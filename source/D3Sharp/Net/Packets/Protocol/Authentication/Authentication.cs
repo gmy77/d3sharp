@@ -1,11 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using bnet.protocol;
 
-namespace D3Sharp.Net.Packets.Auth
+namespace D3Sharp.Net.Packets.Protocol.Authentication
 {
+    [Service(serviceID: -1, serviceHash: 0x71240e35, method: 0x1)]
+    public class LogonRequest : PacketIn
+    {
+        public LogonRequest(Header header, IEnumerable<byte> payload)
+            : base(header, payload)
+        {
+            this.Request = bnet.protocol.authentication.LogonRequest.CreateBuilder().MergeFrom(this.Payload.ToArray()).Build();
+        }
+    }
+
     class LogonResponse : PacketOut
     {
         public LogonResponse(int requestID)

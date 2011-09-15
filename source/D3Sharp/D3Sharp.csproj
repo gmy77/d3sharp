@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -63,26 +63,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Net\Packets\Auth\BindResponse.cs" />
-    <Compile Include="Net\Packets\Auth\ConnectResponse.cs" />
-    <Compile Include="Net\Packets\Auth\LogonResponse.cs" />
+    <Compile Include="Net\Packets\Protocol\Authentication\Authentication.cs" />
+    <Compile Include="Net\Packets\Protocol\ChannelInvitation\ChannelInvitation.cs" />
+    <Compile Include="Net\Packets\Protocol\Connection\Connections.cs" />
     <Compile Include="Net\Packets\Header.cs" />
     <Compile Include="Net\Packets\Packet.cs" />
     <Compile Include="Net\Packets\PacketOut.cs" />
+    <Compile Include="Net\Packets\Protocol\Followers\Followers.cs" />
+    <Compile Include="Net\Packets\Protocol\Friends\Friends.cs" />
+    <Compile Include="Net\Packets\Protocol\UserManager\UserManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Net\Client.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Net\Server.cs" />
     <Compile Include="Net\IClient.cs" />
-    <Compile Include="Net\Packets\Auth\BindRequest.cs" />
-    <Compile Include="Net\Packets\Auth\LogonRequest.cs" />
     <Compile Include="Utils\Extensions\ArrayExtensions.cs" />
     <Compile Include="Net\ClientEventArgs.cs" />
     <Compile Include="Net\ClientDataEventArgs.cs" />
     <Compile Include="Utils\Extensions\DateTimeExtensions.cs" />
     <Compile Include="Utils\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Net\Packets\Parser.cs" />
-    <Compile Include="Net\Packets\Auth\ConnectRequest.cs" />
     <Compile Include="Net\Packets\PacketIn.cs" />
     <Compile Include="Utils\TinyLogger.cs" />
     <Compile Include="Utils\win32\NativeMethods.cs" />

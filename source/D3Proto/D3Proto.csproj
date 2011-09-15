@@ -30,7 +30,8 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <Reference Include="System">
+    </Reference>
     <Reference Include="Google.ProtocolBuffers, Version=2.3.0.277, Culture=neutral, PublicKeyToken=17b3b1f090c3ea48">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\Google.ProtocolBuffers.dll</HintPath>
@@ -85,6 +86,10 @@
     <Compile Include="D3\PartyMessage\PartyMessage.cs" />
     <Compile Include="D3\Quests\Quest.cs" />
     <Compile Include="D3\Stats\Stats.cs" />
+    <Compile Include="bnet\protocol\followers\Followers.cs" />
+    <Compile Include="bnet\protocol\chat\Chat.cs" />
+    <Compile Include="bnet\protocol\chat\ChatTypes.cs" />
+    <Compile Include="bnet\protocol\party\Party.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

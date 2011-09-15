@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using D3Sharp.Net.Packets;
-using D3Sharp.Net.Packets.Auth;
+using D3Sharp.Net.Packets.Protocol.Authentication;
+using D3Sharp.Net.Packets.Protocol.Connection;
 
 namespace D3Sharp.Net
 {

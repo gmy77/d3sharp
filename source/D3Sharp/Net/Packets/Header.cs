@@ -51,7 +51,7 @@ namespace D3Sharp.Net.Packets
 
         public override string ToString()
         {
-            return string.Format("Service: {0}, Method: {1}, RequestID: {2}, Unknown: {3}, Payload-Length: {4}", this.Service, this.Method, this.RequestID, this.Unknown, this.PayloadLength);
+            return string.Format("[S]: 0x{0}, [M]: 0x{1}, [R]: 0x{2}, [L]: 0x{3}", this.Service.ToString("X2"), this.Method.ToString("X2"), this.RequestID.ToString("X2"), this.PayloadLength.ToString("X2"));
         }
     }
 }
