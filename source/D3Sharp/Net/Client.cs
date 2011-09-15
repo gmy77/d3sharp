@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -66,17 +67,32 @@ namespace D3Sharp.Net
                 Console.WriteLine(response);
             }
             else if (packet is BindRequest)
-            {                
-                var importedServices = new List<uint>();
-                foreach(var service in packet.Request.ExportedServiceList)
+            {              
+                var importedServicesIDs = new List<uint>();
+                foreach (var service in packet.Request.ExportedServiceList) // add list of imported services supplied by client.
                 {
-                    importedServices.Add(service.Id);
+                    importedServicesIDs.Add(service.Id);
                     if (!this.Services.ContainsKey(service.Id)) this.Services.Add(service.Id, service.Hash);
                 }
 
-                var response = new BindResponse(packet.Header.RequestID, importedServices);
-                this.Send(response.GetRawPacketData());
-                Console.WriteLine(response);
+                if (importedServicesIDs.Count > 0)
+                {
+                    var response = new BindResponse(packet.Header.RequestID, importedServicesIDs);
+                    this.Send(response.GetRawPacketData());
+                    Console.WriteLine(response);
+                }
+
+                var requestedServices = new Dictionary<uint,uint>();
+                if (requestedServices.Count > 0)
+                {
+                    foreach (var serviceHash in packet.Request.ImportedServiceHashList) // supply service id's requested by client using service-hashes.
+                    {
+                        requestedServices.Add(Server.Services.ContainsKey(serviceHash) ? Server.Services[serviceHash] : (uint) 255, serviceHash);
+                        // probably we should reply with a BoundService.
+                    }
+                }
+
+
             }
 
             else if (packet is LogonRequest)
