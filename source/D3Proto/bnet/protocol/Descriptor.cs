@@ -17,7 +17,7 @@ namespace bnet.protocol {
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.Path, global::bnet.protocol.Path.Builder> internal__static_bnet_protocol_Path__FieldAccessorTable;
     #endregion
     #region Descriptor
-    public static pbd::FileDescriptor PathDescriptor {
+    public static pbd::FileDescriptor Descriptor_ {
       get { return descriptor; }
     }
     private static pbd::FileDescriptor descriptor;
@@ -28,7 +28,7 @@ namespace bnet.protocol {
           "bCIXCgRQYXRoEg8KB29yZGluYWwYASADKA0=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
-        internal__static_bnet_protocol_Path__Descriptor = PathDescriptor.MessageTypes[0];
+        internal__static_bnet_protocol_Path__Descriptor = Descriptor_.MessageTypes[0];
         internal__static_bnet_protocol_Path__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.Path, global::bnet.protocol.Path.Builder>(internal__static_bnet_protocol_Path__Descriptor,
                 new string[] { "Ordinal", });
@@ -271,7 +271,7 @@ namespace bnet.protocol {
       }
     }
     static Path() {
-      object.ReferenceEquals(global::bnet.protocol.Descriptor.PathDescriptor, null);
+      object.ReferenceEquals(global::bnet.protocol.Descriptor.Descriptor_, null);
     }
   }
   

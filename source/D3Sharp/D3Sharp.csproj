@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -76,7 +76,6 @@
     <Compile Include="Net\IClient.cs" />
     <Compile Include="Net\Packets\Auth\BindRequest.cs" />
     <Compile Include="Net\Packets\Auth\LogonRequest.cs" />
-    <Compile Include="Proto\bnet\protocol\Descriptor.cs" />
     <Compile Include="Utils\Extensions\ArrayExtensions.cs" />
     <Compile Include="Net\ClientEventArgs.cs" />
     <Compile Include="Net\ClientDataEventArgs.cs" />
@@ -87,58 +86,8 @@
     <Compile Include="Net\Packets\PacketIn.cs" />
     <Compile Include="Utils\TinyLogger.cs" />
     <Compile Include="Utils\win32\NativeMethods.cs" />
-    <Compile Include="Proto\DescriptorProtoFile.cs" />
-    <Compile Include="Proto\bnet\protocol\ContentHandle.cs" />
-    <Compile Include="Proto\bnet\protocol\Entity.cs" />
-    <Compile Include="Proto\bnet\protocol\Resource.cs" />
-    <Compile Include="Proto\bnet\protocol\Rpc.cs" />
-    <Compile Include="Proto\bnet\protocol\attribute\Attribute.cs" />
-    <Compile Include="Proto\bnet\protocol\authentication\Authentication.cs" />
-    <Compile Include="Proto\bnet\protocol\channel\Channel.cs" />
-    <Compile Include="Proto\bnet\protocol\channel\ChannelTypes.cs" />
-    <Compile Include="Proto\bnet\protocol\channel_invitation\ChannelInvitation.cs" />
-    <Compile Include="Proto\bnet\protocol\channel_invitation\ChannelInvitationTypes.cs" />
-    <Compile Include="Proto\bnet\protocol\config\ProcessConfig.cs" />
-    <Compile Include="Proto\bnet\protocol\connection\Connection.cs" />
-    <Compile Include="Proto\bnet\protocol\exchange\Exchange.cs" />
-    <Compile Include="Proto\bnet\protocol\exchange\ExchangeTypes.cs" />
-    <Compile Include="Proto\bnet\protocol\exchange_object_provider\ExchangeObjectProvider.cs" />
-    <Compile Include="Proto\bnet\protocol\friends\Friends.cs" />
-    <Compile Include="Proto\bnet\protocol\friends\FriendsTypes.cs" />
-    <Compile Include="Proto\bnet\protocol\game_master\GameFactory.cs" />
-    <Compile Include="Proto\bnet\protocol\game_master\GameMaster.cs" />
-    <Compile Include="Proto\bnet\protocol\game_master\GameMasterTypes.cs" />
-    <Compile Include="Proto\bnet\protocol\game_utilities\GameUtilities.cs" />
-    <Compile Include="Proto\bnet\protocol\invitation\Invitation.cs" />
-    <Compile Include="Proto\bnet\protocol\notification\Notification.cs" />
-    <Compile Include="Proto\bnet\protocol\presence\Presence.cs" />
-    <Compile Include="Proto\bnet\protocol\presence\PresenceTypes.cs" />
-    <Compile Include="Proto\bnet\protocol\profanity\Profanity.cs" />
-    <Compile Include="Proto\bnet\protocol\search\Search.cs" />
-    <Compile Include="Proto\bnet\protocol\search\SearchTypes.cs" />
-    <Compile Include="Proto\bnet\protocol\server_pool\ServerPool.cs" />
-    <Compile Include="Proto\bnet\protocol\storage\Storage.cs" />
-    <Compile Include="Proto\bnet\protocol\toon\Toon.cs" />
-    <Compile Include="Proto\bnet\protocol\toon\external\ToonExternal.cs" />
-    <Compile Include="Proto\bnet\protocol\user_manager\UserManager.cs" />
-    <Compile Include="Proto\D3\Account\Account.cs" />
-    <Compile Include="Proto\D3\AttributeSerializer\AttributeSerializer.cs" />
-    <Compile Include="Proto\D3\Client\Settings.cs" />
-    <Compile Include="Proto\D3\GameBalance\GBHandle.cs" />
-    <Compile Include="Proto\D3\GameMessage\GameMessage.cs" />
-    <Compile Include="Proto\D3\Hero\Hero.cs" />
-    <Compile Include="Proto\D3\Hireling\Hireling.cs" />
-    <Compile Include="Proto\D3\ItemCrafting\ItemCrafting.cs" />
-    <Compile Include="Proto\D3\Items\Items.cs" />
-    <Compile Include="Proto\D3\OnlineService\OnlineService.cs" />
-    <Compile Include="Proto\D3\PartyMessage\PartyMessage.cs" />
-    <Compile Include="Proto\D3\Quests\Quest.cs" />
-    <Compile Include="Proto\D3\Stats\Stats.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Core\" />
-  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
@@ -161,4 +110,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\D3Proto\D3Proto.csproj">
+      <Project>{4CC19847-6F24-4453-9E31-126F94308AB9}</Project>
+      <Name>D3Proto</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

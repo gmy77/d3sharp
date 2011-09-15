@@ -193,7 +193,7 @@ namespace bnet.protocol.storage {
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
           new pbd::FileDescriptor[] {
-          global::bnet.protocol.Descriptor.PathDescriptor, 
+          global::bnet.protocol.Descriptor.Descriptor_, 
           global::bnet.protocol.Entity.Descriptor, 
           global::bnet.protocol.Rpc.Descriptor, 
           }, assigner);

@@ -10,7 +10,7 @@ namespace bnet.protocol.friends {
   
     #region Extension registration
     public static void RegisterAllExtensions(pb::ExtensionRegistry registry) {
-      registry.Add(global::bnet.protocol.friends.FriendInvitation.FriendInv);
+      registry.Add(global::bnet.protocol.friends.FriendInvitation.FriendInvitation_);
     }
     #endregion
     #region Static variables
@@ -47,7 +47,7 @@ namespace bnet.protocol.friends {
         internal__static_bnet_protocol_friends_FriendInvitation__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.FriendInvitation, global::bnet.protocol.friends.FriendInvitation.Builder>(internal__static_bnet_protocol_friends_FriendInvitation__Descriptor,
                 new string[] { "FirstReceived", });
-        global::bnet.protocol.friends.FriendInvitation.FriendInv = pb::GeneratedSingleExtension<global::bnet.protocol.friends.FriendInvitation>.CreateInstance(global::bnet.protocol.friends.FriendInvitation.Descriptor.Extensions[0]);
+        global::bnet.protocol.friends.FriendInvitation.FriendInvitation_ = pb::GeneratedSingleExtension<global::bnet.protocol.friends.FriendInvitation>.CreateInstance(global::bnet.protocol.friends.FriendInvitation.Descriptor.Extensions[0]);
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -393,7 +393,7 @@ namespace bnet.protocol.friends {
     }
     
     public const int FriendInvitationFieldNumber = 103;
-    public static pb::GeneratedExtensionBase<global::bnet.protocol.friends.FriendInvitation> FriendInv;
+    public static pb::GeneratedExtensionBase<global::bnet.protocol.friends.FriendInvitation> FriendInvitation_;
     public const int FirstReceivedFieldNumber = 1;
     private bool hasFirstReceived;
     private bool firstReceived_ = false;
