@@ -1,0 +1,10 @@
+<ThreeSix> yes FE 00 03 00 00 {LogonResponse size} {LogonResponse data}
+<Tylor> I'm sorry, this is a stupid (and slightly off topic) question, but where did you guys learn to do this kind of stuff? I'm legitimately interested because it is all so complicated.
+<ThreeSix> and its not have to be 03 it have to be the number from LogonRequest
+
+<ThreeSix> this is how far am I, http://oi53.tinypic.com/2v1oh1t.jpg
+<ThreeSix> its not have to be 03, it depends on the RequestLogon header
+<TeTuBe> what header your using?
+<TeTuBe> okay
+<Link_> ThreeSix which byte of request login header? 3rd?
+<ThreeSix> for example if LoginRequest is 0101030000 the respone hea

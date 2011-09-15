@@ -1,0 +1,50 @@
+<raistlinthewiz> btw scriptor
+<raistlinthewiz> u working on c#
+<raistlinthewiz> ?
+<scriptor> yes
+<raistlinthewiz> oh
+<raistlinthewiz> we too
+<scriptor> nice ^^
+<raistlinthewiz> how far ahead u r?
+<scriptor> i received the bind requests after logonresponse but i switched to moduleloadrequest
+<scriptor> http://80.86.81.60:8080/bin/Debug/Log/
+<raistlinthewiz> u sent the moduleloadrequest it seems
+<scriptor> yes
+<raistlinthewiz> can i get some help from u on header decompisiton?
+<scriptor>                     pb.CodedInputStream s = pb.CodedInputStream.CreateInstance(bytes);
+<scriptor>                     service = s.ReadRawByte();
+<scriptor>                     method = s.ReadRawVarint32();
+<scriptor>                     requestId = s.ReadRawByte() | (s.ReadRawByte() << 8);
+<scriptor>                     if (service != 0xfe) unknown = s.ReadRawVarint64();
+<scriptor>                     len = s.ReadRawVarint32();
+<raistlinthewiz> ok so u read the SID and store them there
+<raistlinthewiz> what they're used for by context actualy?
+<scriptor> no idea
+<scriptor> just saving them in an dictionary containing ID and has
+<scriptor> h
+<raistlinthewiz> u just storing them and with next related message using the same SID right?
+<raistlinthewiz> and another think, i'd like to share repos if you like to, we're 2man working right now maybe eventually we can merge our codebases and share stuff -- and don't take it wrong :) just to make sure peeps over c# can collobrate
+<scriptor>                 foreach (var e in request.ExportedServiceList)
+<scriptor>                 {
+<scriptor>                     newResponse.AddImportedServiceId(e.Id);
+<scriptor>                     if (!m_services.ContainsKey(e.Id))
+<scriptor>                         m_services.Add(e.Id, e.Hash);
+<scriptor>                     Log.Message("Registering service Id={0}, Hash={1}\n\n", Log.eLogLevel.Log, e.Id, e.Hash);
+<scriptor>                 }
+<scriptor> this is in bindrequest
+<scriptor> http://80.86.81.60:8080/bin/Debug/Log/
+<scriptor> whoops
+
+-
+scriptor is ~scriptor@Rizon-66DD3832.server4you.de * scriptor
+scriptor on @#D3.dev @#d3-protocol #d3dev-www +#D3dev #D3SE
+scriptor using *.rizon.net Where are you?
+scriptor has identified for this nick
+scriptor End of /WHOIS list.
+-
+<raistlinthewiz> kk and u got bitbucket acc?
+<raistlinthewiz> ill give u access over our one
+<raistlinthewiz> this is svn repo i guess?
+<scriptor> no, just webserver
+<raistlinthewiz> oh
+<raistlinthewiz> just give me ur bitbucket acc, ill add you to access list

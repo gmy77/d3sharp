@@ -1,0 +1,85 @@
+Update Protocol (Agent)
+-----------------------
+
+[agent->bnet2]
+--------------
+POST /patch HTTP/1.1
+Content-Type: text/html
+Content-Length: 140
+User-Agent: Blizzard Web Client
+Host: enUS.patch.battle.net:1119
+Cache-Control: no-cache
+Cookie: __utma=134253166.570439164.1309041696.1309217021.1309302496.6; __utmz=134253166.1309041696.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+
+<version program="Agnt">
+	<record program="Bnet" component="Win" version="1" />
+	<record program="Agnt" component="Win" version="1" />
+</version>
+
+[bnet2->agent]
+--------------
+HTTP/1.1 200 OK
+Server: Protocol HTTP
+Content-Length: 535
+Connection: close
+Content-Type: application/xml
+
+<patch>
+	<record program="Bnet" component="Win">http://attdist.blizzard.com/sc2patch/update/B16117-5C52FCF1/sc2-1-22280-x86-Win-enUS-bnet-bin-component-dl;sc2-1-22280-x86-Win-enUS-bnet-bin-component-dl;69B17A0F007E49F5B37E2876C87A17DA;22280</record>
+	<record program="Agnt" component="Win">http://ak.worldofwarcraft.com.edgesuite.net/d3-pod/20FB5BE9/NA/Patches/agent404/agent-403-404-win.mpq.torrent;http://ak.worldofwarcraft.com.edgesuite.net/d3-pod/20FB5BE9/NA/Patches/agent404/agent-404-win.mpq.torrent;404;403;0</record>
+</patch>
+
+[agent->bnet2]
+--------------
+POST /patch HTTP/1.1
+Content-Type: text/html
+Content-Length: 140
+User-Agent: Blizzard Web Client
+Host: enUS.patch.battle.net:1119
+Cache-Control: no-cacheCookie: __utma=134253166.570439164.1309041696.1309217021.1309302496.6; __utmz=134253166.1309041696.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+
+<version program="Clnt">
+	<record program="Bnet" component="Win" version="1" />
+	<record program="Clnt" component="Win" version="1" />
+</version>
+
+[bnet2->agent]
+--------------
+HTTP/1.1 200 OK
+Server: Protocol HTTP
+Content-Length: 535
+Connection: close
+Content-Type: application/xml
+
+<patch>
+	<record program="Bnet" component="Win">http://attdist.blizzard.com/sc2patch/update/B16117-5C52FCF1/sc2-1-22280-x86-Win-enUS-bnet-bin-component-dl;sc2-1-22280-x86-Win-enUS-bnet-bin-component-dl;69B17A0F007E49F5B37E2876C87A17DA;22280</record>
+	<record program="Clnt" component="Win">http://ak.worldofwarcraft.com.edgesuite.net/d3-pod/20FB5BE9/NA/Patches/bl525/launcher-524-525-win.mpq.torrent;http://ak.worldofwarcraft.com.edgesuite.net/d3-pod/20FB5BE9/NA/Patches/bl525/launcher-525-win.mpq.torrent;525;524;0</record>
+</patch>
+
+[agent->bnet2]
+--------------
+POST /patch HTTP/1.1
+Content-Type: text/html
+Content-Length: 137
+User-Agent: Blizzard Web Client
+Host: enUS.patch.battle.net:1119Cache-Control: no-cacheCookie: __utma=134253166.570439164.1309041696.1309217021.1309302496.6; __utmz=134253166.1309041696.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+
+<version program="D3">
+	<record program="Bnet" component="Win" version="1" />
+	<record program="D3" component="enUS" version="1" />
+</version>
+
+[bnet2->agent]
+--------------
+HTTP/1.1 200 OK
+Server: Protocol HTTP
+Content-Length: 487
+Connection: close
+Content-Type: application/xml
+
+<patch>
+	<record program="Bnet" component="Win">http://attdist.blizzard.com/sc2patch/update/B16117-5C52FCF1/sc2-1-22280-x86-Win-enUS-bnet-bin-component-dl;sc2-1-22280-x86-Win-enUS-bnet-bin-component-dl;69B17A0F007E49F5B37E2876C87A17DA;22280</record>
+	<record program="D3" component="enUS">http://ak.worldofwarcraft.com.edgesuite.net/d3-pod/20FB5BE9/NA/d3-7318-A25A9969D948E82419928FBFBACA41A3.xml;D253D8118D6D5D4A50A5DE72526D8AA1;A0F73AD55B049A9A6B3D94D7B944F07E;7318</record>
+</patch>
+
+

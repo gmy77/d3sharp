@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>D3Sharp</RootNamespace>
+    <AssemblyName>D3Sharp</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System">
+    </Reference>
+    <Reference Include="System.Core">
+    </Reference>
+    <Reference Include="Google.ProtocolBuffers, Version=2.3.0.277, Culture=neutral, PublicKeyToken=17b3b1f090c3ea48">
+      <HintPath>..\libs\Google.ProtocolBuffers.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Net\Packets\Auth\BindResponse.cs" />
+    <Compile Include="Net\Packets\Auth\ConnectResponse.cs" />
+    <Compile Include="Net\Packets\Auth\LogonResponse.cs" />
+    <Compile Include="Net\Packets\Header.cs" />
+    <Compile Include="Net\Packets\Packet.cs" />
+    <Compile Include="Net\Packets\PacketOut.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Net\Client.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Net\Server.cs" />
+    <Compile Include="Net\IClient.cs" />
+    <Compile Include="Net\Packets\Auth\BindRequest.cs" />
+    <Compile Include="Net\Packets\Auth\LogonRequest.cs" />
+    <Compile Include="Proto\bnet\protocol\Descriptor.cs" />
+    <Compile Include="Utils\Extensions\ArrayExtensions.cs" />
+    <Compile Include="Net\ClientEventArgs.cs" />
+    <Compile Include="Net\ClientDataEventArgs.cs" />
+    <Compile Include="Utils\Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Utils\Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Net\Packets\Parser.cs" />
+    <Compile Include="Net\Packets\Auth\ConnectRequest.cs" />
+    <Compile Include="Net\Packets\PacketIn.cs" />
+    <Compile Include="Utils\TinyLogger.cs" />
+    <Compile Include="Utils\win32\NativeMethods.cs" />
+    <Compile Include="Proto\DescriptorProtoFile.cs" />
+    <Compile Include="Proto\bnet\protocol\ContentHandle.cs" />
+    <Compile Include="Proto\bnet\protocol\Entity.cs" />
+    <Compile Include="Proto\bnet\protocol\Resource.cs" />
+    <Compile Include="Proto\bnet\protocol\Rpc.cs" />
+    <Compile Include="Proto\bnet\protocol\attribute\Attribute.cs" />
+    <Compile Include="Proto\bnet\protocol\authentication\Authentication.cs" />
+    <Compile Include="Proto\bnet\protocol\channel\Channel.cs" />
+    <Compile Include="Proto\bnet\protocol\channel\ChannelTypes.cs" />
+    <Compile Include="Proto\bnet\protocol\channel_invitation\ChannelInvitation.cs" />
+    <Compile Include="Proto\bnet\protocol\channel_invitation\ChannelInvitationTypes.cs" />
+    <Compile Include="Proto\bnet\protocol\config\ProcessConfig.cs" />
+    <Compile Include="Proto\bnet\protocol\connection\Connection.cs" />
+    <Compile Include="Proto\bnet\protocol\exchange\Exchange.cs" />
+    <Compile Include="Proto\bnet\protocol\exchange\ExchangeTypes.cs" />
+    <Compile Include="Proto\bnet\protocol\exchange_object_provider\ExchangeObjectProvider.cs" />
+    <Compile Include="Proto\bnet\protocol\friends\Friends.cs" />
+    <Compile Include="Proto\bnet\protocol\friends\FriendsTypes.cs" />
+    <Compile Include="Proto\bnet\protocol\game_master\GameFactory.cs" />
+    <Compile Include="Proto\bnet\protocol\game_master\GameMaster.cs" />
+    <Compile Include="Proto\bnet\protocol\game_master\GameMasterTypes.cs" />
+    <Compile Include="Proto\bnet\protocol\game_utilities\GameUtilities.cs" />
+    <Compile Include="Proto\bnet\protocol\invitation\Invitation.cs" />
+    <Compile Include="Proto\bnet\protocol\notification\Notification.cs" />
+    <Compile Include="Proto\bnet\protocol\presence\Presence.cs" />
+    <Compile Include="Proto\bnet\protocol\presence\PresenceTypes.cs" />
+    <Compile Include="Proto\bnet\protocol\profanity\Profanity.cs" />
+    <Compile Include="Proto\bnet\protocol\search\Search.cs" />
+    <Compile Include="Proto\bnet\protocol\search\SearchTypes.cs" />
+    <Compile Include="Proto\bnet\protocol\server_pool\ServerPool.cs" />
+    <Compile Include="Proto\bnet\protocol\storage\Storage.cs" />
+    <Compile Include="Proto\bnet\protocol\toon\Toon.cs" />
+    <Compile Include="Proto\bnet\protocol\toon\external\ToonExternal.cs" />
+    <Compile Include="Proto\bnet\protocol\user_manager\UserManager.cs" />
+    <Compile Include="Proto\D3\Account\Account.cs" />
+    <Compile Include="Proto\D3\AttributeSerializer\AttributeSerializer.cs" />
+    <Compile Include="Proto\D3\Client\Settings.cs" />
+    <Compile Include="Proto\D3\GameBalance\GBHandle.cs" />
+    <Compile Include="Proto\D3\GameMessage\GameMessage.cs" />
+    <Compile Include="Proto\D3\Hero\Hero.cs" />
+    <Compile Include="Proto\D3\Hireling\Hireling.cs" />
+    <Compile Include="Proto\D3\ItemCrafting\ItemCrafting.cs" />
+    <Compile Include="Proto\D3\Items\Items.cs" />
+    <Compile Include="Proto\D3\OnlineService\OnlineService.cs" />
+    <Compile Include="Proto\D3\PartyMessage\PartyMessage.cs" />
+    <Compile Include="Proto\D3\Quests\Quest.cs" />
+    <Compile Include="Proto\D3\Stats\Stats.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Core\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
+</Project>

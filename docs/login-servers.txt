@@ -1,0 +1,4 @@
+eu.logon.battle.net     - 213.248.127.130
+us.logon.battle.net 	- 12.129.206.130
+beta.actual.battle.net  - 12.129.236.246
+
