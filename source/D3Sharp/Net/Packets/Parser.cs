@@ -49,14 +49,18 @@ namespace D3Sharp.Net.Packets
             var payload = new byte[header.PayloadLength];
             if (header.PayloadLength > 0) Array.Copy(buffer, 6, payload, 0, header.PayloadLength); // if our packet contains a payload, get it.
 
-            if (client.Services.ContainsKey(header.Service)) // if matching service exists for the request.
+
+            if(Server.Services.ContainsKey(header.ServiceID))
             {
-                foreach (var packet in from pair in Packets
-                                       where client.Services[header.Service] == pair.Value.ServiceHash && header.Method == pair.Value.Method
-                                       select Activator.CreateInstance(pair.Key, new object[] { header, payload })) // try to match requested service against know packet classes.
+                var serviceHash = Server.Services[header.ServiceID];
+                foreach(var pair in Packets)
                 {
-                    client.Process((PacketIn) packet);
-                    return header.Data.Length + payload.Length;
+                    if(pair.Value.ServiceHash==serviceHash && pair.Value.Method == header.Method)
+                    {
+                        var packet = Activator.CreateInstance(pair.Key, new object[] {header, payload});
+                        client.Process((PacketIn)packet);
+                        return header.Data.Length + payload.Length;
+                    }
                 }
             }
 

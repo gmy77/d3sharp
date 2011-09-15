@@ -25,6 +25,15 @@ namespace D3Sharp.Net
         public event ConnectionDataEventHandler DataReceived;
         public event ConnectionDataEventHandler DataSent;
 
+
+        public static Dictionary<uint, uint> Services = new Dictionary<uint, uint>
+                                                            {
+                                                                {0x0, 0x0}, // base service
+                                                                {0x1, 0xB732DB32}, // connection service 
+                                                                {0x2, 0xDECFC01}, // authentication service
+                                                                {0x3, 0x83040608 } // toon service
+                                                            };
+
         private static readonly Logger Logger = LogManager.CreateLogger();
         private bool _disposed;
 

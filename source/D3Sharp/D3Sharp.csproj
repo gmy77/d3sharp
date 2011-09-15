@@ -71,6 +71,7 @@
     <Compile Include="Net\Packets\PacketOut.cs" />
     <Compile Include="Net\Packets\Protocol\Followers\Followers.cs" />
     <Compile Include="Net\Packets\Protocol\Friends\Friends.cs" />
+    <Compile Include="Net\Packets\Protocol\Toon\Toon.cs" />
     <Compile Include="Net\Packets\Protocol\UserManager\UserManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Net\Client.cs" />

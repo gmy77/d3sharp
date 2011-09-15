@@ -50,11 +50,10 @@ namespace D3Sharp.Net
 
             this._server = server;
             this._socket = socket;
-            this.Services = new Dictionary<uint, uint>
-                                {
-                                    {0x0, 0x0} // base service.
-                                };
+            this.Services = new Dictionary<uint, uint>();
         }
+
+        private static uint _importedServiceCounter = 99;
 
         public void Process(PacketIn packet)
         {
@@ -67,32 +66,25 @@ namespace D3Sharp.Net
                 Console.WriteLine(response);
             }
             else if (packet is BindRequest)
-            {              
-                var importedServicesIDs = new List<uint>();
-                foreach (var service in packet.Request.ExportedServiceList) // add list of imported services supplied by client.
+            {
+                var requestedServiceIDs = new List<uint>();
+
+                foreach (var serviceHash in packet.Request.ImportedServiceHashList) // supply service id's requested by client using service-hashes.
                 {
-                    importedServicesIDs.Add(service.Id);
-                    if (!this.Services.ContainsKey(service.Id)) this.Services.Add(service.Id, service.Hash);
+                    requestedServiceIDs.Add(Server.Services.ContainsValue(serviceHash) ?  Server.Services.Where(pair => pair.Value == serviceHash).FirstOrDefault().Key : _importedServiceCounter++);
                 }
 
-                if (importedServicesIDs.Count > 0)
+                if (requestedServiceIDs.Count > 0)
                 {
-                    var response = new BindResponse(packet.Header.RequestID, importedServicesIDs);
+                    var response = new BindResponse(packet.Header.RequestID, requestedServiceIDs);
                     this.Send(response.GetRawPacketData());
                     Console.WriteLine(response);
                 }
-
-                var requestedServices = new Dictionary<uint,uint>();
-                if (requestedServices.Count > 0)
+                
+                foreach (var service in packet.Request.ExportedServiceList) // add list of imported services supplied by client.
                 {
-                    foreach (var serviceHash in packet.Request.ImportedServiceHashList) // supply service id's requested by client using service-hashes.
-                    {
-                        requestedServices.Add(Server.Services.ContainsKey(serviceHash) ? Server.Services[serviceHash] : (uint) 255, serviceHash);
-                        // probably we should reply with a BoundService.
-                    }
+                    if (!this.Services.ContainsKey(service.Id)) this.Services.Add(service.Id, service.Hash);
                 }
-
-
             }
 
             else if (packet is LogonRequest)

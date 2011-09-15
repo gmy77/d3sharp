@@ -10,7 +10,7 @@ namespace D3Sharp.Net.Packets
     {
         public byte[] Data { get; private set; }
 
-        public byte Service { get; set; }
+        public byte ServiceID { get; set; }
         public uint Method { get; set; }
         public int RequestID { get; set; }
         public ulong Unknown { get; set; }
@@ -27,10 +27,10 @@ namespace D3Sharp.Net.Packets
             this.Data = data;
 
             var stream = CodedInputStream.CreateInstance(data);
-            this.Service = stream.ReadRawByte();
+            this.ServiceID = stream.ReadRawByte();
             this.Method = stream.ReadRawVarint32();
-            this.RequestID = stream.ReadRawByte() | (stream.ReadRawByte() << 8);
-            if (Service != 0xfe) this.Unknown = stream.ReadRawVarint64();
+            this.RequestID =  stream.ReadRawByte() | (stream.ReadRawByte() << 8);
+            if (ServiceID != 0xfe) this.Unknown = stream.ReadRawVarint64();
             this.PayloadLength = stream.ReadRawVarint32();
         }
 
@@ -51,7 +51,7 @@ namespace D3Sharp.Net.Packets
 
         public override string ToString()
         {
-            return string.Format("[S]: 0x{0}, [M]: 0x{1}, [R]: 0x{2}, [L]: 0x{3}", this.Service.ToString("X2"), this.Method.ToString("X2"), this.RequestID.ToString("X2"), this.PayloadLength.ToString("X2"));
+            return string.Format("[S]: 0x{0}, [M]: 0x{1}, [R]: 0x{2}, [L]: 0x{3}", this.ServiceID.ToString("X2"), this.Method.ToString("X2"), this.RequestID.ToString("X2"), this.PayloadLength.ToString("X2"));
         }
     }
 }
