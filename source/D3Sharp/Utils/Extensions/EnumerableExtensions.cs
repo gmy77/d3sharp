@@ -25,17 +25,32 @@ namespace D3Sharp.Utils.Extensions
 
         public static string Dump(this IEnumerable<byte> collection)
         {
-            var sb=new StringBuilder();
+            var output=new StringBuilder();
+            var hex=new StringBuilder();
+            var text=new StringBuilder();
             int i=0;
             foreach (byte value in collection) {
-                if (i>0 && ((i%16)==0))
-                    sb.Append(Environment.NewLine);
-                sb.Append(value.ToString("X2"));
-                sb.Append(' ');
+                if (i>0 && ((i%16)==0)) {
+                    output.Append(hex);
+                    output.Append(' ');
+                    output.Append(text);
+                    output.Append(Environment.NewLine);
+                    hex.Clear(); text.Clear();
+                }
+                hex.Append(value.ToString("X2"));
+                hex.Append(' ');
+                text.Append(string.Format("{0}", (char.IsWhiteSpace((char)value) && (char)value != ' ') ? '.' : (char)value)); // prettify text
                 ++i;
             }
-            sb.Append(Environment.NewLine);
-            return sb.ToString();
+            var hexstring=hex.ToString();
+            if (text.Length<16) {
+                hexstring=hexstring.PadRight(48); // pad the hex representation in-case it's smaller than a regular 16 value line.
+            }
+            output.Append(hexstring);
+            output.Append(' ');
+            output.Append(text);
+            output.Append(Environment.NewLine);
+            return output.ToString();
         }
     }
 }

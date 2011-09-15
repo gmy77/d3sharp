@@ -36,17 +36,7 @@ namespace D3Sharp.Utils.Extensions
 
         public static string Dump(this byte[] array)
         {
-            var sb=new StringBuilder();
-            int i=0;
-            foreach (byte value in array) {
-                if (i>0 && ((i%16)==0))
-                    sb.Append(Environment.NewLine);
-                sb.Append(value.ToString("X2"));
-                sb.Append(' ');
-                ++i;
-            }
-            sb.Append(Environment.NewLine);
-            return sb.ToString();
+            return EnumerableExtensions.Dump(array);
         }
     }
 }
