@@ -14,12 +14,12 @@ namespace D3Sharp.Net.Packets
         public uint Method { get; set; }
         public int RequestID { get; set; }
         public ulong Unknown { get; set; }
-        public uint PayloadLenght { get; set; }
+        public uint PayloadLength { get; set; }
 
         public Header()
         {            
             this.Unknown = 0x0;
-            this.PayloadLenght = 0x0;
+            this.PayloadLength = 0x0;
         }
 
         public Header(byte[] data)
@@ -31,7 +31,7 @@ namespace D3Sharp.Net.Packets
             this.Method = stream.ReadRawVarint32();
             this.RequestID = stream.ReadRawByte() | (stream.ReadRawByte() << 8);
             if (Service != 0xfe) this.Unknown = stream.ReadRawVarint64();
-            this.PayloadLenght = stream.ReadRawVarint32();
+            this.PayloadLength = stream.ReadRawVarint32();
         }
 
         public Header(IEnumerable<byte> data)
@@ -46,12 +46,12 @@ namespace D3Sharp.Net.Packets
             //stream.WriteRawVarint32(this.Method);
             //stream.WriteRawByte((byte) this.RequestID);
             //stream.WriteRawVarint64(this.Unknown);
-            //stream.WriteRawVarint32(this.PayloadLenght);
+            //stream.WriteRawVarint32(this.PayloadLength);
         }
 
         public override string ToString()
         {
-            return string.Format("Service: {0}, Method: {1}, RequestID: {2}, Unknown: {3}, Payload-Length: {4}", this.Service, this.Method, this.RequestID, this.Unknown, this.PayloadLenght);
+            return string.Format("Service: {0}, Method: {1}, RequestID: {2}, Unknown: {3}, Payload-Length: {4}", this.Service, this.Method, this.RequestID, this.Unknown, this.PayloadLength);
         }
     }
 }

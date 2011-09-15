@@ -46,8 +46,8 @@ namespace D3Sharp.Net.Packets
         public static int Identify(IClient client, byte[] buffer)
         {
             var header = new Header(buffer.Take(6));
-            var payload = new byte[header.PayloadLenght];
-            if (header.PayloadLenght > 0) Array.Copy(buffer, 6, payload, 0, header.PayloadLenght); // if our packet contains a payload, get it.
+            var payload = new byte[header.PayloadLength];
+            if (header.PayloadLength > 0) Array.Copy(buffer, 6, payload, 0, header.PayloadLength); // if our packet contains a payload, get it.
 
             if (client.Services.ContainsKey(header.Service)) // if matching service exists for the request.
             {
