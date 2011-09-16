@@ -63,16 +63,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Net\Packets\Protocol\Authentication\Authentication.cs" />
-    <Compile Include="Net\Packets\Protocol\ChannelInvitation\ChannelInvitation.cs" />
-    <Compile Include="Net\Packets\Protocol\Connection\Connections.cs" />
+    <Compile Include="Core\Services\Authentication.cs" />
+    <Compile Include="Core\Services\Base.cs" />
+    <Compile Include="Core\Services\Connection.cs" />
+    <Compile Include="Core\Services\Service.cs" />
+    <Compile Include="Core\Services\ServiceManager.cs" />
+    <Compile Include="Core\Services\Toon.cs" />
     <Compile Include="Net\Packets\Header.cs" />
     <Compile Include="Net\Packets\Packet.cs" />
-    <Compile Include="Net\Packets\PacketOut.cs" />
-    <Compile Include="Net\Packets\Protocol\Followers\Followers.cs" />
-    <Compile Include="Net\Packets\Protocol\Friends\Friends.cs" />
-    <Compile Include="Net\Packets\Protocol\Toon\Toon.cs" />
-    <Compile Include="Net\Packets\Protocol\UserManager\UserManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Net\Client.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,8 +81,7 @@
     <Compile Include="Net\ClientDataEventArgs.cs" />
     <Compile Include="Utils\Extensions\DateTimeExtensions.cs" />
     <Compile Include="Utils\Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Net\Packets\Parser.cs" />
-    <Compile Include="Net\Packets\PacketIn.cs" />
+    <Compile Include="Net\Packets\PacketRouter.cs" />
     <Compile Include="Utils\TinyLogger.cs" />
     <Compile Include="Utils\win32\NativeMethods.cs" />
   </ItemGroup>

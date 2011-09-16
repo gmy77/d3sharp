@@ -20,7 +20,7 @@ namespace D3Sharp
             LogManager.Enabled = true; // enable the logger.
             LogManager.AttachLogTarget(new ConsoleTarget(Level.Trace)); // attach a console-target.
 
-            Logger.Info("d3sharp v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);            
+            Logger.Info("d3sharp v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
 
             var main = new Program(); // startup.
             main.ParseArguments(args);
@@ -73,7 +73,7 @@ namespace D3Sharp
         {
             _server.ClientConnected += (sender, e) => Logger.Trace("Client connected: {0}", e.Client.ToString());
             _server.ClientDisconnected += (sender, e) => Logger.Trace("Client disconnected: {0}", e.Client.ToString());
-            _server.DataReceived += (sender, e) => Parser.Parse(e);
+            _server.DataReceived += (sender, e) => PacketRouter.Route(e);
             _server.DataSent += (sender, e) => { };
         }
 

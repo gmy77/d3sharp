@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using D3Sharp.Net.Packets;
-using D3Sharp.Net.Packets.Protocol.Authentication;
-using D3Sharp.Net.Packets.Protocol.Connection;
 
 namespace D3Sharp.Net
 {
@@ -53,53 +51,6 @@ namespace D3Sharp.Net
             this.Services = new Dictionary<uint, uint>();
         }
         
-        private static uint _importedServiceCounter = 99;
-
-        public void Process(PacketIn packet)
-        {
-            Console.WriteLine(packet);
-
-            if (packet is ConnectRequest)
-            {
-                var response = new ConnectResponse(packet.Header.RequestID);
-                this.Send(response.GetRawPacketData());
-                Console.WriteLine(response);
-            }
-            else if (packet is BindRequest)
-            {
-                var requestedServiceIDs = new List<uint>();
-                // supply service id's requested by client using service-hashes.
-                foreach (var serviceHash in packet.Request.ImportedServiceHashList) 
-                {
-                    requestedServiceIDs.Add(
-                        Server.Services.ContainsValue(serviceHash)
-                        ? Server.Services.Where(pair => pair.Value == serviceHash).FirstOrDefault().Key
-                        : _importedServiceCounter++);
-                }
-
-                if (requestedServiceIDs.Count > 0)
-                {
-                    var response = new BindResponse(packet.Header.RequestID, requestedServiceIDs);
-                    this.Send(response.GetRawPacketData());
-                    Console.WriteLine(response);
-                }
-                // add list of imported services supplied by client.
-                foreach (var service in packet.Request.ExportedServiceList) 
-                {
-                    if (!this.Services.ContainsKey(service.Id))
-                         this.Services.Add(service.Id, service.Hash);
-                }
-            }
-
-            else if (packet is LogonRequest)
-            {
-                // who needs a module-check when we're already hacking lol?!
-                var response = new LogonResponse(packet.Header.RequestID);
-                this.Send(response.GetRawPacketData());
-                Console.WriteLine(response);
-            }  
-        }
-
         #region recv-methods
 
         public IAsyncResult BeginReceive(AsyncCallback callback, object state)
@@ -115,6 +66,16 @@ namespace D3Sharp.Net
         #endregion
 
         #region send methods
+
+        public int Send(Packet packet, dynamic proto)
+        {
+            if (packet == null) throw new ArgumentNullException("packet");
+            if (proto == null) throw new ArgumentNullException("proto");
+
+            Console.WriteLine("[Server Reply]: {0}\n{1}{2}\n", proto.GetType(),proto,packet);
+
+            return Send(packet.GetRawPacketData());
+        }
 
         public int Send(IEnumerable<byte> data)
         {

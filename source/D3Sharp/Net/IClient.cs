@@ -13,14 +13,13 @@ namespace D3Sharp.Net
 
         Dictionary<uint, uint> Services { get; }
 
+        int Send(Packet packet, dynamic proto);
         int Send(IEnumerable<byte> data);
         int Send(IEnumerable<byte> data, SocketFlags flags);
         int Send(byte[] buffer);
         int Send(byte[] buffer, SocketFlags flags);
         int Send(byte[] buffer, int start, int count);
         int Send(byte[] buffer, int start, int count, SocketFlags flags);
-
-        void Process(PacketIn packet);
 
         void Disconnect();
     }

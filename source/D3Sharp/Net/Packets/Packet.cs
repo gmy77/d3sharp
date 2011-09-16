@@ -6,41 +6,36 @@ using D3Sharp.Utils.Extensions;
 
 namespace D3Sharp.Net.Packets
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public class ServiceAttribute : Attribute
-    {
-        /// <summary>
-        /// The service ID -- if it's a bound service on runtime just put in -1.
-        /// </summary>
-        public int ServiceID { get; set; }
-
-        /// <summary>
-        /// The service hash.
-        /// </summary>
-        public uint ServiceHash { get; set; }
-        
-        /// <summary>
-        /// The service method.
-        /// </summary>
-        public byte Method { get; set; }
-
-        /// <summary>
-        /// Creates a new service attribute.
-        /// </summary>
-        /// <param name="serviceID">The service ID -- if it's a bound service on runtime just put in -1.</param>
-        /// <param name="serviceHash">The service hash.</param>
-        /// <param name="method">The service method.</param>
-        public ServiceAttribute(int serviceID, uint serviceHash, byte method)
-        {
-            this.ServiceID = serviceID;
-            this.ServiceHash = serviceHash;
-            this.Method = method;
-        }
-    }
-
     public class Packet
     {
         public Header Header { get; protected set; }
-        public IEnumerable<byte> Payload { get; protected set; }
+        public IEnumerable<byte> Payload { get; set; }
+
+        public Packet(Header header, byte[] payload)
+        {
+            this.Header = header;
+            this.Payload = payload;
+        }
+
+        public int Lenght
+        {
+            get { return this.Header.Data.Length + this.Payload.ToArray().Length; }
+        }
+
+        public byte[] GetRawPacketData()
+        {
+            return this.Header.Data.Append(this.Payload.ToArray());
+        }
+
+        public override string ToString()
+        {
+            return
+            string.Format(
+                "Header\t: {0}\nData\t: {1}- {2}",
+                this.Header,
+                this.Header.Data.HexDump(),
+                this.Payload.HexDump()
+            );
+        }
     }
 }
