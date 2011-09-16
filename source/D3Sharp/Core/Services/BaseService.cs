@@ -38,7 +38,7 @@ namespace D3Sharp.Core.Services
             foreach (var serviceHash in request.ImportedServiceHashList)
             {
                 var serviceID = ServiceManager.GetServerServiceIDByHash(serviceHash);
-                Logger.Trace("RPC:Bind() - Hash: 0x{0} ID: {1} Service: {2} ", serviceHash.ToString("X"), serviceID, ServiceManager.GetServerServiceByID(serviceID) != null ? ServiceManager.GetServerServiceByID(serviceID).GetType().Name : "N");
+                Logger.Trace("RPC:Bind() - Hash: 0x{0} ID: {1} Service: {2} ", serviceHash.ToString("X"), serviceID, ServiceManager.GetServerServiceByID(serviceID) != null ? ServiceManager.GetServerServiceByID(serviceID).GetType().Name : "N/A");
                 requestedServiceIDs.Add(serviceID);
             }
 

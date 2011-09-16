@@ -13,7 +13,14 @@ namespace D3Sharp.Core.Services
         [ServiceMethod(0x1)]
         public void SubscribeToFollowers(IClient client, Packet packetIn)
         {
+            var response = bnet.protocol.followers.SubscribeToFollowersResponse.CreateBuilder().Build();
 
+            var packet = new Packet(
+                new Header(new byte[] { 0xfe, 0x0, (byte)packetIn.Header.RequestID, 0x0, (byte)response.SerializedSize }),
+                response.ToByteArray());
+
+            Logger.Debug("RPC:Followers:Subscribe()");
+            client.Send(packet);
         }
     }
 }

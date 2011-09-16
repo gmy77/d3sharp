@@ -15,8 +15,8 @@ namespace D3Sharp.Core.Services
         public void Logon(IClient client, Packet packetIn)
         {
             var response = bnet.protocol.authentication.LogonResponse.CreateBuilder()
-                .SetAccount(EntityId.CreateBuilder().SetHigh(12345).SetLow(67890))
-                .SetGameAccount(EntityId.CreateBuilder().SetHigh(67890).SetLow(12345))
+                .SetAccount(EntityId.CreateBuilder().SetHigh(0x100000000000000).SetLow(0))
+                .SetGameAccount(EntityId.CreateBuilder().SetHigh(0x200006200004433).SetLow(0))
                 .Build();
 
             var packet = new Packet(

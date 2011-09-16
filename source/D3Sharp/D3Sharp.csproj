@@ -70,6 +70,7 @@
     <Compile Include="Core\Services\FriendsService.cs" />
     <Compile Include="Core\Services\GameMasterService.cs" />
     <Compile Include="Core\Services\GameUtilitiesService.cs" />
+    <Compile Include="Core\Services\PresenceService.cs" />
     <Compile Include="Core\Services\Service.cs" />
     <Compile Include="Core\Services\ServiceManager.cs" />
     <Compile Include="Core\Services\StorageService.cs" />
