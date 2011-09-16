@@ -16,7 +16,7 @@ namespace D3Sharp.Core.Services
             var response = bnet.protocol.followers.SubscribeToFollowersResponse.CreateBuilder().Build();
 
             var packet = new Packet(
-                new Header(new byte[] { 0xfe, 0x0, (byte)packetIn.Header.RequestID, 0x0, (byte)response.SerializedSize }),
+                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
             Logger.Debug("RPC:Followers:Subscribe()");

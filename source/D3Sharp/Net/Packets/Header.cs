@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Google.ProtocolBuffers;
@@ -30,10 +31,35 @@ namespace D3Sharp.Net.Packets
             this.ServiceID = stream.ReadRawByte();
             this.MethodID = stream.ReadRawVarint32();
             this.RequestID =  stream.ReadRawByte() | (stream.ReadRawByte() << 8);
-            if (ServiceID != 0xfe)
-                this.Unknown = stream.ReadRawVarint64();
+            if (ServiceID != 0xfe) this.Unknown = stream.ReadRawVarint64();
             this.PayloadLength = stream.ReadRawVarint32();
         }
+
+        public Header(byte serviceID, uint methodId, int requestID, uint payloadLenght)
+        {
+            this.ServiceID = serviceID;
+            this.MethodID = methodId;
+            this.RequestID = requestID;
+            this.Unknown = 0x0;
+            this.PayloadLength = payloadLenght;
+
+            this.Data = this.ServiceID != 0xfe ? new byte[6] : new byte[5];
+
+            using (var stream = new MemoryStream())
+            {
+                var output = CodedOutputStream.CreateInstance(stream);
+                output.WriteRawByte(this.ServiceID);
+                output.WriteRawVarint32(this.MethodID);
+                output.WriteRawByte((byte) (this.RequestID & 0xff));
+                output.WriteRawByte((byte) (this.RequestID >> 8));
+                if (serviceID != 0xfe) output.WriteRawVarint64(this.Unknown);
+                output.WriteRawVarint32(this.PayloadLength);
+                output.Flush();
+
+                this.Data = stream.ToArray();
+            }
+        }
+
 
         public Header(IEnumerable<byte> data)
             : this(data.ToArray())

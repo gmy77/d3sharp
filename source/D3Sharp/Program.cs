@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using System.Text;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
 using D3Sharp.Utils;

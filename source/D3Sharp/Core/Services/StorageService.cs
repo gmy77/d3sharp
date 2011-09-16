@@ -17,7 +17,7 @@ namespace D3Sharp.Core.Services
             var response = bnet.protocol.storage.OpenTableResponse.CreateBuilder().Build();
 
             var packet = new Packet(
-                new Header(new byte[] { 0xfe, 0x0, (byte)packetIn.Header.RequestID, 0x0, (byte)response.SerializedSize }),
+                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
             Logger.Debug("RPC:Storage:OpenTableRequest()");
@@ -30,7 +30,7 @@ namespace D3Sharp.Core.Services
             var response = bnet.protocol.storage.OpenColumnResponse.CreateBuilder().Build();
 
             var packet = new Packet(
-                new Header(new byte[] { 0xfe, 0x0, (byte)packetIn.Header.RequestID, 0x0, (byte)response.SerializedSize }),
+                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
             Logger.Debug("RPC:Storage:OpenColumnRequest()");
@@ -51,14 +51,56 @@ namespace D3Sharp.Core.Services
                 case "LoadAccountDigest":
                     response = LoadAccountDigest(request);
                     break;
+                case "GetHeroDigests":
+                    response = GetHeroDigest(request);
+                    break;
+                default:
+                    break;
             }                
-
+            
             var packet = new Packet(
-                new Header(new byte[] { 0xfe, 0x0, (byte)packetIn.Header.RequestID, 0x0, (byte)response.SerializedSize }),
+                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
             Logger.Debug("RPC:Storage:ExecuteRequest()");
             client.Send(packet);
+        }
+
+        private bnet.protocol.storage.ExecuteResponse GetHeroDigest(bnet.protocol.storage.ExecuteRequest request)
+        {
+            var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
+
+            var equipment = D3.Hero.VisualEquipment.CreateBuilder().Build();
+            //var questhistory = D3.Hero.QuestHistoryEntry.CreateBuilder().Build();
+
+            var heroDigest = D3.Hero.Digest.CreateBuilder().SetVersion(1)
+                .SetHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0x300016200004433).SetIdLow(1).Build())
+                .SetHeroName("testhero")
+                .SetGbidClass(1)
+                .SetLevel(5)
+                .SetPlayerFlags(0)
+                .SetVisualEquipment(equipment)
+                //.SetQuestHistory(0, questhistory)
+                .SetLastPlayedAct(0)
+                .SetHighestUnlockedAct(0)
+                .SetLastPlayedDifficulty(0)
+                .SetHighestUnlockedDifficulty(0)
+                .SetLastPlayedQuest(1)
+                .SetLastPlayedQuestStep(1)
+                .SetTimePlayed(0).Build();
+
+            var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
+                .SetTableId(request.OperationsList[0].TableId)
+                .AddData(
+                    bnet.protocol.storage.Cell.CreateBuilder()
+                        .SetColumnId(request.OperationsList[0].ColumnId)
+                        .SetRowId(request.OperationsList[0].RowId)
+                        .SetVersion(1)
+                        .SetData(heroDigest.ToByteString())
+                        .Build()).Build();
+
+            builder.AddResults(operationResult);
+            return builder.Build();
         }
 
         private bnet.protocol.storage.ExecuteResponse LoadAccountDigest(bnet.protocol.storage.ExecuteRequest request)
@@ -78,25 +120,20 @@ namespace D3Sharp.Core.Services
                                             .SetSigilColorIndex(0)
                                             .SetUseSigilVariant(false)
                                             .Build())
-                                            .SetFlags(0)
-                                            .Build();
-                
+                .SetFlags(0)
+                .Build();
 
-            foreach (var operation in request.OperationsList)
-            {
-                var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
-                    .SetTableId(operation.TableId)
-                    .AddData(
-                        bnet.protocol.storage.Cell.CreateBuilder()
-                            .SetColumnId(operation.ColumnId)
-                            .SetRowId(operation.RowId)
-                            .SetVersion(1)
-                            .SetData(accountDigest.ToByteString())
-                            .Build()).Build();
+            var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
+                .SetTableId(request.OperationsList[0].TableId)
+                .AddData(
+                    bnet.protocol.storage.Cell.CreateBuilder()
+                        .SetColumnId(request.OperationsList[0].ColumnId)
+                        .SetRowId(request.OperationsList[0].RowId)
+                        .SetVersion(1)
+                        .SetData(accountDigest.ToByteString())
+                        .Build()).Build();
 
-                builder.AddResults(operationResult);
-            }
-
+            builder.AddResults(operationResult);
             return builder.Build();
         }
 
@@ -104,19 +141,16 @@ namespace D3Sharp.Core.Services
         {
             var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
 
-            foreach (var operation in request.OperationsList)
-            {
-                var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
-                    .SetTableId(operation.TableId)
-                    .AddData(
-                        bnet.protocol.storage.Cell.CreateBuilder()
-                            .SetColumnId(operation.ColumnId)
-                            .SetRowId(operation.RowId)
-                            .Build()).Build();
 
-                builder.AddResults(operationResult);
-            }
+            var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
+                .SetTableId(request.OperationsList[0].TableId)
+                .AddData(
+                    bnet.protocol.storage.Cell.CreateBuilder()
+                        .SetColumnId(request.OperationsList[0].ColumnId)
+                        .SetRowId(request.OperationsList[0].RowId)
+                        .Build()).Build();
 
+            builder.AddResults(operationResult);
             return builder.Build();
         }
     }

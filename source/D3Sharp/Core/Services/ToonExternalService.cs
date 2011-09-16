@@ -16,10 +16,28 @@ namespace D3Sharp.Core.Services
             var response = bnet.protocol.toon.external.ToonListResponse.CreateBuilder().Build();
 
             var packet = new Packet(
-                new Header(new byte[] { 0xfe, 0x0, (byte)packetIn.Header.RequestID, 0x0, (byte)response.SerializedSize }),
+                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
             Logger.Debug("RPC:Toon:ToonListRequest()");
+            client.Send(packet);
+        }
+
+        [ServiceMethod(0x3)]
+        public void CreateToonRequest(IClient client, Packet packetIn)
+        {
+            var request = bnet.protocol.toon.external.CreateToonRequest.CreateBuilder().MergeFrom(packetIn.Payload.ToArray()).Build();
+            Console.WriteLine(request);
+
+            var response = bnet.protocol.toon.external.CreateToonResponse.CreateBuilder()
+                .SetToon(bnet.protocol.EntityId.CreateBuilder().SetHigh(0x300016200004433).SetLow(1))                
+                .Build();
+
+            var packet = new Packet(
+                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
+                response.ToByteArray());
+
+            Logger.Debug("RPC:Toon:CreateToonRequest()");
             client.Send(packet);
         }
     }
