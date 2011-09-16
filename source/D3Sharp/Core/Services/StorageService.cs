@@ -92,12 +92,19 @@ namespace D3Sharp.Core.Services
 
             var equipment = D3.Hero.VisualEquipment.CreateBuilder().Build();
 
+            // class - SetGbidClass
+            // wizard: 0x1D4681B1
+
+            // sex - SetPlayerFlags
+            // male: 0x0
+            // female: 0x2000002
+
             var heroDigest = D3.Hero.Digest.CreateBuilder().SetVersion(1)
                 .SetHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0x300016200004433).SetIdLow(1).Build())
                 .SetHeroName("testhero")
-                .SetGbidClass(3)
-                .SetLevel(5)
-                .SetPlayerFlags(0)
+                .SetGbidClass(0x1D4681B1)
+                .SetPlayerFlags(0x2000002)
+                .SetLevel(1)
                 .SetVisualEquipment(equipment)
                 //.SetQuestHistory(0, questhistory)
                 .SetLastPlayedAct(0)
