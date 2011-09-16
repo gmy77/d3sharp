@@ -7,8 +7,8 @@ using D3Sharp.Net.Packets;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x3, serviceHash: 0x83040608)]
-    public class Toon : Service
+    [Service(serviceID: 0x2, serverHash: 0x4124C31B, clientHash: 0x0)]
+    public class ToonExternalService : Service
     {
         [ServiceMethod(0x1)]
         public void GetToonList(IClient client, Packet packet)

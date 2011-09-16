@@ -36,7 +36,7 @@ namespace D3Sharp.Net.Packets
 
 
             var packet = new Packet(header, payload);
-            var service = ServiceManager.GetService(header.ServiceID);
+            var service = ServiceManager.GetServerServiceByID(header.ServiceID);
 
             if(service!=null)
             {

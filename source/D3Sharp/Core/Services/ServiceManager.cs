@@ -20,16 +20,16 @@ namespace D3Sharp.Core.Services
             }
         }
 
-        public static Service GetService(uint serviceID)
+        public static Service GetServerServiceByID(uint serviceID)
         {
             return (from pair in ProvidedServices let serviceInfo = pair.Value where serviceInfo.ServiceID == serviceID select Services[pair.Key]).FirstOrDefault();
         }
 
         private static uint _notImplementedServiceCounter = 99;
 
-        public static uint GetServiceIDByHash(uint serviceHash)
+        public static uint GetServerServiceIDByHash(uint serviceHash)
         {
-            foreach (var serviceInfo in ProvidedServices.Select(pair => pair.Value).Where(serviceInfo => serviceInfo.ServiceHash == serviceHash))
+            foreach (var serviceInfo in ProvidedServices.Select(pair => pair.Value).Where(serviceInfo => serviceInfo.ServerHash == serviceHash))
             {
                 return serviceInfo.ServiceID;
             }

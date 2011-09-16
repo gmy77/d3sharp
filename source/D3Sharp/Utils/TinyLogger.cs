@@ -34,7 +34,7 @@ namespace D3Sharp.Utils
         public static Logger CreateLogger()
         {
             var frame = new StackFrame(1, false);
-            var name = frame.GetMethod().DeclaringType.FullName;
+            var name = frame.GetMethod().DeclaringType.Name;
             if (name == null) throw new Exception("Error getting full name for declaring type.");
             if (!Loggers.ContainsKey(name)) Loggers.Add(name, new Logger(name));
             return Loggers[name];

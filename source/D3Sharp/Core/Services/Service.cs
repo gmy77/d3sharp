@@ -5,19 +5,22 @@ using System.Reflection;
 using System.Text;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
+using D3Sharp.Utils;
 
 namespace D3Sharp.Core.Services
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class ServiceAttribute : Attribute
     {
-        public uint ServiceID { get; set; }
-        public uint ServiceHash { get; set; }
+        public uint ServiceID { get; private set; }
+        public uint ServerHash { get; private set; }
+        public uint ClientHash { get; private set; }
 
-        public ServiceAttribute(uint serviceID, uint serviceHash)
+        public ServiceAttribute(uint serviceID, uint serverHash, uint clientHash)
         {
             this.ServiceID = serviceID;
-            this.ServiceHash = serviceHash;
+            this.ServerHash = serverHash;
+            this.ClientHash = clientHash;
         }
     }
 
@@ -34,6 +37,7 @@ namespace D3Sharp.Core.Services
 
     public class Service
     {
+        public static readonly Logger Logger = LogManager.CreateLogger();
         public Dictionary<uint, MethodInfo> Methods = new Dictionary<uint, MethodInfo>();
 
         public Service()
@@ -54,10 +58,14 @@ namespace D3Sharp.Core.Services
 
         public void CallMethod(uint methodID, IClient client, Packet packet)
         {
-            if (!this.Methods.ContainsKey(methodID)) return;
+            if (!this.Methods.ContainsKey(methodID))
+            {
+                Console.WriteLine("Unknown method 0x{0} called on {1} ", methodID, this.GetType());
+                return;
+            }
 
             var method = this.Methods[methodID];
-            Console.WriteLine("[Client Call]: {0}:{1}\n{2}\n", method.ReflectedType.FullName, method.Name,packet);
+            //Console.WriteLine("[Client]: {0}:{1}", method.ReflectedType.FullName, method.Name);
             method.Invoke(this, new object[] {client, packet});
         }
     }

@@ -9,11 +9,9 @@ using bnet.protocol;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x0, serviceHash: 0x0)]
-    public class Base : Service
+    [Service(serviceID: 0x0, serverHash: 0x0, clientHash: 0x0)]
+    public class BaseService : Service
     {
-        private static uint _importedServiceCounter = 99;
-
         [ServiceMethod(0x1)]
         public void Connect(IClient client, Packet packetIn)
         {
@@ -22,12 +20,12 @@ namespace D3Sharp.Core.Services
                 .SetClientId(ProcessId.CreateBuilder().SetLabel(1).SetEpoch(DateTime.Now.ToUnixTime()))
                 .Build();
 
-            var packet =
-                new Packet(
+            var packet = new Packet(
                     new Header(new byte[] {0xfe, 0x0, (byte) packetIn.Header.RequestID, 0x0, (byte) response.SerializedSize}),
                     response.ToByteArray());
 
-            client.Send(packet, response);
+            Logger.Debug("RPC:Connect()");
+            client.Send(packet);
         }
 
         [ServiceMethod(0x2)]
@@ -39,7 +37,9 @@ namespace D3Sharp.Core.Services
             var requestedServiceIDs = new List<uint>(); 
             foreach (var serviceHash in request.ImportedServiceHashList)
             {
-                requestedServiceIDs.Add(ServiceManager.GetServiceIDByHash(serviceHash));
+                var serviceID = ServiceManager.GetServerServiceIDByHash(serviceHash);
+                Logger.Trace("RPC:Bind() - Hash: 0x{0} ID: {1} Service: {2} ", serviceHash.ToString("X"), serviceID, ServiceManager.GetServerServiceByID(serviceID) != null ? ServiceManager.GetServerServiceByID(serviceID).GetType().Name : "N");
+                requestedServiceIDs.Add(serviceID);
             }
 
             // read services supplied by client..
@@ -50,8 +50,7 @@ namespace D3Sharp.Core.Services
             }
 
             var builder = bnet.protocol.connection.BindResponse.CreateBuilder();
-            foreach (var serviceId in requestedServiceIDs)
-                builder.AddImportedServiceId(serviceId);
+            foreach (var serviceId in requestedServiceIDs) builder.AddImportedServiceId(serviceId);
             var response = builder.Build();
 
             var packet =
@@ -59,7 +58,7 @@ namespace D3Sharp.Core.Services
                     new Header(new byte[] {0xfe, 0x0, (byte) packetIn.Header.RequestID, 0x0, (byte) response.SerializedSize}),
                     response.ToByteArray());
 
-            client.Send(packet, response);
+            client.Send(packet);
         }
     }
 }

@@ -67,13 +67,9 @@ namespace D3Sharp.Net
 
         #region send methods
 
-        public int Send(Packet packet, dynamic proto)
+        public int Send(Packet packet)
         {
             if (packet == null) throw new ArgumentNullException("packet");
-            if (proto == null) throw new ArgumentNullException("proto");
-
-            Console.WriteLine("[Server Reply]: {0}\n{1}{2}\n", proto.GetType(),proto,packet);
-
             return Send(packet.GetRawPacketData());
         }
 

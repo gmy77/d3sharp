@@ -63,12 +63,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Services\Authentication.cs" />
-    <Compile Include="Core\Services\Base.cs" />
-    <Compile Include="Core\Services\Connection.cs" />
+    <Compile Include="Core\Services\AuthenticationService.cs" />
+    <Compile Include="Core\Services\BaseService.cs" />
+    <Compile Include="Core\Services\ChannelInvitationService.cs" />
+    <Compile Include="Core\Services\FollowersService.cs" />
+    <Compile Include="Core\Services\FriendsService.cs" />
+    <Compile Include="Core\Services\GameMasterService.cs" />
+    <Compile Include="Core\Services\GameUtilitiesService.cs" />
     <Compile Include="Core\Services\Service.cs" />
     <Compile Include="Core\Services\ServiceManager.cs" />
-    <Compile Include="Core\Services\Toon.cs" />
+    <Compile Include="Core\Services\StorageService.cs" />
+    <Compile Include="Core\Services\ToonExternalService.cs" />
+    <Compile Include="Core\Services\UserManagerService.cs" />
     <Compile Include="Net\Packets\Header.cs" />
     <Compile Include="Net\Packets\Packet.cs" />
     <Compile Include="Program.cs" />
