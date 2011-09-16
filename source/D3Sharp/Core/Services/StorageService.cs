@@ -54,6 +54,9 @@ namespace D3Sharp.Core.Services
                 case "GetHeroDigests":
                     response = GetHeroDigest(request);
                     break;
+                case "GetToonSettings":
+                    response = GetToonSettings(request);
+                    break;
                 default:
                     break;
             }                
@@ -66,17 +69,33 @@ namespace D3Sharp.Core.Services
             client.Send(packet);
         }
 
+        private bnet.protocol.storage.ExecuteResponse GetToonSettings(bnet.protocol.storage.ExecuteRequest request)
+        {
+            var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
+
+            var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
+                .SetTableId(request.OperationsList[0].TableId)
+                .AddData(
+                    bnet.protocol.storage.Cell.CreateBuilder()
+                        .SetColumnId(request.OperationsList[0].ColumnId)
+                        .SetRowId(request.OperationsList[0].RowId)
+                        .SetVersion(1)
+                        .Build()).Build();
+
+            builder.AddResults(operationResult);
+            return builder.Build();
+        }
+
         private bnet.protocol.storage.ExecuteResponse GetHeroDigest(bnet.protocol.storage.ExecuteRequest request)
         {
             var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
 
             var equipment = D3.Hero.VisualEquipment.CreateBuilder().Build();
-            //var questhistory = D3.Hero.QuestHistoryEntry.CreateBuilder().Build();
 
             var heroDigest = D3.Hero.Digest.CreateBuilder().SetVersion(1)
                 .SetHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0x300016200004433).SetIdLow(1).Build())
                 .SetHeroName("testhero")
-                .SetGbidClass(1)
+                .SetGbidClass(3)
                 .SetLevel(5)
                 .SetPlayerFlags(0)
                 .SetVisualEquipment(equipment)

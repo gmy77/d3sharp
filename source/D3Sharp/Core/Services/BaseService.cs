@@ -55,7 +55,7 @@ namespace D3Sharp.Core.Services
 
             var packet =
                 new Packet(
-                    new Header(new byte[] {0xfe, 0x0, (byte) packetIn.Header.RequestID, 0x0, (byte) response.SerializedSize}),
+                    new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint) response.SerializedSize),
                     response.ToByteArray());
 
             client.Send(packet);
