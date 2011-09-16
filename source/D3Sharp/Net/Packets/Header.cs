@@ -18,8 +18,8 @@ namespace D3Sharp.Net.Packets
 
         public Header()
         {            
-            this.Unknown = 0x0;
-            this.PayloadLength = 0x0;
+            this.Unknown = 0x00;
+            this.PayloadLength = 0x00;
         }
 
         public Header(byte[] data)
@@ -30,7 +30,8 @@ namespace D3Sharp.Net.Packets
             this.ServiceID = stream.ReadRawByte();
             this.Method = stream.ReadRawVarint32();
             this.RequestID =  stream.ReadRawByte() | (stream.ReadRawByte() << 8);
-            if (ServiceID != 0xfe) this.Unknown = stream.ReadRawVarint64();
+            if (ServiceID != 0xfe)
+                this.Unknown = stream.ReadRawVarint64();
             this.PayloadLength = stream.ReadRawVarint32();
         }
 
@@ -45,7 +46,8 @@ namespace D3Sharp.Net.Packets
             //stream.WriteRawByte(this.Service);
             //stream.WriteRawVarint32(this.Method);
             //stream.WriteRawByte((byte) this.RequestID);
-            //stream.WriteRawVarint64(this.Unknown);
+            //if (ServiceID != 0xfe)
+                //stream.WriteRawVarint64(this.Unknown);
             //stream.WriteRawVarint32(this.PayloadLength);
         }
 

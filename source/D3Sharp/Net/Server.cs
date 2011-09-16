@@ -25,14 +25,14 @@ namespace D3Sharp.Net
         public event ConnectionDataEventHandler DataReceived;
         public event ConnectionDataEventHandler DataSent;
 
-
+        // Server services.
         public static Dictionary<uint, uint> Services = new Dictionary<uint, uint>
-                                                            {
-                                                                {0x0, 0x0}, // base service
-                                                                {0x1, 0xB732DB32}, // connection service 
-                                                                {0x2, 0xDECFC01}, // authentication service
-                                                                {0x3, 0x83040608 } // toon service
-                                                            };
+        {
+            {0x00, 0x00      }, // base service
+            {0x01, 0xB732DB32}, // connection service
+            {0x02, 0xDECFC01 }, // authentication service
+            {0x03, 0x83040608}  // toon service
+        };
 
         private static readonly Logger Logger = LogManager.CreateLogger();
         private bool _disposed;
@@ -52,7 +52,7 @@ namespace D3Sharp.Net
             try {
                 Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, true);
             } catch (SocketException e) {
-                // This is failing on Linux. Dunno why.
+                // This is failing on Linux; dunno why.
                 Logger.DebugException(e, "Listen");
             }
             Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
@@ -139,7 +139,8 @@ namespace D3Sharp.Net
                 while (bytesRemaining > 0) // Ensure we send every byte.
                 {
                     var bytesSent = connection.Socket.Send(buffer, totalBytesSent, bytesRemaining, flags); // Send the remaining data.                    
-                    if (bytesSent > 0) OnDataSent(new ClientDataEventArgs(connection, buffer.Enumerate(totalBytesSent, bytesSent))); // Raise the Data Sent event.
+                    if (bytesSent > 0)
+                        OnDataSent(new ClientDataEventArgs(connection, buffer.Enumerate(totalBytesSent, bytesSent))); // Raise the Data Sent event.
 
                     // Decrement bytes remaining and increment bytes sent.
                     bytesRemaining -= bytesSent;
@@ -173,25 +174,25 @@ namespace D3Sharp.Net
 
         #region events
 
-        protected virtual void OnClientConnection(ClientEventArgs e) // Raise the ClientConnected event.
+        protected virtual void OnClientConnection(ClientEventArgs e)
         {
             var handler = ClientConnected;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnClientDisconnect(ClientEventArgs e) // Raise the ClientDisconnected event.
+        protected virtual void OnClientDisconnect(ClientEventArgs e)
         {
             var handler = ClientDisconnected;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnDataReceived(ClientDataEventArgs e) // Raise the DataReceived event.
+        protected virtual void OnDataReceived(ClientDataEventArgs e)
         {
             var handler = DataReceived;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnDataSent(ClientDataEventArgs e) // Raise the DataSent event.
+        protected virtual void OnDataSent(ClientDataEventArgs e)
         {
             var handler = DataSent;
             if (handler != null) handler(this, e);
@@ -268,7 +269,7 @@ namespace D3Sharp.Net
                 DisconnectAll(); // Disconnect all users.
             }
 
-            // Dispose of unmanaged resoureces here.
+            // Dispose of unmanaged resources here.
 
             _disposed = true;
         }

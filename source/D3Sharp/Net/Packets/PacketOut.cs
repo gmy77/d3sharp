@@ -22,7 +22,15 @@ namespace D3Sharp.Net.Packets
 
         public override string ToString()
         {
-            return string.Format("\n===========[OUT]===========\nType\t: {0}\nHeader\t: {1}\nProto\t: {2}Data\t: {3}- {4}", this.Response.GetType(), Header, this.Response ?? this.Payload.HexDump(), this.Header.Data.HexDump(), this.Payload.HexDump());
+            return
+            string.Format(
+                "\n===========[OUT]===========\nType\t: {0}\nHeader\t: {1}\nProto\t: {2}Data\t: {3}- {4}",
+                this.Response.GetType(),
+                this.Header,
+                this.Response ?? this.Payload.HexDump(),
+                this.Header.Data.HexDump(),
+                this.Payload.HexDump()
+            );
         }
     }
 }

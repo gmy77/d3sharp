@@ -16,8 +16,8 @@ namespace D3Sharp.Net
         public override string ToString()
         {
             return Client.RemoteEndPoint != null
-                       ? string.Format("{0}: {1} bytes", Client.RemoteEndPoint, Data.Count())
-                       : string.Format("Not Connected: {0} bytes", Data.Count());
+                ? string.Format("{0}: {1} bytes", Client.RemoteEndPoint, Data.Count())
+                : string.Format("Not Connected: {0} bytes", Data.Count());
         }
     }
 }

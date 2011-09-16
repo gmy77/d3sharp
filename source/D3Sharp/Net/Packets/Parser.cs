@@ -14,7 +14,8 @@ namespace D3Sharp.Net.Packets
         {
             foreach (Type t in Assembly.GetEntryAssembly().GetTypes())
             {
-                if (!t.IsSubclassOf(typeof(PacketIn))) continue; // check if type is a subclass 'HardcodedPacket'.
+                if (!t.IsSubclassOf(typeof(PacketIn)))
+                    continue;
                 ReadPacketInfo(t);
             }
         }
@@ -22,19 +23,20 @@ namespace D3Sharp.Net.Packets
         private static void ReadPacketInfo(Type type)
         {
             object[] attr = type.GetCustomAttributes(typeof(ServiceAttribute), true); // get the attributes of the packet.
-            if (attr.Length == 0) return;
-
+            if (attr.Length == 0)
+                return;
             Packets.Add(type, (ServiceAttribute)attr[0]);            
         }
 
         public static void Parse(ClientDataEventArgs e)
         {
             var buffer = e.Data.ToArray();
-
-            while (buffer.Length > 0) // we may have recieved more than one packets actually, process them all..
+            // handle data as a stream -- a single packet can contain multiple messages
+            while (buffer.Length > 0)
             {
                 var bytesConsumed = Identify(e.Client, buffer);
-                if (bytesConsumed <= 0) return;
+                if (bytesConsumed <= 0)
+                    return;
 
                 var bytesLeft=buffer.Length - bytesConsumed;
                 var tmp = new byte[bytesLeft];
@@ -47,10 +49,11 @@ namespace D3Sharp.Net.Packets
         {
             var header = new Header(buffer.Take(6));
             var payload = new byte[header.PayloadLength];
-            if (header.PayloadLength > 0) Array.Copy(buffer, 6, payload, 0, header.PayloadLength); // if our packet contains a payload, get it.
+            // if our packet contains a payload, get it.
+            if (header.PayloadLength > 0)
+                Array.Copy(buffer, 6, payload, 0, header.PayloadLength);
 
-
-            if(Server.Services.ContainsKey(header.ServiceID))
+            if (Server.Services.ContainsKey(header.ServiceID))
             {
                 var serviceHash = Server.Services[header.ServiceID];
                 foreach(var pair in Packets)

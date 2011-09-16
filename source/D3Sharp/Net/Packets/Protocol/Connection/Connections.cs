@@ -43,7 +43,8 @@ namespace D3Sharp.Net.Packets.Protocol.Connection
             : base(requestID)
         {
             var builder = bnet.protocol.connection.BindResponse.CreateBuilder();           
-            foreach (var serviceId in requestedServiceIDs) { builder.AddImportedServiceId(serviceId); }
+            foreach (var serviceId in requestedServiceIDs)
+                builder.AddImportedServiceId(serviceId);
             this.Response = builder.Build();
 
             this.Header = new Header(new byte[] { 0xfe, 0x0, (byte)requestID, 0x0, (byte)this.Response.SerializedSize });

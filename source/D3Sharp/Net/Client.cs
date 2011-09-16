@@ -52,7 +52,7 @@ namespace D3Sharp.Net
             this._socket = socket;
             this.Services = new Dictionary<uint, uint>();
         }
-
+        
         private static uint _importedServiceCounter = 99;
 
         public void Process(PacketIn packet)
@@ -68,10 +68,13 @@ namespace D3Sharp.Net
             else if (packet is BindRequest)
             {
                 var requestedServiceIDs = new List<uint>();
-
-                foreach (var serviceHash in packet.Request.ImportedServiceHashList) // supply service id's requested by client using service-hashes.
+                // supply service id's requested by client using service-hashes.
+                foreach (var serviceHash in packet.Request.ImportedServiceHashList) 
                 {
-                    requestedServiceIDs.Add(Server.Services.ContainsValue(serviceHash) ?  Server.Services.Where(pair => pair.Value == serviceHash).FirstOrDefault().Key : _importedServiceCounter++);
+                    requestedServiceIDs.Add(
+                        Server.Services.ContainsValue(serviceHash)
+                        ? Server.Services.Where(pair => pair.Value == serviceHash).FirstOrDefault().Key
+                        : _importedServiceCounter++);
                 }
 
                 if (requestedServiceIDs.Count > 0)
@@ -80,10 +83,11 @@ namespace D3Sharp.Net
                     this.Send(response.GetRawPacketData());
                     Console.WriteLine(response);
                 }
-                
-                foreach (var service in packet.Request.ExportedServiceList) // add list of imported services supplied by client.
+                // add list of imported services supplied by client.
+                foreach (var service in packet.Request.ExportedServiceList) 
                 {
-                    if (!this.Services.ContainsKey(service.Id)) this.Services.Add(service.Id, service.Hash);
+                    if (!this.Services.ContainsKey(service.Id))
+                         this.Services.Add(service.Id, service.Hash);
                 }
             }
 
@@ -152,13 +156,16 @@ namespace D3Sharp.Net
 
         public void Disconnect()
         {
-            if (this.IsConnected) _server.Disconnect(this);
+            if (this.IsConnected)
+                _server.Disconnect(this);
         }
 
         public override string ToString()
         {
-            if (_socket.RemoteEndPoint != null) return _socket.RemoteEndPoint.ToString();
-            else return "Not Connected";
+            if (_socket.RemoteEndPoint != null)
+                return _socket.RemoteEndPoint.ToString();
+            else
+                return "Not Connected";
         }
     }
 }
