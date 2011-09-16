@@ -94,6 +94,10 @@ namespace D3Sharp.Core.Services
 
             // class - SetGbidClass
             // wizard: 0x1D4681B1
+            // witch doctor: 0x343C22A
+            // demon hunter: -930376119
+            // monk: 0x3DAC15
+            // barbarian: 0x4FB91EE2
 
             // sex - SetPlayerFlags
             // male: 0x0
@@ -102,7 +106,7 @@ namespace D3Sharp.Core.Services
             var heroDigest = D3.Hero.Digest.CreateBuilder().SetVersion(1)
                 .SetHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0x300016200004433).SetIdLow(1).Build())
                 .SetHeroName("testhero")
-                .SetGbidClass(0x1D4681B1)
+                .SetGbidClass(0x4FB91EE2)
                 .SetPlayerFlags(0x2000002)
                 .SetLevel(1)
                 .SetVisualEquipment(equipment)
