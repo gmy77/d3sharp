@@ -49,7 +49,7 @@ namespace D3Sharp.Core.Services
             ulong eid_low=0xFFFFFFFFFFFFFFFF; // Actual id?
 
             var equipment = D3.Hero.VisualEquipment.CreateBuilder().Build();
-            var heroDigest = D3.Hero.Digest.CreateBuilder().SetVersion(1)
+            var heroDigest = D3.Hero.Digest.CreateBuilder().SetVersion(891)
                 .SetHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(eid_high).SetIdLow(eid_low).Build())
                 .SetHeroName(request.Name)
                 .SetGbidClass(hcp.GbidClass)
@@ -61,8 +61,8 @@ namespace D3Sharp.Core.Services
                 .SetHighestUnlockedAct(0)
                 .SetLastPlayedDifficulty(0)
                 .SetHighestUnlockedDifficulty(0)
-                .SetLastPlayedQuest(1)
-                .SetLastPlayedQuestStep(1)
+                .SetLastPlayedQuest(-1)
+                .SetLastPlayedQuestStep(-1)
                 .SetTimePlayed(0)
                 .Build();
             
