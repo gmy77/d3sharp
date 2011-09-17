@@ -3,6 +3,7 @@ using System.Reflection;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
 using D3Sharp.Utils;
+using Nini.Config;
 
 namespace D3Sharp
 {
@@ -28,7 +29,9 @@ namespace D3Sharp
         }
         
         Program() {
-            this._port=1345;
+			IConfigSource source = new IniConfigSource("config.ini"); // get configuration file
+			
+			this._port=source.Configs["Server"].GetInt("Port"); // apply port number from config file
         }
         
         public void ParseArguments(string[] args) {
