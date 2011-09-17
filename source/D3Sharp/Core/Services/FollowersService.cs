@@ -19,7 +19,7 @@ namespace D3Sharp.Core.Services
                 new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
-            Logger.Debug("RPC:Followers:Subscribe()");
+            Logger.Trace("RPC:Followers:Subscribe()");
             client.Send(packet);
         }
     }

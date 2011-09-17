@@ -14,6 +14,7 @@ namespace D3Sharp.Core.Services
         [ServiceMethod(0x1)]
         public void Logon(IClient client, Packet packetIn)
         {
+            Logger.Trace("RPC:Authentication:Logon()");
             var response = bnet.protocol.authentication.LogonResponse.CreateBuilder()
                 .SetAccount(EntityId.CreateBuilder().SetHigh(0x100000000000000).SetLow(0))
                 .SetGameAccount(EntityId.CreateBuilder().SetHigh(0x200006200004433).SetLow(0))
@@ -23,7 +24,6 @@ namespace D3Sharp.Core.Services
                 new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
-            Logger.Debug("RPC:Logon()");
             client.Send(packet);
         }       
     }

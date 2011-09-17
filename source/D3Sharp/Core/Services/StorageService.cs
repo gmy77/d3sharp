@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
+using D3Sharp.Utils.Extensions;
 using Google.ProtocolBuffers;
 
 namespace D3Sharp.Core.Services
@@ -14,34 +15,36 @@ namespace D3Sharp.Core.Services
         [ServiceMethod(0x2)]
         public void OpenTableRequest(IClient client, Packet packetIn)
         {
+            Logger.Trace("RPC:Storage:OpenTableRequest()");
             var response = bnet.protocol.storage.OpenTableResponse.CreateBuilder().Build();
 
             var packet = new Packet(
                 new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
-            Logger.Debug("RPC:Storage:OpenTableRequest()");
             client.Send(packet);
         }
 
         [ServiceMethod(0x3)]
         public void OpenColumnRequest(IClient client, Packet packetIn)
         {
+            Logger.Trace("RPC:Storage:OpenColumnRequest()");
             var response = bnet.protocol.storage.OpenColumnResponse.CreateBuilder().Build();
 
             var packet = new Packet(
                 new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
-            Logger.Debug("RPC:Storage:OpenColumnRequest()");
             client.Send(packet);
         }
 
         [ServiceMethod(0x1)]
         public void ExecuteRequest(IClient client, Packet packetIn)
         {
-            var request = bnet.protocol.storage.ExecuteRequest.CreateBuilder().MergeFrom(packetIn.Payload.ToArray()).Build();
-
+            Logger.Trace("RPC:Storage:ExecuteRequest()");
+            var request = bnet.protocol.storage.ExecuteRequest.ParseFrom(packetIn.Payload.ToArray());
+            //Logger.Debug("request:\n{0}", request.ToString());
+            
             bnet.protocol.storage.ExecuteResponse response = null;
             switch (request.QueryName)
             {
@@ -58,6 +61,7 @@ namespace D3Sharp.Core.Services
                     response = GetToonSettings(request);
                     break;
                 default:
+                    Logger.Warn("Unhandled ExecuteRequest: {0}", request.QueryName);
                     break;
             }                
             
@@ -65,7 +69,6 @@ namespace D3Sharp.Core.Services
                 new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
-            Logger.Debug("RPC:Storage:ExecuteRequest()");
             client.Send(packet);
         }
 
@@ -88,8 +91,33 @@ namespace D3Sharp.Core.Services
 
         private bnet.protocol.storage.ExecuteResponse GetHeroDigest(bnet.protocol.storage.ExecuteRequest request)
         {
+            var op=request.OperationsList[0];
+            var table_id=op.TableId;
+            var column_id=op.ColumnId;
+            var row_id=op.RowId;
+            
+            Logger.Debug("table_id.hash:\n{0}", table_id.Hash.ToByteArray().Dump());
+            Logger.Debug("column_id.hash:\n{0}", column_id.Hash.ToByteArray().Dump());
+            Logger.Debug("row_id.hash:\n{0}", row_id.Hash.ToByteArray().Dump());
+            
+            try {
+                var stream = CodedInputStream.CreateInstance(row_id.Hash.ToByteArray());
+                stream.SkipRawBytes(2);
+                var tgen=bnet.protocol.toon.ToonHandle.CreateBuilder()
+                    .SetRealm(stream.ReadRawVarint32())
+                    .SetRegion(stream.ReadRawVarint32())
+                    .SetProgram(stream.ReadUInt32()) // "D3\0\0"
+                    .SetId(stream.ReadUInt64())
+                    .Build();
+                Logger.Debug("generated:\n{0}", tgen.ToByteArray().Dump());
+                Logger.Debug(tgen.ToString());
+                //var toonhandle=bnet.protocol.toon.ToonHandle.ParseFrom(eid.ToByteArray());
+                //Logger.Debug("row_id.hash as handle:\n{0}", toonhandle.ToString());
+            } catch (Exception e) {
+                Logger.DebugException(e, "row_id");
+            }
             var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
-
+            
             var equipment = D3.Hero.VisualEquipment.CreateBuilder().Build();
 
             // class - SetGbidClass
@@ -104,7 +132,7 @@ namespace D3Sharp.Core.Services
             // female: 0x2000002
 
             var heroDigest = D3.Hero.Digest.CreateBuilder().SetVersion(1)
-                .SetHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0x300016200004433).SetIdLow(1).Build())
+                .SetHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0x300016200004433).SetIdLow(0xFFFFFFFFFFFFFFFF).Build())
                 .SetHeroName("testhero")
                 .SetGbidClass(0x4FB91EE2)
                 .SetPlayerFlags(0x2000002)

@@ -13,6 +13,7 @@ namespace D3Sharp.Core.Services
         [ServiceMethod(0x2)]
         public void ListFactoriesRequest(IClient client, Packet packetIn)
         {
+            Logger.Trace("RPC:GameMaster:ListFactoriesRequest()");
             //var reqb = bnet.protocol.game_master.ListFactoriesRequest.ParseFrom(packetIn.Payload.ToArray());
             var varib1 = bnet.protocol.attribute.Variant.CreateBuilder();
             varib1.SetIntValue(2);
@@ -68,7 +69,6 @@ namespace D3Sharp.Core.Services
             var packet = new Packet(
                 new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
-            Logger.Debug("RPC:GameMasterService:ListFactoriesRequest()");
             client.Send(packet);
         }
     }

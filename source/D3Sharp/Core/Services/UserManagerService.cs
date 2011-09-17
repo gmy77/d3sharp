@@ -13,13 +13,13 @@ namespace D3Sharp.Core.Services
         [ServiceMethod(0x1)]
         public void SubscribeToUserManager(IClient client, Packet packetIn)
         {
+            Logger.Trace("RPC:UserManager:Subscribe()");
             var response = bnet.protocol.user_manager.SubscribeToUserManagerResponse.CreateBuilder().Build();
 
             var packet = new Packet(
                 new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
-            Logger.Debug("RPC:UserManager:Subscribe()");
             client.Send(packet);
         }
     }

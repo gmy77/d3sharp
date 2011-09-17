@@ -13,6 +13,7 @@ namespace D3Sharp.Core.Services
         [ServiceMethod(0x1)]
         public void SubscribeToFriends(IClient client, Packet packetIn)
         {
+            Logger.Trace("RPC:Friends:Subscribe()");
             var response = bnet.protocol.friends.SubscribeToFriendsResponse.CreateBuilder()
                 .SetMaxFriends(127)
                 .SetMaxReceivedInvitations(127)
@@ -23,7 +24,6 @@ namespace D3Sharp.Core.Services
                 new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
-            Logger.Debug("RPC:Friends:Subscribe()");
             client.Send(packet);
         }
     }
