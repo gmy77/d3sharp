@@ -1,3 +1,5 @@
-# This will not get you in the game
+# Stay awhile and listen
 
-Read the [FAQ](/raistlinthewiz/d3sharp/wiki/FAQ) on GitHub.
+* Read the fucking [FAQ](/raistlinthewiz/d3sharp/wiki/FAQ) before asking!
+* Status: Will not you get you in-game yet.
+* IRC: [#d3sharp/rizon](irc://irc.synirc.net/d3dev)
