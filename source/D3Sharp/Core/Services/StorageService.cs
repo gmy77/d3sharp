@@ -10,9 +10,9 @@ namespace D3Sharp.Core.Services
     public class StorageService : Service
     {
         [ServiceMethod(0x2)]
-        public void OpenTableRequest(IClient client, Packet packetIn)
+        public void OpenTable(IClient client, Packet packetIn)
         {
-            Logger.Trace("RPC:Storage:OpenTableRequest()");
+            Logger.Trace("RPC:Storage:OpenTable()");
             var response = bnet.protocol.storage.OpenTableResponse.CreateBuilder().Build();
 
             var packet = new Packet(
@@ -23,9 +23,9 @@ namespace D3Sharp.Core.Services
         }
 
         [ServiceMethod(0x3)]
-        public void OpenColumnRequest(IClient client, Packet packetIn)
+        public void OpenColumn(IClient client, Packet packetIn)
         {
-            Logger.Trace("RPC:Storage:OpenColumnRequest()");
+            Logger.Trace("RPC:Storage:OpenColumn()");
             var response = bnet.protocol.storage.OpenColumnResponse.CreateBuilder().Build();
 
             var packet = new Packet(
@@ -36,9 +36,9 @@ namespace D3Sharp.Core.Services
         }
 
         [ServiceMethod(0x1)]
-        public void ExecuteRequest(IClient client, Packet packetIn)
+        public void Execute(IClient client, Packet packetIn)
         {
-            Logger.Trace("RPC:Storage:ExecuteRequest()");
+            Logger.Trace("RPC:Storage:Execute()");
             var request = bnet.protocol.storage.ExecuteRequest.ParseFrom(packetIn.Payload.ToArray());
             //Logger.Debug("request:\n{0}", request.ToString());
             
@@ -58,7 +58,7 @@ namespace D3Sharp.Core.Services
                     response = GetToonSettings(request);
                     break;
                 default:
-                    Logger.Warn("Unhandled ExecuteRequest: {0}", request.QueryName);
+                    Logger.Warn("Unhandled query: {0}", request.QueryName);
                     break;
             }                
             

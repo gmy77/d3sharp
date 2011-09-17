@@ -12,9 +12,9 @@ namespace D3Sharp.Core.Services
     public class ToonExternalService : Service
     {
         [ServiceMethod(0x1)]
-        public void ToonListRequest(IClient client, Packet packetIn)
+        public void ToonList(IClient client, Packet packetIn)
         {            
-            Logger.Trace("RPC:ToonExternal:ToonListRequest()");
+            Logger.Trace("RPC:ToonExternal:ToonList()");
             var response = bnet.protocol.toon.external.ToonListResponse.CreateBuilder().Build();
 
             var packet = new Packet(
@@ -25,9 +25,9 @@ namespace D3Sharp.Core.Services
         }
 
         [ServiceMethod(0x2)]
-        public void SelectToonRequest(IClient client, Packet packetIn)
+        public void SelectToon(IClient client, Packet packetIn)
         {
-            Logger.Trace("RPC:ToonExternal:SelectToonRequest()");
+            Logger.Trace("RPC:ToonExternal:SelectToon()");
             //var request = bnet.protocol.toon.external.SelectToonRequest.ParseFrom(packetIn.Payload.ToArray());
             var response = bnet.protocol.toon.external.SelectToonResponse.CreateBuilder().Build();
 
@@ -39,9 +39,9 @@ namespace D3Sharp.Core.Services
         }
 
         [ServiceMethod(0x3)]
-        public void CreateToonRequest(IClient client, Packet packetIn)
+        public void CreateToon(IClient client, Packet packetIn)
         {
-            Logger.Trace("RPC:ToonExternal:CreateToonRequest()");
+            Logger.Trace("RPC:ToonExternal:CreateToon()");
             var request = bnet.protocol.toon.external.CreateToonRequest.ParseFrom(packetIn.Payload.ToArray());
             var hcp = D3.OnlineService.HeroCreateParams.ParseFrom(request.AttributeList[0].Value.MessageValue);
             
