@@ -7,7 +7,7 @@ using Google.ProtocolBuffers;
 ﻿namespace D3Sharp.Core.Services
 {
     // bnet.protocol.party.PartyService
-    [Service(serviceID: 0x0D, serverHash: 0xF4E7FA35, clientHash: 0x0)]
+    [Service(serviceID: 0x0D, serviceName: "bnet.protocol.party.PartyService", clientHash: 0x0)]
     public class PartyService : Service
     {
         [ServiceMethod(0x01)]

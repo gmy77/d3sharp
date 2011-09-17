@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
 using D3Sharp.Utils;
@@ -18,6 +20,13 @@ namespace D3Sharp.Core.Services
         {
             this.ServiceID = serviceID;
             this.ServerHash = serverHash;
+            this.ClientHash = clientHash;
+        }
+
+        public ServiceAttribute(uint serviceID, string serviceName, uint clientHash)
+        {
+            this.ServiceID = serviceID;
+            this.ServerHash = Service.GetServiceHashFromName(serviceName);
             this.ClientHash = clientHash;
         }
     }
@@ -65,6 +74,13 @@ namespace D3Sharp.Core.Services
             var method = this.Methods[methodID];
             //Console.WriteLine("[Client]: {0}:{1}", method.ReflectedType.FullName, method.Name);
             method.Invoke(this, new object[] {client, packet});
+        }
+
+        public static uint GetServiceHashFromName(string name)
+        {
+            var bytes = Encoding.ASCII.GetBytes(name);
+            return bytes.Aggregate(0x811C9DC5, (current, t) => 0x1000193*(t ^ current));
+
         }
     }
 }

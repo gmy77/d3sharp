@@ -3,7 +3,7 @@ using D3Sharp.Net.Packets;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x7, serverHash: 0x810CB195, clientHash: 0x0)]
+    [Service(serviceID: 0x7, serviceName: "bnet.protocol.game_master.GameMaster", clientHash: 0x0)]
     public class GameMasterService : Service
     {
         [ServiceMethod(0x1)]

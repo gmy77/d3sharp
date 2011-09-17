@@ -4,7 +4,7 @@ using D3Sharp.Net.Packets;
 namespace D3Sharp.Core.Services
 {
     // bnet.protocol.presence
-    [Service(serviceID: 0xb, serverHash: 0xFA0796FF, clientHash: 0x0)]
+    [Service(serviceID: 0xb, serviceName: "bnet.protocol.presence.PresenceService", clientHash: 0x0)]
     public class PresenceService : Service
     {
         [ServiceMethod(0x1)]

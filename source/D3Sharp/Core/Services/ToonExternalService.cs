@@ -8,7 +8,7 @@ using Google.ProtocolBuffers;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x2, serverHash: 0x4124C31B, clientHash: 0x0)]
+    [Service(serviceID: 0x2, serviceName: "bnet.protocol.toon.external.ToonServiceExternal", clientHash: 0x0)]
     public class ToonExternalService : Service
     {
         [ServiceMethod(0x1)]
@@ -48,7 +48,21 @@ namespace D3Sharp.Core.Services
             ulong eid_high=0x0300016200004433; // ToonHandle
             ulong eid_low=0xFFFFFFFFFFFFFFFF; // Actual id?
 
-            var equipment = D3.Hero.VisualEquipment.CreateBuilder().Build();
+            var visualItems = new[]
+                            {
+                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
+                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
+                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
+                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
+                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
+                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
+                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
+                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
+                            };
+
+            var equipment = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems);
+
+
             var heroDigest = D3.Hero.Digest.CreateBuilder().SetVersion(891)
                 .SetHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(eid_high).SetIdLow(eid_low).Build())
                 .SetHeroName(request.Name)
@@ -56,7 +70,6 @@ namespace D3Sharp.Core.Services
                 .SetPlayerFlags(hcp.IsFemale ? (uint)0x2000002 : 0x00)
                 .SetLevel(1)
                 .SetVisualEquipment(equipment)
-                //.SetQuestHistory(0, questhistory)
                 .SetLastPlayedAct(0)
                 .SetHighestUnlockedAct(0)
                 .SetLastPlayedDifficulty(0)
@@ -77,9 +90,9 @@ namespace D3Sharp.Core.Services
                 eid_bytes=stream.ToArray();
             }
             // In this we have the tags, which are not in the ColumnId, and eid.High is coded backwards (otherwise this would be correct)
-            Logger.Debug("D3OS EID bytes:\n{0}", eid.ToByteArray().Dump());
+            //Logger.Debug("D3OS EID bytes:\n{0}", eid.ToByteArray().Dump());
             // And in the raw format, the data for eid.High is never even close to what it should be
-            Logger.Debug("D3OS EID raw:\n{0}", eid_bytes.Dump());
+            //Logger.Debug("D3OS EID raw:\n{0}", eid_bytes.Dump());
             
             // Hard coding eid as ColumnId for certain form
             var colid = bnet.protocol.storage.ColumnId.CreateBuilder()

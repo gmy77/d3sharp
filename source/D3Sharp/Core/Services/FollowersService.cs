@@ -3,7 +3,7 @@ using D3Sharp.Net.Packets;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x4, serverHash: 0xE5A11099, clientHash: 0x905CDF9F)]
+    [Service(serviceID: 0x4, serviceName: "bnet.protocol.followers.FollowersService", clientHash: 0x905CDF9F)]
     public class FollowersService : Service
     {
         [ServiceMethod(0x1)]

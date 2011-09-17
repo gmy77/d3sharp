@@ -6,7 +6,7 @@ using D3Sharp.Core.Storage;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x9, serverHash: 0xDA6E4BB9, clientHash: 0x0)]
+    [Service(serviceID: 0x9, serviceName: "bnet.protocol.storage.StorageService", clientHash: 0x0)]
     public class StorageService : Service
     {
         [ServiceMethod(0x2)]
@@ -94,9 +94,9 @@ namespace D3Sharp.Core.Services
             var column_id=op.ColumnId;
             var row_id=op.RowId;
             
-            Logger.Debug("table_id.Hash:\n{0}", table_id.Hash.ToByteArray().Dump());
-            Logger.Debug("column_id.Hash:\n{0}", column_id.Hash.ToByteArray().Dump());
-            Logger.Debug("row_id.Hash:\n{0}", row_id.Hash.ToByteArray().Dump());
+            //Logger.Debug("table_id.Hash:\n{0}", table_id.Hash.ToByteArray().Dump());
+            //Logger.Debug("column_id.Hash:\n{0}", column_id.Hash.ToByteArray().Dump());
+            //Logger.Debug("row_id.Hash:\n{0}", row_id.Hash.ToByteArray().Dump());
             
             /*try {
                 var stream = CodedInputStream.CreateInstance(row_id.Hash.ToByteArray());
@@ -114,6 +114,7 @@ namespace D3Sharp.Core.Services
             } catch (Exception e) {
                 Logger.DebugException(e, "row_id");
             }*/
+
             var heroDigest = D3.Hero.Digest.ParseFrom(StorageManager.Tables[table_id].Rows[row_id].Cells[column_id].Data);
 
             var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
