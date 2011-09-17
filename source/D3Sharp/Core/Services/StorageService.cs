@@ -5,6 +5,7 @@ using System.Text;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
 using D3Sharp.Utils.Extensions;
+using D3Sharp.Core.Storage;
 using Google.ProtocolBuffers;
 
 namespace D3Sharp.Core.Services
@@ -83,7 +84,8 @@ namespace D3Sharp.Core.Services
                         .SetColumnId(request.OperationsList[0].ColumnId)
                         .SetRowId(request.OperationsList[0].RowId)
                         .SetVersion(1)
-                        .Build()).Build();
+                        .Build())
+                .Build();
 
             builder.AddResults(operationResult);
             return builder.Build();
@@ -96,11 +98,11 @@ namespace D3Sharp.Core.Services
             var column_id=op.ColumnId;
             var row_id=op.RowId;
             
-            Logger.Debug("table_id.hash:\n{0}", table_id.Hash.ToByteArray().Dump());
-            Logger.Debug("column_id.hash:\n{0}", column_id.Hash.ToByteArray().Dump());
-            Logger.Debug("row_id.hash:\n{0}", row_id.Hash.ToByteArray().Dump());
+            Logger.Debug("table_id.Hash:\n{0}", table_id.Hash.ToByteArray().Dump());
+            Logger.Debug("column_id.Hash:\n{0}", column_id.Hash.ToByteArray().Dump());
+            Logger.Debug("row_id.Hash:\n{0}", row_id.Hash.ToByteArray().Dump());
             
-            try {
+            /*try {
                 var stream = CodedInputStream.CreateInstance(row_id.Hash.ToByteArray());
                 stream.SkipRawBytes(2);
                 var tgen=bnet.protocol.toon.ToonHandle.CreateBuilder()
@@ -115,37 +117,8 @@ namespace D3Sharp.Core.Services
                 //Logger.Debug("row_id.hash as handle:\n{0}", toonhandle.ToString());
             } catch (Exception e) {
                 Logger.DebugException(e, "row_id");
-            }
-            var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
-            
-            var equipment = D3.Hero.VisualEquipment.CreateBuilder().Build();
-
-            // class - SetGbidClass
-            // wizard: 0x1D4681B1
-            // witch doctor: 0x343C22A
-            // demon hunter: -930376119
-            // monk: 0x3DAC15
-            // barbarian: 0x4FB91EE2
-
-            // sex - SetPlayerFlags
-            // male: 0x0
-            // female: 0x2000002
-
-            var heroDigest = D3.Hero.Digest.CreateBuilder().SetVersion(1)
-                .SetHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0x300016200004433).SetIdLow(0xFFFFFFFFFFFFFFFF).Build())
-                .SetHeroName("testhero")
-                .SetGbidClass(0x4FB91EE2)
-                .SetPlayerFlags(0x2000002)
-                .SetLevel(1)
-                .SetVisualEquipment(equipment)
-                //.SetQuestHistory(0, questhistory)
-                .SetLastPlayedAct(0)
-                .SetHighestUnlockedAct(0)
-                .SetLastPlayedDifficulty(0)
-                .SetHighestUnlockedDifficulty(0)
-                .SetLastPlayedQuest(1)
-                .SetLastPlayedQuestStep(1)
-                .SetTimePlayed(0).Build();
+            }*/
+            var heroDigest = D3.Hero.Digest.ParseFrom(StorageManager.Tables[table_id].Rows[row_id].Cells[column_id].Data);
 
             var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
                 .SetTableId(request.OperationsList[0].TableId)
@@ -155,8 +128,10 @@ namespace D3Sharp.Core.Services
                         .SetRowId(request.OperationsList[0].RowId)
                         .SetVersion(1)
                         .SetData(heroDigest.ToByteString())
-                        .Build()).Build();
+                        .Build()
+                ).Build();
 
+            var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
             builder.AddResults(operationResult);
             return builder.Build();
         }
@@ -168,16 +143,16 @@ namespace D3Sharp.Core.Services
             var accountDigest = D3.Account.Digest.CreateBuilder().SetVersion(1)
                 .SetLastPlayedHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).Build())
                 .SetBannerConfiguration(D3.Account.BannerConfiguration.CreateBuilder()
-                                            .SetBackgroundColorIndex(0)
-                                            .SetBannerIndex(0)
-                                            .SetPattern(0)
-                                            .SetPatternColorIndex(0)
-                                            .SetPlacementIndex(0)
-                                            .SetSigilAccent(0)
-                                            .SetSigilMain(0)
-                                            .SetSigilColorIndex(0)
-                                            .SetUseSigilVariant(false)
-                                            .Build())
+                    .SetBackgroundColorIndex(0)
+                    .SetBannerIndex(0)
+                    .SetPattern(0)
+                    .SetPatternColorIndex(0)
+                    .SetPlacementIndex(0)
+                    .SetSigilAccent(0)
+                    .SetSigilMain(0)
+                    .SetSigilColorIndex(0)
+                    .SetUseSigilVariant(false)
+                    .Build())
                 .SetFlags(0)
                 .Build();
 
@@ -189,7 +164,8 @@ namespace D3Sharp.Core.Services
                         .SetRowId(request.OperationsList[0].RowId)
                         .SetVersion(1)
                         .SetData(accountDigest.ToByteString())
-                        .Build()).Build();
+                        .Build())
+                .Build();
 
             builder.AddResults(operationResult);
             return builder.Build();
@@ -199,14 +175,14 @@ namespace D3Sharp.Core.Services
         {
             var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
 
-
             var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
                 .SetTableId(request.OperationsList[0].TableId)
                 .AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
                         .SetColumnId(request.OperationsList[0].ColumnId)
                         .SetRowId(request.OperationsList[0].RowId)
-                        .Build()).Build();
+                        .Build())
+                .Build();
 
             builder.AddResults(operationResult);
             return builder.Build();

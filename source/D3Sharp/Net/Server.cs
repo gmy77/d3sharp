@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using D3Sharp.Core.Storage;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Extensions;
 
@@ -41,9 +42,9 @@ namespace D3Sharp.Net
             // Create new TCP socket and set socket options.
             Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try {
+                // This is failing on Linux; dunno why.
                 Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, true);
             } catch (SocketException e) {
-                // This is failing on Linux; dunno why.
                 Logger.DebugException(e, "Listen");
             }
             Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
