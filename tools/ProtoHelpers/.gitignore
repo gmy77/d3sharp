@@ -1,3 +1,4 @@
 bin/
 obj/
 ProtoHelpers.pidb
+/*.csproj.ReSharper
