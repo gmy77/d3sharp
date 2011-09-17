@@ -34,5 +34,20 @@ namespace D3Sharp.Core.Services
 
             client.Send(packet);
         }
+
+        [ServiceMethod(0x13)]
+        public void UnsubscribeOrderStatusChangeRequest(IClient client, Packet packetIn)
+        {
+            Logger.Trace("RPC:Exchange:UnsubscribeOrderStatusChangeRequest() Stub");
+            var request = bnet.protocol.exchange.UnsubscribeOrderStatusChangeRequest.ParseFrom(packetIn.Payload.ToArray());
+
+            var response = bnet.protocol.NoData.CreateBuilder().Build();
+
+            var packet = new Packet(
+                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
+                response.ToByteArray());
+
+            client.Send(packet);
+        }
     }
 }
