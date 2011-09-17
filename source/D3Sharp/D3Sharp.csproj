@@ -66,6 +66,7 @@
     <Compile Include="Core\Services\AuthenticationService.cs" />
     <Compile Include="Core\Services\BaseService.cs" />
     <Compile Include="Core\Services\ChannelInvitationService.cs" />
+    <Compile Include="Core\Services\ExchangeService.cs" />
     <Compile Include="Core\Services\FollowersService.cs" />
     <Compile Include="Core\Services\FriendsService.cs" />
     <Compile Include="Core\Services\GameMasterService.cs" />
