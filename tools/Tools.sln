@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtoStringFixer", "ProtoStringFixer\ProtoStringFixer.csproj", "{FDCA4AB2-6E3B-4269-BBC7-4BBD3806B99B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtoHelpers", "ProtoHelpers\ProtoHelpers.csproj", "{1519D483-C89D-4B86-8A48-2E4F05440423}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Debug|x86.Build.0 = Debug|Any CPU
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Release|x86.ActiveCfg = Release|Any CPU
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Release|x86.Build.0 = Release|Any CPU
+		{FDCA4AB2-6E3B-4269-BBC7-4BBD3806B99B}.Debug|x86.ActiveCfg = Debug|x86
+		{FDCA4AB2-6E3B-4269-BBC7-4BBD3806B99B}.Debug|x86.Build.0 = Debug|x86
+		{FDCA4AB2-6E3B-4269-BBC7-4BBD3806B99B}.Release|x86.ActiveCfg = Release|x86
+		{FDCA4AB2-6E3B-4269-BBC7-4BBD3806B99B}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = ProtoStringFixer.csproj
+	EndGlobalSection
+EndGlobal
