@@ -31,7 +31,7 @@ namespace D3Sharp
         Program() {
 			IConfigSource source = new IniConfigSource("config.ini"); // get configuration file
 			
-			this._port=source.Configs["Server"].GetInt("Port"); // apply port number from config file
+			this._port=source.Configs["Server"].GetInt("Port", 1345); // apply port number from config file, or default
         }
         
         public void ParseArguments(string[] args) {
