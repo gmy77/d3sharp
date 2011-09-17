@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3Sharp", "D3Sharp\D3Sharp.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3Proto", "D3Proto\D3Proto.csproj", "{4CC19847-6F24-4453-9E31-126F94308AB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtoStringFixer", "ProtoStringFixer\ProtoStringFixer.csproj", "{1519D483-C89D-4B86-8A48-2E4F05440423}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,16 +35,6 @@ Global
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|x86.ActiveCfg = Release|Any CPU
-		{1519D483-C89D-4B86-8A48-2E4F05440423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1519D483-C89D-4B86-8A48-2E4F05440423}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1519D483-C89D-4B86-8A48-2E4F05440423}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1519D483-C89D-4B86-8A48-2E4F05440423}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1519D483-C89D-4B86-8A48-2E4F05440423}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1519D483-C89D-4B86-8A48-2E4F05440423}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1519D483-C89D-4B86-8A48-2E4F05440423}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1519D483-C89D-4B86-8A48-2E4F05440423}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1519D483-C89D-4B86-8A48-2E4F05440423}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{1519D483-C89D-4B86-8A48-2E4F05440423}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
