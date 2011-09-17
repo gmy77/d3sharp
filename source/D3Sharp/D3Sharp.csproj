@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -66,12 +66,18 @@
     <Compile Include="Core\Services\AuthenticationService.cs" />
     <Compile Include="Core\Services\BaseService.cs" />
     <Compile Include="Core\Services\ChannelInvitationService.cs" />
+    <Compile Include="Core\Services\ChannelOwnerService.cs" />
+    <Compile Include="Core\Services\ChannelService.cs" />
+    <Compile Include="Core\Services\ChatService.cs" />
     <Compile Include="Core\Services\ExchangeService.cs" />
     <Compile Include="Core\Services\FollowersService.cs" />
     <Compile Include="Core\Services\FriendsService.cs" />
     <Compile Include="Core\Services\GameMasterService.cs" />
     <Compile Include="Core\Services\GameUtilitiesService.cs" />
+    <Compile Include="Core\Services\NotificationService.cs" />
+    <Compile Include="Core\Services\PartyService.cs" />
     <Compile Include="Core\Services\PresenceService.cs" />
+    <Compile Include="Core\Services\SearchService.cs" />
     <Compile Include="Core\Services\Service.cs" />
     <Compile Include="Core\Services\ServiceManager.cs" />
     <Compile Include="Core\Services\StorageService.cs" />

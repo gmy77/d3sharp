@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.IO;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
@@ -16,7 +13,7 @@ namespace D3Sharp.Core.Services
     {
         [ServiceMethod(0x1)]
         public void ToonListRequest(IClient client, Packet packetIn)
-        {
+        {            
             Logger.Trace("RPC:ToonExternal:ToonListRequest()");
             var response = bnet.protocol.toon.external.ToonListResponse.CreateBuilder().Build();
 
