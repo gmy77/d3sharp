@@ -16,7 +16,8 @@ namespace D3Sharp.Core.Services
                 new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
                 response.ToByteArray());
 
-            client.Send(packet);
+            //TODO: Sending this packet crashes my client. This may be a local issue as I haven't heard anyone else mention it.     -Ethos
+            //client.Send(packet);
         }
     }
 }
