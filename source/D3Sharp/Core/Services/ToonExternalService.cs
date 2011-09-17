@@ -28,7 +28,7 @@ namespace D3Sharp.Core.Services
         public void SelectToonRequest(IClient client, Packet packetIn)
         {
             Logger.Trace("RPC:ToonExternal:SelectToonRequest()");
-            var request = bnet.protocol.toon.external.SelectToonRequest.ParseFrom(packetIn.Payload.ToArray());
+            //var request = bnet.protocol.toon.external.SelectToonRequest.ParseFrom(packetIn.Payload.ToArray());
             var response = bnet.protocol.toon.external.SelectToonResponse.CreateBuilder().Build();
 
             var packet = new Packet(
@@ -47,7 +47,7 @@ namespace D3Sharp.Core.Services
             
             ulong eid_high=0x0300016200004433; // ToonHandle
             ulong eid_low=0xFFFFFFFFFFFFFFFF; // Actual id?
-            
+
             var equipment = D3.Hero.VisualEquipment.CreateBuilder().Build();
             var heroDigest = D3.Hero.Digest.CreateBuilder().SetVersion(1)
                 .SetHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(eid_high).SetIdLow(eid_low).Build())
