@@ -60,7 +60,7 @@ namespace D3Sharp.Core.Services
         {
             if (!this.Methods.ContainsKey(methodID))
             {
-                Console.WriteLine("Unknown method 0x{0} called on {1} ", methodID, this.GetType());
+                Console.WriteLine("Unknown method 0x{0:x2} called on {1} ", methodID, this.GetType());
                 return;
             }
 
