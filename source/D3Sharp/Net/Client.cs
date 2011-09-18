@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using D3Sharp.Core.Accounts;
 using D3Sharp.Core.Toons;
 using D3Sharp.Net.Packets;
 
@@ -17,12 +18,7 @@ namespace D3Sharp.Net
 
         public Dictionary<uint, uint> Services { get; private set; }
 
-        public string Email { get; set; }
-
-        public Dictionary<ulong, Toon> Toons
-        {
-            get { return ToonManager.GetToonsByEmail(this.Email); }
-        }
+        public Account Account { get; set; }
 
         public Client(Server server, Socket socket)
         {

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using D3Sharp.Core.Channels;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
 using D3Sharp.Utils.Extensions;
@@ -17,9 +18,11 @@ using Google.ProtocolBuffers;
             var request = bnet.protocol.channel.CreateChannelRequest.ParseFrom(packetIn.Payload.ToArray());
             //Logger.Debug("request:\n{0}", request.ToString());
 
+            var newChannel = ChannelsManager.CreateNewChannel(request.State ?? null);
+
             var response = bnet.protocol.channel.CreateChannelResponse.CreateBuilder()
                 .SetObjectId(request.ObjectId)
-                .SetChannelId(bnet.protocol.EntityId.CreateBuilder().SetHigh(0xCCDD).SetLow(0xAABB))
+                .SetChannelId(newChannel.BnetEntityID)
                 .Build();
 
             var packet = new Packet(

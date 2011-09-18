@@ -11,7 +11,6 @@ using D3Sharp.Net.Packets;
         public void ProcessClient(IClient client, Packet packetIn)
         {
             Logger.Trace("RPC:GameUtilities:ProcessClientRequest()");
-            //var request = bnet.protocol.game_utilities.ProcessClient.ParseFrom(packetIn.Payload.ToArray());
 
             var request = bnet.protocol.game_utilities.ClientRequest.ParseFrom(packetIn.Payload.ToArray());
 

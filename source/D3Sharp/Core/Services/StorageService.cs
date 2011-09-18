@@ -55,7 +55,7 @@ namespace D3Sharp.Core.Services
                     response = GameAccountSettings(request);
                     break;
                 case "LoadAccountDigest":
-                    response = LoadAccountDigest(request);
+                    response = LoadAccountDigest(client, request);
                     break;
                 case "GetHeroDigests":
                     response = GetHeroDigest(client, request);
@@ -94,13 +94,13 @@ namespace D3Sharp.Core.Services
                     
                 var toonId=stream.ReadValueU64(false);
 
-                if(!client.Toons.ContainsKey(toonId))
+                if(!client.Account.Toons.ContainsKey(toonId))
                 {
                     Logger.Error("Can't find the requested toon: " + toonId);
                     continue;
                 }
 
-                var toon = client.Toons[toonId];                    
+                var toon = client.Account.Toons[toonId];                    
                 var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
                 operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
@@ -146,25 +146,9 @@ namespace D3Sharp.Core.Services
             return builder.Build();
         }
 
-        private bnet.protocol.storage.ExecuteResponse LoadAccountDigest(bnet.protocol.storage.ExecuteRequest request)
+        private bnet.protocol.storage.ExecuteResponse LoadAccountDigest(IClient client, bnet.protocol.storage.ExecuteRequest request)
         {
-            var results = new List<bnet.protocol.storage.OperationResult>();
-
-            var accountDigest = D3.Account.Digest.CreateBuilder().SetVersion(1)
-                .SetLastPlayedHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).Build())
-                .SetBannerConfiguration(D3.Account.BannerConfiguration.CreateBuilder()
-                                            .SetBackgroundColorIndex(0)
-                                            .SetBannerIndex(0)
-                                            .SetPattern(0)
-                                            .SetPatternColorIndex(0)
-                                            .SetPlacementIndex(0)
-                                            .SetSigilAccent(0)
-                                            .SetSigilMain(0)
-                                            .SetSigilColorIndex(0)
-                                            .SetUseSigilVariant(false)
-                                            .Build())
-                .SetFlags(0)
-                .Build();
+            var results = new List<bnet.protocol.storage.OperationResult>();          
 
             foreach (var operation in request.OperationsList)
             {
@@ -174,11 +158,10 @@ namespace D3Sharp.Core.Services
                         .SetColumnId(request.OperationsList[0].ColumnId)
                         .SetRowId(request.OperationsList[0].RowId)
                         .SetVersion(1)
-                        .SetData(accountDigest.ToByteString())
+                        .SetData(client.Account.Digest.ToByteString())
                         .Build());
                 results.Add(operationResult.Build());
             }
-
 
             var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
             foreach (var result in results)

@@ -21,9 +21,9 @@ namespace D3Sharp.Core.Services
 
             var builder = bnet.protocol.toon.external.ToonListResponse.CreateBuilder();
 
-            if(client.Toons.Count>0)
+            if(client.Account.Toons.Count>0)
             {
-                foreach (var pair in client.Toons)
+                foreach (var pair in client.Account.Toons)
                 {
                     builder.AddToons(pair.Value.BnetEntityID);
                 }
@@ -60,7 +60,7 @@ namespace D3Sharp.Core.Services
             var heroCreateParams = D3.OnlineService.HeroCreateParams.ParseFrom(request.AttributeList[0].Value.MessageValue);
             var builder = bnet.protocol.toon.external.CreateToonResponse.CreateBuilder();
 
-            var toon = new Toons.Toon(request.Name, (uint)heroCreateParams.GbidClass, heroCreateParams.IsFemale ? Toons.ToonGender.Female : Toons.ToonGender.Male, 1, client.Email);
+            var toon = new Toons.Toon(request.Name, (uint)heroCreateParams.GbidClass, heroCreateParams.IsFemale ? Toons.ToonGender.Female : Toons.ToonGender.Male, 1, (long)client.Account.ID);
             if (Toons.ToonManager.SaveToon(toon)) builder.SetToon(toon.BnetEntityID);
 
             var response = builder.Build();

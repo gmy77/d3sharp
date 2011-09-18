@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
+using D3Sharp.Core.Accounts;
 using D3Sharp.Core.Storage;
 using D3Sharp.Utils;
 
@@ -25,9 +26,9 @@ namespace D3Sharp.Core.Toons
             return (from pair in Toons where pair.Value.ID == id select pair.Value).FirstOrDefault();
         }
 
-        public static Dictionary<ulong,Toon> GetToonsByEmail(string email)
+        public static Dictionary<ulong, Toon> GetToonsForAccount(Account account)
         {
-            return Toons.Where(pair => pair.Value.AccountEmail == email).ToDictionary(pair => pair.Key, pair => pair.Value);
+            return Toons.Where(pair => (ulong)pair.Value.AccountID == account.ID).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
         public static bool SaveToon(Toon toon)
@@ -65,7 +66,7 @@ namespace D3Sharp.Core.Toons
             while(reader.Read())
             {
                 var id = (ulong) reader.GetInt64(0);
-                var toon = new Toon(id, reader.GetString(1), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetString(5));
+                var toon = new Toon(id, reader.GetString(1), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5));
                 Toons.Add(id, toon);
             }
         }
