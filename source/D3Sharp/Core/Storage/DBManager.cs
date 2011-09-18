@@ -23,7 +23,7 @@ namespace D3Sharp.Core.Storage
         {
             try
             {
-                Connection = new SQLiteConnection(string.Format("Data Source={0}\\Assets\\toon.db",System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
+                Connection = new SQLiteConnection(string.Format("Data Source={0}/Assets/toon.db",System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
                 Connection.Open();
             }
             catch (Exception e)
