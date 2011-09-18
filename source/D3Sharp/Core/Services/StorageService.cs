@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using D3Sharp.Core.Toons;
@@ -7,6 +8,7 @@ using D3Sharp.Net.Packets;
 using D3Sharp.Utils.Extensions;
 using D3Sharp.Core.Storage;
 using Google.ProtocolBuffers;
+using Gibbed.Helpers;
 
 namespace D3Sharp.Core.Services
 {
@@ -80,11 +82,22 @@ namespace D3Sharp.Core.Services
             foreach(var operation in request.OperationsList)
             {
                 // plash
-                //var stream = CodedInputStream.CreateInstance(operation.RowId.Hash.ToByteArray());
-                //stream.ReadRawBytes(4);
-                //var test = stream.ReadRawBytes(4);
+                var stream = new MemoryStream(operation.RowId.Hash.ToByteArray());
+                
+                // contains ToonHandle in field form with one unknown field (which is not in message definition):
+                // int16 unknown; uint8 realm; uint8 region; uint32 program; uint64 id;
+                var th_unknown = stream.ReadValueU16();
+                var toonhandle = bnet.protocol.toon.ToonHandle.CreateBuilder()
+                    .SetRealm(stream.ReadValueU8())
+                    .SetRegion(stream.ReadValueU8())
+                    .SetProgram(stream.ReadValueU32(true))
+                    .SetId(stream.ReadValueU64(true))
+                    .Build();
+                
+                Logger.Debug("th_unknown: {0}", th_unknown);
+                Logger.Debug("ToonHandle:\n{0}", toonhandle.ToString());
 
-                var toon = ToonManager.Toons.First().Value;
+                var toon = ToonManager.Toons[toonhandle.Id];
                 var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
                 operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
