@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -65,6 +65,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\Nini.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\libs\System.Data.SQLite.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Services\AuthenticationService.cs" />
@@ -87,6 +92,10 @@
     <Compile Include="Core\Services\StorageService.cs" />
     <Compile Include="Core\Services\ToonExternalService.cs" />
     <Compile Include="Core\Services\UserManagerService.cs" />
+    <Compile Include="Core\Storage\DBManager.cs" />
+    <Compile Include="Core\Toons\Toon.cs" />
+    <Compile Include="Core\Toons\ToonHandleHelper.cs" />
+    <Compile Include="Core\Toons\ToonManager.cs" />
     <Compile Include="Net\Packets\Header.cs" />
     <Compile Include="Net\Packets\Packet.cs" />
     <Compile Include="Program.cs" />
@@ -102,12 +111,13 @@
     <Compile Include="Net\Packets\PacketRouter.cs" />
     <Compile Include="Utils\TinyLogger.cs" />
     <Compile Include="Utils\win32\NativeMethods.cs" />
-    <Compile Include="Core\Storage\Table.cs" />
-    <Compile Include="Core\Storage\StorageManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Assets\toon.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="config.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

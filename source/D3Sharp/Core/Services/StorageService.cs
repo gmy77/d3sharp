@@ -1,8 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using D3Sharp.Core.Toons;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
 using D3Sharp.Utils.Extensions;
 using D3Sharp.Core.Storage;
+using Google.ProtocolBuffers;
 
 namespace D3Sharp.Core.Services
 {
@@ -69,119 +73,125 @@ namespace D3Sharp.Core.Services
             client.Send(packet);
         }
 
-        private bnet.protocol.storage.ExecuteResponse GetToonSettings(bnet.protocol.storage.ExecuteRequest request)
+        private bnet.protocol.storage.ExecuteResponse GetHeroDigest(bnet.protocol.storage.ExecuteRequest request)
         {
-            var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
+            var results = new List<bnet.protocol.storage.OperationResult>();
 
-            var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
-                .SetTableId(request.OperationsList[0].TableId)
-                .AddData(
+            foreach(var operation in request.OperationsList)
+            {
+                // plash
+                //var stream = CodedInputStream.CreateInstance(operation.RowId.Hash.ToByteArray());
+                //stream.ReadRawBytes(4);
+                //var test = stream.ReadRawBytes(4);
+
+                var toon = ToonManager.Toons.First().Value;
+                var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
+                operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
                         .SetColumnId(request.OperationsList[0].ColumnId)
                         .SetRowId(request.OperationsList[0].RowId)
                         .SetVersion(1)
-                        .Build())
-                .Build();
+                        .SetData(toon.Digest.ToByteString())
+                        .Build()
+                    );
+                results.Add(operationResult.Build());
+            }
 
-            builder.AddResults(operationResult);
+            var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();            
+            foreach(var result in results)
+            {
+                builder.AddResults(result);
+            }            
             return builder.Build();
         }
 
-        private bnet.protocol.storage.ExecuteResponse GetHeroDigest(bnet.protocol.storage.ExecuteRequest request)
+        private bnet.protocol.storage.ExecuteResponse GetToonSettings(bnet.protocol.storage.ExecuteRequest request)
         {
-            var op=request.OperationsList[0];
-            var table_id=op.TableId;
-            var column_id=op.ColumnId;
-            var row_id=op.RowId;
-            
-            //Logger.Debug("table_id.Hash:\n{0}", table_id.Hash.ToByteArray().Dump());
-            //Logger.Debug("column_id.Hash:\n{0}", column_id.Hash.ToByteArray().Dump());
-            //Logger.Debug("row_id.Hash:\n{0}", row_id.Hash.ToByteArray().Dump());
-            
-            /*try {
-                var stream = CodedInputStream.CreateInstance(row_id.Hash.ToByteArray());
-                stream.SkipRawBytes(2);
-                var tgen=bnet.protocol.toon.ToonHandle.CreateBuilder()
-                    .SetRealm(stream.ReadRawVarint32())
-                    .SetRegion(stream.ReadRawVarint32())
-                    .SetProgram(stream.ReadUInt32()) // "D3\0\0"
-                    .SetId(stream.ReadUInt64())
-                    .Build();
-                Logger.Debug("generated:\n{0}", tgen.ToByteArray().Dump());
-                Logger.Debug(tgen.ToString());
-                //var toonhandle=bnet.protocol.toon.ToonHandle.ParseFrom(eid.ToByteArray());
-                //Logger.Debug("row_id.hash as handle:\n{0}", toonhandle.ToString());
-            } catch (Exception e) {
-                Logger.DebugException(e, "row_id");
-            }*/
+            var results = new List<bnet.protocol.storage.OperationResult>();
 
-            var heroDigest = D3.Hero.Digest.ParseFrom(StorageManager.Tables[table_id].Rows[row_id].Cells[column_id].Data);
-
-            var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
-                .SetTableId(request.OperationsList[0].TableId)
-                .AddData(
+            foreach (var operation in request.OperationsList)
+            {
+                var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
+                operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
                         .SetColumnId(request.OperationsList[0].ColumnId)
                         .SetRowId(request.OperationsList[0].RowId)
                         .SetVersion(1)
-                        .SetData(heroDigest.ToByteString())
                         .Build()
-                ).Build();
+                    );
+                results.Add(operationResult.Build());
+            }
 
             var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
-            builder.AddResults(operationResult);
+            foreach (var result in results)
+            {
+                builder.AddResults(result);
+            }
             return builder.Build();
         }
 
         private bnet.protocol.storage.ExecuteResponse LoadAccountDigest(bnet.protocol.storage.ExecuteRequest request)
         {
-            var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
+            var results = new List<bnet.protocol.storage.OperationResult>();
 
             var accountDigest = D3.Account.Digest.CreateBuilder().SetVersion(1)
                 .SetLastPlayedHeroId(D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).Build())
                 .SetBannerConfiguration(D3.Account.BannerConfiguration.CreateBuilder()
-                    .SetBackgroundColorIndex(0)
-                    .SetBannerIndex(0)
-                    .SetPattern(0)
-                    .SetPatternColorIndex(0)
-                    .SetPlacementIndex(0)
-                    .SetSigilAccent(0)
-                    .SetSigilMain(0)
-                    .SetSigilColorIndex(0)
-                    .SetUseSigilVariant(false)
-                    .Build())
+                                            .SetBackgroundColorIndex(0)
+                                            .SetBannerIndex(0)
+                                            .SetPattern(0)
+                                            .SetPatternColorIndex(0)
+                                            .SetPlacementIndex(0)
+                                            .SetSigilAccent(0)
+                                            .SetSigilMain(0)
+                                            .SetSigilColorIndex(0)
+                                            .SetUseSigilVariant(false)
+                                            .Build())
                 .SetFlags(0)
                 .Build();
 
-            var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
-                .SetTableId(request.OperationsList[0].TableId)
-                .AddData(
+            foreach (var operation in request.OperationsList)
+            {
+                var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
+                operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
                         .SetColumnId(request.OperationsList[0].ColumnId)
                         .SetRowId(request.OperationsList[0].RowId)
                         .SetVersion(1)
                         .SetData(accountDigest.ToByteString())
-                        .Build())
-                .Build();
+                        .Build());
+                results.Add(operationResult.Build());
+            }
 
-            builder.AddResults(operationResult);
+
+            var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
+            foreach (var result in results)
+            {
+                builder.AddResults(result);
+            }
             return builder.Build();
         }
 
         private bnet.protocol.storage.ExecuteResponse GameAccountSettings(bnet.protocol.storage.ExecuteRequest request)
         {
-            var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
+            var results = new List<bnet.protocol.storage.OperationResult>();
 
-            var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder()
-                .SetTableId(request.OperationsList[0].TableId)
-                .AddData(
+            foreach (var operation in request.OperationsList)
+            {
+                var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
+                operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
                         .SetColumnId(request.OperationsList[0].ColumnId)
                         .SetRowId(request.OperationsList[0].RowId)
-                        .Build())
-                .Build();
+                        .Build());
+                results.Add(operationResult.Build());
+            }
 
-            builder.AddResults(operationResult);
+            var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
+            foreach (var result in results)
+            {
+                builder.AddResults(result);
+            }
             return builder.Build();
         }
     }

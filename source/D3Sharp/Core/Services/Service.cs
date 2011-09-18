@@ -44,7 +44,7 @@ namespace D3Sharp.Core.Services
 
     public class Service
     {
-        public static readonly Logger Logger = LogManager.CreateLogger();
+        protected static readonly Logger Logger = LogManager.CreateLogger();
         public Dictionary<uint, MethodInfo> Methods = new Dictionary<uint, MethodInfo>();
 
         public Service()
@@ -80,7 +80,6 @@ namespace D3Sharp.Core.Services
         {
             var bytes = Encoding.ASCII.GetBytes(name);
             return bytes.Aggregate(0x811C9DC5, (current, t) => 0x1000193*(t ^ current));
-
         }
     }
 }
