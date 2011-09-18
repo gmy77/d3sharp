@@ -10,7 +10,7 @@ namespace D3Sharp.Core.Toons
     // just a quick hack - not to be meant a final.
     public static class ToonManager
     {
-        public static readonly Dictionary<ulong, Toon> Toons =
+        private static readonly Dictionary<ulong, Toon> Toons =
             new Dictionary<ulong, Toon>();
 
         private static readonly Logger Logger = LogManager.CreateLogger();
@@ -25,6 +25,11 @@ namespace D3Sharp.Core.Toons
             return (from pair in Toons where pair.Value.ID == id select pair.Value).FirstOrDefault();
         }
 
+        public static Dictionary<ulong,Toon> GetToonsByEmail(string email)
+        {
+            return Toons.Where(pair => pair.Value.AccountEmail == email).ToDictionary(pair => pair.Key, pair => pair.Value);
+        }
+
         public static bool SaveToon(Toon toon)
         {
             if(Toons.ContainsKey(toon.ID))
@@ -34,7 +39,7 @@ namespace D3Sharp.Core.Toons
             }
 
             Toons.Add(toon.ID, toon);
-            toon.Save();
+            toon.SaveToDB();
             return true;
         }
 
@@ -46,7 +51,7 @@ namespace D3Sharp.Core.Toons
                 return;
             }
 
-            toon.Delete();
+            if (toon.DeleteFromDB()) Toons.Remove(toon.ID);
         }
 
         private static void LoadToons()
@@ -60,7 +65,7 @@ namespace D3Sharp.Core.Toons
             while(reader.Read())
             {
                 var id = (ulong) reader.GetInt64(0);
-                var toon = new Toon(id, reader.GetString(1), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4));
+                var toon = new Toon(id, reader.GetString(1), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetString(5));
                 Toons.Add(id, toon);
             }
         }
@@ -69,7 +74,7 @@ namespace D3Sharp.Core.Toons
         {
             foreach(var pair in Toons)
             {
-                pair.Value.Save();
+                pair.Value.SaveToDB();
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using D3Sharp.Core.Toons;
 using D3Sharp.Net.Packets;
 
 namespace D3Sharp.Net
@@ -15,6 +16,25 @@ namespace D3Sharp.Net
         public static readonly int BufferSize = 16*1024; // 16 KB
 
         public Dictionary<uint, uint> Services { get; private set; }
+
+        public string Email { get; set; }
+
+        public Dictionary<ulong, Toon> Toons
+        {
+            get { return ToonManager.GetToonsByEmail(this.Email); }
+        }
+
+        public Client(Server server, Socket socket)
+        {
+            if (server == null) throw new ArgumentNullException("server");
+            if (socket == null) throw new ArgumentNullException("socket");
+
+            this._server = server;
+            this._socket = socket;
+            this.Services = new Dictionary<uint, uint>();
+        }
+
+        #region socket stuff
 
         public bool IsConnected
         {
@@ -40,19 +60,7 @@ namespace D3Sharp.Net
         {
             get { return _socket; }
         }
-
-        public Client(Server server, Socket socket)
-        {
-            if (server == null) throw new ArgumentNullException("server");
-            if (socket == null) throw new ArgumentNullException("socket");
-
-            this._server = server;
-            this._socket = socket;
-            this.Services = new Dictionary<uint, uint>();
-        }
         
-        #region recv-methods
-
         public IAsyncResult BeginReceive(AsyncCallback callback, object state)
         {
             return _socket.BeginReceive(_recvBuffer, 0, BufferSize, SocketFlags.None, callback, state);
@@ -62,10 +70,6 @@ namespace D3Sharp.Net
         {
             return _socket.EndReceive(result);
         }
-
-        #endregion
-
-        #region send methods
 
         public int Send(Packet packet)
         {
@@ -109,8 +113,6 @@ namespace D3Sharp.Net
             return _server.Send(this, buffer, start, count, flags);
         }
 
-        #endregion
-
         public void Disconnect()
         {
             if (this.IsConnected)
@@ -124,5 +126,7 @@ namespace D3Sharp.Net
             else
                 return "Not Connected";
         }
+
+        #endregion
     }
 }

@@ -29,6 +29,10 @@ namespace D3Sharp.Core.Toons
         /// </summary>
         public bnet.protocol.EntityId BnetEntityID { get; private set; }
 
+        /// <summary>
+        /// As we don't have an account-db yet, a hackish workaround.
+        /// </summary>
+        public string AccountEmail { get; private set; }
 
         /// <summary>
         /// Toon handle struct.
@@ -70,7 +74,7 @@ namespace D3Sharp.Core.Toons
             }
         }
 
-        public Toon(ulong id, string name, ToonClass @class, ToonGender gender, byte level)
+        public Toon(ulong id, string name, ToonClass @class, ToonGender gender, byte level, string accountEmail)
         {
             this.ID = id;
             this.ToonHandle = new ToonHandleHelper(id);
@@ -80,6 +84,7 @@ namespace D3Sharp.Core.Toons
             this.Class = @class;
             this.Gender = gender;
             this.Level = level;
+            this.AccountEmail = accountEmail;
 
             var visualItems = new[]
                             {
@@ -113,13 +118,13 @@ namespace D3Sharp.Core.Toons
                 .Build();
         }
 
-        public Toon(ulong id, string name, byte @class, byte gender, byte level)
-            : this(id, name, (ToonClass)@class, (ToonGender)gender, level)
+        public Toon(ulong id, string name, byte @class, byte gender, byte level, string accountEmail)
+            : this(id, name, (ToonClass)@class, (ToonGender)gender, level, accountEmail)
         {
         }
 
-        public Toon(string name, uint classId, ToonGender gender, byte level)
-            : this(GetToonIDByName(name), name, GetClassByID(classId), gender , level)
+        public Toon(string name, uint classId, ToonGender gender, byte level, string accountEmail)
+            : this(GetToonIDByName(name), name, GetClassByID(classId), gender , level, accountEmail)
         {
         }
 
@@ -153,16 +158,16 @@ namespace D3Sharp.Core.Toons
             return genderId== 0x2000002 ? ToonGender.Female : ToonGender.Male;
         }
 
-        public void Save()
+        public void SaveToDB()
         {
             try
-            {
+            {                
                 if (ExistsInDB())
                 {
                     var query =
                         string.Format(
-                            "UPDATE toons SET name='{0}', Class={1}, Gender={2}, Level={3} WHERE id={4}",
-                            Name, (byte)Class, (byte)Gender, Level, ID);
+                            "UPDATE toons SET name='{0}', class={1}, gender={2}, level={3}, email='{4}' WHERE id={5}",
+                            Name, (byte)Class, (byte)Gender, Level, this.AccountEmail, ID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -171,8 +176,8 @@ namespace D3Sharp.Core.Toons
                 {
                     var query =
                         string.Format(
-                            "INSERT INTO toons (id, name, class, gender, level) VALUES({0},'{1}',{2},{3},{4})",
-                            ID, Name, (byte) Class, (byte) Gender, Level);
+                            "INSERT INTO toons (id, name, class, gender, level, email) VALUES({0},'{1}',{2},{3},{4},'{5}')",
+                            ID, Name, (byte) Class, (byte) Gender, Level, this.AccountEmail);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();                    
@@ -184,23 +189,22 @@ namespace D3Sharp.Core.Toons
             }
         }
 
-        public void Delete()
+        public bool DeleteFromDB()
         {
             try
             {
-                // Remove from manager
-                if (ToonManager.Toons.ContainsKey(this.ID)) ToonManager.Toons.Remove(this.ID);
-
                 // Remove from DB
-                if (!ExistsInDB()) return;
+                if (!ExistsInDB()) return false;
 
                 var query = string.Format("DELETE FROM toons WHERE id={0}", this.ID);
                 var cmd = new SQLiteCommand(query, DBManager.Connection);
                 cmd.ExecuteNonQuery();
+                return true;
             }
             catch (Exception e)
             {
                 Logger.ErrorException(e, "Toon.Delete()");
+                return false;
             }
         }
 

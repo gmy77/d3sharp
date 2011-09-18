@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using D3Sharp.Core.Toons;
 using D3Sharp.Net.Packets;
 
 namespace D3Sharp.Net
@@ -12,6 +13,10 @@ namespace D3Sharp.Net
         IPEndPoint LocalEndPoint { get; }
 
         Dictionary<uint, uint> Services { get; }
+        string Email { get; set; }
+
+        Dictionary<ulong, Toon> Toons { get; }
+
 
         int Send(Packet packet);
         int Send(IEnumerable<byte> data);

@@ -58,7 +58,7 @@ namespace D3Sharp.Core.Services
                     response = LoadAccountDigest(request);
                     break;
                 case "GetHeroDigests":
-                    response = GetHeroDigest(request);
+                    response = GetHeroDigest(client, request);
                     break;
                 case "GetToonSettings":
                     response = GetToonSettings(request);
@@ -76,7 +76,7 @@ namespace D3Sharp.Core.Services
             client.Send(packet);
         }
 
-        private bnet.protocol.storage.ExecuteResponse GetHeroDigest(bnet.protocol.storage.ExecuteRequest request)
+        private bnet.protocol.storage.ExecuteResponse GetHeroDigest(IClient client, bnet.protocol.storage.ExecuteRequest request)
         {
             var results = new List<bnet.protocol.storage.OperationResult>();
 
@@ -94,13 +94,13 @@ namespace D3Sharp.Core.Services
                     
                 var toonId=stream.ReadValueU64(false);
 
-                if(!ToonManager.Toons.ContainsKey(toonId))
+                if(!client.Toons.ContainsKey(toonId))
                 {
                     Logger.Error("Can't find the requested toon: " + toonId);
                     continue;
                 }
 
-                var toon = ToonManager.Toons[toonId];
+                var toon = client.Toons[toonId];                    
                 var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
                 operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
