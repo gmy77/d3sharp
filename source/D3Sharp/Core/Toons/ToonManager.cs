@@ -37,6 +37,17 @@ namespace D3Sharp.Core.Toons
             toon.Save();
         }
 
+        public static void DeleteToon(Toon toon)
+        {
+            if (!Toons.ContainsKey(toon.ID))
+            {
+                Logger.Error("Attempting to delete toon that does not exist: " + toon.ID);
+                return;
+            }
+
+            toon.Delete();
+        }
+
         private static void LoadToons()
         {
             var query = "SELECT * from toons";

@@ -50,19 +50,14 @@ namespace D3Sharp.Core.Toons
                 {
                     case ToonClass.Barbarian:
                         return 0x4FB91EE2;
-                        break;
                     case ToonClass.DemonHunter:
                         return 0xc88b9649;
-                        break;
                     case ToonClass.Monk:
                         return 0x3DAC15;
-                        break;
                     case ToonClass.WitchDoctor:
                         return 0x343C22A;
-                        break;
                     case ToonClass.Wizard:
                         return 0x1D4681B1;
-                        break;
                 }
                 return 0x0;
             }
@@ -106,7 +101,7 @@ namespace D3Sharp.Core.Toons
                 .SetHeroName(this.Name)
                 .SetGbidClass((int)this.ClassID)
                 .SetPlayerFlags(this.GenderID)
-                .SetLevel(1)
+                .SetLevel(this.Level)
                 .SetVisualEquipment(this.Equipment)
                 .SetLastPlayedAct(0)
                 .SetHighestUnlockedAct(0)
@@ -186,6 +181,26 @@ namespace D3Sharp.Core.Toons
             catch (Exception e)
             {
                 Logger.ErrorException(e, "Toon.Save()");
+            }
+        }
+
+        public void Delete()
+        {
+            try
+            {
+                // Remove from manager
+                if (ToonManager.Toons.ContainsKey(this.ID)) ToonManager.Toons.Remove(this.ID);
+
+                // Remove from DB
+                if (!ExistsInDB()) return;
+
+                var query = string.Format("DELETE FROM toons WHERE id={0}", this.ID);
+                var cmd = new SQLiteCommand(query, DBManager.Connection);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e, "Toon.Delete()");
             }
         }
 

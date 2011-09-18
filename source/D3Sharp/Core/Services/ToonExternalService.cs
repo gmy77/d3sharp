@@ -23,12 +23,10 @@ namespace D3Sharp.Core.Services
 
             if (Toons.ToonManager.Toons.Count > 0)
             {
-                //TODO: sending multi-toons bugs...
-                //foreach(var pair in Toons.ToonManager.Toons)
-                //{
-                //    builder.AddToons(pair.Value.BnetEntityID);
-                //}                    
-                builder.AddToons(Toons.ToonManager.Toons.First().Value.BnetEntityID);
+                foreach(var pair in Toons.ToonManager.Toons)
+                {                    
+                    builder.AddToons(pair.Value.BnetEntityID);
+                }
             }
 
             var response = builder.Build();
@@ -67,6 +65,26 @@ namespace D3Sharp.Core.Services
             var response = bnet.protocol.toon.external.CreateToonResponse.CreateBuilder()
                 .SetToon(toon.BnetEntityID)
                 .Build();
+
+            var packet = new Packet(
+                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
+                response.ToByteArray());
+
+            client.Send(packet);
+        }
+
+        [ServiceMethod(0x4)]
+        public void DeleteToon(IClient client, Packet packetIn)
+        {
+            Logger.Trace("RPC:ToonExternal:DeleteToon()");
+
+            var request = bnet.protocol.toon.external.DeleteToonRequest.ParseFrom(packetIn.Payload.ToArray());
+            var id = request.Toon.Low;
+
+            var toon = Toons.ToonManager.GetToon(id);
+            Toons.ToonManager.DeleteToon(toon);
+
+            var response = bnet.protocol.toon.external.DeleteToonResponse.CreateBuilder().Build();
 
             var packet = new Packet(
                 new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),

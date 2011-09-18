@@ -3,45 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using D3Sharp.Core.Services;
+using D3Sharp.Utils;
 using D3Sharp.Utils.Extensions;
+using Google.ProtocolBuffers;
 
 namespace D3Sharp.Net.Packets
 {
     public static class PacketRouter
     {
+        private static readonly Logger Logger = LogManager.CreateLogger();
+
         public static void Route(ClientDataEventArgs e)
         {            
-            var buffer = e.Data.ToArray();
-            // handle data as a stream -- a single packet can contain multiple messages
-            while (buffer.Length > 0)
+            var stream=CodedInputStream.CreateInstance(e.Data.ToArray());
+            while(!stream.IsAtEnd)
             {
-                var bytesConsumed = Identify(e.Client, buffer);
-                if (bytesConsumed <= 0)
-                    return;
-
-                var bytesLeft=buffer.Length - bytesConsumed;
-                var tmp = new byte[bytesLeft];
-                Array.Copy(buffer, bytesConsumed, tmp, 0, bytesLeft);
-                buffer = tmp;
+                Identify(e.Client, stream);
             }
         }
 
-        public static int Identify(IClient client, byte[] buffer)
+        public static int Identify(IClient client, CodedInputStream stream)
         {
-            var header = new Header(buffer.Take(6));
+            var header = new Header(stream);
             var payload = new byte[header.PayloadLength];
-            // if our packet contains a payload, get it.
-            if (header.PayloadLength > 0)
-                Array.Copy(buffer, 6, payload, 0, header.PayloadLength);
-
-
+            payload = stream.ReadRawBytes((int)header.PayloadLength);
+            
             var packet = new Packet(header, payload);
             var service = ServiceManager.GetServerServiceByID(header.ServiceID);
 
             if(service!=null)
             {
                 service.CallMethod(header.MethodID, client, packet);
-                return packet.Lenght;
+                return packet.Length;
             }
 
             Console.WriteLine("\n===========[Unknown Crap]===========\nHeader\t: {0}Payload\t: {1}", header.Data.Dump(), payload.Dump());

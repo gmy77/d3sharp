@@ -20,6 +20,7 @@ namespace D3Sharp
 
             LogManager.Enabled = true; // enable the logger.
             LogManager.AttachLogTarget(new ConsoleTarget(Level.Trace)); // attach a console-target.
+            LogManager.AttachLogTarget(new FileTarget(Level.Trace,"log.txt")); // attach a console-target.
 
             Logger.Info("d3sharp v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
 
