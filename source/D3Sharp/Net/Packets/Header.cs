@@ -30,7 +30,7 @@ namespace D3Sharp.Net.Packets
             var stream = CodedInputStream.CreateInstance(data);
             this.ServiceID = stream.ReadRawByte();
             this.MethodID = stream.ReadRawVarint32();
-            this.RequestID =  stream.ReadRawByte() | (stream.ReadRawByte() << 8);
+            this.RequestID = stream.ReadRawByte() | (stream.ReadRawByte() << 8);
             if (ServiceID != 0xfe) this.Unknown = stream.ReadRawVarint64();
             this.PayloadLength = stream.ReadRawVarint32();
         }

@@ -65,6 +65,7 @@ namespace D3Sharp.Core.Services
                     break;
                 default:
                     Logger.Warn("Unhandled query: {0}", request.QueryName);
+                    response = bnet.protocol.storage.ExecuteResponse.CreateBuilder().Build();
                     break;
             }                
             
@@ -81,23 +82,25 @@ namespace D3Sharp.Core.Services
 
             foreach(var operation in request.OperationsList)
             {
-                // plash
+                // find the requested toons entity-id.
                 var stream = new MemoryStream(operation.RowId.Hash.ToByteArray());
                 
                 // contains ToonHandle in field form with one unknown field (which is not in message definition):
                 // int16 unknown; uint8 realm; uint8 region; uint32 program; uint64 id;
-                var th_unknown = stream.ReadValueU16();
-                var toonhandle = bnet.protocol.toon.ToonHandle.CreateBuilder()
-                    .SetRealm(stream.ReadValueU8())
-                    .SetRegion(stream.ReadValueU8())
-                    .SetProgram(stream.ReadValueU32(true))
-                    .SetId(stream.ReadValueU64(true))
-                    .Build();
-                
-                Logger.Debug("th_unknown: {0}", th_unknown);
-                Logger.Debug("ToonHandle:\n{0}", toonhandle.ToString());
+                stream.ReadValueU16(); // unknown
+                stream.ReadValueU8(); // realm
+                stream.ReadValueU8(); // region 
+                stream.ReadValueU32(false); // program
+                    
+                var toonId=stream.ReadValueU64(false);
 
-                var toon = ToonManager.Toons[toonhandle.Id];
+                if(!ToonManager.Toons.ContainsKey(toonId))
+                {
+                    Logger.Error("Can't find the requested toon: " + toonId);
+                    continue;
+                }
+
+                var toon = ToonManager.Toons[toonId];
                 var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
                 operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()

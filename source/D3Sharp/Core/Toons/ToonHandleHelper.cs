@@ -12,9 +12,9 @@ namespace D3Sharp.Core.Toons
         public ToonHandleHelper(ulong id)
         {
             this.ID = id;
-            this.Program = 00004433;
-            this.Region = 62;
-            this.Realm = 01;
+            this.Program = 0x00004433;
+            this.Region = 0x62;
+            this.Realm = 0x01;
         }
 
         public ToonHandleHelper(D3.OnlineService.EntityId entityID)

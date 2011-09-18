@@ -19,10 +19,17 @@ namespace D3Sharp.Core.Services
         {            
             Logger.Trace("RPC:ToonExternal:ToonList()");
 
-            // todo: send all the toons.
             var builder = bnet.protocol.toon.external.ToonListResponse.CreateBuilder();
+
             if (Toons.ToonManager.Toons.Count > 0)
+            {
+                //TODO: sending multi-toons bugs...
+                //foreach(var pair in Toons.ToonManager.Toons)
+                //{
+                //    builder.AddToons(pair.Value.BnetEntityID);
+                //}                    
                 builder.AddToons(Toons.ToonManager.Toons.First().Value.BnetEntityID);
+            }
 
             var response = builder.Build();
 
