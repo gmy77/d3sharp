@@ -25,16 +25,17 @@ namespace D3Sharp.Core.Toons
             return (from pair in Toons where pair.Value.ID == id select pair.Value).FirstOrDefault();
         }
 
-        public static void SaveToon(Toon toon)
+        public static bool SaveToon(Toon toon)
         {
             if(Toons.ContainsKey(toon.ID))
             {
                 Logger.Error("Duplicate toon id: " + toon.ID);
-                return;
+                return false;
             }
 
             Toons.Add(toon.ID, toon);
             toon.Save();
+            return true;
         }
 
         public static void DeleteToon(Toon toon)

@@ -58,13 +58,12 @@ namespace D3Sharp.Core.Services
             
             var request = bnet.protocol.toon.external.CreateToonRequest.ParseFrom(packetIn.Payload.ToArray());
             var heroCreateParams = D3.OnlineService.HeroCreateParams.ParseFrom(request.AttributeList[0].Value.MessageValue);
+            var builder = bnet.protocol.toon.external.CreateToonResponse.CreateBuilder();
 
             var toon = new Toons.Toon(request.Name, (uint)heroCreateParams.GbidClass, heroCreateParams.IsFemale ? Toons.ToonGender.Female : Toons.ToonGender.Male, 1);
-            Toons.ToonManager.SaveToon(toon);
-                       
-            var response = bnet.protocol.toon.external.CreateToonResponse.CreateBuilder()
-                .SetToon(toon.BnetEntityID)
-                .Build();
+            if (Toons.ToonManager.SaveToon(toon)) builder.SetToon(toon.BnetEntityID);
+
+            var response = builder.Build();
 
             var packet = new Packet(
                 new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
