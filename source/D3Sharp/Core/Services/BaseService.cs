@@ -45,12 +45,11 @@ namespace D3Sharp.Core.Services
             }
 
             // read services supplied by client..
-            foreach (
-                var service in request.ExportedServiceList.Where(service => !client.Services.ContainsValue(service.Id)))
+            foreach (var service in request.ExportedServiceList.Where(service => !client.Services.ContainsValue(service.Id)))
             {
+                if (client.Services.ContainsKey(service.Hash)) continue;
                 client.Services.Add(service.Hash, service.Id);
-                Logger.Trace(string.Format("RPC:Bind() [import] Hash: 0x{0} ID: 0x{1}", service.Hash.ToString("X8"),
-                                           service.Id.ToString("X2")));
+                Logger.Trace(string.Format("RPC:Bind() [import] Hash: 0x{0} ID: 0x{1}", service.Hash.ToString("X8"), service.Id.ToString("X2")));
             }
 
             var builder = bnet.protocol.connection.BindResponse.CreateBuilder();
