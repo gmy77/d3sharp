@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using D3Sharp.Core.Accounts;
 using D3Sharp.Core.Toons;
 using D3Sharp.Net.Packets;
+using Google.ProtocolBuffers;
 
 namespace D3Sharp.Net
 {
@@ -15,6 +17,8 @@ namespace D3Sharp.Net
 
         Dictionary<uint, uint> Services { get; }
         Account Account { get; set; }
+
+        void RemoteCall(string remoteService, uint methodID, IMessage message);
 
         int Send(Packet packet);
         int Send(IEnumerable<byte> data);

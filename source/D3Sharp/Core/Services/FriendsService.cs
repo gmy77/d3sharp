@@ -6,7 +6,7 @@ using D3Sharp.Utils.Extensions;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x6, serviceName: "bnet.protocol.friends.FriendsService", clientHash: 0x6F259A13)]
+    [Service(serviceID: 0x6, serviceName: "bnet.protocol.friends.FriendsService")]
     public class FriendsService : Service
     {
         [ServiceMethod(0x1)]

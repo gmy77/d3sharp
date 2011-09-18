@@ -1,13 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using D3Sharp.Core.Accounts;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
-using bnet.protocol;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x1, serviceName: "bnet.protocol.authentication.AuthenticationServer", clientHash: 0x71240E35)]
+    [Service(serviceID: 0x1, serviceName: "bnet.protocol.authentication.AuthenticationServer")]
     public class AuthenticationService:Service
     {
         [ServiceMethod(0x1)]

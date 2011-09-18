@@ -6,6 +6,7 @@ using System.Text;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
 using D3Sharp.Utils;
+using D3Sharp.Utils.Helpers;
 
 namespace D3Sharp.Core.Services
 {
@@ -13,26 +14,22 @@ namespace D3Sharp.Core.Services
     public class ServiceAttribute : Attribute
     {
         public uint ServiceID { get; private set; }
-        public uint ServerHash { get; private set; }
-        public uint ClientHash { get; private set; }
+        public uint Hash { get; private set; }
 
-        public ServiceAttribute(uint serviceID, uint serverHash, uint clientHash)
+        public ServiceAttribute(uint serviceID, uint serviceHash)
         {
             this.ServiceID = serviceID;
-            this.ServerHash = serverHash;
-            this.ClientHash = clientHash;
+            this.Hash = serviceHash;
         }
 
-        public ServiceAttribute(uint serviceID, string serviceName, uint clientHash)
+        public ServiceAttribute(uint serviceID, string serviceName)
+            : this(serviceID, StringHashHelper.HashString(serviceName))
         {
-            this.ServiceID = serviceID;
-            this.ServerHash = Service.GetServiceHashFromName(serviceName);
-            this.ClientHash = clientHash;
         }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class ServiceMethodAttribute: Attribute
+    public class ServiceMethodAttribute : Attribute
     {
         public byte MethodID { get; set; }
 
@@ -45,7 +42,12 @@ namespace D3Sharp.Core.Services
     public class Service
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public Dictionary<uint, MethodInfo> Methods = new Dictionary<uint, MethodInfo>();
+
+        private static uint _notImplementedServiceCounter = 99;
+        private readonly static Dictionary<Type, ServiceAttribute> ProvidedServices = new Dictionary<Type, ServiceAttribute>();
+        private readonly static Dictionary<Type, Service> Services = new Dictionary<Type, Service>();
+        
+        public readonly Dictionary<uint, MethodInfo> Methods = new Dictionary<uint, MethodInfo>();
 
         public Service()
         {
@@ -72,14 +74,34 @@ namespace D3Sharp.Core.Services
             }
 
             var method = this.Methods[methodID];
-            //Console.WriteLine("[Client]: {0}:{1}", method.ReflectedType.FullName, method.Name);
-            method.Invoke(this, new object[] {client, packet});
+            method.Invoke(this, new object[] { client, packet });
         }
 
-        public static uint GetServiceHashFromName(string name)
+        static Service()
         {
-            var bytes = Encoding.ASCII.GetBytes(name);
-            return bytes.Aggregate(0x811C9DC5, (current, t) => 0x1000193*(t ^ current));
+            foreach (Type type in Assembly.GetEntryAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(Service))))
+            {
+                object[] attributes = type.GetCustomAttributes(typeof(ServiceAttribute), true); // get the attributes of the packet.
+                if (attributes.Length == 0) return;
+
+                ProvidedServices.Add(type, (ServiceAttribute)attributes[0]);
+                Services.Add(type, (Service)Activator.CreateInstance(type));
+            }
+        }
+
+        public static Service GetByID(uint serviceID)
+        {
+            return (from pair in ProvidedServices let serviceInfo = pair.Value where serviceInfo.ServiceID == serviceID select Services[pair.Key]).FirstOrDefault();
+        }
+
+        public static uint GetByHash(uint serviceHash)
+        {
+            foreach (var serviceInfo in ProvidedServices.Select(pair => pair.Value).Where(serviceInfo => serviceInfo.Hash == serviceHash))
+            {
+                return serviceInfo.ServiceID;
+            }
+
+            return _notImplementedServiceCounter++;
         }
     }
 }

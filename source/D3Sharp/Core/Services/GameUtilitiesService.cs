@@ -2,9 +2,9 @@
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
 
-﻿namespace D3Sharp.Core.Services
+namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x8, serviceName: "bnet.protocol.game_utilities.GameUtilities", clientHash: 0x0)]
+    [Service(serviceID: 0x8, serviceName: "bnet.protocol.game_utilities.GameUtilities")]
     public class GameUtilitiesService : Service
     {
         [ServiceMethod(0x1)]

@@ -1,18 +1,13 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using D3Sharp.Core.Toons;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
-using D3Sharp.Utils.Extensions;
-using D3Sharp.Core.Storage;
-using Google.ProtocolBuffers;
 using Gibbed.Helpers;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x9, serviceName: "bnet.protocol.storage.StorageService", clientHash: 0x0)]
+    [Service(serviceID: 0x9, serviceName: "bnet.protocol.storage.StorageService")]
     public class StorageService : Service
     {
         [ServiceMethod(0x2)]
