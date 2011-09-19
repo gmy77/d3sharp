@@ -56,11 +56,16 @@ namespace D3Sharp.Net
         }
 
         // rpc to client
-        public void CallMethod(ulong localObjectId, MethodDescriptor method, IMessage request, IMessage responsePrototype, Action<IMessage> done)
+        public void CallMethod(MethodDescriptor method, IMessage request)
+        {
+            CallMethod(method, request, 0);
+        }
+        
+        public void CallMethod(MethodDescriptor method, IMessage request, ulong localObjectId)
         {
             var serviceName = method.Service.FullName;
             var serviceHash = StringHashHelper.HashString(serviceName);
-
+            
             var externalObjectId = GetExternalObjectID(localObjectId);
 
             if (!this.Services.ContainsKey(serviceHash))
@@ -69,8 +74,8 @@ namespace D3Sharp.Net
                 return;
             }
 
-            Logger.Trace("Calling {0} (localObjectId={1}, externalObjectId={2}) with request:", method.FullName, localObjectId, externalObjectId);
-            Logger.Debug(request.ToString());
+            //Logger.Trace("Calling {0} (localObjectId={1}, externalObjectId={2}) with request:", method.FullName, localObjectId, externalObjectId);
+            //Logger.Debug(request.ToString());
             
             var serviceId = this.Services[serviceHash];
             var header = new Header((byte) serviceId, (uint)(method.Index + 1), this._requestCounter++, (uint) request.SerializedSize);
@@ -82,12 +87,18 @@ namespace D3Sharp.Net
 
         public void MapLocalObjectID(ulong localObjectId, ulong externalObjectId)
         {
-            this.MappedObjects[localObjectId] = externalObjectId;
+            try {
+                this.MappedObjects[localObjectId] = externalObjectId;
+            } catch (Exception e) {
+                Logger.DebugException(e, "MapLocalObjectID()");
+            }
         }
 
         public ulong GetExternalObjectID(ulong localObjectId)
         {
-            return this.MappedObjects[localObjectId];
+            ulong external=0;
+            this.MappedObjects.TryGetValue(localObjectId, out external);
+            return external;
         }
 
         #region socket stuff

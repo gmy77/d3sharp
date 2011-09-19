@@ -49,7 +49,7 @@ namespace D3Sharp.Core.Channels
             }
 
             client.CurrentChannel = this;
-            client.CallMethod(this.ID, bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), null, done =>{});
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.ID);
         }
         
         public bool HasUser(IClient client)

@@ -16,7 +16,7 @@ namespace D3Sharp.Core.Services
         public override void CreateChannel(IRpcController controller, CreateChannelRequest request, Action<CreateChannelResponse> done)
         {
             Logger.Trace("CreateChannel()");
-            Logger.Debug("request:\n{0}", request.ToString());
+            //Logger.Debug("request:\n{0}", request.ToString());
             
             var newChannel = ChannelsManager.CreateNewChannel(this.Client, request.ObjectId);
             var builder = CreateChannelResponse.CreateBuilder()
