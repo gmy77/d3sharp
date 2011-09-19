@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using D3Sharp.Core.Channels;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
 using D3Sharp.Utils;
+using Google.ProtocolBuffers;
 using bnet.protocol.toon.external;
 
 namespace D3Sharp.Core.Services
@@ -13,9 +15,9 @@ namespace D3Sharp.Core.Services
         protected static readonly Logger Logger = LogManager.CreateLogger();
         public IClient Client { get; set; }
 
-        public override void  ToonList(Google.ProtocolBuffers.IRpcController controller, ToonListRequest request, Action<ToonListResponse> done)
+        public override void ToonList(Google.ProtocolBuffers.IRpcController controller, ToonListRequest request, Action<ToonListResponse> done)
         {
- 	        Logger.Trace("ToonList()");
+            Logger.Trace("ToonList()");
             var builder = ToonListResponse.CreateBuilder();
 
             if (Client.Account.Toons.Count > 0)
@@ -34,6 +36,9 @@ namespace D3Sharp.Core.Services
             Logger.Trace("SelectToon()");
             var builder = SelectToonResponse.CreateBuilder();
             done(builder.Build());
+
+            var channel = ChannelsManager.CreateNewChannel(Client);
+            channel.NotifyChannelState((Client)this.Client);
         }
 
         public override void CreateToon(Google.ProtocolBuffers.IRpcController controller, CreateToonRequest request, Action<CreateToonResponse> done)

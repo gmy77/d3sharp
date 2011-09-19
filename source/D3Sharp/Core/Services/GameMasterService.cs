@@ -9,7 +9,7 @@ using bnet.protocol.game_master;
 namespace D3Sharp.Core.Services
 {
     [Service(serviceID: 0x7, serviceName: "bnet.protocol.game_master.GameMaster")]
-    public class GameMasterService : GameMaster,IServerService
+    public class GameMasterService : GameMaster, IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
         public IClient Client { get; set; }
@@ -22,7 +22,7 @@ namespace D3Sharp.Core.Services
         public override void ListFactories(IRpcController controller, ListFactoriesRequest request, Action<ListFactoriesResponse> done)
         {
             Logger.Trace("ListFactories()");
-            
+
             var description = GameFactoryDescription.CreateBuilder().SetId(14249086168335147635);
             var atributes = new bnet.protocol.attribute.Attribute[4]
                                 {
@@ -35,15 +35,15 @@ namespace D3Sharp.Core.Services
             description.AddRangeAttribute(atributes);
             description.AddStatsBucket(GameStatsBucket.CreateBuilder()
                                            .SetBucketMin(0)
-                                           .SetBucketMax(4294967296F)
+                                           .SetBucketMax(4267296)
                                            .SetWaitMilliseconds(1354)
                                            .SetGamesPerHour(0)
-                                           .SetActiveGames(1)
-                                           .SetActivePlayers(1)
-                                           .SetFormingGames(0)
+                                           .SetActiveGames(69)
+                                           .SetActivePlayers(75)
+                                           .SetFormingGames(5)
                                            .SetWaitingPlayers(0).Build());
 
-            var builder =ListFactoriesResponse.CreateBuilder().AddDescription(description).SetTotalResults(1);
+            var builder = ListFactoriesResponse.CreateBuilder().AddDescription(description).SetTotalResults(1);
             done(builder.Build());
         }
 
