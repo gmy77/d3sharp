@@ -4,21 +4,27 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using D3Sharp.Core.Accounts;
+using D3Sharp.Core.Services;
 using D3Sharp.Core.Toons;
 using D3Sharp.Net.Packets;
+using D3Sharp.Utils;
+using D3Sharp.Utils.Helpers;
+using Google.ProtocolBuffers;
 
 namespace D3Sharp.Net
 {
     public sealed class Client : IClient
     {
+        protected static readonly Logger Logger = LogManager.CreateLogger();
+
         private readonly Server _server;
         private readonly Socket _socket;
         private readonly byte[] _recvBuffer = new byte[BufferSize];
-        public static readonly int BufferSize = 16*1024; // 16 KB
+        public static readonly int BufferSize = 16 * 1024; // 16 KB
 
-        public Dictionary<uint, uint> Services { get; private set; }
-
+        public Dictionary<uint, uint> Services { get; set; }
         public Account Account { get; set; }
+        private int _requestCounter = 0;
 
         public Client(Server server, Socket socket)
         {
@@ -29,6 +35,30 @@ namespace D3Sharp.Net
             this._socket = socket;
             this.Services = new Dictionary<uint, uint>();
         }
+
+        public void RemoteCall(string remoteService, uint methodID, IMessage message)
+        {
+            var service = ClientService.GetDefinitionByName(remoteService);            
+            if(service==null)
+            {
+                Logger.Error("{0} is not known client service", remoteService);
+                return;
+            }
+
+            if(!this.Services.ContainsKey(service.Hash))
+            {
+                Logger.Error("Not bound to client service {0} [0x{1}] yet.", remoteService, service.Hash.ToString("X8"));
+                return;
+            }
+
+            var serviceId = this.Services[service.Hash];
+            var packet = new Packet(
+                new Header((byte)serviceId, methodID, this._requestCounter++, (uint)message.SerializedSize),
+                message.ToByteArray());
+
+            this.Send(packet);
+        }
+
 
         #region socket stuff
 
@@ -56,7 +86,7 @@ namespace D3Sharp.Net
         {
             get { return _socket; }
         }
-        
+
         public IAsyncResult BeginReceive(AsyncCallback callback, object state)
         {
             return _socket.BeginReceive(_recvBuffer, 0, BufferSize, SocketFlags.None, callback, state);

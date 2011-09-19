@@ -14,9 +14,9 @@ namespace D3Sharp.Net.Packets
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         public static void Route(ClientDataEventArgs e)
-        {            
-            var stream=CodedInputStream.CreateInstance(e.Data.ToArray());
-            while(!stream.IsAtEnd)
+        {
+            var stream = CodedInputStream.CreateInstance(e.Data.ToArray());
+            while (!stream.IsAtEnd)
             {
                 Identify(e.Client, stream);
             }
@@ -27,11 +27,11 @@ namespace D3Sharp.Net.Packets
             var header = new Header(stream);
             var payload = new byte[header.PayloadLength];
             payload = stream.ReadRawBytes((int)header.PayloadLength);
-            
-            var packet = new Packet(header, payload);
-            var service = ServiceManager.GetServerServiceByID(header.ServiceID);
 
-            if(service!=null)
+            var packet = new Packet(header, payload);
+            var service = Service.GetByID(header.ServiceID);                
+
+            if (service != null)
             {
                 service.CallMethod(header.MethodID, client, packet);
                 return packet.Length;

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using D3Sharp.Core.Accounts;
+using D3Sharp.Net;
 
 namespace D3Sharp.Core.Channels
 {
@@ -10,9 +12,11 @@ namespace D3Sharp.Core.Channels
         private readonly static Dictionary<ulong, Channel> Channels =
             new Dictionary<ulong, Channel>();
 
-        public static Channel CreateNewChannel(bnet.protocol.channel.ChannelState state=null)
+        public static Channel CreateNewChannel(IClient client)
         {
-            return new Channel((ulong) Channels.Count, state);
+            var channel = new Channel((ulong) Channels.Count);
+            channel.AddUser(client);
+            return channel;
         }
     }
 }

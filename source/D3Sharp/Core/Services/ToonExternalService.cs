@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.IO;
-using D3Sharp.Core;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
-using D3Sharp.Utils.Extensions;
-using D3Sharp.Core.Storage;
-using Google.ProtocolBuffers;
+using bnet.protocol.toon.external;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x2, serviceName: "bnet.protocol.toon.external.ToonServiceExternal", clientHash: 0x0)]
+    [Service(serviceID: 0x2, serviceName: "bnet.protocol.toon.external.ToonServiceExternal")]
     public class ToonExternalService : Service
     {
         [ServiceMethod(0x1)]

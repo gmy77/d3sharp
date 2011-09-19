@@ -2,13 +2,11 @@
 using D3Sharp.Core.Channels;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
-using D3Sharp.Utils.Extensions;
-using Google.ProtocolBuffers;
 
-﻿namespace D3Sharp.Core.Services
+namespace D3Sharp.Core.Services
 {
     // bnet.protocol.party.PartyService
-    [Service(serviceID: 0x0D, serviceName: "bnet.protocol.party.PartyService", clientHash: 0x0)]
+    [Service(serviceID: 0x0D, serviceName: "bnet.protocol.party.PartyService")]
     public class PartyService : Service
     {
         [ServiceMethod(0x01)]
@@ -18,7 +16,7 @@ using Google.ProtocolBuffers;
             var request = bnet.protocol.channel.CreateChannelRequest.ParseFrom(packetIn.Payload.ToArray());
             //Logger.Debug("request:\n{0}", request.ToString());
 
-            var newChannel = ChannelsManager.CreateNewChannel(request.State ?? null);
+            var newChannel = ChannelsManager.CreateNewChannel(client);
 
             var response = bnet.protocol.channel.CreateChannelResponse.CreateBuilder()
                 .SetObjectId(request.ObjectId)

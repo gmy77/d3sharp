@@ -3,7 +3,7 @@ using D3Sharp.Net.Packets;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x5, serviceName: "bnet.protocol.user_manager.UserManagerService", clientHash: 0xBC872C22)]
+    [Service(serviceID: 0x5, serviceName: "bnet.protocol.user_manager.UserManagerService")]
     public class UserManagerService : Service
     {
         [ServiceMethod(0x1)]
