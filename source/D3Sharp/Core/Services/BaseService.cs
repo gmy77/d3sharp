@@ -3,65 +3,79 @@ using System.Collections.Generic;
 using System.Linq;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
+using D3Sharp.Utils;
 using D3Sharp.Utils.Extensions;
 using bnet.protocol;
-
+using bnet.protocol.connection;
 
 namespace D3Sharp.Core.Services
 {
     [Service(serviceID: 0x0, serviceHash: 0x0)]
-    public class BaseService : Service
+    public class BaseService :  ConnectionService,  IServerService
     {
-        [ServiceMethod(0x1)]
-        public void Connect(IClient client, Packet packetIn)
+        protected static readonly Logger Logger = LogManager.CreateLogger();
+        public IClient Client { get; set; }
+
+        public override void Connect(Google.ProtocolBuffers.IRpcController controller, ConnectRequest request, Action<ConnectResponse> done)
         {
-            Logger.Trace("RPC:Connect()");
-            var response = bnet.protocol.connection.ConnectResponse.CreateBuilder()
+            Logger.Trace("Connect()");
+
+            var builder = ConnectResponse.CreateBuilder()
                 .SetServerId(ProcessId.CreateBuilder().SetLabel(0xAAAA).SetEpoch(DateTime.Now.ToUnixTime()))
-                .SetClientId(ProcessId.CreateBuilder().SetLabel(0xBBBB).SetEpoch(DateTime.Now.ToUnixTime()))
-                .Build();
+                .SetClientId(ProcessId.CreateBuilder().SetLabel(0xBBBB).SetEpoch(DateTime.Now.ToUnixTime()));
 
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint) response.SerializedSize),
-                response.ToByteArray());
-
-            client.Send(packet);
+            done(builder.Build());
         }
 
-        [ServiceMethod(0x2)]
-        public void Bind(IClient client, Packet packetIn)
+        public override void Bind(Google.ProtocolBuffers.IRpcController controller, BindRequest request, Action<BindResponse> done)
         {
-            var request = bnet.protocol.connection.BindRequest.ParseFrom(packetIn.Payload.ToArray());
-
-            // supply service id's requested by client using service-hashes.
             var requestedServiceIDs = new List<uint>();
             foreach (var serviceHash in request.ImportedServiceHashList)
             {
                 var serviceID = Service.GetByHash(serviceHash);
-                Logger.Trace("RPC:Bind() [export] Hash: 0x{0}  ID: 0x{1}  Service: {2} ", serviceHash.ToString("X8"),
-                             serviceID.ToString("X2"),
-                             Service.GetByID(serviceID) != null ? Service.GetByID(serviceID).GetType().Name : "N/A");
+                Logger.Trace("Bind() [export] Hash: 0x{0} ID: 0x{1} Service: {2} ", serviceHash.ToString("X8"), serviceID.ToString("X2"),
+
+                Service.GetByID(serviceID) != null ? Service.GetByID(serviceID).GetType().Name : "N/A");
                 requestedServiceIDs.Add(serviceID);
             }
 
             // read services supplied by client..
-            foreach (var service in request.ExportedServiceList.Where(service => !client.Services.ContainsValue(service.Id)))
+            foreach (var service in request.ExportedServiceList.Where(service => !Client.Services.ContainsValue(service.Id)))
             {
-                if (client.Services.ContainsKey(service.Hash)) continue;
-                client.Services.Add(service.Hash, service.Id);
-                Logger.Trace(string.Format("RPC:Bind() [import] Hash: 0x{0} ID: 0x{1}", service.Hash.ToString("X8"), service.Id.ToString("X2")));
+                if (Client.Services.ContainsKey(service.Hash)) continue;
+                Client.Services.Add(service.Hash, service.Id);
+                Logger.Trace(string.Format("Bind() [import] Hash: 0x{0} ID: 0x{1}", service.Hash.ToString("X8"), service.Id.ToString("X2")));
             }
 
-            var builder = bnet.protocol.connection.BindResponse.CreateBuilder();
+            var builder = BindResponse.CreateBuilder();
             foreach (var serviceId in requestedServiceIDs) builder.AddImportedServiceId(serviceId);
-            var response = builder.Build();
-
-            var packet =
-                new Packet(
-                    new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint) response.SerializedSize),
-                    response.ToByteArray());
-
-            client.Send(packet);
+            
+            done(builder.Build());
         }
+
+        public override void Echo(Google.ProtocolBuffers.IRpcController controller, EchoRequest request, Action<EchoResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Encrypt(Google.ProtocolBuffers.IRpcController controller, EncryptRequest request, Action<NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ForceDisconnect(Google.ProtocolBuffers.IRpcController controller, DisconnectNotification request, Action<NO_RESPONSE> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Null(Google.ProtocolBuffers.IRpcController controller, NullRequest request, Action<NO_RESPONSE> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void RequestDisconnect(Google.ProtocolBuffers.IRpcController controller, DisconnectRequest request, Action<NO_RESPONSE> done)
+        {
+            throw new NotImplementedException();
+        }        
     }
 }

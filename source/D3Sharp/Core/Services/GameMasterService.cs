@@ -1,25 +1,29 @@
-﻿using D3Sharp.Net;
+﻿using System;
+using D3Sharp.Net;
 using D3Sharp.Net.Packets;
+using D3Sharp.Utils;
+using Google.ProtocolBuffers;
+using bnet.protocol;
+using bnet.protocol.game_master;
 
 namespace D3Sharp.Core.Services
 {
     [Service(serviceID: 0x7, serviceName: "bnet.protocol.game_master.GameMaster")]
-    public class GameMasterService : Service
+    public class GameMasterService : GameMaster,IServerService
     {
-        [ServiceMethod(0x1)]
-        public void JoinGame(IClient client, Packet packetIn)
+        protected static readonly Logger Logger = LogManager.CreateLogger();
+        public IClient Client { get; set; }
+
+        public override void JoinGame(IRpcController controller, JoinGameRequest request, Action<JoinGameResponse> done)
         {
-            Logger.Trace("RPC:GameMaster:JoinGame() Stub");
-            //var request = bnet.protocol.game_master.JoinGameRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x2)]
-        public void ListFactories(IClient client, Packet packetIn)
+
+        public override void ListFactories(IRpcController controller, ListFactoriesRequest request, Action<ListFactoriesResponse> done)
         {
-            Logger.Trace("RPC:GameMaster:ListFactories()");
-
-            var description = bnet.protocol.game_master.GameFactoryDescription.CreateBuilder().SetId(14249086168335147635);
-
+            Logger.Trace("ListFactories()");
+            
+            var description = GameFactoryDescription.CreateBuilder().SetId(14249086168335147635);
             var atributes = new bnet.protocol.attribute.Attribute[4]
                                 {
                                     bnet.protocol.attribute.Attribute.CreateBuilder().SetName("min_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2)).Build(),
@@ -29,7 +33,7 @@ namespace D3Sharp.Core.Services
                                 };
 
             description.AddRangeAttribute(atributes);
-            description.AddStatsBucket(bnet.protocol.game_master.GameStatsBucket.CreateBuilder()
+            description.AddStatsBucket(GameStatsBucket.CreateBuilder()
                                            .SetBucketMin(0)
                                            .SetBucketMax(4294967296F)
                                            .SetWaitMilliseconds(1354)
@@ -39,104 +43,73 @@ namespace D3Sharp.Core.Services
                                            .SetFormingGames(0)
                                            .SetWaitingPlayers(0).Build());
 
-            var response = bnet.protocol.game_master.ListFactoriesResponse.CreateBuilder().AddDescription(description).SetTotalResults(1).Build();
+            var builder =ListFactoriesResponse.CreateBuilder().AddDescription(description).SetTotalResults(1);
+            done(builder.Build());
+        }
 
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
-                response.ToByteArray());
+        public override void FindGame(IRpcController controller, FindGameRequest request, Action<FindGameResponse> done)
+        {
+            throw new NotImplementedException();
+        }
 
-            client.Send(packet);
-        }
-        
-        [ServiceMethod(0x3)]
-        public void FindGame(IClient client, Packet packetIn)
+        public override void CancelFindGame(IRpcController controller, CancelFindGameRequest request, Action<NoData> done)
         {
-            Logger.Trace("RPC:GameMaster:FindGame() Stub");
-            //var request = bnet.protocol.game_master.FindGameRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x4)]
-        public void CancelFindGame(IClient client, Packet packetIn)
+
+        public override void GameEnded(IRpcController controller, GameEndedNotification request, Action<NO_RESPONSE> done)
         {
-            Logger.Trace("RPC:GameMaster:CancelFindGame() Stub");
-            //var request = bnet.protocol.game_master.CancelFindGameRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x5)]
-        public void GameEnded(IClient client, Packet packetIn)
+
+        public override void PlayerLeft(IRpcController controller, PlayerLeftNotification request, Action<NO_RESPONSE> done)
         {
-            Logger.Trace("RPC:GameMaster:GameEnded() Stub");
-            //var request = bnet.protocol.game_master.GameEndedNotification.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x6)]
-        public void PlayerLeft(IClient client, Packet packetIn)
+
+        public override void RegisterServer(IRpcController controller, RegisterServerRequest request, Action<NoData> done)
         {
-            Logger.Trace("RPC:GameMaster:PlayerLeft() Stub");
-            //var request = bnet.protocol.game_master.PlayerLeftNotification.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x7)]
-        public void RegisterServer(IClient client, Packet packetIn)
+
+        public override void UnregisterServer(IRpcController controller, UnregisterServerRequest request, Action<NO_RESPONSE> done)
         {
-            Logger.Trace("RPC:GameMaster:RegisterServer() Stub");
-            //var request = bnet.protocol.game_master.RegisterServerRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x8)]
-        public void UnregisterServer(IClient client, Packet packetIn)
+
+        public override void RegisterUtilities(IRpcController controller, RegisterUtilitiesRequest request, Action<NoData> done)
         {
-            Logger.Trace("RPC:GameMaster:UnregisterServer() Stub");
-            //var request = bnet.protocol.game_master.UnregisterServerRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x9)]
-        public void RegisterUtilities(IClient client, Packet packetIn)
+
+        public override void UnregisterUtilities(IRpcController controller, UnregisterUtilitiesRequest request, Action<NO_RESPONSE> done)
         {
-            Logger.Trace("RPC:GameMaster:RegisterUtilities() Stub");
-            //var request = bnet.protocol.game_master.RegisterUtilitiesRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x0a)]
-        public void UnregisterUtilities(IClient client, Packet packetIn)
+
+        public override void Subscribe(IRpcController controller, SubscribeRequest request, Action<SubscribeResponse> done)
         {
-            Logger.Trace("RPC:GameMaster:UnregisterUtilities() Stub");
-            //var request = bnet.protocol.game_master.UnregisterUtilitiesRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0xb)]
-        public void Subscribe(IClient client, Packet packetIn)
+
+        public override void Unsubscribe(IRpcController controller, UnsubscribeRequest request, Action<NO_RESPONSE> done)
         {
-            Logger.Trace("RPC:GameMaster:Subscribe() Stub");
-            //var request = bnet.protocol.game_master.SubscribeRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0xc)]
-        public void Unsubscribe(IClient client, Packet packetIn)
+
+        public override void ChangeGame(IRpcController controller, ChangeGameRequest request, Action<NoData> done)
         {
-            Logger.Trace("RPC:GameMaster:Unsubscribe() Stub");
-            //var request = bnet.protocol.game_master.UnsubscribeRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0xd)]
-        public void ChangeGame(IClient client, Packet packetIn)
+
+        public override void GetFactoryInfo(IRpcController controller, GetFactoryInfoRequest request, Action<GetFactoryInfoResponse> done)
         {
-            Logger.Trace("RPC:GameMaster:ChangeGame() Stub");
-            //var request = bnet.protocol.game_master.ChangeGameRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0xe)]
-        public void GetFactoryInfo(IClient client, Packet packetIn)
+
+        public override void GetGameStats(IRpcController controller, GetGameStatsRequest request, Action<GetGameStatsResponse> done)
         {
-            Logger.Trace("RPC:GameMaster:GetFactoryInfo() Stub");
-            //var request = bnet.protocol.game_master.GetFactoryInfoRequest.ParseFrom(packetIn.Payload.ToArray());
-        }
-        
-        [ServiceMethod(0xf)]
-        public void GetGameStats(IClient client, Packet packetIn)
-        {
-            Logger.Trace("RPC:GameMaster:GetGameStats() Stub");
-            //var request = bnet.protocol.game_master.GetGameStatsRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
     }
 }

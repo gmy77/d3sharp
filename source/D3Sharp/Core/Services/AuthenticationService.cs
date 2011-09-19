@@ -2,30 +2,32 @@
 using D3Sharp.Core.Accounts;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
+using D3Sharp.Utils;
+using bnet.protocol.authentication;
 
 namespace D3Sharp.Core.Services
 {
     [Service(serviceID: 0x1, serviceName: "bnet.protocol.authentication.AuthenticationServer")]
-    public class AuthenticationService:Service
+    public class AuthenticationService:AuthenticationServer, IServerService
     {
-        [ServiceMethod(0x1)]
-        public void Logon(IClient client, Packet packetIn)
+        protected static readonly Logger Logger = LogManager.CreateLogger();
+        public IClient Client { get; set; }
+
+        public override void Logon(Google.ProtocolBuffers.IRpcController controller, LogonRequest request, System.Action<LogonResponse> done)
         {
-            var request = bnet.protocol.authentication.LogonRequest.ParseFrom(packetIn.Payload.ToArray());
+            Logger.Trace("LogonRequest(): " + request.Email);
+            Client.Account = AccountsManager.GetAccount(request.Email);
 
-            Logger.Trace("RPC:Authentication:Logon(): " + request.Email);
-            client.Account = AccountsManager.GetAccount(request.Email);
+            var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
+                .SetAccount(Client.Account.BnetAccountID)
+                .SetGameAccount(Client.Account.BnetGameAccountID);
 
-            var response = bnet.protocol.authentication.LogonResponse.CreateBuilder()
-                .SetAccount(client.Account.BnetAccountID)
-                .SetGameAccount(client.Account.BnetGameAccountID)
-                .Build();
+            done(builder.Build());
+        }
 
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
-                response.ToByteArray());
-
-            client.Send(packet);
-        }       
+        public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, ModuleMessageRequest request, System.Action<bnet.protocol.NoData> done)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

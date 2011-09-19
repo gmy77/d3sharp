@@ -1,50 +1,39 @@
 ﻿using D3Sharp.Net;
 using D3Sharp.Net.Packets;
+using D3Sharp.Utils;
 
 namespace D3Sharp.Core.Services
 {
-    // bnet.protocol.presence
     [Service(serviceID: 0xb, serviceName: "bnet.protocol.presence.PresenceService")]
-    public class PresenceService : Service
+    public class PresenceService : bnet.protocol.presence.PresenceService,IServerService
     {
-        [ServiceMethod(0x1)]
-        public void Subscribe(IClient client, Packet packetIn)
-        {
-            Logger.Trace("RPC:Presence:Subscribe()");
-            
-            var response = bnet.protocol.NoData.CreateBuilder().Build();            
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
-                response.ToByteArray());
-        }
-        
-        [ServiceMethod(0x2)]
-        public void Unsubscribe(IClient client, Packet packetIn)
-        {
-            Logger.Trace("RPC:Presence:Unsubscribe()");
+        protected static readonly Logger Logger = LogManager.CreateLogger();
+        public IClient Client { get; set; }
 
-            var response = bnet.protocol.NoData.CreateBuilder().Build();
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
-                response.ToByteArray());
-        }
-        
-        [ServiceMethod(0x3)]
-        public void Update(IClient client, Packet packetIn)
+        public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.SubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("RPC:Presence:Update()");
+            Logger.Trace("Subscribe()");
+            var builder = bnet.protocol.NoData.CreateBuilder();
+            done(builder.Build());
+        }
 
-            var response = bnet.protocol.NoData.CreateBuilder().Build();
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
-                response.ToByteArray());
-        }
-        
-        [ServiceMethod(0x4)]
-        public void Query(IClient client, Packet packetIn)
+        public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UnsubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("RPC:Presence:Query() Stub");
-            // responds with QueryResponse
+            Logger.Trace("Unsubscribe()");
+            var builder = bnet.protocol.NoData.CreateBuilder();
+            done(builder.Build());
         }
+
+        public override void Update(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UpdateRequest request, System.Action<bnet.protocol.NoData> done)
+        {
+            Logger.Trace("Update()");
+            var builder = bnet.protocol.NoData.CreateBuilder();
+            done(builder.Build());
+        }
+
+        public override void Query(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.QueryRequest request, System.Action<bnet.protocol.presence.QueryResponse> done)
+        {
+            throw new System.NotImplementedException();
+        }               
     }
 }

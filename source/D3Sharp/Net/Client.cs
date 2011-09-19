@@ -10,10 +10,11 @@ using D3Sharp.Net.Packets;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Helpers;
 using Google.ProtocolBuffers;
+using Google.ProtocolBuffers.Descriptors;
 
 namespace D3Sharp.Net
 {
-    public sealed class Client : IClient
+    public sealed class Client : IClient, IRpcChannel
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -36,29 +37,25 @@ namespace D3Sharp.Net
             this.Services = new Dictionary<uint, uint>();
         }
 
-        public void RemoteCall(string remoteService, uint methodID, IMessage message)
+        // rpc to client
+        public void CallMethod(MethodDescriptor method, IRpcController controller, IMessage request, IMessage responsePrototype, Action<IMessage> done)
         {
-            var service = ClientService.GetDefinitionByName(remoteService);            
-            if(service==null)
+            var serviceName = method.Service.FullName;
+            var serviceHash = StringHashHelper.HashString(serviceName);
+
+            if (!this.Services.ContainsKey(serviceHash))
             {
-                Logger.Error("{0} is not known client service", remoteService);
+                Logger.Error("Not bound to client service {0} [0x{1}] yet.", serviceName, serviceHash.ToString("X8"));
                 return;
             }
 
-            if(!this.Services.ContainsKey(service.Hash))
-            {
-                Logger.Error("Not bound to client service {0} [0x{1}] yet.", remoteService, service.Hash.ToString("X8"));
-                return;
-            }
-
-            var serviceId = this.Services[service.Hash];
+            var serviceId = this.Services[serviceHash];
             var packet = new Packet(
-                new Header((byte)serviceId, methodID, this._requestCounter++, (uint)message.SerializedSize),
-                message.ToByteArray());
+                new Header((byte) serviceId, (uint)(method.Index + 1), this._requestCounter++, (uint) request.SerializedSize),
+                request.ToByteArray());
 
             this.Send(packet);
-        }
-
+        }      
 
         #region socket stuff
 
