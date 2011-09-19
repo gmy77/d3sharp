@@ -53,9 +53,6 @@
     </Reference>
     <Reference Include="System.Xml">
     </Reference>
-    <Reference Include="Be.Windows.Forms.HexBox, Version=1.4.7.13476, Culture=neutral, PublicKeyToken=e0e5adf0ebc99863">
-      <HintPath>Be.Windows.Forms.HexBox.dll</HintPath>
-    </Reference>
     <Reference Include="Google.ProtocolBuffers, Version=2.3.0.277, Culture=neutral, PublicKeyToken=17b3b1f090c3ea48">
       <HintPath>Google.ProtocolBuffers.dll</HintPath>
     </Reference>
