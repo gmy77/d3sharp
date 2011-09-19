@@ -83,22 +83,81 @@ namespace D3Sharp.Core.Toons
             this.Level = level;
             this.AccountID = accountId;
 
+
             var visualItems = new[]
                             {
-                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
-                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
-                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
-                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
-                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
-                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
-                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
-                                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(),
+                                // Some hack. We should either load strings and then hash it from DB or load hash directly from DB..
+                                // Showing a head and a Wep to show how it works
+
+                                // Head
+                                D3.Hero.VisualItem.CreateBuilder()
+                                    .SetGbid( (int)StringHashHelper.HashString2("Helm_002") )
+                                    .SetDyeType(0)
+                                    .SetItemEffectType(0)
+                                    .SetEffectLevel(0)
+                                    .Build(),
+
+                                // Chest
+                                D3.Hero.VisualItem.CreateBuilder()
+                                    .SetGbid(0)
+                                    .SetDyeType(0)
+                                    .SetItemEffectType(0)
+                                    .SetEffectLevel(0)
+                                    .Build(),
+
+                                // Feet
+                                D3.Hero.VisualItem.CreateBuilder()
+                                    .SetGbid(0)
+                                    .SetDyeType(0)
+                                    .SetItemEffectType(0)
+                                    .SetEffectLevel(0)
+                                    .Build(),
+
+                                // Hands
+                                D3.Hero.VisualItem.CreateBuilder()
+                                    .SetGbid(0)
+                                    .SetDyeType(0)
+                                    .SetItemEffectType(0)
+                                    .SetEffectLevel(0)
+                                    .Build(),
+
+                                // Weapon (1)
+                                D3.Hero.VisualItem.CreateBuilder()
+                                    .SetGbid( (int)StringHashHelper.HashString2("Unique_Mace_1H_012") )
+                                    .SetDyeType(0)
+                                    .SetItemEffectType(0)
+                                    .SetEffectLevel(0)
+                                    .Build(),
+
+                                // Weapon (2)
+                                D3.Hero.VisualItem.CreateBuilder()
+                                    .SetGbid(0)
+                                    .SetDyeType(0)
+                                    .SetItemEffectType(0)
+                                    .SetEffectLevel(0)
+                                    .Build(),
+
+                                // Shoulders
+                                D3.Hero.VisualItem.CreateBuilder()
+                                    .SetGbid(0)
+                                    .SetDyeType(0)
+                                    .SetItemEffectType(0)
+                                    .SetEffectLevel(0)
+                                    .Build(),
+
+                                // Legs
+                                D3.Hero.VisualItem.CreateBuilder()
+                                    .SetGbid(0)
+                                    .SetDyeType(0)
+                                    .SetItemEffectType(0)
+                                    .SetEffectLevel(0)
+                                    .Build(),
                             };
 
 
             this.Equipment = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
 
-            this.Digest= D3.Hero.Digest.CreateBuilder().SetVersion(891)
+            this.Digest = D3.Hero.Digest.CreateBuilder().SetVersion(891)
                 .SetHeroId(this.D3EntityID)
                 .SetHeroName(this.Name)
                 .SetGbidClass((int)this.ClassID)
