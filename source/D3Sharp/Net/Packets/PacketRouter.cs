@@ -47,6 +47,7 @@ namespace D3Sharp.Net.Packets
 
                 lock (service) // lock the service so that it's in-context client does not get changed..
                 {
+                    //Logger.Debug("service-call data:{0}", message.ToString());
                     ((IServerService) service).Client = client;
                     service.CallMethod(method, null, message, (msg => SendResponse(client, header.RequestID, msg)));
                 }
