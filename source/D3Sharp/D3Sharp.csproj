@@ -82,7 +82,6 @@
     <Compile Include="Core\Services\ChannelOwnerService.cs" />
     <Compile Include="Core\Services\ChannelService.cs" />
     <Compile Include="Core\Services\ChatService.cs" />
-    <Compile Include="Core\Services\ClientService.cs" />
     <Compile Include="Core\Services\ExchangeService.cs" />
     <Compile Include="Core\Services\FollowersService.cs" />
     <Compile Include="Core\Services\FriendsService.cs" />

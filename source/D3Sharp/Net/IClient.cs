@@ -16,9 +16,7 @@ namespace D3Sharp.Net
         IPEndPoint LocalEndPoint { get; }
 
         Dictionary<uint, uint> Services { get; }
-        Account Account { get; set; }
-
-        void RemoteCall(string remoteService, uint methodID, IMessage message);
+        Account Account { get; set; }       
 
         int Send(Packet packet);
         int Send(IEnumerable<byte> data);

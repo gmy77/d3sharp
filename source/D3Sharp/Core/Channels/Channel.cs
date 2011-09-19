@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using D3Sharp.Net;
+using Google.ProtocolBuffers;
 
 namespace D3Sharp.Core.Channels
 {
@@ -42,9 +43,9 @@ namespace D3Sharp.Core.Channels
             foreach (var m in this.Members.Where(m => m.Identity != user.Identity))
             {
                 builder.AddMember(m);
-            }                        
+            }
 
-            client.RemoteCall("bnet.protocol.channel.ChannelSubscriber", 0x1, builder.Build());
+            ((IRpcChannel) client).CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), null, builder.Build(), null, done =>{});
         }
     }
 }
