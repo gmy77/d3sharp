@@ -15,12 +15,12 @@ namespace D3Sharp.Core.Channels
         // Maybe it doesn't like 0 as a channel id?
         private static ulong _idGenerated=1000;
 
-        public static Channel CreateNewChannel(Client client, ulong externalObjectId)
+        public static Channel CreateNewChannel(IClient client, ulong externalObjectId)
         {
             var channel = new Channel(_idGenerated++);
             client.MapLocalObjectID(channel.ID, externalObjectId);
             Channels.Add(channel.ID, channel);
-            channel.Add(client);
+            channel.Add((Client)client);
             return channel;
         }
         

@@ -11,7 +11,7 @@ namespace D3Sharp.Core.Services
     public class NotificationService : bnet.protocol.notification.NotificationService, IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public Client Client { get; set; }
+        public IClient Client { get; set; }
 
         public override void SendNotification(IRpcController controller, Notification request, Action<NoData> done)
         {

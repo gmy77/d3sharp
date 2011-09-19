@@ -13,7 +13,7 @@ namespace D3Sharp.Core.Services
     public class ToonExternalService : ToonServiceExternal, IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public Client Client { get; set; }
+        public IClient Client { get; set; }
 
         public override void ToonList(Google.ProtocolBuffers.IRpcController controller, ToonListRequest request, Action<ToonListResponse> done)
         {

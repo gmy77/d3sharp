@@ -15,7 +15,7 @@ namespace D3Sharp.Net
         public int Port { get; private set; }
 
         protected Socket Listener;
-        protected Dictionary<Socket, Client> Connections = new Dictionary<Socket, Client>();
+        protected Dictionary<Socket, IClient> Connections = new Dictionary<Socket, IClient>();
         protected object ConnectionLock = new object();
 
         public delegate void ConnectionEventHandler(object sender, ClientEventArgs e);

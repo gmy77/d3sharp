@@ -8,7 +8,7 @@ namespace D3Sharp.Core.Services
     public class PresenceService : bnet.protocol.presence.PresenceService,IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public Client Client { get; set; }
+        public IClient Client { get; set; }
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.SubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {

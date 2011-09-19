@@ -14,7 +14,7 @@ namespace D3Sharp.Core.Services
     public class BaseService :  ConnectionService,  IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public Client Client { get; set; }
+        public IClient Client { get; set; }
 
         public override void Connect(Google.ProtocolBuffers.IRpcController controller, ConnectRequest request, Action<ConnectResponse> done)
         {

@@ -12,7 +12,7 @@ namespace D3Sharp.Core.Services
     public class GameMasterService : GameMaster, IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public Client Client { get; set; }
+        public IClient Client { get; set; }
 
         public override void JoinGame(IRpcController controller, JoinGameRequest request, Action<JoinGameResponse> done)
         {

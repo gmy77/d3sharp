@@ -11,7 +11,7 @@ namespace D3Sharp.Core.Services
     public class PartyService : bnet.protocol.party.PartyService,IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public Client Client { get; set; }
+        public IClient Client { get; set; }
 
         public override void CreateChannel(IRpcController controller, CreateChannelRequest request, Action<CreateChannelResponse> done)
         {
@@ -25,7 +25,7 @@ namespace D3Sharp.Core.Services
 
             done(builder.Build());
 
-            newChannel.NotifyChannelState(this.Client);
+            newChannel.NotifyChannelState((Client)this.Client);
         }
 
         public override void JoinChannel(IRpcController controller, JoinChannelRequest request, Action<JoinChannelResponse> done)

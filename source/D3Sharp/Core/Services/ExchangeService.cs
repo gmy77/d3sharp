@@ -14,7 +14,7 @@ namespace D3Sharp.Core.Services
     public class ExchangeService : bnet.protocol.exchange.ExchangeService, IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public Client Client { get; set; }
+        public IClient Client { get; set; }
 
         public override void GetConfiguration(IRpcController controller, GetConfigurationRequest request, Action<GetConfigurationResponse> done)
         {
