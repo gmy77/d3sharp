@@ -5,9 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
-using Be.Windows.Forms;
 using Google.ProtocolBuffers;
+using ProtoHelpers.Utils;
 
 namespace ProtoStringViewer
 {
@@ -23,7 +24,8 @@ namespace ProtoStringViewer
         private void textBoxInput_TextChanged(object sender, EventArgs e)
         {
             _byteData = ProtoHelpers.Utils.Conversion.Unescape(this.textBoxInput.Text);
-            this.hexBoxOutput.ByteProvider = new DynamicByteProvider(_byteData);
+            this.hexBox.Text = _byteData.DumpHex(false);
+            File.WriteAllBytes("proto.raw", _byteData);
         }
 
         private void textBoxProtoType_TextChanged(object sender, EventArgs e)
