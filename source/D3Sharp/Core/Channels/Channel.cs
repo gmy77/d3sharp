@@ -19,7 +19,7 @@ namespace D3Sharp.Core.Channels
             this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(433661094618860925).SetLow(11233645142038554527).Build();
 
             var builder = bnet.protocol.channel.ChannelState.CreateBuilder()
-                .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN)
+                .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN_INVITATION)
                 .SetMaxMembers(8)
                 .SetMinMembers(1)
                 .SetMaxInvitations(12);
@@ -65,7 +65,7 @@ namespace D3Sharp.Core.Channels
             client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), builder.Build());
         }
 
-        public void Add(Client client)
+        public void Add(Client client, ulong objectId)
         {
             var builder = bnet.protocol.channel.AddNotification.CreateBuilder();
             var identity = bnet.protocol.Identity.CreateBuilder();
@@ -79,12 +79,22 @@ namespace D3Sharp.Core.Channels
             var selfBuilder = bnet.protocol.channel.Member.CreateBuilder().SetIdentity(identity.Build()).SetState(state.Build());
             var self = selfBuilder.Build();
             builder.SetSelf(self);
-            builder.AddMember(self);
-            builder.SetChannelState(this.State);
 
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.ID);
+            if (client.Account.Toons.Count > 0)
+            {
+                var memberIdentity = bnet.protocol.Identity.CreateBuilder();
+                memberIdentity.SetToonId(client.Account.Toons.First().Value.BnetEntityID);
+
+                var memberState = bnet.protocol.channel.MemberState.CreateBuilder().AddRole(2).SetPrivileges(64511);
+
+                var member = bnet.protocol.channel.Member.CreateBuilder().SetIdentity(memberIdentity).SetState(memberState.Build());
+                builder.AddMember(self);
+            }
+
+            builder.SetChannelState(this.State);
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), objectId);
         }
-        
+
         public bool HasUser(Client client)
         {
             return this.Members.Any(m => m.Identity == client.Identity);

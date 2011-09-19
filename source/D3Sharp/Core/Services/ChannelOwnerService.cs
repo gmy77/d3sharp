@@ -31,7 +31,21 @@ namespace D3Sharp.Core.Services
 
         public override void JoinChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.JoinChannelRequest request, System.Action<bnet.protocol.channel.JoinChannelResponse> done)
         {
-            throw new System.NotImplementedException();
+            Logger.Trace("JoinChannel()");
+
+            ////>>> JoinChannelRequest
+            ////channel_id {
+            ////  high: 433661094641971304
+            ////  low: 11017467167309309688
+            ////}
+            ////object_id: 15
+
+
+            ////>>> JoinChannelResponse
+            ////object_id: 67122
+
+            var builder = bnet.protocol.channel.JoinChannelResponse.CreateBuilder().SetObjectId(67122);
+            done(builder.Build());
         }
     }
 }

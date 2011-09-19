@@ -155,10 +155,10 @@ namespace D3Sharp.Net
 
         #region service methods
 
-        public IEnumerable<Client> GetClients()
+        public IEnumerable<IClient> GetClients()
         {
             lock (ConnectionLock)
-                foreach (Client client in Connections.Values)
+                foreach (IClient client in Connections.Values)
                     yield return client;
         }
 

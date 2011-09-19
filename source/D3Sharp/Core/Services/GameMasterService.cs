@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
 using D3Sharp.Utils;
@@ -49,7 +50,68 @@ namespace D3Sharp.Core.Services
 
         public override void FindGame(IRpcController controller, FindGameRequest request, Action<FindGameResponse> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("FindGame()");
+
+            ////>>> FindGameResponse
+            ////request_id: 12526585062881647236
+
+            var findGameResponse = bnet.protocol.game_master.FindGameResponse.CreateBuilder();
+            findGameResponse.SetRequestId(12526585062881647236);
+
+            done(findGameResponse.Build());
+
+            var gameFoundNotification = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();
+
+            var gameHandle = bnet.protocol.game_master.GameHandle.CreateBuilder();
+            gameHandle.SetFactoryId(request.FactoryId);
+            gameHandle.SetGameId(bnet.protocol.EntityId.CreateBuilder().SetHigh(433661094641971304).SetLow(11017467167309309688).Build());
+
+            var connectInfo = bnet.protocol.game_master.ConnectInfo.CreateBuilder();
+            connectInfo.SetToonId(Client.Account.Toons.First().Value.BnetEntityID);
+            connectInfo.SetHost("127.0.0.1");
+            connectInfo.SetPort(1345);
+            connectInfo.SetToken(ByteString.CopyFrom(new byte[] { 0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84 }));
+            connectInfo.AddAttribute(bnet.protocol.attribute.Attribute
+                .CreateBuilder()
+                .SetName("SGameId")
+                .SetValue(bnet.protocol.attribute.Variant
+                        .CreateBuilder()
+                        .SetIntValue(2014314530)
+                        .Build())
+                .Build());
+
+            gameFoundNotification.SetRequestId(12526585062881647236);
+            gameFoundNotification.SetGameHandle(gameHandle.Build());
+            gameFoundNotification.AddConnectInfo(connectInfo.Build());
+
+            var c = this.Client as Client;
+            c.CallMethod(GameFactorySubscriber.Descriptor.FindMethodByName("NotifyGameFound"), gameFoundNotification.Build(),1);
+
+
+            ////            >>> GameFoundNotification
+            ////request_id: 12526585062881647236
+            ////game_handle {
+            ////  factory_id: 14249086168335147635
+            ////  game_id {
+            ////    high: 433661094641971304
+            ////    low: 11017467167309309688
+            ////  }
+            ////}
+            ////connect_info {
+            ////  toon_id {
+            ////    high: 216174302532224051
+            ////    low: 2345959482769161802
+            ////  }
+            ////  host: "12.129.237.197"
+            ////  port: 1119
+            ////  token: "7340260919376462884"
+            ////  attribute {
+            ////    name: "SGameId"
+            ////    value {
+            ////      int_value: 2014314530
+            ////    }
+            ////  }
+            ////}
         }
 
         public override void CancelFindGame(IRpcController controller, CancelFindGameRequest request, Action<NoData> done)

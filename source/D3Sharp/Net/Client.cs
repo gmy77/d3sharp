@@ -31,8 +31,6 @@ namespace D3Sharp.Net
         public Toon CurrentToon { get; set; }
         public Channel CurrentChannel { get; set; }
 
-        private Dictionary<ulong, ulong> MappedObjects { get; set; }
-
         public bnet.protocol.Identity Identity {
             get {
                 var identityBuilder = bnet.protocol.Identity.CreateBuilder();
@@ -52,7 +50,6 @@ namespace D3Sharp.Net
             this._server = server;
             this._socket = socket;
             this.Services = new Dictionary<uint, uint>();
-            this.MappedObjects = new Dictionary<ulong, ulong>();
         }
 
         // rpc to client
@@ -61,44 +58,25 @@ namespace D3Sharp.Net
             CallMethod(method, request, 0);
         }
         
-        public void CallMethod(MethodDescriptor method, IMessage request, ulong localObjectId)
+        public void CallMethod(MethodDescriptor method, IMessage request, ulong objectId)
         {
             var serviceName = method.Service.FullName;
-            var serviceHash = StringHashHelper.HashString(serviceName);
-            
-            var externalObjectId = GetExternalObjectID(localObjectId);
+            var serviceHash = StringHashHelper.HashString(serviceName);           
 
             if (!this.Services.ContainsKey(serviceHash))
             {
                 Logger.Error("Not bound to client service {0} [0x{1}] yet.", serviceName, serviceHash.ToString("X8"));
                 return;
             }
-
-            //Logger.Trace("Calling {0} (localObjectId={1}, externalObjectId={2}) with request:", method.FullName, localObjectId, externalObjectId);
-            //Logger.Debug(request.ToString());
             
             var serviceId = this.Services[serviceHash];
-            var header = new Header((byte) serviceId, (uint)(method.Index + 1), this._requestCounter++, (uint) request.SerializedSize);
-            header.ExternalObjectID=externalObjectId;
-            var packet = new Packet(header, request.ToByteArray());
+
+
+            var packet = new Packet(
+                new Header((byte) serviceId, (uint) (method.Index + 1), this._requestCounter++,(uint) request.SerializedSize, objectId),
+                request.ToByteArray());
 
             this.Send(packet);
-        }
-
-        public void MapLocalObjectID(ulong localObjectId, ulong externalObjectId)
-        {
-            try {
-                this.MappedObjects[localObjectId] = externalObjectId;
-            } catch (Exception e) {
-                Logger.DebugException(e, "MapLocalObjectID()");
-            }
-        }
-
-        public ulong GetExternalObjectID(ulong localObjectId)
-        {
-            ulong external=0;
-            this.MappedObjects.TryGetValue(localObjectId, out external);
-            return external;
         }
 
         #region socket stuff

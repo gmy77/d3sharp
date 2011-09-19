@@ -12,15 +12,10 @@ namespace D3Sharp.Core.Channels
         private readonly static Dictionary<ulong, Channel> Channels =
             new Dictionary<ulong, Channel>();
 
-        // Maybe it doesn't like 0 as a channel id?
-        private static ulong _idGenerated=1000;
-
-        public static Channel CreateNewChannel(IClient client, ulong externalObjectId)
+        public static Channel CreateNewChannel(IClient client)
         {
-            var channel = new Channel(_idGenerated++);
-            client.MapLocalObjectID(channel.ID, externalObjectId);
-            Channels.Add(channel.ID, channel);
-            channel.Add((Client)client);
+            var channel = new Channel((ulong)Channels.Count);
+            //Channels.Add(channel.ID, channel);
             return channel;
         }
         
