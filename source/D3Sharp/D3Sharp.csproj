@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -68,15 +68,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.SQLite, Version=1.0.74.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libs\sqlite-mixed\System.Data.SQLite.dll</HintPath>
+      <HintPath>..\libs\System.Data.SQLite.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Accounts\Account.cs" />
-    <Compile Include="Core\Accounts\AccountsManager.cs" />
-    <Compile Include="Core\Channels\Channel.cs" />
-    <Compile Include="Core\Channels\ChannelsManager.cs" />
+    <Compile Include="Core\Items\Item.cs" />
+    <Compile Include="Core\Items\ItemTypeGenerator.cs" />
     <Compile Include="Core\Services\AuthenticationService.cs" />
     <Compile Include="Core\Services\BaseService.cs" />
     <Compile Include="Core\Services\ChannelInvitationService.cs" />
@@ -88,19 +85,21 @@
     <Compile Include="Core\Services\FriendsService.cs" />
     <Compile Include="Core\Services\GameMasterService.cs" />
     <Compile Include="Core\Services\GameUtilitiesService.cs" />
-    <Compile Include="Core\Services\IServerService.cs" />
     <Compile Include="Core\Services\NotificationService.cs" />
     <Compile Include="Core\Services\PartyService.cs" />
     <Compile Include="Core\Services\PresenceService.cs" />
     <Compile Include="Core\Services\SearchService.cs" />
     <Compile Include="Core\Services\Service.cs" />
+    <Compile Include="Core\Services\ServiceManager.cs" />
     <Compile Include="Core\Services\StorageService.cs" />
     <Compile Include="Core\Services\ToonExternalService.cs" />
     <Compile Include="Core\Services\UserManagerService.cs" />
     <Compile Include="Core\Storage\DBManager.cs" />
+    <Compile Include="Core\Storage\GamedataDBManager.cs" />
     <Compile Include="Core\Toons\Toon.cs" />
     <Compile Include="Core\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Toons\ToonManager.cs" />
+    <Compile Include="Core\Toons\VisualEquipment.cs" />
     <Compile Include="Net\Packets\Header.cs" />
     <Compile Include="Net\Packets\Packet.cs" />
     <Compile Include="Program.cs" />
@@ -114,13 +113,13 @@
     <Compile Include="Utils\Extensions\DateTimeExtensions.cs" />
     <Compile Include="Utils\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Net\Packets\PacketRouter.cs" />
-    <Compile Include="Utils\Helpers\StringHashHelper.cs" />
     <Compile Include="Utils\TinyLogger.cs" />
     <Compile Include="Utils\win32\NativeMethods.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Assets\gamedata.db" />
     <None Include="Assets\toon.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

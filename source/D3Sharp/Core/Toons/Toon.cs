@@ -83,6 +83,7 @@ namespace D3Sharp.Core.Toons
             this.Level = level;
             this.AccountID = accountId;
 
+            Items.ItemTypeGenerator itemsGenerator = new Items.ItemTypeGenerator();
 
             var visualItems = new[]
                             {
@@ -91,7 +92,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Head
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid( (int)StringHashHelper.HashString2("Helm_002") )
+                                    .SetGbid( itemsGenerator.generate(Items.TYPE.Helm).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -99,7 +100,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Chest
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
+                                    .SetGbid(itemsGenerator.generate(Items.TYPE.ChestArmor).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -107,7 +108,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Feet
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
+                                    .SetGbid(itemsGenerator.generate(Items.TYPE.Boots).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -115,7 +116,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Hands
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
+                                    .SetGbid(itemsGenerator.generate(Items.TYPE.Gloves).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -123,7 +124,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Weapon (1)
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid( (int)StringHashHelper.HashString2("Unique_Mace_1H_012") )
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -139,7 +140,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Shoulders
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
+                                    .SetGbid(itemsGenerator.generate(Items.TYPE.Shoulders).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)

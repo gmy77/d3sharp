@@ -63,35 +63,5 @@ namespace D3Sharp.Core.Services
             var builder = bnet.protocol.toon.external.DeleteToonResponse.CreateBuilder();
             done(builder.Build());
         }
-
-
-        [ServiceMethod(0x4)]
-        public void DeleteToon4(IClient client, Packet packetIn)
-        {
-            Logger.Trace("RPC:ToonExternal:DeleteToon(4)");
-            var request = bnet.protocol.toon.external.DeleteToonRequest.ParseFrom(packetIn.Payload.ToArray());
-
-            Core.Toons.ToonManager.DeleteToon(request.Toon.Low);
-
-            var response = bnet.protocol.toon.external.DeleteToonResponse.CreateBuilder().Build();
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
-                response.ToByteArray());
-
-            client.Send(packet);
-        }
-
-        [ServiceMethod(0x5)]
-        public void DeleteToon5(IClient client, Packet packetIn)
-        {
-            Logger.Trace("RPC:ToonExternal:DeleteToon(5)");
-            var response = bnet.protocol.toon.external.DeleteToonResponse.CreateBuilder().Build();
-
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
-                response.ToByteArray());
-
-            client.Send(packet);
-        }
     }
 }
