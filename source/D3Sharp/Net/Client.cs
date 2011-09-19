@@ -31,6 +31,11 @@ namespace D3Sharp.Net
         public Toon CurrentToon { get; set; }
         public Channel CurrentChannel { get; set; }
 
+        /// <summary>
+        /// Object id map as with remote object id as key, local object id as value.
+        /// </summary>
+        private Dictionary<ulong, ulong> MappedObjects { get; set; }
+
         public bnet.protocol.Identity Identity {
             get {
                 var identityBuilder = bnet.protocol.Identity.CreateBuilder();
@@ -50,6 +55,7 @@ namespace D3Sharp.Net
             this._server = server;
             this._socket = socket;
             this.Services = new Dictionary<uint, uint>();
+            this.MappedObjects = new Dictionary<ulong, ulong>();
         }
 
         // rpc to client
@@ -77,6 +83,25 @@ namespace D3Sharp.Net
                 request.ToByteArray());
 
             this.Send(packet);
+        }
+
+        public void MapLocalObjectID(ulong externalObjectId, ulong localObjectId)
+        {
+            try
+            {
+                this.MappedObjects[externalObjectId] = localObjectId;
+            }
+            catch (Exception e)
+            {
+                Logger.DebugException(e, "MapLocalObjectID()");
+            }
+        }
+
+        public ulong GetLocalObjectID(ulong remoteObjectId)
+        {
+            ulong localId = 0;
+            this.MappedObjects.TryGetValue(remoteObjectId, out localId);
+            return localId;
         }
 
         #region socket stuff

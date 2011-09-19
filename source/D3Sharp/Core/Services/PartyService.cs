@@ -20,7 +20,6 @@ namespace D3Sharp.Core.Services
             
             var channel = ChannelsManager.CreateNewChannel(this.Client);
             var builder = CreateChannelResponse.CreateBuilder()
-                .SetObjectId(channel.ID)
                 .SetChannelId(channel.BnetEntityID);
 
             done(builder.Build());

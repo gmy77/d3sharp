@@ -26,6 +26,9 @@ namespace D3Sharp.Net
         
         void CallMethod(MethodDescriptor method, IMessage request);
         void CallMethod(MethodDescriptor method, IMessage request, ulong localObjectId);
+
+        void MapLocalObjectID(ulong localObjectId, ulong externalObjectId);
+        ulong GetLocalObjectID(ulong localObjectId);
         
         int Send(Packet packet);
         int Send(IEnumerable<byte> data);

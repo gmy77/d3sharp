@@ -16,6 +16,8 @@ namespace D3Sharp.Core.Services
             //Logger.Debug("request:\n{0}", request.ToString());
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
+
+            // need to return a proper notificationadd - check addnotify.txt in logs.
         }
 
         public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UnsubscribeRequest request, System.Action<bnet.protocol.NoData> done)
