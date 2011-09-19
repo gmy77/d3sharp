@@ -11,20 +11,21 @@ namespace D3Sharp.Core.Services
     public class PartyService : bnet.protocol.party.PartyService,IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public IClient Client { get; set; }
+        public Client Client { get; set; }
 
         public override void CreateChannel(IRpcController controller, CreateChannelRequest request, Action<CreateChannelResponse> done)
         {
             Logger.Trace("CreateChannel()");
-
-            var channel = ChannelsManager.CreateNewChannel(Client);
+            //Logger.Debug("request:\n{0}", request.ToString());
+            
+            var newChannel = ChannelsManager.CreateNewChannel(this.Client, request.ObjectId);
             var builder = CreateChannelResponse.CreateBuilder()
                 .SetObjectId(request.ObjectId)
-                .SetChannelId(channel.BnetEntityID);
+                .SetChannelId(newChannel.BnetEntityID);
 
             done(builder.Build());
 
-            channel.NotifyChannelState((Client)this.Client);
+            newChannel.NotifyChannelState(this.Client);
         }
 
         public override void JoinChannel(IRpcController controller, JoinChannelRequest request, Action<JoinChannelResponse> done)

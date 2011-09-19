@@ -11,7 +11,7 @@ namespace D3Sharp.Core.Services
     public class SearchService : bnet.protocol.search.SearchService,IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public IClient Client { get; set; }
+        public Client Client { get; set; }
 
         public override void FindMatches(IRpcController controller, FindMatchesRequest request, Action<FindMatchesResponse> done)
         {

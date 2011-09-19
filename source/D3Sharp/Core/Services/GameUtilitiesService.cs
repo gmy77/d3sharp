@@ -14,7 +14,7 @@ namespace D3Sharp.Core.Services
     public class GameUtilitiesService : GameUtilities,IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public IClient Client { get; set; }
+        public Client Client { get; set; }
 
         public override void ProcessClientRequest(IRpcController controller, ClientRequest request, Action<ClientResponse> done)
         {
@@ -22,6 +22,8 @@ namespace D3Sharp.Core.Services
 
             // TODO: handle the request. this is where banner changing happens (CustomMessageId 4)
             // CustomMessage for banner change is a D3.GameMessages.SaveBannerConfiguration
+            Logger.Debug("request:\n{0}", request.ToString());
+            
             var builder = ClientResponse.CreateBuilder();
             done(builder.Build());
         }

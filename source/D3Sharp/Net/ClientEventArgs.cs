@@ -4,9 +4,9 @@ namespace D3Sharp.Net
 {    
     public class ClientEventArgs : EventArgs
     {
-        public IClient Client { get; private set; }
+        public Client Client { get; private set; }
 
-        public ClientEventArgs(IClient connection)
+        public ClientEventArgs(Client connection)
         {
             if (connection == null)
                 throw new ArgumentNullException("connection");

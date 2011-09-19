@@ -22,7 +22,7 @@ namespace D3Sharp.Net.Packets
             }
         }
 
-        public static void Identify(IClient client, CodedInputStream stream)
+        public static void Identify(Client client, CodedInputStream stream)
         {
             var header = new Header(stream);
             var payload = new byte[header.PayloadLength];
@@ -61,7 +61,7 @@ namespace D3Sharp.Net.Packets
             }
         }
 
-        private static void SendResponse(IClient client, int requestId, IMessage message)
+        private static void SendResponse(Client client, int requestId, IMessage message)
         {
             var packet = new Packet(
                 new Header(0xfe, 0x0, requestId, (uint)message.SerializedSize),

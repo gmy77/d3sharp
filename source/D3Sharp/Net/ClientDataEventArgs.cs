@@ -7,7 +7,7 @@ namespace D3Sharp.Net
     {
         public IEnumerable<byte> Data { get; private set; }
 
-        public ClientDataEventArgs(IClient client, IEnumerable<byte> data)
+        public ClientDataEventArgs(Client client, IEnumerable<byte> data)
             : base(client)
         {
             this.Data = data ?? new byte[0];

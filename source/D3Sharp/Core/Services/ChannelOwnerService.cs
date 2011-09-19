@@ -7,7 +7,7 @@ namespace D3Sharp.Core.Services
     public class ChannelOwnerService : bnet.protocol.channel.ChannelOwner, IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public IClient Client { get; set; }
+        public Client Client { get; set; }
 
         public override void CreateChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.CreateChannelRequest request, System.Action<bnet.protocol.channel.CreateChannelResponse> done)
         {

@@ -8,6 +8,6 @@ namespace D3Sharp.Core.Services
 {
     public interface IServerService
     {
-        IClient Client { get; set; }
+        Client Client { get; set; }
     }
 }

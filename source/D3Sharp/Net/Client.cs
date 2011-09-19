@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using D3Sharp.Core.Accounts;
 using D3Sharp.Core.Services;
 using D3Sharp.Core.Toons;
+using D3Sharp.Core.Channels;
 using D3Sharp.Net.Packets;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Helpers;
@@ -14,7 +15,7 @@ using Google.ProtocolBuffers.Descriptors;
 
 namespace D3Sharp.Net
 {
-    public sealed class Client : IClient, IRpcChannel
+    public sealed class Client : IClient//, IRpcChannel
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -26,6 +27,22 @@ namespace D3Sharp.Net
         public Dictionary<uint, uint> Services { get; set; }
         public Account Account { get; set; }
         private int _requestCounter = 0;
+        
+        public Toon CurrentToon { get; set; }
+        public Channel CurrentChannel { get; set; }
+
+        private Dictionary<ulong, ulong> MappedObjects { get; set; }
+
+        public bnet.protocol.Identity Identity {
+            get {
+                var identityBuilder = bnet.protocol.Identity.CreateBuilder();
+                identityBuilder.SetAccountId(this.Account.BnetAccountID);
+                identityBuilder.SetGameAccountId(this.Account.BnetGameAccountID);
+                if (this.CurrentToon != null)
+                    identityBuilder.SetToonId(this.CurrentToon.BnetEntityID);
+                return identityBuilder.Build();
+            }
+        }
 
         public Client(Server server, Socket socket)
         {
@@ -35,13 +52,21 @@ namespace D3Sharp.Net
             this._server = server;
             this._socket = socket;
             this.Services = new Dictionary<uint, uint>();
+            this.MappedObjects = new Dictionary<ulong, ulong>();
         }
 
         // rpc to client
-        public void CallMethod(MethodDescriptor method, IRpcController controller, IMessage request, IMessage responsePrototype, Action<IMessage> done)
+        public void CallMethod(MethodDescriptor method, IMessage request)
+        {
+            CallMethod(method, request, 0);
+        }
+        
+        public void CallMethod(MethodDescriptor method, IMessage request, ulong localObjectId)
         {
             var serviceName = method.Service.FullName;
             var serviceHash = StringHashHelper.HashString(serviceName);
+            
+            var externalObjectId = GetExternalObjectID(localObjectId);
 
             if (!this.Services.ContainsKey(serviceHash))
             {
@@ -49,13 +74,32 @@ namespace D3Sharp.Net
                 return;
             }
 
+            //Logger.Trace("Calling {0} (localObjectId={1}, externalObjectId={2}) with request:", method.FullName, localObjectId, externalObjectId);
+            //Logger.Debug(request.ToString());
+            
             var serviceId = this.Services[serviceHash];
-            var packet = new Packet(
-                new Header((byte) serviceId, (uint)(method.Index + 1), this._requestCounter++, (uint) request.SerializedSize),
-                request.ToByteArray());
+            var header = new Header((byte) serviceId, (uint)(method.Index + 1), this._requestCounter++, (uint) request.SerializedSize);
+            header.ExternalObjectID=externalObjectId;
+            var packet = new Packet(header, request.ToByteArray());
 
             this.Send(packet);
-        }      
+        }
+
+        public void MapLocalObjectID(ulong localObjectId, ulong externalObjectId)
+        {
+            try {
+                this.MappedObjects[localObjectId] = externalObjectId;
+            } catch (Exception e) {
+                Logger.DebugException(e, "MapLocalObjectID()");
+            }
+        }
+
+        public ulong GetExternalObjectID(ulong localObjectId)
+        {
+            ulong external=0;
+            this.MappedObjects.TryGetValue(localObjectId, out external);
+            return external;
+        }
 
         #region socket stuff
 

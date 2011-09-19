@@ -18,12 +18,12 @@ namespace D3Sharp.Core.Channels
             this.ID = id;
             this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(433661094618860925).SetLow(11233645142038554527).Build();
 
-            var builder = bnet.protocol.channel.ChannelState.CreateBuilder();
-            builder.SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN_INVITATION);
-            builder.SetMaxMembers(8);
-            builder.SetMinMembers(1);
-            builder.SetMaxInvitations(12);
-            //builder.SetName("d3sharp test channel");
+            var builder = bnet.protocol.channel.ChannelState.CreateBuilder()
+                .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN)
+                .SetMaxMembers(8)
+                .SetMinMembers(1)
+                .SetMaxInvitations(12);
+                //.SetName("d3sharp test channel"); // Note: cap log doesn't set this optional field
             this.State = builder.Build();
         }
 
@@ -60,9 +60,9 @@ namespace D3Sharp.Core.Channels
 
 
             var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
-            var builder = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
+            var builder = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState);
 
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), null, builder, null, r => { });
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), builder.Build());
         }
 
         public void Add(Client client)
@@ -73,14 +73,43 @@ namespace D3Sharp.Core.Channels
             identity.SetGameAccountId(client.Account.BnetGameAccountID);
             if (client.Account.Toons.Count > 0) identity.SetToonId(client.Account.Toons.First().Value.BnetEntityID);
 
-            var state = bnet.protocol.channel.MemberState.CreateBuilder().AddRole(2).SetPrivileges(64511);
+            var state = bnet.protocol.channel.MemberState.CreateBuilder()
+                .AddRole(2)
+                .SetPrivileges(64511);
             var selfBuilder = bnet.protocol.channel.Member.CreateBuilder().SetIdentity(identity.Build()).SetState(state.Build());
             var self = selfBuilder.Build();
             builder.SetSelf(self);
             builder.AddMember(self);
             builder.SetChannelState(this.State);
 
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), null, builder.Build(), null, r => { });
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.ID);
+        }
+        
+        public bool HasUser(Client client)
+        {
+            return this.Members.Any(m => m.Identity == client.Identity);
+        }
+        
+        /*public void Close()
+        {
+            RemoveAllUsers();
+        }
+        
+        public void RemoveAllUsers()
+        {
+            // Need a way to iterate clients on the server to send a NotifyRemove
+            // and then call RemoveUser on them
+            this.Members.Clear();
+        }*/
+        
+        public void RemoveUser(Client client)
+        {
+            var identity = client.Identity;
+            var builder = bnet.protocol.channel.RemoveNotification.CreateBuilder()
+                .SetMemberId(identity.ToonId);
+            this.Members.RemoveAll(m => identity == m.Identity);
+            client.CurrentChannel = null;
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyRemove"), builder.Build(), this.ID);
         }
     }
 }

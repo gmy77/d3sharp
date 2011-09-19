@@ -15,7 +15,7 @@ namespace D3Sharp.Core.Services
     public class FriendsService : bnet.protocol.friends.FriendsService,IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public IClient Client { get; set; }
+        public Client Client { get; set; }
 
         public override void SubscribeToFriends(IRpcController controller, SubscribeToFriendsRequest request, Action<SubscribeToFriendsResponse> done)
         {

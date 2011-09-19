@@ -235,7 +235,7 @@ namespace D3Sharp.Core.Toons
             }
             catch (Exception e)
             {
-                Logger.ErrorException(e, "Toon.Save()");
+                Logger.ErrorException(e, "Toon.SaveToDB()");
             }
         }
 
@@ -253,7 +253,7 @@ namespace D3Sharp.Core.Toons
             }
             catch (Exception e)
             {
-                Logger.ErrorException(e, "Toon.Delete()");
+                Logger.ErrorException(e, "Toon.DeleteFromDB()");
                 return false;
             }
         }

@@ -11,7 +11,7 @@ namespace D3Sharp.Core.Services
     public class AuthenticationService:AuthenticationServer, IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public IClient Client { get; set; }
+        public Client Client { get; set; }
 
         public override void Logon(Google.ProtocolBuffers.IRpcController controller, LogonRequest request, System.Action<LogonResponse> done)
         {
