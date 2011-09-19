@@ -45,8 +45,11 @@ namespace D3Sharp.Net.Packets
             {
                 var message = builder.WeakMergeFrom(CodedInputStream.CreateInstance(packet.Payload.ToArray())).WeakBuild();
 
-                ((IServerService) service).Client = client;
-                service.CallMethod(method, null, message, (msg => SendResponse(client, header.RequestID, msg)));
+                lock (service) // lock the service so that it's in-context client does not get changed..
+                {
+                    ((IServerService) service).Client = client;
+                    service.CallMethod(method, null, message, (msg => SendResponse(client, header.RequestID, msg)));
+                }
             }
             catch (NotImplementedException)
             {

@@ -17,12 +17,14 @@ namespace D3Sharp.Core.Services
         {
             Logger.Trace("CreateChannel()");
 
-            var newChannel = ChannelsManager.CreateNewChannel(Client);
+            var channel = ChannelsManager.CreateNewChannel(Client);
             var builder = CreateChannelResponse.CreateBuilder()
                 .SetObjectId(request.ObjectId)
-                .SetChannelId(newChannel.BnetEntityID);
+                .SetChannelId(channel.BnetEntityID);
 
             done(builder.Build());
+
+            channel.NotifyChannelState((Client)this.Client);
         }
 
         public override void JoinChannel(IRpcController controller, JoinChannelRequest request, Action<JoinChannelResponse> done)

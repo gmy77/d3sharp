@@ -36,9 +36,6 @@ namespace D3Sharp.Core.Services
             Logger.Trace("SelectToon()");
             var builder = SelectToonResponse.CreateBuilder();
             done(builder.Build());
-
-            var channel = ChannelsManager.CreateNewChannel(Client);
-            channel.NotifyChannelState((Client)this.Client);
         }
 
         public override void CreateToon(Google.ProtocolBuffers.IRpcController controller, CreateToonRequest request, Action<CreateToonResponse> done)
