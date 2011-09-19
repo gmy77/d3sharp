@@ -16,36 +16,71 @@ namespace D3Sharp.Core.Channels
         public Channel(ulong id)
         {
             this.ID = id;
-            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetLow(id).SetHigh(0x0).Build();
+            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(433661094618860925).SetLow(11233645142038554527).Build();
 
             var builder = bnet.protocol.channel.ChannelState.CreateBuilder();
-            builder.SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN);
+            builder.SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN_INVITATION);
             builder.SetMaxMembers(8);
             builder.SetMinMembers(1);
             builder.SetMaxInvitations(12);
-            builder.SetName("d3sharp test channel");
+            //builder.SetName("d3sharp test channel");
             this.State = builder.Build();
         }
 
-        public void AddUser(IClient client)
+        public void NotifyChannelState(Client client)
         {
-            var identityBuilder = bnet.protocol.Identity.CreateBuilder();
-            identityBuilder.SetAccountId(client.Account.BnetAccountID);
-            identityBuilder.SetGameAccountId(client.Account.BnetGameAccountID);
-            if (client.Account.Toons.Count > 0) identityBuilder.SetToonId(client.Account.Toons.First().Value.BnetEntityID);
-            var identity = identityBuilder.Build();
+            var field1 =
+                bnet.protocol.presence.Field.CreateBuilder().SetKey(
+                    bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram(16974).SetGroup(3).SetField(3).SetIndex(0)
+                        .Build()).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
 
-            var user = bnet.protocol.channel.Member.CreateBuilder().SetIdentity(identity).SetState(bnet.protocol.channel.MemberState.CreateBuilder().AddRole(2).Build()).Build();
-            this.Members.Add(user);
+            var field2 =
+                bnet.protocol.presence.Field.CreateBuilder().SetKey(
+                    bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram(16974).SetGroup(3).SetField(10).SetIndex(0)
+                        .Build()).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1315530390868296).Build()).Build();
 
-            var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(this.State).SetSelf(user);
-            
-            foreach (var m in this.Members.Where(m => m.Identity != user.Identity))
-            {
-                builder.AddMember(m);
-            }
+            var field3 =
+                bnet.protocol.presence.Field.CreateBuilder().SetKey(
+                    bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram(16974).SetGroup(3).SetField(11).SetIndex(0)
+                        .Build()).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(
+                                ByteString.CopyFrom(new byte[]
+                                                        {
+                                                            0x9, 0x46, 0xee, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4,
+                                                            0x11, 0xdd, 0xb4, 0x63, 0xe7, 0x82, 0x44, 0x68, 0x4e
+                                                        })).Build()).Build();
 
-            ((IRpcChannel) client).CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), null, builder.Build(), null, done =>{});
+
+            var fieldOperation1 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build();
+            var fieldOperation2 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build();
+            var fieldOperation3 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field3).Build();
+
+            var state =
+                bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityID).AddFieldOperation(
+                    fieldOperation1).AddFieldOperation(fieldOperation2).AddFieldOperation(fieldOperation3).Build();
+
+
+            var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+            var builder = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
+
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), null, builder, null, r => { });
+        }
+
+        public void Add(Client client)
+        {
+            var builder = bnet.protocol.channel.AddNotification.CreateBuilder();
+            var identity = bnet.protocol.Identity.CreateBuilder();
+            identity.SetAccountId(client.Account.BnetAccountID);
+            identity.SetGameAccountId(client.Account.BnetGameAccountID);
+            if (client.Account.Toons.Count > 0) identity.SetToonId(client.Account.Toons.First().Value.BnetEntityID);
+
+            var state = bnet.protocol.channel.MemberState.CreateBuilder().AddRole(2).SetPrivileges(64511);
+            var selfBuilder = bnet.protocol.channel.Member.CreateBuilder().SetIdentity(identity.Build()).SetState(state.Build());
+            var self = selfBuilder.Build();
+            builder.SetSelf(self);
+            builder.AddMember(self);
+            builder.SetChannelState(this.State);
+
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), null, builder.Build(), null, r => { });
         }
     }
 }

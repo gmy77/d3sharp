@@ -14,8 +14,7 @@ namespace D3Sharp.Core.Channels
 
         public static Channel CreateNewChannel(IClient client)
         {
-            var channel = new Channel((ulong) Channels.Count);
-            channel.AddUser(client);
+            var channel = new Channel((ulong)Channels.Count);
             return channel;
         }
     }
