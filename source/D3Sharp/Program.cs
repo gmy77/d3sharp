@@ -10,7 +10,6 @@ namespace D3Sharp
     internal class Program
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-
         private int _port;
         private Server _server;
 

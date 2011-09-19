@@ -69,8 +69,8 @@ namespace D3Sharp.Core.Channels
         {
             var builder = bnet.protocol.channel.AddNotification.CreateBuilder();
             var identity = bnet.protocol.Identity.CreateBuilder();
-            identity.SetAccountId(client.Account.BnetAccountID);
-            identity.SetGameAccountId(client.Account.BnetGameAccountID);
+            //identity.SetAccountId(client.Account.BnetAccountID); // TODO: client doesn't want to see this stuff either it asserts.
+            //identity.SetGameAccountId(client.Account.BnetGameAccountID);
             if (client.Account.Toons.Count > 0) identity.SetToonId(client.Account.Toons.First().Value.BnetEntityID);
 
             var state = bnet.protocol.channel.MemberState.CreateBuilder()

@@ -33,18 +33,7 @@ namespace D3Sharp.Core.Services
         {
             Logger.Trace("JoinChannel()");
 
-            ////>>> JoinChannelRequest
-            ////channel_id {
-            ////  high: 433661094641971304
-            ////  low: 11017467167309309688
-            ////}
-            ////object_id: 15
-
-
-            ////>>> JoinChannelResponse
-            ////object_id: 67122
-
-            var builder = bnet.protocol.channel.JoinChannelResponse.CreateBuilder().SetObjectId(67122);
+            var builder = bnet.protocol.channel.JoinChannelResponse.CreateBuilder().SetObjectId(67122); // should be fixed with the actual joined channel object id.
             done(builder.Build());
         }
     }
