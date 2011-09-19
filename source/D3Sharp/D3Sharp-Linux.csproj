@@ -93,7 +93,6 @@
     <Compile Include="Core\Services\PresenceService.cs" />
     <Compile Include="Core\Services\SearchService.cs" />
     <Compile Include="Core\Services\Service.cs" />
-    <Compile Include="Core\Services\ServiceManager.cs" />
     <Compile Include="Core\Services\StorageService.cs" />
     <Compile Include="Core\Services\ToonExternalService.cs" />
     <Compile Include="Core\Services\UserManagerService.cs" />
@@ -117,6 +116,7 @@
     <Compile Include="Utils\Helpers\StringHashHelper.cs" />
     <Compile Include="Utils\TinyLogger.cs" />
     <Compile Include="Utils\win32\NativeMethods.cs" />
+    <Compile Include="Core\Services\ClientService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
