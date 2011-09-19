@@ -1,45 +1,38 @@
-﻿using System.Linq;
+﻿using System;
 using D3Sharp.Core.Channels;
 using D3Sharp.Net;
-using D3Sharp.Net.Packets;
+using D3Sharp.Utils;
+using Google.ProtocolBuffers;
+using bnet.protocol.channel;
 
 namespace D3Sharp.Core.Services
 {
-    // bnet.protocol.party.PartyService
     [Service(serviceID: 0x0D, serviceName: "bnet.protocol.party.PartyService")]
-    public class PartyService : Service
+    public class PartyService : bnet.protocol.party.PartyService,IServerService
     {
-        [ServiceMethod(0x01)]
-        public void CreateChannel(IClient client, Packet packetIn)
+        protected static readonly Logger Logger = LogManager.CreateLogger();
+        public IClient Client { get; set; }
+
+        public override void CreateChannel(IRpcController controller, CreateChannelRequest request, Action<CreateChannelResponse> done)
         {
-            Logger.Trace("RPC:Party:CreateChannel()");
-            var request = bnet.protocol.channel.CreateChannelRequest.ParseFrom(packetIn.Payload.ToArray());
-            //Logger.Debug("request:\n{0}", request.ToString());
+            Logger.Trace("CreateChannel()");
 
-            var newChannel = ChannelsManager.CreateNewChannel(client);
-
-            var response = bnet.protocol.channel.CreateChannelResponse.CreateBuilder()
+            var newChannel = ChannelsManager.CreateNewChannel(Client);
+            var builder = CreateChannelResponse.CreateBuilder()
                 .SetObjectId(request.ObjectId)
-                .SetChannelId(newChannel.BnetEntityID)
-                .Build();
+                .SetChannelId(newChannel.BnetEntityID);
 
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
-                response.ToByteArray());
-
-            client.Send(packet);
-        }
-        
-        [ServiceMethod(0x02)]
-        public void JoinChannel(IClient client, Packet packetIn)
-        {
-            Logger.Trace("RPC:Party:JoinChannel() Stub");
+            done(builder.Build());
         }
 
-        [ServiceMethod(0x03)]
-        public void GetChannelInfo(IClient client, Packet packetIn)
+        public override void JoinChannel(IRpcController controller, JoinChannelRequest request, Action<JoinChannelResponse> done)
         {
-            Logger.Trace("RPC:Party:GetChannelInfo() Stub");
+            throw new NotImplementedException();
+        }
+
+        public override void GetChannelInfo(IRpcController controller, GetChannelInfoRequest request, Action<GetChannelInfoResponse> done)
+        {
+            throw new NotImplementedException();
         }
     }
 }
