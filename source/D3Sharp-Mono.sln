@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3Proto", "D3Proto\D3Proto.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Helpers", "Gibbed.Helpers\Gibbed.Helpers.csproj", "{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3Sharp-Linux", "D3Sharp\D3Sharp-Linux.csproj", "{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3Sharp-Mono", "D3Sharp\D3Sharp-Mono.csproj", "{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

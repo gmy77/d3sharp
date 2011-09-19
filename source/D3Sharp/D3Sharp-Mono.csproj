@@ -145,6 +145,8 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\D3Proto\D3Proto.csproj">
       <Project>{4CC19847-6F24-4453-9E31-126F94308AB9}</Project>
