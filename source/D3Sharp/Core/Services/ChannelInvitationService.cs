@@ -28,8 +28,8 @@ namespace D3Sharp.Core.Services
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder()
                 .SetId(0)
                 .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder()
-                    .SetAccountId(bnet.protocol.EntityId.CreateBuilder().SetHigh(accountHandle).SetLow(0x0).Build()) //TODO: Change SetLow to an actual index in the database.
-                    .SetGameAccountId(bnet.protocol.EntityId.CreateBuilder().SetHigh(gameAccountHandle).SetLow(0x0).Build()) //TODO: Change SetLow to an actual index in the database.
+                    .SetAccountId(Client.Account.BnetAccountID)
+                    .SetGameAccountId(Client.Account.BnetGameAccountID)
                     .Build())
                 .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder()
                     .SetAccountId(bnet.protocol.EntityId.CreateBuilder().SetHigh(accountHandle).SetLow(0x0).Build()) //TODO: Change SetLow to an actual index in the database.
