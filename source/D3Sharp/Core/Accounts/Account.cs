@@ -81,7 +81,7 @@ namespace D3Sharp.Core.Accounts
             }
             catch (Exception e)
             {
-                Logger.ErrorException(e, "Toon.Save()");
+                Logger.ErrorException(e, "SaveToDB()");
             }
         }
     }

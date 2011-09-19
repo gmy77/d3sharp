@@ -4,8 +4,10 @@ using System.Net;
 using System.Net.Sockets;
 using D3Sharp.Core.Accounts;
 using D3Sharp.Core.Toons;
+using D3Sharp.Core.Channels;
 using D3Sharp.Net.Packets;
 using Google.ProtocolBuffers;
+using Google.ProtocolBuffers.Descriptors;
 
 namespace D3Sharp.Net
 {
@@ -16,8 +18,17 @@ namespace D3Sharp.Net
         IPEndPoint LocalEndPoint { get; }
 
         Dictionary<uint, uint> Services { get; }
-        Account Account { get; set; }       
-
+        Account Account { get; set; }
+        
+        Toon CurrentToon { get; set; }
+        Channel CurrentChannel { get; set; }
+        bnet.protocol.Identity Identity { get; }
+        
+        void MapLocalObjectID(ulong localObjectId, ulong externalObjectId);
+        ulong GetExternalObjectID(ulong localObjectId);
+        
+        void CallMethod(ulong localObjectId, MethodDescriptor method, IMessage request, IMessage responsePrototype, Action<IMessage> done);
+        
         int Send(Packet packet);
         int Send(IEnumerable<byte> data);
         int Send(IEnumerable<byte> data, SocketFlags flags);

@@ -14,12 +14,12 @@ namespace D3Sharp.Net.Packets
         public byte ServiceID { get; set; }
         public uint MethodID { get; set; }
         public int RequestID { get; set; }
-        public ulong Unknown { get; set; }
+        public ulong ExternalObjectID { get; set; }
         public uint PayloadLength { get; set; }
 
         public Header()
         {            
-            this.Unknown = 0x00;
+            this.ExternalObjectID = 0x00;
             this.PayloadLength = 0x00;
         }
 
@@ -33,7 +33,7 @@ namespace D3Sharp.Net.Packets
             var serviceId = stream.ReadRawByte();
             var methodId = stream.ReadRawVarint32();
             var requestId = stream.ReadRawByte() | (stream.ReadRawByte() << 8);
-            if (serviceId != 0xfe) this.Unknown = stream.ReadRawVarint64();
+            if (serviceId != 0xfe) this.ExternalObjectID = stream.ReadRawVarint64();
             var payloadLength = stream.ReadRawVarint32();
 
             this.SetData(serviceId, methodId, requestId, payloadLength);
@@ -44,7 +44,7 @@ namespace D3Sharp.Net.Packets
             this.ServiceID = serviceId;
             this.MethodID = methodId;
             this.RequestID = requestId;
-            this.Unknown = 0x0;
+            this.ExternalObjectID = 0x0;
             this.PayloadLength = payloadLenght;
 
             this.Data = this.ServiceID != 0xfe ? new byte[6] : new byte[5];
@@ -56,7 +56,7 @@ namespace D3Sharp.Net.Packets
                 output.WriteRawVarint32(this.MethodID);
                 output.WriteRawByte((byte)(this.RequestID & 0xff));
                 output.WriteRawByte((byte)(this.RequestID >> 8));
-                if (serviceId != 0xfe) output.WriteRawVarint64(this.Unknown);
+                if (serviceId != 0xfe) output.WriteRawVarint64(this.ExternalObjectID);
                 output.WriteRawVarint32(this.PayloadLength);
                 output.Flush();
 

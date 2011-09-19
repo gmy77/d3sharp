@@ -13,7 +13,7 @@ namespace D3Sharp.Core.Services
         protected static readonly Logger Logger = LogManager.CreateLogger();
         public IClient Client { get; set; }
 
-        public override void  ToonList(Google.ProtocolBuffers.IRpcController controller, ToonListRequest request, Action<ToonListResponse> done)
+        public override void ToonList(Google.ProtocolBuffers.IRpcController controller, ToonListRequest request, Action<ToonListResponse> done)
         {
  	        Logger.Trace("ToonList()");
             var builder = ToonListResponse.CreateBuilder();
@@ -32,7 +32,10 @@ namespace D3Sharp.Core.Services
         public override void SelectToon(Google.ProtocolBuffers.IRpcController controller, SelectToonRequest request, Action<SelectToonResponse> done)
         {
             Logger.Trace("SelectToon()");
+            
             var builder = SelectToonResponse.CreateBuilder();
+            var toon = Toons.ToonManager.GetToon(request.Toon.Low);
+            this.Client.CurrentToon = toon;
             done(builder.Build());
         }
 
@@ -50,8 +53,8 @@ namespace D3Sharp.Core.Services
         public override void DeleteToon(Google.ProtocolBuffers.IRpcController controller, DeleteToonRequest request, Action<DeleteToonResponse> done)
         {
             Logger.Trace("DeleteToon()");
+            
             var id = request.Toon.Low;
-
             var toon = Toons.ToonManager.GetToon(id);
             Toons.ToonManager.DeleteToon(toon);
 

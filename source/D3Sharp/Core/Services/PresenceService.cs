@@ -13,6 +13,7 @@ namespace D3Sharp.Core.Services
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.SubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("Subscribe()");
+            //Logger.Debug("request:\n{0}", request.ToString());
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
@@ -20,13 +21,19 @@ namespace D3Sharp.Core.Services
         public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UnsubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("Unsubscribe()");
+            //Logger.Debug("request:\n{0}", request.ToString());
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
 
         public override void Update(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UpdateRequest request, System.Action<bnet.protocol.NoData> done)
         {
+            // op->field->value->int_value:
+            //  0 for present
+            //  2 for away
+            //  4 for busy
             Logger.Trace("Update()");
+            //Logger.Debug("request:\n{0}", request.ToString());
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
