@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
+using D3Sharp.Core.Accounts;
 using D3Sharp.Core.Storage;
 using D3Sharp.Utils;
 
@@ -10,7 +11,7 @@ namespace D3Sharp.Core.Toons
     // just a quick hack - not to be meant a final.
     public static class ToonManager
     {
-        public static readonly Dictionary<ulong, Toon> Toons =
+        private static readonly Dictionary<ulong, Toon> Toons =
             new Dictionary<ulong, Toon>();
 
         private static readonly Logger Logger = LogManager.CreateLogger();
@@ -25,16 +26,33 @@ namespace D3Sharp.Core.Toons
             return (from pair in Toons where pair.Value.ID == id select pair.Value).FirstOrDefault();
         }
 
-        public static void SaveToon(Toon toon)
+        public static Dictionary<ulong, Toon> GetToonsForAccount(Account account)
+        {
+            return Toons.Where(pair => (ulong)pair.Value.AccountID == account.ID).ToDictionary(pair => pair.Key, pair => pair.Value);
+        }
+
+        public static bool SaveToon(Toon toon)
         {
             if(Toons.ContainsKey(toon.ID))
             {
                 Logger.Error("Duplicate toon id: " + toon.ID);
-                return;
+                return false;
             }
 
             Toons.Add(toon.ID, toon);
-            toon.Save();
+            toon.SaveToDB();
+            return true;
+        }
+
+        public static void DeleteToon(Toon toon)
+        {
+            if (!Toons.ContainsKey(toon.ID))
+            {
+                Logger.Error("Attempting to delete toon that does not exist: " + toon.ID);
+                return;
+            }
+
+            if (toon.DeleteFromDB()) Toons.Remove(toon.ID);
         }
 
         public static void DeleteToon(ulong id)
@@ -61,7 +79,7 @@ namespace D3Sharp.Core.Toons
             while(reader.Read())
             {
                 var id = (ulong) reader.GetInt64(0);
-                var toon = new Toon(id, reader.GetString(1), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4));
+                var toon = new Toon(id, reader.GetString(1), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5));
                 Toons.Add(id, toon);
             }
         }
@@ -70,7 +88,7 @@ namespace D3Sharp.Core.Toons
         {
             foreach(var pair in Toons)
             {
-                pair.Value.Save();
+                pair.Value.SaveToDB();
             }
         }
     }

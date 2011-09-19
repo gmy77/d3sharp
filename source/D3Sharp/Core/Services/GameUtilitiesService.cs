@@ -1,72 +1,71 @@
-﻿using D3Sharp.Net;
+﻿using System;
+using System.Linq;
+using D3Sharp.Net;
 using D3Sharp.Net.Packets;
+using D3Sharp.Utils;
+using Google.ProtocolBuffers;
+using bnet.protocol;
+using bnet.protocol.game_utilities;
+using bnet.protocol.server_pool;
 
-﻿namespace D3Sharp.Core.Services
+namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x8, serviceName: "bnet.protocol.game_utilities.GameUtilities", clientHash: 0x0)]
-    public class GameUtilitiesService : Service
+    [Service(serviceID: 0x8, serviceName: "bnet.protocol.game_utilities.GameUtilities")]
+    public class GameUtilitiesService : GameUtilities,IServerService
     {
-        [ServiceMethod(0x1)]
-        public void ProcessClient(IClient client, Packet packetIn)
+        protected static readonly Logger Logger = LogManager.CreateLogger();
+        public IClient Client { get; set; }
+
+        public override void ProcessClientRequest(IRpcController controller, ClientRequest request, Action<ClientResponse> done)
         {
-            Logger.Trace("RPC:GameMaster:ProcessClient() Stub");
-            //var request = bnet.protocol.game_utilities.ProcessClient.ParseFrom(packetIn.Payload.ToArray());
+            Logger.Trace("ProcessClientRequest()");
+
+            // TODO: handle the request. this is where banner changing happens (CustomMessageId 4)
+            // CustomMessage for banner change is a D3.GameMessages.SaveBannerConfiguration
+            Logger.Debug("request:\n{0}", request.ToString());
+            
+            var builder = ClientResponse.CreateBuilder();
+            done(builder.Build());
         }
-        
-        [ServiceMethod(0x2)]
-        public void CreateToon(IClient client, Packet packetIn)
+
+        public override void CreateToon(IRpcController controller, CreateToonRequest request, Action<CreateToonResponse> done)
         {
-            Logger.Trace("RPC:GameMaster:CreateToon() Stub");
-            //var request = bnet.protocol.game_utilities.CreateToonRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x3)]
-        public void DeleteToon(IClient client, Packet packetIn)
+
+        public override void DeleteToon(IRpcController controller, DeleteToonRequest request, Action<NoData> done)
         {
-            Logger.Trace("RPC:GameMaster:DeleteToon() Stub");
-            //var request = bnet.protocol.game_utilities.DeleteToonRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x4)]
-        public void TransferToon(IClient client, Packet packetIn)
+
+        public override void TransferToon(IRpcController controller, TransferToonRequest request, Action<NoData> done)
         {
-            Logger.Trace("RPC:GameMaster:TransferToon() Stub");
-            //var request = bnet.protocol.game_utilities.TransferToonRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x5)]
-        public void SelectToon(IClient client, Packet packetIn)
+
+        public override void SelectToon(IRpcController controller, SelectToonRequest request, Action<NoData> done)
         {
-            Logger.Trace("RPC:GameMaster:SelectToon() Stub");
-            //var request = bnet.protocol.game_utilities.SelectToonRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x6)]
-        public void PresenceChannelCreated(IClient client, Packet packetIn)
+
+        public override void PresenceChannelCreated(IRpcController controller, PresenceChannelCreatedRequest request, Action<NoData> done)
         {
-            Logger.Trace("RPC:GameMaster:PresenceChannelCreated() Stub");
-            //var request = bnet.protocol.game_utilities.PresenceChannelCreatedRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x7)]
-        public void GetPlayerVariables(IClient client, Packet packetIn)
+
+        public override void GetPlayerVariables(IRpcController controller, PlayerVariablesRequest request, Action<VariablesResponse> done)
         {
-            Logger.Trace("RPC:GameMaster:GetPlayerVariables() Stub");
-            //var request = bnet.protocol.game_utilities.GetPlayerVariablesRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x8)]
-        public void GetGameVariables(IClient client, Packet packetIn)
+
+        public override void GetGameVariables(IRpcController controller, GameVariablesRequest request, Action<VariablesResponse> done)
         {
-            Logger.Trace("RPC:GameMaster:GetGameVariables() Stub");
-            //var request = bnet.protocol.game_utilities.GetGameVariablesRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
-        
-        [ServiceMethod(0x9)]
-        public void GetLoad(IClient client, Packet packetIn)
+
+        public override void GetLoad(IRpcController controller, GetLoadRequest request, Action<ServerState> done)
         {
-            Logger.Trace("RPC:GameMaster:GetLoad() Stub");
-            //var request = bnet.protocol.game_utilities.GetLoadRequest.ParseFrom(packetIn.Payload.ToArray());
+            throw new NotImplementedException();
         }
     }
 }

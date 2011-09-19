@@ -1,26 +1,33 @@
-﻿using D3Sharp.Net;
+﻿using System.Linq;
+using D3Sharp.Core.Accounts;
+using D3Sharp.Net;
 using D3Sharp.Net.Packets;
-using bnet.protocol;
+using D3Sharp.Utils;
+using bnet.protocol.authentication;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x1, serviceName: "bnet.protocol.authentication.AuthenticationServer", clientHash: 0x71240E35)]
-    public class AuthenticationService:Service
+    [Service(serviceID: 0x1, serviceName: "bnet.protocol.authentication.AuthenticationServer")]
+    public class AuthenticationService:AuthenticationServer, IServerService
     {
-        [ServiceMethod(0x1)]
-        public void Logon(IClient client, Packet packetIn)
+        protected static readonly Logger Logger = LogManager.CreateLogger();
+        public IClient Client { get; set; }
+
+        public override void Logon(Google.ProtocolBuffers.IRpcController controller, LogonRequest request, System.Action<LogonResponse> done)
         {
-            Logger.Trace("RPC:Authentication:Logon()");
-            var response = bnet.protocol.authentication.LogonResponse.CreateBuilder()
-                .SetAccount(EntityId.CreateBuilder().SetHigh(0x100000000000000).SetLow(0))
-                .SetGameAccount(EntityId.CreateBuilder().SetHigh(0x200006200004433).SetLow(0))
-                .Build();
+            Logger.Trace("LogonRequest(): " + request.Email);
+            Client.Account = AccountsManager.GetAccount(request.Email);
 
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
-                response.ToByteArray());
+            var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
+                .SetAccount(Client.Account.BnetAccountID)
+                .SetGameAccount(Client.Account.BnetGameAccountID);
 
-            client.Send(packet);
-        }       
+            done(builder.Build());
+        }
+
+        public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, ModuleMessageRequest request, System.Action<bnet.protocol.NoData> done)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

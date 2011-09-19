@@ -20,6 +20,7 @@ namespace D3Sharp
 
             LogManager.Enabled = true; // enable the logger.
             LogManager.AttachLogTarget(new ConsoleTarget(Level.Trace)); // attach a console-target.
+            LogManager.AttachLogTarget(new FileTarget(Level.Trace, "log.txt")); // attach a console-target.
 
             Logger.Info("d3sharp v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
 
@@ -27,24 +28,27 @@ namespace D3Sharp
             main.ParseArguments(args);
             main.Run();
         }
-        
-        Program() {
-			IConfigSource source = new IniConfigSource("config.ini"); // get configuration file
-			
-			this._port=source.Configs["Server"].GetInt("Port", 1345); // apply port number from config file, or default
+
+        Program()
+        {
+            IConfigSource source = new IniConfigSource("config.ini"); // get configuration file
+
+            this._port = source.Configs["Server"].GetInt("Port", 1345); // apply port number from config file, or default
         }
-        
-        public void ParseArguments(string[] args) {
+
+        public void ParseArguments(string[] args)
+        {
             // Temp code
-            if (args.Length>0) {
+            if (args.Length > 0)
+            {
                 int port;
                 if (!Int32.TryParse(args[0], out port))
                     Logger.Warn("Invalid format for port; defaulting to {0}", _port);
                 else
-                    _port=port;
+                    _port = port;
             }
         }
-        
+
         public void Run()
         {
             using (_server = new Server()) // Create new test server.

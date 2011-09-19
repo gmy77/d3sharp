@@ -1,78 +1,67 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.IO;
-using D3Sharp.Core;
+using D3Sharp.Core.Channels;
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
-using D3Sharp.Utils.Extensions;
-using D3Sharp.Core.Storage;
+using D3Sharp.Utils;
 using Google.ProtocolBuffers;
+using bnet.protocol.toon.external;
 
 namespace D3Sharp.Core.Services
 {
-    [Service(serviceID: 0x2, serviceName: "bnet.protocol.toon.external.ToonServiceExternal", clientHash: 0x0)]
-    public class ToonExternalService : Service
+    [Service(serviceID: 0x2, serviceName: "bnet.protocol.toon.external.ToonServiceExternal")]
+    public class ToonExternalService : ToonServiceExternal, IServerService
     {
-        [ServiceMethod(0x1)]
-        public void ToonList(IClient client, Packet packetIn)
-        {            
-            Logger.Trace("RPC:ToonExternal:ToonList()");
+        protected static readonly Logger Logger = LogManager.CreateLogger();
+        public IClient Client { get; set; }
 
-            var builder = bnet.protocol.toon.external.ToonListResponse.CreateBuilder();
+        public override void ToonList(Google.ProtocolBuffers.IRpcController controller, ToonListRequest request, Action<ToonListResponse> done)
+        {
+            Logger.Trace("ToonList()");
+            var builder = ToonListResponse.CreateBuilder();
 
-            if (Toons.ToonManager.Toons.Count > 0)
+            if (Client.Account.Toons.Count > 0)
             {
-                //TODO: sending multi-toons bugs...
-                //foreach(var pair in Toons.ToonManager.Toons)
-                //{
-                //    builder.AddToons(pair.Value.BnetEntityID);
-                //}                    
-                builder.AddToons(Toons.ToonManager.Toons.First().Value.BnetEntityID);
+                foreach (var pair in Client.Account.Toons)
+                {
+                    builder.AddToons(pair.Value.BnetEntityID);
+                }
             }
 
-            var response = builder.Build();
-
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
-                response.ToByteArray());
-
-            client.Send(packet);
+            done(builder.Build());
         }
 
-        [ServiceMethod(0x2)]
-        public void SelectToon(IClient client, Packet packetIn)
+        public override void SelectToon(Google.ProtocolBuffers.IRpcController controller, SelectToonRequest request, Action<SelectToonResponse> done)
         {
-            Logger.Trace("RPC:ToonExternal:SelectToon()");
-            var response = bnet.protocol.toon.external.SelectToonResponse.CreateBuilder().Build();
-
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
-                response.ToByteArray());
-
-            client.Send(packet);
-        }
-
-        [ServiceMethod(0x3)]
-        public void CreateToon(IClient client, Packet packetIn)
-        {
-            Logger.Trace("RPC:ToonExternal:CreateToon()");
+            Logger.Trace("SelectToon()");
             
-            var request = bnet.protocol.toon.external.CreateToonRequest.ParseFrom(packetIn.Payload.ToArray());
+            var builder = SelectToonResponse.CreateBuilder();
+            var toon = Toons.ToonManager.GetToon(request.Toon.Low);
+            this.Client.CurrentToon = toon;
+            done(builder.Build());
+        }
+
+        public override void CreateToon(Google.ProtocolBuffers.IRpcController controller, CreateToonRequest request, Action<CreateToonResponse> done)
+        {
+            Logger.Trace("CreateToon()");
             var heroCreateParams = D3.OnlineService.HeroCreateParams.ParseFrom(request.AttributeList[0].Value.MessageValue);
+            var builder = CreateToonResponse.CreateBuilder();
 
-            var toon = new Toons.Toon(request.Name, (uint)heroCreateParams.GbidClass, heroCreateParams.IsFemale ? Toons.ToonGender.Female : Toons.ToonGender.Male, 1);
-            Toons.ToonManager.SaveToon(toon);
-                       
-            var response = bnet.protocol.toon.external.CreateToonResponse.CreateBuilder()
-                .SetToon(toon.BnetEntityID)
-                .Build();
+            var toon = new Toons.Toon(request.Name, (uint)heroCreateParams.GbidClass, heroCreateParams.IsFemale ? Toons.ToonGender.Female : Toons.ToonGender.Male, 1, (long)Client.Account.ID);
+            if (Toons.ToonManager.SaveToon(toon)) builder.SetToon(toon.BnetEntityID);
+            done(builder.Build());
+        }
 
-            var packet = new Packet(
-                new Header(0xfe, 0x0, packetIn.Header.RequestID, (uint)response.SerializedSize),
-                response.ToByteArray());
+        public override void DeleteToon(Google.ProtocolBuffers.IRpcController controller, DeleteToonRequest request, Action<DeleteToonResponse> done)
+        {
+            Logger.Trace("DeleteToon()");
+            
+            var id = request.Toon.Low;
+            var toon = Toons.ToonManager.GetToon(id);
+            Toons.ToonManager.DeleteToon(toon);
 
-            client.Send(packet);
+            var builder = bnet.protocol.toon.external.DeleteToonResponse.CreateBuilder();
+            done(builder.Build());
         }
 
 

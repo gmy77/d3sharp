@@ -17,7 +17,7 @@ namespace D3Sharp.Net.Packets
             this.Payload = payload;
         }
 
-        public int Lenght
+        public int Length
         {
             get { return this.Header.Data.Length + this.Payload.ToArray().Length; }
         }
