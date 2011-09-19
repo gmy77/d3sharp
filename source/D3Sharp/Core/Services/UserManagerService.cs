@@ -2,6 +2,7 @@
 using D3Sharp.Net;
 using D3Sharp.Net.Packets;
 using D3Sharp.Utils;
+using D3Sharp.Utils.Extensions;
 using Google.ProtocolBuffers;
 using bnet.protocol.user_manager;
 
@@ -15,11 +16,25 @@ namespace D3Sharp.Core.Services
 
         public override void SubscribeToUserManager(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.user_manager.SubscribeToUserManagerRequest request, System.Action<bnet.protocol.user_manager.SubscribeToUserManagerResponse> done)
         {
-            //TODO: Sending this packet crashes my client. This may be a local issue as I haven't heard anyone else mention it.     -Ethos
-            //var builder = bnet.protocol.user_manager.SubscribeToUserManagerResponse.CreateBuilder();
-            //done(builder.Build());
+            Logger.Trace("SubscribeToUserManager()");
 
-            throw new NotImplementedException();
+            const ulong accountHandle = 0x0000000000000000;
+            var fakeentityid = bnet.protocol.EntityId.CreateBuilder().SetHigh(accountHandle).SetLow(0x0).Build();
+
+            // no idea which attribute the recent player object might want
+            var attribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("fakename").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0)).Build();
+
+            var recent_player = bnet.protocol.user_manager.RecentPlayer.CreateBuilder()
+                .SetPlayer(fakeentityid)
+                .SetTimestampPlayed(DateTime.Now.AddDays(-2).ToUnixTime())
+                .AddAttributes(attribute)
+                .Build();
+
+            var builder = bnet.protocol.user_manager.SubscribeToUserManagerResponse.CreateBuilder()
+                .AddBlockedUsers(fakeentityid)
+                .AddRecentPlayers(recent_player);
+
+            done(builder.Build());
         }
 
         public override void ReportPlayer(IRpcController controller, ReportPlayerRequest request, Action<ReportPlayerResponse> done)
