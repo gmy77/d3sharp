@@ -27,29 +27,17 @@ namespace ProtoStringViewer
     public partial class FormMain : Form
     {
         private byte[] _byteData;
+        private bool _arrayize=false;
 
         public FormMain()
         {
             InitializeComponent();
         }
 
-        private void textBoxInput_TextChanged(object sender, EventArgs e)
-        {
-            _byteData = ProtoHelpers.Utils.Conversion.Unescape(this.textBoxInput.Text);
-            this.hexBox.Text = _byteData.DumpHex(false);
-            File.WriteAllBytes("proto.raw", _byteData);
-            UpdateProtoOutput();
-        }
-
-        private void textBoxProtoType_TextChanged(object sender, EventArgs e)
-        {
-            UpdateProtoOutput();
-        }
-
         private void UpdateProtoOutput()
         {
             string typename = textBoxProtoType.Text;
-	        if (typename.Trim() == string.Empty)
+            if (typename.Trim() == string.Empty)
                 return;
             var type = Type.GetType(typename);
             if (type == null)
@@ -75,5 +63,55 @@ namespace ProtoStringViewer
                 richTextBoxProto.Text = ex.ToString();
             }
         }
+
+        public void UpdateHexOutput()
+        {
+            this.hexBox.Text = _arrayize ? Utils.GetArrayRepresentation(_byteData) : _byteData.DumpHex(false);
+        }
+
+        public void UpdateOutputs()
+        {
+            UpdateHexOutput();
+            UpdateProtoOutput();
+        }
+
+        private void textBoxInput_TextChanged(object sender, EventArgs e)
+        {
+            _byteData = ProtoHelpers.Utils.Conversion.Unescape(this.textBoxInput.Text);
+            // Only write when it changes
+            File.WriteAllBytes("proto.raw", _byteData);
+            UpdateOutputs();
+        }
+
+        private void textBoxProtoType_TextChanged(object sender, EventArgs e)
+        {
+            UpdateProtoOutput();
+        }
+
+        private void csharpizeButton_Click(object sender, EventArgs e)
+        {
+            _arrayize = !_arrayize;
+            if (_arrayize)
+                csharpizeButton.Text = "Outputting C# array";
+            else
+                csharpizeButton.Text = "Ouputting raw";
+            UpdateHexOutput();
+        }
+    }
+
+    public static class Utils
+    {
+        public static string GetArrayRepresentation(byte[] array)
+        {
+            string bytes = string.Empty;
+            for (int index = 0; index < array.Length; index++)
+            {
+                byte b = array[index];
+                bytes = bytes + "0x" + b.ToString("X2");
+                if (index != array.Length - 1) bytes += ", ";
+            }
+            return "var data = new byte[] { " + bytes + " };";
+        }
+
     }
 }

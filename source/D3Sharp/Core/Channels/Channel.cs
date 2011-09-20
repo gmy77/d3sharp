@@ -18,22 +18,21 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using D3Sharp.Core.Objects;
 using D3Sharp.Net.BNet;
 using Google.ProtocolBuffers;
 
 namespace D3Sharp.Core.Channels
 {
-    public class Channel
+    public class Channel : RPCObject
     {
-        public ulong ID { get; private set; }
         public bnet.protocol.EntityId BnetEntityID { get; private set; }
         public bnet.protocol.channel.ChannelState State { get; private set; }
 
         public List<bnet.protocol.channel.Member> Members = new List<bnet.protocol.channel.Member>();
 
-        public Channel(ulong id)
+        public Channel()
         {
-            this.ID = id;
             this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(this.ID).SetLow(0).Build();
 
             var builder = bnet.protocol.channel.ChannelState.CreateBuilder()
