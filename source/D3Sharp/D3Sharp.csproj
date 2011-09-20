@@ -99,7 +99,7 @@
     <Compile Include="Core\Services\PresenceService.cs" />
     <Compile Include="Core\Services\SearchService.cs" />
     <Compile Include="Core\Services\Service.cs" />
-    <Compile Include="Core\Services\ServiceManager.cs" />
+    <Compile Include="Core\Services\IServerService.cs" />
     <Compile Include="Core\Services\StorageService.cs" />
     <Compile Include="Core\Services\ToonExternalService.cs" />
     <Compile Include="Core\Services\UserManagerService.cs" />
@@ -108,7 +108,6 @@
     <Compile Include="Core\Toons\Toon.cs" />
     <Compile Include="Core\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Toons\ToonManager.cs" />
-    <Compile Include="Core\Toons\VisualEquipment.cs" />
     <Compile Include="Net\BNet\BNetClient.cs" />
     <Compile Include="Net\BNet\BnetServer.cs" />
     <Compile Include="Net\BNet\Config.cs" />
@@ -140,7 +139,9 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Assets\gamedata.db" />
+    <None Include="Assets\gamedata.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Assets\toon.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

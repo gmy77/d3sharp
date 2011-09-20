@@ -12,18 +12,31 @@ namespace D3Sharp.Core.Items
     {
         public static readonly Logger Logger = LogManager.CreateLogger();       
 
-        public Item generate(TYPE itemType)
+        public Item generateRandomElement(ItemType itemType)
         {             
           try
-            {
-                String query = String.Format("SELECT itemname from items where itemname like '{0}_%' limit 1", itemType.ToString());
-                var cmd = new SQLiteCommand(query, Storage.GameDataDBManager.Connection);
+            {             
+
+                // select count of Items with correct Type
+                // the itemname structure ITEMTYPE_NUMBER example: BOOTS_001 , BELT_004
+                String querypart = String.Format("from items where itemname like '{0}_%'",itemType.ToString());
+                String countQuery = String.Format("SELECT count(*) {0}", querypart);
+                var cmd = new SQLiteCommand(countQuery, Storage.GameDataDBManager.Connection);
                 var reader = cmd.ExecuteReader();
+                reader.Read();
+                int itemsCount = reader.GetInt32(0);
+
+                // Now select random element 
+                Random rand = new Random();
+                int selectedElementNr = rand.Next(itemsCount);
+                String selectRandom = String.Format("SELECT itemname {0} limit {1},1",querypart, selectedElementNr);
+                cmd = new SQLiteCommand(selectRandom, Storage.GameDataDBManager.Connection);
+                reader = cmd.ExecuteReader();
 
                 if (!reader.HasRows)
                 {
                     throw new Exception("Missing Data in DB");
-                }
+                }              
 
                 while (reader.Read())
                 {
@@ -40,5 +53,8 @@ namespace D3Sharp.Core.Items
            
             return null;
         }
+
+      
     }
+
 }

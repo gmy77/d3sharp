@@ -105,7 +105,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Head
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid( itemsGenerator.generate(Items.TYPE.Helm).Gbid)
+                                    .SetGbid( itemsGenerator.generateRandomElement(Items.ItemType.Helm).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -113,7 +113,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Chest
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generate(Items.TYPE.ChestArmor).Gbid)
+                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.ChestArmor).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -121,7 +121,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Feet
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generate(Items.TYPE.Boots).Gbid)
+                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Boots).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -129,7 +129,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Hands
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generate(Items.TYPE.Gloves).Gbid)
+                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Gloves).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -153,7 +153,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Shoulders
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generate(Items.TYPE.Shoulders).Gbid)
+                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Shoulders).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)

@@ -6,7 +6,7 @@ using System.Text;
 namespace D3Sharp.Core.Items
 {
 
-    public enum TYPE
+    public enum ItemType
     {
         Helm, ChestArmor, Gloves, Boots, Shoulders, Belt
     }
@@ -16,9 +16,9 @@ namespace D3Sharp.Core.Items
        
         public int Gbid { get; set; }
 
-        public TYPE ItemType { get; set; }
+        public ItemType ItemType { get; set; }
        
-        public Item(int gbid, TYPE itemType)
+        public Item(int gbid, ItemType itemType)
         {
             Gbid = gbid;
             ItemType = itemType;
