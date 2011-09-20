@@ -42,24 +42,31 @@ namespace ProtoStringViewer
 
         private void textBoxProtoType_TextChanged(object sender, EventArgs e)
         {
-            if (textBoxProtoType.Text.Trim() == string.Empty) return;
-            
+            if (textBoxProtoType.Text.Trim() == string.Empty)
+                return;
             var type = Type.GetType(textBoxProtoType.Text);
             if (type == null)
             {
+                richTextBoxProto.Text = "(no type)";
                 return;
             }
 
-            var defaultMessage = MessageUtil.GetDefaultMessage(type);
-
-            IBuilder builder = defaultMessage.WeakCreateBuilderForType();
-            if (builder == null)
+            try
             {
-                return;
+                var defaultMessage = MessageUtil.GetDefaultMessage(type);
+                IBuilder builder = defaultMessage.WeakCreateBuilderForType();
+                if (builder == null)
+                {
+                    richTextBoxProto.Text = "(no builder)";
+                    return;
+                }
+                builder.WeakMergeFrom(ByteString.CopyFrom(_byteData));
+                richTextBoxProto.Text = TextFormat.PrintToString(builder.WeakBuild());
             }
-
-            builder.WeakMergeFrom(ByteString.CopyFrom(_byteData));
-            richTextBoxProto.Text = TextFormat.PrintToString(builder.WeakBuild());            
+            catch (Exception ex)
+            {
+                richTextBoxProto.Text = ex.ToString();
+            }
         }
     }
 }
