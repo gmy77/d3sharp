@@ -1,9 +1,23 @@
-﻿using System;
+﻿/*
+ * Copyright (C) 2011 D3Sharp Project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using D3Sharp.Core.Accounts;
-using D3Sharp.Net;
+using D3Sharp.Core.Objects;
 
 namespace D3Sharp.Core.Channels
 {
@@ -12,21 +26,16 @@ namespace D3Sharp.Core.Channels
         private readonly static Dictionary<ulong, Channel> Channels =
             new Dictionary<ulong, Channel>();
 
-        // Maybe it doesn't like 0 as a channel id?
-        private static ulong _idGenerated=1000;
-
-        public static Channel CreateNewChannel(IClient client, ulong externalObjectId)
+        public static Channel CreateNewChannel()
         {
-            var channel = new Channel(_idGenerated++);
-            client.MapLocalObjectID(channel.ID, externalObjectId);
+            var channel = new Channel();
             Channels.Add(channel.ID, channel);
-            channel.Add((Client)client);
             return channel;
         }
         
         public static Channel DeleteChannel(ulong id) {
             throw new System.NotImplementedException();
-            // Should remove mapped client-server IDs here..
+            // TODO: Mapping removal should be done in client or mayhaps the ID controller
         }
     }
 }

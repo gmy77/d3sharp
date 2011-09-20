@@ -1,22 +1,39 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * Copyright (C) 2011 D3Sharp Project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System.Collections.Generic;
 using System.Linq;
-using D3Sharp.Net;
+using D3Sharp.Core.Objects;
+using D3Sharp.Net.BNet;
 using Google.ProtocolBuffers;
 
 namespace D3Sharp.Core.Channels
 {
-    public class Channel
+    public class Channel : RPCObject
     {
-        public ulong ID { get; private set; }
         public bnet.protocol.EntityId BnetEntityID { get; private set; }
         public bnet.protocol.channel.ChannelState State { get; private set; }
 
         public List<bnet.protocol.channel.Member> Members = new List<bnet.protocol.channel.Member>();
 
-        public Channel(ulong id)
+        public Channel()
         {
-            this.ID = id;
-            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(433661094618860925).SetLow(11233645142038554527).Build();
+            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(this.ID).SetLow(0).Build();
 
             var builder = bnet.protocol.channel.ChannelState.CreateBuilder()
                 .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN)
@@ -27,7 +44,7 @@ namespace D3Sharp.Core.Channels
             this.State = builder.Build();
         }
 
-        public void NotifyChannelState(Client client)
+        public void NotifyChannelState(BNetClient client)
         {
             var field1 =
                 bnet.protocol.presence.Field.CreateBuilder().SetKey(
@@ -65,29 +82,33 @@ namespace D3Sharp.Core.Channels
             client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), builder.Build());
         }
 
-        public void Add(Client client)
+        public void Add(BNetClient client)
         {
-            var builder = bnet.protocol.channel.AddNotification.CreateBuilder();
-            var identity = bnet.protocol.Identity.CreateBuilder();
-            identity.SetAccountId(client.Account.BnetAccountID);
-            identity.SetGameAccountId(client.Account.BnetGameAccountID);
-            if (client.Account.Toons.Count > 0) identity.SetToonId(client.Account.Toons.First().Value.BnetEntityID);
+            var identity = client.GetIdentity(false, false, true);
+            var user = bnet.protocol.channel.Member.CreateBuilder()
+                .SetIdentity(identity)
+                .SetState(bnet.protocol.channel.MemberState.CreateBuilder()
+                    .AddRole(2)
+                    .SetPrivileges(0xFBFF) // 64511
+                    .Build())
+                .Build();
+            this.Members.Add(user);
 
-            var state = bnet.protocol.channel.MemberState.CreateBuilder()
-                .AddRole(2)
-                .SetPrivileges(64511);
-            var selfBuilder = bnet.protocol.channel.Member.CreateBuilder().SetIdentity(identity.Build()).SetState(state.Build());
-            var self = selfBuilder.Build();
-            builder.SetSelf(self);
-            builder.AddMember(self);
-            builder.SetChannelState(this.State);
-
+            var builder = bnet.protocol.channel.AddNotification.CreateBuilder()
+                .SetChannelState(this.State)
+                .SetSelf(user);
+            
+            // Cap includes the user that was added
+            foreach (var m in this.Members)
+            {
+                builder.AddMember(m);
+            }
             client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.ID);
         }
-        
-        public bool HasUser(Client client)
+
+        public bool HasUser(BNetClient client)
         {
-            return this.Members.Any(m => m.Identity == client.Identity);
+            return this.Members.Any(m => m.Identity == client.GetIdentity(false, false, true));
         }
         
         /*public void Close()
@@ -102,9 +123,9 @@ namespace D3Sharp.Core.Channels
             this.Members.Clear();
         }*/
         
-        public void RemoveUser(Client client)
+        public void RemoveUser(BNetClient client)
         {
-            var identity = client.Identity;
+            var identity = client.GetIdentity(false, false, true);
             var builder = bnet.protocol.channel.RemoveNotification.CreateBuilder()
                 .SetMemberId(identity.ToonId);
             this.Members.RemoveAll(m => identity == m.Identity);

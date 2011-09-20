@@ -31,11 +31,12 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBoxInput = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.csharpizeButton = new System.Windows.Forms.Button();
+            this.hexBox = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.richTextBoxProto = new System.Windows.Forms.RichTextBox();
             this.textBoxProtoType = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.hexBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -68,6 +69,7 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.csharpizeButton);
             this.groupBox2.Controls.Add(this.hexBox);
             this.groupBox2.Location = new System.Drawing.Point(12, 192);
             this.groupBox2.Name = "groupBox2";
@@ -75,6 +77,25 @@
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Hex Output";
+            // 
+            // csharpizeButton
+            // 
+            this.csharpizeButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.csharpizeButton.Location = new System.Drawing.Point(3, 16);
+            this.csharpizeButton.Name = "csharpizeButton";
+            this.csharpizeButton.Size = new System.Drawing.Size(888, 29);
+            this.csharpizeButton.TabIndex = 1;
+            this.csharpizeButton.Text = "Outputting raw";
+            this.csharpizeButton.UseVisualStyleBackColor = true;
+            this.csharpizeButton.Click += new System.EventHandler(this.csharpizeButton_Click);
+            // 
+            // hexBox
+            // 
+            this.hexBox.Location = new System.Drawing.Point(3, 51);
+            this.hexBox.Multiline = true;
+            this.hexBox.Name = "hexBox";
+            this.hexBox.Size = new System.Drawing.Size(888, 123);
+            this.hexBox.TabIndex = 0;
             // 
             // groupBox3
             // 
@@ -99,7 +120,7 @@
             this.richTextBoxProto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.richTextBoxProto.Location = new System.Drawing.Point(6, 45);
             this.richTextBoxProto.Name = "richTextBoxProto";
-            this.richTextBoxProto.Size = new System.Drawing.Size(882, 126);
+            this.richTextBoxProto.Size = new System.Drawing.Size(1380, 183);
             this.richTextBoxProto.TabIndex = 5;
             this.richTextBoxProto.Text = "";
             // 
@@ -109,7 +130,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxProtoType.Location = new System.Drawing.Point(126, 16);
             this.textBoxProtoType.Name = "textBoxProtoType";
-            this.textBoxProtoType.Size = new System.Drawing.Size(765, 20);
+            this.textBoxProtoType.Size = new System.Drawing.Size(1263, 20);
             this.textBoxProtoType.TabIndex = 4;
             this.textBoxProtoType.TextChanged += new System.EventHandler(this.textBoxProtoType_TextChanged);
             // 
@@ -121,15 +142,6 @@
             this.label1.Size = new System.Drawing.Size(111, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Convert as proto type:";
-            // 
-            // hexBox
-            // 
-            this.hexBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hexBox.Location = new System.Drawing.Point(3, 16);
-            this.hexBox.Multiline = true;
-            this.hexBox.Name = "hexBox";
-            this.hexBox.Size = new System.Drawing.Size(888, 158);
-            this.hexBox.TabIndex = 0;
             // 
             // FormMain
             // 
@@ -161,6 +173,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox richTextBoxProto;
         private System.Windows.Forms.TextBox hexBox;
+        private System.Windows.Forms.Button csharpizeButton;
     }
 }
 
