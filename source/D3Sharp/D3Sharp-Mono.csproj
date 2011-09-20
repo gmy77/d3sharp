@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -103,22 +103,33 @@
     <Compile Include="Core\Toons\Toon.cs" />
     <Compile Include="Core\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Toons\ToonManager.cs" />
-    <Compile Include="Net\Packets\Header.cs" />
-    <Compile Include="Net\Packets\Packet.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Net\Client.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Net\Server.cs" />
-    <Compile Include="Net\IClient.cs" />
     <Compile Include="Utils\Extensions\ArrayExtensions.cs" />
-    <Compile Include="Net\ClientEventArgs.cs" />
-    <Compile Include="Net\ClientDataEventArgs.cs" />
     <Compile Include="Utils\Extensions\DateTimeExtensions.cs" />
     <Compile Include="Utils\Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Net\Packets\PacketRouter.cs" />
     <Compile Include="Utils\Helpers\StringHashHelper.cs" />
     <Compile Include="Utils\TinyLogger.cs" />
     <Compile Include="Utils\win32\NativeMethods.cs" />
+    <Compile Include="Net\Connection.cs" />
+    <Compile Include="Net\ConnectionDataEventArgs.cs" />
+    <Compile Include="Net\ConnectionEventArgs.cs" />
+    <Compile Include="Net\IClient.cs" />
+    <Compile Include="Net\IConnection.cs" />
+    <Compile Include="Net\Server.cs" />
+    <Compile Include="Net\BNet\BNetClient.cs" />
+    <Compile Include="Net\BNet\BnetServer.cs" />
+    <Compile Include="Net\BNet\Config.cs" />
+    <Compile Include="Net\BNet\IBNetClient.cs" />
+    <Compile Include="Net\BNet\Packets\BNetHeader.cs" />
+    <Compile Include="Net\BNet\Packets\BNetPacket.cs" />
+    <Compile Include="Net\BNet\Packets\BNetRouter.cs" />
+    <Compile Include="Net\Game\Config.cs" />
+    <Compile Include="Net\Game\GameClient.cs" />
+    <Compile Include="Net\Game\GameServer.cs" />
+    <Compile Include="Net\Game\IGameClient.cs" />
+    <Compile Include="Core\Config\Config.cs" />
+    <Compile Include="Core\Config\ConfigManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
