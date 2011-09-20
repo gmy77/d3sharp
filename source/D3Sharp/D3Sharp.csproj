@@ -130,6 +130,8 @@
     <Compile Include="Utils\Helpers\StringHashHelper.cs" />
     <Compile Include="Utils\TinyLogger.cs" />
     <Compile Include="Utils\win32\NativeMethods.cs" />
+    <Compile Include="Core\Objects\ObjectManager.cs" />
+    <Compile Include="Core\Objects\RPCObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -130,6 +130,8 @@
     <Compile Include="Net\Game\IGameClient.cs" />
     <Compile Include="Core\Config\Config.cs" />
     <Compile Include="Core\Config\ConfigManager.cs" />
+    <Compile Include="Core\Objects\ObjectManager.cs" />
+    <Compile Include="Core\Objects\RPCObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

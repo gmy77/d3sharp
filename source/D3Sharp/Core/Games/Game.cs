@@ -20,18 +20,14 @@ using D3Sharp.Net;
 using D3Sharp.Net.BNet;
 using D3Sharp.Net.Game;
 using D3Sharp.Utils;
+using D3Sharp.Core.Objects;
 using Google.ProtocolBuffers;
 
 namespace D3Sharp.Core.Games
 {
-    public class Game
+    public class Game : RPCObject
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-
-        /// <summary>
-        /// Actual game id.
-        /// </summary>
-        public ulong ID { get; private set; }
 
         /// <summary>
         /// Bnet EntityID encoded id.
@@ -45,9 +41,8 @@ namespace D3Sharp.Core.Games
 
         public static ulong RequestIdCounter = 0;
 
-        public Game(ulong id, ulong factoryId)
+        public Game(ulong factoryId)
         {
-            this.ID = ++id;
             this.RequestID = ++RequestIdCounter;
             this.FactoryID = factoryId;
 

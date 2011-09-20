@@ -17,25 +17,32 @@
  */
 
 using System.Collections.Generic;
-using D3Sharp.Core.Objects;
+using System.Linq;
+using D3Sharp.Net.BNet;
+using Google.ProtocolBuffers;
 
-namespace D3Sharp.Core.Channels
+namespace D3Sharp.Core.Objects
 {
-    public static class ChannelsManager
+    public class RPCObject
     {
-        private readonly static Dictionary<ulong, Channel> Channels =
-            new Dictionary<ulong, Channel>();
-
-        public static Channel CreateNewChannel()
+        public bool Initialized { get; private set; }
+        public ulong ID { get; set; }
+        
+        public RPCObject()
         {
-            var channel = new Channel();
-            Channels.Add(channel.ID, channel);
-            return channel;
+            ObjectManager.Init(this);
+            this.Initialized = true;
         }
         
-        public static Channel DeleteChannel(ulong id) {
-            throw new System.NotImplementedException();
-            // TODO: Mapping removal should be done in client or mayhaps the ID controller
+        public void Release()
+        {
+            ObjectManager.Release(this);
+            this.Initialized = false;
+        }
+        
+        ~RPCObject()
+        {
+            Release();
         }
     }
 }
