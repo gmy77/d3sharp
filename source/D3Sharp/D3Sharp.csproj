@@ -68,7 +68,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.SQLite, Version=1.0.74.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
-      <HintPath>..\libs\System.Data.SQLite.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\sqlite-mixed\System.Data.SQLite.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -94,12 +95,12 @@
     <Compile Include="Core\Services\FriendsService.cs" />
     <Compile Include="Core\Services\GameMasterService.cs" />
     <Compile Include="Core\Services\GameUtilitiesService.cs" />
+    <Compile Include="Core\Services\IServerService.cs" />
     <Compile Include="Core\Services\NotificationService.cs" />
     <Compile Include="Core\Services\PartyService.cs" />
     <Compile Include="Core\Services\PresenceService.cs" />
     <Compile Include="Core\Services\SearchService.cs" />
     <Compile Include="Core\Services\Service.cs" />
-    <Compile Include="Core\Services\IServerService.cs" />
     <Compile Include="Core\Services\StorageService.cs" />
     <Compile Include="Core\Services\ToonExternalService.cs" />
     <Compile Include="Core\Services\UserManagerService.cs" />
