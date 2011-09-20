@@ -37,7 +37,7 @@ namespace D3Sharp.Net.Game
 
         public void Parse(ConnectionDataEventArgs e)
         {
-            Console.WriteLine(e.Data.Dump());
+            //Console.WriteLine(e.Data.Dump());
 
             using (var stream = new MemoryStream(e.Data.ToArray()))
             {
