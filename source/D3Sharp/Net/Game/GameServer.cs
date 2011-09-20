@@ -24,8 +24,14 @@ namespace D3Sharp.Net.Game
         {
             this.OnConnect += GameServer_OnConnect;
             this.OnDisconnect += (sender, e) => Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
-            this.DataReceived += (sender, e) => Logger.Trace("recv()");
+            this.DataReceived += GameServer_DataReceived;
             this.DataSent += (sender, e) => { };
+        }
+
+        void GameServer_DataReceived(object sender, ConnectionDataEventArgs e)
+        {
+            var connection = (Connection) e.Connection;
+            ((GameClient) connection.Client).Parse(e);
         }
 
         void GameServer_OnConnect(object sender, ConnectionEventArgs e)
