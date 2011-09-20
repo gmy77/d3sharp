@@ -38,13 +38,20 @@ namespace ProtoStringViewer
             _byteData = ProtoHelpers.Utils.Conversion.Unescape(this.textBoxInput.Text);
             this.hexBox.Text = _byteData.DumpHex(false);
             File.WriteAllBytes("proto.raw", _byteData);
+            UpdateProtoOutput();
         }
 
         private void textBoxProtoType_TextChanged(object sender, EventArgs e)
         {
-            if (textBoxProtoType.Text.Trim() == string.Empty)
+            UpdateProtoOutput();
+        }
+
+        private void UpdateProtoOutput()
+        {
+            string typename = textBoxProtoType.Text;
+	        if (typename.Trim() == string.Empty)
                 return;
-            var type = Type.GetType(textBoxProtoType.Text);
+            var type = Type.GetType(typename);
             if (type == null)
             {
                 richTextBoxProto.Text = "(no type)";
