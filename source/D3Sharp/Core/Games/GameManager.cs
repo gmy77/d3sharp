@@ -12,7 +12,7 @@ namespace D3Sharp.Core.Games
 
         public static Game CreateGame(ulong factoryId)
         {
-            return new Game((ulong) AvailableGames.Count,factoryId);
+            return new Game((ulong) AvailableGames.Count, factoryId);
         }
     }
 }

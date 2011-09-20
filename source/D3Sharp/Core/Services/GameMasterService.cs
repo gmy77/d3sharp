@@ -27,23 +27,23 @@ namespace D3Sharp.Core.Services
 
             var description = GameFactoryDescription.CreateBuilder().SetId(14249086168335147635);
             var atributes = new bnet.protocol.attribute.Attribute[4]
-                                {
-                                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("min_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2)).Build(),
-                                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("max_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(4)).Build(),
-                                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("num_teams").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1)).Build(),
-                                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("0.3.0")).Build()
-                                };
+                {
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("min_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("max_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(4)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("num_teams").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("0.3.0")).Build()
+                };
 
             description.AddRangeAttribute(atributes);
             description.AddStatsBucket(GameStatsBucket.CreateBuilder()
-                                           .SetBucketMin(0)
-                                           .SetBucketMax(4267296)
-                                           .SetWaitMilliseconds(1354)
-                                           .SetGamesPerHour(0)
-                                           .SetActiveGames(69)
-                                           .SetActivePlayers(75)
-                                           .SetFormingGames(5)
-                                           .SetWaitingPlayers(0).Build());
+               .SetBucketMin(0)
+               .SetBucketMax(4267296)
+               .SetWaitMilliseconds(1354)
+               .SetGamesPerHour(0)
+               .SetActiveGames(69)
+               .SetActivePlayers(75)
+               .SetFormingGames(5)
+               .SetWaitingPlayers(0).Build());
 
             var builder = ListFactoriesResponse.CreateBuilder().AddDescription(description).SetTotalResults(1);
             done(builder.Build());
@@ -52,8 +52,10 @@ namespace D3Sharp.Core.Services
         public override void FindGame(IRpcController controller, FindGameRequest request, Action<FindGameResponse> done)
         {            
             Logger.Trace("FindGame()");
-                        
+    
             var game = GameManager.CreateGame(request.FactoryId);
+            // Map the remote ID
+            this.Client.MapLocalObjectID(game.ID, request.ObjectId);
             var builder = FindGameResponse.CreateBuilder().SetRequestId(game.RequestID);
             done(builder.Build());
 

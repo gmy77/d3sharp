@@ -22,13 +22,14 @@ namespace D3Sharp.Net
         
         Toon CurrentToon { get; set; }
         Channel CurrentChannel { get; set; }
-        bnet.protocol.Identity Identity { get; }       
         
         void CallMethod(MethodDescriptor method, IMessage request);
         void CallMethod(MethodDescriptor method, IMessage request, ulong localObjectId);
 
-        void MapLocalObjectID(ulong localObjectId, ulong externalObjectId);
-        ulong GetLocalObjectID(ulong localObjectId);
+        bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon);
+
+        void MapLocalObjectID(ulong localObjectId, ulong remoteObjectId);
+        ulong GetRemoteObjectID(ulong localObjectId);
         
         int Send(Packet packet);
         int Send(IEnumerable<byte> data);

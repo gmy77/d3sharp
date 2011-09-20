@@ -16,10 +16,10 @@ namespace D3Sharp.Core.Channels
         public Channel(ulong id)
         {
             this.ID = id;
-            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(433661094618860925).SetLow(11233645142038554527).Build();
+            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(this.ID).SetLow(0).Build();
 
             var builder = bnet.protocol.channel.ChannelState.CreateBuilder()
-                .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN_INVITATION)
+                .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN)
                 .SetMaxMembers(8)
                 .SetMinMembers(1)
                 .SetMaxInvitations(12);
@@ -65,39 +65,33 @@ namespace D3Sharp.Core.Channels
             client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), builder.Build());
         }
 
-        public void Add(Client client, ulong objectId)
+        public void Add(Client client)
         {
-            var builder = bnet.protocol.channel.AddNotification.CreateBuilder();
-            var identity = bnet.protocol.Identity.CreateBuilder();
-            //identity.SetAccountId(client.Account.BnetAccountID); // TODO: client doesn't want to see this stuff either it asserts.
-            //identity.SetGameAccountId(client.Account.BnetGameAccountID);
-            if (client.Account.Toons.Count > 0) identity.SetToonId(client.Account.Toons.First().Value.BnetEntityID);
+            var identity = client.GetIdentity(false, false, true);
+            var user = bnet.protocol.channel.Member.CreateBuilder()
+                .SetIdentity(identity)
+                .SetState(bnet.protocol.channel.MemberState.CreateBuilder()
+                    .AddRole(2)
+                    .SetPrivileges(0xFBFF) // 64511
+                    .Build())
+                .Build();
+            this.Members.Add(user);
 
-            var state = bnet.protocol.channel.MemberState.CreateBuilder()
-                .AddRole(2)
-                .SetPrivileges(64511);
-            var selfBuilder = bnet.protocol.channel.Member.CreateBuilder().SetIdentity(identity.Build()).SetState(state.Build());
-            var self = selfBuilder.Build();
-            builder.SetSelf(self);
-
-            if (client.Account.Toons.Count > 0)
+            var builder = bnet.protocol.channel.AddNotification.CreateBuilder()
+                .SetChannelState(this.State)
+                .SetSelf(user);
+            
+            // Cap includes the user that was added
+            foreach (var m in this.Members)
             {
-                var memberIdentity = bnet.protocol.Identity.CreateBuilder();
-                memberIdentity.SetToonId(client.Account.Toons.First().Value.BnetEntityID);
-
-                var memberState = bnet.protocol.channel.MemberState.CreateBuilder().AddRole(2).SetPrivileges(64511);
-
-                var member = bnet.protocol.channel.Member.CreateBuilder().SetIdentity(memberIdentity).SetState(memberState.Build());
-                builder.AddMember(self);
+                builder.AddMember(m);
             }
-
-            builder.SetChannelState(this.State);
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), objectId);
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.ID);
         }
 
         public bool HasUser(Client client)
         {
-            return this.Members.Any(m => m.Identity == client.Identity);
+            return this.Members.Any(m => m.Identity == client.GetIdentity(false, false, true));
         }
         
         /*public void Close()
@@ -114,7 +108,7 @@ namespace D3Sharp.Core.Channels
         
         public void RemoveUser(Client client)
         {
-            var identity = client.Identity;
+            var identity = client.GetIdentity(false, false, true);
             var builder = bnet.protocol.channel.RemoveNotification.CreateBuilder()
                 .SetMemberId(identity.ToonId);
             this.Members.RemoveAll(m => identity == m.Identity);

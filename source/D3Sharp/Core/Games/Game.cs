@@ -46,14 +46,13 @@ namespace D3Sharp.Core.Games
                     ("127.0.0.1").SetPort((int)this.ID + 16000).SetToken(ByteString.CopyFrom(new byte[] {0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84}))
                     .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("SGameId").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2014314530).Build())).Build();
                  
-
             var builder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();
             builder.AddConnectInfo(connectionInfo);
             builder.SetRequestId(this.RequestID);
             builder.SetGameHandle(this.GameHandle);
 
             Logger.Trace("Game spawned: {0}:{1}", connectionInfo.Host, connectionInfo.Port);
-            client.CallMethod(bnet.protocol.game_master.GameFactorySubscriber.Descriptor.FindMethodByName("NotifyGameFound"), builder.Build(),this.ID);            
+            client.CallMethod(bnet.protocol.game_master.GameFactorySubscriber.Descriptor.FindMethodByName("NotifyGameFound"), builder.Build(), this.ID);
         }
     }
 }

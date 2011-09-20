@@ -21,6 +21,8 @@ namespace D3Sharp.Core.Services
 
         public override void RemoveMember(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.RemoveMemberRequest request, System.Action<bnet.protocol.NoData> done)
         {
+            Logger.Trace("RemoveMember");
+            Logger.Debug("request:\n{0}", request.ToString());
             throw new System.NotImplementedException();
         }
 

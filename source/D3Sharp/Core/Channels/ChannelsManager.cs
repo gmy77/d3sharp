@@ -12,16 +12,19 @@ namespace D3Sharp.Core.Channels
         private readonly static Dictionary<ulong, Channel> Channels =
             new Dictionary<ulong, Channel>();
 
-        public static Channel CreateNewChannel(IClient client)
+        // We'll start at a high value to avoid ID conflicts for now
+        private static ulong _channelgen = 100000;
+
+        public static Channel CreateNewChannel()
         {
-            var channel = new Channel((ulong)Channels.Count);
+            var channel = new Channel(_channelgen++);
             Channels.Add(channel.ID, channel);
             return channel;
         }
         
         public static Channel DeleteChannel(ulong id) {
             throw new System.NotImplementedException();
-            // Should remove mapped client-server IDs here..
+            // TODO: Mapping removal should be done in client or mayhaps the ID controller
         }
     }
 }

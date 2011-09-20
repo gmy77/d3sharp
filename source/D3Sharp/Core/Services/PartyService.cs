@@ -18,14 +18,16 @@ namespace D3Sharp.Core.Services
             Logger.Trace("CreateChannel()");
             //Logger.Debug("request:\n{0}", request.ToString());
             
-            var channel = ChannelsManager.CreateNewChannel(this.Client);
+            var channel = ChannelsManager.CreateNewChannel();
+            // This is an object creator, so we have to map the remote object ID
+            this.Client.MapLocalObjectID(channel.ID, request.ObjectId);
             var builder = CreateChannelResponse.CreateBuilder()
                 .SetObjectId(channel.ID)
                 .SetChannelId(channel.BnetEntityID);
 
             done(builder.Build());
 
-            channel.Add((Client)this.Client, request.ObjectId);
+            channel.Add((Client)this.Client);
             channel.NotifyChannelState((Client)this.Client);
         }
 
