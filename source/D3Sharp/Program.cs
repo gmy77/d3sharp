@@ -1,17 +1,36 @@
+/*
+ * Copyright (C) 2011 D3Sharp Project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 using System;
 using System.Reflection;
-using D3Sharp.Net;
-using D3Sharp.Net.Packets;
+using System.Threading;
+using D3Sharp.Net.BnetServer;
+using D3Sharp.Net.GameServer;
 using D3Sharp.Utils;
-using Nini.Config;
 
 namespace D3Sharp
 {
     internal class Program
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        private int _port;
-        private Server _server;
+
+        private static BnetServer _bnetServer;
+        private static GameServer _gameServer;
 
         public static void Main(string[] args)
         {
@@ -21,67 +40,56 @@ namespace D3Sharp
             LogManager.AttachLogTarget(new ConsoleTarget(Level.Trace)); // attach a console-target.
             LogManager.AttachLogTarget(new FileTarget(Level.Trace, "log.txt")); // attach a console-target.
 
-            Logger.Info("d3sharp v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
+            PrintLicence();
 
-            var main = new Program(); // startup.
-            main.ParseArguments(args);
-            main.Run();
+            Logger.Info("D3Sharp v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
+            StartupServers();
         }
 
-        Program()
+        private static void StartupServers()
         {
-            IConfigSource source = new IniConfigSource("config.ini"); // get configuration file
+            _bnetServer = new BnetServer();
+            _gameServer = new GameServer();
 
-            this._port = source.Configs["Server"].GetInt("Port", 1345); // apply port number from config file, or default
-        }
+            var bnetServerThread = new Thread(_bnetServer.Run) { IsBackground = true };
+            bnetServerThread.Start();
 
-        public void ParseArguments(string[] args)
-        {
-            // Temp code
-            if (args.Length > 0)
+            var gameServerThread = new Thread(_gameServer.Run) { IsBackground = true };
+            gameServerThread.Start();
+
+            // Read user input indefinitely.
+            while (true)
             {
-                int port;
-                if (!Int32.TryParse(args[0], out port))
-                    Logger.Warn("Invalid format for port; defaulting to {0}", _port);
-                else
-                    _port = port;
-            }
-        }
-
-        public void Run()
-        {
-            using (_server = new Server()) // Create new test server.
-            {
-                InitializeServerEvents(); // Initializes server events for debug output.
-
-                // we can't listen for port 1119 because D3 and the launcher (agent) communicates on that port through loopback.
-                // so we change our default port and start D3 with a shortcut like so:
-                //   "F:\Diablo III Beta\Diablo III.exe" -launch -auroraaddress 127.0.0.1:1345
-                _server.Listen(_port);
-                Logger.Info("Server is listening on port {0}...", _server.Port.ToString());
-
-                // Read user input indefinitely.
-                while (_server.IsListening)
+                var line = Console.ReadLine();
+                if (!string.Equals("quit", line, StringComparison.OrdinalIgnoreCase)
+                    && !string.Equals("exit", line, StringComparison.OrdinalIgnoreCase))
                 {
-                    var line = Console.ReadLine();
-                    if (!string.Equals("quit", line, StringComparison.OrdinalIgnoreCase)
-                     && !string.Equals("exit", line, StringComparison.OrdinalIgnoreCase))
-                    {
-                        continue;
-                    }
-                    Logger.Info("Shutting down server...");
-                    _server.Shutdown();
+                    continue;
                 }
+
+                Logger.Info("Shutting down servers...");
+                _bnetServer.Shutdown();
+                _gameServer.Shutdown();
             }
         }
 
-        private void InitializeServerEvents()
+        private static void PrintLicence()
         {
-            _server.ClientConnected += (sender, e) => Logger.Trace("Client connected: {0}", e.Client.ToString());
-            _server.ClientDisconnected += (sender, e) => Logger.Trace("Client disconnected: {0}", e.Client.ToString());
-            _server.DataReceived += (sender, e) => PacketRouter.Route(e);
-            _server.DataSent += (sender, e) => { };
+            Console.WriteLine("D3Sharp, Copyright (C) 2011 D3Sharp Project\nD3Sharp comes with ABSOLUTELY NO WARRANTY.This is free software, and you are welcome to redistribute it under certain conditions; see LICENCE file for details\n");
         }
+
+        //public void ParseArguments(string[] args)
+        //{
+        //    // Temp code
+        //    if (args.Length > 0)
+        //    {
+        //        int port;
+        //        if (!Int32.TryParse(args[0], out port))
+        //            Logger.Warn("Invalid format for port; defaulting to {0}", _port);
+        //        else
+        //            _port = port;
+        //    }
+        //}
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {

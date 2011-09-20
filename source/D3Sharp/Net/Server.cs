@@ -1,9 +1,26 @@
+/*
+ * Copyright (C) 2011 D3Sharp Project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using D3Sharp.Core.Storage;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Extensions;
 
@@ -26,13 +43,15 @@ namespace D3Sharp.Net
         public event ConnectionDataEventHandler DataReceived;
         public event ConnectionDataEventHandler DataSent;
 
-        private static readonly Logger Logger = LogManager.CreateLogger();
+        protected static readonly Logger Logger = LogManager.CreateLogger();
         private bool _disposed;
+
+        public virtual void Run() { }
 
         #region listener
 
-        public virtual void Listen(int port)
-        {
+        public virtual bool Listen(string bindIP, int port)
+        {            
             // Check if the server has been disposed.
             if (_disposed) throw new ObjectDisposedException(this.GetType().Name, "Server has been disposed.");
 
@@ -41,17 +60,31 @@ namespace D3Sharp.Net
 
             // Create new TCP socket and set socket options.
             Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            try {
+
+            try
+            {
                 // This is failing on Linux; dunno why.
                 Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, true);
-            } catch (SocketException e) {
+            }
+            catch (SocketException e)
+            {
                 Logger.DebugException(e, "Listen");
             }
+
             Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
 
-            // Bind.
-            Listener.Bind(new IPEndPoint(IPAddress.Any, port));
-            this.Port = port;
+            try
+            {
+                // Bind.
+                Listener.Bind(new IPEndPoint(IPAddress.Parse(bindIP), port));
+                this.Port = port;
+            }
+            catch(SocketException e)
+            {
+                Logger.Fatal(string.Format("{0} can't bind on {1}, server shutting down..", this.GetType().Name, bindIP));
+                this.Shutdown();
+                return false;
+            }
 
             // Start listening for incoming connections.
             Listener.Listen(10);
@@ -59,6 +92,8 @@ namespace D3Sharp.Net
 
             // Begin accepting any incoming connections asynchronously.
             Listener.BeginAccept(AcceptCallback, null);
+            
+            return true;
         }
 
         private void AcceptCallback(IAsyncResult result)
