@@ -1,0 +1,193 @@
+Starting Log
+bnet.protocol.connection.ConnectRequest
+
+bnet.protocol.connection.ConnectResponse
+server_id {
+  label: 2
+  epoch: 1318903854
+}
+client_id {
+  label: 1
+  epoch: 1318903854
+}
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 3073563442
+imported_service_hash: 4194801407
+exported_service {
+  hash: 3213656212
+  id: 2
+}
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 233634817
+exported_service {
+  hash: 1898188341
+  id: 3
+}
+
+bnet.protocol.connection.BindResponse
+imported_service_id: 2
+
+bnet.protocol.connection.BindResponse
+imported_service_id: 3
+
+bnet.protocol.authentication.LogonRequest
+program: "D3"
+platform: "Win"
+locale: "enUS"
+email: "test@test.com"
+listener_id: 2
+version: "Aurora 396b8632a7_public/188 (Aug 31 2011 20:25:07)"
+
+bnet.protocol.authentication.LogonResponse
+account {
+  high: 2
+  low: 1
+}
+game_account {
+  high: 4
+  low: 3
+}
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 213793859
+exported_service {
+  hash: 3788189352
+  id: 4
+}
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 2198078984
+exported_service {
+  hash: 4035247136
+  id: 5
+}
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 1092928283
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 3852538009
+exported_service {
+  hash: 2422005663
+  id: 6
+}
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 1041835658
+exported_service {
+  hash: 3162975266
+  id: 7
+}
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 2749215165
+exported_service {
+  hash: 1864735251
+  id: 8
+}
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 4108843573
+exported_service {
+  hash: 3213656212
+  id: 10
+}
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 14195881
+exported_service {
+  hash: 3213656212
+  id: 10
+}
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 2165092757
+imported_service_hash: 1069623117
+imported_service_hash: 101490829
+exported_service {
+  hash: 3338259653
+  id: 1
+}
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 3664661433
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 3612349579
+exported_service {
+  hash: 376431777
+  id: 11
+}
+
+bnet.protocol.connection.BindRequest
+imported_service_hash: 170173073
+
+bnet.protocol.connection.BindResponse
+imported_service_id: 4
+
+bnet.protocol.connection.BindResponse
+imported_service_id: 5
+
+bnet.protocol.connection.BindResponse
+
+bnet.protocol.connection.BindResponse
+imported_service_id: 6
+
+bnet.protocol.channel_invitation.SubscribeRequest
+object_id: 3
+
+bnet.protocol.connection.BindResponse
+imported_service_id: 7
+
+bnet.protocol.connection.BindResponse
+imported_service_id: 8
+
+bnet.protocol.connection.BindResponse
+imported_service_id: 10
+
+bnet.protocol.connection.BindResponse
+imported_service_id: 10
+
+bnet.protocol.connection.BindResponse
+imported_service_id: 1
+
+bnet.protocol.connection.BindResponse
+
+bnet.protocol.connection.BindResponse
+imported_service_id: 11
+
+bnet.protocol.connection.BindResponse
+
+bnet.protocol.followers.SubscribeToFollowersRequest
+object_id: 4
+
+bnet.protocol.user_manager.SubscribeToUserManagerRequest
+object_id: 5
+
+bnet.protocol.friends.SubscribeToFriendsRequest
+object_id: 6
+
+bnet.protocol.exchange.GetConfigurationRequest
+program: 17459
+
+bnet.protocol.exchange.GetConfigurationResponse
+configs {
+  specialist: 1
+  auction_durations: 60
+  auction_start_delays: 60
+  anti_sniping_extension_delay: 10
+  currency_config {
+    currency: "Awesome"
+    tick_size: 1
+    flat_outbid_incr: 2
+    scale_outbid_incr: 3
+    min_starting_unit_price: 1
+    max_starting_unit_price: 100
+    max_unit_price: 300
+    max_total_amount: 400
+    buyout_rule: 1
+  }
+}
+

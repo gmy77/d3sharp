@@ -1,3 +1,12 @@
+<&plash> 4 is
+<&plash> high: 216174302532224051
+<&plash> low: 10824503355229695733
+<&plash> 5 is 
+<&plash> high: 216174302532224051
+<&plash> low: 14655650672318688456
+
+(amendment) <&plash> So, both field 4 and 5 are one of the EntityId types, or contain at least two ulongs
+
 channel_state {
   [bnet.protocol.presence.ChannelState.presence] {
     entity_id {
@@ -72,8 +81,3 @@ channel_state {
   }
 }
 
-<&plash> high: 216174302532224051
-<&plash> low: 10824503355229695733
-<&plash> 5 is 
-<&plash> high: 216174302532224051
-<&plash> low: 14655650672318688456

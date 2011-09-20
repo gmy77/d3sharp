@@ -1,0 +1,36 @@
+Packet ops
+
+ (
+	ConnectRequest                = 0x100
+	BindRequest                   = 0x200
+	LogonRequest                  = 0x101
+	DisconnectNotification        = 0x400
+	SubscribeRequest              = 0x0109
+	ToonListRequest               = 0x010A
+	SubscribeToFollowersRequest   = 0x0110
+	SubscribeToUserManagerRequest = 0x010F
+	SubscribeToFriendsRequest     = 0x0106
+)
+
+
+Services
+
+{
+		233634817:  1,
+		3073563442: 4,
+		4194801407: 3,
+		213793859:  13,
+		2198078984: 9,
+		1092928283: 10,
+		3852538009: 16,
+		1041835658: 15,
+		2749215165: 6,
+		4108843573: 7,
+		14195881:   5,
+		2165092757: 11,
+		3664661433: 12,
+		3612349579: 8,
+		170173073:  14,
+		1069623117: 18,
+		101490829:  17
+}

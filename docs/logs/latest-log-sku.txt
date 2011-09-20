@@ -1,0 +1,6004 @@
+Python 2.7.2 (default, Jun 12 2011, 15:08:59) [MSC v.1500 32 bit (Intel)] on win32
+Type "copyright", "credits" or "license()" for more information.
+>>> ================================ RESTART ================================
+>>> 
+D3 client<->server protocol simulator by sku
+replaying real login protocol
+
+
+*** server received packet ***
+> this is total packet 0x0001
+> this is server's 0x0001-th received packet
+> packet header: [service=0x0] [method=0x1] [request=0x0] [unknown=0x0] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x1 (service id: 0x00)
+>>> ConnectRequest
+
+
+
+*** client received packet ***
+> this is total packet 0x0002
+> this is client's 0x0001-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x0] [size=0x1a]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 0c 08 dd e9 8e bb 0e 10 82 89 a1 f3 04 12 0a
+0010 08 c6 dc 03 10 94 cd a5 f3 04
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0000 (service id: 0xfe)
+>>> ConnectResponse
+server_id {
+  label: 3882071261
+  epoch: 1315456130
+}
+client_id {
+  label: 60998
+  epoch: 1315530388
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0003
+> this is server's 0x0002-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0x1] [unknown=0x0] [size=0x13]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 08 32 db 32 b7 ff 96 07 fa 12 07 0d 94 80 8c
+0010 bf 10 02
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 3073563442
+imported_service_hash: 4194801407
+exported_service {
+  hash: 3213656212
+  id: 2
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0004
+> this is client's 0x0002-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x1] [size=0x4]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 02 04 03
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0001 (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 4
+imported_service_id: 3
+
+
+
+*** server received packet ***
+> this is total packet 0x0005
+> this is server's 0x0003-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0x2] [unknown=0x0] [size=0xf]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 04 01 fc ec 0d 12 07 0d 35 0e 24 71 10 03
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 233634817
+exported_service {
+  hash: 1898188341
+  id: 3
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0006
+> this is client's 0x0003-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x2] [size=0x3]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 01 01
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0002 (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 1
+
+
+
+*** server received packet ***
+> this is total packet 0x0007
+> this is server's 0x0004-th received packet
+> packet header: [service=0x1] [method=0x1] [request=0x3] [unknown=0x0] [size=0x5c]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 02 44 33 12 03 57 69 6e 1a 04 65 6e 55 53 22
+0010 14 61 6e 64 72 6f 6e 65 6d 61 69 40 67 6d 61 69
+0020 6c 2e 63 6f 6d 28 02 32 33 41 75 72 6f 72 61 20
+0030 33 39 36 62 38 36 33 32 61 37 5f 70 75 62 6c 69
+0040 63 2f 31 38 38 20 28 41 75 67 20 33 31 20 32 30
+0050 31 31 20 32 30 3a 32 35 3a 30 37 29
+> packet received on service id 0x01 with hash 0x0decfc01
+handler 0x0decfc01 called, method: 0x1 (service id: 0x01)
+>>> LogonRequest
+program: "D3"
+platform: "Win"
+locale: "enUS"
+email: "<replaced email>"
+listener_id: 2
+version: "Aurora 396b8632a7_public/188 (Aug 31 2011 20:25:07)"
+
+
+
+*** client received packet ***
+> this is total packet 0x0008
+> this is client's 0x0004-th received packet
+> packet header: [service=0x3] [method=0x1] [request=0x0] [unknown=0x2] [size=0x172]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 2c 0d 53 55 00 00 15 68 74 75 61 1a 20 8f 52
+0010 90 6a 2c 85 b4 16 a5 95 70 22 51 57 0f 96 d3 52
+0020 2f 39 23 76 03 11 5f 2f 1a b2 49 62 04 3c 12 c1
+0030 02 00 89 eb d9 43 b0 56 42 52 e8 a3 a0 d2 26 51
+0040 bd 36 09 68 7c 00 7e 66 24 e4 a1 4f 59 38 67 ac
+0050 df 97 b3 75 b6 31 e1 63 28 f3 b3 d7 f8 f9 b7 c7
+0060 15 de 82 10 88 24 25 e7 f9 ae ae 32 fc 17 d9 d4
+0070 b0 2d 67 1e c7 a9 a4 23 ad 32 41 49 f8 98 77 26
+0080 24 07 3d db f4 05 05 a0 3a fb ed ed 01 79 ba 14
+0090 d8 3f 2b 22 cd 0f 25 36 c1 e3 90 ea 51 cf cb ba
+00a0 50 1a 40 5e a6 e4 fc 0a 36 1e da c4 5d ec 11 12
+00b0 9d ea 6e 38 20 5c ed de 79 50 8e 85 d5 06 7e 0b
+00c0 fd 0e 37 e0 05 b0 f5 0e c9 de 02 07 c7 68 8b c1
+00d0 11 56 1d b4 1b c8 cd 74 24 11 fc 49 21 84 2d d4
+00e0 0d 96 2f 26 b5 dc 5f 14 4b 12 18 25 c4 a3 5c 22
+00f0 5d 45 f6 6e f7 01 2a 76 4b ed 60 e6 0d db 43 73
+0100 d6 3d 05 d8 2c 64 7c c6 93 b2 43 0f 3b e0 c1 06
+0110 e1 73 1c 81 97 bc 90 2d 00 73 d3 35 ce 7a cd 1c
+0120 c5 b6 0c f2 3c 22 c3 08 fc 09 fa b7 cc 85 de 19
+0130 ab a9 cc 2c 69 69 0c 6e a9 a9 fb c3 c3 7e fd 1f
+0140 44 f0 ea 08 68 46 0f cd 33 01 78 7d ee 5b cb 8b
+0150 67 96 6d 3c 61 95 05 6b 3e c4 de 37 3b 81 d2 f1
+0160 64 70 ad 5c 4f dd 3a a5 c7 9f 1b 84 6b b6 ce 33
+0170 a9 2e
+> packet received on service id 0x03 with hash 0x71240e35
+handler 0x71240e35 called, method: 0x1 (service id: 0x03)
+>>> ModuleLoadRequest
+module_handle {
+  region: 21843
+  usage: 1635087464
+  hash: "\217R\220j,\205\264\026\245\225p\"QW\017\226\323R/9#v\003\021_/\032\262Ib\004<"
+}
+message: "\000\211\353\331C\260VBR\350\243\240\322&Q\2756\th|\000~f$\344\241OY8g\254\337\227\263u\2661\341c(\363\263\327\370\371\267\307\025\336\202\020\210$%\347\371\256\2562\374\027\331\324\260-g\036\307\251\244#\2552AI\370\230w&$\007=\333\364\005\005\240:\373\355\355\001y\272\024\330?+\"\315\017%6\301\343\220\352Q\317\313\272P\032@^\246\344\374\n6\036\332\304]\354\021\022\235\352n8 \\\355\336yP\216\205\325\006~\013\375\0167\340\005\260\365\016\311\336\002\007\307h\213\301\021V\035\264\033\310\315t$\021\374I!\204-\324\r\226/&\265\334_\024K\022\030%\304\243\\\"]E\366n\367\001*vK\355`\346\r\333Cs\326=\005\330,d|\306\223\262C\017;\340\301\006\341s\034\201\227\274\220-\000s\3235\316z\315\034\305\266\014\362<\"\303\010\374\t\372\267\314\205\336\031\253\251\314,ii\014n\251\251\373\303\303~\375\037D\360\352\010hF\017\3153\001x}\356[\313\213g\226m<a\225\005k>\304\3367;\201\322\361dp\255\\O\335:\245\307\237\033\204k\266\3163\251."
+
+
+
+*** server received packet ***
+> this is total packet 0x0009
+> this is server's 0x0005-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x0] [size=0x2]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 10 00
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0000 (service id: 0xfe)
+>>> ModuleLoadResponse
+module_id: 0
+
+
+
+*** server received packet ***
+> this is total packet 0x000a
+> this is server's 0x0006-th received packet
+> packet header: [service=0x1] [method=0x2] [request=0x4] [unknown=0x0] [size=0x126]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 08 00 12 a1 02 02 a3 09 bd 98 2f 97 65 21 48 ae
+0010 e4 98 bb ce e0 37 bb f1 e5 09 ee 5d d5 d2 77 d8
+0020 ae b8 11 8a 5c e5 8e fc 7d f8 18 bc 5e 44 7c 6e
+0030 84 f5 76 ea 01 5e 9c c2 2b 52 5a 41 94 b1 c2 55
+0040 e9 82 df a3 6e 0b 21 55 f0 e6 d4 9c 23 84 2d 8a
+0050 75 7c 42 7d af 27 f5 2a 11 b3 b7 88 f8 ed c7 76
+0060 a5 9f 60 b5 91 26 50 d3 28 eb 7f 52 28 47 39 68
+0070 4b e7 28 cd c1 93 f0 b9 47 cf 04 24 9d 34 92 2c
+0080 97 02 aa 6b c9 82 93 9c ee 15 1a 06 73 ef 9f 50
+0090 c1 ad ff 26 ab e9 d9 f6 42 ca 44 94 14 24 0e bc
+00a0 45 35 e5 28 5d 29 06 f5 f1 c8 97 0f f1 56 76 c9
+00b0 1e d6 75 34 de 2a 7c 6a 4d ff e9 be 9c 2e e9 81
+00c0 3e a8 94 56 6e b9 a0 5f 70 c8 7b d3 5e 0f 0f 94
+00d0 78 e3 0c a5 09 27 c6 80 fa 3c f6 1a 9c 19 2c d2
+00e0 a1 7c 33 ca 7f 68 c0 b7 1a 39 62 73 f0 d5 97 ec
+00f0 6f 8d 5b a4 bc 1b 82 be 59 c6 e0 c7 e7 c8 45 46
+0100 6b c2 09 e1 6d 05 8a 31 86 bb 61 f6 30 0b 03 a8
+0110 55 53 57 db f3 3f 07 ae 4f f5 69 36 c0 2c 3e 2c
+0120 f3 b6 24 5e 92 d7
+> packet received on service id 0x01 with hash 0x0decfc01
+handler 0x0decfc01 called, method: 0x2 (service id: 0x01)
+>>> ModuleMessageRequest
+module_id: 0
+message: "\002\243\t\275\230/\227e!H\256\344\230\273\316\3407\273\361\345\t\356]\325\322w\330\256\270\021\212\\\345\216\374}\370\030\274^D|n\204\365v\352\001^\234\302+RZA\224\261\302U\351\202\337\243n\013!U\360\346\324\234#\204-\212u|B}\257\'\365*\021\263\267\210\370\355\307v\245\237`\265\221&P\323(\353\177R(G9hK\347(\315\301\223\360\271G\317\004$\2354\222,\227\002\252k\311\202\223\234\356\025\032\006s\357\237P\301\255\377&\253\351\331\366B\312D\224\024$\016\274E5\345(])\006\365\361\310\227\017\361Vv\311\036\326u4\336*|jM\377\351\276\234.\351\201>\250\224Vn\271\240_p\310{\323^\017\017\224x\343\014\245\t\'\306\200\372<\366\032\234\031,\322\241|3\312\177h\300\267\0329bs\360\325\227\354o\215[\244\274\033\202\276Y\306\340\307\347\310EFk\302\t\341m\005\2121\206\273a\3660\013\003\250USW\333\363?\007\256O\365i6\300,>,\363\266$^\222\327"
+
+
+
+*** client received packet ***
+> this is total packet 0x000b
+> this is client's 0x0005-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x4] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0004 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x000c
+> this is client's 0x0006-th received packet
+> packet header: [service=0x3] [method=0x2] [request=0x1] [unknown=0x2] [size=0xa6]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 08 00 12 a1 01 03 fa c8 5a d0 61 7d f7 ce 12 a6
+0010 33 8c 57 1e 3c 47 f9 6d 24 3b 92 3a 36 ad 79 a2
+0020 83 21 11 a7 e5 ba 99 3c 6b 13 33 18 ae b9 0f 07
+0030 d8 7b 07 ed 85 ab 48 8b c3 f7 4f 61 9c 04 3b 4f
+0040 4a a7 9d bf 9e 7a d1 b4 5c 24 55 e4 34 74 d1 40
+0050 b0 1a 3f 4f 8b 2d ce e0 45 f7 22 f4 d5 4a dd b9
+0060 8d 47 c2 d7 eb 2a 9f 69 4e e4 0d 11 81 0e d0 d4
+0070 79 f8 5f 66 d2 2a 44 4c 0b 06 2c 7f 6e b2 32 08
+0080 d4 3d f9 dc 39 92 be 94 94 16 24 1e 9f cc 5b 85
+0090 bc a9 de 95 71 5c 8a 26 91 0c 92 1d e8 76 8b c5
+00a0 ab 3f 44 03 45 1c
+> packet received on service id 0x03 with hash 0x71240e35
+handler 0x71240e35 called, method: 0x2 (service id: 0x03)
+>>> ModuleMessageRequest
+module_id: 0
+message: "\003\372\310Z\320a}\367\316\022\2463\214W\036<G\371m$;\222:6\255y\242\203!\021\247\345\272\231<k\0233\030\256\271\017\007\330{\007\355\205\253H\213\303\367Oa\234\004;OJ\247\235\277\236z\321\264\\$U\3444t\321@\260\032?O\213-\316\340E\367\"\364\325J\335\271\215G\302\327\353*\237iN\344\r\021\201\016\320\324y\370_f\322*DL\013\006,\177n\2622\010\324=\371\3349\222\276\224\224\026$\036\237\314[\205\274\251\336\225q\\\212&\221\014\222\035\350v\213\305\253?D\003E\034"
+
+
+
+*** server received packet ***
+> this is total packet 0x000d
+> this is server's 0x0007-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x1] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0001 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x000e
+> this is client's 0x0007-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x3] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 00 00 00 00 00 00 00 01 11 f9 5b 00 00
+0010 00 00 00 00 12 12 09 33 44 00 00 62 00 00 02 11
+0020 21 5c 4f 00 00 00 00 00
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0003 (service id: 0xfe)
+>>> LogonResponse
+account {
+  high: 72057594037927936
+  low: 23545
+}
+game_account {
+  high: 144115608982668339
+  low: 5200929
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x000f
+> this is server's 0x0008-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0x5] [unknown=0x0] [size=0xf]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 04 43 3c be 0c 12 07 0d a8 2e cb e1 10 04
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 213793859
+exported_service {
+  hash: 3788189352
+  id: 4
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0010
+> this is server's 0x0009-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0x6] [unknown=0x0] [size=0xf]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 04 08 06 04 83 12 07 0d 20 fc 84 f0 10 05
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 2198078984
+exported_service {
+  hash: 4035247136
+  id: 5
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0011
+> this is server's 0x000a-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0x7] [unknown=0x0] [size=0x6]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 04 1b c3 24 41
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 1092928283
+
+
+
+*** server received packet ***
+> this is total packet 0x0012
+> this is server's 0x000b-th received packet
+> packet header: [service=0x3] [method=0x1] [request=0x8] [unknown=0x0] [size=0x16]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 12 09 00 00 00 00 00 00 00 01 11 f9 5b 00 00
+0010 00 00 00 00 18 03
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x1 (service id: 0x03)
+>>> SubscribeRequest_Presence
+entity_id {
+  high: 72057594037927936
+  low: 23545
+}
+object_id: 3
+
+
+
+*** server received packet ***
+> this is total packet 0x0013
+> this is server's 0x000c-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0x9] [unknown=0x0] [size=0xf]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 04 99 10 a1 e5 12 07 0d 9f df 5c 90 10 06
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 3852538009
+exported_service {
+  hash: 2422005663
+  id: 6
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0014
+> this is server's 0x000d-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0xa] [unknown=0x0] [size=0xf]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 04 8a 26 19 3e 12 07 0d 22 2c 87 bc 10 07
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 1041835658
+exported_service {
+  hash: 3162975266
+  id: 7
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0015
+> this is server's 0x000e-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0xb] [unknown=0x0] [size=0xf]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 04 bd b1 dd a3 12 07 0d 13 9a 25 6f 10 08
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 2749215165
+exported_service {
+  hash: 1864735251
+  id: 8
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0016
+> this is server's 0x000f-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0xc] [unknown=0x0] [size=0xf]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 04 35 fa e7 f4 12 07 0d 94 80 8c bf 10 0a
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 4108843573
+exported_service {
+  hash: 3213656212
+  id: 10
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0017
+> this is server's 0x0010-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0xd] [unknown=0x0] [size=0xf]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 04 a9 9c d8 00 12 07 0d 94 80 8c bf 10 0a
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 14195881
+exported_service {
+  hash: 3213656212
+  id: 10
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0018
+> this is server's 0x0011-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0xe] [unknown=0x0] [size=0x17]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 0c 95 b1 0c 81 4d 27 c1 3f 8d a0 0c 06 12 07
+0010 0d c5 cc f9 c6 10 01
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 2165092757
+imported_service_hash: 1069623117
+imported_service_hash: 101490829
+exported_service {
+  hash: 3338259653
+  id: 1
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0019
+> this is server's 0x0012-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0xf] [unknown=0x0] [size=0x6]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 04 b9 4b 6e da
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 3664661433
+
+
+
+*** server received packet ***
+> this is total packet 0x001a
+> this is server's 0x0013-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0x10] [unknown=0x0] [size=0xf]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 04 8b 14 50 d7 12 07 0d a1 e4 6f 16 10 0b
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 3612349579
+exported_service {
+  hash: 376431777
+  id: 11
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x001b
+> this is server's 0x0014-th received packet
+> packet header: [service=0x0] [method=0x2] [request=0x11] [unknown=0x0] [size=0x6]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 04 91 a2 24 0a
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x2 (service id: 0x00)
+>>> BindRequest
+imported_service_hash: 170173073
+
+
+
+*** client received packet ***
+> this is total packet 0x001c
+> this is client's 0x0008-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x5] [size=0x3]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 01 0d
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0005 (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 13
+
+
+
+*** client received packet ***
+> this is total packet 0x001d
+> this is client's 0x0009-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x6] [size=0x3]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 01 09
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0006 (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 9
+
+
+
+*** client received packet ***
+> this is total packet 0x001e
+> this is client's 0x000a-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x7] [size=0x3]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 01 0a
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0007 (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 10
+
+
+
+*** client received packet ***
+> this is total packet 0x001f
+> this is client's 0x000b-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x9] [size=0x3]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 01 10
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0009 (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 16
+
+
+
+*** client received packet ***
+> this is total packet 0x0020
+> this is client's 0x000c-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0xa] [size=0x3]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 01 0f
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x000a (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 15
+
+
+
+*** server received packet ***
+> this is total packet 0x0021
+> this is server's 0x0015-th received packet
+> packet header: [service=0x9] [method=0x1] [request=0x12] [unknown=0x0] [size=0x2]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 10 04
+> packet received on service id 0x09 with hash 0x83040608
+handler 0x83040608 called, method: 0x1 (service id: 0x09)
+>>> SubscribeRequest_Invitation
+object_id: 4
+
+
+
+*** client received packet ***
+> this is total packet 0x0022
+> this is client's 0x000d-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0xb] [size=0x3]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 01 06
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x000b (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 6
+
+
+
+*** client received packet ***
+> this is total packet 0x0023
+> this is client's 0x000e-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0xc] [size=0x3]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 01 07
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x000c (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 7
+
+
+
+*** client received packet ***
+> this is total packet 0x0024
+> this is client's 0x000f-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0xd] [size=0x3]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 01 05
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x000d (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 5
+
+
+
+*** client received packet ***
+> this is total packet 0x0025
+> this is client's 0x0010-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0xe] [size=0x5]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 03 0b 0c 08
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x000e (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 11
+imported_service_id: 12
+imported_service_id: 8
+
+
+
+*** client received packet ***
+> this is total packet 0x0026
+> this is client's 0x0011-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x8] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0008 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0027
+> this is client's 0x0012-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0xf] [size=0x3]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 01 0e
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x000f (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 14
+
+
+
+*** client received packet ***
+> this is total packet 0x0028
+> this is client's 0x0013-th received packet
+> packet header: [service=0xa] [method=0x1] [request=0x0] [unknown=0x3] [size=0xd7]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 1a d4 01 aa 06 d0 01 0a 12 09 00 00 00 00 00 00
+0010 00 01 11 f9 5b 00 00 00 00 00 00 12 27 0a 25 0a
+0020 0a 08 b3 88 01 10 01 18 01 20 00 12 17 3a 15 08
+0030 b3 88 81 80 a0 ac 80 80 03 10 c8 d9 94 9e b3 94
+0040 d5 b1 cb 01 12 1f 0a 1d 0a 0a 08 ce 84 01 10 01
+0050 18 01 20 00 12 0f 2a 0d 44 72 65 79 66 61 6c 20
+0060 48 79 61 74 74 12 12 0a 10 0a 0a 08 ce 84 01 10
+0070 01 18 02 20 00 12 02 10 01 12 2d 0a 2b 0a 13 08
+0080 ce 84 01 10 01 18 04 20 c6 d5 f4 f3 96 a2 97 9c
+0090 95 01 12 14 3a 12 09 33 44 00 00 62 01 00 03 11
+00a0 f5 6e 7d 6e 73 5c 38 96 12 2d 0a 2b 0a 13 08 ce
+00b0 84 01 10 01 18 04 20 fb d1 95 9e 93 b8 d5 b1 c8
+00c0 01 12 14 3a 12 09 33 44 00 00 62 01 00 03 11 c8
+00d0 2c c5 33 a3 54 63 cb
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x1 (service id: 0x0a)
+>>> AddNotification
+channel_state {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 72057594037927936
+      low: 23545
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 1
+          field: 1
+          index: 0
+        }
+        value {
+          message_value: "\010\263\210\201\200\240\254\200\200\003\020\310\331\224\236\263\224\325\261\313\001"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 1
+          field: 1
+          index: 0
+        }
+        value {
+          string_value: "Dreyfal Hyatt"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 1
+          field: 2
+          index: 0
+        }
+        value {
+          bool_value: true
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 1
+          field: 4
+          index: 10752446439796583110
+        }
+        value {
+          message_value: "\t3D\000\000b\001\000\003\021\365n}ns\\8\226"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 1
+          field: 4
+          index: 14439479118565566715
+        }
+        value {
+          message_value: "\t3D\000\000b\001\000\003\021\310,\3053\243Tc\313"
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0029
+> this is client's 0x0014-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x10] [size=0x3]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 01 12
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0010 (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 18
+
+
+
+*** client received packet ***
+> this is total packet 0x002a
+> this is client's 0x0015-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x11] [size=0x3]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 01 11
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0011 (service id: 0xfe)
+>>> BindResponse
+imported_service_id: 17
+
+
+
+*** server received packet ***
+> this is total packet 0x002b
+> this is server's 0x0016-th received packet
+> packet header: [service=0xa] [method=0x1] [request=0x13] [unknown=0x0] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0x0a with hash 0x4124c31b
+handler 0x4124c31b called, method: 0x1 (service id: 0x0a)
+>>> ToonListRequest
+
+
+
+*** server received packet ***
+> this is total packet 0x002c
+> this is server's 0x0017-th received packet
+> packet header: [service=0x10] [method=0x1] [request=0x14] [unknown=0x0] [size=0x2]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 10 05
+> packet received on service id 0x10 with hash 0xe5a11099
+handler 0xe5a11099 called, method: 0x1 (service id: 0x10)
+>>> SubscribeToFollowersRequest
+object_id: 5
+
+
+
+*** server received packet ***
+> this is total packet 0x002d
+> this is server's 0x0018-th received packet
+> packet header: [service=0xf] [method=0x1] [request=0x15] [unknown=0x0] [size=0x2]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 08 06
+> packet received on service id 0x0f with hash 0x3e19268a
+handler 0x3e19268a called, method: 0x1 (service id: 0x0f)
+>>> SubscribeToUserManagerRequest
+object_id: 6
+
+
+
+*** server received packet ***
+> this is total packet 0x002e
+> this is server's 0x0019-th received packet
+> packet header: [service=0x6] [method=0x1] [request=0x16] [unknown=0x0] [size=0x2]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 10 07
+> packet received on service id 0x06 with hash 0xa3ddb1bd
+handler 0xa3ddb1bd called, method: 0x1 (service id: 0x06)
+>>> SubscribeToFriendsRequest
+object_id: 7
+
+
+
+*** server received packet ***
+> this is total packet 0x002f
+> this is server's 0x001a-th received packet
+> packet header: [service=0x12] [method=0x1b] [request=0x17] [unknown=0x0] [size=0x5]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0d 33 44 00 00
+> packet received on service id 0x12 with hash 0xd750148b
+handler 0xd750148b called, method: 0x1b (service id: 0x12)
+>>> GetBidFeeEstimationRequest
+
+
+
+*** client received packet ***
+> this is total packet 0x0030
+> this is client's 0x0016-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x12] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0012 (service id: 0xfe)
+>>> SubscribeResponse_Invitation
+
+
+
+*** server received packet ***
+> this is total packet 0x0031
+> this is server's 0x001b-th received packet
+> packet header: [service=0xb] [method=0x2] [request=0x18] [unknown=0x0] [size=0x8]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 02 08 01 10 00 18 0a
+> packet received on service id 0x0b with hash 0x810cb195
+handler 0x810cb195 called, method: 0x2 (service id: 0x0b)
+>>> ListFactoriesRequest
+filter {
+  op: MATCH_ANY
+}
+start_index: 0
+max_results: 10
+
+
+
+*** client received packet ***
+> this is total packet 0x0032
+> this is client's 0x0017-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x15] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0015 (service id: 0xfe)
+>>> SubscribeToUserManagerResponse
+
+
+
+*** client received packet ***
+> this is total packet 0x0033
+> this is client's 0x0018-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x14] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0014 (service id: 0xfe)
+>>> SubscribeToFollowersResponse
+
+
+
+*** client received packet ***
+> this is total packet 0x0034
+> this is client's 0x0019-th received packet
+> packet header: Answer [service=0xfe] [method=0x7930] [request=0x17] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x7930, request:0x0017 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0035
+> this is client's 0x001a-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x16] [size=0x6]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 10 7f 18 7f 20 7f
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0016 (service id: 0xfe)
+>>> SubscribeToFriendsResponse
+max_friends: 127
+max_received_invitations: 127
+max_sent_invitations: 127
+
+
+
+*** client received packet ***
+> this is total packet 0x0036
+> this is client's 0x001b-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x13] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 12 09 33 44 00 00 62 01 00 03 11 f5 6e 7d 6e
+0010 73 5c 38 96 12 12 09 33 44 00 00 62 01 00 03 11
+0020 c8 2c c5 33 a3 54 63 cb
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0013 (service id: 0xfe)
+>>> ToonListResponse
+toons {
+  high: 216174302532224051
+  low: 10824503355229695733
+}
+toons {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0037
+> this is server's 0x001c-th received packet
+> packet header: [service=0x3] [method=0x1] [request=0x19] [unknown=0x0] [size=0x16]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 12 09 33 44 00 00 62 01 00 03 11 f5 6e 7d 6e
+0010 73 5c 38 96 18 08
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x1 (service id: 0x03)
+>>> SubscribeRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 10824503355229695733
+}
+object_id: 8
+
+
+
+*** server received packet ***
+> this is total packet 0x0038
+> this is server's 0x001d-th received packet
+> packet header: [service=0x3] [method=0x1] [request=0x1a] [unknown=0x0] [size=0x16]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb 18 09
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x1 (service id: 0x03)
+>>> SubscribeRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+object_id: 9
+
+
+
+*** server received packet ***
+> this is total packet 0x0039
+> this is server's 0x001e-th received packet
+> packet header: [service=0xe] [method=0x2] [request=0x1b] [unknown=0x0] [size=0x14]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 1a 12 0a 10 27 f4 a8 fc c5 d3 59 dd 0c 50 ec 1c
+0010 12 9f eb 9a
+> packet received on service id 0x0e with hash 0xda6e4bb9
+handler 0xda6e4bb9 called, method: 0x2 (service id: 0x0e)
+>>> OpenTableRequest
+table_id {
+  hash: "\'\364\250\374\305\323Y\335\014P\354\034\022\237\353\232"
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x003a
+> this is server's 0x001f-th received packet
+> packet header: [service=0xe] [method=0x3] [request=0x1c] [unknown=0x0] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 22 12 0a 10 27 f4 a8 fc c5 d3 59 dd 0c 50 ec 1c
+0010 12 9f eb 9a 2a 12 0a 10 68 19 52 dc 11 c9 53 46
+0020 be b6 99 2e 5f 8e f0 da
+> packet received on service id 0x0e with hash 0xda6e4bb9
+handler 0xda6e4bb9 called, method: 0x3 (service id: 0x0e)
+>>> OpenColumnRequest
+table_id {
+  hash: "\'\364\250\374\305\323Y\335\014P\354\034\022\237\353\232"
+}
+column_id {
+  hash: "h\031R\334\021\311SF\276\266\231._\216\360\332"
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x003b
+> this is server's 0x0020-th received packet
+> packet header: [service=0xe] [method=0x1] [request=0x1d] [unknown=0x0] [size=0x5e]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 3a 40 0a 12 0a 10 27 f4 a8 fc c5 d3 59 dd 0c 50
+0010 ec 1c 12 9f eb 9a 12 12 0a 10 68 19 52 dc 11 c9
+0020 53 46 be b6 99 2e 5f 8e f0 da 1a 12 0a 10 02 00
+0030 00 62 00 00 44 33 00 00 00 00 00 4f 5c 21 32 02
+0040 08 04 52 16 47 65 74 47 61 6d 65 41 63 63 6f 75
+0050 6e 74 53 65 74 74 69 6e 67 73 60 b0 ea 01
+> packet received on service id 0x0e with hash 0xda6e4bb9
+handler 0xda6e4bb9 called, method: 0x1 (service id: 0x0e)
+>>> ExecuteRequest
+operations {
+  table_id {
+    hash: "\'\364\250\374\305\323Y\335\014P\354\034\022\237\353\232"
+  }
+  column_id {
+    hash: "h\031R\334\021\311SF\276\266\231._\216\360\332"
+  }
+  row_id {
+    hash: "\002\000\000b\000\000D3\000\000\000\000\000O\\!"
+  }
+  rops {
+    op: COL_FETCH
+  }
+}
+query_name: "GetGameAccountSettings"
+timeout: 30000
+
+
+
+*** client received packet ***
+> this is total packet 0x003c
+> this is client's 0x001c-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x18] [size=0x71]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 6d 09 73 62 8c 0d 60 ec be c5 1a 11 0a 0b 6d
+0010 69 6e 5f 70 6c 61 79 65 72 73 12 02 18 02 1a 11
+0020 0a 0b 6d 61 78 5f 70 6c 61 79 65 72 73 12 02 18
+0030 04 1a 0f 0a 09 6e 75 6d 5f 74 65 61 6d 73 12 02
+0040 18 01 1a 12 0a 07 76 65 72 73 69 6f 6e 12 07 2a
+0050 05 30 2e 33 2e 30 22 17 0d 00 00 00 00 15 00 00
+0060 80 4f 18 ca 0a 20 00 28 45 30 4b 38 00 40 00 10
+0070 01
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0018 (service id: 0xfe)
+>>> ListFactoriesResponse
+description {
+  id: 14249086168335147635
+  attribute {
+    name: "min_players"
+    value {
+      int_value: 2
+    }
+  }
+  attribute {
+    name: "max_players"
+    value {
+      int_value: 4
+    }
+  }
+  attribute {
+    name: "num_teams"
+    value {
+      int_value: 1
+    }
+  }
+  attribute {
+    name: "version"
+    value {
+      string_value: "0.3.0"
+    }
+  }
+  stats_bucket {
+    bucket_min: 0.0
+    bucket_max: 4294967296.0
+    wait_milliseconds: 1354
+    games_per_hour: 0
+    active_games: 69
+    active_players: 75
+    forming_games: 0
+    waiting_players: 0
+  }
+}
+total_results: 1
+
+
+
+*** client received packet ***
+> this is total packet 0x003d
+> this is client's 0x001d-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x1b] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x001b (service id: 0xfe)
+>>> OpenTableResponse
+
+
+
+*** client received packet ***
+> this is total packet 0x003e
+> this is client's 0x001e-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x1c] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x001c (service id: 0xfe)
+>>> OpenColumnResponse
+
+
+
+*** client received packet ***
+> this is total packet 0x003f
+> this is client's 0x001f-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x1d] [size=0x42]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 40 08 04 12 12 0a 10 27 f4 a8 fc c5 d3 59 dd
+0010 0c 50 ec 1c 12 9f eb 9a 1a 28 0a 12 0a 10 68 19
+0020 52 dc 11 c9 53 46 be b6 99 2e 5f 8e f0 da 12 12
+0030 0a 10 02 00 00 62 00 00 44 33 00 00 00 00 00 4f
+0040 5c 21
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x001d (service id: 0xfe)
+>>> ExecuteResponse
+results {
+  error_code: 4
+  table_id {
+    hash: "\'\364\250\374\305\323Y\335\014P\354\034\022\237\353\232"
+  }
+  data {
+    column_id {
+      hash: "h\031R\334\021\311SF\276\266\231._\216\360\332"
+    }
+    row_id {
+      hash: "\002\000\000b\000\000D3\000\000\000\000\000O\\!"
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0040
+> this is server's 0x0021-th received packet
+> packet header: [service=0xa] [method=0x1] [request=0x1e] [unknown=0x0] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0x0a with hash 0x4124c31b
+handler 0x4124c31b called, method: 0x1 (service id: 0x0a)
+>>> ToonListRequest
+
+
+
+*** client received packet ***
+> this is total packet 0x0041
+> this is client's 0x0020-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x19] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0019 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0042
+> this is client's 0x0021-th received packet
+> packet header: [service=0xa] [method=0x1] [request=0x0] [unknown=0x8] [size=0x11c]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 1a 99 02 aa 06 95 02 0a 12 09 33 44 00 00 62 01
+0010 00 03 11 f5 6e 7d 6e 73 5c 38 96 12 24 0a 22 0a
+0020 0a 08 b3 88 01 10 02 18 01 20 00 12 14 3a 12 08
+0030 08 10 03 18 04 20 0b 28 14 30 07 38 0b 40 04 48
+0040 01 12 1b 0a 19 0a 0a 08 b3 88 01 10 03 18 01 20
+0050 00 12 0b 18 c9 ac ae c4 fc ff ff ff ff 01 12 12
+0060 0a 10 0a 0a 08 b3 88 01 10 03 18 02 20 00 12 02
+0070 18 01 12 32 0a 30 0a 0a 08 b3 88 01 10 03 18 03
+0080 20 00 12 22 3a 20 0a 02 20 00 0a 02 20 00 0a 02
+0090 20 00 0a 02 20 00 0a 02 20 00 0a 02 20 00 0a 02
+00a0 20 00 0a 02 20 00 12 12 0a 10 0a 0a 08 b3 88 01
+00b0 10 03 18 04 20 00 12 02 18 00 12 22 0a 20 0a 0a
+00c0 08 ce 84 01 10 03 18 02 20 00 12 12 2a 10 43 6f
+00d0 72 6e 65 6c 69 6f 75 73 4a 44 23 32 32 36 12 12
+00e0 0a 10 0a 0a 08 ce 84 01 10 03 18 03 20 00 12 02
+00f0 10 00 12 14 0a 12 0a 0a 08 ce 84 01 10 03 18 09
+0100 20 00 12 04 42 02 44 33 12 12 0a 10 0a 0a 08 ce
+0110 84 01 10 03 18 0a 20 00 12 02 18 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x1 (service id: 0x0a)
+>>> AddNotification
+channel_state {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 10824503355229695733
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 2
+          field: 1
+          index: 0
+        }
+        value {
+          message_value: "\010\010\020\003\030\004 \013(\0240\0078\013@\004H\001"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 1
+          index: 0
+        }
+        value {
+          int_value: -930376119
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 2
+          index: 0
+        }
+        value {
+          int_value: 1
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 3
+          index: 0
+        }
+        value {
+          message_value: "\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 4
+          index: 0
+        }
+        value {
+          int_value: 0
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 2
+          index: 0
+        }
+        value {
+          string_value: "REPLACEDNAME#226"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 3
+          index: 0
+        }
+        value {
+          bool_value: false
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 9
+          index: 0
+        }
+        value {
+          fourcc_value: "D3"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 10
+          index: 0
+        }
+        value {
+          int_value: 0
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0043
+> this is client's 0x0022-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x1e] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 12 09 33 44 00 00 62 01 00 03 11 f5 6e 7d 6e
+0010 73 5c 38 96 12 12 09 33 44 00 00 62 01 00 03 11
+0020 c8 2c c5 33 a3 54 63 cb
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x001e (service id: 0xfe)
+>>> ToonListResponse
+toons {
+  high: 216174302532224051
+  low: 10824503355229695733
+}
+toons {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0044
+> this is client's 0x0023-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x1a] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x001a (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0045
+> this is client's 0x0024-th received packet
+> packet header: [service=0xa] [method=0x1] [request=0x0] [unknown=0x9] [size=0x117]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 1a 94 02 aa 06 90 02 0a 12 09 33 44 00 00 62 01
+0010 00 03 11 c8 2c c5 33 a3 54 63 cb 12 24 0a 22 0a
+0020 0a 08 b3 88 01 10 02 18 01 20 00 12 14 3a 12 08
+0030 08 10 03 18 04 20 0b 28 14 30 07 38 0b 40 04 48
+0040 01 12 16 0a 14 0a 0a 08 b3 88 01 10 03 18 01 20
+0050 00 12 06 18 b1 83 9a ea 01 12 12 0a 10 0a 0a 08
+0060 b3 88 01 10 03 18 02 20 00 12 02 18 01 12 35 0a
+0070 33 0a 0a 08 b3 88 01 10 03 18 03 20 00 12 25 3a
+0080 23 0a 02 20 00 0a 02 20 00 0a 02 20 00 0a 02 20
+0090 00 0a 05 0d d9 eb 48 05 0a 02 20 00 0a 02 20 00
+00a0 0a 02 20 00 12 12 0a 10 0a 0a 08 b3 88 01 10 03
+00b0 18 04 20 00 12 02 18 02 12 1f 0a 1d 0a 0a 08 ce
+00c0 84 01 10 03 18 02 20 00 12 0f 2a 0d 46 65 6d 57
+00d0 69 7a 61 72 64 23 37 33 36 12 12 0a 10 0a 0a 08
+00e0 ce 84 01 10 03 18 03 20 00 12 02 10 00 12 14 0a
+00f0 12 0a 0a 08 ce 84 01 10 03 18 09 20 00 12 04 42
+0100 02 44 33 12 12 0a 10 0a 0a 08 ce 84 01 10 03 18
+0110 0a 20 00 12 02 18 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x1 (service id: 0x0a)
+>>> AddNotification
+channel_state {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 14655650672318688456
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 2
+          field: 1
+          index: 0
+        }
+        value {
+          message_value: "\010\010\020\003\030\004 \013(\0240\0078\013@\004H\001"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 1
+          index: 0
+        }
+        value {
+          int_value: 491159985
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 2
+          index: 0
+        }
+        value {
+          int_value: 1
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 3
+          index: 0
+        }
+        value {
+          message_value: "\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\005\r\331\353H\005\n\002 \000\n\002 \000\n\002 \000"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 4
+          index: 0
+        }
+        value {
+          int_value: 2
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 2
+          index: 0
+        }
+        value {
+          string_value: "FemWizard#736"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 3
+          index: 0
+        }
+        value {
+          bool_value: false
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 9
+          index: 0
+        }
+        value {
+          fourcc_value: "D3"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 10
+          index: 0
+        }
+        value {
+          int_value: 0
+        }
+      }
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0046
+> this is server's 0x0022-th received packet
+> packet header: [service=0xe] [method=0x2] [request=0x1f] [unknown=0x0] [size=0x14]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 1a 12 0a 10 06 8b 94 62 64 14 b9 4a 51 36 fd 0f
+0010 a6 e6 6c d7
+> packet received on service id 0x0e with hash 0xda6e4bb9
+handler 0xda6e4bb9 called, method: 0x2 (service id: 0x0e)
+>>> OpenTableRequest
+table_id {
+  hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0047
+> this is client's 0x0025-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0x9] [size=0x30]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2e aa 06 2b 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 c8 2c c5 33 a3 54 63 cb 12 15 0a 13 0a 0a 08
+0020 b3 88 01 10 03 18 04 20 00 12 05 18 82 80 80 10
+0030
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 14655650672318688456
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 4
+          index: 0
+        }
+        value {
+          int_value: 33554434
+        }
+      }
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0048
+> this is server's 0x0023-th received packet
+> packet header: [service=0xe] [method=0x3] [request=0x20] [unknown=0x0] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 22 12 0a 10 06 8b 94 62 64 14 b9 4a 51 36 fd 0f
+0010 a6 e6 6c d7 2a 12 0a 10 a1 81 a8 35 68 24 41 60
+0020 09 7c 05 1b 11 a8 7f 04
+> packet received on service id 0x0e with hash 0xda6e4bb9
+handler 0xda6e4bb9 called, method: 0x3 (service id: 0x0e)
+>>> OpenColumnRequest
+table_id {
+  hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+}
+column_id {
+  hash: "\241\201\2505h$A`\t|\005\033\021\250\177\004"
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0049
+> this is server's 0x0024-th received packet
+> packet header: [service=0xe] [method=0x1] [request=0x21] [unknown=0x0] [size=0x98]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 3a 40 0a 12 0a 10 06 8b 94 62 64 14 b9 4a 51 36
+0010 fd 0f a6 e6 6c d7 12 12 0a 10 a1 81 a8 35 68 24
+0020 41 60 09 7c 05 1b 11 a8 7f 04 1a 12 0a 10 03 00
+0030 01 62 00 00 44 33 96 38 5c 73 6e 7d 6e f5 32 02
+0040 08 04 3a 40 0a 12 0a 10 06 8b 94 62 64 14 b9 4a
+0050 51 36 fd 0f a6 e6 6c d7 12 12 0a 10 a1 81 a8 35
+0060 68 24 41 60 09 7c 05 1b 11 a8 7f 04 1a 12 0a 10
+0070 03 00 01 62 00 00 44 33 cb 63 54 a3 33 c5 2c c8
+0080 32 02 08 04 52 0e 47 65 74 48 65 72 6f 44 69 67
+0090 65 73 74 73 60 b0 ea 01
+> packet received on service id 0x0e with hash 0xda6e4bb9
+handler 0xda6e4bb9 called, method: 0x1 (service id: 0x0e)
+>>> ExecuteRequest
+operations {
+  table_id {
+    hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+  }
+  column_id {
+    hash: "\241\201\2505h$A`\t|\005\033\021\250\177\004"
+  }
+  row_id {
+    hash: "\003\000\001b\000\000D3\2268\\sn}n\365"
+  }
+  rops {
+    op: COL_FETCH
+  }
+}
+operations {
+  table_id {
+    hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+  }
+  column_id {
+    hash: "\241\201\2505h$A`\t|\005\033\021\250\177\004"
+  }
+  row_id {
+    hash: "\003\000\001b\000\000D3\313cT\2433\305,\310"
+  }
+  rops {
+    op: COL_FETCH
+  }
+}
+query_name: "GetHeroDigests"
+timeout: 30000
+
+
+
+*** client received packet ***
+> this is total packet 0x004a
+> this is client's 0x0026-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x1f] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x001f (service id: 0xfe)
+>>> OpenTableResponse
+
+
+
+*** client received packet ***
+> this is total packet 0x004b
+> this is client's 0x0027-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x20] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0020 (service id: 0xfe)
+>>> OpenColumnResponse
+
+
+
+*** client received packet ***
+> this is total packet 0x004c
+> this is client's 0x0028-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x21] [size=0x1c8]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 b3 01 12 12 0a 10 06 8b 94 62 64 14 b9 4a 51
+0010 36 fd 0f a6 e6 6c d7 1a 9c 01 0a 12 0a 10 a1 81
+0020 a8 35 68 24 41 60 09 7c 05 1b 11 a8 7f 04 12 12
+0030 0a 10 03 00 01 62 00 00 44 33 96 38 5c 73 6e 7d
+0040 6e f5 21 01 00 00 00 00 00 00 00 2a 69 08 fb 06
+0050 12 15 08 b3 88 81 80 a0 ac 80 80 03 10 f5 dd f5
+0060 f3 b6 8e 97 9c 96 01 1a 10 43 6f 72 6e 65 6c 69
+0070 6f 75 73 4a 44 23 32 32 36 25 49 96 8b c8 28 02
+0080 30 00 3a 20 0a 02 20 00 0a 02 20 00 0a 02 20 00
+0090 0a 02 20 00 0a 02 20 00 0a 02 20 00 0a 02 20 00
+00a0 0a 02 20 00 50 00 58 00 60 00 68 00 75 ff ff ff
+00b0 ff 78 01 80 01 00 12 8f 02 12 12 0a 10 06 8b 94
+00c0 62 64 14 b9 4a 51 36 fd 0f a6 e6 6c d7 1a f8 01
+00d0 0a 12 0a 10 a1 81 a8 35 68 24 41 60 09 7c 05 1b
+00e0 11 a8 7f 04 12 12 0a 10 03 00 01 62 00 00 44 33
+00f0 cb 63 54 a3 33 c5 2c c8 21 d3 ca 69 b2 77 ac 04
+0100 00 2a c4 01 08 fb 06 12 15 08 b3 88 81 80 a0 ac
+0110 80 80 03 10 c8 d9 94 9e b3 94 d5 b1 cb 01 1a 65
+0120 46 65 6d 57 69 7a 61 72 64 23 37 33 36 00 00 00
+0130 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0140 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0150 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0160 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0170 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0180 00 00 00 00 00 25 b1 81 46 1d 28 02 30 82 80 80
+0190 10 3a 23 0a 02 20 00 0a 02 20 00 0a 02 20 00 0a
+01a0 02 20 00 0a 05 0d d9 eb 48 05 0a 02 20 00 0a 02
+01b0 20 00 0a 02 20 00 50 00 58 00 60 00 68 00 75 94
+01c0 56 01 00 78 01 80 01 2f
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0021 (service id: 0xfe)
+>>> ExecuteResponse
+results {
+  table_id {
+    hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+  }
+  data {
+    column_id {
+      hash: "\241\201\2505h$A`\t|\005\033\021\250\177\004"
+    }
+    row_id {
+      hash: "\003\000\001b\000\000D3\2268\\sn}n\365"
+    }
+    version: 1
+    data: "\010\373\006\022\025\010\263\210\201\200\240\254\200\200\003\020\365\335\365\363\266\216\227\234\226\001\032\020REPLACEDNAME#226%I\226\213\310(\0020\000: \n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000P\000X\000`\000h\000u\377\377\377\377x\001\200\001\000"
+  }
+}
+results {
+  table_id {
+    hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+  }
+  data {
+    column_id {
+      hash: "\241\201\2505h$A`\t|\005\033\021\250\177\004"
+    }
+    row_id {
+      hash: "\003\000\001b\000\000D3\313cT\2433\305,\310"
+    }
+    version: 1315530001205971
+    data: "\010\373\006\022\025\010\263\210\201\200\240\254\200\200\003\020\310\331\224\236\263\224\325\261\313\001\032eFemWizard#736\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000%\261\201F\035(\0020\202\200\200\020:#\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\005\r\331\353H\005\n\002 \000\n\002 \000\n\002 \000P\000X\000`\000h\000u\224V\001\000x\001\200\001/"
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x004d
+> this is server's 0x0025-th received packet
+> packet header: [service=0xe] [method=0x3] [request=0x22] [unknown=0x0] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 22 12 0a 10 27 f4 a8 fc c5 d3 59 dd 0c 50 ec 1c
+0010 12 9f eb 9a 2a 12 0a 10 85 1b 15 11 91 27 fc 3f
+0020 f7 43 2c 8d c2 0d bb 38
+> packet received on service id 0x0e with hash 0xda6e4bb9
+handler 0xda6e4bb9 called, method: 0x3 (service id: 0x0e)
+>>> OpenColumnRequest
+table_id {
+  hash: "\'\364\250\374\305\323Y\335\014P\354\034\022\237\353\232"
+}
+column_id {
+  hash: "\205\033\025\021\221\'\374?\367C,\215\302\r\2738"
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x004e
+> this is client's 0x0029-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x22] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0022 (service id: 0xfe)
+>>> OpenColumnResponse
+
+
+
+*** server received packet ***
+> this is total packet 0x004f
+> this is server's 0x0026-th received packet
+> packet header: [service=0xe] [method=0x1] [request=0x23] [unknown=0x0] [size=0x59]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 3a 40 0a 12 0a 10 27 f4 a8 fc c5 d3 59 dd 0c 50
+0010 ec 1c 12 9f eb 9a 12 12 0a 10 85 1b 15 11 91 27
+0020 fc 3f f7 43 2c 8d c2 0d bb 38 1a 12 0a 10 02 00
+0030 00 62 00 00 44 33 00 00 00 00 00 4f 5c 21 32 02
+0040 08 04 52 11 4c 6f 61 64 41 63 63 6f 75 6e 74 44
+0050 69 67 65 73 74 60 b0 ea 01
+> packet received on service id 0x0e with hash 0xda6e4bb9
+handler 0xda6e4bb9 called, method: 0x1 (service id: 0x0e)
+>>> ExecuteRequest
+operations {
+  table_id {
+    hash: "\'\364\250\374\305\323Y\335\014P\354\034\022\237\353\232"
+  }
+  column_id {
+    hash: "\205\033\025\021\221\'\374?\367C,\215\302\r\2738"
+  }
+  row_id {
+    hash: "\002\000\000b\000\000D3\000\000\000\000\000O\\!"
+  }
+  rops {
+    op: COL_FETCH
+  }
+}
+query_name: "LoadAccountDigest"
+timeout: 30000
+
+
+
+*** client received packet ***
+> this is total packet 0x0050
+> this is client's 0x002a-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x23] [size=0x7a]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 78 12 12 0a 10 27 f4 a8 fc c5 d3 59 dd 0c 50
+0010 ec 1c 12 9f eb 9a 1a 62 0a 12 0a 10 85 1b 15 11
+0020 91 27 fc 3f f7 43 2c 8d c2 0d bb 38 12 12 0a 10
+0030 02 00 00 62 00 00 44 33 00 00 00 00 00 4f 5c 21
+0040 21 01 00 00 00 00 00 00 00 2a 2f 08 63 12 15 08
+0050 b3 88 81 80 a0 ac 80 80 03 10 c8 d9 94 9e b3 94
+0060 d5 b1 cb 01 1a 12 08 08 10 03 18 04 20 0b 28 14
+0070 30 07 38 0b 40 04 48 01 20 00
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0023 (service id: 0xfe)
+>>> ExecuteResponse
+results {
+  table_id {
+    hash: "\'\364\250\374\305\323Y\335\014P\354\034\022\237\353\232"
+  }
+  data {
+    column_id {
+      hash: "\205\033\025\021\221\'\374?\367C,\215\302\r\2738"
+    }
+    row_id {
+      hash: "\002\000\000b\000\000D3\000\000\000\000\000O\\!"
+    }
+    version: 1
+    data: "\010c\022\025\010\263\210\201\200\240\254\200\200\003\020\310\331\224\236\263\224\325\261\313\001\032\022\010\010\020\003\030\004 \013(\0240\0078\013@\004H\001 \000"
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0051
+> this is server's 0x0027-th received packet
+> packet header: [service=0xa] [method=0x2] [request=0x24] [unknown=0x0] [size=0x14]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb
+> packet received on service id 0x0a with hash 0x4124c31b
+handler 0x4124c31b called, method: 0x2 (service id: 0x0a)
+>>> SelectToonRequest
+toon {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0052
+> this is client's 0x002b-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x24] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0024 (service id: 0xfe)
+>>> SelectToonResponse
+
+
+
+*** server received packet ***
+> this is total packet 0x0053
+> this is server's 0x0028-th received packet
+> packet header: [service=0xe] [method=0x3] [request=0x25] [unknown=0x0] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 22 12 0a 10 06 8b 94 62 64 14 b9 4a 51 36 fd 0f
+0010 a6 e6 6c d7 2a 12 0a 10 1c e5 c8 15 97 27 39 3f
+0020 6c eb 1f 2c 1a 99 97 80
+> packet received on service id 0x0e with hash 0xda6e4bb9
+handler 0xda6e4bb9 called, method: 0x3 (service id: 0x0e)
+>>> OpenColumnRequest
+table_id {
+  hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+}
+column_id {
+  hash: "\034\345\310\025\227\'9?l\353\037,\032\231\227\200"
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0054
+> this is client's 0x002c-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0x9] [size=0x6e]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 6c aa 06 69 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 c8 2c c5 33 a3 54 63 cb 12 12 0a 10 0a 0a 08
+0020 ce 84 01 10 03 18 03 20 00 12 02 10 01 12 19 0a
+0030 17 0a 0a 08 ce 84 01 10 03 18 0a 20 00 12 09 18
+0040 c8 a2 8e cd fc 8e ab 02 12 24 0a 22 0a 0a 08 ce
+0050 84 01 10 03 18 0b 20 00 12 14 3a 12 09 46 ee 00
+0060 00 00 00 00 04 11 dd b4 63 e7 82 44 68 4e
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 14655650672318688456
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 3
+          index: 0
+        }
+        value {
+          bool_value: true
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 10
+          index: 0
+        }
+        value {
+          int_value: 1315530390868296
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 11
+          index: 0
+        }
+        value {
+          message_value: "\tF\356\000\000\000\000\000\004\021\335\264c\347\202DhN"
+        }
+      }
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0055
+> this is server's 0x0029-th received packet
+> packet header: [service=0xe] [method=0x1] [request=0x26] [unknown=0x0] [size=0x57]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 3a 40 0a 12 0a 10 06 8b 94 62 64 14 b9 4a 51 36
+0010 fd 0f a6 e6 6c d7 12 12 0a 10 1c e5 c8 15 97 27
+0020 39 3f 6c eb 1f 2c 1a 99 97 80 1a 12 0a 10 03 00
+0030 01 62 00 00 44 33 cb 63 54 a3 33 c5 2c c8 32 02
+0040 08 04 52 0f 47 65 74 54 6f 6f 6e 53 65 74 74 69
+0050 6e 67 73 60 b0 ea 01
+> packet received on service id 0x0e with hash 0xda6e4bb9
+handler 0xda6e4bb9 called, method: 0x1 (service id: 0x0e)
+>>> ExecuteRequest
+operations {
+  table_id {
+    hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+  }
+  column_id {
+    hash: "\034\345\310\025\227\'9?l\353\037,\032\231\227\200"
+  }
+  row_id {
+    hash: "\003\000\001b\000\000D3\313cT\2433\305,\310"
+  }
+  rops {
+    op: COL_FETCH
+  }
+}
+query_name: "GetToonSettings"
+timeout: 30000
+
+
+
+*** client received packet ***
+> this is total packet 0x0056
+> this is client's 0x002d-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x25] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0025 (service id: 0xfe)
+>>> OpenColumnResponse
+
+
+
+*** client received packet ***
+> this is total packet 0x0057
+> this is client's 0x002e-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x26] [size=0x42]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 40 08 04 12 12 0a 10 06 8b 94 62 64 14 b9 4a
+0010 51 36 fd 0f a6 e6 6c d7 1a 28 0a 12 0a 10 1c e5
+0020 c8 15 97 27 39 3f 6c eb 1f 2c 1a 99 97 80 12 12
+0030 0a 10 03 00 01 62 00 00 44 33 cb 63 54 a3 33 c5
+0040 2c c8
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0026 (service id: 0xfe)
+>>> ExecuteResponse
+results {
+  error_code: 4
+  table_id {
+    hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+  }
+  data {
+    column_id {
+      hash: "\034\345\310\025\227\'9?l\353\037,\032\231\227\200"
+    }
+    row_id {
+      hash: "\003\000\001b\000\000D3\313cT\2433\305,\310"
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0058
+> this is server's 0x002a-th received packet
+> packet header: [service=0x7] [method=0x1] [request=0x27] [unknown=0x0] [size=0x6]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 02 38 03 20 0a
+> packet received on service id 0x07 with hash 0xf4e7fa35
+handler 0xf4e7fa35 called, method: 0x1 (service id: 0x07)
+>>> CreateChannelRequest
+state {
+  privacy_level: PRIVACY_LEVEL_OPEN_INVITATION
+}
+object_id: 10
+
+
+
+*** client received packet ***
+> this is total packet 0x0059
+> this is client's 0x002f-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x27] [size=0x18]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 08 95 8c 04 12 12 09 7d 0d aa c9 77 ac 04 06 11
+0010 9f 27 00 00 bd ec e5 9b
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0027 (service id: 0xfe)
+>>> CreateChannelResponse
+object_id: 67093
+channel_id {
+  high: 433661094618860925
+  low: 11233645142038554527
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x005a
+> this is server's 0x002b-th received packet
+> packet header: [service=0x12] [method=0x12] [request=0x28] [unknown=0x0] [size=0x16]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 00 00 02 11 21 5c 4f 00
+0010 00 00 00 00 10 0b
+> packet received on service id 0x12 with hash 0xd750148b
+handler 0xd750148b called, method: 0x12 (service id: 0x12)
+>>> UnsubscribeOrderStatusChangeRequest
+agent_id {
+  high: 144115608982668339
+  low: 5200929
+}
+object_id: 11
+
+
+
+*** client received packet ***
+> this is total packet 0x005b
+> this is client's 0x0030-th received packet
+> packet header: [service=0xa] [method=0x1] [request=0x0] [unknown=0xa] [size=0x72]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 46 0a 3c 0a 12 09 00 00 00 00 00 00 00 01 11
+0010 f9 5b 00 00 00 00 00 00 12 12 09 33 44 00 00 62
+0020 00 00 02 11 21 5c 4f 00 00 00 00 00 1a 12 09 33
+0030 44 00 00 62 01 00 03 11 c8 2c c5 33 a3 54 63 cb
+0040 12 06 10 02 18 ff f7 03 12 1e 0a 14 1a 12 09 33
+0050 44 00 00 62 01 00 03 11 c8 2c c5 33 a3 54 63 cb
+0060 12 06 10 02 18 ff f7 03 1a 08 08 08 10 01 28 0c
+0070 38 03
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x1 (service id: 0x0a)
+>>> AddNotification
+self {
+  identity {
+    account_id {
+      high: 72057594037927936
+      low: 23545
+    }
+    game_account_id {
+      high: 144115608982668339
+      low: 5200929
+    }
+    toon_id {
+      high: 216174302532224051
+      low: 14655650672318688456
+    }
+  }
+  state {
+    role: 2
+    privileges: 64511
+  }
+}
+member {
+  identity {
+    toon_id {
+      high: 216174302532224051
+      low: 14655650672318688456
+    }
+  }
+  state {
+    role: 2
+    privileges: 64511
+  }
+}
+channel_state {
+  max_members: 8
+  min_members: 1
+  max_invitations: 12
+  privacy_level: PRIVACY_LEVEL_OPEN_INVITATION
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x005c
+> this is server's 0x002c-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x29] [unknown=0x0] [size=0x3d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb 12 27 0a 25 0a 0a 08 b3 88 01 10 04
+0020 18 01 20 00 12 17 3a 15 08 fd 9a a8 cd fc 8e ab
+0030 82 06 10 9f cf 80 80 d0 97 fb f2 9b 01
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 1
+      index: 0
+    }
+    value {
+      message_value: "\010\375\232\250\315\374\216\253\202\006\020\237\317\200\200\320\227\373\362\233\001"
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x005d
+> this is client's 0x0031-th received packet
+> packet header: Answer [service=0xfe] [method=0x7930] [request=0x28] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x7930, request:0x0028 (service id: 0xfe)
+>>> NoData
+
+
+
+*** server received packet ***
+> this is total packet 0x005e
+> this is server's 0x002d-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x2a] [unknown=0x0] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb 12 12 0a 10 0a 0a 08 b3 88 01 10 04
+0020 18 02 20 00 12 02 18 01
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 2
+      index: 0
+    }
+    value {
+      int_value: 1
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x005f
+> this is server's 0x002e-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x2b] [unknown=0x0] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb 12 12 0a 10 0a 0a 08 b3 88 01 10 04
+0020 18 03 20 00 12 02 2a 00
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 3
+      index: 0
+    }
+    value {
+      string_value: ""
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0060
+> this is server's 0x002f-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x2c] [unknown=0x10615] [size=0x68]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 66 1a 64 0a 19 44 33 2e 50 61 72 74 79 2e 47
+0010 61 6d 65 43 72 65 61 74 65 50 61 72 61 6d 73 12
+0020 47 3a 45 08 02 10 80 02 1a 2d 08 00 10 00 1d 94
+0030 56 01 00 20 ff ff ff ff ff ff ff ff ff 01 2a 15
+0040 08 b3 88 81 80 a0 ac 80 80 03 10 c8 d9 94 9e b3
+0050 94 d5 b1 cb 01 30 00 2a 0d 46 65 6d 57 69 7a 61
+0060 72 64 23 37 33 36 30 01
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.GameCreateParams"
+    value {
+      message_value: "\010\002\020\200\002\032-\010\000\020\000\035\224V\001\000 \377\377\377\377\377\377\377\377\377\001*\025\010\263\210\201\200\240\254\200\200\003\020\310\331\224\236\263\224\325\261\313\0010\000*\rFemWizard#7360\001"
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0061
+> this is client's 0x0032-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x29] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0029 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0062
+> this is client's 0x0033-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0x9] [size=0x42]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 40 aa 06 3d 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 c8 2c c5 33 a3 54 63 cb 12 27 0a 25 0a 0a 08
+0020 b3 88 01 10 04 18 01 20 00 12 17 3a 15 08 fd 9a
+0030 a8 cd fc 8e ab 82 06 10 9f cf 80 80 d0 97 fb f2
+0040 9b 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 14655650672318688456
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 4
+          field: 1
+          index: 0
+        }
+        value {
+          message_value: "\010\375\232\250\315\374\216\253\202\006\020\237\317\200\200\320\227\373\362\233\001"
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0063
+> this is client's 0x0034-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x2a] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x002a (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0064
+> this is client's 0x0035-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0x9] [size=0x2d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2b aa 06 28 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 c8 2c c5 33 a3 54 63 cb 12 12 0a 10 0a 0a 08
+0020 b3 88 01 10 04 18 02 20 00 12 02 18 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 14655650672318688456
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 4
+          field: 2
+          index: 0
+        }
+        value {
+          int_value: 1
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0065
+> this is client's 0x0036-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x2b] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x002b (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0066
+> this is client's 0x0037-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0x9] [size=0x2d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2b aa 06 28 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 c8 2c c5 33 a3 54 63 cb 12 12 0a 10 0a 0a 08
+0020 b3 88 01 10 04 18 03 20 00 12 02 2a 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 14655650672318688456
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 4
+          field: 3
+          index: 0
+        }
+        value {
+          string_value: ""
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0067
+> this is client's 0x0038-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x2c] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x002c (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0068
+> this is client's 0x0039-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xa] [size=0x7c]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb 12 66 1a 64 0a 19 44 33 2e 50 61 72
+0020 74 79 2e 47 61 6d 65 43 72 65 61 74 65 50 61 72
+0030 61 6d 73 12 47 3a 45 08 02 10 80 02 1a 2d 08 00
+0040 10 00 1d 94 56 01 00 20 ff ff ff ff ff ff ff ff
+0050 ff 01 2a 15 08 b3 88 81 80 a0 ac 80 80 03 10 c8
+0060 d9 94 9e b3 94 d5 b1 cb 01 30 00 2a 0d 46 65 6d
+0070 57 69 7a 61 72 64 23 37 33 36 30 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+state_change {
+  attribute {
+    name: "D3.Party.GameCreateParams"
+    value {
+      message_value: "\010\002\020\200\002\032-\010\000\020\000\035\224V\001\000 \377\377\377\377\377\377\377\377\377\001*\025\010\263\210\201\200\240\254\200\200\003\020\310\331\224\236\263\224\325\261\313\0010\000*\rFemWizard#7360\001"
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0069
+> this is server's 0x0030-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x2d] [unknown=0x10615] [size=0x1d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 1b 1a 19 0a 15 44 33 2e 50 61 72 74 79 2e 53
+0010 63 72 65 65 6e 53 74 61 74 75 73 12 00
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.ScreenStatus"
+    value {
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x006a
+> this is client's 0x003a-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x2d] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x002d (service id: 0xfe)
+>>> NoData
+
+
+
+*** server received packet ***
+> this is total packet 0x006b
+> this is server's 0x0031-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x2e] [unknown=0x0] [size=0x26]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb 12 10 0a 0e 0a 0a 08 b3 88 01 10 04
+0020 18 01 20 00 12 00
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 1
+      index: 0
+    }
+    value {
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x006c
+> this is server's 0x0032-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x2f] [unknown=0x0] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb 12 12 0a 10 0a 0a 08 b3 88 01 10 04
+0020 18 02 20 00 12 02 18 00
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 2
+      index: 0
+    }
+    value {
+      int_value: 0
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x006d
+> this is server's 0x0033-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x30] [unknown=0x0] [size=0x26]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb 12 10 0a 0e 0a 0a 08 b3 88 01 10 04
+0020 18 03 20 00 12 00
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 3
+      index: 0
+    }
+    value {
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x006e
+> this is server's 0x0034-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x31] [unknown=0x10615] [size=0x1d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 1b 1a 19 0a 15 44 33 2e 50 61 72 74 79 2e 53
+0010 63 72 65 65 6e 53 74 61 74 75 73 12 00
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.ScreenStatus"
+    value {
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x006f
+> this is server's 0x0035-th received packet
+> packet header: [service=0x4] [method=0x2] [request=0x32] [unknown=0x10615] [size=0x14]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x2 (service id: 0x04)
+>>> RemoveMemberRequest
+member_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0070
+> this is client's 0x003b-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xa] [size=0x31]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb 12 1b 1a 19 0a 15 44 33 2e 50 61 72
+0020 74 79 2e 53 63 72 65 65 6e 53 74 61 74 75 73 12
+0030 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+state_change {
+  attribute {
+    name: "D3.Party.ScreenStatus"
+    value {
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0071
+> this is client's 0x003c-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x2e] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x002e (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0072
+> this is client's 0x003d-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0x9] [size=0x2b]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 29 aa 06 26 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 c8 2c c5 33 a3 54 63 cb 12 10 0a 0e 0a 0a 08
+0020 b3 88 01 10 04 18 01 20 00 12 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 14655650672318688456
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 4
+          field: 1
+          index: 0
+        }
+        value {
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0073
+> this is client's 0x003e-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x2f] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x002f (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0074
+> this is client's 0x003f-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0x9] [size=0x2d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2b aa 06 28 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 c8 2c c5 33 a3 54 63 cb 12 12 0a 10 0a 0a 08
+0020 b3 88 01 10 04 18 02 20 00 12 02 18 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 14655650672318688456
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 4
+          field: 2
+          index: 0
+        }
+        value {
+          int_value: 0
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0075
+> this is client's 0x0040-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x30] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0030 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0076
+> this is client's 0x0041-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0x9] [size=0x2b]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 29 aa 06 26 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 c8 2c c5 33 a3 54 63 cb 12 10 0a 0e 0a 0a 08
+0020 b3 88 01 10 04 18 03 20 00 12 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 14655650672318688456
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 4
+          field: 3
+          index: 0
+        }
+        value {
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0077
+> this is client's 0x0042-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x31] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0031 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0078
+> this is client's 0x0043-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xa] [size=0x31]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb 12 1b 1a 19 0a 15 44 33 2e 50 61 72
+0020 74 79 2e 53 63 72 65 65 6e 53 74 61 74 75 73 12
+0030 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+state_change {
+  attribute {
+    name: "D3.Party.ScreenStatus"
+    value {
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0079
+> this is client's 0x0044-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x32] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0032 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x007a
+> this is client's 0x0045-th received packet
+> packet header: [service=0xa] [method=0x3] [request=0x0] [unknown=0xa] [size=0x2a]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb 12 12 09 33 44 00 00 62 01 00 03 11
+0020 c8 2c c5 33 a3 54 63 cb 18 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x3 (service id: 0x0a)
+>>> RemoveNotification
+agent_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+member_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+reason: 1
+
+
+
+*** server received packet ***
+> this is total packet 0x007b
+> this is server's 0x0036-th received packet
+> packet header: [service=0xa] [method=0x2] [request=0x33] [unknown=0x0] [size=0x14]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 00 00 00 00 00 00 00 03 11 00 00 00 00
+0010 00 00 00 00
+> packet received on service id 0x0a with hash 0x4124c31b
+handler 0x4124c31b called, method: 0x2 (service id: 0x0a)
+>>> SelectToonRequest
+toon {
+  high: 216172782113783808
+  low: 0
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x007c
+> this is client's 0x0046-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x33] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0033 (service id: 0xfe)
+>>> SelectToonResponse
+
+
+
+*** server received packet ***
+> this is total packet 0x007d
+> this is server's 0x0037-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x34] [unknown=0x0] [size=0x26]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 c8 2c c5 33
+0010 a3 54 63 cb 12 10 0a 0e 0a 0a 08 b3 88 01 10 04
+0020 18 01 20 00 12 00
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 14655650672318688456
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 1
+      index: 0
+    }
+    value {
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x007e
+> this is client's 0x0047-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0x9] [size=0x70]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 6e aa 06 6b 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 c8 2c c5 33 a3 54 63 cb 12 12 0a 10 0a 0a 08
+0020 ce 84 01 10 03 18 03 20 00 12 02 10 00 12 12 0a
+0030 10 0a 0a 08 ce 84 01 10 03 18 05 20 00 12 02 18
+0040 00 12 19 0a 17 0a 0a 08 ce 84 01 10 03 18 0a 20
+0050 00 12 09 18 cc e3 dd ce fc 8e ab 02 12 12 0a 0e
+0060 0a 0a 08 ce 84 01 10 03 18 0b 20 00 12 00 10 01
+0070
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 14655650672318688456
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 3
+          index: 0
+        }
+        value {
+          bool_value: false
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 5
+          index: 0
+        }
+        value {
+          int_value: 0
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 10
+          index: 0
+        }
+        value {
+          int_value: 1315530394268108
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 11
+          index: 0
+        }
+        value {
+        }
+      }
+      operation: CLEAR
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x007f
+> this is client's 0x0048-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x34] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0034 (service id: 0xfe)
+>>> NoData
+
+
+
+*** server received packet ***
+> this is total packet 0x0080
+> this is server's 0x0038-th received packet
+> packet header: [service=0xa] [method=0x3] [request=0x35] [unknown=0x0] [size=0x2a]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 07 4e 45 57 4d 4f 4e 4b 12 1f 0a 10 48 65 72
+0010 6f 43 72 65 61 74 65 50 61 72 61 6d 73 12 0b 3a
+0020 09 0d 15 ac 3d 00 10 00 18 00
+> packet received on service id 0x0a with hash 0x4124c31b
+handler 0x4124c31b called, method: 0x3 (service id: 0x0a)
+>>> CreateToonRequest
+name: "NEWMONK"
+attribute {
+  name: "HeroCreateParams"
+  value {
+    message_value: "\r\025\254=\000\020\000\030\000"
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0081
+> this is client's 0x0049-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x35] [size=0x14]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0035 (service id: 0xfe)
+>>> CreateToonResponse
+toon {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0082
+> this is server's 0x0039-th received packet
+> packet header: [service=0x3] [method=0x1] [request=0x36] [unknown=0x0] [size=0x16]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 18 0c
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x1 (service id: 0x03)
+>>> SubscribeRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+object_id: 12
+
+
+
+*** server received packet ***
+> this is total packet 0x0083
+> this is server's 0x003a-th received packet
+> packet header: [service=0xe] [method=0x1] [request=0x37] [unknown=0x0] [size=0x56]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 3a 40 0a 12 0a 10 06 8b 94 62 64 14 b9 4a 51 36
+0010 fd 0f a6 e6 6c d7 12 12 0a 10 a1 81 a8 35 68 24
+0020 41 60 09 7c 05 1b 11 a8 7f 04 1a 12 0a 10 03 00
+0030 01 62 00 00 44 33 20 8e 85 b8 5b ea 3e 4a 32 02
+0040 08 04 52 0e 47 65 74 48 65 72 6f 44 69 67 65 73
+0050 74 73 60 b0 ea 01
+> packet received on service id 0x0e with hash 0xda6e4bb9
+handler 0xda6e4bb9 called, method: 0x1 (service id: 0x0e)
+>>> ExecuteRequest
+operations {
+  table_id {
+    hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+  }
+  column_id {
+    hash: "\241\201\2505h$A`\t|\005\033\021\250\177\004"
+  }
+  row_id {
+    hash: "\003\000\001b\000\000D3 \216\205\270[\352>J"
+  }
+  rops {
+    op: COL_FETCH
+  }
+}
+query_name: "GetHeroDigests"
+timeout: 30000
+
+
+
+*** client received packet ***
+> this is total packet 0x0084
+> this is client's 0x004a-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x36] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0036 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x0085
+> this is client's 0x004b-th received packet
+> packet header: [service=0xa] [method=0x1] [request=0x0] [unknown=0xc] [size=0x76]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 1a 74 aa 06 71 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 1d 0a 1b 0a 0a 08
+0020 ce 84 01 10 03 18 02 20 00 12 0d 2a 0b 4e 45 57
+0030 4d 4f 4e 4b 23 33 34 39 12 12 0a 10 0a 0a 08 ce
+0040 84 01 10 03 18 03 20 00 12 02 10 00 12 14 0a 12
+0050 0a 0a 08 ce 84 01 10 03 18 09 20 00 12 04 42 02
+0060 44 33 12 12 0a 10 0a 0a 08 ce 84 01 10 03 18 0a
+0070 20 00 12 02 18 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x1 (service id: 0x0a)
+>>> AddNotification
+channel_state {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 2
+          index: 0
+        }
+        value {
+          string_value: "NEWMONK#349"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 3
+          index: 0
+        }
+        value {
+          bool_value: false
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 9
+          index: 0
+        }
+        value {
+          fourcc_value: "D3"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 10
+          index: 0
+        }
+        value {
+          int_value: 0
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0086
+> this is client's 0x004c-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x8e]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 8b 01 aa 06 87 01 0a 12 09 33 44 00 00 62 01
+0010 00 03 11 4a 3e ea 5b b8 85 8e 20 12 15 0a 13 0a
+0020 0a 08 b3 88 01 10 03 18 01 20 00 12 05 18 95 d8
+0030 f6 01 12 12 0a 10 0a 0a 08 b3 88 01 10 03 18 02
+0040 20 00 12 02 18 01 12 32 0a 30 0a 0a 08 b3 88 01
+0050 10 03 18 03 20 00 12 22 3a 20 0a 02 20 00 0a 02
+0060 20 00 0a 02 20 00 0a 02 20 00 0a 02 20 00 0a 02
+0070 20 00 0a 02 20 00 0a 02 20 00 12 12 0a 10 0a 0a
+0080 08 b3 88 01 10 03 18 04 20 00 12 02 18 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 1
+          index: 0
+        }
+        value {
+          int_value: 4041749
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 2
+          index: 0
+        }
+        value {
+          int_value: 1
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 3
+          index: 0
+        }
+        value {
+          message_value: "\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000"
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 4
+          index: 0
+        }
+        value {
+          int_value: 0
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0087
+> this is client's 0x004d-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x3f]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 3d aa 06 3a 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 24 0a 22 0a 0a 08
+0020 b3 88 01 10 02 18 01 20 00 12 14 3a 12 08 08 10
+0030 03 18 04 20 0b 28 14 30 07 38 0b 40 04 48 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 2
+          field: 1
+          index: 0
+        }
+        value {
+          message_value: "\010\010\020\003\030\004 \013(\0240\0078\013@\004H\001"
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0088
+> this is client's 0x004e-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x37] [size=0xb0]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 ad 01 12 12 0a 10 06 8b 94 62 64 14 b9 4a 51
+0010 36 fd 0f a6 e6 6c d7 1a 96 01 0a 12 0a 10 a1 81
+0020 a8 35 68 24 41 60 09 7c 05 1b 11 a8 7f 04 12 12
+0030 0a 10 03 00 01 62 00 00 44 33 20 8e 85 b8 5b ea
+0040 3e 4a 21 01 00 00 00 00 00 00 00 2a 63 08 fb 06
+0050 12 14 08 b3 88 81 80 a0 ac 80 80 03 10 ca fc a8
+0060 df 85 b7 a1 c7 20 1a 0b 4e 45 57 4d 4f 4e 4b 23
+0070 33 34 39 25 15 ac 3d 00 28 02 30 00 3a 20 0a 02
+0080 20 00 0a 02 20 00 0a 02 20 00 0a 02 20 00 0a 02
+0090 20 00 0a 02 20 00 0a 02 20 00 0a 02 20 00 50 00
+00a0 58 00 60 00 68 00 75 ff ff ff ff 78 01 80 01 00
+00b0
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0037 (service id: 0xfe)
+>>> ExecuteResponse
+results {
+  table_id {
+    hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+  }
+  data {
+    column_id {
+      hash: "\241\201\2505h$A`\t|\005\033\021\250\177\004"
+    }
+    row_id {
+      hash: "\003\000\001b\000\000D3 \216\205\270[\352>J"
+    }
+    version: 1
+    data: "\010\373\006\022\024\010\263\210\201\200\240\254\200\200\003\020\312\374\250\337\205\267\241\307 \032\013NEWMONK#349%\025\254=\000(\0020\000: \n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\002 \000P\000X\000`\000h\000u\377\377\377\377x\001\200\001\000"
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0089
+> this is server's 0x003b-th received packet
+> packet header: [service=0xa] [method=0x2] [request=0x38] [unknown=0x0] [size=0x14]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20
+> packet received on service id 0x0a with hash 0x4124c31b
+handler 0x4124c31b called, method: 0x2 (service id: 0x0a)
+>>> SelectToonRequest
+toon {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x008a
+> this is client's 0x004f-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0x3] [size=0x41]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 3f aa 06 3c 0a 12 09 00 00 00 00 00 00 00 01
+0010 11 f9 5b 00 00 00 00 00 00 12 26 0a 24 0a 0a 08
+0020 b3 88 01 10 01 18 01 20 00 12 16 3a 14 08 b3 88
+0030 81 80 a0 ac 80 80 03 10 ca fc a8 df 85 b7 a1 c7
+0040 20
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 72057594037927936
+      low: 23545
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 1
+          field: 1
+          index: 0
+        }
+        value {
+          message_value: "\010\263\210\201\200\240\254\200\200\003\020\312\374\250\337\205\267\241\307 "
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x008b
+> this is client's 0x0050-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x38] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0038 (service id: 0xfe)
+>>> SelectToonResponse
+
+
+
+*** client received packet ***
+> this is total packet 0x008c
+> this is client's 0x0051-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x6e]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 6c aa 06 69 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 12 0a 10 0a 0a 08
+0020 ce 84 01 10 03 18 03 20 00 12 02 10 01 12 19 0a
+0030 17 0a 0a 08 ce 84 01 10 03 18 0a 20 00 12 09 18
+0040 c7 bb a5 d1 fc 8e ab 02 12 24 0a 22 0a 0a 08 ce
+0050 84 01 10 03 18 0b 20 00 12 14 3a 12 09 46 ee 00
+0060 00 00 00 00 04 11 dd b4 63 e7 82 44 68 4e
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 3
+          index: 0
+        }
+        value {
+          bool_value: true
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 10
+          index: 0
+        }
+        value {
+          int_value: 1315530399636935
+        }
+      }
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 3
+          field: 11
+          index: 0
+        }
+        value {
+          message_value: "\tF\356\000\000\000\000\000\004\021\335\264c\347\202DhN"
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x008d
+> this is client's 0x0052-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0x3] [size=0x47]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 45 aa 06 42 0a 12 09 00 00 00 00 00 00 00 01
+0010 11 f9 5b 00 00 00 00 00 00 12 2c 0a 2a 0a 12 08
+0020 ce 84 01 10 01 18 04 20 f9 f4 a9 df a5 9b a1 c7
+0030 23 12 14 3a 12 09 33 44 00 00 62 01 00 03 11 4a
+0040 3e ea 5b b8 85 8e 20
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 72057594037927936
+      low: 23545
+    }
+    field_operation {
+      field {
+        key {
+          program: 16974
+          group: 1
+          field: 4
+          index: 2562131311400221305
+        }
+        value {
+          message_value: "\t3D\000\000b\001\000\003\021J>\352[\270\205\216 "
+        }
+      }
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x008e
+> this is server's 0x003c-th received packet
+> packet header: [service=0xe] [method=0x1] [request=0x39] [unknown=0x0] [size=0x57]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 3a 40 0a 12 0a 10 06 8b 94 62 64 14 b9 4a 51 36
+0010 fd 0f a6 e6 6c d7 12 12 0a 10 1c e5 c8 15 97 27
+0020 39 3f 6c eb 1f 2c 1a 99 97 80 1a 12 0a 10 03 00
+0030 01 62 00 00 44 33 20 8e 85 b8 5b ea 3e 4a 32 02
+0040 08 04 52 0f 47 65 74 54 6f 6f 6e 53 65 74 74 69
+0050 6e 67 73 60 b0 ea 01
+> packet received on service id 0x0e with hash 0xda6e4bb9
+handler 0xda6e4bb9 called, method: 0x1 (service id: 0x0e)
+>>> ExecuteRequest
+operations {
+  table_id {
+    hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+  }
+  column_id {
+    hash: "\034\345\310\025\227\'9?l\353\037,\032\231\227\200"
+  }
+  row_id {
+    hash: "\003\000\001b\000\000D3 \216\205\270[\352>J"
+  }
+  rops {
+    op: COL_FETCH
+  }
+}
+query_name: "GetToonSettings"
+timeout: 30000
+
+
+
+*** client received packet ***
+> this is total packet 0x008f
+> this is client's 0x0053-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x39] [size=0x42]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 40 08 04 12 12 0a 10 06 8b 94 62 64 14 b9 4a
+0010 51 36 fd 0f a6 e6 6c d7 1a 28 0a 12 0a 10 1c e5
+0020 c8 15 97 27 39 3f 6c eb 1f 2c 1a 99 97 80 12 12
+0030 0a 10 03 00 01 62 00 00 44 33 20 8e 85 b8 5b ea
+0040 3e 4a
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0039 (service id: 0xfe)
+>>> ExecuteResponse
+results {
+  error_code: 4
+  table_id {
+    hash: "\006\213\224bd\024\271JQ6\375\017\246\346l\327"
+  }
+  data {
+    column_id {
+      hash: "\034\345\310\025\227\'9?l\353\037,\032\231\227\200"
+    }
+    row_id {
+      hash: "\003\000\001b\000\000D3 \216\205\270[\352>J"
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0090
+> this is server's 0x003d-th received packet
+> packet header: [service=0x7] [method=0x1] [request=0x3a] [unknown=0x0] [size=0x6]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 02 38 03 20 0d
+> packet received on service id 0x07 with hash 0xf4e7fa35
+handler 0xf4e7fa35 called, method: 0x1 (service id: 0x07)
+>>> CreateChannelRequest
+state {
+  privacy_level: PRIVACY_LEVEL_OPEN_INVITATION
+}
+object_id: 13
+
+
+
+*** server received packet ***
+> this is total packet 0x0091
+> this is server's 0x003e-th received packet
+> packet header: [service=0x12] [method=0x12] [request=0x3b] [unknown=0x0] [size=0x16]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 00 00 02 11 21 5c 4f 00
+0010 00 00 00 00 10 0e
+> packet received on service id 0x12 with hash 0xd750148b
+handler 0xd750148b called, method: 0x12 (service id: 0x12)
+>>> UnsubscribeOrderStatusChangeRequest
+agent_id {
+  high: 144115608982668339
+  low: 5200929
+}
+object_id: 14
+
+
+
+*** client received packet ***
+> this is total packet 0x0092
+> this is client's 0x0054-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x3a] [size=0x18]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 08 99 8c 04 12 12 09 fd 1b 36 ca 77 ac 04 06 11
+0010 f4 26 00 00 04 e8 e5 98
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x003a (service id: 0xfe)
+>>> CreateChannelResponse
+object_id: 67097
+channel_id {
+  high: 433661094628039677
+  low: 11017467167309309684
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0093
+> this is client's 0x0055-th received packet
+> packet header: [service=0xa] [method=0x1] [request=0x0] [unknown=0xd] [size=0x72]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 46 0a 3c 0a 12 09 00 00 00 00 00 00 00 01 11
+0010 f9 5b 00 00 00 00 00 00 12 12 09 33 44 00 00 62
+0020 00 00 02 11 21 5c 4f 00 00 00 00 00 1a 12 09 33
+0030 44 00 00 62 01 00 03 11 4a 3e ea 5b b8 85 8e 20
+0040 12 06 10 02 18 ff f7 03 12 1e 0a 14 1a 12 09 33
+0050 44 00 00 62 01 00 03 11 4a 3e ea 5b b8 85 8e 20
+0060 12 06 10 02 18 ff f7 03 1a 08 08 08 10 01 28 0c
+0070 38 03
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x1 (service id: 0x0a)
+>>> AddNotification
+self {
+  identity {
+    account_id {
+      high: 72057594037927936
+      low: 23545
+    }
+    game_account_id {
+      high: 144115608982668339
+      low: 5200929
+    }
+    toon_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+  }
+  state {
+    role: 2
+    privileges: 64511
+  }
+}
+member {
+  identity {
+    toon_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+  }
+  state {
+    role: 2
+    privileges: 64511
+  }
+}
+channel_state {
+  max_members: 8
+  min_members: 1
+  max_invitations: 12
+  privacy_level: PRIVACY_LEVEL_OPEN_INVITATION
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0094
+> this is client's 0x0056-th received packet
+> packet header: Answer [service=0xfe] [method=0x7930] [request=0x3b] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x7930, request:0x003b (service id: 0xfe)
+>>> NoData
+
+
+
+*** server received packet ***
+> this is total packet 0x0095
+> this is server's 0x003f-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x3c] [unknown=0x0] [size=0x3d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 27 0a 25 0a 0a 08 b3 88 01 10 04
+0020 18 01 20 00 12 17 3a 15 08 fd b7 d8 d1 fc 8e ab
+0030 82 06 10 f4 cd 80 80 c0 80 fa f2 98 01
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 1
+      index: 0
+    }
+    value {
+      message_value: "\010\375\267\330\321\374\216\253\202\006\020\364\315\200\200\300\200\372\362\230\001"
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x0096
+> this is client's 0x0057-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x3c] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x003c (service id: 0xfe)
+>>> NoData
+
+
+
+*** server received packet ***
+> this is total packet 0x0097
+> this is server's 0x0040-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x3d] [unknown=0x0] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 12 0a 10 0a 0a 08 b3 88 01 10 04
+0020 18 02 20 00 12 02 18 01
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 2
+      index: 0
+    }
+    value {
+      int_value: 1
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0098
+> this is server's 0x0041-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x3e] [unknown=0x0] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 12 0a 10 0a 0a 08 b3 88 01 10 04
+0020 18 03 20 00 12 02 2a 00
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 3
+      index: 0
+    }
+    value {
+      string_value: ""
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x0099
+> this is server's 0x0042-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x3f] [unknown=0x10619] [size=0x4f]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 4d 1a 4b 0a 19 44 33 2e 50 61 72 74 79 2e 47
+0010 61 6d 65 43 72 65 61 74 65 50 61 72 61 6d 73 12
+0020 2e 3a 2c 08 02 10 80 02 1a 16 08 00 10 00 1d 94
+0030 56 01 00 20 ff ff ff ff ff ff ff ff ff 01 30 00
+0040 2a 0b 4e 45 57 4d 4f 4e 4b 23 33 34 39 30 01
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.GameCreateParams"
+    value {
+      message_value: "\010\002\020\200\002\032\026\010\000\020\000\035\224V\001\000 \377\377\377\377\377\377\377\377\377\0010\000*\013NEWMONK#3490\001"
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x009a
+> this is client's 0x0058-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x42]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 40 aa 06 3d 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 27 0a 25 0a 0a 08
+0020 b3 88 01 10 04 18 01 20 00 12 17 3a 15 08 fd b7
+0030 d8 d1 fc 8e ab 82 06 10 f4 cd 80 80 c0 80 fa f2
+0040 98 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 4
+          field: 1
+          index: 0
+        }
+        value {
+          message_value: "\010\375\267\330\321\374\216\253\202\006\020\364\315\200\200\300\200\372\362\230\001"
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x009b
+> this is client's 0x0059-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x3d] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x003d (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x009c
+> this is client's 0x005a-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x2d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2b aa 06 28 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 12 0a 10 0a 0a 08
+0020 b3 88 01 10 04 18 02 20 00 12 02 18 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 4
+          field: 2
+          index: 0
+        }
+        value {
+          int_value: 1
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x009d
+> this is client's 0x005b-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x3f] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x003f (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x009e
+> this is client's 0x005c-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x63]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 4d 1a 4b 0a 19 44 33 2e 50 61 72
+0020 74 79 2e 47 61 6d 65 43 72 65 61 74 65 50 61 72
+0030 61 6d 73 12 2e 3a 2c 08 02 10 80 02 1a 16 08 00
+0040 10 00 1d 94 56 01 00 20 ff ff ff ff ff ff ff ff
+0050 ff 01 30 00 2a 0b 4e 45 57 4d 4f 4e 4b 23 33 34
+0060 39 30 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  attribute {
+    name: "D3.Party.GameCreateParams"
+    value {
+      message_value: "\010\002\020\200\002\032\026\010\000\020\000\035\224V\001\000 \377\377\377\377\377\377\377\377\377\0010\000*\013NEWMONK#3490\001"
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x009f
+> this is client's 0x005d-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x3e] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x003e (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00a0
+> this is client's 0x005e-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x2d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2b aa 06 28 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 12 0a 10 0a 0a 08
+0020 b3 88 01 10 04 18 03 20 00 12 02 2a 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 4
+          field: 3
+          index: 0
+        }
+        value {
+          string_value: ""
+        }
+      }
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00a1
+> this is server's 0x0043-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x40] [unknown=0x10619] [size=0x23]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 21 1a 1f 0a 15 44 33 2e 50 61 72 74 79 2e 53
+0010 63 72 65 65 6e 53 74 61 74 75 73 12 06 3a 04 08
+0020 03 10 00
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.ScreenStatus"
+    value {
+      message_value: "\010\003\020\000"
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00a2
+> this is client's 0x005f-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x40] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0040 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00a3
+> this is client's 0x0060-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x37]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 21 1a 1f 0a 15 44 33 2e 50 61 72
+0020 74 79 2e 53 63 72 65 65 6e 53 74 61 74 75 73 12
+0030 06 3a 04 08 03 10 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  attribute {
+    name: "D3.Party.ScreenStatus"
+    value {
+      message_value: "\010\003\020\000"
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00a4
+> this is server's 0x0044-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x41] [unknown=0x10619] [size=0x2f]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2d 1a 2b 0a 25 44 33 2e 50 61 72 74 79 2e 4a
+0010 6f 69 6e 50 65 72 6d 69 73 73 69 6f 6e 50 72 65
+0020 76 69 6f 75 73 54 6f 4c 6f 63 6b 12 02 18 01
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.JoinPermissionPreviousToLock"
+    value {
+      int_value: 1
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00a5
+> this is client's 0x0061-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x41] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0041 (service id: 0xfe)
+>>> NoData
+
+
+
+*** server received packet ***
+> this is total packet 0x00a6
+> this is server's 0x0045-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x42] [unknown=0x10619] [size=0x4]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 02 38 04
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  privacy_level: PRIVACY_LEVEL_CLOSED
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00a7
+> this is server's 0x0046-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x43] [unknown=0x10619] [size=0x1e]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 1c 1a 1a 0a 14 44 33 2e 50 61 72 74 79 2e 4c
+0010 6f 63 6b 52 65 61 73 6f 6e 73 12 02 18 01
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.LockReasons"
+    value {
+      int_value: 1
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00a8
+> this is server's 0x0047-th received packet
+> packet header: [service=0xb] [method=0x3] [request=0x44] [unknown=0x0] [size=0xdf]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 14 12 12 09 33 44 00 00 62 01 00 03 11 4a 3e
+0010 ea 5b b8 85 8e 20 11 73 62 8c 0d 60 ec be c5 1a
+0020 60 0a 5a 08 02 12 12 0a 07 76 65 72 73 69 6f 6e
+0030 12 07 2a 05 30 2e 33 2e 30 12 42 0a 10 47 61 6d
+0040 65 43 72 65 61 74 65 50 61 72 61 6d 73 12 2e 3a
+0050 2c 08 02 10 80 02 1a 16 08 00 10 00 1d 94 56 01
+0060 00 20 ff ff ff ff ff ff ff ff ff 01 30 00 2a 0b
+0070 4e 45 57 4d 4f 4e 4b 23 33 34 39 30 01 10 01 18
+0080 00 20 01 2a 5a 12 58 1a 12 0a 07 76 65 72 73 69
+0090 6f 6e 12 07 2a 05 30 2e 33 2e 30 1a 42 0a 10 47
+00a0 61 6d 65 43 72 65 61 74 65 50 61 72 61 6d 73 12
+00b0 2e 3a 2c 08 02 10 80 02 1a 16 08 00 10 00 1d 94
+00c0 56 01 00 20 ff ff ff ff ff ff ff ff ff 01 30 00
+00d0 2a 0b 4e 45 57 4d 4f 4e 4b 23 33 34 39 30 01
+> packet received on service id 0x0b with hash 0x810cb195
+handler 0x810cb195 called, method: 0x3 (service id: 0x0b)
+>>> FindGameRequest
+player {
+  toon_id {
+    high: 216174302532224051
+    low: 2345959482769161802
+  }
+}
+factory_id: 14249086168335147635
+properties {
+  filter {
+    op: MATCH_ALL
+    attribute {
+      name: "version"
+      value {
+        string_value: "0.3.0"
+      }
+    }
+    attribute {
+      name: "GameCreateParams"
+      value {
+        message_value: "\010\002\020\200\002\032\026\010\000\020\000\035\224V\001\000 \377\377\377\377\377\377\377\377\377\0010\000*\013NEWMONK#3490\001"
+      }
+    }
+  }
+  create: true
+  open: false
+}
+object_id: 1
+channel_request {
+  state {
+    attribute {
+      name: "version"
+      value {
+        string_value: "0.3.0"
+      }
+    }
+    attribute {
+      name: "GameCreateParams"
+      value {
+        message_value: "\010\002\020\200\002\032\026\010\000\020\000\035\224V\001\000 \377\377\377\377\377\377\377\377\377\0010\000*\013NEWMONK#3490\001"
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00a9
+> this is client's 0x0062-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x43]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 2d 1a 2b 0a 25 44 33 2e 50 61 72
+0020 74 79 2e 4a 6f 69 6e 50 65 72 6d 69 73 73 69 6f
+0030 6e 50 72 65 76 69 6f 75 73 54 6f 4c 6f 63 6b 12
+0040 02 18 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  attribute {
+    name: "D3.Party.JoinPermissionPreviousToLock"
+    value {
+      int_value: 1
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00aa
+> this is client's 0x0063-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x42] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0042 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00ab
+> this is client's 0x0064-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x18]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 02 38 04
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  privacy_level: PRIVACY_LEVEL_CLOSED
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00ac
+> this is client's 0x0065-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x43] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0043 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00ad
+> this is client's 0x0066-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x32]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 1c 1a 1a 0a 14 44 33 2e 50 61 72
+0020 74 79 2e 4c 6f 63 6b 52 65 61 73 6f 6e 73 12 02
+0030 18 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  attribute {
+    name: "D3.Party.LockReasons"
+    value {
+      int_value: 1
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00ae
+> this is client's 0x0067-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x44] [size=0xb]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 08 84 b5 99 ce ef d7 d7 eb ad 01
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0044 (service id: 0xfe)
+>>> FindGameResponse
+request_id: 12526585062881647236
+
+
+
+*** client received packet ***
+> this is total packet 0x00af
+> this is client's 0x0068-th received packet
+> packet header: [service=0x1] [method=0x1] [request=0x0] [unknown=0x1] [size=0x7b]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 08 84 b5 99 ce ef d7 d7 eb ad 01 1a 1d 09 73 62
+0010 8c 0d 60 ec be c5 12 12 09 68 b0 0a cb 77 ac 04
+0020 06 11 f8 26 00 00 04 e8 e5 98 22 4f 0a 12 09 33
+0030 44 00 00 62 01 00 03 11 4a 3e ea 5b b8 85 8e 20
+0040 12 0e 31 32 2e 31 32 39 2e 32 33 37 2e 31 39 37
+0050 18 df 08 22 13 37 33 34 30 32 36 30 39 31 39 33
+0060 37 36 34 36 32 38 38 34 2a 11 0a 07 53 47 61 6d
+0070 65 49 64 12 06 18 a2 80 c0 c0 07
+> packet received on service id 0x01 with hash 0xc6f9ccc5
+handler 0xc6f9ccc5 called, method: 0x1 (service id: 0x01)
+>>> GameFoundNotification
+request_id: 12526585062881647236
+game_handle {
+  factory_id: 14249086168335147635
+  game_id {
+    high: 433661094641971304
+    low: 11017467167309309688
+  }
+}
+connect_info {
+  toon_id {
+    high: 216174302532224051
+    low: 2345959482769161802
+  }
+  host: "12.129.237.197"
+  port: 1119
+  token: "7340260919376462884"
+  attribute {
+    name: "SGameId"
+    value {
+      int_value: 2014314530
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00b0
+> this is server's 0x0048-th received packet
+> packet header: [service=0x8] [method=0x3] [request=0x45] [unknown=0x0] [size=0x16]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 12 09 68 b0 0a cb 77 ac 04 06 11 f8 26 00 00
+0010 04 e8 e5 98 18 0f
+> packet received on service id 0x08 with hash 0x060ca08d
+handler 0x060ca08d called, method: 0x3 (service id: 0x08)
+>>> JoinChannelRequest
+channel_id {
+  high: 433661094641971304
+  low: 11017467167309309688
+}
+object_id: 15
+
+
+
+*** client received packet ***
+> this is total packet 0x00b1
+> this is client's 0x0069-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x45] [size=0x4]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 08 b2 8c 04
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0045 (service id: 0xfe)
+>>> JoinChannelResponse
+object_id: 67122
+
+
+
+*** server received packet ***
+> this is total packet 0x00b2
+> this is server's 0x0049-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x46] [unknown=0x10619] [size=0x39]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 37 1a 35 0a 0f 44 33 2e 50 61 72 74 79 2e 47
+0010 61 6d 65 49 64 12 22 3a 20 08 f3 c4 b1 ec 80 8c
+0020 bb df c5 01 10 e8 e0 aa d8 fc 8e ab 82 06 18 f8
+0030 cd 80 80 c0 80 fa f2 98 01
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.GameId"
+    value {
+      message_value: "\010\363\304\261\354\200\214\273\337\305\001\020\350\340\252\330\374\216\253\202\006\030\370\315\200\200\300\200\372\362\230\001"
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00b3
+> this is client's 0x006a-th received packet
+> packet header: [service=0xa] [method=0x1] [request=0x0] [unknown=0xf] [size=0xda]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 48 0a 3c 0a 12 09 00 00 00 00 00 00 00 01 11
+0010 f9 5b 00 00 00 00 00 00 12 12 09 33 44 00 00 62
+0020 00 00 02 11 21 5c 4f 00 00 00 00 00 1a 12 09 33
+0030 44 00 00 62 01 00 03 11 4a 3e ea 5b b8 85 8e 20
+0040 12 08 10 65 10 01 18 8a 97 0c 12 20 0a 14 1a 12
+0050 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b b8 85
+0060 8e 20 12 08 10 65 10 01 18 8a 97 0c 1a 6c 08 08
+0070 10 00 1a 12 0a 07 76 65 72 73 69 6f 6e 12 07 2a
+0080 05 30 2e 33 2e 30 1a 42 0a 10 47 61 6d 65 43 72
+0090 65 61 74 65 50 61 72 61 6d 73 12 2e 3a 2c 08 02
+00a0 10 80 02 1a 16 08 00 10 00 1d 94 56 01 00 20 ff
+00b0 ff ff ff ff ff ff ff ff 01 30 00 2a 0b 4e 45 57
+00c0 4d 4f 4e 4b 23 33 34 39 30 01 28 0a 38 01 c2 06
+00d0 09 11 73 62 8c 0d 60 ec be c5
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x1 (service id: 0x0a)
+>>> AddNotification
+self {
+  identity {
+    account_id {
+      high: 72057594037927936
+      low: 23545
+    }
+    game_account_id {
+      high: 144115608982668339
+      low: 5200929
+    }
+    toon_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+  }
+  state {
+    role: 101
+    role: 1
+    privileges: 199562
+  }
+}
+member {
+  identity {
+    toon_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+  }
+  state {
+    role: 101
+    role: 1
+    privileges: 199562
+  }
+}
+channel_state {
+  max_members: 8
+  min_members: 0
+  attribute {
+    name: "version"
+    value {
+      string_value: "0.3.0"
+    }
+  }
+  attribute {
+    name: "GameCreateParams"
+    value {
+      message_value: "\010\002\020\200\002\032\026\010\000\020\000\035\224V\001\000 \377\377\377\377\377\377\377\377\377\0010\000*\013NEWMONK#3490\001"
+    }
+  }
+  max_invitations: 10
+  privacy_level: PRIVACY_LEVEL_OPEN
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00b4
+> this is server's 0x004a-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x47] [unknown=0x10619] [size=0x21]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 1f 1a 1d 0a 19 44 33 2e 50 61 72 74 79 2e 47
+0010 61 6d 65 43 72 65 61 74 65 50 61 72 61 6d 73 12
+0020 00
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.GameCreateParams"
+    value {
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00b5
+> this is server's 0x004b-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x48] [unknown=0x10619] [size=0x1d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 1b 1a 19 0a 15 44 33 2e 50 61 72 74 79 2e 53
+0010 63 72 65 65 6e 53 74 61 74 75 73 12 00
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.ScreenStatus"
+    value {
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00b6
+> this is server's 0x004c-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x49] [unknown=0x10619] [size=0x4]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 02 38 03
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  privacy_level: PRIVACY_LEVEL_OPEN_INVITATION
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00b7
+> this is server's 0x004d-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x4a] [unknown=0x10619] [size=0x2d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2b 1a 29 0a 25 44 33 2e 50 61 72 74 79 2e 4a
+0010 6f 69 6e 50 65 72 6d 69 73 73 69 6f 6e 50 72 65
+0020 76 69 6f 75 73 54 6f 4c 6f 63 6b 12 00
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.JoinPermissionPreviousToLock"
+    value {
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00b8
+> this is server's 0x004e-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x4b] [unknown=0x10619] [size=0x1e]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 1c 1a 1a 0a 14 44 33 2e 50 61 72 74 79 2e 4c
+0010 6f 63 6b 52 65 61 73 6f 6e 73 12 02 18 00
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.LockReasons"
+    value {
+      int_value: 0
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00b9
+> this is client's 0x006b-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x46] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0046 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00ba
+> this is client's 0x006c-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x4d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 37 1a 35 0a 0f 44 33 2e 50 61 72
+0020 74 79 2e 47 61 6d 65 49 64 12 22 3a 20 08 f3 c4
+0030 b1 ec 80 8c bb df c5 01 10 e8 e0 aa d8 fc 8e ab
+0040 82 06 18 f8 cd 80 80 c0 80 fa f2 98 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  attribute {
+    name: "D3.Party.GameId"
+    value {
+      message_value: "\010\363\304\261\354\200\214\273\337\305\001\020\350\340\252\330\374\216\253\202\006\030\370\315\200\200\300\200\372\362\230\001"
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00bb
+> this is client's 0x006d-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x47] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0047 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00bc
+> this is client's 0x006e-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x35]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 1f 1a 1d 0a 19 44 33 2e 50 61 72
+0020 74 79 2e 47 61 6d 65 43 72 65 61 74 65 50 61 72
+0030 61 6d 73 12 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  attribute {
+    name: "D3.Party.GameCreateParams"
+    value {
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00bd
+> this is client's 0x006f-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x48] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0048 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00be
+> this is client's 0x0070-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x31]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 1b 1a 19 0a 15 44 33 2e 50 61 72
+0020 74 79 2e 53 63 72 65 65 6e 53 74 61 74 75 73 12
+0030 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  attribute {
+    name: "D3.Party.ScreenStatus"
+    value {
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00bf
+> this is client's 0x0071-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x49] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0049 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00c0
+> this is client's 0x0072-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x18]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 02 38 03
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  privacy_level: PRIVACY_LEVEL_OPEN_INVITATION
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00c1
+> this is client's 0x0073-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x4a] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x004a (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00c2
+> this is client's 0x0074-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x41]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 2b 1a 29 0a 25 44 33 2e 50 61 72
+0020 74 79 2e 4a 6f 69 6e 50 65 72 6d 69 73 73 69 6f
+0030 6e 50 72 65 76 69 6f 75 73 54 6f 4c 6f 63 6b 12
+0040 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  attribute {
+    name: "D3.Party.JoinPermissionPreviousToLock"
+    value {
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00c3
+> this is client's 0x0075-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x4b] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x004b (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00c4
+> this is client's 0x0076-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x32]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 1c 1a 1a 0a 14 44 33 2e 50 61 72
+0020 74 79 2e 4c 6f 63 6b 52 65 61 73 6f 6e 73 12 02
+0030 18 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  attribute {
+    name: "D3.Party.LockReasons"
+    value {
+      int_value: 0
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00c5
+> this is server's 0x004f-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x4c] [unknown=0x0] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 12 0a 10 0a 0a 08 b3 88 01 10 04
+0020 18 02 20 00 12 02 18 01
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 2
+      index: 0
+    }
+    value {
+      int_value: 1
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00c6
+> this is client's 0x0077-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x4c] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x004c (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00c7
+> this is client's 0x0078-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x2d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2b aa 06 28 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 12 0a 10 0a 0a 08
+0020 b3 88 01 10 05 18 01 20 00 12 02 18 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 5
+          field: 1
+          index: 0
+        }
+        value {
+          int_value: 0
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00c8
+> this is client's 0x0079-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x2d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2b aa 06 28 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 12 0a 10 0a 0a 08
+0020 b3 88 01 10 05 18 02 20 00 12 02 18 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 5
+          field: 2
+          index: 0
+        }
+        value {
+          int_value: 0
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00c9
+> this is client's 0x007a-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x2d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2b aa 06 28 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 12 0a 10 0a 0a 08
+0020 b3 88 01 10 05 18 03 20 00 12 02 18 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 5
+          field: 3
+          index: 0
+        }
+        value {
+          int_value: 1
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00ca
+> this is client's 0x007b-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x35]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 33 aa 06 30 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 1a 0a 18 0a 0a 08
+0020 b3 88 01 10 05 18 04 20 00 12 0a 18 d0 fa d0 9a
+0030 a5 e4 99 8f 05
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 5
+          field: 4
+          index: 0
+        }
+        value {
+          int_value: 368845616615538000
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00cb
+> this is client's 0x007c-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x50]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 4e aa 06 4b 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 35 0a 33 0a 0a 08
+0020 b3 88 01 10 03 18 03 20 00 12 25 3a 23 0a 02 20
+0030 00 0a 02 20 00 0a 02 20 00 0a 02 20 00 0a 05 0d
+0040 27 18 b5 49 0a 02 20 00 0a 02 20 00 0a 02 20 00
+0050
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 3
+          field: 3
+          index: 0
+        }
+        value {
+          message_value: "\n\002 \000\n\002 \000\n\002 \000\n\002 \000\n\005\r\'\030\265I\n\002 \000\n\002 \000\n\002 \000"
+        }
+      }
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00cc
+> this is server's 0x0050-th received packet
+> packet header: [service=0x4] [method=0x5] [request=0x4d] [unknown=0x10619] [size=0x57]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 55 0a 14 1a 12 09 33 44 00 00 62 01 00 03 11
+0010 4a 3e ea 5b b8 85 8e 20 12 3d 0a 3b 0a 15 44 33
+0020 2e 50 61 72 74 79 4d 65 6d 62 65 72 2e 47 61 6d
+0030 65 49 64 12 22 3a 20 08 f3 c4 b1 ec 80 8c bb df
+0040 c5 01 10 e8 e0 aa d8 fc 8e ab 82 06 18 f8 cd 80
+0050 80 c0 80 fa f2 98 01
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x5 (service id: 0x04)
+>>> UpdateMemberStateRequest
+state_change {
+  identity {
+    toon_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+  }
+  state {
+    attribute {
+      name: "D3.PartyMember.GameId"
+      value {
+        message_value: "\010\363\304\261\354\200\214\273\337\305\001\020\350\340\252\330\374\216\253\202\006\030\370\315\200\200\300\200\372\362\230\001"
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00cd
+> this is client's 0x007d-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x4d] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x004d (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00ce
+> this is client's 0x007e-th received packet
+> packet header: [service=0xa] [method=0x7] [request=0x0] [unknown=0xd] [size=0x6b]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 55 0a 14 1a 12 09 33 44 00 00 62
+0020 01 00 03 11 4a 3e ea 5b b8 85 8e 20 12 3d 0a 3b
+0030 0a 15 44 33 2e 50 61 72 74 79 4d 65 6d 62 65 72
+0040 2e 47 61 6d 65 49 64 12 22 3a 20 08 f3 c4 b1 ec
+0050 80 8c bb df c5 01 10 e8 e0 aa d8 fc 8e ab 82 06
+0060 18 f8 cd 80 80 c0 80 fa f2 98 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x7 (service id: 0x0a)
+>>> UpdateMemberStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  identity {
+    toon_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+  }
+  state {
+    attribute {
+      name: "D3.PartyMember.GameId"
+      value {
+        message_value: "\010\363\304\261\354\200\214\273\337\305\001\020\350\340\252\330\374\216\253\202\006\030\370\315\200\200\300\200\372\362\230\001"
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00cf
+> this is client's 0x007f-th received packet
+> packet header: [service=0x0] [method=0x3] [request=0x2] [unknown=0x0] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x3 (service id: 0x00)
+>>> EchoRequest
+
+
+
+*** server received packet ***
+> this is total packet 0x00d0
+> this is server's 0x0051-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x2] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0002 (service id: 0xfe)
+>>> EchoResponse
+
+
+
+*** client received packet ***
+> this is total packet 0x00d1
+> this is client's 0x0080-th received packet
+> packet header: [service=0x0] [method=0x3] [request=0x3] [unknown=0x0] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0x00 with hash 0x00000000
+handler 0x00000000 called, method: 0x3 (service id: 0x00)
+>>> EchoRequest
+
+
+
+*** server received packet ***
+> this is total packet 0x00d2
+> this is server's 0x0052-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x3] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0003 (service id: 0xfe)
+>>> EchoResponse
+
+
+
+*** server received packet ***
+> this is total packet 0x00d3
+> this is server's 0x0053-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x4e] [unknown=0x10619] [size=0x2f]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2d 1a 2b 0a 25 44 33 2e 50 61 72 74 79 2e 4a
+0010 6f 69 6e 50 65 72 6d 69 73 73 69 6f 6e 50 72 65
+0020 76 69 6f 75 73 54 6f 4c 6f 63 6b 12 02 18 01
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.JoinPermissionPreviousToLock"
+    value {
+      int_value: 1
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00d4
+> this is server's 0x0054-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x4f] [unknown=0x10619] [size=0x4]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 02 38 04
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  privacy_level: PRIVACY_LEVEL_CLOSED
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00d5
+> this is server's 0x0055-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x50] [unknown=0x10619] [size=0x1e]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 1c 1a 1a 0a 14 44 33 2e 50 61 72 74 79 2e 4c
+0010 6f 63 6b 52 65 61 73 6f 6e 73 12 02 18 08
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.LockReasons"
+    value {
+      int_value: 8
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00d6
+> this is client's 0x0081-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x4e] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x004e (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00d7
+> this is client's 0x0082-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x43]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 2d 1a 2b 0a 25 44 33 2e 50 61 72
+0020 74 79 2e 4a 6f 69 6e 50 65 72 6d 69 73 73 69 6f
+0030 6e 50 72 65 76 69 6f 75 73 54 6f 4c 6f 63 6b 12
+0040 02 18 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  attribute {
+    name: "D3.Party.JoinPermissionPreviousToLock"
+    value {
+      int_value: 1
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00d8
+> this is client's 0x0083-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x4f] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x004f (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00d9
+> this is client's 0x0084-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x18]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 02 38 04
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  privacy_level: PRIVACY_LEVEL_CLOSED
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00da
+> this is client's 0x0085-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x50] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0050 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00db
+> this is client's 0x0086-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x32]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 1c 1a 1a 0a 14 44 33 2e 50 61 72
+0020 74 79 2e 4c 6f 63 6b 52 65 61 73 6f 6e 73 12 02
+0030 18 08
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  attribute {
+    name: "D3.Party.LockReasons"
+    value {
+      int_value: 8
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00dc
+> this is server's 0x0056-th received packet
+> packet header: [service=0x4] [method=0x4] [request=0x51] [unknown=0x10619] [size=0x1d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 1b 1a 19 0a 15 44 33 2e 50 61 72 74 79 2e 53
+0010 63 72 65 65 6e 53 74 61 74 75 73 12 00
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x4 (service id: 0x04)
+>>> UpdateChannelStateRequest
+state_change {
+  attribute {
+    name: "D3.Party.ScreenStatus"
+    value {
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00dd
+> this is client's 0x0087-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x51] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0051 (service id: 0xfe)
+>>> NoData
+
+
+
+*** server received packet ***
+> this is total packet 0x00de
+> this is server's 0x0057-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x52] [unknown=0x0] [size=0x26]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 10 0a 0e 0a 0a 08 b3 88 01 10 04
+0020 18 01 20 00 12 00
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 1
+      index: 0
+    }
+    value {
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00df
+> this is server's 0x0058-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x53] [unknown=0x0] [size=0x28]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 12 0a 10 0a 0a 08 b3 88 01 10 04
+0020 18 02 20 00 12 02 18 00
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 2
+      index: 0
+    }
+    value {
+      int_value: 0
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00e0
+> this is server's 0x0059-th received packet
+> packet header: [service=0x3] [method=0x3] [request=0x54] [unknown=0x0] [size=0x26]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 10 0a 0e 0a 0a 08 b3 88 01 10 04
+0020 18 03 20 00 12 00
+> packet received on service id 0x03 with hash 0xfa0796ff
+handler 0xfa0796ff called, method: 0x3 (service id: 0x03)
+>>> UpdateRequest_Presence
+entity_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 3
+      index: 0
+    }
+    value {
+    }
+  }
+}
+
+
+
+*** server received packet ***
+> this is total packet 0x00e1
+> this is server's 0x005a-th received packet
+> packet header: [service=0x4] [method=0x2] [request=0x55] [unknown=0x10619] [size=0x14]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20
+> packet received on service id 0x04 with hash 0xb732db32
+handler 0xb732db32 called, method: 0x2 (service id: 0x04)
+>>> RemoveMemberRequest
+member_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00e2
+> this is client's 0x0088-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xd] [size=0x31]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 1b 1a 19 0a 15 44 33 2e 50 61 72
+0020 74 79 2e 53 63 72 65 65 6e 53 74 61 74 75 73 12
+0030 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+state_change {
+  attribute {
+    name: "D3.Party.ScreenStatus"
+    value {
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00e3
+> this is client's 0x0089-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x52] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0052 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00e4
+> this is client's 0x008a-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x2b]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 29 aa 06 26 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 10 0a 0e 0a 0a 08
+0020 b3 88 01 10 04 18 01 20 00 12 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 4
+          field: 1
+          index: 0
+        }
+        value {
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00e5
+> this is client's 0x008b-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x55] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0055 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00e6
+> this is client's 0x008c-th received packet
+> packet header: [service=0xa] [method=0x3] [request=0x0] [unknown=0xd] [size=0x2a]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 0a 12 09 33 44 00 00 62 01 00 03 11 4a 3e ea 5b
+0010 b8 85 8e 20 12 12 09 33 44 00 00 62 01 00 03 11
+0020 4a 3e ea 5b b8 85 8e 20 18 01
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x3 (service id: 0x0a)
+>>> RemoveNotification
+agent_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+member_id {
+  high: 216174302532224051
+  low: 2345959482769161802
+}
+reason: 1
+
+
+
+*** client received packet ***
+> this is total packet 0x00e7
+> this is client's 0x008d-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x53] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0053 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00e8
+> this is client's 0x008e-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x2d]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 2b aa 06 28 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 12 0a 10 0a 0a 08
+0020 b3 88 01 10 04 18 02 20 00 12 02 18 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 4
+          field: 2
+          index: 0
+        }
+        value {
+          int_value: 0
+        }
+      }
+    }
+  }
+}
+
+
+
+*** client received packet ***
+> this is total packet 0x00e9
+> this is client's 0x008f-th received packet
+> packet header: Answer [service=0xfe] [method=0x0] [request=0x54] [size=0x0]
+> packet payload/protobuffer:
+no payload!
+> packet received on service id 0xfe with hash 0xfffffffe
+handler 0xfffffffe called, method: 0x0, request:0x0054 (service id: 0xfe)
+>>> NoData
+
+
+
+*** client received packet ***
+> this is total packet 0x00ea
+> this is client's 0x0090-th received packet
+> packet header: [service=0xa] [method=0x6] [request=0x0] [unknown=0xc] [size=0x2b]
+> packet payload/protobuffer:
+     00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+     -----------------------------------------------
+0000 12 29 aa 06 26 0a 12 09 33 44 00 00 62 01 00 03
+0010 11 4a 3e ea 5b b8 85 8e 20 12 10 0a 0e 0a 0a 08
+0020 b3 88 01 10 04 18 03 20 00 12 00
+> packet received on service id 0x0a with hash 0xbf8c8094
+handler 0xbf8c8094 called, method: 0x6 (service id: 0x0a)
+>>> UpdateChannelStateNotification
+state_change {
+  [bnet.protocol.presence.ChannelState.presence] {
+    entity_id {
+      high: 216174302532224051
+      low: 2345959482769161802
+    }
+    field_operation {
+      field {
+        key {
+          program: 17459
+          group: 4
+          field: 3
+          index: 0
+        }
+        value {
+        }
+      }
+    }
+  }
+}
+
+>>>

@@ -1,0 +1,300 @@
+fe 00 02 00 03 08 fb 01
+
+[in] Event: bnet.protocol.authentication.LogonRequest, Bytes: 92
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+program: "D3"
+platform: "Win"
+locale: "enUS"
+email: "test@test.com"
+listener_id: 523
+version: "Aurora 396b8632a7_public/188 (Aug 31 2011 20:25:07)"
+[!!] Byte Dump (Inc. Header) ->
+fb 01 03 00 00 56 0a 02 44 33 12 03 57 69 6e 1a 04 65 6e 55 53 22 0d 74
+65 73 74 40 74 65 73 74 2e 63 6f 6d 28 8b 04 32 33 41 75 72 6f 72 61 20
+33 39 36 62 38 36 33 32 61 37 5f 70 75 62 6c 69 63 2f 31 38 38 20 28 41
+75 67 20 33 31 20 32 30 31 31 20 32 30 3a 32 35 3a 30 37 29
+
+fb 01 00 00 02 f2 02 0a 2c 0d 53 55 00 00 15 68 74 75 61 1a 20 8f 52 90
+6a 2c 85 b4 16 a5 95 70 22 51 57 0f 96 d3 52 2f 39 23 76 03 11 5f 2f 1a
+b2 49 62 04 3c 12 c1 02 00 89 eb d9 43 b0 56 42 52 e8 a3 a0 d2 26 51 bd
+36 09 68 7c 00 7e 66 24 e4 a1 4f 59 38 67 ac df 97 b3 75 b6 31 e1 63 28
+f3 b3 d7 f8 f9 b7 c7 15 de 82 10 88 24 25 e7 f9 ae ae 32 fc 17 d9 d4 b0
+2d 67 1e c7 a9 a4 23 ad 32 41 49 f8 98 77 26 24 07 3d db f4 05 05 a0 3a
+fb ed ed 01 79 ba 14 d8 3f 2b 22 cd 0f 25 36 c1 e3 90 ea 51 cf cb ba 50
+1a 40 5e a6 e4 fc 0a 36 1e da c4 5d ec 11 12 9d ea 6e 38 20 5c ed de 79
+50 8e 85 d5 06 7e 0b fd 0e 37 e0 05 b0 f5 0e c9 de 02 07 c7 68 8b c1 11
+56 1d b4 1b c8 cd 74 24 11 fc 49 21 84 2d d4 0d 96 2f 26 b5 dc 5f 14 4b
+12 18 25 c4 a3 5c 22 5d 45 f6 6e f7 01 2a 76 4b ed 60 e6 0d db 43 73 d6
+3d 05 d8 2c 64 7c c6 93 b2 43 0f 3b e0 c1 06 e1 73 1c 81 97 bc 90 2d 00
+73 d3 35 ce 7a cd 1c c5 b6 0c f2 3c 22 c3 08 fc 09 fa b7 cc 85 de 19 ab
+a9 cc 2c 69 69 0c 6e a9 a9 fb c3 c3 7e fd 1f 44 f0 ea 08 68 46 0f cd 33
+01 78 7d ee 5b cb 8b 67 96 6d 3c 61 95 05 6b 3e c4 de 37 3b 81 d2 f1 64
+70 ad 5c 4f dd 3a a5 c7 9f 1b 84 6b b6 ce 33 a9 2e
+[in] Event: bnet.protocol.authentication.LogonRequest, Bytes: 92
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+program: "D3"
+platform: "Win"
+locale: "enUS"
+email: "test@test.com"
+listener_id: 523
+version: "Aurora 396b8632a7_public/188 (Aug 31 2011 20:25:07)"
+[!!] Byte Dump (Inc. Header) ->
+fb 01 03 00 00 56 0a 02 44 33 12 03 57 69 6e 1a 04 65 6e 55 53 22 0d 74
+65 73 74 40 74 65 73 74 2e 63 6f 6d 28 8b 04 32 33 41 75 72 6f 72 61 20
+33 39 36 62 38 36 33 32 61 37 5f 70 75 62 6c 69 63 2f 31 38 38 20 28 41
+75 67 20 33 31 20 32 30 31 31 20 32 30 3a 32 35 3a 30 37 29
+
+[out] Event: bnet.protocol.authentication.LogonResponse, Bytes: 45, Result: True
+
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+account {
+  high: 5
+  low: 4
+}
+game_account {
+  high: 7
+  low: 6
+}
+[!!] Byte Dump (Inc. Header) ->
+fe 00 03 00 28 0a 12 09 05 00 00 00 00 00 00 00 11 04 00 00 00 00 00 00
+00 12 12 09 07 00 00 00 00 00 00 00 11 06 00 00 00 00 00 00 00
+
+!!!!!UNKNOWN SERVICE HASH!!!!!
+Message (6 bytes): fe c4 17 0 0 0
+
+[in] Event: bnet.protocol.connection.BindRequest, Bytes: 22
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+imported_service_hash: 213793859
+imported_service_hash: 1953719668
+exported_service {
+  hash: 3788189352
+  id: 252
+}
+[!!] Byte Dump (Inc. Header) ->
+00 02 04 00 00 10 0a 04 43 3c be 0c 12 08 0d a8 2e cb e1 10 fc 01
+
+[out] Event: bnet.protocol.connection.BindResponse, Bytes: 8, Result: True
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+imported_service_id: 252
+[!!] Byte Dump (Inc. Header) ->
+fe 00 04 00 03 08 fc 01
+
+[in] Event: bnet.protocol.connection.BindRequest, Bytes: 22
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+imported_service_hash: 2198078984
+exported_service {
+  hash: 4035247136
+  id: 253
+}
+[!!] Byte Dump (Inc. Header) ->
+00 02 05 00 00 10 0a 04 08 06 04 83 12 08 0d 20 fc 84 f0 10 fd 01
+
+[out] Event: bnet.protocol.connection.BindResponse, Bytes: 8, Result: True
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+imported_service_id: 253
+[!!] Byte Dump (Inc. Header) ->
+fe 00 05 00 03 08 fd 01
+
+[in] Event: bnet.protocol.connection.BindRequest, Bytes: 12
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+imported_service_hash: 1092928283
+[!!] Byte Dump (Inc. Header) ->
+00 02 06 00 00 06 0a 04 1b c3 24 41
+
+[out] Event: bnet.protocol.connection.BindResponse, Bytes: 5, Result: True
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+[!!] Byte Dump (Inc. Header) ->
+fe 00 06 00 00
+
+[in] Event: bnet.protocol.connection.BindRequest, Bytes: 22
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+imported_service_hash: 3852538009
+exported_service {
+  hash: 2422005663
+  id: 222
+}
+[!!] Byte Dump (Inc. Header) ->
+00 02 07 00 00 10 0a 04 99 10 a1 e5 12 08 0d 9f df 5c 90 10 de 01
+
+[out] Event: bnet.protocol.connection.BindResponse, Bytes: 8, Result: True
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+imported_service_id: 222
+[!!] Byte Dump (Inc. Header) ->
+fe 00 07 00 03 08 de 01
+
+[in] Event: bnet.protocol.connection.BindRequest, Bytes: 22
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+imported_service_hash: 1041835658
+exported_service {
+  hash: 3162975266
+  id: 223
+}
+[!!] Byte Dump (Inc. Header) ->
+00 02 08 00 00 10 0a 04 8a 26 19 3e 12 08 0d 22 2c 87 bc 10 df 01
+
+[out] Event: bnet.protocol.connection.BindResponse, Bytes: 8, Result: True
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+imported_service_id: 223
+[!!] Byte Dump (Inc. Header) ->
+fe 00 08 00 03 08 df 01
+
+[in] Event: bnet.protocol.connection.BindRequest, Bytes: 22
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+imported_service_hash: 2749215165
+exported_service {
+  hash: 1864735251
+  id: 224
+}
+[!!] Byte Dump (Inc. Header) ->
+00 02 09 00 00 10 0a 04 bd b1 dd a3 12 08 0d 13 9a 25 6f 10 e0 01
+
+[out] Event: bnet.protocol.connection.BindResponse, Bytes: 8, Result: True
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+imported_service_id: 224
+[!!] Byte Dump (Inc. Header) ->
+fe 00 09 00 03 08 e0 01
+
+[in] Event: bnet.protocol.connection.BindRequest, Bytes: 22
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+imported_service_hash: 4108843573
+exported_service {
+  hash: 3213656212
+  id: 250
+}
+[!!] Byte Dump (Inc. Header) ->
+00 02 0a 00 00 10 0a 04 35 fa e7 f4 12 08 0d 94 80 8c bf 10 fa 01
+
+[out] Event: bnet.protocol.connection.BindResponse, Bytes: 8, Result: True
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+imported_service_id: 250
+[!!] Byte Dump (Inc. Header) ->
+fe 00 0a 00 03 08 fa 01
+
+[in] Event: bnet.protocol.connection.BindRequest, Bytes: 22
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+imported_service_hash: 14195881
+exported_service {
+  hash: 3213656212
+  id: 250
+}
+[!!] Byte Dump (Inc. Header) ->
+00 02 0b 00 00 10 0a 04 a9 9c d8 00 12 08 0d 94 80 8c bf 10 fa 01
+
+[out] Event: bnet.protocol.connection.BindResponse, Bytes: 8, Result: True
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+imported_service_id: 250
+[!!] Byte Dump (Inc. Header) ->
+fe 00 0b 00 03 08 fa 01
+
+[in] Event: bnet.protocol.connection.BindRequest, Bytes: 29
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+imported_service_hash: 2165092757
+imported_service_hash: 1069623117
+imported_service_hash: 101490829
+exported_service {
+  hash: 3338259653
+  id: 1
+}
+[!!] Byte Dump (Inc. Header) ->
+00 02 0c 00 00 17 0a 0c 95 b1 0c 81 4d 27 c1 3f 8d a0 0c 06 12 07 0d c5
+cc f9 c6 10 01
+
+[out] Event: bnet.protocol.connection.BindResponse, Bytes: 7, Result: True
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+imported_service_id: 1
+[!!] Byte Dump (Inc. Header) ->
+fe 00 0c 00 02 08 01
+
+[in] Event: bnet.protocol.connection.BindRequest, Bytes: 12
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+imported_service_hash: 3664661433
+[!!] Byte Dump (Inc. Header) ->
+00 02 0d 00 00 06 0a 04 b9 4b 6e da
+
+[out] Event: bnet.protocol.connection.BindResponse, Bytes: 5, Result: True
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+[!!] Byte Dump (Inc. Header) ->
+fe 00 0d 00 00
+
+[in] Event: bnet.protocol.connection.BindRequest, Bytes: 22
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+imported_service_hash: 3612349579
+exported_service {
+  hash: 376431777
+  id: 227
+}
+[!!] Byte Dump (Inc. Header) ->
+00 02 0e 00 00 10 0a 04 8b 14 50 d7 12 08 0d a1 e4 6f 16 10 e3 01
+
+[out] Event: bnet.protocol.connection.BindResponse, Bytes: 8, Result: True
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+imported_service_id: 227
+[!!] Byte Dump (Inc. Header) ->
+fe 00 0e 00 03 08 e3 01
+
+[in] Event: bnet.protocol.connection.BindRequest, Bytes: 12
+[!!] ProcessID - ProcLabel: 15313, ProcEpoch: 1316031631
+[!!] Message Debug ->
+imported_service_hash: 170173073
+exported_service {
+}
+[!!] Byte Dump (Inc. Header) ->
+00 02 0f 00 00 06 0a 04 91 a2 24 0a
+
+[out] Event: bnet.protocol.connection.BindResponse, Bytes: 7, Result: True
+[!!] ProcessID - ProcLabel: 6000, ProcEpoch: 1316031621
+[!!] Message Debug ->
+imported_service_id: 0
+[!!] Byte Dump (Inc. Header) ->
+fe 00 0f 00 02 08 00
+
+!!!!!UNKNOWN SERVICE HASH!!!!!
+Message (9 bytes): fd 1 10 0 0 3 10 8c 4
+
+module_id: 524
+!!!!!UNKNOWN SERVICE HASH!!!!!
+Message (9 bytes): de 1 11 0 0 3 10 8d 4
+
+module_id: 525
+!!!!!UNKNOWN SERVICE HASH!!!!!
+Message (9 bytes): df 1 12 0 0 3 8 8e 4
+
+1: 526
+!!!!!UNKNOWN SERVICE HASH!!!!!
+Message (9 bytes): e0 1 13 0 0 3 10 8f 4
+
+module_id: 527
+!!!!!UNKNOWN SERVICE HASH!!!!!
+Message (14 bytes): 1 2 14 0 0 8 a 2 8 1 10 0 18 a
+
+module_id: 0
+1 {
+  1: 1
+}
+3: 10
+

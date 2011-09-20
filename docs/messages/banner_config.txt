@@ -1,0 +1,31 @@
+Banner messages
+---------------
+
+message_value: "\n\022\b\003\020\000\030\000 \000(\0000\0008\000@\000H\000\020\000\030\001" // default
+message_value: "\n\022\b\  b\020\000\030\000 \000(\0000\0008\000@\000H\000\020\000\030\001" // only shape change
+message_value: "\n\022\b\003\020\000\030\000 \000(\0000\0008\000@\003H\000\020\000\030\001" // only pattern change
+message_value: "\n\022\b\003\020\001\030\000 \000(\0000\0008\000@\000H\000\020\000\030\001" // only sigil change
+message_value: "\n\022\b\003\020\000\030\001 \000(\0000\0008\000@\000H\000\020\000\030\001" // only sigil accent
+message_value: "\n\022\b\003\020\000\030\000 \000(\0000\0008\001@\000H\000\020\000\030\001" // position
+message_value: "\n\022\b\003\020\000\030\000 \000(\0010\0008\000@\000H\000\020\000\030\001" // banner dye
+message_value: "\n\022\b\003\020\000\030\000 \001(\0000\0008\000@\000H\000\020\000\030\001" // pattern dye
+message_value: "\n\022\b\003\020\000\030\000 \000(\0000\0018\000@\000H\000\020\000\030\001" // sigil dye
+
+Type is D3.GameMessage.SaveBannerConfiguration
+
+First:
+
+banner {
+  banner_index: 3
+  sigil_main: 0
+  sigil_accent: 0
+  pattern_color_index: 0
+  background_color_index: 0
+  sigil_color_index: 0
+  placement_index: 0
+  pattern: 0
+  use_sigil_variant: false
+}
+slot_index: 0
+make_active: true
+
