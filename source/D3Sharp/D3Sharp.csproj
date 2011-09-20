@@ -81,6 +81,7 @@
     <Compile Include="Core\Config\ConfigManager.cs" />
     <Compile Include="Core\Games\Game.cs" />
     <Compile Include="Core\Games\GameManager.cs" />
+    <Compile Include="Core\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\Services\AuthenticationService.cs" />
     <Compile Include="Core\Services\BaseService.cs" />
     <Compile Include="Core\Services\ChannelInvitationService.cs" />

@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
+using D3Sharp.Core.Helpers;
 using D3Sharp.Core.Storage;
 using D3Sharp.Core.Toons;
 using D3Sharp.Utils;
@@ -75,8 +76,8 @@ namespace D3Sharp.Core.Accounts
         {
             this.Email = email;
             this.ID = id;
-            this.BnetAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh(0x100000000000000).SetLow(this.ID).Build();
-            this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh(0x200006200004433).SetLow(this.ID).Build();            
+            this.BnetAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.ID).Build();
+            this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(this.ID).Build();            
         }
 
         public Account(string email)

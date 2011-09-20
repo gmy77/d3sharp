@@ -16,8 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
+using D3Sharp.Core.Helpers;
 
 namespace D3Sharp.Core.Services
 {
@@ -29,12 +31,10 @@ namespace D3Sharp.Core.Services
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.SubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("Subscribe()");
-            //Logger.Debug("request:\n{0}", request.ToString());
+            Logger.Trace("Subscribe()" + request.EntityId.GetHighIdType());
+                                    
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
-
-            // need to return a proper notificationadd - check addnotify.txt in logs.
         }
 
         public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UnsubscribeRequest request, System.Action<bnet.protocol.NoData> done)

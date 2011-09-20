@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using D3Sharp.Core.Helpers;
 using Google.ProtocolBuffers;
 
 namespace D3Sharp.Core.Toons
@@ -46,12 +47,12 @@ namespace D3Sharp.Core.Toons
 
         public D3.OnlineService.EntityId ToD3EntityID()
         {
-            return D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(216174302532224051).SetIdLow(this.ID).Build();
+            return D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId).SetIdLow(this.ID).Build();
         }
 
         public bnet.protocol.EntityId ToBnetEntityID()
         {
-            return bnet.protocol.EntityId.CreateBuilder().SetHigh(216174302532224051).SetLow(this.ID).Build();
+            return bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ToonId).SetLow(this.ID).Build();
         }
     }
 }
