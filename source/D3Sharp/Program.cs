@@ -19,8 +19,8 @@
 using System;
 using System.Reflection;
 using System.Threading;
-using D3Sharp.Net.BnetServer;
-using D3Sharp.Net.GameServer;
+using D3Sharp.Net.BNet;
+using D3Sharp.Net.Game;
 using D3Sharp.Utils;
 
 namespace D3Sharp

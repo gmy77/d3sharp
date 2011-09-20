@@ -16,12 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using D3Sharp.Net.BNet;
-
-namespace D3Sharp.Core.Services
+namespace D3Sharp.Net.Game
 {
-    public interface IServerService
+    public sealed class GameClient : IGameClient
     {
-        IBNetClient Client { get; set; }
+        public IConnection Connection { get; set; }
+
+        public GameClient(IConnection connection)
+        {
+            this.Connection = connection;
+        }
     }
 }

@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using D3Sharp.Net;
+using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 
 namespace D3Sharp.Core.Services
@@ -25,7 +25,7 @@ namespace D3Sharp.Core.Services
     public class ChatService : bnet.protocol.chat.ChatService, IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public IClient Client { get; set; }
+        public IBNetClient Client { get; set; }
 
         public override void CreateChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.CreateChannelRequest request, System.Action<bnet.protocol.channel.CreateChannelResponse> done)
         {

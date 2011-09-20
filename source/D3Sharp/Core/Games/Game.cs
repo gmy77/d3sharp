@@ -17,6 +17,7 @@
  */
 
 using D3Sharp.Net;
+using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using Google.ProtocolBuffers;
 
@@ -53,11 +54,11 @@ namespace D3Sharp.Core.Games
             this.GameHandle = bnet.protocol.game_master.GameHandle.CreateBuilder().SetFactoryId(this.FactoryID).SetGameId(this.BnetEntityId).Build();
         }
 
-        public void ListenForGame(Client client)
+        public void ListenForGame(BNetClient client)
         {
             var connectionInfo =
                 bnet.protocol.game_master.ConnectInfo.CreateBuilder().SetToonId(client.CurrentToon.BnetEntityID).SetHost
-                    ("127.0.0.1").SetPort(Net.GameServer.Config.Instance.Port).SetToken(ByteString.CopyFrom(new byte[] {0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84}))
+                    ("127.0.0.1").SetPort(Net.Game.Config.Instance.Port).SetToken(ByteString.CopyFrom(new byte[] {0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84}))
                     .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("SGameId").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2014314530).Build())).Build();
                  
             var builder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();

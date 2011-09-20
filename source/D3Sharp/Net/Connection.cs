@@ -20,111 +20,30 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using D3Sharp.Core.Accounts;
-using D3Sharp.Core.Toons;
-using D3Sharp.Core.Channels;
-using D3Sharp.Net.BnetServer.Packets;
+using D3Sharp.Net.BNet.Packets;
 using D3Sharp.Utils;
-using D3Sharp.Utils.Helpers;
-using Google.ProtocolBuffers;
-using Google.ProtocolBuffers.Descriptors;
 
 namespace D3Sharp.Net
 {
-    public sealed class Client : IClient//, IRpcChannel
+    public class Connection : IConnection//, IRpcChannel
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
 
         private readonly Server _server;
         private readonly Socket _socket;
         private readonly byte[] _recvBuffer = new byte[BufferSize];
-        public static readonly int BufferSize = 16 * 1024; // 16 KB
+        public static readonly int BufferSize = 16 * 1024; // 16 KB       
 
-        public Dictionary<uint, uint> Services { get; set; }
-        public Account Account { get; set; }
-        private int _requestCounter = 0;
-        
-        public Toon CurrentToon { get; set; }
-        public Channel CurrentChannel { get; set; }
+        public IClient Client { get; set; }
 
-        /// <summary>
-        /// Object id map as with remote object id as key, local object id as value.
-        /// </summary>
-        private Dictionary<ulong, ulong> MappedObjects { get; set; }
-
-        public Client(Server server, Socket socket)
+        public Connection(Server server, Socket socket)
         {
             if (server == null) throw new ArgumentNullException("server");
             if (socket == null) throw new ArgumentNullException("socket");
 
             this._server = server;
             this._socket = socket;
-            this.Services = new Dictionary<uint, uint>();
-            this.MappedObjects = new Dictionary<ulong, ulong>();
-        }
-
-        // rpc to client
-        public void CallMethod(MethodDescriptor method, IMessage request)
-        {
-            Logger.Debug("CallMethod with 0 localObjectId");
-            CallMethod(method, request, 0);
-        }
-
-        public void CallMethod(MethodDescriptor method, IMessage request, ulong localObjectId)
-        {
-            var serviceName = method.Service.FullName;
-            var serviceHash = StringHashHelper.HashString(serviceName);           
-
-            if (!this.Services.ContainsKey(serviceHash))
-            {
-                Logger.Error("Not bound to client service {0} [0x{1}] yet.", serviceName, serviceHash.ToString("X8"));
-                return;
-            }
-            
-            var serviceId = this.Services[serviceHash];
-            var remoteObjectId = GetRemoteObjectID(localObjectId);
-
-            Logger.Debug("Calling {0} localObjectId={1}, remoteObjectId={2}", method.FullName, localObjectId, remoteObjectId);
-            
-            var packet = new Packet(
-                new Header((byte) serviceId, (uint) (method.Index + 1), this._requestCounter++,(uint) request.SerializedSize, remoteObjectId),
-                request.ToByteArray());
-
-            this.Send(packet);
-        }
-
-        public bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon)
-        {
-            var identityBuilder = bnet.protocol.Identity.CreateBuilder();
-            if (acct) identityBuilder.SetAccountId(this.Account.BnetAccountID);
-            if (gameacct) identityBuilder.SetGameAccountId(this.Account.BnetGameAccountID);
-            if (toon && this.CurrentToon != null)
-                identityBuilder.SetToonId(this.CurrentToon.BnetEntityID);
-            return identityBuilder.Build();
-        }
-
-        public void MapLocalObjectID(ulong localObjectId, ulong remoteObjectId)
-        {
-            try
-            {
-                this.MappedObjects[localObjectId] = remoteObjectId;
-            }
-            catch (Exception e)
-            {
-                Logger.DebugException(e, "MapLocalObjectID()");
-            }
-        }
-
-        public ulong GetRemoteObjectID(ulong remoteObjectId)
-        {
-            // TODO: Check for conflicts
-            // TODO: Handle exceptions-- should be fatal?
-            //       Maybe we can not bother once ID tracker/generator is in
-            if (remoteObjectId == 0)
-                return 0; // null/unused/unset
-            else
-                return this.MappedObjects[remoteObjectId];
-        }
+        }       
 
         #region socket stuff
 
@@ -163,7 +82,7 @@ namespace D3Sharp.Net
             return _socket.EndReceive(result);
         }
 
-        public int Send(Packet packet)
+        public int Send(BNetPacket packet)
         {
             if (packet == null) throw new ArgumentNullException("packet");
             return Send(packet.GetRawPacketData());

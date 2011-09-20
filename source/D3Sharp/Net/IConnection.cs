@@ -16,27 +16,29 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using D3Sharp.Net.BNet.Packets;
 
 namespace D3Sharp.Net
-{    
-    public class ClientEventArgs : EventArgs
+{
+    public interface IConnection
     {
-        public IClient Client { get; private set; }
+        bool IsConnected { get; }
+        IPEndPoint RemoteEndPoint { get; }
+        IPEndPoint LocalEndPoint { get; }
+        IClient Client { get; set; }
+        
+        int Send(BNetPacket packet);
+        int Send(IEnumerable<byte> data);
+        int Send(IEnumerable<byte> data, SocketFlags flags);
+        int Send(byte[] buffer);
+        int Send(byte[] buffer, SocketFlags flags);
+        int Send(byte[] buffer, int start, int count);
+        int Send(byte[] buffer, int start, int count, SocketFlags flags);
 
-        public ClientEventArgs(IClient connection)
-        {
-            if (connection == null)
-                throw new ArgumentNullException("connection");
-            this.Client = connection;
-        }
-
-        public override string ToString()
-        {
-            return Client.RemoteEndPoint != null
-                ? Client.RemoteEndPoint.ToString()
-                : "Not Connected";
-        }
+        void Disconnect();
     }
 }
 

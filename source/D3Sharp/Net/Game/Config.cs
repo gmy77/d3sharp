@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 D3Sharp Project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,27 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-using System.Linq;
-
-namespace D3Sharp.Net
+namespace D3Sharp.Net.Game
 {
-    public sealed class ClientDataEventArgs : ClientEventArgs
-    {
-        public IEnumerable<byte> Data { get; private set; }
+    public sealed class Config: Core.Config.Config
+    {       
+        public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("Port", value); } }
+        public int Port { get { return this.GetInt("Port", 1345); } set { this.Set("Port", value); } }
 
-        public ClientDataEventArgs(IClient client, IEnumerable<byte> data)
-            : base(client)
-        {
-            this.Data = data ?? new byte[0];
-        }
-
-        public override string ToString()
-        {
-            return Client.RemoteEndPoint != null
-                ? string.Format("{0}: {1} bytes", Client.RemoteEndPoint, Data.Count())
-                : string.Format("Not Connected: {0} bytes", Data.Count());
-        }
+        private static readonly Config _instance = new Config();
+        public static Config Instance { get { return _instance; } }
+        private Config() : base("Game-Server") { }
     }
 }
-

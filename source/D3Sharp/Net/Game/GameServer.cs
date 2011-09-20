@@ -16,22 +16,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using D3Sharp.Net.BnetServer.Packets;
-
-namespace D3Sharp.Net.BnetServer
+namespace D3Sharp.Net.Game
 {
-    public sealed class BnetServer : Server
+    public sealed class GameServer:Server
     {
-        public BnetServer()
+        public GameServer()
         {
-            this.ClientConnected += (sender, e) => Logger.Trace("Client connected: {0}", e.Client.ToString());
-            this.ClientDisconnected += (sender, e) => Logger.Trace("Client disconnected: {0}", e.Client.ToString());
-            this.DataReceived += (sender, e) => PacketRouter.Route(e);
+            this.OnConnect += GameServer_OnConnect;
+            this.OnDisconnect += (sender, e) => Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
+            this.DataReceived += (sender, e) => Logger.Trace("recv()");
             this.DataSent += (sender, e) => { };
+        }
+
+        void GameServer_OnConnect(object sender, ConnectionEventArgs e)
+        {
+            Logger.Trace("Game-Client connected: {0}", e.Connection.ToString());
+            e.Connection.Client = new GameClient(e.Connection);
         }
 
         public override void Run()
@@ -41,7 +41,7 @@ namespace D3Sharp.Net.BnetServer
             //   "F:\Diablo III Beta\Diablo III.exe" -launch -auroraaddress 127.0.0.1:1345
 
             if (!this.Listen(Config.Instance.BindIP, Config.Instance.Port)) return;
-            Logger.Info("Bnet-Server is listening on {0}:{1}...", Config.Instance.BindIP, Config.Instance.Port);
+            Logger.Info("Game-Server is listening on {0}:{1}...", Config.Instance.BindIP, Config.Instance.Port);
         }
     }
 }

@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using D3Sharp.Net;
 using System;
+using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Extensions;
 using bnet.protocol.channel_invitation;
@@ -28,7 +28,7 @@ namespace D3Sharp.Core.Services
     public class ChannelInvitationService: bnet.protocol.channel_invitation.ChannelInvitationService, IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public IClient Client { get; set; }
+        public IBNetClient Client { get; set; }
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SubscribeRequest request, System.Action<bnet.protocol.channel_invitation.SubscribeResponse> done)
         {

@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using D3Sharp.Net;
+using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Extensions;
 using bnet.protocol;
@@ -31,7 +31,7 @@ namespace D3Sharp.Core.Services
     public class BaseService :  ConnectionService,  IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public IClient Client { get; set; }
+        public IBNetClient Client { get; set; }
 
         public override void Connect(Google.ProtocolBuffers.IRpcController controller, ConnectRequest request, Action<ConnectResponse> done)
         {

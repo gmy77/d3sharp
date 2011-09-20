@@ -20,14 +20,14 @@ using System.Collections.Generic;
 using System.Linq;
 using D3Sharp.Utils.Extensions;
 
-namespace D3Sharp.Net.BnetServer.Packets
+namespace D3Sharp.Net.BNet.Packets
 {
-    public class Packet
+    public class BNetPacket
     {
-        public Header Header { get; protected set; }
+        public BNetHeader Header { get; protected set; }
         public IEnumerable<byte> Payload { get; set; }
 
-        public Packet(Header header, byte[] payload)
+        public BNetPacket(BNetHeader header, byte[] payload)
         {
             this.Header = header;
             this.Payload = payload;

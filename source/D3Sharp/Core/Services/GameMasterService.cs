@@ -17,8 +17,8 @@
  */
 
 using System;
-using D3Sharp.Net;
 using D3Sharp.Core.Games;
+using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using Google.ProtocolBuffers;
 using bnet.protocol;
@@ -30,7 +30,7 @@ namespace D3Sharp.Core.Services
     public class GameMasterService : GameMaster, IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public IClient Client { get; set; }
+        public IBNetClient Client { get; set; }
 
         public override void JoinGame(IRpcController controller, JoinGameRequest request, Action<JoinGameResponse> done)
         {
@@ -76,7 +76,7 @@ namespace D3Sharp.Core.Services
             done(builder.Build());
 
             // TODO: should actually match the games that matches the filter.
-            game.ListenForGame((Client) this.Client);    
+            game.ListenForGame((BNetClient) this.Client);    
         }
 
         public override void CancelFindGame(IRpcController controller, CancelFindGameRequest request, Action<NoData> done)

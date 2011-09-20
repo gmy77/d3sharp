@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2011 D3Sharp Project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,12 +16,27 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using D3Sharp.Net.BNet;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace D3Sharp.Core.Services
+namespace D3Sharp.Net
 {
-    public interface IServerService
+    public sealed class ConnectionDataEventArgs : ConnectionEventArgs
     {
-        IBNetClient Client { get; set; }
+        public IEnumerable<byte> Data { get; private set; }
+
+        public ConnectionDataEventArgs(IConnection connection, IEnumerable<byte> data)
+            : base(connection)
+        {
+            this.Data = data ?? new byte[0];
+        }
+
+        public override string ToString()
+        {
+            return Connection.RemoteEndPoint != null
+                ? string.Format("{0}: {1} bytes", Connection.RemoteEndPoint, Data.Count())
+                : string.Format("Not Connected: {0} bytes", Data.Count());
+        }
     }
 }
+

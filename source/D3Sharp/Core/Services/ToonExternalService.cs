@@ -17,7 +17,7 @@
  */
 
 using System;
-using D3Sharp.Net;
+using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using bnet.protocol.toon.external;
 
@@ -27,7 +27,7 @@ namespace D3Sharp.Core.Services
     public class ToonExternalService : ToonServiceExternal, IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public IClient Client { get; set; }
+        public IBNetClient Client { get; set; }
 
         public override void ToonList(Google.ProtocolBuffers.IRpcController controller, ToonListRequest request, Action<ToonListResponse> done)
         {

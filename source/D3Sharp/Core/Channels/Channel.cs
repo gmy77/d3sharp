@@ -18,7 +18,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using D3Sharp.Net;
+using D3Sharp.Net.BNet;
 using Google.ProtocolBuffers;
 
 namespace D3Sharp.Core.Channels
@@ -45,7 +45,7 @@ namespace D3Sharp.Core.Channels
             this.State = builder.Build();
         }
 
-        public void NotifyChannelState(Client client)
+        public void NotifyChannelState(BNetClient client)
         {
             var field1 =
                 bnet.protocol.presence.Field.CreateBuilder().SetKey(
@@ -83,7 +83,7 @@ namespace D3Sharp.Core.Channels
             client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), builder.Build());
         }
 
-        public void Add(Client client)
+        public void Add(BNetClient client)
         {
             var identity = client.GetIdentity(false, false, true);
             var user = bnet.protocol.channel.Member.CreateBuilder()
@@ -107,7 +107,7 @@ namespace D3Sharp.Core.Channels
             client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.ID);
         }
 
-        public bool HasUser(Client client)
+        public bool HasUser(BNetClient client)
         {
             return this.Members.Any(m => m.Identity == client.GetIdentity(false, false, true));
         }
@@ -124,7 +124,7 @@ namespace D3Sharp.Core.Channels
             this.Members.Clear();
         }*/
         
-        public void RemoveUser(Client client)
+        public void RemoveUser(BNetClient client)
         {
             var identity = client.GetIdentity(false, false, true);
             var builder = bnet.protocol.channel.RemoveNotification.CreateBuilder()

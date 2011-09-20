@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2011 D3Sharp Project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,15 +16,27 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace D3Sharp.Net.BnetServer
-{
-    public sealed class Config: Core.Config.Config
-    {
-        public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("Port", value); } }
-        public int Port { get { return this.GetInt("Port", 1345); } set { this.Set("Port", value); } }
+using System;
 
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Bnet-Server") { }
+namespace D3Sharp.Net
+{    
+    public class ConnectionEventArgs : EventArgs
+    {
+        public IConnection Connection { get; private set; }
+
+        public ConnectionEventArgs(IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException("connection");
+            this.Connection = connection;
+        }
+
+        public override string ToString()
+        {
+            return Connection.RemoteEndPoint != null
+                ? Connection.RemoteEndPoint.ToString()
+                : "Not Connected";
+        }
     }
 }
+

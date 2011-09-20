@@ -18,7 +18,7 @@
 
 using System.IO;
 using System.Collections.Generic;
-using D3Sharp.Net;
+using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using Gibbed.Helpers;
 
@@ -28,7 +28,7 @@ namespace D3Sharp.Core.Services
     public class StorageService : bnet.protocol.storage.StorageService,IServerService
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        public IClient Client { get; set; }
+        public IBNetClient Client { get; set; }
 
         public override void OpenTable(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.storage.OpenTableRequest request, System.Action<bnet.protocol.storage.OpenTableResponse> done)
         {
@@ -71,7 +71,7 @@ namespace D3Sharp.Core.Services
             done(response);
         }
 
-        private bnet.protocol.storage.ExecuteResponse GetHeroDigest(IClient client, bnet.protocol.storage.ExecuteRequest request)
+        private bnet.protocol.storage.ExecuteResponse GetHeroDigest(IBNetClient client, bnet.protocol.storage.ExecuteRequest request)
         {
             var results = new List<bnet.protocol.storage.OperationResult>();
 
@@ -141,7 +141,7 @@ namespace D3Sharp.Core.Services
             return builder.Build();
         }
 
-        private bnet.protocol.storage.ExecuteResponse LoadAccountDigest(IClient client, bnet.protocol.storage.ExecuteRequest request)
+        private bnet.protocol.storage.ExecuteResponse LoadAccountDigest(IBNetClient client, bnet.protocol.storage.ExecuteRequest request)
         {
             var results = new List<bnet.protocol.storage.OperationResult>();          
 

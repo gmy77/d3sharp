@@ -19,9 +19,9 @@
 using System.IO;
 using Google.ProtocolBuffers;
 
-namespace D3Sharp.Net.BnetServer.Packets
+namespace D3Sharp.Net.BNet.Packets
 {
-    public class Header
+    public class BNetHeader
     {
         public byte[] Data { get; private set; }
 
@@ -31,18 +31,18 @@ namespace D3Sharp.Net.BnetServer.Packets
         public ulong ObjectID { get; set; }
         public uint PayloadLength { get; set; }
 
-        public Header()
+        public BNetHeader()
         {            
             this.ObjectID = 0x00;
             this.PayloadLength = 0x00;
         }
 
-        public Header(byte serviceId, uint methodId, int requestId, uint payloadLenght, ulong objectID)
+        public BNetHeader(byte serviceId, uint methodId, int requestId, uint payloadLenght, ulong objectID)
         {
             this.SetData(serviceId, methodId, requestId, payloadLenght, objectID);
         }
 
-        public Header(CodedInputStream stream)
+        public BNetHeader(CodedInputStream stream)
         {
             var serviceId = stream.ReadRawByte();
             var methodId = stream.ReadRawVarint32();

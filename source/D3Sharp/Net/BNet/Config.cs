@@ -16,12 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using D3Sharp.Net.BNet;
-
-namespace D3Sharp.Core.Services
+namespace D3Sharp.Net.BNet
 {
-    public interface IServerService
+    public sealed class Config: Core.Config.Config
     {
-        IBNetClient Client { get; set; }
+        public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("Port", value); } }
+        public int Port { get { return this.GetInt("Port", 1345); } set { this.Set("Port", value); } }
+
+        private static readonly Config _instance = new Config();
+        public static Config Instance { get { return _instance; } }
+        private Config() : base("Bnet-Server") { }
     }
 }
