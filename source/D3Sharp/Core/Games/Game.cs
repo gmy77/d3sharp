@@ -18,6 +18,7 @@
 
 using D3Sharp.Net;
 using D3Sharp.Net.BNet;
+using D3Sharp.Net.Game;
 using D3Sharp.Utils;
 using Google.ProtocolBuffers;
 
@@ -56,9 +57,10 @@ namespace D3Sharp.Core.Games
 
         public void ListenForGame(BNetClient client)
         {
+            // we should actually find server's public-interface and use that.
             var connectionInfo =
                 bnet.protocol.game_master.ConnectInfo.CreateBuilder().SetToonId(client.CurrentToon.BnetEntityID).SetHost
-                    ("127.0.0.1").SetPort(Net.Game.Config.Instance.Port).SetToken(ByteString.CopyFrom(new byte[] {0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84}))
+                    (Net.Game.Config.Instance.BindIP).SetPort(Net.Game.Config.Instance.Port).SetToken(ByteString.CopyFrom(new byte[] {0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84}))
                     .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("SGameId").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2014314530).Build())).Build();
                  
             var builder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();
@@ -66,7 +68,6 @@ namespace D3Sharp.Core.Games
             builder.SetRequestId(this.RequestID);
             builder.SetGameHandle(this.GameHandle);
 
-            Logger.Trace("Game spawned: {0}:{1}", connectionInfo.Host, connectionInfo.Port);
             client.CallMethod(bnet.protocol.game_master.GameFactorySubscriber.Descriptor.FindMethodByName("NotifyGameFound"), builder.Build(), this.ID);
         }
     }
