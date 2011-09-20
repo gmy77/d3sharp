@@ -72,19 +72,6 @@ namespace D3Sharp.Core.Toons
             if (toon.DeleteFromDB()) Toons.Remove(toon.ID);
         }
 
-        public static void DeleteToon(ulong id)
-        {
-            if (!Toons.ContainsKey(id))
-            {
-                Logger.Error("toon id not present: " + id);
-                return;
-            }
-
-            Toon toon = Toons[id];            
-            toon.Delete();
-            Toons.Remove(id);
-        }
-
         private static void LoadToons()
         {
             var query = "SELECT * from toons";

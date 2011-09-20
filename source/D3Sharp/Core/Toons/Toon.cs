@@ -282,22 +282,7 @@ namespace D3Sharp.Core.Toons
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
-        }
-
-        public void Delete()
-        {
-
-            if (ExistsInDB())
-            {
-                var query =
-                    string.Format(
-                        "Delete from toons where id={0}",
-                        this.ID);
-
-                var cmd = new SQLiteCommand(query, DBManager.Connection);
-                cmd.ExecuteNonQuery();
-            }
-        }
+        }       
     }
 
     public enum ToonClass
