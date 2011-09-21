@@ -67,10 +67,9 @@ namespace D3Sharp.Core.Services
         {
             Logger.Trace("Update() {0}: {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
 
-            // Here the client either asks for an 'update' on some toon related objects or toon itself.
-            // It maybe also setting a value on toon, like his away statys??! /raist
-            // Check presence.update.request on docs.
-            // We should implement it when we completely figure it out.
+            // This "UpdateRequest" is not, as it may seem, a request to update the client on the state of an object,
+            // but instead the *client* requesting to change fields on an object that it has subscribed to.
+            // Check docs/rpc/presence.txt in branch wip-docs (or master)
 
             switch (request.EntityId.GetHighIdType())
             {
