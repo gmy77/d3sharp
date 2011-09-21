@@ -23,13 +23,13 @@ namespace D3Sharp.Utils.Helpers
 {
     public class StringHashHelper
     {
-        public static uint HashString(string input)
+        public static uint HashString(string input) // used on: proto namespace and toon names
         {
             var bytes = Encoding.ASCII.GetBytes(input);
             return bytes.Aggregate(0x811C9DC5, (current, t) => 0x1000193 * (t ^ current));
         }
 
-        public static uint HashString2(string input)
+        public static uint HashString2(string input) // and please put in whats the hash used for?
         {
             uint hash = 0;
             input = input.ToLower();

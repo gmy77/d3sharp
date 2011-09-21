@@ -16,17 +16,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using D3Sharp.Core.Storage;
 
 namespace D3Sharp.Core.Accounts
 {
-    public static class AccountsManager
+    public static class AccountManager
     {
         private static readonly Dictionary<string, Account> Accounts = new Dictionary<string, Account>();
 
-        static AccountsManager()
+        static AccountManager()
         {
             LoadAccounts();
         }
@@ -61,6 +62,19 @@ namespace D3Sharp.Core.Accounts
                 var email = reader.GetString(1);
                 var account = new Account(databaseId, email);
                 Accounts.Add(email, account);
+            }
+        }
+
+        public static ulong GetNextAvailablePersistantId()
+        {
+            var cmd = new SQLiteCommand("SELECT max(id) from accounts", DBManager.Connection);           
+            try
+            {
+                return Convert.ToUInt64(cmd.ExecuteScalar());
+            }
+            catch (InvalidCastException e)
+            {
+                return 0;
             }
         }
     }

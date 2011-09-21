@@ -72,9 +72,13 @@ namespace D3Sharp.Core.Accounts
             this.SetFields(email);
         }
 
+        private static ulong? _persistantIdCounter = null;
         protected override ulong GenerateNewPersistentId()
         {
-            throw new NotImplementedException();
+            if (_persistantIdCounter == null)
+                _persistantIdCounter = AccountManager.GetNextAvailablePersistantId();
+
+            return (ulong)++_persistantIdCounter;
         }
 
         private void SetFields(string email)

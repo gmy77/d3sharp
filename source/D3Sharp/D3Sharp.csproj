@@ -74,7 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Accounts\Account.cs" />
-    <Compile Include="Core\Accounts\AccountsManager.cs" />
+    <Compile Include="Core\Accounts\AccountManager.cs" />
     <Compile Include="Core\Channels\Channel.cs" />
     <Compile Include="Core\Channels\ChannelsManager.cs" />
     <Compile Include="Core\Config\Config.cs" />

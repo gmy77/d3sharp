@@ -90,14 +90,9 @@ namespace D3Sharp.Core.Toons
         }
 
         public Toon(string name, int classId, ToonGender gender, byte level, long accountId) // toon with **newly generated** persistantId
-            : base()
+            : base(StringHashHelper.HashString(name))
         {
             this.SetFields(name, GetClassByID(classId), gender, level, accountId);
-        }
-
-        public override bool Equals(object obj)
-        {
-            throw new NotImplementedException();
         }
 
         private void SetFields(string name, ToonClass @class, ToonGender gender, byte level, long accountId)
