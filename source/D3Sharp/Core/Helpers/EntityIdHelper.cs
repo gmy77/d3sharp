@@ -35,7 +35,7 @@ namespace D3Sharp.Core.Helpers
                     return HighIdType.GameAccountId;
                 case 0x300000000000000:
                     return HighIdType.ToonId;
-                case 0x400000000000000:
+                case 0x600000000000000:
                     return HighIdType.ChannelId;
             }
             return HighIdType.Unknown;
@@ -50,7 +50,7 @@ namespace D3Sharp.Core.Helpers
             AccountId = 0x100000000000000,
             GameAccountId = 0x200000000000000,
             ToonId = 0x300000000000000,
-            ChannelId = 0x400000000000000
+            ChannelId = 0x600000000000000
         }
     }
 }

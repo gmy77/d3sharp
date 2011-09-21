@@ -45,44 +45,6 @@ namespace D3Sharp.Core.Channels
             this.State = builder.Build();
         }
 
-        public void NotifyChannelState(BNetClient client)
-        {
-            var field1 =
-                bnet.protocol.presence.Field.CreateBuilder().SetKey(
-                    bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram(16974).SetGroup(3).SetField(3).SetIndex(0)
-                        .Build()).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
-
-            var field2 =
-                bnet.protocol.presence.Field.CreateBuilder().SetKey(
-                    bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram(16974).SetGroup(3).SetField(10).SetIndex(0)
-                        .Build()).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1315530390868296).Build()).Build();
-
-            var field3 =
-                bnet.protocol.presence.Field.CreateBuilder().SetKey(
-                    bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram(16974).SetGroup(3).SetField(11).SetIndex(0)
-                        .Build()).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(
-                                ByteString.CopyFrom(new byte[]
-                                                        {
-                                                            0x9, 0x46, 0xee, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4,
-                                                            0x11, 0xdd, 0xb4, 0x63, 0xe7, 0x82, 0x44, 0x68, 0x4e
-                                                        })).Build()).Build();
-
-
-            var fieldOperation1 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build();
-            var fieldOperation2 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build();
-            var fieldOperation3 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field3).Build();
-
-            var state =
-                bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityID).AddFieldOperation(
-                    fieldOperation1).AddFieldOperation(fieldOperation2).AddFieldOperation(fieldOperation3).Build();
-
-
-            var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
-            var builder = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState);
-
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), builder.Build(), this.DynamicId);
-        }
-
         public void Add(BNetClient client)
         {
             var identity = client.GetIdentity(false, false, true);
@@ -93,18 +55,23 @@ namespace D3Sharp.Core.Channels
                     .SetPrivileges(0xFBFF) // 64511
                     .Build())
                 .Build();
-            this.Members.Add(user);
 
-            var builder = bnet.protocol.channel.AddNotification.CreateBuilder()
-                .SetChannelState(this.State)
-                .SetSelf(user);
-            
-            // Cap includes the user that was added
-            foreach (var m in this.Members)
-            {
-                builder.AddMember(m);
-            }
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.DynamicId);
+
+            this.Members.Add(user);
+            this.NotifyAllSubscribers();
+        }
+
+        public void RemoveUser(BNetClient client)
+        {
+            // send notification remove to client itself.
+            var identity = client.GetIdentity(false, false, true);
+            var builder = bnet.protocol.channel.RemoveNotification.CreateBuilder()
+                .SetMemberId(identity.ToonId);
+            this.Members.RemoveAll(m => identity == m.Identity);
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyRemove"), builder.Build(), this.DynamicId);
+
+            // notify all subscribers.
+            this.NotifyAllSubscribers();
         }
 
         public bool HasUser(BNetClient client)
@@ -124,14 +91,42 @@ namespace D3Sharp.Core.Channels
             this.Members.Clear();
         }*/
         
-        public void RemoveUser(BNetClient client)
-        {
-            var identity = client.GetIdentity(false, false, true);
-            var builder = bnet.protocol.channel.RemoveNotification.CreateBuilder()
-                .SetMemberId(identity.ToonId);
-            this.Members.RemoveAll(m => identity == m.Identity);
-            client.CurrentChannel = null;
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyRemove"), builder.Build(), this.DynamicId);
-        }
+        //public void NotifyChannelState(BNetClient client)
+        //{
+        //    var field1 =
+        //        bnet.protocol.presence.Field.CreateBuilder().SetKey(
+        //            bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram(16974).SetGroup(3).SetField(3).SetIndex(0)
+        //                .Build()).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
+
+        //    var field2 =
+        //        bnet.protocol.presence.Field.CreateBuilder().SetKey(
+        //            bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram(16974).SetGroup(3).SetField(10).SetIndex(0)
+        //                .Build()).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1315530390868296).Build()).Build();
+
+        //    var field3 =
+        //        bnet.protocol.presence.Field.CreateBuilder().SetKey(
+        //            bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram(16974).SetGroup(3).SetField(11).SetIndex(0)
+        //                .Build()).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(
+        //                        ByteString.CopyFrom(new byte[]
+        //                                                {
+        //                                                    0x9, 0x46, 0xee, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4,
+        //                                                    0x11, 0xdd, 0xb4, 0x63, 0xe7, 0x82, 0x44, 0x68, 0x4e
+        //                                                })).Build()).Build();
+
+
+        //    var fieldOperation1 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build();
+        //    var fieldOperation2 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build();
+        //    var fieldOperation3 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field3).Build();
+
+        //    var state =
+        //        bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityID).AddFieldOperation(
+        //            fieldOperation1).AddFieldOperation(fieldOperation2).AddFieldOperation(fieldOperation3).Build();
+
+
+        //    var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+        //    var builder = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState);
+
+        //    client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), builder.Build(), this.DynamicId);
+        //}
     }
 }

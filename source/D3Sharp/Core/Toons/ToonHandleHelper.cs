@@ -24,25 +24,33 @@ namespace D3Sharp.Core.Toons
     public class ToonHandleHelper
     {
         public ulong ID { get; private set; }
-        public uint Program { get; private set; }
-        public uint Region { get; private set; }
-        public uint Realm { get; private set; }
+
+        // Commented out all Program, Region, Realm stuff because **as of right now** we don't section Toon High's with that fields.
+        // All we have in hand is a default program, region, realm there. So after we get all stuff implemented, we should also
+        // sectionize HighId's so we'll have technical correctiness :) 
+
+        // And remember that we chain-this stuff in, checking for HighID = EntityHelper.ToonId will not just work.
+        // We should be masking out sections on comparision and just check the type identifier byte(s) at the beginning.
+
+        // public uint Program { get; private set; }
+        // public uint Region { get; private set; }
+        // public uint Realm { get; private set; }
 
         public ToonHandleHelper(ulong id)
         {
             this.ID = id;
-            this.Program = 0x00004433;
-            this.Region = 0x62;
-            this.Realm = 0x01;
+            // this.Program = 0x00004433;
+            // this.Region = 0x62;
+            // this.Realm = 0x01;
         }
 
         public ToonHandleHelper(D3.OnlineService.EntityId entityID)
         {
             var stream = CodedInputStream.CreateInstance(entityID.ToByteArray());
             this.ID = stream.ReadUInt64();
-            this.Program = stream.ReadUInt32();
-            this.Region = stream.ReadRawVarint32();
-            this.Realm = stream.ReadRawVarint32();
+            // this.Program = stream.ReadUInt32();
+            //this.Region = stream.ReadRawVarint32();
+            // this.Realm = stream.ReadRawVarint32();
         }
 
         public D3.OnlineService.EntityId ToD3EntityID()
