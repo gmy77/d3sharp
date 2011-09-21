@@ -25,7 +25,7 @@ using D3Sharp.Utils;
 
 namespace D3Sharp.Core.Toons
 {
-    // just a quick hack - not to be meant a final.
+    // Just a quick hack - not to be meant final
     public static class ToonManager
     {
         private static readonly Dictionary<ulong, Toon> Toons =
@@ -40,36 +40,36 @@ namespace D3Sharp.Core.Toons
 
         public static Toon GetToonByLowID(ulong id)
         {
-            return (from pair in Toons where pair.Value.Id == id select pair.Value).FirstOrDefault();
+            return (from pair in Toons where pair.Value.DatabaseId == id select pair.Value).FirstOrDefault();
         }
 
         public static Dictionary<ulong, Toon> GetToonsForAccount(Account account)
         {
-            return Toons.Where(pair => (ulong)pair.Value.AccountID == account.Id).ToDictionary(pair => pair.Key, pair => pair.Value);
+            return Toons.Where(pair => (ulong)pair.Value.AccountID == account.DatabaseId).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
         public static bool SaveToon(Toon toon)
         {
-            if(Toons.ContainsKey(toon.Id))
+            if(Toons.ContainsKey(toon.DatabaseId))
             {
-                Logger.Error("Duplicate toon id: " + toon.Id);
+                Logger.Error("Duplicate toon id: {0}", toon.DatabaseId);
                 return false;
             }
 
-            Toons.Add(toon.Id, toon);
+            Toons.Add(toon.DatabaseId, toon);
             toon.SaveToDB();
             return true;
         }
 
         public static void DeleteToon(Toon toon)
         {
-            if (!Toons.ContainsKey(toon.Id))
+            if (!Toons.ContainsKey(toon.DatabaseId))
             {
-                Logger.Error("Attempting to delete toon that does not exist: " + toon.Id);
+                Logger.Error("Attempting to delete toon that does not exist: {0}", toon.DatabaseId);
                 return;
             }
 
-            if (toon.DeleteFromDB()) Toons.Remove(toon.Id);
+            if (toon.DeleteFromDB()) Toons.Remove(toon.DatabaseId);
         }
 
         private static void LoadToons()
@@ -82,9 +82,9 @@ namespace D3Sharp.Core.Toons
 
             while(reader.Read())
             {
-                var id = (ulong) reader.GetInt64(0);
-                var toon = new Toon(id, reader.GetString(1), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5));
-                Toons.Add(id, toon);
+                var databaseId = (ulong) reader.GetInt64(0);
+                var toon = new Toon(databaseId, reader.GetString(1), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5));
+                Toons.Add(databaseId, toon);
             }
         }
 

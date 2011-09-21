@@ -28,7 +28,7 @@ namespace D3Sharp.Core.Games
         public static Game CreateGame(ulong factoryId)
         {
             var game = new Game(factoryId);
-            AvailableGames.Add(game.Id, game);
+            AvailableGames.Add(game.LocalObjectId, game);
             return game;
         }
     }

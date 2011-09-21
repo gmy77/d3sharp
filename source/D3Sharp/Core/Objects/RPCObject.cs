@@ -45,7 +45,7 @@ namespace D3Sharp.Core.Objects
         }
 
         public virtual void NotifySubscriber(BNetClient client) { }
-        public virtual void NotifyAllSubscriber() { }
+        public virtual void NotifyAllSubscribers() { }
 
         public void Release()
         {

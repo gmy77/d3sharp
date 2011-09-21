@@ -33,8 +33,12 @@ namespace D3Sharp.Core.Services
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SubscribeRequest request, System.Action<bnet.protocol.channel_invitation.SubscribeResponse> done)
         {
             Logger.Trace("Subscribe()");
-
-            //TODO: Set these to the corect values.
+            
+            // NOTE: SubscribeRequest gives us an object_id
+            // Client should be added as a subscriber to.. something
+            
+            /*
+            // TODO: Set these to the correct values.
             const ulong accountHandle = 0x0000000000000000;
             const ulong gameAccountHandle = 0x0000000000000000;
 
@@ -61,10 +65,11 @@ namespace D3Sharp.Core.Services
                 .SetObjectId(request.ObjectId)
                 .AddReceivedInvitation(invitation)
                 .Build();
+            */
 
             var builder = bnet.protocol.channel_invitation.SubscribeResponse.CreateBuilder()
-                .AddCollection(invite_collection)
-                .AddReceivedInvitation(invitation);
+                //.AddCollection(invite_collection)
+                /*.AddReceivedInvitation(invitation)*/;
 
             done(builder.Build());
         }

@@ -26,7 +26,6 @@ namespace D3Sharp.Core.Channels
 {
     public class Channel : RPCObject
     {
-        public ulong Id { get; private set; }
         public static ulong IdCounter = 0;
 
         public bnet.protocol.EntityId BnetEntityID { get; private set; }
@@ -36,15 +35,14 @@ namespace D3Sharp.Core.Channels
 
         public Channel()
         {
-            this.Id = ++IdCounter;
-            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(this.Id).SetLow(0).Build();
+            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(this.LocalObjectId).SetLow(0).Build();
 
             var builder = bnet.protocol.channel.ChannelState.CreateBuilder()
                 .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN)
                 .SetMaxMembers(8)
                 .SetMinMembers(1)
                 .SetMaxInvitations(12);
-                //.SetName("d3sharp test channel"); // Note: cap log doesn't set this optional field
+                //.SetName("d3sharp test channel"); // NOTE: cap log doesn't set this optional field
             this.State = builder.Build();
         }
 
@@ -83,7 +81,7 @@ namespace D3Sharp.Core.Channels
             var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
             var builder = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState);
 
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), builder.Build());
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), builder.Build(), this.LocalObjectId);
         }
 
         public void Add(BNetClient client)

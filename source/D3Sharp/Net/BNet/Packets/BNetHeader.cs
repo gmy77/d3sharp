@@ -37,9 +37,9 @@ namespace D3Sharp.Net.BNet.Packets
             this.PayloadLength = 0x00;
         }
 
-        public BNetHeader(byte serviceId, uint methodId, int requestId, uint payloadLenght, ulong objectID)
+        public BNetHeader(byte serviceId, uint methodId, int requestId, uint payloadLength, ulong objectID)
         {
-            this.SetData(serviceId, methodId, requestId, payloadLenght, objectID);
+            this.SetData(serviceId, methodId, requestId, payloadLength, objectID);
         }
 
         public BNetHeader(CodedInputStream stream)
@@ -55,13 +55,13 @@ namespace D3Sharp.Net.BNet.Packets
             this.SetData(serviceId, methodId, requestId, payloadLength, objectId);
         }
 
-        private void SetData(byte serviceId, uint methodId, int requestId, uint payloadLenght, ulong objectId)
+        private void SetData(byte serviceId, uint methodId, int requestId, uint payloadLength, ulong objectId)
         {
             this.ServiceID = serviceId;
             this.MethodID = methodId;
             this.RequestID = requestId;
             this.ObjectID = objectId;
-            this.PayloadLength = payloadLenght;
+            this.PayloadLength = payloadLength;
 
             this.Data = this.ServiceID != 0xfe ? new byte[6] : new byte[5];
 

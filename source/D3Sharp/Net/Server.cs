@@ -79,7 +79,7 @@ namespace D3Sharp.Net
                 Listener.Bind(new IPEndPoint(IPAddress.Parse(bindIP), port));
                 this.Port = port;
             }
-            catch(SocketException e)
+            catch (SocketException)
             {
                 Logger.Fatal(string.Format("{0} can't bind on {1}, server shutting down..", this.GetType().Name, bindIP));
                 this.Shutdown();

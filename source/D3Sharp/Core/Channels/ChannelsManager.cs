@@ -29,7 +29,7 @@ namespace D3Sharp.Core.Channels
         public static Channel CreateNewChannel()
         {
             var channel = new Channel();
-            Channels.Add(channel.Id, channel);
+            Channels.Add(channel.LocalObjectId, channel);
             return channel;
         }
         

@@ -57,9 +57,9 @@ namespace D3Sharp.Core.Accounts
 
             while (reader.Read())
             {
-                var id = (ulong)reader.GetInt64(0);
+                var databaseId = (ulong)reader.GetInt64(0);
                 var email = reader.GetString(1);
-                var account = new Account(id, email);
+                var account = new Account(databaseId, email);
                 Accounts.Add(email, account);
             }
         }

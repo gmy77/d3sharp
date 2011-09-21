@@ -34,9 +34,9 @@ namespace D3Sharp.Core.Accounts
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         /// <summary>
-        /// The actual id.
+        /// ID for object in the database.
         /// </summary>
-        public ulong Id { get; private set; }
+        public ulong DatabaseId { get; private set; }
 
         public bnet.protocol.EntityId BnetAccountID { get; private set; }
         public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
@@ -65,12 +65,12 @@ namespace D3Sharp.Core.Accounts
             get { return ToonManager.GetToonsForAccount(this); }
         }
 
-        public Account(ulong id, string email)
+        public Account(ulong databaseId, string email)
         {
             this.Email = email;
-            this.Id = id;
-            this.BnetAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.Id).Build();
-            this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(this.Id).Build();
+            this.DatabaseId = databaseId;
+            this.BnetAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.DatabaseId).Build();
+            this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(this.DatabaseId).Build();
             this.BannerConfiguration = D3.Account.BannerConfiguration.CreateBuilder()
                 .SetBackgroundColorIndex(20)
                 .SetBannerIndex(8)
@@ -91,34 +91,34 @@ namespace D3Sharp.Core.Accounts
 
         public override void NotifySubscriber(Net.BNet.BNetClient client)
         {
-            // check d3sharp / docs / rpc / notification-data-layout.txt  for fields keys.
+            // Check d3sharp/docs/rpc/notification-data-layout.txt for fields keys
 
-            // realid name field
+            // RealID name field
             var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet,1, 1, 0);
             var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("RealID Name here!").Build()).Build();
             var fieldOperation1 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build();
 
-            // hardcoded boolean - always true
+            // Hardcoded boolean - always true
             var fieldKey2 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
-            var field2 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
+            var field2 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey2).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
             var fieldOperation2 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build();
 
-            // cretea presence.ChannelState
+            // Create a presence.ChannelState
             var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetAccountID).AddFieldOperation(fieldOperation1).AddFieldOperation(fieldOperation2).Build();
 
-            // embed in  channel.ChannelState
+            // Embed in channel.ChannelState
             var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
 
-            // put in addnotification message
+            // Put in addnotification message
             var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
 
-            // make the rpc call.
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(),this.LocalObjectId);
+            // Make the rpc call
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.LocalObjectId);
         }
 
-        public override void NotifyAllSubscriber()
+        public override void NotifyAllSubscribers()
         {
-            foreach(var subscriber in this.Subscribers)
+            foreach (var subscriber in this.Subscribers)
             {
                 this.NotifySubscriber(subscriber);
             }
@@ -131,7 +131,7 @@ namespace D3Sharp.Core.Accounts
                 var query =
                     string.Format(
                         "INSERT INTO accounts (id, email) VALUES({0},'{1}')",
-                        this.Id, this.Email);
+                        this.DatabaseId, this.Email);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();

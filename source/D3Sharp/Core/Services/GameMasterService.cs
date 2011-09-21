@@ -42,7 +42,7 @@ namespace D3Sharp.Core.Services
             Logger.Trace("ListFactories()");
 
             var description = GameFactoryDescription.CreateBuilder().SetId(14249086168335147635);
-            var atributes = new bnet.protocol.attribute.Attribute[4]
+            var attributes = new bnet.protocol.attribute.Attribute[4]
                 {
                     bnet.protocol.attribute.Attribute.CreateBuilder().SetName("min_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2)).Build(),
                     bnet.protocol.attribute.Attribute.CreateBuilder().SetName("max_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(4)).Build(),
@@ -50,7 +50,7 @@ namespace D3Sharp.Core.Services
                     bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("0.3.0")).Build()
                 };
 
-            description.AddRangeAttribute(atributes);
+            description.AddRangeAttribute(attributes);
             description.AddStatsBucket(GameStatsBucket.CreateBuilder()
                .SetBucketMin(0)
                .SetBucketMax(4267296)
@@ -76,7 +76,7 @@ namespace D3Sharp.Core.Services
             done(builder.Build());
 
             // TODO: should actually match the games that matches the filter.
-            game.ListenForGame((BNetClient) this.Client);    
+            game.ListenForGame((BNetClient)this.Client);
         }
 
         public override void CancelFindGame(IRpcController controller, CancelFindGameRequest request, Action<NoData> done)

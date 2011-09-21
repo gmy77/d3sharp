@@ -34,22 +34,19 @@ namespace D3Sharp.Core.Games
         /// </summary>
         public bnet.protocol.EntityId BnetEntityId { get; private set; }
 
-        public bnet.protocol.game_master.GameHandle GameHandle {get; private set;}
+        public bnet.protocol.game_master.GameHandle GameHandle { get; private set; }
 
-        public ulong Id { get; private set; }
         public ulong RequestID { get; private set; }
         public ulong FactoryID { get; private set; }
 
-        public static ulong IdCounter = 0;
         public static ulong RequestIdCounter = 0;
 
         public Game(ulong factoryId)
         {
-            this.Id = ++IdCounter;
             this.RequestID = ++RequestIdCounter;
             this.FactoryID = factoryId;
 
-            this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh(433661094641971304).SetLow(this.Id).Build();
+            this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh(433661094641971304).SetLow(this.LocalObjectId).Build();
             this.GameHandle = bnet.protocol.game_master.GameHandle.CreateBuilder().SetFactoryId(this.FactoryID).SetGameId(this.BnetEntityId).Build();
         }
 
