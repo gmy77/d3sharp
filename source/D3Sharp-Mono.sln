@@ -53,7 +53,7 @@ Global
 		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = D3Proto\D3Proto.csproj
+		StartupItem = D3Sharp\D3Sharp-Mono.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

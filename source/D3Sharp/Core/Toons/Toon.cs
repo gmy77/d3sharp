@@ -53,7 +53,7 @@ namespace D3Sharp.Core.Toons
         public D3.Hero.Digest Digest { get; private set; }
         public D3.Hero.VisualEquipment Equipment { get; private set; }
 
-        //TODO: toons should be linked to accounts actually here /raist.
+        //TODO: Toons should be linked to accounts here. /raist
 
         public int ClassID
         {
@@ -83,14 +83,14 @@ namespace D3Sharp.Core.Toons
             }
         }
 
-        public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // toon with given persistantId
+        public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
             :base(persistantId)
         {
             this.SetFields(name, (ToonClass)@class, (ToonGender)gender, level, accountId);
         }
 
-        public Toon(string name, int classId, ToonGender gender, byte level, long accountId) // toon with **newly generated** persistantId
-            : base(StringHashHelper.HashString(name))
+        public Toon(string name, int classId, ToonGender gender, byte level, long accountId) // Toon with **newly generated** persistent ID
+            : base(StringHashHelper.HashIdentity(name))
         {
             this.SetFields(name, GetClassByID(classId), gender, level, accountId);
         }
@@ -114,7 +114,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Head
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid( (int)StringHashHelper.HashString2("Helm_002") )
+                                    .SetGbid( (int)StringHashHelper.HashItemName("Helm_002") )
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -146,7 +146,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Weapon (1)
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid( (int)StringHashHelper.HashString2("Unique_Mace_1H_012") )
+                                    .SetGbid( (int)StringHashHelper.HashItemName("Unique_Mace_1H_012") )
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -223,7 +223,7 @@ namespace D3Sharp.Core.Toons
 
         protected override void NotifySubscriber(Net.BNet.BNetClient client)
         {
-            // check d3sharp/docs/rpc/notification-data-layout.txt for fields keys.
+            // Check d3sharp/docs/rpc/notification-data-layout.txt for fields keys
 
             // Banner configuration
             var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 2, 1, 0);

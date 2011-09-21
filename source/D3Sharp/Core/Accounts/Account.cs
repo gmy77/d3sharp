@@ -60,13 +60,13 @@ namespace D3Sharp.Core.Accounts
             get { return ToonManager.GetToonsForAccount(this); }
         }
 
-        public Account(ulong persistantId, string email) // account with given persistantId
+        public Account(ulong persistantId, string email) // Account with given persistent ID
             : base(persistantId)
         {
             this.SetFields(email);
         }
 
-        public Account(string email) // account with **newly generated** persistantId
+        public Account(string email) // Account with **newly generated** persistent ID
             : base()
         {
             this.SetFields(email);

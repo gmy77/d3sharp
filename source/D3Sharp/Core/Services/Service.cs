@@ -38,7 +38,7 @@ namespace D3Sharp.Core.Services
         }
 
         public ServiceAttribute(uint serviceID, string serviceName)
-            : this(serviceID, StringHashHelper.HashString(serviceName))
+            : this(serviceID, StringHashHelper.HashIdentity(serviceName))
         {
         }
     }
