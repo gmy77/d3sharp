@@ -63,8 +63,9 @@ namespace D3Sharp.Net
 
             try
             {
-                // This is failing on Linux; dunno why.
-                Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, true);
+                // Problem: When using SocketOptionLevel.Socket: This is failing on Linux; dunno why.
+                // Reason: SocketOptionName.NoDelay only works with SocketOptionLevel.Tcp
+                Listener.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
             }
             catch (SocketException e)
             {
