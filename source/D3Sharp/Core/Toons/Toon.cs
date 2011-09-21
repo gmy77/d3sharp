@@ -26,14 +26,9 @@ using D3Sharp.Utils.Helpers;
 
 namespace D3Sharp.Core.Toons
 {
-    public class Toon : RPCObject
+    public class Toon : PersistentRPCObject
     {        
         private static readonly Logger Logger = LogManager.CreateLogger();
-
-        /// <summary>
-        /// The actual id.
-        /// </summary>
-        public ulong DatabaseId { get; private set; }
 
         /// <summary>
         /// D3 EntityID encoded id.
@@ -88,10 +83,26 @@ namespace D3Sharp.Core.Toons
             }
         }
 
-        public Toon(ulong id, string name, ToonClass @class, ToonGender gender, byte level, long accountId)
+        public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // toon with given persistantId
+            :base(persistantId)
         {
-            this.DatabaseId = id;
-            this.ToonHandle = new ToonHandleHelper(id);
+            this.SetFields(name, (ToonClass)@class, (ToonGender)gender, level, accountId);
+        }
+
+        public Toon(string name, int classId, ToonGender gender, byte level, long accountId) // toon with **newly generated** persistantId
+            : base()
+        {
+            this.SetFields(name, GetClassByID(classId), gender, level, accountId);
+        }
+
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SetFields(string name, ToonClass @class, ToonGender gender, byte level, long accountId)
+        {
+            this.ToonHandle = new ToonHandleHelper(this.PersistentID);
             this.D3EntityID = this.ToonHandle.ToD3EntityID();
             this.BnetEntityID = this.ToonHandle.ToBnetEntityID();
             this.Name = name;
@@ -191,16 +202,6 @@ namespace D3Sharp.Core.Toons
                 .Build();
         }
 
-        public Toon(ulong id, string name, byte @class, byte gender, byte level, long accountId)
-            : this(id, name, (ToonClass)@class, (ToonGender)gender, level, accountId)
-        {
-        }
-
-        public Toon(string name, int classId, ToonGender gender, byte level, long accountId)
-            : this(StringHashHelper.HashString(name), name, GetClassByID(classId), gender , level, accountId)
-        {
-        }
-
         private static ToonClass GetClassByID(int classId)
         {
             switch (classId)
@@ -225,7 +226,7 @@ namespace D3Sharp.Core.Toons
             return genderId== 0x2000002 ? ToonGender.Female : ToonGender.Male;
         }
 
-        public override void NotifySubscriber(Net.BNet.BNetClient client)
+        protected override void NotifySubscriber(Net.BNet.BNetClient client)
         {
             // check d3sharp/docs/rpc/notification-data-layout.txt for fields keys.
 
@@ -287,15 +288,7 @@ namespace D3Sharp.Core.Toons
             var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
 
             // Make the rpc call
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(),this.LocalObjectId);
-        }
-
-        public override void NotifyAllSubscribers()
-        {
-            foreach (var subscriber in this.Subscribers)
-            {
-                this.NotifySubscriber(subscriber);
-            }
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(),this.DynamicId);
         }
 
         public void SaveToDB()
@@ -307,7 +300,7 @@ namespace D3Sharp.Core.Toons
                     var query =
                         string.Format(
                             "UPDATE toons SET name='{0}', class={1}, gender={2}, level={3}, accountId={4} WHERE id={5}",
-                            Name, (byte)this.Class, (byte)this.Gender, this.Level, this.AccountID, this.DatabaseId);
+                            Name, (byte)this.Class, (byte)this.Gender, this.Level, this.AccountID, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -317,7 +310,7 @@ namespace D3Sharp.Core.Toons
                     var query =
                         string.Format(
                             "INSERT INTO toons (id, name, class, gender, level, accountId) VALUES({0},'{1}',{2},{3},{4},{5})",
-                            this.DatabaseId, this.Name, (byte)this.Class, (byte)this.Gender, this.Level, this.AccountID);
+                            this.PersistentID, this.Name, (byte)this.Class, (byte)this.Gender, this.Level, this.AccountID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();                    
@@ -336,7 +329,7 @@ namespace D3Sharp.Core.Toons
                 // Remove from DB
                 if (!ExistsInDB()) return false;
 
-                var query = string.Format("DELETE FROM toons WHERE id={0}", this.DatabaseId);
+                var query = string.Format("DELETE FROM toons WHERE id={0}", this.PersistentID);
                 var cmd = new SQLiteCommand(query, DBManager.Connection);
                 cmd.ExecuteNonQuery();
                 return true;
@@ -353,7 +346,7 @@ namespace D3Sharp.Core.Toons
             var query =
                 string.Format(
                     "SELECT id from toons where id={0}",
-                    this.DatabaseId);
+                    this.PersistentID);
 
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();

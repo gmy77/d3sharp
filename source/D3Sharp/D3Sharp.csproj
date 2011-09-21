@@ -83,6 +83,7 @@
     <Compile Include="Core\Games\GameManager.cs" />
     <Compile Include="Core\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\Helpers\FieldKeyHelper.cs" />
+    <Compile Include="Core\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\Services\AuthenticationService.cs" />
     <Compile Include="Core\Services\BaseService.cs" />
     <Compile Include="Core\Services\ChannelInvitationService.cs" />
@@ -132,7 +133,7 @@
     <Compile Include="Utils\Helpers\StringHashHelper.cs" />
     <Compile Include="Utils\TinyLogger.cs" />
     <Compile Include="Utils\win32\NativeMethods.cs" />
-    <Compile Include="Core\Objects\ObjectManager.cs" />
+    <Compile Include="Core\Objects\RPCObjectManager.cs" />
     <Compile Include="Core\Objects\RPCObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

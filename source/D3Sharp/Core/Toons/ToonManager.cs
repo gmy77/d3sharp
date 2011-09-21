@@ -40,36 +40,36 @@ namespace D3Sharp.Core.Toons
 
         public static Toon GetToonByLowID(ulong id)
         {
-            return (from pair in Toons where pair.Value.DatabaseId == id select pair.Value).FirstOrDefault();
+            return (from pair in Toons where pair.Value.PersistentID == id select pair.Value).FirstOrDefault();
         }
 
         public static Dictionary<ulong, Toon> GetToonsForAccount(Account account)
         {
-            return Toons.Where(pair => (ulong)pair.Value.AccountID == account.DatabaseId).ToDictionary(pair => pair.Key, pair => pair.Value);
+            return Toons.Where(pair => (ulong)pair.Value.AccountID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
         public static bool SaveToon(Toon toon)
         {
-            if(Toons.ContainsKey(toon.DatabaseId))
+            if(Toons.ContainsKey(toon.PersistentID))
             {
-                Logger.Error("Duplicate toon id: {0}", toon.DatabaseId);
+                Logger.Error("Duplicate persistent toon id: {0}", toon.PersistentID);
                 return false;
             }
 
-            Toons.Add(toon.DatabaseId, toon);
+            Toons.Add(toon.PersistentID, toon);
             toon.SaveToDB();
             return true;
         }
 
         public static void DeleteToon(Toon toon)
         {
-            if (!Toons.ContainsKey(toon.DatabaseId))
+            if (!Toons.ContainsKey(toon.PersistentID))
             {
-                Logger.Error("Attempting to delete toon that does not exist: {0}", toon.DatabaseId);
+                Logger.Error("Attempting to delete toon that does not exist: {0}", toon.PersistentID);
                 return;
             }
 
-            if (toon.DeleteFromDB()) Toons.Remove(toon.DatabaseId);
+            if (toon.DeleteFromDB()) Toons.Remove(toon.PersistentID);
         }
 
         private static void LoadToons()

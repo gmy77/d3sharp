@@ -26,16 +26,14 @@ namespace D3Sharp.Core.Channels
 {
     public class Channel : RPCObject
     {
-        public static ulong IdCounter = 0;
-
         public bnet.protocol.EntityId BnetEntityID { get; private set; }
         public bnet.protocol.channel.ChannelState State { get; private set; }
 
-        public List<bnet.protocol.channel.Member> Members = new List<bnet.protocol.channel.Member>();
+        public readonly List<bnet.protocol.channel.Member> Members = new List<bnet.protocol.channel.Member>();
 
         public Channel()
         {
-            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(this.LocalObjectId).SetLow(0).Build();
+            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(this.DynamicId).SetLow(0).Build();
 
             var builder = bnet.protocol.channel.ChannelState.CreateBuilder()
                 .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN)
@@ -81,7 +79,7 @@ namespace D3Sharp.Core.Channels
             var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
             var builder = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState);
 
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), builder.Build(), this.LocalObjectId);
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), builder.Build(), this.DynamicId);
         }
 
         public void Add(BNetClient client)
@@ -105,7 +103,7 @@ namespace D3Sharp.Core.Channels
             {
                 builder.AddMember(m);
             }
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.LocalObjectId);
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.DynamicId);
         }
 
         public bool HasUser(BNetClient client)
@@ -132,7 +130,7 @@ namespace D3Sharp.Core.Channels
                 .SetMemberId(identity.ToonId);
             this.Members.RemoveAll(m => identity == m.Identity);
             client.CurrentChannel = null;
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyRemove"), builder.Build(), this.LocalObjectId);
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyRemove"), builder.Build(), this.DynamicId);
         }
     }
 }

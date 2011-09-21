@@ -46,7 +46,7 @@ namespace D3Sharp.Core.Games
             this.RequestID = ++RequestIdCounter;
             this.FactoryID = factoryId;
 
-            this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh(433661094641971304).SetLow(this.LocalObjectId).Build();
+            this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh(433661094641971304).SetLow(this.DynamicId).Build();
             this.GameHandle = bnet.protocol.game_master.GameHandle.CreateBuilder().SetFactoryId(this.FactoryID).SetGameId(this.BnetEntityId).Build();
         }
 
@@ -63,7 +63,7 @@ namespace D3Sharp.Core.Games
             builder.SetRequestId(this.RequestID);
             builder.SetGameHandle(this.GameHandle);
 
-            client.CallMethod(bnet.protocol.game_master.GameFactorySubscriber.Descriptor.FindMethodByName("NotifyGameFound"), builder.Build(), this.LocalObjectId);
+            client.CallMethod(bnet.protocol.game_master.GameFactorySubscriber.Descriptor.FindMethodByName("NotifyGameFound"), builder.Build(), this.DynamicId);
         }
     }
 }
