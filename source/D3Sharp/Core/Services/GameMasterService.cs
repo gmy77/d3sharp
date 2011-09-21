@@ -75,7 +75,7 @@ namespace D3Sharp.Core.Services
             var builder = FindGameResponse.CreateBuilder().SetRequestId(game.RequestID);
             done(builder.Build());
 
-            // TODO: should actually match the games that matches the filter.
+            // TODO: We should actually match the games that matches the filter
             game.ListenForGame((BNetClient)this.Client);
         }
 

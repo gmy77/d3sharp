@@ -36,7 +36,7 @@ namespace D3Sharp.Core.Accounts
         {
             Account account;
 
-            if (Accounts.ContainsKey(email)) 
+            if (Accounts.ContainsKey(email))
                 account = Accounts[email];
             else
             {
@@ -67,7 +67,7 @@ namespace D3Sharp.Core.Accounts
 
         public static ulong GetNextAvailablePersistantId()
         {
-            var cmd = new SQLiteCommand("SELECT max(id) from accounts", DBManager.Connection);           
+            var cmd = new SQLiteCommand("SELECT max(id) from accounts", DBManager.Connection);
             try
             {
                 return Convert.ToUInt64(cmd.ExecuteScalar());

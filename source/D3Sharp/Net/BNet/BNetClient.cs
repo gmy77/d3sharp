@@ -63,7 +63,7 @@ namespace D3Sharp.Net.BNet
         public void CallMethod(MethodDescriptor method, IMessage request, ulong localObjectId)
         {
             var serviceName = method.Service.FullName;
-            var serviceHash = StringHashHelper.HashString(serviceName);
+            var serviceHash = StringHashHelper.HashIdentity(serviceName);
 
             if (!this.Services.ContainsKey(serviceHash))
             {

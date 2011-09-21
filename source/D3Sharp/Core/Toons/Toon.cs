@@ -83,14 +83,14 @@ namespace D3Sharp.Core.Toons
             }
         }
 
-        public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // toon with given persistantId
+        public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
             :base(persistantId)
         {
             this.SetFields(name, (ToonClass)@class, (ToonGender)gender, level, accountId);
         }
 
         public Toon(string name, int classId, ToonGender gender, byte level, long accountId) // toon with **newly generated** persistantId
-            : base(StringHashHelper.HashString(name))
+            : base(StringHashHelper.HashIdentity(name))
         {
             this.SetFields(name, GetClassByID(classId), gender, level, accountId);
         }

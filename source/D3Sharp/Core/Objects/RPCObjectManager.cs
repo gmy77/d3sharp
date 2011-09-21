@@ -31,7 +31,7 @@ namespace D3Sharp.Core.Objects
 
         static RPCObjectManager()
         {
-            Objects[0] = null; // null object; can we even have a null in a dictionary?
+            Objects[0] = null;
         }
 
         public static void Init(RPCObject obj)

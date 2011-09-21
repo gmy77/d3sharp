@@ -41,7 +41,7 @@ namespace D3Sharp.Core.Items
                 while (reader.Read())
                 {
                     var itemName = (String)reader.GetString(0);
-                    int id = (int)StringHashHelper.HashString2(itemName);
+                    int id = (int)StringHashHelper.HashItemName(itemName);
                     Item item = new Item(id, itemType);
                     return item;
                 }
