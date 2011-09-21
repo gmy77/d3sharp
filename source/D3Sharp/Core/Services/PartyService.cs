@@ -38,9 +38,9 @@ namespace D3Sharp.Core.Services
             
             var channel = ChannelsManager.CreateNewChannel();
             // This is an object creator, so we have to map the remote object ID
-            this.Client.MapLocalObjectID(channel.ID, request.ObjectId);
+            this.Client.MapLocalObjectID(channel.LocalObjectId, request.ObjectId);
             var builder = CreateChannelResponse.CreateBuilder()
-                .SetObjectId(channel.ID)
+                .SetObjectId(channel.LocalObjectId)
                 .SetChannelId(channel.BnetEntityID);
 
             done(builder.Build());

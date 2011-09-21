@@ -26,14 +26,27 @@ namespace D3Sharp.Core.Objects
     public class RPCObject
     {
         public bool Initialized { get; private set; }
-        public ulong ID { get; set; }
-        
+        public ulong LocalObjectId { get; set; }
+
+        public List<BNetClient> Subscribers { get; private set; }
+
         public RPCObject()
         {
             ObjectManager.Init(this);
             this.Initialized = true;
+            this.Subscribers = new List<BNetClient>();
+        }       
+
+        public void AddSubscriber(BNetClient client, ulong remoteObjectId)
+        {
+            client.MapLocalObjectID(this.LocalObjectId, remoteObjectId);
+            this.Subscribers.Add(client);
+            this.NotifySubscriber(client);
         }
-        
+
+        public virtual void NotifySubscriber(BNetClient client) { }
+        public virtual void NotifyAllSubscriber() { }
+
         public void Release()
         {
             ObjectManager.Release(this);

@@ -39,25 +39,25 @@ namespace D3Sharp.Core.Objects
 
         public static void Init(RPCObject obj)
         {
-            if (obj.ID != 0 && Objects.ContainsKey(obj.ID))
+            if (obj.LocalObjectId != 0 && Objects.ContainsKey(obj.LocalObjectId))
                 throw new Exception("Given object was already initialized");
             ulong id = Next();
-            obj.ID = id;
+            obj.LocalObjectId = id;
             Objects.Add(id, obj);
         }
         
         public static void Release(RPCObject obj)
         {
-            Logger.Debug("Releasing object {0}", obj.ID);
+            Logger.Debug("Releasing object {0}", obj.LocalObjectId);
             if (obj.Initialized)
             {
-                if (obj.ID == 0 || !Objects.ContainsKey(obj.ID))
+                if (obj.LocalObjectId == 0 || !Objects.ContainsKey(obj.LocalObjectId))
                     throw new Exception("Given object was already released");
-                Objects.Remove(obj.ID);
+                Objects.Remove(obj.LocalObjectId);
             }
             else
             {
-                Logger.Debug("RPCObject with ID={0} tried to release twice", obj.ID);
+                Logger.Debug("RPCObject with ID={0} tried to release twice", obj.LocalObjectId);
             }
         }
         

@@ -50,7 +50,7 @@ namespace D3Sharp.Core.Services
             Logger.Trace("SelectToon()");
             
             var builder = SelectToonResponse.CreateBuilder();
-            var toon = Toons.ToonManager.GetToon(request.Toon.Low);
+            var toon = Toons.ToonManager.GetToonByLowID(request.Toon.Low);
             this.Client.CurrentToon = toon;
             done(builder.Build());
         }
@@ -61,7 +61,7 @@ namespace D3Sharp.Core.Services
             var heroCreateParams = D3.OnlineService.HeroCreateParams.ParseFrom(request.AttributeList[0].Value.MessageValue);
             var builder = CreateToonResponse.CreateBuilder();
 
-            var toon = new Toons.Toon(request.Name, (uint)heroCreateParams.GbidClass, heroCreateParams.IsFemale ? Toons.ToonGender.Female : Toons.ToonGender.Male, 1, (long)Client.Account.ID);
+            var toon = new Toons.Toon(request.Name, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? Toons.ToonGender.Female : Toons.ToonGender.Male, 1, (long)Client.Account.Id);
             if (Toons.ToonManager.SaveToon(toon)) builder.SetToon(toon.BnetEntityID);
             done(builder.Build());
         }
@@ -71,7 +71,7 @@ namespace D3Sharp.Core.Services
             Logger.Trace("DeleteToon()");
             
             var id = request.Toon.Low;
-            var toon = Toons.ToonManager.GetToon(id);
+            var toon = Toons.ToonManager.GetToonByLowID(id);
             Toons.ToonManager.DeleteToon(toon);
 
             var builder = bnet.protocol.toon.external.DeleteToonResponse.CreateBuilder();

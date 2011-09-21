@@ -17,9 +17,12 @@
  */
 
 using System;
+using System.Collections.Generic;
+using D3Sharp.Core.Toons;
 using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using D3Sharp.Core.Helpers;
+using bnet.protocol;
 
 namespace D3Sharp.Core.Services
 {
@@ -31,9 +34,23 @@ namespace D3Sharp.Core.Services
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.SubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("Subscribe()" + request.EntityId.GetHighIdType());
+            Logger.Trace(string.Format("Subscribe() {0}: {1}", request.EntityId.GetHighIdType(), request.EntityId.Low));
                                     
-            var builder = bnet.protocol.NoData.CreateBuilder();
+            switch(request.EntityId.GetHighIdType())
+            {
+                case EntityIdHelper.HighIdType.AccountId:
+                    this.Client.Account.AddSubscriber((BNetClient)this.Client, request.ObjectId);
+                    break;
+                case EntityIdHelper.HighIdType.ToonId:
+                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
+                    toon.AddSubscriber((BNetClient)this.Client, request.ObjectId);
+                    break;
+                default:
+                    Logger.Warn("Recieved an unhandled Presence:Subscribe request with " + request.EntityId.GetHighIdType());
+                    break;
+            }
+
+            var builder = NoData.CreateBuilder();
             done(builder.Build());
         }
 

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using D3Sharp.Core.Helpers;
+using D3Sharp.Core.Objects;
 using D3Sharp.Core.Storage;
 using D3Sharp.Core.Toons;
 using D3Sharp.Utils;
@@ -28,17 +29,19 @@ using D3Sharp.Utils.Helpers;
 
 namespace D3Sharp.Core.Accounts
 {
-    public class Account
+    public class Account : RPCObject
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         /// <summary>
         /// The actual id.
         /// </summary>
-        public ulong ID { get; private set; }
+        public ulong Id { get; private set; }
 
         public bnet.protocol.EntityId BnetAccountID { get; private set; }
         public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
+        public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
+
         public string Email { get; private set; }
 
         public D3.Account.Digest Digest
@@ -46,17 +49,7 @@ namespace D3Sharp.Core.Accounts
             get
             {
                 var builder = D3.Account.Digest.CreateBuilder().SetVersion(99)
-                    .SetBannerConfiguration(D3.Account.BannerConfiguration.CreateBuilder()
-                                                .SetBackgroundColorIndex(0)
-                                                .SetBannerIndex(3)
-                                                .SetPattern(0)
-                                                .SetPatternColorIndex(0)
-                                                .SetPlacementIndex(0)
-                                                .SetSigilAccent(0)
-                                                .SetSigilMain(0)
-                                                .SetSigilColorIndex(0)
-                                                .SetUseSigilVariant(false)
-                                                .Build())
+                    .SetBannerConfiguration(this.BannerConfiguration)
                     .SetFlags(0);
 
                 builder.SetLastPlayedHeroId(Toons.Count > 0
@@ -75,14 +68,60 @@ namespace D3Sharp.Core.Accounts
         public Account(ulong id, string email)
         {
             this.Email = email;
-            this.ID = id;
-            this.BnetAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.ID).Build();
-            this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(this.ID).Build();            
+            this.Id = id;
+            this.BnetAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.Id).Build();
+            this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(this.Id).Build();
+            this.BannerConfiguration = D3.Account.BannerConfiguration.CreateBuilder()
+                .SetBackgroundColorIndex(20)
+                .SetBannerIndex(8)
+                .SetPattern(4)
+                .SetPatternColorIndex(11)
+                .SetPlacementIndex(11)
+                .SetSigilAccent(4)
+                .SetSigilMain(3)
+                .SetSigilColorIndex(7)
+                .SetUseSigilVariant(true)
+                .Build();
         }
 
         public Account(string email)
             : this(StringHashHelper.HashString(email), email)
         {
+        }
+
+        public override void NotifySubscriber(Net.BNet.BNetClient client)
+        {
+            // check d3sharp / docs / rpc / notification-data-layout.txt  for fields keys.
+
+            // realid name field
+            var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet,1, 1, 0);
+            var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("RealID Name here!").Build()).Build();
+            var fieldOperation1 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build();
+
+            // hardcoded boolean - always true
+            var fieldKey2 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
+            var field2 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
+            var fieldOperation2 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build();
+
+            // cretea presence.ChannelState
+            var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetAccountID).AddFieldOperation(fieldOperation1).AddFieldOperation(fieldOperation2).Build();
+
+            // embed in  channel.ChannelState
+            var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+
+            // put in addnotification message
+            var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
+
+            // make the rpc call.
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(),this.LocalObjectId);
+        }
+
+        public override void NotifyAllSubscriber()
+        {
+            foreach(var subscriber in this.Subscribers)
+            {
+                this.NotifySubscriber(subscriber);
+            }
         }
 
         public void SaveToDB()
@@ -92,7 +131,7 @@ namespace D3Sharp.Core.Accounts
                 var query =
                     string.Format(
                         "INSERT INTO accounts (id, email) VALUES({0},'{1}')",
-                        this.ID, this.Email);
+                        this.Id, this.Email);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();

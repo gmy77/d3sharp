@@ -16,26 +16,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-using D3Sharp.Core.Objects;
-
-namespace D3Sharp.Core.Channels
+namespace D3Sharp.Core.Helpers
 {
-    public static class ChannelsManager
+    public class FieldKeyHelper
     {
-        private readonly static Dictionary<ulong, Channel> Channels =
-            new Dictionary<ulong, Channel>();
-
-        public static Channel CreateNewChannel()
+        public enum Program : uint
         {
-            var channel = new Channel();
-            Channels.Add(channel.Id, channel);
-            return channel;
+            BNet = 16974,
+            D3 = 17459
         }
-        
-        public static Channel DeleteChannel(ulong id) {
-            throw new System.NotImplementedException();
-            // TODO: Mapping removal should be done in client or mayhaps the ID controller
+
+        public static bnet.protocol.presence.FieldKey Create(Program program, uint group, uint field, uint index)
+        {
+            return
+                bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram((uint) program).SetGroup(group).SetField(
+                    field).SetIndex(index).Build();
         }
-    }
+    } 
 }
