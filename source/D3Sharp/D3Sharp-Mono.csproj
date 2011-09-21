@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,7 +53,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.CSharp">
+    </Reference>
     <Reference Include="System">
     </Reference>
     <Reference Include="System.Core">
@@ -65,8 +66,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\Nini.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data">
+    </Reference>
+    <Reference Include="System.Data.Linq">
+    </Reference>
     <Reference Include="System.Data.SQLite, Version=1.0.74.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\sqlite-managed\System.Data.SQLite.dll</HintPath>
@@ -74,7 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Accounts\Account.cs" />
-    <Compile Include="Core\Accounts\AccountsManager.cs" />
     <Compile Include="Core\Channels\Channel.cs" />
     <Compile Include="Core\Channels\ChannelsManager.cs" />
     <Compile Include="Core\Config\Config.cs" />
@@ -132,8 +134,10 @@
     <Compile Include="Utils\Helpers\StringHashHelper.cs" />
     <Compile Include="Utils\TinyLogger.cs" />
     <Compile Include="Utils\win32\NativeMethods.cs" />
-    <Compile Include="Core\Objects\ObjectManager.cs" />
     <Compile Include="Core\Objects\RPCObject.cs" />
+    <Compile Include="Core\Accounts\AccountManager.cs" />
+    <Compile Include="Core\Objects\RPCObjectManager.cs" />
+    <Compile Include="Core\Objects\PersistentRPCObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
