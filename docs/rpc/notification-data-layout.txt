@@ -16,20 +16,21 @@ Program Group   Field   Value type                          Description
 == BN - 16974 ==
 BN      1       1       string                              RealID name most likely
 BN      1       2       bool                                Unknown; seems to always be true in caps
+BN      1       4       bnet.protocol.EntityId              Current Toon's ID
 BN      3       2       string                              Hero's name
-BN      3       3       bool                                Unknown
-BN      3       9       string                              Program ("D3")
-BN      3       10      uint64                              Unknown; always 0?
+BN      3       3       bool                                Hardcore mode
+BN      3       9       string                              Program (should always "D3")
+BN      3       10      int64                               Unknown; always 0?
 BN      3       11      bnet.protocol.EntityId              Unknown
 
 == D3 - 17459 ==
 D3      1       1       D3.OnlineService.EntityId           Unknown; toon ID?
 D3      2       1       D3.Account.BannerConfiguration      Banner configuration
-D3      3       1       uint64                              Hero's class (GbidClass)
-D3      3       2       uint64                              Hero's current level
+D3      3       1       int64                               Hero's class (GbidClass)
+D3      3       2       int64                               Hero's current level
 D3      3       3       D3.Hero.VisualEquipment             Hero's visible equipment
-D3      3       4       uint64                              Hero's flags (gender and such)
-D3      4       1       D3.OnlineService.EntityId           Unknown
+D3      3       4       int64                               Hero's flags (gender and such)
+D3      4       1       D3.OnlineService.EntityId           Channel ID
 D3      4       2       int                                 Unknown
 D3      4       3       string                              Unknown; seen as empty string
 

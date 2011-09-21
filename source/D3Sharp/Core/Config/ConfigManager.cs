@@ -36,7 +36,7 @@ namespace D3Sharp.Core.Config
                 Parser = new IniConfigSource(ConfigFile); // see if the file exists by trying to parse it.
                 _fileExists = true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Parser = new IniConfigSource(); // initiate a new .ini source.
                 _fileExists = false;

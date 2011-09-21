@@ -18,20 +18,17 @@
 
 using System;
 using System.Data.SQLite;
+using D3Sharp.Core.Helpers;
+using D3Sharp.Core.Objects;
 using D3Sharp.Core.Storage;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Helpers;
 
 namespace D3Sharp.Core.Toons
 {
-    public class Toon
+    public class Toon : PersistentRPCObject
     {        
         private static readonly Logger Logger = LogManager.CreateLogger();
-
-        /// <summary>
-        /// The actual id.
-        /// </summary>
-        public ulong ID { get; private set; }
 
         /// <summary>
         /// D3 EntityID encoded id.
@@ -56,7 +53,9 @@ namespace D3Sharp.Core.Toons
         public D3.Hero.Digest Digest { get; private set; }
         public D3.Hero.VisualEquipment Equipment { get; private set; }
 
-        public uint ClassID
+        //TODO: toons should be linked to accounts actually here /raist.
+
+        public int ClassID
         {
             get
             {
@@ -65,7 +64,7 @@ namespace D3Sharp.Core.Toons
                     case ToonClass.Barbarian:
                         return 0x4FB91EE2;
                     case ToonClass.DemonHunter:
-                        return 0xc88b9649;
+                        return -930376119;
                     case ToonClass.Monk:
                         return 0x3DAC15;
                     case ToonClass.WitchDoctor:
@@ -84,10 +83,21 @@ namespace D3Sharp.Core.Toons
             }
         }
 
-        public Toon(ulong id, string name, ToonClass @class, ToonGender gender, byte level, long accountId)
+        public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // toon with given persistantId
+            :base(persistantId)
         {
-            this.ID = id;
-            this.ToonHandle = new ToonHandleHelper(id);
+            this.SetFields(name, (ToonClass)@class, (ToonGender)gender, level, accountId);
+        }
+
+        public Toon(string name, int classId, ToonGender gender, byte level, long accountId) // toon with **newly generated** persistantId
+            : base(StringHashHelper.HashString(name))
+        {
+            this.SetFields(name, GetClassByID(classId), gender, level, accountId);
+        }
+
+        private void SetFields(string name, ToonClass @class, ToonGender gender, byte level, long accountId)
+        {
+            this.ToonHandle = new ToonHandleHelper(this.PersistentID);
             this.D3EntityID = this.ToonHandle.ToD3EntityID();
             this.BnetEntityID = this.ToonHandle.ToBnetEntityID();
             this.Name = name;
@@ -188,23 +198,13 @@ namespace D3Sharp.Core.Toons
                 .Build();
         }
 
-        public Toon(ulong id, string name, byte @class, byte gender, byte level, long accountId)
-            : this(id, name, (ToonClass)@class, (ToonGender)gender, level, accountId)
-        {
-        }
-
-        public Toon(string name, uint classId, ToonGender gender, byte level, long accountId)
-            : this(StringHashHelper.HashString(name), name, GetClassByID(classId), gender , level, accountId)
-        {
-        }
-
-        private static ToonClass GetClassByID(uint classId)
+        private static ToonClass GetClassByID(int classId)
         {
             switch (classId)
             {
                 case 0x4FB91EE2:
                     return ToonClass.Barbarian;
-                case 0xc88b9649:
+                case -930376119:
                     return ToonClass.DemonHunter;
                 case 0x3DAC15:
                     return ToonClass.Monk;
@@ -222,6 +222,71 @@ namespace D3Sharp.Core.Toons
             return genderId== 0x2000002 ? ToonGender.Female : ToonGender.Male;
         }
 
+        protected override void NotifySubscriber(Net.BNet.BNetClient client)
+        {
+            // check d3sharp/docs/rpc/notification-data-layout.txt for fields keys.
+
+            // Banner configuration
+            var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 2, 1, 0);
+            var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(client.Account.BannerConfiguration.ToByteString()).Build()).Build();
+            var fieldOperation1 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build();
+
+            // Class
+            var fieldKey2 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 1, 0);
+            var field2 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey2).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.ClassID).Build()).Build();
+            var fieldOperation2 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build();
+
+            // Level
+            var fieldKey3 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 2, 0);
+            var field3 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey3).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.Level).Build()).Build();
+            var fieldOperation3 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field3).Build();
+
+            // Equipment
+            var fieldKey4 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 3, 0);
+            var field4 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey4).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Equipment.ToByteString()).Build()).Build();
+            var fieldOperation4 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field4).Build();
+
+            // Gender
+            var fieldKey5 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 4, 0);
+            var field5 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey5).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.GenderID).Build()).Build();
+            var fieldOperation5 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field5).Build();
+
+            // Name
+            var fieldKey6 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 2, 0);
+            var field6 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey6).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build()).Build();
+            var fieldOperation6 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field6).Build();
+
+            // Unknown boolean - probably harcore mode enabled?? /raist
+            var fieldKey7 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 3, 0);
+            var field7 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey7).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(false).Build()).Build();
+            var fieldOperation7 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field7).Build();
+
+            // Program - FourCC "D3"
+            var fieldKey8 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 9, 0);
+            var field8 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey8).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build()).Build();
+            var fieldOperation8 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field8).Build();
+
+            // Unknown int - maybe highest completed act? /raist
+            var fieldKey9 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 9, 10);
+            var field9 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey9).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build()).Build();
+            var fieldOperation9 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field9).Build();
+
+            // Create a presence.ChannelState
+            var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityID)
+                .AddFieldOperation(fieldOperation1).AddFieldOperation(fieldOperation2).AddFieldOperation(fieldOperation3).AddFieldOperation(fieldOperation4)
+                .AddFieldOperation(fieldOperation5).AddFieldOperation(fieldOperation6).AddFieldOperation(fieldOperation7).AddFieldOperation(fieldOperation8)
+                .AddFieldOperation(fieldOperation9).Build();
+
+            // Embed in channel.ChannelState
+            var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+
+            // Put in AddNotification message
+            var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
+
+            // Make the rpc call
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(),this.DynamicId);
+        }
+
         public void SaveToDB()
         {
             try
@@ -231,7 +296,7 @@ namespace D3Sharp.Core.Toons
                     var query =
                         string.Format(
                             "UPDATE toons SET name='{0}', class={1}, gender={2}, level={3}, accountId={4} WHERE id={5}",
-                            Name, (byte)Class, (byte)Gender, Level, this.AccountID, ID);
+                            Name, (byte)this.Class, (byte)this.Gender, this.Level, this.AccountID, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -241,7 +306,7 @@ namespace D3Sharp.Core.Toons
                     var query =
                         string.Format(
                             "INSERT INTO toons (id, name, class, gender, level, accountId) VALUES({0},'{1}',{2},{3},{4},{5})",
-                            ID, Name, (byte) Class, (byte) Gender, Level, this.AccountID);
+                            this.PersistentID, this.Name, (byte)this.Class, (byte)this.Gender, this.Level, this.AccountID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();                    
@@ -260,7 +325,7 @@ namespace D3Sharp.Core.Toons
                 // Remove from DB
                 if (!ExistsInDB()) return false;
 
-                var query = string.Format("DELETE FROM toons WHERE id={0}", this.ID);
+                var query = string.Format("DELETE FROM toons WHERE id={0}", this.PersistentID);
                 var cmd = new SQLiteCommand(query, DBManager.Connection);
                 cmd.ExecuteNonQuery();
                 return true;
@@ -276,8 +341,8 @@ namespace D3Sharp.Core.Toons
         {
             var query =
                 string.Format(
-                    "SELECT id  from toons where id={0}",
-                    this.ID);
+                    "SELECT id from toons where id={0}",
+                    this.PersistentID);
 
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();

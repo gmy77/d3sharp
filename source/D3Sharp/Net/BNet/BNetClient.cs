@@ -105,15 +105,15 @@ namespace D3Sharp.Net.BNet
             }
         }
 
-        public ulong GetRemoteObjectID(ulong remoteObjectId)
+        public ulong GetRemoteObjectID(ulong localObjectId)
         {
             // TODO: Check for conflicts
             // TODO: Handle exceptions-- should be fatal?
             //       Maybe we can not bother once ID tracker/generator is in
-            if (remoteObjectId == 0)
+            if (localObjectId == 0)
                 return 0; // null/unused/unset
             else
-                return this.MappedObjects[remoteObjectId];
+                return this.MappedObjects[localObjectId];
         }
     }
 }

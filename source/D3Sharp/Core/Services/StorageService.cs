@@ -91,7 +91,7 @@ namespace D3Sharp.Core.Services
 
                 if(!client.Account.Toons.ContainsKey(toonId))
                 {
-                    Logger.Error("Can't find the requested toon: " + toonId);
+                    Logger.Error("Can't find the requested toon: {0}", toonId);
                     continue;
                 }
 

@@ -31,8 +31,8 @@ namespace D3Sharp.Core.Services
 
         public override void Logon(Google.ProtocolBuffers.IRpcController controller, LogonRequest request, System.Action<LogonResponse> done)
         {
-            Logger.Trace("LogonRequest(): " + request.Email);
-            Client.Account = AccountsManager.GetAccount(request.Email);
+            Logger.Trace("LogonRequest(); Email={0}", request.Email);
+            Client.Account = AccountManager.GetAccount(request.Email);
 
             var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
                 .SetAccount(Client.Account.BnetAccountID)

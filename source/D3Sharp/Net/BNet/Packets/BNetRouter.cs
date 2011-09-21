@@ -59,7 +59,6 @@ namespace D3Sharp.Net.BNet.Packets
             try
             {
                 var message = builder.WeakMergeFrom(CodedInputStream.CreateInstance(packet.Payload.ToArray())).WeakBuild();
-
                 lock (service) // lock the service so that it's in-context client does not get changed..
                 {
                     //Logger.Debug("service-call data:{0}", message.ToString());
@@ -69,11 +68,15 @@ namespace D3Sharp.Net.BNet.Packets
             }
             catch (NotImplementedException)
             {
-                Logger.Debug(string.Format("Unimplemented service method: {0} {1}", service.GetType().Name, method.Name));
+                Logger.Debug("Unimplemented service method: {0} {1}", service.GetType().Name, method.Name);
             }
-            catch(Exception e)
+            catch (UninitializedMessageException e)
             {
-                Logger.DebugException(e,string.Empty);
+                Logger.Debug("Failed to parse message: {0}", e.Message);
+            }
+            catch (Exception e)
+            {
+                Logger.DebugException(e, string.Empty);
             }
         }
 
