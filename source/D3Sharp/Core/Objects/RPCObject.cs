@@ -23,51 +23,55 @@ using D3Sharp.Net.BNet;
 namespace D3Sharp.Core.Objects
 {
     /// <summary>
-    /// RPC Objects are 'objects' that can be referenced over client-server communication process by remote end.
-    /// They've a DynamicId field that get's generated on memory instantiation.
+    /// RPC objects are mapped to a remote dynamic ID for the purposes of handling subscriptions
+    /// and server-side data.
     /// </summary>
     public class RPCObject
     {
         /// <summary>
-        /// The dnymaicId of the project which is set on memory instantiation and changes over sessions.
+        /// The dynamic ID of the object, which is set on memory instantiation and changes over sessions.
+        /// RPCObjectManager will track all dynamic IDs so that we don't get a duplicate.
         /// </summary>
         public ulong DynamicId { get; set; }
 
         /// <summary>
-        /// List of client observers that subscribed for object update notifications.
+        /// List of clients that subscribed for notifications when this object updates its states.
         /// </summary>
         protected List<BNetClient> Subscribers { get; private set; }
 
         /// <summary>
-        /// RPCObject ctor which can only be called by derived objects.
+        /// Constructor which can only be called by derived objects.
         /// </summary>
         protected RPCObject()
         {
-            RPCObjectManager.Init(this); // let RPCObjectManager to generate new DynamicId for us.
+            // Let RPCObjectManager generate new dynamid ID for us
+            RPCObjectManager.Init(this);
             this.Subscribers = new List<BNetClient>();
         }       
 
         /// <summary>
-        /// Adds a client subscriber to object, which will eventually be notified on any object updates.
+        /// Adds a client subscriber to object, which will eventually be notified whenever the object changes state.
         /// </summary>
-        /// <param name="client">The observer.</param>
-        /// <param name="remoteObjectId">The mapped remoteId</param>
+        /// <param name="client">The subscriber.</param>
+        /// <param name="remoteObjectId">The client's dynamic ID.</param>
         public void AddSubscriber(BNetClient client, ulong remoteObjectId)
         {
-            client.MapLocalObjectID(this.DynamicId, remoteObjectId); // map observer's Id to to our dynamic Id so any further rpc-conversation over object, can benefit it.
-            this.Subscribers.Add(client); // add client to subscribers list.
-            this.NotifySubscriber(client); // when we add a new subscriber, he should get an initial notification on objects present state.
+            // Map the subscriber's dynamic ID to to our dynamic ID so we know how to translate later on when the object makes a notify call
+            client.MapLocalObjectID(this.DynamicId, remoteObjectId);
+            this.Subscribers.Add(client);
+            // Since the client wasn't previously subscribed, it should not be aware of the object's state -- let's notify it
+            this.NotifySubscriber(client);
         }
 
         /// <summary>
-        /// Notifies a specific subscriber about object's present state.
-        /// This methods should be actually implemented by derived object.
+        /// Notifies a specific subscriber about the object's present state.
+        /// This methods should be actually implemented by deriving object classes.
         /// </summary>
-        /// <param name="client">The observer</param>
+        /// <param name="client">The subscriber.</param>
         protected virtual void NotifySubscriber(BNetClient client) { }
 
         /// <summary>
-        /// Notifies all observers of the object with present state of the object.
+        /// Notifies all subscribers with the object's current state.
         /// </summary>
         public void NotifyAllSubscribers()
         {
@@ -85,20 +89,25 @@ namespace D3Sharp.Core.Objects
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this); // Take object out the finalization queue to prevent finalization code for it from executing a second time.
+            // Take object out the finalization queue to prevent finalization code for it from executing a second time
+            GC.SuppressFinalize(this);
         }
 
         private void Dispose(bool disposing)
         {
-            if (this._disposed) return; // if it's already disposed, just return.
-            if (disposing)  { } // dispose any managed resources - where we don't have any.
+            if (this._disposed) return; // If it's already disposed, just get out of here
+            if (disposing)  { } // Dispose any managed resources - here we don't have any
             
-            RPCObjectManager.Release(this); // release DynamicId.
+            RPCObjectManager.Release(this); // Release our dynamic ID
 
             _disposed = true;
         }
 
-        ~RPCObject() { Dispose(false); } // finalizer called by the runtime. we should only dispose unmanaged objects and should NOT reference managed ones.
+        ~RPCObject()
+        {
+            // Finalizer called by the runtime. We should only dispose unmanaged objects and should NOT reference managed ones
+            Dispose(false);
+        }
         
         #endregion
     }
