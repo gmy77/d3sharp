@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using D3Sharp.Core.Accounts;
 using D3Sharp.Core.Toons;
 using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
@@ -64,13 +65,27 @@ namespace D3Sharp.Core.Services
 
         public override void Update(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UpdateRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            // op->field->value->int_value:
-            //  0 for present
-            //  2 for away
-            //  4 for busy
-            Logger.Trace("Update()");
-            //Logger.Debug("request:\n{0}", request.ToString());
-            var builder = bnet.protocol.NoData.CreateBuilder();
+            Logger.Trace("Update() {0}: {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
+
+            // Here the client either asks for an 'update' on some toon related objects or toon itself.
+            // It maybe also setting a value on toon, like his away statys??! /raist
+            // Check presence.update.request on docs.
+            // We should implement it when we completely figure it out.
+
+            switch (request.EntityId.GetHighIdType())
+            {
+                case EntityIdHelper.HighIdType.AccountId:
+                    var account = AccountManager.GetAccountByEntityID(request.EntityId);
+                    break;
+                case EntityIdHelper.HighIdType.ToonId:
+                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);                    
+                    break;
+                default:
+                    Logger.Warn("Recieved an unhandled Presence:Update request with {0}", request.EntityId.GetHighIdType());
+                    break;
+            }
+
+            var builder = NoData.CreateBuilder();
             done(builder.Build());
         }
 

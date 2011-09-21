@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Linq;
 using D3Sharp.Core.Storage;
 
 namespace D3Sharp.Core.Accounts
@@ -32,7 +33,7 @@ namespace D3Sharp.Core.Accounts
             LoadAccounts();
         }
 
-        public static Account GetAccount(string email)
+        public static Account GetAccountByEmail(string email)
         {
             Account account;
 
@@ -46,6 +47,11 @@ namespace D3Sharp.Core.Accounts
             }
 
             return account;
+        }
+
+        public static Account GetAccountByEntityID(bnet.protocol.EntityId entityId)
+        {
+            return Accounts.Where(account => account.Value.BnetAccountID == entityId).Select(account => account.Value).FirstOrDefault();
         }
 
         private static void LoadAccounts()

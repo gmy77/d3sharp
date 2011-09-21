@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using D3Sharp.Core.Helpers;
 using D3Sharp.Core.Objects;
 using D3Sharp.Net.BNet;
 using Google.ProtocolBuffers;
@@ -33,7 +34,7 @@ namespace D3Sharp.Core.Channels
 
         public Channel()
         {
-            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh(this.DynamicId).SetLow(0).Build();
+            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ChannelId).SetLow(this.DynamicId).Build();
 
             var builder = bnet.protocol.channel.ChannelState.CreateBuilder()
                 .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN)
