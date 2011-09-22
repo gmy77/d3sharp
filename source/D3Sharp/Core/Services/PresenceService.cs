@@ -98,7 +98,7 @@ namespace D3Sharp.Core.Services
             foreach(var key in request.KeyList)
             {
                 var field = toon.QueryField(key);
-                if(field!=null) builder.AddField(toon.QueryField(key));
+                if (field != null) builder.AddField(field);
             }
 
             done(builder.Build());

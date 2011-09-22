@@ -16,28 +16,28 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-using System.Linq;
-using D3Sharp.Core.Objects;
-using D3Sharp.Net.BNet;
-
-namespace D3Sharp.Core.Channels
+namespace D3Sharp.Core.Items
 {
-    public static class ChannelsManager
+
+    public enum ItemType
     {
-        public readonly static Dictionary<ulong, Channel> Channels =
-            new Dictionary<ulong, Channel>();
+        Helm, ChestArmor, Gloves, Boots, Shoulders, Belt, Pants, Bracers, Shield, Quiver, Orb,
+        Axe_1H, Axe_2H, CombatStaff_2H, Dagger, FistWeapon, Mace_1H, Mace_2H, Sword_1H,
+        Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, ThrownWeapon, ThrowingAxe, Wand, Ring
+    }
 
-        public static Channel CreateNewChannel(BNetClient client, ulong remoteObjectId)
+    class Item
+    {
+
+        public int Gbid { get; set; }
+
+        public ItemType ItemType { get; set; }
+
+        public Item(int gbid, ItemType itemType)
         {
-            var channel = new Channel(client, remoteObjectId);
-            Channels.Add(channel.DynamicId, channel);
-            return channel;
+            Gbid = gbid;
+            ItemType = itemType;
         }
 
-        public static Channel DeleteChannel(ulong id) {
-            throw new System.NotImplementedException();
-            // TODO: Mapping removal should be done in client or mayhaps the ID controller
-        }
     }
 }

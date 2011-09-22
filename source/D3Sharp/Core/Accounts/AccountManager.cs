@@ -54,6 +54,11 @@ namespace D3Sharp.Core.Accounts
             return Accounts.Where(account => account.Value.BnetAccountID == entityId).Select(account => account.Value).FirstOrDefault();
         }
 
+        public static Account GetAccountByPersistantID(ulong persistantId)
+        {
+            return Accounts.Where(account => account.Value.PersistentID == persistantId).Select(account => account.Value).FirstOrDefault();
+        }
+
         private static void LoadAccounts()
         {
             var query = "SELECT * from accounts";

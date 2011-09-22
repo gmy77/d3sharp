@@ -31,6 +31,7 @@ namespace D3Sharp.Net.BNet
         Account Account { get; set; }
 
         Toon CurrentToon { get; set; }
+        Channel CurrentChannel { get; set; }
 
         void CallMethod(MethodDescriptor method, IMessage request);
         void CallMethod(MethodDescriptor method, IMessage request, ulong localObjectId);
