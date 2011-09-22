@@ -60,17 +60,11 @@ namespace D3Sharp.Net
 
             // Create new TCP socket and set socket options.
             Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-            try
-            {
-                // This is failing on Linux; dunno why.
-                Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, true);
-            }
-            catch (SocketException e)
-            {
-                Logger.DebugException(e, "Listen");
-            }
-
+            
+            // Setup our options:
+            // * NoDelay - don't use packet coalescing
+            // * DontLinger - don't keep sockets around once they've been disconnected
+            Listener.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
             Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
 
             try

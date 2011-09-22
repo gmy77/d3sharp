@@ -34,11 +34,13 @@ namespace D3Sharp
 
         public static void Main(string[] args)
         {
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // watch for unhandled-exceptions.
-
-            LogManager.Enabled = true; // enable the logger.
-            LogManager.AttachLogTarget(new ConsoleTarget(Level.Trace)); // attach a console-target.
-            LogManager.AttachLogTarget(new FileTarget(Level.Trace, "log.txt")); // attach a console-target.
+            // Watch for unhandled exceptions
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
+            
+            // Don't forget this..
+            LogManager.Enabled = true;
+            LogManager.AttachLogTarget(new ConsoleTarget(Level.Trace));
+            LogManager.AttachLogTarget(new FileTarget(Level.Trace, "d3sharp-log.txt"));
 
             PrintLicence();
 
@@ -57,12 +59,13 @@ namespace D3Sharp
             var gameServerThread = new Thread(_gameServer.Run) { IsBackground = true };
             gameServerThread.Start();
 
-            // Read user input indefinitely.
+            // Read user input indefinitely
+            // TODO: Replace with proper command parsing and execution
             while (true)
             {
                 var line = Console.ReadLine();
                 if (!string.Equals("quit", line, StringComparison.OrdinalIgnoreCase)
-                    && !string.Equals("exit", line, StringComparison.OrdinalIgnoreCase))
+                 && !string.Equals("exit", line, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
@@ -75,21 +78,11 @@ namespace D3Sharp
 
         private static void PrintLicence()
         {
-            Console.WriteLine("D3Sharp, Copyright (C) 2011 D3Sharp Project\nD3Sharp comes with ABSOLUTELY NO WARRANTY.This is free software, and you are welcome to redistribute it under certain conditions; see LICENCE file for details\n");
+            Console.WriteLine("Copyright (C) 2011 D3Sharp Project");
+            Console.WriteLine("D3Sharp comes with ABSOLUTELY NO WARRANTY.");
+            Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENCE file for details.");
+            Console.WriteLine();
         }
-
-        //public void ParseArguments(string[] args)
-        //{
-        //    // Temp code
-        //    if (args.Length > 0)
-        //    {
-        //        int port;
-        //        if (!Int32.TryParse(args[0], out port))
-        //            Logger.Warn("Invalid format for port; defaulting to {0}", _port);
-        //        else
-        //            _port = port;
-        //    }
-        //}
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {

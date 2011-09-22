@@ -19,20 +19,21 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Linq;
 using D3Sharp.Core.Storage;
 
 namespace D3Sharp.Core.Accounts
 {
     public static class AccountManager
     {
-        private static readonly Dictionary<string, Account> Accounts = new Dictionary<string, Account>();
+        public static readonly Dictionary<string, Account> Accounts = new Dictionary<string, Account>();
 
         static AccountManager()
         {
             LoadAccounts();
         }
 
-        public static Account GetAccount(string email)
+        public static Account GetAccountByEmail(string email)
         {
             Account account;
 
@@ -46,6 +47,16 @@ namespace D3Sharp.Core.Accounts
             }
 
             return account;
+        }
+
+        public static Account GetAccountByEntityID(bnet.protocol.EntityId entityId)
+        {
+            return Accounts.Where(account => account.Value.BnetAccountID == entityId).Select(account => account.Value).FirstOrDefault();
+        }
+
+        public static Account GetAccountByPersistantID(ulong persistantId)
+        {
+            return Accounts.Where(account => account.Value.PersistentID == persistantId).Select(account => account.Value).FirstOrDefault();
         }
 
         private static void LoadAccounts()
@@ -72,7 +83,7 @@ namespace D3Sharp.Core.Accounts
             {
                 return Convert.ToUInt64(cmd.ExecuteScalar());
             }
-            catch (InvalidCastException e)
+            catch (InvalidCastException)
             {
                 return 0;
             }

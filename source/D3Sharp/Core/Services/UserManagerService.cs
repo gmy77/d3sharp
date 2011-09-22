@@ -17,6 +17,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using D3Sharp.Core.Accounts;
 using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using Google.ProtocolBuffers;
@@ -27,21 +29,26 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x5, serviceName: "bnet.protocol.user_manager.UserManagerService")]
     public class UserManagerService : bnet.protocol.user_manager.UserManagerService,IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void SubscribeToUserManager(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.user_manager.SubscribeToUserManagerRequest request, System.Action<bnet.protocol.user_manager.SubscribeToUserManagerResponse> done)
         {
             Logger.Trace("SubscribeToUserManager()");
-            // NOTE: SubscribeToUserManagerRequest gives us an object_id
-            // TODO: Sending this packet crashes my client. This may be a local issue as I haven't heard anyone else mention it.  -Ethos
-            // Note that the request has an ObjectId, but it is never referenced later in the
-            // capture.. suggesting that this doesn't create a specific object, or is maybe mapped
-            // to a static identifier for handling future requsts by the client to this service
-            
-            // Commented out for now to avoid a non-common crash on the client
-            //var builder = bnet.protocol.user_manager.SubscribeToUserManagerResponse.CreateBuilder();
-            //done(builder.Build());
+
+            // temp hack: send him all online players on server where he should be normally get list of player he met in his last few games /raist.
+
+            var builder = SubscribeToUserManagerResponse.CreateBuilder();
+            foreach(var player in OnlinePlayers.Players)
+            {
+                if (player == this.Client) continue; // don't add himself to list.
+                var recentPlayer = RecentPlayer.CreateBuilder();
+                recentPlayer.SetPlayer(player.CurrentToon.BnetEntityID);
+                Logger.Warn("RecentPlayer => " + player.CurrentToon);
+                builder.AddRecentPlayers(recentPlayer);
+            }
+
+            done(builder.Build());
         }
 
         public override void ReportPlayer(IRpcController controller, ReportPlayerRequest request, Action<ReportPlayerResponse> done)

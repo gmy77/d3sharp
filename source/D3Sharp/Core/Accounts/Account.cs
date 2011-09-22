@@ -24,6 +24,7 @@ using D3Sharp.Core.Helpers;
 using D3Sharp.Core.Objects;
 using D3Sharp.Core.Storage;
 using D3Sharp.Core.Toons;
+using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Helpers;
 
@@ -36,8 +37,9 @@ namespace D3Sharp.Core.Accounts
         public bnet.protocol.EntityId BnetAccountID { get; private set; }
         public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
         public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
-
         public string Email { get; private set; }
+
+        public BNetClient LoggedInClient { get; set; }
 
         public D3.Account.Digest Digest
         {
@@ -99,7 +101,7 @@ namespace D3Sharp.Core.Accounts
                 .Build();
         }
 
-        protected override void NotifySubscriber(Net.BNet.BNetClient client)
+        protected override void NotifySubscriptionAdded(Net.BNet.BNetClient client)
         {
             // Check d3sharp/docs/rpc/notification-data-layout.txt for fields keys
 

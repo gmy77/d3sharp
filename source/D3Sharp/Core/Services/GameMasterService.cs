@@ -29,7 +29,7 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x7, serviceName: "bnet.protocol.game_master.GameMaster")]
     public class GameMasterService : GameMaster, IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void JoinGame(IRpcController controller, JoinGameRequest request, Action<JoinGameResponse> done)
