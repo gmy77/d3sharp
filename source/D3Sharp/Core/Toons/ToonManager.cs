@@ -45,7 +45,7 @@ namespace D3Sharp.Core.Toons
 
         public static Dictionary<ulong, Toon> GetToonsForAccount(Account account)
         {
-            return Toons.Where(pair => (ulong)pair.Value.AccountID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
+            return Toons.Where(pair => (ulong)pair.Value.Owner.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
         public static bool SaveToon(Toon toon)

@@ -50,10 +50,10 @@ Global
 		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Release|x86.ActiveCfg = Release|Any CPU
 		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = D3Sharp\D3Sharp.csproj
-	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = D3Sharp\D3Sharp.csproj
 	EndGlobalSection
 EndGlobal

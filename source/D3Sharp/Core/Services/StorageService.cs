@@ -27,7 +27,7 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x9, serviceName: "bnet.protocol.storage.StorageService")]
     public class StorageService : bnet.protocol.storage.StorageService,IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void OpenTable(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.storage.OpenTableRequest request, System.Action<bnet.protocol.storage.OpenTableResponse> done)

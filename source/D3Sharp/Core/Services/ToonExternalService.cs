@@ -26,7 +26,7 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x2, serviceName: "bnet.protocol.toon.external.ToonServiceExternal")]
     public class ToonExternalService : ToonServiceExternal, IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void ToonList(Google.ProtocolBuffers.IRpcController controller, ToonListRequest request, Action<ToonListResponse> done)
@@ -61,7 +61,7 @@ namespace D3Sharp.Core.Services
             var heroCreateParams = D3.OnlineService.HeroCreateParams.ParseFrom(request.AttributeList[0].Value.MessageValue);
             var builder = CreateToonResponse.CreateBuilder();
 
-            var toon = new Toons.Toon(request.Name, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? Toons.ToonGender.Female : Toons.ToonGender.Male, 1, (long)Client.Account.PersistentID);
+            var toon = new Toons.Toon(request.Name, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? Toons.ToonGender.Female : Toons.ToonGender.Male, 1, Client.Account);
             if (Toons.ToonManager.SaveToon(toon)) builder.SetToon(toon.BnetEntityID);
             done(builder.Build());
         }

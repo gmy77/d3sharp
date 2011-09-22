@@ -60,7 +60,7 @@ namespace D3Sharp.Core.Objects
             client.MapLocalObjectID(this.DynamicId, remoteObjectId);
             this.Subscribers.Add(client);
             // Since the client wasn't previously subscribed, it should not be aware of the object's state -- let's notify it
-            this.NotifySubscriber(client);
+            this.NotifySubscriptionAdded(client);
         }
 
         /// <summary>
@@ -68,18 +68,19 @@ namespace D3Sharp.Core.Objects
         /// This methods should be actually implemented by deriving object classes.
         /// </summary>
         /// <param name="client">The subscriber.</param>
-        protected virtual void NotifySubscriber(BNetClient client) { }
+        protected virtual void NotifySubscriptionAdded(BNetClient client) { }
 
-        /// <summary>
-        /// Notifies all subscribers with the object's current state.
-        /// </summary>
-        public void NotifyAllSubscribers()
-        {
-            foreach (var subscriber in this.Subscribers)
-            {
-                this.NotifySubscriber(subscriber);
-            }
-        }
+        // ** We're yet not sure about this, so commenting out **
+        ///// <summary>
+        ///// Notifies all subscribers with the object's current state.
+        ///// </summary>
+        //public void NotifyAllSubscribers()
+        //{
+        //    foreach (var subscriber in this.Subscribers)
+        //    {
+        //        this.NotifySubscriptionAdded(subscriber);
+        //    }
+        //}
         
         #region de-ctor
 

@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using D3Sharp.Core.Accounts;
 using D3Sharp.Core.Toons;
 using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
@@ -29,7 +30,7 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0xb, serviceName: "bnet.protocol.presence.PresenceService")]
     public class PresenceService : bnet.protocol.presence.PresenceService,IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.SubscribeRequest request, System.Action<bnet.protocol.NoData> done)
@@ -64,19 +65,43 @@ namespace D3Sharp.Core.Services
 
         public override void Update(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UpdateRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            // op->field->value->int_value:
-            //  0 for present
-            //  2 for away
-            //  4 for busy
-            Logger.Trace("Update()");
-            //Logger.Debug("request:\n{0}", request.ToString());
-            var builder = bnet.protocol.NoData.CreateBuilder();
+            Logger.Trace("Update() {0}: {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
+
+            // This "UpdateRequest" is not, as it may seem, a request to update the client on the state of an object,
+            // but instead the *client* requesting to change fields on an object that it has subscribed to.
+            // Check docs/rpc/presence.txt in branch wip-docs (or master)
+
+            switch (request.EntityId.GetHighIdType())
+            {
+                case EntityIdHelper.HighIdType.AccountId:
+                    var account = AccountManager.GetAccountByEntityID(request.EntityId);
+                    break;
+                case EntityIdHelper.HighIdType.ToonId:
+                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);                    
+                    break;
+                default:
+                    Logger.Warn("Recieved an unhandled Presence:Update request with {0}", request.EntityId.GetHighIdType());
+                    break;
+            }
+
+            var builder = NoData.CreateBuilder();
             done(builder.Build());
         }
 
         public override void Query(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.QueryRequest request, System.Action<bnet.protocol.presence.QueryResponse> done)
         {
-            throw new System.NotImplementedException();
+            Logger.Trace("Query() {0}: {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
+
+            var builder = bnet.protocol.presence.QueryResponse.CreateBuilder();
+            var toon = ToonManager.GetToonByLowID(request.EntityId.Low);                       
+
+            foreach(var key in request.KeyList)
+            {
+                var field = toon.QueryField(key);
+                if (field != null) builder.AddField(field);
+            }
+
+            done(builder.Build());
         }               
     }
 }

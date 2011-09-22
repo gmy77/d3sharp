@@ -83,7 +83,10 @@
     <Compile Include="Core\Games\GameManager.cs" />
     <Compile Include="Core\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\Helpers\FieldKeyHelper.cs" />
+    <Compile Include="Core\Items\Item.cs" />
+    <Compile Include="Core\Items\ItemTypeGenerator.cs" />
     <Compile Include="Core\Objects\PersistentRPCObject.cs" />
+    <Compile Include="Core\OnlinePlayers.cs" />
     <Compile Include="Core\Services\AuthenticationService.cs" />
     <Compile Include="Core\Services\BaseService.cs" />
     <Compile Include="Core\Services\ChannelInvitationService.cs" />
@@ -105,6 +108,7 @@
     <Compile Include="Core\Services\ToonExternalService.cs" />
     <Compile Include="Core\Services\UserManagerService.cs" />
     <Compile Include="Core\Storage\DBManager.cs" />
+    <Compile Include="Core\Storage\GamedataDBManager.cs" />
     <Compile Include="Core\Toons\Toon.cs" />
     <Compile Include="Core\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Toons\ToonManager.cs" />
@@ -139,6 +143,9 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Assets\gamedata.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Assets\toon.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
