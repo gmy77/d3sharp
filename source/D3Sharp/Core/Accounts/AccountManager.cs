@@ -72,7 +72,7 @@ namespace D3Sharp.Core.Accounts
             {
                 return Convert.ToUInt64(cmd.ExecuteScalar());
             }
-            catch (InvalidCastException e)
+            catch (InvalidCastException)
             {
                 return 0;
             }
