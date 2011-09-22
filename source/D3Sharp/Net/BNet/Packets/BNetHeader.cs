@@ -25,11 +25,11 @@ namespace D3Sharp.Net.BNet.Packets
     {
         public byte[] Data { get; private set; }
 
-        public byte ServiceID { get; set; }
-        public uint MethodID { get; set; }
-        public int RequestID { get; set; }
-        public ulong ObjectID { get; set; }
-        public uint PayloadLength { get; set; }
+        public byte ServiceID { get; private set; }
+        public uint MethodID { get; private set; }
+        public int RequestID { get; private set; }
+        public ulong ObjectID { get; private set; }
+        public uint PayloadLength { get; private set; }
 
         public BNetHeader()
         {            
@@ -63,9 +63,7 @@ namespace D3Sharp.Net.BNet.Packets
             this.ObjectID = objectId;
             this.PayloadLength = payloadLength;
 
-            this.Data = this.ServiceID != 0xfe ? new byte[6] : new byte[5];
-
-            using (var stream = new MemoryStream())
+            using (var stream = new MemoryStream(this.ServiceID != 0xfe ? 6 : 5))
             {
                 var output = CodedOutputStream.CreateInstance(stream);
                 output.WriteRawByte(this.ServiceID);
