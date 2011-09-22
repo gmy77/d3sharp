@@ -30,7 +30,7 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x0, serviceHash: 0x0)]
     public class BaseService :  ConnectionService,  IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void Connect(Google.ProtocolBuffers.IRpcController controller, ConnectRequest request, Action<ConnectResponse> done)

@@ -28,15 +28,17 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x0D, serviceName: "bnet.protocol.party.PartyService")]
     public class PartyService : bnet.protocol.party.PartyService,IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
+
+        // PartyService just used ChannelService to create a new channel for the party.
 
         public override void CreateChannel(IRpcController controller, CreateChannelRequest request, Action<CreateChannelResponse> done)
         {
             Logger.Trace("CreateChannel()");
-            //Logger.Debug("request:\n{0}", request.ToString());
             
-            var channel = ChannelsManager.CreateNewChannel();
+            var channel = ChannelsManager.CreateNewChannel((BNetClient)this.Client);
+
             // This is an object creator, so we have to map the remote object ID
             this.Client.MapLocalObjectID(channel.DynamicId, request.ObjectId);
             var builder = CreateChannelResponse.CreateBuilder()
@@ -44,9 +46,6 @@ namespace D3Sharp.Core.Services
                 .SetChannelId(channel.BnetEntityID);
 
             done(builder.Build());
-
-            channel.Add((BNetClient)this.Client);
-            channel.NotifyChannelState((BNetClient)this.Client);
         }
 
         public override void JoinChannel(IRpcController controller, JoinChannelRequest request, Action<JoinChannelResponse> done)

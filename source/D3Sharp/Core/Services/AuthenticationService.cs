@@ -26,19 +26,21 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x1, serviceName: "bnet.protocol.authentication.AuthenticationServer")]
     public class AuthenticationService:AuthenticationServer, IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void Logon(Google.ProtocolBuffers.IRpcController controller, LogonRequest request, System.Action<LogonResponse> done)
         {
             Logger.Trace("LogonRequest(); Email={0}", request.Email);
-            Client.Account = AccountManager.GetAccount(request.Email);
+            Client.Account = AccountManager.GetAccountByEmail(request.Email);
 
             var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
                 .SetAccount(Client.Account.BnetAccountID)
                 .SetGameAccount(Client.Account.BnetGameAccountID);
 
             done(builder.Build());
+
+            OnlinePlayers.Players.Add((BNetClient)Client);
         }
 
         public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, ModuleMessageRequest request, System.Action<bnet.protocol.NoData> done)

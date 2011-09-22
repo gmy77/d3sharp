@@ -27,7 +27,7 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x3, serviceName: "bnet.protocol.channel_invitation.ChannelInvitationService")]
     public class ChannelInvitationService: bnet.protocol.channel_invitation.ChannelInvitationService, IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SubscribeRequest request, System.Action<bnet.protocol.channel_invitation.SubscribeResponse> done)
