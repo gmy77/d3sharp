@@ -108,14 +108,13 @@ namespace D3Sharp.Core.Toons
             this.Level = level;
             this.AccountID = accountId;
 
+            var itemsGenerator = new Items.ItemTypeGenerator();
+
             var visualItems = new[]
                             {
-                                // Some hack. We should either load strings and then hash it from DB or load hash directly from DB..
-                                // Showing a head and a Wep to show how it works
-
                                 // Head
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid( (int)StringHashHelper.HashItemName("Helm_002") )
+                                    .SetGbid( itemsGenerator.generateRandomElement(Items.ItemType.Helm).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -123,7 +122,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Chest
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
+                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.ChestArmor).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -131,7 +130,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Feet
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
+                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Boots).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -139,7 +138,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Hands
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
+                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Gloves).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -147,7 +146,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Weapon (1)
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid( (int)StringHashHelper.HashItemName("Unique_Mace_1H_012") )
+                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Sword_1H).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -155,7 +154,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Weapon (2)
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
+                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Shield).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -163,7 +162,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Shoulders
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
+                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Shoulders).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -171,7 +170,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Legs
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
+                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Pants).Gbid)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
