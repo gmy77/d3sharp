@@ -54,7 +54,6 @@ namespace D3Sharp.Core.Toons
         public byte Level { get; private set; }
         public D3.Hero.Digest Digest { get; private set; }
         public D3.Hero.VisualEquipment Equipment { get; private set; }
-        public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
 
         //TODO: Toons should be linked to accounts here. /raist
 
@@ -108,19 +107,6 @@ namespace D3Sharp.Core.Toons
             this.Gender = gender;
             this.Level = level;
             this.AccountID = accountId;
-
-            this.BannerConfiguration = D3.Account.BannerConfiguration.CreateBuilder()
-                .SetBackgroundColorIndex(20)
-                .SetBannerIndex(8)
-                .SetPattern(4)
-                .SetPatternColorIndex(11)
-                .SetPlacementIndex(11)
-                .SetSigilAccent(4)
-                .SetSigilMain(3)
-                .SetSigilColorIndex(7)
-                .SetUseSigilVariant(true)
-                .Build();
-
 
             var visualItems = new[]
                             {
@@ -245,7 +231,7 @@ namespace D3Sharp.Core.Toons
                 case FieldKeyHelper.Program.D3:
                     if (queryKey.Group == 2 && queryKey.Field == 1) // Banner configuration
                     {                        
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.BannerConfiguration.ToByteString()).Build());
+                        //field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(BannerConfiguration.ToByteString()).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 1) // Hero's class (GbidClass)
                     {                        
@@ -301,7 +287,7 @@ namespace D3Sharp.Core.Toons
 
             // Banner configuration
             var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 2, 1, 0);
-            var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.BannerConfiguration.ToByteString()).Build()).Build();
+            var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(client.Account.BannerConfiguration.ToByteString()).Build()).Build();
             var fieldOperation1 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build();
 
             // Class
