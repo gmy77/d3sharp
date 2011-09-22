@@ -37,7 +37,6 @@ namespace D3Sharp.Net.BNet
         private int _requestCounter = 0;
 
         public Toon CurrentToon { get; set; }
-        public Channel CurrentChannel { get; set; }
 
         public IConnection Connection { get; set; }
 

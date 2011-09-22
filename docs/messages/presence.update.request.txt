@@ -1,0 +1,81 @@
+Presence.Update
+----------------------
+
+{Update's presence related values on objects}
+
+Update over toons: (request.entityid=toon)
+--------------------------
+
+[Channels] [D3      4       1       D3.OnlineService.EntityId           Channel ID]
+------------------------------------------------------------------------------------
+
+
+bnet.protocol.presence.UpdateRequest
+entity_id {
+  high: 216172782113783808
+  low: 4049700251
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 1
+      index: 0
+    }
+    value {
+      message_value: "\010\200\200\200\200\200\200\200\200\006\020\000"
+    }
+  }
+}
+
+field contains: {id_high: 433661094618860925 - id_low: 11233645142038554527} 
+which is a channel: object_id: 67093 channel_id { high: 433661094618860925 low: 11233645142038554527 }
+
+
+[Unknown maybe away status?] D3      4       2       int                                 Unknown
+------------------------------------------------------------------------------------------------------------
+bnet.protocol.presence.UpdateRequest
+entity_id {
+  high: 216172782113783808
+  low: 4049700251
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 2
+      index: 0
+    }
+    value {
+      int_value: 2
+    }
+  }
+}
+
+ //  0 for present
+ //  2 for away
+ //  4 for busy
+
+[unknown - away/status msg?] D3      4       3       string                              Unknown; seen as empty string
+----------------------------------------------------------------------------------------------
+bnet.protocol.presence.UpdateRequest
+entity_id {
+  high: 216172782113783808
+  low: 4049700251
+}
+field_operation {
+  field {
+    key {
+      program: 17459
+      group: 4
+      field: 3
+      index: 0
+    }
+    value {
+      string_value: ""
+    }
+  }
+}
+

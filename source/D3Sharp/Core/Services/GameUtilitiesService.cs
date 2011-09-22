@@ -29,7 +29,7 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x8, serviceName: "bnet.protocol.game_utilities.GameUtilities")]
     public class GameUtilitiesService : GameUtilities,IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void ProcessClientRequest(IRpcController controller, ClientRequest request, Action<ClientResponse> done)
