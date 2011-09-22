@@ -42,7 +42,7 @@ namespace D3Sharp.Core.Channels
             client.MapLocalObjectID(this.DynamicId, remoteObjectId);
             
             var builder = bnet.protocol.channel.ChannelState.CreateBuilder()
-                .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN)
+                .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN_INVITATION)
                 .SetMaxMembers(8)
                 .SetMinMembers(1)
                 .SetMaxInvitations(12);
