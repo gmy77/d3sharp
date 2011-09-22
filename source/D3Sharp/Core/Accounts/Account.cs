@@ -34,8 +34,7 @@ namespace D3Sharp.Core.Accounts
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         public bnet.protocol.EntityId BnetAccountID { get; private set; }
-        public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
-        public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
+        public bnet.protocol.EntityId BnetGameAccountID { get; private set; }        
 
         public string Email { get; private set; }
 
@@ -44,7 +43,7 @@ namespace D3Sharp.Core.Accounts
             get
             {
                 var builder = D3.Account.Digest.CreateBuilder().SetVersion(99)
-                    .SetBannerConfiguration(this.BannerConfiguration)
+                    .SetBannerConfiguration(this.Toons.First().Value.BannerConfiguration)
                     .SetFlags(0);
 
                 builder.SetLastPlayedHeroId(Toons.Count > 0
@@ -86,17 +85,6 @@ namespace D3Sharp.Core.Accounts
             this.Email = email;
             this.BnetAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.PersistentID).Build();
             this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(this.PersistentID).Build();
-            this.BannerConfiguration = D3.Account.BannerConfiguration.CreateBuilder()
-                .SetBackgroundColorIndex(20)
-                .SetBannerIndex(8)
-                .SetPattern(4)
-                .SetPatternColorIndex(11)
-                .SetPlacementIndex(11)
-                .SetSigilAccent(4)
-                .SetSigilMain(3)
-                .SetSigilColorIndex(7)
-                .SetUseSigilVariant(true)
-                .Build();
         }
 
         protected override void NotifySubscriptionAdded(Net.BNet.BNetClient client)

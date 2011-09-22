@@ -26,7 +26,7 @@ namespace D3Sharp.Core.Accounts
 {
     public static class AccountManager
     {
-        private static readonly Dictionary<string, Account> Accounts = new Dictionary<string, Account>();
+        public static readonly Dictionary<string, Account> Accounts = new Dictionary<string, Account>();
 
         static AccountManager()
         {

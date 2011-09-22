@@ -44,11 +44,11 @@ namespace D3Sharp.Core.Channels
                 //.SetName("d3sharp test channel"); // NOTE: cap log doesn't set this optional field
             this.State = builder.Build();
 
-            this.Add(client);
+            // add the client that requested the creation of channel to channel
+            this.AddMember(client);
         }
 
-
-        public void Add(BNetClient client)
+        public void AddMember(BNetClient client)
         {
             var identity = client.GetIdentity(false, false, true);
             var member = bnet.protocol.channel.Member.CreateBuilder()
@@ -59,12 +59,10 @@ namespace D3Sharp.Core.Channels
                     .Build())
                 .Build();
 
-
             this.Members.Add(client, member);
-            //this.NotifyJoin(client);
         }
 
-        public void NotifyJoin(BNetClient client)
+        /*public void NotifyJoin(BNetClient client)
         {
             var notification = bnet.protocol.channel.JoinNotification.CreateBuilder().SetMember(this.Members[client]).Build();
 
@@ -74,7 +72,7 @@ namespace D3Sharp.Core.Channels
 
                 pair.Key.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyJoin"), notification, this.DynamicId);
             }
-        }      
+        }    */  
 
         public bool HasUser(BNetClient client)
         {

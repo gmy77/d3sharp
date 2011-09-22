@@ -17,27 +17,12 @@
  */
 
 using System.Collections.Generic;
-using System.Linq;
-using D3Sharp.Core.Objects;
 using D3Sharp.Net.BNet;
 
-namespace D3Sharp.Core.Channels
+namespace D3Sharp.Core
 {
-    public static class ChannelsManager
+    public static class OnlinePlayers
     {
-        public readonly static Dictionary<ulong, Channel> Channels =
-            new Dictionary<ulong, Channel>();
-
-        public static Channel CreateNewChannel(BNetClient client)
-        {
-            var channel = new Channel(client);
-            Channels.Add(channel.DynamicId, channel);
-            return channel;
-        }
-
-        public static Channel DeleteChannel(ulong id) {
-            throw new System.NotImplementedException();
-            // TODO: Mapping removal should be done in client or mayhaps the ID controller
-        }
+        public static List<BNetClient> Players = new List<BNetClient>();
     }
 }

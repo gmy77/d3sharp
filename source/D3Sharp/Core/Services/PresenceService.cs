@@ -90,7 +90,18 @@ namespace D3Sharp.Core.Services
 
         public override void Query(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.QueryRequest request, System.Action<bnet.protocol.presence.QueryResponse> done)
         {
-            throw new System.NotImplementedException();
+            Logger.Trace("Query() {0}: {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
+
+            var builder = bnet.protocol.presence.QueryResponse.CreateBuilder();
+            var toon = ToonManager.GetToonByLowID(request.EntityId.Low);                       
+
+            foreach(var key in request.KeyList)
+            {
+                var field = toon.QueryField(key);
+                if(field!=null) builder.AddField(toon.QueryField(key));
+            }
+
+            done(builder.Build());
         }               
     }
 }

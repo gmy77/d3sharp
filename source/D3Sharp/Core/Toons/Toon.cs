@@ -18,6 +18,8 @@
 
 using System;
 using System.Data.SQLite;
+using System.Linq;
+using D3Sharp.Core.Channels;
 using D3Sharp.Core.Helpers;
 using D3Sharp.Core.Objects;
 using D3Sharp.Core.Storage;
@@ -52,6 +54,7 @@ namespace D3Sharp.Core.Toons
         public byte Level { get; private set; }
         public D3.Hero.Digest Digest { get; private set; }
         public D3.Hero.VisualEquipment Equipment { get; private set; }
+        public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
 
         //TODO: Toons should be linked to accounts here. /raist
 
@@ -105,6 +108,18 @@ namespace D3Sharp.Core.Toons
             this.Gender = gender;
             this.Level = level;
             this.AccountID = accountId;
+
+            this.BannerConfiguration = D3.Account.BannerConfiguration.CreateBuilder()
+                .SetBackgroundColorIndex(20)
+                .SetBannerIndex(8)
+                .SetPattern(4)
+                .SetPatternColorIndex(11)
+                .SetPlacementIndex(11)
+                .SetSigilAccent(4)
+                .SetSigilMain(3)
+                .SetSigilColorIndex(7)
+                .SetUseSigilVariant(true)
+                .Build();
 
 
             var visualItems = new[]
@@ -221,13 +236,72 @@ namespace D3Sharp.Core.Toons
             return genderId== 0x2000002 ? ToonGender.Female : ToonGender.Male;
         }
 
+        public bnet.protocol.presence.Field QueryField(bnet.protocol.presence.FieldKey queryKey)
+        {
+            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(queryKey);
+
+            switch ((FieldKeyHelper.Program)queryKey.Program)
+            {
+                case FieldKeyHelper.Program.D3:
+                    if (queryKey.Group == 2 && queryKey.Field == 1) // Banner configuration
+                    {                        
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.BannerConfiguration.ToByteString()).Build());
+                    }
+                    else if (queryKey.Group == 3 && queryKey.Field == 1) // Hero's class (GbidClass)
+                    {                        
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.ClassID).Build());
+                    }
+                    else if (queryKey.Group == 3 && queryKey.Field == 2) // Hero's current level
+                    {                        
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.Level).Build());
+                    }
+                    else if (queryKey.Group == 3 && queryKey.Field == 3) // Hero's visible equipment
+                    {                        
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Equipment.ToByteString()).Build());
+                    }
+                    else if (queryKey.Group == 3 && queryKey.Field == 4) // Hero's flags (gender and such)
+                    {                        
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.GenderID).Build());
+                    }
+                    else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID
+                    {
+                        //field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(ChannelsManager.Channels.First().Value.BnetEntityID.ToByteString()).Build());                       
+                    }
+                    else if (queryKey.Group == 4 && queryKey.Field == 2) // int - Away status (0=present, 2=away, 4=busy)
+                    {                        
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2).Build());
+                    }
+                    break;
+                case FieldKeyHelper.Program.BNet:
+                    if (queryKey.Group == 3 && queryKey.Field == 2) // heroname             
+                    { 
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build());
+                    }
+                    else if (queryKey.Group == 3 && queryKey.Field == 3) // hardcore
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(false).Build());
+                    }
+                    else if (queryKey.Group == 3 && queryKey.Field == 5) // unknown ??
+                    {
+                        //field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build());
+                    }
+                    else if (queryKey.Group == 3 && queryKey.Field == 9) // program - always d3    
+                    {  
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build());
+                    }
+                    break;
+            }
+
+            return field.HasValue ? field.Build() : null;
+        }
+
         protected override void NotifySubscriptionAdded(Net.BNet.BNetClient client)
         {
             // Check d3sharp/docs/rpc/notification-data-layout.txt for fields keys
 
             // Banner configuration
             var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 2, 1, 0);
-            var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(client.Account.BannerConfiguration.ToByteString()).Build()).Build();
+            var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.BannerConfiguration.ToByteString()).Build()).Build();
             var fieldOperation1 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build();
 
             // Class
@@ -284,6 +358,12 @@ namespace D3Sharp.Core.Toons
 
             // Make the rpc call
             client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(),this.DynamicId);
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Name: {0} High: {1} Low:{2}", this.Name, this.BnetEntityID.High,
+                                 this.BnetEntityID.Low);
         }
 
         public void SaveToDB()

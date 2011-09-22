@@ -39,6 +39,8 @@ namespace D3Sharp.Core.Services
                 .SetGameAccount(Client.Account.BnetGameAccountID);
 
             done(builder.Build());
+
+            OnlinePlayers.Players.Add((BNetClient)Client);
         }
 
         public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, ModuleMessageRequest request, System.Action<bnet.protocol.NoData> done)
