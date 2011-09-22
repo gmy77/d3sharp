@@ -66,7 +66,7 @@ namespace D3Sharp.Core.Channels
             var builder = bnet.protocol.channel.AddNotification.CreateBuilder()
                 .SetChannelState(this.State)
                 .SetSelf(member);
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build());
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(),this.DynamicId);
 
             this.Members.Add(client, member);
         }
