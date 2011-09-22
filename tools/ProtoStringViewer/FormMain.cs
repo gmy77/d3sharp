@@ -39,7 +39,7 @@ namespace ProtoStringViewer
             string typename = textBoxProtoType.Text;
             if (typename.Trim() == string.Empty)
                 return;
-            var type = Type.GetType(typename);
+            var type = Type.GetType(typename + ", D3Proto");
             if (type == null)
             {
                 richTextBoxProto.Text = "(no type)";
