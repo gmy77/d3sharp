@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4CC19847-6F24-4453-9E31-126F94308AB9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>D3Proto</RootNamespace>
+    <AssemblyName>D3Proto</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+    </Reference>
+    <Reference Include="Google.ProtocolBuffers, Version=2.3.0.277, Culture=neutral, PublicKeyToken=17b3b1f090c3ea48">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\Google.ProtocolBuffers.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="bnet\protocol\Descriptor.cs" />
+    <Compile Include="bnet\protocol\exchange\ExchangeService.cs" />
+    <Compile Include="DescriptorProtoFile.cs" />
+    <Compile Include="bnet\protocol\ContentHandle.cs" />
+    <Compile Include="bnet\protocol\Entity.cs" />
+    <Compile Include="bnet\protocol\Resource.cs" />
+    <Compile Include="bnet\protocol\Rpc.cs" />
+    <Compile Include="bnet\protocol\attribute\Attribute.cs" />
+    <Compile Include="bnet\protocol\authentication\Authentication.cs" />
+    <Compile Include="bnet\protocol\channel\Channel.cs" />
+    <Compile Include="bnet\protocol\channel\ChannelTypes.cs" />
+    <Compile Include="bnet\protocol\channel_invitation\ChannelInvitation.cs" />
+    <Compile Include="bnet\protocol\channel_invitation\ChannelInvitationTypes.cs" />
+    <Compile Include="bnet\protocol\config\ProcessConfig.cs" />
+    <Compile Include="bnet\protocol\connection\Connection.cs" />
+    <Compile Include="bnet\protocol\exchange\Exchange.cs" />
+    <Compile Include="bnet\protocol\exchange\ExchangeTypes.cs" />
+    <Compile Include="bnet\protocol\exchange_object_provider\ExchangeObjectProvider.cs" />
+    <Compile Include="bnet\protocol\friends\Friends.cs" />
+    <Compile Include="bnet\protocol\friends\FriendsTypes.cs" />
+    <Compile Include="bnet\protocol\game_master\GameFactory.cs" />
+    <Compile Include="bnet\protocol\game_master\GameMaster.cs" />
+    <Compile Include="bnet\protocol\game_master\GameMasterTypes.cs" />
+    <Compile Include="bnet\protocol\game_utilities\GameUtilities.cs" />
+    <Compile Include="bnet\protocol\invitation\Invitation.cs" />
+    <Compile Include="bnet\protocol\notification\Notification.cs" />
+    <Compile Include="bnet\protocol\presence\Presence.cs" />
+    <Compile Include="bnet\protocol\presence\PresenceTypes.cs" />
+    <Compile Include="bnet\protocol\profanity\Profanity.cs" />
+    <Compile Include="bnet\protocol\search\Search.cs" />
+    <Compile Include="bnet\protocol\search\SearchTypes.cs" />
+    <Compile Include="bnet\protocol\server_pool\ServerPool.cs" />
+    <Compile Include="bnet\protocol\storage\Storage.cs" />
+    <Compile Include="bnet\protocol\toon\Toon.cs" />
+    <Compile Include="bnet\protocol\toon\external\ToonExternal.cs" />
+    <Compile Include="bnet\protocol\user_manager\UserManager.cs" />
+    <Compile Include="D3\Account\Account.cs" />
+    <Compile Include="D3\AttributeSerializer\AttributeSerializer.cs" />
+    <Compile Include="D3\Client\Settings.cs" />
+    <Compile Include="D3\GameBalance\GBHandle.cs" />
+    <Compile Include="D3\GameMessage\GameMessage.cs" />
+    <Compile Include="D3\Hero\Hero.cs" />
+    <Compile Include="D3\Hireling\Hireling.cs" />
+    <Compile Include="D3\ItemCrafting\ItemCrafting.cs" />
+    <Compile Include="D3\Items\Items.cs" />
+    <Compile Include="D3\OnlineService\OnlineService.cs" />
+    <Compile Include="D3\PartyMessage\PartyMessage.cs" />
+    <Compile Include="D3\Quests\Quest.cs" />
+    <Compile Include="D3\Stats\Stats.cs" />
+    <Compile Include="bnet\protocol\followers\Followers.cs" />
+    <Compile Include="bnet\protocol\chat\Chat.cs" />
+    <Compile Include="bnet\protocol\chat\ChatTypes.cs" />
+    <Compile Include="bnet\protocol\party\Party.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
