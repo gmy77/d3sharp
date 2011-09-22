@@ -48,10 +48,6 @@ namespace D3Sharp.Core.Channels
                 .SetMaxInvitations(12);
             //.SetName("d3sharp test channel"); // NOTE: cap log doesn't set this optional field
             this.State = builder.Build();
-
-            // Add the client that requested the creation of channel as the owner
-            this.AddOwner(client);
-            client.CurrentChannel = this;
         }
 
         public void AddOwner(BNetClient client)
@@ -73,6 +69,7 @@ namespace D3Sharp.Core.Channels
             client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.DynamicId);
 
             this.Members.Add(client, member);
+            client.CurrentChannel = this;
         }
 
         public bool HasUser(BNetClient client)

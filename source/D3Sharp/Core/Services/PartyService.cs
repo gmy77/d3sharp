@@ -44,6 +44,9 @@ namespace D3Sharp.Core.Services
                 .SetChannelId(channel.BnetEntityId);
 
             done(builder.Build());
+            
+            // Add the client that requested the creation of channel as the owner
+            channel.AddOwner((BNetClient)Client);
         }
 
         public override void JoinChannel(IRpcController controller, JoinChannelRequest request, Action<JoinChannelResponse> done)
