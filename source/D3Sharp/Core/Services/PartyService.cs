@@ -43,7 +43,7 @@ namespace D3Sharp.Core.Services
             this.Client.MapLocalObjectID(channel.DynamicId, request.ObjectId);
             var builder = CreateChannelResponse.CreateBuilder()
                 .SetObjectId(channel.DynamicId)
-                .SetChannelId(channel.BnetEntityID);
+                .SetChannelId(channel.BnetEntityId);
 
             done(builder.Build());
         }
