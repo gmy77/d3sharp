@@ -221,7 +221,7 @@ namespace D3Sharp.Core.Toons
             return genderId== 0x2000002 ? ToonGender.Female : ToonGender.Male;
         }
 
-        protected override void NotifySubscriber(Net.BNet.BNetClient client)
+        protected override void NotifySubscriptionAdded(Net.BNet.BNetClient client)
         {
             // Check d3sharp/docs/rpc/notification-data-layout.txt for fields keys
 

@@ -24,7 +24,7 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x4, serviceName: "bnet.protocol.followers.FollowersService")]
     public class FollowersService : bnet.protocol.followers.FollowersService,IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void SubscribeToFollowers(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.followers.SubscribeToFollowersRequest request, System.Action<bnet.protocol.followers.SubscribeToFollowersResponse> done)

@@ -17,7 +17,9 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using D3Sharp.Core.Objects;
+using D3Sharp.Net.BNet;
 
 namespace D3Sharp.Core.Channels
 {
@@ -26,10 +28,11 @@ namespace D3Sharp.Core.Channels
         private readonly static Dictionary<ulong, Channel> Channels =
             new Dictionary<ulong, Channel>();
 
-        public static Channel CreateNewChannel()
+        public static Channel CreateNewChannel(BNetClient client)
         {
-            var channel = new Channel();
+            var channel = new Channel(client);
             Channels.Add(channel.DynamicId, channel);
+                        
             return channel;
         }
         

@@ -24,7 +24,7 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x0f, serviceName: "bnet.protocol.chat.ChatService")]
     public class ChatService : bnet.protocol.chat.ChatService, IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void CreateChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.CreateChannelRequest request, System.Action<bnet.protocol.channel.CreateChannelResponse> done)

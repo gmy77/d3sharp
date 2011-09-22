@@ -26,7 +26,7 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x1, serviceName: "bnet.protocol.authentication.AuthenticationServer")]
     public class AuthenticationService:AuthenticationServer, IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void Logon(Google.ProtocolBuffers.IRpcController controller, LogonRequest request, System.Action<LogonResponse> done)

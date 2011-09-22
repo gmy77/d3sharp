@@ -99,7 +99,7 @@ namespace D3Sharp.Core.Accounts
                 .Build();
         }
 
-        protected override void NotifySubscriber(Net.BNet.BNetClient client)
+        protected override void NotifySubscriptionAdded(Net.BNet.BNetClient client)
         {
             // Check d3sharp/docs/rpc/notification-data-layout.txt for fields keys
 

@@ -30,9 +30,9 @@ namespace D3Sharp.Core.Channels
         public bnet.protocol.EntityId BnetEntityID { get; private set; }
         public bnet.protocol.channel.ChannelState State { get; private set; }
 
-        public readonly List<bnet.protocol.channel.Member> Members = new List<bnet.protocol.channel.Member>();
+        public readonly Dictionary<BNetClient, bnet.protocol.channel.Member> Members = new Dictionary<BNetClient, bnet.protocol.channel.Member>();
 
-        public Channel()
+        public Channel(BNetClient client)
         {
             this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ChannelId).SetLow(this.DynamicId).Build();
 
@@ -43,12 +43,15 @@ namespace D3Sharp.Core.Channels
                 .SetMaxInvitations(12);
                 //.SetName("d3sharp test channel"); // NOTE: cap log doesn't set this optional field
             this.State = builder.Build();
+
+            this.Add(client);
         }
+
 
         public void Add(BNetClient client)
         {
             var identity = client.GetIdentity(false, false, true);
-            var user = bnet.protocol.channel.Member.CreateBuilder()
+            var member = bnet.protocol.channel.Member.CreateBuilder()
                 .SetIdentity(identity)
                 .SetState(bnet.protocol.channel.MemberState.CreateBuilder()
                     .AddRole(2)
@@ -57,28 +60,41 @@ namespace D3Sharp.Core.Channels
                 .Build();
 
 
-            this.Members.Add(user);
-            this.NotifyAllSubscribers();
+            this.Members.Add(client, member);
+            //this.NotifyJoin(client);
+        }
+
+        public void NotifyJoin(BNetClient client)
+        {
+            var notification = bnet.protocol.channel.JoinNotification.CreateBuilder().SetMember(this.Members[client]).Build();
+
+            foreach(var pair in Members)
+            {
+                if (pair.Key == client) continue;
+
+                pair.Key.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyJoin"), notification, this.DynamicId);
+            }
+        }      
+
+        public bool HasUser(BNetClient client)
+        {
+            return this.Members.Any(pair => pair.Key == client);
         }
 
         public void RemoveUser(BNetClient client)
         {
-            // send notification remove to client itself.
-            var identity = client.GetIdentity(false, false, true);
-            var builder = bnet.protocol.channel.RemoveNotification.CreateBuilder()
-                .SetMemberId(identity.ToonId);
-            this.Members.RemoveAll(m => identity == m.Identity);
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyRemove"), builder.Build(), this.DynamicId);
+            //// send notification remove to client itself.
+            //var identity = client.GetIdentity(false, false, true);
+            //var builder = bnet.protocol.channel.RemoveNotification.CreateBuilder()
+            //    .SetMemberId(identity.ToonId);
 
-            // notify all subscribers.
-            this.NotifyAllSubscribers();
+            //this.Members.Remove(client);
+            //client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyRemove"), builder.Build(), this.DynamicId);
+
+            //// notify all subscribers.
+            //this.NotifySubscribers();
         }
 
-        public bool HasUser(BNetClient client)
-        {
-            return this.Members.Any(m => m.Identity == client.GetIdentity(false, false, true));
-        }
-        
         /*public void Close()
         {
             RemoveAllUsers();

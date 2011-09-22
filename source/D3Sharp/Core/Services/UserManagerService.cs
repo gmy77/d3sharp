@@ -27,7 +27,7 @@ namespace D3Sharp.Core.Services
     [Service(serviceID: 0x5, serviceName: "bnet.protocol.user_manager.UserManagerService")]
     public class UserManagerService : bnet.protocol.user_manager.UserManagerService,IServerService
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
         public override void SubscribeToUserManager(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.user_manager.SubscribeToUserManagerRequest request, System.Action<bnet.protocol.user_manager.SubscribeToUserManagerResponse> done)
