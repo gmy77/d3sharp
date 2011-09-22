@@ -33,11 +33,14 @@ namespace D3Sharp.Core.Channels
 
         public readonly Dictionary<BNetClient, bnet.protocol.channel.Member> Members = new Dictionary<BNetClient, bnet.protocol.channel.Member>();
 
-        public Channel(BNetClient client)
+        public Channel(BNetClient client, ulong remoteObjectId)
         {
             this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ChannelId).SetLow(this.DynamicId).Build();
             this.D3EntityId = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong) EntityIdHelper.HighIdType.ChannelId).SetIdLow(this.DynamicId).Build();
 
+            // This is an object creator, so we have to map the remote object ID
+            client.MapLocalObjectID(this.DynamicId, remoteObjectId);
+            
             var builder = bnet.protocol.channel.ChannelState.CreateBuilder()
                 .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN)
                 .SetMaxMembers(8)
@@ -46,7 +49,7 @@ namespace D3Sharp.Core.Channels
             //.SetName("d3sharp test channel"); // NOTE: cap log doesn't set this optional field
             this.State = builder.Build();
 
-            // add the client that requested the creation of channel to channel
+            // Add the client that requested the creation of channel as the owner
             this.AddOwner(client);
             client.CurrentChannel = this;
         }
@@ -62,11 +65,12 @@ namespace D3Sharp.Core.Channels
                     .Build())
                 .Build();
 
-            // be carefult when editing the below rpc call, you may broke in game to error7!! /raist.
+            // Be careful when editing the below RPC call, you may break in-game to error!! /raist
             var builder = bnet.protocol.channel.AddNotification.CreateBuilder()
                 .SetChannelState(this.State)
                 .SetSelf(member);
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(),this.DynamicId);
+            builder.AddMember(member);
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.DynamicId);
 
             this.Members.Add(client, member);
         }

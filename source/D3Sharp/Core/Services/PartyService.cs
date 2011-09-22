@@ -37,10 +37,8 @@ namespace D3Sharp.Core.Services
         {
             Logger.Trace("CreateChannel()");
             
-            var channel = ChannelsManager.CreateNewChannel((BNetClient)this.Client);
+            var channel = ChannelsManager.CreateNewChannel((BNetClient)this.Client, request.ObjectId);
 
-            // This is an object creator, so we have to map the remote object ID
-            this.Client.MapLocalObjectID(channel.DynamicId, request.ObjectId);
             var builder = CreateChannelResponse.CreateBuilder()
                 .SetObjectId(channel.DynamicId)
                 .SetChannelId(channel.BnetEntityId);
