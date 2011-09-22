@@ -41,7 +41,7 @@ namespace D3Sharp.Core.Channels
                 .SetMaxMembers(8)
                 .SetMinMembers(1)
                 .SetMaxInvitations(12);
-                //.SetName("d3sharp test channel"); // NOTE: cap log doesn't set this optional field
+            //.SetName("d3sharp test channel"); // NOTE: cap log doesn't set this optional field
             this.State = builder.Build();
 
             // add the client that requested the creation of channel to channel
@@ -59,6 +59,12 @@ namespace D3Sharp.Core.Channels
                     .Build())
                 .Build();
 
+            // be carefult when editing the below rpc call, you may broke in game to error!! /raist.
+            var builder = bnet.protocol.channel.AddNotification.CreateBuilder()
+                .SetChannelState(this.State)
+                .SetSelf(member);
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.DynamicId);
+
             this.Members.Add(client, member);
         }
 
@@ -72,7 +78,7 @@ namespace D3Sharp.Core.Channels
 
                 pair.Key.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyJoin"), notification, this.DynamicId);
             }
-        }    */  
+        }    */
 
         public bool HasUser(BNetClient client)
         {
@@ -104,7 +110,7 @@ namespace D3Sharp.Core.Channels
             // and then call RemoveUser on them
             this.Members.Clear();
         }*/
-        
+
         //public void NotifyChannelState(BNetClient client)
         //{
         //    var field1 =
