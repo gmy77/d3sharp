@@ -16,8 +16,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using D3Sharp.Net.Game.Packets;
-
 namespace D3Sharp.Net.Game
 {
     public sealed class GameServer : Server
@@ -26,12 +24,14 @@ namespace D3Sharp.Net.Game
         {
             this.OnConnect += GameServer_OnConnect;
             this.OnDisconnect += (sender, e) => Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
-            this.DataReceived += (sender, e) => GameRouter.Route(e);
+            this.DataReceived += GameServer_DataReceived;
             this.DataSent += (sender, e) => { };
         }
 
         void GameServer_DataReceived(object sender, ConnectionDataEventArgs e)
         {
+            var connection = (Connection)e.Connection;
+            ((GameClient)connection.Client).Parse(e);
         }
 
         void GameServer_OnConnect(object sender, ConnectionEventArgs e)
