@@ -55,14 +55,6 @@ namespace D3Sharp.Utils.Extensions
         {
             return EnumerableExtensions.Dump(array);
         }
-
-        public static string ToHex(this byte[] obj)
-        {
-            var hex = new StringBuilder(obj.Length * 2);
-            foreach (var b in obj)
-                hex.AppendFormat("0x{0:x2} ", b);
-            return hex.ToString();
-        }
     }
 }
 
