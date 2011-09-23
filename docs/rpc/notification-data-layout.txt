@@ -19,6 +19,7 @@ BN      1       2       bool                                Unknown; seems to al
 BN      1       4       bnet.protocol.EntityId              Current Toon's ID
 BN      3       2       string                              Hero's name
 BN      3       3       bool                                Hardcore mode
+BN      3       5       int                                 Unknown; only seen as 0
 BN      3       9       string                              Program (should always "D3")
 BN      3       10      int64                               Unknown; always 0?
 BN      3       11      bnet.protocol.EntityId              Unknown
