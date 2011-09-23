@@ -69,8 +69,8 @@ namespace D3Sharp.Net.Game.Packets
                     Logger.Debug("Response opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x28: //Ability/Interaction
-                    Logger.Debug("Interaction opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
-                    Logger.Debug("Interaction Payload [{0}]", payload.HexDump());
+                    Logger.Debug("Interaction opCode [0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("Interaction payload [0x{0}]", payload.HexDump());
                     break;
                 case 0x2D:  //Manipulate Inventory
                     SendInventoryUpdate(connection, packet);
