@@ -1,0 +1,4 @@
+<frW> He said "I'm not 100% sure that mine opcodes are correct, but think they are. I have used the IDA disassembler... there is one big switch-case in the Diablo 2.exe :) Actually there are 2 cases that are possible:"
+<frW> "1) the opcode is shifted 1 bit, and before it there is 1 bit flag"
+<frW> "2) it's not 8 bits, but 9 bits used for the opcode"
+<frW> "You can see this if you send a packet with just the opcode (the 9 bit one) and without any payload - the game will crash and will put in the log a message saying the proper number of the opcode, something like "Received truncated message XXX". :)"
