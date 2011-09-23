@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Items\Item.cs" />
+    <Compile Include="Core\Items\ItemGenerator.cs" />
     <Compile Include="Core\Items\ItemTypeGenerator.cs" />
     <Compile Include="Core\Accounts\Account.cs" />
     <Compile Include="Core\Accounts\AccountManager.cs" />
@@ -85,8 +86,6 @@
     <Compile Include="Core\Games\GameManager.cs" />
     <Compile Include="Core\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\Helpers\FieldKeyHelper.cs" />
-    <Compile Include="Core\Items\Item.cs" />
-    <Compile Include="Core\Items\ItemTypeGenerator.cs" />
     <Compile Include="Core\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\OnlinePlayers.cs" />
     <Compile Include="Core\Services\AuthenticationService.cs" />

@@ -22,6 +22,7 @@ using D3Sharp.Utils.Extensions;
 using Gibbed.Helpers;
 using System.Text;
 using D3Sharp.Utils;
+using D3Sharp.Core.Items;
 
 //using Gibbed.Helpers;
 
@@ -100,7 +101,7 @@ namespace D3Sharp.Net.Game
                 Id = 0x000D,
                 SNOPackHash = msg.SNOPackHash,
                 ProtocolHash = GameMessage.ImplementedProtocolHash,
-                Version = "0.3.0.7333",
+                Version = "0.3.0.7338",
             });
             FlushOutgoingBuffer();
 
@@ -4488,120 +4489,19 @@ namespace D3Sharp.Net.Game
                 },
             });
             #endregion
-            #region ACDEnterKnown 0x78A000E4
-            SendMessage(new ACDEnterKnownMessage()
-            {
-                Id = 0x003B,
-                Field0 = 0x78A000E4,
-                Field1 = 0x00001158,
-                Field2 = 0x0000001A,
-                Field3 = 0x00000001,
-                Field4 = null,
-                Field5 = new InventoryLocationMessageData()
-                {
-                    Field0 = 0x789E00E2,
-                    Field1 = 0x00000000,
-                    Field2 = new IVector2D()
-                    {
-                        Field0 = 0x00000000,
-                        Field1 = 0x00000000,
-                    },
-                },
-                Field6 = new GBHandle()
-                {
-                    Field0 = 0x00000002,
-                    Field1 = 0x622256D4,
-                },
-                Field7 = -1,
-                Field8 = -1,
-                Field9 = 0x00000001,
-                Field10 = 0x00,
-            });
+         
 
-            SendMessage(new AffixMessage()
-            {
-                Id = 0x0048,
-                Field0 = 0x78A000E4,
-                Field1 = 0x00000001,
-                aAffixGBIDs = new int[0]
-    {
-    },
-            });
+            ItemGenerator generator = new ItemGenerator();
+            Item item = generator.Generate("ManaPotion_04", 0x78A000E4);
+            item.InvLoc.Field0 = 0x00000000;
+            item.InvLoc.Field1 = 0x00000000;
+            item.SendTo(this);
 
-            SendMessage(new AffixMessage()
-            {
-                Id = 0x0048,
-                Field0 = 0x78A000E4,
-                Field1 = 0x00000002,
-                aAffixGBIDs = new int[0]
-    {
-    },
-            });
-
-            SendMessage(new ACDCollFlagsMessage()
-            {
-                Id = 0x00A6,
-                Field0 = 0x78A000E4,
-                Field1 = 0x00000080,
-            });
-
-            SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = 0x78A000E4,
-                atKeyVals = new NetAttributeKeyValue[4]
-    {
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0052], // Hitpoints_Granted 
-            Int = 0x00000000,
-            Float = 100f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0125], // Seed 
-            Int = unchecked((int)0x884DCD35),
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0121], // ItemStackQuantityLo 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0115], // Item_Quality_Level 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-    },
-            });
-
-            SendMessage(new ACDGroupMessage()
-            {
-                Id = 0x00B8,
-                Field0 = 0x78A000E4,
-                Field1 = -1,
-                Field2 = -1,
-            });
-
-            SendMessage(new ANNDataMessage()
-            {
-                Id = 0x003E,
-                Field0 = 0x78A000E4,
-            });
-
-            SendMessage(new SNONameDataMessage()
-            {
-                Id = 0x00D3,
-                Field0 = new SNOName()
-                {
-                    Field0 = 0x00000001,
-                    Field1 = 0x00001158,
-                },
-            });
-            #endregion
+            
+            item = generator.Generate("HealthPotionMinor", 0x78A000E5);
+            item.InvLoc.Field0 = 0x00000001;
+            item.InvLoc.Field1 = 0x00000000;
+            item.SendTo(this);
 
             #region ACDEnterKnown 0x78BE0102
             SendMessage(new ACDEnterKnownMessage()
@@ -12746,86 +12646,7 @@ namespace D3Sharp.Net.Game
                 Field1 = 0x00001025,
             });
             #endregion
-            #region Item 0x789F00E4
-            SendMessage(new AttributeSetValueMessage()
-            {
-                Id = 0x004C,
-                Field0 = 0x78A000E4,
-                Field1 = new NetAttributeKeyValue()
-                {
-                    Attribute = GameAttribute.Attributes[0x0115], // Item_Quality_Level 
-                    Int = 0x00000001,
-                    Float = 0f,
-                },
-            });
-
-            SendMessage(new AttributeSetValueMessage()
-            {
-                Id = 0x004C,
-                Field0 = 0x78A000E4,
-                Field1 = new NetAttributeKeyValue()
-                {
-                    Attribute = GameAttribute.Attributes[0x0052], // Hitpoints_Granted 
-                    Int = 0x00000000,
-                    Float = 100f,
-                },
-            });
-
-            SendMessage(new AttributeSetValueMessage()
-            {
-                Id = 0x004C,
-                Field0 = 0x78A000E4,
-                Field1 = new NetAttributeKeyValue()
-                {
-                    Attribute = GameAttribute.Attributes[0x0125], // Seed 
-                    Int = unchecked((int)0x884DCD35),
-                    Float = 0f,
-                },
-            });
-
-            SendMessage(new AttributeSetValueMessage()
-            {
-                Id = 0x004C,
-                Field0 = 0x78A000E4,
-                Field1 = new NetAttributeKeyValue()
-                {
-                    Attribute = GameAttribute.Attributes[0x0121], // ItemStackQuantityLo 
-                    Int = 0x00000001,
-                    Float = 0f,
-                },
-            });
-
-            SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x007A,
-                Field0 = 0x78A000E4,
-                Field1 = 0x00000027,
-            });
-
-            SendMessage(new ACDInventoryPositionMessage()
-            {
-                Id = 0x0040,
-                Field0 = 0x78A000E4,
-                Field1 = new InventoryLocationMessageData()
-                {
-                    Field0 = 0x789E00E2,
-                    Field1 = 0x00000000,
-                    Field2 = new IVector2D()
-                    {
-                        Field0 = 0x00000000,
-                        Field1 = 0x00000000,
-                    },
-                },
-                Field2 = 0x00000001,
-            });
-
-            SendMessage(new ACDInventoryUpdateActorSNO()
-            {
-                Id = 0x0041,
-                Field0 = 0x78A000E4,
-                Field1 = 0x00001158,
-            });
-            #endregion
+           
             #region Attributes 0x78DD0118
             SendMessage(new AttributeSetValueMessage()
             {
@@ -14704,6 +14525,11 @@ namespace D3Sharp.Net.Game
         }
 
         public void OnMessage(RequestBuffCancelMessage msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnMessage(InventoryDropItemMessage msg)
         {
             throw new NotImplementedException();
         }

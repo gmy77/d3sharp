@@ -4710,22 +4710,22 @@ namespace D3Sharp.Net.Game
 
     public class InventoryRequestMoveMessage : GameMessage
     {
-        public int Field0;
-        public InvLoc Field1;
+        public int invItemId;
+        public InvLoc invTargetLocation;
 
         public override void VisitHandler(IGameMessageHandler handler) { handler.OnMessage(this); }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = new InvLoc();
-            Field1.Parse(buffer);
+            invItemId = buffer.ReadInt(32);
+            invTargetLocation = new InvLoc();
+            invTargetLocation.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
+            buffer.WriteInt(32, invItemId);
+            invTargetLocation.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -4734,8 +4734,8 @@ namespace D3Sharp.Net.Game
             b.AppendLine("InventoryRequestMoveMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            Field1.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + invItemId.ToString("X8") + " (" + invItemId + ")");
+            invTargetLocation.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
@@ -6727,6 +6727,38 @@ namespace D3Sharp.Net.Game
 
     }
 
+    public class InventoryDropItemMessage : GameMessage
+    {
+
+        public int invItemId;       
+
+        public override void VisitHandler(IGameMessageHandler handler) { handler.OnMessage(this); }
+
+        public override void Parse(GameBitBuffer buffer)
+        {
+            invItemId = buffer.ReadInt(32);
+        }
+
+        public override void Encode(GameBitBuffer buffer)
+        {
+            buffer.WriteInt(32, invItemId);
+        }
+
+        public override void AsText(StringBuilder b, int pad)
+        {
+            b.Append(' ', pad);
+            b.AppendLine("InventoryDropItemMessage:");
+            b.Append(' ', pad++);
+            b.AppendLine("{");
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + invItemId.ToString("X8"));           
+            b.Append(' ', --pad);
+            b.AppendLine("}");
+        }
+
+
+    }
+
+
     public class SimpleMessage : GameMessage
     {
 
@@ -7648,23 +7680,23 @@ namespace D3Sharp.Net.Game
     {
         public int Field0;
         public int Field1;
-        public int Field2;
-        public int Field3;
+        public int xCoord;
+        public int yCoord;
 
         public void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
             Field1 = buffer.ReadInt(5) + (-1);
-            Field2 = buffer.ReadInt(32);
-            Field3 = buffer.ReadInt(32);
+            xCoord = buffer.ReadInt(32);
+            yCoord = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, Field0);
             buffer.WriteInt(5, Field1 - (-1));
-            buffer.WriteInt(32, Field2);
-            buffer.WriteInt(32, Field3);
+            buffer.WriteInt(32, xCoord);
+            buffer.WriteInt(32, yCoord);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -7675,8 +7707,8 @@ namespace D3Sharp.Net.Game
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
-            b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
+            b.Append(' ', pad); b.AppendLine("Field2: 0x" + xCoord.ToString("X8") + " (" + xCoord + ")");
+            b.Append(' ', pad); b.AppendLine("Field3: 0x" + yCoord.ToString("X8") + " (" + yCoord + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

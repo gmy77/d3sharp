@@ -83,7 +83,6 @@ namespace D3Sharp.Net.Game
                 case 60:
                 case 62:
                 case 67:
-                case 89:
                 case 95:
                 case 96:
                 case 105:
@@ -109,6 +108,8 @@ namespace D3Sharp.Net.Game
                 case 275:
                 case 296:
                     return new ANNDataMessage();
+                case 89:
+                    return new InventoryDropItemMessage();
                 case 61:
                     return new PlayerEnterKnownMessage();
                 case 63:
@@ -663,6 +664,7 @@ namespace D3Sharp.Net.Game
         void OnMessage(GameTestingSamplingStartMessage msg);
         void OnMessage(RequestBuffCancelMessage msg);
         void OnMessage(SimpleMessage msg);
+        void OnMessage(InventoryDropItemMessage inventoryDropItemMessage);
     }
 
 }
