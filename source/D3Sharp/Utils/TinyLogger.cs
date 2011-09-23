@@ -33,6 +33,8 @@ namespace D3Sharp.Utils
         Warn,
         Error,
         Fatal,
+        Incoming,
+        Outgoing,
     }
 
     public static class LogManager
@@ -142,6 +144,11 @@ namespace D3Sharp.Utils
 
         public void FatalException(Exception exception, string message) { LogException(Level.Fatal, message, null, exception); }
         public void FatalException(Exception exception, string message, params object[] args) { LogException(Level.Fatal, message, args, exception); }
+
+        public void LogIncoming(Google.ProtocolBuffers.IMessage msg) { Log(Level.Incoming, msg.AsText(), null); }
+        public void LogOutgoing(Google.ProtocolBuffers.IMessage msg) { Log(Level.Outgoing, msg.AsText(), null); }
+        public void LogIncoming(D3Sharp.Net.Game.GameMessage msg) { Log(Level.Incoming, msg.AsText(), null); }
+        public void LogOutgoing(D3Sharp.Net.Game.GameMessage msg) { Log(Level.Outgoing, msg.AsText(), null); }
     }
 
     public class Target
@@ -257,6 +264,8 @@ namespace D3Sharp.Utils
                 case Level.Warn: Console.ForegroundColor = ConsoleColor.Yellow; break;
                 case Level.Error: Console.ForegroundColor = ConsoleColor.Magenta; break;
                 case Level.Fatal: Console.ForegroundColor = ConsoleColor.Red; break;
+                case Level.Incoming:
+                case Level.Outgoing: Console.ForegroundColor = ConsoleColor.White; break;
                 default: break;
             }
         }
