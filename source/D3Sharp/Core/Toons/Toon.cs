@@ -85,7 +85,7 @@ namespace D3Sharp.Core.Toons
         public uint GenderID
         {
             get {
-                return this.Gender == ToonGender.Male ? (uint)0x0 : 0x2000002;
+                return this.Gender == ToonGender.Male ? (uint)0x0 : 0x2;
             }
         }
 
@@ -249,16 +249,16 @@ namespace D3Sharp.Core.Toons
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Equipment.ToByteString()).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 4) // Hero's flags (gender and such)
-                    {                        
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.GenderID).Build());
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.GenderID | 0x2000020).Build());
                     }
-                    else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID
+                    else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if he's online
                     {
                         if(this.Owner.LoggedInClient!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());                       
                     }
-                    else if (queryKey.Group == 4 && queryKey.Field == 2) // int - Away status (0=present, 2=away, 4=busy)
+                    else if (queryKey.Group == 4 && queryKey.Field == 2) // int - Away status (0=present, 2=away, 4=busy) - still not sure about this on recent players window
                     {                        
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build());
                     }
                     break;
                 case FieldKeyHelper.Program.BNet:
@@ -266,13 +266,13 @@ namespace D3Sharp.Core.Toons
                     { 
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build());
                     }
-                    else if (queryKey.Group == 3 && queryKey.Field == 3) // hardcore
+                    else if (queryKey.Group == 3 && queryKey.Field == 3) // is the toon online?
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(false).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build());
                     }
-                    else if (queryKey.Group == 3 && queryKey.Field == 5) // unknown ??
+                    else if (queryKey.Group == 3 && queryKey.Field == 5) // always 0 when the toon is online
                     {
-                        //field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 9) // program - always d3    
                     {  
@@ -310,7 +310,7 @@ namespace D3Sharp.Core.Toons
 
             // Gender
             var fieldKey5 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 4, 0);
-            var field5 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey5).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.GenderID).Build()).Build();
+            var field5 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey5).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.GenderID | 0x2000020).Build()).Build();
             var fieldOperation5 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field5).Build();
 
             // Name
@@ -318,9 +318,9 @@ namespace D3Sharp.Core.Toons
             var field6 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey6).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build()).Build();
             var fieldOperation6 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field6).Build();
 
-            // Unknown boolean - probably harcore mode enabled?? /raist
+            // is the toon online?
             var fieldKey7 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 3, 0);
-            var field7 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey7).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(false).Build()).Build();
+            var field7 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey7).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
             var fieldOperation7 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field7).Build();
 
             // Program - FourCC "D3"
