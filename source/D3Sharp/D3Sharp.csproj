@@ -119,10 +119,11 @@
     <Compile Include="Net\BNet\Packets\BNetHeader.cs" />
     <Compile Include="Net\BNet\Packets\BNetPacket.cs" />
     <Compile Include="Net\Game\Config.cs" />
+    <Compile Include="Net\Game\GameAttribute.cs" />
+    <Compile Include="Net\Game\GameBitBuffer.cs" />
     <Compile Include="Net\Game\GameClient.cs" />
-    <Compile Include="Net\Game\Packets\GameHeader.cs" />
-    <Compile Include="Net\Game\Packets\GamePacket.cs" />
-    <Compile Include="Net\Game\Packets\GameRouter.cs" />
+    <Compile Include="Net\Game\GameMessage.cs" />
+    <Compile Include="Net\Game\GameMessageTypes.cs" />
     <Compile Include="Net\Game\GameServer.cs" />
     <Compile Include="Net\Game\IGameClient.cs" />
     <Compile Include="Net\IClient.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Utils\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Net\BNet\Packets\BNetRouter.cs" />
     <Compile Include="Utils\Helpers\StringHashHelper.cs" />
+    <Compile Include="Utils\IMessageExtensions.cs" />
     <Compile Include="Utils\TinyLogger.cs" />
     <Compile Include="Utils\win32\NativeMethods.cs" />
     <Compile Include="Core\Objects\RPCObjectManager.cs" />
