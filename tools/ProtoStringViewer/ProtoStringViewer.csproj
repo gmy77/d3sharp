@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Google.ProtocolBuffers, Version=2.3.0.277, Culture=neutral, PublicKeyToken=17b3b1f090c3ea48, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\source\libs\Google.ProtocolBuffers.dll</HintPath>
+    </Reference>
     <Reference Include="System">
     </Reference>
     <Reference Include="System.Core">
@@ -50,9 +54,6 @@
     <Reference Include="System.Windows.Forms">
     </Reference>
     <Reference Include="System.Xml">
-    </Reference>
-    <Reference Include="Google.ProtocolBuffers, Version=2.3.0.277, Culture=neutral, PublicKeyToken=17b3b1f090c3ea48">
-      <HintPath>Google.ProtocolBuffers.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -85,164 +86,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\ContentHandle.cs">
-      <Link>bnet\protocol\ContentHandle.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\Descriptor.cs">
-      <Link>bnet\protocol\Descriptor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\Entity.cs">
-      <Link>bnet\protocol\Entity.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\Resource.cs">
-      <Link>bnet\protocol\Resource.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\Rpc.cs">
-      <Link>bnet\protocol\Rpc.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\attribute\Attribute.cs">
-      <Link>bnet\protocol\attribute\Attribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\authentication\Authentication.cs">
-      <Link>bnet\protocol\authentication\Authentication.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\channel\Channel.cs">
-      <Link>bnet\protocol\channel\Channel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\channel\ChannelTypes.cs">
-      <Link>bnet\protocol\channel\ChannelTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\channel_invitation\ChannelInvitation.cs">
-      <Link>bnet\protocol\channel_invitation\ChannelInvitation.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\channel_invitation\ChannelInvitationTypes.cs">
-      <Link>bnet\protocol\channel_invitation\ChannelInvitationTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\chat\Chat.cs">
-      <Link>bnet\protocol\chat\Chat.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\chat\ChatTypes.cs">
-      <Link>bnet\protocol\chat\ChatTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\config\ProcessConfig.cs">
-      <Link>bnet\protocol\config\ProcessConfig.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\connection\Connection.cs">
-      <Link>bnet\protocol\connection\Connection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\exchange\Exchange.cs">
-      <Link>bnet\protocol\exchange\Exchange.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\exchange\ExchangeService.cs">
-      <Link>bnet\protocol\exchange\ExchangeService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\exchange\ExchangeTypes.cs">
-      <Link>bnet\protocol\exchange\ExchangeTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\exchange_object_provider\ExchangeObjectProvider.cs">
-      <Link>bnet\protocol\exchange_object_provider\ExchangeObjectProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\followers\Followers.cs">
-      <Link>bnet\protocol\followers\Followers.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\friends\Friends.cs">
-      <Link>bnet\protocol\friends\Friends.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\friends\FriendsTypes.cs">
-      <Link>bnet\protocol\friends\FriendsTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\game_master\GameFactory.cs">
-      <Link>bnet\protocol\game_master\GameFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\game_master\GameMaster.cs">
-      <Link>bnet\protocol\game_master\GameMaster.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\game_master\GameMasterTypes.cs">
-      <Link>bnet\protocol\game_master\GameMasterTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\game_utilities\GameUtilities.cs">
-      <Link>bnet\protocol\game_utilities\GameUtilities.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\invitation\Invitation.cs">
-      <Link>bnet\protocol\invitation\Invitation.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\notification\Notification.cs">
-      <Link>bnet\protocol\notification\Notification.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\party\Party.cs">
-      <Link>bnet\protocol\party\Party.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\presence\Presence.cs">
-      <Link>bnet\protocol\presence\Presence.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\presence\PresenceTypes.cs">
-      <Link>bnet\protocol\presence\PresenceTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\profanity\Profanity.cs">
-      <Link>bnet\protocol\profanity\Profanity.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\search\Search.cs">
-      <Link>bnet\protocol\search\Search.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\search\SearchTypes.cs">
-      <Link>bnet\protocol\search\SearchTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\server_pool\ServerPool.cs">
-      <Link>bnet\protocol\server_pool\ServerPool.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\storage\Storage.cs">
-      <Link>bnet\protocol\storage\Storage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\toon\Toon.cs">
-      <Link>bnet\protocol\toon\Toon.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\toon\external\ToonExternal.cs">
-      <Link>bnet\protocol\toon\external\ToonExternal.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\bnet\protocol\user_manager\UserManager.cs">
-      <Link>bnet\protocol\user_manager\UserManager.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\Account\Account.cs">
-      <Link>D3\Account\Account.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\AttributeSerializer\AttributeSerializer.cs">
-      <Link>D3\AttributeSerializer\AttributeSerializer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\Client\Settings.cs">
-      <Link>D3\Client\Settings.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\GameBalance\GBHandle.cs">
-      <Link>D3\GameBalance\GBHandle.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\GameMessage\GameMessage.cs">
-      <Link>D3\GameMessage\GameMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\Hero\Hero.cs">
-      <Link>D3\Hero\Hero.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\Hireling\Hireling.cs">
-      <Link>D3\Hireling\Hireling.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\ItemCrafting\ItemCrafting.cs">
-      <Link>D3\ItemCrafting\ItemCrafting.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\Items\Items.cs">
-      <Link>D3\Items\Items.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\OnlineService\OnlineService.cs">
-      <Link>D3\OnlineService\OnlineService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\PartyMessage\PartyMessage.cs">
-      <Link>D3\PartyMessage\PartyMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\Quests\Quest.cs">
-      <Link>D3\Quests\Quest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\source\D3Proto\D3\Stats\Stats.cs">
-      <Link>D3\Stats\Stats.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\source\D3Proto\D3Proto.csproj">
+      <Project>{4CC19847-6F24-4453-9E31-126F94308AB9}</Project>
+      <Name>D3Proto</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ProtoHelpers\ProtoHelpers.csproj">
       <Project>{1519D483-C89D-4B86-8A48-2E4F05440423}</Project>
       <Name>ProtoHelpers</Name>

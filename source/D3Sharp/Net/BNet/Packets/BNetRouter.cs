@@ -52,7 +52,9 @@ namespace D3Sharp.Net.BNet.Packets
                 return;
             }
 
-            var method = service.DescriptorForType.Methods[(int)header.MethodID - 1];
+            //var method = service.DescriptorForType.Methods[(int)header.MethodID - 1];
+            //Logger.Warn("METHODID: {0}, from header: {1}", (uint)method.Options[bnet.protocol.Rpc.MethodId.Descriptor], header.MethodID);
+            var method = service.DescriptorForType.Methods.Single(m => (uint)m.Options[bnet.protocol.Rpc.MethodId.Descriptor] == header.MethodID);
             var proto = service.GetRequestPrototype(method);
             var builder = proto.WeakCreateBuilderForType();
 

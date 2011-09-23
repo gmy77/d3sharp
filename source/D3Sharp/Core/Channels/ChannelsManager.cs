@@ -28,9 +28,9 @@ namespace D3Sharp.Core.Channels
         public readonly static Dictionary<ulong, Channel> Channels =
             new Dictionary<ulong, Channel>();
 
-        public static Channel CreateNewChannel(BNetClient client)
+        public static Channel CreateNewChannel(BNetClient client, ulong remoteObjectId)
         {
-            var channel = new Channel(client);
+            var channel = new Channel(client, remoteObjectId);
             Channels.Add(channel.DynamicId, channel);
             return channel;
         }

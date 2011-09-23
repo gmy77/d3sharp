@@ -47,8 +47,11 @@ namespace D3Sharp.Core.Toons
         public ToonHandleHelper(D3.OnlineService.EntityId entityID)
         {
             var stream = CodedInputStream.CreateInstance(entityID.ToByteArray());
-            this.ID = stream.ReadUInt64();
-            //this.Program = stream.ReadUInt32();
+            ulong tmp=0;
+            // I believe this actually calls ReadRawVarint64(), but just to be sure..
+            stream.ReadUInt64(ref tmp);
+            this.ID = tmp;
+            //this.Program = stream.ReadRawVarint32();
             //this.Region = stream.ReadRawVarint32();
             //this.Realm = stream.ReadRawVarint32();
         }

@@ -1,0 +1,532 @@
+<Egris|work> 0x1306 is logout initiated opcode, 0x1406 is logout canceled
+<Egris|work> 0x3c24 is position update
+<Egris|work> 0x2d16 is inventory update
+
+<Egris|work> client->server header is byte,byte,byte,uint16, byte
+<Egris|work> the packet sent from the server to the client
+<Egris|work> the packet sent from the server to the client
+<Egris|work> doesn't use the same header as the packet from the client to the server
+<Egris|work> 0x5c06 looks like some kind of heartbeat, it gets sent every couple seconds and has no payload
+<Egris|work> 0x2822 is world object interact
+
+<LordNonsense> so client to server is always 6 bytes?
+<Egris|work> yeah for the header
+
+<Egris|work> 1406 and 1306, the logout opcodes have no payload
+
+switch (header.opCode)
+{
+	case 0x542: // welcome the client..
+		WelcomeClient(connection, packet);
+		break;
+	case 0x180C:
+		SendToonApperanceData(connection, packet);
+		break;
+	case 0x1306:
+		LogoutStart(connection, packet);
+		break;
+	case 0x1406:
+		LogoutCancel(connection, packet);
+		break;
+	case 0x4F06:
+		break;
+	case 0x3c44:
+		//Info Interact
+		break;
+	case 0x3c24:
+		//Position Update
+		break;
+	case 0x3c63:
+		//Position Stop
+		break;
+	case 0x2822:
+		//Hand Interact
+		break;
+	case 0x2d16:
+		SendInventoryUpdate(connection, packet);
+		//Manipulate Inventory
+		break;
+	case 0x2816:
+		//Ability
+		break;
+	case 0x282e:
+		//Ability
+		break;
+	case 0x5C06: 
+		//heatbeat no payload
+		break;
+	case 0x900A:
+		break;
+	default:
+		//Unknown opCode
+		break;
+}
+
+------------------------------------------------------------------------------------------
+<raistlin> oh and check this
+<raistlin> gs
+<raistlin> http://pastebin.com/LnVbfJ3B
+<raistlin> stuff
+<[TOM_RUS]> but if they implement encryption, they will most likely also check for erros
+<[TOM_RUS]> your GS packet struct is wrong btw
+<[TOM_RUS]> there's 4 bytes size
+<raistlin> in d3sharp?
+<raistlin> i know but iwas so in a rush
+<raistlin> because of that people bitching me in channels
+<[TOM_RUS]> [20.09.2011 22:10:18] hazzik: Received GS Packet 36 bytes:
+<[TOM_RUS]> 00 00 00 24 3C 78 6C 00 4F 46 4E 3C 37 44 4B E1
+<[TOM_RUS]> EA 41 70 17 35 3E EB 77 1D 36 F5 C2 00 20 88 00
+<[TOM_RUS]> 40 11 06 29
+<[TOM_RUS]> that's moevement packet from client
+<[TOM_RUS]> 00 00 00 24 - size
+<[TOM_RUS]> 0x24=36 bytes
+<raistlin> oh
+<raistlin> then opcode?
+<[TOM_RUS]> same thing in server packets, first 4 bytes is size (including those 4 bytes)
+<[TOM_RUS]> probably
+<[TOM_RUS]> but i'm not sure if opcode 1 or 2 or even more bytes
+<[TOM_RUS]> most likely opcode is 1 byte
+<raistlin> 3C
+<raistlin> ?
+<[TOM_RUS]> yeah
+<[TOM_RUS]>     0x00, 0x00, 0x00, 0x6e, 0x26, 0x78, 0x6c, 0x00, 0x4f, 0x32, 0xf1, 0x40, 0xcc, 0x26, 0x78, 0x36, 
+<[TOM_RUS]> some other packet (incomplete)
+<[TOM_RUS]> 0x00, 0x00, 0x00, 0x6e size
+<[TOM_RUS]> 0x26 opcode
+<[TOM_RUS]> then goes same thing as in movement packet
+<[TOM_RUS]> 0x78, 0x6c, 0x00
+<raistlin> oh
+[TOM_RUS]> so I think opcode is 1 byte, but still not 100% sure
+
+
+
+<[TOM_RUS]> so I think opcode is 1 byte, but still not 100% sure
+<[TOM_RUS]> or even some varint or whatever it may be
+<raistlin> and do you think
+<[TOM_RUS]> I can't find where client generates packets yet :(
+<raistlin> the very first packet sends the client
+<raistlin> has request id in it?
+<[TOM_RUS]> no idea
+<raistlin> i think it should so gs can match it with request on bnet-serv
+<raistlin> while u tell to go in game from
+<raistlin> game-ser
+<raistlin> u give connection info
+<raistlin> and game info
+<raistlin> which includes rquest id game id stuff
+<raistlin> i think very first packet may have a proto in
+<raistlin> or just
+<raistlin> the request id but never checked it yet
+<raistlin> still working on bnet-2 part
+<[TOM_RUS]> http://paste2.org/p/1663052
+<[TOM_RUS]> can't find anything in first client packet :(
+<raistlin> oh but it should be able to somewhat match him 
+<raistlin> the connection - to bnet client
+<raistlin> to send it's realted toon data
+<raistlin> not sure where its
+<[TOM_RUS]> sure it should 
+<raistlin> i mostly think it should be: 12526585062881647236
+<raistlin> because
+<raistlin> its unique for clients
+<raistlin> factoryid game id all have more than 1 clients bound
+<[TOM_RUS]> may be there's varint's being used or something, so you can't just looks at bytes...
+<raistlin> oh i saw something like this
+<raistlin> sec
+<raistlin> np := C.NewPacketRef([]byte{0x00, 0x00, 0x00, 0x18, //ProtocolBufferMessage
+<raistlin> 	0x06, 0xe1,  
+<raistlin> 	0x3e, 0xc2, 0xde, 0x20,   
+<raistlin> 	0xf7, 0x70, 0x46, 0x15,    
+<raistlin> 	0x30, 0x2e, 0x33, 0x2e, 0x30, 0x2e, 0x37, 0x33, 0x33, 0x33})
+<raistlin> 	np.Index = len(np.Buffer)
+<raistlin> 	c.Send(np) //protocol data + game version
+<raistlin> but not sure if its any correct
+<raistlin> maybe it's just a proto there in
+
+
+request_id: 12526585062881647236
+game_handle {
+  factory_id: 14249086168335147635
+  game_id {
+    high: 433661094641971304
+    low: 11017467167309309688
+  }
+}
+connect_info {
+  toon_id {
+    high: 216174302532224051
+    low: 2
+  }
+  host: "127.0.0.1"
+  port: 6665
+  token: "\a4\002`\221\223vF(\204"
+  attribute {
+    name: "SGameId"
+    value {
+      int_value: 2014314530
+ 
+12526585062881647236 -> 116256464C2D6F73
+14249086168335147635 -> 13C64AD667C13D0B
+433661094641971304 -> 604AC77CB0AB068
+11017467167309309688 -> F4A30CD33333718
+216174302532224051 -> 300016200004433
+token 0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84
+2014314530 -> 78100022
+ 
+GS: Client connected...
+GS: Received packet, len = 66
+00 00 00 42 05 02 80 00 B1 00 00 22 19 01 00 00
+00 00 00 00 01 C4 DF 76 30 0C C6 31 39 07 02 56
+3B CB 85 58 34 98 72 F4 02 00 00 13 7C 78 08 00
+11 00 00 00 00 00 00 00 00 20 0F 77 04 0D 6A F1
+26 85
+ 
+GS: Opcode 05, size 66
+ 
+
+
+-------------------------------------------
+
+<bonesoul> or better here
+<bonesoul> so u think opcode is 2 bytes?
+<Egris|work> yeah i think so
+<bonesoul> and lenght?
+<bonesoul> i think thats not correct - from what i talked with tom
+<bonesoul> i think first x4 bytes are
+<bonesoul> packet lenght
+<bonesoul> then there's 1 byte opcode or maybe2
+<bonesoul> 00 00 00 42 05 02 - 80 00 00 00 00 00 00 00 00 00 00 C0 DD 0D 84 C4 DF 76 30 0C C6 31 39 07 02 56 3B CB 85 58 34 00 00 00 00 00 00 00 01 78 08 00 11 00 00 00 00 00 00 00 00 20 0F 77 04 0D 6A F1 26 85 
+<bonesoul> 66
+<bonesoul> bytes
+<bonesoul> lenght is 00 00 00 42
+<bonesoul> then comes the opcode
+<Egris|work> that would make more sense
+<bonesoul> and lenght fits for all
+<bonesoul> Data	: 00 00 00 06 13 90 - 
+<bonesoul> 6
+<Egris|work> so uint32 length, uint16 opcode
+<bonesoul> not sure
+<bonesoul> for opcode
+<bonesoul> maybe 1 byte only
+<Egris|work> nah, i think it's 2, it looks like it fits all the packets in my log
+<bonesoul> u have a d3sharp fork or got your own emu?
+<Egris|work> that may also work for the s->c packets also, i know it starts with length also
+<Egris|work> d3sharp, but i didn't fork it in git, just took one of yesterdays builds
+<bonesoul> ok
+<bonesoul> i wanted to ask if your gamerouter was any special there
+Egris|work> d3sharp, but i didn't fork it in git, just took one of yesterdays builds
+<bonesoul> ok
+<bonesoul> i wanted to ask if your gamerouter was any special there
+<Egris|work> i coded it similar to BNetRouter for consistency
+<bonesoul> oh k
+<bonesoul> maybe get a fork and start sending us fucking patches :D
+<bonesoul> i really didnt have time to look for gs any
+<bonesoul> other then giving the hardcoded town
+<bonesoul> for bitchers lol
+<Egris|work> lol
+<bonesoul> still implementing bnet
+<bonesoul> i'd like to see ur patches ýn 
+<Egris|work> i'll fork it when i get home from work
+<bonesoul> ok nice
+<bonesoul> we really need workforce there
+<bonesoul> u know lots of stuff
+<bonesoul> but with latest few commits
+<bonesoul> we figured all bits of bnet
+<bonesoul> doing an actuall implementation there now
+<Egris|work> i did a lot of work during WoW beta, I haven't done much on D3 yet, because I don't have any experience with Protobuf, but WoW uses opCodes, so i'm familiar with that
+<bonesoul> we've figured proto 
+<bonesoul> its easy stuff
+<bonesoul> what we need is peeps getting in gameserver
+<bonesoul> because me and plash cant do it every part u know times is not enough :)
+<bonesoul> tough ill soon start on gs too
+<bonesoul> after i get channels & part working
+<bonesoul> there
+<bonesoul> oh on wow which team ur in?
+<Egris|work> yeah, gameserver is gonna be the tough part, don't have nice structs already known like a lot of the proto stuff
+<bonesoul> good part is
+<bonesoul> with that
+<bonesoul> server only acks
+<bonesoul>  :)
+<bonesoul> for the most part there
+<bonesoul> so u know the draeaded old wow 0x90 right?
+<Egris|work> yep
+<bonesoul> i had a fear we had in d3 lol:D
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------
+
+[Trace] [Server]: Game-Client connected: 127.0.0.1:65256
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x542, [5]: 0x02
+Data	: 00 00 00 42 05 02 - 80 00 00 00 00 00 00 00 00 00 00 C0 DD 0D 84 C4 DF 76 30 0C C6 31 39 07 02 56 3B CB 85 58 34 00 00 00 00 00 00 00 01 78 08 00 11 00 00 00 00 00 00 00 00 20 0F 77 04 0D 6A F1 26 85 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x180C, [5]: 0x90
+Data	: 00 00 00 0C 18 90 - 00 00 00 00 90 05 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x90
+Data	: 00 00 00 06 13 90 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x91
+Data	: 00 00 00 06 5C 91 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x91
+Data	: 00 00 00 06 14 91 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x91
+Data	: 00 00 00 06 5C 91 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data	: 00 00 00 0A 90 01 - 00 00 00 01 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 51 0B D5 44 4C 3F C4 43 9B 2C F3 45 04 6E 5E 34 F5 C2 00 20 88 00 40 11 06 41 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 FD 6D 44 4C 49 4C 41 9B 2C F3 45 04 72 97 30 F5 C2 00 20 88 00 40 11 06 41 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 EF 08 47 4C 52 D9 41 9B 2C F3 44 04 72 A5 30 F5 C2 00 20 88 00 40 11 06 41 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 E0 A4 47 4C 5C 66 40 9B 2C F3 44 04 72 B5 35 F5 C2 00 20 88 00 40 11 06 41 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 D2 40 47 4C 65 F2 43 9B 2C F3 45 04 72 CA 31 F5 C2 00 20 88 00 40 11 06 41 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 C3 DC 46 4C 6F 7F 43 9B 2C F3 45 04 72 E4 31 F5 C2 00 20 88 00 40 11 06 41 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 B5 76 46 4C 79 0C 42 9B 2C F3 44 04 72 F4 35 F5 C2 00 20 88 00 40 11 06 41 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 A7 0F 46 4C 82 99 42 9B 2C F3 45 04 72 FC 34 F5 C2 00 20 88 00 40 11 06 41 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 98 A8 46 4C 8C 26 40 9B 2C F3 45 04 72 FD 31 F5 C2 00 20 88 00 40 11 06 41 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 8A 41 46 4C 95 B2 41 9B 2C F3 46 04 72 FE 32 F5 C2 00 20 88 00 40 11 06 41 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 A2 C1 45 4C 77 3F 40 9B 2C F3 46 14 C4 EB 34 F5 C2 00 20 88 00 40 11 06 41 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C44, [5]: 0x78
+Data	: 00 00 00 44 3C 78 - 4F 00 71 46 50 A2 C1 45 4C 77 3F 40 9B 2C F3 45 14 C5 14 36 F5 C2 00 20 88 00 48 11 06 21 78 E2 78 03 62 8A 85 16 05 8A 63 B9 7C 84 D9 67 CD 40 A6 28 A6 3E AE 10 00 24 40 01 08 00 00 3C 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x79
+Data	: 00 00 00 06 5C 79 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x78
+Data	: 00 00 00 06 13 78 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data	: 00 00 00 0A 90 01 - 00 00 01 46 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x01
+Data	: 00 00 00 06 14 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x00
+Data	: 00 00 00 06 13 00 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x01
+Data	: 00 00 00 06 14 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x00
+Data	: 00 00 00 06 13 00 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x01
+Data	: 00 00 00 06 14 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data	: 00 00 00 0A 90 01 - 00 00 01 47 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x00
+Data	: 00 00 00 06 13 00 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x01
+Data	: 00 00 00 06 14 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data	: 00 00 00 0A 90 01 - 00 00 02 46 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x00
+Data	: 00 00 00 06 13 00 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data	: 00 00 00 0A 90 01 - 00 00 02 47 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x00
+Data	: 00 00 00 06 14 00 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x00
+Data	: 00 00 00 06 13 00 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x00
+Data	: 00 00 00 06 13 00 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data	: 00 00 00 0A 90 01 - 00 00 03 46 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x00
+Data	: 00 00 00 06 14 00 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data	: 00 00 00 0A 90 01 - 00 00 03 47 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data	: 00 00 00 06 5C 01 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data	: 00 00 00 0A 90 01 - 00 00 04 46 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 B5 87 46 4C 5D BE 41 9B 2C F3 44 15 63 3D 36 F5 C2 00 20 88 00 40 11 06 21 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 BF C5 46 4C 4F D5 41 9B 2C F3 46 15 63 3A 32 F5 C2 00 20 88 00 40 11 06 21 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 CA 03 46 4C 41 EC 41 9B 2C F3 45 15 63 36 32 F5 C2 00 20 88 00 40 11 06 21 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 D4 41 46 4C 34 03 40 9B 2C F3 45 15 63 31 33 F5 C2 00 20 88 00 40 11 06 21 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 DE 7F 45 4C 26 1A 40 9B 2C F3 45 15 63 2B 34 F5 C2 00 20 88 00 40 11 06 21 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x79
+Data	: 00 00 00 06 5C 79 - 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 E8 BD 45 4C 18 31 40 9B 2C F3 45 15 63 24 31 F5 C2 00 20 88 00 40 11 06 21 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 F2 FB 44 4C 0A 48 40 9B 2C F3 44 15 63 1A 34 F5 C2 00 20 88 00 40 11 06 21 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 D9 CF 47 4C 0C FC 42 9B 2C F2 46 0D AA ED 32 F5 C2 00 20 88 00 40 11 06 21 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 CB 8B 44 4C 03 E6 43 9B 2C F2 46 0D AB 2A 36 F5 C2 00 20 88 00 48 11 06 21 
+[Debug] [GameRouter]: Header	: [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data	: 00 00 00 24 3C 78 - 4F 00 71 46 50 DA 1D 44 4C 0D 2D 43 9B 2C F2 46 0D AB 2A 36 F5 C2 00 20 88 00 48 11 06 21
+
+
+--------------------------------
+
+
+[Trace] [Server]: Game-Client connected: 127.0.0.1:65256
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x542, [5]: 0x02
+Data    : 00 00 00 42 05 02 - 80 00 00 00 00 00 00 00 00 00 00 C0 DD 0D 84 C4 DF 76 30 0C C6 31 39 07 02 56 3B CB 85 58 34 00 00 00 00 00 00 00 01 78 08 00 11 00 00 00 00 00 00 00 00 20 0F 77 04 0D 6A F1 26 85
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x180C, [5]: 0x90
+Data    : 00 00 00 0C 18 90 - 00 00 00 00 90 05
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x90
+Data    : 00 00 00 06 13 90 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x91
+Data    : 00 00 00 06 5C 91 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x91
+Data    : 00 00 00 06 14 91 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x91
+Data    : 00 00 00 06 5C 91 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data    : 00 00 00 0A 90 01 - 00 00 00 01
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 51 0B D5 44 4C 3F C4 43 9B 2C F3 45 04 6E 5E 34 F5 C2 00 20 88 00 40 11 06 41
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 FD 6D 44 4C 49 4C 41 9B 2C F3 45 04 72 97 30 F5 C2 00 20 88 00 40 11 06 41
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 EF 08 47 4C 52 D9 41 9B 2C F3 44 04 72 A5 30 F5 C2 00 20 88 00 40 11 06 41
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 E0 A4 47 4C 5C 66 40 9B 2C F3 44 04 72 B5 35 F5 C2 00 20 88 00 40 11 06 41
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 D2 40 47 4C 65 F2 43 9B 2C F3 45 04 72 CA 31 F5 C2 00 20 88 00 40 11 06 41
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 C3 DC 46 4C 6F 7F 43 9B 2C F3 45 04 72 E4 31 F5 C2 00 20 88 00 40 11 06 41
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 B5 76 46 4C 79 0C 42 9B 2C F3 44 04 72 F4 35 F5 C2 00 20 88 00 40 11 06 41
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 A7 0F 46 4C 82 99 42 9B 2C F3 45 04 72 FC 34 F5 C2 00 20 88 00 40 11 06 41
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 98 A8 46 4C 8C 26 40 9B 2C F3 45 04 72 FD 31 F5 C2 00 20 88 00 40 11 06 41
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 8A 41 46 4C 95 B2 41 9B 2C F3 46 04 72 FE 32 F5 C2 00 20 88 00 40 11 06 41
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 A2 C1 45 4C 77 3F 40 9B 2C F3 46 14 C4 EB 34 F5 C2 00 20 88 00 40 11 06 41
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C44, [5]: 0x78
+Data    : 00 00 00 44 3C 78 - 4F 00 71 46 50 A2 C1 45 4C 77 3F 40 9B 2C F3 45 14 C5 14 36 F5 C2 00 20 88 00 48 11 06 21 78 E2 78 03 62 8A 85 16 05 8A 63 B9 7C 84 D9 67 CD 40 A6 28 A6 3E AE 10 00 24 40 01 08 00 00 3C
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x79
+Data    : 00 00 00 06 5C 79 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x78
+Data    : 00 00 00 06 13 78 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data    : 00 00 00 0A 90 01 - 00 00 01 46
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x01
+Data    : 00 00 00 06 14 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x00
+Data    : 00 00 00 06 13 00 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x01
+Data    : 00 00 00 06 14 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x00
+Data    : 00 00 00 06 13 00 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x01
+Data    : 00 00 00 06 14 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data    : 00 00 00 0A 90 01 - 00 00 01 47
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x00
+Data    : 00 00 00 06 13 00 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x01
+Data    : 00 00 00 06 14 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data    : 00 00 00 0A 90 01 - 00 00 02 46
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x00
+Data    : 00 00 00 06 13 00 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data    : 00 00 00 0A 90 01 - 00 00 02 47
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x00
+Data    : 00 00 00 06 14 00 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x00
+Data    : 00 00 00 06 13 00 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1306, [5]: 0x00
+Data    : 00 00 00 06 13 00 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data    : 00 00 00 0A 90 01 - 00 00 03 46
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x1406, [5]: 0x00
+Data    : 00 00 00 06 14 00 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data    : 00 00 00 0A 90 01 - 00 00 03 47
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x01
+Data    : 00 00 00 06 5C 01 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x900A, [5]: 0x01
+Data    : 00 00 00 0A 90 01 - 00 00 04 46
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 B5 87 46 4C 5D BE 41 9B 2C F3 44 15 63 3D 36 F5 C2 00 20 88 00 40 11 06 21
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 BF C5 46 4C 4F D5 41 9B 2C F3 46 15 63 3A 32 F5 C2 00 20 88 00 40 11 06 21
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 CA 03 46 4C 41 EC 41 9B 2C F3 45 15 63 36 32 F5 C2 00 20 88 00 40 11 06 21
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 D4 41 46 4C 34 03 40 9B 2C F3 45 15 63 31 33 F5 C2 00 20 88 00 40 11 06 21
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 DE 7F 45 4C 26 1A 40 9B 2C F3 45 15 63 2B 34 F5 C2 00 20 88 00 40 11 06 21
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x5C06, [5]: 0x79
+Data    : 00 00 00 06 5C 79 -
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 E8 BD 45 4C 18 31 40 9B 2C F3 45 15 63 24 31 F5 C2 00 20 88 00 40 11 06 21
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 F2 FB 44 4C 0A 48 40 9B 2C F3 44 15 63 1A 34 F5 C2 00 20 88 00 40 11 06 21
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 D9 CF 47 4C 0C FC 42 9B 2C F2 46 0D AA ED 32 F5 C2 00 20 88 00 40 11 06 21
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 CB 8B 44 4C 03 E6 43 9B 2C F2 46 0D AB 2A 36 F5 C2 00 20 88 00 48 11 06 21
+[Debug] [GameRouter]: Header    : [0]: 0x00, [1]: 0x00, [2]: 0x00, [O]: 0x3C24, [5]: 0x78
+Data    : 00 00 00 24 3C 78 - 4F 00 71 46 50 DA 1D 44 4C 0D 2D 43 9B 2C F2 46 0D AB 2A 36 F5 C2 00 20 88 00 48 11 06 21
+
+
+
+
+
+
+

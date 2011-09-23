@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PcapDotNet.Analysis</name>
+    </assembly>
+    <members>
+        <member name="T:PcapDotNet.Analysis.PcapDotNetAnalysis">
+            <summary>
+            Used to send PreEmptive Runtime Intelligence Data.
+            </summary>
+        </member>
+        <member name="M:PcapDotNet.Analysis.PcapDotNetAnalysis.Initialize">
+            <summary>
+            Initializes the Runtime Intelligence and make sures it will be closed on ProcessExit.
+            </summary>
+        </member>
+        <member name="M:PcapDotNet.Analysis.PcapDotNetAnalysis.PacketSent">
+            <summary>
+            Counts a packet sent event.
+            </summary>
+        </member>
+        <member name="M:PcapDotNet.Analysis.PcapDotNetAnalysis.PacketSent(System.Int32)">
+            <summary>
+            Counts a packet sent events according to the given <paramref name="count"/>.
+            </summary>
+            <param name="count">The number of packet sent event to count.</param>
+        </member>
+        <member name="M:PcapDotNet.Analysis.PcapDotNetAnalysis.PacketReceived">
+            <summary>
+            Counts a packet received event.
+            </summary>
+        </member>
+        <member name="M:PcapDotNet.Analysis.PcapDotNetAnalysis.PacketReceived(System.Int32)">
+            <summary>
+            Counts a packet received events according to the given <paramref name="count"/>.
+            </summary>
+            <param name="count">The number of packet sent event to count.</param>
+        </member>
+        <member name="P:PcapDotNet.Analysis.PcapDotNetAnalysis.OptIn">
+            <summary>
+            Choose whether to send PreEmptive Runtime Intelligence Data or not.
+            </summary>
+        </member>
+    </members>
+</doc>

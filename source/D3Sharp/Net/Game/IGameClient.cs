@@ -18,8 +18,7 @@
 
 namespace D3Sharp.Net.Game
 {
-    public interface IGameClient:IClient
+    public interface IGameClient : IClient
     {
-        void Parse(ConnectionDataEventArgs e);
     }
 }

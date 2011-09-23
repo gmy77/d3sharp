@@ -73,6 +73,7 @@ namespace D3Sharp
                 Logger.Info("Shutting down servers...");
                 _bnetServer.Shutdown();
                 _gameServer.Shutdown();
+                break;
             }
         }
 
