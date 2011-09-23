@@ -61,7 +61,7 @@ namespace D3Sharp.Core.Services
             var heroCreateParams = D3.OnlineService.HeroCreateParams.ParseFrom(request.AttributeList[0].Value.MessageValue);
             var builder = CreateToonResponse.CreateBuilder();
 
-            var toon = new Toons.Toon(request.Name, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? Toons.ToonGender.Female : Toons.ToonGender.Male, 1, Client.Account);
+            var toon = new Toons.Toon(request.Name, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? Toons.ToonFlags.Female : Toons.ToonFlags.Male, 1, Client.Account);
             if (Toons.ToonManager.SaveToon(toon)) builder.SetToon(toon.BnetEntityID);
             done(builder.Build());
         }

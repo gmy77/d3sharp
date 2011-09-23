@@ -103,9 +103,10 @@ namespace D3Sharp.Core.Accounts
 
         protected override void NotifySubscriptionAdded(Net.BNet.BNetClient client)
         {
-            // Check d3sharp/docs/rpc/notification-data-layout.txt for fields keys
+            // Check docs/rpc/fields.txt for fields keys
 
             // RealID name field
+            // NOTE: Probably won't ever use this for its actual purpose, but showing the email in final might not be a good idea
             var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet,1, 1, 0);
             var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Email).Build()).Build();
             var fieldOperation1 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build();
