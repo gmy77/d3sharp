@@ -142,6 +142,7 @@
     <Compile Include="Utils\win32\NativeMethods.cs" />
     <Compile Include="Core\Objects\RPCObjectManager.cs" />
     <Compile Include="Core\Objects\RPCObject.cs" />
+    <Compile Include="Core\Storage\Config.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

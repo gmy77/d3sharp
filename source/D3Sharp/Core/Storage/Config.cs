@@ -16,35 +16,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Data.SQLite;
-using System.Reflection;
-using D3Sharp.Utils;
-
 namespace D3Sharp.Core.Storage
 {
-    // just a quick hack - not to be meant a final layer.
-    public static class DBManager
+    public sealed class Config : Core.Config.Config
     {
-        public static SQLiteConnection Connection { get; private set; }
-        public static readonly Logger Logger = LogManager.CreateLogger();
-
-        static DBManager()
-        {
-            Connect();            
+        public string AssetsRoot {
+            get { return this.GetString("AssetsRoot", "."); }
+            set { this.Set("AssetsRoot", value); }
         }
 
-        private static void Connect()
-        {
-            try
-            {
-                Connection = new SQLiteConnection(String.Format("Data Source={0}/Assets/toon.db", Config.Instance.AssetsRoot));
-                Connection.Open();
-            }
-            catch (Exception e)
-            {
-                Logger.FatalException(e, "Connect()");
-            }
-        }
+        private static readonly Config _instance = new Config();
+        public static Config Instance { get { return _instance; } }
+        private Config() : base("Storage") { }
     }
 }

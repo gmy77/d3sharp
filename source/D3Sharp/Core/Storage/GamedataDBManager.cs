@@ -38,7 +38,7 @@ namespace D3Sharp.Core.Storage
         {
             try
             {
-                Connection = new SQLiteConnection(string.Format("Data Source={0}/Assets/gamedata.db", System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
+                Connection = new SQLiteConnection(String.Format("Data Source={0}/Assets/gamedata.db", Config.Instance.AssetsRoot));
                 Connection.Open();
             }
             catch (Exception e)
