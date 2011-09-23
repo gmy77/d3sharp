@@ -220,11 +220,6 @@ namespace D3Sharp.Core.Toons
             return ToonClass.Barbarian;
         }
 
-        private static ToonGender GetGenderByID(uint genderId)
-        {
-            return genderId== 0x2000002 ? ToonGender.Female : ToonGender.Male;
-        }
-
         public bnet.protocol.presence.Field QueryField(bnet.protocol.presence.FieldKey queryKey)
         {
             var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(queryKey);
@@ -256,7 +251,7 @@ namespace D3Sharp.Core.Toons
                     {
                         if(this.Owner.LoggedInClient!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());                       
                     }
-                    else if (queryKey.Group == 4 && queryKey.Field == 2) // int - Away status (0=present, 2=away, 4=busy) - still not sure about this on recent players window
+                    else if (queryKey.Group == 4 && queryKey.Field == 2) // int - status message: 0 = 'online', 1 = 'in menus' 
                     {                        
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build());
                     }
@@ -430,6 +425,6 @@ namespace D3Sharp.Core.Toons
     public enum ToonGender
     {
         Male, // 0x0
-        Female // 0x2000002
+        Female // 0x2
     }
 }
