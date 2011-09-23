@@ -48,60 +48,60 @@ namespace D3Sharp.Net.Game.Packets
             {
                 case 0x05: //Response = 06, 17
                     WelcomeClient(connection, packet);
-                    Logger.Debug("WelcomeClient opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("WelcomeClient opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x10: //no payload
-                    Logger.Debug("NoPayload opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("NoPayload opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x12:
-                    Logger.Debug("UnNamed opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("UnNamed opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x13: //Logout
                     StartLogout(connection, packet);
-                    Logger.Debug("Logout opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("Logout opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x14: //Cancel Logout
                     CancelLogout(connection, packet);
-                    Logger.Debug("Cancel opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("Cancel opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x18:  //Reponse = 4E, 21
                     SendToonApperanceData(connection, packet);
-                    Logger.Debug("Response opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("Response opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x28: //Ability/Interaction
                     Logger.Debug("Interaction opCode [0x{0}]", header.opCode.ToString("x2"));
-                    Logger.Debug("Interaction payload [0x{0}]", payload.HexDump());
+                    Logger.Debug("Interaction payload [{0}]", payload.HexDump());
                     break;
                 case 0x2D:  //Manipulate Inventory
                     SendInventoryUpdate(connection, packet);
-                    Logger.Debug("Manipulate Inventory opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("Manipulate Inventory opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x35:  // Update / Add To Sash/Belt
-                    Logger.Debug("UpdateSash opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("UpdateSash opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x3C:  //Position Update
-                    Logger.Debug("PositionUpdate opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("PositionUpdate opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x47:
-                    Logger.Debug("UnNamed opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("UnNamed opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x4F: //no payload
-                    Logger.Debug("NoPayLoad opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("NoPayLoad opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x5C: //no payload heartbeat
-                    Logger.Debug("NoPayLoad Heartbeat opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("NoPayLoad Heartbeat opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x90: //payload - 4 bytes
-                    Logger.Debug("Payload 4bytes opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("Payload 4bytes opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 case 0x92: //no payload, response = 26
                     //server sends 0x91
                     //client responds with 0x92
                     //server responds with 0x26
-                    Logger.Debug("UnNamed opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("UnNamed opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
                 default:
-                    Logger.Debug("Unknown opCode [opcode=0x{0}]", header.opCode.ToString("x2"));
+                    Logger.Debug("Unknown opCode [0x{0}]", header.opCode.ToString("x2"));
                     break;
             }
 
