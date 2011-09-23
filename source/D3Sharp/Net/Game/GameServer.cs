@@ -16,22 +16,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using D3Sharp.Net.Game.Packets;
+
 namespace D3Sharp.Net.Game
 {
-    public sealed class GameServer:Server
+    public sealed class GameServer : Server
     {
         public GameServer()
         {
             this.OnConnect += GameServer_OnConnect;
             this.OnDisconnect += (sender, e) => Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
-            this.DataReceived += GameServer_DataReceived;
+            this.DataReceived += (sender, e) => GameRouter.Route(e);
             this.DataSent += (sender, e) => { };
         }
 
         void GameServer_DataReceived(object sender, ConnectionDataEventArgs e)
         {
-            var connection = (Connection) e.Connection;
-            ((GameClient) connection.Client).Parse(e);
         }
 
         void GameServer_OnConnect(object sender, ConnectionEventArgs e)
@@ -42,6 +42,10 @@ namespace D3Sharp.Net.Game
 
         public override void Run()
         {
+            // we can't listen for port 1119 because D3 and the launcher (agent) communicates on that port through loopback.
+            // so we change our default port and start D3 with a shortcut like so:
+            //   "F:\Diablo III Beta\Diablo III.exe" -launch -auroraaddress 127.0.0.1:1345
+
             if (!this.Listen(Config.Instance.BindIP, Config.Instance.Port)) return;
             Logger.Info("Game-Server is listening on {0}:{1}...", Config.Instance.BindIP, Config.Instance.Port);
         }

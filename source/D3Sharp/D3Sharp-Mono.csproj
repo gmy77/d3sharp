@@ -120,6 +120,9 @@
     <Compile Include="Net\BNet\Packets\BNetPacket.cs" />
     <Compile Include="Net\Game\Config.cs" />
     <Compile Include="Net\Game\GameClient.cs" />
+    <Compile Include="Net\Game\Packets\GameHeader.cs" />
+    <Compile Include="Net\Game\Packets\GamePacket.cs" />
+    <Compile Include="Net\Game\Packets\GameRouter.cs" />
     <Compile Include="Net\Game\GameServer.cs" />
     <Compile Include="Net\Game\IGameClient.cs" />
     <Compile Include="Net\IClient.cs" />

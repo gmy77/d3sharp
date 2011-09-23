@@ -17,22 +17,43 @@
  */
 
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using D3Sharp.Utils.Extensions;
-using Gibbed.Helpers;
 
-//using Gibbed.Helpers;
-
-namespace D3Sharp.Net.Game
+namespace D3Sharp.Net.Game.Packets
 {
-    public sealed class GameClient : IGameClient
+    public class GamePacket
     {
-        public IConnection Connection { get; set; }
+        public GameHeader Header { get; protected set; }
+        public IEnumerable<byte> Payload { get; set; }
 
-        public GameClient(IConnection connection)
+
+        public GamePacket(GameHeader header, byte[] payload)
         {
-            this.Connection = connection;
+            this.Header = header;
+            this.Payload = payload;
         }
+
+        public UInt32 Length
+        {
+            get { return this.Header.Length; }
+        }
+
+        public byte[] GetRawPacketData()
+        {
+            return this.Header.Data.Append(this.Payload.ToArray());
+        }
+
+        public override string ToString()
+        {
+            return string.Format(
+                "Header\t: {0}\nData\t: {1}- {2}",
+                this.Header,
+                this.Header.Data.HexDump(),
+                this.Payload.HexDump()
+                );
+        }
+
     }
 }
