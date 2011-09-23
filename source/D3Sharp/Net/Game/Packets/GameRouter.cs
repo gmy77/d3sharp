@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using System.Linq;
 using D3Sharp.Utils;
+using D3Sharp.Utils.Extensions;
 
 namespace D3Sharp.Net.Game.Packets
 {
@@ -36,9 +37,9 @@ namespace D3Sharp.Net.Game.Packets
         {
             var header = new GameHeader(stream);
             var payload = new byte[header.Length - 6];
-
+            
             stream.Read(payload, 0, (int)header.Length - 6);
-
+            
             var packet = new GamePacket(header, payload);
 
             //Logger.Debug("C->S: {0}", packet.ToString());
