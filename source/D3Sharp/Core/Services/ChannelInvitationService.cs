@@ -95,6 +95,7 @@ namespace D3Sharp.Core.Services
         {
             var invitee = ToonManager.GetToonByLowID(request.TargetId.Low);
 
+            //var invitationInfo = request.GetExtension(bnet.protocol.channel_invitation.SendInvitationRequest.ChannelInvitation); returns all empty, there should be another way..
             Logger.Warn(String.Format("{0} invited {1} to his channel.", Client.CurrentToon.Name, invitee.Name));
         }
 
