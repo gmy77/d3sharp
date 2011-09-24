@@ -8664,9 +8664,9 @@ namespace D3Sharp.Net.Game
                         },
                         Field1 = new Vector3D()
                         {
-                            Field0 = 2997.877f,
-                            Field1 = 2857.371f,
-                            Field2 = 24.04533f
+                            Field0 = 3030.794f,
+                            Field1 = 2770.09f,
+                            Field2 = 23.94532f,
                         },
                     },
                     Field2 = 0x772E0000,
