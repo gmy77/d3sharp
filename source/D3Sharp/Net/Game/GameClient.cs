@@ -419,6 +419,8 @@ namespace D3Sharp.Net.Game
                 Field0 = 0x00000000,
                 Field1 = "",
                 ToonName = BnetClient.CurrentToon.Name,
+                Field3 = 0x00000002,
+                snoActorPortrait = 0x00001271,
                 Field4 = 0x00000002,
                 Field6 = 0x00000004,
                 #region HeroStateData
