@@ -31,22 +31,20 @@ namespace D3Sharp.Core.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public IBNetClient Client { get; set; }
 
-        // PartyService just used ChannelService to create a new channel for the party.
-
+        // PartyService just uses ChannelService to create a new channel for the party.
         public override void CreateChannel(IRpcController controller, CreateChannelRequest request, Action<CreateChannelResponse> done)
         {
             Logger.Trace("CreateChannel()");
             
             var channel = ChannelsManager.CreateNewChannel((BNetClient)this.Client, request.ObjectId);
-
             var builder = CreateChannelResponse.CreateBuilder()
                 .SetObjectId(channel.DynamicId)
                 .SetChannelId(channel.BnetEntityId);
 
             done(builder.Build());
             
-            // Add the client that requested the creation of channel as the owner
-            channel.AddOwner((BNetClient)Client);
+            // Set the client that requested the creation of channel as the owner
+            channel.SetOwner((BNetClient)Client);
         }
 
         public override void JoinChannel(IRpcController controller, JoinChannelRequest request, Action<JoinChannelResponse> done)

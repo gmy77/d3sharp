@@ -1,0 +1,30 @@
+
+== Program values ==
+16974 - 0x0000424E - "BN\0\0"
+17459 - 0x00004433 - "D3\0\0"
+
+== Fields ==
+Prgm.Grp.Fld    Value type                          Description
+=========================================================================================================
+== BN - 16974 ==
+BN.1.1          string                              RealID name
+BN.1.2          bool                                Unknown; seems to always be true in caps
+BN.1.4          bnet.protocol.EntityId              Current Toon's ID
+BN.3.2          string                              Hero's name
+BN.3.3          bool                                Whether the account is online
+BN.3.5          int64                               Account away status (0=online, 2=away, 4=busy)
+BN.3.9          string                              Program (should always "D3")
+BN.3.10         int64                               Unknown; always 0?
+BN.3.11         bnet.protocol.EntityId              Unknown
+
+== D3 - 17459 ==
+D3.1.1          D3.OnlineService.EntityId           Unknown; pretty sure this is a Toon ID, need to investigate some more
+D3.2.1          D3.Account.BannerConfiguration      Banner configuration
+D3.3.1          int64                               Hero's class (GbidClass)
+D3.3.2          int64                               Hero's current level
+D3.3.3          D3.Hero.VisualEquipment             Hero's visible equipment
+D3.3.4          int64                               Hero's flags (gender and such - always has flags 0x2000000 and 0x20 set on query response)
+D3.4.1          D3.OnlineService.EntityId           Channel ID (added to query response only when the toon is online)
+D3.4.2          int64                               Current screen (0=in-menus, 1=in-menus, 3=in-menus); see ScreenStatus sent to ChannelService.UpdateChannelState call
+D3.4.3          string                              Probably the away message (unused in client, currently)
+

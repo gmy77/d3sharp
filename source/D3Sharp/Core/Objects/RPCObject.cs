@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using D3Sharp.Utils;
 using D3Sharp.Net.BNet;
 
 namespace D3Sharp.Core.Objects
@@ -28,6 +29,9 @@ namespace D3Sharp.Core.Objects
     /// </summary>
     public class RPCObject
     {
+        // bah
+        private static readonly Logger Logger = LogManager.CreateLogger();
+        
         /// <summary>
         /// The dynamic ID of the object, which is set on memory instantiation and changes over sessions.
         /// RPCObjectManager will track all dynamic IDs so that we don't get a duplicate.
@@ -44,7 +48,7 @@ namespace D3Sharp.Core.Objects
         /// </summary>
         protected RPCObject()
         {
-            // Let RPCObjectManager generate new dynamid ID for us
+            // Let RPCObjectManager generate a new dynamic ID for us
             RPCObjectManager.Init(this);
             this.Subscribers = new List<BNetClient>();
         }       
@@ -52,7 +56,7 @@ namespace D3Sharp.Core.Objects
         /// <summary>
         /// Adds a client subscriber to object, which will eventually be notified whenever the object changes state.
         /// </summary>
-        /// <param name="client">The subscriber.</param>
+        /// <param name="client">The client to add as a subscriber.</param>
         /// <param name="remoteObjectId">The client's dynamic ID.</param>
         public void AddSubscriber(BNetClient client, ulong remoteObjectId)
         {
@@ -61,6 +65,24 @@ namespace D3Sharp.Core.Objects
             this.Subscribers.Add(client);
             // Since the client wasn't previously subscribed, it should not be aware of the object's state -- let's notify it
             this.NotifySubscriptionAdded(client);
+        }
+
+        /// <summary>
+        /// Removes a given subscriber and unmaps the object's dynamic ID.
+        /// </summary>
+        /// <param name="client">The client to remove.</param>
+        public void RemoveSubscriber(BNetClient client)
+        {
+            if (!this.Subscribers.Contains(client))
+            {
+                Logger.Warn("Attempted to remove subscriber {0}", client.Connection.RemoteEndPoint.ToString());
+                return;
+            }
+            // Unmap the object from the client
+            client.UnmapLocalObjectID(this.DynamicId);
+            this.Subscribers.Remove(client);
+            // We don't need to do a notify nor respond to the client with anything since the client will ultimately act
+            // like the object never existed in the first place
         }
 
         /// <summary>

@@ -52,7 +52,7 @@ namespace D3Sharp.Core.Toons
         
         public string Name { get; private set; }
         public ToonClass Class { get; private set; }
-        public ToonGender Gender { get; private set; }
+        public ToonFlags Flags { get; private set; }
         public byte Level { get; private set; }
         public D3.Hero.Digest Digest { get; private set; }
         public D3.Hero.VisualEquipment Equipment { get; private set; }
@@ -82,33 +82,33 @@ namespace D3Sharp.Core.Toons
             }
         }
 
-        public uint GenderID
+        public uint Gender
         {
             get {
-                return this.Gender == ToonGender.Male ? (uint)0x0 : 0x2;
+                return (uint)(this.Flags & ToonFlags.Female); // 0x00 for male, so we can just return the AND operation
             }
         }
 
         public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
             :base(persistantId)
         {
-            this.SetFields(name, (ToonClass)@class, (ToonGender)gender, level, AccountManager.GetAccountByPersistantID((ulong)accountId));
+            this.SetFields(name, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistantID((ulong)accountId));
         }
 
-        public Toon(string name, int classId, ToonGender gender, byte level, Account account) // Toon with **newly generated** persistent ID
+        public Toon(string name, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
             : base(StringHashHelper.HashIdentity(name))
         {
-            this.SetFields(name, GetClassByID(classId), gender, level, account);
+            this.SetFields(name, GetClassByID(classId), flags, level, account);
         }
 
-        private void SetFields(string name, ToonClass @class, ToonGender gender, byte level, Account owner)
+        private void SetFields(string name, ToonClass @class, ToonFlags flags, byte level, Account owner)
         {
             this.ToonHandle = new ToonHandleHelper(this.PersistentID);
             this.D3EntityID = this.ToonHandle.ToD3EntityID();
             this.BnetEntityID = this.ToonHandle.ToBnetEntityID();
             this.Name = name;
             this.Class = @class;
-            this.Gender = gender;
+            this.Flags = flags;
             this.Level = level;
             this.Owner = owner;
 
@@ -188,7 +188,7 @@ namespace D3Sharp.Core.Toons
                 .SetHeroId(this.D3EntityID)
                 .SetHeroName(this.Name)
                 .SetGbidClass((int)this.ClassID)
-                .SetPlayerFlags(this.GenderID)
+                .SetPlayerFlags((uint)this.Flags)
                 .SetLevel(this.Level)
                 .SetVisualEquipment(this.Equipment)
                 .SetLastPlayedAct(0)
@@ -245,31 +245,31 @@ namespace D3Sharp.Core.Toons
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 4) // Hero's flags (gender and such)
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.GenderID | 0x2000020).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.Flags | ToonFlags.BothUnknowns)).Build());
                     }
-                    else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if he's online
+                    else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if the client is online
                     {
                         if(this.Owner.LoggedInClient!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());                       
                     }
-                    else if (queryKey.Group == 4 && queryKey.Field == 2) // int - status message: 0 = 'online', 1 = 'in menus' 
+                    else if (queryKey.Group == 4 && queryKey.Field == 2) // Current screen (all known values are just "in-menu"; also see ScreenStatuses sent in ChannelService.UpdateChannelState)
                     {                        
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build());
                     }
                     break;
                 case FieldKeyHelper.Program.BNet:
-                    if (queryKey.Group == 3 && queryKey.Field == 2) // heroname             
+                    if (queryKey.Group == 3 && queryKey.Field == 2) // Toon name             
                     { 
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build());
                     }
-                    else if (queryKey.Group == 3 && queryKey.Field == 3) // is the toon online?
+                    else if (queryKey.Group == 3 && queryKey.Field == 3) // Whether the toon is online
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build());
                     }
-                    else if (queryKey.Group == 3 && queryKey.Field == 5) // always 0 when the toon is online
+                    else if (queryKey.Group == 3 && queryKey.Field == 5) // Away status - 0 for online
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build());
                     }
-                    else if (queryKey.Group == 3 && queryKey.Field == 9) // program - always d3    
+                    else if (queryKey.Group == 3 && queryKey.Field == 9) // Program - always D3
                     {  
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build());
                     }
@@ -281,7 +281,7 @@ namespace D3Sharp.Core.Toons
 
         protected override void NotifySubscriptionAdded(Net.BNet.BNetClient client)
         {
-            // Check d3sharp/docs/rpc/notification-data-layout.txt for fields keys
+            // Check docs/rpc/fields.txt for fields keys
 
             // Banner configuration
             var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 2, 1, 0);
@@ -303,9 +303,9 @@ namespace D3Sharp.Core.Toons
             var field4 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey4).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Equipment.ToByteString()).Build()).Build();
             var fieldOperation4 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field4).Build();
 
-            // Gender
+            // Flags
             var fieldKey5 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 4, 0);
-            var field5 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey5).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.GenderID | 0x2000020).Build()).Build();
+            var field5 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey5).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.Flags | ToonFlags.BothUnknowns)).Build()).Build();
             var fieldOperation5 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field5).Build();
 
             // Name
@@ -313,7 +313,7 @@ namespace D3Sharp.Core.Toons
             var field6 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey6).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build()).Build();
             var fieldOperation6 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field6).Build();
 
-            // is the toon online?
+            // Whether the toon is online
             var fieldKey7 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 3, 0);
             var field7 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey7).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
             var fieldOperation7 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field7).Build();
@@ -340,13 +340,13 @@ namespace D3Sharp.Core.Toons
             // Put in AddNotification message
             var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
 
-            // Make the rpc call
+            // Make the RPC call
             client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(),this.DynamicId);
         }
 
         public override string ToString()
         {
-            return String.Format("Name: {0} High: {1} Low:{2}", this.Name, this.BnetEntityID.High,
+            return String.Format("Name: {0} High: {1} Low: {2}", this.Name, this.BnetEntityID.High,
                                  this.BnetEntityID.Low);
         }
 
@@ -417,14 +417,19 @@ namespace D3Sharp.Core.Toons
     {
         Barbarian, // 0x4FB91EE2
         Monk, // 0x3DAC15
-        DemonHunter, // 0xc88b9649
+        DemonHunter, // 0xC88B9649
         WitchDoctor, // 0x343C22A
         Wizard // 0x1D4681B1
     }
 
-    public enum ToonGender
+    [Flags]
+    public enum ToonFlags : uint
     {
-        Male, // 0x0
-        Female // 0x2
+        Male=0x00,
+        Female=0x02,
+        // TODO: These two need to be figured out still.. /plash
+        Unknown1=0x20,
+        Unknown2=0x2000000,
+        BothUnknowns=Unknown1 | Unknown2
     }
 }

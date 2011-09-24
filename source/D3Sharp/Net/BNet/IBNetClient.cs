@@ -39,6 +39,7 @@ namespace D3Sharp.Net.BNet
         bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon);
 
         void MapLocalObjectID(ulong localObjectId, ulong remoteObjectId);
+        void UnmapLocalObjectID(ulong localObjectId);
         ulong GetRemoteObjectID(ulong localObjectId);
     }
 }

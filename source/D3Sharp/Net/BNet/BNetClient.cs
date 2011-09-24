@@ -105,6 +105,18 @@ namespace D3Sharp.Net.BNet
             }
         }
 
+        public void UnmapLocalObjectID(ulong localObjectId)
+        {
+            try
+            {
+                this.MappedObjects.Remove(localObjectId);
+            }
+            catch (Exception e)
+            {
+                Logger.DebugException(e, "UnmapLocalObjectID()");
+            }
+        }
+
         public ulong GetRemoteObjectID(ulong localObjectId)
         {
             // TODO: Check for conflicts
