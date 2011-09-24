@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using D3Sharp.Net.BNet;
 using D3Sharp.Utils.Extensions;
 using Gibbed.Helpers;
 using System.Text;
@@ -32,6 +33,7 @@ namespace D3Sharp.Net.Game
         static readonly Logger Logger = LogManager.CreateLogger();
 
         public IConnection Connection { get; set; }
+        public BNetClient BnetClient { get; private set; }
 
         GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
@@ -279,6 +281,10 @@ namespace D3Sharp.Net.Game
             if (msg.Id != 0x000A)
                 throw new NotImplementedException();
 
+            // a hackish way to get bnetclient in context -- pretends games has only one client in. when we're done with implementing bnet completely, will get this sorted out. /raist
+            this.BnetClient = Core.Games.GameManager.AvailableGames[(ulong)msg.Field2].Clients.FirstOrDefault();
+            if (this.BnetClient != null) this.BnetClient.InGameClient = this;
+
             SendMessage(new VersionsMessage()
             {
                 Id = 0x000D,
@@ -340,7 +346,7 @@ namespace D3Sharp.Net.Game
                 Id = 0x0031,
                 Field0 = 0x00000000,
                 Field1 = "",
-                ToonName = "NEWMONK#349",
+                ToonName = this.BnetClient.CurrentToon.Name,
                 Field3 = 0x00000002,
                 Field4 = 0x00000004,
                 snoActorPortrait = 0x00001271,
