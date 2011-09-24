@@ -191,12 +191,12 @@ namespace D3Sharp.Net.Game
                                 {
                                     Field0 = new Quaternion()
                                     {
-                                        Field0 = float.Parse(data[49]),
+                                        Field0 = 1f,//float.Parse(data[49]),
                                         Field1 = new Vector3D()
                                         {
-                                            Field0 = float.Parse(data[46]),
-                                            Field1 = float.Parse(data[47]),
-                                            Field2 = float.Parse(data[48]),
+                                            Field0 = 0f,//float.Parse(data[46]),
+                                            Field1 = 0f,//float.Parse(data[47]),
+                                            Field2 = 0f,//float.Parse(data[48]),
                                         },
                                     },
                                     Field1 = new Vector3D()
@@ -223,12 +223,12 @@ namespace D3Sharp.Net.Game
                                 {
                                     Field0 = new Quaternion()
                                     {
-                                        Field0 = float.Parse(data2[5]),
+                                        Field0 = 1f,//float.Parse(data2[5]),
                                         Field1 = new Vector3D()
                                         {
-                                            Field0 = float.Parse(data2[2]),
-                                            Field1 = float.Parse(data2[3]),
-                                            Field2 = float.Parse(data2[4]),
+                                            Field0 = 0f,//float.Parse(data2[2]),
+                                            Field1 = 0f,//float.Parse(data2[3]),
+                                            Field2 = 0f,//float.Parse(data2[4]),
                                         },
                                     },
                                     Field1 = new Vector3D()
