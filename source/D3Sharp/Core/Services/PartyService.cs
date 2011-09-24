@@ -18,6 +18,7 @@
 
 using System;
 using D3Sharp.Core.Channels;
+using D3Sharp.Core.Toons;
 using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using Google.ProtocolBuffers;
@@ -33,9 +34,7 @@ namespace D3Sharp.Core.Services
 
         // PartyService just uses ChannelService to create a new channel for the party.
         public override void CreateChannel(IRpcController controller, CreateChannelRequest request, Action<CreateChannelResponse> done)
-        {
-            Logger.Trace("CreateChannel()");
-            
+        {                        
             var channel = ChannelsManager.CreateNewChannel((BNetClient)this.Client, request.ObjectId);
             var builder = CreateChannelResponse.CreateBuilder()
                 .SetObjectId(channel.DynamicId)
@@ -45,6 +44,11 @@ namespace D3Sharp.Core.Services
             
             // Set the client that requested the creation of channel as the owner
             channel.SetOwner((BNetClient)Client);
+
+            Logger.Warn(String.Format("Created a new channel: {0}:{1} for toon {2}", channel.BnetEntityId.High,
+                                      channel.BnetEntityId.Low, Client.CurrentToon.Name));
+
+            
         }
 
         public override void JoinChannel(IRpcController controller, JoinChannelRequest request, Action<JoinChannelResponse> done)
@@ -54,7 +58,9 @@ namespace D3Sharp.Core.Services
 
         public override void GetChannelInfo(IRpcController controller, GetChannelInfoRequest request, Action<GetChannelInfoResponse> done)
         {
-            throw new NotImplementedException();
+            Logger.Warn(String.Format("GetChannelInfoRequest() channel: {0}:{1} by toon: {2}",
+                                       request.ChannelId.High,
+                                       request.ChannelId.Low, Client.CurrentToon.Name));
         }
     }
 }

@@ -17,9 +17,11 @@
  */
 
 using System;
+using D3Sharp.Core.Toons;
 using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Extensions;
+using Google.ProtocolBuffers;
 using bnet.protocol.channel_invitation;
 
 namespace D3Sharp.Core.Services
@@ -91,7 +93,9 @@ namespace D3Sharp.Core.Services
 
         public override void SendInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, System.Action<bnet.protocol.invitation.SendInvitationResponse> done)
         {
-            throw new System.NotImplementedException();
+            var invitee = ToonManager.GetToonByLowID(request.TargetId.Low);
+
+            Logger.Warn(String.Format("{0} invited {1} to his channel.", Client.CurrentToon.Name, invitee.Name));
         }
 
         public override void SuggestInvitation(Google.ProtocolBuffers.IRpcController controller, SuggestInvitationRequest request, System.Action<bnet.protocol.NoData> done)
