@@ -82,6 +82,27 @@ namespace D3Sharp.Core.Toons
             }
         }
 
+        public int ResourceID
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x00000002;
+                    case ToonClass.DemonHunter:
+                        return 0x00000005;
+                    case ToonClass.Monk:
+                        return 0x00000003;
+                    case ToonClass.WitchDoctor:
+                        return 0x00000004;
+                    case ToonClass.Wizard:
+                        return 0x00000001;
+                }
+                return 0x00000001;
+            }
+        }
+
         public uint Gender
         {
             get {

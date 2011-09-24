@@ -344,12 +344,12 @@ namespace D3Sharp.Net.Game
             SendMessage(new NewPlayerMessage()
             {
                 Id = 0x0031,
-                Field0 = 0x00000000,
-                Field1 = "",
+                Field0 = 0x00000000, //Party frame (0x00000000 hide, 0x00000001 show)
+                Field1 = "", //Owner name?
                 ToonName = this.BnetClient.CurrentToon.Name,
-                Field3 = 0x00000002,
-                Field4 = 0x00000004,
-                snoActorPortrait = 0x00001271,
+                Field3 = 0x00000002, //party frame class 
+                Field4 = 0x00000004, //party frame level
+                snoActorPortrait = 0x00001271, //party frame portrait
                 Field6 = 0x00000001,
                 #region HeroStateData
                 Field7 = new HeroStateData()
@@ -648,14 +648,14 @@ namespace D3Sharp.Net.Game
                     #endregion
                 },
                 #endregion
-                Field8 = false,
+                Field8 = false, //announce party join
                 Field9 = 0x00000001,
                 Field10 = 0x789E00E2,
             });
             #endregion
-            /*
+            
             #region GenericBlobMessages 0x0032,0x00ED,0x00EE,0x00EF
-            SendMessage(new GenericBlobMessage()
+            /*SendMessage(new GenericBlobMessage()
             {
                 Id = 0x0032,
                 Data = new byte[22]
@@ -690,12 +690,10 @@ namespace D3Sharp.Net.Game
     {
         0x18, 0x00, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
     },
-            });
+            });*/
             #endregion
-*/
-            /*
             #region GameSyncedData
-                        SendMessage(new GameSyncedDataMessage()
+            /*SendMessage(new GameSyncedDataMessage()
                         {
                             Id = 0x00AF,
                             Field0 = new GameSyncedData()
@@ -715,8 +713,8 @@ namespace D3Sharp.Net.Game
                         0x00000000, 0x00000000, 
                     },
                             },
-                        });
-                        #endregion*/
+                        });*/
+            #endregion
 
 
             #region Interstitial,RevealWorld,WorldStatus,EnterWorld
@@ -741,7 +739,7 @@ namespace D3Sharp.Net.Game
             //FlushOutgoingBuffer();
 
 
-            //#region RevealScene/MapRevealScene
+            #region RevealScene/MapRevealScene
             /*SendMessage(new RevealSceneMessage()
             {
                 Id = 0x0034,
@@ -1522,9 +1520,8 @@ namespace D3Sharp.Net.Game
                 Field3 = 0x772E0000,
                 Field4 = 0x00000002,
             });            
-
+            */
             #endregion
-*/
 
             Console.WriteLine("Positioning character at " + posx + " " + posy + " " + posz);
 
@@ -1533,7 +1530,7 @@ namespace D3Sharp.Net.Game
             {
                 Id = 0x003B,
                 Field0 = 0x789E00E2,
-                Field1 = 0x00001271,
+                Field1 = 0x00001271, //Player model?
                 Field2 = 0x00000009,
                 Field3 = 0x00000000,
                 Field4 = new WorldLocationMessageData()
@@ -1564,7 +1561,7 @@ namespace D3Sharp.Net.Game
                 Field6 = new GBHandle()
                 {
                     Field0 = 0x00000007,
-                    Field1 = 0x003DAC15,
+                    Field1 = BnetClient.CurrentToon.ClassID,
                 },
                 Field7 = -1,
                 Field8 = -1,
@@ -1865,21 +1862,21 @@ namespace D3Sharp.Net.Game
          },
          new NetAttributeKeyValue()
          {
-            Field0 = 0x00000003,
+            Field0 = BnetClient.CurrentToon.ResourceID,
             Attribute = GameAttribute.Attributes[0x005E], // Resource_Cur 
             Int = 0x43480000,
             Float = 0f,
          },
          new NetAttributeKeyValue()
          {
-            Field0 = 0x00000003,
+            Field0 = BnetClient.CurrentToon.ResourceID,
             Attribute = GameAttribute.Attributes[0x005F], // Resource_Max 
             Int = 0x00000000,
             Float = 200f,
          },
          new NetAttributeKeyValue()
          {
-            Field0 = 0x00000003,
+            Field0 = BnetClient.CurrentToon.ResourceID,
             Attribute = GameAttribute.Attributes[0x0061], // Resource_Max_Total 
             Int = 0x43480000,
             Float = 0f,
@@ -1898,7 +1895,7 @@ namespace D3Sharp.Net.Game
          },
          new NetAttributeKeyValue()
          {
-            Field0 = 0x00000003,
+            Field0 = BnetClient.CurrentToon.ResourceID,
             Attribute = GameAttribute.Attributes[0x0068], // Resource_Regen_Total 
             Int = 0x00000000,
             Float = 3.051758E-05f,
@@ -1914,7 +1911,7 @@ namespace D3Sharp.Net.Game
     {
          new NetAttributeKeyValue()
          {
-            Field0 = 0x00000003,
+            Field0 = BnetClient.CurrentToon.ResourceID,
             Attribute = GameAttribute.Attributes[0x006B], // Resource_Effective_Max 
             Int = 0x00000000,
             Float = 200f,
@@ -2464,7 +2461,7 @@ namespace D3Sharp.Net.Game
          new NetAttributeKeyValue()
          {
             Attribute = GameAttribute.Attributes[0x005C], // Resource_Type_Primary 
-            Int = 0x00000003,
+            Int = BnetClient.CurrentToon.ResourceID,
             Float = 0f,
          },
          new NetAttributeKeyValue()
@@ -2578,7 +2575,7 @@ namespace D3Sharp.Net.Game
          new NetAttributeKeyValue()
          {
             Attribute = GameAttribute.Attributes[0x0026], // Level 
-            Int = 0x00000001,
+            Int = BnetClient.CurrentToon.Level,
             Float = 0f,
          },
          new NetAttributeKeyValue()
@@ -2688,61 +2685,61 @@ namespace D3Sharp.Net.Game
                 {
                     Field0 = new VisualItem[8]
         {
-             new VisualItem()
+             new VisualItem() //Head
              {
-                Field0 = -1,
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-                Field3 = 0x00000000,
-             },
-             new VisualItem()
-             {
-                Field0 = -1,
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-                Field3 = 0x00000000,
-             },
-             new VisualItem()
-             {
-                Field0 = -1,
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-                Field3 = 0x00000000,
-             },
-             new VisualItem()
-             {
-                Field0 = -1,
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-                Field3 = 0x00000000,
-             },
-             new VisualItem()
-             {
-                Field0 = 0x49B51827,
+                Field0 = BnetClient.CurrentToon.Equipment.VisualItemList[0].Gbid,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
                 Field3 = -1,
              },
-             new VisualItem()
+             new VisualItem() //Chest
              {
-                Field0 = -1,
+                Field0 = BnetClient.CurrentToon.Equipment.VisualItemList[1].Gbid,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
-                Field3 = 0x00000000,
+                Field3 = -1,
              },
-             new VisualItem()
+             new VisualItem() //Feet
              {
-                Field0 = -1,
+                Field0 = BnetClient.CurrentToon.Equipment.VisualItemList[2].Gbid,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
-                Field3 = 0x00000000,
+                Field3 = -1,
              },
-             new VisualItem()
+             new VisualItem() //Hands
              {
-                Field0 = -1,
+                Field0 = BnetClient.CurrentToon.Equipment.VisualItemList[3].Gbid,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
-                Field3 = 0x00000000,
+                Field3 = -1,
+             },
+             new VisualItem() //Main hand
+             {
+                Field0 = BnetClient.CurrentToon.Equipment.VisualItemList[4].Gbid,
+                Field1 = 0x00000000,
+                Field2 = 0x00000000,
+                Field3 = -1,
+             },
+             new VisualItem() //Offhand
+             {
+                Field0 = BnetClient.CurrentToon.Equipment.VisualItemList[5].Gbid,
+                Field1 = 0x00000000,
+                Field2 = 0x00000000,
+                Field3 = -1,
+             },
+             new VisualItem() //Shoulders
+             {
+                Field0 = BnetClient.CurrentToon.Equipment.VisualItemList[6].Gbid,
+                Field1 = 0x00000000,
+                Field2 = 0x00000000,
+                Field3 = -1,
+             },
+             new VisualItem() //Legs
+             {
+                Field0 = BnetClient.CurrentToon.Equipment.VisualItemList[7].Gbid,
+                Field1 = 0x00000000,
+                Field2 = 0x00000000,
+                Field3 = -1,
              },
         },
                 },
