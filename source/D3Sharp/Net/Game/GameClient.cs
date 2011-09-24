@@ -96,6 +96,11 @@ namespace D3Sharp.Net.Game
         {
             string filePath = "Assets//map.txt";
             string line, line2;
+
+            System.Globalization.CultureInfo ci = (System.Globalization.CultureInfo)System.Globalization.CultureInfo.CurrentCulture.Clone();
+            ci.NumberFormat.CurrencyDecimalSeparator = ".";
+            //avarage = double.Parse("0.0", NumberStyles.Any, ci);
+
             if (File.Exists(filePath))
             {
                 StreamReader file = null;
@@ -152,30 +157,30 @@ namespace D3Sharp.Net.Game
                                         {
                                             Field0 = new Vector3D()
                                             {
-                                                Field0 = float.Parse(data[27]),
-                                                Field1 = float.Parse(data[28]),
-                                                Field2 = float.Parse(data[29]),
+                                                Field0 = float.Parse(data[27],ci),
+                                                Field1 = float.Parse(data[28],ci),
+                                                Field2 = float.Parse(data[29],ci),
                                             },
                                             Field1 = new Vector3D()
                                             {
-                                                Field0 = float.Parse(data[30]),
-                                                Field1 = float.Parse(data[31]),
-                                                Field2 = float.Parse(data[32]),
+                                                Field0 = float.Parse(data[30], ci),
+                                                Field1 = float.Parse(data[31], ci),
+                                                Field2 = float.Parse(data[32], ci),
                                             },
                                         },
                                         Field4 = new AABB()
                                         {
                                             Field0 = new Vector3D()
                                             {
-                                                Field0 = float.Parse(data[33]),
-                                                Field1 = float.Parse(data[34]),
-                                                Field2 = float.Parse(data[35]),
+                                                Field0 = float.Parse(data[33], ci),
+                                                Field1 = float.Parse(data[34], ci),
+                                                Field2 = float.Parse(data[35], ci),
                                             },
                                             Field1 = new Vector3D()
                                             {
-                                                Field0 = float.Parse(data[36]),
-                                                Field1 = float.Parse(data[37]),
-                                                Field2 = float.Parse(data[38]),
+                                                Field0 = float.Parse(data[36], ci),
+                                                Field1 = float.Parse(data[37], ci),
+                                                Field2 = float.Parse(data[38], ci),
                                             },
                                         },
                                         Field5 = new int[4]
@@ -191,19 +196,19 @@ namespace D3Sharp.Net.Game
                                 {
                                     Field0 = new Quaternion()
                                     {
-                                        Field0 = 1f,//float.Parse(data[49]),
+                                        Field0 = 1f,//float.Parse(data[49],ci),
                                         Field1 = new Vector3D()
                                         {
-                                            Field0 = 0f,//float.Parse(data[46]),
-                                            Field1 = 0f,//float.Parse(data[47]),
-                                            Field2 = 0f,//float.Parse(data[48]),
+                                            Field0 = 0f,//float.Parse(data[46],ci),
+                                            Field1 = 0f,//float.Parse(data[47],ci),
+                                            Field2 = 0f,//float.Parse(data[48],ci),
                                         },
                                     },
                                     Field1 = new Vector3D()
                                     {
-                                        Field0 = float.Parse(data[50]),
-                                        Field1 = float.Parse(data[51]),
-                                        Field2 = float.Parse(data[52]),
+                                        Field0 = float.Parse(data[50], ci),
+                                        Field1 = float.Parse(data[51], ci),
+                                        Field2 = float.Parse(data[52], ci),
                                     },
                                 },
                                 Field5 = int.Parse(data[53]),
@@ -223,19 +228,19 @@ namespace D3Sharp.Net.Game
                                 {
                                     Field0 = new Quaternion()
                                     {
-                                        Field0 = 1f,//float.Parse(data2[5]),
+                                        Field0 = 1f,//float.Parse(data2[5],ci),
                                         Field1 = new Vector3D()
                                         {
-                                            Field0 = 0f,//float.Parse(data2[2]),
-                                            Field1 = 0f,//float.Parse(data2[3]),
-                                            Field2 = 0f,//float.Parse(data2[4]),
+                                            Field0 = 0f,//float.Parse(data2[2],ci),
+                                            Field1 = 0f,//float.Parse(data2[3],ci),
+                                            Field2 = 0f,//float.Parse(data2[4],ci),
                                         },
                                     },
                                     Field1 = new Vector3D()
                                     {
-                                        Field0 = float.Parse(data2[6]),
-                                        Field1 = float.Parse(data2[7]),
-                                        Field2 = float.Parse(data2[8]),
+                                        Field0 = float.Parse(data2[6], ci),
+                                        Field1 = float.Parse(data2[7], ci),
+                                        Field2 = float.Parse(data2[8], ci),
                                     },
                                 },
                                 Field3 = 0x772E0000,//int.Parse(data2[9]),
@@ -246,8 +251,8 @@ namespace D3Sharp.Net.Game
                             posy = (r.Field1.tCachedValues.Field3.Field0.Field1 + r.Field1.tCachedValues.Field3.Field1.Field1) / 2.0f + r.Field4.Field1.Field1;
                             posz = (r.Field1.tCachedValues.Field3.Field0.Field2 + r.Field1.tCachedValues.Field3.Field1.Field2) / 2.0f + r.Field4.Field1.Field2;
 
-                            Console.WriteLine(r.AsText());
-                            Console.WriteLine(r2.AsText());
+                            //Console.WriteLine(r.AsText());
+                            //Console.WriteLine(r2.AsText());
 
                             SendMessage(r);
                             SendMessage(r2);
@@ -257,7 +262,7 @@ namespace D3Sharp.Net.Game
                 }
                 catch (Exception e)
                 {
-
+                    Console.WriteLine("EXCEPTION DAMMIT");
                 }
                 finally
                 {
