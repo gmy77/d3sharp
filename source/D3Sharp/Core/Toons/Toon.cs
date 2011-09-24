@@ -32,7 +32,7 @@ using Account = D3Sharp.Core.Accounts.Account;
 namespace D3Sharp.Core.Toons
 {
     public class Toon : PersistentRPCObject
-    {        
+    {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace D3Sharp.Core.Toons
         /// Toon handle struct.
         /// </summary>
         public ToonHandleHelper ToonHandle { get; private set; }
-        
+
         public string Name { get; private set; }
         public ToonClass Class { get; private set; }
         public ToonFlags Flags { get; private set; }
@@ -228,19 +228,19 @@ namespace D3Sharp.Core.Toons
             {
                 case FieldKeyHelper.Program.D3:
                     if (queryKey.Group == 2 && queryKey.Field == 1) // Banner configuration
-                    {                        
+                    {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.BannerConfiguration.ToByteString()).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 1) // Hero's class (GbidClass)
-                    {                        
+                    {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.ClassID).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 2) // Hero's current level
-                    {                        
+                    {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.Level).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 3) // Hero's visible equipment
-                    {                        
+                    {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Equipment.ToByteString()).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 4) // Hero's flags (gender and such)
@@ -249,16 +249,16 @@ namespace D3Sharp.Core.Toons
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if the client is online
                     {
-                        if(this.Owner.LoggedInClient!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());                       
+                        if(this.Owner.LoggedInClient!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 2) // Current screen (all known values are just "in-menu"; also see ScreenStatuses sent in ChannelService.UpdateChannelState)
-                    {                        
+                    {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build());
                     }
                     break;
                 case FieldKeyHelper.Program.BNet:
-                    if (queryKey.Group == 3 && queryKey.Field == 2) // Toon name             
-                    { 
+                    if (queryKey.Group == 3 && queryKey.Field == 2) // Toon name
+                    {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 3) // Whether the toon is online
@@ -270,7 +270,7 @@ namespace D3Sharp.Core.Toons
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 9) // Program - always D3
-                    {  
+                    {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build());
                     }
                     break;
@@ -353,7 +353,7 @@ namespace D3Sharp.Core.Toons
         public void SaveToDB()
         {
             try
-            {                
+            {
                 if (ExistsInDB())
                 {
                     var query =
@@ -372,7 +372,7 @@ namespace D3Sharp.Core.Toons
                             this.PersistentID, this.Name, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
-                    cmd.ExecuteNonQuery();                    
+                    cmd.ExecuteNonQuery();
                 }
             }
             catch (Exception e)
