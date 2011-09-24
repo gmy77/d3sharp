@@ -82,6 +82,67 @@ namespace D3Sharp.Core.Toons
             }
         }
 
+        public int ResourceID
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x00000002;
+                    case ToonClass.DemonHunter:
+                        return 0x00000005;
+                    case ToonClass.Monk:
+                        return 0x00000003;
+                    case ToonClass.WitchDoctor:
+                        return 0x00000004;
+                    case ToonClass.Wizard:
+                        return 0x00000001;
+                }
+                return 0x00000001;
+            }
+        }
+
+        public int ClassSNO
+        {
+            get
+            {
+                if (Gender == 0)
+                {
+                    switch (this.Class)
+                    {
+                        case ToonClass.Barbarian:
+                            return 0x0CE5;
+                        case ToonClass.DemonHunter:
+                            return 0x0125C7;
+                        case ToonClass.Monk:
+                            return 0x1271;
+                        case ToonClass.WitchDoctor:
+                            return 0x1955;
+                        case ToonClass.Wizard:
+                            return 0x1990;
+                    }
+                }
+                else
+                {
+                    switch (this.Class)
+                    {
+                        case ToonClass.Barbarian:
+                            return 0x0CD5;
+                        case ToonClass.DemonHunter:
+                            return 0x0123D2;
+                        case ToonClass.Monk:
+                            return 0x126D;
+                        case ToonClass.WitchDoctor:
+                            return 0x1951;
+                        case ToonClass.Wizard:
+                            return 0x197E;
+                    }
+                }
+                return 0x0;
+            }
+        }
+
         public uint Gender
         {
             get {
