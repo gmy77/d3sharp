@@ -57,7 +57,7 @@ namespace D3Sharp.Net.Game
                 {
                     GameMessage msg = _incomingBuffer.ParseMessage();
 
-                    Logger.LogIncoming(msg);
+                    //Logger.LogIncoming(msg);
 
                     try
                     {
