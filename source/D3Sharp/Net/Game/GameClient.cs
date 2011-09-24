@@ -357,7 +357,7 @@ namespace D3Sharp.Net.Game
                     Field0 = 0x00000000,
                     Field1 = 0x00000000,
                     Field2 = 0x00000000,
-                    Field3 = 0x00000000,
+                    ToonGender = BnetClient.CurrentToon.Gender,
                     Field4 = new PlayerSavedData()
                     {
                         #region HotBarButtonData

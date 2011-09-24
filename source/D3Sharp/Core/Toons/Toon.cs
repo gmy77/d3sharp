@@ -143,10 +143,10 @@ namespace D3Sharp.Core.Toons
             }
         }
 
-        public uint Gender
+        public int Gender
         {
             get {
-                return (uint)(this.Flags & ToonFlags.Female); // 0x00 for male, so we can just return the AND operation
+                return (int)(this.Flags & ToonFlags.Female); // 0x00 for male, so we can just return the AND operation
             }
         }
 
