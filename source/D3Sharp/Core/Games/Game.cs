@@ -59,7 +59,8 @@ namespace D3Sharp.Core.Games
             // We should actually find the server's public-interface and use that
             var connectionInfo =
                 bnet.protocol.game_master.ConnectInfo.CreateBuilder().SetToonId(client.CurrentToon.BnetEntityID).SetHost
-                    (Net.Game.Config.Instance.BindIP).SetPort(Net.Game.Config.Instance.Port).SetToken(ByteString.CopyFrom(new byte[] {0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84}))
+                    //(Net.Game.Config.Instance.BindIP).SetPort(Net.Game.Config.Instance.Port).SetToken(ByteString.CopyFrom(new byte[] {0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84}))
+                    (Net.Broadcast.Config.Instance.BindIP).SetPort(Net.Game.Config.Instance.Port).SetToken(ByteString.CopyFrom(new byte[] { 0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84 }))
                     .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("SGameId").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.DynamicId).Build())).Build();
                  
             var builder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();
