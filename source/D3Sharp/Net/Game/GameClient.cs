@@ -97,9 +97,7 @@ namespace D3Sharp.Net.Game
             string filePath = "Assets//map.txt";
             string line, line2;
 
-            System.Globalization.CultureInfo ci = (System.Globalization.CultureInfo)System.Globalization.CultureInfo.CurrentCulture.Clone();
-            ci.NumberFormat.CurrencyDecimalSeparator = ".";
-            //avarage = double.Parse("0.0", NumberStyles.Any, ci);
+            //avarage = double.Parse("0.0", NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
 
             if (File.Exists(filePath))
             {
@@ -157,30 +155,30 @@ namespace D3Sharp.Net.Game
                                         {
                                             Field0 = new Vector3D()
                                             {
-                                                Field0 = float.Parse(data[27],ci),
-                                                Field1 = float.Parse(data[28],ci),
-                                                Field2 = float.Parse(data[29],ci),
+                                                Field0 = float.Parse(data[27], System.Globalization.CultureInfo.InvariantCulture),
+                                                Field1 = float.Parse(data[28], System.Globalization.CultureInfo.InvariantCulture),
+                                                Field2 = float.Parse(data[29], System.Globalization.CultureInfo.InvariantCulture),
                                             },
                                             Field1 = new Vector3D()
                                             {
-                                                Field0 = float.Parse(data[30], ci),
-                                                Field1 = float.Parse(data[31], ci),
-                                                Field2 = float.Parse(data[32], ci),
+                                                Field0 = float.Parse(data[30], System.Globalization.CultureInfo.InvariantCulture),
+                                                Field1 = float.Parse(data[31], System.Globalization.CultureInfo.InvariantCulture),
+                                                Field2 = float.Parse(data[32], System.Globalization.CultureInfo.InvariantCulture),
                                             },
                                         },
                                         Field4 = new AABB()
                                         {
                                             Field0 = new Vector3D()
                                             {
-                                                Field0 = float.Parse(data[33], ci),
-                                                Field1 = float.Parse(data[34], ci),
-                                                Field2 = float.Parse(data[35], ci),
+                                                Field0 = float.Parse(data[33], System.Globalization.CultureInfo.InvariantCulture),
+                                                Field1 = float.Parse(data[34], System.Globalization.CultureInfo.InvariantCulture),
+                                                Field2 = float.Parse(data[35], System.Globalization.CultureInfo.InvariantCulture),
                                             },
                                             Field1 = new Vector3D()
                                             {
-                                                Field0 = float.Parse(data[36], ci),
-                                                Field1 = float.Parse(data[37], ci),
-                                                Field2 = float.Parse(data[38], ci),
+                                                Field0 = float.Parse(data[36], System.Globalization.CultureInfo.InvariantCulture),
+                                                Field1 = float.Parse(data[37], System.Globalization.CultureInfo.InvariantCulture),
+                                                Field2 = float.Parse(data[38], System.Globalization.CultureInfo.InvariantCulture),
                                             },
                                         },
                                         Field5 = new int[4]
@@ -196,19 +194,19 @@ namespace D3Sharp.Net.Game
                                 {
                                     Field0 = new Quaternion()
                                     {
-                                        Field0 = 1f,//float.Parse(data[49],ci),
+                                        Field0 = 1f,//float.Parse(data[49],System.Globalization.CultureInfo),
                                         Field1 = new Vector3D()
                                         {
-                                            Field0 = 0f,//float.Parse(data[46],ci),
-                                            Field1 = 0f,//float.Parse(data[47],ci),
-                                            Field2 = 0f,//float.Parse(data[48],ci),
+                                            Field0 = 0f,//float.Parse(data[46],System.Globalization.CultureInfo),
+                                            Field1 = 0f,//float.Parse(data[47],System.Globalization.CultureInfo),
+                                            Field2 = 0f,//float.Parse(data[48],System.Globalization.CultureInfo),
                                         },
                                     },
                                     Field1 = new Vector3D()
                                     {
-                                        Field0 = float.Parse(data[50], ci),
-                                        Field1 = float.Parse(data[51], ci),
-                                        Field2 = float.Parse(data[52], ci),
+                                        Field0 = float.Parse(data[50], System.Globalization.CultureInfo.InvariantCulture),
+                                        Field1 = float.Parse(data[51], System.Globalization.CultureInfo.InvariantCulture),
+                                        Field2 = float.Parse(data[52], System.Globalization.CultureInfo.InvariantCulture),
                                     },
                                 },
                                 Field5 = int.Parse(data[53]),
@@ -228,19 +226,19 @@ namespace D3Sharp.Net.Game
                                 {
                                     Field0 = new Quaternion()
                                     {
-                                        Field0 = 1f,//float.Parse(data2[5],ci),
+                                        Field0 = 1f,//float.Parse(data2[5],System.Globalization.CultureInfo),
                                         Field1 = new Vector3D()
                                         {
-                                            Field0 = 0f,//float.Parse(data2[2],ci),
-                                            Field1 = 0f,//float.Parse(data2[3],ci),
-                                            Field2 = 0f,//float.Parse(data2[4],ci),
+                                            Field0 = 0f,//float.Parse(data2[2],System.Globalization.CultureInfo),
+                                            Field1 = 0f,//float.Parse(data2[3],System.Globalization.CultureInfo),
+                                            Field2 = 0f,//float.Parse(data2[4],System.Globalization.CultureInfo),
                                         },
                                     },
                                     Field1 = new Vector3D()
                                     {
-                                        Field0 = float.Parse(data2[6], ci),
-                                        Field1 = float.Parse(data2[7], ci),
-                                        Field2 = float.Parse(data2[8], ci),
+                                        Field0 = float.Parse(data2[6], System.Globalization.CultureInfo.InvariantCulture),
+                                        Field1 = float.Parse(data2[7], System.Globalization.CultureInfo.InvariantCulture),
+                                        Field2 = float.Parse(data2[8], System.Globalization.CultureInfo.InvariantCulture),
                                     },
                                 },
                                 Field3 = 0x772E0000,//int.Parse(data2[9]),
