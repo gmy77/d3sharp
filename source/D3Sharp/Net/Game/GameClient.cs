@@ -94,7 +94,7 @@ namespace D3Sharp.Net.Game
 
         public void ReadAndSendMap()
         {
-            string filePath = "Assets//map.txt";
+            string filePath = Config.Instance.Map;
             string line, line2;
 
             //avarage = double.Parse("0.0", NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
@@ -260,8 +260,7 @@ namespace D3Sharp.Net.Game
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("EXCEPTION DAMMIT");
-                    Console.WriteLine("Error: {0}", e.ToString());
+                    Logger.DebugException(e, "ReadAndSendMap");
                 }
                 finally
                 {
@@ -271,9 +270,8 @@ namespace D3Sharp.Net.Game
             }
             else
             {
-                Console.WriteLine("MAP FILE NOT FOUND!");
+                Logger.Error("Map file {0} not found!", filePath);
             }
-
         }
 
         public void OnMessage(JoinBNetGameMessage msg)
