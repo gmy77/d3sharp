@@ -263,6 +263,7 @@ namespace D3Sharp.Net.Game
                 catch (Exception e)
                 {
                     Console.WriteLine("EXCEPTION DAMMIT");
+                    Console.WriteLine("Error: {0}", e.ToString());
                 }
                 finally
                 {
