@@ -418,11 +418,9 @@ namespace D3Sharp.Net.Game
                 Id = 0x0031,
                 Field0 = 0x00000000,
                 Field1 = "",
-                Field2 = "NEWMONK#349",
-                Field3 = 0x00000002,
-                Field4 = 0x00000004,
-                snoActorPortrait = 0x00001271,
-                Field6 = 0x00000001,
+                ToonName = BnetClient.CurrentToon.Name,
+                Field4 = 0x00000002,
+                Field6 = 0x00000004,
                 #region HeroStateData
                 Field7 = new HeroStateData()
                 {
@@ -8666,9 +8664,9 @@ namespace D3Sharp.Net.Game
                         },
                         Field1 = new Vector3D()
                         {
-                            Field0 = 3030.794f,
-                            Field1 = 2770.09f,
-                            Field2 = 23.94532f,
+                            Field0 = 2997.877f,
+                            Field1 = 2857.371f,
+                            Field2 = 24.04533f
                         },
                     },
                     Field2 = 0x772E0000,
