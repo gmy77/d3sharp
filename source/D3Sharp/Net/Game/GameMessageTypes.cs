@@ -4051,9 +4051,9 @@ namespace D3Sharp.Net.Game
 
     public class JoinBNetGameMessage : GameMessage
     {
-        public EntityId Field0;
+        public EntityId Field0;  // this *is* the toon id /raist.
         public GameId Field1;
-        public int Field2;
+        public int Field2; // and this is the SGameId there we set in D3Sharp.Core.Games.Game.cs when we send the connection info to client /raist.
         public long Field3;
         public int Field4;
         public int ProtocolHash;

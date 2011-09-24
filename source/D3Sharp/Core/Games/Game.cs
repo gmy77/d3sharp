@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
+using D3Sharp.Core.Helpers;
 using D3Sharp.Net;
 using D3Sharp.Net.BNet;
 using D3Sharp.Net.Game;
@@ -39,6 +41,8 @@ namespace D3Sharp.Core.Games
         public ulong RequestID { get; private set; }
         public ulong FactoryID { get; private set; }
 
+        public List<BNetClient> Clients = new List<BNetClient>();
+
         public static ulong RequestIdCounter = 0;
 
         public Game(ulong factoryId)
@@ -46,7 +50,7 @@ namespace D3Sharp.Core.Games
             this.RequestID = ++RequestIdCounter;
             this.FactoryID = factoryId;
 
-            this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh(433661094641971304).SetLow(this.DynamicId).Build();
+            this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameId).SetLow(this.DynamicId).Build();
             this.GameHandle = bnet.protocol.game_master.GameHandle.CreateBuilder().SetFactoryId(this.FactoryID).SetGameId(this.BnetEntityId).Build();
         }
 
@@ -56,13 +60,14 @@ namespace D3Sharp.Core.Games
             var connectionInfo =
                 bnet.protocol.game_master.ConnectInfo.CreateBuilder().SetToonId(client.CurrentToon.BnetEntityID).SetHost
                     (Net.Game.Config.Instance.BindIP).SetPort(Net.Game.Config.Instance.Port).SetToken(ByteString.CopyFrom(new byte[] {0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84}))
-                    .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("SGameId").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2014314530).Build())).Build();
+                    .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("SGameId").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.DynamicId).Build())).Build();
                  
             var builder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();
             builder.AddConnectInfo(connectionInfo);
             builder.SetRequestId(this.RequestID);
             builder.SetGameHandle(this.GameHandle);
 
+            this.Clients.Add(client);
             client.CallMethod(bnet.protocol.game_master.GameFactorySubscriber.Descriptor.FindMethodByName("NotifyGameFound"), builder.Build(), this.DynamicId);
         }
     }
