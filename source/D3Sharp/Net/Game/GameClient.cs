@@ -349,7 +349,7 @@ namespace D3Sharp.Net.Game
                 ToonName = this.BnetClient.CurrentToon.Name,
                 Field3 = 0x00000002, //party frame class 
                 Field4 = 0x00000004, //party frame level
-                snoActorPortrait = 0x00001271, //party frame portrait
+                snoActorPortrait = BnetClient.CurrentToon.ClassSNO, //party frame portrait
                 Field6 = 0x00000001,
                 #region HeroStateData
                 Field7 = new HeroStateData()
@@ -1530,7 +1530,7 @@ namespace D3Sharp.Net.Game
             {
                 Id = 0x003B,
                 Field0 = 0x789E00E2,
-                Field1 = 0x00001271, //Player model?
+                Field1 = BnetClient.CurrentToon.ClassSNO, //Player model?
                 Field2 = 0x00000009,
                 Field3 = 0x00000000,
                 Field4 = new WorldLocationMessageData()
@@ -2757,7 +2757,7 @@ namespace D3Sharp.Net.Game
                 Field0 = new SNOName()
                 {
                     Field0 = 0x00000001,
-                    Field1 = 0x00001271,
+                    Field1 = BnetClient.CurrentToon.ClassSNO,
                 },
             });
             #endregion
@@ -3066,7 +3066,7 @@ namespace D3Sharp.Net.Game
                         {
                             Id = 0x0042,
                             Field0 = 0x789E00E2,
-                            Field1 = 0x00001271,
+                            Field1 = BnetClient.CurrentToon.ClassSNO,
                             Field2 = new WorldPlace()
                             {
                                 Field0 = new Vector3D()
