@@ -25,6 +25,9 @@ using D3Sharp.Utils;
 using D3Sharp.Core.Helpers;
 using bnet.protocol;
 
+// TODO: Need to do some more testing and inspection to make sure that
+// responding before performing the action requested is proper
+
 namespace D3Sharp.Core.Services
 {
     [Service(serviceID: 0xb, serviceName: "bnet.protocol.presence.PresenceService")]
@@ -44,10 +47,13 @@ namespace D3Sharp.Core.Services
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
                     var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
-                    toon.AddSubscriber((BNetClient)this.Client, request.ObjectId);
+                    // The client will send us a Subscribe with ToonId of 0 the first time it
+                    // tries to create a toon with a name that already exists. Let's handle that here.
+                    if (toon != null)
+                        toon.AddSubscriber((BNetClient)this.Client, request.ObjectId);
                     break;
                 default:
-                    Logger.Warn("Recieved an unhandled Presence:Subscribe request with {0}", request.EntityId.GetHighIdType());
+                    Logger.Warn("Recieved an unhandled Presence.Subscribe request with type {0}", request.EntityId.GetHighIdType());
                     break;
             }
 
@@ -58,7 +64,26 @@ namespace D3Sharp.Core.Services
         public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UnsubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("Unsubscribe()");
-            //Logger.Debug("request:\n{0}", request.ToString());
+            Logger.Debug("request:\n{0}", request.ToString());
+            
+            switch (request.EntityId.GetHighIdType())
+            {
+                case EntityIdHelper.HighIdType.AccountId:
+                    var account = AccountManager.GetAccountByEntityID(request.EntityId);
+                    // The client will probably make sure it doesn't unsubscribe to a null ID, but just to make sure..
+                    if (account != null)
+                        account.RemoveSubscriber((BNetClient)this.Client);
+                    break;
+                case EntityIdHelper.HighIdType.ToonId:
+                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
+                    if (toon != null)
+                        toon.RemoveSubscriber((BNetClient)this.Client);
+                    break;
+                default:
+                    Logger.Warn("Recieved an unhandled Presence.Unsubscribe request with type {0}", request.EntityId.GetHighIdType());
+                    break;
+            }
+            
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
@@ -66,7 +91,7 @@ namespace D3Sharp.Core.Services
         public override void Update(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UpdateRequest request, System.Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("Update() {0}: {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
-
+            //Logger.Warn("request:\n{0}", request.ToString());
             // This "UpdateRequest" is not, as it may seem, a request to update the client on the state of an object,
             // but instead the *client* requesting to change fields on an object that it has subscribed to.
             // Check docs/rpc/presence.txt in branch wip-docs (or master)
@@ -80,7 +105,7 @@ namespace D3Sharp.Core.Services
                     var toon = ToonManager.GetToonByLowID(request.EntityId.Low);                    
                     break;
                 default:
-                    Logger.Warn("Recieved an unhandled Presence:Update request with {0}", request.EntityId.GetHighIdType());
+                    Logger.Warn("Recieved an unhandled Presence.Update request with type {0}", request.EntityId.GetHighIdType());
                     break;
             }
 
