@@ -4492,13 +4492,13 @@ namespace D3Sharp.Net.Game
          
 
             ItemGenerator generator = new ItemGenerator();
-            Item item = generator.Generate("ManaPotion_04", 0x78A000E4);
+            Item item = generator.Generate("ManaPotion_04");
             item.InvLoc.Field0 = 0x00000000;
             item.InvLoc.Field1 = 0x00000000;
             item.SendTo(this);
 
             
-            item = generator.Generate("HealthPotionMinor", 0x78A000E5);
+            item = generator.Generate("HealthPotionMinor");
             item.InvLoc.Field0 = 0x00000001;
             item.InvLoc.Field1 = 0x00000000;
             item.SendTo(this);
@@ -14266,7 +14266,18 @@ namespace D3Sharp.Net.Game
 
         public void OnMessage(InventoryRequestMoveMessage msg)
         {
-            throw new NotImplementedException();
+
+            ACDInventoryUpdateActorSNO response = new ACDInventoryUpdateActorSNO();
+            response.Id = 0x00A;
+            response.Field0 = msg.invItemId;
+            response.Field1 = 0;
+            SendMessage(new DWordDataMessage() // TICK
+            {
+                Id = 0x00,
+                Field0 = 0x0cf7a7fb,               
+            });
+           
+           
         }
 
         public void OnMessage(InventorySplitStackMessage msg)
