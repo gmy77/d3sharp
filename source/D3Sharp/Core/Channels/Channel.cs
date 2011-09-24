@@ -16,8 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using D3Sharp.Utils;
 using D3Sharp.Core.Helpers;
 using D3Sharp.Core.Objects;
 using D3Sharp.Net.BNet;
@@ -27,16 +29,48 @@ namespace D3Sharp.Core.Channels
 {
     public class Channel : RPCObject
     {
+        private static readonly Logger Logger = LogManager.CreateLogger();
+        
+        // Reasons the client tries to remove a member
+        // TODO: Need more data to complete this
+        public enum RemoveRequestReason : uint
+        {
+            RequestedBySelf = 0x00   // Default; generally when the client quits or leaves a channel (for example, when switching toons)
+            // Kick is probably 0x01 or somesuch
+        }
+        
+        // Reasons a member was removed (sent in NotifyRemove)
+        public enum RemoveReason : uint
+        {
+            Kicked = 0x00,           // The member was kicked
+            Left = 0x01              // The member left
+        }
+        
+        public static RemoveReason GetRemoveReasonForRequest(RemoveRequestReason reqreason)
+        {
+            switch (reqreason)
+            {
+                case RemoveRequestReason.RequestedBySelf:
+                    return RemoveReason.Left;
+                    break;
+                default:
+                    Logger.Warn("No RemoveReason for given RemoveRequestReason: {0}", Enum.GetName(typeof(RemoveRequestReason), reqreason));
+                    break;
+            }
+            return RemoveReason.Left;
+        }
+        
         public bnet.protocol.EntityId BnetEntityId { get; private set; }
         public D3.OnlineService.EntityId D3EntityId { get; private set; }
         public bnet.protocol.channel.ChannelState State { get; private set; }
 
         public readonly Dictionary<BNetClient, bnet.protocol.channel.Member> Members = new Dictionary<BNetClient, bnet.protocol.channel.Member>();
+        public BNetClient Owner { get; private set; }
 
         public Channel(BNetClient client, ulong remoteObjectId)
         {
             this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ChannelId).SetLow(this.DynamicId).Build();
-            this.D3EntityId = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong) EntityIdHelper.HighIdType.ChannelId).SetIdLow(this.DynamicId).Build();
+            this.D3EntityId = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ChannelId).SetIdLow(this.DynamicId).Build();
 
             // This is an object creator, so we have to map the remote object ID
             client.MapLocalObjectID(this.DynamicId, remoteObjectId);
@@ -50,8 +84,34 @@ namespace D3Sharp.Core.Channels
             this.State = builder.Build();
         }
 
-        public void AddOwner(BNetClient client)
+        public void SetOwner(BNetClient client)
         {
+            if (client == this.Owner)
+            {
+                Logger.Warn("Tried to set client {0} as owner of channel when it was already the owner", client.Connection.RemoteEndPoint.ToString());
+                return;
+            }
+            RemoveOwner(RemoveReason.Left);
+            AddMember(client);
+            this.Owner = client;
+        }
+
+        public void RemoveOwner(RemoveReason reason)
+        {
+            if (this.Owner != null)
+            {
+                RemoveMember(this.Owner, reason);
+            }
+        }
+
+        public void AddMember(BNetClient client)
+        {
+            if (HasUser(client))
+            {
+                Logger.Warn("Attempted to add client {0} to channel when it was already a member of the channel", client.Connection.RemoteEndPoint.ToString());
+                return;
+            }
+            
             var identity = client.GetIdentity(false, false, true);
             var member = bnet.protocol.channel.Member.CreateBuilder()
                 .SetIdentity(identity)
@@ -62,16 +122,59 @@ namespace D3Sharp.Core.Channels
                 .Build();
 
             // Be careful when editing the below RPC call, you may break in-game to error!! /raist
-            var builder = bnet.protocol.channel.AddNotification.CreateBuilder()
+            var message = bnet.protocol.channel.AddNotification.CreateBuilder()
                 .SetChannelState(this.State)
-                .SetSelf(member);
-            builder.AddMember(member);
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.DynamicId);
-
+                .SetSelf(member)
+                .AddMember(member)
+                .Build();
+            // This needs to be here so that the foreach below will also send to the client that was just added
             this.Members.Add(client, member);
+            
+            var method = bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd");
+            foreach (var pair in this.Members)
+            {
+                client.CallMethod(method, message, this.DynamicId);
+            }
             client.CurrentChannel = this;
         }
-
+        
+        public void RemoveMemberByID(bnet.protocol.EntityId memberId, RemoveReason reason)
+        {
+            var client = this.Members.FirstOrDefault(pair => pair.Value.Identity.ToonId == memberId).Key;
+            RemoveMember(client, reason);
+        }
+        
+        public void RemoveMember(BNetClient client, RemoveReason reason)
+        {
+            if (client.CurrentToon == null)
+            {
+                Logger.Warn("Could not remove toon-less client {0}", client.Connection.RemoteEndPoint.ToString());
+                return;
+            }
+            else if (!HasUser(client))
+            {
+                Logger.Warn("Attempted to remove non-member client {0} from channel", client.Connection.RemoteEndPoint.ToString());
+                return;
+            }
+            else if (client.CurrentChannel != this)
+            {
+                Logger.Warn("Client {0} is being removed from a channel that is not its current one..", client.Connection.RemoteEndPoint.ToString());
+            }
+            var memberId = this.Members[client].Identity.ToonId;
+            var message = bnet.protocol.channel.RemoveNotification.CreateBuilder()
+                .SetMemberId(memberId)
+                .SetReason((uint)reason)
+                .Build();
+            //Logger.Debug("NotifyRemove message:\n{0}", message.ToString());
+            var method = bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyRemove");
+            foreach (var pair in this.Members) //.Where(m => m.Value.Identity != client.Identity(false, false, true))
+            {
+                pair.Key.CallMethod(method, message, this.DynamicId);
+            }
+            this.Members.Remove(client);
+            client.CurrentChannel = null;
+        }
+        
         public bool HasUser(BNetClient client)
         {
             return this.Members.Any(pair => pair.Key == client);

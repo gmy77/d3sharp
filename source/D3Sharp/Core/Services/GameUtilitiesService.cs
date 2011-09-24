@@ -38,7 +38,7 @@ namespace D3Sharp.Core.Services
 
             // TODO: handle the request. this is where banner changing happens (CustomMessageId 4)
             // CustomMessage for banner change is a D3.GameMessages.SaveBannerConfiguration
-            Logger.Debug("request:\n{0}", request.ToString());
+            //Logger.Debug("request:\n{0}", request.ToString());
             
             var builder = ClientResponse.CreateBuilder();
             done(builder.Build());
