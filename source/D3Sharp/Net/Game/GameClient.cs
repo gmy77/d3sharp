@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2011 D3Sharp Project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -42,6 +42,7 @@ namespace D3Sharp.Net.Game
         int objectId = 0x78f50114 + 100;
         int packetId = 0x227 + 20;
         int tick = 1;
+        int[] ids = { 5346, 5347, 5350, 5360, 5361, 5362, 5363, 5365, 5387, 5393, 5395, 5397, 5411, 5428, 5432, 5433, 5467 };
 
         Random rand = new Random();
         IList<int> objectIdsSpawned = null;
@@ -3947,7 +3948,8 @@ namespace D3Sharp.Net.Game
                     position.Field0 -= (float)(rand.NextDouble() * 20);
                     position.Field1 -= (float)(rand.NextDouble() * 20);
                 }
-                SpawnZombie();
+                int b = rand.Next(0, ids.Length);
+                SpawnZombie(ids[b]);
             }
 
             position.Field1 = oldPosField1;
@@ -4405,8 +4407,9 @@ namespace D3Sharp.Net.Game
             });
         }
         
-        private void SpawnZombie()
+        private void SpawnZombie(int npcId)
         {
+            int nId = npcId;
             if (position == null)
                 return;
 
@@ -4425,7 +4428,7 @@ namespace D3Sharp.Net.Game
             {
                 Id = 0x003B,
                 Field0 = objectId,
-                Field1 = 6652,
+                Field1 = nId,
                 Field2 = 0x8,
                 Field3 = 0x0,
                 Field4 = new WorldLocationMessageData()
@@ -4450,7 +4453,7 @@ namespace D3Sharp.Net.Game
                             Field2 = position.Field2,
                         },
                     },
-                    Field2 = 0x772E0000,
+                    Field2 = 0x772e0000,
                 },
                 Field5 = null,
                 Field6 = new GBHandle()
@@ -4459,7 +4462,7 @@ namespace D3Sharp.Net.Game
                     Field1 = 1,
                 },
                 Field7 = 0x00000001,
-                Field8 = 6652,
+                Field8 = nId,
                 Field9 = 0x0,
                 Field10 = 0x0,
                 Field11 = 0x0,
@@ -4652,7 +4655,7 @@ namespace D3Sharp.Net.Game
                 Field0 = new SNOName
                 {
                     Field0 = 0x1,
-                    Field1 = 6652
+                    Field1 = nId 
                 }
             });
             #endregion
