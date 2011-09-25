@@ -83,6 +83,7 @@
     <Compile Include="Core\Games\GameManager.cs" />
     <Compile Include="Core\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\Helpers\FieldKeyHelper.cs" />
+    <Compile Include="Core\Helpers\NotificationTypeHelper.cs" />
     <Compile Include="Core\Items\Item.cs" />
     <Compile Include="Core\Items\ItemTypeGenerator.cs" />
     <Compile Include="Core\Objects\PersistentRPCObject.cs" />

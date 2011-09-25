@@ -20,6 +20,8 @@ using System;
 using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using Google.ProtocolBuffers;
+using D3Sharp.Core.Helpers;
+using D3Sharp.Core.Toons;
 using bnet.protocol;
 using bnet.protocol.notification;
 
@@ -33,7 +35,27 @@ namespace D3Sharp.Core.Services
 
         public override void SendNotification(IRpcController controller, Notification request, Action<NoData> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("SendNotification()");
+            Logger.Debug("notification:\n{0}", request.ToString());
+
+            switch (request.GetNotificationType())
+            {
+                case NotificationTypeHelper.NotificationType.Whisper:
+                    // Hackztime deluxe
+                    // TODO: The notification on the recipient's side will end up with no name, and
+                    // the recipient doesn't even send a subscribe request or something like that when trying to respond
+                    // Need more data to figure this out..
+                    var account = ToonManager.GetAccountByToonLowID(request.TargetId.Low);
+                    var method = bnet.protocol.notification.NotificationListener.Descriptor.FindMethodByName("OnNotificationReceived");
+                    account.LoggedInClient.CallMethod(method, request, 0);
+                    break;
+                default:
+                    Logger.Warn("Unhandled notification type: {0}", request.Type);
+                    break;
+            }
+
+            var builder = NoData.CreateBuilder();
+            done(builder.Build());
         }
 
         public override void RegisterClient(IRpcController controller, RegisterClientRequest request, Action<NoData> done)
