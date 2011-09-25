@@ -4453,7 +4453,7 @@ namespace D3Sharp.Net.Game
                             Field2 = position.Field2,
                         },
                     },
-                    Field2 = 0x772e0000,
+                    Field2 = 0x772E0000,
                 },
                 Field5 = null,
                 Field6 = new GBHandle()
