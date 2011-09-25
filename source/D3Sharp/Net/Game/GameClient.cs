@@ -2771,6 +2771,165 @@ namespace D3Sharp.Net.Game
             });
             #endregion
 
+            #region ACDEnterKnown 0x77F20036 // The Inn Door
+            SendMessage(new ACDEnterKnownMessage()
+            {
+                Id = 0x003B,
+                Field0 = 0x77F20036,
+                Field1 = 0x0002B875,
+                Field2 = 0x00000010,
+                Field3 = 0x00000000,
+                Field4 = new WorldLocationMessageData()
+                {
+                    Field0 = 0.632705f,
+                    Field1 = new PRTransform()
+                    {
+                        Field0 = new Quaternion()
+                        {
+                            Field0 = 0.7219135f,
+                            Field1 = new Vector3D()
+                            {
+                                Field0 = 0f,
+                                Field1 = 0f,
+                                Field2 = 0.6919833f,
+                            },
+                        },
+                        Field1 = new Vector3D()
+                        {
+                            Field0 = 2993.722f,
+                            Field1 = 2782.086f,
+                            Field2 = 24.32831f,
+                        },
+                    },
+                    Field2 = 0x772E0000,
+                },
+                Field5 = null,
+                Field6 = new GBHandle()
+                {
+                    Field0 = -1,
+                    Field1 = -1,
+                },
+                Field7 = 0x00000001,
+                Field8 = 0x0002B875,
+                Field9 = 0x00000000,
+                Field10 = 0x00,
+                Field12 = 0x0000DBD3,
+                Field13 = 0x00000059,
+            });
+
+            SendMessage(new AffixMessage()
+            {
+                Id = 0x0048,
+                Field0 = 0x77F20036,
+                Field1 = 0x00000001,
+                aAffixGBIDs = new int[0]
+    {
+    },
+            });
+
+            SendMessage(new AffixMessage()
+            {
+                Id = 0x0048,
+                Field0 = 0x77F20036,
+                Field1 = 0x00000002,
+                aAffixGBIDs = new int[0]
+    {
+    },
+            });
+
+            SendMessage(new PortalSpecifierMessage()
+            {
+                Id = 0x004B,
+                Field0 = 0x77F20036,
+                Field1 = new ResolvedPortalDestination()
+                {
+                    snoWorld = 0x0001AB32,
+                    Field1 = 0x000000AC,
+                    snoDestLevelArea = 0x0001AB91,
+                },
+            });
+
+            SendMessage(new ACDCollFlagsMessage()
+            {
+                Id = 0x00A6,
+                Field0 = 0x77F20036,
+                Field1 = 0x00000001,
+            });
+
+            SendMessage(new AttributesSetValuesMessage()
+            {
+                Id = 0x004D,
+                Field0 = 0x77F20036,
+                atKeyVals = new NetAttributeKeyValue[7]
+    {
+         new NetAttributeKeyValue()
+         {
+            Attribute = GameAttribute.Attributes[0x02BC], // MinimapActive 
+            Int = 0x00000001,
+            Float = 0f,
+         },
+         new NetAttributeKeyValue()
+         {
+            Attribute = GameAttribute.Attributes[0x0056], // Hitpoints_Max_Total 
+            Int = 0x00000000,
+            Float = 1f,
+         },
+         new NetAttributeKeyValue()
+         {
+            Attribute = GameAttribute.Attributes[0x0054], // Hitpoints_Max 
+            Int = 0x00000000,
+            Float = 0.0009994507f,
+         },
+         new NetAttributeKeyValue()
+         {
+            Attribute = GameAttribute.Attributes[0x0051], // Hitpoints_Total_From_Level 
+            Int = 0x00000000,
+            Float = 3.051758E-05f,
+         },
+         new NetAttributeKeyValue()
+         {
+            Attribute = GameAttribute.Attributes[0x004D], // Hitpoints_Cur 
+            Int = 0x00000000,
+            Float = 0.0009994507f,
+         },
+         new NetAttributeKeyValue()
+         {
+            Attribute = GameAttribute.Attributes[0x0043], // TeamID 
+            Int = 0x00000001,
+            Float = 0f,
+         },
+         new NetAttributeKeyValue()
+         {
+            Attribute = GameAttribute.Attributes[0x0026], // Level 
+            Int = 0x00000001,
+            Float = 0f,
+         },
+    },
+            });
+
+            SendMessage(new ACDGroupMessage()
+            {
+                Id = 0x00B8,
+                Field0 = 0x77F20036,
+                Field1 = -1,
+                Field2 = -1,
+            });
+
+            SendMessage(new ANNDataMessage()
+            {
+                Id = 0x003E,
+                Field0 = 0x77F20036,
+            });
+
+            SendMessage(new ACDTranslateFacingMessage()
+            {
+                Id = 0x0070,
+                Field0 = 0x77F20036,
+                Field1 = 1.528479f,
+                Field2 = false,
+            });
+            #endregion
+
             FlushOutgoingBuffer();
 
             SendMessage(new DWordDataMessage() // TICK
@@ -3774,7 +3933,25 @@ namespace D3Sharp.Net.Game
 
         public void OnMessage(SecondaryAnimationPowerMessage msg)
         {
-            SpawnZombie();
+            var oldPosField1 = position.Field1;
+            var oldPosField2 = position.Field2;
+            for (var i = 0; i < 10; i++)
+            {
+                if ((i % 2) == 0)
+                {
+                    position.Field0 += (float)(rand.NextDouble() * 20);
+                    position.Field1 += (float)(rand.NextDouble() * 20);
+                }
+                else
+                {
+                    position.Field0 -= (float)(rand.NextDouble() * 20);
+                    position.Field1 -= (float)(rand.NextDouble() * 20);
+                }
+                SpawnZombie();
+            }
+
+            position.Field1 = oldPosField1;
+            position.Field2 = oldPosField2;
         }
 
         public void OnMessage(SNODataMessage msg)
