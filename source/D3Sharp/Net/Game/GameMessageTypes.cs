@@ -562,6 +562,105 @@ namespace D3Sharp.Net.Game
             b.AppendLine("}");
         }
 
+        public RevealSceneMessage()
+        {
+
+        }
+
+        public RevealSceneMessage(string[] data, int f0)
+        {
+            Id = 0x0034;
+            Field0 = f0;//0x772E0000; //int.Parse(data[0]),
+            Field1 = new SceneSpecification()
+            {
+                Field0 = int.Parse(data[1]),
+                Field1 = new IVector2D()
+                {
+                    Field0 = int.Parse(data[2]),
+                    Field1 = int.Parse(data[3]),
+                },
+                arSnoLevelAreas = new int[4] { int.Parse(data[4]), int.Parse(data[5]), int.Parse(data[6]), int.Parse(data[7]), },
+                snoPrevWorld = int.Parse(data[8]),
+                Field4 = int.Parse(data[9]),
+                snoPrevLevelArea = int.Parse(data[10]),
+                snoNextWorld = int.Parse(data[11]),
+                Field7 = int.Parse(data[12]),
+                snoNextLevelArea = int.Parse(data[13]),
+                snoMusic = int.Parse(data[14]),
+                snoCombatMusic = int.Parse(data[15]),
+                snoAmbient = int.Parse(data[16]),
+                snoReverb = int.Parse(data[17]),
+                snoWeather = int.Parse(data[18]),
+                snoPresetWorld = int.Parse(data[19]),
+                Field15 = int.Parse(data[20]),
+                Field16 = int.Parse(data[21]),
+                Field17 = int.Parse(data[22]),
+                Field18 = int.Parse(data[23]),
+                tCachedValues = new SceneCachedValues()
+                {
+                    Field0 = int.Parse(data[24]),
+                    Field1 = int.Parse(data[25]),
+                    Field2 = int.Parse(data[26]),
+                    Field3 = new AABB()
+                    {
+                        Field0 = new Vector3D()
+                        {
+                            Field0 = float.Parse(data[27], System.Globalization.CultureInfo.InvariantCulture),
+                            Field1 = float.Parse(data[28], System.Globalization.CultureInfo.InvariantCulture),
+                            Field2 = float.Parse(data[29], System.Globalization.CultureInfo.InvariantCulture),
+                        },
+                        Field1 = new Vector3D()
+                        {
+                            Field0 = float.Parse(data[30], System.Globalization.CultureInfo.InvariantCulture),
+                            Field1 = float.Parse(data[31], System.Globalization.CultureInfo.InvariantCulture),
+                            Field2 = float.Parse(data[32], System.Globalization.CultureInfo.InvariantCulture),
+                        },
+                    },
+                    Field4 = new AABB()
+                    {
+                        Field0 = new Vector3D()
+                        {
+                            Field0 = float.Parse(data[33], System.Globalization.CultureInfo.InvariantCulture),
+                            Field1 = float.Parse(data[34], System.Globalization.CultureInfo.InvariantCulture),
+                            Field2 = float.Parse(data[35], System.Globalization.CultureInfo.InvariantCulture),
+                        },
+                        Field1 = new Vector3D()
+                        {
+                            Field0 = float.Parse(data[36], System.Globalization.CultureInfo.InvariantCulture),
+                            Field1 = float.Parse(data[37], System.Globalization.CultureInfo.InvariantCulture),
+                            Field2 = float.Parse(data[38], System.Globalization.CultureInfo.InvariantCulture),
+                        },
+                    },
+                    Field5 = new int[4] { int.Parse(data[39]), int.Parse(data[40]), int.Parse(data[41]), int.Parse(data[42]), },
+                    Field6 = int.Parse(data[43]),
+                },
+            };
+            Field2 = int.Parse(data[44]);
+            snoScene = int.Parse(data[45]);
+            Field4 = new PRTransform()
+            {
+                Field0 = new Quaternion()
+                {
+                    Field0 = 1f,//float.Parse(data[49],System.Globalization.CultureInfo),
+                    Field1 = new Vector3D()
+                    {
+                        Field0 = 0f,//float.Parse(data[46],System.Globalization.CultureInfo),
+                        Field1 = 0f,//float.Parse(data[47],System.Globalization.CultureInfo),
+                        Field2 = 0f,//float.Parse(data[48],System.Globalization.CultureInfo),
+                    },
+                },
+                Field1 = new Vector3D()
+                {
+                    Field0 = float.Parse(data[50], System.Globalization.CultureInfo.InvariantCulture),
+                    Field1 = float.Parse(data[51], System.Globalization.CultureInfo.InvariantCulture),
+                    Field2 = float.Parse(data[52], System.Globalization.CultureInfo.InvariantCulture),
+                },
+            };
+
+            Field5 = int.Parse(data[53]);
+            snoSceneGroup = int.Parse(data[54]);
+            arAppliedLabels = new int[0];
+        }
 
     }
 
@@ -838,6 +937,72 @@ namespace D3Sharp.Net.Game
             b.AppendLine("}");
         }
 
+        public ACDEnterKnownMessage()
+        {
+
+        }
+
+        public ACDEnterKnownMessage(string[] Data, int f2)
+        {
+            Id = 0x003B;
+            Field0 = int.Parse(Data[2]);
+            Field1 = int.Parse(Data[3]);
+            Field2 = int.Parse(Data[4]);
+            Field3 = int.Parse(Data[5]);
+
+            Field4 = null;
+            
+            if (int.Parse(Data[0])>0)
+            Field4 = new WorldLocationMessageData()
+             {
+                 Field0 = float.Parse(Data[6], System.Globalization.CultureInfo.InvariantCulture),
+                 Field1 = new PRTransform()
+                 {
+                     Field0 = new Quaternion()
+                     {
+                         Field0 = float.Parse(Data[10], System.Globalization.CultureInfo.InvariantCulture),
+                         Field1 = new Vector3D()
+                         {
+                             Field0 = float.Parse(Data[7], System.Globalization.CultureInfo.InvariantCulture),
+                             Field1 = float.Parse(Data[8], System.Globalization.CultureInfo.InvariantCulture),
+                             Field2 = float.Parse(Data[9], System.Globalization.CultureInfo.InvariantCulture),
+                         },
+                     },
+                     Field1 = new Vector3D()
+                     {
+                         Field0 = float.Parse(Data[11], System.Globalization.CultureInfo.InvariantCulture),
+                         Field1 = float.Parse(Data[12], System.Globalization.CultureInfo.InvariantCulture),
+                         Field2 = float.Parse(Data[13], System.Globalization.CultureInfo.InvariantCulture),
+                     },
+                 },
+                 Field2 = f2, //=int.Parse(Data[14]),
+             };
+
+            Field5 = null;
+            if (int.Parse(Data[1])>0)
+            {
+                Field5 = new InventoryLocationMessageData()
+                    {
+                        Field0 = int.Parse(Data[15]),
+                        Field1 = int.Parse(Data[16]),
+                        Field2 = new IVector2D()
+                        {
+                            Field0 = int.Parse(Data[17]),
+                            Field1 = int.Parse(Data[18]),
+                        }
+                    };
+            }
+
+            Field6 = new GBHandle()
+            {
+                Field0 = int.Parse(Data[19]),
+                Field1 = int.Parse(Data[20]),
+            };
+            Field7 = int.Parse(Data[21]);
+            Field8 = int.Parse(Data[22]);
+            Field9 = int.Parse(Data[23]);
+            Field10 = byte.Parse(Data[24]);
+        }
 
     }
 
@@ -3299,6 +3464,39 @@ namespace D3Sharp.Net.Game
             b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
+        }
+
+        public MapRevealSceneMessage()
+        {
+
+        }
+
+        public MapRevealSceneMessage(string[] data2, int f3)
+        {
+            Id = 0x0044;
+            Field0 = int.Parse(data2[0]);
+            snoScene = int.Parse(data2[1]);
+            Field2 = new PRTransform()
+            {
+                Field0 = new Quaternion()
+                {
+                    Field0 = 1f,//float.Parse(data2[5],System.Globalization.CultureInfo),
+                    Field1 = new Vector3D()
+                    {
+                        Field0 = 0f,//float.Parse(data2[2],System.Globalization.CultureInfo),
+                        Field1 = 0f,//float.Parse(data2[3],System.Globalization.CultureInfo),
+                        Field2 = 0f,//float.Parse(data2[4],System.Globalization.CultureInfo),
+                    },
+                },
+                Field1 = new Vector3D()
+                {
+                    Field0 = float.Parse(data2[6], System.Globalization.CultureInfo.InvariantCulture),
+                    Field1 = float.Parse(data2[7], System.Globalization.CultureInfo.InvariantCulture),
+                    Field2 = float.Parse(data2[8], System.Globalization.CultureInfo.InvariantCulture),
+                },
+            };
+            Field3 = f3;//int.Parse(data2[9]),
+            Field4 = int.Parse(data2[10]);
         }
 
 
