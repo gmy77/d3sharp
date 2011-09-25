@@ -73,6 +73,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Inventory\InventoryManager.cs" />
+    <Compile Include="Core\Items\Affix.cs" />
     <Compile Include="Core\Items\Item.cs" />
     <Compile Include="Core\Items\ItemGenerator.cs" />
     <Compile Include="Core\Items\ItemTypeGenerator.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="Core\Games\GameManager.cs" />
     <Compile Include="Core\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\Helpers\FieldKeyHelper.cs" />
+    <Compile Include="Core\Items\NetAttribute.cs" />
     <Compile Include="Core\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\OnlinePlayers.cs" />
     <Compile Include="Core\Services\AuthenticationService.cs" />

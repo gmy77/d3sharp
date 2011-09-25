@@ -23,6 +23,7 @@ using Gibbed.Helpers;
 using System.Text;
 using D3Sharp.Utils;
 using D3Sharp.Core.Items;
+using D3Sharp.Core.Inventory;
 
 //using Gibbed.Helpers;
 
@@ -36,6 +37,8 @@ namespace D3Sharp.Net.Game
 
         GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
+        InventoryManager invManager = new InventoryManager(null);
+
 
         public GameClient(IConnection connection)
         {
@@ -4489,7 +4492,16 @@ namespace D3Sharp.Net.Game
                 },
             });
             #endregion
-         
+
+
+            
+            foreach (Item item in invManager.Items)
+            {
+                item.SendTo(this);
+            }
+            /*
+            List<Item> getInventoryItems = 
+
 
             ItemGenerator generator = new ItemGenerator();
             Item item = generator.Generate("ManaPotion_04");
@@ -4501,7 +4513,7 @@ namespace D3Sharp.Net.Game
             item = generator.Generate("HealthPotionMinor");
             item.InvLoc.Field0 = 0x00000001;
             item.InvLoc.Field1 = 0x00000000;
-            item.SendTo(this);
+            item.SendTo(this);*/
 
             #region ACDEnterKnown 0x78BE0102
             SendMessage(new ACDEnterKnownMessage()
@@ -14267,6 +14279,11 @@ namespace D3Sharp.Net.Game
         public void OnMessage(InventoryRequestMoveMessage msg)
         {
 
+
+            foreach (Item item in invManager.Items)
+            {
+                item.SendTo(this);
+            }
             ACDInventoryUpdateActorSNO response = new ACDInventoryUpdateActorSNO();
             response.Id = 0x00A;
             response.Field0 = msg.invItemId;
