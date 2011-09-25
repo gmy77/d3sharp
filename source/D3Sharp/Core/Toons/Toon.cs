@@ -93,11 +93,11 @@ namespace D3Sharp.Core.Toons
                     case ToonClass.Monk:
                         return 0x00000003;
                     case ToonClass.WitchDoctor:
-                        return 0x00000004;
+                        return 0x00000000;
                     case ToonClass.Wizard:
                         return 0x00000001;
                 }
-                return 0x00000001;
+                return 0x00000000;
             }
         }
 
