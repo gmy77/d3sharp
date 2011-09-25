@@ -29,8 +29,6 @@ namespace D3Sharp.Core.Channels
 {
     public class Channel : RPCObject
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
-        
         // Reasons the client tries to remove a member
         // TODO: Need more data to complete this
         public enum RemoveRequestReason : uint
@@ -52,7 +50,6 @@ namespace D3Sharp.Core.Channels
             {
                 case RemoveRequestReason.RequestedBySelf:
                     return RemoveReason.Left;
-                    break;
                 default:
                     Logger.Warn("No RemoveReason for given RemoveRequestReason: {0}", Enum.GetName(typeof(RemoveRequestReason), reqreason));
                     break;
@@ -113,7 +110,7 @@ namespace D3Sharp.Core.Channels
             }
             
             var identity = client.GetIdentity(false, false, true);
-            var member = bnet.protocol.channel.Member.CreateBuilder()
+            var addedMember = bnet.protocol.channel.Member.CreateBuilder()
                 .SetIdentity(identity)
                 .SetState(bnet.protocol.channel.MemberState.CreateBuilder()
                     .AddRole(2)
@@ -121,21 +118,31 @@ namespace D3Sharp.Core.Channels
                     .Build())
                 .Build();
 
-            // Be careful when editing the below RPC call, you may break in-game to error!! /raist
-            var message = bnet.protocol.channel.AddNotification.CreateBuilder()
-                .SetChannelState(this.State)
-                .SetSelf(member)
-                .AddMember(member)
-                .Build();
             // This needs to be here so that the foreach below will also send to the client that was just added
-            this.Members.Add(client, member);
+            this.Members.Add(client, addedMember);
             
             var method = bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd");
             foreach (var pair in this.Members)
             {
-                client.CallMethod(method, message, this.DynamicId);
+                var message = bnet.protocol.channel.AddNotification.CreateBuilder()
+                    .SetChannelState(this.State)
+                    // Here we have to set the self property for each call on each client
+                    // TODO: This may not be necessary here (this field is optional); check the caps
+                    .SetSelf(pair.Value)
+                    .AddMember(addedMember)
+                    .Build();
+                pair.Key.CallMethod(method, message, this.DynamicId);
             }
             client.CurrentChannel = this;
+        }
+        
+        public void RemoveAllMembers()
+        {
+            foreach (var pair in this.Members)
+            {
+                // TODO: There should probably be a RemoveReason for "channel disbanded"; find it!
+                RemoveMember(pair.Key, RemoveReason.Left);
+            }
         }
         
         public void RemoveMemberByID(bnet.protocol.EntityId memberId, RemoveReason reason)
@@ -167,7 +174,7 @@ namespace D3Sharp.Core.Channels
                 .Build();
             //Logger.Debug("NotifyRemove message:\n{0}", message.ToString());
             var method = bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyRemove");
-            foreach (var pair in this.Members) //.Where(m => m.Value.Identity != client.Identity(false, false, true))
+            foreach (var pair in this.Members)
             {
                 pair.Key.CallMethod(method, message, this.DynamicId);
             }

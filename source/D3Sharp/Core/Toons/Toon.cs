@@ -33,8 +33,6 @@ namespace D3Sharp.Core.Toons
 {
     public class Toon : PersistentRPCObject
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
-
         /// <summary>
         /// D3 EntityID encoded id.
         /// </summary>

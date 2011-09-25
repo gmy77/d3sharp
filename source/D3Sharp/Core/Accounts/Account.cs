@@ -32,8 +32,6 @@ namespace D3Sharp.Core.Accounts
 {
     public class Account : PersistentRPCObject
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
-
         public bnet.protocol.EntityId BnetAccountID { get; private set; }
         public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
         public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }

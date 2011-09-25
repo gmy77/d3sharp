@@ -18,13 +18,16 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using D3Sharp.Core.Objects;
+using D3Sharp.Utils;
 using D3Sharp.Net.BNet;
+using D3Sharp.Core.Objects;
 
 namespace D3Sharp.Core.Channels
 {
-    public static class ChannelsManager
+    public static class ChannelManager
     {
+        private static readonly Logger Logger = LogManager.CreateLogger();
+
         public readonly static Dictionary<ulong, Channel> Channels =
             new Dictionary<ulong, Channel>();
 
@@ -35,9 +38,15 @@ namespace D3Sharp.Core.Channels
             return channel;
         }
 
-        public static Channel DeleteChannel(ulong id) {
-            throw new System.NotImplementedException();
-            // TODO: Mapping removal should be done in client or mayhaps the ID controller
+        public static void DeleteChannel(ulong id)
+        {
+            if (!Channels.ContainsKey(id)) {
+                Logger.Warn("Attempted to delete a non-existent channel with ID {0}", id);
+                return;
+            }
+            var channel = Channels[id];
+            channel.RemoveAllMembers();
+            Channels.Remove(id);
         }
     }
 }

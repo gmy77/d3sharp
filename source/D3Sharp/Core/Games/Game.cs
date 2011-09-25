@@ -29,8 +29,6 @@ namespace D3Sharp.Core.Games
 {
     public class Game : RPCObject
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
-
         /// <summary>
         /// Bnet EntityID encoded ID.
         /// </summary>
