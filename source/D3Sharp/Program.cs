@@ -42,7 +42,7 @@ namespace D3Sharp
             LogManager.AttachLogTarget(new ConsoleTarget(Level.Trace));
             LogManager.AttachLogTarget(new FileTarget(Level.Trace, "d3sharp-log.txt"));
 
-            PrintLicence();
+            PrintLicense();
 
             Logger.Info("D3Sharp v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
             StartupServers();
@@ -77,11 +77,11 @@ namespace D3Sharp
             }
         }
 
-        private static void PrintLicence()
+        private static void PrintLicense()
         {
             Console.WriteLine("Copyright (C) 2011 D3Sharp Project");
             Console.WriteLine("D3Sharp comes with ABSOLUTELY NO WARRANTY.");
-            Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENCE file for details.");
+            Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
             Console.WriteLine();
         }
 
