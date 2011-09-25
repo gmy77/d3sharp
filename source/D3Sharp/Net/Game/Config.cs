@@ -30,14 +30,3 @@ namespace D3Sharp.Net.Game
     }
 }
 
-namespace D3Sharp.Net.Broadcast
-{
-    public sealed class Config : Core.Config.Config
-    {
-        public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("BindIP", value); } }
-
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Broadcast") { }
-    }
-}
