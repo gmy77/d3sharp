@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 D3Sharp Project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,7 @@ namespace D3Sharp.Net.Game
         int objectId = 0x78f50114 + 100;
         int packetId = 0x227 + 20;
         int tick = 1;
-        int[] ids = { 5346, 5347, 5350, 5360, 5361, 5362, 5363, 5365, 5387, 5393, 5395, 5397, 5411, 5428, 5432, 5433, 5467 };
+        int[] mobs = { 5346, 5347, 5350, 5360, 5361, 5362, 5363, 5365, 5387, 5393, 5395, 5397, 5411, 5428, 5432, 5433, 5467 };
 
         Random rand = new Random();
         IList<int> objectIdsSpawned = null;
@@ -3948,8 +3948,7 @@ namespace D3Sharp.Net.Game
                     position.Field0 -= (float)(rand.NextDouble() * 20);
                     position.Field1 -= (float)(rand.NextDouble() * 20);
                 }
-                int b = rand.Next(0, ids.Length);
-                SpawnZombie(ids[b]);
+                SpawnMob(mobs[rand.Next(0, mobs.Length)]);
             }
 
             position.Field1 = oldPosField1;
@@ -4407,9 +4406,9 @@ namespace D3Sharp.Net.Game
             });
         }
         
-        private void SpawnZombie(int npcId)
+        private void SpawnMob(int mobId)
         {
-            int nId = npcId;
+            int nId = mobId;
             if (position == null)
                 return;
 
