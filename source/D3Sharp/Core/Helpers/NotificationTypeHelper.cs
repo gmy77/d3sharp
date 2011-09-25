@@ -16,28 +16,32 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-using System.Linq;
-using D3Sharp.Core.Objects;
-using D3Sharp.Net.BNet;
-
-namespace D3Sharp.Core.Channels
+namespace D3Sharp.Core.Helpers
 {
-    public static class ChannelsManager
+    public static class NotificationTypeHelper
     {
-        public readonly static Dictionary<ulong, Channel> Channels =
-            new Dictionary<ulong, Channel>();
-
-        public static Channel CreateNewChannel(BNetClient client, ulong remoteObjectId)
+        /// <summary>
+        /// Returns the NotificationType for the given notification.
+        /// </summary>
+        /// <param name="notification">The notification</param>
+        /// <returns><see cref="NotificationType"/></returns>
+        public static NotificationType GetNotificationType(this bnet.protocol.notification.Notification notification)
         {
-            var channel = new Channel(client, remoteObjectId);
-            Channels.Add(channel.DynamicId, channel);
-            return channel;
+            switch (notification.Type)
+            {
+                case "WHISPER":
+                    return NotificationType.Whisper;
+            }
+            return NotificationType.Unknown;
         }
 
-        public static Channel DeleteChannel(ulong id) {
-            throw new System.NotImplementedException();
-            // TODO: Mapping removal should be done in client or mayhaps the ID controller
+        /// <summary>
+        /// Notification types
+        /// </summary>
+        public enum NotificationType
+        {
+            Unknown,
+            Whisper
         }
     }
 }

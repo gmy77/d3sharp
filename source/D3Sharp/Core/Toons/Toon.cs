@@ -33,8 +33,6 @@ namespace D3Sharp.Core.Toons
 {
     public class Toon : PersistentRPCObject
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
-
         /// <summary>
         /// D3 EntityID encoded id.
         /// </summary>
@@ -70,7 +68,7 @@ namespace D3Sharp.Core.Toons
                     case ToonClass.Barbarian:
                         return 0x4FB91EE2;
                     case ToonClass.DemonHunter:
-                        return -930376119;
+                        return unchecked((int)0xC88B9649);
                     case ToonClass.Monk:
                         return 0x3DAC15;
                     case ToonClass.WitchDoctor:
@@ -143,10 +141,10 @@ namespace D3Sharp.Core.Toons
             }
         }
 
-        public uint Gender
+        public int Gender
         {
             get {
-                return (uint)(this.Flags & ToonFlags.Female); // 0x00 for male, so we can just return the AND operation
+                return (int)(this.Flags & ToonFlags.Female); // 0x00 for male, so we can just return the AND operation
             }
         }
 
@@ -268,7 +266,7 @@ namespace D3Sharp.Core.Toons
             {
                 case 0x4FB91EE2:
                     return ToonClass.Barbarian;
-                case -930376119:
+                case unchecked((int)0xC88B9649):
                     return ToonClass.DemonHunter;
                 case 0x3DAC15:
                     return ToonClass.Monk;

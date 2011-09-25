@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2011 D3Sharp Project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,6 @@ namespace D3Sharp.Net.Game
     {
         static readonly Logger Logger = LogManager.CreateLogger();
         static public int WorldID = 0x772E0000;
-        static bool WorldRevealed = false;
 
         public IConnection Connection { get; set; }
         public BNetClient BnetClient { get; private set; }
@@ -94,7 +93,7 @@ namespace D3Sharp.Net.Game
             }
         }
 
-        public float posx=0, posy=0, posz=0;
+        public float posx, posy, posz;
 
         public void ReadAndSendMap()
         {
@@ -121,7 +120,7 @@ namespace D3Sharp.Net.Game
                         string[] data = line.Split(' ');
 
                         if (!versiondetermined)
-                            if (data.Length > 0) 
+                            if (data.Length > 0)
                                 if (data[0].Equals("v"))
                                 {
                                     version = int.Parse(data[1]);
@@ -134,7 +133,7 @@ namespace D3Sharp.Net.Game
                                     SendMessage(new RevealWorldMessage()
                                     {
                                         Id = 0x0037,
-                                        Field0 = 0x772E0000,
+                                        Field0 = WorldID,
                                         Field1 = 0x000115EE,
                                     });
 
@@ -142,7 +141,7 @@ namespace D3Sharp.Net.Game
                                     {
                                         Id = 0x0033,
                                         Field0 = new Vector3D() { Field0 = 3143.75f, Field1 = 2828.75f, Field2 = 59.07559f },
-                                        Field1 = 0x772E0000,
+                                        Field1 = WorldID,
                                         Field2 = 0x000115EE,
                                     });
                                     #endregion
@@ -172,7 +171,7 @@ namespace D3Sharp.Net.Game
                             if (data.Length >= 1) //check only lines with data in them
                             {
                                 //packet data
-                                if (data[0].Equals("p") && data.Length>=2)
+                                if (data[0].Equals("p") && data.Length >= 2)
                                 {
                                     int packettype = int.Parse(data[1]);
                                     switch (packettype)
@@ -185,8 +184,8 @@ namespace D3Sharp.Net.Game
                                             SendMessage(new EnterWorldMessage()
                                             {
                                                 Id = 0x0033,
-                                                Field0 = new Vector3D() 
-                                                { 
+                                                Field0 = new Vector3D()
+                                                {
                                                     Field0 = float.Parse(data[2], System.Globalization.CultureInfo.InvariantCulture),
                                                     Field1 = float.Parse(data[3], System.Globalization.CultureInfo.InvariantCulture),
                                                     Field2 = float.Parse(data[4], System.Globalization.CultureInfo.InvariantCulture)
@@ -202,11 +201,10 @@ namespace D3Sharp.Net.Game
                                                 Field0 = int.Parse(data[2]),
                                                 Field1 = int.Parse(data[3]),
                                             });
-                                            WorldRevealed = true;
                                             break;
                                         case 0x3b: //acdenterknownmessage
                                             //if (int.Parse(data[5]) == 1)
-                                            {                                                
+                                            {
                                                 SendMessage(new ACDEnterKnownMessage(data.Skip(2).ToArray(), WorldID));
                                                 //posx = float.Parse(data[11], System.Globalization.CultureInfo.InvariantCulture);
                                                 //posy = float.Parse(data[12], System.Globalization.CultureInfo.InvariantCulture);
@@ -215,7 +213,7 @@ namespace D3Sharp.Net.Game
                                             break;
                                         case 0x44: //maprevealscenemessage
                                             SendMessage(new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID));
-                                            break;                                       
+                                            break;
                                         default:
                                             Logger.Error("Unimplemented packet type encountered in map file: " + packettype);
                                             break;
@@ -223,7 +221,7 @@ namespace D3Sharp.Net.Game
                                 }
 
                                 //spawn point
-                                if (data[0].Equals("s") && data.Length>=4)
+                                if (data[0].Equals("s") && data.Length >= 4)
                                 {
                                     posx = float.Parse(data[1], System.Globalization.CultureInfo.InvariantCulture);
                                     posy = float.Parse(data[2], System.Globalization.CultureInfo.InvariantCulture);
@@ -301,6 +299,19 @@ namespace D3Sharp.Net.Game
                 Field1 = true,
             });
 
+            /*
+             * 
+             * 
+ {
+  Field0: 3053.339
+  Field1: 2602.044
+  Field2: 0.5997887
+             * 
+             * * 
+             */
+
+
+
             #region NewPlayer
             SendMessage(new NewPlayerMessage()
             {
@@ -318,7 +329,7 @@ namespace D3Sharp.Net.Game
                     Field0 = 0x00000000,
                     Field1 = 0x00000000,
                     Field2 = 0x00000000,
-                    Field3 = 0x00000000,
+                    Field3 = BnetClient.CurrentToon.Gender,
                     Field4 = new PlayerSavedData()
                     {
                         #region HotBarButtonData
@@ -614,7 +625,7 @@ namespace D3Sharp.Net.Game
                 Field10 = 0x789E00E2,
             });
             #endregion
-            
+
             #region GenericBlobMessages 0x0032,0x00ED,0x00EE,0x00EF
             /*SendMessage(new GenericBlobMessage()
             {
@@ -677,7 +688,27 @@ namespace D3Sharp.Net.Game
                         });*/
             #endregion
 
+
+            #region Interstitial,RevealWorld,WorldStatus,EnterWorld
+
+            SendMessage(new RevealWorldMessage()
+            {
+                Id = 0x0037,
+                Field0 = WorldID,
+                Field1 = 0x000115EE,
+            });
+
+            SendMessage(new EnterWorldMessage()
+            {
+                Id = 0x0033,
+                Field0 = new Vector3D() { Field0 = 3143.75f, Field1 = 2828.75f, Field2 = 59.07559f },
+                Field1 = WorldID,
+                Field2 = 0x000115EE,
+            });
+            #endregion
+
             ReadAndSendMap();
+            //FlushOutgoingBuffer();
 
             Console.WriteLine("Positioning character at " + posx + " " + posy + " " + posz);
 

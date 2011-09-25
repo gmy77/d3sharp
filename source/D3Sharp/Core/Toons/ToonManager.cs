@@ -38,6 +38,11 @@ namespace D3Sharp.Core.Toons
             LoadToons();
         }
 
+        public static Account GetAccountByToonLowID(ulong id)
+        {
+            return (from pair in Toons where pair.Value.PersistentID == id select pair.Value).FirstOrDefault().Owner;
+        }
+
         public static Toon GetToonByLowID(ulong id)
         {
             return (from pair in Toons where pair.Value.PersistentID == id select pair.Value).FirstOrDefault();

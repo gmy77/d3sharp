@@ -58,8 +58,6 @@ namespace D3Sharp.Net.Game
             Array.Copy(Data, result, bytes);
             Length = 32;
             Position = 32;
-            
-            for (int i = 0; i < Data.Length; i++) Data[i] = 0; // FIXME: WriteInt bugged? Dont care atm
 
             return result;
         }
@@ -160,7 +158,7 @@ namespace D3Sharp.Net.Game
                 if (count > length)
                     count = length;
                 int mask = (1 << count) - 1;
-                Data[Position >> 3] |= (byte)(((value >> (length - count)) & mask) << off);
+                Data[Position >> 3] = (byte)((Data[Position >> 3] & (~(mask << off))) | (((value >> (length - count)) & mask) << off));
                 length -= count;
                 Position += count;
                 if (Position > Length)

@@ -32,8 +32,6 @@ namespace D3Sharp.Core.Accounts
 {
     public class Account : PersistentRPCObject
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
-
         public bnet.protocol.EntityId BnetAccountID { get; private set; }
         public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
         public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
@@ -49,10 +47,11 @@ namespace D3Sharp.Core.Accounts
                     .SetBannerConfiguration(this.BannerConfiguration)
                     .SetFlags(0);
 
-                builder.SetLastPlayedHeroId(Toons.Count > 0
-                                                ? Toons.First().Value.D3EntityID
-                                                : D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).
-                                                      Build());
+                builder.SetLastPlayedHeroId(
+                    (Toons.Count > 0)
+                    ? Toons.First().Value.D3EntityID
+                    : D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0)
+                    .Build());
                 return builder.Build();
             }
         }
