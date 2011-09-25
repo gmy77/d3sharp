@@ -19,10 +19,12 @@ using System;
 using System.IO;
 using System.Linq;
 using D3Sharp.Net.BNet;
-using D3Sharp.Utils.Extensions;
 using Gibbed.Helpers;
 using System.Text;
 using D3Sharp.Utils;
+using System.Collections.Generic;
+using D3Sharp.Net.Game;
+using D3Sharp.Core.Map;
 
 //using Gibbed.Helpers;
 
@@ -31,7 +33,6 @@ namespace D3Sharp.Net.Game
     public sealed class GameClient : IGameClient, IGameMessageHandler
     {
         static readonly Logger Logger = LogManager.CreateLogger();
-        static public int WorldID = 0x772E0000;
 
         public IConnection Connection { get; set; }
         public BNetClient BnetClient { get; private set; }
@@ -39,10 +40,13 @@ namespace D3Sharp.Net.Game
         GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
 
+        public World GameWorld;
+
         public GameClient(IConnection connection)
         {
             this.Connection = connection;
             _outgoingBuffer.WriteInt(32, 0);
+            GameWorld = new World(this);
         }
 
         public void Parse(ConnectionDataEventArgs e)
@@ -68,7 +72,7 @@ namespace D3Sharp.Net.Game
                     }
                     catch (NotImplementedException)
                     {
-                        Logger.Debug("Unhandled game message: 0x{0:X4} {1}", msg.Id, msg.GetType().Name);
+                        //Logger.Debug("Unhandled game message: 0x{0:X4} {1}", msg.Id, msg.GetType().Name);
                     }
                 }
 
@@ -90,161 +94,6 @@ namespace D3Sharp.Net.Game
             {
                 var data = _outgoingBuffer.GetPacketAndReset();
                 Connection.Send(data);
-            }
-        }
-
-        public float posx, posy, posz;
-
-        public void ReadAndSendMap()
-        {
-            string filePath = Config.Instance.Map;
-            string line, line2;
-
-            //avarage = double.Parse("0.0", NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-
-            bool versiondetermined = false;
-            int version = 0;
-
-            if (File.Exists(filePath))
-            {
-                StreamReader file = null;
-                try
-                {
-
-                    System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex(@"\s+");
-
-                    file = new StreamReader(filePath);
-                    while ((line = file.ReadLine()) != null)
-                    {
-                        line = rx.Replace(line, @" ");
-                        string[] data = line.Split(' ');
-
-                        if (!versiondetermined)
-                            if (data.Length > 0)
-                                if (data[0].Equals("v"))
-                                {
-                                    version = int.Parse(data[1]);
-                                    Logger.Info("Map file version: " + version);
-                                }
-                                else
-                                {
-                                    //reveal world here if fallback - updated map files have world reveal data
-                                    #region Interstitial,RevealWorld,WorldStatus,EnterWorld
-                                    SendMessage(new RevealWorldMessage()
-                                    {
-                                        Id = 0x0037,
-                                        Field0 = WorldID,
-                                        Field1 = 0x000115EE,
-                                    });
-
-                                    SendMessage(new EnterWorldMessage()
-                                    {
-                                        Id = 0x0033,
-                                        Field0 = new Vector3D() { Field0 = 3143.75f, Field1 = 2828.75f, Field2 = 59.07559f },
-                                        Field1 = WorldID,
-                                        Field2 = 0x000115EE,
-                                    });
-                                    #endregion
-                                }
-                        versiondetermined = true;
-
-                        if (version == 0)
-                        {
-                            //fallback to the original version of the text files because people WILL mix them with the new :(
-
-                            if ((line2 = file.ReadLine()) != null)
-                            {
-                                string[] data2 = line2.Split(' ');
-
-                                RevealSceneMessage r = new RevealSceneMessage(data, WorldID);
-                                MapRevealSceneMessage r2 = new MapRevealSceneMessage(data2, WorldID);
-
-                                posx = (r.Field1.tCachedValues.Field3.Field0.Field0 + r.Field1.tCachedValues.Field3.Field1.Field0) / 2.0f + r.Field4.Field1.Field0;
-                                posy = (r.Field1.tCachedValues.Field3.Field0.Field1 + r.Field1.tCachedValues.Field3.Field1.Field1) / 2.0f + r.Field4.Field1.Field1;
-                                posz = (r.Field1.tCachedValues.Field3.Field0.Field2 + r.Field1.tCachedValues.Field3.Field1.Field2) / 2.0f + r.Field4.Field1.Field2;
-
-                                SendMessage(r);
-                                SendMessage(r2);
-                            }
-                        }
-                        else
-                            if (data.Length >= 1) //check only lines with data in them
-                            {
-                                //packet data
-                                if (data[0].Equals("p") && data.Length >= 2)
-                                {
-                                    int packettype = int.Parse(data[1]);
-                                    switch (packettype)
-                                    {
-                                        case 0x34: //revealscenemessage
-                                            SendMessage(new RevealSceneMessage(data.Skip(2).ToArray(), WorldID));
-                                            break;
-                                        case 0x33: //enterworldmessage
-                                            WorldID = int.Parse(data[5]);
-                                            SendMessage(new EnterWorldMessage()
-                                            {
-                                                Id = 0x0033,
-                                                Field0 = new Vector3D()
-                                                {
-                                                    Field0 = float.Parse(data[2], System.Globalization.CultureInfo.InvariantCulture),
-                                                    Field1 = float.Parse(data[3], System.Globalization.CultureInfo.InvariantCulture),
-                                                    Field2 = float.Parse(data[4], System.Globalization.CultureInfo.InvariantCulture)
-                                                },
-                                                Field1 = WorldID,
-                                                Field2 = int.Parse(data[6]),
-                                            });
-                                            break;
-                                        case 0x37: //revealworldmessage
-                                            SendMessage(new RevealWorldMessage()
-                                            {
-                                                Id = 0x0037,
-                                                Field0 = int.Parse(data[2]),
-                                                Field1 = int.Parse(data[3]),
-                                            });
-                                            break;
-                                        case 0x3b: //acdenterknownmessage
-                                            //if (int.Parse(data[5]) == 1)
-                                            {
-                                                SendMessage(new ACDEnterKnownMessage(data.Skip(2).ToArray(), WorldID));
-                                                //posx = float.Parse(data[11], System.Globalization.CultureInfo.InvariantCulture);
-                                                //posy = float.Parse(data[12], System.Globalization.CultureInfo.InvariantCulture);
-                                                //posz = float.Parse(data[13], System.Globalization.CultureInfo.InvariantCulture);
-                                            }
-                                            break;
-                                        case 0x44: //maprevealscenemessage
-                                            SendMessage(new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID));
-                                            break;
-                                        default:
-                                            Logger.Error("Unimplemented packet type encountered in map file: " + packettype);
-                                            break;
-                                    }
-                                }
-
-                                //spawn point
-                                if (data[0].Equals("s") && data.Length >= 4)
-                                {
-                                    posx = float.Parse(data[1], System.Globalization.CultureInfo.InvariantCulture);
-                                    posy = float.Parse(data[2], System.Globalization.CultureInfo.InvariantCulture);
-                                    posz = float.Parse(data[3], System.Globalization.CultureInfo.InvariantCulture);
-                                }
-
-                            }
-
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.DebugException(e, "ReadAndSendMap");
-                }
-                finally
-                {
-                    if (file != null)
-                        file.Close();
-                }
-            }
-            else
-            {
-                Logger.Error("Map file {0} not found!", filePath);
             }
         }
 
@@ -298,19 +147,6 @@ namespace D3Sharp.Net.Game
                 Field0 = 0x00000000,
                 Field1 = true,
             });
-
-            /*
-             * 
-             * 
- {
-  Field0: 3053.339
-  Field1: 2602.044
-  Field2: 0.5997887
-             * 
-             * * 
-             */
-
-
 
             #region NewPlayer
             SendMessage(new NewPlayerMessage()
@@ -626,91 +462,9 @@ namespace D3Sharp.Net.Game
             });
             #endregion
 
-            #region GenericBlobMessages 0x0032,0x00ED,0x00EE,0x00EF
-            /*SendMessage(new GenericBlobMessage()
-            {
-                Id = 0x0032,
-                Data = new byte[22]
-    {
-        0x08, 0x00, 0x12, 0x12, 0x08, 0x08, 0x10, 0x03, 0x18, 0x04, 0x20, 0x0B, 0x28, 0x14, 0x30, 0x07, 
-        0x38, 0x0B, 0x40, 0x04, 0x48, 0x01, 
-    },
-            });
+            GameWorld.ReadAndSendMap();
 
-            SendMessage(new GenericBlobMessage()
-            {
-                Id = 0x00ED,
-                Data = new byte[11]
-    {
-        0x18, 0x00, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    },
-            });
-
-            SendMessage(new GenericBlobMessage()
-            {
-                Id = 0x00EE,
-                Data = new byte[11]
-    {
-        0x18, 0x00, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    },
-            });
-
-            SendMessage(new GenericBlobMessage()
-            {
-                Id = 0x00EF,
-                Data = new byte[11]
-    {
-        0x18, 0x00, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    },
-            });*/
-            #endregion
-            #region GameSyncedData
-            /*SendMessage(new GameSyncedDataMessage()
-                        {
-                            Id = 0x00AF,
-                            Field0 = new GameSyncedData()
-                            {
-                                Field0 = false,
-                                Field1 = 0x00000000,
-                                Field2 = 0x00000000,
-                                Field3 = 0x00000000,
-                                Field4 = 0x00000000,
-                                Field5 = 0x00000000,
-                                Field6 = new int[2]
-                    {
-                        0x00000000, 0x00000000, 
-                    },
-                                Field7 = new int[2]
-                    {
-                        0x00000000, 0x00000000, 
-                    },
-                            },
-                        });*/
-            #endregion
-
-
-            #region Interstitial,RevealWorld,WorldStatus,EnterWorld
-
-            SendMessage(new RevealWorldMessage()
-            {
-                Id = 0x0037,
-                Field0 = WorldID,
-                Field1 = 0x000115EE,
-            });
-
-            SendMessage(new EnterWorldMessage()
-            {
-                Id = 0x0033,
-                Field0 = new Vector3D() { Field0 = 3143.75f, Field1 = 2828.75f, Field2 = 59.07559f },
-                Field1 = WorldID,
-                Field2 = 0x000115EE,
-            });
-            #endregion
-
-            ReadAndSendMap();
-            //FlushOutgoingBuffer();
-
-            Console.WriteLine("Positioning character at " + posx + " " + posy + " " + posz);
+            Console.WriteLine("Positioning character at " + GameWorld.posx + " " + GameWorld.posy + " " + GameWorld.posz);
 
             #region ACDEnterKnown 0x789E00E2 PlayerId??
             SendMessage(new ACDEnterKnownMessage()
@@ -737,12 +491,12 @@ namespace D3Sharp.Net.Game
                         },
                         Field1 = new Vector3D()
                         {
-                            Field0 = posx,
-                            Field1 = posy,
-                            Field2 = posz,
+                            Field0 = GameWorld.posx,
+                            Field1 = GameWorld.posy,
+                            Field2 = GameWorld.posz,
                         },
                     },
-                    Field2 = WorldID,
+                    Field2 = GameWorld.WorldID,
                 },
                 Field5 = null,
                 Field6 = new GBHandle()
@@ -2246,7 +2000,7 @@ namespace D3Sharp.Net.Game
                                     Field1 = 2828.75f,
                                     Field2 = 59.07559f,
                                 },
-                                Field1 = WorldID,
+                                Field1 = GameWorld.WorldID,
                             },
                             Field3 = 0x00000000,
                             Field4 = 0x00026186,
@@ -2466,6 +2220,7 @@ namespace D3Sharp.Net.Game
 
         public void OnMessage(ACDTranslateNormalMessage msg)
         {
+            Logger.Info("player position: " + msg.Field1.Field0 + " " + msg.Field1.Field1 + " " + msg.Field1.Field2);
             throw new NotImplementedException();
         }
 
