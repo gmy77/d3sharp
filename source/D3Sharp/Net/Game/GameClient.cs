@@ -4280,15 +4280,15 @@ namespace D3Sharp.Net.Game
                         Field0 = 0x00000000,
                         Field1 = 0x00000000,
                     },
-                    arSnoLevelAreas = new int[] { 0x0001AB91, -1, -1, -1, },
+                    arSnoLevelAreas = new int[] { 0x0001AB91, unchecked((int)0xFFFFFFFF), unchecked((int)0xFFFFFFFF), unchecked((int)0xFFFFFFFF) },
                     snoPrevWorld = 0x000115EE,
                     Field4 = 0x000000DF,
-                    snoPrevLevelArea = -1,
+                    snoPrevLevelArea = unchecked((int)0xFFFFFFFF),
                     snoNextWorld = 0x00015348,
                     Field7 = 0x000000AC,
-                    snoNextLevelArea = -1,
+                    snoNextLevelArea = unchecked((int)0xFFFFFFFF),
                     snoMusic = 0x000206F8,
-                    snoCombatMusic = -1,
+                    snoCombatMusic = unchecked((int)0xFFFFFFFF),
                     snoAmbient = 0x0002C68A,
                     snoReverb = 0x00021ABA,
                     snoWeather = 0x00017869,
@@ -4296,7 +4296,7 @@ namespace D3Sharp.Net.Game
                     Field15 = 0x00000000,
                     Field16 = 0x00000000,
                     Field17 = 0x00000000,
-                    Field18 = -1,
+                    Field18 = unchecked((int)0xFFFFFFFF),
                     tCachedValues = new SceneCachedValues()
                     {
                         Field0 = 0x0000003F,
@@ -4389,6 +4389,64 @@ namespace D3Sharp.Net.Game
                 },
                 Field3 = 0x772F0001,
                 Field4 = 0
+            });
+
+            SendMessage(new ACDEnterKnownMessage
+            {
+                Id = 0x3B,
+                Field0 = 0x7A0800A2,
+                Field1 = 0x0000157F,
+                Field2 = 8,
+                Field3 = 0,
+                Field4 = new WorldLocationMessageData
+                {
+                    Field0 = 1f,
+                    Field1 = new PRTransform
+                    {
+                        Field0 = new Quaternion
+                        {
+                            Field0 = 0.9909708f,
+                            Field1 = new Vector3D
+                            {
+                                Field0 = 0f,
+                                Field1 = 0f,
+                                Field2 = 0.1340775f
+                            }
+                        },
+                        Field1 = new Vector3D
+                        {
+                            Field0 = 82.15131f,
+                            Field1 = 122.2867f,
+                            Field2 = 0.1000366f
+                        }
+                    },
+                    Field2 = 0x772F0001
+                },
+                Field6 = new GBHandle { 
+                    Field0 = -1,
+                    Field1 = unchecked((int)0xFFFFFFFF)
+                },
+                Field7 = 0x00000001,
+                Field8 = 0x0000157F,
+                Field9 = 0,
+                Field10 = 0x0,
+                Field12 = 0x0001AB8C,
+                Field13 = 0x00000000
+            });
+
+            SendMessage(new AffixMessage() { 
+                Id = 0x48,
+                Field0 = 0x7A0800A2,
+                Field1 = 1,
+                aAffixGBIDs = new int[0]
+            });
+
+            SendMessage(new AffixMessage()
+            {
+                Id = 0x48,
+                Field0 = 0x7A0800A2,
+                Field1 = 2,
+                aAffixGBIDs = new int[0]
             });
 
             SendMessage(new PlayerWarpedMessage()
