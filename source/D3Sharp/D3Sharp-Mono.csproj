@@ -77,6 +77,7 @@
     <Compile Include="Core\Accounts\AccountManager.cs" />
     <Compile Include="Core\Channels\Channel.cs" />
     <Compile Include="Core\Channels\ChannelManager.cs" />
+    <Compile Include="Core\Channels\Member.cs" />
     <Compile Include="Core\Config\Config.cs" />
     <Compile Include="Core\Config\ConfigManager.cs" />
     <Compile Include="Core\Games\Game.cs" />
