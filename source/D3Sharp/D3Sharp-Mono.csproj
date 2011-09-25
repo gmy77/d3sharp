@@ -76,7 +76,7 @@
     <Compile Include="Core\Accounts\Account.cs" />
     <Compile Include="Core\Accounts\AccountManager.cs" />
     <Compile Include="Core\Channels\Channel.cs" />
-    <Compile Include="Core\Channels\ChannelsManager.cs" />
+    <Compile Include="Core\Channels\ChannelManager.cs" />
     <Compile Include="Core\Config\Config.cs" />
     <Compile Include="Core\Config\ConfigManager.cs" />
     <Compile Include="Core\Games\Game.cs" />
@@ -176,7 +176,35 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Assets\Maps\cathedral_level2map.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Maps\cathedral_level3map.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Maps\cathedralmap.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Maps\defiledcrypt.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Maps\largetristram.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Maps\mapinn.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Maps\oldtristram.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Maps\tristram.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Maps\weepinghollowbig.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\D3Proto\D3Proto.csproj">

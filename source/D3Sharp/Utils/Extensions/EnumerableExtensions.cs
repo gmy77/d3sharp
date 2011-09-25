@@ -33,6 +33,8 @@ namespace D3Sharp.Utils.Extensions
                 sb.Append(value.ToString("X2"));
                 sb.Append(' ');
             }
+            if (sb.Length>0)
+                sb.Remove(sb.Length-1, 1);
             return sb.ToString();
         }
 

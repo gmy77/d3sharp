@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using D3Sharp.Core.Accounts;
 using D3Sharp.Core.Channels;
 using D3Sharp.Core.Toons;
+using D3Sharp.Net.Game;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
 
@@ -32,6 +33,7 @@ namespace D3Sharp.Net.BNet
 
         Toon CurrentToon { get; set; }
         Channel CurrentChannel { get; set; }
+        GameClient InGameClient { get; set; }
 
         void CallMethod(MethodDescriptor method, IMessage request);
         void CallMethod(MethodDescriptor method, IMessage request, ulong localObjectId);

@@ -16,20 +16,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using D3Sharp.Utils;
+using Google.ProtocolBuffers;
 
-namespace D3Sharp.Core.Games
+namespace D3Sharp.Core.Channels
 {
-    public static class GameManager
-    {
-        public static readonly Dictionary<ulong, Game> AvailableGames =
-            new Dictionary<ulong, Game>();
 
-        public static Game CreateGame(ulong factoryId)
+    public class Member
+    {
+        public enum Role
         {
-            var game = new Game(factoryId);
-            AvailableGames.Add(game.DynamicId, game);
-            return game;
+            Owner = 1,
+            Unknown101 = 101
+        }
+
+        public BnetMember
+        public List<Role> Roles { get; private set; }
+
+        public Member()
+        {
+            this.Roles = new List<Role>();
         }
     }
+
 }

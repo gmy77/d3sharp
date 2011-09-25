@@ -29,8 +29,7 @@ namespace D3Sharp.Core.Objects
     /// </summary>
     public class RPCObject
     {
-        // bah
-        private static readonly Logger Logger = LogManager.CreateLogger();
+        protected static readonly Logger Logger = LogManager.CreateLogger();
         
         /// <summary>
         /// The dynamic ID of the object, which is set on memory instantiation and changes over sessions.

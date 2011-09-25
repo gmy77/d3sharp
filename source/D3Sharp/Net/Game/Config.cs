@@ -20,11 +20,24 @@ namespace D3Sharp.Net.Game
 {
     public sealed class Config: Core.Config.Config
     {       
-        public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("Port", value); } }
+        public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("BindIP", value); } }
         public int Port { get { return this.GetInt("Port", 1345); } set { this.Set("Port", value); } }
+        public string Map { get { return this.GetString("Map", "Assets/Maps/tristram.txt"); } set { this.Set("Map", value); } }
 
         private static readonly Config _instance = new Config();
         public static Config Instance { get { return _instance; } }
         private Config() : base("Game-Server") { }
+    }
+}
+
+namespace D3Sharp.Net.Broadcast
+{
+    public sealed class Config : Core.Config.Config
+    {
+        public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("BindIP", value); } }
+
+        private static readonly Config _instance = new Config();
+        public static Config Instance { get { return _instance; } }
+        private Config() : base("Broadcast") { }
     }
 }

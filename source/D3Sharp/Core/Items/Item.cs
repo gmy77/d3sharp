@@ -35,8 +35,9 @@ namespace D3Sharp.Core.Items
     class Item
     {
 
-        public int Id { get; set; }
+        public int ItemId { get; set; }
         public int Gbid { get; set; }
+        public int PlayerId { get; set; }
 
         public IVector2D InvLoc { get; set; }
         public List<Affix> AffixList { get; set; }
@@ -45,7 +46,7 @@ namespace D3Sharp.Core.Items
 
         public Item(int id, int gbid)
         {
-            Id = id;
+            ItemId = id;
             Gbid = gbid;
             InvLoc = new IVector2D();
             InvLoc.Field0 = 0x00000000 -1;
@@ -60,14 +61,14 @@ namespace D3Sharp.Core.Items
             client.SendMessage(new ACDEnterKnownMessage()
             {
                 Id = 0x003B,
-                Field0 = Id,
+                Field0 = ItemId,
                 Field1 = 0x00001158,
                 Field2 = 0x0000001A,
                 Field3 = 0x00000001,
                 Field4 = null,
                 Field5 = new InventoryLocationMessageData()
                 {
-                    Field0 = 0x789E00E2,
+                    Field0 = PlayerId,
                     Field1 = 0x00000000,
                     Field2 = InvLoc,
                 },
@@ -82,6 +83,33 @@ namespace D3Sharp.Core.Items
                 Field10 = 0x00,
             });
 
+
+
+            int[] affixGbis = new int[AffixList.Count];
+            for (int i = 0; i < AffixList.Count; i++)
+            {
+                affixGbis[i] = AffixList[i].AffixGbid;
+            }
+
+            client.SendMessage(new AffixMessage()
+            {
+                Id = 0x0048,
+                Field0 = ItemId,
+                Field1 = 0x00000001,
+                aAffixGBIDs = affixGbis,
+
+            });
+
+            client.SendMessage(new AffixMessage()
+            {
+                Id = 0x0048,
+                Field0 = ItemId,
+                Field1 = 0x00000002,
+                aAffixGBIDs = affixGbis,
+            });
+
+            /*
+            
             client.SendMessage(new AffixMessage()
             {
                 Id = 0x0048,
@@ -101,10 +129,12 @@ namespace D3Sharp.Core.Items
                 },
             });
 
+
+            */
             client.SendMessage(new ACDCollFlagsMessage()
             {
                 Id = 0x00A6,
-                Field0 = Id,
+                Field0 = ItemId,
                 Field1 = 0x00000080,
             });
 
@@ -123,7 +153,7 @@ namespace D3Sharp.Core.Items
             client.SendMessage(new AttributesSetValuesMessage()
             {
                 Id = 0x004D,
-                Field0 = Id,
+                Field0 = ItemId,
                 atKeyVals = netAttributesList.ToArray(),
             });
 
@@ -168,7 +198,7 @@ namespace D3Sharp.Core.Items
             client.SendMessage(new ACDGroupMessage()
             {
                 Id = 0x00B8,
-                Field0 = Id,
+                Field0 = ItemId,
                 Field1 = -1,
                 Field2 = -1,
             });
@@ -176,7 +206,7 @@ namespace D3Sharp.Core.Items
             client.SendMessage(new ANNDataMessage()
             {
                 Id = 0x003E,
-                Field0 = Id,
+                Field0 = ItemId,
             });
 
             client.SendMessage(new SNONameDataMessage()
@@ -193,7 +223,7 @@ namespace D3Sharp.Core.Items
             client.SendMessage(new AttributeSetValueMessage()
             {
                 Id = 0x004C,
-                Field0 = Id,
+                Field0 = ItemId,
                 Field1 = new NetAttributeKeyValue()
                 {
                     Attribute = GameAttribute.Attributes[0x0115], // Item_Quality_Level 
@@ -205,7 +235,7 @@ namespace D3Sharp.Core.Items
             client.SendMessage(new AttributeSetValueMessage()
             {
                 Id = 0x004C,
-                Field0 = Id,
+                Field0 = ItemId,
                 Field1 = new NetAttributeKeyValue()
                 {
                     Attribute = GameAttribute.Attributes[0x0052], // Hitpoints_Granted 
@@ -217,7 +247,7 @@ namespace D3Sharp.Core.Items
             client.SendMessage(new AttributeSetValueMessage()
             {
                 Id = 0x004C,
-                Field0 = Id,
+                Field0 = ItemId,
                 Field1 = new NetAttributeKeyValue()
                 {
                     Attribute = GameAttribute.Attributes[0x0125], // Seed 
@@ -229,7 +259,7 @@ namespace D3Sharp.Core.Items
             client.SendMessage(new AttributeSetValueMessage()
             {
                 Id = 0x004C,
-                Field0 = Id,
+                Field0 = ItemId,
                 Field1 = new NetAttributeKeyValue()
                 {
                     Attribute = GameAttribute.Attributes[0x0121], // ItemStackQuantityLo 
@@ -241,17 +271,17 @@ namespace D3Sharp.Core.Items
             client.SendMessage(new PlayEffectMessage()
             {
                 Id = 0x007A,
-                Field0 = Id,
+                Field0 = ItemId,
                 Field1 = 0x00000027,
             });
 
             client.SendMessage(new ACDInventoryPositionMessage()
             {
                 Id = 0x0040,
-                Field0 = Id,
+                Field0 = ItemId,
                 Field1 = new InventoryLocationMessageData()
                 {
-                    Field0 = 0x789E00E2,
+                    Field0 = PlayerId,
                     Field1 = 0x00000000,
                     Field2 = InvLoc,
                 },
@@ -261,7 +291,7 @@ namespace D3Sharp.Core.Items
             client.SendMessage(new ACDInventoryUpdateActorSNO()
             {
                 Id = 0x0041,
-                Field0 = Id,
+                Field0 = ItemId,
                 Field1 = 0x00001158,
             });
 

@@ -70,6 +70,7 @@ namespace D3Sharp.Core.Services
             Logger.Trace("FindGame()");
     
             var game = GameManager.CreateGame(request.FactoryId);
+
             // Map the remote ID
             this.Client.MapLocalObjectID(game.DynamicId, request.ObjectId);
             var builder = FindGameResponse.CreateBuilder().SetRequestId(game.RequestID);

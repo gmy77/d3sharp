@@ -359,7 +359,7 @@ namespace D3Sharp.Net.Game
     {
         public int Field0;
         public string Field1;
-        public string Field2;
+        public string ToonName;
         public int Field3;
         public int Field4;
         public int /* sno */ snoActorPortrait;
@@ -375,7 +375,7 @@ namespace D3Sharp.Net.Game
         {
             Field0 = buffer.ReadInt(3);
             Field1 = buffer.ReadCharArray(128);
-            Field2 = buffer.ReadCharArray(101);
+            ToonName = buffer.ReadCharArray(101);
             Field3 = buffer.ReadInt(5) + (-1);
             Field4 = buffer.ReadInt(3) + (-1);
             snoActorPortrait = buffer.ReadInt(32);
@@ -391,7 +391,7 @@ namespace D3Sharp.Net.Game
         {
             buffer.WriteInt(3, Field0);
             buffer.WriteCharArray(128, Field1);
-            buffer.WriteCharArray(101, Field2);
+            buffer.WriteCharArray(101, ToonName);
             buffer.WriteInt(5, Field3 - (-1));
             buffer.WriteInt(3, Field4 - (-1));
             buffer.WriteInt(32, snoActorPortrait);
@@ -410,7 +410,7 @@ namespace D3Sharp.Net.Game
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
             b.Append(' ', pad); b.AppendLine("Field1: \"" + Field1 + "\"");
-            b.Append(' ', pad); b.AppendLine("Field2: \"" + Field2 + "\"");
+            b.Append(' ', pad); b.AppendLine("ToonName: \"" + ToonName + "\"");
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
             b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
             b.Append(' ', pad); b.AppendLine("snoActorPortrait: 0x" + snoActorPortrait.ToString("X8"));
@@ -4051,9 +4051,9 @@ namespace D3Sharp.Net.Game
 
     public class JoinBNetGameMessage : GameMessage
     {
-        public EntityId Field0;
+        public EntityId Field0;  // this *is* the toon id /raist.
         public GameId Field1;
-        public int Field2;
+        public int Field2; // and this is the SGameId there we set in D3Sharp.Core.Games.Game.cs when we send the connection info to client /raist.
         public long Field3;
         public int Field4;
         public int ProtocolHash;

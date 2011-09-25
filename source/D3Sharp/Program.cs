@@ -22,6 +22,7 @@ using System.Threading;
 using D3Sharp.Net.BNet;
 using D3Sharp.Net.Game;
 using D3Sharp.Utils;
+using D3Sharp.Utils.Helpers;
 
 namespace D3Sharp
 {
@@ -34,6 +35,10 @@ namespace D3Sharp
 
         public static void Main(string[] args)
         {
+
+            StringHashHelper.HashItemName("HealthPotion");
+
+
             // Watch for unhandled exceptions
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             
