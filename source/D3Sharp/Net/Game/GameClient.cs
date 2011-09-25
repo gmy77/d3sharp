@@ -4425,17 +4425,17 @@ namespace D3Sharp.Net.Game
                 Field0 = 0x789E00E2,
                 Field1 = new WorldLocationMessageData
                 {
-                    Field0 = 1f,
+                    Field0 = 1.43f,
                     Field1 = new PRTransform
                     {
                         Field0 = new Quaternion
                         {
-                            Field0 = 0.9909708f,
+                            Field0 = 0.05940768f,
                             Field1 = new Vector3D
                             {
                                 Field0 = 0f,
                                 Field1 = 0f,
-                                Field2 = 0.1340775f
+                                Field2 = 0.9982339f,
                             }
                         },
                         Field1 = new Vector3D
