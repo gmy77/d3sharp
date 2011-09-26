@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using D3Sharp.Net.Game;
 using System.Collections;
+using D3Sharp.Net.Game.Messages;
+using D3Sharp.Net.Game.Messages.Misc;
 
 namespace D3Sharp.Core.NPC
 {
@@ -13,7 +15,7 @@ namespace D3Sharp.Core.NPC
         float HP;
         float MaxHP;
 
-        GameClient Game;
+        GameClient Client;
 
         public void Die(int anim)
         {
@@ -179,7 +181,7 @@ namespace D3Sharp.Core.NPC
         public BasicNPC(int objectId, ref GameClient g)
         {
             ID = objectId;
-            Game = g;
+            Client = g;
             //Game.SendMessage(new AffixMessage()
             //{
             //    Id = 0x48,
@@ -201,7 +203,7 @@ namespace D3Sharp.Core.NPC
             //    Field1 = 0x1
             //});
 
-            Game.SendMessage(new AttributesSetValuesMessage
+            Client.SendMessage(new AttributesSetValuesMessage
             {
                 Id = 0x4d,
                 Field0 = objectId,
@@ -283,7 +285,7 @@ namespace D3Sharp.Core.NPC
 
             });
 
-            Game.SendMessage(new AttributesSetValuesMessage
+            Client.SendMessage(new AttributesSetValuesMessage
             {
                 Id = 0x4d,
                 Field0 = objectId,

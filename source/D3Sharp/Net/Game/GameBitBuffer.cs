@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game
 {
@@ -100,7 +101,7 @@ namespace D3Sharp.Net.Game
 
         public void ConsumeData()
         {
-            int bytes = ((Position+7)&(~7)) >> 3;
+            int bytes = ((Position + 7) & (~7)) >> 3;
             Array.Copy(Data, bytes, Data, 0, (Length >> 3) - bytes);
             Length = Length - (bytes * 8);
             Position = 0;

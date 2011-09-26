@@ -6,6 +6,11 @@ using System.Text;
 using D3Sharp.Net.Game;
 using D3Sharp.Core.Map;
 using D3Sharp.Core.Actors;
+using D3Sharp.Net.Game.Messages;
+using D3Sharp.Net.Game.Messages.ACD;
+using D3Sharp.Net.Game.Messages.Map;
+using D3Sharp.Net.Game.Messages.Scene;
+using D3Sharp.Net.Game.Messages.World;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Extensions;
 using D3Sharp.Core.NPC;
@@ -14,35 +19,34 @@ namespace D3Sharp.Core.Map
 {
     public class World
     {
-        private GameClient Game;
         static readonly Logger Logger = LogManager.CreateLogger();
-
+        private GameClient Client;        
         private List<BasicNPC> NPCs;
 
         public World(GameClient g)
         {
-            Game = g;
+            Client = g;
             NPCs = new List<BasicNPC>();
         }
 
-        public  float posx, posy, posz;
+        public float posx, posy, posz;
 
         public List<MapChunk> MapChunkDB;
         public int WorldID = 0x772E0000;
 
-        private  int CompareMapChunks(MapChunk x, MapChunk y)
+        private int CompareMapChunks(MapChunk x, MapChunk y)
         {
             if (x.Scene.ParentChunkID != y.Scene.ParentChunkID) return x.Scene.ParentChunkID - y.Scene.ParentChunkID;
             return x.Scene.ChunkID - y.Scene.ChunkID;
         }
-        private  int OriginalSort(MapChunk x, MapChunk y)
+        private int OriginalSort(MapChunk x, MapChunk y)
         {
             if (x.Scene.WorldID != y.Scene.WorldID) return x.Scene.WorldID - y.Scene.WorldID;
             if (x.Scene.ParentChunkID != y.Scene.ParentChunkID) return x.Scene.ParentChunkID - y.Scene.ParentChunkID;
             return x.originalsortorder - y.originalsortorder;
         }
 
-        public  void LoadMapChunkDatabase()
+        public void LoadMapChunkDatabase()
         {
             MapChunkDB = new List<MapChunk>();
 
@@ -121,7 +125,7 @@ namespace D3Sharp.Core.Map
 
         void CreateNPC(int objectId)
         {
-            NPCs.Add(new BasicNPC(objectId, ref Game));
+            NPCs.Add(new BasicNPC(objectId, ref Client));
         }
 
         public void Tick()
@@ -129,7 +133,7 @@ namespace D3Sharp.Core.Map
             //world time based code comes here later, call this X times a second (where x is around 20 imo)
         }
 
-        public  void ReadAndSendMap()
+        public void ReadAndSendMap()
         {
             ActorDB.Init();
             //LoadMapChunkDatabase();
@@ -167,14 +171,14 @@ namespace D3Sharp.Core.Map
                                 {
                                     //reveal world here if fallback - updated map files have world reveal data
                                     #region Interstitial,RevealWorld,WorldStatus,EnterWorld
-                                    Game.SendMessage(new RevealWorldMessage()
+                                    Client.SendMessage(new RevealWorldMessage()
                                     {
                                         Id = 0x0037,
                                         Field0 = WorldID,
                                         Field1 = 0x000115EE,
                                     });
 
-                                    Game.SendMessage(new EnterWorldMessage()
+                                    Client.SendMessage(new EnterWorldMessage()
                                     {
                                         Id = 0x0033,
                                         Field0 = new Vector3D() { Field0 = 3143.75f, Field1 = 2828.75f, Field2 = 59.07559f },
@@ -200,8 +204,8 @@ namespace D3Sharp.Core.Map
                                 posy = (r.SceneSpec.tCachedValues.Field3.Field0.Field1 + r.SceneSpec.tCachedValues.Field3.Field1.Field1) / 2.0f + r.Position.Field1.Field1;
                                 posz = (r.SceneSpec.tCachedValues.Field3.Field0.Field2 + r.SceneSpec.tCachedValues.Field3.Field1.Field2) / 2.0f + r.Position.Field1.Field2;
 
-                                Game.SendMessage(r);
-                                Game.SendMessage(r2);
+                                Client.SendMessage(r);
+                                Client.SendMessage(r2);
                             }
                         }
                         else
@@ -215,11 +219,11 @@ namespace D3Sharp.Core.Map
                                     {
                                         case 0x34: //revealscenemessage
                                             if (int.Parse(data[56]) == -1)
-                                                Game.SendMessage(new RevealSceneMessage(data.Skip(2).ToArray(), WorldID));
+                                                Client.SendMessage(new RevealSceneMessage(data.Skip(2).ToArray(), WorldID));
                                             break;
                                         case 0x33: //enterworldmessage
                                             WorldID = int.Parse(data[5]);
-                                            Game.SendMessage(new EnterWorldMessage()
+                                            Client.SendMessage(new EnterWorldMessage()
                                             {
                                                 Id = 0x0033,
                                                 Field0 = new Vector3D()
@@ -233,7 +237,7 @@ namespace D3Sharp.Core.Map
                                             });
                                             break;
                                         case 0x37: //revealworldmessage
-                                            Game.SendMessage(new RevealWorldMessage()
+                                            Client.SendMessage(new RevealWorldMessage()
                                             {
                                                 Id = 0x0037,
                                                 Field0 = int.Parse(data[2]),
@@ -245,19 +249,19 @@ namespace D3Sharp.Core.Map
                                                 ACDEnterKnownMessage wm = new ACDEnterKnownMessage(data.Skip(2).ToArray(), WorldID);
                                                 if (!ActorDB.isBlackListed(wm.Field1))
                                                 {
-                                                    Game.SendMessage(wm);
+                                                    Client.SendMessage(wm);
                                                     Logger.Info(String.Format("{0,7}", wm.Field1) + ": " + ActorDB.GetActorName(wm.Field1));
                                                     if (ActorDB.isNPC(wm.Field1))
                                                     {
                                                         //SEND NPC DATA HERE
                                                         CreateNPC(wm.Field0);
                                                     }
-                                                    Game.FlushOutgoingBuffer();
+                                                    Client.FlushOutgoingBuffer();
                                                 }
                                             }
                                             break;
                                         case 0x44: //maprevealscenemessage
-                                            Game.SendMessage(new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID));
+                                            Client.SendMessage(new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID));
                                             break;
                                         default:
                                             Logger.Error("Unimplemented packet type encountered in map file: " + packettype);

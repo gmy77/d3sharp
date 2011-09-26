@@ -19,10 +19,11 @@
 using System;
 using System.Linq;
 using D3Sharp.Core.Services;
+using D3Sharp.Net.BNet.Packets;
 using D3Sharp.Utils;
 using Google.ProtocolBuffers;
 
-namespace D3Sharp.Net.BNet.Packets
+namespace D3Sharp.Net.BNet
 {
     public static class BNetRouter
     {
