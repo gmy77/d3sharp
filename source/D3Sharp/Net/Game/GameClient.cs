@@ -772,7 +772,7 @@ namespace D3Sharp.Net.Game
          new NetAttributeKeyValue()
          {
             Attribute = GameAttribute.Attributes[0x01F8], // SkillKit 
-            Int = 0x00008AFA,
+            Int = BnetClient.CurrentToon.SkillKit,
             Float = 0f,
          },
          new NetAttributeKeyValue()
