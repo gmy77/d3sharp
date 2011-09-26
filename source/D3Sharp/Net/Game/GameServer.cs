@@ -16,12 +16,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using D3Sharp.Core.Universe;
+
 namespace D3Sharp.Net.Game
 {
     public sealed class GameServer : Server
     {
+        private Universe GameUniverse;
+
         public GameServer()
         {
+            GameUniverse=new Universe();
+
             this.OnConnect += GameServer_OnConnect;
             this.OnDisconnect += (sender, e) => Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
             this.DataReceived += GameServer_DataReceived;

@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Core\Accounts\Account.cs" />
     <Compile Include="Core\Accounts\AccountManager.cs" />
+    <Compile Include="Core\Actors\Actor.cs" />
     <Compile Include="Core\Actors\ActorDB.cs" />
     <Compile Include="Core\Channels\Channel.cs" />
     <Compile Include="Core\Channels\ChannelManager.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="Core\Helpers\NotificationTypeHelper.cs" />
     <Compile Include="Core\Items\Item.cs" />
     <Compile Include="Core\Items\ItemTypeGenerator.cs" />
-    <Compile Include="Core\Map\MapChunk.cs" />
+    <Compile Include="Core\Map\Scene.cs" />
     <Compile Include="Core\Map\World.cs" />
     <Compile Include="Core\NPC\BasicNPC.cs" />
     <Compile Include="Core\Objects\PersistentRPCObject.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Core\Toons\Toon.cs" />
     <Compile Include="Core\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Toons\ToonManager.cs" />
+    <Compile Include="Core\Universe\Universe.cs" />
     <Compile Include="Net\BNet\BNetClient.cs" />
     <Compile Include="Net\BNet\BnetServer.cs" />
     <Compile Include="Net\BNet\Config.cs" />

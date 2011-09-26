@@ -9,6 +9,7 @@ using D3Sharp.Core.Actors;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Extensions;
 using D3Sharp.Core.NPC;
+using D3Sharp.Core.Actors;
 
 namespace D3Sharp.Core.Map
 {
@@ -18,106 +19,161 @@ namespace D3Sharp.Core.Map
         static readonly Logger Logger = LogManager.CreateLogger();
 
         private List<BasicNPC> NPCs;
+        private List<Actor> Actors;
+        private List<Scene> Scenes;
 
         public World(GameClient g)
         {
             Game = g;
             NPCs = new List<BasicNPC>();
+            Actors = new List<Actors.Actor>();
+            Scenes = new List<Scene>();
         }
 
         public  float posx, posy, posz;
 
-        public List<MapChunk> MapChunkDB;
+        public List<Scene> MapChunkDB;
         public int WorldID = 0x772E0000;
 
-        private  int CompareMapChunks(MapChunk x, MapChunk y)
+        public Scene GetScene(int ID)
         {
-            if (x.Scene.ParentChunkID != y.Scene.ParentChunkID) return x.Scene.ParentChunkID - y.Scene.ParentChunkID;
-            return x.Scene.ChunkID - y.Scene.ChunkID;
-        }
-        private  int OriginalSort(MapChunk x, MapChunk y)
-        {
-            if (x.Scene.WorldID != y.Scene.WorldID) return x.Scene.WorldID - y.Scene.WorldID;
-            if (x.Scene.ParentChunkID != y.Scene.ParentChunkID) return x.Scene.ParentChunkID - y.Scene.ParentChunkID;
-            return x.originalsortorder - y.originalsortorder;
+            for (int x = 0; x < Scenes.Count; x++)
+                if (Scenes[x].ID == ID) return Scenes[x];
+            return null;
         }
 
-        public  void LoadMapChunkDatabase()
+        public Actor GetActor(int ID)
         {
-            MapChunkDB = new List<MapChunk>();
-
-            string filePath = "Assets\\!onlymap.txt";
-            string line, line2;
-            if (File.Exists(filePath))
-            {
-                int x = 0;
-                StreamReader file = null;
-                try
-                {
-                    System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex(@"\s+");
-
-                    file = new StreamReader(filePath);
-                    while ((line = file.ReadLine()) != null)
-                    {
-                        string line_ = rx.Replace(line, @" ");
-                        string[] data = line_.Split(' ');
-
-                        if ((line2 = file.ReadLine()) != null)
-                        {
-                            string line2_ = rx.Replace(line2, @" ");
-                            string[] data2 = line2_.Split(' ');
-
-                            int worldid = int.Parse(data[2]);
-
-                            MapChunk m = new MapChunk();
-
-                            m.Scene = new RevealSceneMessage(data.Skip(2).ToArray(), worldid);
-                            m.Map = new MapRevealSceneMessage(data2.Skip(2).ToArray(), worldid);
-                            m.SceneLine = line;
-                            m.MapLine = line2;
-                            m.originalsortorder = x++;
-
-                            MapChunkDB.Add(m);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.DebugException(e, "ReadMapDatabase");
-                }
-                finally
-                {
-                    if (file != null)
-                        file.Close();
-                }
-                MapChunkDB.Sort(CompareMapChunks);
-                StreamWriter f = new StreamWriter("Assets\\mapdboutput.txt");
-
-                for (x = 1; x < MapChunkDB.Count; x++)
-                {
-                    MapChunk m0 = MapChunkDB[x - 1];
-                    MapChunk m1 = MapChunkDB[x];
-                    if (CompareMapChunks(m0, m1) == 0)
-                    {
-                        MapChunkDB.RemoveAt(x);
-                        x--;
-                    }
-                }
-                MapChunkDB.Sort(OriginalSort);
-
-
-                MapChunk[] mdb = MapChunkDB.ToArray();
-
-                foreach (MapChunk m in mdb)
-                {
-                    f.WriteLine(m.SceneLine);
-                    f.WriteLine(m.MapLine);
-                }
-                f.Close();
-
-
-            }
+            for (int x = 0; x < Actors.Count; x++)
+                if (Actors[x].ID == ID) return Actors[x];
+            return null;
         }
+
+        public void AddScene(string Line)
+        {
+            string[] data = Line.Split(' ');
+            int SceneID=int.Parse(data[46]);
+
+            Scene s = GetScene(SceneID);
+            if (s != null) return;
+
+            s = new Scene();
+            s.ID = SceneID;
+
+            s.SceneLine = Line;
+            s.SceneData = new RevealSceneMessage(data.Skip(2).ToArray(),WorldID);
+
+            Scenes.Add(s);
+        }
+
+        public void AddMapScene(string Line)
+        {
+            string[] data = Line.Split(' ');
+            int SceneID = int.Parse(data[2]);
+
+            Scene s = GetScene(SceneID);
+
+            if (s!=null) return;
+
+            s.MapLine = Line;
+            s.Map = new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID);
+        }
+
+        public void AddActor(string Line)
+        {
+            string[] data = Line.Split(' ');
+
+        }
+
+
+        //private  int CompareMapChunks(Scene x, Scene y)
+        //{
+        //    if (x.SceneData.ParentChunkID != y.SceneData.ParentChunkID) return x.SceneData.ParentChunkID - y.SceneData.ParentChunkID;
+        //    return x.SceneData.ChunkID - y.SceneData.ChunkID;
+        //}
+        //private  int OriginalSort(Scene x, Scene y)
+        //{
+        //    if (x.SceneData.WorldID != y.SceneData.WorldID) return x.SceneData.WorldID - y.SceneData.WorldID;
+        //    if (x.SceneData.ParentChunkID != y.SceneData.ParentChunkID) return x.SceneData.ParentChunkID - y.SceneData.ParentChunkID;
+        //    return x.originalsortorder - y.originalsortorder;
+        //}
+
+        //public  void LoadMapChunkDatabase()
+        //{
+        //    MapChunkDB = new List<Scene>();
+
+        //    string filePath = "Assets\\!onlymap.txt";
+        //    string line, line2;
+        //    if (File.Exists(filePath))
+        //    {
+        //        int x = 0;
+        //        StreamReader file = null;
+        //        try
+        //        {
+        //            System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex(@"\s+");
+
+        //            file = new StreamReader(filePath);
+        //            while ((line = file.ReadLine()) != null)
+        //            {
+        //                string line_ = rx.Replace(line, @" ");
+        //                string[] data = line_.Split(' ');
+
+        //                if ((line2 = file.ReadLine()) != null)
+        //                {
+        //                    string line2_ = rx.Replace(line2, @" ");
+        //                    string[] data2 = line2_.Split(' ');
+
+        //                    int worldid = int.Parse(data[2]);
+
+        //                    Scene m = new Scene();
+
+        //                    m.SceneData = new RevealSceneMessage(data.Skip(2).ToArray(), worldid);
+        //                    m.Map = new MapRevealSceneMessage(data2.Skip(2).ToArray(), worldid);
+        //                    m.SceneLine = line;
+        //                    m.MapLine = line2;
+        //                    m.originalsortorder = x++;
+
+        //                    MapChunkDB.Add(m);
+        //                }
+        //            }
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            Logger.DebugException(e, "ReadMapDatabase");
+        //        }
+        //        finally
+        //        {
+        //            if (file != null)
+        //                file.Close();
+        //        }
+        //        MapChunkDB.Sort(CompareMapChunks);
+        //        StreamWriter f = new StreamWriter("Assets\\mapdboutput.txt");
+
+        //        for (x = 1; x < MapChunkDB.Count; x++)
+        //        {
+        //            Scene m0 = MapChunkDB[x - 1];
+        //            Scene m1 = MapChunkDB[x];
+        //            if (CompareMapChunks(m0, m1) == 0)
+        //            {
+        //                MapChunkDB.RemoveAt(x);
+        //                x--;
+        //            }
+        //        }
+        //        MapChunkDB.Sort(OriginalSort);
+
+
+        //        Scene[] mdb = MapChunkDB.ToArray();
+
+        //        foreach (Scene m in mdb)
+        //        {
+        //            f.WriteLine(m.SceneLine);
+        //            f.WriteLine(m.MapLine);
+        //        }
+        //        f.Close();
+
+
+        //    }
+        //}
 
         void CreateNPC(int objectId)
         {
@@ -129,7 +185,12 @@ namespace D3Sharp.Core.Map
             //world time based code comes here later, call this X times a second (where x is around 20 imo)
         }
 
-        public  void ReadAndSendMap()
+        public void RevealWorld()
+        {
+
+        }
+
+        public void ReadAndSendMap()
         {
             ActorDB.Init();
             //LoadMapChunkDatabase();
@@ -214,7 +275,7 @@ namespace D3Sharp.Core.Map
                                     switch (packettype)
                                     {
                                         case 0x34: //revealscenemessage
-                                            if (int.Parse(data[56]) == -1)
+                                            //if (int.Parse(data[56]) == -1)
                                                 Game.SendMessage(new RevealSceneMessage(data.Skip(2).ToArray(), WorldID));
                                             break;
                                         case 0x33: //enterworldmessage
