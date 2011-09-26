@@ -1,4 +1,22 @@
-﻿﻿using System;
+﻿/*
+ * Copyright (C) 2011 D3Sharp Project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+﻿using System;
 using System.Text;
 
 namespace D3Sharp.Net.Game
@@ -501,12 +519,12 @@ namespace D3Sharp.Net.Game
 
     public class RevealSceneMessage : GameMessage
     {
-        public int Field0;
-        public SceneSpecification Field1;
-        public int Field2;
+        public int WorldID;
+        public SceneSpecification SceneSpec;
+        public int ChunkID;
         public int /* sno */ snoScene;
-        public PRTransform Field4;
-        public int Field5;
+        public PRTransform Position;
+        public int ParentChunkID;
         public int /* sno */ snoSceneGroup;
         // MaxLength = 256
         public int /* gbid */[] arAppliedLabels;
@@ -515,14 +533,14 @@ namespace D3Sharp.Net.Game
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = new SceneSpecification();
-            Field1.Parse(buffer);
-            Field2 = buffer.ReadInt(32);
+            WorldID = buffer.ReadInt(32);
+            SceneSpec = new SceneSpecification();
+            SceneSpec.Parse(buffer);
+            ChunkID = buffer.ReadInt(32);
             snoScene = buffer.ReadInt(32);
-            Field4 = new PRTransform();
-            Field4.Parse(buffer);
-            Field5 = buffer.ReadInt(32);
+            Position = new PRTransform();
+            Position.Parse(buffer);
+            ParentChunkID = buffer.ReadInt(32);
             snoSceneGroup = buffer.ReadInt(32);
             arAppliedLabels = new int /* gbid */[buffer.ReadInt(9)];
             for (int i = 0; i < arAppliedLabels.Length; i++) arAppliedLabels[i] = buffer.ReadInt(32);
@@ -530,12 +548,12 @@ namespace D3Sharp.Net.Game
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
-            buffer.WriteInt(32, Field2);
+            buffer.WriteInt(32, WorldID);
+            SceneSpec.Encode(buffer);
+            buffer.WriteInt(32, ChunkID);
             buffer.WriteInt(32, snoScene);
-            Field4.Encode(buffer);
-            buffer.WriteInt(32, Field5);
+            Position.Encode(buffer);
+            buffer.WriteInt(32, ParentChunkID);
             buffer.WriteInt(32, snoSceneGroup);
             buffer.WriteInt(9, arAppliedLabels.Length);
             for (int i = 0; i < arAppliedLabels.Length; i++) buffer.WriteInt(32, arAppliedLabels[i]);
@@ -547,12 +565,12 @@ namespace D3Sharp.Net.Game
             b.AppendLine("RevealSceneMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            Field1.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.Append(' ', pad); b.AppendLine("WorldID: 0x" + WorldID.ToString("X8") + " (" + WorldID + ")");
+            SceneSpec.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("ChunkID: 0x" + ChunkID.ToString("X8") + " (" + ChunkID + ")");
             b.Append(' ', pad); b.AppendLine("snoScene: 0x" + snoScene.ToString("X8"));
-            Field4.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("Field5: 0x" + Field5.ToString("X8") + " (" + Field5 + ")");
+            Position.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("ParentChunkID: 0x" + ParentChunkID.ToString("X8") + " (" + ParentChunkID + ")");
             b.Append(' ', pad); b.AppendLine("snoSceneGroup: 0x" + snoSceneGroup.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("arAppliedLabels:");
             b.Append(' ', pad); b.AppendLine("{");
@@ -570,8 +588,8 @@ namespace D3Sharp.Net.Game
         public RevealSceneMessage(string[] data, int f0)
         {
             Id = 0x0034;
-            Field0 = f0;//0x772E0000; //int.Parse(data[0]),
-            Field1 = new SceneSpecification()
+            WorldID = f0;//0x772E0000; //int.Parse(data[0]),
+            SceneSpec = new SceneSpecification()
             {
                 Field0 = int.Parse(data[1]),
                 Field1 = new IVector2D()
@@ -635,18 +653,18 @@ namespace D3Sharp.Net.Game
                     Field6 = int.Parse(data[43]),
                 },
             };
-            Field2 = int.Parse(data[44]);
+            ChunkID = int.Parse(data[44]);
             snoScene = int.Parse(data[45]);
-            Field4 = new PRTransform()
+            Position = new PRTransform()
             {
                 Field0 = new Quaternion()
                 {
-                    Field0 = 1f,//float.Parse(data[49],System.Globalization.CultureInfo),
+                    Field0 = float.Parse(data[49],System.Globalization.CultureInfo.InvariantCulture),
                     Field1 = new Vector3D()
                     {
-                        Field0 = 0f,//float.Parse(data[46],System.Globalization.CultureInfo),
-                        Field1 = 0f,//float.Parse(data[47],System.Globalization.CultureInfo),
-                        Field2 = 0f,//float.Parse(data[48],System.Globalization.CultureInfo),
+                        Field0 = float.Parse(data[46],System.Globalization.CultureInfo.InvariantCulture),
+                        Field1 = float.Parse(data[47],System.Globalization.CultureInfo.InvariantCulture),
+                        Field2 = float.Parse(data[48],System.Globalization.CultureInfo.InvariantCulture),
                     },
                 },
                 Field1 = new Vector3D()
@@ -657,7 +675,7 @@ namespace D3Sharp.Net.Game
                 },
             };
 
-            Field5 = int.Parse(data[53]);
+            ParentChunkID = int.Parse(data[53]);
             snoSceneGroup = int.Parse(data[54]);
             arAppliedLabels = new int[0];
         }
@@ -951,46 +969,46 @@ namespace D3Sharp.Net.Game
             Field3 = int.Parse(Data[5]);
 
             Field4 = null;
-
-            if (int.Parse(Data[0]) > 0)
-                Field4 = new WorldLocationMessageData()
-                {
-                    Field0 = float.Parse(Data[6], System.Globalization.CultureInfo.InvariantCulture),
-                    Field1 = new PRTransform()
-                    {
-                        Field0 = new Quaternion()
-                        {
-                            Field0 = float.Parse(Data[10], System.Globalization.CultureInfo.InvariantCulture),
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = float.Parse(Data[7], System.Globalization.CultureInfo.InvariantCulture),
-                                Field1 = float.Parse(Data[8], System.Globalization.CultureInfo.InvariantCulture),
-                                Field2 = float.Parse(Data[9], System.Globalization.CultureInfo.InvariantCulture),
-                            },
-                        },
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = float.Parse(Data[11], System.Globalization.CultureInfo.InvariantCulture),
-                            Field1 = float.Parse(Data[12], System.Globalization.CultureInfo.InvariantCulture),
-                            Field2 = float.Parse(Data[13], System.Globalization.CultureInfo.InvariantCulture),
-                        },
-                    },
-                    Field2 = f2, //=int.Parse(Data[14]),
-                };
+            
+            if (int.Parse(Data[0])>0)
+            Field4 = new WorldLocationMessageData()
+             {
+                 Field0 = float.Parse(Data[6], System.Globalization.CultureInfo.InvariantCulture),
+                 Field1 = new PRTransform()
+                 {
+                     Field0 = new Quaternion()
+                     {
+                         Field0 = float.Parse(Data[10], System.Globalization.CultureInfo.InvariantCulture),
+                         Field1 = new Vector3D()
+                         {
+                             Field0 = float.Parse(Data[7], System.Globalization.CultureInfo.InvariantCulture),
+                             Field1 = float.Parse(Data[8], System.Globalization.CultureInfo.InvariantCulture),
+                             Field2 = float.Parse(Data[9], System.Globalization.CultureInfo.InvariantCulture),
+                         },
+                     },
+                     Field1 = new Vector3D()
+                     {
+                         Field0 = float.Parse(Data[11], System.Globalization.CultureInfo.InvariantCulture),
+                         Field1 = float.Parse(Data[12], System.Globalization.CultureInfo.InvariantCulture),
+                         Field2 = float.Parse(Data[13], System.Globalization.CultureInfo.InvariantCulture),
+                     },
+                 },
+                 Field2 = f2, //=int.Parse(Data[14]),
+             };
 
             Field5 = null;
-            if (int.Parse(Data[1]) > 0)
+            if (int.Parse(Data[1])>0)
             {
                 Field5 = new InventoryLocationMessageData()
-                {
-                    Field0 = int.Parse(Data[15]),
-                    Field1 = int.Parse(Data[16]),
-                    Field2 = new IVector2D()
                     {
-                        Field0 = int.Parse(Data[17]),
-                        Field1 = int.Parse(Data[18]),
-                    }
-                };
+                        Field0 = int.Parse(Data[15]),
+                        Field1 = int.Parse(Data[16]),
+                        Field2 = new IVector2D()
+                        {
+                            Field0 = int.Parse(Data[17]),
+                            Field1 = int.Parse(Data[18]),
+                        }
+                    };
             }
 
             Field6 = new GBHandle()
@@ -3424,31 +3442,31 @@ namespace D3Sharp.Net.Game
 
     public class MapRevealSceneMessage : GameMessage
     {
-        public int Field0;
+        public int ChunkID;
         public int /* sno */ snoScene;
         public PRTransform Field2;
         public int Field3;
-        public int Field4;
+        public int MiniMapVisibility;
 
         public override void VisitHandler(IGameMessageHandler handler) { handler.OnMessage(this); }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ChunkID = buffer.ReadInt(32);
             snoScene = buffer.ReadInt(32);
             Field2 = new PRTransform();
             Field2.Parse(buffer);
             Field3 = buffer.ReadInt(32);
-            Field4 = buffer.ReadInt(3);
+            MiniMapVisibility = buffer.ReadInt(3);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, ChunkID);
             buffer.WriteInt(32, snoScene);
             Field2.Encode(buffer);
             buffer.WriteInt(32, Field3);
-            buffer.WriteInt(3, Field4);
+            buffer.WriteInt(3, MiniMapVisibility);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -3457,11 +3475,11 @@ namespace D3Sharp.Net.Game
             b.AppendLine("MapRevealSceneMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("ChunkID: 0x" + ChunkID.ToString("X8") + " (" + ChunkID + ")");
             b.Append(' ', pad); b.AppendLine("snoScene: 0x" + snoScene.ToString("X8"));
             Field2.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
-            b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
+            b.Append(' ', pad); b.AppendLine("MiniMapVisibility: 0x" + MiniMapVisibility.ToString("X8") + " (" + MiniMapVisibility + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
@@ -3474,18 +3492,18 @@ namespace D3Sharp.Net.Game
         public MapRevealSceneMessage(string[] data2, int f3)
         {
             Id = 0x0044;
-            Field0 = int.Parse(data2[0]);
+            ChunkID = int.Parse(data2[0]);
             snoScene = int.Parse(data2[1]);
             Field2 = new PRTransform()
             {
                 Field0 = new Quaternion()
                 {
-                    Field0 = 1f,//float.Parse(data2[5],System.Globalization.CultureInfo),
+                    Field0 = float.Parse(data2[5],System.Globalization.CultureInfo.InvariantCulture),
                     Field1 = new Vector3D()
                     {
-                        Field0 = 0f,//float.Parse(data2[2],System.Globalization.CultureInfo),
-                        Field1 = 0f,//float.Parse(data2[3],System.Globalization.CultureInfo),
-                        Field2 = 0f,//float.Parse(data2[4],System.Globalization.CultureInfo),
+                        Field0 = float.Parse(data2[2],System.Globalization.CultureInfo.InvariantCulture),
+                        Field1 = float.Parse(data2[3],System.Globalization.CultureInfo.InvariantCulture),
+                        Field2 = float.Parse(data2[4],System.Globalization.CultureInfo.InvariantCulture),
                     },
                 },
                 Field1 = new Vector3D()
@@ -3496,7 +3514,7 @@ namespace D3Sharp.Net.Game
                 },
             };
             Field3 = f3;//int.Parse(data2[9]),
-            Field4 = int.Parse(data2[10]);
+            MiniMapVisibility = int.Parse(data2[10]);
         }
 
 
@@ -7051,7 +7069,7 @@ namespace D3Sharp.Net.Game
         public int Field0;
         public IVector2D Field1;
         // MaxLength = 4
-        public int /* sno */[] arSnoLevelAreas;
+        public int /* sno */[] arSnoLevelAreas; //area names
         public int /* sno */ snoPrevWorld;
         public int Field4;
         public int /* sno */ snoPrevLevelArea;

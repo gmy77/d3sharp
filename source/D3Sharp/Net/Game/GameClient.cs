@@ -15,15 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 using System;
 using System.IO;
 using System.Linq;
 using D3Sharp.Net.BNet;
-using D3Sharp.Utils.Extensions;
 using Gibbed.Helpers;
 using System.Text;
 using D3Sharp.Utils;
 using System.Collections.Generic;
+using D3Sharp.Net.Game;
+using D3Sharp.Core.Map;
 
 //using Gibbed.Helpers;
 
@@ -45,7 +47,6 @@ namespace D3Sharp.Net.Game
     public sealed class GameClient : IGameClient, IGameMessageHandler
     {
         static readonly Logger Logger = LogManager.CreateLogger();
-        static public int WorldID = 0x772E0000;
 
         public IConnection Connection { get; set; }
         public BNetClient BnetClient { get; private set; }
@@ -53,23 +54,29 @@ namespace D3Sharp.Net.Game
         GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
 
+        public int packetId = 0x227 + 20;
+        public int tick = 0;
+        public World GameWorld;
         public float posx, posy, posz;
         int objectId = 0x78f50114 + 100;
-        int packetId = 0x227 + 20;
-        int tick = 1;
         int active_mob_index = 0;
-        int[] mobs = { 4285, 5346, 5347, 5350, 5360, 5361, 5362, 5363, 5365, 5387, 5393, 5395, 5397, 5411, 5428, 5432, 5433, 5467 };
+        int[] mobs = { 5346, 4152, 6024, 5360, 5361, 5362, 5363, 5365, 5387, 5393, 5395, 5397, 5411, 5428, 5432, 5433, 5467 };
 
         Random rand = new Random();
         IList<Mob> objectsSpawned = null;
         IList<TempMob> tempObjects = new List<TempMob>();
         Vector3D position;
+        float position_angle = 0.0f;
+
+        private bool IsLoggingOut;
 
         public GameClient(IConnection connection)
         {
             this.Connection = connection;
             _outgoingBuffer.WriteInt(32, 0);
+            GameWorld = new World(this);
         }
+
         public void Parse(ConnectionDataEventArgs e)
         {
             //Console.WriteLine(e.Data.Dump());
@@ -85,7 +92,7 @@ namespace D3Sharp.Net.Game
                 {
                     GameMessage msg = _incomingBuffer.ParseMessage();
 
-                    //Logger.LogIncoming(msg);
+                    Logger.LogIncoming(msg);
 
                     try
                     {
@@ -93,7 +100,7 @@ namespace D3Sharp.Net.Game
                     }
                     catch (NotImplementedException)
                     {
-                        Logger.Debug("Unhandled game message: 0x{0:X4} {1}", msg.Id, msg.GetType().Name);
+                        //Logger.Debug("Unhandled game message: 0x{0:X4} {1}", msg.Id, msg.GetType().Name);
                     }
                 }
 
@@ -102,11 +109,19 @@ namespace D3Sharp.Net.Game
             _incomingBuffer.ConsumeData();
             FlushOutgoingBuffer();
         }
+
         public void SendMessage(GameMessage msg)
         {
             //Logger.LogOutgoing(msg);
             _outgoingBuffer.EncodeMessage(msg);
         }
+        
+        public void SendMessageNow(GameMessage msg)
+        {
+            SendMessage(msg);
+            FlushOutgoingBuffer();
+        }
+
         public void FlushOutgoingBuffer()
         {
             if (_outgoingBuffer.Length > 32)
@@ -116,158 +131,6 @@ namespace D3Sharp.Net.Game
             }
         }
 
-        public void ReadAndSendMap()
-        {
-            string filePath = Config.Instance.Map;
-            string line, line2;
-
-            //avarage = double.Parse("0.0", NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-
-            bool versiondetermined = false;
-            int version = 0;
-
-            if (File.Exists(filePath))
-            {
-                StreamReader file = null;
-                try
-                {
-
-                    System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex(@"\s+");
-
-                    file = new StreamReader(filePath);
-                    while ((line = file.ReadLine()) != null)
-                    {
-                        line = rx.Replace(line, @" ");
-                        string[] data = line.Split(' ');
-
-                        if (!versiondetermined)
-                            if (data.Length > 0)
-                                if (data[0].Equals("v"))
-                                {
-                                    version = int.Parse(data[1]);
-                                    Logger.Info("Map file version: " + version);
-                                }
-                                else
-                                {
-                                    //reveal world here if fallback - updated map files have world reveal data
-                                    #region Interstitial,RevealWorld,WorldStatus,EnterWorld
-                                    SendMessage(new RevealWorldMessage()
-                                    {
-                                        Id = 0x0037,
-                                        Field0 = WorldID,
-                                        Field1 = 0x000115EE,
-                                    });
-
-                                    SendMessage(new EnterWorldMessage()
-                                    {
-                                        Id = 0x0033,
-                                        Field0 = new Vector3D() { Field0 = 3143.75f, Field1 = 2828.75f, Field2 = 59.07559f },
-                                        Field1 = WorldID,
-                                        Field2 = 0x000115EE,
-                                    });
-                                    #endregion
-                                }
-                        versiondetermined = true;
-
-                        if (version == 0)
-                        {
-                            //fallback to the original version of the text files because people WILL mix them with the new :(
-
-                            if ((line2 = file.ReadLine()) != null)
-                            {
-                                string[] data2 = line2.Split(' ');
-
-                                RevealSceneMessage r = new RevealSceneMessage(data, WorldID);
-                                MapRevealSceneMessage r2 = new MapRevealSceneMessage(data2, WorldID);
-
-                                posx = (r.Field1.tCachedValues.Field3.Field0.Field0 + r.Field1.tCachedValues.Field3.Field1.Field0) / 2.0f + r.Field4.Field1.Field0;
-                                posy = (r.Field1.tCachedValues.Field3.Field0.Field1 + r.Field1.tCachedValues.Field3.Field1.Field1) / 2.0f + r.Field4.Field1.Field1;
-                                posz = (r.Field1.tCachedValues.Field3.Field0.Field2 + r.Field1.tCachedValues.Field3.Field1.Field2) / 2.0f + r.Field4.Field1.Field2;
-
-                                SendMessage(r);
-                                SendMessage(r2);
-                            }
-                        }
-                        else
-                            if (data.Length >= 1) //check only lines with data in them
-                            {
-                                //packet data
-                                if (data[0].Equals("p") && data.Length >= 2)
-                                {
-                                    int packettype = int.Parse(data[1]);
-                                    switch (packettype)
-                                    {
-                                        case 0x34: //revealscenemessage
-                                            SendMessage(new RevealSceneMessage(data.Skip(2).ToArray(), WorldID));
-                                            break;
-                                        case 0x33: //enterworldmessage
-                                            WorldID = int.Parse(data[5]);
-                                            SendMessage(new EnterWorldMessage()
-                                            {
-                                                Id = 0x0033,
-                                                Field0 = new Vector3D()
-                                                {
-                                                    Field0 = float.Parse(data[2], System.Globalization.CultureInfo.InvariantCulture),
-                                                    Field1 = float.Parse(data[3], System.Globalization.CultureInfo.InvariantCulture),
-                                                    Field2 = float.Parse(data[4], System.Globalization.CultureInfo.InvariantCulture)
-                                                },
-                                                Field1 = WorldID,
-                                                Field2 = int.Parse(data[6]),
-                                            });
-                                            break;
-                                        case 0x37: //revealworldmessage
-                                            SendMessage(new RevealWorldMessage()
-                                            {
-                                                Id = 0x0037,
-                                                Field0 = int.Parse(data[2]),
-                                                Field1 = int.Parse(data[3]),
-                                            });
-                                            break;
-                                        case 0x3b: //acdenterknownmessage
-                                            //if (int.Parse(data[5]) == 1)
-                                            {
-                                                SendMessage(new ACDEnterKnownMessage(data.Skip(2).ToArray(), WorldID));
-                                                //posx = float.Parse(data[11], System.Globalization.CultureInfo.InvariantCulture);
-                                                //posy = float.Parse(data[12], System.Globalization.CultureInfo.InvariantCulture);
-                                                //posz = float.Parse(data[13], System.Globalization.CultureInfo.InvariantCulture);
-                                            }
-                                            break;
-                                        case 0x44: //maprevealscenemessage
-                                            SendMessage(new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID));
-                                            break;
-                                        default:
-                                            Logger.Error("Unimplemented packet type encountered in map file: " + packettype);
-                                            break;
-                                    }
-                                }
-
-                                //spawn point
-                                if (data[0].Equals("s") && data.Length >= 4)
-                                {
-                                    posx = float.Parse(data[1], System.Globalization.CultureInfo.InvariantCulture);
-                                    posy = float.Parse(data[2], System.Globalization.CultureInfo.InvariantCulture);
-                                    posz = float.Parse(data[3], System.Globalization.CultureInfo.InvariantCulture);
-                                }
-
-                            }
-
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.DebugException(e, "ReadAndSendMap");
-                }
-                finally
-                {
-                    if (file != null)
-                        file.Close();
-                }
-            }
-            else
-            {
-                Logger.Error("Map file {0} not found!", filePath);
-            }
-        }
         public void OnMessage(JoinBNetGameMessage msg)
         {
             if (msg.Id != 0x000A)
@@ -277,14 +140,13 @@ namespace D3Sharp.Net.Game
             this.BnetClient = Core.Games.GameManager.AvailableGames[(ulong)msg.Field2].Clients.FirstOrDefault();
             if (this.BnetClient != null) this.BnetClient.InGameClient = this;
 
-            SendMessage(new VersionsMessage()
+            SendMessageNow(new VersionsMessage()
             {
                 Id = 0x000D,
                 SNOPackHash = msg.SNOPackHash,
                 ProtocolHash = GameMessage.ImplementedProtocolHash,
                 Version = "0.3.0.7333",
             });
-            FlushOutgoingBuffer();
 
             SendMessage(new ConnectionEstablishedMessage()
             {
@@ -293,6 +155,7 @@ namespace D3Sharp.Net.Game
                 Field1 = 0x4BB91A16,
                 Field2 = msg.SNOPackHash,
             });
+
             SendMessage(new GameSetupMessage()
             {
                 Id = 0x002F,
@@ -325,7 +188,7 @@ namespace D3Sharp.Net.Game
                 Id = 0x0031,
                 Field0 = 0x00000000, //Party frame (0x00000000 hide, 0x00000001 show)
                 Field1 = "", //Owner name?
-                ToonName = BnetClient.CurrentToon.Name,
+                ToonName = this.BnetClient.CurrentToon.Name,
                 Field3 = 0x00000002, //party frame class 
                 Field4 = 0x00000004, //party frame level
                 snoActorPortrait = BnetClient.CurrentToon.ClassSNO, //party frame portrait
@@ -632,872 +495,10 @@ namespace D3Sharp.Net.Game
                 Field10 = 0x789E00E2,
             });
             #endregion
-            #region GenericBlobMessages 0x0032,0x00ED,0x00EE,0x00EF
-            /*SendMessage(new GenericBlobMessage()
-            {
-                Id = 0x0032,
-                Data = new byte[22]
-    {
-        0x08, 0x00, 0x12, 0x12, 0x08, 0x08, 0x10, 0x03, 0x18, 0x04, 0x20, 0x0B, 0x28, 0x14, 0x30, 0x07, 
-        0x38, 0x0B, 0x40, 0x04, 0x48, 0x01, 
-    },
-            });
 
-            SendMessage(new GenericBlobMessage()
-            {
-                Id = 0x00ED,
-                Data = new byte[11]
-    {
-        0x18, 0x00, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    },
-            });
+            GameWorld.ReadAndSendMap();
 
-            SendMessage(new GenericBlobMessage()
-            {
-                Id = 0x00EE,
-                Data = new byte[11]
-    {
-        0x18, 0x00, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    },
-            });
-
-            SendMessage(new GenericBlobMessage()
-            {
-                Id = 0x00EF,
-                Data = new byte[11]
-    {
-        0x18, 0x00, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    },
-            });*/
-            #endregion
-            #region GameSyncedData
-            /*SendMessage(new GameSyncedDataMessage()
-                        {
-                            Id = 0x00AF,
-                            Field0 = new GameSyncedData()
-                            {
-                                Field0 = false,
-                                Field1 = 0x00000000,
-                                Field2 = 0x00000000,
-                                Field3 = 0x00000000,
-                                Field4 = 0x00000000,
-                                Field5 = 0x00000000,
-                                Field6 = new int[2]
-                    {
-                        0x00000000, 0x00000000, 
-                    },
-                                Field7 = new int[2]
-                    {
-                        0x00000000, 0x00000000, 
-                    },
-                            },
-                        });*/
-            #endregion
-            #region Interstitial,RevealWorld,WorldStatus,EnterWorld
-
-            SendMessage(new RevealWorldMessage()
-            {
-                Id = 0x0037,
-                Field0 = 0x772E0000,
-                Field1 = 0x000115EE,
-            });
-
-            SendMessage(new EnterWorldMessage()
-            {
-                Id = 0x0033,
-                Field0 = new Vector3D() { Field0 = 3143.75f, Field1 = 2828.75f, Field2 = 59.07559f },
-                Field1 = 0x772E0000,
-                Field2 = 0x000115EE,
-            });
-            #endregion
-
-            ReadAndSendMap();
-
-            #region RevealScene/MapRevealScene
-            /*SendMessage(new RevealSceneMessage()
-            {
-                Id = 0x0034,
-                Field0 = 0x772E0000,
-                Field1 = new SceneSpecification()
-                {
-                    Field0 = 0x00000000,
-                    Field1 = new IVector2D()
-                    {
-                        Field0 = 0x00000000,
-                        Field1 = 0x00000000,
-                    },
-                    arSnoLevelAreas = new int[4]
-        {
-            0x00004DEB, 0x00026186, -1, -1, 
-        },
-                    snoPrevWorld = -1,
-                    Field4 = 0x00000000,
-                    snoPrevLevelArea = -1,
-                    snoNextWorld = -1,
-                    Field7 = 0x00000000,
-                    snoNextLevelArea = -1,
-                    snoMusic = 0x000206F8,
-                    snoCombatMusic = -1,
-                    snoAmbient = 0x0002734F,
-                    snoReverb = 0x000153F6,
-                    snoWeather = 0x00013220,
-                    snoPresetWorld = 0x000115EE,
-                    Field15 = 0x00000002,
-                    Field16 = 0x00000002,
-                    Field17 = 0x00000000,
-                    Field18 = -1,
-                    tCachedValues = new SceneCachedValues()
-                    {
-                        Field0 = 0x0000003F,
-                        Field1 = 0x00000060,
-                        Field2 = 0x00000060,
-                        Field3 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                Field0 = 115.9387f,
-                                Field1 = 125.2578f,
-                                Field2 = 43.82879f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 124.0615f,
-                                Field1 = 131.6655f,
-                                Field2 = 57.26923f,
-                            },
-                        },
-                        Field4 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                Field0 = 115.9387f,
-                                Field1 = 125.2578f,
-                                Field2 = 43.82879f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 124.0615f,
-                                Field1 = 131.6655f,
-                                Field2 = 57.26923f,
-                            },
-                        },
-                        Field5 = new int[4]
-            {
-                0x00000000, 0x000004C8, 0x00000000, 0x00000000, 
-            },
-                        Field6 = 0x00000009,
-                    },
-                },
-                Field2 = 0x77560002,
-                snoScene = 0x00008245,
-                Field4 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
-                        },
-                    },
-                    Field1 = new Vector3D()
-                    {
-                        Field0 = 3060f,
-                        Field1 = 2760f,
-                        Field2 = 0f,
-                    },
-                },
-                Field5 = -1,
-                snoSceneGroup = -1,
-                arAppliedLabels = new int[0]
-    {
-    },
-            });
-
-            SendMessage(new MapRevealSceneMessage()
-            {
-                Id = 0x0044,
-                Field0 = 0x77560002,
-                snoScene = 0x00008245,
-                Field2 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
-                        },
-                    },
-                    Field1 = new Vector3D()
-                    {
-                        Field0 = 3060f,
-                        Field1 = 2760f,
-                        Field2 = 0f,
-                    },
-                },
-                Field3 = 0x772E0000,
-                Field4 = 0x00000002,
-            });
-
-/*            SendMessage(new RevealSceneMessage()
-            {
-                Id = 0x0034,
-                Field0 = 0x772E0000,
-                Field1 = new SceneSpecification()
-                {
-                    Field0 = 0x00000000,
-                    Field1 = new IVector2D()
-                    {
-                        Field0 = 0x0000002B,
-                        Field1 = 0x0000002E,
-                    },
-                    arSnoLevelAreas = new int[4]
-        {
-            0x000316CE, -1, 0x00004DEB, -1, 
-        },
-                    snoPrevWorld = -1,
-                    Field4 = 0x00000000,
-                    snoPrevLevelArea = -1,
-                    snoNextWorld = -1,
-                    Field7 = 0x00000000,
-                    snoNextLevelArea = -1,
-                    snoMusic = 0x00021AF7,
-                    snoCombatMusic = -1,
-                    snoAmbient = 0x0002734F,
-                    snoReverb = 0x000153F6,
-                    snoWeather = 0x00013220,
-                    snoPresetWorld = 0x000115EE,
-                    Field15 = 0x00000000,
-                    Field16 = 0x00000000,
-                    Field17 = 0x00000000,
-                    Field18 = -1,
-                    tCachedValues = new SceneCachedValues()
-                    {
-                        Field0 = 0x0000003F,
-                        Field1 = 0x00000060,
-                        Field2 = 0x00000060,
-                        Field3 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                Field0 = 119.8279f,
-                                Field1 = 126.4012f,
-                                Field2 = 36.26942f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 130.6345f,
-                                Field1 = 128.5111f,
-                                Field2 = 40.50302f,
-                            },
-                        },
-                        Field4 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                Field0 = 122.8899f,
-                                Field1 = 126.4012f,
-                                Field2 = 36.26942f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 133.6965f,
-                                Field1 = 128.5111f,
-                                Field2 = 40.50302f,
-                            },
-                        },
-                        Field5 = new int[4]
-            {
-                0x00000315, 0x00000000, 0x0000009B, 0x00000000, 
-            },
-                        Field6 = 0x00000009,
-                    },
-                },
-                Field2 = 0x77540000,
-                snoScene = 0x00008243,
-                Field4 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
-                        },
-                    },
-                    Field1 = new Vector3D()
-                    {
-                        Field0 = 2580f,
-                        Field1 = 2760f,
-                        Field2 = 0f,
-                    },
-                },
-                Field5 = -1,
-                snoSceneGroup = -1,
-                arAppliedLabels = new int[0]
-    {
-    },
-            });
-
-            SendMessage(new MapRevealSceneMessage()
-            {
-                Id = 0x0044,
-                Field0 = 0x77540000,
-                snoScene = 0x00008243,
-                Field2 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
-                        },
-                    },
-                    Field1 = new Vector3D()
-                    {
-                        Field0 = 2580f,
-                        Field1 = 2760f,
-                        Field2 = 0f,
-                    },
-                },
-                Field3 = 0x772E0000,
-                Field4 = 0x00000002,
-            });
-
-            SendMessage(new RevealSceneMessage()
-            {
-                Id = 0x0034,
-                Field0 = 0x772E0000,
-                Field1 = new SceneSpecification()
-                {
-                    Field0 = 0x00000000,
-                    Field1 = new IVector2D()
-                    {
-                        Field0 = 0x0000002F,
-                        Field1 = 0x0000002A,
-                    },
-                    arSnoLevelAreas = new int[4]
-        {
-            0x00004DEB, -1, -1, -1, 
-        },
-                    snoPrevWorld = -1,
-                    Field4 = 0x00000000,
-                    snoPrevLevelArea = -1,
-                    snoNextWorld = -1,
-                    Field7 = 0x00000000,
-                    snoNextLevelArea = -1,
-                    snoMusic = 0x000206F8,
-                    snoCombatMusic = -1,
-                    snoAmbient = 0x0002734F,
-                    snoReverb = 0x000153F6,
-                    snoWeather = 0x00013220,
-                    snoPresetWorld = 0x000115EE,
-                    Field15 = 0x00000036,
-                    Field16 = 0x00000036,
-                    Field17 = 0x00000000,
-                    Field18 = 0x00000017,
-                    tCachedValues = new SceneCachedValues()
-                    {
-                        Field0 = 0x0000003F,
-                        Field1 = 0x00000060,
-                        Field2 = 0x00000060,
-                        Field3 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                Field0 = 120.0193f,
-                                Field1 = 126.4575f,
-                                Field2 = 27.89188f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 128.8389f,
-                                Field1 = 133.2742f,
-                                Field2 = 41.33233f,
-                            },
-                        },
-                        Field4 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                Field0 = 120.0193f,
-                                Field1 = 126.4575f,
-                                Field2 = 26.40827f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 128.8389f,
-                                Field1 = 133.2742f,
-                                Field2 = 42.81593f,
-                            },
-                        },
-                        Field5 = new int[4]
-            {
-                0x0000093A, 0x00000000, 0x00000000, 0x00000000, 
-            },
-                        Field6 = 0x00000009,
-                    },
-                },
-                Field2 = 0x778A0036,
-                snoScene = 0x0000823E,
-                Field4 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
-                        },
-                    },
-                    Field1 = new Vector3D()
-                    {
-                        Field0 = 2820f,
-                        Field1 = 2520f,
-                        Field2 = 0f,
-                    },
-                },
-                Field5 = -1,
-                snoSceneGroup = -1,
-                arAppliedLabels = new int[0]
-    {
-    },
-            });
-
-            SendMessage(new MapRevealSceneMessage()
-            {
-                Id = 0x0044,
-                Field0 = 0x778A0036,
-                snoScene = 0x0000823E,
-                Field2 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
-                        },
-                    },
-                    Field1 = new Vector3D()
-                    {
-                        Field0 = 2820f,
-                        Field1 = 2520f,
-                        Field2 = 0f,
-                    },
-                },
-                Field3 = 0x772E0000,
-                Field4 = 0x00000002,
-            });
-
-            SendMessage(new RevealSceneMessage()
-            {
-                Id = 0x0034,
-                Field0 = 0x772E0000,
-                Field1 = new SceneSpecification()
-                {
-                    Field0 = 0x00000000,
-                    Field1 = new IVector2D()
-                    {
-                        Field0 = 0x00000033,
-                        Field1 = 0x0000002A,
-                    },
-                    arSnoLevelAreas = new int[4]
-        {
-            0x00004DEB, -1, -1, -1, 
-        },
-                    snoPrevWorld = -1,
-                    Field4 = 0x00000000,
-                    snoPrevLevelArea = -1,
-                    snoNextWorld = -1,
-                    Field7 = 0x00000000,
-                    snoNextLevelArea = -1,
-                    snoMusic = 0x000206F8,
-                    snoCombatMusic = -1,
-                    snoAmbient = 0x0002734F,
-                    snoReverb = 0x000153F6,
-                    snoWeather = 0x00013220,
-                    snoPresetWorld = 0x000115EE,
-                    Field15 = 0x0000003C,
-                    Field16 = 0x0000003C,
-                    Field17 = 0x00000000,
-                    Field18 = -1,
-                    tCachedValues = new SceneCachedValues()
-                    {
-                        Field0 = 0x0000003F,
-                        Field1 = 0x00000060,
-                        Field2 = 0x00000060,
-                        Field3 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                Field0 = 112.136f,
-                                Field1 = 122.7885f,
-                                Field2 = 19.60409f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 127.8643f,
-                                Field1 = 122.7885f,
-                                Field2 = 35.97958f,
-                            },
-                        },
-                        Field4 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                Field0 = 112.136f,
-                                Field1 = 122.7885f,
-                                Field2 = 19.60409f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 127.8643f,
-                                Field1 = 122.7885f,
-                                Field2 = 35.97958f,
-                            },
-                        },
-                        Field5 = new int[4]
-            {
-                0x000000CF, 0x00000000, 0x00000000, 0x00000000, 
-            },
-                        Field6 = 0x00000009,
-                    },
-                },
-                Field2 = 0x7790003C,
-                snoScene = 0x0000823F,
-                Field4 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
-                        },
-                    },
-                    Field1 = new Vector3D()
-                    {
-                        Field0 = 3060f,
-                        Field1 = 2520f,
-                        Field2 = 0f,
-                    },
-                },
-                Field5 = -1,
-                snoSceneGroup = -1,
-                arAppliedLabels = new int[0]
-    {
-    },
-            });
-
-            SendMessage(new MapRevealSceneMessage()
-            {
-                Id = 0x0044,
-                Field0 = 0x7790003C,
-                snoScene = 0x0000823F,
-                Field2 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
-                        },
-                    },
-                    Field1 = new Vector3D()
-                    {
-                        Field0 = 3060f,
-                        Field1 = 2520f,
-                        Field2 = 0f,
-                    },
-                },
-                Field3 = 0x772E0000,
-                Field4 = 0x00000002,
-            });
-
-            SendMessage(new RevealSceneMessage()
-            {
-                Id = 0x0034,
-                Field0 = 0x772E0000,
-                Field1 = new SceneSpecification()
-                {
-                    Field0 = 0x00000000,
-                    Field1 = new IVector2D()
-                    {
-                        Field0 = 0x00000033,
-                        Field1 = 0x00000026,
-                    },
-                    arSnoLevelAreas = new int[4]
-        {
-            -1, -1, -1, -1, 
-        },
-                    snoPrevWorld = -1,
-                    Field4 = -1,
-                    snoPrevLevelArea = -1,
-                    snoNextWorld = -1,
-                    Field7 = -1,
-                    snoNextLevelArea = -1,
-                    snoMusic = 0x000206F8,
-                    snoCombatMusic = -1,
-                    snoAmbient = 0x0002734F,
-                    snoReverb = 0x000153F6,
-                    snoWeather = 0x0000C575,
-                    snoPresetWorld = 0x000115EE,
-                    Field15 = 0x00000089,
-                    Field16 = 0x00000089,
-                    Field17 = 0x00000000,
-                    Field18 = -1,
-                    tCachedValues = new SceneCachedValues()
-                    {
-                        Field0 = 0x0000003F,
-                        Field1 = 0x00000060,
-                        Field2 = 0x00000060,
-                        Field3 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                Field0 = 119.9998f,
-                                Field1 = 120.0008f,
-                                Field2 = -6.470332f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 120.0005f,
-                                Field1 = 120.0008f,
-                                Field2 = 6.970119f,
-                            },
-                        },
-                        Field4 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                Field0 = 119.9998f,
-                                Field1 = 120.0008f,
-                                Field2 = -6.470333f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 120.0005f,
-                                Field1 = 120.0008f,
-                                Field2 = 6.97012f,
-                            },
-                        },
-                        Field5 = new int[4]
-            {
-                0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-            },
-                        Field6 = 0x00000001,
-                    },
-                },
-                Field2 = 0x77DD0089,
-                snoScene = 0x0000823A,
-                Field4 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
-                        },
-                    },
-                    Field1 = new Vector3D()
-                    {
-                        Field0 = 3060f,
-                        Field1 = 2280f,
-                        Field2 = 0f,
-                    },
-                },
-                Field5 = -1,
-                snoSceneGroup = -1,
-                arAppliedLabels = new int[0]
-    {
-    },
-            });
-
-            SendMessage(new MapRevealSceneMessage()
-            {
-                Id = 0x0044,
-                Field0 = 0x77DD0089,
-                snoScene = 0x0000823A,
-                Field2 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
-                        },
-                    },
-                    Field1 = new Vector3D()
-                    {
-                        Field0 = 3060f,
-                        Field1 = 2280f,
-                        Field2 = 0f,
-                    },
-                },
-                Field3 = 0x772E0000,
-                Field4 = 0x00000000,
-            });
-
-            SendMessage(new RevealSceneMessage()
-            {
-                Id = 0x0034,
-                Field0 = 0x772E0000,
-                Field1 = new SceneSpecification()
-                {
-                    Field0 = 0x00000000,
-                    Field1 = new IVector2D()
-                    {
-                        Field0 = 0x0000002F,
-                        Field1 = 0x0000002E,
-                    },
-                    arSnoLevelAreas = new int[4]
-        {
-            0x00004DEB, 0x00026186, 0x000316CE, -1, 
-        },
-                    snoPrevWorld = -1,
-                    Field4 = 0x00000000,
-                    snoPrevLevelArea = -1,
-                    snoNextWorld = -1,
-                    Field7 = 0x00000000,
-                    snoNextLevelArea = -1,
-                    snoMusic = 0x000206F8,
-                    snoCombatMusic = -1,
-                    snoAmbient = 0x0002734F,
-                    snoReverb = 0x000153F6,
-                    snoWeather = 0x00013220,
-                    snoPresetWorld = 0x000115EE,
-                    Field15 = 0x00000001,
-                    Field16 = 0x00000001,
-                    Field17 = 0x00000000,
-                    Field18 = -1,
-                    tCachedValues = new SceneCachedValues()
-                    {
-                        Field0 = 0x0000003F,
-                        Field1 = 0x00000060,
-                        Field2 = 0x00000060,
-                        Field3 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                Field0 = 118.3843f,
-                                Field1 = 119.1316f,
-                                Field2 = 43.57133f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 134.2307f,
-                                Field1 = 131.5811f,
-                                Field2 = 43.57133f,
-                            },
-                        },
-                        Field4 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                Field0 = 113.465f,
-                                Field1 = 119.1316f,
-                                Field2 = 43.57133f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 139.15f,
-                                Field1 = 131.5811f,
-                                Field2 = 43.57133f,
-                            },
-                        },
-                        Field5 = new int[4]
-            {
-                0x0000083F, 0x00000371, 0x000001ED, 0x00000000, 
-            },
-                        Field6 = 0x00000009,
-                    },
-                },
-                Field2 = 0x77550001,
-                snoScene = 0x00008244,
-                Field4 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
-                        },
-                    },
-                    Field1 = new Vector3D()
-                    {
-                        Field0 = 2820f,
-                        Field1 = 2760f,
-                        Field2 = 0f,
-                    },
-                },
-                Field5 = -1,
-                snoSceneGroup = -1,
-                arAppliedLabels = new int[1]
-    {
-        0x00360E26, 
-    },
-            });
-
-            SendMessage(new MapRevealSceneMessage()
-            {
-                Id = 0x0044,
-                Field0 = 0x77550001,
-                snoScene = 0x00008244,
-                Field2 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
-                        },
-                    },
-                    Field1 = new Vector3D()
-                    {
-                        Field0 = 2820f,
-                        Field1 = 2760f,
-                        Field2 = 0f,
-                    },
-                },
-                Field3 = 0x772E0000,
-                Field4 = 0x00000002,
-            });            
-            */
-            #endregion
-
-            Console.WriteLine("Positioning character at " + posx + " " + posy + " " + posz);
+            Console.WriteLine("Positioning character at " + GameWorld.posx + " " + GameWorld.posy + " " + GameWorld.posz);
 
             #region ACDEnterKnown 0x789E00E2 PlayerId??
             SendMessage(new ACDEnterKnownMessage()
@@ -1524,12 +525,12 @@ namespace D3Sharp.Net.Game
                         },
                         Field1 = new Vector3D()
                         {
-                            Field0 = posx,
-                            Field1 = posy,
-                            Field2 = posz,
+                            Field0 = GameWorld.posx,
+                            Field1 = GameWorld.posy,
+                            Field2 = GameWorld.posz,
                         },
                     },
-                    Field2 = 0x772E0000,
+                    Field2 = GameWorld.WorldID,
                 },
                 Field5 = null,
                 Field6 = new GBHandle()
@@ -1559,7 +560,7 @@ namespace D3Sharp.Net.Game
          new NetAttributeKeyValue()
          {
             Attribute = GameAttribute.Attributes[0x01F8], // SkillKit 
-            Int = 0x00008AFA,
+            Int = BnetClient.CurrentToon.SkillKit,
             Float = 0f,
          },
          new NetAttributeKeyValue()
@@ -5233,8 +4234,8 @@ namespace D3Sharp.Net.Game
             SendMessage(new RevealSceneMessage()
             {
                 Id = 0x0034,
-                Field0 = 0x772E0000,
-                Field1 = new SceneSpecification()
+                WorldID = 0x772E0000,
+                SceneSpec = new SceneSpecification()
                 {
                     Field0 = 0x00000000,
                     Field1 = new IVector2D()
@@ -5304,9 +4305,9 @@ namespace D3Sharp.Net.Game
                         Field6 = 0x00000009,
                     },
                 },
-                Field2 = 0x77550001,
+                ChunkID = 0x77550001,
                 snoScene = 0x00008244,
-                Field4 = new PRTransform()
+                Position = new PRTransform()
                 {
                     Field0 = new Quaternion()
                     {
@@ -5325,7 +4326,7 @@ namespace D3Sharp.Net.Game
                         Field2 = 0f,
                     },
                 },
-                Field5 = -1,
+                ParentChunkID = -1,
                 snoSceneGroup = -1,
                 arAppliedLabels = new int[1]
     {
@@ -5336,7 +4337,7 @@ namespace D3Sharp.Net.Game
             SendMessage(new MapRevealSceneMessage()
             {
                 Id = 0x0044,
-                Field0 = 0x77550001,
+                ChunkID = 0x77550001,
                 snoScene = 0x00008244,
                 Field2 = new PRTransform()
                 {
@@ -5358,7 +4359,7 @@ namespace D3Sharp.Net.Game
                     },
                 },
                 Field3 = 0x772E0000,
-                Field4 = 0x00000002,
+                MiniMapVisibility = 0x00000002,
             });
             #endregion
             #region ACDEnterKnown 0x77BC0000
@@ -8266,7 +7267,9 @@ namespace D3Sharp.Net.Game
             });
 
             FlushOutgoingBuffer();
+
         }
+
         public void OnMessage(SimpleMessage msg)
         {
             switch (msg.Id)
@@ -8533,7 +7536,7 @@ namespace D3Sharp.Net.Game
                                     Field1 = 2828.75f,
                                     Field2 = 59.07559f,
                                 },
-                                Field1 = 0x772E0000,
+                                Field1 = GameWorld.WorldID,
                             },
                             Field3 = 0x00000000,
                             Field4 = 0x00026186,
@@ -8553,11 +7556,25 @@ namespace D3Sharp.Net.Game
                         FlushOutgoingBuffer();
                     }
                     break;
+                case 0x0028: // Logout complete (sent when delay timer expires on client side)
+                    if (IsLoggingOut)
+                    {
+                        SendMessageNow(new QuitGameMessage()
+                        {
+                            Id = 0x0003,
+                            // Field0 - quit reason?
+                            // 0 - logout
+                            // 1 - kicked by party leader
+                            // 2 - disconnected due to client-server (version?) missmatch
+                            Field0 = 0,
+                        });
+                    }
+                    break;
                 default:
                     throw new NotImplementedException();
             }
-
         }
+
         public void OnMessage(GameSetupMessage msg)
         {
             throw new NotImplementedException();
@@ -8714,6 +7731,8 @@ namespace D3Sharp.Net.Game
         {
             if (msg.Field1 != null)
                 position = msg.Field1;
+
+            position_angle = msg.Field2;
 
             List<TempMob> newtemps = new List<TempMob>();
             var curtime = DateTime.Now;
@@ -8974,14 +7993,28 @@ namespace D3Sharp.Net.Game
         {
             throw new NotImplementedException();
         }
+
         public void OnMessage(LogoutContextMessage msg)
         {
-            throw new NotImplementedException();
+            IsLoggingOut = !IsLoggingOut;
+
+            if (IsLoggingOut)
+            {
+                SendMessageNow(new LogoutTickTimeMessage()
+                {
+                    Id = 0x0027,
+                    Field0 = false, // true - logout with party?
+                    Field1 = 600, // delay 1, make this equal to 0 for instant logout
+                    Field2 = 600, // delay 2
+                });
+            }
         }
-        public void OnMessage(LogoutTickTimeMessage msg)
+
+        public void OnMessage(LogoutTickTimeMessage msg) // this is probably server->client opcode only, no handler needed
         {
             throw new NotImplementedException();
         }
+
         public void OnMessage(TargetMessage msg)
         {
             if (msg.Field1 == 0x77F20036)
@@ -9028,7 +8061,7 @@ namespace D3Sharp.Net.Game
                     spos.Field0 = position.Field0 + ((mob.pos.Field0 - position.Field0) * (step * 0.10f));
                     spos.Field1 = position.Field1 + ((mob.pos.Field1 - position.Field1) * (step * 0.10f));
                     spos.Field2 = position.Field2 + ((mob.pos.Field2 - position.Field2) * (step * 0.10f));
-                    SpawnTempObject(166619, spos, 2000);
+                    SpawnTempObject(99063, spos);
                     foreach (Mob emob in objectsSpawned)
                     {
                         if (Math.Abs(emob.pos.Field0 - spos.Field0) < 6f &&
@@ -9049,9 +8082,7 @@ namespace D3Sharp.Net.Game
                 FlushOutgoingBuffer();
 
                 System.Threading.Thread.Sleep(400);
-
-                //SpawnMob(86790, mob.pos.Field0, mob.pos.Field1, mob.pos.Field2);
-                
+                                
                 foreach (Mob emob in objectsSpawned)
                 {
                     if (Math.Abs(emob.pos.Field0 - mob.pos.Field0) < 10f &&
@@ -9078,14 +8109,14 @@ namespace D3Sharp.Net.Game
                 return;
             }
 
-            //var mdzq = new System.Net.Sockets.TcpClient("localhost", 19991);
-            //var query = mdzq.GetStream().ReadString(1000);
-            //mdzq.Close();
-            //var mymobs = query.Split(',').Select(s => int.Parse(s));
+            var mdzq = new System.Net.Sockets.TcpClient("localhost", 19991);
+            var query = mdzq.GetStream().ReadString(1000);
+            mdzq.Close();
+            var mymobs = query.Split(',').Select(s => int.Parse(s));
 
-            List<int> mymobs = new List<int>();
-            for (int n = 0; n < 10; ++n)
-                mymobs.Add(mobs[active_mob_index]);
+            //List<int> mymobs = new List<int>();
+            //for (int n = 0; n < 10; ++n)
+            //    mymobs.Add(mobs[active_mob_index]);
 
             float x = position.Field0;
             float y = position.Field1;
@@ -9102,7 +8133,7 @@ namespace D3Sharp.Net.Game
                     x -= (float)(rand.NextDouble() * 20);
                     y -= (float)(rand.NextDouble() * 20);
                 }
-                //SpawnMob(mobs[rand.Next(0, mobs.Length)]);
+
                 var vpos = new Vector3D();
                 vpos.Field0 = x;
                 vpos.Field1 = y;
@@ -9378,8 +8409,8 @@ namespace D3Sharp.Net.Game
             SendMessage(new RevealSceneMessage()
             {
                 Id = 0x0034,
-                Field0 = 0x772F0001,
-                Field1 = new SceneSpecification()
+                WorldID = 0x772F0001,
+                SceneSpec = new SceneSpecification()
                 {
                     Field0 = 0x00000000,
                     Field1 = new IVector2D()
@@ -9443,9 +8474,9 @@ namespace D3Sharp.Net.Game
                         Field6 = 0x00000001
                     }
                 },
-                Field2 = 0x78740120,
+                ChunkID = 0x78740120,
                 snoScene = 0x0001AB2F,
-                Field4 = new PRTransform()
+                Position = new PRTransform()
                 {
                     Field0 = new Quaternion()
                     {
@@ -9464,7 +8495,7 @@ namespace D3Sharp.Net.Game
                         Field2 = 0f,
                     }
                 },
-                Field5 = unchecked((int)0xFFFFFFFF),
+                ParentChunkID = unchecked((int)0xFFFFFFFF),
                 snoSceneGroup = unchecked((int)0xFFFFFFFF),
                 arAppliedLabels = new int[0]
 
@@ -9474,7 +8505,7 @@ namespace D3Sharp.Net.Game
             SendMessage(new MapRevealSceneMessage()
             {
                 Id = 0x044,
-                Field0 = 0x78740120,
+                ChunkID = 0x78740120,
                 snoScene = 0x0001AB2F,
                 Field2 = new PRTransform()
                 {
@@ -9496,7 +8527,7 @@ namespace D3Sharp.Net.Game
                     }
                 },
                 Field3 = 0x772F0001,
-                Field4 = 0
+                MiniMapVisibility = 0
             });
             FlushOutgoingBuffer();
 
@@ -9763,7 +8794,7 @@ namespace D3Sharp.Net.Game
             });
         }
 
-        private void SpawnTempObject(int code, Vector3D pos, int timeout_ms = 2000)
+        private void SpawnTempObject(int code, Vector3D pos, float angle = -1.0f /*random*/, int timeout_ms = 2000)
         {
             int nId = code;
 
@@ -10296,7 +9327,6 @@ namespace D3Sharp.Net.Game
                 Field0 = tick - 20,
                 Field1 = tick
             });
-
         }
     }
 }

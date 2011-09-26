@@ -93,11 +93,11 @@ namespace D3Sharp.Core.Toons
                     case ToonClass.Monk:
                         return 0x00000003;
                     case ToonClass.WitchDoctor:
-                        return 0x00000004;
+                        return 0x00000000;
                     case ToonClass.Wizard:
                         return 0x00000001;
                 }
-                return 0x00000001;
+                return 0x00000000;
             }
         }
 
@@ -138,6 +138,27 @@ namespace D3Sharp.Core.Toons
                     }
                 }
                 return 0x0;
+            }
+        }
+
+        public int SkillKit
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x00008AF4;
+                    case ToonClass.DemonHunter:
+                        return 0x00008AFC;
+                    case ToonClass.Monk:
+                        return 0x00008AFA;
+                    case ToonClass.WitchDoctor:
+                        return 0x00008AFF;
+                    case ToonClass.Wizard:
+                        return 0x00008B00;
+                }
+                return 0x00000001;
             }
         }
 

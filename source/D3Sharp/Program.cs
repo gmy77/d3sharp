@@ -42,6 +42,7 @@ namespace D3Sharp
             LogManager.AttachLogTarget(new ConsoleTarget(Level.Trace));
             LogManager.AttachLogTarget(new FileTarget(Level.Trace, "d3sharp-log.txt"));
 
+            PrintBanner();
             PrintLicense();
 
             Logger.Info("D3Sharp v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
@@ -75,6 +76,17 @@ namespace D3Sharp
                 _gameServer.Shutdown();
                 break;
             }
+        }
+
+        private static void PrintBanner()
+        {
+            Console.WriteLine(@"      _  _____       _                         ");
+            Console.WriteLine(@"   __| ||___ /  ___ | |__    __ _  _ __  _ __  ");
+            Console.WriteLine(@"  / _` |  |_ \ / __|| '_ \  / _` || '__|| '_ \ ");
+            Console.WriteLine(@" | (_| | ___) |\__ \| | | || (_| || |   | |_) |");
+            Console.WriteLine(@"  \__,_||____/ |___/|_| |_| \__,_||_|   | .__/ ");
+            Console.WriteLine(@"                                        |_|    ");
+            Console.WriteLine();
         }
 
         private static void PrintLicense()

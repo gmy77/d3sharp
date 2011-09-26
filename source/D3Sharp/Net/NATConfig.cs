@@ -16,15 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace D3Sharp.Net.BNet
+namespace D3Sharp.Net
 {
-    public sealed class Config: Core.Config.Config
+    public sealed class NATConfig: Core.Config.Config
     {
-        public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("BindIP", value); } }
-        public int Port { get { return this.GetInt("Port", 1345); } set { this.Set("Port", value); } }
+        public bool Enabled { get { return this.GetBoolean("Enabled", true); } set { this.Set("Enabled", value); } }
+        public string PublicIP { get { return this.GetString("PublicIP", "0.0.0.0"); } set { this.Set("PublicIP", value); } }
 
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Bnet-Server") { }
+        private static readonly NATConfig _instance = new NATConfig();
+        public static NATConfig Instance { get { return _instance; } }
+        private NATConfig() : base("NAT") { }
     }
 }

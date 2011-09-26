@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Core\Accounts\Account.cs" />
     <Compile Include="Core\Accounts\AccountManager.cs" />
+    <Compile Include="Core\Actors\ActorDB.cs" />
     <Compile Include="Core\Channels\Channel.cs" />
     <Compile Include="Core\Channels\ChannelManager.cs" />
     <Compile Include="Core\Channels\Member.cs" />
@@ -87,6 +88,9 @@
     <Compile Include="Core\Helpers\NotificationTypeHelper.cs" />
     <Compile Include="Core\Items\Item.cs" />
     <Compile Include="Core\Items\ItemTypeGenerator.cs" />
+    <Compile Include="Core\Map\MapChunk.cs" />
+    <Compile Include="Core\Map\World.cs" />
+    <Compile Include="Core\NPC\BasicNPC.cs" />
     <Compile Include="Core\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\OnlinePlayers.cs" />
     <Compile Include="Core\Services\AuthenticationService.cs" />
@@ -129,6 +133,8 @@
     <Compile Include="Net\Game\GameServer.cs" />
     <Compile Include="Net\Game\IGameClient.cs" />
     <Compile Include="Net\IClient.cs" />
+    <Compile Include="Net\NATConfig.cs" />
+    <Compile Include="Net\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Net\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -191,23 +197,96 @@
     <None Include="Assets\Maps\defiledcrypt.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Maps\largetristram.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\Maps\mapinn.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Maps\oldtristram.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\Maps\tristram.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\Maps\weepinghollowbig.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Assets\Maps\001.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\002.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\003.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\004.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\005.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\006.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\007.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\008.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\009.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\010.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\011.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\012.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\013.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\014.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\015.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\016.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\017.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\018.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\019.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\020.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\021.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\022.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\023.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\024.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\025.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\026.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\027.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\ubertristram.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\D3Proto\D3Proto.csproj">
       <Project>{4CC19847-6F24-4453-9E31-126F94308AB9}</Project>
@@ -217,5 +296,8 @@
       <Project>{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}</Project>
       <Name>Gibbed.Helpers</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Net\NAT\" />
   </ItemGroup>
 </Project>
