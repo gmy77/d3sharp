@@ -134,6 +134,8 @@
     <Compile Include="Net\Game\GameServer.cs" />
     <Compile Include="Net\Game\IGameClient.cs" />
     <Compile Include="Net\IClient.cs" />
+    <Compile Include="Net\NATConfig.cs" />
+    <Compile Include="Net\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Net\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -295,5 +297,8 @@
       <Project>{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}</Project>
       <Name>Gibbed.Helpers</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Net\NAT\" />
   </ItemGroup>
 </Project>

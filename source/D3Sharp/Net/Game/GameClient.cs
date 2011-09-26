@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 using System;
 using System.IO;
 using System.Linq;
@@ -54,12 +55,15 @@ namespace D3Sharp.Net.Game
         IList<int> objectIdsSpawned = null;
         Vector3D position;
 
+        private bool IsLoggingOut;
+
         public GameClient(IConnection connection)
         {
             this.Connection = connection;
             _outgoingBuffer.WriteInt(32, 0);
             GameWorld = new World(this);
         }
+
         public void Parse(ConnectionDataEventArgs e)
         {
             //Console.WriteLine(e.Data.Dump());
@@ -92,11 +96,19 @@ namespace D3Sharp.Net.Game
             _incomingBuffer.ConsumeData();
             FlushOutgoingBuffer();
         }
+
         public void SendMessage(GameMessage msg)
         {
             //Logger.LogOutgoing(msg);
             _outgoingBuffer.EncodeMessage(msg);
         }
+        
+        public void SendMessageNow(GameMessage msg)
+        {
+            SendMessage(msg);
+            FlushOutgoingBuffer();
+        }
+
         public void FlushOutgoingBuffer()
         {
             if (_outgoingBuffer.Length > 32)
@@ -105,6 +117,7 @@ namespace D3Sharp.Net.Game
                 Connection.Send(data);
             }
         }
+
         public void OnMessage(JoinBNetGameMessage msg)
         {
             if (msg.Id != 0x000A)
@@ -114,14 +127,13 @@ namespace D3Sharp.Net.Game
             this.BnetClient = Core.Games.GameManager.AvailableGames[(ulong)msg.Field2].Clients.FirstOrDefault();
             if (this.BnetClient != null) this.BnetClient.InGameClient = this;
 
-            SendMessage(new VersionsMessage()
+            SendMessageNow(new VersionsMessage()
             {
                 Id = 0x000D,
                 SNOPackHash = msg.SNOPackHash,
                 ProtocolHash = GameMessage.ImplementedProtocolHash,
                 Version = "0.3.0.7333",
             });
-            FlushOutgoingBuffer();
 
             SendMessage(new ConnectionEstablishedMessage()
             {
@@ -130,6 +142,7 @@ namespace D3Sharp.Net.Game
                 Field1 = 0x4BB91A16,
                 Field2 = msg.SNOPackHash,
             });
+
             SendMessage(new GameSetupMessage()
             {
                 Id = 0x002F,
@@ -7252,6 +7265,7 @@ namespace D3Sharp.Net.Game
             FlushOutgoingBuffer();
 
         }
+
         public void OnMessage(SimpleMessage msg)
         {
             switch (msg.Id)
@@ -7538,11 +7552,25 @@ namespace D3Sharp.Net.Game
                         FlushOutgoingBuffer();
                     }
                     break;
+                case 0x0028: // Logout complete (sent when delay timer expires on client side)
+                    if (IsLoggingOut)
+                    {
+                        SendMessageNow(new QuitGameMessage()
+                        {
+                            Id = 0x0003,
+                            // Field0 - quit reason?
+                            // 0 - logout
+                            // 1 - kicked by party leader
+                            // 2 - disconnected due to client-server (version?) missmatch
+                            Field0 = 0,
+                        });
+                    }
+                    break;
                 default:
                     throw new NotImplementedException();
             }
-
         }
+
         public void OnMessage(GameSetupMessage msg)
         {
             throw new NotImplementedException();
@@ -7936,14 +7964,28 @@ namespace D3Sharp.Net.Game
         {
             throw new NotImplementedException();
         }
+
         public void OnMessage(LogoutContextMessage msg)
         {
-            throw new NotImplementedException();
+            IsLoggingOut = !IsLoggingOut;
+
+            if (IsLoggingOut)
+            {
+                SendMessageNow(new LogoutTickTimeMessage()
+                {
+                    Id = 0x0027,
+                    Field0 = false, // true - logout with party?
+                    Field1 = 600, // delay 1, make this equal to 0 for instant logout
+                    Field2 = 600, // delay 2
+                });
+            }
         }
-        public void OnMessage(LogoutTickTimeMessage msg)
+
+        public void OnMessage(LogoutTickTimeMessage msg) // this is probably server->client opcode only, no handler needed
         {
             throw new NotImplementedException();
         }
+
         public void OnMessage(TargetMessage msg)
         {
             if (msg.Field1 == 0x77F20036)
@@ -8885,7 +8927,6 @@ namespace D3Sharp.Net.Game
                 Field0 = tick - 20,
                 Field1 = tick
             });
-
         }
     }
 }
