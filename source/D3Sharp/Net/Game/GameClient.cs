@@ -3741,51 +3741,55 @@ namespace D3Sharp.Net.Game
                  new HotbarButtonData()
                  {
                      // Left Click
-                    m_snoPower = (int)Skills.Monk.BlindingFlash,
+                    m_snoPower = (int)Skills.DemonHunter.BolaShot,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
                      // Right Click
-                    m_snoPower = (int)Skills.Monk.FistsOfThunder,
+                    m_snoPower = (int)Skills.Barbarian.Whirlwind,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
-                    m_snoPower = -1,
+                     // Unknown - Left-Click Switch ?
+                    m_snoPower = (int)Skills.None,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
-                    m_snoPower = -1,
+                     // Right-Click Switch - Press X ingame
+                    m_snoPower = (int)Skills.None,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
                      // QuickKey 1
-                    m_snoPower = (int)Skills.Monk.FistsOfThunder,
+                    m_snoPower = (int)Skills.DemonHunter.Companion,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
-                    m_snoPower = -1,
+                     // QuickKey 2
+                    m_snoPower = (int)Skills.Monk.ExplodingPalm,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
-                    m_snoPower = -1,
+                     // QuickKey 3
+                    m_snoPower = (int)Skills.WitchDoctor.SpiritWalk,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
                      // QuickKey 4
-                    m_snoPower = (int)Skills.Monk.BlindingFlash,
+                    m_snoPower = (int)Skills.Wizard.Hydra,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
                      // QuickKey 5
-                    m_snoPower = -1,
+                    m_snoPower = (int)Skills.None,
                     m_gbidItem = 0x622256D4,
                  },
             },
