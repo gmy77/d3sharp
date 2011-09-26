@@ -92,15 +92,41 @@ namespace D3Sharp.Core.Services
         }
 
         public override void SendInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, System.Action<bnet.protocol.invitation.SendInvitationResponse> done)
-        {
+        {            
             var invitee = ToonManager.GetToonByLowID(request.TargetId.Low);
-
-            //var invitationInfo = request.GetExtension(bnet.protocol.channel_invitation.SendInvitationRequest.ChannelInvitation); returns all empty, there should be another way..
             Logger.Warn(String.Format("{0} invited {1} to his channel.", Client.CurrentToon.Name, invitee.Name));
+
+
+            // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
+            var extensionBytes = request.UnknownFields.FieldDictionary[105].LengthDelimitedList[0].ToByteArray();
+            var channelInvitationInfo = bnet.protocol.channel_invitation.SendInvitationRequest.ParseFrom(extensionBytes);
+
+            var channelInvitation = bnet.protocol.channel_invitation.Invitation.CreateBuilder()
+                .SetChannelDescription(bnet.protocol.channel.ChannelDescription.CreateBuilder().SetChannelId(channelInvitationInfo.ChannelId).Build())
+                .SetReserved(channelInvitationInfo.Reserved)
+                .SetServiceType(channelInvitationInfo.ServiceType)
+                .SetRejoin(false).Build();
+                
+            var invitation = bnet.protocol.invitation.Invitation.CreateBuilder(); // also need to add creation_time, expiration_time.
+            invitation.SetId(1) // TODO: fix the id
+                .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetToonId(Client.CurrentToon.BnetEntityID).Build())
+                .SetInviterName(Client.CurrentToon.Name)
+                .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetToonId(request.TargetId).Build())
+                .SetInviteeName(invitee.Name)
+                .SetInvitationMessage(request.InvitationMessage)
+                .SetCreationTime(DateTime.Now.ToUnixTime())
+                .SetExpirationTime(DateTime.Now.ToUnixTime() + request.ExpirationTime)
+                .SetExtension(bnet.protocol.channel_invitation.Invitation.ChannelInvitation, channelInvitation);
+
+            var builder = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder()
+                .SetInvitation(invitation);
+
+            done(builder.Build());
         }
 
         public override void SuggestInvitation(Google.ProtocolBuffers.IRpcController controller, SuggestInvitationRequest request, System.Action<bnet.protocol.NoData> done)
         {
+            // "request to join party"
             throw new System.NotImplementedException();
         }
 

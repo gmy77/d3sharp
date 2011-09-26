@@ -951,46 +951,46 @@ namespace D3Sharp.Net.Game
             Field3 = int.Parse(Data[5]);
 
             Field4 = null;
-
-            if (int.Parse(Data[0]) > 0)
-                Field4 = new WorldLocationMessageData()
-                {
-                    Field0 = float.Parse(Data[6], System.Globalization.CultureInfo.InvariantCulture),
-                    Field1 = new PRTransform()
-                    {
-                        Field0 = new Quaternion()
-                        {
-                            Field0 = float.Parse(Data[10], System.Globalization.CultureInfo.InvariantCulture),
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = float.Parse(Data[7], System.Globalization.CultureInfo.InvariantCulture),
-                                Field1 = float.Parse(Data[8], System.Globalization.CultureInfo.InvariantCulture),
-                                Field2 = float.Parse(Data[9], System.Globalization.CultureInfo.InvariantCulture),
-                            },
-                        },
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = float.Parse(Data[11], System.Globalization.CultureInfo.InvariantCulture),
-                            Field1 = float.Parse(Data[12], System.Globalization.CultureInfo.InvariantCulture),
-                            Field2 = float.Parse(Data[13], System.Globalization.CultureInfo.InvariantCulture),
-                        },
-                    },
-                    Field2 = f2, //=int.Parse(Data[14]),
-                };
+            
+            if (int.Parse(Data[0])>0)
+            Field4 = new WorldLocationMessageData()
+             {
+                 Field0 = float.Parse(Data[6], System.Globalization.CultureInfo.InvariantCulture),
+                 Field1 = new PRTransform()
+                 {
+                     Field0 = new Quaternion()
+                     {
+                         Field0 = float.Parse(Data[10], System.Globalization.CultureInfo.InvariantCulture),
+                         Field1 = new Vector3D()
+                         {
+                             Field0 = float.Parse(Data[7], System.Globalization.CultureInfo.InvariantCulture),
+                             Field1 = float.Parse(Data[8], System.Globalization.CultureInfo.InvariantCulture),
+                             Field2 = float.Parse(Data[9], System.Globalization.CultureInfo.InvariantCulture),
+                         },
+                     },
+                     Field1 = new Vector3D()
+                     {
+                         Field0 = float.Parse(Data[11], System.Globalization.CultureInfo.InvariantCulture),
+                         Field1 = float.Parse(Data[12], System.Globalization.CultureInfo.InvariantCulture),
+                         Field2 = float.Parse(Data[13], System.Globalization.CultureInfo.InvariantCulture),
+                     },
+                 },
+                 Field2 = f2, //=int.Parse(Data[14]),
+             };
 
             Field5 = null;
-            if (int.Parse(Data[1]) > 0)
+            if (int.Parse(Data[1])>0)
             {
                 Field5 = new InventoryLocationMessageData()
-                {
-                    Field0 = int.Parse(Data[15]),
-                    Field1 = int.Parse(Data[16]),
-                    Field2 = new IVector2D()
                     {
-                        Field0 = int.Parse(Data[17]),
-                        Field1 = int.Parse(Data[18]),
-                    }
-                };
+                        Field0 = int.Parse(Data[15]),
+                        Field1 = int.Parse(Data[16]),
+                        Field2 = new IVector2D()
+                        {
+                            Field0 = int.Parse(Data[17]),
+                            Field1 = int.Parse(Data[18]),
+                        }
+                    };
             }
 
             Field6 = new GBHandle()
