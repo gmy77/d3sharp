@@ -7539,7 +7539,7 @@ namespace D3Sharp.Net.Game
                         FlushOutgoingBuffer();
                     }
                     break;
-                case 0x0028: // Logout complete
+                case 0x0028: // Logout complete (sent when delay timer expires on client side)
                     if (IsLoggingOut)
                     {
                         SendMessageNow(new QuitGameMessage()
@@ -7964,15 +7964,6 @@ namespace D3Sharp.Net.Game
                     Field0 = false, // true - logout with party?
                     Field1 = 600, // delay 1, make this equal to 0 for instant logout
                     Field2 = 600, // delay 2
-                });
-            }
-            else
-            {
-                // probably not required, need check packet logs
-                SendMessageNow(new LogoutContextMessage()
-                {
-                    Id = 0x0026,
-                    Field0 = true, // no visible difference when changing value of this field
                 });
             }
         }
