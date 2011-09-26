@@ -2,8 +2,8 @@
 {
     public class Skills
     {
-        public int None = -1;
-        public int BasicAttack = 0x00007780;
+        public static int None = -1;
+        public static int BasicAttack = 0x00007780;
 
         public enum Barbarian
         {
