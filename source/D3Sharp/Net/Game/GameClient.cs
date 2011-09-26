@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using D3Sharp.Net.Game;
 using D3Sharp.Core.Map;
 using D3Sharp.Core.Skills;
+using D3Sharp.Core.NPC;
 
 //using Gibbed.Helpers;
 
@@ -46,7 +47,15 @@ namespace D3Sharp.Net.Game
         public World GameWorld;
         public float posx, posy, posz;
         int objectId = 0x78f50114 + 100;
-        int[] mobs = { 5346, 5347, 5350, 5360, 5361, 5362, 5363, 5365, 5387, 5393, 5395, 5397, 5411, 5428, 5432, 5433, 5467 };
+        //int[] mobs = { 5346, 5347, 5350, 5360, 5361, 5362, 5363, 5365, 5387, 5393, 5395, 5397, 5411, 5428, 5432, 5433, 5467 };
+        int[] mobs = { (int)BasicNPC.NPCList.DoomViper, (int)BasicNPC.NPCList.KingLeoricsGhost, (int)BasicNPC.NPCList.Returned,
+                       (int)BasicNPC.NPCList.ReturnedArcher, (int)BasicNPC.NPCList.SerpentMagus, (int)BasicNPC.NPCList.SkeletalArcher,
+                       (int)BasicNPC.NPCList.SkeletalExecutioner, (int)BasicNPC.NPCList.SkeletalWarrior, (int)BasicNPC.NPCList.Skeleton,
+                       (int)BasicNPC.NPCList.SkeletonKing_GhostDeath, (int)BasicNPC.NPCList.SkeletonKing_Ghost, (int)BasicNPC.NPCList.SkeletonKing_GhostAttack,
+                       (int)BasicNPC.NPCList.SkeletonKing_GhostAttack2, (int)BasicNPC.NPCList.SkeletonKing_Normal, (int)BasicNPC.NPCList.Spiderling,
+                       (int)BasicNPC.NPCList.TombGuardian, (int)BasicNPC.NPCList.WrithingDeceiver };
+
+        
 
         Random rand = new Random();
         IList<int> objectIdsSpawned = null;

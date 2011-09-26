@@ -385,5 +385,26 @@ namespace D3Sharp.Core.NPC
             //});
 
         }
+
+        public enum NPCList
+        {
+            SkeletalArcher = 5346,
+            ReturnedArcher = 5347,
+            SkeletonKing_Normal = 5350,
+            SkeletonKing_Ghost = 5360,
+            SkeletonKing_GhostAttack = 5361,
+            SkeletonKing_GhostAttack2 = 5362,
+            SkeletonKing_GhostDeath = 5363,
+            KingLeoricsGhost = 5365,
+            TombGuardian = 5387,
+            Skeleton = 5393,
+            Returned = 5395,
+            SkeletalWarrior = 5397,
+            SkeletalExecutioner = 5411,
+            SerpentMagus = 5428,
+            WrithingDeceiver = 5432,
+            DoomViper = 5433,
+            Spiderling = 5467,
+        }
     }
 }
