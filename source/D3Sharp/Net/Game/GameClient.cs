@@ -25,6 +25,7 @@ using D3Sharp.Utils;
 using System.Collections.Generic;
 using D3Sharp.Net.Game;
 using D3Sharp.Core.Map;
+using D3Sharp.Core.Skills;
 
 //using Gibbed.Helpers;
 
@@ -3739,27 +3740,14 @@ namespace D3Sharp.Net.Game
             {
                  new HotbarButtonData()
                  {
-                    m_snoPower = 0x000176C4,
+                     // Right Click
+                    m_snoPower = (int)Skills.Monk.BlindingFlash,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
-                    m_snoPower = 0x00007780,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                    m_snoPower = -1,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                    m_snoPower = 0x00007780,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                    m_snoPower = 0x000216FA,
+                     // Left Click
+                    m_snoPower = (int)Skills.Monk.FistsOfThunder,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
@@ -3774,11 +3762,29 @@ namespace D3Sharp.Net.Game
                  },
                  new HotbarButtonData()
                  {
+                     // QuickKey 1
+                    m_snoPower = (int)Skills.Monk.FistsOfThunder,
+                    m_gbidItem = -1,
+                 },
+                 new HotbarButtonData()
+                 {
                     m_snoPower = -1,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
+                    m_snoPower = -1,
+                    m_gbidItem = -1,
+                 },
+                 new HotbarButtonData()
+                 {
+                     // QuickKey 4
+                    m_snoPower = (int)Skills.Monk.BlindingFlash,
+                    m_gbidItem = -1,
+                 },
+                 new HotbarButtonData()
+                 {
+                     // QuickKey 5
                     m_snoPower = -1,
                     m_gbidItem = 0x622256D4,
                  },
