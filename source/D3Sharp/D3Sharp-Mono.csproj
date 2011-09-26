@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Core\Accounts\Account.cs" />
     <Compile Include="Core\Accounts\AccountManager.cs" />
+    <Compile Include="Core\Actors\ActorDB.cs" />
     <Compile Include="Core\Channels\Channel.cs" />
     <Compile Include="Core\Channels\ChannelManager.cs" />
     <Compile Include="Core\Channels\Member.cs" />
@@ -87,6 +88,9 @@
     <Compile Include="Core\Helpers\NotificationTypeHelper.cs" />
     <Compile Include="Core\Items\Item.cs" />
     <Compile Include="Core\Items\ItemTypeGenerator.cs" />
+    <Compile Include="Core\Map\MapChunk.cs" />
+    <Compile Include="Core\Map\World.cs" />
+    <Compile Include="Core\NPC\BasicNPC.cs" />
     <Compile Include="Core\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\OnlinePlayers.cs" />
     <Compile Include="Core\Services\AuthenticationService.cs" />
@@ -191,19 +195,7 @@
     <None Include="Assets\Maps\defiledcrypt.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Maps\largetristram.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\Maps\mapinn.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\Maps\oldtristram.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\Maps\tristram.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\Maps\weepinghollowbig.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -287,6 +279,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Maps\027.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Maps\ubertristram.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
