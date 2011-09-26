@@ -9146,7 +9146,7 @@ namespace D3Sharp.Net.Game
         public void OnMessage(InventoryRequestUseMessage msg)
         {
             ++active_mob_index;
-            if (active_mob_index > mobs.Length)
+            if (active_mob_index >= mobs.Length)
             {
                 active_mob_index = 0;
             }
