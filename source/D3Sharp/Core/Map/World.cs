@@ -12,7 +12,7 @@ using D3Sharp.Core.NPC;
 
 namespace D3Sharp.Core.Map
 {
-    public  class World
+    public class World
     {
         private GameClient Game;
         static readonly Logger Logger = LogManager.CreateLogger();
@@ -295,15 +295,19 @@ namespace D3Sharp.Core.Map
 
         public void HandleTarget(int ID)
         {
+            List<BasicNPC> removelist = new List<BasicNPC>();
             foreach (BasicNPC b in NPCs)
             {
                 if (b.ID == ID)
                 {
                     b.Die(0);
-                    NPCs.Remove(b);
+                    removelist.Add(b);
                 }
             }
+            foreach (BasicNPC b in removelist)
+            {
+                NPCs.Remove(b);
+            }
         }
-    
     }
 }
