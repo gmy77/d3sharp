@@ -42,7 +42,7 @@ namespace D3Sharp.Core.Actors
         
         public static bool isMob(int id)
         {
-            for (int x = 0; x < NPCList.Length; x++)
+            for (int x = 0; x < MobList.Length; x++)
                 if (MobList[x] == id) return true;
 
             return false;
