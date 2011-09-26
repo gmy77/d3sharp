@@ -3740,13 +3740,13 @@ namespace D3Sharp.Net.Game
             {
                  new HotbarButtonData()
                  {
-                     // Right Click
+                     // Left Click
                     m_snoPower = (int)Skills.Monk.BlindingFlash,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
-                     // Left Click
+                     // Right Click
                     m_snoPower = (int)Skills.Monk.FistsOfThunder,
                     m_gbidItem = -1,
                  },
