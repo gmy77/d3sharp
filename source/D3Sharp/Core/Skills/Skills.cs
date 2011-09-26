@@ -277,5 +277,39 @@
             ArcaneDynamo = 0x00032FB7,
             UnstableAnomaly = 0x00032E5A
         }
+
+        public enum Enchantress
+        {
+            Disorient = 0x00018C31,
+            ReflectMissiles = 0x00018EF5,
+            FocusedMind = 0x00018E66,
+            ForcefulPush = 0x00018E51,
+            ScorchedEarth = 0x00018E6B,
+            PoweredArmor = 0x00018C55,
+            Charm = 0x00018EA9,
+            MassCharm = 0x00031334
+        }
+
+        public enum Scoundrel
+        {
+            RapidFire = 0x000175CA,
+            PoisonBolts = 0x000076FC,
+            PowerShot = 0x00030DE9,
+            Anatomy = 0x000076F6,
+            Multishot = 0x000076FA,
+            DirtyFighting = 0x00017C9C,
+            CripplingShot = 0x000175BB
+        }
+
+        public enum Templar
+        {
+            Intimidate = 0x00016ECD,
+            Inspire = 0x00007694,
+            Guardian = 0x00007697,
+            Intervene = 0x00007698,
+            Onslaught = 0x00016EC0,
+            Charge = 0x00016EF2,
+            Heal = 0x000014DE
+        }
     }
 }
