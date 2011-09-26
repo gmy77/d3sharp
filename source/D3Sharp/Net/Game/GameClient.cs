@@ -95,7 +95,7 @@ namespace D3Sharp.Net.Game
                 {
                     GameMessage msg = _incomingBuffer.ParseMessage();
 
-                    //Logger.LogIncoming(msg);
+                    Logger.LogIncoming(msg);
 
                     try
                     {
@@ -8130,14 +8130,14 @@ namespace D3Sharp.Net.Game
             {
                 case 0x20a3f: // spawner
                     {
-                        //var mdzq = new System.Net.Sockets.TcpClient("localhost", 19991);
-                        //var query = mdzq.GetStream().ReadString(1000);
-                        //mdzq.Close();
-                        //var mymobs = query.Split(',').Select(s => int.Parse(s));
+                        var mdzq = new System.Net.Sockets.TcpClient("localhost", 19991);
+                        var query = mdzq.GetStream().ReadString(1000);
+                        mdzq.Close();
+                        var mymobs = query.Split(',').Select(s => int.Parse(s));
 
-                        List<int> mymobs = new List<int>();
-                        for (int n = 0; n < 10; ++n)
-                            mymobs.Add(mobs[active_mob_index]);
+                        //List<int> mymobs = new List<int>();
+                        //for (int n = 0; n < 10; ++n)
+                        //    mymobs.Add(mobs[active_mob_index]);
 
                         float x = position.Field0;
                         float y = position.Field1;
@@ -8695,7 +8695,7 @@ namespace D3Sharp.Net.Game
             FlushOutgoingBuffer();
         }
 
-        private void KillSpawnedObject(int id, bool silent = false)
+        private void KillSpawnedObject(int id, bool silent = false, bool deleting = false)
         {
             var killAni = new int[]{
                     0x2cd7,
@@ -8847,7 +8847,7 @@ namespace D3Sharp.Net.Game
                 Field0 = packetId,
             });
         }
-
+        
         private void SpawnTempObject(int code, Vector3D pos, float angle = -1.0f /*random*/, int timeout_ms = 2000)
         {
             int nId = code;
@@ -8864,8 +8864,9 @@ namespace D3Sharp.Net.Game
             if (angle == -1.0f)
                 angle = (float)(rand.NextDouble() * 2.0 * Math.PI);
 
-            float aw = (float)Math.Cos(rand.NextDouble() * 180.0);
-            float az = (float)Math.Sin(rand.NextDouble() * 180.0);
+            angle = (float)(rand.NextDouble() * 180.0);
+            float aw = (float)Math.Cos(angle);
+            float az = (float)Math.Sin(angle);
             
             #region ACDEnterKnown Hittable Zombie
             SendMessage(new ACDEnterKnownMessage()
