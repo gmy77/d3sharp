@@ -141,6 +141,27 @@ namespace D3Sharp.Core.Toons
             }
         }
 
+        public int SkillKit
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x00008AF4;
+                    case ToonClass.DemonHunter:
+                        return 0x00008AFC;
+                    case ToonClass.Monk:
+                        return 0x00008AFA;
+                    case ToonClass.WitchDoctor:
+                        return 0x00008AFF;
+                    case ToonClass.Wizard:
+                        return 0x00008B00;
+                }
+                return 0x00000001;
+            }
+        }
+
         public int Gender
         {
             get {
