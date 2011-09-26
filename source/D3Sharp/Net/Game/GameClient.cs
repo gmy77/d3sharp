@@ -7968,6 +7968,7 @@ namespace D3Sharp.Net.Game
             }
             else
             {
+                // probably not required, need check packet logs
                 SendMessageNow(new LogoutContextMessage()
                 {
                     Id = 0x0026,
