@@ -7546,6 +7546,7 @@ namespace D3Sharp.Net.Game
                         {
                             Id = 0x0003,
                             // Field0 - quit reason?
+                            // 0 - logout
                             // 1 - kicked by party leader
                             // 2 - disconnected due to client-server (version?) missmatch
                             Field0 = 0,
@@ -7961,7 +7962,7 @@ namespace D3Sharp.Net.Game
                 {
                     Id = 0x0027,
                     Field0 = false, // true - logout with party?
-                    Field1 = 600, // delay 1, make this equal to 0 for instant logout or cancel
+                    Field1 = 600, // delay 1, make this equal to 0 for instant logout
                     Field2 = 600, // delay 2
                 });
             }
@@ -7969,7 +7970,7 @@ namespace D3Sharp.Net.Game
             {
                 SendMessageNow(new LogoutContextMessage()
                 {
-                    Field0 = true,
+                    Field0 = true, // no visible difference when changing value of this field
                 });
             }
         }
