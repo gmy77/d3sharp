@@ -35,6 +35,13 @@ namespace D3Sharp.Net.Game
         public int id;
     }
 
+    public class TempMob
+    {
+        public Vector3D pos;
+        public int id;
+        public DateTime timeout;
+    }
+
     public sealed class GameClient : IGameClient, IGameMessageHandler
     {
         static readonly Logger Logger = LogManager.CreateLogger();
@@ -50,10 +57,12 @@ namespace D3Sharp.Net.Game
         int objectId = 0x78f50114 + 100;
         int packetId = 0x227 + 20;
         int tick = 1;
-        int[] mobs = { 5346, 5347, 5350, 5360, 5361, 5362, 5363, 5365, 5387, 5393, 5395, 5397, 5411, 5428, 5432, 5433, 5467 };
+        int active_mob_index = 0;
+        int[] mobs = { 4285, 5346, 5347, 5350, 5360, 5361, 5362, 5363, 5365, 5387, 5393, 5395, 5397, 5411, 5428, 5432, 5433, 5467 };
 
         Random rand = new Random();
         IList<Mob> objectsSpawned = null;
+        IList<TempMob> tempObjects = new List<TempMob>();
         Vector3D position;
 
         public GameClient(IConnection connection)
@@ -76,7 +85,7 @@ namespace D3Sharp.Net.Game
                 {
                     GameMessage msg = _incomingBuffer.ParseMessage();
 
-                    Logger.LogIncoming(msg);
+                    //Logger.LogIncoming(msg);
 
                     try
                     {
@@ -2433,7 +2442,7 @@ namespace D3Sharp.Net.Game
          {
             Attribute = GameAttribute.Attributes[0x0056], // Hitpoints_Max_Total 
             Int = 0x00000000,
-            Float = 76f,
+            Float = 96f,
          },
          new NetAttributeKeyValue()
          {
@@ -8705,6 +8714,29 @@ namespace D3Sharp.Net.Game
         {
             if (msg.Field1 != null)
                 position = msg.Field1;
+
+            List<TempMob> newtemps = new List<TempMob>();
+            var curtime = DateTime.Now;
+            int cleancount = 0;
+            foreach (TempMob m in tempObjects)
+            {
+                if (curtime > m.timeout)
+                {
+                    KillSpawnedObject(m.id, true);
+                    ++cleancount;
+
+                }
+                else
+                {
+                    newtemps.Add(m);
+                }
+            }
+            tempObjects = newtemps;
+
+            if (cleancount > 0)
+            {
+                Logger.Debug("cleaned up {0} temp objects", cleancount);
+            }
         }
         public void OnMessage(ACDTranslateSnappedMessage msg)
         {
@@ -8965,11 +8997,13 @@ namespace D3Sharp.Net.Game
                     switch (msg.Field5)
                     {
                         case 0:
+                            SpawnTempObject(120932, position);
                             break;
                         case 1:
+                            SpawnTempObject(120934, position);
                             break;
                         case 2:
-                            SpawnMob(120932, position.Field0, position.Field1, position.Field2);
+                            SpawnTempObject(137943, position);
                             break;
                         default:
                             Logger.Error("hmm unknown monk kung-fu: {0}", msg.Field5);
@@ -8984,189 +9018,75 @@ namespace D3Sharp.Net.Game
             }
 
             Mob mob = objectsSpawned.First(a => a.id == msg.Field1);
-
-            SpawnMob(185366, mob.pos.Field0, mob.pos.Field1, mob.pos.Field2);
-            FlushOutgoingBuffer();
-
-            System.Threading.Thread.Sleep(400);
-
-            //SpawnMob(86790, mob.pos.Field0, mob.pos.Field1, mob.pos.Field2);
-
             List<Mob> kills = new List<Mob>();
-            foreach (Mob emob in objectsSpawned)
+
+            if (msg.snoPower == 0x7780) // normal attack? make it explosion line!
             {
-                if (Math.Abs(emob.pos.Field0 - mob.pos.Field0) < 10f &&
-                    Math.Abs(emob.pos.Field1 - mob.pos.Field1) < 10f &&
-                    Math.Abs(emob.pos.Field2 - mob.pos.Field2) < 10f)
+                for (int step = 1; step < 10; ++step)
                 {
-                    kills.Add(emob);
+                    var spos = new Vector3D();
+                    spos.Field0 = position.Field0 + ((mob.pos.Field0 - position.Field0) * (step * 0.10f));
+                    spos.Field1 = position.Field1 + ((mob.pos.Field1 - position.Field1) * (step * 0.10f));
+                    spos.Field2 = position.Field2 + ((mob.pos.Field2 - position.Field2) * (step * 0.10f));
+                    SpawnTempObject(166619, spos, 2000);
+                    foreach (Mob emob in objectsSpawned)
+                    {
+                        if (Math.Abs(emob.pos.Field0 - spos.Field0) < 6f &&
+                            Math.Abs(emob.pos.Field1 - spos.Field1) < 6f &&
+                            Math.Abs(emob.pos.Field2 - spos.Field2) < 6f)
+                        {
+                            kills.Add(emob);
+                        }
+                    }
+                    FlushOutgoingBuffer();
+                    System.Threading.Thread.Sleep(100);
+                }
+                kills = kills.GroupBy(m => m.id).Select(m => m.First()).ToList();
+            }
+            else // meteor!!!
+            {
+                SpawnTempObject(185366, mob.pos);
+                FlushOutgoingBuffer();
+
+                System.Threading.Thread.Sleep(400);
+
+                //SpawnMob(86790, mob.pos.Field0, mob.pos.Field1, mob.pos.Field2);
+                
+                foreach (Mob emob in objectsSpawned)
+                {
+                    if (Math.Abs(emob.pos.Field0 - mob.pos.Field0) < 10f &&
+                        Math.Abs(emob.pos.Field1 - mob.pos.Field1) < 10f &&
+                        Math.Abs(emob.pos.Field2 - mob.pos.Field2) < 10f)
+                    {
+                        kills.Add(emob);
+                    }
                 }
             }
 
-            Logger.Error("meteor killing {0} mobs", kills.Count);
+            Logger.Debug("killing {0} mobs", kills.Count);
 
             foreach (Mob x in kills)
             {
-                msg.Field1 = x.id;
+                KillSpawnedObject(x.id);
                 objectsSpawned.Remove(x);
-
-                var killAni = new int[]{
-                    0x2cd7,
-                    0x2cd4,
-                    0x01b378,
-                    0x2cdc,
-                    0x02f2,
-                    0x2ccf,
-                    0x2cd0,
-                    0x2cd1,
-                    0x2cd2,
-                    0x2cd3,
-                    0x2cd5,
-                    0x01b144,
-                    0x2cd6,
-                    0x2cd8,
-                    0x2cda,
-                    0x2cd9
-                };
-                SendMessage(new PlayEffectMessage()
-                {
-                    Id = 0x7a,
-                    Field0 = msg.Field1,
-                    Field1 = 0x0,
-                    Field2 = 0x2,
-                });
-                SendMessage(new PlayEffectMessage()
-                {
-                    Id = 0x7a,
-                    Field0 = msg.Field1,
-                    Field1 = 0xc,
-                });
-                SendMessage(new PlayHitEffectMessage()
-                {
-                    Id = 0x7b,
-                    Field0 = msg.Field1,
-                    Field1 = 0x789E00E2,
-                    Field2 = 0x2,
-                    Field3 = false,
-                });
-
-                SendMessage(new FloatingNumberMessage()
-                {
-                    Id = 0xd0,
-                    Field0 = msg.Field1,
-                    Field1 = 9001.0f,
-                    Field2 = 0,
-                });
-
-                SendMessage(new ANNDataMessage()
-                {
-                    Id = 0x6d,
-                    Field0 = msg.Field1,
-                });
-
-                int ani = killAni[rand.Next(killAni.Length)];
-                Logger.Info("Ani used: " + ani);
-
-                SendMessage(new PlayAnimationMessage()
-                {
-                    Id = 0x6c,
-                    Field0 = msg.Field1,
-                    Field1 = 0xb,
-                    Field2 = 0,
-                    tAnim = new PlayAnimationMessageSpec[1]
-                {
-                    new PlayAnimationMessageSpec()
-                    {
-                        Field0 = 0x2,
-                        Field1 = ani,
-                        Field2 = 0x0,
-                        Field3 = 1f
-                    }
-                }
-                });
-
-                packetId += 10 * 2;
-                SendMessage(new DWordDataMessage()
-                {
-                    Id = 0x89,
-                    Field0 = packetId,
-                });
-
-                SendMessage(new ANNDataMessage()
-                {
-                    Id = 0xc5,
-                    Field0 = msg.Field1,
-                });
-
-                SendMessage(new AttributeSetValueMessage
-                {
-                    Id = 0x4c,
-                    Field0 = msg.Field1,
-                    Field1 = new NetAttributeKeyValue
-                    {
-                        Attribute = GameAttribute.Attributes[0x4d],
-                        Float = 0
-                    }
-                });
-
-                SendMessage(new AttributeSetValueMessage
-                {
-                    Id = 0x4c,
-                    Field0 = msg.Field1,
-                    Field1 = new NetAttributeKeyValue
-                    {
-                        Attribute = GameAttribute.Attributes[0x1c2],
-                        Int = 1
-                    }
-                });
-
-                SendMessage(new AttributeSetValueMessage
-                {
-                    Id = 0x4c,
-                    Field0 = msg.Field1,
-                    Field1 = new NetAttributeKeyValue
-                    {
-                        Attribute = GameAttribute.Attributes[0x1c5],
-                        Int = 1
-                    }
-                });
-                SendMessage(new PlayEffectMessage()
-                {
-                    Id = 0x7a,
-                    Field0 = msg.Field1,
-                    Field1 = 0xc,
-                });
-                SendMessage(new PlayEffectMessage()
-                {
-                    Id = 0x7a,
-                    Field0 = msg.Field1,
-                    Field1 = 0x37,
-                });
-                SendMessage(new PlayHitEffectMessage()
-                {
-                    Id = 0x7b,
-                    Field0 = msg.Field1,
-                    Field1 = 0x789E00E2,
-                    Field2 = 0x2,
-                    Field3 = false,
-                });
-                packetId += 10 * 2;
-                SendMessage(new DWordDataMessage()
-                {
-                    Id = 0x89,
-                    Field0 = packetId,
-                });
             }
         }
         public void OnMessage(SecondaryAnimationPowerMessage msg)
         {
+            if (position == null)
+            {
+                return;
+            }
+
             //var mdzq = new System.Net.Sockets.TcpClient("localhost", 19991);
             //var query = mdzq.GetStream().ReadString(1000);
             //mdzq.Close();
             //var mymobs = query.Split(',').Select(s => int.Parse(s));
-            int[] mymobs = { 6653, 6653, 6653, 6653, 6653, 6653, 6653, 6653, 6653, 6653 };
 
-            //for (var i = 0; i < 1; i++)
+            List<int> mymobs = new List<int>();
+            for (int n = 0; n < 10; ++n)
+                mymobs.Add(mobs[active_mob_index]);
+
             float x = position.Field0;
             float y = position.Field1;
             int i = 0;
@@ -9183,7 +9103,11 @@ namespace D3Sharp.Net.Game
                     y -= (float)(rand.NextDouble() * 20);
                 }
                 //SpawnMob(mobs[rand.Next(0, mobs.Length)]);
-                SpawnMob(mobid, x, y, position.Field2);
+                var vpos = new Vector3D();
+                vpos.Field0 = x;
+                vpos.Field1 = y;
+                vpos.Field2 = position.Field2;
+                SpawnMob(mobid, vpos);
                 ++i;
             }
         }
@@ -9221,7 +9145,11 @@ namespace D3Sharp.Net.Game
         }
         public void OnMessage(InventoryRequestUseMessage msg)
         {
-            throw new NotImplementedException();
+            ++active_mob_index;
+            if (active_mob_index > mobs.Length)
+            {
+                active_mob_index = 0;
+            }
         }
         public void OnMessage(SocketSpellMessage msg)
         {
@@ -9681,15 +9609,431 @@ namespace D3Sharp.Net.Game
             });
             FlushOutgoingBuffer();
         }
-        private void SpawnMob(int mobId, float x, float y, float z)
+
+        private void KillSpawnedObject(int id, bool silent = false)
+        {
+            var killAni = new int[]{
+                    0x2cd7,
+                    0x2cd4,
+                    0x01b378,
+                    0x2cdc,
+                    0x02f2,
+                    0x2ccf,
+                    0x2cd0,
+                    0x2cd1,
+                    0x2cd2,
+                    0x2cd3,
+                    0x2cd5,
+                    0x01b144,
+                    0x2cd6,
+                    0x2cd8,
+                    0x2cda,
+                    0x2cd9
+                };
+            SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = id,
+                Field1 = 0x0,
+                Field2 = 0x2,
+            });
+            SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = id,
+                Field1 = 0xc,
+            });
+            SendMessage(new PlayHitEffectMessage()
+            {
+                Id = 0x7b,
+                Field0 = id,
+                Field1 = 0x789E00E2,
+                Field2 = 0x2,
+                Field3 = false,
+            });
+
+            if (!silent)
+            {
+                SendMessage(new FloatingNumberMessage()
+                {
+                    Id = 0xd0,
+                    Field0 = id,
+                    Field1 = 9001.0f,
+                    Field2 = 0,
+                });
+            }
+
+            SendMessage(new ANNDataMessage()
+            {
+                Id = 0x6d,
+                Field0 = id,
+            });
+
+            int ani = killAni[rand.Next(killAni.Length)];
+            Logger.Info("Ani used: " + ani);
+
+            SendMessage(new PlayAnimationMessage()
+            {
+                Id = 0x6c,
+                Field0 = id,
+                Field1 = 0xb,
+                Field2 = 0,
+                tAnim = new PlayAnimationMessageSpec[1]
+                {
+                    new PlayAnimationMessageSpec()
+                    {
+                        Field0 = 0x2,
+                        Field1 = ani,
+                        Field2 = 0x0,
+                        Field3 = 1f
+                    }
+                }
+            });
+
+            packetId += 10 * 2;
+            SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = packetId,
+            });
+
+            SendMessage(new ANNDataMessage()
+            {
+                Id = 0xc5,
+                Field0 = id,
+            });
+
+            SendMessage(new AttributeSetValueMessage
+            {
+                Id = 0x4c,
+                Field0 = id,
+                Field1 = new NetAttributeKeyValue
+                {
+                    Attribute = GameAttribute.Attributes[0x4d],
+                    Float = 0
+                }
+            });
+
+            SendMessage(new AttributeSetValueMessage
+            {
+                Id = 0x4c,
+                Field0 = id,
+                Field1 = new NetAttributeKeyValue
+                {
+                    Attribute = GameAttribute.Attributes[0x1c2],
+                    Int = 1
+                }
+            });
+
+            SendMessage(new AttributeSetValueMessage
+            {
+                Id = 0x4c,
+                Field0 = id,
+                Field1 = new NetAttributeKeyValue
+                {
+                    Attribute = GameAttribute.Attributes[0x1c5],
+                    Int = 1
+                }
+            });
+            SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = id,
+                Field1 = 0xc,
+            });
+            SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = id,
+                Field1 = 0x37,
+            });
+            SendMessage(new PlayHitEffectMessage()
+            {
+                Id = 0x7b,
+                Field0 = id,
+                Field1 = 0x789E00E2,
+                Field2 = 0x2,
+                Field3 = false,
+            });
+            packetId += 10 * 2;
+            SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = packetId,
+            });
+        }
+
+        private void SpawnTempObject(int code, Vector3D pos, int timeout_ms = 2000)
+        {
+            int nId = code;
+
+            TempMob mob = new TempMob();
+            mob.pos = pos;
+            mob.timeout = DateTime.Now.AddMilliseconds(timeout_ms);
+            
+            objectId++;
+            mob.id = objectId;
+            tempObjects.Add(mob);
+
+            #region ACDEnterKnown Hittable Zombie
+            SendMessage(new ACDEnterKnownMessage()
+            {
+                Id = 0x003B,
+                Field0 = objectId,
+                Field1 = nId,
+                Field2 = 0x8,
+                Field3 = 0x0,
+                Field4 = new WorldLocationMessageData()
+                {
+                    Field0 = 1.35f,
+                    Field1 = new PRTransform()
+                    {
+                        Field0 = new Quaternion()
+                        {
+                            Field0 = 0.768145f,
+                            Field1 = new Vector3D()
+                            {
+                                Field0 = 0f,
+                                Field1 = 0f,
+                                Field2 = -0.640276f,
+                            },
+                        },
+                        Field1 = new Vector3D()
+                        {
+                            Field0 = pos.Field0 + 5,
+                            Field1 = pos.Field1 + 5,
+                            Field2 = pos.Field2,
+                        },
+                    },
+                    Field2 = 0x772E0000,
+                },
+                Field5 = null,
+                Field6 = new GBHandle()
+                {
+                    Field0 = 1,
+                    Field1 = 1,
+                },
+                Field7 = 0x00000001,
+                Field8 = nId,
+                Field9 = 0x0,
+                Field10 = 0x0,
+                Field11 = 0x0,
+                Field12 = 0x0,
+                Field13 = 0x0
+            });
+            SendMessage(new AffixMessage()
+            {
+                Id = 0x48,
+                Field0 = objectId,
+                Field1 = 0x1,
+                aAffixGBIDs = new int[0]
+            });
+            SendMessage(new AffixMessage()
+            {
+                Id = 0x48,
+                Field0 = objectId,
+                Field1 = 0x2,
+                aAffixGBIDs = new int[0]
+            });
+            SendMessage(new ACDCollFlagsMessage
+            {
+                Id = 0xa6,
+                Field0 = objectId,
+                Field1 = 0x1
+            });
+
+            //SendMessage(new AttributesSetValuesMessage
+            //{
+            //    Id = 0x4d,
+            //    Field0 = objectId,
+            //    atKeyVals = new NetAttributeKeyValue[15] {
+            //        new NetAttributeKeyValue {
+            //            Attribute = GameAttribute.Attributes[214],
+            //            Int = 0
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Attribute = GameAttribute.Attributes[464],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 1048575,
+            //            Attribute = GameAttribute.Attributes[441],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 30582,
+            //            Attribute = GameAttribute.Attributes[560],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 30286,
+            //            Attribute = GameAttribute.Attributes[560],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 30285,
+            //            Attribute = GameAttribute.Attributes[560],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 30284,
+            //            Attribute = GameAttribute.Attributes[560],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 30283,
+            //            Attribute = GameAttribute.Attributes[560],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 30290,
+            //            Attribute = GameAttribute.Attributes[560],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 79486,
+            //            Attribute = GameAttribute.Attributes[560],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 30286,
+            //            Attribute = GameAttribute.Attributes[460],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 30285,
+            //            Attribute = GameAttribute.Attributes[460],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 30284,
+            //            Attribute = GameAttribute.Attributes[460],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 30283,
+            //            Attribute = GameAttribute.Attributes[460],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 30290,
+            //            Attribute = GameAttribute.Attributes[460],
+            //            Int = 1
+            //        }
+            //    }
+
+            //});
+
+            //SendMessage(new AttributesSetValuesMessage
+            //{
+            //    Id = 0x4d,
+            //    Field0 = objectId,
+            //    atKeyVals = new NetAttributeKeyValue[9] {
+            //        new NetAttributeKeyValue {
+            //            Attribute = GameAttribute.Attributes[86],
+            //            Float = 4.546875f
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 79486,
+            //            Attribute = GameAttribute.Attributes[460],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Attribute = GameAttribute.Attributes[84],
+            //            Float = 4.546875f
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Attribute = GameAttribute.Attributes[81],
+            //            Int = 0
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Attribute = GameAttribute.Attributes[77],
+            //            Float = 4.546875f
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Attribute = GameAttribute.Attributes[69],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Field0 = 30582,
+            //            Attribute = GameAttribute.Attributes[460],
+            //            Int = 1
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Attribute = GameAttribute.Attributes[67],
+            //            Int = 10
+            //        },
+            //        new NetAttributeKeyValue {
+            //            Attribute = GameAttribute.Attributes[38],
+            //            Int = 1
+            //        }
+            //    }
+
+            //});
+
+
+            SendMessage(new ACDGroupMessage
+            {
+                Id = 0xb8,
+                Field0 = objectId,
+                Field1 = unchecked((int)0xb59b8de4),
+                Field2 = unchecked((int)0xffffffff)
+            });
+
+            SendMessage(new ANNDataMessage
+            {
+                Id = 0x3e,
+                Field0 = objectId
+            });
+
+            SendMessage(new ACDTranslateFacingMessage
+            {
+                Id = 0x70,
+                Field0 = objectId,
+                Field1 = (float)(rand.NextDouble() * 2.0 * Math.PI),
+                Field2 = false
+            });
+
+            SendMessage(new SetIdleAnimationMessage
+            {
+                Id = 0xa5,
+                Field0 = objectId,
+                Field1 = 0x11150
+            });
+
+            SendMessage(new SNONameDataMessage
+            {
+                Id = 0xd3,
+                Field0 = new SNOName
+                {
+                    Field0 = 0x1,
+                    Field1 = nId
+                }
+            });
+            #endregion
+
+            packetId += 30 * 2;
+            SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = packetId,
+            });
+            tick += 20;
+            SendMessage(new EndOfTickMessage()
+            {
+                Id = 0x008D,
+                Field0 = tick - 20,
+                Field1 = tick
+            });
+
+        }
+
+        private void SpawnMob(int mobId, Vector3D pos)
         {
             int nId = mobId;
 
             Mob mob = new Mob();
-            mob.pos = new Vector3D();
-            mob.pos.Field0 = x;
-            mob.pos.Field1 = y;
-            mob.pos.Field2 = z;
+            mob.pos = pos;
 
             if (objectsSpawned == null)
             {
@@ -9727,9 +10071,9 @@ namespace D3Sharp.Net.Game
                         },
                         Field1 = new Vector3D()
                         {
-                            Field0 = x + 5,
-                            Field1 = y + 5,
-                            Field2 = z,
+                            Field0 = pos.Field0 + 5,
+                            Field1 = pos.Field1 + 5,
+                            Field2 = pos.Field2,
                         },
                     },
                     Field2 = 0x772E0000,
