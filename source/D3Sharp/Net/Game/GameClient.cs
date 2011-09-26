@@ -8957,7 +8957,28 @@ namespace D3Sharp.Net.Game
                 EnterInn();
                 return;
             }
-            else if (!objectsSpawned.Any(a => a.id == msg.Field1))
+
+            if (BnetClient.CurrentToon.Class == Core.Toons.ToonClass.Monk)
+            {
+                if (msg.snoPower == 0x0176c4) // fists of lightning
+                {
+                    switch (msg.Field5)
+                    {
+                        case 0:
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            SpawnMob(120932, position.Field0, position.Field1, position.Field2);
+                            break;
+                        default:
+                            Logger.Error("hmm unknown monk kung-fu: {0}", msg.Field5);
+                            break;
+                    }
+                }
+            }
+
+            if (objectsSpawned == null || !objectsSpawned.Any(a => a.id == msg.Field1))
             {
                 return;
             }
