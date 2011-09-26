@@ -7,6 +7,9 @@
 
         public enum Barbarian
         {
+            //
+            // Fury Generator
+            //
             Bash = 0x0001358A,
             Cleave = 0x00013987,
             LeapAttack = 0x00016CE1,
@@ -15,6 +18,10 @@
             WarCry = 0x00013ECC,
             FuriousCharge = 0x00017C9B,
             AncientSpear = 0x0001115B,
+
+            //
+            // Fury Spender
+            //
             HammerOfTheAncients = 0x000134E5,
             ThreateningShout = 0x0001389C,
             BattleRage = 0x000134E4,
@@ -23,6 +30,10 @@
             SiesmicSlam = 0x000153CD,
             Sprint = 0x000132D7,
             Whirlwind = 0x00017828,
+
+            //
+            // Situational
+            //
             IgnorePain = 0x000136A8,
             Revenge = 0x0001AB1E,
             Overpower = 0x00026DC1,
@@ -52,6 +63,9 @@
 
         public enum DemonHunter
         {
+            //
+            // Hatred Generator
+            //
             HungeringArrow = 0x0001F8BF,
             EvasiveFire = 0x00020C41,
             BolaShot = 0x00012EF0,
@@ -59,6 +73,10 @@
             Grenades = 0x00015252,
             SpikeTrap = 0x00012625,
             Strafe = 0x00020B8E,
+
+            //
+            // Hatred Spender
+            //
             Impale = 0x00020126,
             RapidFire = 0x00020078,
             Chakram = 0x0001F8BD,
@@ -66,6 +84,11 @@
             FanOfKnives = 0x00012EEA,
             Multishot = 0x00012F51,
             ClusterArrow = 0x0001F8BE,
+            RainOfVengeance = 0x001FF01,
+
+            //
+            // Discipline
+            //
             Caltrops = 0x0001F8C0,
             Vault = 0x0001B26F,
             ShadowPower = 0x0001FF0E,
@@ -74,7 +97,6 @@
             Sentry = 0x0001F8C1,
             MarkedForDeath = 0x0001FEB2,
             Preparation = 0x0001F8BC,
-            //not in old build - Rain of Vengeance
 
             //
             // Demon Hunter Passives
@@ -149,27 +171,38 @@
 
         public enum WitchDoctor
         {
-            SummonZombieDogs = 0x000190AD,
+            //
+            // Physical Realm
+            //
             PoisonDart = 0x0001930D,
             PlagueOfToads = 0x00019FE1,
-            GraspOfTheDead = 0x00010E3E,
-            Haunt = 0x00014692,
             ZombieCharger = 0x00012113,
-            Hex = 0x000077A7,
             CorpseSpiders = 0x000110EA,
-            Horrify = 0x00010854,
             Firebats = 0x00019DEB,
             Firebomb = 0x000107EF,
+            LocustSwarm = 0x000110EB,
+            AcidCloud = 0x00011337,
+            WallOfZombies = 0x00020EB5,
+
+            //
+            // Spirit Realm
+            //
+            Haunt = 0x00014692,
+            Horrify = 0x00010854,
             SpiritWalk = 0x00019EFD,
             SoulHarvest = 0x00010820,
+            SpiritBarrage = 0x0001A7DA,
+            MassConfusion = 0x00010810,
+
+            //
+            // Support
+            //
+            SummonZombieDogs = 0x000190AD,
+            GraspOfTheDead = 0x00010E3E,
+            Hex = 0x000077A7,
             Sacrifice = 0x000190AC,
             Gargantuan = 0x000077A0,
-            LocustSwarm = 0x000110EB,
-            SpiritBarrage = 0x0001A7DA,
-            AcidCloud = 0x00011337,
-            MassConfusion = 0x00010810,
             BigBadVoodoo = 0x0001CA9A,
-            WallOfZombies = 0x00020EB5,
             FetishArmy = 0x000011C51,
 
             //
@@ -191,10 +224,17 @@
 
         public enum Wizard
         {
+            //
+            // Signature
+            //
             MagicMissile = 0x00007818,
             ShockPulse = 0x0000783F,
             SpectralBlade = 0x0001177C,
             Electrocute = 0x000006E5,
+
+            //
+            // Offensive
+            //
             WaveOfForce = 0x0000784C,
             ArcaneOrb = 0x000077CC,
             EnergyTwister = 0x00012D39,
@@ -205,6 +245,10 @@
             ArcaneTorrent = 0x00020D38,
             Meteor = 0x00010E46,
             Blizzard = 0x000077D8,
+
+            //
+            // Utility
+            //
             FrostNova = 0x000077FE,
             IceArmor = 0x00011E07,
             MagicWeapon = 0x0001294C,
