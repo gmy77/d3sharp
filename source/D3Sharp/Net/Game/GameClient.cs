@@ -7970,6 +7970,7 @@ namespace D3Sharp.Net.Game
             {
                 SendMessageNow(new LogoutContextMessage()
                 {
+                    Id = 0x0026,
                     Field0 = true, // no visible difference when changing value of this field
                 });
             }
