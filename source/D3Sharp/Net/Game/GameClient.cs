@@ -29,6 +29,12 @@ using System.Collections.Generic;
 
 namespace D3Sharp.Net.Game
 {
+    public class Mob
+    {
+        public Vector3D pos;
+        public int id;
+    }
+
     public sealed class GameClient : IGameClient, IGameMessageHandler
     {
         static readonly Logger Logger = LogManager.CreateLogger();
@@ -47,7 +53,7 @@ namespace D3Sharp.Net.Game
         int[] mobs = { 5346, 5347, 5350, 5360, 5361, 5362, 5363, 5365, 5387, 5393, 5395, 5397, 5411, 5428, 5432, 5433, 5467 };
 
         Random rand = new Random();
-        IList<int> objectIdsSpawned = null;
+        IList<Mob> objectsSpawned = null;
         Vector3D position;
 
         public GameClient(IConnection connection)
@@ -70,7 +76,7 @@ namespace D3Sharp.Net.Game
                 {
                     GameMessage msg = _incomingBuffer.ParseMessage();
 
-                    //Logger.LogIncoming(msg);
+                    Logger.LogIncoming(msg);
 
                     try
                     {
@@ -8951,11 +8957,39 @@ namespace D3Sharp.Net.Game
                 EnterInn();
                 return;
             }
-            else if (objectIdsSpawned == null || !objectIdsSpawned.Contains(msg.Field1)) return;
+            else if (!objectsSpawned.Any(a => a.id == msg.Field1))
+            {
+                return;
+            }
 
-            objectIdsSpawned.Remove(msg.Field1);
+            Mob mob = objectsSpawned.First(a => a.id == msg.Field1);
 
-            var killAni = new int[]{
+            SpawnMob(185366, mob.pos.Field0, mob.pos.Field1, mob.pos.Field2);
+            FlushOutgoingBuffer();
+
+            System.Threading.Thread.Sleep(400);
+
+            //SpawnMob(86790, mob.pos.Field0, mob.pos.Field1, mob.pos.Field2);
+
+            List<Mob> kills = new List<Mob>();
+            foreach (Mob emob in objectsSpawned)
+            {
+                if (Math.Abs(emob.pos.Field0 - mob.pos.Field0) < 10f &&
+                    Math.Abs(emob.pos.Field1 - mob.pos.Field1) < 10f &&
+                    Math.Abs(emob.pos.Field2 - mob.pos.Field2) < 10f)
+                {
+                    kills.Add(emob);
+                }
+            }
+
+            Logger.Error("meteor killing {0} mobs", kills.Count);
+
+            foreach (Mob x in kills)
+            {
+                msg.Field1 = x.id;
+                objectsSpawned.Remove(x);
+
+                var killAni = new int[]{
                     0x2cd7,
                     0x2cd4,
                     0x01b378,
@@ -8972,53 +9006,53 @@ namespace D3Sharp.Net.Game
                     0x2cd8,
                     0x2cda,
                     0x2cd9
-            };
-            SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = msg.Field1,
-                Field1 = 0x0,
-                Field2 = 0x2,
-            });
-            SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = msg.Field1,
-                Field1 = 0xc,
-            });
-            SendMessage(new PlayHitEffectMessage()
-            {
-                Id = 0x7b,
-                Field0 = msg.Field1,
-                Field1 = 0x789E00E2,
-                Field2 = 0x2,
-                Field3 = false,
-            });
+                };
+                SendMessage(new PlayEffectMessage()
+                {
+                    Id = 0x7a,
+                    Field0 = msg.Field1,
+                    Field1 = 0x0,
+                    Field2 = 0x2,
+                });
+                SendMessage(new PlayEffectMessage()
+                {
+                    Id = 0x7a,
+                    Field0 = msg.Field1,
+                    Field1 = 0xc,
+                });
+                SendMessage(new PlayHitEffectMessage()
+                {
+                    Id = 0x7b,
+                    Field0 = msg.Field1,
+                    Field1 = 0x789E00E2,
+                    Field2 = 0x2,
+                    Field3 = false,
+                });
 
-            SendMessage(new FloatingNumberMessage()
-            {
-                Id = 0xd0,
-                Field0 = msg.Field1,
-                Field1 = 9001.0f,
-                Field2 = 0,
-            });
+                SendMessage(new FloatingNumberMessage()
+                {
+                    Id = 0xd0,
+                    Field0 = msg.Field1,
+                    Field1 = 9001.0f,
+                    Field2 = 0,
+                });
 
-            SendMessage(new ANNDataMessage()
-            {
-                Id = 0x6d,
-                Field0 = msg.Field1,
-            });
+                SendMessage(new ANNDataMessage()
+                {
+                    Id = 0x6d,
+                    Field0 = msg.Field1,
+                });
 
-            int ani = killAni[rand.Next(killAni.Length)];
-            Logger.Info("Ani used: " + ani);
+                int ani = killAni[rand.Next(killAni.Length)];
+                Logger.Info("Ani used: " + ani);
 
-            SendMessage(new PlayAnimationMessage()
-            {
-                Id = 0x6c,
-                Field0 = msg.Field1,
-                Field1 = 0xb,
-                Field2 = 0,
-                tAnim = new PlayAnimationMessageSpec[1]
+                SendMessage(new PlayAnimationMessage()
+                {
+                    Id = 0x6c,
+                    Field0 = msg.Field1,
+                    Field1 = 0xb,
+                    Field2 = 0,
+                    tAnim = new PlayAnimationMessageSpec[1]
                 {
                     new PlayAnimationMessageSpec()
                     {
@@ -9028,101 +9062,109 @@ namespace D3Sharp.Net.Game
                         Field3 = 1f
                     }
                 }
-            });
+                });
 
-            packetId += 10 * 2;
-            SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = packetId,
-            });
-
-            SendMessage(new ANNDataMessage()
-            {
-                Id = 0xc5,
-                Field0 = msg.Field1,
-            });
-
-            SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = msg.Field1,
-                Field1 = new NetAttributeKeyValue
+                packetId += 10 * 2;
+                SendMessage(new DWordDataMessage()
                 {
-                    Attribute = GameAttribute.Attributes[0x4d],
-                    Float = 0
-                }
-            });
+                    Id = 0x89,
+                    Field0 = packetId,
+                });
 
-            SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = msg.Field1,
-                Field1 = new NetAttributeKeyValue
+                SendMessage(new ANNDataMessage()
                 {
-                    Attribute = GameAttribute.Attributes[0x1c2],
-                    Int = 1
-                }
-            });
+                    Id = 0xc5,
+                    Field0 = msg.Field1,
+                });
 
-            SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = msg.Field1,
-                Field1 = new NetAttributeKeyValue
+                SendMessage(new AttributeSetValueMessage
                 {
-                    Attribute = GameAttribute.Attributes[0x1c5],
-                    Int = 1
-                }
-            });
-            SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = msg.Field1,
-                Field1 = 0xc,
-            });
-            SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = msg.Field1,
-                Field1 = 0x37,
-            });
-            SendMessage(new PlayHitEffectMessage()
-            {
-                Id = 0x7b,
-                Field0 = msg.Field1,
-                Field1 = 0x789E00E2,
-                Field2 = 0x2,
-                Field3 = false,
-            });
-            packetId += 10 * 2;
-            SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = packetId,
-            });
+                    Id = 0x4c,
+                    Field0 = msg.Field1,
+                    Field1 = new NetAttributeKeyValue
+                    {
+                        Attribute = GameAttribute.Attributes[0x4d],
+                        Float = 0
+                    }
+                });
+
+                SendMessage(new AttributeSetValueMessage
+                {
+                    Id = 0x4c,
+                    Field0 = msg.Field1,
+                    Field1 = new NetAttributeKeyValue
+                    {
+                        Attribute = GameAttribute.Attributes[0x1c2],
+                        Int = 1
+                    }
+                });
+
+                SendMessage(new AttributeSetValueMessage
+                {
+                    Id = 0x4c,
+                    Field0 = msg.Field1,
+                    Field1 = new NetAttributeKeyValue
+                    {
+                        Attribute = GameAttribute.Attributes[0x1c5],
+                        Int = 1
+                    }
+                });
+                SendMessage(new PlayEffectMessage()
+                {
+                    Id = 0x7a,
+                    Field0 = msg.Field1,
+                    Field1 = 0xc,
+                });
+                SendMessage(new PlayEffectMessage()
+                {
+                    Id = 0x7a,
+                    Field0 = msg.Field1,
+                    Field1 = 0x37,
+                });
+                SendMessage(new PlayHitEffectMessage()
+                {
+                    Id = 0x7b,
+                    Field0 = msg.Field1,
+                    Field1 = 0x789E00E2,
+                    Field2 = 0x2,
+                    Field3 = false,
+                });
+                packetId += 10 * 2;
+                SendMessage(new DWordDataMessage()
+                {
+                    Id = 0x89,
+                    Field0 = packetId,
+                });
+            }
         }
         public void OnMessage(SecondaryAnimationPowerMessage msg)
         {
-            var oldPosField1 = position.Field1;
-            var oldPosField2 = position.Field2;
-            for (var i = 0; i < 10; i++)
+            //var mdzq = new System.Net.Sockets.TcpClient("localhost", 19991);
+            //var query = mdzq.GetStream().ReadString(1000);
+            //mdzq.Close();
+            //var mymobs = query.Split(',').Select(s => int.Parse(s));
+            int[] mymobs = { 6653, 6653, 6653, 6653, 6653, 6653, 6653, 6653, 6653, 6653 };
+
+            //for (var i = 0; i < 1; i++)
+            float x = position.Field0;
+            float y = position.Field1;
+            int i = 0;
+            foreach (int mobid in mymobs)
             {
                 if ((i % 2) == 0)
                 {
-                    position.Field0 += (float)(rand.NextDouble() * 20);
-                    position.Field1 += (float)(rand.NextDouble() * 20);
+                    x += (float)(rand.NextDouble() * 20);
+                    y += (float)(rand.NextDouble() * 20);
                 }
                 else
                 {
-                    position.Field0 -= (float)(rand.NextDouble() * 20);
-                    position.Field1 -= (float)(rand.NextDouble() * 20);
+                    x -= (float)(rand.NextDouble() * 20);
+                    y -= (float)(rand.NextDouble() * 20);
                 }
-                SpawnMob(mobs[rand.Next(0, mobs.Length)]);
+                //SpawnMob(mobs[rand.Next(0, mobs.Length)]);
+                SpawnMob(mobid, x, y, position.Field2);
+                ++i;
             }
-
-            position.Field1 = oldPosField1;
-            position.Field2 = oldPosField2;
         }
         public void OnMessage(SNODataMessage msg)
         {
@@ -9618,21 +9660,26 @@ namespace D3Sharp.Net.Game
             });
             FlushOutgoingBuffer();
         }
-        private void SpawnMob(int mobId)
+        private void SpawnMob(int mobId, float x, float y, float z)
         {
             int nId = mobId;
-            if (position == null)
-                return;
 
-            if (objectIdsSpawned == null)
+            Mob mob = new Mob();
+            mob.pos = new Vector3D();
+            mob.pos.Field0 = x;
+            mob.pos.Field1 = y;
+            mob.pos.Field2 = z;
+
+            if (objectsSpawned == null)
             {
-                objectIdsSpawned = new List<int>();
-                objectIdsSpawned.Add(objectId - 100);
-                objectIdsSpawned.Add(objectId);
+                objectsSpawned = new List<Mob>();
+                //objectsSpawned.Add(objectId - 100);
+                //objectsSpawned.Add(objectId);
             }
 
             objectId++;
-            objectIdsSpawned.Add(objectId);
+            mob.id = objectId;
+            objectsSpawned.Add(mob);
 
             #region ACDEnterKnown Hittable Zombie
             SendMessage(new ACDEnterKnownMessage()
@@ -9659,9 +9706,9 @@ namespace D3Sharp.Net.Game
                         },
                         Field1 = new Vector3D()
                         {
-                            Field0 = position.Field0 + 5,
-                            Field1 = position.Field1 + 5,
-                            Field2 = position.Field2,
+                            Field0 = x + 5,
+                            Field1 = y + 5,
+                            Field2 = z,
                         },
                     },
                     Field2 = 0x772E0000,
@@ -9866,7 +9913,7 @@ namespace D3Sharp.Net.Game
                 Field0 = new SNOName
                 {
                     Field0 = 0x1,
-                    Field1 = nId 
+                    Field1 = nId
                 }
             });
             #endregion
