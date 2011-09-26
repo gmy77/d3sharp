@@ -63,10 +63,10 @@ namespace D3Sharp.Net.Game
         int objectId = 0x78f50114 + 100;
 
         int active_mob_index = 0;
-        int[] mobs = { 5346, 4152, 6024, 5360, 5361, 5362, 5363, 5365, 5387, 5393, 5395, 5397, 5411, 5428, 5432, 5433, 5467 };
+        int[] mobs = { 5428, 5346, 6024, 5387, 5393, 5395, 5397, 5432, 5433, 5467 };
 
         Random rand = new Random();
-        IList<Mob> objectsSpawned = null;
+        IList<Mob> objectsSpawned = new List<Mob>();
         IList<TempMob> tempObjects = new List<TempMob>();
         Vector3D position;
         float position_angle = 0.0f;
@@ -95,7 +95,7 @@ namespace D3Sharp.Net.Game
                 {
                     GameMessage msg = _incomingBuffer.ParseMessage();
 
-                    Logger.LogIncoming(msg);
+                    //Logger.LogIncoming(msg);
 
                     try
                     {
@@ -3772,7 +3772,7 @@ namespace D3Sharp.Net.Game
                  new HotbarButtonData()
                  {
                      // Left Click
-                    m_snoPower = (int)Skills.Wizard.PowerHungry,
+                    m_snoPower = (int)Skills.Monk.FistsOfThunder,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
@@ -3802,19 +3802,19 @@ namespace D3Sharp.Net.Game
                  new HotbarButtonData()
                  {
                      // QuickKey 2
-                    m_snoPower = (int)Skills.Monk.ExplodingPalm,
+                    m_snoPower = (int)Skills.Wizard.Meteor,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
                      // QuickKey 3
-                    m_snoPower = (int)Skills.WitchDoctor.SpiritWalk,
+                    m_snoPower = (int)Skills.Monk.SevenSidedStrike,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
                  {
                      // QuickKey 4
-                    m_snoPower = (int)Skills.Wizard.Hydra,
+                    m_snoPower = (int)Skills.Wizard.MagicMissile,
                     m_gbidItem = -1,
                  },
                  new HotbarButtonData()
@@ -8034,10 +8034,10 @@ namespace D3Sharp.Net.Game
                 EnterInn();
                 return;
             }
-
+            
             if (BnetClient.CurrentToon.Class == Core.Toons.ToonClass.Monk)
             {
-                if (msg.snoPower == 0x0176c4) // fists of lightning
+                if (msg.snoPower == (int)Skills.Monk.FistsOfThunder) // fists of lightning
                 {
                     switch (msg.Field5)
                     {
@@ -8057,66 +8057,118 @@ namespace D3Sharp.Net.Game
                 }
             }
 
-            if (objectsSpawned == null || !objectsSpawned.Any(a => a.id == msg.Field1))
-            {
-                return;
-            }
+            Mob target_mob;
 
-            Mob mob = objectsSpawned.First(a => a.id == msg.Field1);
-            List<Mob> kills = new List<Mob>();
+            if (msg.Field1 == -1)
+                target_mob = null;
+            else if (objectsSpawned.Any(a => a.id == msg.Field1))
+                target_mob = objectsSpawned.First(a => a.id == msg.Field1);
+            else
+                return;
 
             switch (msg.snoPower)
             {
-                case 0x7805: // explosion line!
+                case (int)Skills.Wizard.MagicMissile:
                     {
+                        if (target_mob == null) break;
+
                         for (int step = 1; step < 10; ++step)
                         {
                             var spos = new Vector3D();
-                            spos.Field0 = position.Field0 + ((mob.pos.Field0 - position.Field0) * (step * 0.10f));
-                            spos.Field1 = position.Field1 + ((mob.pos.Field1 - position.Field1) * (step * 0.10f));
-                            spos.Field2 = position.Field2 + ((mob.pos.Field2 - position.Field2) * (step * 0.10f));
+                            spos.Field0 = position.Field0 + ((target_mob.pos.Field0 - position.Field0) * (step * 0.10f));
+                            spos.Field1 = position.Field1 + ((target_mob.pos.Field1 - position.Field1) * (step * 0.10f));
+                            spos.Field2 = position.Field2 + ((target_mob.pos.Field2 - position.Field2) * (step * 0.10f));
+
                             SpawnTempObject(61419, spos);
+
+                            List<Mob> hits = new List<Mob>();
                             foreach (Mob emob in objectsSpawned)
                             {
                                 if (Math.Abs(emob.pos.Field0 - spos.Field0) < 6f &&
                                     Math.Abs(emob.pos.Field1 - spos.Field1) < 6f &&
                                     Math.Abs(emob.pos.Field2 - spos.Field2) < 6f)
                                 {
-                                    kills.Add(emob);
+                                    hits.Add(emob);
                                 }
+                            }
+                            foreach (Mob x in hits)
+                            {
+                                KillSpawnedObject(x.id);
+                                objectsSpawned.Remove(x);
                             }
                             FlushOutgoingBuffer();
                             System.Threading.Thread.Sleep(100);
                         }
-                        kills = kills.GroupBy(m => m.id).Select(m => m.First()).ToList();
                         break;
                     }
-                case 0x17c30: // meteor!!!
+                case (int)Skills.Wizard.Meteor:
                     {
-                        SpawnTempObject(185366, mob.pos);
+                        if (target_mob == null) break;
+
+                        SpawnTempObject(185366, target_mob.pos);
                         FlushOutgoingBuffer();
 
                         System.Threading.Thread.Sleep(400);
 
+                        List<Mob> hits = new List<Mob>();
                         foreach (Mob emob in objectsSpawned)
                         {
-                            if (Math.Abs(emob.pos.Field0 - mob.pos.Field0) < 10f &&
-                                Math.Abs(emob.pos.Field1 - mob.pos.Field1) < 10f &&
-                                Math.Abs(emob.pos.Field2 - mob.pos.Field2) < 10f)
+                            if (Math.Abs(emob.pos.Field0 - target_mob.pos.Field0) < 10f &&
+                                Math.Abs(emob.pos.Field1 - target_mob.pos.Field1) < 10f &&
+                                Math.Abs(emob.pos.Field2 - target_mob.pos.Field2) < 10f)
                             {
-                                kills.Add(emob);
+                                hits.Add(emob);
                             }
                         }
+
+                        foreach (Mob x in hits)
+                        {
+                            KillSpawnedObject(x.id);
+                            objectsSpawned.Remove(x);
+                        }
+                        FlushOutgoingBuffer();
                         break;
                     }
-            }
+                case (int)Skills.Monk.SevenSidedStrike:
+                    {
+                        Vector3D startpos;
+                        if (target_mob == null)
+                            startpos = position;
+                        else
+                            startpos = target_mob.pos;
 
-            Logger.Debug("killing {0} mobs", kills.Count);
+                        List<Mob> nearby = new List<Mob>();
 
-            foreach (Mob x in kills)
-            {
-                KillSpawnedObject(x.id);
-                objectsSpawned.Remove(x);
+                        if (target_mob != null)
+                            nearby.Add(target_mob);
+
+                        foreach (Mob emob in objectsSpawned)
+                        {
+                            if (emob == target_mob) continue;
+
+                            if (Math.Abs(emob.pos.Field0 - startpos.Field0) < 20f &&
+                                Math.Abs(emob.pos.Field1 - startpos.Field1) < 20f &&
+                                Math.Abs(emob.pos.Field2 - startpos.Field2) < 20f)
+                            {
+                                nearby.Add(emob);
+                            }
+                        }
+
+                        for (int n = 0; n < 7; ++n)
+                        {
+                            if (nearby.Count > 0)
+                            {
+                                SpawnTempObject(99063, nearby[0].pos);
+                                KillSpawnedObject(nearby[0].id);
+                                objectsSpawned.Remove(nearby[0]);
+                                nearby.RemoveAt(0);
+                            }
+                            FlushOutgoingBuffer();
+                            System.Threading.Thread.Sleep(100);
+                        }
+
+                        break;
+                    }
             }
         }
         public void OnMessage(SecondaryAnimationPowerMessage msg)
@@ -8128,16 +8180,16 @@ namespace D3Sharp.Net.Game
 
             switch (msg.snoPower)
             {
-                case 0x20a3f: // spawner
+                case (int)Skills.DemonHunter.Companion: // spawner
                     {
-                        var mdzq = new System.Net.Sockets.TcpClient("localhost", 19991);
-                        var query = mdzq.GetStream().ReadString(1000);
-                        mdzq.Close();
-                        var mymobs = query.Split(',').Select(s => int.Parse(s));
+                        //var mdzq = new System.Net.Sockets.TcpClient("localhost", 19991);
+                        //var query = mdzq.GetStream().ReadString(1000);
+                        //mdzq.Close();
+                        //var mymobs = query.Split(',').Select(s => int.Parse(s));
 
-                        //List<int> mymobs = new List<int>();
-                        //for (int n = 0; n < 10; ++n)
-                        //    mymobs.Add(mobs[active_mob_index]);
+                        List<int> mymobs = new List<int>();
+                        for (int n = 0; n < 10; ++n)
+                            mymobs.Add(mobs[active_mob_index]);
 
                         float x = position.Field0;
                         float y = position.Field1;
@@ -8163,35 +8215,6 @@ namespace D3Sharp.Net.Game
                             ++i;
                         }
                         FlushOutgoingBuffer();
-                        break;
-                    }
-                case 0x19efd: // seven sided strike
-                    {
-                        List<Mob> nearby = new List<Mob>();
-                        foreach (Mob emob in objectsSpawned)
-                        {
-                            if (Math.Abs(emob.pos.Field0 - position.Field0) < 20f &&
-                                Math.Abs(emob.pos.Field1 - position.Field1) < 20f &&
-                                Math.Abs(emob.pos.Field2 - position.Field2) < 20f)
-                            {
-                                nearby.Add(emob);
-                            }
-                        }
-
-                        for (int n = 0; n < 7; ++n)
-                        {
-                            if (nearby.Count > 0)
-                            {
-                                SpawnTempObject(99063, nearby[0].pos, position_angle);
-                                //SpawnTempObject(144046, nearby[0].pos);
-                                KillSpawnedObject(nearby[0].id);
-                                objectsSpawned.Remove(nearby[0]);
-                                nearby.RemoveAt(0);
-                            }
-                            FlushOutgoingBuffer();
-                            System.Threading.Thread.Sleep(100);
-                        }
-
                         break;
                     }
             }
@@ -8862,9 +8885,9 @@ namespace D3Sharp.Net.Game
 
             // make angle random if -1.0
             if (angle == -1.0f)
-                angle = (float)(rand.NextDouble() * 2.0 * Math.PI);
-
-            angle = (float)(rand.NextDouble() * 180.0);
+                angle = (float)(rand.NextDouble() * 180.0);
+                //angle = (float)(rand.NextDouble() * 2.0 * Math.PI);
+            
             float aw = (float)Math.Cos(angle);
             float az = (float)Math.Sin(angle);
             
@@ -9127,13 +9150,6 @@ namespace D3Sharp.Net.Game
 
             Mob mob = new Mob();
             mob.pos = pos;
-
-            if (objectsSpawned == null)
-            {
-                objectsSpawned = new List<Mob>();
-                //objectsSpawned.Add(objectId - 100);
-                //objectsSpawned.Add(objectId);
-            }
 
             objectId++;
             mob.id = objectId;
