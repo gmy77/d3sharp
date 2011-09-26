@@ -8,6 +8,7 @@ using D3Sharp.Core.Map;
 using D3Sharp.Core.Actors;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Extensions;
+using D3Sharp.Core.NPC;
 
 namespace D3Sharp.Core.Map
 {
@@ -16,15 +17,18 @@ namespace D3Sharp.Core.Map
         private GameClient Game;
         static readonly Logger Logger = LogManager.CreateLogger();
 
+        private List<BasicNPC> NPCs;
+
         public World(GameClient g)
         {
             Game = g;
+            NPCs = new List<BasicNPC>();
         }
 
         public  float posx, posy, posz;
 
-        public  List<MapChunk> MapChunkDB;
-         public int WorldID = 0x772E0000;
+        public List<MapChunk> MapChunkDB;
+        public int WorldID = 0x772E0000;
 
         private  int CompareMapChunks(MapChunk x, MapChunk y)
         {
@@ -115,6 +119,15 @@ namespace D3Sharp.Core.Map
             }
         }
 
+        void CreateNPC(int objectId)
+        {
+            NPCs.Add(new BasicNPC(objectId, ref Game));
+        }
+
+        public void Tick()
+        {
+            //world time based code comes here later, call this X times a second (where x is around 20 imo)
+        }
 
         public  void ReadAndSendMap()
         {
@@ -233,11 +246,13 @@ namespace D3Sharp.Core.Map
                                                 if (!ActorDB.isBlackListed(wm.Field1))
                                                 {
                                                     Game.SendMessage(wm);
-                                                    Logger.Info("NewActor " + String.Format("{0,7}", wm.Field1) + ": " + ActorDB.GetActorName(wm.Field1));
+                                                    Logger.Info(String.Format("{0,7}", wm.Field1) + ": " + ActorDB.GetActorName(wm.Field1));
                                                     if (ActorDB.isNPC(wm.Field1))
                                                     {
                                                         //SEND NPC DATA HERE
+                                                        CreateNPC(wm.Field0);
                                                     }
+                                                    Game.FlushOutgoingBuffer();
                                                 }
                                             }
                                             break;
@@ -277,5 +292,18 @@ namespace D3Sharp.Core.Map
                 Logger.Error("Map file {0} not found!", filePath);
             }
         }
+
+        public void HandleTarget(int ID)
+        {
+            foreach (BasicNPC b in NPCs)
+            {
+                if (b.ID == ID)
+                {
+                    b.Die(0);
+                    NPCs.Remove(b);
+                }
+            }
+        }
+    
     }
 }

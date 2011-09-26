@@ -40,6 +40,9 @@ namespace D3Sharp.Net.Game
         GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
 
+        public int packetId = 0x227 + 20;
+        public int tick = 0;
+
         public World GameWorld;
 
         public GameClient(IConnection connection)
@@ -2220,7 +2223,7 @@ namespace D3Sharp.Net.Game
 
         public void OnMessage(ACDTranslateNormalMessage msg)
         {
-            Logger.Info("player position: " + msg.Field1.Field0 + " " + msg.Field1.Field1 + " " + msg.Field1.Field2);
+            //Logger.Info("player position: " + msg.Field1.Field0 + " " + msg.Field1.Field1 + " " + msg.Field1.Field2);
             throw new NotImplementedException();
         }
 
@@ -2531,6 +2534,7 @@ namespace D3Sharp.Net.Game
 
         public void OnMessage(TargetMessage msg)
         {
+            GameWorld.HandleTarget(msg.Field1);
             throw new NotImplementedException();
         }
 

@@ -90,6 +90,7 @@
     <Compile Include="Core\Items\ItemTypeGenerator.cs" />
     <Compile Include="Core\Map\MapChunk.cs" />
     <Compile Include="Core\Map\World.cs" />
+    <Compile Include="Core\NPC\BasicNPC.cs" />
     <Compile Include="Core\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\OnlinePlayers.cs" />
     <Compile Include="Core\Services\AuthenticationService.cs" />
