@@ -28,7 +28,26 @@
             Overpower = 0x00026DC1,
             Earthquake = 0x0001823E,
             CallOfTheAncients = 0x000138B1,
-            WrathOfTheBerserker = 0x000136F7
+            WrathOfTheBerserker = 0x000136F7,
+
+            //
+            // Barbarian Passives
+            //
+            BloodThirst = 0x000321A1,
+            PoundOfFlesh = 0x00032195,
+            Ruthless = 0x00032177,
+            WeaponsMaster = 0x00032543,
+            InspiringPresence = 0x000322EA,
+            BerserkerRage = 0x00032183,
+            Animosity = 0x000321AC,
+            Superstition = 0x000322B3,
+            ToughAsNails = 0x00032418,
+            NoEscape = 0x00031FB5,
+            Relentless = 0x00032256,
+            Brawler = 0x0003214D,
+            Juggernaut = 0x0003238B,
+            BoonOfBulKathos = 0x00031F3B,
+            Unforgiving = 0x000321F4
         }
 
         public enum DemonHunter
@@ -54,8 +73,25 @@
             SmokeScreen = 0x0001FE87,
             Sentry = 0x0001F8C1,
             MarkedForDeath = 0x0001FEB2,
-            Preparation = 0x0001F8BC
+            Preparation = 0x0001F8BC,
             //not in old build - Rain of Vengeance
+
+            //
+            // Demon Hunter Passives
+            //
+            Brooding = 0x00033771,
+            ThrillOfTheHunt = 0x00033919,
+            Vengeance = 0x00026042,
+            SteadyAim = 0x0002820B,
+            CullTheWeak = 0x00026049,
+            Fundamentals = 0x00026047,
+            HotPursuit = 0x0002604D,
+            Archery = 0x00033346,
+            Perfectionist = 0x0002604A,
+            CustomEngineering = 0x00032EE2,
+            Grenadier = 0x00032F8B,
+            Sharpshooter = 0x00026043,
+            Ballistics = 0x0002604B,
         }
 
         public enum Monk
@@ -83,7 +119,7 @@
             Serenity = 0x000177D7,
             SevenSidedStrike = 0x000179B6,
             MysticAlly = 0x0001E148,
-            WaveOfLight= 0x00017721,
+            WaveOfLight = 0x00017721,
 
             //
             // Mantras
@@ -91,7 +127,24 @@
             MantraOfEvasion = 0x0002EF95,
             MantraOfRetribution = 0x00010F6C,
             MantraOfHealing = 0x00010F72,
-            MantraOfConviction = 0x00017554
+            MantraOfConviction = 0x00017554,
+
+            //
+            // Monk Passives
+            //
+            TheGuardiansPath = 0x00033394,
+            SixthSense = 0x000332D6,
+            OneWithEverything = 0x000332F8,
+            SeizeTheInitiative = 0x000332DC,
+            Transcendence = 0x00033162,
+            ChantOfResonance = 0x00026333,
+            BeaconOfYtar = 0x000330D0,
+            FleetFooted = 0x00033085,
+            ExaltedSoul = 0x00033083,
+            Pacifism = 0x00033395,
+            GuidingLight = 0x0002634C,
+            NearDeathExperience = 0x00026344,
+            Resolve = 0x00033A7D
         }
 
         public enum WitchDoctor
@@ -117,7 +170,23 @@
             MassConfusion = 0x00010810,
             BigBadVoodoo = 0x0001CA9A,
             WallOfZombies = 0x00020EB5,
-            FetishArmy = 0x000011C51
+            FetishArmy = 0x000011C51,
+
+            //
+            // Witch Doctor Passives
+            //
+            CircleOfLife = 0x00032EBB,
+            Vermin = 0x00032EB7,
+            SpiritualAttunement = 0x00032EB9,
+            GruesomeFeast = 0x00032ED2,
+            BloodRitual = 0x00032EB8,
+            ZombieHandler = 0x00032EB3,
+            PierceTheVeil = 0x00032EF4,
+            RushOfEssence = 0x00032EB5,
+            VisionQuest = 0x00033091,
+            FierceLoyalty = 0x00032EFF,
+            DeathTrance = 0x00032EB4,
+            TribalRites = 0x00032ED9
         }
 
         public enum Wizard
@@ -146,7 +215,23 @@
             Teleport = 0x00029198,
             EnergyArmor = 0x000153CF,
             Familiar = 0x00018330,
-            Archon = 0x00020ED8
+            Archon = 0x00020ED8,
+
+            //
+            // Wizard Passives
+            //
+            PowerHungry = 0x00032E5E,
+            TemporalFlux = 0x00032E5D,
+            GlassCannon = 0x00032E57,
+            Prodigy = 0x00032E6D,
+            Virtuoso = 0x00032E65,
+            AstralPresence = 0x00032E58,
+            Illusionist = 0x00032EA3,
+            GalvanizingWard = 0x00032E9D,
+            Blur = 0x00032E54,
+            Evocation = 0x00032E59,
+            ArcaneDynamo = 0x00032FB7,
+            UnstableAnomaly = 0x00032E5A
         }
     }
 }
