@@ -8864,7 +8864,6 @@ namespace D3Sharp.Net.Game
             if (angle == -1.0f)
                 angle = (float)(rand.NextDouble() * 2.0 * Math.PI);
 
-            //angle = Math.Sqrt(rand.NextDouble());
             float aw = (float)Math.Cos(rand.NextDouble() * 180.0);
             float az = (float)Math.Sin(rand.NextDouble() * 180.0);
             
