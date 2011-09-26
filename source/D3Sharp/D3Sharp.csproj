@@ -113,6 +113,7 @@
     <Compile Include="Core\Services\StorageService.cs" />
     <Compile Include="Core\Services\ToonExternalService.cs" />
     <Compile Include="Core\Services\UserManagerService.cs" />
+    <Compile Include="Core\Skills\Skills.cs" />
     <Compile Include="Core\Storage\DBManager.cs" />
     <Compile Include="Core\Storage\GamedataDBManager.cs" />
     <Compile Include="Core\Toons\Toon.cs" />
