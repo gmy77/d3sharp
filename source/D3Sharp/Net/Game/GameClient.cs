@@ -8118,7 +8118,7 @@ namespace D3Sharp.Net.Game
                         }
                         break;
                     }
-                case (int)Skills.Wizard.Meteor:
+                case (int)Skills.Wizard.GlassCannon: // demonic meteor
                     {
                         SpawnTempObject(185366, target_pos);
                         FlushOutgoingBuffer();
@@ -8142,6 +8142,40 @@ namespace D3Sharp.Net.Game
                             objectsSpawned.Remove(x);
                         }
                         FlushOutgoingBuffer();
+                        break;
+                    }
+                case (int)Skills.Wizard.Meteor:
+                    {
+                        SpawnTempObject(86790, target_pos);
+                        FlushOutgoingBuffer();
+
+                        System.Threading.Thread.Sleep(2000);
+
+                        List<Mob> hits = new List<Mob>();
+                        foreach (Mob emob in objectsSpawned)
+                        {
+                            if (Math.Abs(emob.pos.Field0 - target_pos.Field0) < 13f &&
+                                Math.Abs(emob.pos.Field1 - target_pos.Field1) < 13f &&
+                                Math.Abs(emob.pos.Field2 - target_pos.Field2) < 13f)
+                            {
+                                hits.Add(emob);
+                            }
+                        }
+
+                        SpawnTempObject(86769, target_pos);
+                        SpawnTempObject(90364, target_pos, -1.0f, 5000); 
+
+                        foreach (Mob x in hits)
+                        {
+                            KillSpawnedObject(x.id);
+                            objectsSpawned.Remove(x);
+                        }
+                        FlushOutgoingBuffer();
+                        break;
+                    }
+                case (int)Skills.Wizard.Disintegrate:
+                    {
+                        SpawnTempObject(52687, target_pos);
                         break;
                     }
                 case (int)Skills.Monk.SevenSidedStrike:
@@ -8200,8 +8234,13 @@ namespace D3Sharp.Net.Game
                         //var mdzq = new System.Net.Sockets.TcpClient("localhost", 19991);
                         //var query = mdzq.GetStream().ReadString(1000);
                         //mdzq.Close();
-                        //var mymobs = query.Split(',').Select(s => int.Parse(s));
-
+                        //var mymobs = new List<int>();
+                        //foreach (var s in query.Split(','))
+                        //{
+                        //    int n;
+                        //    if (int.TryParse(s, out n))
+                        //        mymobs.Add(n);
+                        //}
                         List<int> mymobs = new List<int>();
                         for (int n = 0; n < 10; ++n)
                             mymobs.Add(mobs[active_mob_index]);
