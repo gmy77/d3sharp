@@ -8058,26 +8058,33 @@ namespace D3Sharp.Net.Game
             }
 
             Mob target_mob;
+            Vector3D target_pos;
 
             if (msg.Field1 == -1)
+            {
                 target_mob = null;
+                target_pos = msg.Field2.Field0;
+            }
             else if (objectsSpawned.Any(a => a.id == msg.Field1))
+            {
                 target_mob = objectsSpawned.First(a => a.id == msg.Field1);
+                target_pos = target_mob.pos;
+            }
             else
+            {
                 return;
+            }
 
             switch (msg.snoPower)
             {
                 case (int)Skills.Wizard.MagicMissile:
                     {
-                        if (target_mob == null) break;
-
                         for (int step = 1; step < 10; ++step)
                         {
                             var spos = new Vector3D();
-                            spos.Field0 = position.Field0 + ((target_mob.pos.Field0 - position.Field0) * (step * 0.10f));
-                            spos.Field1 = position.Field1 + ((target_mob.pos.Field1 - position.Field1) * (step * 0.10f));
-                            spos.Field2 = position.Field2 + ((target_mob.pos.Field2 - position.Field2) * (step * 0.10f));
+                            spos.Field0 = position.Field0 + ((target_pos.Field0 - position.Field0) * (step * 0.10f));
+                            spos.Field1 = position.Field1 + ((target_pos.Field1 - position.Field1) * (step * 0.10f));
+                            spos.Field2 = position.Field2 + ((target_pos.Field2 - position.Field2) * (step * 0.10f));
 
                             SpawnTempObject(61419, spos);
 
@@ -8103,9 +8110,7 @@ namespace D3Sharp.Net.Game
                     }
                 case (int)Skills.Wizard.Meteor:
                     {
-                        if (target_mob == null) break;
-
-                        SpawnTempObject(185366, target_mob.pos);
+                        SpawnTempObject(185366, target_pos);
                         FlushOutgoingBuffer();
 
                         System.Threading.Thread.Sleep(400);
@@ -8113,9 +8118,9 @@ namespace D3Sharp.Net.Game
                         List<Mob> hits = new List<Mob>();
                         foreach (Mob emob in objectsSpawned)
                         {
-                            if (Math.Abs(emob.pos.Field0 - target_mob.pos.Field0) < 10f &&
-                                Math.Abs(emob.pos.Field1 - target_mob.pos.Field1) < 10f &&
-                                Math.Abs(emob.pos.Field2 - target_mob.pos.Field2) < 10f)
+                            if (Math.Abs(emob.pos.Field0 - target_pos.Field0) < 10f &&
+                                Math.Abs(emob.pos.Field1 - target_pos.Field1) < 10f &&
+                                Math.Abs(emob.pos.Field2 - target_pos.Field2) < 10f)
                             {
                                 hits.Add(emob);
                             }
@@ -8135,7 +8140,7 @@ namespace D3Sharp.Net.Game
                         if (target_mob == null)
                             startpos = position;
                         else
-                            startpos = target_mob.pos;
+                            startpos = target_pos;
 
                         List<Mob> nearby = new List<Mob>();
 
