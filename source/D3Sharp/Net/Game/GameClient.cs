@@ -46,6 +46,74 @@ namespace D3Sharp.Net.Game
         public DateTime timeout;
     }
 
+    public class HeroSkillState
+    {
+        public int[] activeSkills;
+        public HotbarButtonData[] hotbarSkills;
+        public int[] passiveSkills;
+
+        public HeroSkillState()
+        {
+            // initialize to current convience skills
+            activeSkills = new int[6] {
+                (int)Skills.Monk.FistsOfThunder,
+                (int)Skills.Barbarian.Whirlwind,
+                (int)Skills.DemonHunter.Companion,
+                (int)Skills.Wizard.Meteor,
+                (int)Skills.Monk.SevenSidedStrike,
+                (int)Skills.Wizard.MagicMissile
+            };
+            hotbarSkills = new HotbarButtonData[9] {
+                new HotbarButtonData()
+                {
+                    m_snoPower = activeSkills[0],
+                    m_gbidItem = -1
+                },
+                new HotbarButtonData()
+                {
+                    m_snoPower = activeSkills[1],
+                    m_gbidItem = -1
+                },
+                new HotbarButtonData()
+                {
+                    m_snoPower = (int)Skills.None,
+                    m_gbidItem = -1
+                },
+                new HotbarButtonData()
+                {
+                    m_snoPower = (int)Skills.None,
+                    m_gbidItem = -1
+                },
+                new HotbarButtonData()
+                {
+                    m_snoPower = activeSkills[2],
+                    m_gbidItem = -1
+                },
+                new HotbarButtonData()
+                {
+                    m_snoPower = activeSkills[3],
+                    m_gbidItem = -1
+                },
+                new HotbarButtonData()
+                {
+                    m_snoPower = activeSkills[4],
+                    m_gbidItem = -1
+                },
+                new HotbarButtonData()
+                {
+                    m_snoPower = activeSkills[5],
+                    m_gbidItem = -1
+                },
+                new HotbarButtonData()
+                {
+                    m_snoPower = (int)Skills.None,
+                    m_gbidItem = 0x622256D4 // potion
+                }
+            };
+            passiveSkills = new int[3] { -1, -1, -1 };
+        }
+    }
+
     public sealed class GameClient : IGameClient, IGameMessageHandler
     {
         static readonly Logger Logger = LogManager.CreateLogger();
@@ -70,6 +138,7 @@ namespace D3Sharp.Net.Game
         IList<TempMob> tempObjects = new List<TempMob>();
         Vector3D position;
         float position_angle = 0.0f;
+        HeroSkillState skillState = new HeroSkillState();
 
         private bool IsLoggingOut;
 
@@ -1553,7 +1622,7 @@ namespace D3Sharp.Net.Game
          new NetAttributeKeyValue()
          {
             Attribute = GameAttribute.Attributes[0x0026], // Level 
-            Int = BnetClient.CurrentToon.Level,
+            Int = 30,//BnetClient.CurrentToon.Level,
             Float = 0f,
          },
          new NetAttributeKeyValue()
@@ -3767,64 +3836,8 @@ namespace D3Sharp.Net.Game
                     Field3 = 0x02000000,
                     Field4 = new PlayerSavedData()
                     {
-                        Field0 = new HotbarButtonData[9]
-            {
-                 new HotbarButtonData()
-                 {
-                     // Left Click
-                    m_snoPower = (int)Skills.Monk.FistsOfThunder,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                     // Right Click
-                    m_snoPower = (int)Skills.Barbarian.Whirlwind,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                     // Unknown - Left-Click Switch ?
-                    m_snoPower = (int)Skills.None,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                     // Right-Click Switch - Press X ingame
-                    m_snoPower = (int)Skills.None,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                     // QuickKey 1
-                    m_snoPower = (int)Skills.DemonHunter.Companion,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                     // QuickKey 2
-                    m_snoPower = (int)Skills.Wizard.Meteor,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                     // QuickKey 3
-                    m_snoPower = (int)Skills.Monk.SevenSidedStrike,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                     // QuickKey 4
-                    m_snoPower = (int)Skills.Wizard.MagicMissile,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                     // QuickKey 5
-                    m_snoPower = (int)Skills.None,
-                    m_gbidItem = 0x622256D4,
-                 },
-            },
-                        Field1 = new SkillKeyMapping[15]
+                        Field0 = skillState.hotbarSkills,
+                 Field1 = new SkillKeyMapping[15]
             {
                  new SkillKeyMapping()
                  {
@@ -3917,10 +3930,10 @@ namespace D3Sharp.Net.Game
                     Field2 = 0x00000000,
                  },
             },
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000001,
-                        Field4 = new HirelingSavedData()
-                        {
+                 Field2 = 0x00000000,
+                 Field3 = 0x00000001,
+                 Field4 = new HirelingSavedData()
+                 {
                             Field0 = new HirelingInfo[4]
                 {
                      new HirelingInfo()
@@ -4015,14 +4028,8 @@ namespace D3Sharp.Net.Game
                     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
                 },
                         },
-                        snoActiveSkills = new int[6]
-            {
-                0x000176C4, 0x000216FA, -1, -1, -1, -1, 
-            },
-                        snoTraits = new int[3]
-            {
-                -1, -1, -1, 
-            },
+                        snoActiveSkills = skillState.activeSkills,
+                        snoTraits = skillState.passiveSkills,
                         Field9 = new SavePointData()
                         {
                             snoWorld = -1,
@@ -8034,28 +8041,6 @@ namespace D3Sharp.Net.Game
                 EnterInn();
                 return;
             }
-            
-            if (BnetClient.CurrentToon.Class == Core.Toons.ToonClass.Monk)
-            {
-                if (msg.snoPower == (int)Skills.Monk.FistsOfThunder) // fists of lightning
-                {
-                    switch (msg.Field5)
-                    {
-                        case 0:
-                            SpawnTempObject(120932, position, position_angle);
-                            break;
-                        case 1:
-                            SpawnTempObject(120934, position, position_angle);
-                            break;
-                        case 2:
-                            SpawnTempObject(137943, position, position_angle);
-                            break;
-                        default:
-                            Logger.Error("hmm unknown monk kung-fu: {0}", msg.Field5);
-                            break;
-                    }
-                }
-            }
 
             Mob target_mob;
             Vector3D target_pos;
@@ -8077,6 +8062,31 @@ namespace D3Sharp.Net.Game
 
             switch (msg.snoPower)
             {
+                case (int)Skills.Monk.FistsOfThunder:
+                {
+                    Vector3D punchpos = new Vector3D();
+                    punchpos.Field0 = position.Field0 + (float)(Math.Sin(position_angle * 57.324840f) * 10);
+                    punchpos.Field1 = position.Field1 + (float)(Math.Cos(position_angle * 57.324840f) * 10);
+                    punchpos.Field2 = position.Field2;
+
+                    switch (msg.Field5)
+                    {
+                        case 0:
+                            SpawnTempObject(120932, punchpos, position_angle);
+                            break;
+                        case 1:
+                            SpawnTempObject(120934, punchpos, position_angle);
+                            break;
+                        case 2:
+                            SpawnTempObject(137943, punchpos, position_angle);
+                            break;
+                        default:
+                            Logger.Error("hmm unknown monk kung-fu: {0}", msg.Field5);
+                            break;
+                    }
+                    
+                    break;
+                }
                 case (int)Skills.Wizard.MagicMissile:
                     {
                         for (int step = 1; step < 10; ++step)
@@ -8274,7 +8284,8 @@ namespace D3Sharp.Net.Game
         }
         public void OnMessage(AssignSkillMessage msg)
         {
-            throw new NotImplementedException();
+            skillState.activeSkills[msg.Field1] = msg.snoPower;
+            UpdateHeroSkillState();
         }
         public void OnMessage(HirelingRequestLearnSkillMessage msg)
         {
@@ -8282,7 +8293,8 @@ namespace D3Sharp.Net.Game
         }
         public void OnMessage(PlayerChangeHotbarButtonMessage msg)
         {
-            throw new NotImplementedException();
+            skillState.hotbarSkills[msg.Field0] = msg.Field1;
+            UpdateHeroSkillState();
         }
         public void OnMessage(WorldStatusMessage msg)
         {
@@ -8868,6 +8880,7 @@ namespace D3Sharp.Net.Game
                 Field2 = 0x2,
                 Field3 = false,
             });
+
             packetId += 10 * 2;
             SendMessage(new DWordDataMessage()
             {
@@ -9410,6 +9423,246 @@ namespace D3Sharp.Net.Game
                 Field0 = tick - 20,
                 Field1 = tick
             });
+        }
+
+        private void UpdateHeroSkillState()
+        {
+            SendMessage(new HeroStateMessage()
+{
+    Id = 0x003A,
+    Field0 = new HeroStateData()
+    {
+        Field0 = 0x00000000,
+        Field1 = 0x00000000,
+        Field2 = 0x00000000,
+        Field3 = 0x02000000,
+        Field4 = new PlayerSavedData()
+        {
+            Field0 = skillState.hotbarSkills,
+            Field1 = new SkillKeyMapping[15]
+            {
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+                 new SkillKeyMapping()
+                 {
+                    Power = -1,
+                    Field1 = -1,
+                    Field2 = 0x00000000,
+                 },
+            },
+            Field2 = 0x00000000,
+            Field3 = 0x00000001,
+            Field4 = new HirelingSavedData()
+            {
+                Field0 = new HirelingInfo[4]
+                {
+                     new HirelingInfo()
+                     {
+                        Field0 = 0x00000000,
+                        Field1 = -1,
+                        Field2 = 0x00000000,
+                        Field3 = 0x00000000,
+                        Field4 = false,
+                        Field5 = -1,
+                        Field6 = -1,
+                        Field7 = -1,
+                        Field8 = -1,
+                     },
+                     new HirelingInfo()
+                     {
+                        Field0 = 0x00000000,
+                        Field1 = -1,
+                        Field2 = 0x00000000,
+                        Field3 = 0x00000000,
+                        Field4 = false,
+                        Field5 = -1,
+                        Field6 = -1,
+                        Field7 = -1,
+                        Field8 = -1,
+                     },
+                     new HirelingInfo()
+                     {
+                        Field0 = 0x00000000,
+                        Field1 = -1,
+                        Field2 = 0x00000000,
+                        Field3 = 0x00000000,
+                        Field4 = false,
+                        Field5 = -1,
+                        Field6 = -1,
+                        Field7 = -1,
+                        Field8 = -1,
+                     },
+                     new HirelingInfo()
+                     {
+                        Field0 = 0x00000000,
+                        Field1 = -1,
+                        Field2 = 0x00000000,
+                        Field3 = 0x00000000,
+                        Field4 = false,
+                        Field5 = -1,
+                        Field6 = -1,
+                        Field7 = -1,
+                        Field8 = -1,
+                     },
+                },
+                Field1 = 0x00000000,
+                Field2 = 0x00000000,
+            },
+            Field5 = 0x00000000,
+            Field6 = new LearnedLore()
+            {
+                Field0 = 0x00000000,
+                m_snoLoreLearned = new int[256]
+                {
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
+                },
+            },
+            snoActiveSkills = skillState.activeSkills,
+            snoTraits = skillState.passiveSkills,
+            Field9 = new SavePointData()
+            {
+                snoWorld = -1,
+                Field1 = -1,
+            },
+            m_SeenTutorials = new int[64]
+            {
+                -1, -1, -1, -1, -1, -1, -1, -1, 
+                -1, -1, -1, -1, -1, -1, -1, -1, 
+                -1, -1, -1, -1, -1, -1, -1, -1, 
+                -1, -1, -1, -1, -1, -1, -1, -1, 
+                -1, -1, -1, -1, -1, -1, -1, -1, 
+                -1, -1, -1, -1, -1, -1, -1, -1, 
+                -1, -1, -1, -1, -1, -1, -1, -1, 
+                -1, -1, -1, -1, -1, -1, -1, -1, 
+            },
+        },
+                    Field5 = 0x00000000,
+                    tQuestRewardHistory = new PlayerQuestRewardHistoryEntry[0]
+                    {
+                    },
+                },
+            });
+
+            packetId += 10 * 2;
+            SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = packetId,
+            });
+            FlushOutgoingBuffer();
         }
     }
 }
