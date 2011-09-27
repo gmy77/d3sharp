@@ -329,7 +329,7 @@ namespace D3Sharp.Core.Toons
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if the client is online
                     {
-                        if(this.Owner.LoggedInClient!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());
+                        if(this.Owner.LoggedInBNetClient!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInBNetClient.CurrentChannel.D3EntityId.ToByteString()).Build());
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 2) // Current screen (all known values are just "in-menu"; also see ScreenStatuses sent in ChannelService.UpdateChannelState)
                     {

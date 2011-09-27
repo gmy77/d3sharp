@@ -47,7 +47,7 @@ namespace D3Sharp.Core.Services
                     // Need more data to figure this out..
                     var account = ToonManager.GetAccountByToonLowID(request.TargetId.Low);
                     var method = bnet.protocol.notification.NotificationListener.Descriptor.FindMethodByName("OnNotificationReceived");
-                    account.LoggedInClient.CallMethod(method, request, 0);
+                    account.LoggedInBNetClient.CallMethod(method, request, 0);
                     break;
                 default:
                     Logger.Warn("Unhandled notification type: {0}", request.Type);
