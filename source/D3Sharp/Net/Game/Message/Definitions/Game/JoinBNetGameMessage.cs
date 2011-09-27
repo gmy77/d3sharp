@@ -55,7 +55,11 @@ namespace D3Sharp.Net.Game.Message.Definitions.Game
 
             // a hackish way to get client.BnetClient in context -- pretends games has only one client in. when we're done with implementing bnet completely, will get this sorted out. /raist
             client.BnetClient = Core.Games.GameManager.AvailableGames[(ulong)this.Field2].Clients.FirstOrDefault();
-            if (client.BnetClient != null) client.BnetClient.InGameClient = client;
+            if (client.BnetClient != null)
+            {
+                client.Toon = client.BnetClient.CurrentToon;
+                client.BnetClient.InGameClient = client;
+            }
 
             client.SendMessageNow(new VersionsMessage()
             {

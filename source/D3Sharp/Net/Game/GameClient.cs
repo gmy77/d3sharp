@@ -19,6 +19,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using D3Sharp.Core.Toons;
 using D3Sharp.Net.BNet;
 using D3Sharp.Net.Game.Message.Definitions.ACD;
 using D3Sharp.Net.Game.Message.Definitions.Animation;
@@ -60,6 +61,8 @@ namespace D3Sharp.Net.Game
 
         public IList<int> objectIdsSpawned = null;
         public Vector3D position;
+
+        public Toon Toon;
 
         public bool IsLoggingOut;
 
