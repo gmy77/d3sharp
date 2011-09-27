@@ -472,7 +472,7 @@ namespace D3Sharp.Core.Universe
                 Field3 = 0x00000000,
                 Field4 = new WorldLocationMessageData()
                 {
-                    Field0 = 1.43f,
+                    Field0 = currentToon.ModelScale,
                     Field1 = new PRTransform()
                     {
                         Field0 = new Quaternion()
