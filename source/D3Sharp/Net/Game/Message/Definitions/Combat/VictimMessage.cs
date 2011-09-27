@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Text;
 using D3Sharp.Net.Game.Messages;
 
@@ -37,7 +38,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.Combat
 
         public override void Handle(GameClient client)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void Parse(GameBitBuffer buffer)

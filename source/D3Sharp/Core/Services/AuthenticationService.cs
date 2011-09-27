@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using D3Sharp.Core.Accounts;
 using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
@@ -46,7 +47,7 @@ namespace D3Sharp.Core.Services
 
         public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, ModuleMessageRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
