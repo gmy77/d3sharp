@@ -16,46 +16,48 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using D3Sharp.Net.Game.Messages.Game;
 
-namespace D3Sharp.Net.Game.Messages.Connection
+namespace D3Sharp.Net.Game.Messages.Game
 {
-    [IncomingMessage(Opcodes.LogoutComplete)]
-    public class LogoutComplete:GameMessage
+    public class VersionsMessage : GameMessage
     {
+        public int SNOPackHash;
+        public int ProtocolHash;
+        public string Version;
+
+        public VersionsMessage() : base(Opcodes.VersionsMessage) { }
+
         public override void Handle(GameClient client)
         {
-            if (client.IsLoggingOut)
-            {
-                client.SendMessageNow(new QuitGameMessage()
-                {
-                    Id = 0x0003,
-                    // Field0 - quit reason?
-                    // 0 - logout
-                    // 1 - kicked by party leader
-                    // 2 - disconnected due to client-server (version?) missmatch
-                    Field0 = 0,
-                });
-            }
+            throw new System.NotImplementedException();
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            
+            SNOPackHash = buffer.ReadInt(32);
+            ProtocolHash = buffer.ReadInt(32);
+            Version = buffer.ReadCharArray(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            throw new NotImplementedException();
+            buffer.WriteInt(32, SNOPackHash);
+            buffer.WriteInt(32, ProtocolHash);
+            buffer.WriteCharArray(32, Version);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
-            throw new NotImplementedException();
+            b.Append(' ', pad);
+            b.AppendLine("VersionsMessage:");
+            b.Append(' ', pad++);
+            b.AppendLine("{");
+            b.Append(' ', pad); b.AppendLine("SNOPackHash: 0x" + SNOPackHash.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("ProtocolHash: 0x" + ProtocolHash.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Version: \"" + Version + "\"");
+            b.Append(' ', --pad);
+            b.AppendLine("}");
         }
     }
 }

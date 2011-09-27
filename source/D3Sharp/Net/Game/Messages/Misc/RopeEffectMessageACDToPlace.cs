@@ -20,42 +20,53 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using D3Sharp.Net.Game.Messages.Game;
 
-namespace D3Sharp.Net.Game.Messages.Connection
+namespace D3Sharp.Net.Game.Messages.Misc
 {
-    [IncomingMessage(Opcodes.LogoutComplete)]
-    public class LogoutComplete:GameMessage
+    public class RopeEffectMessageACDToPlace : GameMessage
     {
+        public int /* sno */ Field0;
+        public int Field1;
+        public int Field2;
+        public WorldPlace Field3;
+
+
         public override void Handle(GameClient client)
         {
-            if (client.IsLoggingOut)
-            {
-                client.SendMessageNow(new QuitGameMessage()
-                {
-                    Id = 0x0003,
-                    // Field0 - quit reason?
-                    // 0 - logout
-                    // 1 - kicked by party leader
-                    // 2 - disconnected due to client-server (version?) missmatch
-                    Field0 = 0,
-                });
-            }
+            throw new NotImplementedException();
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadInt(32);
+            Field2 = buffer.ReadInt(5);
+            Field3 = new WorldPlace();
+            Field3.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            throw new NotImplementedException();
+            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(5, Field2);
+            Field3.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
-            throw new NotImplementedException();
+            b.Append(' ', pad);
+            b.AppendLine("RopeEffectMessageACDToPlace:");
+            b.Append(' ', pad++);
+            b.AppendLine("{");
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            Field3.AsText(b, pad);
+            b.Append(' ', --pad);
+            b.AppendLine("}");
         }
+
+
     }
 }

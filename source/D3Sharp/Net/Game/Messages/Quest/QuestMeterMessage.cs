@@ -20,42 +20,47 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using D3Sharp.Net.Game.Messages.Game;
 
-namespace D3Sharp.Net.Game.Messages.Connection
+namespace D3Sharp.Net.Game.Messages.Quest
 {
-    [IncomingMessage(Opcodes.LogoutComplete)]
-    public class LogoutComplete:GameMessage
+    public class QuestMeterMessage : GameMessage
     {
+        public int /* sno */ snoQuest;
+        public int Field1;
+        public float Field2;
+
         public override void Handle(GameClient client)
         {
-            if (client.IsLoggingOut)
-            {
-                client.SendMessageNow(new QuitGameMessage()
-                {
-                    Id = 0x0003,
-                    // Field0 - quit reason?
-                    // 0 - logout
-                    // 1 - kicked by party leader
-                    // 2 - disconnected due to client-server (version?) missmatch
-                    Field0 = 0,
-                });
-            }
+            throw new NotImplementedException();
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            
+            snoQuest = buffer.ReadInt(32);
+            Field1 = buffer.ReadInt(32);
+            Field2 = buffer.ReadFloat32();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            throw new NotImplementedException();
+            buffer.WriteInt(32, snoQuest);
+            buffer.WriteInt(32, Field1);
+            buffer.WriteFloat32(Field2);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
-            throw new NotImplementedException();
+            b.Append(' ', pad);
+            b.AppendLine("QuestMeterMessage:");
+            b.Append(' ', pad++);
+            b.AppendLine("{");
+            b.Append(' ', pad); b.AppendLine("snoQuest: 0x" + snoQuest.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("Field2: " + Field2.ToString("G"));
+            b.Append(' ', --pad);
+            b.AppendLine("}");
         }
+
+
     }
 }

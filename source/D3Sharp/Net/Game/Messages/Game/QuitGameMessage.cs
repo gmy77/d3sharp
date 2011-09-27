@@ -17,45 +17,38 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using D3Sharp.Net.Game.Messages.Game;
 
-namespace D3Sharp.Net.Game.Messages.Connection
+namespace D3Sharp.Net.Game.Messages.Game
 {
-    [IncomingMessage(Opcodes.LogoutComplete)]
-    public class LogoutComplete:GameMessage
+    public class QuitGameMessage:GameMessage
     {
+        public int Field0;
+
         public override void Handle(GameClient client)
         {
-            if (client.IsLoggingOut)
-            {
-                client.SendMessageNow(new QuitGameMessage()
-                {
-                    Id = 0x0003,
-                    // Field0 - quit reason?
-                    // 0 - logout
-                    // 1 - kicked by party leader
-                    // 2 - disconnected due to client-server (version?) missmatch
-                    Field0 = 0,
-                });
-            }
+            throw new NotImplementedException();
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            
+            Field0 = buffer.ReadInt(3);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            throw new NotImplementedException();
+            buffer.WriteInt(3, Field0);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
-            throw new NotImplementedException();
+            b.Append(' ', pad);
+            b.AppendLine("QuitGameMessage:");
+            b.Append(' ', pad++);
+            b.AppendLine("{");
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', --pad);
+            b.AppendLine("}");
         }
     }
 }
