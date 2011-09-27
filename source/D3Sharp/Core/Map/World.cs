@@ -156,7 +156,7 @@ namespace D3Sharp.Core.Map
         public void RevealWorld(Toon t)
         {
             //reveal world to player
-            t.client.SendMessage(new RevealWorldMessage()
+            t.Owner.LoggedInBNetClient.InGameClient.SendMessage(new RevealWorldMessage()
             {
                 Id = 0x0037,
                 Field0 = WorldID,
@@ -164,7 +164,7 @@ namespace D3Sharp.Core.Map
             });
 
             //player enters world
-            t.client.SendMessage(new EnterWorldMessage()
+            t.Owner.LoggedInBNetClient.InGameClient.SendMessage(new EnterWorldMessage()
             {
                 Id = 0x0033,
                 Field0 = new Vector3D()

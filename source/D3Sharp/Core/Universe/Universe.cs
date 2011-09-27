@@ -8,13 +8,14 @@ using D3Sharp.Core.Map;
 using D3Sharp.Net.Game;
 using D3Sharp.Core.Toons;
 using D3Sharp.Net.Game.Messages;
-using D3Sharp.Net.Game.Messages.ACD;
-using D3Sharp.Net.Game.Messages.Connection;
-using D3Sharp.Net.Game.Messages.Misc;
-using D3Sharp.Net.Game.Messages.Misc.ANN;
-using D3Sharp.Net.Game.Messages.Player;
-using D3Sharp.Net.Game.Messages.Inventory;
-using D3Sharp.Net.Game.Messages.World;
+using D3Sharp.Net.Game.Message.Fields;
+using D3Sharp.Net.Game.Message.Definitions.ACD;
+using D3Sharp.Net.Game.Message.Definitions.Connection;
+using D3Sharp.Net.Game.Message.Definitions.Misc;
+using D3Sharp.Net.Game.Message.Definitions.Player;
+using D3Sharp.Net.Game.Message.Definitions.Inventory;
+using D3Sharp.Net.Game.Message.Definitions.World;
+using D3Sharp.Net.Game.Message.Definitions.Attribute;
 
 namespace D3Sharp.Core.Universe
 {
@@ -127,7 +128,6 @@ namespace D3Sharp.Core.Universe
         public void EnterPlayer(GameClient cl)
         {
             Toon CurrentToon = cl.BnetClient.CurrentToon;
-            CurrentToon.client = cl;
 
             Players.Add(CurrentToon);
 
@@ -148,7 +148,7 @@ namespace D3Sharp.Core.Universe
             //handle world entry for player here, hardcoded version for now
 
             #region NewPlayer
-            CurrentToon.client.SendMessage(new NewPlayerMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new NewPlayerMessage()
             {
                 Id = 0x0031,
                 Field0 = 0x00000000, //Party frame (0x00000000 hide, 0x00000001 show)
@@ -464,7 +464,7 @@ namespace D3Sharp.Core.Universe
             Console.WriteLine("Positioning character at " + CurrentToon.PosX + " " + CurrentToon.PosY + " " + CurrentToon.PosZ);
 
             #region ACDEnterKnown 0x789E00E2 PlayerId??
-            CurrentToon.client.SendMessage(new ACDEnterKnownMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new ACDEnterKnownMessage()
             {
                 Id = 0x003B,
                 Field0 = 0x789E00E2,
@@ -507,14 +507,14 @@ namespace D3Sharp.Core.Universe
                 Field10 = 0x00,
             });
 
-            CurrentToon.client.SendMessage(new ACDCollFlagsMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new ACDCollFlagsMessage()
             {
                 Id = 0x00A6,
                 Field0 = 0x789E00E2,
                 Field1 = 0x00000000,
             });
 
-            CurrentToon.client.SendMessage(new AttributesSetValuesMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new AttributesSetValuesMessage()
             {
                 Id = 0x004D,
                 Field0 = 0x789E00E2,
@@ -624,7 +624,7 @@ namespace D3Sharp.Core.Universe
     },
             });
 
-            CurrentToon.client.SendMessage(new AttributesSetValuesMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new AttributesSetValuesMessage()
             {
                 Id = 0x004D,
                 Field0 = 0x789E00E2,
@@ -732,7 +732,7 @@ namespace D3Sharp.Core.Universe
     },
             });
 
-            CurrentToon.client.SendMessage(new AttributesSetValuesMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new AttributesSetValuesMessage()
             {
                 Id = 0x004D,
                 Field0 = 0x789E00E2,
@@ -841,7 +841,7 @@ namespace D3Sharp.Core.Universe
     },
             });
 
-            CurrentToon.client.SendMessage(new AttributesSetValuesMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new AttributesSetValuesMessage()
             {
                 Id = 0x004D,
                 Field0 = 0x789E00E2,
@@ -946,7 +946,7 @@ namespace D3Sharp.Core.Universe
     },
             });
 
-            CurrentToon.client.SendMessage(new AttributesSetValuesMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new AttributesSetValuesMessage()
             {
                 Id = 0x004D,
                 Field0 = 0x789E00E2,
@@ -1051,7 +1051,7 @@ namespace D3Sharp.Core.Universe
     },
             });
 
-            CurrentToon.client.SendMessage(new AttributesSetValuesMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new AttributesSetValuesMessage()
             {
                 Id = 0x004D,
                 Field0 = 0x789E00E2,
@@ -1163,7 +1163,7 @@ namespace D3Sharp.Core.Universe
     },
             });
 
-            CurrentToon.client.SendMessage(new AttributesSetValuesMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new AttributesSetValuesMessage()
             {
                 Id = 0x004D,
                 Field0 = 0x789E00E2,
@@ -1276,7 +1276,7 @@ namespace D3Sharp.Core.Universe
     },
             });
 
-            CurrentToon.client.SendMessage(new AttributesSetValuesMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new AttributesSetValuesMessage()
             {
                 Id = 0x004D,
                 Field0 = 0x789E00E2,
@@ -1390,7 +1390,7 @@ namespace D3Sharp.Core.Universe
     },
             });
 
-            CurrentToon.client.SendMessage(new AttributesSetValuesMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new AttributesSetValuesMessage()
             {
                 Id = 0x004D,
                 Field0 = 0x789E00E2,
@@ -1492,7 +1492,7 @@ namespace D3Sharp.Core.Universe
     },
             });
 
-            CurrentToon.client.SendMessage(new AttributesSetValuesMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new AttributesSetValuesMessage()
             {
                 Id = 0x004D,
                 Field0 = 0x789E00E2,
@@ -1586,7 +1586,7 @@ namespace D3Sharp.Core.Universe
     },
             });
 
-            CurrentToon.client.SendMessage(new ACDGroupMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new ACDGroupMessage()
             {
                 Id = 0x00B8,
                 Field0 = 0x789E00E2,
@@ -1594,13 +1594,13 @@ namespace D3Sharp.Core.Universe
                 Field2 = -1,
             });
 
-            CurrentToon.client.SendMessage(new ANNDataMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new ANNDataMessage()
             {
                 Id = 0x003E,
                 Field0 = 0x789E00E2,
             });
 
-            CurrentToon.client.SendMessage(new ACDTranslateFacingMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new ACDTranslateFacingMessage()
             {
                 Id = 0x0070,
                 Field0 = 0x789E00E2,
@@ -1608,14 +1608,14 @@ namespace D3Sharp.Core.Universe
                 Field2 = false,
             });
 
-            CurrentToon.client.SendMessage(new PlayerEnterKnownMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new PlayerEnterKnownMessage()
             {
                 Id = 0x003D,
                 Field0 = 0x00000000,
                 Field1 = 0x789E00E2,
             });
 
-            CurrentToon.client.SendMessage(new VisualInventoryMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new VisualInventoryMessage()
             {
                 Id = 0x004E,
                 Field0 = 0x789E00E2,
@@ -1683,13 +1683,13 @@ namespace D3Sharp.Core.Universe
                 },
             });
 
-            CurrentToon.client.SendMessage(new PlayerActorSetInitialMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new PlayerActorSetInitialMessage()
             {
                 Id = 0x0039,
                 Field0 = 0x789E00E2,
                 Field1 = 0x00000000,
             });
-            CurrentToon.client.SendMessage(new SNONameDataMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new SNONameDataMessage()
             {
                 Id = 0x00D3,
                 Field0 = new SNOName()
@@ -1700,17 +1700,17 @@ namespace D3Sharp.Core.Universe
             });
             #endregion
 
-            CurrentToon.client.FlushOutgoingBuffer();
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.FlushOutgoingBuffer();
 
-            CurrentToon.client.SendMessage(new DWordDataMessage() // TICK
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new DWordDataMessage() // TICK
             {
                 Id = 0x0089,
                 Field0 = 0x00000077,
             });
 
-            CurrentToon.client.FlushOutgoingBuffer();
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.FlushOutgoingBuffer();
 
-            CurrentToon.client.SendMessage(new AttributeSetValueMessage()
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new AttributeSetValueMessage()
             {
                 Id = 0x004C,
                 Field0 = 0x789E00E2,
@@ -1722,7 +1722,7 @@ namespace D3Sharp.Core.Universe
                 },
             });
 
-            CurrentToon.client.SendMessage(new DWordDataMessage() // TICK
+            CurrentToon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new DWordDataMessage() // TICK
             {
                 Id = 0x0089,
                 Field0 = 0x0000007D,

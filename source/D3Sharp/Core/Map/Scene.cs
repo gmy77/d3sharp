@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using D3Sharp.Net.Game.Messages.Scene;
-using D3Sharp.Net.Game.Messages.Map;
+using D3Sharp.Net.Game.Message.Definitions.Scene;
+using D3Sharp.Net.Game.Message.Definitions.Map;
 using D3Sharp.Core.Toons;
 
 namespace D3Sharp.Core.Map
@@ -18,9 +18,9 @@ namespace D3Sharp.Core.Map
 
         public void Reveal(Toon t)
         {
-            if (SceneData != null) t.client.SendMessage(SceneData);
-            if (Map != null) t.client.SendMessage(Map);
-            t.client.FlushOutgoingBuffer();
+            if (SceneData != null) t.Owner.LoggedInBNetClient.InGameClient.SendMessage(SceneData);
+            if (Map != null) t.Owner.LoggedInBNetClient.InGameClient.SendMessage(Map);
+            t.Owner.LoggedInBNetClient.InGameClient.FlushOutgoingBuffer();
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using D3Sharp.Net.Game.Messages.ACD;
+using D3Sharp.Net.Game.Message.Definitions.ACD;
 using D3Sharp.Core.Toons;
 
 namespace D3Sharp.Core.Actors
@@ -17,8 +17,8 @@ namespace D3Sharp.Core.Actors
 
         public void Reveal(Toon t)
         {
-            if (RevealMessage != null) t.client.SendMessage(RevealMessage);
-            t.client.FlushOutgoingBuffer();
+            if (RevealMessage != null) t.Owner.LoggedInBNetClient.InGameClient.SendMessage(RevealMessage);
+            t.Owner.LoggedInBNetClient.InGameClient.FlushOutgoingBuffer();
         }
     }
 }

@@ -499,8 +499,6 @@ namespace D3Sharp.Core.Toons
         public int CurrentWorldID;
         public int CurrentWorldSNO;
         public float PosX, PosY, PosZ;
-        public GameClient client;
-
     }
 
     public enum ToonClass
