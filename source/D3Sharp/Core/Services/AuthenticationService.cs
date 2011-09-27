@@ -34,7 +34,7 @@ namespace D3Sharp.Core.Services
         {
             Logger.Trace("LogonRequest(); Email={0}", request.Email);
             Client.Account = AccountManager.GetAccountByEmail(request.Email);
-            Client.Account.LoggedInClient = (BNetClient)Client;
+            Client.Account.LoggedInBNetClient = (BNetClient)Client;
 
             var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
                 .SetAccount(Client.Account.BnetAccountID)

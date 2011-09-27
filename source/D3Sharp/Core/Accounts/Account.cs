@@ -37,7 +37,7 @@ namespace D3Sharp.Core.Accounts
         public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
         public string Email { get; private set; }
 
-        public BNetClient LoggedInClient { get; set; }
+        public BNetClient LoggedInBNetClient { get; set; }
 
         public D3.Account.Digest Digest
         {
