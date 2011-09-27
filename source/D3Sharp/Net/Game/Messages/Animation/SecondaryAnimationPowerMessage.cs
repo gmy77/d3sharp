@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using D3Sharp.Core.NPC;
+using D3Sharp.Core.Helpers;
 
 namespace D3Sharp.Net.Game.Messages.Animation
 {
@@ -38,13 +39,13 @@ namespace D3Sharp.Net.Game.Messages.Animation
             {
                 if ((i % 2) == 0)
                 {
-                    client.position.Field0 += (float)(client.rand.NextDouble() * 20);
-                    client.position.Field1 += (float)(client.rand.NextDouble() * 20);
+                    client.position.Field0 += (float)(RandomHelper.NextDouble() * 20);
+                    client.position.Field1 += (float)(RandomHelper.NextDouble() * 20);
                 }
                 else
                 {
-                    client.position.Field0 -= (float)(client.rand.NextDouble() * 20);
-                    client.position.Field1 -= (float)(client.rand.NextDouble() * 20);
+                    client.position.Field0 -= (float)(RandomHelper.NextDouble() * 20);
+                    client.position.Field1 -= (float)(RandomHelper.NextDouble() * 20);
                 }
                 System.Threading.Thread.Sleep(15); // Required to not generate the same random value twice...
                 client.SpawnMob(BasicNPC.RandomNPC());

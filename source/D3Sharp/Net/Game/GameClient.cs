@@ -18,6 +18,7 @@
 
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using D3Sharp.Net.BNet;
 using D3Sharp.Net.Game.Messages;
 using D3Sharp.Net.Game.Messages.ACD;
@@ -29,8 +30,8 @@ using D3Sharp.Net.Game.Messages.Player;
 using D3Sharp.Net.Game.Messages.Scene;
 using D3Sharp.Net.Game.Messages.World;
 using D3Sharp.Utils;
-using System.Collections.Generic;
 using D3Sharp.Core.Map;
+using D3Sharp.Core.Helpers;
 
 //using Gibbed.Helpers;
 
@@ -52,7 +53,6 @@ namespace D3Sharp.Net.Game
         public float posx, posy, posz;
         public  int objectId = 0x78f50114 + 100;
 
-        public  Random rand = new Random();
         public IList<int> objectIdsSpawned = null;
         public Vector3D position;
 
@@ -615,7 +615,7 @@ namespace D3Sharp.Net.Game
             {
                 Id = 0x70,
                 Field0 = objectId,
-                Field1 = (float)(rand.NextDouble() * 2.0 * Math.PI),
+                Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI),
                 Field2 = false
             });
 

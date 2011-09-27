@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using D3Sharp.Net.Game;
-using System.Collections;
 using D3Sharp.Net.Game.Messages;
 using D3Sharp.Net.Game.Messages.Misc;
+using D3Sharp.Core.Helpers;
 
 namespace D3Sharp.Core.NPC
 {
@@ -351,7 +352,7 @@ namespace D3Sharp.Core.NPC
             //{
             //    Id = 0x70,
             //    Field0 = objectId,
-            //    Field1 = (float)(rand.NextDouble() * 2.0 * Math.PI),
+            //    Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI),
             //    Field2 = false
             //});
 
@@ -730,9 +731,8 @@ namespace D3Sharp.Core.NPC
 
         public static int RandomNPC()
         {
-            Random r = new Random();
             NPCList[] values = (NPCList[])Enum.GetValues(typeof(NPCList));
-            int toReturn = (int)values[r.Next(0, values.Length)];
+            int toReturn = (int)values[RandomHelper.Next(0, values.Length)];
             return toReturn;
         }
     }
