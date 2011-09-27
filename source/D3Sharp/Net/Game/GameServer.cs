@@ -17,6 +17,7 @@
  */
 
 using D3Sharp.Core.Universe;
+using System.Linq;
 
 namespace D3Sharp.Net.Game
 {
@@ -34,16 +35,16 @@ namespace D3Sharp.Net.Game
             this.DataSent += (sender, e) => { };
         }
 
+        void GameServer_OnConnect(object sender, ConnectionEventArgs e)
+        {
+            Logger.Trace("Game-Client connected: {0}", e.Connection.ToString());
+            e.Connection.Client = new GameClient(e.Connection,GameUniverse);
+        }
+
         void GameServer_DataReceived(object sender, ConnectionDataEventArgs e)
         {
             var connection = (Connection)e.Connection;
             ((GameClient)connection.Client).Parse(e);
-        }
-
-        void GameServer_OnConnect(object sender, ConnectionEventArgs e)
-        {
-            Logger.Trace("Game-Client connected: {0}", e.Connection.ToString());
-            e.Connection.Client = new GameClient(e.Connection);
         }
 
         public override void Run()

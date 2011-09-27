@@ -22,6 +22,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Utils
 {
@@ -147,8 +148,8 @@ namespace D3Sharp.Utils
 
         public void LogIncoming(Google.ProtocolBuffers.IMessage msg) { Log(Level.Incoming, msg.AsText(), null); }
         public void LogOutgoing(Google.ProtocolBuffers.IMessage msg) { Log(Level.Outgoing, msg.AsText(), null); }
-        public void LogIncoming(D3Sharp.Net.Game.GameMessage msg) { Log(Level.Incoming, msg.AsText(), null); }
-        public void LogOutgoing(D3Sharp.Net.Game.GameMessage msg) { Log(Level.Outgoing, msg.AsText(), null); }
+        public void LogIncoming(GameMessage msg) { Log(Level.Incoming, msg.AsText(), null); }
+        public void LogOutgoing(GameMessage msg) { Log(Level.Outgoing, msg.AsText(), null); }
     }
 
     public class Target

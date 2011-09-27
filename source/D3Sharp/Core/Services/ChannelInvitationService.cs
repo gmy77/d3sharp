@@ -95,8 +95,7 @@ namespace D3Sharp.Core.Services
         {            
             var invitee = ToonManager.GetToonByLowID(request.TargetId.Low);
             Logger.Warn(String.Format("{0} invited {1} to his channel.", Client.CurrentToon.Name, invitee.Name));
-
-
+            
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
             var extensionBytes = request.UnknownFields.FieldDictionary[105].LengthDelimitedList[0].ToByteArray();
             var channelInvitationInfo = bnet.protocol.channel_invitation.SendInvitationRequest.ParseFrom(extensionBytes);
