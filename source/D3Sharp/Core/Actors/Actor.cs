@@ -13,7 +13,6 @@ namespace D3Sharp.Core.Actors
         public int snoID;
         public float PosX, PosY, PosZ;
         public ACDEnterKnownMessage RevealMessage;
-        public string ActorLine;
 
         public void Reveal(Toon t)
         {

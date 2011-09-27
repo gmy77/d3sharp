@@ -13,8 +13,6 @@ namespace D3Sharp.Core.Map
         public int ID;
         public RevealSceneMessage SceneData;
         public MapRevealSceneMessage Map;
-        public string SceneLine;
-        public string MapLine;
 
         public void Reveal(Toon t)
         {
