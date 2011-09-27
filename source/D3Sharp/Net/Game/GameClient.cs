@@ -17,26 +17,25 @@
  */
 
 using System;
-using System.IO;
 using System.Linq;
-using D3Sharp.Net.BNet;
-using D3Sharp.Net.Game.Messages;
-using D3Sharp.Net.Game.Messages.ACD;
-using D3Sharp.Net.Game.Messages.Animation;
-using D3Sharp.Net.Game.Messages.Map;
-using D3Sharp.Net.Game.Messages.Misc;
-using D3Sharp.Net.Game.Messages.Misc.ANN;
-using D3Sharp.Net.Game.Messages.Scene;
-using D3Sharp.Net.Game.Messages.World;
-using Gibbed.Helpers;
-using System.Text;
-using D3Sharp.Utils;
 using System.Collections.Generic;
-using D3Sharp.Net.Game;
+using D3Sharp.Net.BNet;
+using D3Sharp.Net.Game.Message.Definitions.ACD;
+using D3Sharp.Net.Game.Message.Definitions.Animation;
+using D3Sharp.Net.Game.Message.Definitions.Attribute;
+using D3Sharp.Net.Game.Message.Definitions.Map;
+using D3Sharp.Net.Game.Message.Definitions.Misc;
+using D3Sharp.Net.Game.Message.Definitions.Player;
+using D3Sharp.Net.Game.Message.Definitions.Scene;
+using D3Sharp.Net.Game.Message.Definitions.World;
+using D3Sharp.Net.Game.Message.Fields;
+using D3Sharp.Net.Game.Messages;
+using D3Sharp.Utils;
 using D3Sharp.Core.Map;
 using D3Sharp.Core.Skills;
 using D3Sharp.Core.NPC;
 using D3Sharp.Core.Universe;
+using D3Sharp.Core.Helpers;
 
 //using Gibbed.Helpers;
 
@@ -59,7 +58,6 @@ namespace D3Sharp.Net.Game
         public int tick = 0;
         public  int objectId = 0x78f50114 + 100;
 
-        public  Random rand = new Random();
         public IList<int> objectIdsSpawned = null;
         public Vector3D position;
 
@@ -622,7 +620,7 @@ namespace D3Sharp.Net.Game
             {
                 Id = 0x70,
                 Field0 = objectId,
-                Field1 = (float)(rand.NextDouble() * 2.0 * Math.PI),
+                Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI),
                 Field2 = false
             });
 

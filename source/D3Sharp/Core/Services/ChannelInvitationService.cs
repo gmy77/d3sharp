@@ -78,17 +78,17 @@ namespace D3Sharp.Core.Services
 
         public override void AcceptInvitation(Google.ProtocolBuffers.IRpcController controller, AcceptInvitationRequest request, System.Action<AcceptInvitationResponse> done)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void DeclineInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void RevokeInvitation(Google.ProtocolBuffers.IRpcController controller, RevokeInvitationRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void SendInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, System.Action<bnet.protocol.invitation.SendInvitationResponse> done)
@@ -126,12 +126,12 @@ namespace D3Sharp.Core.Services
         public override void SuggestInvitation(Google.ProtocolBuffers.IRpcController controller, SuggestInvitationRequest request, System.Action<bnet.protocol.NoData> done)
         {
             // "request to join party"
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, UnsubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

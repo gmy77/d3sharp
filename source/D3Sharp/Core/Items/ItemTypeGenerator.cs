@@ -18,6 +18,7 @@
 
 using System;
 using System.Data.SQLite;
+using D3Sharp.Core.Helpers;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Helpers;
 
@@ -42,8 +43,7 @@ namespace D3Sharp.Core.Items
                 int itemsCount = reader.GetInt32(0);
 
                 // Now select random element 
-                var rand = new Random();
-                int selectedElementNr = rand.Next(itemsCount);
+                int selectedElementNr = RandomHelper.Next(itemsCount);
                 String selectRandom = String.Format("SELECT itemname {0} limit {1},1", querypart, selectedElementNr);
                 cmd = new SQLiteCommand(selectRandom, Storage.GameDataDBManager.Connection);
                 reader = cmd.ExecuteReader();
