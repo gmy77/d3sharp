@@ -32,6 +32,9 @@ using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Net.Game.Messages;
 using D3Sharp.Utils;
 using D3Sharp.Core.Map;
+using D3Sharp.Core.Skills;
+using D3Sharp.Core.NPC;
+using D3Sharp.Core.Universe;
 using D3Sharp.Core.Helpers;
 
 //using Gibbed.Helpers;
@@ -48,10 +51,11 @@ namespace D3Sharp.Net.Game
         GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
 
+        //this is the main universe reference to handle most of the player-game interactions and manage game state
+        public Universe GameUniverse;
+        
         public int packetId = 0x227 + 20;
         public int tick = 0;
-        public World GameWorld;
-        public float posx, posy, posz;
         public  int objectId = 0x78f50114 + 100;
 
         public IList<int> objectIdsSpawned = null;
@@ -59,11 +63,11 @@ namespace D3Sharp.Net.Game
 
         public bool IsLoggingOut;
 
-        public GameClient(IConnection connection)
+        public GameClient(IConnection connection, Universe GU)
         {
             this.Connection = connection;
             _outgoingBuffer.WriteInt(32, 0);
-            GameWorld = new World(this);
+            GameUniverse = GU;
         }
 
         public void Parse(ConnectionDataEventArgs e)

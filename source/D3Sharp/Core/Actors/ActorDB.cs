@@ -30,6 +30,11 @@ namespace D3Sharp.Core.Actors
         private static int[] NPCList;
         private static int[] MobList;
 
+        static ActorDB()
+        {
+            Init();
+        }
+
         public static string GetActorName(int id)
         {
             try
