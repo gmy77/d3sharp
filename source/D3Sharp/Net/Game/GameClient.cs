@@ -8284,7 +8284,11 @@ namespace D3Sharp.Net.Game
         }
         public void OnMessage(AssignSkillMessage msg)
         {
-            skillState.activeSkills[msg.Field1] = msg.snoPower;
+            if (msg.Id == 0x064)
+                skillState.activeSkills[msg.Field1] = msg.snoPower;
+            else if (msg.Id == 0x065)
+                skillState.passiveSkills[msg.Field1] = msg.snoPower;
+
             UpdateHeroSkillState();
         }
         public void OnMessage(HirelingRequestLearnSkillMessage msg)
