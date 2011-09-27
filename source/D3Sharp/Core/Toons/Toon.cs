@@ -28,6 +28,7 @@ using D3Sharp.Core.Storage;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Helpers;
 using Account = D3Sharp.Core.Accounts.Account;
+using D3Sharp.Net.Game;
 
 namespace D3Sharp.Core.Toons
 {
@@ -491,6 +492,15 @@ namespace D3Sharp.Core.Toons
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
         }
+
+        //////////////////////////////////////////////////////////////////////////
+        // ingame data required by the universe follows
+
+        public int CurrentWorldID;
+        public int CurrentWorldSNO;
+        public float PosX, PosY, PosZ;
+        public GameClient client;
+
     }
 
     public enum ToonClass

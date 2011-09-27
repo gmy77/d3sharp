@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using D3Sharp.Net.Game.Messages.ACD;
+using D3Sharp.Core.Toons;
+
+namespace D3Sharp.Core.Actors
+{
+    public class Actor
+    {
+        public int ID;
+        public int snoID;
+        public float PosX, PosY, PosZ;
+        public ACDEnterKnownMessage RevealMessage;
+        public string ActorLine;
+
+        public void Reveal(Toon t)
+        {
+            if (RevealMessage != null) t.client.SendMessage(RevealMessage);
+            t.client.FlushOutgoingBuffer();
+        }
+    }
+}
