@@ -23,7 +23,6 @@ using D3Sharp.Net.Game.Message.Definitions.Attribute;
 using D3Sharp.Net.Game.Message.Definitions.Game;
 using D3Sharp.Net.Game.Message.Definitions.Hireling;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Misc
 {
@@ -35,9 +34,9 @@ namespace D3Sharp.Net.Game.Message.Definitions.Misc
         Opcodes.SimpleMessage30,Opcodes.SimpleMessage31,Opcodes.SimpleMessage32,Opcodes.SimpleMessage33,Opcodes.SimpleMessage34,Opcodes.SimpleMessage35,Opcodes.SimpleMessage36,
         Opcodes.SimpleMessage37,Opcodes.SimpleMessage38,Opcodes.SimpleMessage39,Opcodes.SimpleMessage40,Opcodes.SimpleMessage41,Opcodes.SimpleMessage42,Opcodes.SimpleMessage43,
         Opcodes.SimpleMessage44,Opcodes.SimpleMessage45,Opcodes.SimpleMessage46})]
-    public class SimpleMessage : GameMessage
+    public class SimpleMessage : GameMessage, ISelfHandler
     {
-        public override void Handle(GameClient client)
+        public void Handle(GameClient client)
         {
             switch (this.Id)
             {

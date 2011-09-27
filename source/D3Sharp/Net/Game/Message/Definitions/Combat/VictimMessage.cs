@@ -18,7 +18,6 @@
 
 using System;
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Combat
 {
@@ -36,10 +35,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.Combat
         public int /* sno */ snoPowerDmgSource;
 
 
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public override void Parse(GameBitBuffer buffer)
         {

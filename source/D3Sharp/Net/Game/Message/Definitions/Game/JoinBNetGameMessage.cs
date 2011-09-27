@@ -16,28 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Text;
-using System.Linq;
-using D3Sharp.Core.Skills;
-using D3Sharp.Net.Game.Message.Definitions.ACD;
-using D3Sharp.Net.Game.Message.Definitions.Act;
-using D3Sharp.Net.Game.Message.Definitions.Animation;
-using D3Sharp.Net.Game.Message.Definitions.Attribute;
-using D3Sharp.Net.Game.Message.Definitions.Connection;
-using D3Sharp.Net.Game.Message.Definitions.Hero;
-using D3Sharp.Net.Game.Message.Definitions.Inventory;
-using D3Sharp.Net.Game.Message.Definitions.Map;
-using D3Sharp.Net.Game.Message.Definitions.Misc;
-using D3Sharp.Net.Game.Message.Definitions.Player;
-using D3Sharp.Net.Game.Message.Definitions.Scene;
-using D3Sharp.Net.Game.Message.Definitions.Team;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Game
 {
-    [IncomingMessage(Opcodes.JoinBNetGameMessage)]
+    [IncomingMessage(Opcodes.JoinBNetGameMessage,Consumers.GameManager)]
     public class JoinBNetGameMessage : GameMessage
     {
         public EntityId Field0;  // this *is* the toon id /raist.
@@ -47,66 +31,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Game
         public int Field4;
         public int ProtocolHash;
         public int SNOPackHash;
-
-        public override void Handle(GameClient client)
-        {
-            if (this.Id != 0x000A)
-                throw new NotImplementedException();
-
-            // a hackish way to get client.BnetClient in context -- pretends games has only one client in. when we're done with implementing bnet completely, will get this sorted out. /raist
-            client.BnetClient = Core.Games.GameManager.AvailableGames[(ulong)this.Field2].Clients.FirstOrDefault();
-            if (client.BnetClient != null)
-            {
-                client.Toon = client.BnetClient.CurrentToon;
-                client.BnetClient.InGameClient = client;
-            }
-
-            client.SendMessageNow(new VersionsMessage()
-            {
-                Id = 0x000D,
-                SNOPackHash = this.SNOPackHash,
-                ProtocolHash = GameMessage.ImplementedProtocolHash,
-                Version = "0.3.0.7333",
-            });
-
-            client.SendMessage(new ConnectionEstablishedMessage()
-            {
-                Id = 0x002E,
-                Field0 = 0x00000000,
-                Field1 = 0x4BB91A16,
-                Field2 = this.SNOPackHash,
-            });
-
-            client.SendMessage(new GameSetupMessage()
-            {
-                Id = 0x002F,
-                Field0 = 0x00000077,
-            });
-
-            client.SendMessage(new SavePointInfoMessage()
-            {
-                Id = 0x0045,
-                snoLevelArea = -1,
-            });
-
-            client.SendMessage(new HearthPortalInfoMessage()
-            {
-                Id = 0x0046,
-                snoLevelArea = -1,
-                Field1 = -1,
-            });
-
-            client.SendMessage(new ActTransitionMessage()
-            {
-                Id = 0x00A8,
-                Field0 = 0x00000000,
-                Field1 = true,
-            });
-
-            client.GameUniverse.EnterPlayer(client);
-
-            client.FlushOutgoingBuffer();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

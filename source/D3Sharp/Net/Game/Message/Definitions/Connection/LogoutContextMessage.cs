@@ -17,17 +17,15 @@
  */
 
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Connection
 {
-
     [IncomingMessage(new[] { Opcodes.LogoutContextMessage1, Opcodes.LogoutContextMessage2 })]
-    public class LogoutContextMessage : GameMessage
+    public class LogoutContextMessage : GameMessage,ISelfHandler
     {
         public bool Field0;
 
-        public override void Handle(GameClient client)
+        public void Handle(GameClient client)
         {
             client.IsLoggingOut = !client.IsLoggingOut;
 

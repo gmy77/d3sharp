@@ -121,6 +121,7 @@
     <Compile Include="Core\Toons\Toon.cs" />
     <Compile Include="Core\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Toons\ToonManager.cs" />
+    <Compile Include="Core\Universe\Game\GameManager.cs" />
     <Compile Include="Core\Universe\Universe.cs" />
     <Compile Include="Net\BNet\BNetClient.cs" />
     <Compile Include="Net\BNet\BnetServer.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Net\BNet\IBNetClient.cs" />
     <Compile Include="Net\BNet\Packets\BNetHeader.cs" />
     <Compile Include="Net\BNet\Packets\BNetPacket.cs" />
+    <Compile Include="Net\Game\ClientManager.cs" />
     <Compile Include="Net\Game\Config.cs" />
     <Compile Include="Net\Game\Message\Fields\AABB.cs" />
     <Compile Include="Net\Game\Message\Fields\ActiveEvent.cs" />
@@ -169,6 +171,8 @@
     <Compile Include="Net\Game\Message\GameBitBuffer.cs" />
     <Compile Include="Net\Game\GameClient.cs" />
     <Compile Include="Net\Game\Message\Definitions\Connection\LogoutComplete.cs" />
+    <Compile Include="Net\Game\Message\IMessageConsumer.cs" />
+    <Compile Include="Net\Game\Message\ISelfHandler.cs" />
     <Compile Include="Net\Game\Message\GameMessage.cs" />
     <Compile Include="Net\Game\GameServer.cs" />
     <Compile Include="Net\Game\IGameClient.cs" />
@@ -240,7 +244,7 @@
     <Compile Include="Net\Game\Message\Definitions\Misc\FloatingAmountMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\FloatingNumberMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Game\GameIdMessage.cs" />
-    <Compile Include="Net\Game\Message\Definitions\Game\GameSyncedDataMessage.cs" />
+    <Compile Include="Net\Game\Message\Definitions\Game\GameSyncedDataMessage.cs.cs" />
     <Compile Include="Net\Game\Message\Definitions\Game\GameTestingSamplingStartMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\GBIDDataMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\GenericBlobMessage.cs" />

@@ -18,7 +18,6 @@
 
 using System;
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Quest
 {
@@ -29,12 +28,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Quest
         public int Field2;
         public bool Field3;
         public bool Field4;
-
-
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

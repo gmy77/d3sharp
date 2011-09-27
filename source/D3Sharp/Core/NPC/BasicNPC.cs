@@ -22,9 +22,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using D3Sharp.Net.Game;
+using D3Sharp.Net.Game.Message;
 using D3Sharp.Net.Game.Message.Definitions.Attribute;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 using D3Sharp.Core.Helpers;
 
 namespace D3Sharp.Core.NPC

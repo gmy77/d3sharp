@@ -19,7 +19,6 @@
 using System;
 using System.Text;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Inventory
 {
@@ -29,12 +28,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Inventory
         public int Field1;
         public int Field2;
         public WorldPlace Field3;
-
-
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

@@ -19,7 +19,6 @@
 using System;
 using System.Text;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.World
 {
@@ -28,12 +27,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.World
         public Vector3D Field0;
         public int Field1;
         public int /* sno */ Field2;
-
-
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

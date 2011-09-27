@@ -18,7 +18,6 @@
 
 using System;
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Trade
 {
@@ -31,12 +30,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Trade
         public int Field4;
         // MaxLength = 5
         public int[] Field5;
-
-
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {
