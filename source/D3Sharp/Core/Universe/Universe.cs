@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using D3Sharp.Utils;
 using D3Sharp.Core.Map;
+using D3Sharp.Core.Actors;
 using D3Sharp.Net.Game;
 using D3Sharp.Core.Toons;
 using D3Sharp.Net.Game.Messages;
@@ -16,6 +17,10 @@ using D3Sharp.Net.Game.Message.Definitions.Player;
 using D3Sharp.Net.Game.Message.Definitions.Inventory;
 using D3Sharp.Net.Game.Message.Definitions.World;
 using D3Sharp.Net.Game.Message.Definitions.Attribute;
+using D3Sharp.Net.Game.Message.Definitions.Combat;
+using D3Sharp.Net.Game.Message.Definitions.Animation;
+using D3Sharp.Net.Game.Message.Definitions.Effect;
+using D3Sharp.Core.Helpers;
 
 namespace D3Sharp.Core.Universe
 {
@@ -34,6 +39,26 @@ namespace D3Sharp.Core.Universe
             World w = new World(WorldID);
             Worlds.Add(w);
             return w;
+        }
+
+        Actor GetActor(int ActorID)
+        {
+            for (int x = 0; x < Worlds.Count; x++)
+            {
+                Actor a = Worlds[x].GetActor(ActorID);
+                if (a!=null) return a;
+            }
+            return null;
+        }
+
+        Portal GetPortal(int ActorID)
+        {
+            for (int x=0; x<Worlds.Count; x++)
+            {
+                Portal p = Worlds[x].GetPortal(ActorID);
+                if (p != null) return p;
+            }
+            return null;
         }
 
         void LoadUniverseData(string Filename)
@@ -62,18 +87,38 @@ namespace D3Sharp.Core.Universe
                             {
                                 case 0x34: //new scene
                                     {
-                                        World w = GetWorld(int.Parse(data[2]));
+                                        int WorldID = int.Parse(data[2]);
+                                        World w = GetWorld(WorldID);
                                         w.AddScene(line);
                                         w.WorldSNO = int.Parse(data[21]); //snoPresetWorld
                                     }
                                     break;
 
-                                case 0x3b: //new actor                            
-                                    GetWorld(int.Parse(data[16])).AddActor(line);
+                                case 0x3b: //new actor     
+                                    {
+                                        int WorldID = int.Parse(data[16]);
+                                        World w = GetWorld(WorldID);
+                                        w.AddActor(line);
+                                    }
                                     break;
 
-                                case 0x44: //new map scene                            
-                                    GetWorld(int.Parse(data[11])).AddMapScene(line);
+                                case 0x44: //new map scene 
+                                    {
+                                        int WorldID = int.Parse(data[11]);
+                                        World w = GetWorld(WorldID);
+                                        w.AddMapScene(line);
+                                    }
+                                    break;
+
+                                case 0x4b: //new portal
+                                    {
+                                        Actor a = GetActor(int.Parse(data[2]));
+                                        if (a != null)
+                                        {
+                                            World w = GetWorld(a.RevealMessage.Field4.Field2);
+                                            if (w != null) w.AddPortal(line);
+                                        }
+                                    }
                                     break;
 
                                 default:
@@ -133,9 +178,14 @@ namespace D3Sharp.Core.Universe
             //initialize world entry point for player to the new character entry area for now
             currentToon.CurrentWorldID = 0x772E0000;
             currentToon.CurrentWorldSNO = 0x115EE;
-            currentToon.PosX = 3143.75f;
-            currentToon.PosY = 2828.75f;
-            currentToon.PosZ = 59.075588f;
+            //currentToon.PosX = 3143.75f;
+            //currentToon.PosY = 2828.75f;
+            //currentToon.PosZ = 59.075588f;
+
+               
+            currentToon.PosX = 2526.250000f;
+            currentToon.PosY = 2098.750000f;
+            currentToon.PosZ = -5.381495f;
 
             //reveal world to the toon
             World w = GetWorld(currentToon.CurrentWorldID);
@@ -1726,7 +1776,240 @@ namespace D3Sharp.Core.Universe
                 Id = 0x0089,
                 Field0 = 0x0000007D,
             });
+        }
+
+        public void ChangeToonWorld(Toon t, int snoWorld)
+        {
+            World w=null;
+            foreach (var x in Worlds)
+                if (x.WorldSNO==snoWorld)
+                    w = x;
+            if (w == null) return; //don't go to a world we don't have in the universe
+
+            t.CurrentWorldID = w.WorldID;
+            t.CurrentWorldSNO = w.WorldSNO;
+
+            w.RevealWorld(t);
+
+            t.Owner.LoggedInBNetClient.InGameClient.FlushOutgoingBuffer();      
+
+            t.Owner.LoggedInBNetClient.InGameClient.SendMessage(new ACDWorldPositionMessage
+            {
+                Id = 0x3f,
+                Field0 = 0x789E00E2,
+                Field1 = new WorldLocationMessageData
+                {
+                    Field0 = 1.43f,
+                    Field1 = new PRTransform
+                    {
+                        Field0 = new Quaternion
+                        {
+                            Field0 = 0.05940768f,
+                            Field1 = new Vector3D
+                            {
+                                Field0 = 0f,
+                                Field1 = 0f,
+                                Field2 = 0.9982339f,
+                            }
+                        },
+                        Field1 = new Vector3D
+                        {
+                            Field0 = 622.665161f,
+                            Field1 = 448.128967f,
+                            Field2 = 0.100000f
+                        }
+                    },
+                    Field2 = w.WorldID,
+                }
+            });
+
+            t.Owner.LoggedInBNetClient.InGameClient.SendMessage(new PlayerWarpedMessage()
+            {
+                Id = 0x0B1,
+                Field0 = 9,
+                Field1 = 0f,
+            });
+
+            t.Owner.LoggedInBNetClient.InGameClient.packetId += 40 * 2;
+            t.Owner.LoggedInBNetClient.InGameClient.SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = t.Owner.LoggedInBNetClient.InGameClient.packetId,
+            });
+
+            t.Owner.LoggedInBNetClient.InGameClient.FlushOutgoingBuffer();      
 
         }
+
+        public void HandleTargetMessage(TargetMessage m, GameClient client)
+        {
+            Portal p=GetPortal(m.Field1);
+
+            if (p!=null)
+            {
+                //we have a transition between worlds here
+
+                ChangeToonWorld(client.Toon, p.PortalMessage.Field1.snoDestLevelArea);
+                return;
+                
+                //if (m.Field1 == 0x77F20036)
+                //{
+                //    client.EnterInn();
+                //    return;
+                //}
+            }
+
+            else if (client.objectIdsSpawned == null || !client.objectIdsSpawned.Contains(m.Field1)) return;
+
+            client.objectIdsSpawned.Remove(m.Field1);
+
+            var killAni = new int[]{
+                    0x2cd7,
+                    0x2cd4,
+                    0x01b378,
+                    0x2cdc,
+                    0x02f2,
+                    0x2ccf,
+                    0x2cd0,
+                    0x2cd1,
+                    0x2cd2,
+                    0x2cd3,
+                    0x2cd5,
+                    0x01b144,
+                    0x2cd6,
+                    0x2cd8,
+                    0x2cda,
+                    0x2cd9
+            };
+            client.SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = m.Field1,
+                Field1 = 0x0,
+                Field2 = 0x2,
+            });
+            client.SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = m.Field1,
+                Field1 = 0xc,
+            });
+            client.SendMessage(new PlayHitEffectMessage()
+            {
+                Id = 0x7b,
+                Field0 = m.Field1,
+                Field1 = 0x789E00E2,
+                Field2 = 0x2,
+                Field3 = false,
+            });
+
+            client.SendMessage(new FloatingNumberMessage()
+            {
+                Id = 0xd0,
+                Field0 = m.Field1,
+                Field1 = 9001.0f,
+                Field2 = 0,
+            });
+
+            client.SendMessage(new ANNDataMessage()
+            {
+                Id = 0x6d,
+                Field0 = m.Field1,
+            });
+
+            int ani = killAni[RandomHelper.Next(killAni.Length)];
+            Logger.Info("Ani used: " + ani);
+
+            client.SendMessage(new PlayAnimationMessage()
+            {
+                Id = 0x6c,
+                Field0 = m.Field1,
+                Field1 = 0xb,
+                Field2 = 0,
+                tAnim = new PlayAnimationMessageSpec[1]
+                {
+                    new PlayAnimationMessageSpec()
+                    {
+                        Field0 = 0x2,
+                        Field1 = ani,
+                        Field2 = 0x0,
+                        Field3 = 1f
+                    }
+                }
+            });
+
+            client.packetId += 10 * 2;
+            client.SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = client.packetId,
+            });
+
+            client.SendMessage(new ANNDataMessage()
+            {
+                Id = 0xc5,
+                Field0 = m.Field1,
+            });
+
+            client.SendMessage(new AttributeSetValueMessage
+            {
+                Id = 0x4c,
+                Field0 = m.Field1,
+                Field1 = new NetAttributeKeyValue
+                {
+                    Attribute = GameAttribute.Attributes[0x4d],
+                    Float = 0
+                }
+            });
+
+            client.SendMessage(new AttributeSetValueMessage
+            {
+                Id = 0x4c,
+                Field0 = m.Field1,
+                Field1 = new NetAttributeKeyValue
+                {
+                    Attribute = GameAttribute.Attributes[0x1c2],
+                    Int = 1
+                }
+            });
+
+            client.SendMessage(new AttributeSetValueMessage
+            {
+                Id = 0x4c,
+                Field0 = m.Field1,
+                Field1 = new NetAttributeKeyValue
+                {
+                    Attribute = GameAttribute.Attributes[0x1c5],
+                    Int = 1
+                }
+            });
+            client.SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = m.Field1,
+                Field1 = 0xc,
+            });
+            client.SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = m.Field1,
+                Field1 = 0x37,
+            });
+            client.SendMessage(new PlayHitEffectMessage()
+            {
+                Id = 0x7b,
+                Field0 = m.Field1,
+                Field1 = 0x789E00E2,
+                Field2 = 0x2,
+                Field3 = false,
+            });
+            client.packetId += 10 * 2;
+            client.SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = client.packetId,
+            });
+        }
+
     }
 }

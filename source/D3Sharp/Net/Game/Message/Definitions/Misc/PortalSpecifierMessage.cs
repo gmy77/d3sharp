@@ -59,6 +59,18 @@ namespace D3Sharp.Net.Game.Message.Definitions.Misc
             b.AppendLine("}");
         }
 
+        public PortalSpecifierMessage(string[] Data)
+        {
+            Id = 0x004B;
+            Field0 = int.Parse(Data[0]);
+            Field1 = new ResolvedPortalDestination()
+            {
+                snoWorld=int.Parse(Data[1]),
+                Field1=int.Parse(Data[2]),
+                snoDestLevelArea=int.Parse(Data[3]),
+            };
+        }
+
 
     }
 }

@@ -28,6 +28,7 @@ using D3Sharp.Net.Game.Message.Definitions.ACD;
 using D3Sharp.Net.Game.Message.Definitions.Map;
 using D3Sharp.Net.Game.Message.Definitions.Scene;
 using D3Sharp.Net.Game.Message.Definitions.World;
+using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Net.Game.Messages;
 using D3Sharp.Utils;
@@ -44,6 +45,7 @@ namespace D3Sharp.Core.Map
         private List<BasicNPC> NPCs;
         private List<Actor> Actors;
         private List<Scene> Scenes;
+        private List<Portal> Portals;
 
         public int WorldID;
         public int WorldSNO;
@@ -53,6 +55,7 @@ namespace D3Sharp.Core.Map
             NPCs = new List<BasicNPC>();
             Actors = new List<Actors.Actor>();
             Scenes = new List<Scene>();
+            Portals = new List<Portal>();
             WorldID = ID;
         }
 
@@ -67,6 +70,13 @@ namespace D3Sharp.Core.Map
         {
             for (int x = 0; x < Actors.Count; x++)
                 if (Actors[x].ID == ID) return Actors[x];
+            return null;
+        }
+
+        public Portal GetPortal(int ID)
+        {
+            for (int x = 0; x < Portals.Count; x++)
+                if (Portals[x].ActorRef.ID == ID) return Portals[x];
             return null;
         }
 
@@ -92,7 +102,6 @@ namespace D3Sharp.Core.Map
             s = new Scene();
             s.ID = SceneID;
 
-            s.SceneLine = Line;
             s.SceneData = new RevealSceneMessage(data.Skip(2).ToArray(),WorldID);
 
             Scenes.Add(s);
@@ -107,7 +116,6 @@ namespace D3Sharp.Core.Map
 
             if (s==null) return;
 
-            s.MapLine = Line;
             s.Map = new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID);
         }
 
@@ -138,6 +146,17 @@ namespace D3Sharp.Core.Map
             a.PosZ = z;
 
             Actors.Add(a);
+        }
+
+        public void AddPortal(string Line)
+        {
+            string[] data = Line.Split(' ');
+
+            Portal p = new Portal();
+            p.PortalMessage = new PortalSpecifierMessage(data.Skip(2).ToArray());
+            p.ActorRef=GetActor(int.Parse(data[2]));
+
+            Portals.Add(p);
         }
 
         private int SceneSorter(Scene x, Scene y)
@@ -186,7 +205,13 @@ namespace D3Sharp.Core.Map
             {
                 if (ActorDB.isBlackListed(a.snoID)) continue;
                 if (ActorDB.isNPC(a.snoID)) continue;
-                a.Reveal(t);
+                //a.Reveal(t);
+            }
+
+            //reveal portals
+            foreach (Portal p in Portals)
+            {
+                p.Reveal(t);
             }
         }
 

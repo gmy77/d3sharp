@@ -90,6 +90,7 @@
     <Compile Include="Core\Helpers\RandomHelper.cs" />
     <Compile Include="Core\Items\Item.cs" />
     <Compile Include="Core\Items\ItemTypeGenerator.cs" />
+    <Compile Include="Core\Map\Portal.cs" />
     <Compile Include="Core\Map\Scene.cs" />
     <Compile Include="Core\Map\World.cs" />
     <Compile Include="Core\NPC\BasicNPC.cs" />
