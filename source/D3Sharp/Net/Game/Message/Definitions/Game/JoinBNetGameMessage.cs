@@ -59,6 +59,9 @@ namespace D3Sharp.Net.Game.Message.Definitions.Game
             {
                 client.Toon = client.BnetClient.CurrentToon;
                 client.BnetClient.InGameClient = client;
+
+                // TODO: this should eventually be done on the bnet side
+                client.Toon.skillset = new Skillset();
             }
 
             client.SendMessageNow(new VersionsMessage()

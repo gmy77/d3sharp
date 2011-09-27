@@ -29,6 +29,7 @@ using D3Sharp.Utils;
 using D3Sharp.Utils.Helpers;
 using Account = D3Sharp.Core.Accounts.Account;
 using D3Sharp.Net.Game;
+using D3Sharp.Core.Skills;
 
 namespace D3Sharp.Core.Toons
 {
@@ -520,6 +521,9 @@ namespace D3Sharp.Core.Toons
         public int CurrentWorldID;
         public int CurrentWorldSNO;
         public float PosX, PosY, PosZ;
+
+        // client skillset
+        public Skillset skillset;
     }
 
     public enum ToonClass

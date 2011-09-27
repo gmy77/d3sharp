@@ -18,46 +18,44 @@
 
 using System;
 using System.Text;
-using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Net.Game.Messages;
 
-namespace D3Sharp.Net.Game.Message.Definitions.Player
+namespace D3Sharp.Net.Game.Message.Definitions.Skill
 {
-    [IncomingMessage(Opcodes.PlayerChangeHotbarButtonMessage)]
-    public class PlayerChangeHotbarButtonMessage : GameMessage
+    [IncomingMessage(Opcodes.AssignSkillMessage2)]
+    public class AssignPassiveSkillMessage : GameMessage
     {
-        public int Field0;
-        public HotbarButtonData Field1;
+        public int /* sno */ snoPower;
+        public int Field1;
 
 
         public override void Handle(GameClient client)
         {
-            client.Toon.skillset.AssignHotbarButton(Field0, Field1);
+            client.Toon.skillset.AssignPassiveSkill(Field1, snoPower);
             client.Toon.skillset.UpdateClient(client);
             client.FlushOutgoingBuffer();
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(4) + (-1);
-            Field1 = new HotbarButtonData();
-            Field1.Parse(buffer);
+            snoPower = buffer.ReadInt(32);
+            Field1 = buffer.ReadInt(5);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(4, Field0 - (-1));
-            Field1.Encode(buffer);
+            buffer.WriteInt(32, snoPower);
+            buffer.WriteInt(5, Field1);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("PlayerChangeHotbarButtonMessage:");
+            b.AppendLine("AssignSkillMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            Field1.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("snoPower: 0x" + snoPower.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

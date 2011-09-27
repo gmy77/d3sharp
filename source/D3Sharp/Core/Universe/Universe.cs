@@ -167,54 +167,7 @@ namespace D3Sharp.Core.Universe
                     Field4 = new PlayerSavedData()
                     {
                         #region HotBarButtonData
-                        Field0 = new HotbarButtonData[9]
-            {
-                 new HotbarButtonData()
-                 {
-                    m_snoPower = 0x000176C4,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                    m_snoPower = 0x00007780,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                    m_snoPower = -1,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                    m_snoPower = 0x00007780,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                    m_snoPower = 0x000216FA,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                    m_snoPower = -1,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                    m_snoPower = -1,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                    m_snoPower = -1,
-                    m_gbidItem = -1,
-                 },
-                 new HotbarButtonData()
-                 {
-                    m_snoPower = -1,
-                    m_gbidItem = 0x622256D4,
-                 },
-            },
+                        Field0 = currentToon.skillset.hotbarSkills,
                         #endregion
                         #region SkillKeyMapping
                         Field1 = new SkillKeyMapping[15]
@@ -414,16 +367,10 @@ namespace D3Sharp.Core.Universe
                         },
                         #endregion
                         #region snoActiveSkills
-                        snoActiveSkills = new int[6]
-            {
-                0x000176C4, 0x000216FA, -1, -1, -1, -1, 
-            },
+                        snoActiveSkills = currentToon.skillset.activeSkills,
                         #endregion
                         #region snoTraits
-                        snoTraits = new int[3]
-            {
-                -1, -1, -1, 
-            },
+                        snoTraits = currentToon.skillset.passiveSkills,
                         #endregion
                         #region SavePointData
                         Field9 = new SavePointData()

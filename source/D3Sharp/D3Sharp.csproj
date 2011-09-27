@@ -115,7 +115,7 @@
     <Compile Include="Core\Services\StorageService.cs" />
     <Compile Include="Core\Services\ToonExternalService.cs" />
     <Compile Include="Core\Services\UserManagerService.cs" />
-    <Compile Include="Core\Skills\HeroSkillset.cs" />
+    <Compile Include="Core\Skills\Skillset.cs" />
     <Compile Include="Core\Skills\Skills.cs" />
     <Compile Include="Core\Storage\DBManager.cs" />
     <Compile Include="Core\Storage\GamedataDBManager.cs" />
@@ -130,6 +130,7 @@
     <Compile Include="Net\BNet\Packets\BNetHeader.cs" />
     <Compile Include="Net\BNet\Packets\BNetPacket.cs" />
     <Compile Include="Net\Game\Config.cs" />
+    <Compile Include="Net\Game\Message\Definitions\Skill\AssignPassiveSkillMessage.cs" />
     <Compile Include="Net\Game\Message\Fields\AABB.cs" />
     <Compile Include="Net\Game\Message\Fields\ActiveEvent.cs" />
     <Compile Include="Net\Game\Message\Fields\AnimPreplayData.cs" />
@@ -202,7 +203,7 @@
     <Compile Include="Net\Game\Message\Definitions\Misc\AffixMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Combat\AimTargetMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\ANNDataMessage.cs" />
-    <Compile Include="Net\Game\Message\Definitions\Skill\AssignSkillMessage.cs" />
+    <Compile Include="Net\Game\Message\Definitions\Skill\AssignActiveSkillMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Attribute\AttributeSetValueMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Attribute\AttributesSetValuesMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\BlizzconCVarsMessage.cs" />

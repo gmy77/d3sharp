@@ -22,7 +22,8 @@ using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Skill
 {
-    public class AssignSkillMessage : GameMessage
+    [IncomingMessage(Opcodes.AssignSkillMessage1)]
+    public class AssignActiveSkillMessage : GameMessage
     {
         public int /* sno */ snoPower;
         public int Field1;
@@ -30,7 +31,9 @@ namespace D3Sharp.Net.Game.Message.Definitions.Skill
 
         public override void Handle(GameClient client)
         {
-            throw new NotImplementedException();
+            client.Toon.skillset.AssignActiveSkill(Field1, snoPower);
+            client.Toon.skillset.UpdateClient(client);
+            client.FlushOutgoingBuffer();
         }
 
         public override void Parse(GameBitBuffer buffer)
