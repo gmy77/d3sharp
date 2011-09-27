@@ -46,74 +46,6 @@ namespace D3Sharp.Net.Game
         public DateTime timeout;
     }
 
-    public class HeroSkillState
-    {
-        public int[] activeSkills;
-        public HotbarButtonData[] hotbarSkills;
-        public int[] passiveSkills;
-
-        public HeroSkillState()
-        {
-            // initialize to current convience skills
-            activeSkills = new int[6] {
-                (int)Skills.Monk.FistsOfThunder,
-                (int)Skills.Barbarian.Whirlwind,
-                (int)Skills.DemonHunter.Companion,
-                (int)Skills.Wizard.Meteor,
-                (int)Skills.Monk.SevenSidedStrike,
-                (int)Skills.Wizard.MagicMissile
-            };
-            hotbarSkills = new HotbarButtonData[9] {
-                new HotbarButtonData()
-                {
-                    m_snoPower = activeSkills[0],
-                    m_gbidItem = -1
-                },
-                new HotbarButtonData()
-                {
-                    m_snoPower = activeSkills[1],
-                    m_gbidItem = -1
-                },
-                new HotbarButtonData()
-                {
-                    m_snoPower = (int)Skills.None,
-                    m_gbidItem = -1
-                },
-                new HotbarButtonData()
-                {
-                    m_snoPower = (int)Skills.None,
-                    m_gbidItem = -1
-                },
-                new HotbarButtonData()
-                {
-                    m_snoPower = activeSkills[2],
-                    m_gbidItem = -1
-                },
-                new HotbarButtonData()
-                {
-                    m_snoPower = activeSkills[3],
-                    m_gbidItem = -1
-                },
-                new HotbarButtonData()
-                {
-                    m_snoPower = activeSkills[4],
-                    m_gbidItem = -1
-                },
-                new HotbarButtonData()
-                {
-                    m_snoPower = activeSkills[5],
-                    m_gbidItem = -1
-                },
-                new HotbarButtonData()
-                {
-                    m_snoPower = (int)Skills.None,
-                    m_gbidItem = 0x622256D4 // potion
-                }
-            };
-            passiveSkills = new int[3] { -1, -1, -1 };
-        }
-    }
-
     public sealed class GameClient : IGameClient, IGameMessageHandler
     {
         static readonly Logger Logger = LogManager.CreateLogger();
@@ -138,8 +70,8 @@ namespace D3Sharp.Net.Game
         IList<TempMob> tempObjects = new List<TempMob>();
         Vector3D position;
         float position_angle = 0.0f;
-        HeroSkillState skillState = new HeroSkillState();
-
+        HeroSkillset heroSkillset = new HeroSkillset();
+        
         private bool IsLoggingOut;
 
         public GameClient(IConnection connection)
@@ -187,7 +119,7 @@ namespace D3Sharp.Net.Game
             //Logger.LogOutgoing(msg);
             _outgoingBuffer.EncodeMessage(msg);
         }
-        
+
         public void SendMessageNow(GameMessage msg)
         {
             SendMessage(msg);
@@ -3825,234 +3757,7 @@ namespace D3Sharp.Net.Game
                 },
             });
 
-            SendMessage(new HeroStateMessage()
-            {
-                Id = 0x003A,
-                Field0 = new HeroStateData()
-                {
-                    Field0 = 0x00000000,
-                    Field1 = 0x00000000,
-                    Field2 = 0x00000000,
-                    Field3 = 0x02000000,
-                    Field4 = new PlayerSavedData()
-                    {
-                        Field0 = skillState.hotbarSkills,
-                 Field1 = new SkillKeyMapping[15]
-            {
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-            },
-                 Field2 = 0x00000000,
-                 Field3 = 0x00000001,
-                 Field4 = new HirelingSavedData()
-                 {
-                            Field0 = new HirelingInfo[4]
-                {
-                     new HirelingInfo()
-                     {
-                        Field0 = 0x00000000,
-                        Field1 = -1,
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000000,
-                        Field4 = false,
-                        Field5 = -1,
-                        Field6 = -1,
-                        Field7 = -1,
-                        Field8 = -1,
-                     },
-                     new HirelingInfo()
-                     {
-                        Field0 = 0x00000000,
-                        Field1 = -1,
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000000,
-                        Field4 = false,
-                        Field5 = -1,
-                        Field6 = -1,
-                        Field7 = -1,
-                        Field8 = -1,
-                     },
-                     new HirelingInfo()
-                     {
-                        Field0 = 0x00000000,
-                        Field1 = -1,
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000000,
-                        Field4 = false,
-                        Field5 = -1,
-                        Field6 = -1,
-                        Field7 = -1,
-                        Field8 = -1,
-                     },
-                     new HirelingInfo()
-                     {
-                        Field0 = 0x00000000,
-                        Field1 = -1,
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000000,
-                        Field4 = false,
-                        Field5 = -1,
-                        Field6 = -1,
-                        Field7 = -1,
-                        Field8 = -1,
-                     },
-                },
-                            Field1 = 0x00000000,
-                            Field2 = 0x00000000,
-                        },
-                        Field5 = 0x00000000,
-                        Field6 = new LearnedLore()
-                        {
-                            Field0 = 0x00000000,
-                            m_snoLoreLearned = new int[256]
-                {
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                },
-                        },
-                        snoActiveSkills = skillState.activeSkills,
-                        snoTraits = skillState.passiveSkills,
-                        Field9 = new SavePointData()
-                        {
-                            snoWorld = -1,
-                            Field1 = -1,
-                        },
-                        m_SeenTutorials = new int[64]
-            {
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-            },
-                    },
-                    Field5 = 0x00000000,
-                    tQuestRewardHistory = new PlayerQuestRewardHistoryEntry[0]
-        {
-        },
-                },
-            });
+            heroSkillset.UpdateClient(this);
 
             SendMessage(new ANNDataMessage()
             {
@@ -7752,7 +7457,7 @@ namespace D3Sharp.Net.Game
                 position = msg.Field1;
 
             position_angle = msg.Field2.Value;
-            
+
             List<TempMob> newtemps = new List<TempMob>();
             var curtime = DateTime.Now;
             int cleancount = 0;
@@ -8063,30 +7768,30 @@ namespace D3Sharp.Net.Game
             switch (msg.snoPower)
             {
                 case (int)Skills.Monk.FistsOfThunder:
-                {
-                    Vector3D punchpos = new Vector3D();
-                    punchpos.Field0 = position.Field0 + (float)(Math.Sin(position_angle * 57.324840f) * 10);
-                    punchpos.Field1 = position.Field1 + (float)(Math.Cos(position_angle * 57.324840f) * 10);
-                    punchpos.Field2 = position.Field2;
-
-                    switch (msg.Field5)
                     {
-                        case 0:
-                            SpawnTempObject(120932, punchpos, position_angle);
-                            break;
-                        case 1:
-                            SpawnTempObject(120934, punchpos, position_angle);
-                            break;
-                        case 2:
-                            SpawnTempObject(137943, punchpos, position_angle);
-                            break;
-                        default:
-                            Logger.Error("hmm unknown monk kung-fu: {0}", msg.Field5);
-                            break;
+                        Vector3D punchpos = new Vector3D();
+                        punchpos.Field0 = position.Field0 + (float)(Math.Sin(position_angle * 57.324840f) * 10);
+                        punchpos.Field1 = position.Field1 + (float)(Math.Cos(position_angle * 57.324840f) * 10);
+                        punchpos.Field2 = position.Field2;
+
+                        switch (msg.Field5)
+                        {
+                            case 0:
+                                SpawnTempObject(120932, punchpos, position_angle);
+                                break;
+                            case 1:
+                                SpawnTempObject(120934, punchpos, position_angle);
+                                break;
+                            case 2:
+                                SpawnTempObject(137943, punchpos, position_angle);
+                                break;
+                            default:
+                                Logger.Error("hmm unknown monk kung-fu: {0}", msg.Field5);
+                                break;
+                        }
+
+                        break;
                     }
-                    
-                    break;
-                }
                 case (int)Skills.Wizard.MagicMissile:
                     {
                         for (int step = 1; step < 10; ++step)
@@ -8163,7 +7868,7 @@ namespace D3Sharp.Net.Game
                         }
 
                         SpawnTempObject(86769, target_pos);
-                        SpawnTempObject(90364, target_pos, -1.0f, 5000); 
+                        SpawnTempObject(90364, target_pos, -1.0f, 5000);
 
                         foreach (Mob x in hits)
                         {
@@ -8324,11 +8029,17 @@ namespace D3Sharp.Net.Game
         public void OnMessage(AssignSkillMessage msg)
         {
             if (msg.Id == 0x064)
-                skillState.activeSkills[msg.Field1] = msg.snoPower;
+            {
+                heroSkillset.AssignActiveSkill(msg.Field1, msg.snoPower);
+            }
             else if (msg.Id == 0x065)
-                skillState.passiveSkills[msg.Field1] = msg.snoPower;
+            {
+                heroSkillset.AssignPassiveSkill(msg.Field1, msg.snoPower);
+            }
 
-            UpdateHeroSkillState();
+            heroSkillset.UpdateClient(this);
+            SendDWordTick();
+            FlushOutgoingBuffer();
         }
         public void OnMessage(HirelingRequestLearnSkillMessage msg)
         {
@@ -8336,8 +8047,10 @@ namespace D3Sharp.Net.Game
         }
         public void OnMessage(PlayerChangeHotbarButtonMessage msg)
         {
-            skillState.hotbarSkills[msg.Field0] = msg.Field1;
-            UpdateHeroSkillState();
+            heroSkillset.AssignHotbarButton(msg.Field0, msg.Field1);
+            heroSkillset.UpdateClient(this);
+            SendDWordTick();
+            FlushOutgoingBuffer();
         }
         public void OnMessage(WorldStatusMessage msg)
         {
@@ -8931,7 +8644,7 @@ namespace D3Sharp.Net.Game
                 Field0 = packetId,
             });
         }
-        
+
         private void SpawnTempObject(int code, Vector3D pos, float angle = -1.0f /*random*/, int timeout_ms = 2000)
         {
             int nId = code;
@@ -8939,7 +8652,7 @@ namespace D3Sharp.Net.Game
             TempMob mob = new TempMob();
             mob.pos = pos;
             mob.timeout = DateTime.Now.AddMilliseconds(timeout_ms);
-            
+
             objectId++;
             mob.id = objectId;
             tempObjects.Add(mob);
@@ -8947,11 +8660,11 @@ namespace D3Sharp.Net.Game
             // make angle random if -1.0
             if (angle == -1.0f)
                 angle = (float)(rand.NextDouble() * 180.0);
-                //angle = (float)(rand.NextDouble() * 2.0 * Math.PI);
-            
+            //angle = (float)(rand.NextDouble() * 2.0 * Math.PI);
+
             float aw = (float)Math.Cos(angle);
             float az = (float)Math.Sin(angle);
-            
+
             #region ACDEnterKnown Hittable Zombie
             SendMessage(new ACDEnterKnownMessage()
             {
@@ -9468,244 +9181,14 @@ namespace D3Sharp.Net.Game
             });
         }
 
-        private void UpdateHeroSkillState()
+        public void SendDWordTick()
         {
-            SendMessage(new HeroStateMessage()
-{
-    Id = 0x003A,
-    Field0 = new HeroStateData()
-    {
-        Field0 = 0x00000000,
-        Field1 = 0x00000000,
-        Field2 = 0x00000000,
-        Field3 = 0x02000000,
-        Field4 = new PlayerSavedData()
-        {
-            Field0 = skillState.hotbarSkills,
-            Field1 = new SkillKeyMapping[15]
-            {
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-            },
-            Field2 = 0x00000000,
-            Field3 = 0x00000001,
-            Field4 = new HirelingSavedData()
-            {
-                Field0 = new HirelingInfo[4]
-                {
-                     new HirelingInfo()
-                     {
-                        Field0 = 0x00000000,
-                        Field1 = -1,
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000000,
-                        Field4 = false,
-                        Field5 = -1,
-                        Field6 = -1,
-                        Field7 = -1,
-                        Field8 = -1,
-                     },
-                     new HirelingInfo()
-                     {
-                        Field0 = 0x00000000,
-                        Field1 = -1,
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000000,
-                        Field4 = false,
-                        Field5 = -1,
-                        Field6 = -1,
-                        Field7 = -1,
-                        Field8 = -1,
-                     },
-                     new HirelingInfo()
-                     {
-                        Field0 = 0x00000000,
-                        Field1 = -1,
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000000,
-                        Field4 = false,
-                        Field5 = -1,
-                        Field6 = -1,
-                        Field7 = -1,
-                        Field8 = -1,
-                     },
-                     new HirelingInfo()
-                     {
-                        Field0 = 0x00000000,
-                        Field1 = -1,
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000000,
-                        Field4 = false,
-                        Field5 = -1,
-                        Field6 = -1,
-                        Field7 = -1,
-                        Field8 = -1,
-                     },
-                },
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-            },
-            Field5 = 0x00000000,
-            Field6 = new LearnedLore()
-            {
-                Field0 = 0x00000000,
-                m_snoLoreLearned = new int[256]
-                {
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                },
-            },
-            snoActiveSkills = skillState.activeSkills,
-            snoTraits = skillState.passiveSkills,
-            Field9 = new SavePointData()
-            {
-                snoWorld = -1,
-                Field1 = -1,
-            },
-            m_SeenTutorials = new int[64]
-            {
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-            },
-        },
-                    Field5 = 0x00000000,
-                    tQuestRewardHistory = new PlayerQuestRewardHistoryEntry[0]
-                    {
-                    },
-                },
-            });
-
             packetId += 10 * 2;
             SendMessage(new DWordDataMessage()
             {
                 Id = 0x89,
                 Field0 = packetId,
             });
-            FlushOutgoingBuffer();
         }
     }
 }
