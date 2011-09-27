@@ -244,7 +244,7 @@
     <Compile Include="Net\Game\Message\Definitions\Misc\FloatingAmountMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\FloatingNumberMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Game\GameIdMessage.cs" />
-    <Compile Include="Net\Game\Message\Definitions\Game\GameSyncedDataMessage.cs.cs" />
+    <Compile Include="Net\Game\Message\Definitions\Game\GameSyncedDataMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Game\GameTestingSamplingStartMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\GBIDDataMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\GenericBlobMessage.cs" />
