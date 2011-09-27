@@ -115,7 +115,7 @@ namespace D3Sharp.Core.Universe
 
         void InitializeUniverse()
         {
-            LoadUniverseData("Assets\\Maps\\universe.txt");
+            LoadUniverseData("Assets/Maps/universe.txt");
         }
 
         public Universe()
