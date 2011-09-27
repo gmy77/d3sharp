@@ -22,6 +22,7 @@ using D3Sharp.Net.Game.Message.Definitions.Animation;
 using D3Sharp.Net.Game.Message.Definitions.Attribute;
 using D3Sharp.Net.Game.Message.Definitions.Effect;
 using D3Sharp.Net.Game.Message.Definitions.Misc;
+using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Combat

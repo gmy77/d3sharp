@@ -19,6 +19,7 @@
 using System.Text;
 using D3Sharp.Core.Helpers;
 using D3Sharp.Core.NPC;
+using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Animation

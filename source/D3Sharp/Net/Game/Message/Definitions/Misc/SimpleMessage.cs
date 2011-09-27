@@ -22,6 +22,7 @@ using D3Sharp.Net.Game.Message.Definitions.ACD;
 using D3Sharp.Net.Game.Message.Definitions.Attribute;
 using D3Sharp.Net.Game.Message.Definitions.Game;
 using D3Sharp.Net.Game.Message.Definitions.Hireling;
+using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Misc

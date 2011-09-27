@@ -28,6 +28,7 @@ using D3Sharp.Net.Game.Message.Definitions.ACD;
 using D3Sharp.Net.Game.Message.Definitions.Map;
 using D3Sharp.Net.Game.Message.Definitions.Scene;
 using D3Sharp.Net.Game.Message.Definitions.World;
+using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Net.Game.Messages;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Extensions;
