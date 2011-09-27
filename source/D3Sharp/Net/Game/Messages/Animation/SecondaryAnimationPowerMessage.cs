@@ -47,7 +47,6 @@ namespace D3Sharp.Net.Game.Messages.Animation
                     client.position.Field0 -= (float)(RandomHelper.NextDouble() * 20);
                     client.position.Field1 -= (float)(RandomHelper.NextDouble() * 20);
                 }
-                System.Threading.Thread.Sleep(15); // Required to not generate the same random value twice...
                 client.SpawnMob(BasicNPC.RandomNPC());
             }
 
