@@ -81,6 +81,27 @@ namespace D3Sharp.Core.Toons
             }
         }
 
+        public float ModelScale
+        {
+            get
+            {   //dummy values, need confirmation from dump
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 1.22f;
+                    case ToonClass.DemonHunter:
+                        return 1.43f;
+                    case ToonClass.Monk:
+                        return 1.43f;
+                    case ToonClass.WitchDoctor:
+                        return 1.43f;
+                    case ToonClass.Wizard:
+                        return 1.43f;
+                }
+                return 1.43f;
+            }
+        }
+
         public int ResourceID
         {
             get
