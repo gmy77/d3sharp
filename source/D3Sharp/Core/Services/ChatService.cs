@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 
@@ -30,19 +31,19 @@ namespace D3Sharp.Core.Services
         public override void CreateChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.CreateChannelRequest request, System.Action<bnet.protocol.channel.CreateChannelResponse> done)
         {
             Logger.Trace("CreateChannel()");
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void FindChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.FindChannelRequest request, System.Action<bnet.protocol.channel.FindChannelResponse> done)
         {
             Logger.Trace("FindChannel()");
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void JoinChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.JoinChannelRequest request, System.Action<bnet.protocol.channel.JoinChannelResponse> done)
         {
             Logger.Trace("JoinChannel()");
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

@@ -28,6 +28,7 @@ using D3Sharp.Core.Storage;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Helpers;
 using Account = D3Sharp.Core.Accounts.Account;
+using D3Sharp.Net.Game;
 
 namespace D3Sharp.Core.Toons
 {
@@ -77,6 +78,27 @@ namespace D3Sharp.Core.Toons
                         return 0x1D4681B1;
                 }
                 return 0x0;
+            }
+        }
+
+        public float ModelScale
+        {
+            get
+            {   //dummy values, need confirmation from dump
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 1.22f;
+                    case ToonClass.DemonHunter:
+                        return 1.43f;
+                    case ToonClass.Monk:
+                        return 1.43f;
+                    case ToonClass.WitchDoctor:
+                        return 1.43f;
+                    case ToonClass.Wizard:
+                        return 1.43f;
+                }
+                return 1.43f;
             }
         }
 
@@ -329,7 +351,7 @@ namespace D3Sharp.Core.Toons
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if the client is online
                     {
-                        if(this.Owner.LoggedInClient!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());
+                        if(this.Owner.LoggedInBNetClient!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInBNetClient.CurrentChannel.D3EntityId.ToByteString()).Build());
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 2) // Current screen (all known values are just "in-menu"; also see ScreenStatuses sent in ChannelService.UpdateChannelState)
                     {
@@ -491,6 +513,13 @@ namespace D3Sharp.Core.Toons
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
         }
+
+        //////////////////////////////////////////////////////////////////////////
+        // ingame data required by the universe follows
+
+        public int CurrentWorldID;
+        public int CurrentWorldSNO;
+        public float PosX, PosY, PosZ;
     }
 
     public enum ToonClass

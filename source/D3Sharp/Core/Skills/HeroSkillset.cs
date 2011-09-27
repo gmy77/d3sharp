@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using D3Sharp.Net.Game;
+using D3.Hero;
 
 namespace D3Sharp.Core.Skills
 {
-    // temporary place to store and manage active skill slots until Toon does.
     public class HeroSkillset
     {
+        /*
         public int[] activeSkills;
         public HotbarButtonData[] hotbarSkills;
         public int[] passiveSkills;
 
-        public HeroSkillset()
+        public Skillset()
         {
             // initialize to current convience skills
             activeSkills = new int[6] {
@@ -27,48 +27,48 @@ namespace D3Sharp.Core.Skills
             hotbarSkills = new HotbarButtonData[9] {
                 new HotbarButtonData()
                 {
-                    m_snoPower = activeSkills[0],
-                    m_gbidItem = -1
+                    snoPower = activeSkills[0],
+                    gbidItem = -1
                 },
                 new HotbarButtonData()
                 {
-                    m_snoPower = activeSkills[1],
-                    m_gbidItem = -1
+                    snoPower = activeSkills[1],
+                    gbidItem = -1
                 },
                 new HotbarButtonData()
                 {
-                    m_snoPower = (int)Skills.None,
-                    m_gbidItem = -1
+                    snoPower = (int)Skills.None,
+                    gbidItem = -1
                 },
                 new HotbarButtonData()
                 {
-                    m_snoPower = (int)Skills.None,
-                    m_gbidItem = -1
+                    snoPower = (int)Skills.None,
+                    gbidItem = -1
                 },
                 new HotbarButtonData()
                 {
-                    m_snoPower = activeSkills[2],
-                    m_gbidItem = -1
+                    snoPower = activeSkills[2],
+                    gbidItem = -1
                 },
                 new HotbarButtonData()
                 {
-                    m_snoPower = activeSkills[3],
-                    m_gbidItem = -1
+                    snoPower = activeSkills[3],
+                    gbidItem = -1
                 },
                 new HotbarButtonData()
                 {
-                    m_snoPower = activeSkills[4],
-                    m_gbidItem = -1
+                    snoPower = activeSkills[4],
+                    gbidItem = -1
                 },
                 new HotbarButtonData()
                 {
-                    m_snoPower = activeSkills[5],
-                    m_gbidItem = -1
+                    snoPower = activeSkills[5],
+                    gbidItem = -1
                 },
                 new HotbarButtonData()
                 {
-                    m_snoPower = (int)Skills.None,
-                    m_gbidItem = 0x622256D4 // potion
+                    snoPower = (int)Skills.None,
+                    gbidItem = 0x622256D4 // potion
                 }
             };
             passiveSkills = new int[3] { -1, -1, -1 };
@@ -310,8 +310,8 @@ namespace D3Sharp.Core.Skills
         {
             foreach (HotbarButtonData button in hotbarSkills)
             {
-                if (button.m_snoPower == activeSkills[slot])
-                    button.m_snoPower = code;
+                if (button.snoPower == activeSkills[slot])
+                    button.snoPower = code;
             }
 
             activeSkills[slot] = code;
@@ -326,5 +326,6 @@ namespace D3Sharp.Core.Skills
         {
             hotbarSkills[slot] = hotbarButtonData;
         }
+        */
     }
 }

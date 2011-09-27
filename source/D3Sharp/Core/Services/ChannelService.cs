@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
 using D3Sharp.Core.Channels;
@@ -30,12 +31,12 @@ namespace D3Sharp.Core.Services
 
         public override void AddMember(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.AddMemberRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void Dissolve(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.DissolveRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void RemoveMember(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.RemoveMemberRequest request, System.Action<bnet.protocol.NoData> done)
@@ -59,19 +60,19 @@ namespace D3Sharp.Core.Services
 
         public override void SetRoles(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SetRolesRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void UpdateChannelState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateChannelStateRequest request, System.Action<bnet.protocol.NoData> done)
         {
             //Logger.Debug("request:\n{0}", request.ToString());
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void UpdateMemberState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateMemberStateRequest request, System.Action<bnet.protocol.NoData> done)
         {
             //Logger.Debug("request:\n{0}", request.ToString());
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,9 +1,31 @@
-﻿using System;
+﻿/*
+ * Copyright (C) 2011 D3Sharp Project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using D3Sharp.Net.Game;
-using System.Collections;
+using D3Sharp.Net.Game.Message.Definitions.Attribute;
+using D3Sharp.Net.Game.Message.Fields;
+using D3Sharp.Net.Game.Messages;
+using D3Sharp.Core.Helpers;
 
 namespace D3Sharp.Core.NPC
 {
@@ -13,7 +35,7 @@ namespace D3Sharp.Core.NPC
         float HP;
         float MaxHP;
 
-        GameClient Game;
+        GameClient Client;
 
         public void Die(int anim)
         {
@@ -179,7 +201,7 @@ namespace D3Sharp.Core.NPC
         public BasicNPC(int objectId, ref GameClient g)
         {
             ID = objectId;
-            Game = g;
+            Client = g;
             //Game.SendMessage(new AffixMessage()
             //{
             //    Id = 0x48,
@@ -201,7 +223,7 @@ namespace D3Sharp.Core.NPC
             //    Field1 = 0x1
             //});
 
-            Game.SendMessage(new AttributesSetValuesMessage
+            Client.SendMessage(new AttributesSetValuesMessage
             {
                 Id = 0x4d,
                 Field0 = objectId,
@@ -283,7 +305,7 @@ namespace D3Sharp.Core.NPC
 
             });
 
-            Game.SendMessage(new AttributesSetValuesMessage
+            Client.SendMessage(new AttributesSetValuesMessage
             {
                 Id = 0x4d,
                 Field0 = objectId,
@@ -349,7 +371,7 @@ namespace D3Sharp.Core.NPC
             //{
             //    Id = 0x70,
             //    Field0 = objectId,
-            //    Field1 = (float)(rand.NextDouble() * 2.0 * Math.PI),
+            //    Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI),
             //    Field2 = false
             //});
 
@@ -728,9 +750,8 @@ namespace D3Sharp.Core.NPC
 
         public static int RandomNPC()
         {
-            Random r = new Random();
             NPCList[] values = (NPCList[])Enum.GetValues(typeof(NPCList));
-            int toReturn = (int)values[r.Next(0, values.Length)];
+            int toReturn = (int)values[RandomHelper.Next(0, values.Length)];
             return toReturn;
         }
     }
