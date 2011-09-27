@@ -22,6 +22,8 @@ using System.Linq;
 using System.Text;
 using D3Sharp.Net.Game.Messages.ACD;
 using D3Sharp.Net.Game.Messages.Connection;
+using D3Sharp.Net.Game.Messages.Game;
+using D3Sharp.Net.Game.Messages.Hireling;
 
 namespace D3Sharp.Net.Game.Messages.Misc
 {

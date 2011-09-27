@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using D3Sharp.Net.Game.Messages.Animation;
+using D3Sharp.Net.Game.Messages.Effect;
 using D3Sharp.Net.Game.Messages.Misc.ANN;
 using D3Sharp.Net.Game.Messages.Player;
 using D3Sharp.Core.Helpers;

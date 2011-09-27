@@ -16,48 +16,48 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace D3Sharp.Net.Game.Messages.Connection
+namespace D3Sharp.Net.Game.Messages.ACD
 {
-    public class VersionsMessage : GameMessage
+    public class ACDChangeActorMessage : GameMessage
     {
-        public int SNOPackHash;
-        public int ProtocolHash;
-        public string Version;
+        public int Field0;
+        public int /* sno */ Field1;
 
-        public VersionsMessage() : base(Opcodes.VersionsMessage) { }
 
         public override void Handle(GameClient client)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            SNOPackHash = buffer.ReadInt(32);
-            ProtocolHash = buffer.ReadInt(32);
-            Version = buffer.ReadCharArray(32);
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, SNOPackHash);
-            buffer.WriteInt(32, ProtocolHash);
-            buffer.WriteCharArray(32, Version);
+            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, Field1);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("VersionsMessage:");
+            b.AppendLine("ACDChangeActorMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("SNOPackHash: 0x" + SNOPackHash.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("ProtocolHash: 0x" + ProtocolHash.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Version: \"" + Version + "\"");
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
+
+
     }
 }

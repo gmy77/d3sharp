@@ -20,42 +20,49 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using D3Sharp.Net.Game.Messages.Game;
 
-namespace D3Sharp.Net.Game.Messages.Connection
+namespace D3Sharp.Net.Game.Messages.ACD
 {
-    [IncomingMessage(Opcodes.LogoutComplete)]
-    public class LogoutComplete:GameMessage
+    public class ACDTranslateFixedUpdateMessage : GameMessage
     {
+        public int Field0;
+        public Vector3D Field1;
+        public Vector3D Field2;
+
         public override void Handle(GameClient client)
         {
-            if (client.IsLoggingOut)
-            {
-                client.SendMessageNow(new QuitGameMessage()
-                {
-                    Id = 0x0003,
-                    // Field0 - quit reason?
-                    // 0 - logout
-                    // 1 - kicked by party leader
-                    // 2 - disconnected due to client-server (version?) missmatch
-                    Field0 = 0,
-                });
-            }
+            throw new NotImplementedException();
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            
+            Field0 = buffer.ReadInt(32);
+            Field1 = new Vector3D();
+            Field1.Parse(buffer);
+            Field2 = new Vector3D();
+            Field2.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            throw new NotImplementedException();
+            buffer.WriteInt(32, Field0);
+            Field1.Encode(buffer);
+            Field2.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
-            throw new NotImplementedException();
+            b.Append(' ', pad);
+            b.AppendLine("ACDTranslateFixedUpdateMessage:");
+            b.Append(' ', pad++);
+            b.AppendLine("{");
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
+            Field1.AsText(b, pad);
+            Field2.AsText(b, pad);
+            b.Append(' ', --pad);
+            b.AppendLine("}");
         }
+
+
     }
 }

@@ -23,6 +23,7 @@ using D3Sharp.Core.Skills;
 using D3Sharp.Net.Game.Messages.ACD;
 using D3Sharp.Net.Game.Messages.Act;
 using D3Sharp.Net.Game.Messages.Animation;
+using D3Sharp.Net.Game.Messages.Connection;
 using D3Sharp.Net.Game.Messages.Hero;
 using D3Sharp.Net.Game.Messages.Inventory;
 using D3Sharp.Net.Game.Messages.Map;
@@ -33,7 +34,7 @@ using D3Sharp.Net.Game.Messages.Portal;
 using D3Sharp.Net.Game.Messages.Scene;
 using D3Sharp.Net.Game.Messages.Team;
 
-namespace D3Sharp.Net.Game.Messages.Connection
+namespace D3Sharp.Net.Game.Messages.Game
 {
     [IncomingMessage(Opcodes.JoinBNetGameMessage)]
     public class JoinBNetGameMessage : GameMessage
