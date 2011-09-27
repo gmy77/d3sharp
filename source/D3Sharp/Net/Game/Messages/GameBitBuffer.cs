@@ -17,12 +17,9 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
-namespace D3Sharp.Net.Game
+namespace D3Sharp.Net.Game.Messages
 {
     public class GameBitBufferException : Exception
     {

@@ -17,7 +17,6 @@
  */
 
 using System;
-using System.IO;
 using System.Linq;
 using D3Sharp.Net.BNet;
 using D3Sharp.Net.Game.Messages;
@@ -26,16 +25,12 @@ using D3Sharp.Net.Game.Messages.Animation;
 using D3Sharp.Net.Game.Messages.Map;
 using D3Sharp.Net.Game.Messages.Misc;
 using D3Sharp.Net.Game.Messages.Misc.ANN;
+using D3Sharp.Net.Game.Messages.Player;
 using D3Sharp.Net.Game.Messages.Scene;
 using D3Sharp.Net.Game.Messages.World;
-using Gibbed.Helpers;
-using System.Text;
 using D3Sharp.Utils;
 using System.Collections.Generic;
-using D3Sharp.Net.Game;
 using D3Sharp.Core.Map;
-using D3Sharp.Core.Skills;
-using D3Sharp.Core.NPC;
 
 //using Gibbed.Helpers;
 

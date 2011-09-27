@@ -126,8 +126,8 @@
     <Compile Include="Net\BNet\Packets\BNetHeader.cs" />
     <Compile Include="Net\BNet\Packets\BNetPacket.cs" />
     <Compile Include="Net\Game\Config.cs" />
-    <Compile Include="Net\Game\GameAttribute.cs" />
-    <Compile Include="Net\Game\GameBitBuffer.cs" />
+    <Compile Include="Net\Game\Messages\GameAttribute.cs" />
+    <Compile Include="Net\Game\Messages\GameBitBuffer.cs" />
     <Compile Include="Net\Game\GameClient.cs" />
     <Compile Include="Net\Game\Messages\ACD\ACDCollFlagsMessage.cs" />
     <Compile Include="Net\Game\Messages\ACD\ACDEnterKnownMessage.cs" />
@@ -156,11 +156,11 @@
     <Compile Include="Net\Game\Messages\Misc\FloatingNumberMessage.cs" />
     <Compile Include="Net\Game\Messages\Misc\HearthPortalInfoMessage.cs" />
     <Compile Include="Net\Game\Messages\Misc\HirelingInfoUpdateMessage.cs" />
-    <Compile Include="Net\Game\Messages\Misc\PlayEffectMessage.cs" />
-    <Compile Include="Net\Game\Messages\Misc\PlayerActorSetInitialMessage.cs" />
-    <Compile Include="Net\Game\Messages\Misc\PlayerEnterKnownMessage.cs" />
-    <Compile Include="Net\Game\Messages\Misc\PlayerWarpedMessage.cs" />
-    <Compile Include="Net\Game\Messages\Misc\PlayHitEffectMessage.cs" />
+    <Compile Include="Net\Game\Messages\Player\PlayEffectMessage.cs" />
+    <Compile Include="Net\Game\Messages\Player\PlayerActorSetInitialMessage.cs" />
+    <Compile Include="Net\Game\Messages\Player\PlayerEnterKnownMessage.cs" />
+    <Compile Include="Net\Game\Messages\Player\PlayerWarpedMessage.cs" />
+    <Compile Include="Net\Game\Messages\Player\PlayHitEffectMessage.cs" />
     <Compile Include="Net\Game\Messages\Misc\SavePointInfoMessage.cs" />
     <Compile Include="Net\Game\Messages\GameMessage.cs" />
     <Compile Include="Net\Game\GameServer.cs" />

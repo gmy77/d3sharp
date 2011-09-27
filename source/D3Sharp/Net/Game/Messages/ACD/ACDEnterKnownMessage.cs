@@ -1,4 +1,22 @@
-﻿using System;
+﻿/*
+ * Copyright (C) 2011 D3Sharp Project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -93,7 +111,38 @@ namespace D3Sharp.Net.Game.Messages.ACD
 
         public override void Parse(GameBitBuffer buffer)
         {
-            throw new NotImplementedException();
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadInt(32);
+            Field2 = buffer.ReadInt(5);
+            Field3 = buffer.ReadInt(2) + (-1);
+            if (buffer.ReadBool())
+            {
+                Field4 = new WorldLocationMessageData();
+                Field4.Parse(buffer);
+            }
+            if (buffer.ReadBool())
+            {
+                Field5 = new InventoryLocationMessageData();
+                Field5.Parse(buffer);
+            }
+            Field6 = new GBHandle();
+            Field6.Parse(buffer);
+            Field7 = buffer.ReadInt(32);
+            Field8 = buffer.ReadInt(32);
+            Field9 = buffer.ReadInt(4) + (-1);
+            Field10 = (byte)buffer.ReadInt(8);
+            if (buffer.ReadBool())
+            {
+                Field11 = buffer.ReadInt(32);
+            }
+            if (buffer.ReadBool())
+            {
+                Field12 = buffer.ReadInt(32);
+            }
+            if (buffer.ReadBool())
+            {
+                Field13 = buffer.ReadInt(32);
+            }
         }
 
         public override void Encode(GameBitBuffer buffer)
