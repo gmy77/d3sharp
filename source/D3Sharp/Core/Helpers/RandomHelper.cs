@@ -16,17 +16,42 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace D3Sharp.Net.Game
-{
-    public sealed class Config: Core.Config.Config
-    {       
-        public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("BindIP", value); } }
-        public int Port { get { return this.GetInt("Port", 1345); } set { this.Set("Port", value); } }
-        public string Map { get { return this.GetString("Map", "Assets/Maps/001.txt"); } set { this.Set("Map", value); } }
+using System;
 
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Game-Server") { }
+namespace D3Sharp.Core.Helpers
+{
+    public class RandomHelper
+    {
+        private readonly static Random _random;
+
+        static RandomHelper()
+        {
+            _random = new Random();
+        }
+
+        public static int Next()
+        {
+            return _random.Next();
+        }
+
+        public static int Next(Int32 maxValue)
+        {
+            return _random.Next(maxValue);
+        }
+
+        public static int Next(Int32 minValue, Int32 maxValue)
+        {
+            return _random.Next(minValue, maxValue);
+        }
+
+        public static void NextBytes(byte[] buffer)
+        {
+            _random.NextBytes(buffer);
+        }
+
+        public static double NextDouble()
+        {
+            return _random.NextDouble();
+        }
     }
 }
-

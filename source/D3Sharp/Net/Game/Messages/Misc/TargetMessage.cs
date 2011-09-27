@@ -24,6 +24,7 @@ using D3Sharp.Net.Game.Messages.Animation;
 using D3Sharp.Net.Game.Messages.Effect;
 using D3Sharp.Net.Game.Messages.Misc.ANN;
 using D3Sharp.Net.Game.Messages.Player;
+using D3Sharp.Core.Helpers;
 
 namespace D3Sharp.Net.Game.Messages.Misc
 {
@@ -103,7 +104,7 @@ namespace D3Sharp.Net.Game.Messages.Misc
                 Field0 = this.Field1,
             });
 
-            int ani = killAni[client.rand.Next(killAni.Length)];
+            int ani = killAni[RandomHelper.Next(killAni.Length)];
             Logger.Info("Ani used: " + ani);
 
             client.SendMessage(new PlayAnimationMessage()

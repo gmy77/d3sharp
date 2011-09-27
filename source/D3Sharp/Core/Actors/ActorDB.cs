@@ -34,17 +34,13 @@ namespace D3Sharp.Core.Actors
 
         public static bool isNPC(int id)
         {
-            for (int x = 0; x < NPCList.Length; x++)
-                if (NPCList[x] == id) return true;
-
+            if (Array.BinarySearch<int>(NPCList, id) >= 0) return true;
             return false;
         }
         
         public static bool isMob(int id)
         {
-            for (int x = 0; x < MobList.Length; x++)
-                if (MobList[x] == id) return true;
-
+            if (Array.BinarySearch<int>(MobList, id) >= 0) return true;
             return false;
         }
 
@@ -100,8 +96,8 @@ namespace D3Sharp.Core.Actors
                 5765,
                 5766,
                 5792,
-                6435,             
                 6434,
+                6435,             
                 6526,
                 54862,
                 56323,
