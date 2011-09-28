@@ -23,7 +23,7 @@ namespace D3Sharp.Core.Skills
             // initialize to current convience skills
             activeSkills = new int[6] {
                 (int)Skills.BasicAttack,
-                (int)Skills.Wizard.Disintegrate,
+                (int)Skills.Wizard.ExplosiveBlast,
                 (int)Skills.Monk.BlindingFlash,
                 (int)Skills.Wizard.Meteor,
                 (int)Skills.Monk.SevenSidedStrike,
