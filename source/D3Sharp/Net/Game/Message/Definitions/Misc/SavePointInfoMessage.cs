@@ -25,8 +25,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.Misc
     {
         public int /* sno */ snoLevelArea;
 
-
-
+        public SavePointInfoMessage():base(Opcodes.SavePointInfoMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

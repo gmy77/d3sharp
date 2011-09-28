@@ -18,7 +18,7 @@
 
 using System;
 using System.Linq;
-using D3Sharp.Core.Services;
+using D3Sharp.Core.BNet.Services;
 using D3Sharp.Net.BNet.Packets;
 using D3Sharp.Utils;
 using Google.ProtocolBuffers;

@@ -73,55 +73,58 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Accounts\Account.cs" />
-    <Compile Include="Core\Accounts\AccountManager.cs" />
-    <Compile Include="Core\Actors\Actor.cs" />
-    <Compile Include="Core\Channels\Channel.cs" />
-    <Compile Include="Core\Channels\ChannelManager.cs" />
-    <Compile Include="Core\Channels\Member.cs" />
+    <Compile Include="Core\BNet\Accounts\Account.cs" />
+    <Compile Include="Core\BNet\Accounts\AccountManager.cs" />
+    <Compile Include="Core\Ingame\Actors\Actor.cs" />
+    <Compile Include="Core\BNet\Channels\Channel.cs" />
+    <Compile Include="Core\BNet\Channels\ChannelManager.cs" />
+    <Compile Include="Core\BNet\Channels\Member.cs" />
     <Compile Include="Core\Config\Config.cs" />
     <Compile Include="Core\Config\ConfigManager.cs" />
-    <Compile Include="Core\Games\Game.cs" />
-    <Compile Include="Core\Games\GameManager.cs" />
+    <Compile Include="Core\BNet\Games\Game.cs" />
+    <Compile Include="Core\BNet\Games\GameManager.cs" />
     <Compile Include="Core\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\Helpers\FieldKeyHelper.cs" />
     <Compile Include="Core\Helpers\NotificationTypeHelper.cs" />
     <Compile Include="Core\Helpers\RandomHelper.cs" />
-    <Compile Include="Core\Items\Item.cs" />
-    <Compile Include="Core\Items\ItemTypeGenerator.cs" />
-    <Compile Include="Core\Map\Scene.cs" />
-    <Compile Include="Core\Map\World.cs" />
-    <Compile Include="Core\NPC\BasicNPC.cs" />
-    <Compile Include="Core\Objects\PersistentRPCObject.cs" />
-    <Compile Include="Core\OnlinePlayers.cs" />
-    <Compile Include="Core\Services\AuthenticationService.cs" />
-    <Compile Include="Core\Services\BaseService.cs" />
-    <Compile Include="Core\Services\ChannelInvitationService.cs" />
-    <Compile Include="Core\Services\ChannelOwnerService.cs" />
-    <Compile Include="Core\Services\ChannelService.cs" />
-    <Compile Include="Core\Services\ChatService.cs" />
-    <Compile Include="Core\Services\ExchangeService.cs" />
-    <Compile Include="Core\Services\FollowersService.cs" />
-    <Compile Include="Core\Services\FriendsService.cs" />
-    <Compile Include="Core\Services\GameMasterService.cs" />
-    <Compile Include="Core\Services\GameUtilitiesService.cs" />
-    <Compile Include="Core\Services\IServerService.cs" />
-    <Compile Include="Core\Services\NotificationService.cs" />
-    <Compile Include="Core\Services\PartyService.cs" />
-    <Compile Include="Core\Services\PresenceService.cs" />
-    <Compile Include="Core\Services\SearchService.cs" />
-    <Compile Include="Core\Services\Service.cs" />
-    <Compile Include="Core\Services\StorageService.cs" />
-    <Compile Include="Core\Services\ToonExternalService.cs" />
-    <Compile Include="Core\Services\UserManagerService.cs" />
-    <Compile Include="Core\Skills\Skills.cs" />
-    <Compile Include="Core\Storage\DBManager.cs" />
-    <Compile Include="Core\Storage\GamedataDBManager.cs" />
-    <Compile Include="Core\Toons\Toon.cs" />
-    <Compile Include="Core\Toons\ToonHandleHelper.cs" />
-    <Compile Include="Core\Toons\ToonManager.cs" />
-    <Compile Include="Core\Universe\Game\GameManager.cs" />
-    <Compile Include="Core\Universe\Universe.cs" />
+    <Compile Include="Core\Common\Items\Item.cs" />
+    <Compile Include="Core\Common\Items\ItemTypeGenerator.cs" />
+    <Compile Include="Core\Ingame\Map\Scene.cs" />
+    <Compile Include="Core\Ingame\Map\World.cs" />
+    <Compile Include="Core\Ingame\NPC\BasicNPC.cs" />
+    <Compile Include="Core\BNet\Objects\PersistentRPCObject.cs" />
+    <Compile Include="Core\BNet\OnlinePlayers.cs" />
+    <Compile Include="Core\BNet\Services\AuthenticationService.cs" />
+    <Compile Include="Core\BNet\Services\BaseService.cs" />
+    <Compile Include="Core\BNet\Services\ChannelInvitationService.cs" />
+    <Compile Include="Core\BNet\Services\ChannelOwnerService.cs" />
+    <Compile Include="Core\BNet\Services\ChannelService.cs" />
+    <Compile Include="Core\BNet\Services\ChatService.cs" />
+    <Compile Include="Core\BNet\Services\ExchangeService.cs" />
+    <Compile Include="Core\BNet\Services\FollowersService.cs" />
+    <Compile Include="Core\BNet\Services\FriendsService.cs" />
+    <Compile Include="Core\BNet\Services\GameMasterService.cs" />
+    <Compile Include="Core\BNet\Services\GameUtilitiesService.cs" />
+    <Compile Include="Core\BNet\Services\IServerService.cs" />
+    <Compile Include="Core\BNet\Services\NotificationService.cs" />
+    <Compile Include="Core\BNet\Services\PartyService.cs" />
+    <Compile Include="Core\BNet\Services\PresenceService.cs" />
+    <Compile Include="Core\BNet\Services\SearchService.cs" />
+    <Compile Include="Core\BNet\Services\Service.cs" />
+    <Compile Include="Core\BNet\Services\StorageService.cs" />
+    <Compile Include="Core\BNet\Services\ToonExternalService.cs" />
+    <Compile Include="Core\BNet\Services\UserManagerService.cs" />
+    <Compile Include="Core\Ingame\Skills\Skillset.cs" />
+    <Compile Include="Core\Ingame\Skills\Skills.cs" />
+    <Compile Include="Core\Common\Storage\DBManager.cs" />
+    <Compile Include="Core\Common\Storage\GamedataDBManager.cs" />
+    <Compile Include="Core\Common\Toons\Toon.cs" />
+    <Compile Include="Core\Common\Toons\ToonHandleHelper.cs" />
+    <Compile Include="Core\Common\Toons\ToonManager.cs" />
+    <Compile Include="Core\Ingame\Universe\Hero.cs" />
+    <Compile Include="Core\Ingame\Universe\Player.cs" />
+    <Compile Include="Core\Ingame\Universe\PlayerManager.cs" />
+    <Compile Include="Core\Ingame\Universe\Universe.cs" />
     <Compile Include="Data\SNO\Config.cs" />
     <Compile Include="Data\SNO\Mass.cs" />
     <Compile Include="Data\SNO\Set.cs" />
@@ -133,6 +136,7 @@
     <Compile Include="Net\BNet\Packets\BNetPacket.cs" />
     <Compile Include="Net\Game\ClientManager.cs" />
     <Compile Include="Net\Game\Config.cs" />
+    <Compile Include="Net\Game\Message\Definitions\Skill\AssignPassiveSkillMessage.cs" />
     <Compile Include="Net\Game\Message\Fields\AABB.cs" />
     <Compile Include="Net\Game\Message\Fields\ActiveEvent.cs" />
     <Compile Include="Net\Game\Message\Fields\AnimPreplayData.cs" />
@@ -207,7 +211,7 @@
     <Compile Include="Net\Game\Message\Definitions\Misc\AffixMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Combat\AimTargetMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\ANNDataMessage.cs" />
-    <Compile Include="Net\Game\Message\Definitions\Skill\AssignSkillMessage.cs" />
+    <Compile Include="Net\Game\Message\Definitions\Skill\AssignActiveSkillMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Attribute\AttributeSetValueMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Attribute\AttributesSetValuesMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\BlizzconCVarsMessage.cs" />
@@ -360,32 +364,14 @@
     <Compile Include="Utils\IMessageExtensions.cs" />
     <Compile Include="Utils\TinyLogger.cs" />
     <Compile Include="Utils\win32\NativeMethods.cs" />
-    <Compile Include="Core\Objects\RPCObjectManager.cs" />
-    <Compile Include="Core\Objects\RPCObject.cs" />
-    <Compile Include="Core\Storage\Config.cs" />
+    <Compile Include="Core\BNet\Objects\RPCObjectManager.cs" />
+    <Compile Include="Core\BNet\Objects\RPCObject.cs" />
+    <Compile Include="Core\Common\Storage\Config.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Assets\gamedata.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\SNO\Actors.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\SNO\Blacklist.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\SNO\Mobs.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\SNO\list.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\SNO\NPCs.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\SNO\Powers.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\toon.db">

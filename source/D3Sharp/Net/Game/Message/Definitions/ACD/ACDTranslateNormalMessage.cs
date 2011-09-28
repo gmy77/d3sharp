@@ -25,7 +25,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
     public class ACDTranslateNormalMessage : GameMessage, ISelfHandler
     {
         public int Field0;
-        public Vector3D Field1;
+        public Vector3D Position;
         public float /* angle */? Field2;
         public bool? Field3;
         public float? Field4;
@@ -35,8 +35,8 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
 
         public void Handle(GameClient client)
         {
-            if (this.Field1 != null)
-                client.Position = this.Field1;
+            if (this.Position != null)
+                client.Player.Hero.Position = this.Position;
         }
 
         public override void Parse(GameBitBuffer buffer)
@@ -44,8 +44,8 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
             Field0 = buffer.ReadInt(32);
             if (buffer.ReadBool())
             {
-                Field1 = new Vector3D();
-                Field1.Parse(buffer);
+                Position = new Vector3D();
+                Position.Parse(buffer);
             }
             if (buffer.ReadBool())
             {
@@ -76,10 +76,10 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, Field0);
-            buffer.WriteBool(Field1 != null);
-            if (Field1 != null)
+            buffer.WriteBool(Position != null);
+            if (Position != null)
             {
-                Field1.Encode(buffer);
+                Position.Encode(buffer);
             }
             buffer.WriteBool(Field2.HasValue);
             if (Field2.HasValue)
@@ -120,9 +120,9 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
-            if (Field1 != null)
+            if (Position != null)
             {
-                Field1.AsText(b, pad);
+                Position.AsText(b, pad);
             }
             if (Field2.HasValue)
             {

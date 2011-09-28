@@ -17,9 +17,9 @@
  */
 
 using System.Collections.Generic;
-using D3Sharp.Core.Accounts;
-using D3Sharp.Core.Channels;
-using D3Sharp.Core.Toons;
+using D3Sharp.Core.BNet.Accounts;
+using D3Sharp.Core.BNet.Channels;
+using D3Sharp.Core.Common.Toons;
 using D3Sharp.Net.Game;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;

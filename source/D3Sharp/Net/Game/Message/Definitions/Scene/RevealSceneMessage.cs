@@ -126,30 +126,30 @@ namespace D3Sharp.Net.Game.Message.Definitions.Scene
                                                                      {
                                                                          Field0 = new Vector3D()
                                                                                       {
-                                                                                          Field0 = float.Parse(data[27], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                          Field1 = float.Parse(data[28], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                          Field2 = float.Parse(data[29], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          X = float.Parse(data[27], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          Y = float.Parse(data[28], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          Z = float.Parse(data[29], System.Globalization.CultureInfo.InvariantCulture),
                                                                                       },
                                                                          Field1 = new Vector3D()
                                                                                       {
-                                                                                          Field0 = float.Parse(data[30], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                          Field1 = float.Parse(data[31], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                          Field2 = float.Parse(data[32], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          X = float.Parse(data[30], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          Y = float.Parse(data[31], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          Z = float.Parse(data[32], System.Globalization.CultureInfo.InvariantCulture),
                                                                                       },
                                                                      },
                                                         Field4 = new AABB()
                                                                      {
                                                                          Field0 = new Vector3D()
                                                                                       {
-                                                                                          Field0 = float.Parse(data[33], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                          Field1 = float.Parse(data[34], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                          Field2 = float.Parse(data[35], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          X = float.Parse(data[33], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          Y = float.Parse(data[34], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          Z = float.Parse(data[35], System.Globalization.CultureInfo.InvariantCulture),
                                                                                       },
                                                                          Field1 = new Vector3D()
                                                                                       {
-                                                                                          Field0 = float.Parse(data[36], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                          Field1 = float.Parse(data[37], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                          Field2 = float.Parse(data[38], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          X = float.Parse(data[36], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          Y = float.Parse(data[37], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          Z = float.Parse(data[38], System.Globalization.CultureInfo.InvariantCulture),
                                                                                       },
                                                                      },
                                                         Field5 = new int[4] { int.Parse(data[39]), int.Parse(data[40]), int.Parse(data[41]), int.Parse(data[42]), },
@@ -162,19 +162,19 @@ namespace D3Sharp.Net.Game.Message.Definitions.Scene
                            {
                                Field0 = new Quaternion()
                                             {
-                                                Field0 = float.Parse(data[49], System.Globalization.CultureInfo.InvariantCulture),
-                                                Field1 = new Vector3D()
+                                                Amount = float.Parse(data[49], System.Globalization.CultureInfo.InvariantCulture),
+                                                Axis = new Vector3D()
                                                              {
-                                                                 Field0 = float.Parse(data[46], System.Globalization.CultureInfo.InvariantCulture),
-                                                                 Field1 = float.Parse(data[47], System.Globalization.CultureInfo.InvariantCulture),
-                                                                 Field2 = float.Parse(data[48], System.Globalization.CultureInfo.InvariantCulture),
+                                                                 X = float.Parse(data[46], System.Globalization.CultureInfo.InvariantCulture),
+                                                                 Y = float.Parse(data[47], System.Globalization.CultureInfo.InvariantCulture),
+                                                                 Z = float.Parse(data[48], System.Globalization.CultureInfo.InvariantCulture),
                                                              },
                                             },
-                               Field1 = new Vector3D()
+                               ReferencePoint = new Vector3D()
                                             {
-                                                Field0 = float.Parse(data[50], System.Globalization.CultureInfo.InvariantCulture),
-                                                Field1 = float.Parse(data[51], System.Globalization.CultureInfo.InvariantCulture),
-                                                Field2 = float.Parse(data[52], System.Globalization.CultureInfo.InvariantCulture),
+                                                X = float.Parse(data[50], System.Globalization.CultureInfo.InvariantCulture),
+                                                Y = float.Parse(data[51], System.Globalization.CultureInfo.InvariantCulture),
+                                                Z = float.Parse(data[52], System.Globalization.CultureInfo.InvariantCulture),
                                             },
                            };
 

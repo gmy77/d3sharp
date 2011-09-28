@@ -19,12 +19,12 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using D3Sharp.Core.Toons;
+using D3Sharp.Core.Common.Toons;
+using D3Sharp.Core.Ingame.Universe;
 using D3Sharp.Net.BNet;
 using D3Sharp.Net.Game.Message;
 using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Utils;
-using D3Sharp.Core.Universe;
 
 namespace D3Sharp.Net.Game
 {
@@ -38,25 +38,20 @@ namespace D3Sharp.Net.Game
         private readonly GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         private readonly GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
 
-        //this is the main universe reference to handle most of the player-game interactions and manage game state
-        public Universe GameUniverse;
-        
+        public Universe Universe;    
+        public Player Player { get; set; }
         public int PacketId = 0x227 + 20;
         public int Tick = 0;
-        public  int ObjectId = 0x78f50114 + 100;
-
+        public int ObjectId = 0x78f50114 + 100;
         public IList<int> ObjectIdsSpawned = null;
-        public Vector3D Position;
-
-        public Toon Toon;
 
         public bool IsLoggingOut;
 
-        public GameClient(IConnection connection, Universe gameUniverse)
-        {
+        public GameClient(IConnection connection, Universe universe)
+        {            
             this.Connection = connection;
+            this.Universe = universe;
             _outgoingBuffer.WriteInt(32, 0);
-            GameUniverse = gameUniverse;
         }
 
         public void Parse(ConnectionDataEventArgs e)
@@ -77,7 +72,7 @@ namespace D3Sharp.Net.Game
                         GameMessage message = _incomingBuffer.ParseMessage();
                         if (message == null) continue;
 
-                        if (message.Consumer != Consumers.None) this.GameUniverse.Route(this, message);
+                        if (message.Consumer != Consumers.None) this.Universe.Route(this, message);
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                         else Logger.Warn("Got an incoming message that has no consumer or self-handler " + message.GetType());
 
@@ -114,6 +109,6 @@ namespace D3Sharp.Net.Game
                 var data = _outgoingBuffer.GetPacketAndReset();
                 Connection.Send(data);
             }
-        }     
+        }
     }
 }
