@@ -44,11 +44,10 @@ namespace D3Sharp.Core.Ingame.Universe
             this.Properties = toon;
             this.CurrentWorldSNO = 0x115EE;
 
-            //initialize world entry point for player to the new character entry area for now
+            // actor values
             this.Position.X = 3143.75f;
             this.Position.Y = 2828.75f;
             this.Position.Z = 59.075588f;
-
             this.WorldId = 0x772E0000;
             this.Field0 = 0x789E00E2;
             this.snoID = this.ClassSNO;
@@ -61,7 +60,6 @@ namespace D3Sharp.Core.Ingame.Universe
             this.Field8 = -1;
             this.Field9 = 0x00000000;
             this.Field10 = 0x0;
-
             this.GBHandle = new GBHandle()
             {
                 Field0 = 0x00000007,
