@@ -112,49 +112,11 @@ namespace D3Sharp.Core.Ingame.Universe
                                        Field8 = false, //announce party join
                                        Field9 = 0x00000001,
                                        Field10 = 0x789E00E2,
-                                   });
+                                   });            
+
+            Hero.RevealNew(this);
 
             #region ACDEnterKnown 0x789E00E2 PlayerId??
-
-            Client.SendMessage(new ACDEnterKnownMessage()
-                                   {
-                                       Id = 0x003B,
-                                       Field0 = 0x789E00E2,
-                                       Field1 = Client.Player.Hero.ClassSNO,
-                                       //Player model?
-                                       Field2 = 0x00000009,
-                                       Field3 = 0x00000000,
-                                       Field4 = new WorldLocationMessageData()
-                                                    {
-                                                        Field0 = Client.Player.Hero.ModelScale,
-                                                        Field1 = new PRTransform()
-                                                                     {
-                                                                         Field0 = new Quaternion()
-                                                                                      {
-                                                                                          Field0 = 0.05940768f,
-                                                                                          Field1 = new Vector3D()
-                                                                                                       {
-                                                                                                           X = 0f,
-                                                                                                           Y = 0f,
-                                                                                                           Z =
-                                                                                                               0.9982339f,
-                                                                                                       },
-                                                                                      },
-                                                                         Field1 = Client.Player.Hero.Position,
-                                                                     },
-                                                        Field2 = Client.Player.Hero.CurrentWorldID,
-                                                    },
-                                       Field5 = null,
-                                       Field6 = new GBHandle()
-                                                    {
-                                                        Field0 = 0x00000007,
-                                                        Field1 = Client.Player.Hero.Properties.ClassID,
-                                                    },
-                                       Field7 = -1,
-                                       Field8 = -1,
-                                       Field9 = 0x00000000,
-                                       Field10 = 0x00,
-                                   });
 
             Client.SendMessage(new ACDCollFlagsMessage()
                                    {

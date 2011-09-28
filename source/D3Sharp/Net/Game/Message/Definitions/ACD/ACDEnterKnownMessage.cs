@@ -155,7 +155,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
             b.AppendLine("}");
         }
 
-        public ACDEnterKnownMessage()
+        public ACDEnterKnownMessage():base(Opcodes.ACDEnterKnownMessage)
         {
 
         }

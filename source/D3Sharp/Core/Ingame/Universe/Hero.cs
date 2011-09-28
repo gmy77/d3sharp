@@ -17,40 +17,58 @@
  */
 
 using D3Sharp.Core.Common.Toons;
+using D3Sharp.Core.Ingame.Actors;
 using D3Sharp.Core.Ingame.Map;
 using D3Sharp.Core.Ingame.Skills;
 using D3Sharp.Net.Game;
+using D3Sharp.Net.Game.Message.Definitions.ACD;
 using D3Sharp.Net.Game.Message.Fields;
 
 namespace D3Sharp.Core.Ingame.Universe
 {
-    public class Hero // should extend actor actually?? /raist
+    public class Hero:Actor // should extend actor actually?? /raist
     {
         public Toon Properties { get; private set; }
         public Universe Universe { get; private set; }
-
-        public Vector3D Position = new Vector3D();
-        public int CurrentWorldID;
+        
         public int CurrentWorldSNO;
         public Skillset Skillset = new Skillset(); // TODO: this should eventually be done on the bnet side
 
         public GameClient InGameClient { get; private set; }
+       
 
         public Hero(GameClient client, Universe universe, Toon toon)
         {
             this.InGameClient = client;
             this.Universe = universe;
             this.Properties = toon;
-
-            this.CurrentWorldID = 0x772E0000;
             this.CurrentWorldSNO = 0x115EE;
 
             //initialize world entry point for player to the new character entry area for now
             this.Position.X = 3143.75f;
             this.Position.Y = 2828.75f;
             this.Position.Z = 59.075588f;
-        }
 
+            this.WorldId = 0x772E0000;
+            this.Field0 = 0x789E00E2;
+            this.snoID = this.ClassSNO;
+            this.Field2 = 0x00000009;
+            this.Field3 = 0x00000000;
+            this.Scale = ModelScale;
+            this.RotationAmount = 0.05940768f;
+            this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
+            this.Field7 = -1;
+            this.Field8 = -1;
+            this.Field9 = 0x00000000;
+            this.Field10 = 0x0;
+
+            this.GBHandle = new GBHandle()
+            {
+                Field0 = 0x00000007,
+                Field1 = this.Properties.ClassID,
+            };
+        }
+        
         public HeroStateData GetStateData()
         {
             return new HeroStateData()
@@ -94,7 +112,7 @@ namespace D3Sharp.Core.Ingame.Universe
 
         public World CurrentWorld
         {
-            get { return this.Universe.GetWorld(this.CurrentWorldID); }
+            get { return this.Universe.GetWorld(this.WorldId); }
         }
 
         public int ClassSNO

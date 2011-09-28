@@ -302,7 +302,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.Misc
                                     Y = 2828.75f,
                                     Z = 59.07559f,
                                 },
-                                Field1 = client.Player.Hero.CurrentWorldID,
+                                Field1 = client.Player.Hero.WorldId,
                             },
                             Field3 = 0x00000000,
                             Field4 = 0x00026186,
