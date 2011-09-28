@@ -1372,7 +1372,7 @@ namespace D3Sharp.Core.Ingame.Universe
                                        Field0 = 0x00000000,
                                        Field1 = 0x789E00E2,
                                    });
-
+            /*
             Client.SendMessage(new VisualInventoryMessage()
                                    {
                                        Id = 0x004E,
@@ -1456,9 +1456,10 @@ namespace D3Sharp.Core.Ingame.Universe
                                                                      },
                                                     },
                                    });
+             */
 
             // sample item
-
+            Universe.InventoryMenager.CreateItem(Client, 3, 3);
             Client.SendMessage(new ACDEnterKnownMessage()
             {
                 Id = 0x003B,
