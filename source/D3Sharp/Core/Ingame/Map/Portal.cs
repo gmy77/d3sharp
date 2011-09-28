@@ -25,10 +25,12 @@ namespace D3Sharp.Core.Ingame.Map
         public int TargetWorldID;
         public Vector3D TargetPos;
 
-        public Portal()
-        {
-            TargetPos = new Vector3D();
-        }
+        //uncomment this constructor to show all portals in the world, even those that will crash the client on entry
+        //useful for determining which actor the portal is.
+        //public Portal()
+        //{
+        //    TargetPos = new Vector3D();
+        //}
 
         public void Reveal(Hero hero)
         {

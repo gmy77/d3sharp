@@ -63,9 +63,9 @@ namespace D3Sharp.Core.Ingame.Universe
             //initial world and position
             this.WorldId = 0x772E0000;
             //new char starter pos:
-            //this.Position.X = 3143.75f;
-            //this.Position.Y = 2828.75f;
-            //this.Position.Z = 59.075588f;
+            this.Position.X = 3143.75f;
+            this.Position.Y = 2828.75f;
+            this.Position.Z = 59.075588f;
 
             //den of evil:
             //this.Position.X = 2526.250000f;
@@ -73,20 +73,20 @@ namespace D3Sharp.Core.Ingame.Universe
             //this.Position.Z = -5.381495f;
 
             //inn:
-            this.Position.X = 2996.250000f;
-            this.Position.Y = 2793.750000f;
-            this.Position.Z = 24.045330f;
+            //this.Position.X = 2996.250000f;
+            //this.Position.Y = 2793.750000f;
+            //this.Position.Z = 24.045330f;
 
             //this.Position.X = 1768.750000f;
             //this.Position.Y = 2921.250000f;
             //this.Position.Z = 20.333143f;        
 
             //this.Position.X = 2041.250000f;
-            //this.Position.Y =  1778.750000f;
+            //this.Position.Y = 1778.750000f;
             //this.Position.Z = 0.426203f;
 
             //defiled crypt level 2
-            //this.WorldID = 2000289804;
+            //this.WorldId = 2000289804;
             //this.Position.X = 158.750000f;
             //this.Position.Y = 76.250000f;
             //this.Position.Z = 0.100000f;

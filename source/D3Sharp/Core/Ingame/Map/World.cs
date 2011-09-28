@@ -213,8 +213,8 @@ namespace D3Sharp.Core.Ingame.Map
             //for (int x = hero.RevealedActors.Count - 1; x >= 0; x-- )
             //    if (hero.RevealedActors[x].RevealMessage.Field4.Field2 == WorldID) hero.RevealedActors[x].Destroy(hero);
 
-            for (int x = hero.RevealedScenes.Count - 1; x >= 0; x--)
-                if (hero.RevealedScenes[x].SceneData.WorldID == WorldID) hero.RevealedScenes[x].Destroy(hero);
+            //for (int x = hero.RevealedScenes.Count - 1; x >= 0; x--)
+            //    if (hero.RevealedScenes[x].SceneData.WorldID == WorldID) hero.RevealedScenes[x].Destroy(hero);
 
             //hero.Owner.LoggedInBNetClient.InGameClient.SendMessage(new WorldDeletedMessage() { Id = 0xd9, Field0 = WorldID, });
             hero.InGameClient.FlushOutgoingBuffer();
