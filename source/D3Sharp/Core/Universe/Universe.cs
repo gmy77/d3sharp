@@ -224,19 +224,29 @@ namespace D3Sharp.Core.Universe
         {
             Toon t = client.Toon;
 
-            World w = null;
+            World newworld = null;
             //don't use getworld() here as that'd create a new empty world anyway
             foreach (var x in _worlds)
                 if (x.WorldID == WorldID)
-                    w = x;
-            if (w == null) return; //don't go to a world we don't have in the universe
+                    newworld = x;
 
-            t.CurrentWorldID = w.WorldID;
-            t.CurrentWorldSNO = w.WorldSNO;
+            World currentworld = null;
+            //don't use getworld() here as that'd create a new empty world anyway
+            foreach (var x in _worlds)
+                if (x.WorldID == t.CurrentWorldID)
+                    currentworld = x;
+            
+            if (newworld == null || currentworld==null) return; //don't go to a world we don't have in the universe
 
-            w.RevealWorld(t);
+            currentworld.DestroyWorld(t);
 
-            client.FlushOutgoingBuffer();
+            t.CurrentWorldID = newworld.WorldID;
+            t.CurrentWorldSNO = newworld.WorldSNO;
+            t.PosX = Pos.Field0;
+            t.PosY = Pos.Field1;
+            t.PosZ = Pos.Field2;
+
+            newworld.RevealWorld(t);
 
             client.SendMessage(new ACDWorldPositionMessage
             {
@@ -257,11 +267,18 @@ namespace D3Sharp.Core.Universe
                                 Field2 = 0.9982339f,
                             }
                         },
-                        Field1 = Pos,
+                        Field1 = new Vector3D
+                        {
+                            Field0 = t.PosX,
+                            Field1 = t.PosY,
+                            Field2 = t.PosZ,
+                        },
                     },
-                    Field2 = w.WorldID,
+                    Field2 = newworld.WorldID,
                 }
             });
+
+            client.FlushOutgoingBuffer();
 
             client.SendMessage(new PlayerWarpedMessage()
             {

@@ -19,6 +19,7 @@
 using System;
 using System.Data.SQLite;
 using System.Linq;
+using System.Collections.Generic;
 using D3.Account;
 using D3Sharp.Core.Accounts;
 using D3Sharp.Core.Channels;
@@ -195,12 +196,14 @@ namespace D3Sharp.Core.Toons
             :base(persistantId)
         {
             this.SetFields(name, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistantID((ulong)accountId));
+            RevealedWorlds=new List<int>();
         }
 
         public Toon(string name, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
             : base(StringHashHelper.HashIdentity(name))
         {
             this.SetFields(name, GetClassByID(classId), flags, level, account);
+            RevealedWorlds=new List<int>();
         }
 
         private void SetFields(string name, ToonClass @class, ToonFlags flags, byte level, Account owner)
@@ -520,6 +523,7 @@ namespace D3Sharp.Core.Toons
         public int CurrentWorldID;
         public int CurrentWorldSNO;
         public float PosX, PosY, PosZ;
+        public List<int> RevealedWorlds;
     }
 
     public enum ToonClass

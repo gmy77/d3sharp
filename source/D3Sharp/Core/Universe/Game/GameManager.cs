@@ -125,7 +125,11 @@ namespace D3Sharp.Core.Universe.Game
             //inn:
             currentToon.PosX = 2996.250000f;
             currentToon.PosY = 2793.750000f;
-            currentToon.PosZ = -24.045330f;                
+            currentToon.PosZ = 24.045330f;
+
+            //currentToon.PosX = 1768.750000f;
+            //currentToon.PosY = 2921.250000f;
+            //currentToon.PosZ = 20.333143f;                
 
             //reveal world to the toon
             World world = this.Universe.GetWorld(currentToon.CurrentWorldID);

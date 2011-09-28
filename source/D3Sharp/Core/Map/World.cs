@@ -166,13 +166,21 @@ namespace D3Sharp.Core.Map
 
         public void RevealWorld(Toon toon)
         {
-            //reveal world to player
-            toon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new RevealWorldMessage()
+            bool found = false;
+            foreach (var t in toon.RevealedWorlds)
+                if (t == WorldID) found = true;
+
+            if (!found)
             {
-                Id = 0x0037,
-                Field0 = WorldID,
-                Field1 = WorldSNO,
-            });
+                //reveal world to player
+                toon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new RevealWorldMessage()
+                {
+                    Id = 0x0037,
+                    Field0 = WorldID,
+                    Field1 = WorldSNO,
+                });
+                toon.RevealedWorlds.Add(WorldID);
+            }
 
             //player enters world
             toon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new EnterWorldMessage()
@@ -188,23 +196,42 @@ namespace D3Sharp.Core.Map
                 Field2 = WorldSNO,
             });
 
-            //just reveal the whole thing to the player for now
-            foreach (Scene s in Scenes)
-                s.Reveal(toon);
 
-            //reveal actors
-            foreach (Actor a in Actors)
+            if (!found)
             {
-                if (ActorDB.isBlackListed(a.snoID)) continue;
-                if (ActorDB.isNPC(a.snoID)) continue;
-                //a.Reveal(toon);
+                //just reveal the whole thing to the player for now
+                foreach (Scene s in Scenes)
+                    s.Reveal(toon);
+
+                //if you reveal the actors again the game crashes with not being able to move the player actor. wtf.
+
+                //reveal actors
+                foreach (Actor a in Actors)
+                {
+                    if (ActorDB.isBlackListed(a.snoID)) continue;
+                    if (ActorDB.isNPC(a.snoID)) continue;
+                    //a.Reveal(toon);
+                }
+
+                //reveal portals
+                foreach (Portal p in Portals)
+                {
+                    p.Reveal(toon);
+                }
             }
 
-            //reveal portals
-            foreach (Portal p in Portals)
-            {
-                p.Reveal(toon);
-            }
+        }
+
+        public void DestroyWorld(Toon toon)
+        {
+            //foreach (Actor a in Actors)
+            //    a.Destroy(toon);
+
+            //foreach (Scene s in Scenes)
+            //    s.Destroy(toon);
+
+            //toon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new WorldDeletedMessage() { Id = 0xd9, Field0 = WorldID, });
+            toon.Owner.LoggedInBNetClient.InGameClient.FlushOutgoingBuffer();
         }
 
         void CreateNPC(int objectId)

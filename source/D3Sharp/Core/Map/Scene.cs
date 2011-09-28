@@ -20,5 +20,15 @@ namespace D3Sharp.Core.Map
             if (Map != null) t.Owner.LoggedInBNetClient.InGameClient.SendMessage(Map);
             t.Owner.LoggedInBNetClient.InGameClient.FlushOutgoingBuffer();
         }
+
+        public void Destroy(Toon t)
+        {
+            if (SceneData != null)
+            {
+                t.Owner.LoggedInBNetClient.InGameClient.SendMessage(new DestroySceneMessage() { Id=0x35, Field0 = SceneData.WorldID, Field1 = ID });
+                t.Owner.LoggedInBNetClient.InGameClient.FlushOutgoingBuffer();
+            }
+        }
+
     }
 }
