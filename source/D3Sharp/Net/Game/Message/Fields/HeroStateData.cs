@@ -17,7 +17,6 @@
  */
 
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Fields
 {

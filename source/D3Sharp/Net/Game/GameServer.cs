@@ -29,16 +29,10 @@ namespace D3Sharp.Net.Game
         {
             GameUniverse=new Universe();
 
-            this.OnConnect += GameServer_OnConnect;
-            this.OnDisconnect += (sender, e) => Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
+            this.OnConnect += ClientManager.OnConnect;
+            this.OnDisconnect += ClientManager.OnDisconnect;
             this.DataReceived += GameServer_DataReceived;
             this.DataSent += (sender, e) => { };
-        }
-
-        void GameServer_OnConnect(object sender, ConnectionEventArgs e)
-        {
-            Logger.Trace("Game-Client connected: {0}", e.Connection.ToString());
-            e.Connection.Client = new GameClient(e.Connection,GameUniverse);
         }
 
         void GameServer_DataReceived(object sender, ConnectionDataEventArgs e)

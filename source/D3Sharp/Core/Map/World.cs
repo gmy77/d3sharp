@@ -16,13 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using D3Sharp.Net.Game;
-using D3Sharp.Core.Map;
 using D3Sharp.Core.Actors;
 using D3Sharp.Net.Game.Message.Definitions.ACD;
 using D3Sharp.Net.Game.Message.Definitions.Map;
@@ -30,11 +25,8 @@ using D3Sharp.Net.Game.Message.Definitions.Scene;
 using D3Sharp.Net.Game.Message.Definitions.World;
 using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 using D3Sharp.Utils;
-using D3Sharp.Utils.Extensions;
 using D3Sharp.Core.NPC;
-using D3Sharp.Core.Actors;
 using D3Sharp.Core.Toons;
 
 namespace D3Sharp.Core.Map
@@ -172,10 +164,10 @@ namespace D3Sharp.Core.Map
             Scenes.Sort(SceneSorter);
         }
 
-        public void RevealWorld(Toon t)
+        public void RevealWorld(Toon toon)
         {
             //reveal world to player
-            t.Owner.LoggedInBNetClient.InGameClient.SendMessage(new RevealWorldMessage()
+            toon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new RevealWorldMessage()
             {
                 Id = 0x0037,
                 Field0 = WorldID,
@@ -183,14 +175,14 @@ namespace D3Sharp.Core.Map
             });
 
             //player enters world
-            t.Owner.LoggedInBNetClient.InGameClient.SendMessage(new EnterWorldMessage()
+            toon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new EnterWorldMessage()
             {
                 Id = 0x0033,
                 Field0 = new Vector3D()
                 {
-                    Field0 = t.PosX,
-                    Field1 = t.PosY,
-                    Field2 = t.PosZ
+                    Field0 = toon.PosX,
+                    Field1 = toon.PosY,
+                    Field2 = toon.PosZ
                 },
                 Field1 = WorldID,
                 Field2 = WorldSNO,
@@ -198,20 +190,20 @@ namespace D3Sharp.Core.Map
 
             //just reveal the whole thing to the player for now
             foreach (Scene s in Scenes)
-                s.Reveal(t);
+                s.Reveal(toon);
 
             //reveal actors
             foreach (Actor a in Actors)
             {
                 if (ActorDB.isBlackListed(a.snoID)) continue;
                 if (ActorDB.isNPC(a.snoID)) continue;
-                //a.Reveal(t);
+                //a.Reveal(toon);
             }
 
             //reveal portals
             foreach (Portal p in Portals)
             {
-                p.Reveal(t);
+                p.Reveal(toon);
             }
         }
 

@@ -18,7 +18,6 @@
 
 using System;
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Hireling
 {
@@ -28,10 +27,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.Hireling
         public int /* sno */ Field1;
 
 
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public override void Parse(GameBitBuffer buffer)
         {

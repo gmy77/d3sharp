@@ -19,7 +19,6 @@
 using System;
 using System.Text;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.ACD
 {
@@ -32,10 +31,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
         public int /* sno */ Field4;
 
 
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public override void Parse(GameBitBuffer buffer)
         {

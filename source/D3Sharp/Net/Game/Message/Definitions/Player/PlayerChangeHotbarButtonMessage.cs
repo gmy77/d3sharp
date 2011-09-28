@@ -19,7 +19,6 @@
 using System;
 using System.Text;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Player
 {
@@ -27,12 +26,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Player
     {
         public int Field0;
         public HotbarButtonData Field1;
-
-
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

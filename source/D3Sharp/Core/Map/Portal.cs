@@ -7,7 +7,7 @@ using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Definitions.ACD;
 using D3Sharp.Net.Game.Message.Definitions.Attribute;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
+using D3Sharp.Net.Game.Message;
 
 using D3Sharp.Core.Toons;
 

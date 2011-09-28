@@ -17,17 +17,11 @@
  */
 
 using System.Text;
-using D3Sharp.Core.Helpers;
-using D3Sharp.Net.Game.Message.Definitions.Animation;
-using D3Sharp.Net.Game.Message.Definitions.Attribute;
-using D3Sharp.Net.Game.Message.Definitions.Effect;
-using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Combat
 {
-    [IncomingMessage(Opcodes.TargetMessage)]
+    [IncomingMessage(Opcodes.TargetMessage,Consumers.Universe)]
     public class TargetMessage : GameMessage
     {
         public int Field0;
@@ -37,11 +31,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Combat
         public int Field4;
         public int Field5;
         public AnimPreplayData Field6;
-
-        public override void Handle(GameClient client)
-        {
-            client.GameUniverse.HandleTargetMessage(this,client);
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {
