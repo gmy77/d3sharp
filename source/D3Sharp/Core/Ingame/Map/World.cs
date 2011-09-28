@@ -55,22 +55,15 @@ namespace D3Sharp.Core.Ingame.Map
             return null;
         }
 
-        public Actor GetActor(int ID)
+        //this is a helper function to prune duplicate entries from the packet data
+        public bool ActorExists(Actor actor)
         {
-            for (int x = 0; x < Actors.Count; x++)
-                if (Actors[x].Id == ID) return Actors[x];
-            return null;
-        }
-
-        //get actor by snoid and x,y,z position - this is a helper function to prune duplicate entries from the packet data
-        public Actor GetActor(int snoID, float x, float y, float z)
-        {
-            for (int i = 0; i < Actors.Count; i++)
-                if (Actors[i].snoID == snoID &&
-                    Actors[i].Position.X ==x &&
-                    Actors[i].Position.Y == y &&
-                    Actors[i].Position.Z == z) return Actors[i];
-            return null;
+            return Actors.Any(
+                t =>
+                    t.SnoId == actor.SnoId && 
+                    t.Position.X == actor.Position.X && 
+                    t.Position.Y == actor.Position.Y &&
+                    t.Position.Z == actor.Position.Z);
         }
 
         public void AddScene(string Line)
@@ -103,29 +96,11 @@ namespace D3Sharp.Core.Ingame.Map
             s.Map = new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID);
         }
 
-        public void AddActor(string Line)
+        public void AddActor(string line)
         {
-            string[] data = Line.Split(' ');
-
-            //skip inventory using items as their use is unknown
-            if (int.Parse(data[2]) == 0) return;
-
-            int ActorID = int.Parse(data[4]);
-            int snoID = int.Parse(data[5]);
-
-            float x, y, z;
-            x = float.Parse(data[13], System.Globalization.CultureInfo.InvariantCulture);
-            y = float.Parse(data[14], System.Globalization.CultureInfo.InvariantCulture);
-            z = float.Parse(data[15], System.Globalization.CultureInfo.InvariantCulture);
-
-            Actor actor = GetActor(snoID,x,y,z);
-            if (actor != null) return;
-
-            actor = new Actor();
-            
-            actor.ParseFrom(this.WorldID, data);            
-
-            Actors.Add(actor);
+            var actor = new Actor();
+            if (!actor.ParseFrom(this.WorldID, line)) return; // if not valid actor (inventory using items), just don't add it to list.            
+            if(!this.ActorExists(actor)) Actors.Add(actor); // filter duplicate actors.
         }
 
         private int SceneSorter(Scene x, Scene y)
@@ -167,8 +142,8 @@ namespace D3Sharp.Core.Ingame.Map
             //reveal actors
             foreach (var actor in Actors)
             {
-                if (ActorDB.isBlackListed(actor.snoID)) continue;
-                if (ActorDB.isNPC(actor.snoID)) continue;
+                if (ActorDB.isBlackListed(actor.SnoId)) continue;
+                if (ActorDB.isNPC(actor.SnoId)) continue;
                 actor.Reveal(hero);
             }
         }

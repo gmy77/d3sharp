@@ -430,15 +430,15 @@ namespace D3Sharp.Core.Ingame.Universe
                 {
                     Field0 = new Quaternion()
                     {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
+                        Amount = 1f,
+                        Axis = new Vector3D()
                         {
                             X = 0f,
                             Y = 0f,
                             Z = 0f,
                         }
                     },
-                    Field1 = new Vector3D()
+                    ReferencePoint = new Vector3D()
                     {
                         X = 0f,
                         Y = 0f,
@@ -461,15 +461,15 @@ namespace D3Sharp.Core.Ingame.Universe
                 {
                     Field0 = new Quaternion()
                     {
-                        Field0 = 1f,
-                        Field1 = new Vector3D()
+                        Amount = 1f,
+                        Axis = new Vector3D()
                         {
                             X = 0f,
                             Y = 0f,
                             Z = 0f,
                         }
                     },
-                    Field1 = new Vector3D()
+                    ReferencePoint = new Vector3D()
                     {
                         X = 0f,
                         Y = 0f,
@@ -495,15 +495,15 @@ namespace D3Sharp.Core.Ingame.Universe
                     {
                         Field0 = new Quaternion
                         {
-                            Field0 = 0.9909708f,
-                            Field1 = new Vector3D
+                            Amount = 0.9909708f,
+                            Axis = new Vector3D
                             {
                                 X = 0f,
                                 Y = 0f,
                                 Z = 0.1340775f
                             }
                         },
-                        Field1 = new Vector3D
+                        ReferencePoint = new Vector3D
                         {
                             X = 82.15131f,
                             Y = 122.2867f,
@@ -563,15 +563,15 @@ namespace D3Sharp.Core.Ingame.Universe
                     {
                         Field0 = new Quaternion
                         {
-                            Field0 = 0.05940768f,
-                            Field1 = new Vector3D
+                            Amount = 0.05940768f,
+                            Axis = new Vector3D
                             {
                                 X = 0f,
                                 Y = 0f,
                                 Z = 0.9982339f,
                             }
                         },
-                        Field1 = new Vector3D
+                        ReferencePoint = new Vector3D
                         {
                             X = 82.15131f,
                             Y = 122.2867f,
@@ -622,15 +622,15 @@ namespace D3Sharp.Core.Ingame.Universe
                     {
                         Field0 = new Quaternion()
                         {
-                            Field0 = 0.768145f,
-                            Field1 = new Vector3D()
+                            Amount = 0.768145f,
+                            Axis = new Vector3D()
                             {
                                 X = 0f,
                                 Y = 0f,
                                 Z = -0.640276f,
                             },
                         },
-                        Field1 = new Vector3D()
+                        ReferencePoint = new Vector3D()
                         {
                             X = client.Player.Hero.Position.X + 5,
                             Y = client.Player.Hero.Position.Y + 5,

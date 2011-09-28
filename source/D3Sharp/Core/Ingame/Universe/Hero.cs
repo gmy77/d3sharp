@@ -21,7 +21,6 @@ using D3Sharp.Core.Ingame.Actors;
 using D3Sharp.Core.Ingame.Map;
 using D3Sharp.Core.Ingame.Skills;
 using D3Sharp.Net.Game;
-using D3Sharp.Net.Game.Message.Definitions.ACD;
 using D3Sharp.Net.Game.Message.Fields;
 
 namespace D3Sharp.Core.Ingame.Universe
@@ -45,26 +44,28 @@ namespace D3Sharp.Core.Ingame.Universe
             this.CurrentWorldSNO = 0x115EE;
 
             // actor values
-            this.Position.X = 3143.75f;
-            this.Position.Y = 2828.75f;
-            this.Position.Z = 59.075588f;
-            this.WorldId = 0x772E0000;
             this.Id = 0x789E00E2;
-            this.snoID = this.ClassSNO;
+            this.SnoId = this.ClassSNO;
+            this.WorldId = 0x772E0000;
             this.Field2 = 0x00000009;
             this.Field3 = 0x00000000;
             this.Scale = ModelScale;
             this.RotationAmount = 0.05940768f;
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
-            this.Field7 = -1;
-            this.Field8 = -1;
-            this.Field9 = 0x00000000;
-            this.Field10 = 0x0;
+            this.Position.X = 3143.75f;
+            this.Position.Y = 2828.75f;
+            this.Position.Z = 59.075588f;
+
             this.GBHandle = new GBHandle()
             {
                 Field0 = 0x00000007,
                 Field1 = this.Properties.ClassID,
             };
+
+            this.Field7 = -1;
+            this.Field8 = -1;
+            this.Field9 = 0x00000000;
+            this.Field10 = 0x0;
         }
         
         public HeroStateData GetStateData()

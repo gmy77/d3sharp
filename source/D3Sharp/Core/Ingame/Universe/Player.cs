@@ -116,8 +116,6 @@ namespace D3Sharp.Core.Ingame.Universe
 
             Hero.Reveal(this.Hero);
 
-            #region ACDEnterKnown 0x789E00E2 PlayerId??
-
             Client.SendMessage(new ACDCollFlagsMessage()
                                    {
                                        Id = 0x00A6,
@@ -1474,8 +1472,6 @@ namespace D3Sharp.Core.Ingame.Universe
                                                         Field1 = Client.Player.Hero.ClassSNO,
                                                     },
                                    });
-
-            #endregion
 
             Client.FlushOutgoingBuffer();
 
