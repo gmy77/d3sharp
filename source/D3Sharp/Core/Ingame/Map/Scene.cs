@@ -10,14 +10,30 @@ namespace D3Sharp.Core.Ingame.Map
         public int ID;
         public RevealSceneMessage SceneData;
         public MapRevealSceneMessage Map;
-        public string SceneLine;
-        public string MapLine;
 
         public void Reveal(Hero hero)
         {
-            if (SceneData != null) hero.InGameClient.SendMessage(SceneData);
+            if (hero.RevealedScenes.Contains(this)) return; //already revealed
+
+            if (SceneData != null)
+            {
+                hero.InGameClient.SendMessage(SceneData);
+                hero.RevealedScenes.Add(this);
+            }
             if (Map != null) hero.InGameClient.SendMessage(Map);
             hero.InGameClient.FlushOutgoingBuffer();
         }
+
+        public void Destroy(Hero hero)
+        {
+            if (!hero.RevealedScenes.Contains(this)) return; //not revealed yet
+            if (SceneData != null)
+            {
+                hero.InGameClient.SendMessage(new DestroySceneMessage() { Id = 0x35, Field0 = SceneData.WorldID, Field1 = ID });
+                hero.InGameClient.FlushOutgoingBuffer();
+                hero.RevealedScenes.Remove(this);
+            }
+        }
+
     }
 }

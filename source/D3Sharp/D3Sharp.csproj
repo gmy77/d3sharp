@@ -89,6 +89,7 @@
     <Compile Include="Core\Helpers\RandomHelper.cs" />
     <Compile Include="Core\Common\Items\Item.cs" />
     <Compile Include="Core\Common\Items\ItemTypeGenerator.cs" />
+    <Compile Include="Core\Ingame\Map\Portal.cs" />
     <Compile Include="Core\Ingame\Map\Scene.cs" />
     <Compile Include="Core\Ingame\Map\World.cs" />
     <Compile Include="Core\Ingame\NPC\BasicNPC.cs" />
@@ -250,7 +251,7 @@
     <Compile Include="Net\Game\Message\Definitions\Misc\FloatingAmountMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\FloatingNumberMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Game\GameIdMessage.cs" />
-    <Compile Include="Net\Game\Message\Definitions\Game\GameSyncedDataMessage.cs" />
+    <Compile Include="Net\Game\Message\Definitions\Game\GameSyncedDataMessage.cs.cs" />
     <Compile Include="Net\Game\Message\Definitions\Game\GameTestingSamplingStartMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\GBIDDataMessage.cs" />
     <Compile Include="Net\Game\Message\Definitions\Misc\GenericBlobMessage.cs" />

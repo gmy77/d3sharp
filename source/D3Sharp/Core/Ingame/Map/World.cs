@@ -21,10 +21,12 @@ using System.Linq;
 using D3Sharp.Core.Ingame.Actors;
 using D3Sharp.Core.Ingame.NPC;
 using D3Sharp.Core.Ingame.Universe;
+using D3Sharp.Core.Ingame.Map;
 using D3Sharp.Net.Game.Message.Definitions.ACD;
 using D3Sharp.Net.Game.Message.Definitions.Map;
 using D3Sharp.Net.Game.Message.Definitions.Scene;
 using D3Sharp.Net.Game.Message.Definitions.World;
+using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Utils;
 using D3Sharp.Data.SNO;
@@ -37,6 +39,7 @@ namespace D3Sharp.Core.Ingame.Map
         private List<BasicNPC> NPCs;
         private List<Actor> Actors;
         private List<Scene> Scenes;
+        private List<Portal> Portals;
 
         public int WorldID;
         public int WorldSNO;
@@ -46,6 +49,7 @@ namespace D3Sharp.Core.Ingame.Map
             NPCs = new List<BasicNPC>();
             Actors = new List<Actor>();
             Scenes = new List<Scene>();
+            Portals = new List<Portal>();
             WorldID = ID;
         }
 
@@ -56,7 +60,31 @@ namespace D3Sharp.Core.Ingame.Map
             return null;
         }
 
-        //this is a helper function to prune duplicate entries from the packet data
+        public Actor GetActor(int ID)
+        {
+            for (int x = 0; x < Actors.Count; x++)
+                if (Actors[x].Id == ID) return Actors[x];
+            return null;
+        }
+
+        public Portal GetPortal(int ID)
+        {
+            for (int x = 0; x < Portals.Count; x++)
+                if (Portals[x].ActorRef.Id == ID) return Portals[x];
+            return null;
+        }
+
+        //get actor by snoid and x,y,z position - this is a helper function to prune duplicate entries from the packet data
+        public Actor GetActor(int snoID, float x, float y, float z)
+        {
+            for (int i = 0; i < Actors.Count; i++)
+                if (Actors[i].SnoId == snoID &&
+                    Actors[i].Position.X == x &&
+                    Actors[i].Position.Y == y &&
+                    Actors[i].Position.Z == z) return Actors[i];
+            return null;
+        }
+
         public bool ActorExists(Actor actor)
         {
             return Actors.Any(
@@ -78,7 +106,6 @@ namespace D3Sharp.Core.Ingame.Map
             s = new Scene();
             s.ID = SceneID;
 
-            s.SceneLine = Line;
             s.SceneData = new RevealSceneMessage(data.Skip(2).ToArray(),WorldID);
 
             Scenes.Add(s);
@@ -93,7 +120,6 @@ namespace D3Sharp.Core.Ingame.Map
 
             if (s==null) return;
 
-            s.MapLine = Line;
             s.Map = new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID);
         }
 
@@ -102,6 +128,23 @@ namespace D3Sharp.Core.Ingame.Map
             var actor = new Actor();
             if (!actor.ParseFrom(this.WorldID, line)) return; // if not valid actor (inventory using items), just don't add it to list.            
             if(!this.ActorExists(actor)) Actors.Add(actor); // filter duplicate actors.
+        }
+
+        public void AddPortal(string Line)
+        {
+            string[] data = Line.Split(' ');
+
+            int ActorID = int.Parse(data[2]);
+
+            //this check is here so no duplicate portals are in a world and thus a portal actor isn't revealed twice to a player
+            foreach (var portal in Portals)
+                if (portal.ActorRef.Id == ActorID) return;
+
+            Portal p = new Portal();
+            p.PortalMessage = new PortalSpecifierMessage(data.Skip(2).ToArray());
+            p.ActorRef=GetActor(ActorID);
+
+            Portals.Add(p);
         }
 
         private int SceneSorter(Scene x, Scene y)
@@ -119,13 +162,19 @@ namespace D3Sharp.Core.Ingame.Map
 
         public void Reveal(Hero hero)
         {
-            //reveal world to player
-            hero.InGameClient.SendMessage(new RevealWorldMessage()
+            bool found=hero.RevealedWorlds.Contains(this);
+
+            if (!found)
             {
-                Id = 0x0037,
-                Field0 = WorldID,
-                Field1 = WorldSNO,
-            });
+                //reveal world to player
+                hero.InGameClient.SendMessage(new RevealWorldMessage()
+                {
+                    Id = 0x0037,
+                    Field0 = WorldID,
+                    Field1 = WorldSNO,
+                });
+                hero.RevealedWorlds.Add(this);
+            }
 
             //player enters world
             hero.InGameClient.SendMessage(new EnterWorldMessage()
@@ -140,13 +189,36 @@ namespace D3Sharp.Core.Ingame.Map
             foreach (var scene in Scenes)
                 scene.Reveal(hero);
 
-            //reveal actors
-            foreach (var actor in Actors)
+            if (!found)
             {
-                if (SNOMass.Instance.IsOfGroup(actor.SnoId, SNOGroup.Blacklist)) continue;
-                if (SNOMass.Instance.IsOfGroup(actor.SnoId, SNOGroup.NPCs)) continue;
-                actor.Reveal(hero);
+                //reveal actors
+                foreach (var actor in Actors)
+                {
+                    if (SNOMass.Instance.IsOfGroup(actor.SnoId, SNOGroup.Blacklist)) continue;
+                    if (SNOMass.Instance.IsOfGroup(actor.SnoId, SNOGroup.NPCs)) continue;
+                    //actor.Reveal(hero);
+                }
+
+                //reveal portals
+                Logger.Info("Revealing portals for world " + WorldID);
+                foreach (Portal portal in Portals)
+                {
+                    portal.Reveal(hero);
+                }
             }
+
+        }
+
+        public void DestroyWorld(Hero hero)
+        {
+            //for (int x = hero.RevealedActors.Count - 1; x >= 0; x-- )
+            //    if (hero.RevealedActors[x].RevealMessage.Field4.Field2 == WorldID) hero.RevealedActors[x].Destroy(hero);
+
+            //for (int x = hero.RevealedScenes.Count - 1; x >= 0; x--)
+            //    if (hero.RevealedScenes[x].SceneData.WorldID == WorldID) hero.RevealedScenes[x].Destroy(hero);
+
+            //hero.Owner.LoggedInBNetClient.InGameClient.SendMessage(new WorldDeletedMessage() { Id = 0xd9, Field0 = WorldID, });
+            hero.InGameClient.FlushOutgoingBuffer();
         }
 
         void CreateNPC(int objectId)
