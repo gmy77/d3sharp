@@ -23,6 +23,7 @@ using D3Sharp.Core.Common.Toons;
 using D3Sharp.Core.Ingame.Universe;
 using D3Sharp.Net.BNet;
 using D3Sharp.Net.Game.Message;
+using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Utils;
 
@@ -75,6 +76,14 @@ namespace D3Sharp.Net.Game
                         if (message.Consumer != Consumers.None) this.Universe.Route(this, message);
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                         else Logger.Warn("Got an incoming message that has no consumer or self-handler " + message.GetType());
+
+                        //sending PackedID 
+                        PacketId += 10 * 2;
+                        SendMessage(new DWordDataMessage()
+                        {
+                            Id = 0x0089,
+                            Field0 = PacketId,
+                        });
 
                         //Logger.LogIncoming(msg);
                     }
