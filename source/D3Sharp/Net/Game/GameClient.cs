@@ -19,12 +19,12 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using D3Sharp.Core.Toons;
+using D3Sharp.Core.Common.Toons;
+using D3Sharp.Core.Ingame.Universe;
 using D3Sharp.Net.BNet;
 using D3Sharp.Net.Game.Message;
 using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Utils;
-using D3Sharp.Core.Universe;
 
 namespace D3Sharp.Net.Game
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using D3Sharp.Core.Universe;
+using D3Sharp.Core.Ingame.Universe;
 using D3Sharp.Utils;
 
 namespace D3Sharp.Net.Game

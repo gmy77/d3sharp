@@ -21,7 +21,7 @@ using D3Sharp.Net.Game.Message.Fields;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Game
 {
-    [IncomingMessage(Opcodes.JoinBNetGameMessage,Consumers.GameManager)]
+    [IncomingMessage(Opcodes.JoinBNetGameMessage,Consumers.PlayerManager)]
     public class JoinBNetGameMessage : GameMessage
     {
         public EntityId Field0;  // this *is* the toon id /raist.

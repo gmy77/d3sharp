@@ -14,7 +14,7 @@ namespace D3Sharp.Net.Game.Message
     {
         None,
         Universe,
-        GameManager,
+        PlayerManager,
         Skillset
     }
 }
