@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Linq;
 using D3Sharp.Core.BNet.Games;
 using D3Sharp.Core.Ingame.Map;
-using D3Sharp.Core.Ingame.Skills;
 using D3Sharp.Net.Game;
 using D3Sharp.Net.Game.Message;
 using D3Sharp.Net.Game.Message.Definitions.ACD;
@@ -63,11 +62,8 @@ namespace D3Sharp.Core.Ingame.Universe
             client.BnetClient = GameManager.AvailableGames[(ulong)message.Field2].Clients.FirstOrDefault();
             if (client.BnetClient != null)
             {
-                client.Player.Toon = client.BnetClient.CurrentToon;
-                client.BnetClient.InGameClient = client;
-
-                // TODO: this should eventually be done on the bnet side
-                client.Player.Toon.Skillset = new Skillset();
+                client.Player.Toon = new IngameToon(client, client.BnetClient.CurrentToon);
+                client.BnetClient.InGameClient = client;                
             }
 
             client.SendMessageNow(new VersionsMessage()
@@ -134,7 +130,7 @@ namespace D3Sharp.Core.Ingame.Universe
                 Id = 0x0031,
                 Field0 = 0x00000000, //Party frame (0x00000000 hide, 0x00000001 show)
                 Field1 = "", //Owner name?
-                ToonName = client.Player.Toon.Name,
+                ToonName = client.Player.Toon.Properties.Name,
                 Field3 = 0x00000002, //party frame class 
                 Field4 = 0x00000004, //party frame level
                 snoActorPortrait = client.Player.Toon.ClassSNO, //party frame portrait
@@ -145,7 +141,7 @@ namespace D3Sharp.Core.Ingame.Universe
                     Field0 = 0x00000000,
                     Field1 = 0x00000000,
                     Field2 = 0x00000000,
-                    Field3 = client.Player.Toon.Gender,
+                    Field3 = client.Player.Toon.Properties.Gender,
                     Field4 = new PlayerSavedData()
                     {
                         #region HotBarButtonData
@@ -422,7 +418,7 @@ namespace D3Sharp.Core.Ingame.Universe
                 Field6 = new GBHandle()
                 {
                     Field0 = 0x00000007,
-                    Field1 = client.Player.Toon.ClassID,
+                    Field1 = client.Player.Toon.Properties.ClassID,
                 },
                 Field7 = -1,
                 Field8 = -1,
@@ -1436,7 +1432,7 @@ namespace D3Sharp.Core.Ingame.Universe
          new NetAttributeKeyValue()
          {
             Attribute = GameAttribute.Attributes[0x0026], // Level 
-            Int = client.Player.Toon.Level,
+            Int = client.Player.Toon.Properties.Level,
             Float = 0f,
          },
          new NetAttributeKeyValue()
@@ -1548,56 +1544,56 @@ namespace D3Sharp.Core.Ingame.Universe
         {
              new VisualItem() //Head
              {
-                Field0 = client.Player.Toon.Equipment.VisualItemList[0].Gbid,
+                Field0 = client.Player.Toon.Properties.Equipment.VisualItemList[0].Gbid,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
                 Field3 = -1,
              },
              new VisualItem() //Chest
              {
-                Field0 = client.Player.Toon.Equipment.VisualItemList[1].Gbid,
+                Field0 = client.Player.Toon.Properties.Equipment.VisualItemList[1].Gbid,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
                 Field3 = -1,
              },
              new VisualItem() //Feet
              {
-                Field0 = client.Player.Toon.Equipment.VisualItemList[2].Gbid,
+                Field0 = client.Player.Toon.Properties.Equipment.VisualItemList[2].Gbid,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
                 Field3 = -1,
              },
              new VisualItem() //Hands
              {
-                Field0 = client.Player.Toon.Equipment.VisualItemList[3].Gbid,
+                Field0 = client.Player.Toon.Properties.Equipment.VisualItemList[3].Gbid,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
                 Field3 = -1,
              },
              new VisualItem() //Main hand
              {
-                Field0 = client.Player.Toon.Equipment.VisualItemList[4].Gbid,
+                Field0 = client.Player.Toon.Properties.Equipment.VisualItemList[4].Gbid,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
                 Field3 = -1,
              },
              new VisualItem() //Offhand
              {
-                Field0 = client.Player.Toon.Equipment.VisualItemList[5].Gbid,
+                Field0 = client.Player.Toon.Properties.Equipment.VisualItemList[5].Gbid,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
                 Field3 = -1,
              },
              new VisualItem() //Shoulders
              {
-                Field0 = client.Player.Toon.Equipment.VisualItemList[6].Gbid,
+                Field0 = client.Player.Toon.Properties.Equipment.VisualItemList[6].Gbid,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
                 Field3 = -1,
              },
              new VisualItem() //Legs
              {
-                Field0 = client.Player.Toon.Equipment.VisualItemList[7].Gbid,
+                Field0 = client.Player.Toon.Properties.Equipment.VisualItemList[7].Gbid,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
                 Field3 = -1,

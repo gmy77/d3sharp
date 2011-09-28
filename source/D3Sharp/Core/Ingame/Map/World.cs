@@ -21,6 +21,7 @@ using System.Linq;
 using D3Sharp.Core.Common.Toons;
 using D3Sharp.Core.Ingame.Actors;
 using D3Sharp.Core.Ingame.NPC;
+using D3Sharp.Core.Ingame.Universe;
 using D3Sharp.Net.Game.Message.Definitions.ACD;
 using D3Sharp.Net.Game.Message.Definitions.Map;
 using D3Sharp.Net.Game.Message.Definitions.Scene;
@@ -43,7 +44,7 @@ namespace D3Sharp.Core.Ingame.Map
         public World(int ID)
         {
             NPCs = new List<BasicNPC>();
-            Actors = new List<Actors.Actor>();
+            Actors = new List<Actor>();
             Scenes = new List<Scene>();
             WorldID = ID;
         }
@@ -145,10 +146,10 @@ namespace D3Sharp.Core.Ingame.Map
             Scenes.Sort(SceneSorter);
         }
 
-        public void RevealWorld(Toon toon)
+        public void RevealWorld(IngameToon toon)
         {
             //reveal world to player
-            toon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new RevealWorldMessage()
+            toon.InGameClient.SendMessage(new RevealWorldMessage()
             {
                 Id = 0x0037,
                 Field0 = WorldID,
@@ -156,7 +157,7 @@ namespace D3Sharp.Core.Ingame.Map
             });
 
             //player enters world
-            toon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new EnterWorldMessage()
+            toon.InGameClient.SendMessage(new EnterWorldMessage()
             {
                 Id = 0x0033,
                 Field0 = toon.Position,
@@ -165,15 +166,15 @@ namespace D3Sharp.Core.Ingame.Map
             });
 
             //just reveal the whole thing to the player for now
-            foreach (Scene s in Scenes)
-                s.Reveal(toon);
+            foreach (var scene in Scenes)
+                scene.Reveal(toon);
 
             //reveal actors
-            foreach (Actor a in Actors)
+            foreach (var actor in Actors)
             {
-                if (ActorDB.isBlackListed(a.snoID)) continue;
-                if (ActorDB.isNPC(a.snoID)) continue;
-                a.Reveal(toon);
+                if (ActorDB.isBlackListed(actor.snoID)) continue;
+                if (ActorDB.isNPC(actor.snoID)) continue;
+                actor.Reveal(toon);
             }
         }
 

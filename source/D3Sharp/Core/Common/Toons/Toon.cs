@@ -22,8 +22,6 @@ using D3Sharp.Core.BNet.Accounts;
 using D3Sharp.Core.BNet.Objects;
 using D3Sharp.Core.Common.Storage;
 using D3Sharp.Core.Helpers;
-using D3Sharp.Core.Ingame.Skills;
-using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Utils.Helpers;
 using Account = D3Sharp.Core.BNet.Accounts.Account;
 
@@ -53,17 +51,21 @@ namespace D3Sharp.Core.Common.Toons
         public D3.Hero.Digest Digest { get; private set; }
         public D3.Hero.VisualEquipment Equipment { get; private set; }
 
-        public Account Owner { get; set; }
-
-        
-        // ingame data required by the universe follows
-
-        public Vector3D Position = new Vector3D();
-        public int CurrentWorldID;
-        public int CurrentWorldSNO;
-        public Skillset Skillset;
+        public Account Owner { get; set; }       
         
         //TODO: Toons should be linked to accounts here. /raist
+
+        public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
+            :base(persistantId)
+        {
+            this.SetFields(name, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistantID((ulong)accountId));
+        }
+
+        public Toon(string name, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
+            : base(StringHashHelper.HashIdentity(name))
+        {
+            this.SetFields(name, GetClassByID(classId), flags, level, account);
+        }
 
         public int ClassID
         {
@@ -86,126 +88,12 @@ namespace D3Sharp.Core.Common.Toons
             }
         }
 
-        public float ModelScale
-        {
-            get
-            {   //dummy values, need confirmation from dump
-                switch (this.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 1.22f;
-                    case ToonClass.DemonHunter:
-                        return 1.43f;
-                    case ToonClass.Monk:
-                        return 1.43f;
-                    case ToonClass.WitchDoctor:
-                        return 1.43f;
-                    case ToonClass.Wizard:
-                        return 1.43f;
-                }
-                return 1.43f;
-            }
-        }
-
-        public int ResourceID
-        {
-            get
-            {
-                switch (this.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 0x00000002;
-                    case ToonClass.DemonHunter:
-                        return 0x00000005;
-                    case ToonClass.Monk:
-                        return 0x00000003;
-                    case ToonClass.WitchDoctor:
-                        return 0x00000000;
-                    case ToonClass.Wizard:
-                        return 0x00000001;
-                }
-                return 0x00000000;
-            }
-        }
-
-        public int ClassSNO
-        {
-            get
-            {
-                if (Gender == 0)
-                {
-                    switch (this.Class)
-                    {
-                        case ToonClass.Barbarian:
-                            return 0x0CE5;
-                        case ToonClass.DemonHunter:
-                            return 0x0125C7;
-                        case ToonClass.Monk:
-                            return 0x1271;
-                        case ToonClass.WitchDoctor:
-                            return 0x1955;
-                        case ToonClass.Wizard:
-                            return 0x1990;
-                    }
-                }
-                else
-                {
-                    switch (this.Class)
-                    {
-                        case ToonClass.Barbarian:
-                            return 0x0CD5;
-                        case ToonClass.DemonHunter:
-                            return 0x0123D2;
-                        case ToonClass.Monk:
-                            return 0x126D;
-                        case ToonClass.WitchDoctor:
-                            return 0x1951;
-                        case ToonClass.Wizard:
-                            return 0x197E;
-                    }
-                }
-                return 0x0;
-            }
-        }
-
-        public int SkillKit
-        {
-            get
-            {
-                switch (this.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 0x00008AF4;
-                    case ToonClass.DemonHunter:
-                        return 0x00008AFC;
-                    case ToonClass.Monk:
-                        return 0x00008AFA;
-                    case ToonClass.WitchDoctor:
-                        return 0x00008AFF;
-                    case ToonClass.Wizard:
-                        return 0x00008B00;
-                }
-                return 0x00000001;
-            }
-        }
-
         public int Gender
         {
-            get {
+            get
+            {
                 return (int)(this.Flags & ToonFlags.Female); // 0x00 for male, so we can just return the AND operation
             }
-        }
-
-        public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
-            :base(persistantId)
-        {
-            this.SetFields(name, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistantID((ulong)accountId));
-        }
-
-        public Toon(string name, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
-            : base(StringHashHelper.HashIdentity(name))
-        {
-            this.SetFields(name, GetClassByID(classId), flags, level, account);
         }
 
         private void SetFields(string name, ToonClass @class, ToonFlags flags, byte level, Account owner)

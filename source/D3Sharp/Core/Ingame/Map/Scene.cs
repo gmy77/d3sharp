@@ -1,4 +1,5 @@
 ﻿using D3Sharp.Core.Common.Toons;
+using D3Sharp.Core.Ingame.Universe;
 using D3Sharp.Net.Game.Message.Definitions.Scene;
 using D3Sharp.Net.Game.Message.Definitions.Map;
 
@@ -12,11 +13,11 @@ namespace D3Sharp.Core.Ingame.Map
         public string SceneLine;
         public string MapLine;
 
-        public void Reveal(Toon t)
+        public void Reveal(IngameToon toon)
         {
-            if (SceneData != null) t.Owner.LoggedInBNetClient.InGameClient.SendMessage(SceneData);
-            if (Map != null) t.Owner.LoggedInBNetClient.InGameClient.SendMessage(Map);
-            t.Owner.LoggedInBNetClient.InGameClient.FlushOutgoingBuffer();
+            if (SceneData != null) toon.InGameClient.SendMessage(SceneData);
+            if (Map != null) toon.InGameClient.SendMessage(Map);
+            toon.InGameClient.FlushOutgoingBuffer();
         }
     }
 }
