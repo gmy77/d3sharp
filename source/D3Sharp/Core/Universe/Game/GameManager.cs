@@ -113,9 +113,19 @@ namespace D3Sharp.Core.Universe.Game
             //initialize world entry point for player to the new character entry area for now
             currentToon.CurrentWorldID = 0x772E0000;
             currentToon.CurrentWorldSNO = 0x115EE;
-            currentToon.PosX = 3143.75f;
-            currentToon.PosY = 2828.75f;
-            currentToon.PosZ = 59.075588f;
+            //currentToon.PosX = 3143.75f;
+            //currentToon.PosY = 2828.75f;
+            //currentToon.PosZ = 59.075588f;
+
+            //den of evil:
+            //currentToon.PosX = 2526.250000f;
+            //currentToon.PosY = 2098.750000f;
+            //currentToon.PosZ = -5.381495f;
+
+            //inn:
+            currentToon.PosX = 2996.250000f;
+            currentToon.PosY = 2793.750000f;
+            currentToon.PosZ = -24.045330f;                
 
             //reveal world to the toon
             World world = this.Universe.GetWorld(currentToon.CurrentWorldID);

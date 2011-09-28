@@ -18,6 +18,14 @@ namespace D3Sharp.Core.Map
         public Actor ActorRef;
         public PortalSpecifierMessage PortalMessage;
 
+        public int TargetWorldID;
+        public Vector3D TargetPos;
+
+        public Portal()
+        {
+            TargetPos = new Vector3D();
+        }
+
         public void Reveal(Toon t)
         {
             if (PortalMessage != null && ActorRef != null)
