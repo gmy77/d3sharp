@@ -77,10 +77,12 @@ namespace D3Sharp.Core.Ingame.Universe
             //this.Position.Y = 2793.750000f;
             //this.Position.Z = 24.045330f;
 
+            // adrias hut
             //this.Position.X = 1768.750000f;
             //this.Position.Y = 2921.250000f;
             //this.Position.Z = 20.333143f;        
 
+            // cemetry of forsaken
             //this.Position.X = 2041.250000f;
             //this.Position.Y = 1778.750000f;
             //this.Position.Z = 0.426203f;
