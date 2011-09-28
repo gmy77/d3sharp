@@ -22,6 +22,7 @@ using D3Sharp.Net.Game.Message.Fields;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Player
 {
+    [IncomingMessage(Opcodes.PlayerChangeHotbarButtonMessage, Consumers.Skillset)]
     public class PlayerChangeHotbarButtonMessage : GameMessage
     {
         public int Field0;

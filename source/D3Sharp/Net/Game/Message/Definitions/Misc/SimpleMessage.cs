@@ -293,16 +293,16 @@ namespace D3Sharp.Net.Game.Message.Definitions.Misc
                         {
                             Id = 0x0042,
                             Field0 = 0x789E00E2,
-                            Field1 = client.BnetClient.CurrentToon.ClassSNO,
+                            Field1 = client.Player.Toon.ClassSNO,
                             Field2 = new WorldPlace()
                             {
                                 Field0 = new Vector3D()
                                 {
-                                    Field0 = 3143.75f,
-                                    Field1 = 2828.75f,
-                                    Field2 = 59.07559f,
+                                    X = 3143.75f,
+                                    Y = 2828.75f,
+                                    Z = 59.07559f,
                                 },
-                                Field1 = client.BnetClient.CurrentToon.CurrentWorldID,
+                                Field1 = client.Player.Toon.CurrentWorldID,
                             },
                             Field3 = 0x00000000,
                             Field4 = 0x00026186,

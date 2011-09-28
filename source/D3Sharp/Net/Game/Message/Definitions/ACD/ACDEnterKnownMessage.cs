@@ -181,16 +181,16 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
                                                                    Field0 = float.Parse(Data[10], System.Globalization.CultureInfo.InvariantCulture),
                                                                    Field1 = new Vector3D()
                                                                                 {
-                                                                                    Field0 = float.Parse(Data[7], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                    Field1 = float.Parse(Data[8], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                    Field2 = float.Parse(Data[9], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                    X = float.Parse(Data[7], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                    Y = float.Parse(Data[8], System.Globalization.CultureInfo.InvariantCulture),
+                                                                                    Z = float.Parse(Data[9], System.Globalization.CultureInfo.InvariantCulture),
                                                                                 },
                                                                },
                                                   Field1 = new Vector3D()
                                                                {
-                                                                   Field0 = float.Parse(Data[11], System.Globalization.CultureInfo.InvariantCulture),
-                                                                   Field1 = float.Parse(Data[12], System.Globalization.CultureInfo.InvariantCulture),
-                                                                   Field2 = float.Parse(Data[13], System.Globalization.CultureInfo.InvariantCulture),
+                                                                   X = float.Parse(Data[11], System.Globalization.CultureInfo.InvariantCulture),
+                                                                   Y = float.Parse(Data[12], System.Globalization.CultureInfo.InvariantCulture),
+                                                                   Z = float.Parse(Data[13], System.Globalization.CultureInfo.InvariantCulture),
                                                                },
                                               },
                                  Field2 = f2, //=int.Parse(Data[14]),
