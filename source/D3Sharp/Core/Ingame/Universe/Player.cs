@@ -1457,6 +1457,39 @@ namespace D3Sharp.Core.Ingame.Universe
                                                     },
                                    });
 
+            // sample item
+
+            Client.SendMessage(new ACDEnterKnownMessage()
+            {
+                Id = 0x003B,
+                Field0 = 0x789F00E3,
+                Field1 = 0x00001025,
+                Field2 = 0x0000001A,
+                Field3 = 0x00000001,
+                Field4 = null,
+                Field5 = new InventoryLocationMessageData()
+                {
+                    Field0 = 0x789E00E2,
+                    Field1 = 0x00000003,
+                    Field2 = new IVector2D()
+                    {
+                        Field0 = 0x00000000,
+                        Field1 = 0x00000000,
+                    },
+                },
+                Field6 = new GBHandle()
+                {
+                    Field0 = 0x00000002,
+                    Field1 = Client.Player.Hero.Properties.Equipment.VisualItemList[5].Gbid,
+                },
+                Field7 = -1,
+                Field8 = -1,
+                Field9 = 0x00000001,
+                Field10 = 0x00,
+
+            });
+            // Sample item
+
             Client.SendMessage(new PlayerActorSetInitialMessage()
                                    {
                                        Id = 0x0039,

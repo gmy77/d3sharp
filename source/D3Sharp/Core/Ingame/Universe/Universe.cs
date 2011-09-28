@@ -46,11 +46,13 @@ namespace D3Sharp.Core.Ingame.Universe
 
         public PlayerManager PlayerManager { get; private set; }
 
+        public InventoryMenager InventoryMenager { get; private set; }
+
         public Universe()
         {
             this._worlds = new List<World>();
             this.PlayerManager = new PlayerManager(this);
-
+            this.InventoryMenager = new InventoryMenager();
             InitializeUniverse();
         }
 
@@ -60,6 +62,9 @@ namespace D3Sharp.Core.Ingame.Universe
             {
                 case Consumers.Universe:
                     this.Consume(client, message);
+                    break;
+                case Consumers.Inventory:
+                    this.InventoryMenager.Consume(client, message);
                     break;
                 case Consumers.PlayerManager:
                     this.PlayerManager.Consume(client, message);

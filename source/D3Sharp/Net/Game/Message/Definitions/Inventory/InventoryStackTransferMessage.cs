@@ -21,14 +21,12 @@ using System.Text;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Inventory
 {
+    [IncomingMessage(Opcodes.InventoryStackTransferMessage, Consumers.Inventory)]
     public class InventoryStackTransferMessage : GameMessage
     {
         public int Field0;
         public int Field1;
         public long Field2;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

@@ -22,6 +22,7 @@ using D3Sharp.Net.Game.Message.Fields;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Inventory
 {
+    [IncomingMessage(Opcodes.InventorySplitStackMessage, Consumers.Inventory)]
     public class InventorySplitStackMessage : GameMessage
     {
         public int Field0;
