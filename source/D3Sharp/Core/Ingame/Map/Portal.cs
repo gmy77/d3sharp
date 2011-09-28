@@ -11,8 +11,6 @@ using D3Sharp.Net.Game.Message.Definitions.Attribute;
 using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Net.Game.Message;
 
-using D3Sharp.Core.Ingame.Universe;
-
 namespace D3Sharp.Core.Ingame.Map
 {
     public class Portal

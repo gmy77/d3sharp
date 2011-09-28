@@ -127,7 +127,7 @@
     <Compile Include="Core\Ingame\Universe\PlayerManager.cs" />
     <Compile Include="Core\Ingame\Universe\Universe.cs" />
     <Compile Include="Data\SNO\Config.cs" />
-    <Compile Include="Data\SNO\Mass.cs" />
+    <Compile Include="Data\SNO\Database.cs" />
     <Compile Include="Data\SNO\Set.cs" />
     <Compile Include="Net\BNet\BNetClient.cs" />
     <Compile Include="Net\BNet\BnetServer.cs" />

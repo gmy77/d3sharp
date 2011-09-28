@@ -26,22 +26,22 @@ using D3Sharp.Core.Helpers;
 
 namespace D3Sharp.Data.SNO
 {
-    public class SNOMass
+    public class SNODatabase
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        private static readonly SNOMass _instance;
-        public static SNOMass Instance { get { return _instance; } }
+        private static readonly SNODatabase _instance;
+        public static SNODatabase Instance { get { return _instance; } }
 
         public Dictionary<string, SNOSet> Sets = new Dictionary<string, SNOSet>();
         public Dictionary<int, SNOID> Global = new Dictionary<int, SNOID>();
         public Dictionary<SNOGroup, Dictionary<int, SNOID>> Grouped = new Dictionary<SNOGroup, Dictionary<int, SNOID>>();
 
-        static SNOMass()
+        static SNODatabase()
         {
-            _instance = new SNOMass();
+            _instance = new SNODatabase();
         }
 
-        SNOMass()
+        SNODatabase()
         {
             foreach (SNOGroup grp in Enum.GetValues(typeof(SNOGroup)))
             {

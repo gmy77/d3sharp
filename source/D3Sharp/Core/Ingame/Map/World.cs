@@ -194,8 +194,8 @@ namespace D3Sharp.Core.Ingame.Map
                 //reveal actors
                 foreach (var actor in Actors)
                 {
-                    if (SNOMass.Instance.IsOfGroup(actor.SnoId, SNOGroup.Blacklist)) continue;
-                    if (SNOMass.Instance.IsOfGroup(actor.SnoId, SNOGroup.NPCs)) continue;
+                    if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.Blacklist)) continue;
+                    if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.NPCs)) continue;
                     //actor.Reveal(hero);
                 }
 
