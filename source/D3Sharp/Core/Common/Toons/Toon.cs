@@ -23,6 +23,7 @@ using D3Sharp.Core.BNet.Objects;
 using D3Sharp.Core.Common.Storage;
 using D3Sharp.Core.Helpers;
 using D3Sharp.Core.Ingame.Skills;
+using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Utils.Helpers;
 using Account = D3Sharp.Core.BNet.Accounts.Account;
 
@@ -54,6 +55,14 @@ namespace D3Sharp.Core.Common.Toons
 
         public Account Owner { get; set; }
 
+        
+        // ingame data required by the universe follows
+
+        public Vector3D Position = new Vector3D();
+        public int CurrentWorldID;
+        public int CurrentWorldSNO;
+        public Skillset Skillset;
+        
         //TODO: Toons should be linked to accounts here. /raist
 
         public int ClassID
@@ -509,16 +518,6 @@ namespace D3Sharp.Core.Common.Toons
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
         }
-
-        //////////////////////////////////////////////////////////////////////////
-        // ingame data required by the universe follows
-
-        public int CurrentWorldID;
-        public int CurrentWorldSNO;
-        public float PosX, PosY, PosZ;
-
-        // client skillset
-        public Skillset skillset;
     }
 
     public enum ToonClass

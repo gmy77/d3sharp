@@ -38,26 +38,19 @@ namespace D3Sharp.Net.Game
         private readonly GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         private readonly GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
 
-        //this is the main universe reference to handle most of the player-game interactions and manage game state
-        public Universe GameUniverse;
-        
+        public Player Player { get; private set; }
         public int PacketId = 0x227 + 20;
         public int Tick = 0;
-        public  int ObjectId = 0x78f50114 + 100;
-
+        public int ObjectId = 0x78f50114 + 100;
         public IList<int> ObjectIdsSpawned = null;
-        public Vector3D Position;
-
-        public Toon Toon;
 
         public bool IsLoggingOut;
 
-        public GameClient(IConnection connection, Universe gameUniverse)
-        {
-            this.Position = new Vector3D();
+        public GameClient(IConnection connection, Player player)
+        {            
             this.Connection = connection;
+            this.Player = player;
             _outgoingBuffer.WriteInt(32, 0);
-            GameUniverse = gameUniverse;
         }
 
         public void Parse(ConnectionDataEventArgs e)
@@ -78,7 +71,7 @@ namespace D3Sharp.Net.Game
                         GameMessage message = _incomingBuffer.ParseMessage();
                         if (message == null) continue;
 
-                        if (message.Consumer != Consumers.None) this.GameUniverse.Route(this, message);
+                        if (message.Consumer != Consumers.None) this.Player.Universe.Route(this, message);
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                         else Logger.Warn("Got an incoming message that has no consumer or self-handler " + message.GetType());
 

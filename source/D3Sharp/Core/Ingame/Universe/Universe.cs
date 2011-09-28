@@ -65,7 +65,7 @@ namespace D3Sharp.Core.Ingame.Universe
                     this.PlayerManager.Consume(client, message);
                     break;
                 case Consumers.Skillset:
-                    client.Toon.skillset.Consume(client, message);
+                    client.Player.Toon.Skillset.Consume(client, message);
                     break;
             }
         }
@@ -346,9 +346,9 @@ namespace D3Sharp.Core.Ingame.Universe
                 Id = 0x0033,
                 Field0 = new Vector3D()
                 {
-                    Field0 = 83.75f,
-                    Field1 = 123.75f,
-                    Field2 = 0.2000023f,
+                    X = 83.75f,
+                    Y = 123.75f,
+                    Z = 0.2000023f,
                 },
                 Field1 = 0x772F0001,
                 Field2 = 0x0001AB32,
@@ -394,30 +394,30 @@ namespace D3Sharp.Core.Ingame.Universe
                         {
                             Field0 = new Vector3D()
                             {
-                                Field0 = 120f,
-                                Field1 = 120f,
-                                Field2 = 26.61507f,
+                                X = 120f,
+                                Y = 120f,
+                                Z = 26.61507f,
                             },
                             Field1 = new Vector3D()
                             {
-                                Field0 = 120f,
-                                Field1 = 120f,
-                                Field2 = 36.06968f,
+                                X = 120f,
+                                Y = 120f,
+                                Z = 36.06968f,
                             }
                         },
                         Field4 = new AABB()
                         {
                             Field0 = new Vector3D()
                             {
-                                Field0 = 120f,
-                                Field1 = 120f,
-                                Field2 = 26.61507f,
+                                X = 120f,
+                                Y = 120f,
+                                Z = 26.61507f,
                             },
                             Field1 = new Vector3D()
                             {
-                                Field0 = 120f,
-                                Field1 = 120f,
-                                Field2 = 36.06968f,
+                                X = 120f,
+                                Y = 120f,
+                                Z = 36.06968f,
                             }
                         },
                         Field5 = new int[] { 0x00000267, 0x00000000, 0x00000000, 0x00000000, },
@@ -433,16 +433,16 @@ namespace D3Sharp.Core.Ingame.Universe
                         Field0 = 1f,
                         Field1 = new Vector3D()
                         {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
+                            X = 0f,
+                            Y = 0f,
+                            Z = 0f,
                         }
                     },
                     Field1 = new Vector3D()
                     {
-                        Field0 = 0f,
-                        Field1 = 0f,
-                        Field2 = 0f,
+                        X = 0f,
+                        Y = 0f,
+                        Z = 0f,
                     }
                 },
                 ParentChunkID = unchecked((int)0xFFFFFFFF),
@@ -464,16 +464,16 @@ namespace D3Sharp.Core.Ingame.Universe
                         Field0 = 1f,
                         Field1 = new Vector3D()
                         {
-                            Field0 = 0f,
-                            Field1 = 0f,
-                            Field2 = 0f,
+                            X = 0f,
+                            Y = 0f,
+                            Z = 0f,
                         }
                     },
                     Field1 = new Vector3D()
                     {
-                        Field0 = 0f,
-                        Field1 = 0f,
-                        Field2 = 0f,
+                        X = 0f,
+                        Y = 0f,
+                        Z = 0f,
                     }
                 },
                 Field3 = 0x772F0001,
@@ -498,16 +498,16 @@ namespace D3Sharp.Core.Ingame.Universe
                             Field0 = 0.9909708f,
                             Field1 = new Vector3D
                             {
-                                Field0 = 0f,
-                                Field1 = 0f,
-                                Field2 = 0.1340775f
+                                X = 0f,
+                                Y = 0f,
+                                Z = 0.1340775f
                             }
                         },
                         Field1 = new Vector3D
                         {
-                            Field0 = 82.15131f,
-                            Field1 = 122.2867f,
-                            Field2 = 0.1000366f
+                            X = 82.15131f,
+                            Y = 122.2867f,
+                            Z = 0.1000366f
                         }
                     },
                     Field2 = 0x772F0001
@@ -566,16 +566,16 @@ namespace D3Sharp.Core.Ingame.Universe
                             Field0 = 0.05940768f,
                             Field1 = new Vector3D
                             {
-                                Field0 = 0f,
-                                Field1 = 0f,
-                                Field2 = 0.9982339f,
+                                X = 0f,
+                                Y = 0f,
+                                Z = 0.9982339f,
                             }
                         },
                         Field1 = new Vector3D
                         {
-                            Field0 = 82.15131f,
-                            Field1 = 122.2867f,
-                            Field2 = 0.1000366f
+                            X = 82.15131f,
+                            Y = 122.2867f,
+                            Z = 0.1000366f
                         }
                     },
                     Field2 = 0x772F0001
@@ -594,7 +594,7 @@ namespace D3Sharp.Core.Ingame.Universe
         public void SpawnMob(GameClient client, int mobId) // this shoudn't even rely on client or it's position though i know this is just a hack atm ;) /raist.
         {
             int nId = mobId;
-            if (client.Position == null)
+            if (client.Player.Toon.Position == null)
                 return;
 
             if (client.ObjectIdsSpawned == null)
@@ -625,16 +625,16 @@ namespace D3Sharp.Core.Ingame.Universe
                             Field0 = 0.768145f,
                             Field1 = new Vector3D()
                             {
-                                Field0 = 0f,
-                                Field1 = 0f,
-                                Field2 = -0.640276f,
+                                X = 0f,
+                                Y = 0f,
+                                Z = -0.640276f,
                             },
                         },
                         Field1 = new Vector3D()
                         {
-                            Field0 = client.Position.Field0 + 5,
-                            Field1 = client.Position.Field1 + 5,
-                            Field2 = client.Position.Field2,
+                            X = client.Player.Toon.Position.X + 5,
+                            Y = client.Player.Toon.Position.Y + 5,
+                            Z = client.Player.Toon.Position.Z,
                         },
                     },
                     Field2 = 0x772E0000,

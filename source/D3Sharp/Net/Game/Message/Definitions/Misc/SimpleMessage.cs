@@ -298,9 +298,9 @@ namespace D3Sharp.Net.Game.Message.Definitions.Misc
                             {
                                 Field0 = new Vector3D()
                                 {
-                                    Field0 = 3143.75f,
-                                    Field1 = 2828.75f,
-                                    Field2 = 59.07559f,
+                                    X = 3143.75f,
+                                    Y = 2828.75f,
+                                    Z = 59.07559f,
                                 },
                                 Field1 = client.BnetClient.CurrentToon.CurrentWorldID,
                             },

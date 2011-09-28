@@ -36,7 +36,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
         public void Handle(GameClient client)
         {
             if (this.Field1 != null)
-                client.Position = this.Field1;
+                client.Player.Toon.Position = this.Field1;
         }
 
         public override void Parse(GameBitBuffer buffer)

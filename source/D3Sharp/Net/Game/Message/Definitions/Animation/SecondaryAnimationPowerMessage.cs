@@ -31,25 +31,25 @@ namespace D3Sharp.Net.Game.Message.Definitions.Animation
 
         public void Handle(GameClient client)
         {
-            var oldPosField1 = client.Position.Field1;
-            var oldPosField2 = client.Position.Field2;
+            var oldPosField1 = client.Player.Toon.Position.Y;
+            var oldPosField2 = client.Player.Toon.Position.Z;
             for (var i = 0; i < 10; i++)
             {
                 if ((i % 2) == 0)
                 {
-                    client.Position.Field0 += (float)(RandomHelper.NextDouble() * 20);
-                    client.Position.Field1 += (float)(RandomHelper.NextDouble() * 20);
+                    client.Player.Toon.Position.X += (float)(RandomHelper.NextDouble() * 20);
+                    client.Player.Toon.Position.Y += (float)(RandomHelper.NextDouble() * 20);
                 }
                 else
                 {
-                    client.Position.Field0 -= (float)(RandomHelper.NextDouble() * 20);
-                    client.Position.Field1 -= (float)(RandomHelper.NextDouble() * 20);
+                    client.Player.Toon.Position.X -= (float)(RandomHelper.NextDouble() * 20);
+                    client.Player.Toon.Position.Y -= (float)(RandomHelper.NextDouble() * 20);
                 }
-                client.GameUniverse.SpawnMob(client,BasicNPC.RandomNPC());
+                client.Player.Universe.SpawnMob(client, BasicNPC.RandomNPC());
             }
 
-            client.Position.Field1 = oldPosField1;
-            client.Position.Field2 = oldPosField2;
+            client.Player.Toon.Position.Y = oldPosField1;
+            client.Player.Toon.Position.Z = oldPosField2;
         }
 
         public override void Parse(GameBitBuffer buffer)

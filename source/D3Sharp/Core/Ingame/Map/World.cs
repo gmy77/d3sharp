@@ -159,12 +159,7 @@ namespace D3Sharp.Core.Ingame.Map
             toon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new EnterWorldMessage()
             {
                 Id = 0x0033,
-                Field0 = new Vector3D()
-                {
-                    Field0 = toon.PosX,
-                    Field1 = toon.PosY,
-                    Field2 = toon.PosZ
-                },
+                Field0 = toon.Position,
                 Field1 = WorldID,
                 Field2 = WorldSNO,
             });
