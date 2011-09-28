@@ -210,7 +210,7 @@ namespace D3Sharp.Core.Map
                 {
                     if (ActorDB.isBlackListed(a.snoID)) continue;
                     if (ActorDB.isNPC(a.snoID)) continue;
-                    //a.Reveal(toon);
+                    a.Reveal(toon);
                 }
 
                 //reveal portals

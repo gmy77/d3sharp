@@ -152,6 +152,7 @@ namespace D3Sharp.Core.Universe
                             Portal p = GetPortal(int.Parse(data[1]));
                             if (p != null)
                             {
+                                p.TargetPos = new Vector3D();
                                 p.TargetPos.Field0 = float.Parse(data[2], System.Globalization.CultureInfo.InvariantCulture);
                                 p.TargetPos.Field1 = float.Parse(data[3], System.Globalization.CultureInfo.InvariantCulture);
                                 p.TargetPos.Field2 = float.Parse(data[4], System.Globalization.CultureInfo.InvariantCulture);
@@ -306,7 +307,7 @@ namespace D3Sharp.Core.Universe
             if (p!=null)
             {
                 //we have a transition between worlds here
-                ChangeToonWorld(client, p.TargetWorldID, p.TargetPos);
+                ChangeToonWorld(client, p.TargetWorldID, p.TargetPos); //targetpos will always be valid as otherwise the portal wouldn't be targetable
                 return;
             }
 

@@ -21,14 +21,11 @@ namespace D3Sharp.Core.Map
         public int TargetWorldID;
         public Vector3D TargetPos;
 
-        public Portal()
-        {
-            TargetPos = new Vector3D();
-        }
-
         public void Reveal(Toon t)
         {
-            if (PortalMessage != null && ActorRef != null)
+            if (PortalMessage != null && ActorRef != null && TargetPos!=null)
+                //targetpos!=null in this case is used to detect if the portal has been completely initialized to have a target
+                //if it doesn't have one, it won't be displayed - otherwise the client would crash from this.
             {
                 ActorRef.Reveal(t);
 
