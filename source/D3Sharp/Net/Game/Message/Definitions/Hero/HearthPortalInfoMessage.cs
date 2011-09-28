@@ -26,6 +26,8 @@ namespace D3Sharp.Net.Game.Message.Definitions.Hero
         public int /* sno */ snoLevelArea;
         public int Field1;
 
+        public HearthPortalInfoMessage():base(Opcodes.HearthPortalInfoMessage){}
+
         public override void Parse(GameBitBuffer buffer)
         {
             snoLevelArea = buffer.ReadInt(32);

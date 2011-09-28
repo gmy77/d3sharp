@@ -162,15 +162,15 @@ namespace D3Sharp.Net.Game.Message.Definitions.Scene
                            {
                                Field0 = new Quaternion()
                                             {
-                                                Field0 = float.Parse(data[49], System.Globalization.CultureInfo.InvariantCulture),
-                                                Field1 = new Vector3D()
+                                                Amount = float.Parse(data[49], System.Globalization.CultureInfo.InvariantCulture),
+                                                Axis = new Vector3D()
                                                              {
                                                                  X = float.Parse(data[46], System.Globalization.CultureInfo.InvariantCulture),
                                                                  Y = float.Parse(data[47], System.Globalization.CultureInfo.InvariantCulture),
                                                                  Z = float.Parse(data[48], System.Globalization.CultureInfo.InvariantCulture),
                                                              },
                                             },
-                               Field1 = new Vector3D()
+                               ReferencePoint = new Vector3D()
                                             {
                                                 X = float.Parse(data[50], System.Globalization.CultureInfo.InvariantCulture),
                                                 Y = float.Parse(data[51], System.Globalization.CultureInfo.InvariantCulture),

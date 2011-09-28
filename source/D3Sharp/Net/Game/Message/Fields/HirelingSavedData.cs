@@ -5,17 +5,17 @@ namespace D3Sharp.Net.Game.Message.Fields
     public class HirelingSavedData
     {
         // MaxLength = 4
-        public HirelingInfo[] Field0;
+        public HirelingInfo[] HirelingInfos;
         public int Field1;
         public int Field2;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = new HirelingInfo[4];
-            for (int i = 0; i < Field0.Length; i++)
+            HirelingInfos = new HirelingInfo[4];
+            for (int i = 0; i < HirelingInfos.Length; i++)
             {
-                Field0[i] = new HirelingInfo();
-                Field0[i].Parse(buffer);
+                HirelingInfos[i] = new HirelingInfo();
+                HirelingInfos[i].Parse(buffer);
             }
             Field1 = buffer.ReadInt(2);
             Field2 = buffer.ReadInt(32);
@@ -23,9 +23,9 @@ namespace D3Sharp.Net.Game.Message.Fields
 
         public void Encode(GameBitBuffer buffer)
         {
-            for (int i = 0; i < Field0.Length; i++)
+            for (int i = 0; i < HirelingInfos.Length; i++)
             {
-                Field0[i].Encode(buffer);
+                HirelingInfos[i].Encode(buffer);
             }
             buffer.WriteInt(2, Field1);
             buffer.WriteInt(32, Field2);
@@ -41,9 +41,9 @@ namespace D3Sharp.Net.Game.Message.Fields
             b.AppendLine("Field0:");
             b.Append(' ', pad);
             b.AppendLine("{");
-            for (int i = 0; i < Field0.Length; i++)
+            for (int i = 0; i < HirelingInfos.Length; i++)
             {
-                Field0[i].AsText(b, pad + 1);
+                HirelingInfos[i].AsText(b, pad + 1);
                 b.AppendLine();
             }
             b.Append(' ', pad);

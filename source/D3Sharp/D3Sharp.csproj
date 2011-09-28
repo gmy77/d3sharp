@@ -123,7 +123,7 @@
     <Compile Include="Core\Common\Toons\Toon.cs" />
     <Compile Include="Core\Common\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Common\Toons\ToonManager.cs" />
-    <Compile Include="Core\Ingame\Universe\IngameToon.cs" />
+    <Compile Include="Core\Ingame\Universe\Hero.cs" />
     <Compile Include="Core\Ingame\Universe\Player.cs" />
     <Compile Include="Core\Ingame\Universe\PlayerManager.cs" />
     <Compile Include="Core\Ingame\Universe\Universe.cs" />

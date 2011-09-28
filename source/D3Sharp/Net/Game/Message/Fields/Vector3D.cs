@@ -8,6 +8,15 @@ namespace D3Sharp.Net.Game.Message.Fields
         public float Y;
         public float Z;
 
+        public Vector3D(){}
+
+        public Vector3D(float x, float y, float z)
+        {
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+        }
+
         public void Parse(GameBitBuffer buffer)
         {
             X = buffer.ReadFloat32();

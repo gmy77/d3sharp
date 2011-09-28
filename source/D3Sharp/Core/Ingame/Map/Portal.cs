@@ -30,7 +30,7 @@ namespace D3Sharp.Core.Ingame.Map
             TargetPos = new Vector3D();
         }
 
-        public void Reveal(IngameToon t)
+        public void Reveal(Hero hero)
         {
             if (PortalMessage != null && ActorRef != null && TargetPos!=null)
                 //targetpos!=null in this case is used to detect if the portal has been completely initialized to have a target
@@ -38,37 +38,37 @@ namespace D3Sharp.Core.Ingame.Map
             {
                 Logger.Info("Revealing portal: " + PortalMessage.AsText());
 
-                ActorRef.Reveal(t);
+                ActorRef.Reveal(hero);
 
-                t.InGameClient.SendMessage(new AffixMessage()
+                hero.InGameClient.SendMessage(new AffixMessage()
                 {
                     Id = 0x48,
-                    Field0 = ActorRef.ID,
+                    Field0 = ActorRef.Id,
                     Field1 = 1,
                     aAffixGBIDs = new int[0]
                 });
 
-                t.InGameClient.SendMessage(new AffixMessage()
+                hero.InGameClient.SendMessage(new AffixMessage()
                 {
                     Id = 0x48,
-                    Field0 = ActorRef.ID,
+                    Field0 = ActorRef.Id,
                     Field1 = 2,
                     aAffixGBIDs = new int[0]
                 });
 
-                t.InGameClient.SendMessage(PortalMessage);
+                hero.InGameClient.SendMessage(PortalMessage);
 
-                t.InGameClient.SendMessage(new ACDCollFlagsMessage()
+                hero.InGameClient.SendMessage(new ACDCollFlagsMessage()
                 {
                     Id = 0x00A6,
-                    Field0 = ActorRef.ID,
+                    Field0 = ActorRef.Id,
                     Field1 = 0x00000001,
                 });
 
-                t.InGameClient.SendMessage(new AttributesSetValuesMessage()
+                hero.InGameClient.SendMessage(new AttributesSetValuesMessage()
                 {
                     Id = 0x004D,
-                    Field0 = ActorRef.ID,
+                    Field0 = ActorRef.Id,
                     atKeyVals = new NetAttributeKeyValue[7]
                     {
                          new NetAttributeKeyValue()
@@ -116,30 +116,30 @@ namespace D3Sharp.Core.Ingame.Map
                     },
                 });
 
-                t.InGameClient.SendMessage(new ACDGroupMessage()
+                hero.InGameClient.SendMessage(new ACDGroupMessage()
                 {
                     Id = 0x00B8,
-                    Field0 = ActorRef.ID,
+                    Field0 = ActorRef.Id,
                     Field1 = -1,
                     Field2 = -1,
                 });
 
-                t.InGameClient.SendMessage(new ANNDataMessage()
+                hero.InGameClient.SendMessage(new ANNDataMessage()
                 {
                     Id = 0x003E,
-                    Field0 = ActorRef.ID,
+                    Field0 = ActorRef.Id,
                 });
 
-                t.InGameClient.SendMessage(new ACDTranslateFacingMessage()
+                hero.InGameClient.SendMessage(new ACDTranslateFacingMessage()
                 {
                     Id = 0x0070,
-                    Field0 = ActorRef.ID,
+                    Field0 = ActorRef.Id,
                     Field1 = 0f,
                     Field2 = false,
                 });
 
             }
-            t.InGameClient.FlushOutgoingBuffer();
+            hero.InGameClient.FlushOutgoingBuffer();
         }
 
     }

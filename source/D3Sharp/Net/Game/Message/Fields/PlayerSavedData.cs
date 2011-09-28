@@ -5,14 +5,14 @@ namespace D3Sharp.Net.Game.Message.Fields
     public class PlayerSavedData
     {
         // MaxLength = 9
-        public HotbarButtonData[] Field0;
+        public HotbarButtonData[] HotBarButtons;
         // MaxLength = 15
-        public SkillKeyMapping[] Field1;
+        public SkillKeyMapping[] SkilKeyMappings;
         public int /* time */ Field2;
         public int Field3;
         public HirelingSavedData Field4;
         public int Field5;
-        public LearnedLore Field6;
+        public LearnedLore LearnedLore;
         // MaxLength = 6
         public int /* sno */[] snoActiveSkills;
         // MaxLength = 3
@@ -23,25 +23,25 @@ namespace D3Sharp.Net.Game.Message.Fields
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = new HotbarButtonData[9];
-            for (int i = 0; i < Field0.Length; i++)
+            HotBarButtons = new HotbarButtonData[9];
+            for (int i = 0; i < HotBarButtons.Length; i++)
             {
-                Field0[i] = new HotbarButtonData();
-                Field0[i].Parse(buffer);
+                HotBarButtons[i] = new HotbarButtonData();
+                HotBarButtons[i].Parse(buffer);
             }
-            Field1 = new SkillKeyMapping[15];
-            for (int i = 0; i < Field1.Length; i++)
+            SkilKeyMappings = new SkillKeyMapping[15];
+            for (int i = 0; i < SkilKeyMappings.Length; i++)
             {
-                Field1[i] = new SkillKeyMapping();
-                Field1[i].Parse(buffer);
+                SkilKeyMappings[i] = new SkillKeyMapping();
+                SkilKeyMappings[i].Parse(buffer);
             }
             Field2 = buffer.ReadInt(32);
             Field3 = buffer.ReadInt(32);
             Field4 = new HirelingSavedData();
             Field4.Parse(buffer);
             Field5 = buffer.ReadInt(32);
-            Field6 = new LearnedLore();
-            Field6.Parse(buffer);
+            LearnedLore = new LearnedLore();
+            LearnedLore.Parse(buffer);
             snoActiveSkills = new int /* sno */[6];
             for (int i = 0; i < snoActiveSkills.Length; i++) snoActiveSkills[i] = buffer.ReadInt(32);
             snoTraits = new int /* sno */[3];
@@ -54,19 +54,19 @@ namespace D3Sharp.Net.Game.Message.Fields
 
         public void Encode(GameBitBuffer buffer)
         {
-            for (int i = 0; i < Field0.Length; i++)
+            for (int i = 0; i < HotBarButtons.Length; i++)
             {
-                Field0[i].Encode(buffer);
+                HotBarButtons[i].Encode(buffer);
             }
-            for (int i = 0; i < Field1.Length; i++)
+            for (int i = 0; i < SkilKeyMappings.Length; i++)
             {
-                Field1[i].Encode(buffer);
+                SkilKeyMappings[i].Encode(buffer);
             }
             buffer.WriteInt(32, Field2);
             buffer.WriteInt(32, Field3);
             Field4.Encode(buffer);
             buffer.WriteInt(32, Field5);
-            Field6.Encode(buffer);
+            LearnedLore.Encode(buffer);
             for (int i = 0; i < snoActiveSkills.Length; i++) buffer.WriteInt(32, snoActiveSkills[i]);
             for (int i = 0; i < snoTraits.Length; i++) buffer.WriteInt(32, snoTraits[i]);
             Field9.Encode(buffer);
@@ -83,9 +83,9 @@ namespace D3Sharp.Net.Game.Message.Fields
             b.AppendLine("Field0:");
             b.Append(' ', pad);
             b.AppendLine("{");
-            for (int i = 0; i < Field0.Length; i++)
+            for (int i = 0; i < HotBarButtons.Length; i++)
             {
-                Field0[i].AsText(b, pad + 1);
+                HotBarButtons[i].AsText(b, pad + 1);
                 b.AppendLine();
             }
             b.Append(' ', pad);
@@ -95,9 +95,9 @@ namespace D3Sharp.Net.Game.Message.Fields
             b.AppendLine("Field1:");
             b.Append(' ', pad);
             b.AppendLine("{");
-            for (int i = 0; i < Field1.Length; i++)
+            for (int i = 0; i < SkilKeyMappings.Length; i++)
             {
-                Field1[i].AsText(b, pad + 1);
+                SkilKeyMappings[i].AsText(b, pad + 1);
                 b.AppendLine();
             }
             b.Append(' ', pad);
@@ -110,7 +110,7 @@ namespace D3Sharp.Net.Game.Message.Fields
             Field4.AsText(b, pad);
             b.Append(' ', pad);
             b.AppendLine("Field5: 0x" + Field5.ToString("X8") + " (" + Field5 + ")");
-            Field6.AsText(b, pad);
+            LearnedLore.AsText(b, pad);
             b.Append(' ', pad);
             b.AppendLine("snoActiveSkills:");
             b.Append(' ', pad);

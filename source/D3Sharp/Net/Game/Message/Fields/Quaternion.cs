@@ -4,20 +4,20 @@ namespace D3Sharp.Net.Game.Message.Fields
 {
     public class Quaternion
     {
-        public float Field0;
-        public Vector3D Field1;
+        public float Amount;
+        public Vector3D Axis;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadFloat32();
-            Field1 = new Vector3D();
-            Field1.Parse(buffer);
+            Amount = buffer.ReadFloat32();
+            Axis = new Vector3D();
+            Axis.Parse(buffer);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteFloat32(Field0);
-            Field1.Encode(buffer);
+            buffer.WriteFloat32(Amount);
+            Axis.Encode(buffer);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -27,8 +27,8 @@ namespace D3Sharp.Net.Game.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: " + Field0.ToString("G"));
-            Field1.AsText(b, pad);
+            b.AppendLine("Field0: " + Amount.ToString("G"));
+            Axis.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

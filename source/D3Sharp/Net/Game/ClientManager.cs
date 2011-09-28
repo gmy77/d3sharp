@@ -19,13 +19,10 @@ namespace D3Sharp.Net.Game
 
             // atm, just creating a universe - though clients should be able to join existing ones.
             var universe = new Universe();
-            var player = new Player(universe);
-            var gameClient = new GameClient(e.Connection,player);
-            player.Client = gameClient;
-
-            e.Connection.Client = gameClient;
-
             Universes.Add(universe);
+
+            var gameClient = new GameClient(e.Connection,universe);
+            e.Connection.Client = gameClient;
         }
 
         public static void OnDisconnect(object sender, ConnectionEventArgs e)

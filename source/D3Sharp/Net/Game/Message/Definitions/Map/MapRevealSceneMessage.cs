@@ -78,15 +78,15 @@ namespace D3Sharp.Net.Game.Message.Definitions.Map
                          {
                              Field0 = new Quaternion()
                                           {
-                                              Field0 = float.Parse(data2[5], System.Globalization.CultureInfo.InvariantCulture),
-                                              Field1 = new Vector3D()
+                                              Amount = float.Parse(data2[5], System.Globalization.CultureInfo.InvariantCulture),
+                                              Axis = new Vector3D()
                                                            {
                                                                X = float.Parse(data2[2], System.Globalization.CultureInfo.InvariantCulture),
                                                                Y = float.Parse(data2[3], System.Globalization.CultureInfo.InvariantCulture),
                                                                Z = float.Parse(data2[4], System.Globalization.CultureInfo.InvariantCulture),
                                                            },
                                           },
-                             Field1 = new Vector3D()
+                             ReferencePoint = new Vector3D()
                                           {
                                               X = float.Parse(data2[6], System.Globalization.CultureInfo.InvariantCulture),
                                               Y = float.Parse(data2[7], System.Globalization.CultureInfo.InvariantCulture),

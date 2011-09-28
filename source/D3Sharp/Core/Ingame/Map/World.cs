@@ -18,7 +18,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using D3Sharp.Core.Common.Toons;
 using D3Sharp.Core.Ingame.Actors;
 using D3Sharp.Core.Ingame.NPC;
 using D3Sharp.Core.Ingame.Universe;
@@ -63,14 +62,14 @@ namespace D3Sharp.Core.Ingame.Map
         public Actor GetActor(int ID)
         {
             for (int x = 0; x < Actors.Count; x++)
-                if (Actors[x].ID == ID) return Actors[x];
+                if (Actors[x].Id == ID) return Actors[x];
             return null;
         }
 
         public Portal GetPortal(int ID)
         {
             for (int x = 0; x < Portals.Count; x++)
-                if (Portals[x].ActorRef.ID == ID) return Portals[x];
+                if (Portals[x].ActorRef.Id == ID) return Portals[x];
             return null;
         }
 
@@ -78,11 +77,21 @@ namespace D3Sharp.Core.Ingame.Map
         public Actor GetActor(int snoID, float x, float y, float z)
         {
             for (int i = 0; i < Actors.Count; i++)
-                if (Actors[i].snoID == snoID &&
-                    Actors[i].PosX==x &&
-                    Actors[i].PosY==y &&
-                    Actors[i].PosZ==z) return Actors[i];
+                if (Actors[i].SnoId == snoID &&
+                    Actors[i].Position.X == x &&
+                    Actors[i].Position.Y == y &&
+                    Actors[i].Position.Z == z) return Actors[i];
             return null;
+        }
+
+        public bool ActorExists(Actor actor)
+        {
+            return Actors.Any(
+                t =>
+                    t.SnoId == actor.SnoId && 
+                    t.Position.X == actor.Position.X && 
+                    t.Position.Y == actor.Position.Y &&
+                    t.Position.Z == actor.Position.Z);
         }
 
         public void AddScene(string Line)
@@ -113,33 +122,11 @@ namespace D3Sharp.Core.Ingame.Map
             s.Map = new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID);
         }
 
-        public void AddActor(string Line)
+        public void AddActor(string line)
         {
-            string[] data = Line.Split(' ');
-
-            //skip inventory using items as their use is unknown
-            if (int.Parse(data[2]) == 0) return;
-
-            int ActorID = int.Parse(data[4]);
-            int snoID = int.Parse(data[5]);
-
-            float x, y, z;
-            x = float.Parse(data[13], System.Globalization.CultureInfo.InvariantCulture);
-            y = float.Parse(data[14], System.Globalization.CultureInfo.InvariantCulture);
-            z = float.Parse(data[15], System.Globalization.CultureInfo.InvariantCulture);
-
-            Actor a = GetActor(snoID,x,y,z);
-            if (a != null) return;
-
-            a = new Actor();
-            a.ID = ActorID;
-            a.snoID = snoID;
-            a.RevealMessage = new ACDEnterKnownMessage(data.Skip(2).ToArray(),WorldID);
-            a.PosX = x;
-            a.PosY = y;
-            a.PosZ = z;
-
-            Actors.Add(a);
+            var actor = new Actor();
+            if (!actor.ParseFrom(this.WorldID, line)) return; // if not valid actor (inventory using items), just don't add it to list.            
+            if(!this.ActorExists(actor)) Actors.Add(actor); // filter duplicate actors.
         }
 
         public void AddPortal(string Line)
@@ -150,7 +137,7 @@ namespace D3Sharp.Core.Ingame.Map
 
             //this check is here so no duplicate portals are in a world and thus a portal actor isn't revealed twice to a player
             foreach (var portal in Portals)
-                if (portal.ActorRef.ID == ActorID) return;
+                if (portal.ActorRef.Id == ActorID) return;
 
             Portal p = new Portal();
             p.PortalMessage = new PortalSpecifierMessage(data.Skip(2).ToArray());
@@ -172,65 +159,65 @@ namespace D3Sharp.Core.Ingame.Map
             Scenes.Sort(SceneSorter);
         }
 
-        public void RevealWorld(IngameToon toon)
+        public void Reveal(Hero hero)
         {
-            bool found=toon.RevealedWorlds.Contains(this);
+            bool found=hero.RevealedWorlds.Contains(this);
 
             if (!found)
             {
                 //reveal world to player
-                toon.InGameClient.SendMessage(new RevealWorldMessage()
+                hero.InGameClient.SendMessage(new RevealWorldMessage()
                 {
                     Id = 0x0037,
                     Field0 = WorldID,
                     Field1 = WorldSNO,
                 });
-                toon.RevealedWorlds.Add(this);
+                hero.RevealedWorlds.Add(this);
             }
 
             //player enters world
-            toon.InGameClient.SendMessage(new EnterWorldMessage()
+            hero.InGameClient.SendMessage(new EnterWorldMessage()
             {
                 Id = 0x0033,
-                Field0 = toon.Position,
+                Field0 = hero.Position,
                 Field1 = WorldID,
                 Field2 = WorldSNO,
             });
 
             //just reveal the whole thing to the player for now
             foreach (var scene in Scenes)
-                scene.Reveal(toon);
+                scene.Reveal(hero);
 
             if (!found)
             {
                 //reveal actors
                 foreach (var actor in Actors)
                 {
-                    if (ActorDB.isBlackListed(actor.snoID)) continue;
-                    if (ActorDB.isNPC(actor.snoID)) continue;
-                    //actor.Reveal(toon);
+                    if (ActorDB.isBlackListed(actor.SnoId)) continue;
+                    if (ActorDB.isNPC(actor.SnoId)) continue;
+                    //actor.Reveal(hero);
                 }
 
                 //reveal portals
                 Logger.Info("Revealing portals for world " + WorldID);
                 foreach (Portal portal in Portals)
                 {
-                    portal.Reveal(toon);
+                    portal.Reveal(hero);
                 }
             }
 
         }
 
-        public void DestroyWorld(IngameToon toon)
+        public void DestroyWorld(Hero hero)
         {
-            //for (int x = toon.RevealedActors.Count - 1; x >= 0; x-- )
-            //    if (toon.RevealedActors[x].RevealMessage.Field4.Field2 == WorldID) toon.RevealedActors[x].Destroy(toon);
+            //for (int x = hero.RevealedActors.Count - 1; x >= 0; x-- )
+            //    if (hero.RevealedActors[x].RevealMessage.Field4.Field2 == WorldID) hero.RevealedActors[x].Destroy(hero);
 
-            for (int x = toon.RevealedScenes.Count - 1; x >= 0; x--)
-                if (toon.RevealedScenes[x].SceneData.WorldID == WorldID) toon.RevealedScenes[x].Destroy(toon);
+            for (int x = hero.RevealedScenes.Count - 1; x >= 0; x--)
+                if (hero.RevealedScenes[x].SceneData.WorldID == WorldID) hero.RevealedScenes[x].Destroy(hero);
 
-            //toon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new WorldDeletedMessage() { Id = 0xd9, Field0 = WorldID, });
-            toon.InGameClient.FlushOutgoingBuffer();
+            //hero.Owner.LoggedInBNetClient.InGameClient.SendMessage(new WorldDeletedMessage() { Id = 0xd9, Field0 = WorldID, });
+            hero.InGameClient.FlushOutgoingBuffer();
         }
 
         void CreateNPC(int objectId)

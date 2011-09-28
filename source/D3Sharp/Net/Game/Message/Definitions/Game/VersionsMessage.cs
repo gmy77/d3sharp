@@ -27,8 +27,12 @@ namespace D3Sharp.Net.Game.Message.Definitions.Game
         public int ProtocolHash;
         public string Version;
 
-
-
+        public VersionsMessage(int snoPacketHash):base(Opcodes.VersionsMessage)
+        {
+            this.SNOPackHash = snoPacketHash;
+            this.ProtocolHash = ImplementedProtocolHash;
+            this.Version = "0.3.0.7333";
+        }
 
         public override void Parse(GameBitBuffer buffer)
         {

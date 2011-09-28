@@ -11,27 +11,27 @@ namespace D3Sharp.Core.Ingame.Map
         public RevealSceneMessage SceneData;
         public MapRevealSceneMessage Map;
 
-        public void Reveal(IngameToon t)
+        public void Reveal(Hero hero)
         {
-            if (t.RevealedScenes.Contains(this)) return; //already revealed
+            if (hero.RevealedScenes.Contains(this)) return; //already revealed
 
             if (SceneData != null)
             {
-                t.InGameClient.SendMessage(SceneData);
-                t.RevealedScenes.Add(this);
+                hero.InGameClient.SendMessage(SceneData);
+                hero.RevealedScenes.Add(this);
             }
-            if (Map != null) t.InGameClient.SendMessage(Map);
-            t.InGameClient.FlushOutgoingBuffer();
+            if (Map != null) hero.InGameClient.SendMessage(Map);
+            hero.InGameClient.FlushOutgoingBuffer();
         }
 
-        public void Destroy(IngameToon t)
+        public void Destroy(Hero hero)
         {
-            if (!t.RevealedScenes.Contains(this)) return; //not revealed yet
+            if (!hero.RevealedScenes.Contains(this)) return; //not revealed yet
             if (SceneData != null)
             {
-                t.InGameClient.SendMessage(new DestroySceneMessage() { Id=0x35, Field0 = SceneData.WorldID, Field1 = ID });
-                t.InGameClient.FlushOutgoingBuffer();
-                t.RevealedScenes.Remove(this);
+                hero.InGameClient.SendMessage(new DestroySceneMessage() { Id = 0x35, Field0 = SceneData.WorldID, Field1 = ID });
+                hero.InGameClient.FlushOutgoingBuffer();
+                hero.RevealedScenes.Remove(this);
             }
         }
 

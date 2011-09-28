@@ -26,8 +26,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.Act
         public int Field0;
         public bool Field1;
 
-
-
+        public ActTransitionMessage():base(Opcodes.ActTransitionMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

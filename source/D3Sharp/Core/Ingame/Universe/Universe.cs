@@ -66,7 +66,7 @@ namespace D3Sharp.Core.Ingame.Universe
                     this.PlayerManager.Consume(client, message);
                     break;
                 case Consumers.Skillset:
-                    client.Player.Toon.Skillset.Consume(client, message);
+                    client.Player.Hero.Skillset.Consume(client, message);
                     break;
             }
         }
@@ -142,14 +142,14 @@ namespace D3Sharp.Core.Ingame.Universe
                                         Actor a = GetActor(int.Parse(data[2]));
                                         if (a != null)
                                         {
-                                            World w = GetWorld(a.RevealMessage.Field4.Field2);
+                                            World w = GetWorld(a.WorldId);
                                             if (w != null) w.AddPortal(line);
                                         }
                                     }
                                     break;
 
                                 default:
-                                    Logger.Warn("Unimplemented packet type encountered in universe file: " + packettype);
+                                    Logger.Info("Unimplemented packet type encountered in universe file: " + packettype);
                                     break;
                             }
                         }
@@ -231,7 +231,7 @@ namespace D3Sharp.Core.Ingame.Universe
 
         public void ChangeToonWorld(GameClient client, int WorldID, Vector3D Pos)
         {
-            IngameToon t = client.Player.Toon;
+            Hero hero = client.Player.Hero;
 
             World newworld = null;
             //don't use getworld() here as that'd create a new empty world anyway
@@ -242,20 +242,20 @@ namespace D3Sharp.Core.Ingame.Universe
             World currentworld = null;
             //don't use getworld() here as that'd create a new empty world anyway
             foreach (var x in _worlds)
-                if (x.WorldID == t.CurrentWorldID)
+                if (x.WorldID == hero.WorldId)
                     currentworld = x;
             
             if (newworld == null || currentworld==null) return; //don't go to a world we don't have in the universe
 
-            currentworld.DestroyWorld(t);
+            currentworld.DestroyWorld(hero);
 
-            t.CurrentWorldID = newworld.WorldID;
-            t.CurrentWorldSNO = newworld.WorldSNO;
-            t.Position.X = Pos.X;
-            t.Position.Y = Pos.Y;
-            t.Position.Z = Pos.Z;
+            hero.WorldId = newworld.WorldID;
+            hero.CurrentWorldSNO = newworld.WorldSNO;
+            hero.Position.X = Pos.X;
+            hero.Position.Y = Pos.Y;
+            hero.Position.Z = Pos.Z;
 
-            newworld.RevealWorld(t);
+            newworld.Reveal(hero);
 
             client.SendMessage(new ACDWorldPositionMessage
             {
@@ -268,15 +268,15 @@ namespace D3Sharp.Core.Ingame.Universe
                     {
                         Field0 = new Quaternion
                         {
-                            Field0 = 0.05940768f,
-                            Field1 = new Vector3D
+                            Amount = 0.05940768f,
+                            Axis = new Vector3D
                             {
                                 X = 0f,
                                 Y = 0f,
                                 Z = 0.9982339f,
                             }
                         },
-                        Field1 = t.Position,
+                        ReferencePoint = hero.Position,
                     },
                     Field2 = newworld.WorldID,
                 }
@@ -469,7 +469,7 @@ namespace D3Sharp.Core.Ingame.Universe
         public void SpawnMob(GameClient client, int mobId) // this shoudn't even rely on client or it's position though i know this is just a hack atm ;) /raist.
         {
             int nId = mobId;
-            if (client.Player.Toon.Position == null)
+            if (client.Player.Hero.Position == null)
                 return;
 
             if (client.ObjectIdsSpawned == null)
@@ -497,19 +497,19 @@ namespace D3Sharp.Core.Ingame.Universe
                     {
                         Field0 = new Quaternion()
                         {
-                            Field0 = 0.768145f,
-                            Field1 = new Vector3D()
+                            Amount = 0.768145f,
+                            Axis = new Vector3D()
                             {
                                 X = 0f,
                                 Y = 0f,
                                 Z = -0.640276f,
                             },
                         },
-                        Field1 = new Vector3D()
+                        ReferencePoint = new Vector3D()
                         {
-                            X = client.Player.Toon.Position.X + 5,
-                            Y = client.Player.Toon.Position.Y + 5,
-                            Z = client.Player.Toon.Position.Z,
+                            X = client.Player.Hero.Position.X + 5,
+                            Y = client.Player.Hero.Position.Y + 5,
+                            Z = client.Player.Hero.Position.Z,
                         },
                     },
                     Field2 = 0x772E0000,
