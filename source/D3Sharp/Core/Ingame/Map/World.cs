@@ -58,7 +58,7 @@ namespace D3Sharp.Core.Ingame.Map
         public Actor GetActor(int ID)
         {
             for (int x = 0; x < Actors.Count; x++)
-                if (Actors[x].ID == ID) return Actors[x];
+                if (Actors[x].Id == ID) return Actors[x];
             return null;
         }
 
@@ -118,68 +118,14 @@ namespace D3Sharp.Core.Ingame.Map
             y = float.Parse(data[14], System.Globalization.CultureInfo.InvariantCulture);
             z = float.Parse(data[15], System.Globalization.CultureInfo.InvariantCulture);
 
-            Actor a = GetActor(snoID,x,y,z);
-            if (a != null) return;
+            Actor actor = GetActor(snoID,x,y,z);
+            if (actor != null) return;
 
-            a = new Actor();
-            a.ID = ActorID;
-            a.snoID = snoID;
-            a.WorldId = this.WorldID;
+            actor = new Actor();
+            
+            actor.ParseFrom(this.WorldID, data);            
 
-            a.RevealMessage = new ACDEnterKnownMessage(data.Skip(2).ToArray(),WorldID);
-            this.ReadActor(a, data.ToArray().Skip(2).ToArray());
-
-            a.Position.X = x;
-            a.Position.Y = y;
-            a.Position.Z = z;
-
-            Actors.Add(a);
-        }
-
-        private void ReadActor(Actor actor, string[] Data)
-        {
-            actor.Field0 = int.Parse(Data[2]);
-            actor.snoID = int.Parse(Data[3]);
-            actor.Field2 = int.Parse(Data[4]);
-            actor.Field3 = int.Parse(Data[5]);
-
-            actor.Scale = float.Parse(Data[6], System.Globalization.CultureInfo.InvariantCulture);
-            actor.RotationAmount = float.Parse(Data[10], System.Globalization.CultureInfo.InvariantCulture);
-            actor.RotationAxis = new Vector3D()
-                                     {
-                                         X = float.Parse(Data[7], System.Globalization.CultureInfo.InvariantCulture),
-                                         Y = float.Parse(Data[8], System.Globalization.CultureInfo.InvariantCulture),
-                                         Z = float.Parse(Data[9], System.Globalization.CultureInfo.InvariantCulture),
-                                     };
-
-            actor.Position = new Vector3D()
-                                 {
-                                     X = float.Parse(Data[11], System.Globalization.CultureInfo.InvariantCulture),
-                                     Y = float.Parse(Data[12], System.Globalization.CultureInfo.InvariantCulture),
-                                     Z = float.Parse(Data[13], System.Globalization.CultureInfo.InvariantCulture),
-                                 };
-
-            actor.InventoryLocationData = new InventoryLocationMessageData()
-                                              {
-                                                  Field0 = int.Parse(Data[15]),
-                                                  Field1 = int.Parse(Data[16]),
-                                                  Field2 = new IVector2D()
-                                                               {
-                                                                   Field0 = int.Parse(Data[17]),
-                                                                   Field1 = int.Parse(Data[18]),
-                                                               }
-                                              };
-
-            actor.GBHandle = new GBHandle()
-                                 {
-                                     Field0 = int.Parse(Data[19]),
-                                     Field1 = int.Parse(Data[20]),
-                                 };
-
-            actor.Field7 = int.Parse(Data[21]);
-            actor.Field8 = int.Parse(Data[22]);
-            actor.Field9 = int.Parse(Data[23]);
-            actor.Field10 = byte.Parse(Data[24]);           
+            Actors.Add(actor);
         }
 
         private int SceneSorter(Scene x, Scene y)

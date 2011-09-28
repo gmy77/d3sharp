@@ -39,8 +39,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
         public int? Field12;
         public int? Field13;
 
-
-
+        public ACDEnterKnownMessage() : base(Opcodes.ACDEnterKnownMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
@@ -153,74 +152,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
             }
             b.Append(' ', --pad);
             b.AppendLine("}");
-        }
-
-        public ACDEnterKnownMessage():base(Opcodes.ACDEnterKnownMessage)
-        {
-
-        }
-
-        public ACDEnterKnownMessage(string[] Data, int f2)
-        {
-            Id = 0x003B;
-            Field0 = int.Parse(Data[2]);
-            Field1 = int.Parse(Data[3]);
-            Field2 = int.Parse(Data[4]);
-            Field3 = int.Parse(Data[5]);
-
-            Field4 = null;
-
-            if (int.Parse(Data[0]) > 0)
-                Field4 = new WorldLocationMessageData()
-                             {
-                                 Field0 = float.Parse(Data[6], System.Globalization.CultureInfo.InvariantCulture),
-                                 Field1 = new PRTransform()
-                                              {
-                                                  Field0 = new Quaternion()
-                                                               {
-                                                                   Field0 = float.Parse(Data[10], System.Globalization.CultureInfo.InvariantCulture),
-                                                                   Field1 = new Vector3D()
-                                                                                {
-                                                                                    X = float.Parse(Data[7], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                    Y = float.Parse(Data[8], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                    Z = float.Parse(Data[9], System.Globalization.CultureInfo.InvariantCulture),
-                                                                                },
-                                                               },
-                                                  Field1 = new Vector3D()
-                                                               {
-                                                                   X = float.Parse(Data[11], System.Globalization.CultureInfo.InvariantCulture),
-                                                                   Y = float.Parse(Data[12], System.Globalization.CultureInfo.InvariantCulture),
-                                                                   Z = float.Parse(Data[13], System.Globalization.CultureInfo.InvariantCulture),
-                                                               },
-                                              },
-                                 Field2 = f2, //=int.Parse(Data[14]),
-                             };
-
-            Field5 = null;
-            if (int.Parse(Data[1]) > 0)
-            {
-                Field5 = new InventoryLocationMessageData()
-                             {
-                                 Field0 = int.Parse(Data[15]),
-                                 Field1 = int.Parse(Data[16]),
-                                 Field2 = new IVector2D()
-                                              {
-                                                  Field0 = int.Parse(Data[17]),
-                                                  Field1 = int.Parse(Data[18]),
-                                              }
-                             };
-            }
-
-            Field6 = new GBHandle()
-                         {
-                             Field0 = int.Parse(Data[19]),
-                             Field1 = int.Parse(Data[20]),
-                         };
-            Field7 = int.Parse(Data[21]);
-            Field8 = int.Parse(Data[22]);
-            Field9 = int.Parse(Data[23]);
-            Field10 = byte.Parse(Data[24]);
-        }
-
+        }        
     }
 }

@@ -114,7 +114,7 @@ namespace D3Sharp.Core.Ingame.Universe
                                        Field10 = 0x789E00E2,
                                    });            
 
-            Hero.RevealNew(this);
+            Hero.Reveal(this.Hero);
 
             #region ACDEnterKnown 0x789E00E2 PlayerId??
 

@@ -49,7 +49,7 @@ namespace D3Sharp.Core.Ingame.Universe
             this.Position.Y = 2828.75f;
             this.Position.Z = 59.075588f;
             this.WorldId = 0x772E0000;
-            this.Field0 = 0x789E00E2;
+            this.Id = 0x789E00E2;
             this.snoID = this.ClassSNO;
             this.Field2 = 0x00000009;
             this.Field3 = 0x00000000;
