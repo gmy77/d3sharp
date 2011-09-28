@@ -54,6 +54,7 @@ namespace D3Sharp.Net.Game
 
         public GameClient(IConnection connection, Universe gameUniverse)
         {
+            this.Position = new Vector3D();
             this.Connection = connection;
             _outgoingBuffer.WriteInt(32, 0);
             GameUniverse = gameUniverse;
