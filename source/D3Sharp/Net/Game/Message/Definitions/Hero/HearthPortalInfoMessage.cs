@@ -18,7 +18,6 @@
 
 using System;
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Hero
 {
@@ -26,12 +25,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Hero
     {
         public int /* sno */ snoLevelArea;
         public int Field1;
-
-
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

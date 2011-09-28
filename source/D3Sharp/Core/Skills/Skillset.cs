@@ -6,10 +6,13 @@ using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Net.Game;
 using D3Sharp.Net.Game.Message.Definitions.Hero;
 using D3Sharp.Net.Game.Message.Definitions.Misc;
+using D3Sharp.Net.Game.Message;
+using D3Sharp.Net.Game.Message.Definitions.Player;
+using D3Sharp.Net.Game.Message.Definitions.Skill;
 
 namespace D3Sharp.Core.Skills
 {
-    public class Skillset
+    public class Skillset : IMessageConsumer
     {
         public int[] activeSkills;
         public HotbarButtonData[] hotbarSkills;
@@ -74,6 +77,38 @@ namespace D3Sharp.Core.Skills
                 }
             };
             passiveSkills = new int[3] { -1, -1, -1 };
+        }
+
+        public void Consume(GameClient client, GameMessage message)
+        {
+            if (message is AssignActiveSkillMessage) OnAssignActiveSkill(client, (AssignActiveSkillMessage)message);
+            else if (message is AssignPassiveSkillMessage) OnAssignPassiveSkill(client, (AssignPassiveSkillMessage)message);
+            else if (message is PlayerChangeHotbarButtonMessage) OnPlayerChangeHotbarButtonMessage(client, (PlayerChangeHotbarButtonMessage)message);
+            else return;
+
+            UpdateClient(client);
+            client.FlushOutgoingBuffer();
+        }
+
+        private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
+        {
+            hotbarSkills[message.Field0] = message.Field1;
+        }
+
+        private void OnAssignPassiveSkill(GameClient client, AssignPassiveSkillMessage message)
+        {
+            passiveSkills[message.Field1] = message.snoPower;
+        }
+
+        private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
+        {
+            foreach (HotbarButtonData button in hotbarSkills)
+            {
+                if (button.m_snoPower == activeSkills[message.Field1])
+                    button.m_snoPower = message.snoPower;
+            }
+
+            activeSkills[message.Field1] = message.snoPower;
         }
 
         public void UpdateClient(GameClient client)
@@ -307,33 +342,12 @@ namespace D3Sharp.Core.Skills
                 },
             });
 
-            client.packetId += 10 * 2;
+            client.PacketId += 10 * 2;
             client.SendMessage(new DWordDataMessage()
             {
                 Id = 0x89,
-                Field0 = client.packetId,
+                Field0 = client.PacketId,
             });
-        }
-
-        public void AssignActiveSkill(int slot, int code)
-        {
-            foreach (HotbarButtonData button in hotbarSkills)
-            {
-                if (button.m_snoPower == activeSkills[slot])
-                    button.m_snoPower = code;
-            }
-
-            activeSkills[slot] = code;
-        }
-
-        public void AssignPassiveSkill(int slot, int code)
-        {
-            passiveSkills[slot] = code;
-        }
-
-        public void AssignHotbarButton(int slot, HotbarButtonData hotbarButtonData)
-        {
-            hotbarSkills[slot] = hotbarButtonData;
         }
     }
 }

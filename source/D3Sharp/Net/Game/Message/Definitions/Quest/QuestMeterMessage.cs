@@ -18,7 +18,6 @@
 
 using System;
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Quest
 {
@@ -27,12 +26,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Quest
         public int /* sno */ snoQuest;
         public int Field1;
         public float Field2;
-
-
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

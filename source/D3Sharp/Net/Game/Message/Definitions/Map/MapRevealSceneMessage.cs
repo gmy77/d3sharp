@@ -19,7 +19,6 @@
 using System;
 using System.Text;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Map
 {
@@ -30,12 +29,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Map
         public PRTransform Field2;
         public int Field3;
         public int MiniMapVisibility;
-
-
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

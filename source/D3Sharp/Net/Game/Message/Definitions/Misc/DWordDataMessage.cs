@@ -17,20 +17,17 @@
  */
 
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Misc
 {
     [IncomingMessage(new[] {
         Opcodes.DWordDataMessage1,Opcodes.DWordDataMessage2,Opcodes.DWordDataMessage3,Opcodes.DWordDataMessage4,Opcodes.DWordDataMessage5,Opcodes.DWordDataMessage6,
         Opcodes.DWordDataMessage7,Opcodes.DWordDataMessage8,Opcodes.DWordDataMessage9,Opcodes.DWordDataMessage10,Opcodes.DWordDataMessage11})]
-    public class DWordDataMessage : GameMessage
+    public class DWordDataMessage : GameMessage, ISelfHandler
     {
         public int Field0;
 
-        public DWordDataMessage() { }
-
-        public override void Handle(GameClient client)
+        public void Handle(GameClient client)
         {
 
         }

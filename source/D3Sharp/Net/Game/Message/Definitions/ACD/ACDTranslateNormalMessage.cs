@@ -18,12 +18,11 @@
 
 using System.Text;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.ACD
 {
     [IncomingMessage(new[] { Opcodes.ACDTranslateNormalMessage1, Opcodes.ACDTranslateNormalMessage2 })]
-    public class ACDTranslateNormalMessage : GameMessage
+    public class ACDTranslateNormalMessage : GameMessage, ISelfHandler
     {
         public int Field0;
         public Vector3D Field1;
@@ -34,10 +33,10 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
         public int? Field6;
         public int? Field7;
 
-        public override void Handle(GameClient client)
+        public void Handle(GameClient client)
         {
             if (this.Field1 != null)
-                client.position = this.Field1;
+                client.Position = this.Field1;
         }
 
         public override void Parse(GameBitBuffer buffer)

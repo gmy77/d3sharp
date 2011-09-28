@@ -18,7 +18,6 @@
 
 using System;
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Connection
 {
@@ -28,16 +27,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Connection
         public int Field0;
         public int Field1;
         public int Field2;
-
-        public ConnectionEstablishedMessage()
-            : base(Opcodes.ConnectionEstablishedMessage)
-        {
-        }
-
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

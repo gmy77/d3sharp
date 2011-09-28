@@ -20,37 +20,36 @@ using System.Text;
 using D3Sharp.Core.Helpers;
 using D3Sharp.Core.NPC;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Animation
 {
     [IncomingMessage(Opcodes.SecondaryAnimationPowerMessage)]
-    public class SecondaryAnimationPowerMessage : GameMessage
+    public class SecondaryAnimationPowerMessage : GameMessage,ISelfHandler
     {
         public int /* sno */ snoPower;
         public AnimPreplayData Field1;
 
-        public override void Handle(GameClient client)
+        public void Handle(GameClient client)
         {
-            var oldPosField1 = client.position.Field1;
-            var oldPosField2 = client.position.Field2;
+            var oldPosField1 = client.Position.Field1;
+            var oldPosField2 = client.Position.Field2;
             for (var i = 0; i < 10; i++)
             {
                 if ((i % 2) == 0)
                 {
-                    client.position.Field0 += (float)(RandomHelper.NextDouble() * 20);
-                    client.position.Field1 += (float)(RandomHelper.NextDouble() * 20);
+                    client.Position.Field0 += (float)(RandomHelper.NextDouble() * 20);
+                    client.Position.Field1 += (float)(RandomHelper.NextDouble() * 20);
                 }
                 else
                 {
-                    client.position.Field0 -= (float)(RandomHelper.NextDouble() * 20);
-                    client.position.Field1 -= (float)(RandomHelper.NextDouble() * 20);
+                    client.Position.Field0 -= (float)(RandomHelper.NextDouble() * 20);
+                    client.Position.Field1 -= (float)(RandomHelper.NextDouble() * 20);
                 }
-                client.SpawnMob(BasicNPC.RandomNPC());
+                client.GameUniverse.SpawnMob(client,BasicNPC.RandomNPC());
             }
 
-            client.position.Field1 = oldPosField1;
-            client.position.Field2 = oldPosField2;
+            client.Position.Field1 = oldPosField1;
+            client.Position.Field2 = oldPosField2;
         }
 
         public override void Parse(GameBitBuffer buffer)

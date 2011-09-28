@@ -18,7 +18,6 @@
 
 using System;
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Conversation
 {
@@ -29,10 +28,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.Conversation
         public int Field2;
 
 
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public override void Parse(GameBitBuffer buffer)
         {

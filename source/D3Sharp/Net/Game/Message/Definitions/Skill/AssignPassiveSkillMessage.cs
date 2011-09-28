@@ -18,23 +18,14 @@
 
 using System;
 using System.Text;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Skill
 {
-    [IncomingMessage(Opcodes.AssignSkillMessage2)]
+    [IncomingMessage(Opcodes.AssignSkillMessage2, Consumers.Skillset)]
     public class AssignPassiveSkillMessage : GameMessage
     {
         public int /* sno */ snoPower;
         public int Field1;
-
-
-        public override void Handle(GameClient client)
-        {
-            client.Toon.skillset.AssignPassiveSkill(Field1, snoPower);
-            client.Toon.skillset.UpdateClient(client);
-            client.FlushOutgoingBuffer();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

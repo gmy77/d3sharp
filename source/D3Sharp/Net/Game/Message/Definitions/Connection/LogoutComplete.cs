@@ -19,14 +19,13 @@
 using System;
 using System.Text;
 using D3Sharp.Net.Game.Message.Definitions.Game;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Connection
 {
     [IncomingMessage(Opcodes.LogoutComplete)]
-    public class LogoutComplete:GameMessage
+    public class LogoutComplete : GameMessage,ISelfHandler
     {
-        public override void Handle(GameClient client)
+        public void Handle(GameClient client)
         {
             if (client.IsLoggingOut)
             {
@@ -49,12 +48,12 @@ namespace D3Sharp.Net.Game.Message.Definitions.Connection
 
         public override void Encode(GameBitBuffer buffer)
         {
-            throw new NotImplementedException();
+            
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

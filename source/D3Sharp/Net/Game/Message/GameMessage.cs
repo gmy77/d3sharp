@@ -22,14 +22,15 @@ using System.Reflection;
 using System.Text;
 using D3Sharp.Utils;
 
-namespace D3Sharp.Net.Game.Messages
+namespace D3Sharp.Net.Game.Message
 {
     public abstract class GameMessage
     {
         public const int ImplementedProtocolHash = 0x21EEE08D;
 
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        private static Dictionary<Opcodes, Type> Messages = new Dictionary<Opcodes, Type>();
+        private static readonly Dictionary<Opcodes, Type> MessageTypes = new Dictionary<Opcodes, Type>();
+        private static readonly Dictionary<Opcodes, Consumers> MessageConsumers = new Dictionary<Opcodes, Consumers>();
 
         static GameMessage()
         {
@@ -45,7 +46,8 @@ namespace D3Sharp.Net.Game.Messages
                     {
                         foreach (var opcode in attribute.Opcodes)
                         {
-                            Messages.Add(opcode, type);
+                            MessageTypes.Add(opcode, type);
+                            MessageConsumers.Add(opcode, attribute.Consumer);
                         }
                     }
                 }
@@ -54,21 +56,22 @@ namespace D3Sharp.Net.Game.Messages
 
         public static T Allocate<T>(Opcodes opcode) where T : GameMessage
         {
-            if (!Messages.ContainsKey(opcode))
+            if (!MessageTypes.ContainsKey(opcode))
             {
                 Logger.Debug("Unimplemented message: " + opcode.ToString());
                 return null;
             }
 
-            var msg = (T)Activator.CreateInstance(Messages[opcode]);
+            var msg = (T)Activator.CreateInstance(MessageTypes[opcode]);
             msg.Id = (int)opcode;
-            return msg;
+            msg.Consumer = MessageConsumers[opcode];
+;            return msg;
         }
 
         public static GameMessage ParseMessage(GameBitBuffer buffer)
         {
             int id = buffer.ReadInt(9);
-            var msg = GameMessage.Allocate<GameMessage>((Opcodes)id);
+            var msg = Allocate<GameMessage>((Opcodes)id);
             if (msg == null) return null;
 
             msg.Id = id;
@@ -76,21 +79,9 @@ namespace D3Sharp.Net.Game.Messages
             return msg;
         }
 
-        protected GameMessage(Opcodes opcode)
-        {
-            this.Id = (int) opcode;
-        }
-
-        protected GameMessage(int opcode)
-        {
-            this.Id = (int)opcode;
-        }
-
-        protected GameMessage(){}
-
         public int Id { get; set; }
+        public Consumers Consumer { get; set; }
 
-        public abstract void Handle(GameClient client);
         public abstract void Parse(GameBitBuffer buffer);
         public abstract void Encode(GameBitBuffer buffer);
         public abstract void AsText(StringBuilder b, int pad);
@@ -101,6 +92,6 @@ namespace D3Sharp.Net.Game.Messages
             builder.AppendLine("GameMessage(0x" + Id.ToString("X4") + ")");
             AsText(builder, 0);
             return builder.ToString();
-        }        
+        }
     }
 }

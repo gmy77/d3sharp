@@ -19,23 +19,14 @@
 using System;
 using System.Text;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Player
 {
-    [IncomingMessage(Opcodes.PlayerChangeHotbarButtonMessage)]
+    [IncomingMessage(Opcodes.PlayerChangeHotbarButtonMessage, Consumers.Skillset)]
     public class PlayerChangeHotbarButtonMessage : GameMessage
     {
         public int Field0;
         public HotbarButtonData Field1;
-
-
-        public override void Handle(GameClient client)
-        {
-            client.Toon.skillset.AssignHotbarButton(Field0, Field1);
-            client.Toon.skillset.UpdateClient(client);
-            client.FlushOutgoingBuffer();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

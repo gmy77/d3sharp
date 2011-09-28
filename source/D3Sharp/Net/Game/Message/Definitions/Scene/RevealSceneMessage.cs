@@ -19,7 +19,6 @@
 using System;
 using System.Text;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Scene
 {
@@ -34,12 +33,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Scene
         public int /* sno */ snoSceneGroup;
         // MaxLength = 256
         public int /* gbid */[] arAppliedLabels;
-
-
-        public override void Handle(GameClient client)
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

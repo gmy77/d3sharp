@@ -17,17 +17,11 @@
  */
 
 using System.Text;
-using D3Sharp.Core.Helpers;
-using D3Sharp.Net.Game.Message.Definitions.Animation;
-using D3Sharp.Net.Game.Message.Definitions.Attribute;
-using D3Sharp.Net.Game.Message.Definitions.Effect;
-using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Messages;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Combat
 {
-    [IncomingMessage(Opcodes.TargetMessage)]
+    [IncomingMessage(Opcodes.TargetMessage,Consumers.Universe)]
     public class TargetMessage : GameMessage
     {
         public int Field0;
@@ -37,165 +31,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Combat
         public int Field4;
         public int Field5;
         public AnimPreplayData Field6;
-
-        public override void Handle(GameClient client)
-        {
-            if (this.Field1 == 0x77F20036)
-            {
-                client.EnterInn();
-                return;
-            }
-            else if (client.objectIdsSpawned == null || !client.objectIdsSpawned.Contains(this.Field1)) return;
-
-            client.objectIdsSpawned.Remove(this.Field1);
-
-            var killAni = new int[]{
-                    0x2cd7,
-                    0x2cd4,
-                    0x01b378,
-                    0x2cdc,
-                    0x02f2,
-                    0x2ccf,
-                    0x2cd0,
-                    0x2cd1,
-                    0x2cd2,
-                    0x2cd3,
-                    0x2cd5,
-                    0x01b144,
-                    0x2cd6,
-                    0x2cd8,
-                    0x2cda,
-                    0x2cd9
-            };
-            client.SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = this.Field1,
-                Field1 = 0x0,
-                Field2 = 0x2,
-            });
-            client.SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = this.Field1,
-                Field1 = 0xc,
-            });
-            client.SendMessage(new PlayHitEffectMessage()
-            {
-                Id = 0x7b,
-                Field0 = this.Field1,
-                Field1 = 0x789E00E2,
-                Field2 = 0x2,
-                Field3 = false,
-            });
-
-            client.SendMessage(new FloatingNumberMessage()
-            {
-                Id = 0xd0,
-                Field0 = this.Field1,
-                Field1 = 9001.0f,
-                Field2 = 0,
-            });
-
-            client.SendMessage(new ANNDataMessage()
-            {
-                Id = 0x6d,
-                Field0 = this.Field1,
-            });
-
-            int ani = killAni[RandomHelper.Next(killAni.Length)];
-            Logger.Info("Ani used: " + ani);
-
-            client.SendMessage(new PlayAnimationMessage()
-            {
-                Id = 0x6c,
-                Field0 = this.Field1,
-                Field1 = 0xb,
-                Field2 = 0,
-                tAnim = new PlayAnimationMessageSpec[1]
-                {
-                    new PlayAnimationMessageSpec()
-                    {
-                        Field0 = 0x2,
-                        Field1 = ani,
-                        Field2 = 0x0,
-                        Field3 = 1f
-                    }
-                }
-            });
-
-            client.packetId += 10 * 2;
-            client.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = client.packetId,
-            });
-
-            client.SendMessage(new ANNDataMessage()
-            {
-                Id = 0xc5,
-                Field0 = this.Field1,
-            });
-
-            client.SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = this.Field1,
-                Field1 = new NetAttributeKeyValue
-                {
-                    Attribute = GameAttribute.Attributes[0x4d],
-                    Float = 0
-                }
-            });
-
-            client.SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = this.Field1,
-                Field1 = new NetAttributeKeyValue
-                {
-                    Attribute = GameAttribute.Attributes[0x1c2],
-                    Int = 1
-                }
-            });
-
-            client.SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = this.Field1,
-                Field1 = new NetAttributeKeyValue
-                {
-                    Attribute = GameAttribute.Attributes[0x1c5],
-                    Int = 1
-                }
-            });
-            client.SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = this.Field1,
-                Field1 = 0xc,
-            });
-            client.SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = this.Field1,
-                Field1 = 0x37,
-            });
-            client.SendMessage(new PlayHitEffectMessage()
-            {
-                Id = 0x7b,
-                Field0 = this.Field1,
-                Field1 = 0x789E00E2,
-                Field2 = 0x2,
-                Field3 = false,
-            });
-            client.packetId += 10 * 2;
-            client.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = client.packetId,
-            });
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

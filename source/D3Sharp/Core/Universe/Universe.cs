@@ -1,49 +1,94 @@
-﻿using System;
+﻿/*
+ * Copyright (C) 2011 D3Sharp Project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using D3Sharp.Core.Helpers;
+using D3Sharp.Core.Universe.Game;
+using D3Sharp.Net.Game.Message;
+using D3Sharp.Net.Game.Message.Definitions.Animation;
+using D3Sharp.Net.Game.Message.Definitions.Combat;
+using D3Sharp.Net.Game.Message.Definitions.Effect;
+using D3Sharp.Net.Game.Message.Definitions.Map;
+using D3Sharp.Net.Game.Message.Definitions.Scene;
 using D3Sharp.Utils;
 using D3Sharp.Core.Map;
 using D3Sharp.Net.Game;
-using D3Sharp.Core.Toons;
-using D3Sharp.Net.Game.Messages;
 using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Net.Game.Message.Definitions.ACD;
-using D3Sharp.Net.Game.Message.Definitions.Connection;
 using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Definitions.Player;
-using D3Sharp.Net.Game.Message.Definitions.Inventory;
 using D3Sharp.Net.Game.Message.Definitions.World;
 using D3Sharp.Net.Game.Message.Definitions.Attribute;
 
 namespace D3Sharp.Core.Universe
 {
-    public class Universe
+    public class Universe: IMessageConsumer
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
-        private List<World> Worlds;
-        private List<Toon> Players;
+        private readonly List<World> _worlds;
 
-        World GetWorld(int WorldID)
+        public GameManager GameManager { get; private set; }
+
+        public Universe()
         {
-            for (int x = 0; x < Worlds.Count; x++)
-                if (Worlds[x].WorldID == WorldID) return Worlds[x];
+            this._worlds = new List<World>();
+            this.GameManager = new GameManager(this);
 
-            World w = new World(WorldID);
-            Worlds.Add(w);
-            return w;
+            InitializeUniverse();
         }
 
-        void LoadUniverseData(string Filename)
+        public void Route(GameClient client, GameMessage message)
+        {
+            switch(message.Consumer)
+            {
+                case Consumers.Universe:
+                    this.Consume(client, message);
+                    break;
+                case Consumers.GameManager:
+                    this.GameManager.Consume(client, message);
+                    break;
+                case Consumers.Skillset:
+                    client.Toon.skillset.Consume(client, message);
+                    break;
+            }
+        }
+
+        public void Consume(GameClient client, GameMessage message)
+        {
+            if (message is TargetMessage) OnToonTargetChange(client, (TargetMessage)message);
+        }
+
+        void InitializeUniverse()
+        {
+            LoadUniverseData("Assets/Maps/universe.txt");
+        }
+
+        private void LoadUniverseData(string Filename)
         {
             if (File.Exists(Filename))
             {
                 StreamReader file = null;
                 try
                 {
-                    System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex(@"\s+");
+                    var rx = new System.Text.RegularExpressions.Regex(@"\s+");
 
                     string line;
                     file = new StreamReader(Filename);
@@ -106,1574 +151,713 @@ namespace D3Sharp.Core.Universe
             {
                 Logger.Error("Universe file {0} not found!", Filename);
             }
-            
-            
-            foreach (World w in Worlds)
+
+
+            foreach (World w in _worlds)
                 w.SortScenes();
-
         }
 
-        void InitializeUniverse()
+        public World GetWorld(int WorldID)
         {
-            LoadUniverseData("Assets/Maps/universe.txt");
-        }
+            for (int x = 0; x < _worlds.Count; x++)
+                if (_worlds[x].WorldID == WorldID) return _worlds[x];
 
-        public Universe()
+            var world = new World(WorldID);
+            _worlds.Add(world);
+            return world;
+        }       
+
+        private void OnToonTargetChange(GameClient client, TargetMessage message)
         {
-            Worlds = new List<World>();
-            Players = new List<Toon>();
-            InitializeUniverse();
-        }
-
-        public void EnterPlayer(GameClient client)
-        {
-            var currentToon = client.Toon;
-            Players.Add(currentToon);
-
-            //initialize world entry point for player to the new character entry area for now
-            currentToon.CurrentWorldID = 0x772E0000;
-            currentToon.CurrentWorldSNO = 0x115EE;
-            currentToon.PosX = 3143.75f;
-            currentToon.PosY = 2828.75f;
-            currentToon.PosZ = 59.075588f;
-
-            //reveal world to the toon
-            World w = GetWorld(currentToon.CurrentWorldID);
-            if (w != null)
+            if (message.Field1 == 0x77F20036)
             {
-                w.RevealWorld(currentToon);
+                this.EnterInn(client);
+                return;
             }
+            else if (client.ObjectIdsSpawned == null || !client.ObjectIdsSpawned.Contains(message.Field1)) return;
 
-            //handle world entry for player here, hardcoded version for now
+            client.ObjectIdsSpawned.Remove(message.Field1);
 
-            #region NewPlayer
-            client.SendMessage(new NewPlayerMessage()
+            var killAni = new int[]{
+                    0x2cd7,
+                    0x2cd4,
+                    0x01b378,
+                    0x2cdc,
+                    0x02f2,
+                    0x2ccf,
+                    0x2cd0,
+                    0x2cd1,
+                    0x2cd2,
+                    0x2cd3,
+                    0x2cd5,
+                    0x01b144,
+                    0x2cd6,
+                    0x2cd8,
+                    0x2cda,
+                    0x2cd9
+            };
+            client.SendMessage(new PlayEffectMessage()
             {
-                Id = 0x0031,
-                Field0 = 0x00000000, //Party frame (0x00000000 hide, 0x00000001 show)
-                Field1 = "", //Owner name?
-                ToonName = currentToon.Name,
-                Field3 = 0x00000002, //party frame class 
-                Field4 = 0x00000004, //party frame level
-                snoActorPortrait = currentToon.ClassSNO, //party frame portrait
-                Field6 = 0x00000001,
-                #region HeroStateData
-                Field7 = new HeroStateData()
-                {
-                    Field0 = 0x00000000,
-                    Field1 = 0x00000000,
-                    Field2 = 0x00000000,
-                    Field3 = currentToon.Gender,
-                    Field4 = new PlayerSavedData()
-                    {
-                        #region HotBarButtonData
-                        Field0 = currentToon.skillset.hotbarSkills,
-                        #endregion
-                        #region SkillKeyMapping
-                        Field1 = new SkillKeyMapping[15]
-            {
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-                 new SkillKeyMapping()
-                 {
-                    Power = -1,
-                    Field1 = -1,
-                    Field2 = 0x00000000,
-                 },
-            },
-                        #endregion
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000001,
-                        #region HirelingSavedData
-                        Field4 = new HirelingSavedData()
-                        {
-                            Field0 = new HirelingInfo[4]
-                {
-                     new HirelingInfo()
-                     {
-                        Field0 = 0x00000000,
-                        Field1 = -1,
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000000,
-                        Field4 = false,
-                        Field5 = -1,
-                        Field6 = -1,
-                        Field7 = -1,
-                        Field8 = -1,
-                     },
-                     new HirelingInfo()
-                     {
-                        Field0 = 0x00000000,
-                        Field1 = -1,
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000000,
-                        Field4 = false,
-                        Field5 = -1,
-                        Field6 = -1,
-                        Field7 = -1,
-                        Field8 = -1,
-                     },
-                     new HirelingInfo()
-                     {
-                        Field0 = 0x00000000,
-                        Field1 = -1,
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000000,
-                        Field4 = false,
-                        Field5 = -1,
-                        Field6 = -1,
-                        Field7 = -1,
-                        Field8 = -1,
-                     },
-                     new HirelingInfo()
-                     {
-                        Field0 = 0x00000000,
-                        Field1 = -1,
-                        Field2 = 0x00000000,
-                        Field3 = 0x00000000,
-                        Field4 = false,
-                        Field5 = -1,
-                        Field6 = -1,
-                        Field7 = -1,
-                        Field8 = -1,
-                     },
-                },
-                            Field1 = 0x00000000,
-                            Field2 = 0x00000000,
-                        },
-                        #endregion
-                        Field5 = 0x00000000,
-                        #region LearnedLore
-                        Field6 = new LearnedLore()
-                        {
-                            Field0 = 0x00000000,
-                            m_snoLoreLearned = new int[256]
-                {
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-                },
-                        },
-                        #endregion
-                        #region snoActiveSkills
-                        snoActiveSkills = currentToon.skillset.activeSkills,
-                        #endregion
-                        #region snoTraits
-                        snoTraits = currentToon.skillset.passiveSkills,
-                        #endregion
-                        #region SavePointData
-                        Field9 = new SavePointData()
-                        {
-                            snoWorld = -1,
-                            Field1 = -1,
-                        },
-                        #endregion
-                        #region SeenTutorials
-                        m_SeenTutorials = new int[64]
-            {
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-                -1, -1, -1, -1, -1, -1, -1, -1, 
-            },
-                        #endregion
-                    },
-                    Field5 = 0x00000000,
-                    #region PlayerQuestRewardHistoryEntry
-                    tQuestRewardHistory = new PlayerQuestRewardHistoryEntry[0]
-        {
-        },
-                    #endregion
-                },
-                #endregion
-                Field8 = false, //announce party join
-                Field9 = 0x00000001,
-                Field10 = 0x789E00E2,
+                Id = 0x7a,
+                Field0 = message.Field1,
+                Field1 = 0x0,
+                Field2 = 0x2,
             });
-            #endregion
-
-            Console.WriteLine("Positioning character at " + currentToon.PosX + " " + currentToon.PosY + " " + currentToon.PosZ);
-
-            #region ACDEnterKnown 0x789E00E2 PlayerId??
-            client.SendMessage(new ACDEnterKnownMessage()
+            client.SendMessage(new PlayEffectMessage()
             {
-                Id = 0x003B,
-                Field0 = 0x789E00E2,
-                Field1 = currentToon.ClassSNO, //Player model?
-                Field2 = 0x00000009,
-                Field3 = 0x00000000,
-                Field4 = new WorldLocationMessageData()
-                {
-                    Field0 = currentToon.ModelScale,
-                    Field1 = new PRTransform()
-                    {
-                        Field0 = new Quaternion()
-                        {
-                            Field0 = 0.05940768f,
-                            Field1 = new Vector3D()
-                            {
-                                Field0 = 0f,
-                                Field1 = 0f,
-                                Field2 = 0.9982339f,
-                            },
-                        },
-                        Field1 = new Vector3D()
-                        {
-                            Field0 = currentToon.PosX,
-                            Field1 = currentToon.PosY,
-                            Field2 = currentToon.PosZ,
-                        },
-                    },
-                    Field2 = currentToon.CurrentWorldID,
-                },
-                Field5 = null,
-                Field6 = new GBHandle()
-                {
-                    Field0 = 0x00000007,
-                    Field1 = currentToon.ClassID,
-                },
-                Field7 = -1,
-                Field8 = -1,
-                Field9 = 0x00000000,
-                Field10 = 0x00,
+                Id = 0x7a,
+                Field0 = message.Field1,
+                Field1 = 0xc,
+            });
+            client.SendMessage(new PlayHitEffectMessage()
+            {
+                Id = 0x7b,
+                Field0 = message.Field1,
+                Field1 = 0x789E00E2,
+                Field2 = 0x2,
+                Field3 = false,
             });
 
-            client.SendMessage(new ACDCollFlagsMessage()
+            client.SendMessage(new FloatingNumberMessage()
             {
-                Id = 0x00A6,
-                Field0 = 0x789E00E2,
-                Field1 = 0x00000000,
-            });
-
-            client.SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = 0x789E00E2,
-                atKeyVals = new NetAttributeKeyValue[15]
-    {
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x01F8], // SkillKit 
-            Int = currentToon.SkillKit,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00033C40,
-            Attribute = GameAttribute.Attributes[0x01CC], // Buff_Active 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00007545,
-            Attribute = GameAttribute.Attributes[0x0041], // Skill 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00007545,
-            Attribute = GameAttribute.Attributes[0x0042], // Skill_Total 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000226,
-            Attribute = GameAttribute.Attributes[0x003E], // Resistance_Total 
-            Int = 0x00000000,
-            Float = 0.5f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000226,
-            Attribute = GameAttribute.Attributes[0x003C], // Resistance 
-            Int = 0x00000000,
-            Float = 0.5f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x00D7], // Immobolize 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x00D6], // Untargetable 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000076B7,
-            Attribute = GameAttribute.Attributes[0x0042], // Skill_Total 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000076B7,
-            Attribute = GameAttribute.Attributes[0x0041], // Skill 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000006DF,
-            Attribute = GameAttribute.Attributes[0x0041], // Skill 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x0000CE11,
-            Attribute = GameAttribute.Attributes[0x01CC], // Buff_Active 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x01D2], // CantStartDisplayedPowers 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000216FA,
-            Attribute = GameAttribute.Attributes[0x0042], // Skill_Total 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000176C4,
-            Attribute = GameAttribute.Attributes[0x0041], // Skill 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-    },
-            });
-
-            client.SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = 0x789E00E2,
-                atKeyVals = new NetAttributeKeyValue[15]
-    {
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000216FA,
-            Attribute = GameAttribute.Attributes[0x0041], // Skill 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000176C4,
-            Attribute = GameAttribute.Attributes[0x0042], // Skill_Total 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000006DF,
-            Attribute = GameAttribute.Attributes[0x0042], // Skill_Total 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000000DE,
-            Attribute = GameAttribute.Attributes[0x003C], // Resistance 
-            Int = 0x00000000,
-            Float = 0.5f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000000DE,
-            Attribute = GameAttribute.Attributes[0x003E], // Resistance_Total 
-            Int = 0x00000000,
-            Float = 0.5f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x00C8], // Get_Hit_Recovery 
-            Int = 0x00000000,
-            Float = 6f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x00C7], // Get_Hit_Recovery_Per_Level 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x00C6], // Get_Hit_Recovery_Base 
-            Int = 0x00000000,
-            Float = 5f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00007780,
-            Attribute = GameAttribute.Attributes[0x0041], // Skill 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x00C5], // Get_Hit_Max 
-            Int = 0x00000000,
-            Float = 60f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00007780,
-            Attribute = GameAttribute.Attributes[0x0042], // Skill_Total 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x00C4], // Get_Hit_Max_Per_Level 
-            Int = 0x00000000,
-            Float = 10f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x00C3], // Get_Hit_Max_Base 
-            Int = 0x00000000,
-            Float = 50f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x003E], // Resistance_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000001,
-            Attribute = GameAttribute.Attributes[0x003E], // Resistance_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-    },
-            });
-
-            client.SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = 0x789E00E2,
-                atKeyVals = new NetAttributeKeyValue[15]
-    {
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000002,
-            Attribute = GameAttribute.Attributes[0x003E], // Resistance_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000003,
-            Attribute = GameAttribute.Attributes[0x003E], // Resistance_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000004,
-            Attribute = GameAttribute.Attributes[0x003E], // Resistance_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000005,
-            Attribute = GameAttribute.Attributes[0x003E], // Resistance_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000006,
-            Attribute = GameAttribute.Attributes[0x003E], // Resistance_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x00BE], // Dodge_Rating_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x02BA], // IsTrialActor 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000FFFFF,
-            Attribute = GameAttribute.Attributes[0x01B9], // Buff_Visual_Effect 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x00A8], // Crit_Percent_Cap 
-            Int = 0x3F400000,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = currentToon.ResourceID,
-            Attribute = GameAttribute.Attributes[0x005E], // Resource_Cur 
-            Int = 0x43480000,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = currentToon.ResourceID,
-            Attribute = GameAttribute.Attributes[0x005F], // Resource_Max 
-            Int = 0x00000000,
-            Float = 200f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = currentToon.ResourceID,
-            Attribute = GameAttribute.Attributes[0x0061], // Resource_Max_Total 
-            Int = 0x43480000,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x009D], // Damage_Weapon_Min_Total_All 
-            Int = 0x00000000,
-            Float = 2f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0099], // Damage_Weapon_Delta_Total_All 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = currentToon.ResourceID,
-            Attribute = GameAttribute.Attributes[0x0068], // Resource_Regen_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-    },
-            });
-
-            client.SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = 0x789E00E2,
-                atKeyVals = new NetAttributeKeyValue[15]
-    {
-         new NetAttributeKeyValue()
-         {
-            Field0 = currentToon.ResourceID,
-            Attribute = GameAttribute.Attributes[0x006B], // Resource_Effective_Max 
-            Int = 0x00000000,
-            Float = 200f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000FFFFF,
-            Attribute = GameAttribute.Attributes[0x0092], // Damage_Min_Subtotal 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000FFFFF,
-            Attribute = GameAttribute.Attributes[0x0091], // Damage_Min_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000FFFFF,
-            Attribute = GameAttribute.Attributes[0x0190], // Damage_Weapon_Min_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x018F], // Attacks_Per_Second_Item_CurrentHand 
-            Int = 0x00000000,
-            Float = 1.199219f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0189], // Attacks_Per_Second_Item_Total_MainHand 
-            Int = 0x00000000,
-            Float = 1.199219f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0089], // Attacks_Per_Second_Total 
-            Int = 0x00000000,
-            Float = 1.199219f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0087], // Attacks_Per_Second 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0187], // Attacks_Per_Second_Item_MainHand 
-            Int = 0x00000000,
-            Float = 1.199219f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0086], // Attacks_Per_Second_Item_Total 
-            Int = 0x00000000,
-            Float = 1.199219f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00033C40,
-            Attribute = GameAttribute.Attributes[0x01BE], // Buff_Icon_End_Tick0 
-            Int = 0x000003FB,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0084], // Attacks_Per_Second_Item_Subtotal 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0082], // Attacks_Per_Second_Item 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00033C40,
-            Attribute = GameAttribute.Attributes[0x01BA], // Buff_Icon_Start_Tick0 
-            Int = 0x00000077,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0081], // Hit_Chance 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-    },
-            });
-
-            client.SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = 0x789E00E2,
-                atKeyVals = new NetAttributeKeyValue[15]
-    {
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x007F], // Casting_Speed_Total 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x007D], // Casting_Speed 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x007B], // Movement_Scalar_Total 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x0002EC66,
-            Attribute = GameAttribute.Attributes[0x0042], // Skill_Total 
-            Int = 0x00000000,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0079], // Movement_Scalar_Capped_Total 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0078], // Movement_Scalar_Subtotal 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0076], // Strafing_Rate_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0075], // Sprinting_Rate_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0074], // Running_Rate_Total 
-            Int = 0x00000000,
-            Float = 0.3598633f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x018B], // Damage_Weapon_Min_Total_MainHand 
-            Int = 0x00000000,
-            Float = 2f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0073], // Walking_Rate_Total 
-            Int = 0x00000000,
-            Float = 0.2797852f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x018D], // Damage_Weapon_Delta_Total_MainHand 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000001,
-            Attribute = GameAttribute.Attributes[0x008E], // Damage_Delta_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000002,
-            Attribute = GameAttribute.Attributes[0x008E], // Damage_Delta_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000003,
-            Attribute = GameAttribute.Attributes[0x008E], // Damage_Delta_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-    },
-            });
-
-            client.SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = 0x789E00E2,
-                atKeyVals = new NetAttributeKeyValue[15]
-    {
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000004,
-            Attribute = GameAttribute.Attributes[0x008E], // Damage_Delta_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000005,
-            Attribute = GameAttribute.Attributes[0x008E], // Damage_Delta_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000006,
-            Attribute = GameAttribute.Attributes[0x008E], // Damage_Delta_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x008E], // Damage_Delta_Total 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0070], // Running_Rate 
-            Int = 0x00000000,
-            Float = 0.3598633f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000001,
-            Attribute = GameAttribute.Attributes[0x0190], // Damage_Weapon_Min_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000002,
-            Attribute = GameAttribute.Attributes[0x0190], // Damage_Weapon_Min_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000003,
-            Attribute = GameAttribute.Attributes[0x0190], // Damage_Weapon_Min_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000004,
-            Attribute = GameAttribute.Attributes[0x0190], // Damage_Weapon_Min_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000005,
-            Attribute = GameAttribute.Attributes[0x0190], // Damage_Weapon_Min_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000006,
-            Attribute = GameAttribute.Attributes[0x0190], // Damage_Weapon_Min_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x0190], // Damage_Weapon_Min_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 2f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x006F], // Walking_Rate 
-            Int = 0x00000000,
-            Float = 0.2797852f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000001,
-            Attribute = GameAttribute.Attributes[0x0091], // Damage_Min_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000002,
-            Attribute = GameAttribute.Attributes[0x0091], // Damage_Min_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-    },
-            });
-
-            client.SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = 0x789E00E2,
-                atKeyVals = new NetAttributeKeyValue[15]
-    {
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000003,
-            Attribute = GameAttribute.Attributes[0x0091], // Damage_Min_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000004,
-            Attribute = GameAttribute.Attributes[0x0091], // Damage_Min_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000005,
-            Attribute = GameAttribute.Attributes[0x0091], // Damage_Min_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000006,
-            Attribute = GameAttribute.Attributes[0x0091], // Damage_Min_Total 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000001,
-            Attribute = GameAttribute.Attributes[0x0191], // Damage_Weapon_Delta_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000002,
-            Attribute = GameAttribute.Attributes[0x0191], // Damage_Weapon_Delta_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000003,
-            Attribute = GameAttribute.Attributes[0x0191], // Damage_Weapon_Delta_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000004,
-            Attribute = GameAttribute.Attributes[0x0191], // Damage_Weapon_Delta_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000005,
-            Attribute = GameAttribute.Attributes[0x0191], // Damage_Weapon_Delta_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000006,
-            Attribute = GameAttribute.Attributes[0x0191], // Damage_Weapon_Delta_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x0091], // Damage_Min_Total 
-            Int = 0x00000000,
-            Float = 2f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x0191], // Damage_Weapon_Delta_Total_CurrentHand 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x006E], // Movement_Scalar 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000001,
-            Attribute = GameAttribute.Attributes[0x0092], // Damage_Min_Subtotal 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000002,
-            Attribute = GameAttribute.Attributes[0x0092], // Damage_Min_Subtotal 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-    },
-            });
-
-            client.SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = 0x789E00E2,
-                atKeyVals = new NetAttributeKeyValue[15]
-    {
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000003,
-            Attribute = GameAttribute.Attributes[0x0092], // Damage_Min_Subtotal 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000004,
-            Attribute = GameAttribute.Attributes[0x0092], // Damage_Min_Subtotal 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000005,
-            Attribute = GameAttribute.Attributes[0x0092], // Damage_Min_Subtotal 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000006,
-            Attribute = GameAttribute.Attributes[0x0092], // Damage_Min_Subtotal 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x0092], // Damage_Min_Subtotal 
-            Int = 0x00000000,
-            Float = 2f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x0094], // Damage_Weapon_Delta 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x0095], // Damage_Weapon_Delta_SubTotal 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x0096], // Damage_Weapon_Max 
-            Int = 0x00000000,
-            Float = 3f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x0097], // Damage_Weapon_Max_Total 
-            Int = 0x00000000,
-            Float = 3f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x0098], // Damage_Weapon_Delta_Total 
-            Int = 0x00000000,
-            Float = 1f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x0000CE11,
-            Attribute = GameAttribute.Attributes[0x027B], // Trait 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x009B], // Damage_Weapon_Min 
-            Int = 0x00000000,
-            Float = 2f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00000000,
-            Attribute = GameAttribute.Attributes[0x009C], // Damage_Weapon_Min_Total 
-            Int = 0x00000000,
-            Float = 2f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x0000CE11,
-            Attribute = GameAttribute.Attributes[0x0041], // Skill 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x0000CE11,
-            Attribute = GameAttribute.Attributes[0x0042], // Skill_Total 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-    },
-            });
-
-            client.SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = 0x789E00E2,
-                atKeyVals = new NetAttributeKeyValue[15]
-    {
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x005C], // Resource_Type_Primary 
-            Int = currentToon.ResourceID,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0056], // Hitpoints_Max_Total 
-            Int = 0x00000000,
-            Float = 76f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0054], // Hitpoints_Max 
-            Int = 0x00000000,
-            Float = 40f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0051], // Hitpoints_Total_From_Level 
-            Int = 0x00000000,
-            Float = 3.051758E-05f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0050], // Hitpoints_Total_From_Vitality 
-            Int = 0x00000000,
-            Float = 36f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x004F], // Hitpoints_Factor_Vitality 
-            Int = 0x00000000,
-            Float = 4f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x004E], // Hitpoints_Factor_Level 
-            Int = 0x00000000,
-            Float = 4f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x004D], // Hitpoints_Cur 
-            Int = 0x00000000,
-            Float = 76f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x024C], // Disabled 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0046], // Loading 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0045], // Invulnerable 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0043], // TeamID 
-            Int = 0x00000002,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000FFFFF,
-            Attribute = GameAttribute.Attributes[0x0042], // Skill_Total 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x000FFFFF,
-            Attribute = GameAttribute.Attributes[0x0041], // Skill 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x0000CE11,
-            Attribute = GameAttribute.Attributes[0x0230], // Buff_Icon_Count0 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-    },
-            });
-
-            client.SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = 0x789E00E2,
-                atKeyVals = new NetAttributeKeyValue[14]
-    {
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x012C], // Hidden 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0027], // Level_Cap 
-            Int = 0x0000000D,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0026], // Level 
-            Int = currentToon.Level,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0022], // Experience_Next 
-            Int = 0x000004B0,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0021], // Experience_Granted 
-            Int = 0x000003E8,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0020], // Armor_Total 
-            Int = 0x00000000,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x000C], // Defense 
-            Int = 0x00000000,
-            Float = 10f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Field0 = 0x00033C40,
-            Attribute = GameAttribute.Attributes[0x0230], // Buff_Icon_Count0 
-            Int = 0x00000001,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x000B], // Vitality 
-            Int = 0x00000000,
-            Float = 9f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x000A], // Precision 
-            Int = 0x00000000,
-            Float = 11f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0009], // Attack 
-            Int = 0x00000000,
-            Float = 10f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0008], // Shared_Stash_Slots 
-            Int = 0x0000000E,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0007], // Backpack_Slots 
-            Int = 0x0000003C,
-            Float = 0f,
-         },
-         new NetAttributeKeyValue()
-         {
-            Attribute = GameAttribute.Attributes[0x0103], // General_Cooldown 
-            Int = 0x00000000,
-            Float = 0f,
-         },
-    },
-            });
-
-            client.SendMessage(new ACDGroupMessage()
-            {
-                Id = 0x00B8,
-                Field0 = 0x789E00E2,
-                Field1 = -1,
-                Field2 = -1,
+                Id = 0xd0,
+                Field0 = message.Field1,
+                Field1 = 9001.0f,
+                Field2 = 0,
             });
 
             client.SendMessage(new ANNDataMessage()
             {
-                Id = 0x003E,
-                Field0 = 0x789E00E2,
+                Id = 0x6d,
+                Field0 = message.Field1,
             });
 
-            client.SendMessage(new ACDTranslateFacingMessage()
+            int ani = killAni[RandomHelper.Next(killAni.Length)];
+            Logger.Info("Ani used: " + ani);
+
+            client.SendMessage(new PlayAnimationMessage()
             {
-                Id = 0x0070,
-                Field0 = 0x789E00E2,
-                Field1 = 3.022712f,
-                Field2 = false,
+                Id = 0x6c,
+                Field0 = message.Field1,
+                Field1 = 0xb,
+                Field2 = 0,
+                tAnim = new PlayAnimationMessageSpec[1]
+                {
+                    new PlayAnimationMessageSpec()
+                    {
+                        Field0 = 0x2,
+                        Field1 = ani,
+                        Field2 = 0x0,
+                        Field3 = 1f
+                    }
+                }
             });
 
-            client.SendMessage(new PlayerEnterKnownMessage()
+            client.PacketId += 10 * 2;
+            client.SendMessage(new DWordDataMessage()
             {
-                Id = 0x003D,
-                Field0 = 0x00000000,
+                Id = 0x89,
+                Field0 = client.PacketId,
+            });
+
+            client.SendMessage(new ANNDataMessage()
+            {
+                Id = 0xc5,
+                Field0 = message.Field1,
+            });
+
+            client.SendMessage(new AttributeSetValueMessage
+            {
+                Id = 0x4c,
+                Field0 = message.Field1,
+                Field1 = new NetAttributeKeyValue
+                {
+                    Attribute = GameAttribute.Attributes[0x4d],
+                    Float = 0
+                }
+            });
+
+            client.SendMessage(new AttributeSetValueMessage
+            {
+                Id = 0x4c,
+                Field0 = message.Field1,
+                Field1 = new NetAttributeKeyValue
+                {
+                    Attribute = GameAttribute.Attributes[0x1c2],
+                    Int = 1
+                }
+            });
+
+            client.SendMessage(new AttributeSetValueMessage
+            {
+                Id = 0x4c,
+                Field0 = message.Field1,
+                Field1 = new NetAttributeKeyValue
+                {
+                    Attribute = GameAttribute.Attributes[0x1c5],
+                    Int = 1
+                }
+            });
+            client.SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = message.Field1,
+                Field1 = 0xc,
+            });
+            client.SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = message.Field1,
+                Field1 = 0x37,
+            });
+            client.SendMessage(new PlayHitEffectMessage()
+            {
+                Id = 0x7b,
+                Field0 = message.Field1,
                 Field1 = 0x789E00E2,
+                Field2 = 0x2,
+                Field3 = false,
             });
-
-            client.SendMessage(new VisualInventoryMessage()
+            client.PacketId += 10 * 2;
+            client.SendMessage(new DWordDataMessage()
             {
-                Id = 0x004E,
-                Field0 = 0x789E00E2,
-                Field1 = new VisualEquipment()
-                {
-                    Field0 = new VisualItem[8]
+                Id = 0x89,
+                Field0 = client.PacketId,
+            });
+        }
+
+        private void EnterInn(GameClient client)
         {
-             new VisualItem() //Head
-             {
-                Field0 = currentToon.Equipment.VisualItemList[0].Gbid,
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-                Field3 = -1,
-             },
-             new VisualItem() //Chest
-             {
-                Field0 = currentToon.Equipment.VisualItemList[1].Gbid,
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-                Field3 = -1,
-             },
-             new VisualItem() //Feet
-             {
-                Field0 = currentToon.Equipment.VisualItemList[2].Gbid,
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-                Field3 = -1,
-             },
-             new VisualItem() //Hands
-             {
-                Field0 = currentToon.Equipment.VisualItemList[3].Gbid,
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-                Field3 = -1,
-             },
-             new VisualItem() //Main hand
-             {
-                Field0 = currentToon.Equipment.VisualItemList[4].Gbid,
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-                Field3 = -1,
-             },
-             new VisualItem() //Offhand
-             {
-                Field0 = currentToon.Equipment.VisualItemList[5].Gbid,
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-                Field3 = -1,
-             },
-             new VisualItem() //Shoulders
-             {
-                Field0 = currentToon.Equipment.VisualItemList[6].Gbid,
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-                Field3 = -1,
-             },
-             new VisualItem() //Legs
-             {
-                Field0 = currentToon.Equipment.VisualItemList[7].Gbid,
-                Field1 = 0x00000000,
-                Field2 = 0x00000000,
-                Field3 = -1,
-             },
-        },
-                },
+            client.SendMessage(new RevealWorldMessage()
+            {
+                Id = 0x037,
+                Field0 = 0x772F0001,
+                Field1 = 0x0001AB32,
             });
 
-            client.SendMessage(new PlayerActorSetInitialMessage()
+            client.SendMessage(new WorldStatusMessage()
             {
-                Id = 0x0039,
-                Field0 = 0x789E00E2,
-                Field1 = 0x00000000,
+                Id = 0x0B4,
+                Field0 = 0x772F0001,
+                Field1 = false,
             });
-            client.SendMessage(new SNONameDataMessage()
+
+            client.SendMessage(new EnterWorldMessage()
             {
-                Id = 0x00D3,
-                Field0 = new SNOName()
+                Id = 0x0033,
+                Field0 = new Vector3D()
                 {
-                    Field0 = 0x00000001,
-                    Field1 = currentToon.ClassSNO,
+                    Field0 = 83.75f,
+                    Field1 = 123.75f,
+                    Field2 = 0.2000023f,
                 },
+                Field1 = 0x772F0001,
+                Field2 = 0x0001AB32,
+            });
+
+            client.FlushOutgoingBuffer();
+
+            client.SendMessage(new RevealSceneMessage()
+            {
+                Id = 0x0034,
+                WorldID = 0x772F0001,
+                SceneSpec = new SceneSpecification()
+                {
+                    Field0 = 0x00000000,
+                    Field1 = new IVector2D()
+                    {
+                        Field0 = 0x00000000,
+                        Field1 = 0x00000000,
+                    },
+                    arSnoLevelAreas = new int[] { 0x0001AB91, unchecked((int)0xFFFFFFFF), unchecked((int)0xFFFFFFFF), unchecked((int)0xFFFFFFFF) },
+                    snoPrevWorld = 0x000115EE,
+                    Field4 = 0x000000DF,
+                    snoPrevLevelArea = unchecked((int)0xFFFFFFFF),
+                    snoNextWorld = 0x00015348,
+                    Field7 = 0x000000AC,
+                    snoNextLevelArea = unchecked((int)0xFFFFFFFF),
+                    snoMusic = 0x000206F8,
+                    snoCombatMusic = unchecked((int)0xFFFFFFFF),
+                    snoAmbient = 0x0002C68A,
+                    snoReverb = 0x00021ABA,
+                    snoWeather = 0x00017869,
+                    snoPresetWorld = 0x0001AB32,
+                    Field15 = 0x00000000,
+                    Field16 = 0x00000000,
+                    Field17 = 0x00000000,
+                    Field18 = unchecked((int)0xFFFFFFFF),
+                    tCachedValues = new SceneCachedValues()
+                    {
+                        Field0 = 0x0000003F,
+                        Field1 = 0x00000060,
+                        Field2 = 0x00000060,
+                        Field3 = new AABB()
+                        {
+                            Field0 = new Vector3D()
+                            {
+                                Field0 = 120f,
+                                Field1 = 120f,
+                                Field2 = 26.61507f,
+                            },
+                            Field1 = new Vector3D()
+                            {
+                                Field0 = 120f,
+                                Field1 = 120f,
+                                Field2 = 36.06968f,
+                            }
+                        },
+                        Field4 = new AABB()
+                        {
+                            Field0 = new Vector3D()
+                            {
+                                Field0 = 120f,
+                                Field1 = 120f,
+                                Field2 = 26.61507f,
+                            },
+                            Field1 = new Vector3D()
+                            {
+                                Field0 = 120f,
+                                Field1 = 120f,
+                                Field2 = 36.06968f,
+                            }
+                        },
+                        Field5 = new int[] { 0x00000267, 0x00000000, 0x00000000, 0x00000000, },
+                        Field6 = 0x00000001
+                    }
+                },
+                ChunkID = 0x78740120,
+                snoScene = 0x0001AB2F,
+                Position = new PRTransform()
+                {
+                    Field0 = new Quaternion()
+                    {
+                        Field0 = 1f,
+                        Field1 = new Vector3D()
+                        {
+                            Field0 = 0f,
+                            Field1 = 0f,
+                            Field2 = 0f,
+                        }
+                    },
+                    Field1 = new Vector3D()
+                    {
+                        Field0 = 0f,
+                        Field1 = 0f,
+                        Field2 = 0f,
+                    }
+                },
+                ParentChunkID = unchecked((int)0xFFFFFFFF),
+                snoSceneGroup = unchecked((int)0xFFFFFFFF),
+                arAppliedLabels = new int[0]
+
+            });
+            client.FlushOutgoingBuffer();
+
+            client.SendMessage(new MapRevealSceneMessage()
+            {
+                Id = 0x044,
+                ChunkID = 0x78740120,
+                snoScene = 0x0001AB2F,
+                Field2 = new PRTransform()
+                {
+                    Field0 = new Quaternion()
+                    {
+                        Field0 = 1f,
+                        Field1 = new Vector3D()
+                        {
+                            Field0 = 0f,
+                            Field1 = 0f,
+                            Field2 = 0f,
+                        }
+                    },
+                    Field1 = new Vector3D()
+                    {
+                        Field0 = 0f,
+                        Field1 = 0f,
+                        Field2 = 0f,
+                    }
+                },
+                Field3 = 0x772F0001,
+                MiniMapVisibility = 0
+            });
+            client.FlushOutgoingBuffer();
+
+            client.SendMessage(new ACDEnterKnownMessage
+            {
+                Id = 0x3B,
+                Field0 = 0x7A0800A2,
+                Field1 = 0x0000157F,
+                Field2 = 8,
+                Field3 = 0,
+                Field4 = new WorldLocationMessageData
+                {
+                    Field0 = 1f,
+                    Field1 = new PRTransform
+                    {
+                        Field0 = new Quaternion
+                        {
+                            Field0 = 0.9909708f,
+                            Field1 = new Vector3D
+                            {
+                                Field0 = 0f,
+                                Field1 = 0f,
+                                Field2 = 0.1340775f
+                            }
+                        },
+                        Field1 = new Vector3D
+                        {
+                            Field0 = 82.15131f,
+                            Field1 = 122.2867f,
+                            Field2 = 0.1000366f
+                        }
+                    },
+                    Field2 = 0x772F0001
+                },
+                Field6 = new GBHandle
+                {
+                    Field0 = -1,
+                    Field1 = unchecked((int)0xFFFFFFFF)
+                },
+                Field7 = 0x00000001,
+                Field8 = 0x0000157F,
+                Field9 = 0,
+                Field10 = 0x0,
+                Field12 = 0x0001AB8C,
+                Field13 = 0x00000000
+            });
+
+            client.FlushOutgoingBuffer();
+            client.SendMessage(new AffixMessage()
+            {
+                Id = 0x48,
+                Field0 = 0x7A0800A2,
+                Field1 = 1,
+                aAffixGBIDs = new int[0]
+            });
+            client.FlushOutgoingBuffer();
+
+            client.SendMessage(new AffixMessage()
+            {
+                Id = 0x48,
+                Field0 = 0x7A0800A2,
+                Field1 = 2,
+                aAffixGBIDs = new int[0]
+            });
+            client.FlushOutgoingBuffer();
+
+            client.SendMessage(new PlayerWarpedMessage()
+            {
+                Id = 0x0B1,
+                Field0 = 9,
+                Field1 = 0xf,
+            });
+            client.FlushOutgoingBuffer();
+
+            client.SendMessage(new ACDWorldPositionMessage
+            {
+                Id = 0x3f,
+                Field0 = 0x789E00E2,
+                Field1 = new WorldLocationMessageData
+                {
+                    Field0 = 1.43f,
+                    Field1 = new PRTransform
+                    {
+                        Field0 = new Quaternion
+                        {
+                            Field0 = 0.05940768f,
+                            Field1 = new Vector3D
+                            {
+                                Field0 = 0f,
+                                Field1 = 0f,
+                                Field2 = 0.9982339f,
+                            }
+                        },
+                        Field1 = new Vector3D
+                        {
+                            Field0 = 82.15131f,
+                            Field1 = 122.2867f,
+                            Field2 = 0.1000366f
+                        }
+                    },
+                    Field2 = 0x772F0001
+                }
+            });
+
+            client.PacketId += 10 * 2;
+            client.SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = client.PacketId,
+            });
+            client.FlushOutgoingBuffer();
+        }
+
+        public void SpawnMob(GameClient client, int mobId) // this shoudn't even rely on client or it's position though i know this is just a hack atm ;) /raist.
+        {
+            int nId = mobId;
+            if (client.Position == null)
+                return;
+
+            if (client.ObjectIdsSpawned == null)
+            {
+                client.ObjectIdsSpawned = new List<int>();
+                client.ObjectIdsSpawned.Add(client.ObjectId - 100);
+                client.ObjectIdsSpawned.Add(client.ObjectId);
+            }
+
+            client.ObjectId++;
+            client.ObjectIdsSpawned.Add(client.ObjectId);
+
+            #region ACDEnterKnown Hittable Zombie
+            client.SendMessage(new ACDEnterKnownMessage()
+            {
+                Id = 0x003B,
+                Field0 = client.ObjectId,
+                Field1 = nId,
+                Field2 = 0x8,
+                Field3 = 0x0,
+                Field4 = new WorldLocationMessageData()
+                {
+                    Field0 = 1.35f,
+                    Field1 = new PRTransform()
+                    {
+                        Field0 = new Quaternion()
+                        {
+                            Field0 = 0.768145f,
+                            Field1 = new Vector3D()
+                            {
+                                Field0 = 0f,
+                                Field1 = 0f,
+                                Field2 = -0.640276f,
+                            },
+                        },
+                        Field1 = new Vector3D()
+                        {
+                            Field0 = client.Position.Field0 + 5,
+                            Field1 = client.Position.Field1 + 5,
+                            Field2 = client.Position.Field2,
+                        },
+                    },
+                    Field2 = 0x772E0000,
+                },
+                Field5 = null,
+                Field6 = new GBHandle()
+                {
+                    Field0 = 1,
+                    Field1 = 1,
+                },
+                Field7 = 0x00000001,
+                Field8 = nId,
+                Field9 = 0x0,
+                Field10 = 0x0,
+                Field11 = 0x0,
+                Field12 = 0x0,
+                Field13 = 0x0
+            });
+            client.SendMessage(new AffixMessage()
+            {
+                Id = 0x48,
+                Field0 = client.ObjectId,
+                Field1 = 0x1,
+                aAffixGBIDs = new int[0]
+            });
+            client.SendMessage(new AffixMessage()
+            {
+                Id = 0x48,
+                Field0 = client.ObjectId,
+                Field1 = 0x2,
+                aAffixGBIDs = new int[0]
+            });
+            client.SendMessage(new ACDCollFlagsMessage
+            {
+                Id = 0xa6,
+                Field0 = client.ObjectId,
+                Field1 = 0x1
+            });
+
+            client.SendMessage(new AttributesSetValuesMessage
+            {
+                Id = 0x4d,
+                Field0 = client.ObjectId,
+                atKeyVals = new NetAttributeKeyValue[15] {
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[214],
+                        Int = 0
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[464],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 1048575,
+                        Attribute = GameAttribute.Attributes[441],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30582,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30286,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30285,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30284,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30283,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30290,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 79486,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30286,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30285,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30284,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30283,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30290,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    }
+                }
+
+            });
+
+            client.SendMessage(new AttributesSetValuesMessage
+            {
+                Id = 0x4d,
+                Field0 = client.ObjectId,
+                atKeyVals = new NetAttributeKeyValue[9] {
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[86],
+                        Float = 4.546875f
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 79486,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[84],
+                        Float = 4.546875f
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[81],
+                        Int = 0
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[77],
+                        Float = 4.546875f
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[69],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30582,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[67],
+                        Int = 10
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[38],
+                        Int = 1
+                    }
+                }
+
+            });
+
+
+            client.SendMessage(new ACDGroupMessage
+            {
+                Id = 0xb8,
+                Field0 = client.ObjectId,
+                Field1 = unchecked((int)0xb59b8de4),
+                Field2 = unchecked((int)0xffffffff)
+            });
+
+            client.SendMessage(new ANNDataMessage
+            {
+                Id = 0x3e,
+                Field0 = client.ObjectId
+            });
+
+            client.SendMessage(new ACDTranslateFacingMessage
+            {
+                Id = 0x70,
+                Field0 = client.ObjectId,
+                Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI),
+                Field2 = false
+            });
+
+            client.SendMessage(new SetIdleAnimationMessage
+            {
+                Id = 0xa5,
+                Field0 = client.ObjectId,
+                Field1 = 0x11150
+            });
+
+            client.SendMessage(new SNONameDataMessage
+            {
+                Id = 0xd3,
+                Field0 = new SNOName
+                {
+                    Field0 = 0x1,
+                    Field1 = nId
+                }
             });
             #endregion
 
-            currentToon.Owner.LoggedInBNetClient.InGameClient.FlushOutgoingBuffer();
-
-            client.SendMessage(new DWordDataMessage() // TICK
+            client.PacketId += 30 * 2;
+            client.SendMessage(new DWordDataMessage()
             {
-                Id = 0x0089,
-                Field0 = 0x00000077,
+                Id = 0x89,
+                Field0 = client.PacketId,
             });
-
-            currentToon.Owner.LoggedInBNetClient.InGameClient.FlushOutgoingBuffer();
-
-            client.SendMessage(new AttributeSetValueMessage()
+            client.Tick += 20;
+            client.SendMessage(new EndOfTickMessage()
             {
-                Id = 0x004C,
-                Field0 = 0x789E00E2,
-                Field1 = new NetAttributeKeyValue()
-                {
-                    Attribute = GameAttribute.Attributes[0x005B], // Hitpoints_Healed_Target
-                    Int = 0x00000000,
-                    Float = 76f,
-                },
+                Id = 0x008D,
+                Field0 = client.Tick - 20,
+                Field1 = client.Tick
             });
-
-            client.SendMessage(new DWordDataMessage() // TICK
-            {
-                Id = 0x0089,
-                Field0 = 0x0000007D,
-            });
-
         }
     }
 }

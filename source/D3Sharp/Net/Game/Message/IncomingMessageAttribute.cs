@@ -19,22 +19,24 @@
 using System;
 using System.Collections.Generic;
 
-namespace D3Sharp.Net.Game.Messages
+namespace D3Sharp.Net.Game.Message
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class)]
     public class IncomingMessageAttribute : Attribute
     {
         public List<Opcodes> Opcodes { get; private set; }
+        public Consumers Consumer { get; private set; }
 
-        public IncomingMessageAttribute(Opcodes opcode)
+        public IncomingMessageAttribute(Opcodes opcode, Consumers consumer = Consumers.None)
         {
             this.Opcodes = new List<Opcodes> {opcode};
+            this.Consumer = consumer;
         }
 
         public IncomingMessageAttribute(Opcodes[] opcodes)
         {
             this.Opcodes = new List<Opcodes>();
-            foreach(var opcode in opcodes)
+            foreach (var opcode in opcodes)
             {
                 this.Opcodes.Add(opcode);
             }

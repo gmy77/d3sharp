@@ -22,7 +22,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using D3Sharp.Net.Game.Messages;
+using D3Sharp.Net.Game.Message;
 
 namespace D3Sharp.Utils
 {
