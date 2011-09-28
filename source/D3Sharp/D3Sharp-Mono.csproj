@@ -76,7 +76,6 @@
     <Compile Include="Core\Accounts\Account.cs" />
     <Compile Include="Core\Accounts\AccountManager.cs" />
     <Compile Include="Core\Actors\Actor.cs" />
-    <Compile Include="Core\Actors\ActorDB.cs" />
     <Compile Include="Core\Channels\Channel.cs" />
     <Compile Include="Core\Channels\ChannelManager.cs" />
     <Compile Include="Core\Channels\Member.cs" />
@@ -123,6 +122,9 @@
     <Compile Include="Core\Toons\ToonManager.cs" />
     <Compile Include="Core\Universe\Game\GameManager.cs" />
     <Compile Include="Core\Universe\Universe.cs" />
+    <Compile Include="Data\SNO\Config.cs" />
+    <Compile Include="Data\SNO\Mass.cs" />
+    <Compile Include="Data\SNO\Set.cs" />
     <Compile Include="Net\BNet\BNetClient.cs" />
     <Compile Include="Net\BNet\BnetServer.cs" />
     <Compile Include="Net\BNet\Config.cs" />
@@ -366,6 +368,24 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Assets\gamedata.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\SNO\Actors.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\SNO\Blacklist.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\SNO\Mobs.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\SNO\list.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\SNO\NPCs.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\SNO\Powers.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\toon.db">

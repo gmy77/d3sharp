@@ -18,15 +18,16 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using D3Sharp.Core.Actors;
 using D3Sharp.Net.Game.Message.Definitions.ACD;
 using D3Sharp.Net.Game.Message.Definitions.Map;
 using D3Sharp.Net.Game.Message.Definitions.Scene;
 using D3Sharp.Net.Game.Message.Definitions.World;
 using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Utils;
+using D3Sharp.Data.SNO;
 using D3Sharp.Core.NPC;
 using D3Sharp.Core.Toons;
+using D3Sharp.Core.Actors;
 
 namespace D3Sharp.Core.Map
 {
@@ -176,8 +177,8 @@ namespace D3Sharp.Core.Map
             //reveal actors
             foreach (Actor a in Actors)
             {
-                if (ActorDB.isBlackListed(a.snoID)) continue;
-                if (ActorDB.isNPC(a.snoID)) continue;
+                if (SNOMass.Instance.IsOfGroup(a.snoID, SNOGroup.Blacklist)) continue;
+                if (SNOMass.Instance.IsOfGroup(a.snoID, SNOGroup.NPCs)) continue;
                 a.Reveal(toon);
             }
         }

@@ -19,6 +19,7 @@
 using System.Text;
 using D3Sharp.Core.Helpers;
 using D3Sharp.Core.NPC;
+using D3Sharp.Data.SNO;
 using D3Sharp.Net.Game.Message.Fields;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Animation
@@ -45,7 +46,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.Animation
                     client.Position.Field0 -= (float)(RandomHelper.NextDouble() * 20);
                     client.Position.Field1 -= (float)(RandomHelper.NextDouble() * 20);
                 }
-                client.GameUniverse.SpawnMob(client,BasicNPC.RandomNPC());
+                client.GameUniverse.SpawnMob(client, SNOMass.Instance.RandomID(SNOGroup.NPCs));
             }
 
             client.Position.Field1 = oldPosField1;
