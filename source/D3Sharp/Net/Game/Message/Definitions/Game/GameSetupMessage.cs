@@ -26,6 +26,8 @@ namespace D3Sharp.Net.Game.Message.Definitions.Game
     {
         public int Field0;
 
+        public GameSetupMessage():base(Opcodes.GameSetupMessage) {}
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);

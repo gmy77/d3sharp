@@ -12,7 +12,7 @@ namespace D3Sharp.Core.Ingame.Actors
         public ACDEnterKnownMessage RevealMessage;
         public string ActorLine;
 
-        public void Reveal(IngameToon toon)
+        public void Reveal(Hero toon)
         {
             if (RevealMessage != null) toon.InGameClient.SendMessage(RevealMessage);
             toon.InGameClient.FlushOutgoingBuffer();

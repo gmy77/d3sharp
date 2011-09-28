@@ -13,11 +13,11 @@ namespace D3Sharp.Core.Ingame.Map
         public string SceneLine;
         public string MapLine;
 
-        public void Reveal(IngameToon toon)
+        public void Reveal(Hero hero)
         {
-            if (SceneData != null) toon.InGameClient.SendMessage(SceneData);
-            if (Map != null) toon.InGameClient.SendMessage(Map);
-            toon.InGameClient.FlushOutgoingBuffer();
+            if (SceneData != null) hero.InGameClient.SendMessage(SceneData);
+            if (Map != null) hero.InGameClient.SendMessage(Map);
+            hero.InGameClient.FlushOutgoingBuffer();
         }
     }
 }

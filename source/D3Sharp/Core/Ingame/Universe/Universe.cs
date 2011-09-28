@@ -65,7 +65,7 @@ namespace D3Sharp.Core.Ingame.Universe
                     this.PlayerManager.Consume(client, message);
                     break;
                 case Consumers.Skillset:
-                    client.Player.Toon.Skillset.Consume(client, message);
+                    client.Player.Hero.Skillset.Consume(client, message);
                     break;
             }
         }
@@ -594,7 +594,7 @@ namespace D3Sharp.Core.Ingame.Universe
         public void SpawnMob(GameClient client, int mobId) // this shoudn't even rely on client or it's position though i know this is just a hack atm ;) /raist.
         {
             int nId = mobId;
-            if (client.Player.Toon.Position == null)
+            if (client.Player.Hero.Position == null)
                 return;
 
             if (client.ObjectIdsSpawned == null)
@@ -632,9 +632,9 @@ namespace D3Sharp.Core.Ingame.Universe
                         },
                         Field1 = new Vector3D()
                         {
-                            X = client.Player.Toon.Position.X + 5,
-                            Y = client.Player.Toon.Position.Y + 5,
-                            Z = client.Player.Toon.Position.Z,
+                            X = client.Player.Hero.Position.X + 5,
+                            Y = client.Player.Hero.Position.Y + 5,
+                            Z = client.Player.Hero.Position.Z,
                         },
                     },
                     Field2 = 0x772E0000,

@@ -25,8 +25,8 @@ namespace D3Sharp.Net.Game.Message.Fields
         public int Field0;
         public int Field1;
         public int Field2;
-        public int Field3;
-        public PlayerSavedData Field4;
+        public int Gender;
+        public PlayerSavedData PlayerSavedData;
         public int Field5;
         // MaxLength = 100
         public PlayerQuestRewardHistoryEntry[] tQuestRewardHistory;
@@ -36,9 +36,9 @@ namespace D3Sharp.Net.Game.Message.Fields
             Field0 = buffer.ReadInt(32);
             Field1 = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(32);
-            Field3 = buffer.ReadInt(29);
-            Field4 = new PlayerSavedData();
-            Field4.Parse(buffer);
+            Gender = buffer.ReadInt(29);
+            PlayerSavedData = new PlayerSavedData();
+            PlayerSavedData.Parse(buffer);
             Field5 = buffer.ReadInt(32);
             tQuestRewardHistory = new PlayerQuestRewardHistoryEntry[buffer.ReadInt(7)];
             for (int i = 0; i < tQuestRewardHistory.Length; i++)
@@ -53,8 +53,8 @@ namespace D3Sharp.Net.Game.Message.Fields
             buffer.WriteInt(32, Field0);
             buffer.WriteInt(32, Field1);
             buffer.WriteInt(32, Field2);
-            buffer.WriteInt(29, Field3);
-            Field4.Encode(buffer);
+            buffer.WriteInt(29, Gender);
+            PlayerSavedData.Encode(buffer);
             buffer.WriteInt(32, Field5);
             buffer.WriteInt(7, tQuestRewardHistory.Length);
             for (int i = 0; i < tQuestRewardHistory.Length; i++)
@@ -76,8 +76,8 @@ namespace D3Sharp.Net.Game.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
-            Field4.AsText(b, pad);
+            b.AppendLine("Field3: 0x" + Gender.ToString("X8") + " (" + Gender + ")");
+            PlayerSavedData.AsText(b, pad);
             b.Append(' ', pad);
             b.AppendLine("Field5: 0x" + Field5.ToString("X8") + " (" + Field5 + ")");
             b.Append(' ', pad);

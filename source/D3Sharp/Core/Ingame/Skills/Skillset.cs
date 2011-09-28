@@ -117,11 +117,11 @@ namespace D3Sharp.Core.Ingame.Skills
                     Field0 = 0x00000000,
                     Field1 = 0x00000000,
                     Field2 = 0x00000000,
-                    Field3 = client.BnetClient.CurrentToon.Gender,
-                    Field4 = new PlayerSavedData()
+                    Gender = client.BnetClient.CurrentToon.Gender,
+                    PlayerSavedData = new PlayerSavedData()
                     {
-                        Field0 = hotbarSkills,
-                        Field1 = new SkillKeyMapping[15]
+                        HotBarButtons = hotbarSkills,
+                        SkilKeyMappings = new SkillKeyMapping[15]
                         {
                              new SkillKeyMapping()
                              {
@@ -218,7 +218,7 @@ namespace D3Sharp.Core.Ingame.Skills
                         Field3 = 0x00000001,
                         Field4 = new HirelingSavedData()
                         {
-                            Field0 = new HirelingInfo[4]
+                            HirelingInfos = new HirelingInfo[4]
                             {
                                  new HirelingInfo()
                                  {
@@ -273,7 +273,7 @@ namespace D3Sharp.Core.Ingame.Skills
                             Field2 = 0x00000000,
                         },
                         Field5 = 0x00000000,
-                        Field6 = new LearnedLore()
+                        LearnedLore = new LearnedLore()
                         {
                             Field0 = 0x00000000,
                             m_snoLoreLearned = new int[256]

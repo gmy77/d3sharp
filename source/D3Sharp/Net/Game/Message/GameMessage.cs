@@ -79,6 +79,18 @@ namespace D3Sharp.Net.Game.Message
             return msg;
         }
 
+        public GameMessage() {}
+
+        public GameMessage(int id)
+        {
+            this.Id = id;
+        }
+
+        public GameMessage(Opcodes opcode)
+        {
+            this.Id = (int)opcode;
+        }
+
         public int Id { get; set; }
         public Consumers Consumer { get; set; }
 

@@ -146,10 +146,10 @@ namespace D3Sharp.Core.Ingame.Map
             Scenes.Sort(SceneSorter);
         }
 
-        public void RevealWorld(IngameToon toon)
+        public void Reveal(Hero hero)
         {
             //reveal world to player
-            toon.InGameClient.SendMessage(new RevealWorldMessage()
+            hero.InGameClient.SendMessage(new RevealWorldMessage()
             {
                 Id = 0x0037,
                 Field0 = WorldID,
@@ -157,24 +157,24 @@ namespace D3Sharp.Core.Ingame.Map
             });
 
             //player enters world
-            toon.InGameClient.SendMessage(new EnterWorldMessage()
+            hero.InGameClient.SendMessage(new EnterWorldMessage()
             {
                 Id = 0x0033,
-                Field0 = toon.Position,
+                Field0 = hero.Position,
                 Field1 = WorldID,
                 Field2 = WorldSNO,
             });
 
             //just reveal the whole thing to the player for now
             foreach (var scene in Scenes)
-                scene.Reveal(toon);
+                scene.Reveal(hero);
 
             //reveal actors
             foreach (var actor in Actors)
             {
                 if (ActorDB.isBlackListed(actor.snoID)) continue;
                 if (ActorDB.isNPC(actor.snoID)) continue;
-                actor.Reveal(toon);
+                actor.Reveal(hero);
             }
         }
 

@@ -26,7 +26,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.Game
     {
         public EntityId Field0;  // this *is* the toon id /raist.
         public GameId Field1;
-        public int Field2; // and this is the SGameId there we set in D3Sharp.Core.Games.Game.cs when we send the connection info to client /raist.
+        public int GameId; // and this is the SGameId there we set in D3Sharp.Core.Games.Game.cs when we send the connection info to client /raist.
         public long Field3;
         public int Field4;
         public int ProtocolHash;
@@ -38,7 +38,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.Game
             Field0.Parse(buffer);
             Field1 = new GameId();
             Field1.Parse(buffer);
-            Field2 = buffer.ReadInt(32);
+            GameId = buffer.ReadInt(32);
             Field3 = buffer.ReadInt64(64);
             Field4 = buffer.ReadInt(4) + (2);
             ProtocolHash = buffer.ReadInt(32);
@@ -49,7 +49,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.Game
         {
             Field0.Encode(buffer);
             Field1.Encode(buffer);
-            buffer.WriteInt(32, Field2);
+            buffer.WriteInt(32, GameId);
             buffer.WriteInt64(64, Field3);
             buffer.WriteInt(4, Field4 - (2));
             buffer.WriteInt(32, ProtocolHash);
@@ -64,7 +64,7 @@ namespace D3Sharp.Net.Game.Message.Definitions.Game
             b.AppendLine("{");
             Field0.AsText(b, pad);
             Field1.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.Append(' ', pad); b.AppendLine("Field2: 0x" + GameId.ToString("X8") + " (" + GameId + ")");
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X16"));
             b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
             b.Append(' ', pad); b.AppendLine("ProtocolHash: 0x" + ProtocolHash.ToString("X8"));
