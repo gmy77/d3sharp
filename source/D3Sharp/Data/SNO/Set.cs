@@ -76,46 +76,45 @@ namespace D3Sharp.Data.SNO
         public void Load(string path)
         {
             this.Path = path;
-            using (var reader = File.OpenText(path))
+            var reader = File.OpenText(path);
+            int currentLine = 1;
+            while (!reader.EndOfStream)
             {
-                int currentLine = 1;
-                while (!reader.EndOfStream)
-                {
-                    string line = reader.ReadLine().Trim();
-                    if (line.Length == 0)
-                        continue;
+                string line = reader.ReadLine().Trim();
+                if (line.Length == 0)
+                    continue;
 
-                    int spaceIndex = line.IndexOf(' ');
-                    int id = 0;
+                int spaceIndex = line.IndexOf(' ');
+                int id = 0;
+                try
+                {
+                    id = Int32.Parse(line.Substring(0, spaceIndex > -1 ? spaceIndex : line.Length).Trim(), System.Globalization.CultureInfo.InvariantCulture);
+                }
+                catch (Exception)
+                {
+                    Logger.Warn("Failed to parse ID on line {0}", currentLine);
+                    continue;
+                }
+                string snoFilename = String.Empty;
+                if (spaceIndex > -1)
+                {
                     try
                     {
-                        id = Int32.Parse(line.Substring(0, spaceIndex > -1 ? spaceIndex : line.Length).Trim(), System.Globalization.CultureInfo.InvariantCulture);
+                        snoFilename = line.Substring(spaceIndex+1, line.Length-spaceIndex-1).Trim();
                     }
                     catch (Exception)
                     {
-                        Logger.Warn("Failed to parse ID on line {0}", currentLine);
+                        Logger.Warn("Failed to parse filename on line {0}", currentLine);
                         continue;
                     }
-                    string snoFilename = String.Empty;
-                    if (spaceIndex > -1)
-                    {
-                        try
-                        {
-                            snoFilename = line.Substring(spaceIndex+1, line.Length-spaceIndex-1).Trim();
-                        }
-                        catch (Exception)
-                        {
-                            Logger.Warn("Failed to parse filename on line {0}", currentLine);
-                            continue;
-                        }
-                    }
-                    SNOType type = GetTypeFromExtension(System.IO.Path.GetExtension(snoFilename));
-                    string name = System.IO.Path.GetFileName(snoFilename);
-                    SNOID snoid = new SNOID(type, id, name);
-                    this.IDs.Add(id, snoid);
-                    ++currentLine;
                 }
+                SNOType type = GetTypeFromExtension(System.IO.Path.GetExtension(snoFilename));
+                string name = System.IO.Path.GetFileName(snoFilename);
+                SNOID snoid = new SNOID(type, id, name);
+                this.IDs.Add(id, snoid);
+                ++currentLine;
             }
+            reader.Close();
         }
 
         public bool IsGroupReferencing()

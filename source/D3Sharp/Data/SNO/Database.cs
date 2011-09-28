@@ -55,38 +55,37 @@ namespace D3Sharp.Data.SNO
             Logger.Info("Loading SNO ID sets from list {0}", listPath);
             try
             {
-                using (var reader = File.OpenText(listPath))
+                var reader = File.OpenText(listPath);
+                // Switch to the list file's directory so that we can use relative paths
+                var owd = Directory.GetCurrentDirectory();
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(listPath));
+                int currentLine = 1;
+                while (!reader.EndOfStream)
                 {
-                    // Switch to the list file's directory so that we can use relative paths
-                    var owd = Directory.GetCurrentDirectory();
-                    Directory.SetCurrentDirectory(Path.GetDirectoryName(listPath));
-                    int currentLine = 1;
-                    while (!reader.EndOfStream)
-                    {
-                        string line = reader.ReadLine().Trim();
-                        if (line.Length == 0)
-                            continue;
+                    string line = reader.ReadLine().Trim();
+                    if (line.Length == 0)
+                        continue;
 
-                        string[] parts = line.Split(' ');
-                        if (parts.Length != 2)
-                        {
-                            Logger.Warn("Malformed line at {0} in file {1}", currentLine, listPath);
-                            continue;
-                        }
-                        SNOGroup grp = SNOGroup.Ungrouped;
-                        try {
-                            grp = (SNOGroup)Enum.Parse(typeof(SNOGroup), parts[0]);
-                        } catch (Exception)
-                        {
-                            Logger.Warn("{0} is not a valid group", parts[0]);
-                            continue;
-                        }
-                        LoadSet(grp, parts[1]);
-                        ++currentLine;
+                    string[] parts = line.Split(' ');
+                    if (parts.Length != 2)
+                    {
+                        Logger.Warn("Malformed line at {0} in file {1}", currentLine, listPath);
+                        continue;
                     }
-                    // Go back to the original working directory
-                    Directory.SetCurrentDirectory(owd);
+                    SNOGroup grp = SNOGroup.Ungrouped;
+                    try {
+                        grp = (SNOGroup)Enum.Parse(typeof(SNOGroup), parts[0]);
+                    } catch (Exception)
+                    {
+                        Logger.Warn("{0} is not a valid group", parts[0]);
+                        continue;
+                    }
+                    LoadSet(grp, parts[1]);
+                    ++currentLine;
                 }
+                // Go back to the original working directory
+                Directory.SetCurrentDirectory(owd);
+                reader.Close();
             }
             catch (DirectoryNotFoundException)
             {
