@@ -21,6 +21,7 @@ using System.IO;
 using System.Collections.Generic;
 using D3Sharp.Core.Helpers;
 using D3Sharp.Core.Ingame.Map;
+using D3Sharp.Core.Ingame.Actors;
 using D3Sharp.Net.Game.Message;
 using D3Sharp.Net.Game.Message.Definitions.Animation;
 using D3Sharp.Net.Game.Message.Definitions.Combat;
@@ -38,7 +39,7 @@ using D3Sharp.Net.Game.Message.Definitions.Attribute;
 
 namespace D3Sharp.Core.Ingame.Universe
 {
-    public class Universe: IMessageConsumer
+    public class Universe : IMessageConsumer
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -56,7 +57,7 @@ namespace D3Sharp.Core.Ingame.Universe
 
         public void Route(GameClient client, GameMessage message)
         {
-            switch(message.Consumer)
+            switch (message.Consumer)
             {
                 case Consumers.Universe:
                     this.Consume(client, message);
@@ -106,25 +107,67 @@ namespace D3Sharp.Core.Ingame.Universe
                             {
                                 case 0x34: //new scene
                                     {
-                                        World w = GetWorld(int.Parse(data[2]));
+                                        int WorldID = int.Parse(data[2]);
+                                        World w = GetWorld(WorldID);
                                         w.AddScene(line);
-                                        w.WorldSNO = int.Parse(data[21]); //snoPresetWorld
                                     }
                                     break;
 
-                                case 0x3b: //new actor                            
-                                    GetWorld(int.Parse(data[16])).AddActor(line);
+                                case 0x37: //reveal world
+                                    {
+                                        int WorldID = int.Parse(data[2]);
+                                        World w = GetWorld(WorldID);
+                                        w.WorldSNO = int.Parse(data[3]);
+                                    }
                                     break;
 
-                                case 0x44: //new map scene                            
-                                    GetWorld(int.Parse(data[11])).AddMapScene(line);
+                                case 0x3b: //new actor     
+                                    {
+                                        int WorldID = int.Parse(data[16]);
+                                        World w = GetWorld(WorldID);
+                                        w.AddActor(line);
+                                    }
+                                    break;
+
+                                case 0x44: //new map scene 
+                                    {
+                                        int WorldID = int.Parse(data[11]);
+                                        World w = GetWorld(WorldID);
+                                        w.AddMapScene(line);
+                                    }
+                                    break;
+
+                                case 0x4b: //new portal
+                                    {
+                                        Actor a = GetActor(int.Parse(data[2]));
+                                        if (a != null)
+                                        {
+                                            World w = GetWorld(a.WorldId);
+                                            if (w != null) w.AddPortal(line);
+                                        }
+                                    }
                                     break;
 
                                 default:
-                                    Logger.Error("Unimplemented packet type encountered in universe file: " + packettype);
+                                    Logger.Info("Unimplemented packet type encountered in universe file: " + packettype);
                                     break;
                             }
                         }
+
+                        //manual portal description
+                        if (data[0].Equals("o") && data.Length >= 6)
+                        {
+                            Portal p = GetPortal(int.Parse(data[1]));
+                            if (p != null)
+                            {
+                                p.TargetPos = new Vector3D();
+                                p.TargetPos.X = float.Parse(data[2], System.Globalization.CultureInfo.InvariantCulture);
+                                p.TargetPos.Y = float.Parse(data[3], System.Globalization.CultureInfo.InvariantCulture);
+                                p.TargetPos.Z = float.Parse(data[4], System.Globalization.CultureInfo.InvariantCulture);
+                                p.TargetWorldID = int.Parse(data[5]);
+                            }
+                        }
+
 
                         ////spawn point
                         //if (data[0].Equals("s") && data.Length >= 4)
@@ -164,15 +207,113 @@ namespace D3Sharp.Core.Ingame.Universe
             var world = new World(WorldID);
             _worlds.Add(world);
             return world;
-        }       
+        }
+
+        Actor GetActor(int ActorID)
+        {
+            for (int x = 0; x < _worlds.Count; x++)
+            {
+                Actor a = _worlds[x].GetActor(ActorID);
+                if (a != null) return a;
+            }
+            return null;
+        }
+
+        Portal GetPortal(int ActorID)
+        {
+            for (int x = 0; x < _worlds.Count; x++)
+            {
+                Portal p = _worlds[x].GetPortal(ActorID);
+                if (p != null) return p;
+            }
+            return null;
+        }
+
+        public void ChangeToonWorld(GameClient client, int WorldID, Vector3D Pos)
+        {
+            Hero hero = client.Player.Hero;
+
+            World newworld = null;
+            //don't use getworld() here as that'd create a new empty world anyway
+            foreach (var x in _worlds)
+                if (x.WorldID == WorldID)
+                    newworld = x;
+
+            World currentworld = null;
+            //don't use getworld() here as that'd create a new empty world anyway
+            foreach (var x in _worlds)
+                if (x.WorldID == hero.WorldId)
+                    currentworld = x;
+            
+            if (newworld == null || currentworld==null) return; //don't go to a world we don't have in the universe
+
+            currentworld.DestroyWorld(hero);
+
+            hero.WorldId = newworld.WorldID;
+            hero.CurrentWorldSNO = newworld.WorldSNO;
+            hero.Position.X = Pos.X;
+            hero.Position.Y = Pos.Y;
+            hero.Position.Z = Pos.Z;
+
+            newworld.Reveal(hero);
+
+            client.SendMessage(new ACDWorldPositionMessage
+            {
+                Id = 0x3f,
+                Field0 = 0x789E00E2,
+                Field1 = new WorldLocationMessageData
+                {
+                    Field0 = 1.43f,
+                    Field1 = new PRTransform
+                    {
+                        Field0 = new Quaternion
+                        {
+                            Amount = 0.05940768f,
+                            Axis = new Vector3D
+                            {
+                                X = 0f,
+                                Y = 0f,
+                                Z = 0.9982339f,
+                            }
+                        },
+                        ReferencePoint = hero.Position,
+                    },
+                    Field2 = newworld.WorldID,
+                }
+            });
+
+            client.FlushOutgoingBuffer();
+
+            client.SendMessage(new PlayerWarpedMessage()
+            {
+                Id = 0x0B1,
+                Field0 = 9,
+                Field1 = 0f,
+            });
+
+            client.PacketId += 40 * 2;
+            client.SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = client.PacketId,
+            });
+
+            client.FlushOutgoingBuffer();
+        }
 
         private void OnToonTargetChange(GameClient client, TargetMessage message)
         {
-            if (message.Field1 == 0x77F20036)
+            Logger.Info("Player interaction with " + message.AsText());
+
+            Portal p=GetPortal(message.Field1);
+
+            if (p!=null)
             {
-                this.EnterInn(client);
+                //we have a transition between worlds here
+                ChangeToonWorld(client, p.TargetWorldID, p.TargetPos); //targetpos will always be valid as otherwise the portal wouldn't be targetable
                 return;
             }
+
             else if (client.ObjectIdsSpawned == null || !client.ObjectIdsSpawned.Contains(message.Field1)) return;
 
             client.ObjectIdsSpawned.Remove(message.Field1);
@@ -323,272 +464,6 @@ namespace D3Sharp.Core.Ingame.Universe
                 Id = 0x89,
                 Field0 = client.PacketId,
             });
-        }
-
-        private void EnterInn(GameClient client)
-        {
-            client.SendMessage(new RevealWorldMessage()
-            {
-                Id = 0x037,
-                Field0 = 0x772F0001,
-                Field1 = 0x0001AB32,
-            });
-
-            client.SendMessage(new WorldStatusMessage()
-            {
-                Id = 0x0B4,
-                Field0 = 0x772F0001,
-                Field1 = false,
-            });
-
-            client.SendMessage(new EnterWorldMessage()
-            {
-                Id = 0x0033,
-                Field0 = new Vector3D()
-                {
-                    X = 83.75f,
-                    Y = 123.75f,
-                    Z = 0.2000023f,
-                },
-                Field1 = 0x772F0001,
-                Field2 = 0x0001AB32,
-            });
-
-            client.FlushOutgoingBuffer();
-
-            client.SendMessage(new RevealSceneMessage()
-            {
-                Id = 0x0034,
-                WorldID = 0x772F0001,
-                SceneSpec = new SceneSpecification()
-                {
-                    Field0 = 0x00000000,
-                    Field1 = new IVector2D()
-                    {
-                        Field0 = 0x00000000,
-                        Field1 = 0x00000000,
-                    },
-                    arSnoLevelAreas = new int[] { 0x0001AB91, unchecked((int)0xFFFFFFFF), unchecked((int)0xFFFFFFFF), unchecked((int)0xFFFFFFFF) },
-                    snoPrevWorld = 0x000115EE,
-                    Field4 = 0x000000DF,
-                    snoPrevLevelArea = unchecked((int)0xFFFFFFFF),
-                    snoNextWorld = 0x00015348,
-                    Field7 = 0x000000AC,
-                    snoNextLevelArea = unchecked((int)0xFFFFFFFF),
-                    snoMusic = 0x000206F8,
-                    snoCombatMusic = unchecked((int)0xFFFFFFFF),
-                    snoAmbient = 0x0002C68A,
-                    snoReverb = 0x00021ABA,
-                    snoWeather = 0x00017869,
-                    snoPresetWorld = 0x0001AB32,
-                    Field15 = 0x00000000,
-                    Field16 = 0x00000000,
-                    Field17 = 0x00000000,
-                    Field18 = unchecked((int)0xFFFFFFFF),
-                    tCachedValues = new SceneCachedValues()
-                    {
-                        Field0 = 0x0000003F,
-                        Field1 = 0x00000060,
-                        Field2 = 0x00000060,
-                        Field3 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                X = 120f,
-                                Y = 120f,
-                                Z = 26.61507f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                X = 120f,
-                                Y = 120f,
-                                Z = 36.06968f,
-                            }
-                        },
-                        Field4 = new AABB()
-                        {
-                            Field0 = new Vector3D()
-                            {
-                                X = 120f,
-                                Y = 120f,
-                                Z = 26.61507f,
-                            },
-                            Field1 = new Vector3D()
-                            {
-                                X = 120f,
-                                Y = 120f,
-                                Z = 36.06968f,
-                            }
-                        },
-                        Field5 = new int[] { 0x00000267, 0x00000000, 0x00000000, 0x00000000, },
-                        Field6 = 0x00000001
-                    }
-                },
-                ChunkID = 0x78740120,
-                snoScene = 0x0001AB2F,
-                Position = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Amount = 1f,
-                        Axis = new Vector3D()
-                        {
-                            X = 0f,
-                            Y = 0f,
-                            Z = 0f,
-                        }
-                    },
-                    ReferencePoint = new Vector3D()
-                    {
-                        X = 0f,
-                        Y = 0f,
-                        Z = 0f,
-                    }
-                },
-                ParentChunkID = unchecked((int)0xFFFFFFFF),
-                snoSceneGroup = unchecked((int)0xFFFFFFFF),
-                arAppliedLabels = new int[0]
-
-            });
-            client.FlushOutgoingBuffer();
-
-            client.SendMessage(new MapRevealSceneMessage()
-            {
-                Id = 0x044,
-                ChunkID = 0x78740120,
-                snoScene = 0x0001AB2F,
-                Field2 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Amount = 1f,
-                        Axis = new Vector3D()
-                        {
-                            X = 0f,
-                            Y = 0f,
-                            Z = 0f,
-                        }
-                    },
-                    ReferencePoint = new Vector3D()
-                    {
-                        X = 0f,
-                        Y = 0f,
-                        Z = 0f,
-                    }
-                },
-                Field3 = 0x772F0001,
-                MiniMapVisibility = 0
-            });
-            client.FlushOutgoingBuffer();
-
-            client.SendMessage(new ACDEnterKnownMessage
-            {
-                Id = 0x3B,
-                Field0 = 0x7A0800A2,
-                Field1 = 0x0000157F,
-                Field2 = 8,
-                Field3 = 0,
-                Field4 = new WorldLocationMessageData
-                {
-                    Field0 = 1f,
-                    Field1 = new PRTransform
-                    {
-                        Field0 = new Quaternion
-                        {
-                            Amount = 0.9909708f,
-                            Axis = new Vector3D
-                            {
-                                X = 0f,
-                                Y = 0f,
-                                Z = 0.1340775f
-                            }
-                        },
-                        ReferencePoint = new Vector3D
-                        {
-                            X = 82.15131f,
-                            Y = 122.2867f,
-                            Z = 0.1000366f
-                        }
-                    },
-                    Field2 = 0x772F0001
-                },
-                Field6 = new GBHandle
-                {
-                    Field0 = -1,
-                    Field1 = unchecked((int)0xFFFFFFFF)
-                },
-                Field7 = 0x00000001,
-                Field8 = 0x0000157F,
-                Field9 = 0,
-                Field10 = 0x0,
-                Field12 = 0x0001AB8C,
-                Field13 = 0x00000000
-            });
-
-            client.FlushOutgoingBuffer();
-            client.SendMessage(new AffixMessage()
-            {
-                Id = 0x48,
-                Field0 = 0x7A0800A2,
-                Field1 = 1,
-                aAffixGBIDs = new int[0]
-            });
-            client.FlushOutgoingBuffer();
-
-            client.SendMessage(new AffixMessage()
-            {
-                Id = 0x48,
-                Field0 = 0x7A0800A2,
-                Field1 = 2,
-                aAffixGBIDs = new int[0]
-            });
-            client.FlushOutgoingBuffer();
-
-            client.SendMessage(new PlayerWarpedMessage()
-            {
-                Id = 0x0B1,
-                Field0 = 9,
-                Field1 = 0xf,
-            });
-            client.FlushOutgoingBuffer();
-
-            client.SendMessage(new ACDWorldPositionMessage
-            {
-                Id = 0x3f,
-                Field0 = 0x789E00E2,
-                Field1 = new WorldLocationMessageData
-                {
-                    Field0 = 1.43f,
-                    Field1 = new PRTransform
-                    {
-                        Field0 = new Quaternion
-                        {
-                            Amount = 0.05940768f,
-                            Axis = new Vector3D
-                            {
-                                X = 0f,
-                                Y = 0f,
-                                Z = 0.9982339f,
-                            }
-                        },
-                        ReferencePoint = new Vector3D
-                        {
-                            X = 82.15131f,
-                            Y = 122.2867f,
-                            Z = 0.1000366f
-                        }
-                    },
-                    Field2 = 0x772F0001
-                }
-            });
-
-            client.PacketId += 10 * 2;
-            client.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = client.PacketId,
-            });
-            client.FlushOutgoingBuffer();
         }
 
         public void SpawnMob(GameClient client, int mobId) // this shoudn't even rely on client or it's position though i know this is just a hack atm ;) /raist.

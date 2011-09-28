@@ -18,6 +18,7 @@
 
 using D3Sharp.Core.Ingame.Universe;
 using D3Sharp.Net.Game.Message.Definitions.ACD;
+using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Fields;
 
 namespace D3Sharp.Core.Ingame.Actors
@@ -42,6 +43,9 @@ namespace D3Sharp.Core.Ingame.Actors
 
         public void Reveal(Hero toon)
         {
+            if (toon.RevealedActors.Contains(this)) return; //already revealed
+            toon.RevealedActors.Add(this);
+
             var msg = new ACDEnterKnownMessage
                           {
                               Field0 = Id,
@@ -64,6 +68,15 @@ namespace D3Sharp.Core.Ingame.Actors
 
             toon.InGameClient.SendMessage(msg);
             toon.InGameClient.FlushOutgoingBuffer();
+        }
+
+        public void Destroy(Hero hero)
+        {
+            if (!hero.RevealedActors.Contains(this)) return; //not revealed yet
+
+            hero.InGameClient.SendMessage(new ANNDataMessage() { Id=0x3c, Field0=Id, });
+            hero.InGameClient.FlushOutgoingBuffer();
+            hero.RevealedActors.Remove(this);
         }
 
         public bool ParseFrom(int worldId, string line)
