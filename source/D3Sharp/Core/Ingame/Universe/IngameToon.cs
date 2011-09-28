@@ -18,7 +18,9 @@
 
 using System.Collections.Generic;
 using D3Sharp.Core.Common.Toons;
+using D3Sharp.Core.Ingame.Actors;
 using D3Sharp.Core.Ingame.Skills;
+using D3Sharp.Core.Ingame.Map;
 using D3Sharp.Net.Game;
 using D3Sharp.Net.Game.Message.Fields;
 
@@ -32,7 +34,9 @@ namespace D3Sharp.Core.Ingame.Universe
         public int CurrentWorldID;
         public int CurrentWorldSNO;
         public Skillset Skillset = new Skillset(); // TODO: this should eventually be done on the bnet side
-        public List<int> RevealedWorlds;
+        public List<World> RevealedWorlds;
+        public List<Scene> RevealedScenes;
+        public List<Actor> RevealedActors;        
 
         public GameClient InGameClient { get; private set; }
 
@@ -40,7 +44,9 @@ namespace D3Sharp.Core.Ingame.Universe
         {
             this.InGameClient = client;
             this.Properties = toon;
-            RevealedWorlds = new List<int>();
+            RevealedWorlds = new List<World>();
+            RevealedScenes = new List<Scene>();
+            RevealedActors = new List<Actor>();
         }
 
         public int ClassSNO

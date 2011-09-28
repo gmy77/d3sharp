@@ -110,7 +110,14 @@ namespace D3Sharp.Core.Ingame.Universe
                                         int WorldID = int.Parse(data[2]);
                                         World w = GetWorld(WorldID);
                                         w.AddScene(line);
-                                        w.WorldSNO = int.Parse(data[21]); //snoPresetWorld
+                                    }
+                                    break;
+
+                                case 0x37: //reveal world
+                                    {
+                                        int WorldID = int.Parse(data[2]);
+                                        World w = GetWorld(WorldID);
+                                        w.WorldSNO = int.Parse(data[3]);
                                     }
                                     break;
 

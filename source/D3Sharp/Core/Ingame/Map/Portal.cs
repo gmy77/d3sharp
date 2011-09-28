@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using D3Sharp.Utils;
 using D3Sharp.Core.Ingame.Actors;
 using D3Sharp.Core.Ingame.Universe;
 using D3Sharp.Net.Game.Message.Definitions.Misc;
@@ -16,11 +17,18 @@ namespace D3Sharp.Core.Ingame.Map
 {
     public class Portal
     {
+        static readonly Logger Logger = LogManager.CreateLogger();
+        
         public Actor ActorRef;
         public PortalSpecifierMessage PortalMessage;
 
         public int TargetWorldID;
         public Vector3D TargetPos;
+
+        public Portal()
+        {
+            TargetPos = new Vector3D();
+        }
 
         public void Reveal(IngameToon t)
         {
@@ -28,6 +36,8 @@ namespace D3Sharp.Core.Ingame.Map
                 //targetpos!=null in this case is used to detect if the portal has been completely initialized to have a target
                 //if it doesn't have one, it won't be displayed - otherwise the client would crash from this.
             {
+                Logger.Info("Revealing portal: " + PortalMessage.AsText());
+
                 ActorRef.Reveal(t);
 
                 t.InGameClient.SendMessage(new AffixMessage()

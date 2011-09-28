@@ -146,9 +146,15 @@ namespace D3Sharp.Core.Ingame.Map
         {
             string[] data = Line.Split(' ');
 
+            int ActorID = int.Parse(data[2]);
+
+            //this check is here so no duplicate portals are in a world and thus a portal actor isn't revealed twice to a player
+            foreach (var portal in Portals)
+                if (portal.ActorRef.ID == ActorID) return;
+
             Portal p = new Portal();
             p.PortalMessage = new PortalSpecifierMessage(data.Skip(2).ToArray());
-            p.ActorRef=GetActor(int.Parse(data[2]));
+            p.ActorRef=GetActor(ActorID);
 
             Portals.Add(p);
         }
@@ -168,9 +174,7 @@ namespace D3Sharp.Core.Ingame.Map
 
         public void RevealWorld(IngameToon toon)
         {
-            bool found = false;
-            foreach (var t in toon.RevealedWorlds)
-                if (t == WorldID) found = true;
+            bool found=toon.RevealedWorlds.Contains(this);
 
             if (!found)
             {
@@ -181,7 +185,7 @@ namespace D3Sharp.Core.Ingame.Map
                     Field0 = WorldID,
                     Field1 = WorldSNO,
                 });
-                toon.RevealedWorlds.Add(WorldID);
+                toon.RevealedWorlds.Add(this);
             }
 
             //player enters world
@@ -193,38 +197,25 @@ namespace D3Sharp.Core.Ingame.Map
                 Field2 = WorldSNO,
             });
 
+            //just reveal the whole thing to the player for now
+            foreach (var scene in Scenes)
+                scene.Reveal(toon);
+
             if (!found)
             {
-                //just reveal the whole thing to the player for now
-                foreach (Scene s in Scenes)
-                    s.Reveal(toon);
-
-                //if you reveal the actors again the game crashes with not being able to move the player actor. wtf.
-
-                //reveal actors
-                foreach (Actor a in Actors)
-                {
-                    if (ActorDB.isBlackListed(a.snoID)) continue;
-                    if (ActorDB.isNPC(a.snoID)) continue;
-                    a.Reveal(toon);
-                }
-
-                //reveal portals
-                foreach (Portal p in Portals)
-                {
-                    p.Reveal(toon);
-                }
-
-                //just reveal the whole thing to the player for now
-                foreach (var scene in Scenes)
-                    scene.Reveal(toon);
-
                 //reveal actors
                 foreach (var actor in Actors)
                 {
                     if (ActorDB.isBlackListed(actor.snoID)) continue;
                     if (ActorDB.isNPC(actor.snoID)) continue;
-                    actor.Reveal(toon);
+                    //actor.Reveal(toon);
+                }
+
+                //reveal portals
+                Logger.Info("Revealing portals for world " + WorldID);
+                foreach (Portal portal in Portals)
+                {
+                    portal.Reveal(toon);
                 }
             }
 
@@ -232,11 +223,11 @@ namespace D3Sharp.Core.Ingame.Map
 
         public void DestroyWorld(IngameToon toon)
         {
-            //foreach (Actor a in Actors)
-            //    a.Destroy(toon);
+            //for (int x = toon.RevealedActors.Count - 1; x >= 0; x-- )
+            //    if (toon.RevealedActors[x].RevealMessage.Field4.Field2 == WorldID) toon.RevealedActors[x].Destroy(toon);
 
-            //foreach (Scene s in Scenes)
-            //    s.Destroy(toon);
+            for (int x = toon.RevealedScenes.Count - 1; x >= 0; x--)
+                if (toon.RevealedScenes[x].SceneData.WorldID == WorldID) toon.RevealedScenes[x].Destroy(toon);
 
             //toon.Owner.LoggedInBNetClient.InGameClient.SendMessage(new WorldDeletedMessage() { Id = 0xd9, Field0 = WorldID, });
             toon.InGameClient.FlushOutgoingBuffer();

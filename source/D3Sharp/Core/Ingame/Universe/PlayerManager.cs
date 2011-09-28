@@ -127,7 +127,18 @@ namespace D3Sharp.Core.Ingame.Universe
 
             //client.Player.Toon.Position.X = 1768.750000f;
             //client.Player.Toon.Position.Y = 2921.250000f;
-            //client.Player.Toon.Position.Z = 20.333143f;                
+            //client.Player.Toon.Position.Z = 20.333143f;        
+        
+            //client.Player.Toon.Position.X = 2041.250000f;
+            //client.Player.Toon.Position.Y =  1778.750000f;
+            //client.Player.Toon.Position.Z = 0.426203f;
+
+            //defiled crypt level 2
+            //client.Player.Toon.CurrentWorldID =   2000289804;
+            //client.Player.Toon.CurrentWorldSNO = 60600;
+            //client.Player.Toon.Position.X = 158.750000f;
+            //client.Player.Toon.Position.Y =      76.250000f;
+            //client.Player.Toon.Position.Z =         0.100000f;
 
             //reveal world to the toon
             World world = this.Universe.GetWorld(client.Player.Toon.CurrentWorldID);

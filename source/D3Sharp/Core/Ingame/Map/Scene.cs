@@ -13,17 +13,25 @@ namespace D3Sharp.Core.Ingame.Map
 
         public void Reveal(IngameToon t)
         {
-            if (SceneData != null) t.InGameClient.SendMessage(SceneData);
+            if (t.RevealedScenes.Contains(this)) return; //already revealed
+
+            if (SceneData != null)
+            {
+                t.InGameClient.SendMessage(SceneData);
+                t.RevealedScenes.Add(this);
+            }
             if (Map != null) t.InGameClient.SendMessage(Map);
             t.InGameClient.FlushOutgoingBuffer();
         }
 
         public void Destroy(IngameToon t)
         {
+            if (!t.RevealedScenes.Contains(this)) return; //not revealed yet
             if (SceneData != null)
             {
                 t.InGameClient.SendMessage(new DestroySceneMessage() { Id=0x35, Field0 = SceneData.WorldID, Field1 = ID });
                 t.InGameClient.FlushOutgoingBuffer();
+                t.RevealedScenes.Remove(this);
             }
         }
 
