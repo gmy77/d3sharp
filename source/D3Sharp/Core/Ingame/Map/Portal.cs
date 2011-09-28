@@ -38,7 +38,7 @@ namespace D3Sharp.Core.Ingame.Map
                 //targetpos!=null in this case is used to detect if the portal has been completely initialized to have a target
                 //if it doesn't have one, it won't be displayed - otherwise the client would crash from this.
             {
-                Logger.Info("Revealing portal: " + PortalMessage.AsText());
+                //Logger.Info("Revealing portal: " + PortalMessage.AsText());
 
                 ActorRef.Reveal(hero);
 

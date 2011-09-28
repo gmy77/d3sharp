@@ -149,7 +149,7 @@ namespace D3Sharp.Core.Ingame.Universe
                                     break;
 
                                 default:
-                                    Logger.Info("Unimplemented packet type encountered in universe file: " + packettype);
+                                    //Logger.Info("Unimplemented packet type encountered in universe file: " + packettype);
                                     break;
                             }
                         }
