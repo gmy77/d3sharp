@@ -76,7 +76,7 @@ namespace D3Sharp.Net.Game
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                         else Logger.Warn("Got an incoming message that has no consumer or self-handler " + message.GetType());
 
-                        //Logger.LogIncoming(msg);
+                        //Logger.LogIncoming(message);
                     }
                     catch (NotImplementedException)
                     {

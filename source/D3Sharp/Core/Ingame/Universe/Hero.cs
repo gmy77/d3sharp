@@ -33,6 +33,7 @@ namespace D3Sharp.Core.Ingame.Universe
         
         public int CurrentWorldSNO;
         public Skillset Skillset = new Skillset(); // TODO: this should eventually be done on the bnet side
+        public Inventory Inventory;
 
         public GameClient InGameClient { get; private set; }
 
@@ -50,6 +51,7 @@ namespace D3Sharp.Core.Ingame.Universe
             this.Universe = universe;
             this.Properties = toon;
             this.CurrentWorldSNO = 0x115EE;
+            this.Inventory = new Inventory(this);
 
             // actor values
             this.Id = 0x789E00E2;

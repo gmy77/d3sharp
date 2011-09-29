@@ -22,13 +22,11 @@ using D3Sharp.Net.Game.Message.Fields;
 
 namespace D3Sharp.Net.Game.Message.Definitions.Inventory
 {
+    [IncomingMessage(Opcodes.InventoryRequestMoveMessage1, Consumers.Inventory)]
     public class InventoryRequestMoveMessage : GameMessage
     {
         public int Field0;
         public InvLoc Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {
