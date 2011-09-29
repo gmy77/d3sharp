@@ -1,0 +1,7 @@
+<Configuration>
+  <NamespaceFolders>
+    <SkipFolder>41BB6B2D-BD3F-42B6-860C-D21DC74B33CD/d:Assets/d:Maps</SkipFolder>
+    <SkipFolder>41BB6B2D-BD3F-42B6-860C-D21DC74B33CD/d:Assets/d:SNO</SkipFolder>
+    <SkipFolder>41BB6B2D-BD3F-42B6-860C-D21DC74B33CD/d:Assets</SkipFolder>
+  </NamespaceFolders>
+</Configuration>

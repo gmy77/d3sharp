@@ -25,6 +25,6 @@ namespace D3Sharp.Net.BNet
 
         private static readonly Config _instance = new Config();
         public static Config Instance { get { return _instance; } }
-        private Config() : base("Bnet-Server") { }
+        private Config() : base("MooNet-Server") { }
     }
 }

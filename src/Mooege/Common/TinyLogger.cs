@@ -228,21 +228,8 @@ namespace D3Sharp.Utils
         public ConsoleTarget(Level minLevel, bool initConsole = false)
         {
             MinimumLevel = minLevel;
-            // if (initConsole) InitConsole(); TODO: Make sure only get compiled in win32
         }
-
-        // TODO: Make sure only get compiled in win32
-        /*private static void InitConsole() // binds a new console window to a windowed application.
-        {
-            NativeMethods.AllocConsole(); // allocate a new console window.
-            var stdHandle = NativeMethods.GetStdHandle(StdOutputHandle); // the stdout handle.
-            var safeFileHandle = new Microsoft.Win32.SafeHandles.SafeFileHandle(stdHandle, true);
-            var fileStream = new FileStream(safeFileHandle, FileAccess.Write);
-            var encoding = Encoding.GetEncoding(CodePage);
-            var standardOutput = new StreamWriter(fileStream, encoding) { AutoFlush = true };
-            Console.SetOut(standardOutput); // set console's output stream to stdout.
-        }*/
-
+        
         public override void LogMessage(Level level, string logger, string message)
         {
             SetForeGroundColor(level);

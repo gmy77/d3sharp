@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4CC19847-6F24-4453-9E31-126F94308AB9}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>D3Proto</RootNamespace>
-    <AssemblyName>D3Proto</AssemblyName>
+    <RootNamespace>LibMooNet</RootNamespace>
+    <AssemblyName>LibMooNet</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
