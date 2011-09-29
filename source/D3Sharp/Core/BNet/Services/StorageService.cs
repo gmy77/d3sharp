@@ -20,7 +20,7 @@ using System.IO;
 using System.Collections.Generic;
 using D3Sharp.Net.BNet;
 using D3Sharp.Utils;
-using Gibbed.Helpers;
+using Gibbed.IO;
 
 namespace D3Sharp.Core.BNet.Services
 {
