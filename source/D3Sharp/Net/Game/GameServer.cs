@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 D3Sharp Project
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,14 +16,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Linq;
+using D3Sharp.Core.Ingame.Universe;
+
 namespace D3Sharp.Net.Game
 {
     public sealed class GameServer : Server
     {
+        private Universe GameUniverse;
+
         public GameServer()
         {
-            this.OnConnect += GameServer_OnConnect;
-            this.OnDisconnect += (sender, e) => Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
+            GameUniverse=new Universe();
+
+            this.OnConnect += ClientManager.OnConnect;
+            this.OnDisconnect += ClientManager.OnDisconnect;
             this.DataReceived += GameServer_DataReceived;
             this.DataSent += (sender, e) => { };
         }
@@ -32,12 +39,6 @@ namespace D3Sharp.Net.Game
         {
             var connection = (Connection)e.Connection;
             ((GameClient)connection.Client).Parse(e);
-        }
-
-        void GameServer_OnConnect(object sender, ConnectionEventArgs e)
-        {
-            Logger.Trace("Game-Client connected: {0}", e.Connection.ToString());
-            e.Connection.Client = new GameClient(e.Connection);
         }
 
         public override void Run()

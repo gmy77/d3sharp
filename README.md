@@ -1,10 +1,14 @@
 # Stay awhile and listen
 
-* Read the fucking [FAQ](/raistlinthewiz/d3sharp/wiki/FAQ) before asking!
-* Status: Will get you to town - though ingame is somewhat hardcoded atm..
-* IRC: [#d3sharp/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23d3sharp)
+* Read the [FAQ](/mooege/mooege/wiki/FAQ) before asking!
+* Status: Will get you ingame.. Ask in #mooege.chat for more info.
+* IRC: [#mooege.chat/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23mooege.chat)
+* IRC (developers only): [#mooege/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23mooege)
+* IRC (announcements): [#mooege.announce/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23mooege.announce)
+* [Twitter](http://twitter.com/#!/mooege)
+* [Commit feed on Twitter](http://twitter.com/#!/MooegeDev)
 
-Copyright (C) 2011 D3Sharp Project
+Copyright (C) 2011 mooege project
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,3 +23,4 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+

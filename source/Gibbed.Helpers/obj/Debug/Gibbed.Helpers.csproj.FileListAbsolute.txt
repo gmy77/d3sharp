@@ -1,0 +1,5 @@
+E:\Private\Workspace\d3sharp_angerwin\source\Gibbed.Helpers\bin\Debug\Gibbed.Helpers.dll
+E:\Private\Workspace\d3sharp_angerwin\source\Gibbed.Helpers\bin\Debug\Gibbed.Helpers.pdb
+E:\Private\Workspace\d3sharp_angerwin\source\Gibbed.Helpers\obj\Debug\ResolveAssemblyReference.cache
+E:\Private\Workspace\d3sharp_angerwin\source\Gibbed.Helpers\obj\Debug\Gibbed.Helpers.dll
+E:\Private\Workspace\d3sharp_angerwin\source\Gibbed.Helpers\obj\Debug\Gibbed.Helpers.pdb

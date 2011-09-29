@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 D3Sharp Project
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,10 @@ namespace D3Sharp.Net.BNet
 
         public override void Run()
         {
+            // we can't listen for port 1119 because D3 and the launcher (agent) communicates on that port through loopback.
+            // so we change our default port and start D3 with a shortcut like so:
+            //   "F:\Diablo III Beta\Diablo III.exe" -launch -auroraaddress 127.0.0.1:1345
+
             if (!this.Listen(Config.Instance.BindIP, Config.Instance.Port)) return;
             Logger.Info("Bnet-Server is listening on {0}:{1}...", Config.Instance.BindIP, Config.Instance.Port);
         }
