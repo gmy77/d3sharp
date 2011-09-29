@@ -121,7 +121,7 @@ namespace D3Sharp.Core.Ingame.Universe
         {
             for (int r = 0; r < Rows; r++)
                 for (int c = 0; c < Columns; c++)
-                    if (items[r,c] != null && items[r, c].Gbid == id)
+                    if (items[r,c] != null && items[r, c].ItemId == id)
                         return true;
             return false;
         }
