@@ -318,10 +318,15 @@ namespace D3Sharp.Core.Ingame.Universe
                 return;
             }
 
-            if (SNODatabase.Instance.IsOfGroup(this.GetActor(message.Field1).SnoId, SNOGroup.Actors))
+            // Check if it is an item....
+            Actor a = this.GetActor(message.Field1);
+            if (a != null && SNODatabase.Instance.IsOfGroup(a.SnoId, SNOGroup.Actors))
             {
-                client.Player.Hero.Inventory.PickUp(message);
-                return; 
+                if (message.Field1 == 2065563791)
+                {
+                    client.Player.Hero.Inventory.PickUp(message);
+                    return;
+                }
             }
 
             else if (client.ObjectIdsSpawned == null || !client.ObjectIdsSpawned.Contains(message.Field1)) return;
