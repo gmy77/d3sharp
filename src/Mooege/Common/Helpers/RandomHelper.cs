@@ -18,10 +18,9 @@
 
 using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 
-namespace D3Sharp.Core.Helpers
+namespace Mooege.Common.Helpers
 {
     public class RandomHelper
     {

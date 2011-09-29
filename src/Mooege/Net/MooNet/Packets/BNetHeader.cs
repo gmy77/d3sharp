@@ -19,7 +19,7 @@
 using System.IO;
 using Google.ProtocolBuffers;
 
-namespace D3Sharp.Net.BNet.Packets
+namespace Mooege.Net.MooNet.Packets
 {
     public class BNetHeader
     {

@@ -19,7 +19,7 @@
 using System;
 using System.Text;
 
-namespace D3Sharp.Net.Game.Message
+namespace Mooege.Net.GS.Message
 {
     public class GameBitBufferException : Exception
     {

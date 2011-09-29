@@ -18,9 +18,9 @@
 
 using System;
 using System.Data.SQLite;
-using D3Sharp.Utils;
+using Mooege.Common;
 
-namespace D3Sharp.Core.Common.Storage
+namespace Mooege.Core.Common.Storage
 {
     // just a quick hack - not to be meant a final layer.
     public static class DBManager

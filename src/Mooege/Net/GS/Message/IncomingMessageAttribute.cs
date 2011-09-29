@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace D3Sharp.Net.Game.Message
+namespace Mooege.Net.GS.Message
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class IncomingMessageAttribute : Attribute

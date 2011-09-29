@@ -21,10 +21,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using D3Sharp.Utils;
-using D3Sharp.Utils.Extensions;
+using Mooege.Common;
+using Mooege.Common.Extensions;
 
-namespace D3Sharp.Net
+namespace Mooege.Net
 {
     public class Server : IDisposable
     {       

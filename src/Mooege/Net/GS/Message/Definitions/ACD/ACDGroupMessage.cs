@@ -16,16 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Text;
 
-namespace D3Sharp.Net.Game.Message.Definitions.ACD
+namespace Mooege.Net.GS.Message.Definitions.ACD
 {
-    public class ACDTranslateFacingMessage : GameMessage
+    public class ACDGroupMessage : GameMessage
     {
         public int Field0;
-        public float /* angle */ Field1;
-        public bool Field2;
+        public int Field1;
+        public int Field2;
 
 
 
@@ -33,26 +32,26 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadFloat32();
-            Field2 = buffer.ReadBool();
+            Field1 = buffer.ReadInt(32);
+            Field2 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, Field0);
-            buffer.WriteFloat32(Field1);
-            buffer.WriteBool(Field2);
+            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, Field2);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("ACDTranslateFacingMessage:");
+            b.AppendLine("ACDGroupMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field1: " + Field1.ToString("G"));
-            b.Append(' ', pad); b.AppendLine("Field2: " + (Field2 ? "true" : "false"));
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

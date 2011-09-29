@@ -16,14 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using D3Sharp.Net.Game;
-using D3Sharp.Net.Game.Message;
-using D3Sharp.Net.Game.Message.Definitions.Attribute;
-using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Core.Helpers;
+using Mooege.Net.GS;
+using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Attribute;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Core.Ingame.NPC
+namespace Mooege.Core.GS.NPC
 {
     public class BasicNPC
     {

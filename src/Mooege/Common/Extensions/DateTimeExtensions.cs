@@ -18,7 +18,7 @@
 
 using System;
 
-namespace D3Sharp.Utils.Extensions
+namespace Mooege.Common.Extensions
 {
     public static class DateTimeExtensions
     {

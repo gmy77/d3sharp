@@ -18,11 +18,11 @@
 
 using System.IO;
 using System.Collections.Generic;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
 using Gibbed.IO;
+using Mooege.Common;
+using Mooege.Net.MooNet;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x9, serviceName: "bnet.protocol.storage.StorageService")]
     public class StorageService : bnet.protocol.storage.StorageService,IServerService

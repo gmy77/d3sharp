@@ -17,10 +17,9 @@
  */
 
 using System;
-using D3Sharp.Utils;
 using Nini.Config;
 
-namespace D3Sharp.Core.Config
+namespace Mooege.Common.Config
 {
     public sealed class ConfigurationManager
     {

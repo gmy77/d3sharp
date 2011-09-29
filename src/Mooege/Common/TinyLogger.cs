@@ -22,9 +22,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using D3Sharp.Net.Game.Message;
+using Mooege.Common.Extensions;
+using Mooege.Net.GS.Message;
 
-namespace D3Sharp.Utils
+namespace Mooege.Common
 {
     public enum Level
     {

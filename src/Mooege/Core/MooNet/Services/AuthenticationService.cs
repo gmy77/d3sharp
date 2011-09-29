@@ -17,12 +17,12 @@
  */
 
 using System;
-using D3Sharp.Core.BNet.Accounts;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
+using Mooege.Common;
+using Mooege.Core.MooNet.Accounts;
+using Mooege.Net.MooNet;
 using bnet.protocol.authentication;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x1, serviceName: "bnet.protocol.authentication.AuthenticationServer")]
     public class AuthenticationService:AuthenticationServer, IServerService

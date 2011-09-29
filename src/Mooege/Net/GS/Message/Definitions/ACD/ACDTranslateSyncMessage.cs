@@ -16,15 +16,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Text;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Net.Game.Message.Definitions.ACD
+namespace Mooege.Net.GS.Message.Definitions.ACD
 {
-    public class ACDCollFlagsMessage : GameMessage
+    public class ACDTranslateSyncMessage : GameMessage
     {
         public int Field0;
-        public int Field1;
+        public Vector3D Field1;
+        public bool? Field2;
 
 
 
@@ -32,23 +33,37 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(12);
+            Field1 = new Vector3D();
+            Field1.Parse(buffer);
+            if (buffer.ReadBool())
+            {
+                Field2 = buffer.ReadBool();
+            }
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, Field0);
-            buffer.WriteInt(12, Field1);
+            Field1.Encode(buffer);
+            buffer.WriteBool(Field2.HasValue);
+            if (Field2.HasValue)
+            {
+                buffer.WriteBool(Field2.Value);
+            }
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("ACDCollFlagsMessage:");
+            b.AppendLine("ACDTranslateSyncMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            Field1.AsText(b, pad);
+            if (Field2.HasValue)
+            {
+                b.Append(' ', pad); b.AppendLine("Field2.Value: " + (Field2.Value ? "true" : "false"));
+            }
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

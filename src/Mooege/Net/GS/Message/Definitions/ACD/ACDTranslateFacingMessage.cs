@@ -16,38 +16,42 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Text;
-using D3Sharp.Net.Game.Message.Fields;
 
-namespace D3Sharp.Net.Game.Message.Definitions.ACD
+namespace Mooege.Net.GS.Message.Definitions.ACD
 {
-    public class ACDWorldPositionMessage : GameMessage
+    public class ACDTranslateFacingMessage : GameMessage
     {
         public int Field0;
-        public WorldLocationMessageData Field1;
+        public float /* angle */ Field1;
+        public bool Field2;
+
+
+
 
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
-            Field1 = new WorldLocationMessageData();
-            Field1.Parse(buffer);
+            Field1 = buffer.ReadFloat32();
+            Field2 = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
+            buffer.WriteFloat32(Field1);
+            buffer.WriteBool(Field2);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("ACDWorldPositionMessage:");
+            b.AppendLine("ACDTranslateFacingMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            Field1.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Field1: " + Field1.ToString("G"));
+            b.Append(' ', pad); b.AppendLine("Field2: " + (Field2 ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

@@ -18,7 +18,7 @@
 
 using Nini.Config;
 
-namespace D3Sharp.Core.Config
+namespace Mooege.Common.Config
 {
     public class Config
     {

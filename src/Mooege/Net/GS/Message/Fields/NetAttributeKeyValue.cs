@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace D3Sharp.Net.Game.Message.Fields
+namespace Mooege.Net.GS.Message.Fields
 {
     public class NetAttributeKeyValue
     {

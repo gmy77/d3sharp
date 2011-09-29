@@ -17,12 +17,12 @@
  */
 
 using System;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
 using Google.ProtocolBuffers;
+using Mooege.Common;
+using Mooege.Net.MooNet;
 using bnet.protocol.user_manager;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x5, serviceName: "bnet.protocol.user_manager.UserManagerService")]
     public class UserManagerService : bnet.protocol.user_manager.UserManagerService,IServerService

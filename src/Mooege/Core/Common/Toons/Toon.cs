@@ -18,6 +18,12 @@
 
 using System;
 using System.Data.SQLite;
+using Mooege.Common.Helpers;
+using Mooege.Core.Common.Storage;
+using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Helpers;
+using Mooege.Core.MooNet.Objects;
+using Mooege.Net.MooNet;
 //<<<<<<< HEAD
 //using System.Linq;
 //using System.Collections.Generic;
@@ -25,15 +31,9 @@ using System.Data.SQLite;
 //using D3Sharp.Core.Accounts;
 //using D3Sharp.Core.Channels;
 //=======
-using D3Sharp.Core.BNet.Accounts;
-using D3Sharp.Core.BNet.Objects;
-using D3Sharp.Core.Common.Storage;
 //>>>>>>> 8574c238179fe15ed89f064963d15f70293617bc
-using D3Sharp.Core.Helpers;
-using D3Sharp.Utils.Helpers;
-using Account = D3Sharp.Core.BNet.Accounts.Account;
 
-namespace D3Sharp.Core.Common.Toons
+namespace Mooege.Core.Common.Toons
 {
     public class Toon : PersistentRPCObject
     {
@@ -297,7 +297,7 @@ namespace D3Sharp.Core.Common.Toons
             return field.HasValue ? field.Build() : null;
         }
 
-        protected override void NotifySubscriptionAdded(Net.BNet.BNetClient client)
+        protected override void NotifySubscriptionAdded(BNetClient client)
         {
             // Check docs/rpc/fields.txt for fields keys
 

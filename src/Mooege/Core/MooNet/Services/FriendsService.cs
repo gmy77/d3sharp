@@ -17,15 +17,15 @@
  */
 
 using System;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
-using D3Sharp.Utils.Extensions;
 using Google.ProtocolBuffers;
+using Mooege.Common;
+using Mooege.Common.Extensions;
+using Mooege.Net.MooNet;
 using bnet.protocol;
 using bnet.protocol.friends;
 using bnet.protocol.invitation;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x6, serviceName: "bnet.protocol.friends.FriendsService")]
     public class FriendsService : bnet.protocol.friends.FriendsService,IServerService

@@ -1,9 +1,8 @@
-﻿using D3Sharp.Core.Common.Toons;
-using D3Sharp.Core.Ingame.Universe;
-using D3Sharp.Net.Game.Message.Definitions.Scene;
-using D3Sharp.Net.Game.Message.Definitions.Map;
+﻿using Mooege.Core.GS.Universe;
+using Mooege.Net.GS.Message.Definitions.Map;
+using Mooege.Net.GS.Message.Definitions.Scene;
 
-namespace D3Sharp.Core.Ingame.Map
+namespace Mooege.Core.GS.Map
 {
     sealed public class Scene
     {

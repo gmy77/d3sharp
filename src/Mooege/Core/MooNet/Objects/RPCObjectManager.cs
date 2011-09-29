@@ -18,9 +18,9 @@
 
 using System;
 using System.Collections.Generic;
-using D3Sharp.Utils;
+using Mooege.Common;
 
-namespace D3Sharp.Core.BNet.Objects
+namespace Mooege.Core.MooNet.Objects
 {
     public static class RPCObjectManager
     {

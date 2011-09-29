@@ -18,7 +18,7 @@
 
 using System.Text;
 
-namespace D3Sharp.Net.Game.Message.Definitions.Connection
+namespace Mooege.Net.GS.Message.Definitions.Connection
 {
     [IncomingMessage(new[] { Opcodes.LogoutContextMessage1, Opcodes.LogoutContextMessage2 })]
     public class LogoutContextMessage : GameMessage,ISelfHandler

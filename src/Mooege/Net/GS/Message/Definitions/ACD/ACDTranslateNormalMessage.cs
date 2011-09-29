@@ -17,9 +17,9 @@
  */
 
 using System.Text;
-using D3Sharp.Net.Game.Message.Fields;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Net.Game.Message.Definitions.ACD
+namespace Mooege.Net.GS.Message.Definitions.ACD
 {
     [IncomingMessage(new[] { Opcodes.ACDTranslateNormalMessage1, Opcodes.ACDTranslateNormalMessage2 })]
     public class ACDTranslateNormalMessage : GameMessage, ISelfHandler

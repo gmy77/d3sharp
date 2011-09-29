@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace D3Sharp.Data.SNO
+namespace Mooege.Core.GS.Data.SNO
 {
-    public sealed class Config: Core.Config.Config
+    public sealed class Config: Mooege.Common.Config.Config
     {       
         public string SNOList { get { return this.GetString("SNOList", "Assets/SNO/list.txt"); } set { this.Set("SNOList", value); } }
 

@@ -18,13 +18,13 @@
 
 using System;
 using System.Text;
-using D3Sharp.Net.Game.Message.Definitions.ACD;
-using D3Sharp.Net.Game.Message.Definitions.Attribute;
-using D3Sharp.Net.Game.Message.Definitions.Game;
-using D3Sharp.Net.Game.Message.Definitions.Hireling;
-using D3Sharp.Net.Game.Message.Fields;
+using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Net.GS.Message.Definitions.Attribute;
+using Mooege.Net.GS.Message.Definitions.Game;
+using Mooege.Net.GS.Message.Definitions.Hireling;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Net.Game.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     [IncomingMessage(new[]{
         Opcodes.SimpleMessage1,Opcodes.SimpleMessage2, Opcodes.SimpleMessage3,Opcodes.SimpleMessage5,Opcodes.SimpleMessage6,Opcodes.SimpleMessage7,Opcodes.SimpleMessage8,

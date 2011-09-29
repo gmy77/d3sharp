@@ -17,14 +17,14 @@
  */
 
 using System;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
 using Google.ProtocolBuffers;
+using Mooege.Common;
+using Mooege.Net.MooNet;
 using bnet.protocol;
 using bnet.protocol.exchange;
 using bnet.protocol.exchange_object_provider;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x0a, serviceName: "bnet.protocol.exchange.ExchangeService")]
     public class ExchangeService : bnet.protocol.exchange.ExchangeService, IServerService

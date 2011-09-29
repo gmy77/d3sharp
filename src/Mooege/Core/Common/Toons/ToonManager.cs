@@ -19,11 +19,11 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
-using D3Sharp.Core.BNet.Accounts;
-using D3Sharp.Core.Common.Storage;
-using D3Sharp.Utils;
+using Mooege.Common;
+using Mooege.Core.Common.Storage;
+using Mooege.Core.MooNet.Accounts;
 
-namespace D3Sharp.Core.Common.Toons
+namespace Mooege.Core.Common.Toons
 {
     // Just a quick hack - not to be meant final
     public static class ToonManager

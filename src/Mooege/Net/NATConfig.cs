@@ -16,9 +16,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace D3Sharp.Net
+using Mooege.Common.Config;
+
+namespace Mooege.Net
 {
-    public sealed class NATConfig: Core.Config.Config
+    public sealed class NATConfig: Config
     {
         public bool Enabled { get { return this.GetBoolean("Enabled", true); } set { this.Set("Enabled", value); } }
         public string PublicIP { get { return this.GetString("PublicIP", "0.0.0.0"); } set { this.Set("PublicIP", value); } }

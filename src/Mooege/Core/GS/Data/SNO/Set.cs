@@ -18,11 +18,10 @@
 
 using System;
 using System.IO;
-using System.Text;
 using System.Collections.Generic;
-using D3Sharp.Utils;
+using Mooege.Common;
 
-namespace D3Sharp.Data.SNO
+namespace Mooege.Core.GS.Data.SNO
 {
     // Need moar, cap'n!
     public enum SNOType

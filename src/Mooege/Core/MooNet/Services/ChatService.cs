@@ -17,10 +17,10 @@
  */
 
 using System;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
+using Mooege.Common;
+using Mooege.Net.MooNet;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x0f, serviceName: "bnet.protocol.chat.ChatService")]
     public class ChatService : bnet.protocol.chat.ChatService, IServerService

@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace D3Sharp.Core.Helpers
+namespace Mooege.Core.MooNet.Helpers
 {
     public class FieldKeyHelper
     {

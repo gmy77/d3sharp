@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
 
-namespace D3Sharp.Utils
+namespace Mooege.Common.Extensions
 {
     static class IMessageExtensions
     {

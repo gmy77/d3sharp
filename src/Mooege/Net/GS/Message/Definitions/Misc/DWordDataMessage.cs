@@ -18,7 +18,7 @@
 
 using System.Text;
 
-namespace D3Sharp.Net.Game.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     [IncomingMessage(new[] {
         Opcodes.DWordDataMessage1,Opcodes.DWordDataMessage2,Opcodes.DWordDataMessage3,Opcodes.DWordDataMessage4,Opcodes.DWordDataMessage5,Opcodes.DWordDataMessage6,

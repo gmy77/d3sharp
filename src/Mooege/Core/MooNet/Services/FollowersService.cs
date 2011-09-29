@@ -17,10 +17,10 @@
  */
 
 using System;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
+using Mooege.Common;
+using Mooege.Net.MooNet;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x4, serviceName: "bnet.protocol.followers.FollowersService")]
     public class FollowersService : bnet.protocol.followers.FollowersService,IServerService

@@ -17,9 +17,9 @@
  */
 
 using System.Collections.Generic;
-using D3Sharp.Net.BNet;
+using Mooege.Net.MooNet;
 
-namespace D3Sharp.Core.BNet
+namespace Mooege.Core.MooNet
 {
     public static class OnlinePlayers
     {

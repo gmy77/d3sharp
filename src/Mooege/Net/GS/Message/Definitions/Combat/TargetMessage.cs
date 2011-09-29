@@ -17,9 +17,9 @@
  */
 
 using System.Text;
-using D3Sharp.Net.Game.Message.Fields;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Net.Game.Message.Definitions.Combat
+namespace Mooege.Net.GS.Message.Definitions.Combat
 {
     [IncomingMessage(Opcodes.TargetMessage,Consumers.Universe)]
     public class TargetMessage : GameMessage

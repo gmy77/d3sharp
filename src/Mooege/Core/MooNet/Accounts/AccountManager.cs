@@ -20,9 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
-using D3Sharp.Core.Common.Storage;
+using Mooege.Core.Common.Storage;
 
-namespace D3Sharp.Core.BNet.Accounts
+namespace Mooege.Core.MooNet.Accounts
 {
     public static class AccountManager
     {

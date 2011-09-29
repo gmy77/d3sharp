@@ -16,23 +16,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using D3Sharp.Core.Common.Toons;
-using D3Sharp.Net.Game;
-using D3Sharp.Net.Game.Message;
-using D3Sharp.Net.Game.Message.Definitions.ACD;
-using D3Sharp.Net.Game.Message.Definitions.Act;
-using D3Sharp.Net.Game.Message.Definitions.Attribute;
-using D3Sharp.Net.Game.Message.Definitions.Connection;
-using D3Sharp.Net.Game.Message.Definitions.Game;
-using D3Sharp.Net.Game.Message.Definitions.Hero;
-using D3Sharp.Net.Game.Message.Definitions.Inventory;
-using D3Sharp.Net.Game.Message.Definitions.Misc;
-using D3Sharp.Net.Game.Message.Definitions.Player;
-using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Utils;
+using Mooege.Common;
+using Mooege.Core.Common.Toons;
+using Mooege.Net.GS;
+using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Net.GS.Message.Definitions.Act;
+using Mooege.Net.GS.Message.Definitions.Attribute;
+using Mooege.Net.GS.Message.Definitions.Connection;
+using Mooege.Net.GS.Message.Definitions.Game;
+using Mooege.Net.GS.Message.Definitions.Hero;
+using Mooege.Net.GS.Message.Definitions.Inventory;
+using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Definitions.Player;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Core.Ingame.Universe
+namespace Mooege.Core.GS.Universe
 {
     public class Player
     {

@@ -18,11 +18,10 @@
 
 using System;
 using System.Data.SQLite;
-using D3Sharp.Core.Helpers;
-using D3Sharp.Utils;
-using D3Sharp.Utils.Helpers;
+using Mooege.Common;
+using Mooege.Common.Helpers;
 
-namespace D3Sharp.Core.Common.Items
+namespace Mooege.Core.Common.Items
 {
     class ItemTypeGenerator
     {

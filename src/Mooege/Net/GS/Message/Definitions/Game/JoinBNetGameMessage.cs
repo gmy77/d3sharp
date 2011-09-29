@@ -17,9 +17,9 @@
  */
 
 using System.Text;
-using D3Sharp.Net.Game.Message.Fields;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Net.Game.Message.Definitions.Game
+namespace Mooege.Net.GS.Message.Definitions.Game
 {
     [IncomingMessage(Opcodes.JoinBNetGameMessage,Consumers.PlayerManager)]
     public class JoinBNetGameMessage : GameMessage

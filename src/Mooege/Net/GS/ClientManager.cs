@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using D3Sharp.Core.Ingame.Universe;
-using D3Sharp.Utils;
+﻿using System.Collections.Generic;
+using Mooege.Common;
+using Mooege.Core.GS.Universe;
 
-namespace D3Sharp.Net.Game
+namespace Mooege.Net.GS
 {
     public class ClientManager
     {

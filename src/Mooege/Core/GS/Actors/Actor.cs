@@ -16,12 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using D3Sharp.Core.Ingame.Universe;
-using D3Sharp.Net.Game.Message.Definitions.ACD;
-using D3Sharp.Net.Game.Message.Definitions.Misc;
-using D3Sharp.Net.Game.Message.Fields;
+using Mooege.Core.GS.Universe;
+using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Core.Ingame.Actors
+namespace Mooege.Core.GS.Actors
 {
     public class Actor
     {

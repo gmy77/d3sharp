@@ -20,10 +20,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using D3Sharp.Utils.Helpers;
 using Google.ProtocolBuffers;
+using Mooege.Common.Helpers;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class ServiceAttribute : Attribute
@@ -38,7 +38,7 @@ namespace D3Sharp.Core.BNet.Services
         }
 
         public ServiceAttribute(uint serviceID, string serviceName)
-            : this(serviceID, StringHashHelper.HashIdentity(serviceName))
+            : this(serviceID, (uint) StringHashHelper.HashIdentity(serviceName))
         {
         }
     }

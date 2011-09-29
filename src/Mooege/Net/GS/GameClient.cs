@@ -19,14 +19,12 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using D3Sharp.Core.Common.Toons;
-using D3Sharp.Core.Ingame.Universe;
-using D3Sharp.Net.BNet;
-using D3Sharp.Net.Game.Message;
-using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Utils;
+using Mooege.Common;
+using Mooege.Core.GS.Universe;
+using Mooege.Net.GS.Message;
+using Mooege.Net.MooNet;
 
-namespace D3Sharp.Net.Game
+namespace Mooege.Net.GS
 {
     public sealed class GameClient : IGameClient
     {

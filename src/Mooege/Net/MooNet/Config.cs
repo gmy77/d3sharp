@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace D3Sharp.Net.BNet
+namespace Mooege.Net.MooNet
 {
-    public sealed class Config: Core.Config.Config
+    public sealed class Config: Common.Config.Config
     {
         public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("BindIP", value); } }
         public int Port { get { return this.GetInt("Port", 1345); } set { this.Set("Port", value); } }

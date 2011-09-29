@@ -19,11 +19,11 @@
 using System;
 using System.Reflection;
 using System.Threading;
-using D3Sharp.Net.BNet;
-using D3Sharp.Net.Game;
-using D3Sharp.Utils;
+using Mooege.Common;
+using Mooege.Net.GS;
+using Mooege.Net.MooNet;
 
-namespace D3Sharp
+namespace Mooege
 {
     internal class Program
     {

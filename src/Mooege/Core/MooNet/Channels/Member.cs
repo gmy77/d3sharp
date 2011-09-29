@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace D3Sharp.Core.BNet.Channels
+namespace Mooege.Core.MooNet.Channels
 {
     public class Member
     {

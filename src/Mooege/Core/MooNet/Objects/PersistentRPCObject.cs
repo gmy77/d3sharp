@@ -18,7 +18,7 @@
 
 using System;
 
-namespace D3Sharp.Core.BNet.Objects
+namespace Mooege.Core.MooNet.Objects
 {
     /// <summary>
     /// PersistentRPCObjects are RPCObjects that are persisted in a database or other external resource.

@@ -16,11 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Text;
-using D3Sharp.Net.Game.Message.Fields;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Net.Game.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     public class TimedEventStartedMessage : GameMessage
     {

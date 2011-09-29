@@ -20,9 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using D3Sharp.Utils;
+using Mooege.Common;
 
-namespace D3Sharp.Net.Game.Message
+namespace Mooege.Net.GS.Message
 {
     public abstract class GameMessage
     {

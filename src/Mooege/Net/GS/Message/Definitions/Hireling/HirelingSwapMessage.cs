@@ -16,10 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Text;
 
-namespace D3Sharp.Net.Game.Message.Definitions.Hireling
+namespace Mooege.Net.GS.Message.Definitions.Hireling
 {
     public class HirelingSwapMessage : GameMessage
     {

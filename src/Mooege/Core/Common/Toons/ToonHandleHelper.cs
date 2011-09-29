@@ -16,10 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using D3Sharp.Core.Helpers;
 using Google.ProtocolBuffers;
+using Mooege.Core.MooNet.Helpers;
 
-namespace D3Sharp.Core.Common.Toons
+namespace Mooege.Core.Common.Toons
 {
     public class ToonHandleHelper
     {

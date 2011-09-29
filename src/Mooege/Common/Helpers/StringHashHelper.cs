@@ -19,7 +19,7 @@
 using System.Linq;
 using System.Text;
 
-namespace D3Sharp.Utils.Helpers
+namespace Mooege.Common.Helpers
 {
     public class StringHashHelper
     {

@@ -20,13 +20,13 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
-using D3Sharp.Core.BNet.Objects;
-using D3Sharp.Core.Common.Storage;
-using D3Sharp.Core.Common.Toons;
-using D3Sharp.Core.Helpers;
-using D3Sharp.Net.BNet;
+using Mooege.Core.Common.Storage;
+using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Helpers;
+using Mooege.Core.MooNet.Objects;
+using Mooege.Net.MooNet;
 
-namespace D3Sharp.Core.BNet.Accounts
+namespace Mooege.Core.MooNet.Accounts
 {
     public class Account : PersistentRPCObject
     {
@@ -98,7 +98,7 @@ namespace D3Sharp.Core.BNet.Accounts
                 .Build();
         }
 
-        protected override void NotifySubscriptionAdded(Net.BNet.BNetClient client)
+        protected override void NotifySubscriptionAdded(BNetClient client)
         {
             // Check docs/rpc/fields.txt for fields keys
 

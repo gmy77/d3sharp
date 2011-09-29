@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using D3Sharp.Net.BNet;
+using Mooege.Net.MooNet;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     public interface IServerService
     {

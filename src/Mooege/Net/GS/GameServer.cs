@@ -16,10 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Linq;
-using D3Sharp.Core.Ingame.Universe;
+using Mooege.Core.GS.Universe;
 
-namespace D3Sharp.Net.Game
+namespace Mooege.Net.GS
 {
     public sealed class GameServer : Server
     {

@@ -17,12 +17,12 @@
  */
 
 using System;
-using D3Sharp.Core.Common.Toons;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
+using Mooege.Common;
+using Mooege.Core.Common.Toons;
+using Mooege.Net.MooNet;
 using bnet.protocol.toon.external;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x2, serviceName: "bnet.protocol.toon.external.ToonServiceExternal")]
     public class ToonExternalService : ToonServiceExternal, IServerService

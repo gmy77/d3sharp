@@ -17,13 +17,13 @@
  */
 
 using System;
-using D3Sharp.Core.BNet.Channels;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
 using Google.ProtocolBuffers;
+using Mooege.Common;
+using Mooege.Core.MooNet.Channels;
+using Mooege.Net.MooNet;
 using bnet.protocol.channel;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x0D, serviceName: "bnet.protocol.party.PartyService")]
     public class PartyService : bnet.protocol.party.PartyService,IServerService

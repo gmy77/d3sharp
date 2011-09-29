@@ -16,15 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
-using System.Text;
-using D3Sharp.Net.BNet;
+using Mooege.Net.MooNet;
 
-namespace D3Sharp.Net
+namespace Mooege.Net
 {
     public static class Utils
     {

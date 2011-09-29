@@ -16,9 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using D3Sharp.Net.BNet.Packets;
-
-namespace D3Sharp.Net.BNet
+namespace Mooege.Net.MooNet
 {
     public sealed class BnetServer : Server
     {

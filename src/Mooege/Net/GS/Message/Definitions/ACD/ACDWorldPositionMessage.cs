@@ -16,45 +16,37 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Text;
-using D3Sharp.Net.Game.Message.Fields;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Net.Game.Message.Definitions.ACD
+namespace Mooege.Net.GS.Message.Definitions.ACD
 {
-    public class ACDInventoryPositionMessage : GameMessage
+    public class ACDWorldPositionMessage : GameMessage
     {
         public int Field0;
-        public InventoryLocationMessageData Field1;
-        public int Field2;
-
-
-
+        public WorldLocationMessageData Field1;
 
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
-            Field1 = new InventoryLocationMessageData();
+            Field1 = new WorldLocationMessageData();
             Field1.Parse(buffer);
-            Field2 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, Field0);
             Field1.Encode(buffer);
-            buffer.WriteInt(32, Field2);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("ACDInventoryPositionMessage:");
+            b.AppendLine("ACDWorldPositionMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
             Field1.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

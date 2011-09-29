@@ -16,17 +16,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using D3Sharp.Core.BNet.Accounts;
-using D3Sharp.Core.Common.Toons;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
-using D3Sharp.Core.Helpers;
+using Mooege.Common;
+using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Helpers;
+using Mooege.Net.MooNet;
 using bnet.protocol;
 
 // TODO: Need to do some more testing and inspection to make sure that
 // responding before performing the action requested is proper
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0xb, serviceName: "bnet.protocol.presence.PresenceService")]
     public class PresenceService : bnet.protocol.presence.PresenceService,IServerService

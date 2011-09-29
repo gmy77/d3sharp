@@ -19,11 +19,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using D3Sharp.Core.BNet.Objects;
-using D3Sharp.Core.Helpers;
-using D3Sharp.Net.BNet;
+using Mooege.Core.MooNet.Helpers;
+using Mooege.Core.MooNet.Objects;
+using Mooege.Net.MooNet;
 
-namespace D3Sharp.Core.BNet.Channels
+namespace Mooege.Core.MooNet.Channels
 {
     public class Channel : RPCObject
     {

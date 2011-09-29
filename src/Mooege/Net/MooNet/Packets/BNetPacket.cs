@@ -18,9 +18,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using D3Sharp.Utils.Extensions;
+using Mooege.Common.Extensions;
 
-namespace D3Sharp.Net.BNet.Packets
+namespace Mooege.Net.MooNet.Packets
 {
     public class BNetPacket
     {

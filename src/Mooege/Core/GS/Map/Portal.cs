@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using D3Sharp.Utils;
-using D3Sharp.Core.Ingame.Actors;
-using D3Sharp.Core.Ingame.Universe;
-using D3Sharp.Net.Game.Message.Definitions.Misc;
-using D3Sharp.Net.Game.Message.Definitions.ACD;
-using D3Sharp.Net.Game.Message.Definitions.Attribute;
-using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Message;
+﻿using Mooege.Common;
+using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Universe;
+using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Net.GS.Message.Definitions.Attribute;
+using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Core.Ingame.Map
+namespace Mooege.Core.GS.Map
 {
     public class Portal
     {

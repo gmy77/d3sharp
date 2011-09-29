@@ -19,7 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace D3Sharp.Net
+namespace Mooege.Net
 {
     public sealed class ConnectionDataEventArgs : ConnectionEventArgs
     {

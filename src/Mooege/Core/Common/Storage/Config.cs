@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace D3Sharp.Core.Common.Storage
+namespace Mooege.Core.Common.Storage
 {
-    public sealed class Config : Core.Config.Config
+    public sealed class Config : Mooege.Common.Config.Config
     {
         public string AssetsRoot {
             get { return this.GetString("AssetsRoot", "."); }

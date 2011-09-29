@@ -17,11 +17,11 @@
  */
 
 using System.Collections.Generic;
-using D3Sharp.Utils;
-using D3Sharp.Net.BNet;
-using D3Sharp.Core.Helpers;
+using Mooege.Common;
+using Mooege.Core.MooNet.Helpers;
+using Mooege.Net.MooNet;
 
-namespace D3Sharp.Core.BNet.Channels
+namespace Mooege.Core.MooNet.Channels
 {
     public static class ChannelManager
     {

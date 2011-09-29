@@ -17,13 +17,13 @@
  */
 
 using System;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
 using Google.ProtocolBuffers;
+using Mooege.Common;
+using Mooege.Net.MooNet;
 using bnet.protocol;
 using bnet.protocol.search;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0xe, serviceName: "bnet.protocol.search.SearchService")]
     public class SearchService : bnet.protocol.search.SearchService,IServerService

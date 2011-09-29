@@ -17,12 +17,11 @@
  */
 
 using System.Text;
-using D3Sharp.Core.Helpers;
-using D3Sharp.Data.SNO;
-using D3Sharp.Core.Ingame.NPC;
-using D3Sharp.Net.Game.Message.Fields;
+using Mooege.Common.Helpers;
+using Mooege.Core.GS.Data.SNO;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Net.Game.Message.Definitions.Animation
+namespace Mooege.Net.GS.Message.Definitions.Animation
 {
     [IncomingMessage(Opcodes.SecondaryAnimationPowerMessage)]
     public class SecondaryAnimationPowerMessage : GameMessage,ISelfHandler

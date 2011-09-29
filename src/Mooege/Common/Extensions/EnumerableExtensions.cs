@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace D3Sharp.Utils.Extensions
+namespace Mooege.Common.Extensions
 {
     public static class EnumerableExtensions
     {

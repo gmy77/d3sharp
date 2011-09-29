@@ -1,12 +1,12 @@
-﻿using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game;
-using D3Sharp.Net.Game.Message.Definitions.Hero;
-using D3Sharp.Net.Game.Message.Definitions.Misc;
-using D3Sharp.Net.Game.Message;
-using D3Sharp.Net.Game.Message.Definitions.Player;
-using D3Sharp.Net.Game.Message.Definitions.Skill;
+﻿using Mooege.Net.GS;
+using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Hero;
+using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Definitions.Player;
+using Mooege.Net.GS.Message.Definitions.Skill;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Core.Ingame.Skills
+namespace Mooege.Core.GS.Skills
 {
     public class Skillset : IMessageConsumer
     {

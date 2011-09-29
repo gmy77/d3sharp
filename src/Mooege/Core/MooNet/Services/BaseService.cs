@@ -19,13 +19,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
-using D3Sharp.Utils.Extensions;
+using Mooege.Common;
+using Mooege.Common.Extensions;
+using Mooege.Net.MooNet;
 using bnet.protocol;
 using bnet.protocol.connection;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x0, serviceHash: 0x0)]
     public class BaseService :  ConnectionService,  IServerService

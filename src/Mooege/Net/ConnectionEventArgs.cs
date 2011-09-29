@@ -18,7 +18,7 @@
 
 using System;
 
-namespace D3Sharp.Net
+namespace Mooege.Net
 {    
     public class ConnectionEventArgs : EventArgs
     {

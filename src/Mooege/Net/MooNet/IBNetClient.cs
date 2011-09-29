@@ -17,14 +17,14 @@
  */
 
 using System.Collections.Generic;
-using D3Sharp.Core.BNet.Accounts;
-using D3Sharp.Core.BNet.Channels;
-using D3Sharp.Core.Common.Toons;
-using D3Sharp.Net.Game;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
+using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Channels;
+using Mooege.Net.GS;
 
-namespace D3Sharp.Net.BNet
+namespace Mooege.Net.MooNet
 {
     public interface IBNetClient:IClient
     {

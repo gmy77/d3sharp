@@ -19,25 +19,22 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using D3Sharp.Core.Helpers;
-using D3Sharp.Core.Ingame.Map;
-using D3Sharp.Core.Ingame.Actors;
-using D3Sharp.Net.Game.Message;
-using D3Sharp.Net.Game.Message.Definitions.Animation;
-using D3Sharp.Net.Game.Message.Definitions.Combat;
-using D3Sharp.Net.Game.Message.Definitions.Effect;
-using D3Sharp.Net.Game.Message.Definitions.Map;
-using D3Sharp.Net.Game.Message.Definitions.Scene;
-using D3Sharp.Utils;
-using D3Sharp.Net.Game;
-using D3Sharp.Net.Game.Message.Fields;
-using D3Sharp.Net.Game.Message.Definitions.ACD;
-using D3Sharp.Net.Game.Message.Definitions.Misc;
-using D3Sharp.Net.Game.Message.Definitions.Player;
-using D3Sharp.Net.Game.Message.Definitions.World;
-using D3Sharp.Net.Game.Message.Definitions.Attribute;
+using Mooege.Common;
+using Mooege.Common.Helpers;
+using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Map;
+using Mooege.Net.GS;
+using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Net.GS.Message.Definitions.Animation;
+using Mooege.Net.GS.Message.Definitions.Attribute;
+using Mooege.Net.GS.Message.Definitions.Combat;
+using Mooege.Net.GS.Message.Definitions.Effect;
+using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Definitions.Player;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Core.Ingame.Universe
+namespace Mooege.Core.GS.Universe
 {
     public class Universe : IMessageConsumer
     {

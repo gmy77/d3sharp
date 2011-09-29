@@ -18,7 +18,7 @@
 
 using System.Collections.Generic;
 
-namespace D3Sharp.Core.BNet.Games
+namespace Mooege.Core.MooNet.Games
 {
     public static class GameManager
     {

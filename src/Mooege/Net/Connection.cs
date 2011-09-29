@@ -20,10 +20,10 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using D3Sharp.Net.BNet.Packets;
-using D3Sharp.Utils;
+using Mooege.Common;
+using Mooege.Net.MooNet.Packets;
 
-namespace D3Sharp.Net
+namespace Mooege.Net
 {
     public class Connection : IConnection//, IRpcChannel
     {

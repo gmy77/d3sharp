@@ -18,12 +18,12 @@
 
 using System;
 using System.Linq;
-using D3Sharp.Core.BNet.Services;
-using D3Sharp.Net.BNet.Packets;
-using D3Sharp.Utils;
 using Google.ProtocolBuffers;
+using Mooege.Common;
+using Mooege.Core.MooNet.Services;
+using Mooege.Net.MooNet.Packets;
 
-namespace D3Sharp.Net.BNet
+namespace Mooege.Net.MooNet
 {
     public static class BNetRouter
     {

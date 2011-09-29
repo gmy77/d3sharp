@@ -18,10 +18,10 @@
 
 using System;
 using System.Collections.Generic;
-using D3Sharp.Utils;
-using D3Sharp.Net.BNet;
+using Mooege.Common;
+using Mooege.Net.MooNet;
 
-namespace D3Sharp.Core.BNet.Objects
+namespace Mooege.Core.MooNet.Objects
 {
     /// <summary>
     /// RPC objects are mapped to a remote dynamic ID for the purposes of handling subscriptions

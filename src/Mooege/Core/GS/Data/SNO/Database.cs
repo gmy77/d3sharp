@@ -18,13 +18,11 @@
 
 using System;
 using System.IO;
-using System.Text;
-using System.Linq;
 using System.Collections.Generic;
-using D3Sharp.Utils;
-using D3Sharp.Core.Helpers;
+using Mooege.Common;
+using Mooege.Common.Helpers;
 
-namespace D3Sharp.Data.SNO
+namespace Mooege.Core.GS.Data.SNO
 {
     public class SNODatabase
     {

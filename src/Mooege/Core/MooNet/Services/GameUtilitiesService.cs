@@ -17,14 +17,14 @@
  */
 
 using System;
-using D3Sharp.Net.BNet;
-using D3Sharp.Utils;
 using Google.ProtocolBuffers;
+using Mooege.Common;
+using Mooege.Net.MooNet;
 using bnet.protocol;
 using bnet.protocol.game_utilities;
 using bnet.protocol.server_pool;
 
-namespace D3Sharp.Core.BNet.Services
+namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x8, serviceName: "bnet.protocol.game_utilities.GameUtilities")]
     public class GameUtilitiesService : GameUtilities,IServerService

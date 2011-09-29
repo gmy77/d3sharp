@@ -16,13 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Text;
-using D3Sharp.Net.Game.Message.Fields;
+using Mooege.Net.GS.Message.Fields;
 
-namespace D3Sharp.Net.Game.Message.Definitions.ACD
+namespace Mooege.Net.GS.Message.Definitions.ACD
 {
-    public class ACDTranslateDetPathSinMessage : GameMessage
+    public class ACDTranslateDetPathMessage : GameMessage
     {
         public int Field0;
         public int Field1;
@@ -38,7 +37,8 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
         public int Field11;
         public float Field12;
         public float Field13;
-        public DPathSinData Field14;
+        public float Field14;
+        public float Field15;
 
 
 
@@ -61,8 +61,8 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
             Field11 = buffer.ReadInt(32);
             Field12 = buffer.ReadFloat32();
             Field13 = buffer.ReadFloat32();
-            Field14 = new DPathSinData();
-            Field14.Parse(buffer);
+            Field14 = buffer.ReadFloat32();
+            Field15 = buffer.ReadFloat32();
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -81,13 +81,14 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
             buffer.WriteInt(32, Field11);
             buffer.WriteFloat32(Field12);
             buffer.WriteFloat32(Field13);
-            Field14.Encode(buffer);
+            buffer.WriteFloat32(Field14);
+            buffer.WriteFloat32(Field15);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("ACDTranslateDetPathSinMessage:");
+            b.AppendLine("ACDTranslateDetPathMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
@@ -104,7 +105,8 @@ namespace D3Sharp.Net.Game.Message.Definitions.ACD
             b.Append(' ', pad); b.AppendLine("Field11: 0x" + Field11.ToString("X8") + " (" + Field11 + ")");
             b.Append(' ', pad); b.AppendLine("Field12: " + Field12.ToString("G"));
             b.Append(' ', pad); b.AppendLine("Field13: " + Field13.ToString("G"));
-            Field14.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("Field14: " + Field14.ToString("G"));
+            b.Append(' ', pad); b.AppendLine("Field15: " + Field15.ToString("G"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
