@@ -37,6 +37,7 @@ using D3Sharp.Net.Game.Message.Definitions.Player;
 using D3Sharp.Net.Game.Message.Definitions.World;
 using D3Sharp.Net.Game.Message.Definitions.Attribute;
 using D3Sharp.Data.SNO;
+using D3Sharp.Core.Common.Items;
 
 namespace D3Sharp.Core.Ingame.Universe
 {
@@ -332,6 +333,39 @@ namespace D3Sharp.Core.Ingame.Universe
             else if (client.ObjectIdsSpawned == null || !client.ObjectIdsSpawned.Contains(message.Field1)) return;
 
             client.ObjectIdsSpawned.Remove(message.Field1);
+
+            Hero hero = client.Player.Hero;
+
+            WorldLocationMessageData location = new WorldLocationMessageData
+            {
+                Field0 = 1.43f,
+                Field1 = new PRTransform
+                {
+                    Field0 = new Quaternion
+                    {
+                        Amount = 0f,
+                        Axis = new Vector3D
+                        {
+                            X = 0f,
+                            Y = 0f,
+                            Z = 0f,
+                        }
+                    },
+                    ReferencePoint = hero.Position,
+                },
+                Field2 = hero.WorldId,
+            };
+          
+
+
+            ItemTypeGenerator itemGenerator = new ItemTypeGenerator();
+            Item item = itemGenerator.generateRandomElement(ItemType.Sword_1H);
+            
+            // Reveal item at Worldlocation lead to an error on client
+            //item.RevealAtLocation(client, location);
+
+            hero.Inventory.AddToInventory(item);
+            
 
             var killAni = new int[]{
                     0x2cd7,

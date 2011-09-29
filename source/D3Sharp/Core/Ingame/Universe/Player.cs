@@ -31,6 +31,7 @@ using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Definitions.Player;
 using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Utils;
+using D3Sharp.Core.Common.Items;
 
 namespace D3Sharp.Core.Ingame.Universe
 {
@@ -1343,6 +1344,12 @@ namespace D3Sharp.Core.Ingame.Universe
                                                                },
                                                        },
                                    });
+
+
+
+
+
+
 
             Client.SendMessage(new ACDGroupMessage()
                                    {

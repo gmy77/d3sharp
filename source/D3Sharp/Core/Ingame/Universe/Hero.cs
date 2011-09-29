@@ -23,6 +23,7 @@ using D3Sharp.Core.Ingame.Skills;
 using D3Sharp.Net.Game;
 using D3Sharp.Net.Game.Message.Fields;
 using System.Collections.Generic;
+using D3Sharp.Core.Common.Items;
 
 namespace D3Sharp.Core.Ingame.Universe
 {
@@ -51,7 +52,7 @@ namespace D3Sharp.Core.Ingame.Universe
             this.Universe = universe;
             this.Properties = toon;
             this.CurrentWorldSNO = 0x115EE;
-            this.Inventory = new Inventory(this);
+            this.Inventory = new Inventory(this);          
 
             // actor values
             this.Id = 0x789E00E2;

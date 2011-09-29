@@ -23,9 +23,11 @@ namespace D3Sharp.Core.Ingame.Universe
 
         public int Rows { get { return items.GetLength(0); } }
         public int Columns { get { return items.GetLength(1); } }
-       //public Dictionary<int, Item> inventory = new Dictionary<ihn, Item>();
-
+       
         Item[,] items;
+
+        Dictionary<int, Item> equipmentItems = new Dictionary<int, Item>();
+
         private Hero owner; // Used, because most information is not in the item class but Actors managed by the world
 
         public struct InventorySize
@@ -57,10 +59,10 @@ namespace D3Sharp.Core.Ingame.Universe
         {
             InventorySize dropSize = GetItemInventorySize(droppedItem);
             List<Item> overlapping = new List<Item>();
-
+            
             for (int r = 0; r < Rows; r++)
                 for (int c = 0; c < Columns; c++)
-                    if (items[r,c] != null && items[r, c].Gbid != droppedItem.Gbid)
+                    if (items[r,c] != null && items[r, c].ItemId != droppedItem.ItemId)
                         if (r >= row && r <= row + dropSize.Height)
                             if (c >= column && c <= column + dropSize.Width)        // sorry for the stack
                                 if (!overlapping.Contains(items[r, c]))
@@ -69,6 +71,22 @@ namespace D3Sharp.Core.Ingame.Universe
             return overlapping;
         }
 
+
+        public void EquipItem(int slotId, Item item)
+        {
+            //remove from old inventory place
+            RemoveItem(item);
+            UnequipItem(item);
+            if (equipmentItems.ContainsKey(slotId))
+            {
+                Item currentEquiped = equipmentItems[slotId];
+                InventorySlot? slot = FindSlotForItem(currentEquiped);
+                AddItem(currentEquiped, slot.Value.Row, slot.Value.Column);
+                SendToClient(currentEquiped, slot, 0);
+  
+            }
+            equipmentItems[slotId] = item;
+        }      
 
         private void RemoveItem(Item item)
         {
@@ -85,6 +103,15 @@ namespace D3Sharp.Core.Ingame.Universe
                     if (items[r, c] != null && items[r, c].ItemId == id)
                         return items[r, c];
 
+
+            foreach (int equipmentSlot in equipmentItems.Keys)
+            {
+                if (equipmentItems[equipmentSlot].ItemId == id)
+                {
+                    return equipmentItems[equipmentSlot];                    
+                }
+            }
+
             return null;
         }
 
@@ -93,17 +120,29 @@ namespace D3Sharp.Core.Ingame.Universe
             // TODO does not check if item is move beyond boundaries
             InventorySize size = GetItemInventorySize(item);            
             for (int r = row; r < Math.Min(row + size.Height, Rows); r++)
-                for (int c = column; c < Math.Min(column + size.Width, Columns); c++)
+                for (int c = column; c < Math.Min(column + size.Width, Columns); c++)                
                     // TODO Assert field is empty
-                    items[r, c] = item;
+                    items[r, c] = item;                     
         }
 
         void MoveItem(Item item, int row, int column)
         {
             RemoveItem(item);
-            AddItem(item, row, column);
+            UnequipItem(item);          
+            AddItem(item, row, column);            
         }
 
+        public void UnequipItem(Item item)
+        {
+            foreach (int equipmentSlot in equipmentItems.Keys)
+            {
+                if (equipmentItems[equipmentSlot].ItemId == item.ItemId)
+                {
+                    equipmentItems.Remove(equipmentSlot);
+                    return;
+                }
+            }
+        }
 
         public Inventory(Hero owner)
         {
@@ -123,6 +162,13 @@ namespace D3Sharp.Core.Ingame.Universe
                 for (int c = 0; c < Columns; c++)
                     if (items[r,c] != null && items[r, c].ItemId == id)
                         return true;
+
+            foreach (Item item in equipmentItems.Values)            
+            {
+                if(item.ItemId == id)
+                    return true;
+            }
+
             return false;
         }
 
@@ -169,7 +215,7 @@ namespace D3Sharp.Core.Ingame.Universe
                     Field0 = msg.Field1,    // ItemID
                     Field1 = new InventoryLocationMessageData()
                     {
-                        Field0 = 0x789E00E2, // Inventory Owner
+                        Field0 = owner.Id, // Inventory Owner
                         Field1 = 0x00000000, // EquipmentSlot
                         Field2 = new IVector2D()
                         {
@@ -205,45 +251,74 @@ namespace D3Sharp.Core.Ingame.Universe
             }else{
                 Item item = GetItem(request.Field0);
 
-                if (collectOverlappingItems(item, request.Field1.Field3, request.Field1.Field2).Count == 0)
+                if (request.Field1.Field1 > 0)
                 {
-                    MoveItem(item, request.Field1.Field3, request.Field1.Field2);
+                    EquipItem(request.Field1.Field1, item);
 
-                    owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
+                    InventorySlot slot = new InventorySlot();
+                    slot.Row = request.Field1.Field2;
+                    slot.Column = request.Field1.Field3;
+                    SendToClient(item, slot, request.Field1.Field1);
+
+                }
+                else
+                {
+
+                    if (collectOverlappingItems(item, request.Field1.Field3, request.Field1.Field2).Count == 0)
                     {
-                        Id = 64,                // OPCODE
-                        Field0 = request.Field0,    // ItemID
-                        Field1 = new InventoryLocationMessageData()
-                        {
-                            Field0 = 0x789E00E2, // Inventory Owner
-                            Field1 = 0x00000000, // EquipmentSlot
-                            Field2 = new IVector2D()
-                            {
-                                x = request.Field1.Field2, // Row
-                                y = request.Field1.Field3, // Column
-                            },
-                        },
-                        Field2 = 1 // what does this do?
-                    });
+                        MoveItem(item, request.Field1.Field3, request.Field1.Field2);
 
-                    // Finalize....necessary?
-                    owner.InGameClient.PacketId += 10 * 2;
-                    owner.InGameClient.SendMessage(new DWordDataMessage()
-                    {
-                        Id = 0x89,
-                        Field0 = owner.InGameClient.PacketId,
-                    });
+                        InventorySlot slot = new InventorySlot();
+                        slot.Row = request.Field1.Field2;
+                        slot.Column = request.Field1.Field3;
+                        SendToClient(item, slot, request.Field1.Field1);
 
-                    owner.InGameClient.FlushOutgoingBuffer();
-
+                    }
                 }
             }
         }
 
+        void SendToClient(Item item, InventorySlot? slot, int equipmentSlot)
+        {            
 
+            owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
+            {
+                Id = 64,                // OPCODE
+                Field0 = item.ItemId,    // ItemID
+                Field1 = new InventoryLocationMessageData()
+                {
+                    Field0 = 0x789E00E2, // Inventory Owner
+                    Field1 = equipmentSlot, // EquipmentSlot
+                    Field2 = new IVector2D()
+                    {
+                        x = slot.Value.Row, // Row
+                        y = slot.Value.Column, // Column
+                    },
+                },
+                Field2 = 1 // what does this do?
+            });
+
+            // Finalize....necessary?
+            owner.InGameClient.PacketId += 10 * 2;
+            owner.InGameClient.SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = owner.InGameClient.PacketId,
+            });
+
+            owner.InGameClient.FlushOutgoingBuffer();
+        }
+        
         public void Consume(GameClient client, GameMessage message)
         {
             if (message is InventoryRequestMoveMessage) HandleRequest(message as InventoryRequestMoveMessage);
+        }
+
+        public void AddToInventory(Item item)
+        {
+            InventorySlot? slot = FindSlotForItem(item);
+            AddItem(item, slot.Value.Row, slot.Value.Column);
+            item.RevealInInventory(owner, slot.Value.Row, slot.Value.Column, 0);            
         }
     }
 }

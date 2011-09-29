@@ -33,6 +33,7 @@ using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Definitions.Player;
 using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Utils;
+using D3Sharp.Core.Common.Items;
 
 namespace D3Sharp.Core.Ingame.Universe
 {
@@ -68,7 +69,14 @@ namespace D3Sharp.Core.Ingame.Universe
             client.Player = player;
             this.Players.Add(player);
 
-            player.Greet(message);            
+            player.Greet(message);
+
+
+            // add random Weapon to Inventory            
+            ItemTypeGenerator itemGenerator = new ItemTypeGenerator();
+            Item item = itemGenerator.generateRandomElement(ItemType.Sword_1H);
+            player.Hero.Inventory.AddToInventory(item);             
+
         }
     }
 }

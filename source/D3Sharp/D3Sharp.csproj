@@ -89,7 +89,6 @@
     <Compile Include="Core\BNet\Games\GameManager.cs" />
     <Compile Include="Core\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\Helpers\FieldKeyHelper.cs" />
-    <Compile Include="Core\Inventory\InventoryManager.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributesCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
@@ -139,7 +138,6 @@
     <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributesCreator.cs" />
     <Compile Include="Core\Common\Items\ItemGenerator.cs" />
     <Compile Include="Core\Common\Items\NetAttribute.cs" />
-    <Compile Include="Core\Common\Items\Weapon.cs" />
     <Compile Include="Data\SNO\Config.cs" />
     <Compile Include="Data\SNO\Database.cs" />
     <Compile Include="Data\SNO\Set.cs" />

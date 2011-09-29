@@ -6,7 +6,7 @@ using D3Sharp.Utils;
 
 namespace D3Sharp.Core.Items
 {
-    class Affix
+    public class Affix
     {
 
         public static readonly Logger Logger = LogManager.CreateLogger();
