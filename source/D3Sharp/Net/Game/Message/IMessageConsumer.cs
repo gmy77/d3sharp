@@ -15,6 +15,7 @@ namespace D3Sharp.Net.Game.Message
         None,
         Universe,
         PlayerManager,
-        Skillset
+        Skillset,
+        Inventory
     }
 }

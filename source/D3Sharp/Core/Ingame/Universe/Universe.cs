@@ -36,6 +36,7 @@ using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Definitions.Player;
 using D3Sharp.Net.Game.Message.Definitions.World;
 using D3Sharp.Net.Game.Message.Definitions.Attribute;
+using D3Sharp.Data.SNO;
 
 namespace D3Sharp.Core.Ingame.Universe
 {
@@ -67,6 +68,9 @@ namespace D3Sharp.Core.Ingame.Universe
                     break;
                 case Consumers.Skillset:
                     client.Player.Hero.Skillset.Consume(client, message);
+                    break;
+                case Consumers.Inventory:
+                    client.Player.Hero.Inventory.Consume(client, message);
                     break;
             }
         }
@@ -312,6 +316,17 @@ namespace D3Sharp.Core.Ingame.Universe
                 //we have a transition between worlds here
                 ChangeToonWorld(client, p.TargetWorldID, p.TargetPos); //targetpos will always be valid as otherwise the portal wouldn't be targetable
                 return;
+            }
+
+            // Check if it is an item....
+            Actor a = this.GetActor(message.Field1);
+            if (a != null && SNODatabase.Instance.IsOfGroup(a.SnoId, SNOGroup.Actors))
+            {
+                if (message.Field1 == 2065563791)
+                {
+                    client.Player.Hero.Inventory.PickUp(message);
+                    return;
+                }
             }
 
             else if (client.ObjectIdsSpawned == null || !client.ObjectIdsSpawned.Contains(message.Field1)) return;

@@ -196,7 +196,9 @@ namespace D3Sharp.Core.Ingame.Map
                 {
                     if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.Blacklist)) continue;
                     if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.NPCs)) continue;
-                    //actor.Reveal(hero);
+                    
+                    if(actor.Id == 2065563791)
+                        actor.Reveal(hero);
                 }
 
                 //reveal portals
