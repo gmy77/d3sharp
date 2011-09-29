@@ -82,7 +82,7 @@ namespace Mooege.Net
             return _socket.EndReceive(result);
         }
 
-        public int Send(BNetPacket packet)
+        public int Send(Packet packet)
         {
             if (packet == null) throw new ArgumentNullException("packet");
             return Send(packet.GetRawPacketData());

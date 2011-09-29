@@ -28,13 +28,13 @@ namespace Mooege.Core.MooNet.Services
     public class AuthenticationService:AuthenticationServer, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IBNetClient Client { get; set; }
+        public IMooNetClient Client { get; set; }
 
         public override void Logon(Google.ProtocolBuffers.IRpcController controller, LogonRequest request, System.Action<LogonResponse> done)
         {
             Logger.Trace("LogonRequest(); Email={0}", request.Email);
             Client.Account = AccountManager.GetAccountByEmail(request.Email);
-            Client.Account.LoggedInBNetClient = (BNetClient)Client;
+            Client.Account.LoggedInBNetClient = (MooNetClient)Client;
 
             var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
                 .SetAccount(Client.Account.BnetAccountID)
@@ -42,7 +42,7 @@ namespace Mooege.Core.MooNet.Services
 
             done(builder.Build());
 
-            OnlinePlayers.Players.Add((BNetClient)Client);
+            OnlinePlayers.Players.Add((MooNetClient)Client);
         }
 
         public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, ModuleMessageRequest request, System.Action<bnet.protocol.NoData> done)

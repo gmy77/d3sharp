@@ -108,10 +108,10 @@ namespace Mooege.Core.MooNet.Channels
             }
         }
 
-        public readonly Dictionary<BNetClient, Member> Members = new Dictionary<BNetClient, Member>();
-        public BNetClient Owner { get; private set; }
+        public readonly Dictionary<MooNetClient, Member> Members = new Dictionary<MooNetClient, Member>();
+        public MooNetClient Owner { get; private set; }
 
-        public Channel(BNetClient client, ulong remoteObjectId)
+        public Channel(MooNetClient client, ulong remoteObjectId)
         {
             this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ChannelId).SetLow(this.DynamicId).Build();
             this.D3EntityId = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ChannelId).SetIdLow(this.DynamicId).Build();
@@ -128,7 +128,7 @@ namespace Mooege.Core.MooNet.Channels
             // We'll just let the caller do that for us.
         }
 
-        public void SetOwner(BNetClient client)
+        public void SetOwner(MooNetClient client)
         {
             if (client == this.Owner)
             {
@@ -150,12 +150,12 @@ namespace Mooege.Core.MooNet.Channels
             }
         }
 
-        public Member GetMember(BNetClient client)
+        public Member GetMember(MooNetClient client)
         {
             return this.Members[client];
         }
 
-        public void AddMember(BNetClient client)
+        public void AddMember(MooNetClient client)
         {
             if (HasUser(client))
             {
@@ -228,12 +228,12 @@ namespace Mooege.Core.MooNet.Channels
             RemoveMember(client, reason, false);
         }
 
-        public void RemoveMember(BNetClient client, RemoveReason reason)
+        public void RemoveMember(MooNetClient client, RemoveReason reason)
         {
             RemoveMember(client, reason, false);
         }
 
-        public void RemoveMember(BNetClient client, RemoveReason reason, bool dissolving)
+        public void RemoveMember(MooNetClient client, RemoveReason reason, bool dissolving)
         {
             if (client.CurrentToon == null)
             {
@@ -269,7 +269,7 @@ namespace Mooege.Core.MooNet.Channels
                 Dissolve();
         }
 
-        public bool HasUser(BNetClient client)
+        public bool HasUser(MooNetClient client)
         {
             return this.Members.Any(pair => pair.Key == client);
         }

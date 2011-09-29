@@ -37,7 +37,7 @@ namespace Mooege.Core.MooNet.Games
         public ulong RequestID { get; private set; }
         public ulong FactoryID { get; private set; }
 
-        public List<BNetClient> Clients = new List<BNetClient>();
+        public List<MooNetClient> Clients = new List<MooNetClient>();
 
         public static ulong RequestIdCounter = 0;
 
@@ -50,7 +50,7 @@ namespace Mooege.Core.MooNet.Games
             this.GameHandle = bnet.protocol.game_master.GameHandle.CreateBuilder().SetFactoryId(this.FactoryID).SetGameId(this.BnetEntityId).Build();
         }
 
-        public void ListenForGame(BNetClient client)
+        public void ListenForGame(MooNetClient client)
         {
             // We should actually find the server's public-interface and use that
             var connectionInfo =

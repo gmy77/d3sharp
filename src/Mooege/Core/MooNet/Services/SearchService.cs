@@ -29,7 +29,7 @@ namespace Mooege.Core.MooNet.Services
     public class SearchService : bnet.protocol.search.SearchService,IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IBNetClient Client { get; set; }
+        public IMooNetClient Client { get; set; }
 
         public override void FindMatches(IRpcController controller, FindMatchesRequest request, Action<FindMatchesResponse> done)
         {

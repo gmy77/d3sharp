@@ -24,14 +24,6 @@ using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
-//<<<<<<< HEAD
-//using System.Linq;
-//using System.Collections.Generic;
-//using D3.Account;
-//using D3Sharp.Core.Accounts;
-//using D3Sharp.Core.Channels;
-//=======
-//>>>>>>> 8574c238179fe15ed89f064963d15f70293617bc
 
 namespace Mooege.Core.Common.Toons
 {
@@ -297,7 +289,7 @@ namespace Mooege.Core.Common.Toons
             return field.HasValue ? field.Build() : null;
         }
 
-        protected override void NotifySubscriptionAdded(BNetClient client)
+        protected override void NotifySubscriptionAdded(MooNetClient client)
         {
             // Check docs/rpc/fields.txt for fields keys
 

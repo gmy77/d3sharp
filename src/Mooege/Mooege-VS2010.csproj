@@ -136,12 +136,12 @@
     <Compile Include="Core\GS\Data\SNO\Config.cs" />
     <Compile Include="Core\GS\Data\SNO\Database.cs" />
     <Compile Include="Core\GS\Data\SNO\Set.cs" />
-    <Compile Include="Net\MooNet\BNetClient.cs" />
-    <Compile Include="Net\MooNet\BnetServer.cs" />
+    <Compile Include="Net\MooNet\MooNetClient.cs" />
+    <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />
-    <Compile Include="Net\MooNet\IBNetClient.cs" />
-    <Compile Include="Net\MooNet\Packets\BNetHeader.cs" />
-    <Compile Include="Net\MooNet\Packets\BNetPacket.cs" />
+    <Compile Include="Net\MooNet\IMooNetClient.cs" />
+    <Compile Include="Net\MooNet\Packets\Header.cs" />
+    <Compile Include="Net\MooNet\Packets\Packet.cs" />
     <Compile Include="Net\GS\ClientManager.cs" />
     <Compile Include="Net\GS\Config.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignPassiveSkillMessage.cs" />
@@ -367,7 +367,7 @@
     <Compile Include="Net\ConnectionDataEventArgs.cs" />
     <Compile Include="Common\Extensions\DateTimeExtensions.cs" />
     <Compile Include="Common\Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Net\MooNet\BNetRouter.cs" />
+    <Compile Include="Net\MooNet\MooNetRouter.cs" />
     <Compile Include="Common\Helpers\StringHashHelper.cs" />
     <Compile Include="Common\Extensions\IMessageExtensions.cs" />
     <Compile Include="Common\TinyLogger.cs" />

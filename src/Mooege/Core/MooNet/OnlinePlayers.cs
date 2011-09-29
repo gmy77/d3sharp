@@ -23,6 +23,6 @@ namespace Mooege.Core.MooNet
 {
     public static class OnlinePlayers
     {
-        public static List<BNetClient> Players = new List<BNetClient>();
+        public static List<MooNetClient> Players = new List<MooNetClient>();
     }
 }

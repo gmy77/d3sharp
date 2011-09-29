@@ -30,7 +30,7 @@ namespace Mooege.Core.MooNet.Services
     public class ExchangeService : bnet.protocol.exchange.ExchangeService, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IBNetClient Client { get; set; }
+        public IMooNetClient Client { get; set; }
 
         public override void GetConfiguration(IRpcController controller, GetConfigurationRequest request, Action<GetConfigurationResponse> done)
         {

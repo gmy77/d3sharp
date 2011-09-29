@@ -25,7 +25,7 @@ namespace Mooege.Net
     {
         public static readonly IPAddress LocalHost = IPAddress.Parse("127.0.0.1");
 
-        public static string GetGameServerIPForClient(BNetClient client)
+        public static string GetGameServerIPForClient(MooNetClient client)
         {
             if (!NATConfig.Instance.Enabled) // if NAT is not enabled, just return bnetclient's localendpoint address.
                 return client.Connection.LocalEndPoint.Address.ToString();

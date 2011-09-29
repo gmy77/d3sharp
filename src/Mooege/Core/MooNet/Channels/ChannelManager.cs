@@ -30,7 +30,7 @@ namespace Mooege.Core.MooNet.Channels
         public readonly static Dictionary<ulong, Channel> Channels =
             new Dictionary<ulong, Channel>();
 
-        public static Channel CreateNewChannel(BNetClient client, ulong remoteObjectId)
+        public static Channel CreateNewChannel(MooNetClient client, ulong remoteObjectId)
         {
             var channel = new Channel(client, remoteObjectId);
             Channels.Add(channel.DynamicId, channel);

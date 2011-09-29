@@ -29,7 +29,7 @@ namespace Mooege
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        private static BnetServer _bnetServer;
+        private static MooNetServer _bnetServer;
         private static GameServer _gameServer;
 
         public static void Main(string[] args)
@@ -40,18 +40,18 @@ namespace Mooege
             // Don't forget this..
             LogManager.Enabled = true;
             LogManager.AttachLogTarget(new ConsoleTarget(Level.Trace));
-            LogManager.AttachLogTarget(new FileTarget(Level.Trace, "d3sharp-log.txt"));
+            LogManager.AttachLogTarget(new FileTarget(Level.Trace, "mooege-log.txt"));
 
             PrintBanner();
             PrintLicense();
 
-            Logger.Info("D3Sharp v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
+            Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
             StartupServers();
         }
 
         private static void StartupServers()
         {
-            _bnetServer = new BnetServer();
+            _bnetServer = new MooNetServer();
             _gameServer = new GameServer();
 
             var bnetServerThread = new Thread(_bnetServer.Run) { IsBackground = true };
@@ -80,11 +80,12 @@ namespace Mooege
 
         private static void PrintBanner()
         {
-            Console.WriteLine(@" _ __ ___   ___   ___   ___  __ _  ___ ");
-            Console.WriteLine(@"| '_ ` _ \ / _ \ / _ \ / _ \/ _` |/ _ \");
-            Console.WriteLine(@"| | | | | | (_) | (_) |  __/ (_| |  __/");
-            Console.WriteLine(@"|_| |_| |_|\___/ \___/ \___|\__, |\___|");
-            Console.WriteLine(@"                            |___/      ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(@"  _ __ ___    ___    ___    ___   __ _   ___ ");
+            Console.WriteLine(@" | '_ ` _ \  / _ \  / _ \  / _ \ / _` | / _ \");
+            Console.WriteLine(@" | | | | | || (_) || (_) ||  __/| (_| ||  __/");
+            Console.WriteLine(@" |_| |_| |_| \___/  \___/  \___| \__, | \___|");
+            Console.WriteLine(@"                                 |___/       ");
             Console.WriteLine();
         }
 

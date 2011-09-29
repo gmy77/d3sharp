@@ -28,7 +28,7 @@ namespace Mooege.Core.MooNet.Services
     public class UserManagerService : bnet.protocol.user_manager.UserManagerService,IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IBNetClient Client { get; set; }
+        public IMooNetClient Client { get; set; }
 
         public override void SubscribeToUserManager(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.user_manager.SubscribeToUserManagerRequest request, System.Action<bnet.protocol.user_manager.SubscribeToUserManagerResponse> done)
         {

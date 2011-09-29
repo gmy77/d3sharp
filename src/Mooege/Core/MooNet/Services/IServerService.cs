@@ -22,6 +22,6 @@ namespace Mooege.Core.MooNet.Services
 {
     public interface IServerService
     {
-        IBNetClient Client { get; set; }
+        IMooNetClient Client { get; set; }
     }
 }

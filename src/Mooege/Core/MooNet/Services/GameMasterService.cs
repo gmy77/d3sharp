@@ -30,7 +30,7 @@ namespace Mooege.Core.MooNet.Services
     public class GameMasterService : GameMaster, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IBNetClient Client { get; set; }
+        public IMooNetClient Client { get; set; }
 
         public override void JoinGame(IRpcController controller, JoinGameRequest request, Action<JoinGameResponse> done)
         {
@@ -77,7 +77,7 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
 
             // TODO: We should actually match the games that matches the filter
-            game.ListenForGame((BNetClient)this.Client);
+            game.ListenForGame((MooNetClient)this.Client);
         }
 
         public override void CancelFindGame(IRpcController controller, CancelFindGameRequest request, Action<NoData> done)

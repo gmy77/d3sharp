@@ -27,7 +27,7 @@ namespace Mooege.Core.MooNet.Services
     public class ChannelService : bnet.protocol.channel.Channel, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IBNetClient Client { get; set; }
+        public IMooNetClient Client { get; set; }
 
         public override void AddMember(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.AddMemberRequest request, System.Action<bnet.protocol.NoData> done)
         {
@@ -46,7 +46,7 @@ namespace Mooege.Core.MooNet.Services
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
-            this.Client.CurrentChannel.RemoveMember((BNetClient)this.Client, Channel.GetRemoveReasonForRequest((Channel.RemoveRequestReason)request.Reason));
+            this.Client.CurrentChannel.RemoveMember((MooNetClient)this.Client, Channel.GetRemoveReasonForRequest((Channel.RemoveRequestReason)request.Reason));
         }
 
         public override void SendMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SendMessageRequest request, System.Action<bnet.protocol.NoData> done)

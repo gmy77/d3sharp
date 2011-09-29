@@ -32,7 +32,7 @@ namespace Mooege.Core.MooNet.Services
     public class PresenceService : bnet.protocol.presence.PresenceService,IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IBNetClient Client { get; set; }
+        public IMooNetClient Client { get; set; }
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.SubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
@@ -41,14 +41,14 @@ namespace Mooege.Core.MooNet.Services
             switch (request.EntityId.GetHighIdType())
             {
                 case EntityIdHelper.HighIdType.AccountId:
-                    this.Client.Account.AddSubscriber((BNetClient)this.Client, request.ObjectId);
+                    this.Client.Account.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
                     var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
                     // The client will send us a Subscribe with ToonId of 0 the first time it
                     // tries to create a toon with a name that already exists. Let's handle that here.
                     if (toon != null)
-                        toon.AddSubscriber((BNetClient)this.Client, request.ObjectId);
+                        toon.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
                     break;
                 default:
                     Logger.Warn("Recieved an unhandled Presence.Subscribe request with type {0}", request.EntityId.GetHighIdType());
@@ -70,12 +70,12 @@ namespace Mooege.Core.MooNet.Services
                     var account = AccountManager.GetAccountByEntityID(request.EntityId);
                     // The client will probably make sure it doesn't unsubscribe to a null ID, but just to make sure..
                     if (account != null)
-                        account.RemoveSubscriber((BNetClient)this.Client);
+                        account.RemoveSubscriber((MooNetClient)this.Client);
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
                     var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
                     if (toon != null)
-                        toon.RemoveSubscriber((BNetClient)this.Client);
+                        toon.RemoveSubscriber((MooNetClient)this.Client);
                     break;
                 default:
                     Logger.Warn("Recieved an unhandled Presence.Unsubscribe request with type {0}", request.EntityId.GetHighIdType());

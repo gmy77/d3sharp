@@ -31,7 +31,7 @@ namespace Mooege.Core.MooNet.Services
     public class FriendsService : bnet.protocol.friends.FriendsService,IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IBNetClient Client { get; set; }
+        public IMooNetClient Client { get; set; }
 
         public override void SubscribeToFriends(IRpcController controller, SubscribeToFriendsRequest request, Action<SubscribeToFriendsResponse> done)
         {

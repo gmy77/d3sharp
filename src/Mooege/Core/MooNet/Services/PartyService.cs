@@ -29,13 +29,13 @@ namespace Mooege.Core.MooNet.Services
     public class PartyService : bnet.protocol.party.PartyService,IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IBNetClient Client { get; set; }
+        public IMooNetClient Client { get; set; }
 
         // PartyService just uses ChannelService to create a new channel for the party.
         public override void CreateChannel(IRpcController controller, CreateChannelRequest request, Action<CreateChannelResponse> done)
         {
             Logger.Trace("CreateChannel()");
-            var channel = ChannelManager.CreateNewChannel((BNetClient)this.Client, request.ObjectId);
+            var channel = ChannelManager.CreateNewChannel((MooNetClient)this.Client, request.ObjectId);
             var builder = CreateChannelResponse.CreateBuilder()
                 .SetObjectId(channel.DynamicId)
                 .SetChannelId(channel.BnetEntityId);
@@ -43,7 +43,7 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
 
             // Set the client that requested the creation of channel as the owner
-            channel.SetOwner((BNetClient)Client);
+            channel.SetOwner((MooNetClient)Client);
 
             Logger.Warn("Created a new channel {0}:{1} for toon {2}", channel.BnetEntityId.High, channel.BnetEntityId.Low, Client.CurrentToon.Name);
         }

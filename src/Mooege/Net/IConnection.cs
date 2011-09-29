@@ -30,7 +30,7 @@ namespace Mooege.Net
         IPEndPoint LocalEndPoint { get; }
         IClient Client { get; set; }
         
-        int Send(BNetPacket packet);
+        int Send(Packet packet);
         int Send(IEnumerable<byte> data);
         int Send(IEnumerable<byte> data, SocketFlags flags);
         int Send(byte[] buffer);

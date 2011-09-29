@@ -26,7 +26,7 @@ namespace Mooege.Net.GS.Message.Definitions.Game
     {
         public EntityId Field0;  // this *is* the toon id /raist.
         public GameId Field1;
-        public int GameId; // and this is the SGameId there we set in D3Sharp.Core.Games.Game.cs when we send the connection info to client /raist.
+        public int GameId; // and this is the SGameId there we set in Mooege.Core.MooNet.Games.Game.cs when we send the connection info to client /raist.
         public long Field3;
         public int Field4;
         public int ProtocolHash;

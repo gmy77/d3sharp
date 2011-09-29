@@ -35,7 +35,7 @@ namespace Mooege.Core.MooNet.Accounts
         public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
         public string Email { get; private set; }
 
-        public BNetClient LoggedInBNetClient { get; set; }
+        public MooNetClient LoggedInBNetClient { get; set; }
 
         public D3.Account.Digest Digest
         {
@@ -98,7 +98,7 @@ namespace Mooege.Core.MooNet.Accounts
                 .Build();
         }
 
-        protected override void NotifySubscriptionAdded(BNetClient client)
+        protected override void NotifySubscriptionAdded(MooNetClient client)
         {
             // Check docs/rpc/fields.txt for fields keys
 

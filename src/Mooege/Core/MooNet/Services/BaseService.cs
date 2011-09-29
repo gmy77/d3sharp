@@ -31,7 +31,7 @@ namespace Mooege.Core.MooNet.Services
     public class BaseService :  ConnectionService,  IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IBNetClient Client { get; set; }
+        public IMooNetClient Client { get; set; }
 
         public override void Connect(Google.ProtocolBuffers.IRpcController controller, ConnectRequest request, Action<ConnectResponse> done)
         {

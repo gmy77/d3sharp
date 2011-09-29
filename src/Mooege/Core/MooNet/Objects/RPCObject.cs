@@ -40,7 +40,7 @@ namespace Mooege.Core.MooNet.Objects
         /// <summary>
         /// List of clients that subscribed for notifications when this object updates its states.
         /// </summary>
-        protected List<BNetClient> Subscribers { get; private set; }
+        protected List<MooNetClient> Subscribers { get; private set; }
 
         /// <summary>
         /// Constructor which can only be called by derived objects.
@@ -49,7 +49,7 @@ namespace Mooege.Core.MooNet.Objects
         {
             // Let RPCObjectManager generate a new dynamic ID for us
             RPCObjectManager.Init(this);
-            this.Subscribers = new List<BNetClient>();
+            this.Subscribers = new List<MooNetClient>();
         }       
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Mooege.Core.MooNet.Objects
         /// </summary>
         /// <param name="client">The client to add as a subscriber.</param>
         /// <param name="remoteObjectId">The client's dynamic ID.</param>
-        public void AddSubscriber(BNetClient client, ulong remoteObjectId)
+        public void AddSubscriber(MooNetClient client, ulong remoteObjectId)
         {
             // Map the subscriber's dynamic ID to to our dynamic ID so we know how to translate later on when the object makes a notify call
             client.MapLocalObjectID(this.DynamicId, remoteObjectId);
@@ -70,7 +70,7 @@ namespace Mooege.Core.MooNet.Objects
         /// Removes a given subscriber and unmaps the object's dynamic ID.
         /// </summary>
         /// <param name="client">The client to remove.</param>
-        public void RemoveSubscriber(BNetClient client)
+        public void RemoveSubscriber(MooNetClient client)
         {
             if (!this.Subscribers.Contains(client))
             {
@@ -89,7 +89,7 @@ namespace Mooege.Core.MooNet.Objects
         /// This methods should be actually implemented by deriving object classes.
         /// </summary>
         /// <param name="client">The subscriber.</param>
-        protected virtual void NotifySubscriptionAdded(BNetClient client) { }
+        protected virtual void NotifySubscriptionAdded(MooNetClient client) { }
 
         // ** We're yet not sure about this, so commenting out **
         ///// <summary>

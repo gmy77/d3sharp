@@ -29,7 +29,7 @@ namespace Mooege.Core.MooNet.Services
     public class ChannelInvitationService: bnet.protocol.channel_invitation.ChannelInvitationService, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IBNetClient Client { get; set; }
+        public IMooNetClient Client { get; set; }
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SubscribeRequest request, System.Action<bnet.protocol.channel_invitation.SubscribeResponse> done)
         {

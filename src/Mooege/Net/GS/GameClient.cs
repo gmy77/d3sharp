@@ -31,7 +31,7 @@ namespace Mooege.Net.GS
         static readonly Logger Logger = LogManager.CreateLogger();
 
         public IConnection Connection { get; set; }
-        public BNetClient BnetClient { get; set; }
+        public MooNetClient BnetClient { get; set; }
 
         private readonly GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         private readonly GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
