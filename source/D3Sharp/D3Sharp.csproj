@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Core\BNet\Accounts\Account.cs" />
     <Compile Include="Core\BNet\Accounts\AccountManager.cs" />
+    <Compile Include="Core\Common\Items\ItemGenerator.cs" />
     <Compile Include="Core\Ingame\Actors\Actor.cs" />
     <Compile Include="Core\Ingame\Actors\ActorDB.cs" />
     <Compile Include="Core\BNet\Channels\Channel.cs" />

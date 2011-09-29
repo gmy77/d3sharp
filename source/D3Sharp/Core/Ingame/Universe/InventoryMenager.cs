@@ -10,6 +10,7 @@ using D3Sharp.Net.Game.Message.Definitions.Animation;
 using D3Sharp.Net.Game.Message.Definitions.Player;
 using D3Sharp.Net.Game.Message.Definitions.Inventory;
 using D3Sharp.Net.Game.Message.Definitions.ACD;
+using D3Sharp.Net.Game.Message.Definitions.Attribute;
 using D3Sharp.Core.Common.Items;
 
 
@@ -64,7 +65,7 @@ namespace D3Sharp.Core.Ingame.Universe
             if (msg.Field1.Field1 > 0)
             {
                 
-                 Wear(client, msg);
+                Wear(client, msg);
                 // change hero params
             }
 
@@ -93,12 +94,44 @@ namespace D3Sharp.Core.Ingame.Universe
 
             Item_ID.Add(iid, Gbid);
 
-            var item = D3.Hero.VisualItem.CreateBuilder()
-                              .SetGbid(Gbid)
-                              .SetDyeType(0)
-                              .SetItemEffectType(0)
-                              .SetEffectLevel(0)
-                              .Build();
+       
+
+            Client.SendMessage(new ACDEnterKnownMessage()
+            {
+                Id = 0x003B, // stworzenie przedmiotu ....
+                //Field0 = 0x78A000E4,
+                Field0 = iid,               // id
+                Field1 = 0x00001158,        // ?? Gfx
+                Field2 = 0x00000001,        // ????
+                Field3 = 0x00000001,        // ????
+                Field4 = null,
+                Field5 = new InventoryLocationMessageData()
+                {
+                    Field0 = 0x789E00E2,    // player_id should be not static ....
+                    Field1 = 0x00000000,    // item place ... 0- backpack
+                    Field2 = new IVector2D()
+                    {
+                        Field0 = posX, // pos x in backapck (0-9)
+                        Field1 = posX, // pos y in backpack (0-5)
+                    },
+                },
+                Field6 = new GBHandle()
+                {
+                    Field0 = 0x00000002,
+                    Field1 = Gbid,   // item gfx id ....
+                },
+                Field7 = -1,                // dye
+                Field8 = -1,                // efects
+                Field9 = 0x00000001,        //
+                Field10 = 0x00,             //
+            });
+        }
+
+        public void AddToInventory(GameClient Client, Item item,int PlayerID=0,int posX=0,int PosY=0)
+        {
+            // randomize item id // not safe 
+            var iid = RandomHelper.Next(0x78A000E4, 0x78A00F00);
+            Item_ID.Add(iid, item.Gbid);
 
             Client.SendMessage(new ACDEnterKnownMessage()
             {
@@ -129,6 +162,34 @@ namespace D3Sharp.Core.Ingame.Universe
                 Field9 = 0x00000001,        //
                 Field10 = 0x00,             //
             });
+            // atributes
+            Client.SendMessage(new AttributesSetValuesMessage()
+            {
+                Id = 0x004D,
+                Field0 = iid,
+                atKeyVals = new NetAttributeKeyValue[3]
+                {
+                    new NetAttributeKeyValue()
+                    {
+                        Attribute = GameAttribute.Attributes[274], 
+                        Int = 0x0000005,
+                        Float = 0f,
+                    },
+                    new NetAttributeKeyValue()
+                    {
+                        Attribute = GameAttribute.Attributes[275], 
+                        Int = 0x0000015,
+                        Float = 0f,
+                    },
+                    new NetAttributeKeyValue()
+                    {
+                        Attribute = GameAttribute.Attributes[155], 
+                        Int = 0x0000000,
+                        Float = 1f,
+                    }
+                },
+            });
+            //
         }
 
         public void Wear(GameClient Client, InventoryRequestMoveMessage msg)
@@ -212,12 +273,7 @@ namespace D3Sharp.Core.Ingame.Universe
                 },
             });
             //
-            Client.SendMessage(new PlayerActorSetInitialMessage()
-            {
-                Id = 0x0039,
-                Field0 = 0x789E00E2,
-                Field1 = 0x00000000,
-            });
+           
             
             //
         }
