@@ -17,11 +17,13 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
+using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Core.GS.Universe
@@ -62,36 +64,16 @@ namespace Mooege.Core.GS.Universe
             
             //initial world and position
             this.WorldId = 0x772E0000;
-            //new char starter pos:
+
             this.Position.X = 3143.75f;
             this.Position.Y = 2828.75f;
             this.Position.Z = 59.075588f;
 
-            //den of evil:
-            //this.Position.X = 2526.250000f;
-            //this.Position.Y = 2098.750000f;
-            //this.Position.Z = -5.381495f;
-
-            //inn:
-            //this.Position.X = 2996.250000f;
-            //this.Position.Y = 2793.750000f;
-            //this.Position.Z = 24.045330f;
-
-            // adrias hut
-            //this.Position.X = 1768.750000f;
-            //this.Position.Y = 2921.250000f;
-            //this.Position.Z = 20.333143f;        
-
-            // cemetry of forsaken
-            //this.Position.X = 2041.250000f;
-            //this.Position.Y = 1778.750000f;
-            //this.Position.Z = 0.426203f;
-
-            //defiled crypt level 2
-            //this.WorldId = 2000289804;
-            //this.Position.X = 158.750000f;
-            //this.Position.Y = 76.250000f;
-            //this.Position.Z = 0.100000f;
+            //den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
+            //inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
+            // adrias hut: this.Position.X = 1768.750000f; this.Position.Y = 2921.250000f; this.Position.Z = 20.333143f;        
+            // cemetry of forsaken: this.Position.X = 2041.250000f; this.Position.Y = 1778.750000f; this.Position.Z = 0.426203f;
+            //defiled crypt level 2: this.WorldId = 2000289804; this.Position.X = 158.750000f; this.Position.Y = 76.250000f; this.Position.Z = 0.100000f;
 
             this.GBHandle = new GBHandle()
             {
@@ -144,6 +126,28 @@ namespace Mooege.Core.GS.Universe
                 Field9 = new SavePointData() { snoWorld = -1, Field1 = -1, },
                 m_SeenTutorials = this.SeenTutorials,
             };
+        }
+
+        public VisualInventoryMessage GetVisualInventory()
+        {
+            return new VisualInventoryMessage
+                              {
+                                  Field0 = 0x789E00E2,
+                                  EquipmentList =
+                                      new VisualEquipment
+                                          {
+                                              Equipments =
+                                                  Properties.Equipment.VisualItemList.Select(
+                                                      equipment =>
+                                                      new VisualItem
+                                                          {
+                                                              GbId = equipment.Gbid,
+                                                              Field1 = 0x0,
+                                                              Field2 = 0x0,
+                                                              Field3 = -1
+                                                          }).ToArray()
+                                          }
+                              };
         }
 
         public World CurrentWorld

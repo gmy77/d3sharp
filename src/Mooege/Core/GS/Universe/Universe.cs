@@ -300,7 +300,7 @@ namespace Mooege.Core.GS.Universe
 
         private void OnToonTargetChange(GameClient client, TargetMessage message)
         {
-            Logger.Info("Player interaction with " + message.AsText());
+            //Logger.Info("Player interaction with " + message.AsText());
 
             Portal p=GetPortal(message.Field1);
 
@@ -370,7 +370,7 @@ namespace Mooege.Core.GS.Universe
             });
 
             int ani = killAni[RandomHelper.Next(killAni.Length)];
-            Logger.Info("Ani used: " + ani);
+            //Logger.Info("Ani used: " + ani);
 
             client.SendMessage(new PlayAnimationMessage()
             {
