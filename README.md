@@ -6,6 +6,7 @@
 * IRC (developers only): [#mooege/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23mooege)
 * IRC (announcements): [#mooege.announce/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23mooege.announce)
 * [Twitter](http://twitter.com/#!/mooege)
+* [Commit feed on Twitter](http://twitter.com/#!/MooegeDev)
 
 Copyright (C) 2011 mooege project
 
