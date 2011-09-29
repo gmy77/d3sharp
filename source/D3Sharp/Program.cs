@@ -80,12 +80,11 @@ namespace D3Sharp
 
         private static void PrintBanner()
         {
-            Console.WriteLine(@"      _  _____       _                         ");
-            Console.WriteLine(@"   __| ||___ /  ___ | |__    __ _  _ __  _ __  ");
-            Console.WriteLine(@"  / _` |  |_ \ / __|| '_ \  / _` || '__|| '_ \ ");
-            Console.WriteLine(@" | (_| | ___) |\__ \| | | || (_| || |   | |_) |");
-            Console.WriteLine(@"  \__,_||____/ |___/|_| |_| \__,_||_|   | .__/ ");
-            Console.WriteLine(@"                                        |_|    ");
+            Console.WriteLine(@" _ __ ___   ___   ___   ___  __ _  ___ ");
+            Console.WriteLine(@"| '_ ` _ \ / _ \ / _ \ / _ \/ _` |/ _ \");
+            Console.WriteLine(@"| | | | | | (_) | (_) |  __/ (_| |  __/");
+            Console.WriteLine(@"|_| |_| |_|\___/ \___/ \___|\__, |\___|");
+            Console.WriteLine(@"                            |___/      ");
             Console.WriteLine();
         }
 
