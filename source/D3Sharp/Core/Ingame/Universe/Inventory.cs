@@ -18,6 +18,8 @@ namespace D3Sharp.Core.Ingame.Universe
 {
     public class Inventory:IMessageConsumer
     {
+        //public Item[] Equipped;
+
         public int Rows { get { return items.GetLength(0); } }
         public int Columns { get { return items.GetLength(1); } }
         
@@ -225,6 +227,7 @@ namespace D3Sharp.Core.Ingame.Universe
         public void Consume(GameClient client, GameMessage message)
         {
             if (message is InventoryRequestMoveMessage) HandleRequest(message as InventoryRequestMoveMessage);
+
         }
     }
 }

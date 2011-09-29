@@ -67,25 +67,27 @@ namespace D3Sharp.Net.Game
 
                 while ((end - _incomingBuffer.Position) >= 9)
                 {
+                    GameMessage message = _incomingBuffer.ParseMessage();
                     try
                     {
-                        GameMessage message = _incomingBuffer.ParseMessage();
+
                         if (message == null) continue;
 
                         if (message.Consumer != Consumers.None) this.Universe.Route(this, message);
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                         else Logger.Warn("Got an incoming message that has no consumer or self-handler " + message.GetType());
 
-                        //Logger.LogIncoming(message);
+                        Logger.LogIncoming(message);
                     }
                     catch (NotImplementedException)
                     {
-                        //Logger.Debug("Unhandled game message: 0x{0:X4} {1}", msg.Id, msg.GetType().Name);
+                        Logger.Debug("Unhandled game message: 0x{0:X4} {1}", message .Id, message.GetType().Name);
                     }
                 }
 
                 _incomingBuffer.Position = end;
             }
+            Logger.Debug("Consuming");
             _incomingBuffer.ConsumeData();
             FlushOutgoingBuffer();
         }
