@@ -1456,6 +1456,7 @@ namespace D3Sharp.Core.Ingame.Universe
                 Field10 = 0x00,
             });
             Client.items[0x789E01f7] = item2;
+            Client.items[0x7B1E008F] = new Item(item2.Gbid);
 
 
 

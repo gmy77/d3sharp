@@ -324,10 +324,10 @@ namespace D3Sharp.Core.Ingame.Universe
             Actor a = this.GetActor(message.Field1);
             if (a != null && SNODatabase.Instance.IsOfGroup(a.SnoId, SNOGroup.Actors))
             {
-                if (message.Field1 == 2065563799)
+                if (message.Field1 == 2065563791)
                 {
-                    //client.Player.Hero.Inventory.PickUp(message);
-                    //return;
+                    client.Player.Hero.Inventory.PickUp(message);
+                    return;
                 }
             }
 

@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 using System.Collections.Generic;
+using D3Sharp.Net.Game.Message.Fields;
+
 namespace D3Sharp.Core.Common.Items
 {
     
@@ -29,9 +31,15 @@ namespace D3Sharp.Core.Common.Items
 
     public class Item
     {
+        // Appearance
+        private int dye = 0;
+        private int effect = 0;
+        private int effectLevel = 0;
+
+
         public Dictionary<int, int> Attributes = new Dictionary<int, int>();
         public int Gbid { get; set; }
-        public int Count { get; set;  }
+        public int Count { get; set;  }             // <- amount?
         public ItemType ItemType { get; set; }
         public Item(int gbid)
         {
@@ -39,5 +47,17 @@ namespace D3Sharp.Core.Common.Items
             Count = 1;
         }
 
+        // There are 2 VisualItemClasses... any way to use the builder to create a D3 Message?
+        public VisualItem CreateVisualItem()
+        {
+            return new VisualItem()
+            {
+                Field0 = Gbid,
+                Field1 = 0,
+                Field2 = 0,
+                Field3 = -1
+            };
+
+        }
     }
 }
