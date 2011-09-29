@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 D3Sharp Project
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ namespace D3Sharp
 
         private static void PrintLicense()
         {
-            Console.WriteLine("Copyright (C) 2011 D3Sharp Project");
+            Console.WriteLine("Copyright (C) 2011 mooege project");
             Console.WriteLine("D3Sharp comes with ABSOLUTELY NO WARRANTY.");
             Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
             Console.WriteLine();
