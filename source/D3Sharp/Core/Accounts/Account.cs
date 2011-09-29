@@ -47,10 +47,11 @@ namespace D3Sharp.Core.Accounts
                     .SetBannerConfiguration(this.BannerConfiguration)
                     .SetFlags(0);
 
-                builder.SetLastPlayedHeroId(Toons.Count > 0
-                                                ? Toons.First().Value.D3EntityID
-                                                : D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).
-                                                      Build());
+                builder.SetLastPlayedHeroId(
+                    (Toons.Count > 0)
+                    ? Toons.First().Value.D3EntityID
+                    : D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0)
+                    .Build());
                 return builder.Build();
             }
         }

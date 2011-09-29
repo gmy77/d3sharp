@@ -23,6 +23,9 @@ using D3Sharp.Utils.Extensions;
 using Gibbed.Helpers;
 using System.Text;
 using D3Sharp.Utils;
+using System.Collections.Generic;
+using D3Sharp.Core.Inventory;
+using D3Sharp.Core.Items;
 
 //using Gibbed.Helpers;
 
@@ -37,6 +40,17 @@ namespace D3Sharp.Net.Game
 
         GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
+
+        int objectId = 0x78f50114 + 100;
+        int packetId = 0x227 + 20;
+        int tick = 1;
+
+        Random rand = new Random();
+        IList<int> objectIdsSpawned = null;
+        Vector3D position;
+
+        InventoryManager inventoryManager = new InventoryManager(0x789E00E2);
+            
 
         public GameClient(IConnection connection)
         {
@@ -125,8 +139,8 @@ namespace D3Sharp.Net.Game
                                     Field0 = int.Parse(data[1]),
                                     Field1 = new IVector2D()
                                     {
-                                        Field0 = int.Parse(data[2]),
-                                        Field1 = int.Parse(data[3]),
+                                        x = int.Parse(data[2]),
+                                        y = int.Parse(data[3]),
                                     },
                                     arSnoLevelAreas = new int[4]
             {
@@ -346,7 +360,7 @@ namespace D3Sharp.Net.Game
                 Id = 0x0031,
                 Field0 = 0x00000000, //Party frame (0x00000000 hide, 0x00000001 show)
                 Field1 = "", //Owner name?
-                ToonName = this.BnetClient.CurrentToon.Name,
+                ToonName = BnetClient.CurrentToon.Name,
                 Field3 = 0x00000002, //party frame class 
                 Field4 = 0x00000004, //party frame level
                 snoActorPortrait = BnetClient.CurrentToon.ClassSNO, //party frame portrait
@@ -2052,7 +2066,7 @@ namespace D3Sharp.Net.Game
             Float = 1f,
          },
          new NetAttributeKeyValue()
-         {
+         {           
             Attribute = GameAttribute.Attributes[0x0076], // Strafing_Rate_Total 
             Int = 0x00000000,
             Float = 3.051758E-05f,
@@ -2761,6 +2775,21 @@ namespace D3Sharp.Net.Game
                 },
             });
             #endregion
+
+
+            ItemTypeGenerator itemGenerator = new ItemTypeGenerator();
+
+            Item item = itemGenerator.generateRandomElement(ItemType.Sword_1H);
+            inventoryManager.AddToInventory(item);
+            item = itemGenerator.generateRandomElement(ItemType.Mace_1H);
+            inventoryManager.AddToInventory(item);
+
+
+            foreach (Item invItem in inventoryManager.GetInventoryItems())
+            {
+                invItem.SendTo(this);
+            }
+
             FlushOutgoingBuffer();
 
             SendMessage(new DWordDataMessage() // TICK
@@ -3295,7 +3324,8 @@ namespace D3Sharp.Net.Game
 
         public void OnMessage(ACDTranslateNormalMessage msg)
         {
-            throw new NotImplementedException();
+            if (msg.Field1 != null)
+                position = msg.Field1;
         }
 
         public void OnMessage(ACDTranslateSnappedMessage msg)
@@ -3602,15 +3632,168 @@ namespace D3Sharp.Net.Game
         {
             throw new NotImplementedException();
         }
-
         public void OnMessage(TargetMessage msg)
         {
-            throw new NotImplementedException();
+            if (msg.Field1 == 0x77F20036)
+            {
+                TeleportToInn();
+                return;
+            }
+            else if (!objectIdsSpawned.Contains(msg.Field1)) return;
+
+            objectIdsSpawned.Remove(msg.Field1);
+
+            var killAni = new int[]{
+                    0x2cd7,
+                    0x2cd4,
+                    0x01b378,
+                    0x2cdc,
+                    0x02f2,
+                    0x2ccf,
+                    0x2cd0,
+                    0x2cd1,
+                    0x2cd2,
+                    0x2cd3,
+                    0x2cd5,
+                    0x01b144,
+                    0x2cd6,
+                    0x2cd8,
+                    0x2cda,
+                    0x2cd9
+            };
+            SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = msg.Field1,
+                Field1 = 0x0,
+                Field2 = 0x2,
+            });
+            SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = msg.Field1,
+                Field1 = 0xc,
+            });
+            SendMessage(new PlayHitEffectMessage()
+            {
+                Id = 0x7b,
+                Field0 = msg.Field1,
+                Field1 = 0x789E00E2,
+                Field2 = 0x2,
+                Field3 = false,
+            });
+
+            SendMessage(new FloatingNumberMessage()
+            {
+                Id = 0xd0,
+                Field0 = msg.Field1,
+                Field1 = 9001.0f,
+                Field2 = 0,
+            });
+
+            SendMessage(new ANNDataMessage()
+            {
+                Id = 0x6d,
+                Field0 = msg.Field1,
+            });
+
+            int ani = killAni[rand.Next(killAni.Length)];
+            Logger.Info("Ani used: " + ani);
+
+            SendMessage(new PlayAnimationMessage()
+            {
+                Id = 0x6c,
+                Field0 = msg.Field1,
+                Field1 = 0xb,
+                Field2 = 0,
+                tAnim = new PlayAnimationMessageSpec[1]
+                {
+                    new PlayAnimationMessageSpec()
+                    {
+                        Field0 = 0x2,
+                        Field1 = ani,
+                        Field2 = 0x0,
+                        Field3 = 1f
+                    }
+                }
+            });
+
+            packetId += 10 * 2;
+            SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = packetId,
+            });
+
+            SendMessage(new ANNDataMessage()
+            {
+                Id = 0xc5,
+                Field0 = msg.Field1,
+            });
+
+            SendMessage(new AttributeSetValueMessage
+            {
+                Id = 0x4c,
+                Field0 = msg.Field1,
+                Field1 = new NetAttributeKeyValue
+                {
+                    Attribute = GameAttribute.Attributes[0x4d],
+                    Float = 0
+                }
+            });
+
+            SendMessage(new AttributeSetValueMessage
+            {
+                Id = 0x4c,
+                Field0 = msg.Field1,
+                Field1 = new NetAttributeKeyValue
+                {
+                    Attribute = GameAttribute.Attributes[0x1c2],
+                    Int = 1
+                }
+            });
+
+            SendMessage(new AttributeSetValueMessage
+            {
+                Id = 0x4c,
+                Field0 = msg.Field1,
+                Field1 = new NetAttributeKeyValue
+                {
+                    Attribute = GameAttribute.Attributes[0x1c5],
+                    Int = 1
+                }
+            });
+            SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = msg.Field1,
+                Field1 = 0xc,
+            });
+            SendMessage(new PlayEffectMessage()
+            {
+                Id = 0x7a,
+                Field0 = msg.Field1,
+                Field1 = 0x37,
+            });
+            SendMessage(new PlayHitEffectMessage()
+            {
+                Id = 0x7b,
+                Field0 = msg.Field1,
+                Field1 = 0x789E00E2,
+                Field2 = 0x2,
+                Field3 = false,
+            });
+            packetId += 10 * 2;
+            SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = packetId,
+            });
         }
 
         public void OnMessage(SecondaryAnimationPowerMessage msg)
         {
-            throw new NotImplementedException();
+            SpawnZombie();
         }
 
         public void OnMessage(SNODataMessage msg)
@@ -3635,7 +3818,17 @@ namespace D3Sharp.Net.Game
 
         public void OnMessage(InventoryRequestMoveMessage msg)
         {
+            
+            Item item = inventoryManager.GetItem(msg.invItemId);
+            item.InvLoc.x = msg.invTargetLocation.xCoord;
+            item.InvLoc.y = msg.invTargetLocation.yCoord;
+
+            /*
+                item.SendTo(this);
+            */
+
             throw new NotImplementedException();
+
         }
 
         public void OnMessage(InventorySplitStackMessage msg)
@@ -3654,6 +3847,11 @@ namespace D3Sharp.Net.Game
         }
 
         public void OnMessage(InventoryRequestUseMessage msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnMessage(InventoryDropItemMessage msg)
         {
             throw new NotImplementedException();
         }
@@ -3898,9 +4096,438 @@ namespace D3Sharp.Net.Game
             throw new NotImplementedException();
         }
 
-        public void OnMessage(InventoryDropItemMessage msg)
+        private void TeleportToInn()
         {
-            throw new NotImplementedException();
+            SendMessage(new RevealWorldMessage()
+            {
+                Id = 0x037,
+                Field0 = 0x772F0001,
+                Field1 = 0x0001AB32,
+            });
+
+            SendMessage(new WorldStatusMessage()
+            {
+                Id = 0x0B4,
+                Field0 = 0x772F0001,
+                Field1 = false,
+            });
+
+            SendMessage(new EnterWorldMessage()
+            {
+                Id = 0x0033,
+                Field0 = new Vector3D()
+                {
+                    Field0 = 83.75f,
+                    Field1 = 123.75f,
+                    Field2 = 0.2000023f,
+                },
+                Field1 = 0x772F0001,
+                Field2 = 0x0001AB32,
+            });
+            SendMessage(new RevealSceneMessage()
+            {
+                Id = 0x0034,
+                Field0 = 0x772F0001,
+                Field1 = new SceneSpecification()
+                {
+                    Field0 = 0x00000000,
+                    Field1 = new IVector2D()
+                    {
+                        x = 0x00000000,
+                        y = 0x00000000,
+                    },
+                    arSnoLevelAreas = new int[] { 0x0001AB91, -1, -1, -1, },
+                    snoPrevWorld = 0x000115EE,
+                    Field4 = 0x000000DF,
+                    snoPrevLevelArea = -1,
+                    snoNextWorld = 0x00015348,
+                    Field7 = 0x000000AC,
+                    snoNextLevelArea = -1,
+                    snoMusic = 0x000206F8,
+                    snoCombatMusic = -1,
+                    snoAmbient = 0x0002C68A,
+                    snoReverb = 0x00021ABA,
+                    snoWeather = 0x00017869,
+                    snoPresetWorld = 0x0001AB32,
+                    Field15 = 0x00000000,
+                    Field16 = 0x00000000,
+                    Field17 = 0x00000000,
+                    Field18 = -1,
+                    tCachedValues = new SceneCachedValues()
+                    {
+                        Field0 = 0x0000003F,
+                        Field1 = 0x00000060,
+                        Field2 = 0x00000060,
+                        Field3 = new AABB()
+                        {
+                            Field0 = new Vector3D()
+                            {
+                                Field0 = 120f,
+                                Field1 = 120f,
+                                Field2 = 26.61507f,
+                            },
+                            Field1 = new Vector3D()
+                            {
+                                Field0 = 120f,
+                                Field1 = 120f,
+                                Field2 = 36.06968f,
+                            }
+                        },
+                        Field4 = new AABB()
+                        {
+                            Field0 = new Vector3D()
+                            {
+                                Field0 = 120f,
+                                Field1 = 120f,
+                                Field2 = 26.61507f,
+                            },
+                            Field1 = new Vector3D()
+                            {
+                                Field0 = 120f,
+                                Field1 = 120f,
+                                Field2 = 36.06968f,
+                            }
+                        },
+                        Field5 = new int[] { 0x00000267, 0x00000000, 0x00000000, 0x00000000, },
+                        Field6 = 0x00000001
+                    }
+                },
+                Field2 = 0x78740120,
+                snoScene = 0x0001AB2F,
+                Field4 = new PRTransform()
+                {
+                    Field0 = new Quaternion()
+                    {
+                        Field0 = 1f,
+                        Field1 = new Vector3D()
+                        {
+                            Field0 = 0f,
+                            Field1 = 0f,
+                            Field2 = 0f,
+                        }
+                    },
+                    Field1 = new Vector3D()
+                    {
+                        Field0 = 0f,
+                        Field1 = 0f,
+                        Field2 = 0f,
+                    }
+                },
+                Field5 = -1,
+                snoSceneGroup = -1,
+                arAppliedLabels = new int[0]
+
+            });
+
+            SendMessage(new MapRevealSceneMessage()
+            {
+                Id = 0x044,
+                Field0 = 0x78740120,
+                snoScene = 0x0001AB2F,
+                Field2 = new PRTransform()
+                {
+                    Field0 = new Quaternion()
+                    {
+                        Field0 = 1f,
+                        Field1 = new Vector3D()
+                        {
+                            Field0 = 0f,
+                            Field1 = 0f,
+                            Field2 = 0f,
+                        }
+                    },
+                    Field1 = new Vector3D()
+                    {
+                        Field0 = 0f,
+                        Field1 = 0f,
+                        Field2 = 0f,
+                    }
+                },
+                Field3 = 0x772F0001,
+                Field4 = 0
+            });
+
+            SendMessage(new PlayerWarpedMessage()
+            {
+                Id = 0x0B1,
+                Field0 = 9,
+                Field1 = 0xf,
+            });
+
+            packetId += 10 * 2;
+            SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = packetId,
+            });
+        }
+        
+        private void SpawnZombie()
+        {
+            if (position == null)
+                return;
+
+            if (objectIdsSpawned == null)
+            {
+                objectIdsSpawned = new List<int>();
+                objectIdsSpawned.Add(objectId - 100);
+                objectIdsSpawned.Add(objectId);
+            }
+
+            objectId++;
+            objectIdsSpawned.Add(objectId);
+
+            #region ACDEnterKnown Hittable Zombie
+            SendMessage(new ACDEnterKnownMessage()
+            {
+                Id = 0x003B,
+                Field0 = objectId,
+                Field1 = 6652,
+                Field2 = 0x8,
+                Field3 = 0x0,
+                Field4 = new WorldLocationMessageData()
+                {
+                    Field0 = 1.35f,
+                    Field1 = new PRTransform()
+                    {
+                        Field0 = new Quaternion()
+                        {
+                            Field0 = 0.768145f,
+                            Field1 = new Vector3D()
+                            {
+                                Field0 = 0f,
+                                Field1 = 0f,
+                                Field2 = -0.640276f,
+                            },
+                        },
+                        Field1 = new Vector3D()
+                        {
+                            Field0 = position.Field0 + 5,
+                            Field1 = position.Field1 + 5,
+                            Field2 = position.Field2,
+                        },
+                    },
+                    Field2 = 0x772E0000,
+                },
+                Field5 = null,
+                Field6 = new GBHandle()
+                {
+                    Field0 = 1,
+                    Field1 = 1,
+                },
+                Field7 = 0x00000001,
+                Field8 = 6652,
+                Field9 = 0x0,
+                Field10 = 0x0,
+                Field11 = 0x0,
+                Field12 = 0x0,
+                Field13 = 0x0
+            });
+            SendMessage(new AffixMessage()
+            {
+                Id = 0x48,
+                Field0 = objectId,
+                Field1 = 0x1,
+                aAffixGBIDs = new int[0]
+            });
+            SendMessage(new AffixMessage()
+            {
+                Id = 0x48,
+                Field0 = objectId,
+                Field1 = 0x2,
+                aAffixGBIDs = new int[0]
+            });
+            SendMessage(new ACDCollFlagsMessage
+            {
+                Id = 0xa6,
+                Field0 = objectId,
+                Field1 = 0x1
+            });
+
+            SendMessage(new AttributesSetValuesMessage
+            {
+                Id = 0x4d,
+                Field0 = objectId,
+                atKeyVals = new NetAttributeKeyValue[15] {
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[214],
+                        Int = 0
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[464],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 1048575,
+                        Attribute = GameAttribute.Attributes[441],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30582,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30286,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30285,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30284,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30283,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30290,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 79486,
+                        Attribute = GameAttribute.Attributes[560],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30286,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30285,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30284,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30283,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30290,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    }
+                }
+
+            });
+
+            SendMessage(new AttributesSetValuesMessage
+            {
+                Id = 0x4d,
+                Field0 = objectId,
+                atKeyVals = new NetAttributeKeyValue[9] {
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[86],
+                        Float = 4.546875f
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 79486,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[84],
+                        Float = 4.546875f
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[81],
+                        Int = 0
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[77],
+                        Float = 4.546875f
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[69],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Field0 = 30582,
+                        Attribute = GameAttribute.Attributes[460],
+                        Int = 1
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[67],
+                        Int = 10
+                    },
+                    new NetAttributeKeyValue {
+                        Attribute = GameAttribute.Attributes[38],
+                        Int = 1
+                    }
+                }
+
+            });
+
+
+            SendMessage(new ACDGroupMessage
+            {
+                Id = 0xb8,
+                Field0 = objectId,
+                Field1 = unchecked((int)0xb59b8de4),
+                Field2 = unchecked((int)0xffffffff)
+            });
+
+            SendMessage(new ANNDataMessage
+            {
+                Id = 0x3e,
+                Field0 = objectId
+            });
+
+            SendMessage(new ACDTranslateFacingMessage
+            {
+                Id = 0x70,
+                Field0 = objectId,
+                Field1 = (float)(rand.NextDouble() * 2.0 * Math.PI),
+                Field2 = false
+            });
+
+            SendMessage(new SetIdleAnimationMessage
+            {
+                Id = 0xa5,
+                Field0 = objectId,
+                Field1 = 0x11150
+            });
+
+            SendMessage(new SNONameDataMessage
+            {
+                Id = 0xd3,
+                Field0 = new SNOName
+                {
+                    Field0 = 0x1,
+                    Field1 = 6652
+                }
+            });
+            #endregion
+
+            packetId += 30 * 2;
+            SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = packetId,
+            });
+            tick += 20;
+            SendMessage(new EndOfTickMessage()
+            {
+                Id = 0x008D,
+                Field0 = tick - 20,
+                Field1 = tick
+            });
+
         }
     }
 }

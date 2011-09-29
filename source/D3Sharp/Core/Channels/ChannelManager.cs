@@ -21,6 +21,7 @@ using System.Linq;
 using D3Sharp.Utils;
 using D3Sharp.Net.BNet;
 using D3Sharp.Core.Objects;
+using D3Sharp.Core.Helpers;
 
 namespace D3Sharp.Core.Channels
 {
@@ -38,15 +39,30 @@ namespace D3Sharp.Core.Channels
             return channel;
         }
 
-        public static void DeleteChannel(ulong id)
+        public static void DissolveChannel(ulong id)
         {
+            Logger.Debug("Dissolving channel {0}", id);
             if (!Channels.ContainsKey(id)) {
                 Logger.Warn("Attempted to delete a non-existent channel with ID {0}", id);
                 return;
             }
             var channel = Channels[id];
-            channel.RemoveAllMembers();
+            channel.RemoveAllMembers(true);
             Channels.Remove(id);
+        }
+
+        public static Channel GetChannelByEntityId(bnet.protocol.EntityId entityId)
+        {
+            if (entityId.GetHighIdType() == EntityIdHelper.HighIdType.ChannelId)
+            {
+                if (Channels.ContainsKey(entityId.Low))
+                    return Channels[entityId.Low];
+            }
+            else
+            {
+                Logger.Warn("Given entity ID doesn't look like a channel ID!");
+            }
+            return null;
         }
     }
 }

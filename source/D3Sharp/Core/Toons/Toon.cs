@@ -68,7 +68,7 @@ namespace D3Sharp.Core.Toons
                     case ToonClass.Barbarian:
                         return 0x4FB91EE2;
                     case ToonClass.DemonHunter:
-                        return -930376119;
+                        return unchecked((int)0xC88B9649);
                     case ToonClass.Monk:
                         return 0x3DAC15;
                     case ToonClass.WitchDoctor:
@@ -177,7 +177,7 @@ namespace D3Sharp.Core.Toons
                             {
                                 // Head
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid( itemsGenerator.generateRandomElement(Items.ItemType.Helm).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -185,7 +185,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Chest
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.ChestArmor).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -193,7 +193,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Feet
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Boots).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -201,7 +201,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Hands
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Gloves).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -209,7 +209,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Weapon (1)
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Sword_1H).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -217,7 +217,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Weapon (2)
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Shield).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -225,7 +225,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Shoulders
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Shoulders).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -233,7 +233,7 @@ namespace D3Sharp.Core.Toons
 
                                 // Legs
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Pants).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -266,7 +266,7 @@ namespace D3Sharp.Core.Toons
             {
                 case 0x4FB91EE2:
                     return ToonClass.Barbarian;
-                case -930376119:
+                case unchecked((int)0xC88B9649):
                     return ToonClass.DemonHunter;
                 case 0x3DAC15:
                     return ToonClass.Monk;

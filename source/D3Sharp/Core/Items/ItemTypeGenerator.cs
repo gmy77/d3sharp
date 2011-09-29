@@ -20,6 +20,8 @@ using System;
 using System.Data.SQLite;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Helpers;
+using D3Sharp.Core.Items.ItemCreation;
+using System.Collections.Generic;
 
 namespace D3Sharp.Core.Items
 {
@@ -31,7 +33,6 @@ namespace D3Sharp.Core.Items
         {
             try
             {
-
                 // select count of Items with correct Type
                 // the itemname structure ITEMTYPE_NUMBER example: BOOTS_001 , BELT_004
                 String querypart = String.Format("from items where itemname like '{0}_%'", itemType.ToString());
@@ -56,9 +57,8 @@ namespace D3Sharp.Core.Items
                 while (reader.Read())
                 {
                     var itemName = (String)reader.GetString(0);
-                    var gbid = (int)StringHashHelper.HashItemName(itemName);
-                    var item = new Item(0, gbid);
-                    return item;
+                    //var gbid = (int)StringHashHelper.HashItemName(itemName);
+                    return createItem(itemName, itemType);
                 }
 
             }
@@ -70,6 +70,25 @@ namespace D3Sharp.Core.Items
             return null;
         }
 
+
+        public Item createItem(String itemName, ItemType itemType)
+        {
+
+            ItemGenerator generator = new ItemGenerator();
+            List<IItemAttributesCreator> attributesCreators = new AttributesCreatorFactory().create(itemType);
+
+            Item item = generator.Generate(itemName);
+
+            foreach (IItemAttributesCreator creator in attributesCreators)
+            {
+                creator.CreateAttributes(item);
+            }
+
+            
+
+
+            return item;
+        }
 
     }
 

@@ -7678,15 +7678,21 @@ namespace D3Sharp.Net.Game
 
     public class InvLoc
     {
+
+        public enum EquipmentSlotIds
+        {
+            NotEquipt = 0, HandLeft = 4, HandRight =8
+        }
+
         public int Field0;
-        public int Field1;
+        public int equipmentSlot;
         public int xCoord;
         public int yCoord;
 
         public void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(5) + (-1);
+            equipmentSlot = buffer.ReadInt(5) + (-1);
             xCoord = buffer.ReadInt(32);
             yCoord = buffer.ReadInt(32);
         }
@@ -7694,7 +7700,7 @@ namespace D3Sharp.Net.Game
         public void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, Field0);
-            buffer.WriteInt(5, Field1 - (-1));
+            buffer.WriteInt(5, equipmentSlot - (-1));
             buffer.WriteInt(32, xCoord);
             buffer.WriteInt(32, yCoord);
         }
@@ -7706,7 +7712,7 @@ namespace D3Sharp.Net.Game
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + equipmentSlot.ToString("X8") + " (" + equipmentSlot + ")");
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + xCoord.ToString("X8") + " (" + xCoord + ")");
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + yCoord.ToString("X8") + " (" + yCoord + ")");
             b.Append(' ', --pad);
@@ -8085,19 +8091,19 @@ namespace D3Sharp.Net.Game
 
     public class IVector2D
     {
-        public int Field0;
-        public int Field1;
+        public int x;
+        public int y;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            x = buffer.ReadInt(32);
+            y = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, x);
+            buffer.WriteInt(32, y);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -8106,8 +8112,8 @@ namespace D3Sharp.Net.Game
             b.AppendLine("IVector2D:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + x.ToString("X8") + " (" + x + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + y.ToString("X8") + " (" + y + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

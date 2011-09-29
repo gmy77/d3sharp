@@ -36,14 +36,14 @@ namespace D3Sharp.Core.Channels
             RequestedBySelf = 0x00   // Default; generally when the client quits or leaves a channel (for example, when switching toons)
             // Kick is probably 0x01 or somesuch
         }
-        
+
         // Reasons a member was removed (sent in NotifyRemove)
         public enum RemoveReason : uint
         {
             Kicked = 0x00,           // The member was kicked
             Left = 0x01              // The member left
         }
-        
+
         public static RemoveReason GetRemoveReasonForRequest(RemoveRequestReason reqreason)
         {
             switch (reqreason)
@@ -56,29 +56,78 @@ namespace D3Sharp.Core.Channels
             }
             return RemoveReason.Left;
         }
-        
+
         public bnet.protocol.EntityId BnetEntityId { get; private set; }
         public D3.OnlineService.EntityId D3EntityId { get; private set; }
-        public bnet.protocol.channel.ChannelState State { get; private set; }
 
-        public readonly Dictionary<BNetClient, bnet.protocol.channel.Member> Members = new Dictionary<BNetClient, bnet.protocol.channel.Member>();
+        // State
+        public bnet.protocol.channel.ChannelState.Types.PrivacyLevel PrivacyLevel { get; set; }
+        public uint MaxMembers { get; set; }
+        public uint MinMembers { get; set; }
+        public uint MaxInvitations { get; set; }
+
+        public bnet.protocol.channel.ChannelState State
+        {
+            get
+            {
+                return bnet.protocol.channel.ChannelState.CreateBuilder()
+                    .SetMinMembers(this.MinMembers)
+                    .SetMaxMembers(this.MaxMembers)
+                    .SetMaxInvitations(this.MaxInvitations)
+                    .SetPrivacyLevel(this.PrivacyLevel)
+                    .Build();
+            }
+        }
+
+        // Description
+        public bnet.protocol.channel.ChannelDescription Description
+        {
+            get
+            {
+                // NOTE: Can have extensions
+                var builder = bnet.protocol.channel.ChannelDescription.CreateBuilder()
+                    .SetChannelId(this.BnetEntityId)
+                    .SetState(this.State);
+                if (this.Members.Count > 0) // No reason to set a value that defaults to 0
+                    builder.SetCurrentMembers((uint)this.Members.Count);
+                return builder.Build();
+            }
+        }
+
+        // Info
+        public bnet.protocol.channel.ChannelInfo Info
+        {
+            get
+            {
+                // NOTE: Can have extensions
+                var builder = bnet.protocol.channel.ChannelInfo.CreateBuilder()
+                    .SetDescription(this.Description);
+                foreach (var pair in this.Members)
+                {
+                    builder.AddMember(pair.Value.BnetMember);
+                }
+                return builder.Build();
+            }
+        }
+
+        public readonly Dictionary<BNetClient, Member> Members = new Dictionary<BNetClient, Member>();
         public BNetClient Owner { get; private set; }
 
         public Channel(BNetClient client, ulong remoteObjectId)
         {
             this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ChannelId).SetLow(this.DynamicId).Build();
             this.D3EntityId = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ChannelId).SetIdLow(this.DynamicId).Build();
+            this.PrivacyLevel = bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN_INVITATION;
+            this.MinMembers = 1;
+            this.MaxMembers = 8;
+            this.MaxInvitations = 12;
 
             // This is an object creator, so we have to map the remote object ID
             client.MapLocalObjectID(this.DynamicId, remoteObjectId);
-            
-            var builder = bnet.protocol.channel.ChannelState.CreateBuilder()
-                .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN_INVITATION)
-                .SetMaxMembers(8)
-                .SetMinMembers(1)
-                .SetMaxInvitations(12);
-            //.SetName("d3sharp test channel"); // NOTE: cap log doesn't set this optional field
-            this.State = builder.Build();
+
+            // The client can't be set as the owner (or added as a member) here because the server must first make a response
+            // to the client before using a mapped ID (presuming that this was called from a service).
+            // We'll just let the caller do that for us.
         }
 
         public void SetOwner(BNetClient client)
@@ -88,17 +137,24 @@ namespace D3Sharp.Core.Channels
                 Logger.Warn("Tried to set client {0} as owner of channel when it was already the owner", client.Connection.RemoteEndPoint.ToString());
                 return;
             }
+            // TODO: Should send state update to current owner instead of removing it
             RemoveOwner(RemoveReason.Left);
-            AddMember(client);
             this.Owner = client;
+            AddMember(client);
         }
 
         public void RemoveOwner(RemoveReason reason)
         {
             if (this.Owner != null)
             {
-                RemoveMember(this.Owner, reason);
+                RemoveMember(this.Owner, reason, false);
+                this.Owner = null;
             }
+        }
+
+        public Member GetMember(BNetClient client)
+        {
+            return this.Members[client];
         }
 
         public void AddMember(BNetClient client)
@@ -108,50 +164,78 @@ namespace D3Sharp.Core.Channels
                 Logger.Warn("Attempted to add client {0} to channel when it was already a member of the channel", client.Connection.RemoteEndPoint.ToString());
                 return;
             }
-            
+
             var identity = client.GetIdentity(false, false, true);
-            var addedMember = bnet.protocol.channel.Member.CreateBuilder()
-                .SetIdentity(identity)
-                .SetState(bnet.protocol.channel.MemberState.CreateBuilder()
-                    .AddRole(2)
-                    .SetPrivileges(0xFBFF) // 64511
-                    .Build())
-                .Build();
+
+            bool isOwner = client == this.Owner;
+            var addedMember = new Member(identity,
+                (isOwner) ? Member.Privilege.UnkCreator : Member.Privilege.UnkMember);
+
+            if (this.Members.Count > 0)
+            {
+                addedMember.AddRoles(
+                    (isOwner) ? Member.Role.PartyLeader : Member.Role.PartyMember,
+                    Member.Role.ChannelMember);
+            }
+            else
+            {
+                addedMember.AddRole((isOwner) ? Member.Role.ChannelCreator : Member.Role.ChannelMember);
+            }
 
             // This needs to be here so that the foreach below will also send to the client that was just added
             this.Members.Add(client, addedMember);
-            
+
+            // Cache the built state and member
+            var channelState = this.State;
+            var bnetMember = addedMember.BnetMember;
+
             var method = bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd");
             foreach (var pair in this.Members)
             {
                 var message = bnet.protocol.channel.AddNotification.CreateBuilder()
-                    .SetChannelState(this.State)
-                    // Here we have to set the self property for each call on each client
+                    .SetChannelState(channelState)
+                    // Set the Self property for each call on each client
                     // TODO: This may not be necessary here (this field is optional); check the caps
-                    .SetSelf(pair.Value)
-                    .AddMember(addedMember)
+                    .SetSelf(pair.Value.BnetMember)
+                    .AddMember(bnetMember)
                     .Build();
+                //Logger.Warn("NotifyAdd:\n{0}", message.ToString());
                 pair.Key.CallMethod(method, message, this.DynamicId);
             }
             client.CurrentChannel = this;
         }
-        
-        public void RemoveAllMembers()
+
+        public void Dissolve()
         {
+            ChannelManager.DissolveChannel(this.DynamicId);
+        }
+
+        public void RemoveAllMembers(bool dissolving)
+        {
+            if (!dissolving)
+            {
+                Dissolve();
+                return;
+            }
             foreach (var pair in this.Members)
             {
-                // TODO: There should probably be a RemoveReason for "channel disbanded"; find it!
-                RemoveMember(pair.Key, RemoveReason.Left);
+                // TODO: There should probably be a RemoveReason for "channel dissolved"; find it!
+                RemoveMember(pair.Key, RemoveReason.Left, true);
             }
         }
-        
+
         public void RemoveMemberByID(bnet.protocol.EntityId memberId, RemoveReason reason)
         {
             var client = this.Members.FirstOrDefault(pair => pair.Value.Identity.ToonId == memberId).Key;
-            RemoveMember(client, reason);
+            RemoveMember(client, reason, false);
         }
-        
+
         public void RemoveMember(BNetClient client, RemoveReason reason)
+        {
+            RemoveMember(client, reason, false);
+        }
+
+        public void RemoveMember(BNetClient client, RemoveReason reason, bool dissolving)
         {
             if (client.CurrentToon == null)
             {
@@ -180,11 +264,16 @@ namespace D3Sharp.Core.Channels
             }
             this.Members.Remove(client);
             client.CurrentChannel = null;
+            if (client == this.Owner)
+                this.Owner = null;
+
+            if (this.Members.Count == 0 && !dissolving)
+                Dissolve();
         }
-        
+
         public bool HasUser(BNetClient client)
         {
             return this.Members.Any(pair => pair.Key == client);
-        } 
+        }
     }
 }

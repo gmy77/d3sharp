@@ -24,22 +24,86 @@ using Google.ProtocolBuffers;
 
 namespace D3Sharp.Core.Channels
 {
-
     public class Member
     {
-        public enum Role
+        // TODO: Need moar!
+        public enum Role : uint
         {
-            Owner = 1,
-            Unknown101 = 101
+            ChannelMember = 1,
+            ChannelCreator = 2,
+            PartyMember = 100,
+            PartyLeader = 101 // There's a cap where no member has Role.ChannelCreator (which is plausible since games are actually channels)
         }
 
-        public BnetMember
+        // TODO: These are flags..
+        [Flags]
+        public enum Privilege : ulong
+        {
+            None = 0,
+            Chat = 0x20000,
+
+            // Combinations with unknowns..
+            UnkCreator = 0x0000FBFF,
+            UnkMember = 0x00030B8A,
+            UnkMember2 = 0x00030B80,
+            UnkJoinedMember = 0x0000DBC5
+        }
+
+        public bnet.protocol.Identity Identity { get; set; }
+        public Privilege Privileges { get; set; }
         public List<Role> Roles { get; private set; }
 
-        public Member()
+        public bnet.protocol.channel.MemberState BnetMemberState
         {
+            get
+            {
+                var builder = bnet.protocol.channel.MemberState.CreateBuilder();
+                if (this.Privileges != Privilege.None)
+                    builder.SetPrivileges((ulong)this.Privileges); // We don't have to set this if it is the default (0)
+                foreach (var role in this.Roles)
+                {
+                    builder.AddRole((uint)role);
+                }
+                return builder.Build();
+            }
+        }
+
+        public bnet.protocol.channel.Member BnetMember
+        {
+            get
+            {
+                return bnet.protocol.channel.Member.CreateBuilder()
+                    .SetIdentity(this.Identity)
+                    .SetState(this.BnetMemberState)
+                    .Build();
+            }
+        }
+
+        public Member(bnet.protocol.Identity identity, Privilege privs)
+        {
+            this.Identity = identity;
+            this.Privileges = privs;
             this.Roles = new List<Role>();
         }
-    }
 
+        public Member(bnet.protocol.Identity identity, Privilege privs, params Role[] roles)
+        {
+            this.Identity = identity;
+            this.Privileges = privs;
+            this.Roles = new List<Role>();
+            AddRoles(roles);
+        }
+
+        public void AddRoles(params Role[] roles)
+        {
+            foreach (var role in roles)
+                AddRole(role);
+        }
+
+        public void AddRole(Role role)
+        {
+            if (!this.Roles.Contains(role))
+                this.Roles.Add(role);
+        }
+    }
 }

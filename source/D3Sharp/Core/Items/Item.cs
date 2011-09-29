@@ -44,21 +44,22 @@ namespace D3Sharp.Core.Items
         public List<NetAttribute> AttributeList { get; set; }
 
 
-        public Item(int id, int gbid)
+        public Item(int id, uint gbid)
         {
             ItemId = id;
-            Gbid = gbid;
+            Gbid = unchecked((int)gbid);
             InvLoc = new IVector2D();
-            InvLoc.Field0 = 0x00000000 -1;
-            InvLoc.Field1 = 0x00000000 -1;
+            InvLoc.x = 0x00000000 -1;
+            InvLoc.y = 0x00000000 -1;
 
             AffixList = new List<Affix>();
             AttributeList = new List<NetAttribute>();
         }
+      
 
         public void SendTo(GameClient client)
         {
-            client.SendMessage(new ACDEnterKnownMessage()
+            ACDEnterKnownMessage msg = new ACDEnterKnownMessage()
             {
                 Id = 0x003B,
                 Field0 = ItemId,
@@ -81,9 +82,9 @@ namespace D3Sharp.Core.Items
                 Field8 = -1,
                 Field9 = 0x00000001,
                 Field10 = 0x00,
-            });
+            };
 
-
+            client.SendMessage(msg);
 
             int[] affixGbis = new int[AffixList.Count];
             for (int i = 0; i < AffixList.Count; i++)
@@ -108,29 +109,7 @@ namespace D3Sharp.Core.Items
                 aAffixGBIDs = affixGbis,
             });
 
-            /*
-            
-            client.SendMessage(new AffixMessage()
-            {
-                Id = 0x0048,
-                Field0 = Id,
-                Field1 = 0x00000001,
-                aAffixGBIDs = new int[0]{},
-                            
-            });
-
-            client.SendMessage(new AffixMessage()
-                {
-                            Id = 0x0048,
-                            Field0 = Id,
-                            Field1 = 0x00000002,
-                            aAffixGBIDs = new int[0]
-                {
-                },
-            });
-
-
-            */
+          
             client.SendMessage(new ACDCollFlagsMessage()
             {
                 Id = 0x00A6,
@@ -139,62 +118,34 @@ namespace D3Sharp.Core.Items
             });
 
 
-            List<NetAttributeKeyValue> netAttributesList = new List<NetAttributeKeyValue>();            
+            List<NetAttributeKeyValue> netAttributesList = new List<NetAttributeKeyValue>();    
+        
+
             foreach (NetAttribute attr in AttributeList){
-                NetAttributeKeyValue netAttr = new NetAttributeKeyValue()
+                NetAttributeKeyValue netAttr = null;
+                if (attr.MessageType != -1)
                 {
-                    Attribute = GameAttribute.Attributes[attr.Key], // Hitpoints_Granted 
-                    Int = unchecked((int)attr.IntValue),
-                    Float = attr.FloatValue,
-                };
+                    netAttr = new NetAttributeKeyValue()
+                    {
+                        Field0 = attr.MessageType,
+                        Attribute = GameAttribute.Attributes[attr.Key],
+                        Int = attr.IntValue,
+                        Float = attr.FloatValue,
+                    };
+                }else{
+                    netAttr = new NetAttributeKeyValue()
+                    {                        
+                        Attribute = GameAttribute.Attributes[attr.Key],
+                        Int = unchecked((int)attr.IntValue),
+                        Float = attr.FloatValue,
+                    };
+                }
                 netAttributesList.Add(netAttr);
             }
 
-            client.SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = ItemId,
-                atKeyVals = netAttributesList.ToArray(),
-            });
 
+            SendAttributes(netAttributesList,client);
 
-
-
-
-            /*
-            client.SendMessage(new AttributesSetValuesMessage()
-            {
-                Id = 0x004D,
-                Field0 = Id,
-                atKeyVals = new NetAttributeKeyValue[4]
-                    {
-                         new NetAttributeKeyValue()
-                         {
-                            Attribute = GameAttribute.Attributes[0x0052], // Hitpoints_Granted 
-                            Int = 0x00000000,
-                            Float = 100f,
-                         },
-                         new NetAttributeKeyValue()
-                         {
-                            Attribute = GameAttribute.Attributes[0x0125], // Seed 
-                            Int = unchecked((int)0x884DCD35),
-                            Float = 0f,
-                         },
-                         new NetAttributeKeyValue()
-                         {
-                            Attribute = GameAttribute.Attributes[0x0121], // ItemStackQuantityLo 
-                            Int = 0x00000001,
-                            Float = 0f,
-                         },
-                         new NetAttributeKeyValue()
-                         {
-                            Attribute = GameAttribute.Attributes[0x0115], // Item_Quality_Level 
-                            Int = 0x00000001,
-                            Float = 0f,
-                         },
-                    },
-            });
-            */
             client.SendMessage(new ACDGroupMessage()
             {
                 Id = 0x00B8,
@@ -217,57 +168,18 @@ namespace D3Sharp.Core.Items
                     Field0 = 0x00000001,
                     Field1 = 0x00001158,
                 },
-            });
-
-
-            client.SendMessage(new AttributeSetValueMessage()
-            {
-                Id = 0x004C,
-                Field0 = ItemId,
-                Field1 = new NetAttributeKeyValue()
-                {
-                    Attribute = GameAttribute.Attributes[0x0115], // Item_Quality_Level 
-                    Int = 0x00000001,
-                    Float = 0f,
-                },
-            });
-
-            client.SendMessage(new AttributeSetValueMessage()
-            {
-                Id = 0x004C,
-                Field0 = ItemId,
-                Field1 = new NetAttributeKeyValue()
-                {
-                    Attribute = GameAttribute.Attributes[0x0052], // Hitpoints_Granted 
-                    Int = 0x00000000,
-                    Float = 100f,
-                },
-            });
-
-            client.SendMessage(new AttributeSetValueMessage()
-            {
-                Id = 0x004C,
-                Field0 = ItemId,
-                Field1 = new NetAttributeKeyValue()
-                {
-                    Attribute = GameAttribute.Attributes[0x0125], // Seed 
-                    Int = unchecked((int)0x884DCD35),
-                    Float = 0f,
-                },
-            });
-
-            client.SendMessage(new AttributeSetValueMessage()
-            {
-                Id = 0x004C,
-                Field0 = ItemId,
-                Field1 = new NetAttributeKeyValue()
-                {
-                    Attribute = GameAttribute.Attributes[0x0121], // ItemStackQuantityLo 
-                    Int = 0x00000001,
-                    Float = 0f,
-                },
-            });
-
+            });            
+           
+            /*
+            foreach (NetAttributeKeyValue attr in netAttributesList){
+                client.SendMessage(new AttributeSetValueMessage()
+                {                   
+                    Id = 0x004C,
+                    Field0 = ItemId,
+                    Field1 = attr,
+                });
+            };  */        
+           
             client.SendMessage(new PlayEffectMessage()
             {
                 Id = 0x007A,
@@ -293,9 +205,151 @@ namespace D3Sharp.Core.Items
                 Id = 0x0041,
                 Field0 = ItemId,
                 Field1 = 0x00001158,
+            });          
+        }
+
+        private void SendAttributes(List<NetAttributeKeyValue> netAttributesList, GameClient client)
+        {
+
+            List<NetAttributeKeyValue> tmpList = new  List<NetAttributeKeyValue>(netAttributesList);
+
+            while (tmpList.Count >0)
+            {
+                int selectCount = (tmpList.Count > 15) ? 15 : tmpList.Count;
+                client.SendMessage(new AttributesSetValuesMessage()
+                {
+                    Id = 0x004D,
+                    Field0 = ItemId,
+                    atKeyVals = tmpList.GetRange(0, selectCount).ToArray(),
+                });
+                tmpList.RemoveRange(0, selectCount);   
+
+                
+            }            
+        }
+
+
+        public void SendStaticTo(GameClient client)
+        {
+
+            #region static
+
+            ACDEnterKnownMessage msg = new ACDEnterKnownMessage()
+            {
+                Id = 0x003B,
+                Field0 = 0x78A000E4,
+                Field1 = 0x00001158,
+                Field2 = 0x0000001A,
+                Field3 = 0x00000001,
+                Field4 = null,
+                Field5 = new InventoryLocationMessageData()
+                {
+                    Field0 = 0x789E00E2,
+                    Field1 = 0x00000000,
+                    Field2 = new IVector2D()
+                    {
+                        x = InvLoc.x,
+                        y = InvLoc.y,
+                    },
+                },
+                Field6 = new GBHandle()
+                {
+                    Field0 = 0x00000002,
+                    Field1 = 0x622256D4,
+                },
+                Field7 = -1,
+                Field8 = -1,
+                Field9 = 0x00000001,
+                Field10 = 0x00,
+            };
+
+            client.SendMessage(msg);
+
+            client.SendMessage(new AffixMessage()
+            {
+                Id = 0x0048,
+                Field0 = 0x78A000E4,
+                Field1 = 0x00000001,
+                aAffixGBIDs = new int[0]
+    {
+    },
             });
 
-          
+            client.SendMessage(new AffixMessage()
+            {
+                Id = 0x0048,
+                Field0 = 0x78A000E4,
+                Field1 = 0x00000002,
+                aAffixGBIDs = new int[0]
+    {
+    },
+            });
+
+            client.SendMessage(new ACDCollFlagsMessage()
+            {
+                Id = 0x00A6,
+                Field0 = 0x78A000E4,
+                Field1 = 0x00000080,
+            });
+
+            client.SendMessage(new AttributesSetValuesMessage()
+            {
+                Id = 0x004D,
+                Field0 = 0x78A000E4,
+                atKeyVals = new NetAttributeKeyValue[4]
+    {
+    new NetAttributeKeyValue()
+    {
+    Attribute = GameAttribute.Attributes[0x0052], // Hitpoints_Granted 
+    Int = 0x00000000,
+    Float = 100f,
+    },
+    new NetAttributeKeyValue()
+    {
+    Attribute = GameAttribute.Attributes[0x0125], // Seed 
+    Int = unchecked((int)0x884DCD35),
+    Float = 0f,
+    },
+    new NetAttributeKeyValue()
+    {
+    Attribute = GameAttribute.Attributes[0x0121], // ItemStackQuantityLo 
+    Int = 0x00000001,
+    Float = 0f,
+    },
+    new NetAttributeKeyValue()
+    {
+    Attribute = GameAttribute.Attributes[0x0115], // Item_Quality_Level 
+    Int = 0x00000001,
+    Float = 0f,
+    },
+    },
+            });
+
+            client.SendMessage(new ACDGroupMessage()
+            {
+                Id = 0x00B8,
+                Field0 = 0x78A000E4,
+                Field1 = -1,
+                Field2 = -1,
+            });
+
+            client.SendMessage(new ANNDataMessage()
+            {
+                Id = 0x003E,
+                Field0 = 0x78A000E4,
+            });
+
+            client.SendMessage(new SNONameDataMessage()
+            {
+                Id = 0x00D3,
+                Field0 = new SNOName()
+                {
+                    Field0 = 0x00000001,
+                    Field1 = 0x00001158,
+                },
+            });
+            #endregion
         }
+
     }
 }
