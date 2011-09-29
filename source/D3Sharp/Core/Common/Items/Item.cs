@@ -15,9 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
+using System.Collections.Generic;
 namespace D3Sharp.Core.Common.Items
 {
+    
 
     public enum ItemType
     {
@@ -26,17 +27,16 @@ namespace D3Sharp.Core.Common.Items
         Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, ThrownWeapon, ThrowingAxe, Wand, Ring
     }
 
-    class Item
+    public class Item
     {
-
+        public Dictionary<int, int> Attributes = new Dictionary<int, int>();
         public int Gbid { get; set; }
-
+        public int Count { get; set;  }
         public ItemType ItemType { get; set; }
-
-        public Item(int gbid, ItemType itemType)
+        public Item(int gbid)
         {
             Gbid = gbid;
-            ItemType = itemType;
+            Count = 1;
         }
 
     }

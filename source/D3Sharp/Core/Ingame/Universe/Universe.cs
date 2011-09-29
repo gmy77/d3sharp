@@ -48,11 +48,13 @@ namespace D3Sharp.Core.Ingame.Universe
 
         public PlayerManager PlayerManager { get; private set; }
 
+        public InventoryMenager InventoryMenager { get; private set; }
+
         public Universe()
         {
             this._worlds = new List<World>();
             this.PlayerManager = new PlayerManager(this);
-
+            this.InventoryMenager = new InventoryMenager();
             InitializeUniverse();
         }
 
@@ -63,16 +65,16 @@ namespace D3Sharp.Core.Ingame.Universe
                 case Consumers.Universe:
                     this.Consume(client, message);
                     break;
+                case Consumers.Inventory:
+                    client.Player.Hero.Inventory.Consume(client, message);
+                    break;
                 case Consumers.PlayerManager:
                     this.PlayerManager.Consume(client, message);
                     break;
                 case Consumers.Skillset:
                     client.Player.Hero.Skillset.Consume(client, message);
                     break;
-                case Consumers.Inventory:
-                    client.Player.Hero.Inventory.Consume(client, message);
-                    break;
-            }
+              }
         }
 
         public void Consume(GameClient client, GameMessage message)
@@ -324,8 +326,8 @@ namespace D3Sharp.Core.Ingame.Universe
             {
                 if (message.Field1 == 2065563799)
                 {
-                    client.Player.Hero.Inventory.PickUp(message);
-                    return;
+                    //client.Player.Hero.Inventory.PickUp(message);
+                    //return;
                 }
             }
 

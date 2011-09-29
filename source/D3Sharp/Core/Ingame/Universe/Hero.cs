@@ -37,6 +37,7 @@ namespace D3Sharp.Core.Ingame.Universe
 
         public GameClient InGameClient { get; private set; }
 
+
         public List<World> RevealedWorlds;
         public List<Scene> RevealedScenes;
         public List<Actor> RevealedActors;
