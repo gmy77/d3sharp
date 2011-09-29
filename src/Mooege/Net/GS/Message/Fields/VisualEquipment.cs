@@ -5,23 +5,23 @@ namespace Mooege.Net.GS.Message.Fields
     public class VisualEquipment
     {
         // MaxLength = 8
-        public VisualItem[] Field0;
+        public VisualItem[] Equipments;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = new VisualItem[8];
-            for (int i = 0; i < Field0.Length; i++)
+            Equipments = new VisualItem[8];
+            for (int i = 0; i < Equipments.Length; i++)
             {
-                Field0[i] = new VisualItem();
-                Field0[i].Parse(buffer);
+                Equipments[i] = new VisualItem();
+                Equipments[i].Parse(buffer);
             }
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            for (int i = 0; i < Field0.Length; i++)
+            for (int i = 0; i < Equipments.Length; i++)
             {
-                Field0[i].Encode(buffer);
+                Equipments[i].Encode(buffer);
             }
         }
 
@@ -35,9 +35,9 @@ namespace Mooege.Net.GS.Message.Fields
             b.AppendLine("Field0:");
             b.Append(' ', pad);
             b.AppendLine("{");
-            for (int i = 0; i < Field0.Length; i++)
+            for (int i = 0; i < Equipments.Length; i++)
             {
-                Field0[i].AsText(b, pad + 1);
+                Equipments[i].AsText(b, pad + 1);
                 b.AppendLine();
             }
             b.Append(' ', pad);

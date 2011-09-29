@@ -113,6 +113,7 @@ namespace Mooege.Core.GS.Universe
                                        Field10 = 0x789E00E2,
                                    });            
 
+            // reveal the hero
             Hero.Reveal(this.Hero);
 
             Client.SendMessage(new ACDCollFlagsMessage()
@@ -1372,89 +1373,7 @@ namespace Mooege.Core.GS.Universe
                                        Field1 = 0x789E00E2,
                                    });
 
-            Client.SendMessage(new VisualInventoryMessage()
-                                   {
-                                       Id = 0x004E,
-                                       Field0 = 0x789E00E2,
-                                       Field1 = new VisualEquipment()
-                                                    {
-                                                        Field0 = new VisualItem[8]
-                                                                     {
-                                                                         new VisualItem() //Head
-                                                                             {
-                                                                                 Field0 =
-                                                                                     Client.Player.Hero.Properties.
-                                                                                     Equipment.VisualItemList[0].Gbid,
-                                                                                 Field1 = 0x00000000,
-                                                                                 Field2 = 0x00000000,
-                                                                                 Field3 = -1,
-                                                                             },
-                                                                         new VisualItem() //Chest
-                                                                             {
-                                                                                 Field0 =
-                                                                                     Client.Player.Hero.Properties.
-                                                                                     Equipment.VisualItemList[1].Gbid,
-                                                                                 Field1 = 0x00000000,
-                                                                                 Field2 = 0x00000000,
-                                                                                 Field3 = -1,
-                                                                             },
-                                                                         new VisualItem() //Feet
-                                                                             {
-                                                                                 Field0 =
-                                                                                     Client.Player.Hero.Properties.
-                                                                                     Equipment.VisualItemList[2].Gbid,
-                                                                                 Field1 = 0x00000000,
-                                                                                 Field2 = 0x00000000,
-                                                                                 Field3 = -1,
-                                                                             },
-                                                                         new VisualItem() //Hands
-                                                                             {
-                                                                                 Field0 =
-                                                                                     Client.Player.Hero.Properties.
-                                                                                     Equipment.VisualItemList[3].Gbid,
-                                                                                 Field1 = 0x00000000,
-                                                                                 Field2 = 0x00000000,
-                                                                                 Field3 = -1,
-                                                                             },
-                                                                         new VisualItem() //Main hand
-                                                                             {
-                                                                                 Field0 =
-                                                                                     Client.Player.Hero.Properties.
-                                                                                     Equipment.VisualItemList[4].Gbid,
-                                                                                 Field1 = 0x00000000,
-                                                                                 Field2 = 0x00000000,
-                                                                                 Field3 = -1,
-                                                                             },
-                                                                         new VisualItem() //Offhand
-                                                                             {
-                                                                                 Field0 =
-                                                                                     Client.Player.Hero.Properties.
-                                                                                     Equipment.VisualItemList[5].Gbid,
-                                                                                 Field1 = 0x00000000,
-                                                                                 Field2 = 0x00000000,
-                                                                                 Field3 = -1,
-                                                                             },
-                                                                         new VisualItem() //Shoulders
-                                                                             {
-                                                                                 Field0 =
-                                                                                     Client.Player.Hero.Properties.
-                                                                                     Equipment.VisualItemList[6].Gbid,
-                                                                                 Field1 = 0x00000000,
-                                                                                 Field2 = 0x00000000,
-                                                                                 Field3 = -1,
-                                                                             },
-                                                                         new VisualItem() //Legs
-                                                                             {
-                                                                                 Field0 =
-                                                                                     Client.Player.Hero.Properties.
-                                                                                     Equipment.VisualItemList[7].Gbid,
-                                                                                 Field1 = 0x00000000,
-                                                                                 Field2 = 0x00000000,
-                                                                                 Field3 = -1,
-                                                                             },
-                                                                     },
-                                                    },
-                                   });
+            Client.SendMessage(Hero.GetVisualInventory());
 
             Client.SendMessage(new PlayerActorSetInitialMessage()
                                    {
@@ -1462,6 +1381,7 @@ namespace Mooege.Core.GS.Universe
                                        Field0 = 0x789E00E2,
                                        Field1 = 0x00000000,
                                    });
+
             Client.SendMessage(new SNONameDataMessage()
                                    {
                                        Id = 0x00D3,

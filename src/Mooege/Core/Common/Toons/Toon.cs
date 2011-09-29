@@ -96,21 +96,6 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-//<<<<<<< HEAD
-//        public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
-//            :base(persistantId)
-//        {
-//            this.SetFields(name, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistantID((ulong)accountId));
-//        }
-
-//        public Toon(string name, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
-//            : base(StringHashHelper.HashIdentity(name))
-//        {
-//            this.SetFields(name, GetClassByID(classId), flags, level, account);
-//        }
-
-//=======
-//>>>>>>> 8574c238179fe15ed89f064963d15f70293617bc
         private void SetFields(string name, ToonClass @class, ToonFlags flags, byte level, Account owner)
         {
             this.ToonHandle = new ToonHandleHelper(this.PersistentID);

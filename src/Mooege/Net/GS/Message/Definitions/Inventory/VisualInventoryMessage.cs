@@ -24,22 +24,21 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
     public class VisualInventoryMessage : GameMessage
     {
         public int Field0;
-        public VisualEquipment Field1;
+        public VisualEquipment EquipmentList;
 
-
-
+        public VisualInventoryMessage():base(Opcodes.VisualInventoryMessage){}
 
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
-            Field1 = new VisualEquipment();
-            Field1.Parse(buffer);
+            EquipmentList = new VisualEquipment();
+            EquipmentList.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
+            EquipmentList.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -49,7 +48,7 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            Field1.AsText(b, pad);
+            EquipmentList.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
