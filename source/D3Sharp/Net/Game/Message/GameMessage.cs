@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 D3Sharp Project
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ namespace D3Sharp.Net.Game.Message
             var msg = (T)Activator.CreateInstance(MessageTypes[opcode]);
             msg.Id = (int)opcode;
             msg.Consumer = MessageConsumers[opcode];
-;            return msg;
+            return msg;
         }
 
         public static GameMessage ParseMessage(GameBitBuffer buffer)

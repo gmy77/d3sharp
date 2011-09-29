@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 D3Sharp Project
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +27,6 @@ namespace D3Sharp.Net.Game.Message.Definitions.Inventory
     {
         public int Field0;
         public InvLoc Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

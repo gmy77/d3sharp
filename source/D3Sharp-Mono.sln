@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3Proto", "D3Proto\D3Proto.csproj", "{4CC19847-6F24-4453-9E31-126F94308AB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Helpers", "Gibbed.Helpers\Gibbed.Helpers.csproj", "{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3Sharp-Mono", "D3Sharp\D3Sharp-Mono.csproj", "{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}"
 EndProject
 Global
@@ -39,18 +37,6 @@ Global
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|x86.ActiveCfg = Release|Any CPU
-		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Debug|x86.Build.0 = Debug|Any CPU
-		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Release|x86.ActiveCfg = Release|Any CPU
-		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = D3Sharp\D3Sharp-Mono.csproj

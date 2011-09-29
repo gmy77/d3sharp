@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 D3Sharp Project
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,19 +80,18 @@ namespace D3Sharp
 
         private static void PrintBanner()
         {
-            Console.WriteLine(@"      _  _____       _                         ");
-            Console.WriteLine(@"   __| ||___ /  ___ | |__    __ _  _ __  _ __  ");
-            Console.WriteLine(@"  / _` |  |_ \ / __|| '_ \  / _` || '__|| '_ \ ");
-            Console.WriteLine(@" | (_| | ___) |\__ \| | | || (_| || |   | |_) |");
-            Console.WriteLine(@"  \__,_||____/ |___/|_| |_| \__,_||_|   | .__/ ");
-            Console.WriteLine(@"                                        |_|    ");
+            Console.WriteLine(@" _ __ ___   ___   ___   ___  __ _  ___ ");
+            Console.WriteLine(@"| '_ ` _ \ / _ \ / _ \ / _ \/ _` |/ _ \");
+            Console.WriteLine(@"| | | | | | (_) | (_) |  __/ (_| |  __/");
+            Console.WriteLine(@"|_| |_| |_|\___/ \___/ \___|\__, |\___|");
+            Console.WriteLine(@"                            |___/      ");
             Console.WriteLine();
         }
 
         private static void PrintLicense()
         {
-            Console.WriteLine("Copyright (C) 2011 D3Sharp Project");
-            Console.WriteLine("D3Sharp comes with ABSOLUTELY NO WARRANTY.");
+            Console.WriteLine("Copyright (C) 2011 mooege project");
+            Console.WriteLine("mooege comes with ABSOLUTELY NO WARRANTY.");
             Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
             Console.WriteLine();
         }

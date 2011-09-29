@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 D3Sharp Project
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1376,46 +1376,122 @@ namespace D3Sharp.Core.Ingame.Universe
                                    });
             // add radnom Item
             ItemGenerator  Generator = new ItemGenerator();
-            Item item = Generator.Sword(Client);
-            Logger.Debug("Item Created {0}", item.Gbid);
-            Universe.InventoryMenager.AddToInventory(Client, item, 0x789E00E2, 0, 0);
+            
+            //Logger.Debug("Item Created {0}", item.Gbid);
+            //Client.Player.Hero.Inventory.(item, 0x789E00E2, 0, 0);
+            // create potion ....
+            
             //Universe.InventoryMenager.CreateItem(Client, 0, 0);
             //Universe.InventoryMenager.CreateItem(Client, 0, 2);
             //Universe.InventoryMenager.CreateItem(Client, 2, 0);
-            Universe.InventoryMenager.CreateItem(Client, 2, 2);
+             //Universe.InventoryMenager.CreateItem(Client, 2, 2);
 
             // Universe.InventoryMenager.Equip();
-
+            Item empty = Generator.Sword(Client);
+            empty.Gbid = 0;
+            Client.items[0] = empty; 
+            Item item = Generator.Sword(Client);
             Client.SendMessage(new ACDEnterKnownMessage()
             {
-                Id = 0x003B,
-                Field0 = 0x789F00E3,
-                Field1 = 0x00001025,
-                Field2 = 0x0000001A,
-                Field3 = 0x00000001,
+
+                Id = 0x003B, // stworzenie przedmiotu ....
+                //Field0 = 0x78A000E4,
+                Field0 = 0x789E01f2,        // id
+                Field1 = 0x00001158,        // ????
+                Field2 = 0x00000001,        // ????
+                Field3 = 0x00000001,        // ????
                 Field4 = null,
                 Field5 = new InventoryLocationMessageData()
                 {
-                    Field0 = 0x789E00E2,
-                    Field1 = 0x00000003,
+                    Field0 = 0x789E00E2,    // player_id ???
+                    Field1 = 0x00000000,    // item place ...
                     Field2 = new IVector2D()
                     {
-                        Field0 = 0x00000000,
-                        Field1 = 0x00000000,
+                        Field0 = 0, // pos x
+                        Field1 = 0, // pos y
                     },
                 },
                 Field6 = new GBHandle()
                 {
                     Field0 = 0x00000002,
-                    Field1 = Client.Player.Hero.Properties.Equipment.VisualItemList[5].Gbid,
+                    Field1 = item.Gbid, // item id ....
                 },
                 Field7 = -1,
                 Field8 = -1,
                 Field9 = 0x00000001,
                 Field10 = 0x00,
-
             });
-            // Sample item
+            Client.items[0x789E01f2] = item;
+            //
+            Item item2 = Generator.Sword(Client);
+            //
+            Client.SendMessage(new ACDEnterKnownMessage()
+            {
+
+                Id = 0x003B, // stworzenie przedmiotu ....
+                //Field0 = 0x78A000E4,
+                Field0 = 0x789E01f7,        // id
+                Field1 = 0x00001158,        // ????
+                Field2 = 0x00000001,        // ????
+                Field3 = 0x00000001,        // ????
+                Field4 = null,
+                Field5 = new InventoryLocationMessageData()
+                {
+                    Field0 = 0x789E00E2,    // player_id ???
+                    Field1 = 0x00000000,    // item place ...
+                    Field2 = new IVector2D()
+                    {
+                        Field0 = 2, // pos x
+                        Field1 = 0, // pos y
+                    },
+                },
+                Field6 = new GBHandle()
+                {
+                    Field0 = 0x00000002,
+                    Field1 = item2.Gbid, // item id ....
+                },
+                Field7 = -1,
+                Field8 = -1,
+                Field9 = 0x00000001,
+                Field10 = 0x00,
+            });
+            Client.items[0x789E01f7] = item2;
+
+
+
+               Client.SendMessage(new AttributesSetValuesMessage()
+            {
+                Id = 0x004D,
+                Field0 = 0x789E01f2,
+                atKeyVals = new NetAttributeKeyValue[4]
+                {
+                    new NetAttributeKeyValue()
+                    {
+                        Attribute = GameAttribute.Attributes[0x0052], // Hitpoints_Granted 
+                        Int = 0x00000000,
+                        Float = 125f,
+                    },
+                    new NetAttributeKeyValue()
+                    {
+                        Attribute = GameAttribute.Attributes[0x0125], // Seed 
+                        Int = unchecked((int)0x884DCD35),
+                        Float = 0f,
+                    },
+                    new NetAttributeKeyValue()
+                    {
+                        Attribute = GameAttribute.Attributes[0x0121], // ItemStackQuantityLo 
+                        Int = 10, // quanty
+                        Float = 0f,
+                    },
+                    new NetAttributeKeyValue()
+                    {
+                        Attribute = GameAttribute.Attributes[0x0115], // Item_Quality_Level 
+                        Int = 0x00000001,
+                        Float = 0f,
+                    },
+                },
+            });
+  
 
             Client.SendMessage(new PlayerActorSetInitialMessage()
                                    {

@@ -5,7 +5,6 @@ using D3Sharp.Core.Helpers;
 using D3Sharp.Utils;
 using D3Sharp.Utils.Helpers;
 using System.Data.SQLite;
-using D3Sharp.Net.Game;
 using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Net.Game.Message.Definitions.Animation;
@@ -20,6 +19,20 @@ namespace D3Sharp.Core.Common.Items
     class ItemGenerator
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
+
+        public Item Potion(GameClient Client,int count=1)
+        {
+            Dictionary<int, int> Atribiutes = new Dictionary<int, int>();
+           
+            var Gbid = (int)StringHashHelper.HashItemName("HealthPotion");
+            var item = new Item(Gbid);
+
+            item.Count = count;
+            item.Attributes.Add(0x0121, 100);
+
+            return item;
+
+        }
 
         public Item Sword(GameClient Client)
         {

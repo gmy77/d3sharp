@@ -35,8 +35,6 @@ namespace D3Sharp.Core.Ingame.Universe
         {
             Logger.Info("INV {0}", message.AsText());
             if (message is InventoryRequestMoveMessage) OnInventoryRequestMoveMessage(client, (InventoryRequestMoveMessage)message);
-            else if (message is InventorySplitStackMessage) OnInventorySplitStackMessage(client, (InventorySplitStackMessage)message);
-            else if (message is InventoryStackTransferMessage) OnInventoryStackTransferMessage(client, (InventoryStackTransferMessage)message);
             else return;
 
             client.FlushOutgoingBuffer();
@@ -73,15 +71,6 @@ namespace D3Sharp.Core.Ingame.Universe
             client.FlushOutgoingBuffer();
         }
 
-        public void OnInventorySplitStackMessage(GameClient client, InventorySplitStackMessage message)
-        {
-            // change item params.    
-        }
-
-        public void OnInventoryStackTransferMessage(GameClient client, InventoryStackTransferMessage message)
-        {
-            // change item params and create new item
-        }
 
         public void CreateItem (GameClient Client, int posX=0x0, int posY=0x0)
         {

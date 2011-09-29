@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 D3Sharp Project
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -196,7 +196,9 @@ namespace D3Sharp.Core.Ingame.Map
                 {
                     if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.Blacklist)) continue;
                     if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.NPCs)) continue;
-                    //actor.Reveal(hero);
+                    
+                    if(actor.Id == 2065563791)
+                        actor.Reveal(hero);
                 }
 
                 //reveal portals

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 D3Sharp Project
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 using System.Collections.Generic;
 namespace D3Sharp.Core.Common.Items
 {
+    
+
     public enum ItemType
     {
         Helm, ChestArmor, Gloves, Boots, Shoulders, Belt, Pants, Bracers, Shield, Quiver, Orb,
@@ -29,10 +31,12 @@ namespace D3Sharp.Core.Common.Items
     {
         public Dictionary<int, int> Attributes = new Dictionary<int, int>();
         public int Gbid { get; set; }
+        public int Count { get; set;  }
         public ItemType ItemType { get; set; }
         public Item(int gbid)
         {
             Gbid = gbid;
+            Count = 1;
         }
 
     }

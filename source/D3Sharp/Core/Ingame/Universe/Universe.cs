@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 D3Sharp Project
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Definitions.Player;
 using D3Sharp.Net.Game.Message.Definitions.World;
 using D3Sharp.Net.Game.Message.Definitions.Attribute;
+using D3Sharp.Data.SNO;
 
 namespace D3Sharp.Core.Ingame.Universe
 {
@@ -65,7 +66,7 @@ namespace D3Sharp.Core.Ingame.Universe
                     this.Consume(client, message);
                     break;
                 case Consumers.Inventory:
-                    this.InventoryMenager.Consume(client, message);
+                    client.Player.Hero.Inventory.Consume(client, message);
                     break;
                 case Consumers.PlayerManager:
                     this.PlayerManager.Consume(client, message);
@@ -73,7 +74,7 @@ namespace D3Sharp.Core.Ingame.Universe
                 case Consumers.Skillset:
                     client.Player.Hero.Skillset.Consume(client, message);
                     break;
-            }
+              }
         }
 
         public void Consume(GameClient client, GameMessage message)
@@ -317,6 +318,17 @@ namespace D3Sharp.Core.Ingame.Universe
                 //we have a transition between worlds here
                 ChangeToonWorld(client, p.TargetWorldID, p.TargetPos); //targetpos will always be valid as otherwise the portal wouldn't be targetable
                 return;
+            }
+
+            // Check if it is an item....
+            Actor a = this.GetActor(message.Field1);
+            if (a != null && SNODatabase.Instance.IsOfGroup(a.SnoId, SNOGroup.Actors))
+            {
+                if (message.Field1 == 2065563791)
+                {
+                    //client.Player.Hero.Inventory.PickUp(message);
+                    //return;
+                }
             }
 
             else if (client.ObjectIdsSpawned == null || !client.ObjectIdsSpawned.Contains(message.Field1)) return;

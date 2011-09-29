@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 D3Sharp Project
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,10 @@ namespace D3Sharp.Core.Ingame.Universe
         
         public int CurrentWorldSNO;
         public Skillset Skillset = new Skillset(); // TODO: this should eventually be done on the bnet side
+        public Inventory Inventory;
 
         public GameClient InGameClient { get; private set; }
+
 
         public List<World> RevealedWorlds;
         public List<Scene> RevealedScenes;
@@ -50,6 +52,7 @@ namespace D3Sharp.Core.Ingame.Universe
             this.Universe = universe;
             this.Properties = toon;
             this.CurrentWorldSNO = 0x115EE;
+            this.Inventory = new Inventory(this);
 
             // actor values
             this.Id = 0x789E00E2;

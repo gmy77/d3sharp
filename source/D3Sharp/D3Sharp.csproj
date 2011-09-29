@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -71,6 +71,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\sqlite-mixed\System.Data.SQLite.dll</HintPath>
     </Reference>
+    <Reference Include="Gibbed.IO, Version=1.0.4289.8017, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\Gibbed.IO.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\BNet\Accounts\Account.cs" />
@@ -124,6 +128,7 @@
     <Compile Include="Core\Common\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Common\Toons\ToonManager.cs" />
     <Compile Include="Core\Ingame\Universe\Hero.cs" />
+    <Compile Include="Core\Ingame\Universe\Inventory.cs" />
     <Compile Include="Core\Ingame\Universe\Player.cs" />
     <Compile Include="Core\Ingame\Universe\PlayerManager.cs" />
     <Compile Include="Core\Ingame\Universe\Universe.cs" />
@@ -405,10 +410,6 @@
     <ProjectReference Include="..\D3Proto\D3Proto.csproj">
       <Project>{4CC19847-6F24-4453-9E31-126F94308AB9}</Project>
       <Name>D3Proto</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Gibbed.Helpers\Gibbed.Helpers.csproj">
-      <Project>{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}</Project>
-      <Name>Gibbed.Helpers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
