@@ -17,6 +17,9 @@
  */
 
 using System;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace D3Sharp.Core.Helpers
 {
@@ -52,6 +55,18 @@ namespace D3Sharp.Core.Helpers
         public static double NextDouble()
         {
             return _random.NextDouble();
+        }
+
+        /*IEnumerable<TValue>*/
+        public static TValue RandomValue<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
+        {
+            List<TValue> values = Enumerable.ToList(dictionary.Values);
+            int size = dictionary.Count;
+            /*while (true)
+            {
+                yield return values[_random.Next(size)];
+            }*/
+            return values[_random.Next(size)];
         }
     }
 }

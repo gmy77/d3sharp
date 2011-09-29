@@ -18,9 +18,17 @@
 
 using System;
 using System.Data.SQLite;
+//<<<<<<< HEAD
+//using System.Linq;
+//using System.Collections.Generic;
+//using D3.Account;
+//using D3Sharp.Core.Accounts;
+//using D3Sharp.Core.Channels;
+//=======
 using D3Sharp.Core.BNet.Accounts;
 using D3Sharp.Core.BNet.Objects;
 using D3Sharp.Core.Common.Storage;
+//>>>>>>> 8574c238179fe15ed89f064963d15f70293617bc
 using D3Sharp.Core.Helpers;
 using D3Sharp.Utils.Helpers;
 using Account = D3Sharp.Core.BNet.Accounts.Account;
@@ -96,6 +104,21 @@ namespace D3Sharp.Core.Common.Toons
             }
         }
 
+//<<<<<<< HEAD
+//        public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
+//            :base(persistantId)
+//        {
+//            this.SetFields(name, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistantID((ulong)accountId));
+//        }
+
+//        public Toon(string name, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
+//            : base(StringHashHelper.HashIdentity(name))
+//        {
+//            this.SetFields(name, GetClassByID(classId), flags, level, account);
+//        }
+
+//=======
+//>>>>>>> 8574c238179fe15ed89f064963d15f70293617bc
         private void SetFields(string name, ToonClass @class, ToonFlags flags, byte level, Account owner)
         {
             this.ToonHandle = new ToonHandleHelper(this.PersistentID);
@@ -406,6 +429,17 @@ namespace D3Sharp.Core.Common.Toons
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
         }
+//<<<<<<< HEAD
+
+//        //////////////////////////////////////////////////////////////////////////
+//        // ingame data required by the universe follows
+
+//        public int CurrentWorldID;
+//        public int CurrentWorldSNO;
+//        public float PosX, PosY, PosZ;
+//        public List<int> RevealedWorlds;
+//=======
+//>>>>>>> 8574c238179fe15ed89f064963d15f70293617bc
     }
 
     public enum ToonClass

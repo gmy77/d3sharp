@@ -77,7 +77,6 @@
     <Compile Include="Core\BNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\Common\Items\ItemGenerator.cs" />
     <Compile Include="Core\Ingame\Actors\Actor.cs" />
-    <Compile Include="Core\Ingame\Actors\ActorDB.cs" />
     <Compile Include="Core\BNet\Channels\Channel.cs" />
     <Compile Include="Core\BNet\Channels\ChannelManager.cs" />
     <Compile Include="Core\BNet\Channels\Member.cs" />
@@ -91,6 +90,7 @@
     <Compile Include="Core\Helpers\RandomHelper.cs" />
     <Compile Include="Core\Common\Items\Item.cs" />
     <Compile Include="Core\Common\Items\ItemTypeGenerator.cs" />
+    <Compile Include="Core\Ingame\Map\Portal.cs" />
     <Compile Include="Core\Ingame\Map\Scene.cs" />
     <Compile Include="Core\Ingame\Map\World.cs" />
     <Compile Include="Core\Ingame\NPC\BasicNPC.cs" />
@@ -127,6 +127,9 @@
     <Compile Include="Core\Ingame\Universe\Player.cs" />
     <Compile Include="Core\Ingame\Universe\PlayerManager.cs" />
     <Compile Include="Core\Ingame\Universe\Universe.cs" />
+    <Compile Include="Data\SNO\Config.cs" />
+    <Compile Include="Data\SNO\Database.cs" />
+    <Compile Include="Data\SNO\Set.cs" />
     <Compile Include="Net\BNet\BNetClient.cs" />
     <Compile Include="Net\BNet\BnetServer.cs" />
     <Compile Include="Net\BNet\Config.cs" />
@@ -410,6 +413,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Maps\universe.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\SNO\Actors.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\SNO\Blacklist.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\SNO\list.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\SNO\Mobs.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\SNO\NPCs.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\SNO\Powers.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

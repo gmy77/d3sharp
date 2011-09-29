@@ -22,6 +22,7 @@ using D3Sharp.Core.Ingame.Map;
 using D3Sharp.Core.Ingame.Skills;
 using D3Sharp.Net.Game;
 using D3Sharp.Net.Game.Message.Fields;
+using System.Collections.Generic;
 
 namespace D3Sharp.Core.Ingame.Universe
 {
@@ -34,10 +35,17 @@ namespace D3Sharp.Core.Ingame.Universe
         public Skillset Skillset = new Skillset(); // TODO: this should eventually be done on the bnet side
 
         public GameClient InGameClient { get; private set; }
-       
+
+        public List<World> RevealedWorlds;
+        public List<Scene> RevealedScenes;
+        public List<Actor> RevealedActors;
 
         public Hero(GameClient client, Universe universe, Toon toon)
         {
+            RevealedWorlds = new List<World>();
+            RevealedScenes = new List<Scene>();
+            RevealedActors = new List<Actor>();
+
             this.InGameClient = client;
             this.Universe = universe;
             this.Properties = toon;
@@ -46,15 +54,44 @@ namespace D3Sharp.Core.Ingame.Universe
             // actor values
             this.Id = 0x789E00E2;
             this.SnoId = this.ClassSNO;
-            this.WorldId = 0x772E0000;
             this.Field2 = 0x00000009;
             this.Field3 = 0x00000000;
             this.Scale = ModelScale;
             this.RotationAmount = 0.05940768f;
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
+            
+            //initial world and position
+            this.WorldId = 0x772E0000;
+            //new char starter pos:
             this.Position.X = 3143.75f;
             this.Position.Y = 2828.75f;
             this.Position.Z = 59.075588f;
+
+            //den of evil:
+            //this.Position.X = 2526.250000f;
+            //this.Position.Y = 2098.750000f;
+            //this.Position.Z = -5.381495f;
+
+            //inn:
+            //this.Position.X = 2996.250000f;
+            //this.Position.Y = 2793.750000f;
+            //this.Position.Z = 24.045330f;
+
+            // adrias hut
+            //this.Position.X = 1768.750000f;
+            //this.Position.Y = 2921.250000f;
+            //this.Position.Z = 20.333143f;        
+
+            // cemetry of forsaken
+            //this.Position.X = 2041.250000f;
+            //this.Position.Y = 1778.750000f;
+            //this.Position.Z = 0.426203f;
+
+            //defiled crypt level 2
+            //this.WorldId = 2000289804;
+            //this.Position.X = 158.750000f;
+            //this.Position.Y = 76.250000f;
+            //this.Position.Z = 0.100000f;
 
             this.GBHandle = new GBHandle()
             {

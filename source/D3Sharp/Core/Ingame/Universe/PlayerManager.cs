@@ -54,7 +54,6 @@ namespace D3Sharp.Core.Ingame.Universe
 
         public void OnNewPlayer(GameClient client, JoinBNetGameMessage message)
         {           
-            // a hackish way to get client.BnetClient in context -- pretends games has only one client in. when we're done with implementing bnet completely, will get this sorted out. /raist
             client.BnetClient = GameManager.AvailableGames[(ulong)message.GameId].Clients.FirstOrDefault();
             
             if (client.BnetClient == null)

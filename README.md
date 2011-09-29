@@ -1,9 +1,10 @@
 # Stay awhile and listen
 
-* Read the [FAQ](/raistlinthewiz/d3sharp/wiki/FAQ) before asking!
-* Status: Will get you to town - though ingame is somewhat hardcoded atm... Ask in #d3sharp.chat for more info.
-* IRC: [#d3sharp.chat/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23d3sharp.chat)
-* IRC (Developers Only): [#d3sharp/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23d3sharp)
+* Read the [FAQ](/mooege/mooege/wiki/FAQ) before asking!
+* Status: Will get you ingame.. Ask in #mooege.chat for more info.
+* IRC: [#mooege.chat/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23mooege.chat)
+* IRC (Developers Only): [#mooege/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23mooege)
+* Annoucements: [#mooege.announce/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23mooege.announce)
 
 Copyright (C) 2011 D3Sharp Project
 
