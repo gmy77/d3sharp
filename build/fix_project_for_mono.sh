@@ -11,4 +11,4 @@ fi
 file_in=$1
 file_out=$2
 
-sed -e 's/\.\.\\libs\\sqlite-mixed/\.\.\\libs\\sqlite-managed/g' $file_in > $file_out
+sed -e 's/dep\\sqlite\\sqlite-mixed/dep\\sqlite\\sqlite-managed/g' $file_in > $file_out

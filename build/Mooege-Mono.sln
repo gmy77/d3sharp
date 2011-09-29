@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3Proto", "D3Proto\D3Proto.csproj", "{4CC19847-6F24-4453-9E31-126F94308AB9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mooege-Mono", "..\src\Mooege\Mooege-Mono.csproj", "{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3Sharp-Mono", "D3Sharp\D3Sharp-Mono.csproj", "{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMooNet", "..\src\LibMooNet\LibMooNet.csproj", "{4CC19847-6F24-4453-9E31-126F94308AB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,14 +32,16 @@ Global
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4CC19847-6F24-4453-9E31-126F94308AB9}.Debug|x86.Build.0 = Debug|Any CPU
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|x86.ActiveCfg = Release|Any CPU
+		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = D3Sharp\D3Sharp-Mono.csproj
+		StartupItem = ..\src\Mooege\Mooege-Mono.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

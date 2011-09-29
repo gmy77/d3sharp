@@ -30,7 +30,7 @@ namespace Mooege.Net.MooNet
 
         void BnetServer_OnConnect(object sender, ConnectionEventArgs e)
         {
-            Logger.Trace("MoonNet-Client connected: {0}", e.Connection.ToString());
+            Logger.Trace("MooNet-Client connected: {0}", e.Connection.ToString());
             e.Connection.Client = new MooNetClient(e.Connection);
         }
 

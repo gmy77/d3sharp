@@ -2,4 +2,4 @@
 
 # Run from repo root
 
-sh scripts/fix_project_for_mono.sh "source/D3Sharp/D3Sharp.csproj" "source/D3Sharp/D3Sharp-Mono.csproj"
+sh build/fix_project_for_mono.sh "src/Mooege/Mooege-VS2010.csproj" "src/Mooege/Mooege-Mono.csproj"
