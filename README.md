@@ -1,10 +1,12 @@
 # Stay awhile and listen
 
 * Read the [FAQ](/mooege/mooege/wiki/FAQ) before asking!
-* Status: Will get you ingame.. Ask in #mooege.chat for more info.
-* IRC: irc.synirc.net - chat: #mooege.chat, dev-talk: #mooege, announcements: #mooege.announce
-* [Twitter](http://twitter.com/#!/mooege)
-* [Commit feed on Twitter](http://twitter.com/#!/MooegeDev)
+* Status: Will get you ingame.. not much else.
+* IRC (**irc.synirc.net**):
+  - **#mooege.chat** (general chat)
+  - **#mooege** (dev talk)
+  - **#mooege.announce** (_only_ announcements and the commit feed)
+* [Twitter](http://twitter.com/#!/mooege), [commit feed](http://twitter.com/#!/MooegeDev)
 
 Copyright (C) 2011 mooege project
 
