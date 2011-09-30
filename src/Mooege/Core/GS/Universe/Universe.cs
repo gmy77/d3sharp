@@ -33,6 +33,7 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.GS.Powers;
 
 namespace Mooege.Core.GS.Universe
 {
@@ -44,10 +45,14 @@ namespace Mooege.Core.GS.Universe
 
         public PlayerManager PlayerManager { get; private set; }
 
+        public PowersManager PowersManager;
+
         public Universe()
         {
             this._worlds = new List<World>();
             this.PlayerManager = new PlayerManager(this);
+
+            this.PowersManager = new PowersManager(this);
 
             InitializeUniverse();
         }
@@ -241,8 +246,8 @@ namespace Mooege.Core.GS.Universe
             foreach (var x in _worlds)
                 if (x.WorldID == hero.WorldId)
                     currentworld = x;
-            
-            if (newworld == null || currentworld==null) return; //don't go to a world we don't have in the universe
+
+            if (newworld == null || currentworld == null) return; //don't go to a world we don't have in the universe
 
             currentworld.DestroyWorld(hero);
 
@@ -302,307 +307,19 @@ namespace Mooege.Core.GS.Universe
         {
             //Logger.Info("Player interaction with " + message.AsText());
 
-            Portal p=GetPortal(message.Field1);
+            Portal p = GetPortal(message.Field1);
 
-            if (p!=null)
+            if (p != null)
             {
                 //we have a transition between worlds here
                 ChangeToonWorld(client, p.TargetWorldID, p.TargetPos); //targetpos will always be valid as otherwise the portal wouldn't be targetable
                 return;
             }
-
-            else if (client.ObjectIdsSpawned == null || !client.ObjectIdsSpawned.Contains(message.Field1)) return;
-
-            client.ObjectIdsSpawned.Remove(message.Field1);
-
-            var killAni = new int[]{
-                    0x2cd7,
-                    0x2cd4,
-                    0x01b378,
-                    0x2cdc,
-                    0x02f2,
-                    0x2ccf,
-                    0x2cd0,
-                    0x2cd1,
-                    0x2cd2,
-                    0x2cd3,
-                    0x2cd5,
-                    0x01b144,
-                    0x2cd6,
-                    0x2cd8,
-                    0x2cda,
-                    0x2cd9
-            };
-            client.SendMessage(new PlayEffectMessage()
+            else
             {
-                Id = 0x7a,
-                Field0 = message.Field1,
-                Field1 = 0x0,
-                Field2 = 0x2,
-            });
-            client.SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = message.Field1,
-                Field1 = 0xc,
-            });
-            client.SendMessage(new PlayHitEffectMessage()
-            {
-                Id = 0x7b,
-                Field0 = message.Field1,
-                Field1 = 0x789E00E2,
-                Field2 = 0x2,
-                Field3 = false,
-            });
-
-            client.SendMessage(new FloatingNumberMessage()
-            {
-                Id = 0xd0,
-                Field0 = message.Field1,
-                Field1 = 9001.0f,
-                Field2 = 0,
-            });
-
-            client.SendMessage(new ANNDataMessage()
-            {
-                Id = 0x6d,
-                Field0 = message.Field1,
-            });
-
-            int ani = killAni[RandomHelper.Next(killAni.Length)];
-            //Logger.Info("Ani used: " + ani);
-
-            client.SendMessage(new PlayAnimationMessage()
-            {
-                Id = 0x6c,
-                Field0 = message.Field1,
-                Field1 = 0xb,
-                Field2 = 0,
-                tAnim = new PlayAnimationMessageSpec[1]
-                {
-                    new PlayAnimationMessageSpec()
-                    {
-                        Field0 = 0x2,
-                        Field1 = ani,
-                        Field2 = 0x0,
-                        Field3 = 1f
-                    }
-                }
-            });
-
-            client.PacketId += 10 * 2;
-            client.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = client.PacketId,
-            });
-
-            client.SendMessage(new ANNDataMessage()
-            {
-                Id = 0xc5,
-                Field0 = message.Field1,
-            });
-
-            GameAttributeMap attribs = new GameAttributeMap();
-            attribs[GameAttribute.Hitpoints_Cur] = 0f;
-            attribs[GameAttribute.Could_Have_Ragdolled] = true;
-            attribs[GameAttribute.Deleted_On_Server] = true;
-            attribs.SendMessage(client, message.Field1);
-
-            client.SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = message.Field1,
-                Field1 = 0xc,
-            });
-            client.SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = message.Field1,
-                Field1 = 0x37,
-            });
-            client.SendMessage(new PlayHitEffectMessage()
-            {
-                Id = 0x7b,
-                Field0 = message.Field1,
-                Field1 = 0x789E00E2,
-                Field2 = 0x2,
-                Field3 = false,
-            });
-            client.PacketId += 10 * 2;
-            client.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = client.PacketId,
-            });
-        }
-
-        public void SpawnMob(GameClient client, int mobId) // this shoudn't even rely on client or it's position though i know this is just a hack atm ;) /raist.
-        {
-            int nId = mobId;
-            if (client.Player.Hero.Position == null)
-                return;
-
-            if (client.ObjectIdsSpawned == null)
-            {
-                client.ObjectIdsSpawned = new List<int>();
-                client.ObjectIdsSpawned.Add(client.ObjectId - 100);
-                client.ObjectIdsSpawned.Add(client.ObjectId);
+                PowersManager.UsePower(client.Player.Hero, message.snoPower, message.Field1, message.Field2.Field0);
             }
-
-            client.ObjectId++;
-            client.ObjectIdsSpawned.Add(client.ObjectId);
-
-            #region ACDEnterKnown Hittable Zombie
-            client.SendMessage(new ACDEnterKnownMessage()
-            {
-                Id = 0x003B,
-                Field0 = client.ObjectId,
-                Field1 = nId,
-                Field2 = 0x8,
-                Field3 = 0x0,
-                Field4 = new WorldLocationMessageData()
-                {
-                    Field0 = 1.35f,
-                    Field1 = new PRTransform()
-                    {
-                        Field0 = new Quaternion()
-                        {
-                            Amount = 0.768145f,
-                            Axis = new Vector3D()
-                            {
-                                X = 0f,
-                                Y = 0f,
-                                Z = -0.640276f,
-                            },
-                        },
-                        ReferencePoint = new Vector3D()
-                        {
-                            X = client.Player.Hero.Position.X + 5,
-                            Y = client.Player.Hero.Position.Y + 5,
-                            Z = client.Player.Hero.Position.Z,
-                        },
-                    },
-                    Field2 = 0x772E0000,
-                },
-                Field5 = null,
-                Field6 = new GBHandle()
-                {
-                    Field0 = 1,
-                    Field1 = 1,
-                },
-                Field7 = 0x00000001,
-                Field8 = nId,
-                Field9 = 0x0,
-                Field10 = 0x0,
-                Field11 = 0x0,
-                Field12 = 0x0,
-                Field13 = 0x0
-            });
-            client.SendMessage(new AffixMessage()
-            {
-                Id = 0x48,
-                Field0 = client.ObjectId,
-                Field1 = 0x1,
-                aAffixGBIDs = new int[0]
-            });
-            client.SendMessage(new AffixMessage()
-            {
-                Id = 0x48,
-                Field0 = client.ObjectId,
-                Field1 = 0x2,
-                aAffixGBIDs = new int[0]
-            });
-            client.SendMessage(new ACDCollFlagsMessage
-            {
-                Id = 0xa6,
-                Field0 = client.ObjectId,
-                Field1 = 0x1
-            });
-
-            GameAttributeMap attribs = new GameAttributeMap();
-            attribs[GameAttribute.Untargetable] = false;
-            attribs[GameAttribute.Uninterruptible] = true;
-            attribs[GameAttribute.Buff_Visual_Effect, 1048575] = true;            
-            attribs[GameAttribute.Buff_Icon_Count0, 30582] = 1;
-            attribs[GameAttribute.Buff_Icon_Count0, 30286] = 1;
-            attribs[GameAttribute.Buff_Icon_Count0, 30285] = 1;
-            attribs[GameAttribute.Buff_Icon_Count0, 30284] = 1;
-            attribs[GameAttribute.Buff_Icon_Count0, 30283] = 1;
-            attribs[GameAttribute.Buff_Icon_Count0, 30290] = 1;
-            attribs[GameAttribute.Buff_Icon_Count0, 79486] = 1;
-            attribs[GameAttribute.Buff_Active, 30286] = true;
-            attribs[GameAttribute.Buff_Active, 30285] = true;
-            attribs[GameAttribute.Buff_Active, 30284] = true;
-            attribs[GameAttribute.Buff_Active, 30283] = true;
-            attribs[GameAttribute.Buff_Active, 30290] = true;
-
-            attribs[GameAttribute.Hitpoints_Max_Total] = 4.546875f;
-            attribs[GameAttribute.Buff_Active, 79486] = true;
-            attribs[GameAttribute.Hitpoints_Max] = 4.546875f;
-            attribs[GameAttribute.Hitpoints_Total_From_Level] = 0f;
-            attribs[GameAttribute.Hitpoints_Cur] = 4.546875f;
-            attribs[GameAttribute.Invulnerable] = true;
-            attribs[GameAttribute.Buff_Active, 30582] = true;
-            attribs[GameAttribute.TeamID] = 10;
-            attribs[GameAttribute.Level] = 1;
-
-            attribs.SendMessage(client, client.ObjectId);
-
-
-            client.SendMessage(new ACDGroupMessage
-            {
-                Id = 0xb8,
-                Field0 = client.ObjectId,
-                Field1 = unchecked((int)0xb59b8de4),
-                Field2 = unchecked((int)0xffffffff)
-            });
-
-            client.SendMessage(new ANNDataMessage
-            {
-                Id = 0x3e,
-                Field0 = client.ObjectId
-            });
-
-            client.SendMessage(new ACDTranslateFacingMessage
-            {
-                Id = 0x70,
-                Field0 = client.ObjectId,
-                Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI),
-                Field2 = false
-            });
-
-            client.SendMessage(new SetIdleAnimationMessage
-            {
-                Id = 0xa5,
-                Field0 = client.ObjectId,
-                Field1 = 0x11150
-            });
-
-            client.SendMessage(new SNONameDataMessage
-            {
-                Id = 0xd3,
-                Field0 = new SNOName
-                {
-                    Field0 = 0x1,
-                    Field1 = nId
-                }
-            });
-            #endregion
-
-            client.PacketId += 30 * 2;
-            client.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = client.PacketId,
-            });
-            client.Tick += 20;
-            client.SendMessage(new EndOfTickMessage()
-            {
-                Id = 0x008D,
-                Field0 = client.Tick - 20,
-                Field1 = client.Tick
-            });
         }
+
     }
 }

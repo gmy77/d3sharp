@@ -25,34 +25,14 @@ using Mooege.Net.GS.Message.Fields;
 namespace Mooege.Net.GS.Message.Definitions.Animation
 {
     [IncomingMessage(Opcodes.SecondaryAnimationPowerMessage)]
-    public class SecondaryAnimationPowerMessage : GameMessage,ISelfHandler
+    public class SecondaryAnimationPowerMessage : GameMessage, ISelfHandler
     {
         public int /* sno */ snoPower;
         public AnimPreplayData Field1;
 
         public void Handle(GameClient client)
         {
-            if (snoPower != Skills.Monk.SpiritSpenders.BlindingFlash) return;
-
-            var oldPosField1 = client.Player.Hero.Position.Y;
-            var oldPosField2 = client.Player.Hero.Position.Z;
-            for (var i = 0; i < 10; i++)
-            {
-                if ((i % 2) == 0)
-                {
-                    client.Player.Hero.Position.X += (float)(RandomHelper.NextDouble() * 20);
-                    client.Player.Hero.Position.Y += (float)(RandomHelper.NextDouble() * 20);
-                }
-                else
-                {
-                    client.Player.Hero.Position.X -= (float)(RandomHelper.NextDouble() * 20);
-                    client.Player.Hero.Position.Y -= (float)(RandomHelper.NextDouble() * 20);
-                }
-                client.Player.Universe.SpawnMob(client, SNODatabase.Instance.RandomID(SNOGroup.NPCs));
-            }
-
-            client.Player.Hero.Position.Y = oldPosField1;
-            client.Player.Hero.Position.Z = oldPosField2;
+            client.Universe.PowersManager.UsePower(client.Player.Hero, snoPower);
         }
 
         public override void Parse(GameBitBuffer buffer)
