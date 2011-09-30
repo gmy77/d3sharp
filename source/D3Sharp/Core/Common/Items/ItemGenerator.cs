@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +15,8 @@ namespace D3Sharp.Core.Items
 
         private List<int> vaildItemIds = new List<int>();        
            
-        
+        public static readonly Logger Logger = LogManager.CreateLogger();
+
         public ItemGenerator(){
 
             // couldn't figure out how to create random ids which are valid on clientside 
@@ -32,6 +33,20 @@ namespace D3Sharp.Core.Items
             vaildItemIds.Add(0x78A000ED);
             vaildItemIds.Add(0x78A000EE);
             vaildItemIds.Add(0x78A000EF); 
+        }
+
+    	public Item Potion(GameClient Client,int count=1)
+        {
+            Dictionary<int, int> Atribiutes = new Dictionary<int, int>();
+           
+            var Gbid = (int)StringHashHelper.HashItemName("HealthPotion");
+            var item = new Item(Gbid);
+
+            item.Count = count;
+            item.Attributes.Add(0x0121, 100);
+
+            return item;
+
         }
 
         public Item Generate(String itemName, int itemId, ItemType itemType)

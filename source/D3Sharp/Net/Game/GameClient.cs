@@ -23,8 +23,10 @@ using D3Sharp.Core.Common.Toons;
 using D3Sharp.Core.Ingame.Universe;
 using D3Sharp.Net.BNet;
 using D3Sharp.Net.Game.Message;
+using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Fields;
 using D3Sharp.Utils;
+using D3Sharp.Core.Common.Items;
 
 namespace D3Sharp.Net.Game
 {
@@ -38,6 +40,9 @@ namespace D3Sharp.Net.Game
         private readonly GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         private readonly GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
 
+        // for some testing
+        public Dictionary<int, Item> items = new Dictionary<int, Item>();  // array of items without specific place in inventory
+        //
         public Universe Universe;    
         public Player Player { get; set; }
         public int PacketId = 0x227 + 20;
@@ -76,7 +81,6 @@ namespace D3Sharp.Net.Game
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                         else Logger.Warn("Got an incoming message that has no consumer or self-handler " + message.GetType());
 
-                        //Logger.LogIncoming(message);
                     }
                     catch (NotImplementedException)
                     {

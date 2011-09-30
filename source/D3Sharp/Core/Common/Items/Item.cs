@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 ﻿using System;
+using D3Sharp.Net.Game.Message.Fields;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,7 @@ using D3Sharp.Core.Ingame.Universe;
 
 namespace D3Sharp.Core.Common.Items
 {
+    
 
     public enum ItemType
     {
@@ -42,11 +44,16 @@ namespace D3Sharp.Core.Common.Items
 
     public class Item
     {
+        // Appearance
+        private int dye = 0;
+        private int effect = 0;
+        private int effectLevel = 0;
 
         public int ItemId { get; set; }
+        public Dictionary<int, int> Attributes = new Dictionary<int, int>();
         public int Gbid { get; set; }        
         public ItemType Type { get; set; }
-
+        public int Count { get; set;  }             // <- amount?
         public List<Affix> AffixList { get; set; }
         public List<NetAttribute> AttributeList { get; set; }
 
@@ -55,12 +62,26 @@ namespace D3Sharp.Core.Common.Items
         {
             ItemId = id;
             Gbid = unchecked((int)gbid);
+            Gbid = gbid;
+            Count = 1;
             Type = type;
 
             AffixList = new List<Affix>();
             AttributeList = new List<NetAttribute>();
         }
 
+        // There are 2 VisualItemClasses... any way to use the builder to create a D3 Message?
+        public VisualItem CreateVisualItem()
+        {
+            return new VisualItem()
+            {
+                Field0 = Gbid,
+                Field1 = 0,
+                Field2 = 0,
+                Field3 = -1
+            };
+
+        }
 
         public static bool isPotion(ItemType itemType)
         {

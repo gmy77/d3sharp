@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="Core\BNet\Accounts\Account.cs" />
     <Compile Include="Core\BNet\Accounts\AccountManager.cs" />
+    <Compile Include="Core\Common\Items\ItemGenerator.cs" />
     <Compile Include="Core\Ingame\Actors\Actor.cs" />
     <Compile Include="Core\BNet\Channels\Channel.cs" />
     <Compile Include="Core\BNet\Channels\ChannelManager.cs" />
@@ -393,6 +394,7 @@
     <None Include="config.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Core\Ingame\Universe\InventoryMenager.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
