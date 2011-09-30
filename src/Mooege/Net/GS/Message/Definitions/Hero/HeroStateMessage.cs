@@ -23,20 +23,19 @@ namespace Mooege.Net.GS.Message.Definitions.Hero
 {
     public class HeroStateMessage : GameMessage
     {
-        public HeroStateData Field0;
+        public HeroStateData State;
 
-
-
+        public HeroStateMessage() : base(Opcodes.HeroStateMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = new HeroStateData();
-            Field0.Parse(buffer);
+            State = new HeroStateData();
+            State.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            Field0.Encode(buffer);
+            State.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -45,7 +44,7 @@ namespace Mooege.Net.GS.Message.Definitions.Hero
             b.AppendLine("HeroStateMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            Field0.AsText(b, pad);
+            State.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

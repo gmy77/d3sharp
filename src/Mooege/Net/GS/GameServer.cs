@@ -22,12 +22,8 @@ namespace Mooege.Net.GS
 {
     public sealed class GameServer : Server
     {
-        private Universe GameUniverse;
-
         public GameServer()
         {
-            GameUniverse=new Universe();
-
             this.OnConnect += ClientManager.OnConnect;
             this.OnDisconnect += ClientManager.OnDisconnect;
             this.DataReceived += GameServer_DataReceived;

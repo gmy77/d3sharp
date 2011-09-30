@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,18 +23,23 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
+using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Inventory;
+using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Definitions.Player;
+using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Core.GS.Universe
 {
-    public class Hero:Actor // should extend actor actually?? /raist
+    public class Hero : Actor, IMessageConsumer // should extend actor actually?? /raist
     {
         public Toon Properties { get; private set; }
         public Universe Universe { get; private set; }
-        
+
         public int CurrentWorldSNO;
-        public Skillset Skillset = new Skillset(); // TODO: this should eventually be done on the bnet side
+        public SkillSet SkillSet;
 
         public GameClient InGameClient { get; private set; }
 
@@ -44,14 +49,16 @@ namespace Mooege.Core.GS.Universe
 
         public Hero(GameClient client, Universe universe, Toon toon)
         {
-            RevealedWorlds = new List<World>();
-            RevealedScenes = new List<Scene>();
-            RevealedActors = new List<Actor>();
-
             this.InGameClient = client;
             this.Universe = universe;
             this.Properties = toon;
             this.CurrentWorldSNO = 0x115EE;
+
+            this.SkillSet = new Skills.SkillSet(this.Properties.Class);
+
+            RevealedWorlds = new List<World>();
+            RevealedScenes = new List<Scene>();
+            RevealedActors = new List<Actor>();
 
             // actor values
             this.Id = 0x789E00E2;
@@ -61,7 +68,7 @@ namespace Mooege.Core.GS.Universe
             this.Scale = ModelScale;
             this.RotationAmount = 0.05940768f;
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
-            
+
             //initial world and position
             this.WorldId = 0x772E0000;
 
@@ -86,26 +93,74 @@ namespace Mooege.Core.GS.Universe
             this.Field9 = 0x00000000;
             this.Field10 = 0x0;
         }
-        
+
+        public void Consume(GameClient client, GameMessage message)
+        {
+            if (message is AssignActiveSkillMessage) OnAssignActiveSkill(client, (AssignActiveSkillMessage)message);
+            else if (message is AssignPassiveSkillMessage) OnAssignPassiveSkill(client, (AssignPassiveSkillMessage)message);
+            else if (message is PlayerChangeHotbarButtonMessage) OnPlayerChangeHotbarButtonMessage(client, (PlayerChangeHotbarButtonMessage)message);
+            else return;
+
+            UpdateState();
+            client.FlushOutgoingBuffer();
+        }
+
+        private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
+        {
+            this.SkillSet.HotBarSkills[message.BarIndex] = message.ButtonData;
+        }
+
+        private void OnAssignPassiveSkill(GameClient client, AssignPassiveSkillMessage message)
+        {
+            this.SkillSet.PassiveSkills[message.SkillIndex] = message.SNOSkill;
+        }
+
+        private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
+        {
+            var oldSNOSkill = this.SkillSet.ActiveSkills[message.SkillIndex]; // find replaced skills SNO.
+
+            foreach (HotbarButtonData button in this.SkillSet.HotBarSkills.Where(button => button.SNOSkill == oldSNOSkill)) // loop through hotbar and replace the old skill with new one
+            {
+                button.SNOSkill = message.SNOSkill;
+            }
+
+            this.SkillSet.ActiveSkills[message.SkillIndex] = message.SNOSkill;
+        }
+
+        public void UpdateState()
+        {
+            this.InGameClient.SendMessage(new HeroStateMessage
+            {
+                State = this.GetStateData()
+            });
+
+            this.InGameClient.PacketId += 10 * 2;
+            this.InGameClient.SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = this.InGameClient.PacketId,
+            });
+        }
+
         public HeroStateData GetStateData()
         {
             return new HeroStateData()
-                       {
-                           Field0 = 0x00000000,
-                           Field1 = 0x00000000,
-                           Field2 = 0x00000000,
-                           Gender = Properties.Gender,
-                           PlayerSavedData = this.GetSavedData(),
-                           Field5 = 0x00000000,
-                           tQuestRewardHistory = QuestRewardHistory,
-                       };
+            {
+                Field0 = 0x00000000,
+                Field1 = 0x00000000,
+                Field2 = 0x00000000,
+                Gender = Properties.Gender,
+                PlayerSavedData = this.GetSavedData(),
+                Field5 = 0x00000000,
+                tQuestRewardHistory = QuestRewardHistory,
+            };
         }
 
         private PlayerSavedData GetSavedData()
         {
             return new PlayerSavedData()
             {
-                HotBarButtons = this.Skillset.hotbarSkills,
+                HotBarButtons = this.SkillSet.HotBarSkills,
                 SkilKeyMappings = this.SkillKeyMappings,
 
                 Field2 = 0x00000000,
@@ -121,8 +176,8 @@ namespace Mooege.Core.GS.Universe
                 Field5 = 0x00000000,
 
                 LearnedLore = this.LearnedLore,
-                snoActiveSkills = this.Skillset.activeSkills,
-                snoTraits = this.Skillset.passiveSkills,
+                snoActiveSkills = this.SkillSet.ActiveSkills,
+                snoTraits = this.SkillSet.PassiveSkills,
                 Field9 = new SavePointData() { snoWorld = -1, Field1 = -1, },
                 m_SeenTutorials = this.SeenTutorials,
             };
@@ -131,23 +186,23 @@ namespace Mooege.Core.GS.Universe
         public VisualInventoryMessage GetVisualInventory()
         {
             return new VisualInventoryMessage
-                              {
-                                  Field0 = 0x789E00E2,
-                                  EquipmentList =
-                                      new VisualEquipment
-                                          {
-                                              Equipments =
-                                                  Properties.Equipment.VisualItemList.Select(
-                                                      equipment =>
-                                                      new VisualItem
-                                                          {
-                                                              GbId = equipment.Gbid,
-                                                              Field1 = 0x0,
-                                                              Field2 = 0x0,
-                                                              Field3 = -1
-                                                          }).ToArray()
-                                          }
-                              };
+            {
+                Field0 = 0x789E00E2,
+                EquipmentList =
+                    new VisualEquipment
+                    {
+                        Equipments =
+                            Properties.Equipment.VisualItemList.Select(
+                                equipment =>
+                                new VisualItem
+                                {
+                                    GbId = equipment.Gbid,
+                                    Field1 = 0x0,
+                                    Field2 = 0x0,
+                                    Field3 = -1
+                                }).ToArray()
+                    }
+            };
         }
 
         public World CurrentWorld
@@ -279,10 +334,10 @@ namespace Mooege.Core.GS.Universe
                                                         };
 
         public LearnedLore LearnedLore = new LearnedLore()
-                                             {
-                                                 Field0 = 0x00000000,
-                                                 m_snoLoreLearned =
-                                                     new int[256]
+        {
+            Field0 = 0x00000000,
+            m_snoLoreLearned =
+                new int[256]
                                                          {
                                                             0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
                                                             0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
@@ -317,7 +372,7 @@ namespace Mooege.Core.GS.Universe
                                                             0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
                                                             0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000
                                                          },
-                                             };
+        };
 
         public int[] SeenTutorials = new int[64]
                                          {

@@ -20,22 +20,22 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Skill
 {
-    [IncomingMessage(Opcodes.AssignSkillMessage2, Consumers.Skillset)]
+    [IncomingMessage(Opcodes.AssignSkillMessage2, Consumers.Hero)]
     public class AssignPassiveSkillMessage : GameMessage
     {
-        public int /* sno */ snoPower;
-        public int Field1;
+        public int /* sno */ SNOSkill;
+        public int SkillIndex;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            snoPower = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(5);
+            SNOSkill = buffer.ReadInt(32);
+            SkillIndex = buffer.ReadInt(5);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, snoPower);
-            buffer.WriteInt(5, Field1);
+            buffer.WriteInt(32, SNOSkill);
+            buffer.WriteInt(5, SkillIndex);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -44,8 +44,8 @@ namespace Mooege.Net.GS.Message.Definitions.Skill
             b.AppendLine("AssignSkillMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("snoPower: 0x" + snoPower.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("snoPower: 0x" + SNOSkill.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + SkillIndex.ToString("X8") + " (" + SkillIndex + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

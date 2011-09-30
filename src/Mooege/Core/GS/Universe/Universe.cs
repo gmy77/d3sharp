@@ -62,8 +62,8 @@ namespace Mooege.Core.GS.Universe
                 case Consumers.PlayerManager:
                     this.PlayerManager.Consume(client, message);
                     break;
-                case Consumers.Skillset:
-                    client.Player.Hero.Skillset.Consume(client, message);
+                case Consumers.Hero:
+                    client.Player.Hero.Consume(client, message);
                     break;
             }
         }

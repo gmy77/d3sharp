@@ -21,23 +21,23 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
-    [IncomingMessage(Opcodes.PlayerChangeHotbarButtonMessage, Consumers.Skillset)]
+    [IncomingMessage(Opcodes.PlayerChangeHotbarButtonMessage, Consumers.Hero)]
     public class PlayerChangeHotbarButtonMessage : GameMessage
     {
-        public int Field0;
-        public HotbarButtonData Field1;
+        public int BarIndex;
+        public HotbarButtonData ButtonData;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(4) + (-1);
-            Field1 = new HotbarButtonData();
-            Field1.Parse(buffer);
+            BarIndex = buffer.ReadInt(4) + (-1);
+            ButtonData = new HotbarButtonData();
+            ButtonData.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(4, Field0 - (-1));
-            Field1.Encode(buffer);
+            buffer.WriteInt(4, BarIndex - (-1));
+            ButtonData.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -46,8 +46,8 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             b.AppendLine("PlayerChangeHotbarButtonMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            Field1.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + BarIndex.ToString("X8") + " (" + BarIndex + ")");
+            ButtonData.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
