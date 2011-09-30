@@ -2,9 +2,7 @@
 
 * Read the [FAQ](/mooege/mooege/wiki/FAQ) before asking!
 * Status: Will get you ingame.. Ask in #mooege.chat for more info.
-* IRC: [#mooege.chat/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23mooege.chat)
-* IRC (developers only): [#mooege/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23mooege)
-* IRC (announcements): [#mooege.announce/synirc](http://chat.mibbit.com/?server=irc.synIRC.net&channel=%23mooege.announce)
+* IRC: irc.synirc.net - chat: #mooege.chat, dev-talk: #mooege, announcements: #mooege.announce
 * [Twitter](http://twitter.com/#!/mooege)
 * [Commit feed on Twitter](http://twitter.com/#!/MooegeDev)
 
