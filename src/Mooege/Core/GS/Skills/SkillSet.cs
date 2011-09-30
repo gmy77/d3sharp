@@ -40,7 +40,7 @@ namespace Mooege.Core.GS.Skills
             this.ActiveSkills = hackedSkills.ToArray();
 
             this.HotBarSkills = new HotbarButtonData[9] {
-                new HotbarButtonData  { SNOSkill = ActiveSkills[4], ItemGBId = -1 }, // left-click
+                new HotbarButtonData { SNOSkill = ActiveSkills[4], ItemGBId = -1 }, // left-click
                 new HotbarButtonData { SNOSkill = ActiveSkills[5], ItemGBId = -1 }, // right-click
                 new HotbarButtonData { SNOSkill = ActiveSkills[0], ItemGBId = -1 }, // hidden-bar - left-click switch - which key??
                 new HotbarButtonData { SNOSkill = ActiveSkills[1], ItemGBId = -1 }, // hidden-bar - right-click switch (press x ingame)

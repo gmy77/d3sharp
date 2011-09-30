@@ -23,7 +23,6 @@ using Mooege.Core.Common.Toons;
 
 namespace Mooege.Core.GS.Skills
 {
-
     public class Skills
     {
         public static int None = -1;
@@ -35,19 +34,14 @@ namespace Mooege.Core.GS.Skills
             {
                 case ToonClass.Barbarian:
                     return Barbarian.AllActiveSkillsList;
-                    break;
                 case ToonClass.DemonHunter:
                     return DemonHunter.AllActiveSkillsList;
-                    break;
                 case ToonClass.Monk:
                     return Monk.AllActiveSkillsList;
-                    break;
                 case ToonClass.WitchDoctor:
                     return WitchDoctor.AllActiveSkillsList;
-                    break;
                 case ToonClass.Wizard:
                     return Wizard.AllActiveSkillsList;
-                    break;
                 default:
                     return null;
             }
@@ -59,19 +53,14 @@ namespace Mooege.Core.GS.Skills
             {
                 case ToonClass.Barbarian:
                     return Barbarian.FuryGenerators.List;
-                    break;
                 case ToonClass.DemonHunter:
                     return DemonHunter.HatredGenerators.List;
-                    break;
                 case ToonClass.Monk:
                     return Monk.SpiritGenerator.List;
-                    break;
                 case ToonClass.WitchDoctor:
                     return WitchDoctor.PhysicalRealm.List;
-                    break;
                 case ToonClass.Wizard:
                     return Wizard.Signature.List;
-                    break;
                 default:
                     return null;
             }
@@ -83,19 +72,14 @@ namespace Mooege.Core.GS.Skills
             {
                 case ToonClass.Barbarian:
                     return Barbarian.FurySpenders.List;
-                    break;
                 case ToonClass.DemonHunter:
                     return DemonHunter.HatredSpenders.List;
-                    break;
                 case ToonClass.Monk:
                     return Monk.SpiritSpenders.List;
-                    break;
                 case ToonClass.WitchDoctor:
                     return WitchDoctor.SpiritRealm.List;
-                    break;
                 case ToonClass.Wizard:
                     return Wizard.Offensive.List;
-                    break;
                 default:
                     return null;
             }
@@ -107,19 +91,14 @@ namespace Mooege.Core.GS.Skills
             {
                 case ToonClass.Barbarian:
                     return Barbarian.Situational.List;
-                    break;
                 case ToonClass.DemonHunter:
                     return DemonHunter.Discipline.List;
-                    break;
                 case ToonClass.Monk:
                     return Monk.Mantras.List;
-                    break;
                 case ToonClass.WitchDoctor:
                     return WitchDoctor.Support.List;
-                    break;
                 case ToonClass.Wizard:
                     return Wizard.Utility.List;
-                    break;
                 default:
                     return null;
             }
@@ -131,24 +110,18 @@ namespace Mooege.Core.GS.Skills
             {
                 case ToonClass.Barbarian:
                     return Barbarian.Passives.List;
-                    break;
                 case ToonClass.DemonHunter:
                     return DemonHunter.Passives.List;
-                    break;
                 case ToonClass.Monk:
                     return Monk.Passives.List;
-                    break;
                 case ToonClass.WitchDoctor:
                     return WitchDoctor.Passives.List;
-                    break;
                 case ToonClass.Wizard:
                     return Wizard.Passives.List;
-                    break;
                 default:
                     return null;
             }
         }
-
 
         #region barbarian
 

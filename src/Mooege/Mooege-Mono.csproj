@@ -122,7 +122,7 @@
     <Compile Include="Core\MooNet\Services\StorageService.cs" />
     <Compile Include="Core\MooNet\Services\ToonExternalService.cs" />
     <Compile Include="Core\MooNet\Services\UserManagerService.cs" />
-    <Compile Include="Core\GS\Skills\Skillset.cs" />
+    <Compile Include="Core\GS\Skills\SkillSet.cs" />
     <Compile Include="Core\GS\Skills\Skills.cs" />
     <Compile Include="Core\Common\Storage\DBManager.cs" />
     <Compile Include="Core\Common\Storage\GamedataDBManager.cs" />
