@@ -30,7 +30,7 @@ namespace Mooege.Net.GS.Message.Fields
                     Int = buffer.ReadInt(Attribute.BitCount);
                     break;
                 case GameAttributeEncoding.IntMinMax:
-                    Int = buffer.ReadInt(Attribute.BitCount) + Attribute.Min;
+                    Int = buffer.ReadInt(Attribute.BitCount) + Attribute.Min.Value;
                     break;
                 case GameAttributeEncoding.Float16:
                     Float = buffer.ReadFloat16();
@@ -61,7 +61,7 @@ namespace Mooege.Net.GS.Message.Fields
                     buffer.WriteInt(Attribute.BitCount, Int);
                     break;
                 case GameAttributeEncoding.IntMinMax:
-                    buffer.WriteInt(Attribute.BitCount, Int - Attribute.Min);
+                    buffer.WriteInt(Attribute.BitCount, Int - Attribute.Min.Value);
                     break;
                 case GameAttributeEncoding.Float16:
                     buffer.WriteFloat16(Float);

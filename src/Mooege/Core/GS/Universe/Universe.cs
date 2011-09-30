@@ -403,38 +403,12 @@ namespace Mooege.Core.GS.Universe
                 Field0 = message.Field1,
             });
 
-            client.SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = message.Field1,
-                Field1 = new NetAttributeKeyValue
-                {
-                    Attribute = GameAttribute.Attributes[0x4d],
-                    Float = 0
-                }
-            });
+            GameAttributeMap attribs = new GameAttributeMap();
+            attribs[GameAttribute.Hitpoints_Cur] = 0f;
+            attribs[GameAttribute.Could_Have_Ragdolled] = true;
+            attribs[GameAttribute.Deleted_On_Server] = true;
+            attribs.SendMessage(client, message.Field1);
 
-            client.SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = message.Field1,
-                Field1 = new NetAttributeKeyValue
-                {
-                    Attribute = GameAttribute.Attributes[0x1c2],
-                    Int = 1
-                }
-            });
-
-            client.SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = message.Field1,
-                Field1 = new NetAttributeKeyValue
-                {
-                    Attribute = GameAttribute.Attributes[0x1c5],
-                    Int = 1
-                }
-            });
             client.SendMessage(new PlayEffectMessage()
             {
                 Id = 0x7a,
@@ -546,134 +520,34 @@ namespace Mooege.Core.GS.Universe
                 Field1 = 0x1
             });
 
-            client.SendMessage(new AttributesSetValuesMessage
-            {
-                Id = 0x4d,
-                Field0 = client.ObjectId,
-                atKeyVals = new NetAttributeKeyValue[15] {
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[214],
-                        Int = 0
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[464],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 1048575,
-                        Attribute = GameAttribute.Attributes[441],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30582,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30286,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30285,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30284,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30283,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30290,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 79486,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30286,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30285,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30284,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30283,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30290,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    }
-                }
+            GameAttributeMap attribs = new GameAttributeMap();
+            attribs[GameAttribute.Untargetable] = false;
+            attribs[GameAttribute.Uninterruptible] = true;
+            attribs[GameAttribute.Buff_Visual_Effect, 1048575] = true;            
+            attribs[GameAttribute.Buff_Icon_Count0, 30582] = 1;
+            attribs[GameAttribute.Buff_Icon_Count0, 30286] = 1;
+            attribs[GameAttribute.Buff_Icon_Count0, 30285] = 1;
+            attribs[GameAttribute.Buff_Icon_Count0, 30284] = 1;
+            attribs[GameAttribute.Buff_Icon_Count0, 30283] = 1;
+            attribs[GameAttribute.Buff_Icon_Count0, 30290] = 1;
+            attribs[GameAttribute.Buff_Icon_Count0, 79486] = 1;
+            attribs[GameAttribute.Buff_Active, 30286] = true;
+            attribs[GameAttribute.Buff_Active, 30285] = true;
+            attribs[GameAttribute.Buff_Active, 30284] = true;
+            attribs[GameAttribute.Buff_Active, 30283] = true;
+            attribs[GameAttribute.Buff_Active, 30290] = true;
 
-            });
+            attribs[GameAttribute.Hitpoints_Max_Total] = 4.546875f;
+            attribs[GameAttribute.Buff_Active, 79486] = true;
+            attribs[GameAttribute.Hitpoints_Max] = 4.546875f;
+            attribs[GameAttribute.Hitpoints_Total_From_Level] = 0f;
+            attribs[GameAttribute.Hitpoints_Cur] = 4.546875f;
+            attribs[GameAttribute.Invulnerable] = true;
+            attribs[GameAttribute.Buff_Active, 30582] = true;
+            attribs[GameAttribute.TeamID] = 10;
+            attribs[GameAttribute.Level] = 1;
 
-            client.SendMessage(new AttributesSetValuesMessage
-            {
-                Id = 0x4d,
-                Field0 = client.ObjectId,
-                atKeyVals = new NetAttributeKeyValue[9] {
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[86],
-                        Float = 4.546875f
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 79486,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[84],
-                        Float = 4.546875f
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[81],
-                        Int = 0
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[77],
-                        Float = 4.546875f
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[69],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30582,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[67],
-                        Int = 10
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[38],
-                        Int = 1
-                    }
-                }
-
-            });
+            attribs.SendMessage(client, client.ObjectId);
 
 
             client.SendMessage(new ACDGroupMessage

@@ -122,254 +122,40 @@ namespace Mooege.Core.GS.Universe
                                        Field0 = 0x789E00E2,
                                        Field1 = 0x00000000,
                                    });
+            GameAttributeMap attribs = new GameAttributeMap();
+            attribs[GameAttribute.SkillKit] = Client.Player.Hero.SkillKit;
+            attribs[GameAttribute.Buff_Active, 0x33C40] = true;
+            attribs[GameAttribute.Skill, 0x7545] = 1;
+            attribs[GameAttribute.Skill_Total, 0x7545] = 1;
+            attribs[GameAttribute.Resistance_Total, 0x226] = 0.5f;
+            attribs[GameAttribute.Resistance, 0x226] = 0.5f;
+            attribs[GameAttribute.Immobolize] = true;
+            attribs[GameAttribute.Untargetable] = true;
+            attribs[GameAttribute.Skill_Total, 0x76B7] = 1;
+            attribs[GameAttribute.Skill, 0x76B7] = 1;
+            attribs[GameAttribute.Skill, 0x6DF] = 1;
+            attribs[GameAttribute.Buff_Active, 0xCE11] = true;
+            attribs[GameAttribute.CantStartDisplayedPowers] = true;
+            attribs[GameAttribute.Skill_Total, 0x216FA] = 1;
+            attribs[GameAttribute.Skill, 0x176C4] = 1;
 
-            Client.SendMessage(new AttributesSetValuesMessage()
-                                   {
-                                       Id = 0x004D,
-                                       Field0 = 0x789E00E2,
-                                       atKeyVals = new NetAttributeKeyValue[15]
-                                                       {
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Attribute = GameAttribute.Attributes[0x01F8],
-                                                                   // SkillKit 
-                                                                   Int = Client.Player.Hero.SkillKit,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x00033C40,
-                                                                   Attribute = GameAttribute.Attributes[0x01CC],
-                                                                   // Buff_Active 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x00007545,
-                                                                   Attribute = GameAttribute.Attributes[0x0041],
-                                                                   // Skill 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x00007545,
-                                                                   Attribute = GameAttribute.Attributes[0x0042],
-                                                                   // Skill_Total 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x00000226,
-                                                                   Attribute = GameAttribute.Attributes[0x003E],
-                                                                   // Resistance_Total 
-                                                                   Int = 0x00000000,
-                                                                   Float = 0.5f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x00000226,
-                                                                   Attribute = GameAttribute.Attributes[0x003C],
-                                                                   // Resistance 
-                                                                   Int = 0x00000000,
-                                                                   Float = 0.5f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Attribute = GameAttribute.Attributes[0x00D7],
-                                                                   // Immobolize 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Attribute = GameAttribute.Attributes[0x00D6],
-                                                                   // Untargetable 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x000076B7,
-                                                                   Attribute = GameAttribute.Attributes[0x0042],
-                                                                   // Skill_Total 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x000076B7,
-                                                                   Attribute = GameAttribute.Attributes[0x0041],
-                                                                   // Skill 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x000006DF,
-                                                                   Attribute = GameAttribute.Attributes[0x0041],
-                                                                   // Skill 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x0000CE11,
-                                                                   Attribute = GameAttribute.Attributes[0x01CC],
-                                                                   // Buff_Active 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Attribute = GameAttribute.Attributes[0x01D2],
-                                                                   // CantStartDisplayedPowers 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x000216FA,
-                                                                   Attribute = GameAttribute.Attributes[0x0042],
-                                                                   // Skill_Total 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x000176C4,
-                                                                   Attribute = GameAttribute.Attributes[0x0041],
-                                                                   // Skill 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                       },
-                                   });
+            attribs[GameAttribute.Skill, 0x216FA] = 1;
+            attribs[GameAttribute.Skill_Total, 0x176C4] = 1;
+            attribs[GameAttribute.Skill_Total, 0x6DF] = 1;
+            attribs[GameAttribute.Resistance, 0xDE] = 0.5f;
+            attribs[GameAttribute.Resistance_Total, 0xDE] = 0.5f;
+            attribs[GameAttribute.Get_Hit_Recovery] = 6f;
+            attribs[GameAttribute.Get_Hit_Recovery_Per_Level] = 1f;
+            attribs[GameAttribute.Get_Hit_Recovery_Base] = 5f;
+            attribs[GameAttribute.Skill, 0x7780] = 1;
+            attribs[GameAttribute.Get_Hit_Max] = 60f;
+            attribs[GameAttribute.Skill_Total, 0x7780] = 1;
+            attribs[GameAttribute.Get_Hit_Max_Per_Level] = 10f;
+            attribs[GameAttribute.Get_Hit_Max_Base] = 50f;
+            attribs[GameAttribute.Resistance_Total, 0] = 3.051758E-05f; // im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
+            attribs[GameAttribute.Resistance_Total, 1] = 3.051758E-05f;
 
-            Client.SendMessage(new AttributesSetValuesMessage()
-                                   {
-                                       Id = 0x004D,
-                                       Field0 = 0x789E00E2,
-                                       atKeyVals = new NetAttributeKeyValue[15]
-                                                       {
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x000216FA,
-                                                                   Attribute = GameAttribute.Attributes[0x0041],
-                                                                   // Skill 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x000176C4,
-                                                                   Attribute = GameAttribute.Attributes[0x0042],
-                                                                   // Skill_Total 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x000006DF,
-                                                                   Attribute = GameAttribute.Attributes[0x0042],
-                                                                   // Skill_Total 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x000000DE,
-                                                                   Attribute = GameAttribute.Attributes[0x003C],
-                                                                   // Resistance 
-                                                                   Int = 0x00000000,
-                                                                   Float = 0.5f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x000000DE,
-                                                                   Attribute = GameAttribute.Attributes[0x003E],
-                                                                   // Resistance_Total 
-                                                                   Int = 0x00000000,
-                                                                   Float = 0.5f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Attribute = GameAttribute.Attributes[0x00C8],
-                                                                   // Get_Hit_Recovery 
-                                                                   Int = 0x00000000,
-                                                                   Float = 6f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Attribute = GameAttribute.Attributes[0x00C7],
-                                                                   // Get_Hit_Recovery_Per_Level 
-                                                                   Int = 0x00000000,
-                                                                   Float = 1f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Attribute = GameAttribute.Attributes[0x00C6],
-                                                                   // Get_Hit_Recovery_Base 
-                                                                   Int = 0x00000000,
-                                                                   Float = 5f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x00007780,
-                                                                   Attribute = GameAttribute.Attributes[0x0041],
-                                                                   // Skill 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Attribute = GameAttribute.Attributes[0x00C5],
-                                                                   // Get_Hit_Max 
-                                                                   Int = 0x00000000,
-                                                                   Float = 60f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x00007780,
-                                                                   Attribute = GameAttribute.Attributes[0x0042],
-                                                                   // Skill_Total 
-                                                                   Int = 0x00000001,
-                                                                   Float = 0f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Attribute = GameAttribute.Attributes[0x00C4],
-                                                                   // Get_Hit_Max_Per_Level 
-                                                                   Int = 0x00000000,
-                                                                   Float = 10f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Attribute = GameAttribute.Attributes[0x00C3],
-                                                                   // Get_Hit_Max_Base 
-                                                                   Int = 0x00000000,
-                                                                   Float = 50f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x00000000,
-                                                                   Attribute = GameAttribute.Attributes[0x003E],
-                                                                   // Resistance_Total 
-                                                                   Int = 0x00000000,
-                                                                   Float = 3.051758E-05f,
-                                                               },
-                                                           new NetAttributeKeyValue()
-                                                               {
-                                                                   Field0 = 0x00000001,
-                                                                   Attribute = GameAttribute.Attributes[0x003E],
-                                                                   // Resistance_Total 
-                                                                   Int = 0x00000000,
-                                                                   Float = 3.051758E-05f,
-                                                               },
-                                                       },
-                                   });
+            attribs.SendMessage(Client, 0x789E00E2);
 
             Client.SendMessage(new AttributesSetValuesMessage()
                                    {
