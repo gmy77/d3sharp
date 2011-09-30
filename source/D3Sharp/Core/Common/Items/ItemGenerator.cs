@@ -19,7 +19,7 @@ namespace D3Sharp.Core.Items
         public ItemGenerator(){
 
             // couldn't figure out how to create random ids which are valid on clientside 
-            // workaraound: use this list           
+            // workaround: use this list           
             vaildItemIds.Add(0x789F00E1);            
             vaildItemIds.Add(0x78A000E5);
             vaildItemIds.Add(0x78A000E6);

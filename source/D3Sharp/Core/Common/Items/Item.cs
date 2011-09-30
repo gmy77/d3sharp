@@ -28,6 +28,7 @@ using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Definitions.Effect;
 using D3Sharp.Net.Game.Message;
 using D3Sharp.Core.Ingame.Universe;
+using D3Sharp.Core.Ingame.Actors;
 
 namespace D3Sharp.Core.Common.Items
 {
@@ -93,11 +94,6 @@ namespace D3Sharp.Core.Common.Items
 
 
 
-        public void RevealAtLocation(GameClient client, WorldLocationMessageData worldLocation)
-        {
-            Reveal(client, null, worldLocation);
-        }
-
         public void RevealInInventory(Hero hero, int row, int column, int equipmentSlot)
         {
 
@@ -112,14 +108,6 @@ namespace D3Sharp.Core.Common.Items
                         },
                     };
 
-
-            Reveal(hero.InGameClient, inventorylocation, null);
-        }
-
-        private void Reveal(GameClient client, InventoryLocationMessageData inventoryLocation, WorldLocationMessageData worldLocation)
-        {
-
-            
             ACDEnterKnownMessage msg = new ACDEnterKnownMessage()
             {
                 Id = 0x003B,
@@ -127,8 +115,8 @@ namespace D3Sharp.Core.Common.Items
                 Field1 = 0x00001158,
                 Field2 = 0x0000001A,
                 Field3 = 0x00000001,
-                Field4 = worldLocation,
-                Field5 = inventoryLocation,
+                Field4 = null,
+                Field5 = inventorylocation,
                 Field6 = new GBHandle()
                 {
                     Field0 = 0x00000002,
@@ -140,7 +128,15 @@ namespace D3Sharp.Core.Common.Items
                 Field10 = 0x00,
             };
 
-            client.SendMessage(msg);
+            hero.InGameClient.SendMessage(msg);
+
+            Reveal(hero);
+        }
+
+        public void Reveal(Hero hero)
+        {
+
+            GameClient client = hero.InGameClient;
 
             int[] affixGbis = new int[AffixList.Count];
             for (int i = 0; i < AffixList.Count; i++)
@@ -245,17 +241,8 @@ namespace D3Sharp.Core.Common.Items
                 Field0 = ItemId,
                 Field1 = 0x00000027,
             });
+           
 
-            if (inventoryLocation != null)
-            {
-                client.SendMessage(new ACDInventoryPositionMessage()
-                {
-                    Id = 0x0040,
-                    Field0 = ItemId,
-                    Field1 = inventoryLocation,
-                    Field2 = 0x00000001,
-                });
-            }
             client.SendMessage(new ACDInventoryUpdateActorSNO()
             {
                 Id = 0x0041,

@@ -106,7 +106,9 @@ namespace D3Sharp.Core.Ingame.Universe
 
                         //packet data
                         if (data[0].Equals("p") && data.Length >= 2)
-                        {
+                        {                
+ 
+                           
                             int packettype = int.Parse(data[1]);
                             switch (packettype)
                             {
@@ -321,12 +323,16 @@ namespace D3Sharp.Core.Ingame.Universe
 
             // Check if it is an item....
             Actor a = this.GetActor(message.Field1);
-            if (a != null && SNODatabase.Instance.IsOfGroup(a.SnoId, SNOGroup.Actors))
+            if (a != null)
             {
-                if (message.Field1 == 2065563791)
+                try
                 {
                     client.Player.Hero.Inventory.PickUp(message);
                     return;
+                }
+                catch (Exception)
+                {
+                    // Probably not an Item
                 }
             }
 
@@ -336,35 +342,37 @@ namespace D3Sharp.Core.Ingame.Universe
 
             Hero hero = client.Player.Hero;
 
+
+
             WorldLocationMessageData location = new WorldLocationMessageData
             {
-                Field0 = 1.43f,
-                Field1 = new PRTransform
+
+                Field0 = 1.35f,
+                Field1 = new PRTransform()
                 {
-                    Field0 = new Quaternion
+                    Field0 = new Quaternion()
                     {
-                        Amount = 0f,
-                        Axis = new Vector3D
+                        Amount = 0.768145f,
+                        Axis = new Vector3D()
                         {
                             X = 0f,
                             Y = 0f,
-                            Z = 0f,
-                        }
+                            Z = -0.640276f,
+                        },
                     },
-                    ReferencePoint = hero.Position,
-                },
+                    ReferencePoint = new Vector3D()
+                    {
+                        X = client.Player.Hero.Position.X + 5,
+                        Y = client.Player.Hero.Position.Y + 5,
+                        Z = client.Player.Hero.Position.Z,
+                    },
+                },                              
                 Field2 = hero.WorldId,
             };
-          
 
+            SpawnItemDrop(hero, location);
 
-            ItemTypeGenerator itemGenerator = new ItemTypeGenerator();
-            Item item = itemGenerator.generateRandomElement(ItemType.Sword_1H);
             
-            // Reveal item at Worldlocation lead to an error on client
-            //item.RevealAtLocation(client, location);
-
-            hero.Inventory.AddToInventory(item);
             
 
             var killAni = new int[]{
@@ -513,6 +521,37 @@ namespace D3Sharp.Core.Ingame.Universe
                 Id = 0x89,
                 Field0 = client.PacketId,
             });
+        }
+
+        private void SpawnItemDrop(Hero hero, WorldLocationMessageData location)
+        {
+
+
+            ItemTypeGenerator itemGenerator = new ItemTypeGenerator();
+            Item item = itemGenerator.generateRandomElement(ItemType.Sword_1H);
+
+
+            Actor itemActor = new Actor()
+            {
+                GBHandle = new GBHandle()
+                {
+                    Field0 = 2,
+                    Field1 = item.ItemId,
+                },
+                InventoryLocationData = null,
+                Scale = location.Field0,
+                Position = location.Field1.ReferencePoint,
+                WorldId = location.Field2,
+                RotationAmount = location.Field1.Field0.Amount,
+                RotationAxis = location.Field1.Field0.Axis,
+                SnoId = item.Gbid,
+                Id = item.ItemId,
+            };
+
+            GetWorld(hero.WorldId).AddActor(itemActor);
+            itemActor.Reveal(hero);           
+            item.Reveal(hero);
+
         }
 
         public void SpawnMob(GameClient client, int mobId) // this shoudn't even rely on client or it's position though i know this is just a hack atm ;) /raist.
