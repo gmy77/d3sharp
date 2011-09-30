@@ -20,7 +20,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using Google.ProtocolBuffers;
-using MooNetHelpers.src;
+using MooNetHelpers;
 
 namespace StringViewer
 {

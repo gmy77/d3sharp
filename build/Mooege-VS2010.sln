@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mooege-VS2010", "..\src\mooege\Mooege-VS2010.csproj", "{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mooege-VS2010", "..\src\Mooege\Mooege-VS2010.csproj", "{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMooNet", "..\src\libmoonet\LibMooNet.csproj", "{4CC19847-6F24-4453-9E31-126F94308AB9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMooNet", "..\src\LibMooNet\LibMooNet.csproj", "{4CC19847-6F24-4453-9E31-126F94308AB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
