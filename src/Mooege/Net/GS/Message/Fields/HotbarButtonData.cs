@@ -23,18 +23,18 @@ namespace Mooege.Net.GS.Message.Fields
     public class HotbarButtonData
     {
         public int /* sno */ SNOSkill;
-        public int /* gbid */ ItemGBItem;
+        public int /* gbid */ ItemGBId;
 
         public void Parse(GameBitBuffer buffer)
         {
             SNOSkill = buffer.ReadInt(32);
-            ItemGBItem = buffer.ReadInt(32);
+            ItemGBId = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, SNOSkill);
-            buffer.WriteInt(32, ItemGBItem);
+            buffer.WriteInt(32, ItemGBId);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -46,7 +46,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("m_snoPower: 0x" + SNOSkill.ToString("X8"));
             b.Append(' ', pad);
-            b.AppendLine("m_gbidItem: 0x" + ItemGBItem.ToString("X8"));
+            b.AppendLine("m_gbidItem: 0x" + ItemGBId.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

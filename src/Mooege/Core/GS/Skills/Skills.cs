@@ -29,24 +29,24 @@ namespace Mooege.Core.GS.Skills
         public static int None = -1;
         public static int BasicAttack = 0x00007780;
 
-        public static List<int> GetActiveSkillsByClass(ToonClass @class)
+        public static List<int> GetAllActiveSkillsByClass(ToonClass @class)
         {
             switch (@class)
             {
                 case ToonClass.Barbarian:
-                    return Barbarian.ActiveSkills;
+                    return Barbarian.AllActiveSkillsList;
                     break;
                 case ToonClass.DemonHunter:
-                    return DemonHunter.ActiveSkills;
+                    return DemonHunter.AllActiveSkillsList;
                     break;
                 case ToonClass.Monk:
-                    return Monk.ActiveSkills;
+                    return Monk.AllActiveSkillsList;
                     break;
                 case ToonClass.WitchDoctor:
-                    return WitchDoctor.ActiveSkills;
+                    return WitchDoctor.AllActiveSkillsList;
                     break;
                 case ToonClass.Wizard:
-                    return Wizard.ActiveSkills;
+                    return Wizard.AllActiveSkillsList;
                     break;
                 default:
                     return null;
@@ -154,7 +154,7 @@ namespace Mooege.Core.GS.Skills
 
         public class Barbarian
         {
-            public static readonly List<int> ActiveSkills =
+            public static readonly List<int> AllActiveSkillsList =
                 FuryGenerators.List.Concat(FurySpenders.List).Concat(Situational.List).ToList();
 
             public class FuryGenerators
@@ -270,7 +270,7 @@ namespace Mooege.Core.GS.Skills
 
         public class DemonHunter
         {
-            public static readonly List<int> ActiveSkills =
+            public static readonly List<int> AllActiveSkillsList =
                 HatredGenerators.List.Concat(HatredSpenders.List).Concat(Discipline.List).ToList();
 
 
@@ -385,7 +385,7 @@ namespace Mooege.Core.GS.Skills
 
         public class Monk
         {
-            public static readonly List<int> ActiveSkills =
+            public static readonly List<int> AllActiveSkillsList =
                 SpiritGenerator.List.Concat(SpiritSpenders.List).Concat(Mantras.List).ToList();
 
             public class SpiritGenerator
@@ -495,7 +495,7 @@ namespace Mooege.Core.GS.Skills
 
         public class WitchDoctor
         {
-            public static readonly List<int> ActiveSkills =
+            public static readonly List<int> AllActiveSkillsList =
                 PhysicalRealm.List.Concat(SpiritRealm.List).Concat(Support.List).ToList();
 
             public class PhysicalRealm
@@ -605,7 +605,7 @@ namespace Mooege.Core.GS.Skills
 
         public class Wizard
         {
-            public static readonly List<int> ActiveSkills =
+            public static readonly List<int> AllActiveSkillsList =
                 Signature.List.Concat(Offensive.List).Concat(Utility.List).ToList();
 
             public class Signature

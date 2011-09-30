@@ -19,6 +19,7 @@
 using System.Text;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Data.SNO;
+using Mooege.Core.GS.Skills;
 using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Animation
@@ -31,6 +32,8 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
 
         public void Handle(GameClient client)
         {
+            if (snoPower != Skills.Monk.SpiritSpenders.BlindingFlash) return;
+
             var oldPosField1 = client.Player.Hero.Position.Y;
             var oldPosField2 = client.Player.Hero.Position.Z;
             for (var i = 0; i < 10; i++)
