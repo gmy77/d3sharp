@@ -22,7 +22,6 @@ namespace Mooege.Net.GS
     {       
         public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("BindIP", value); } }
         public int Port { get { return this.GetInt("Port", 1345); } set { this.Set("Port", value); } }
-        public string Map { get { return this.GetString("Map", "Assets/Maps/001.txt"); } set { this.Set("Map", value); } }
 
         private static readonly Config _instance = new Config();
         public static Config Instance { get { return _instance; } }
