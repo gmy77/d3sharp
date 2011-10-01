@@ -33,8 +33,13 @@ namespace D3Sharp.Core.Common.Items
         public static readonly Logger Logger = LogManager.CreateLogger();
 
         private static int nextObjectIdenifier = 0x78A000E6;        
+        private GameClient client;
 
-        public Item generateRandomElement(GameClient client, ItemType itemType)
+        public ItemTypeGenerator(GameClient client){
+            this.client = client;
+        }
+
+        public Item generateRandomElement(ItemType itemType)
         {
             try
             {
@@ -66,7 +71,7 @@ namespace D3Sharp.Core.Common.Items
                 {
                     var itemName = (String)reader.GetString(0);
                     var snoId = (int)reader.GetInt32(1);
-                    return createItem(client, itemName, snoId, itemType);
+                    return createItem(itemName, snoId, itemType);
                 }
             }
             catch (Exception e)
@@ -77,9 +82,9 @@ namespace D3Sharp.Core.Common.Items
         }
 
 
-        public Item createItem(GameClient client, String itemName, int snoId, ItemType itemType)
+        public Item createItem(String itemName, int snoId, ItemType itemType)
         {
-            Item item = Generate(client,itemName, snoId, itemType);
+            Item item = Generate(itemName, snoId, itemType);
             List<IItemAttributesCreator> attributesCreators = new AttributesCreatorFactory().create(itemType);            
             foreach (IItemAttributesCreator creator in attributesCreators)
             {
@@ -89,7 +94,7 @@ namespace D3Sharp.Core.Common.Items
         }
 
 
-        private Item Generate(GameClient client, String itemName, int snoId, ItemType itemType)
+        private Item Generate(String itemName, int snoId, ItemType itemType)
         {
             int itemId = CreateUniqueItemId();
             uint gbid = StringHashHelper.HashItemName(itemName);

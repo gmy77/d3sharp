@@ -129,9 +129,7 @@ namespace D3Sharp.Core.Common.Toons
             this.Flags = flags;
             this.Level = level;
             this.Owner = owner;
-
-            var itemsGenerator = new Items.ItemTypeGenerator();
-
+           
             var visualItems = new[]
                             {
                                 // Head

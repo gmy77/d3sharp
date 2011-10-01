@@ -529,7 +529,7 @@ namespace D3Sharp.Core.Ingame.Universe
         {
 
 
-            ItemTypeGenerator itemGenerator = new ItemTypeGenerator();
+            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(hero.InGameClient);
 
             
             ItemType type = ItemType.Sword_1H;
@@ -558,7 +558,7 @@ namespace D3Sharp.Core.Ingame.Universe
                     break;
             }
 
-            Item item = itemGenerator.generateRandomElement(hero.InGameClient, type);
+            Item item = itemGenerator.generateRandomElement(type);
 
 
             Actor itemActor = new Actor()

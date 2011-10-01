@@ -78,8 +78,8 @@ namespace D3Sharp.Core.Ingame.Universe
             var iid = RandomHelper.Next(0x78A000E4, 0x78A00F00);
             // 
             // generete item
-            var itemsGenerator = new ItemTypeGenerator();
-            int Gbid = itemsGenerator.generateRandomElement(Client, ItemType.Helm).Gbid;
+            var itemsGenerator = new ItemTypeGenerator(Client);
+            int Gbid = itemsGenerator.generateRandomElement(ItemType.Helm).Gbid;
 
             Item_ID.Add(iid, Gbid);
 
