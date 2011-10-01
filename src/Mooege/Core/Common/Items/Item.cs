@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 using System.Collections.Generic;
-using D3Sharp.Net.Game.Message.Fields;
+using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Core.Common.Items
 {
@@ -52,7 +52,7 @@ namespace Mooege.Core.Common.Items
         {
             return new VisualItem()
             {
-                Field0 = Gbid,
+                GbId = Gbid,
                 Field1 = 0,
                 Field2 = 0,
                 Field3 = -1

@@ -23,8 +23,7 @@ using Mooege.Common;
 using Mooege.Core.GS.Universe;
 using Mooege.Net.GS.Message;
 using Mooege.Net.MooNet;
-using D3Sharp.Net.Game.Message.Definitions.Misc;
-using D3Sharp.Core.Common.Items;
+using Mooege.Core.Common.Items;
 
 namespace Mooege.Net.GS
 {

@@ -30,6 +30,7 @@ using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.Common.Items;
 using D3Sharp.Core.Common.Items;
 
 namespace Mooege.Core.GS.Universe

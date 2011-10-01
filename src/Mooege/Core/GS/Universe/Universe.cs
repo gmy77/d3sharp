@@ -33,7 +33,7 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
-using D3Sharp.Data.SNO;
+using Mooege.Core.GS.Data.SNO;
 
 namespace Mooege.Core.GS.Universe
 {
@@ -45,13 +45,10 @@ namespace Mooege.Core.GS.Universe
 
         public PlayerManager PlayerManager { get; private set; }
 
-        public InventoryMenager InventoryMenager { get; private set; }
-
         public Universe()
         {
             this._worlds = new List<World>();
             this.PlayerManager = new PlayerManager(this);
-            this.InventoryMenager = new InventoryMenager();
             InitializeUniverse();
         }
 
