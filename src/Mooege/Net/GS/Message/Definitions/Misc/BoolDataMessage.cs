@@ -20,12 +20,13 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [IncomingMessage(new[] {
+        Opcodes.BoolDataMessage,
+        Opcodes.BoolDataMessage2
+    })]
     public class BoolDataMessage : GameMessage
     {
         public bool Field0;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

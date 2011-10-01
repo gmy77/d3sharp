@@ -65,20 +65,19 @@ namespace Mooege.Net.GS
 
                 while ((end - _incomingBuffer.Position) >= 9)
                 {
+                    GameMessage message = _incomingBuffer.ParseMessage();
+                    if (message == null) continue;
                     try
                     {
-                        GameMessage message = _incomingBuffer.ParseMessage();
-                        if (message == null) continue;
-
                         if (message.Consumer != Consumers.None) this.Universe.Route(this, message);
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
-                        else Logger.Warn("Got an incoming message that has no consumer or self-handler " + message.GetType());
+                        else Logger.Warn("Got an incoming message that has no consumer or self-handler: {0}", message.GetType());
 
                         //Logger.LogIncoming(message);
                     }
                     catch (NotImplementedException)
                     {
-                        //Logger.Debug("Unhandled game message: 0x{0:X4} {1}", msg.Id, msg.GetType().Name);
+                        Logger.Debug("Unhandled game message: 0x{0:X4} {1}", message.Id, message.GetType().Name);
                     }
                 }
 
@@ -88,15 +87,15 @@ namespace Mooege.Net.GS
             FlushOutgoingBuffer();
         }
 
-        public void SendMessage(GameMessage msg)
+        public void SendMessage(GameMessage message)
         {
-            //Logger.LogOutgoing(msg);
-            _outgoingBuffer.EncodeMessage(msg);
+            //Logger.LogOutgoing(message);
+            _outgoingBuffer.EncodeMessage(message);
         }
 
-        public void SendMessageNow(GameMessage msg)
+        public void SendMessageNow(GameMessage message)
         {
-            //SendMessage(msg);
+            SendMessage(message);
             FlushOutgoingBuffer();
         }
 
