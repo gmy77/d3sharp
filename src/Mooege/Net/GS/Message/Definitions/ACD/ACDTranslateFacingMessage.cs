@@ -20,14 +20,15 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [IncomingMessage(new[] {
+        Opcodes.ACDTranslateFacingMessage1,
+        Opcodes.ACDTranslateFacingMessage2
+    })]
     public class ACDTranslateFacingMessage : GameMessage
     {
         public int Field0;
         public float /* angle */ Field1;
         public bool Field2;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {
