@@ -4,6 +4,7 @@
 # Stay awhile and listen
 
 * Read the [FAQ](/mooege/mooege/wiki/FAQ) before asking!
+* Read the [WARNING](https://github.com/mooege/mooege/blob/master/WARNING) before starting to use this software!
 * Status: Will get you ingame.. not much else.
 * IRC (**irc.synirc.net**):
   - **#mooege.chat** (general chat)

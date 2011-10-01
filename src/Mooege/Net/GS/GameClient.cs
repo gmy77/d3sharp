@@ -71,12 +71,11 @@ namespace Mooege.Net.GS
                 {
                     GameMessage message = _incomingBuffer.ParseMessage();
                     if (message == null) continue;
-
                     try
                     {
                         if (message.Consumer != Consumers.None) this.Universe.Route(this, message);
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
-                        else Logger.Warn("Got an incoming message that has no consumer or self-handler " + message.GetType());
+                        else Logger.Debug("{0} has no consumer or self-handler.", message.GetType());
 
                         //Logger.LogIncoming(message);
                     }
@@ -100,7 +99,7 @@ namespace Mooege.Net.GS
 
         public void SendMessageNow(GameMessage message)
         {
-            //SendMessage(message);
+            SendMessage(message);
             FlushOutgoingBuffer();
         }
 

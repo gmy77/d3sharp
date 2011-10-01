@@ -20,7 +20,10 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Connection
 {
-    [IncomingMessage(new[] { Opcodes.LogoutContextMessage1, Opcodes.LogoutContextMessage2 })]
+    [IncomingMessage(new[] {
+        Opcodes.LogoutContextMessage1,
+        Opcodes.LogoutContextMessage2
+    })]
     public class LogoutContextMessage : GameMessage,ISelfHandler
     {
         public bool Field0;
@@ -35,8 +38,8 @@ namespace Mooege.Net.GS.Message.Definitions.Connection
                 {
                     Id = 0x0027,
                     Field0 = false, // true - logout with party?
-                    Field1 = 600, // delay 1, make this equal to 0 for instant logout
-                    Field2 = 600, // delay 2
+                    Field1 = 0, // delay 1, make this equal to 0 for instant logout
+                    Field2 = 0, // delay 2
                 });
             }
         }
