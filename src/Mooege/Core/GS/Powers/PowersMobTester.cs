@@ -27,7 +27,7 @@ namespace Mooege.Core.GS.Powers
         public void ReceiveDamage(Actor from, float amount, int type)
         {
             hp -= amount;
-            if (hp <= 0.0f)
+            if (!dead && hp <= 0.0f)
                 owner.KillMob(this);
         }
 

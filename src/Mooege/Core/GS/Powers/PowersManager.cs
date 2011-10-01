@@ -95,229 +95,216 @@ namespace Mooege.Core.GS.Powers
             _castTimeout = DateTime.Now.AddMilliseconds(100);
 
             // TODO: need to split this out into multiple files eventually
-            switch (powerId)
+            if (powerId == Skills.Skills.Monk.SpiritSpenders.BlindingFlash) // used for spawning stuff right now
             {
-                case (int)Skills.Skills.Monk.BlindingFlash: // used for spawning stuff right now
+                _mobtester.SpawnMob();
+            }
+            else if (powerId == Skills.Skills.BasicAttack) // TODO: actual generic basic attack? or always melee?
+            {
+                if (target != null)
+                {
+                    if (Math.Abs(user.Position.X - targetPos.X) < 15f &&
+                        Math.Abs(user.Position.Y - targetPos.Y) < 15f)
                     {
-                        _mobtester.SpawnMob();
-                        break;
-                    }
-                case (int)Skills.Skills.Wizard.FrostNova: // testing skill
-                    {
-                        //if (target == null) break;
-
-                        SendMessage(new PlayerLevel()
+                        SendMessage(new PlayHitEffectMessage()
                         {
-                            Id = 0x98,
-                            Field0 = 0,
-                            Field1 = 2
+                            Id = 0x7b,
+                            Field0 = target.GetId(),
+                            Field1 = user.Id,
+                            Field2 = 0,
+                            Field3 = false
                         });
-                        SendMessage(new PlayConvLineMessage()
-                        {
-                            Id = 0xba,
-                            Field0 = user.Id,
-                            Field1 = new int[9]
-                            {
-                                user.Id, -1, -1, -1, -1, -1, -1, -1, -1
-                            },
-                            Field2 = new PlayLineParams()
-                            {
-                                snoConversation = 0x2a777,
-                                Field1 = 0,
-                                Field2 = false,
-                                Field3 = 0,
-                                Field4 = 0,
-                                Field5 = -1,
-                                Field6 = 2,
-                                Field7 = 1,
-                                Field8 = 2,
-                                snoSpeakerActor = 0x0000197e,
-                                Field10 = "aaa",
-                                Field11 = 2,
-                                Field12 = -1,
-                                Field13 = 0x32,
-                                Field14 = 0x5a,
-                                Field15 = 0x32
-                            },
-                            Field3 = 0x32
-                        });
+                        DoDamage(user, target, 25f, 0);
                         SendDWordTick();
-
                         FlushOutgoingBuffer();
-                        break;
                     }
-                case 0x7780: // basic attack
+
+                }
+            }
+            else if (powerId == Skills.Skills.Wizard.Utility.FrostNova) // testing skill
+            {
+                //if (target == null) break;
+
+                // try to level up!
+
+                SendMessage(new PlayerLevel()
+                {
+                    Id = 0x98,
+                    Field0 = 0,
+                    Field1 = 2
+                });
+                SendMessage(new PlayConvLineMessage()
+                {
+                    Id = 0xba,
+                    Field0 = user.Id,
+                    Field1 = new int[9]
                     {
-                        // right now always assume melee attack
-                        if (target != null)
-                        {
-                            if (Math.Abs(user.Position.X - targetPos.X) < 15f &&
-                                Math.Abs(user.Position.Y - targetPos.Y) < 15f)
-                            {
-                                SendMessage(new PlayHitEffectMessage()
-                                {
-                                    Id = 0x7b,
-                                    Field0 = target.GetId(),
-                                    Field1 = user.Id,
-                                    Field2 = 0,
-                                    Field3 = false
-                                });
-                                DoDamage(user, target, 25f, 0);
-                                SendDWordTick();
-                                FlushOutgoingBuffer();
-                            }
-
-                        }
-                        break;
-                    }
-                case (int)Skills.Skills.Wizard.Electrocute:
+                        user.Id, -1, -1, -1, -1, -1, -1, -1, -1
+                    },
+                    Field2 = new PlayLineParams()
                     {
-                        // TODO: refactor this targetting style and effect messages out of here
-                        IList<IDamageable> targets;
-                        List<int> effect_targets = new List<int>();
-                        if (target == null)
-                        {
-                            effect_targets.Add(GetProxyIdFor(user, targetPos));
-                            targets = new List<IDamageable>();
-                        }
-                        else
-                        {
-                            targets = FindTargetsInRadius(targetPos, 15f, 1);
-                            targets.Insert(0, target);
-                            foreach (var d in targets)
-                                effect_targets.Add(d.GetId());
-                        }
+                        snoConversation = 0x2a777,
+                        Field1 = 0,
+                        Field2 = false,
+                        Field3 = 0,
+                        Field4 = 0,
+                        Field5 = -1,
+                        Field6 = 2,
+                        Field7 = 1,
+                        Field8 = 2,
+                        snoSpeakerActor = 0x0000197e,
+                        Field10 = "aaa",
+                        Field11 = 2,
+                        Field12 = -1,
+                        Field13 = 0x32,
+                        Field14 = 0x5a,
+                        Field15 = 0x32
+                    },
+                    Field3 = 0x32
+                });
+                SendDWordTick();
 
-                        // look at target
-                        float facing = (float)Math.Atan2(targetPos.Y - user.Position.Y, targetPos.X - user.Position.X);
-                        SendMessage(new ACDTranslateFacingMessage
-                        {
-                            Id = 0x70,
-                            Field0 = user.Id,
-                            Field1 = facing,
-                            Field2 = false
-                        });
+                FlushOutgoingBuffer();
+            }
+            else if (powerId == Skills.Skills.Wizard.Signature.Electrocute) // electrocute
+            {
+                // TODO: refactor this targetting style and effect messages out of here
+                IList<IDamageable> targets;
+                List<int> effect_targets = new List<int>();
+                if (target == null)
+                {
+                    effect_targets.Add(GetProxyIdFor(user, targetPos));
+                    targets = new List<IDamageable>();
+                }
+                else
+                {
+                    targets = FindTargetsInRadius(targetPos, 15f, 1);
+                    targets.Insert(0, target);
+                    foreach (var d in targets)
+                        effect_targets.Add(d.GetId());
+                }
 
-                        int effect_source = user.Id;
-                        foreach (int id in effect_targets)
-                        {
-                            //SendMessage(new PlayEffectMessage() // sound effect
-                            //{
-                            //    Id = 0x7a,
-                            //    Field0 = id,
-                            //    Field1 = 0,
-                            //    Field2 = 0x07
-                            //});
-                            //SendMessage(new PlayHitEffectMessage() // hit lightining
-                            //{
-                            //    Id = 0x7b,
-                            //    Field0 = id,
-                            //    Field1 = user.Id,
-                            //    Field2 = 2,
-                            //    Field3 = false
-                            //});
-                            SendMessage(new RopeEffectMessageACDToACD() // bolt
-                            {
-                                Id = 0x00ab,
-                                Field0 = 0x078C0,
-                                Field1 = effect_source,
-                                Field2 = 4,
-                                Field3 = id,
-                                Field4 = 1
-                            });
-                            SendDWordTick();
+                // look at target
+                float facing = (float)Math.Atan2(targetPos.Y - user.Position.Y, targetPos.X - user.Position.X);
+                SendMessage(new ACDTranslateFacingMessage
+                {
+                    Id = 0x70,
+                    Field0 = user.Id,
+                    Field1 = facing,
+                    Field2 = false
+                });
 
-                            effect_source = id;
-                        }
-
-                        foreach (IDamageable d in targets)
-                        {
-                            DoDamage(user, d, 12, 0);
-                        }
-                        FlushOutgoingBuffer();
-
-                        break;
-                    }
-                case (int)Skills.Skills.Wizard.MagicMissile:
+                int effect_source = user.Id;
+                foreach (int id in effect_targets)
+                {
+                    //SendMessage(new PlayEffectMessage() // sound effect
+                    //{
+                    //    Id = 0x7a,
+                    //    Field0 = id,
+                    //    Field1 = 0,
+                    //    Field2 = 0x07
+                    //});
+                    //SendMessage(new PlayHitEffectMessage() // hit lightining
+                    //{
+                    //    Id = 0x7b,
+                    //    Field0 = id,
+                    //    Field1 = user.Id,
+                    //    Field2 = 2,
+                    //    Field3 = false
+                    //});
+                    SendMessage(new RopeEffectMessageACDToACD() // bolt
                     {
-                        for (int step = 1; step < 10; ++step)
-                        {
-                            var spos = new Vector3D();
-                            spos.X = user.Position.X + ((targetPos.X - user.Position.X) * (step * 0.10f));
-                            spos.Y = user.Position.Y + ((targetPos.Y - user.Position.Y) * (step * 0.10f));
-                            spos.Z = user.Position.Z + ((targetPos.Z - user.Position.Z) * (step * 0.10f));
+                        Id = 0x00ab,
+                        Field0 = 0x078C0,
+                        Field1 = effect_source,
+                        Field2 = 4,
+                        Field3 = id,
+                        Field4 = 1
+                    });
+                    SendDWordTick();
 
-                            SpawnEffect(user, 61419, spos);
+                    effect_source = id;
+                }
 
-                            IList<IDamageable> hits = FindTargetsInRadius(spos, 6f);
-                            foreach (IDamageable x in hits)
-                            {
-                                DoDamage(user, x, 20f, 0);
-                            }
-                            FlushOutgoingBuffer();
-                            System.Threading.Thread.Sleep(100);
-                        }
-                        break;
-                    }
-                case (int)Skills.Skills.Wizard.GlassCannon: // demonic meteor
+                foreach (IDamageable d in targets)
+                {
+                    DoDamage(user, d, 12, 0);
+                }
+                FlushOutgoingBuffer();
+            }
+            else if (powerId == Skills.Skills.Wizard.Signature.MagicMissile)
+            {
+                for (int step = 1; step < 10; ++step)
+                {
+                    var spos = new Vector3D();
+                    spos.X = user.Position.X + ((targetPos.X - user.Position.X) * (step * 0.10f));
+                    spos.Y = user.Position.Y + ((targetPos.Y - user.Position.Y) * (step * 0.10f));
+                    spos.Z = user.Position.Z + ((targetPos.Z - user.Position.Z) * (step * 0.10f));
+
+                    SpawnEffect(user, 61419, spos);
+
+                    IList<IDamageable> hits = FindTargetsInRadius(spos, 6f);
+                    foreach (IDamageable x in hits)
                     {
-                        SpawnEffect(user, 185366, targetPos);
-                        FlushOutgoingBuffer();
-
-                        System.Threading.Thread.Sleep(400);
-
-                        IList<IDamageable> hits = FindTargetsInRadius(targetPos, 10f);
-                        foreach (IDamageable x in hits)
-                        {
-                            DoDamage(user, x, 100f, 0);
-                        }
-                        FlushOutgoingBuffer();
-                        break;
+                        DoDamage(user, x, 20f, 0);
                     }
-                case (int)Skills.Skills.Wizard.Meteor:
+                    FlushOutgoingBuffer();
+                    System.Threading.Thread.Sleep(100);
+                }
+            }
+            else if (powerId == Skills.Skills.Wizard.Offensive.Hydra) // demonic meteor
+            {
+                SpawnEffect(user, 185366, targetPos);
+                FlushOutgoingBuffer();
+
+                System.Threading.Thread.Sleep(400);
+
+                IList<IDamageable> hits = FindTargetsInRadius(targetPos, 10f);
+                foreach (IDamageable x in hits)
+                {
+                    DoDamage(user, x, 100f, 0);
+                }
+                FlushOutgoingBuffer();
+            }
+            else if (powerId == Skills.Skills.Wizard.Offensive.Meteor)
+            {
+                SpawnEffect(user, 86790, targetPos);
+                FlushOutgoingBuffer();
+                System.Threading.Thread.Sleep(2000);
+                SpawnEffect(user, 86769, targetPos);
+                SpawnEffect(user, 90364, targetPos); //, -1.0f, 5000);
+
+                IList<IDamageable> hits = FindTargetsInRadius(targetPos, 13f);
+                foreach (IDamageable x in hits)
+                {
+                    DoDamage(user, x, 150f, 0);
+                }
+                FlushOutgoingBuffer();
+            }
+            else if (powerId == Skills.Skills.Wizard.Offensive.Disintegrate)
+            {
+                //SpawnEffect(user, 52687, targetPos);
+            }
+            else if (powerId == Skills.Skills.Monk.SpiritSpenders.SevenSidedStrike)
+            {
+                Vector3D startpos;
+                if (target == null)
+                    startpos = user.Position;
+                else
+                    startpos = targetPos;
+
+                IList<IDamageable> nearby = FindTargetsInRadius(startpos, 20f, 7);
+                for (int n = 0; n < 7; ++n)
+                {
+                    if (nearby.Count > 0)
                     {
-                        SpawnEffect(user, 86790, targetPos);
-                        FlushOutgoingBuffer();
-                        System.Threading.Thread.Sleep(2000);
-                        SpawnEffect(user, 86769, targetPos);
-                        SpawnEffect(user, 90364, targetPos); //, -1.0f, 5000);
-
-                        IList<IDamageable> hits = FindTargetsInRadius(targetPos, 13f);
-                        foreach (IDamageable x in hits)
-                        {
-                            DoDamage(user, x, 150f, 0);
-                        }
-                        FlushOutgoingBuffer();
-                        break;
+                        SpawnEffect(user, 99063, nearby[0].GetPosition());
+                        DoDamage(user, nearby[0], 100f, 0);
+                        nearby.RemoveAt(0);
                     }
-                case (int)Skills.Skills.Wizard.Disintegrate:
-                    {
-                        SpawnEffect(user, 52687, targetPos);
-                        break;
-                    }
-                case (int)Skills.Skills.Monk.SevenSidedStrike:
-                    {
-                        Vector3D startpos;
-                        if (target == null)
-                            startpos = user.Position;
-                        else
-                            startpos = targetPos;
-
-                        IList<IDamageable> nearby = FindTargetsInRadius(startpos, 20f, 7);
-                        for (int n = 0; n < 7; ++n)
-                        {
-                            if (nearby.Count > 0)
-                            {
-                                SpawnEffect(user, 99063, nearby[0].GetPosition());
-                                DoDamage(user, nearby[0], 100f, 0);
-                                nearby.RemoveAt(0);
-                            }
-                            FlushOutgoingBuffer();
-                            System.Threading.Thread.Sleep(100);
-                        }
-
-                        break;
-                    }
+                    FlushOutgoingBuffer();
+                    System.Threading.Thread.Sleep(100);
+                }
             }
         }
 
