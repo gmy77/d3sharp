@@ -204,14 +204,17 @@ namespace Mooege.Core.GS.Powers
                     //    Field1 = 0,
                     //    Field2 = 0x07
                     //});
-                    //SendMessage(new PlayHitEffectMessage() // hit lightining
-                    //{
-                    //    Id = 0x7b,
-                    //    Field0 = id,
-                    //    Field1 = user.Id,
-                    //    Field2 = 2,
-                    //    Field3 = false
-                    //});
+                    if (! (_proxies.ContainsKey(user) && _proxies[user].ids.Contains(id))) // only run if not proxy object
+                    {
+                        SendMessage(new PlayHitEffectMessage() // hit lightining
+                        {
+                            Id = 0x7b,
+                            Field0 = id,
+                            Field1 = user.Id,
+                            Field2 = 2,
+                            Field3 = false
+                        });
+                    }
                     SendMessage(new RopeEffectMessageACDToACD() // bolt
                     {
                         Id = 0x00ab,
@@ -711,6 +714,7 @@ namespace Mooege.Core.GS.Powers
                 Field1 = amount,
                 Field2 = type,
             });
+            SendDWordTick();
             to.ReceiveDamage(from, amount, type);
             FlushOutgoingBuffer();
         }
@@ -726,6 +730,7 @@ namespace Mooege.Core.GS.Powers
                     Field1 = amount,
                     Field2 = type,
                 });
+                SendDWordTick();
                 dam.ReceiveDamage(from, amount, type);
             }
             FlushOutgoingBuffer();
