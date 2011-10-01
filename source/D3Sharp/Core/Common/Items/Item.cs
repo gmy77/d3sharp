@@ -45,7 +45,8 @@ namespace D3Sharp.Core.Common.Items
     {
 
         public int ItemId { get; set; }
-        public int Gbid { get; set; }        
+        public int Gbid { get; set; }
+        public int SnoId { get; set; }
         public ItemType Type { get; set; }
 
         public List<Affix> AffixList { get; set; }
@@ -112,7 +113,7 @@ namespace D3Sharp.Core.Common.Items
             {
                 Id = 0x003B,
                 Field0 = ItemId,
-                Field1 = 0x00001158,
+                Field1 = SnoId,
                 Field2 = 0x0000001A,
                 Field3 = 0x00000001,
                 Field4 = null,
@@ -221,7 +222,7 @@ namespace D3Sharp.Core.Common.Items
                 Field0 = new SNOName()
                 {
                     Field0 = 0x00000001,
-                    Field1 = 0x00001158,
+                    Field1 = SnoId,
                 },
             });
 
@@ -247,7 +248,7 @@ namespace D3Sharp.Core.Common.Items
             {
                 Id = 0x0041,
                 Field0 = ItemId,
-                Field1 = 0x00001158,
+                Field1 = SnoId,
             });
 
             client.FlushOutgoingBuffer();

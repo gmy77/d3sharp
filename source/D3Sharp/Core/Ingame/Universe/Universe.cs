@@ -528,7 +528,35 @@ namespace D3Sharp.Core.Ingame.Universe
 
 
             ItemTypeGenerator itemGenerator = new ItemTypeGenerator();
-            Item item = itemGenerator.generateRandomElement(ItemType.Sword_1H);
+
+            
+            ItemType type = ItemType.Sword_1H;
+            Random random = new Random();
+
+            // randomize ItemType 
+            switch(random.Next(5))
+            {
+                case 0:
+                    type = ItemType.Sword_1H;
+                    break;
+                case 1:
+                    type = ItemType.Sword_2H;
+                    break;
+                case 2:
+                    type = ItemType.Axe_1H;
+                    break;
+                case 3:
+                    type = ItemType.Shield;
+                    break;
+                case 4:
+                    type = ItemType.Helm;
+                    break;
+                case 5:
+                    type = ItemType.Pants;
+                    break;
+            }
+
+            Item item = itemGenerator.generateRandomElement(type);
 
 
             Actor itemActor = new Actor()
@@ -536,7 +564,7 @@ namespace D3Sharp.Core.Ingame.Universe
                 GBHandle = new GBHandle()
                 {
                     Field0 = 2,
-                    Field1 = item.ItemId,
+                    Field1 = item.Gbid,
                 },
                 InventoryLocationData = null,
                 Scale = location.Field0,
@@ -544,7 +572,7 @@ namespace D3Sharp.Core.Ingame.Universe
                 WorldId = location.Field2,
                 RotationAmount = location.Field1.Field0.Amount,
                 RotationAxis = location.Field1.Field0.Axis,
-                SnoId = item.Gbid,
+                SnoId = item.SnoId,
                 Id = item.ItemId,
             };
 
