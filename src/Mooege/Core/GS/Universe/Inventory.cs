@@ -428,12 +428,59 @@ namespace Mooege.Core.GS.Ingame.Universe
             }); 
         }
 
+        private void OnInventoryDropItemMessage(InventoryDropItemMessage msg)
+        {
+            if (isItemEquipped(msg.ItemId))
+            {
+                UnequipItem(msg.ItemId);
+                RefreshVisual(owner.Id);
+            }
+            else
+            {
+                RemoveItem(msg.ItemId);
+            }
+
+
+            owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
+            {
+                Id = (int)Opcodes.ACDInventoryPositionMessage,
+                Field0 = msg.ItemId,    // ItemID
+                Field1 = new InventoryLocationMessageData()
+                {
+                    Field0 = owner.Id, // Inventory Owner
+                    Field1 = -1, // EquipmentSlot
+                    Field2 = new IVector2D()
+                    {
+                        Field0 = -1,
+                        Field1 = -1
+                    },
+                },
+                Field2 = 1  // TODO, find out what this is and why it must be 1...is it an enum?
+            });
+
+            owner.Universe.DropItem(owner, owner.InGameClient.items[msg.ItemId], owner.Position);
+
+
+            owner.InGameClient.PacketId += 10 * 2;
+            owner.InGameClient.SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = owner.InGameClient.PacketId,
+            });
+
+            
+            owner.InGameClient.FlushOutgoingBuffer();
+        }
+
         public void Consume(GameClient client, GameMessage message)
         {
             if (message is InventoryRequestMoveMessage) HandleInventoryRequestMoveMessage(message as InventoryRequestMoveMessage);
             else if (message is InventorySplitStackMessage) OnInventorySplitStackMessage(message as InventorySplitStackMessage);
             else if (message is InventoryStackTransferMessage) OnInventoryStackTransferMessage(message as InventoryStackTransferMessage);
+            else if (message is InventoryDropItemMessage) OnInventoryDropItemMessage(message as InventoryDropItemMessage);            
             else return;
         }
+
+       
     }
 }

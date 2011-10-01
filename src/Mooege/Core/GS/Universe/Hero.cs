@@ -212,7 +212,7 @@ namespace Mooege.Core.GS.Universe
         public World CurrentWorld
         {
             get { return this.Universe.GetWorld(this.WorldId); }
-        }
+        }        
 
         public int ClassSNO
         {

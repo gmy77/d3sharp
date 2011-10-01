@@ -143,6 +143,7 @@
     <Compile Include="Core\GS\Data\SNO\Config.cs" />
     <Compile Include="Core\GS\Data\SNO\Database.cs" />
     <Compile Include="Core\GS\Data\SNO\Set.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.Array.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Net\GS\Message\GameAttributeMap.cs" />

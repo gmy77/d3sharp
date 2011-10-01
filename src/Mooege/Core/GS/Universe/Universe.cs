@@ -335,36 +335,9 @@ namespace Mooege.Core.GS.Universe
             client.ObjectIdsSpawned.Remove(message.Field1);
 
             Hero hero = client.Player.Hero;
+           
 
-
-
-            WorldLocationMessageData location = new WorldLocationMessageData
-            {
-
-                Field0 = 1.35f,
-                Field1 = new PRTransform()
-                {
-                    Field0 = new Quaternion()
-                    {
-                        Amount = 0.768145f,
-                        Axis = new Vector3D()
-                        {
-                            X = 0f,
-                            Y = 0f,
-                            Z = -0.640276f,
-                        },
-                    },
-                    ReferencePoint = new Vector3D()
-                    {
-                        X = client.Player.Hero.Position.X + 5,
-                        Y = client.Player.Hero.Position.Y + 5,
-                        Z = client.Player.Hero.Position.Z,
-                    },
-                },                              
-                Field2 = hero.WorldId,
-            };
-
-            SpawnItemDrop(hero, location);
+            SpawnRandomDrop(hero, hero.Position);
 
             
             
@@ -491,16 +464,12 @@ namespace Mooege.Core.GS.Universe
             });
         }
 
-        private void SpawnItemDrop(Hero hero, WorldLocationMessageData location)
+        private void SpawnRandomDrop(Hero hero, Vector3D postition)
         {
-
-
-            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(hero.InGameClient);
-
-            
-            ItemType type = ItemType.Sword_1H;
             Random random = new Random();
 
+            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(hero.InGameClient);            
+            ItemType type = ItemType.Sword_1H;            
             // randomize ItemType 
             switch(random.Next(5))
             {
@@ -525,7 +494,12 @@ namespace Mooege.Core.GS.Universe
             }
 
             Item item = itemGenerator.generateRandomElement(type);
+            DropItem(hero, item, postition);
+        }
 
+        public void DropItem(Hero hero, Item item, Vector3D postition)
+        {
+            Random random = new Random();           
 
             Actor itemActor = new Actor()
             {
@@ -535,19 +509,23 @@ namespace Mooege.Core.GS.Universe
                     Field1 = item.Gbid,
                 },
                 InventoryLocationData = null,
-                Scale = location.Field0,
-                Position = location.Field1.ReferencePoint,
-                WorldId = location.Field2,
-                RotationAmount = location.Field1.Field0.Amount,
-                RotationAxis = location.Field1.Field0.Axis,
+                Scale = 1.35f,
+                Position = postition,
+                WorldId = hero.WorldId,
+                RotationAmount = 0.768145f,
+                RotationAxis = new Vector3D()
+                {
+                    X = 0f,
+                    Y = 0f,
+                    Z = (float)random.NextDouble(),
+                },
                 SnoId = item.SnoId,
                 Id = item.ItemId,
             };
 
             GetWorld(hero.WorldId).AddActor(itemActor);
-            itemActor.Reveal(hero);           
+            itemActor.Reveal(hero);
             item.Reveal(hero);
-
         }
 
         public void SpawnMob(GameClient client, int mobId) // this shoudn't even rely on client or it's position though i know this is just a hack atm ;) /raist.
