@@ -86,7 +86,6 @@
     <Compile Include="Core\Common\Items\ItemCreation\IItemAttributesCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\PotionAttributesCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributesCreator.cs" />
-    <Compile Include="Core\Common\Items\NetAttribute.cs" />
     <Compile Include="Core\GS\Universe\Inventory.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />

@@ -36,7 +36,7 @@ namespace Mooege.Core.Common.Items
 
         Helm, ChestArmor, Gloves, Boots, Shoulders, Belt, Pants, Bracers, Shield, Quiver, Orb, 
         Axe_1H, Axe_2H, CombatStaff_2H, Dagger, FistWeapon, Mace_1H, Mace_2H, Sword_1H, 
-        Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, ThrownWeapon, ThrowingAxe, Wand, Ring
+        Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, ThrownWeapon, ThrowingAxe, Wand, Ring, HealthPotion
     }
 
     public class Item
@@ -50,7 +50,7 @@ namespace Mooege.Core.Common.Items
 
 
         public List<Affix> AffixList { get; set; }
-        public List<NetAttribute> AttributeList { get; set; }
+        public List<NetAttributeKeyValue> AttributeList { get; set; }
 
 
         public Item(int id, uint gbid, ItemType type)
@@ -61,7 +61,7 @@ namespace Mooege.Core.Common.Items
             Type = type;
 
             AffixList = new List<Affix>();
-            AttributeList = new List<NetAttribute>();
+            AttributeList = new List<NetAttributeKeyValue>();
         }
 
         // There are 2 VisualItemClasses... any way to use the builder to create a D3 Message?
@@ -79,8 +79,7 @@ namespace Mooege.Core.Common.Items
 
         public static bool isPotion(ItemType itemType)
         {
-            // TODO: implement me
-            return false;
+            return (itemType == ItemType.HealthPotion);
         }
 
         public static bool isWeapon(ItemType itemType)
@@ -184,36 +183,7 @@ namespace Mooege.Core.Common.Items
             });
 
 
-            List<NetAttributeKeyValue> netAttributesList = new List<NetAttributeKeyValue>();
-
-
-            foreach (NetAttribute attr in AttributeList)
-            {
-                NetAttributeKeyValue netAttr = null;
-                if (attr.MessageType != -1)
-                {
-                    netAttr = new NetAttributeKeyValue()
-                    {
-                        Field0 = attr.MessageType,
-                        Attribute = GameAttribute.Attributes[attr.Key],
-                        Int = attr.IntValue,
-                        Float = attr.FloatValue,
-                    };
-                }
-                else
-                {
-                    netAttr = new NetAttributeKeyValue()
-                    {
-                        Attribute = GameAttribute.Attributes[attr.Key],
-                        Int = unchecked((int)attr.IntValue),
-                        Float = attr.FloatValue,
-                    };
-                }
-                netAttributesList.Add(netAttr);
-            }
-
-
-            SendAttributes(netAttributesList, client);
+            SendAttributes(AttributeList, client);
 
             client.SendMessage(new ACDGroupMessage()
             {
@@ -239,7 +209,11 @@ namespace Mooege.Core.Common.Items
                 },
             });
 
+
+
             /*
+             * in the original dump this was sent. But don't know for what its good for
+             * 
             foreach (NetAttributeKeyValue attr in netAttributesList){
                 client.SendMessage(new AttributeSetValueMessage()
                 {                   
@@ -265,13 +239,12 @@ namespace Mooege.Core.Common.Items
             });
 
             client.FlushOutgoingBuffer();
-
         }
-
 
         private void SendAttributes(List<NetAttributeKeyValue> netAttributesList, GameClient client)
         {
-
+            // Attributes can't be send all together
+            // must be split up to part of max 15 attributes at once
             List<NetAttributeKeyValue> tmpList = new List<NetAttributeKeyValue>(netAttributesList);
 
             while (tmpList.Count > 0)
@@ -284,11 +257,8 @@ namespace Mooege.Core.Common.Items
                     atKeyVals = tmpList.GetRange(0, selectCount).ToArray(),
                 });
                 tmpList.RemoveRange(0, selectCount);
-
-
             }
         }
-
 
     }
 }

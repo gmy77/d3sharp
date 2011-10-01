@@ -318,19 +318,16 @@ namespace Mooege.Core.GS.Universe
                 return;
             }
 
-            // Check if it is an item....
+            // Check if it is an Interaction with an item....
             Actor a = this.GetActor(message.Field1);
             if (a != null)
             {
-                try
-                {
+                if(client.items.ContainsKey(message.Field1))
+                {                    
                     client.Player.Hero.Inventory.PickUp(message);
                     return;
                 }
-                catch (Exception)
-                {
-                    // Probably not an Item
-                }
+  
             }
 
             else if (client.ObjectIdsSpawned == null || !client.ObjectIdsSpawned.Contains(message.Field1)) return;
