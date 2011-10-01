@@ -124,6 +124,13 @@ namespace D3Sharp.Core.Ingame.Map
             s.Map = new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID);
         }
 
+
+        public void AddActor(Actor actor)
+        {
+            Actors.Add(actor);                 
+        }
+
+
         public void AddActor(string line)
         {
             var actor = new Actor();

@@ -24,6 +24,7 @@ using D3Sharp.Utils.Helpers;
 using D3Sharp.Core.Items.ItemCreation;
 using System.Collections.Generic;
 using D3Sharp.Core.Items;
+using D3Sharp.Net.Game;
 
 namespace D3Sharp.Core.Common.Items
 {
@@ -31,13 +32,19 @@ namespace D3Sharp.Core.Common.Items
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
 
-        public Item generateRandomElement(ItemType itemType)
+        private static int nextObjectIdenifier = 0x78A000E6;        
+
+        public Item generateRandomElement(GameClient client, ItemType itemType)
         {
             try
             {
                 // select count of Items with correct Type
-                // the itemname structure ITEMTYPE_NUMBER example: BOOTS_001 , BELT_004
-                String querypart = String.Format("from items where itemname like '{0}_%'", itemType.ToString());
+                // the itemname structure Itemtype_ModeNumber example: BOOTS_001 , BELT_104
+                // where mode is 0 = normal , 1 = nightmare, 2 = hell
+                // there are missing snoId for nightmare and hell so just use items from normal mode
+                String modeId = "0";
+
+                String querypart = String.Format("from items where itemname like '{0}_{1}%'", itemType.ToString(), modeId);
                 String countQuery = String.Format("SELECT count(*) {0}", querypart);
                 var cmd = new SQLiteCommand(countQuery, Storage.GameDataDBManager.Connection);
                 var reader = cmd.ExecuteReader();
@@ -46,7 +53,7 @@ namespace D3Sharp.Core.Common.Items
 
                 // Now select random element 
                 int selectedElementNr = RandomHelper.Next(itemsCount);
-                String selectRandom = String.Format("SELECT itemname {0} limit {1},1", querypart, selectedElementNr);
+                String selectRandom = String.Format("SELECT itemname, snoId {0} limit {1},1", querypart, selectedElementNr);
                 cmd = new SQLiteCommand(selectRandom, Storage.GameDataDBManager.Connection);
                 reader = cmd.ExecuteReader();
 
@@ -58,38 +65,49 @@ namespace D3Sharp.Core.Common.Items
                 while (reader.Read())
                 {
                     var itemName = (String)reader.GetString(0);
-                    //var gbid = (int)StringHashHelper.HashItemName(itemName);
-                    return createItem(itemName, itemType);
+                    var snoId = (int)reader.GetInt32(1);
+                    return createItem(client, itemName, snoId, itemType);
                 }
-
             }
             catch (Exception e)
             {
                 Logger.ErrorException(e, "Error generating Item");
             }
-
             return null;
         }
 
 
-        public Item createItem(String itemName, ItemType itemType)
+        public Item createItem(GameClient client, String itemName, int snoId, ItemType itemType)
         {
-
-            ItemGenerator generator = new ItemGenerator();
-            List<IItemAttributesCreator> attributesCreators = new AttributesCreatorFactory().create(itemType);
-
-            Item item = generator.Generate(itemName, itemType);
-
+            Item item = Generate(client,itemName, snoId, itemType);
+            List<IItemAttributesCreator> attributesCreators = new AttributesCreatorFactory().create(itemType);            
             foreach (IItemAttributesCreator creator in attributesCreators)
             {
                 creator.CreateAttributes(item);
             }
+            return item;
+        }
 
-            
 
+        private Item Generate(GameClient client, String itemName, int snoId, ItemType itemType)
+        {
+            int itemId = CreateUniqueItemId();
+            uint gbid = StringHashHelper.HashItemName(itemName);
+            Item item = new Item(itemId, gbid, itemType);
+            item.SnoId = snoId;
+
+            client.items[itemId] = item;
 
             return item;
         }
+
+        private int CreateUniqueItemId()
+        {
+            // TODO: identifier musst calculated correctly 
+            // this way conflicts with ids used for mobs are possible
+            return nextObjectIdenifier++;
+        }
+
 
     }
 

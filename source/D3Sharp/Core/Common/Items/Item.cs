@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 ﻿using System;
-using D3Sharp.Net.Game.Message.Fields;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,10 +28,10 @@ using D3Sharp.Net.Game.Message.Definitions.Misc;
 using D3Sharp.Net.Game.Message.Definitions.Effect;
 using D3Sharp.Net.Game.Message;
 using D3Sharp.Core.Ingame.Universe;
+using D3Sharp.Core.Ingame.Actors;
 
 namespace D3Sharp.Core.Common.Items
 {
-    
 
     public enum ItemType
     {
@@ -44,16 +43,14 @@ namespace D3Sharp.Core.Common.Items
 
     public class Item
     {
-        // Appearance
-        private int dye = 0;
-        private int effect = 0;
-        private int effectLevel = 0;
 
         public int ItemId { get; set; }
-        public Dictionary<int, int> Attributes = new Dictionary<int, int>();
-        public int Gbid { get; set; }        
+        public int Gbid { get; set; }
+        public int SnoId { get; set; }
         public ItemType Type { get; set; }
         public int Count { get; set;  }             // <- amount?
+
+
         public List<Affix> AffixList { get; set; }
         public List<NetAttribute> AttributeList { get; set; }
 
@@ -62,7 +59,6 @@ namespace D3Sharp.Core.Common.Items
         {
             ItemId = id;
             Gbid = unchecked((int)gbid);
-            Gbid = gbid;
             Count = 1;
             Type = type;
 
@@ -114,11 +110,6 @@ namespace D3Sharp.Core.Common.Items
 
 
 
-        public void RevealAtLocation(GameClient client, WorldLocationMessageData worldLocation)
-        {
-            Reveal(client, null, worldLocation);
-        }
-
         public void RevealInInventory(Hero hero, int row, int column, int equipmentSlot)
         {
 
@@ -128,28 +119,20 @@ namespace D3Sharp.Core.Common.Items
                         Field1 = equipmentSlot,
                         Field2 = new IVector2D()
                         {
-                            x = row,
-                            y = column,
+                            Field0 = row,
+                            Field1 = column,
                         },
                     };
 
-
-            Reveal(hero.InGameClient, inventorylocation, null);
-        }
-
-        private void Reveal(GameClient client, InventoryLocationMessageData inventoryLocation, WorldLocationMessageData worldLocation)
-        {
-
-            
             ACDEnterKnownMessage msg = new ACDEnterKnownMessage()
             {
                 Id = 0x003B,
                 Field0 = ItemId,
-                Field1 = 0x00001158,
+                Field1 = SnoId,
                 Field2 = 0x0000001A,
                 Field3 = 0x00000001,
-                Field4 = worldLocation,
-                Field5 = inventoryLocation,
+                Field4 = null,
+                Field5 = inventorylocation,
                 Field6 = new GBHandle()
                 {
                     Field0 = 0x00000002,
@@ -161,7 +144,15 @@ namespace D3Sharp.Core.Common.Items
                 Field10 = 0x00,
             };
 
-            client.SendMessage(msg);
+            hero.InGameClient.SendMessage(msg);
+
+            Reveal(hero);
+        }
+
+        public void Reveal(Hero hero)
+        {
+
+            GameClient client = hero.InGameClient;
 
             int[] affixGbis = new int[AffixList.Count];
             for (int i = 0; i < AffixList.Count; i++)
@@ -246,7 +237,7 @@ namespace D3Sharp.Core.Common.Items
                 Field0 = new SNOName()
                 {
                     Field0 = 0x00000001,
-                    Field1 = 0x00001158,
+                    Field1 = SnoId,
                 },
             });
 
@@ -266,22 +257,13 @@ namespace D3Sharp.Core.Common.Items
                 Field0 = ItemId,
                 Field1 = 0x00000027,
             });
+           
 
-            if (inventoryLocation != null)
-            {
-                client.SendMessage(new ACDInventoryPositionMessage()
-                {
-                    Id = 0x0040,
-                    Field0 = ItemId,
-                    Field1 = inventoryLocation,
-                    Field2 = 0x00000001,
-                });
-            }
             client.SendMessage(new ACDInventoryUpdateActorSNO()
             {
                 Id = 0x0041,
                 Field0 = ItemId,
-                Field1 = 0x00001158,
+                Field1 = SnoId,
             });
 
             client.FlushOutgoingBuffer();

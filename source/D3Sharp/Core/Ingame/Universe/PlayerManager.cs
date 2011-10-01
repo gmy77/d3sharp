@@ -70,13 +70,7 @@ namespace D3Sharp.Core.Ingame.Universe
             this.Players.Add(player);
 
             player.Greet(message);
-
-
-            // add random Weapon to Inventory            
-            ItemTypeGenerator itemGenerator = new ItemTypeGenerator();
-            Item item = itemGenerator.generateRandomElement(ItemType.Sword_1H);
-            player.Hero.Inventory.AddToInventory(item);             
-
+            
         }
     }
 }

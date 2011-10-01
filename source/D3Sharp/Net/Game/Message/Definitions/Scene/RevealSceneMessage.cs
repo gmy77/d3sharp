@@ -97,8 +97,8 @@ namespace D3Sharp.Net.Game.Message.Definitions.Scene
                                 Field0 = int.Parse(data[1]),
                                 Field1 = new IVector2D()
                                              {
-                                                 x = int.Parse(data[2]),
-                                                 y = int.Parse(data[3]),
+                                                 Field0 = int.Parse(data[2]),
+                                                 Field1 = int.Parse(data[3]),
                                              },
                                 arSnoLevelAreas = new int[4] { int.Parse(data[4]), int.Parse(data[5]), int.Parse(data[6]), int.Parse(data[7]), },
                                 snoPrevWorld = int.Parse(data[8]),

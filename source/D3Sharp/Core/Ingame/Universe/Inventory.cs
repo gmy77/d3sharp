@@ -141,14 +141,15 @@ namespace D3Sharp.Core.Ingame.Universe
                 {
                     Field0 = new VisualItem[8]
                     {
-                        owner.InGameClient.items[equipment[0]].CreateVisualItem(),
-                        owner.InGameClient.items[equipment[1]].CreateVisualItem(),
-                        owner.InGameClient.items[equipment[2]].CreateVisualItem(),
-                        owner.InGameClient.items[equipment[3]].CreateVisualItem(),
-                        owner.InGameClient.items[equipment[4]].CreateVisualItem(),
-                        owner.InGameClient.items[equipment[5]].CreateVisualItem(),
-                        owner.InGameClient.items[equipment[6]].CreateVisualItem(),
-                        owner.InGameClient.items[equipment[7]].CreateVisualItem(),
+                        getEquipmentItem(0),
+                        getEquipmentItem(1),
+                        getEquipmentItem(2),
+                        getEquipmentItem(3),
+                        getEquipmentItem(4),
+                        getEquipmentItem(5),
+                        getEquipmentItem(6),
+                        getEquipmentItem(7),
+
                     },
                 },
             });
@@ -163,6 +164,27 @@ namespace D3Sharp.Core.Ingame.Universe
             });
 
             owner.InGameClient.FlushOutgoingBuffer();
+
+        }
+
+
+        public VisualItem getEquipmentItem(int equipSlot)
+        {
+
+            if (equipment[equipSlot] == 0)
+            {
+                return new VisualItem()
+                {
+                    Field0 = 0,
+                    Field1 = 0,
+                    Field2 = 0,
+                    Field3 = 0,
+                };
+            }
+            else
+            {
+                return owner.InGameClient.items[equipment[equipSlot]].CreateVisualItem();
+            }
 
         }
 
@@ -371,7 +393,7 @@ namespace D3Sharp.Core.Ingame.Universe
         /// </summary>
         public void OnInventoryStackTransferMessage(InventoryStackTransferMessage msg)
         {
-            owner.InGameClient.items[msg.Field0].Count = owner.InGameClient.items[msg.Field0].Count - (int)msg.Field2;
+            owner.InGameClient.items[msg.Field0].Count = (owner.InGameClient.items[msg.Field0].Count) - ((int)msg.Field2);
             owner.InGameClient.items[msg.Field1].Count = owner.InGameClient.items[msg.Field1].Count + (int)msg.Field2;
             
             // Update source

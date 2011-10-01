@@ -136,7 +136,6 @@
     <Compile Include="Core\Ingame\Universe\Universe.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\PotionAttributesCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributesCreator.cs" />
-    <Compile Include="Core\Common\Items\ItemGenerator.cs" />
     <Compile Include="Core\Common\Items\NetAttribute.cs" />
     <Compile Include="Data\SNO\Config.cs" />
     <Compile Include="Data\SNO\Database.cs" />

@@ -86,7 +86,8 @@ namespace D3Sharp.Core.Ingame.Actors
             if (int.Parse(data[2]) == 0) return false; //skip inventory using items as their use is unknown
 
             this.WorldId = worldId;
-            this.Id = int.Parse(data[4]);
+
+            this.Id = int.Parse(data[4]);            
             this.SnoId = int.Parse(data[5]);
             this.Field2 = int.Parse(data[6]);
             this.Field3 = int.Parse(data[7]);
@@ -120,8 +121,8 @@ namespace D3Sharp.Core.Ingame.Actors
                     Field1 = int.Parse(data[18]),
                     Field2 = new IVector2D()
                     {
-                        x = int.Parse(data[19]),
-                        y = int.Parse(data[20]),
+                        Field0 = int.Parse(data[19]),
+                        Field1 = int.Parse(data[20]),
                     }
                 };
             }
