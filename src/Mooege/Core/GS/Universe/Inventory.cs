@@ -204,20 +204,20 @@ namespace Mooege.Core.GS.Ingame.Universe
                     equipment[i] = 0;
         }
 
-        void AcceptMoveRequest(InventoryRequestMoveMessage request)
+        void AcceptMoveRequest(int ItemId, int equipmentSlot, int row, int column)
         {
             owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
             {
                 Id = (int)Opcodes.ACDInventoryPositionMessage,
-                Field0 = request.Field0,    // ItemID
+                Field0 = ItemId,
                 Field1 = new InventoryLocationMessageData()
                 {
-                    Field0 = request.Field1.Field0, // Inventory Owner
-                    Field1 = request.Field1.Field1, // EquipmentSlot
+                    Field0 = owner.Id, // Inventory Owner
+                    Field1 = equipmentSlot, // EquipmentSlot
                     Field2 = new IVector2D()
                     {
-                        Field0 = request.Field1.Field2, // Row
-                        Field1 = request.Field1.Field3, // Column
+                        Field0 = row, // Row
+                        Field1 = column, // Column
                     },
                 },
                 Field2 = 1 // what does this do?  // 0- source item not disappearing from inventory, 1 - Moving, any other possibilities? its an int32
@@ -355,7 +355,7 @@ namespace Mooege.Core.GS.Ingame.Universe
                     Logger.Debug("Equip Item {0}", request.AsText());
                     RemoveItem(request.Field0);
                     EquipItem(request.Field0, request.Field1.Field1);
-                    AcceptMoveRequest(request);
+                    AcceptMoveRequest(request.Field0, request.Field1.Field1, request.Field1.Field2, request.Field1.Field3);
                     RefreshVisual(request.Field1.Field0);
                 }
             }
@@ -376,7 +376,7 @@ namespace Mooege.Core.GS.Ingame.Universe
                         RemoveItem(request.Field0);
                     }
                     AddItem(request.Field0, request.Field1.Field3, request.Field1.Field2);
-                    AcceptMoveRequest(request);
+                    AcceptMoveRequest(request.Field0, request.Field1.Field1, request.Field1.Field2, request.Field1.Field3);
                 }
             }
         }
@@ -440,35 +440,8 @@ namespace Mooege.Core.GS.Ingame.Universe
                 RemoveItem(msg.ItemId);
             }
 
-
-            owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
-            {
-                Id = (int)Opcodes.ACDInventoryPositionMessage,
-                Field0 = msg.ItemId,    // ItemID
-                Field1 = new InventoryLocationMessageData()
-                {
-                    Field0 = owner.Id, // Inventory Owner
-                    Field1 = -1, // EquipmentSlot
-                    Field2 = new IVector2D()
-                    {
-                        Field0 = -1,
-                        Field1 = -1
-                    },
-                },
-                Field2 = 1  // TODO, find out what this is and why it must be 1...is it an enum?
-            });
-
             owner.Universe.DropItem(owner, owner.InGameClient.items[msg.ItemId], owner.Position);
-
-
-            owner.InGameClient.PacketId += 10 * 2;
-            owner.InGameClient.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = owner.InGameClient.PacketId,
-            });
-
-            
+            AcceptMoveRequest(msg.ItemId, 0, -1, -1);
             owner.InGameClient.FlushOutgoingBuffer();
         }
 
