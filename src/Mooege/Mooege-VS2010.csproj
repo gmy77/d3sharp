@@ -80,6 +80,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Common\Items\Affix.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\AttributesCreatorFactory.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\IItemAttributesCreator.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\PotionAttributesCreator.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributesCreator.cs" />
+    <Compile Include="Core\GS\Universe\Inventory.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
@@ -137,6 +144,7 @@
     <Compile Include="Core\GS\Data\SNO\Config.cs" />
     <Compile Include="Core\GS\Data\SNO\Database.cs" />
     <Compile Include="Core\GS\Data\SNO\Set.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.Array.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Net\GS\Message\GameAttributeMap.cs" />
@@ -393,7 +401,9 @@
       <Link>Assets\toon.db</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

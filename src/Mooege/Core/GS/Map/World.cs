@@ -56,6 +56,14 @@ namespace Mooege.Core.GS.Map
                 if (Scenes[x].ID == ID) return Scenes[x];
             return null;
         }
+        
+
+        public BasicNPC GetNpc(int ID)
+        {
+            for (int x = 0; x < NPCs.Count; x++)
+                if (NPCs[x].ID == ID) return NPCs[x];
+            return null;
+        }
 
         public Actor GetActor(int ID)
         {
@@ -119,6 +127,18 @@ namespace Mooege.Core.GS.Map
 
             s.Map = new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID);
         }
+
+
+        public void AddActor(Actor actor)
+        {
+            Actors.Add(actor);                 
+        }
+
+        public void AddNpc(BasicNPC npc)
+        {
+            NPCs.Add(npc);
+        }
+
 
         public void AddActor(string line)
         {
@@ -193,7 +213,9 @@ namespace Mooege.Core.GS.Map
                 {
                     if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.Blacklist)) continue;
                     if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.NPCs)) continue;
-                    //actor.Reveal(hero);
+                    
+                    if(actor.Id == 2065563791)
+                        actor.Reveal(hero);
                 }
 
                 //reveal portals
@@ -203,7 +225,6 @@ namespace Mooege.Core.GS.Map
                     portal.Reveal(hero);
                 }
             }
-
         }
 
         public void DestroyWorld(Hero hero)
