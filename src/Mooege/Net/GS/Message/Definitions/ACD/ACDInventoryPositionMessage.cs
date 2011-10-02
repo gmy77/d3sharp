@@ -27,8 +27,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public InventoryLocationMessageData Field1;
         public int Field2;
 
-
-
+        public ACDInventoryPositionMessage() : base(Opcodes.ACDInventoryPositionMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

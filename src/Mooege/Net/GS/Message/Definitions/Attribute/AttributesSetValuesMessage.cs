@@ -27,8 +27,7 @@ namespace Mooege.Net.GS.Message.Definitions.Attribute
         // MaxLength = 15
         public NetAttributeKeyValue[] atKeyVals;
 
-
-
+        public AttributesSetValuesMessage() : base(Opcodes.AttributesSetValuesMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
