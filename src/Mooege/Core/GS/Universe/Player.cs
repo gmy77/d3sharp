@@ -54,8 +54,7 @@ namespace Mooege.Core.GS.Universe
         /// <param name="message"></param>
         public void Greet(JoinBNetGameMessage message)
         {
-            Logger.Debug("Greeting player with toon-name: {0} and positioning him to {1}", this.Hero.Properties.Name,
-                         Hero.Position);
+            Logger.Trace("Greeting player with toon-name: {0} and positioning him to {1}", this.Hero.Properties.Name, Hero.Position);
 
             // send versions message
             Client.SendMessageNow(new VersionsMessage(message.SNOPackHash));
@@ -121,6 +120,7 @@ namespace Mooege.Core.GS.Universe
                                        Field0 = this.Hero.Id,
                                        Field1 = 0x00000000,
                                    });
+
             GameAttributeMap attribs = new GameAttributeMap();
             attribs[GameAttribute.SkillKit] = Client.Player.Hero.SkillKit;
             attribs[GameAttribute.Buff_Active, 0x33C40] = true;
