@@ -54,6 +54,16 @@ namespace Mooege.Core.Common.Items
                 reader.Read();
                 int itemsCount = reader.GetInt32(0);
 
+                if (itemsCount == 0)
+                {
+                    querypart = String.Format("from items where itemname like '{0}%'", itemType.ToString());
+                    countQuery = String.Format("SELECT count(*) {0}", querypart);
+                    cmd = new SQLiteCommand(countQuery, Storage.GameDataDBManager.Connection);
+                    reader = cmd.ExecuteReader();
+                    reader.Read();
+                    itemsCount = reader.GetInt32(0);
+                }
+
                 // Now select random element 
                 int selectedElementNr = RandomHelper.Next(itemsCount);
                 String selectRandom = String.Format("SELECT itemname, snoId {0} limit {1},1", querypart, selectedElementNr);

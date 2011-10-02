@@ -34,15 +34,20 @@ namespace Mooege.Core.Common.Items
     public enum ItemType
     {
 
-        Helm, Gloves, Boots, Belt, Pants, Bracers, Shield, Quiver, Orb, 
+        
+        Helm, Gloves, Boots, Belt, Shoulders, Pants, Bracers, Shield, Quiver, Orb, 
         Axe_1H, Axe_2H, CombatStaff_2H, Dagger,  Mace_1H, Mace_2H, Sword_1H, 
-        Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, Wand, Ring
-
+        Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, Wand, Ring, FistWeapon_1H,
+        HealthPotion
+        
         /*
          * Not working  at the moment
          * 
-         * , ChestArmor, Shoulders, ThrownWeapon, ThrowingAxe, FistWeapon, HealthPotion
+         *  // ChestArmor                   --> does not work because there are missing itemnames for normal mode, just for nightmare and hell and some "a" and "b" variants... -> need to figure out which should be used
+         *  // ThrownWeapon, ThrowingAxe    --> does not work because there are no snoId in Actors.txt
          */
+
+
     }
 
     public class Item
@@ -85,8 +90,7 @@ namespace Mooege.Core.Common.Items
 
         public static bool isPotion(ItemType itemType)
         {
-            // TODO: implement me 
-            return false;
+            return (itemType == ItemType.HealthPotion);
         }
 
         public static bool isWeapon(ItemType itemType)
@@ -97,7 +101,7 @@ namespace Mooege.Core.Common.Items
                 || itemType == ItemType.CombatStaff_2H
                 || itemType == ItemType.Crossbow
                 || itemType == ItemType.Dagger
-               // || itemType == ItemType.FistWeapon
+                || itemType == ItemType.FistWeapon_1H
                 || itemType == ItemType.Mace_1H
                 || itemType == ItemType.Mace_2H
                 || itemType == ItemType.Orb
@@ -106,8 +110,8 @@ namespace Mooege.Core.Common.Items
                 || itemType == ItemType.Staff
                 || itemType == ItemType.Sword_1H
                 || itemType == ItemType.Sword_2H
-            /*    || itemType == ItemType.ThrowingAxe
-                || itemType == ItemType.ThrownWeapon*/
+                //|| itemType == ItemType.ThrowingAxe
+                //|| itemType == ItemType.ThrownWeapon
                 || itemType == ItemType.Wand
                 );
         }
