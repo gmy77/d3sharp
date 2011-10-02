@@ -469,30 +469,10 @@ namespace Mooege.Core.GS.Universe
             Random random = new Random();
 
             ItemTypeGenerator itemGenerator = new ItemTypeGenerator(hero.InGameClient);            
-            ItemType type = ItemType.Sword_1H;            
+            
             // randomize ItemType 
-            switch(random.Next(5))
-            {
-                case 0:
-                    type = ItemType.Sword_1H;
-                    break;
-                case 1:
-                    type = ItemType.Sword_2H;
-                    break;
-                case 2:
-                    type = ItemType.Axe_1H;
-                    break;
-                case 3:
-                    type = ItemType.Shield;
-                    break;
-                case 4:
-                    type = ItemType.Helm;
-                    break;
-                case 5:
-                    type = ItemType.Pants;
-                    break;
-            }
-
+            ItemType[] allValues = (ItemType[])Enum.GetValues(typeof(ItemType));
+            ItemType type = allValues[random.Next(allValues.Length)];           
             Item item = itemGenerator.generateRandomElement(type);
             DropItem(hero, item, postition);
         }

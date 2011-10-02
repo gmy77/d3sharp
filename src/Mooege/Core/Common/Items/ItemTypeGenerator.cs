@@ -74,7 +74,7 @@ namespace Mooege.Core.Common.Items
             }
             catch (Exception e)
             {
-                Logger.ErrorException(e, "Error generating Item");
+                Logger.ErrorException(e, "Error generating Item of type: " + itemType.ToString());
             }
             return null;
         }

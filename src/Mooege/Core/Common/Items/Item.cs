@@ -34,9 +34,15 @@ namespace Mooege.Core.Common.Items
     public enum ItemType
     {
 
-        Helm, ChestArmor, Gloves, Boots, Shoulders, Belt, Pants, Bracers, Shield, Quiver, Orb, 
-        Axe_1H, Axe_2H, CombatStaff_2H, Dagger, FistWeapon, Mace_1H, Mace_2H, Sword_1H, 
-        Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, ThrownWeapon, ThrowingAxe, Wand, Ring, HealthPotion
+        Helm, Gloves, Boots, Belt, Pants, Bracers, Shield, Quiver, Orb, 
+        Axe_1H, Axe_2H, CombatStaff_2H, Dagger,  Mace_1H, Mace_2H, Sword_1H, 
+        Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, Wand, Ring
+
+        /*
+         * Not working  at the moment
+         * 
+         * , ChestArmor, Shoulders, ThrownWeapon, ThrowingAxe, FistWeapon, HealthPotion
+         */
     }
 
     public class Item
@@ -79,7 +85,8 @@ namespace Mooege.Core.Common.Items
 
         public static bool isPotion(ItemType itemType)
         {
-            return (itemType == ItemType.HealthPotion);
+            // TODO: implement me 
+            return false;
         }
 
         public static bool isWeapon(ItemType itemType)
@@ -90,7 +97,7 @@ namespace Mooege.Core.Common.Items
                 || itemType == ItemType.CombatStaff_2H
                 || itemType == ItemType.Crossbow
                 || itemType == ItemType.Dagger
-                || itemType == ItemType.FistWeapon
+               // || itemType == ItemType.FistWeapon
                 || itemType == ItemType.Mace_1H
                 || itemType == ItemType.Mace_2H
                 || itemType == ItemType.Orb
@@ -99,8 +106,8 @@ namespace Mooege.Core.Common.Items
                 || itemType == ItemType.Staff
                 || itemType == ItemType.Sword_1H
                 || itemType == ItemType.Sword_2H
-                || itemType == ItemType.ThrowingAxe
-                || itemType == ItemType.ThrownWeapon
+            /*    || itemType == ItemType.ThrowingAxe
+                || itemType == ItemType.ThrownWeapon*/
                 || itemType == ItemType.Wand
                 );
         }
