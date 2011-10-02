@@ -5,7 +5,7 @@ using System;
 namespace Mooege.Net.GS.Message
 {
 
-    class GameAttributeMap
+    public class GameAttributeMap
     {
         struct KeyId
         {

@@ -270,7 +270,7 @@ namespace Mooege.Core.GS.Universe
         }
 
         /// <summary>
-        /// Checks wheter the inventory contains an item
+        /// Checks whether the inventory contains an item
         /// </summary>
         public bool Contains(int itemId)
         {
@@ -409,30 +409,14 @@ namespace Mooege.Core.GS.Universe
             _owner.InGameClient.items[msg.Field1].Count = _owner.InGameClient.items[msg.Field1].Count + (int)msg.Field2;
             
             // Update source
-            _owner.InGameClient.SendMessage(new AttributeSetValueMessage
-            {
-                Id = (int)Opcodes.AttributeSetValueMessage,
-                Field0 = msg.Field0,
-                Field1 = new NetAttributeKeyValue
-                {
-                    Attribute = GameAttribute.Attributes[0x0121],       // ItemStackQuantityLo 
-                    Int = _owner.InGameClient.items[msg.Field0].Count,   // quantity
-                    Float = 0f,
-                }
-            });
+            GameAttributeMap attributes = new GameAttributeMap();
+            attributes[GameAttribute.ItemStackQuantityLo] = _owner.InGameClient.items[msg.Field0].Count;
+            attributes.SendMessage(_owner.InGameClient, msg.Field0);
 
             // Update target
-            _owner.InGameClient.SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = msg.Field1,
-                Field1 = new NetAttributeKeyValue
-                {
-                    Attribute = GameAttribute.Attributes[0x0121],       // ItemStackQuantityLo 
-                    Int = _owner.InGameClient.items[msg.Field1].Count,   // count
-                    Float = 0f,
-                }
-            });
+            attributes = new GameAttributeMap();
+            attributes[GameAttribute.ItemStackQuantityLo] = _owner.InGameClient.items[msg.Field1].Count;
+            attributes.SendMessage(_owner.InGameClient, msg.Field1);
 
             _owner.InGameClient.PacketId += 10 * 2;
             _owner.InGameClient.SendMessage(new DWordDataMessage()

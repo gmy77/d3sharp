@@ -17,8 +17,9 @@
  */
 
 using System.Collections.Generic;
-using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS;
+using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
@@ -50,7 +51,8 @@ namespace Mooege.Core.Common.Items
         public int Count { get; set; } // <- amount?
 
         public List<Affix> AffixList { get; set; }
-        public List<NetAttributeKeyValue> AttributeList { get; set; }
+        //public List<NetAttributeKeyValue> AttributeList { get; set; }
+        public GameAttributeMap Attributes { get; set; }
 
         public Item(int id, uint gbid, ItemType type)
         {
@@ -60,7 +62,8 @@ namespace Mooege.Core.Common.Items
             Type = type;
 
             AffixList = new List<Affix>();
-            AttributeList = new List<NetAttributeKeyValue>();
+            //AttributeList = new List<NetAttributeKeyValue>();
+            Attributes = new GameAttributeMap();
         }
 
         // There are 2 VisualItemClasses... any way to use the builder to create a D3 Message?
@@ -180,7 +183,8 @@ namespace Mooege.Core.Common.Items
             });
 
 
-            SendAttributes(AttributeList, client);
+            Attributes.SendMessage(client, ItemId);
+            //SendAttributes(AttributeList, client);
 
             client.SendMessage(new ACDGroupMessage()
             {

@@ -25,8 +25,10 @@ namespace Mooege.Core.Common.Items.ItemCreation
     {
         public void CreateAttributes(Item item)
         {
-            item.AttributeList.Add(new NetAttributeKeyValue{ Attribute = GameAttribute.Attributes[0x0115], Int = 1,}); // Itemquality 
-            item.AttributeList.Add(new NetAttributeKeyValue{ Attribute = GameAttribute.Attributes[0x0125], Int = unchecked((int)2286800181),}); // Seed            
+            item.Attributes[GameAttribute.Item_Quality_Level] = 1;
+            item.Attributes[GameAttribute.Seed] = unchecked((int)2286800181);
+//             item.AttributeList.Add(new NetAttributeKeyValue { Attribute = GameAttribute.Attributes[0x0115], Int = 1, }); // Item_Quality_Level 
+//             item.AttributeList.Add(new NetAttributeKeyValue{ Attribute = GameAttribute.Attributes[0x0125], Int = unchecked((int)2286800181),}); // Seed            
         }
     }
 }
