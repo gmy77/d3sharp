@@ -29,6 +29,8 @@ namespace Mooege.Net.GS.Message
         public const int ImplementedProtocolHash = 0x21EEE08D;
 
         protected static readonly Logger Logger = LogManager.CreateLogger();
+
+
         private static readonly Dictionary<Opcodes, Type> MessageTypes = new Dictionary<Opcodes, Type>();
         private static readonly Dictionary<Opcodes, Consumers> MessageConsumers = new Dictionary<Opcodes, Consumers>();
 
