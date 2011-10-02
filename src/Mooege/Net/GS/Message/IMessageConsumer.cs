@@ -10,7 +10,6 @@
          None,
          Universe,
          PlayerManager,
-         Hero,
-         Inventory
+         Hero
      }
  }
