@@ -25,6 +25,8 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     {
         public SNOName Field0;
 
+        public SNONameDataMessage() : base(Opcodes.SNONameDataMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = new SNOName();

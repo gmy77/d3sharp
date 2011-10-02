@@ -26,7 +26,7 @@ namespace Mooege.Net.GS.Message.Definitions.Attribute
         public int Field0;
         public NetAttributeKeyValue Field1;
 
-
+        public AttributeSetValueMessage() : base(Opcodes.AttributeSetValueMessage) { }
 
 
         public override void Parse(GameBitBuffer buffer)

@@ -43,6 +43,7 @@ namespace Mooege.Core.GS.Universe
         private readonly List<World> _worlds;
 
         public PlayerManager PlayerManager { get; private set; }
+        int ObjectId = 0x78f50114 + 100;
 
         public Universe()
         {
@@ -51,6 +52,8 @@ namespace Mooege.Core.GS.Universe
 
             InitializeUniverse();
         }
+
+        public int NextObjectId { get { return ObjectId++; } }
 
         public void Route(GameClient client, GameMessage message)
         {
@@ -257,7 +260,7 @@ namespace Mooege.Core.GS.Universe
             client.SendMessage(new ACDWorldPositionMessage
             {
                 Id = 0x3f,
-                Field0 = 0x789E00E2,
+                Field0 = hero.Id,
                 Field1 = new WorldLocationMessageData
                 {
                     Field0 = 1.43f,
@@ -350,7 +353,7 @@ namespace Mooege.Core.GS.Universe
             {
                 Id = 0x7b,
                 Field0 = message.Field1,
-                Field1 = 0x789E00E2,
+                Field1 = client.Player.Hero.Id,
                 Field2 = 0x2,
                 Field3 = false,
             });
@@ -425,7 +428,7 @@ namespace Mooege.Core.GS.Universe
             {
                 Id = 0x7b,
                 Field0 = message.Field1,
-                Field1 = 0x789E00E2,
+                Field1 = client.Player.Hero.Id,
                 Field2 = 0x2,
                 Field3 = false,
             });
@@ -446,18 +449,19 @@ namespace Mooege.Core.GS.Universe
             if (client.ObjectIdsSpawned == null)
             {
                 client.ObjectIdsSpawned = new List<int>();
-                client.ObjectIdsSpawned.Add(client.ObjectId - 100);
-                client.ObjectIdsSpawned.Add(client.ObjectId);
+                // why is this necessary?
+                //client.ObjectIdsSpawned.Add(client.ObjectId - 100);
+                client.ObjectIdsSpawned.Add(this.NextObjectId);
             }
 
-            client.ObjectId++;
-            client.ObjectIdsSpawned.Add(client.ObjectId);
+            int objectId = this.NextObjectId;
+            client.ObjectIdsSpawned.Add(objectId);
 
             #region ACDEnterKnown Hittable Zombie
             client.SendMessage(new ACDEnterKnownMessage()
             {
                 Id = 0x003B,
-                Field0 = client.ObjectId,
+                Field0 = objectId,
                 Field1 = nId,
                 Field2 = 0x8,
                 Field3 = 0x0,
@@ -502,21 +506,21 @@ namespace Mooege.Core.GS.Universe
             client.SendMessage(new AffixMessage()
             {
                 Id = 0x48,
-                Field0 = client.ObjectId,
+                Field0 = objectId,
                 Field1 = 0x1,
                 aAffixGBIDs = new int[0]
             });
             client.SendMessage(new AffixMessage()
             {
                 Id = 0x48,
-                Field0 = client.ObjectId,
+                Field0 = objectId,
                 Field1 = 0x2,
                 aAffixGBIDs = new int[0]
             });
             client.SendMessage(new ACDCollFlagsMessage
             {
                 Id = 0xa6,
-                Field0 = client.ObjectId,
+                Field0 = objectId,
                 Field1 = 0x1
             });
 
@@ -547,13 +551,13 @@ namespace Mooege.Core.GS.Universe
             attribs[GameAttribute.TeamID] = 10;
             attribs[GameAttribute.Level] = 1;
 
-            attribs.SendMessage(client, client.ObjectId);
+            attribs.SendMessage(client, objectId);
 
 
             client.SendMessage(new ACDGroupMessage
             {
                 Id = 0xb8,
-                Field0 = client.ObjectId,
+                Field0 = objectId,
                 Field1 = unchecked((int)0xb59b8de4),
                 Field2 = unchecked((int)0xffffffff)
             });
@@ -561,13 +565,13 @@ namespace Mooege.Core.GS.Universe
             client.SendMessage(new ANNDataMessage
             {
                 Id = 0x3e,
-                Field0 = client.ObjectId
+                Field0 = objectId
             });
 
             client.SendMessage(new ACDTranslateFacingMessage
             {
                 Id = 0x70,
-                Field0 = client.ObjectId,
+                Field0 = objectId,
                 Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI),
                 Field2 = false
             });
@@ -575,7 +579,7 @@ namespace Mooege.Core.GS.Universe
             client.SendMessage(new SetIdleAnimationMessage
             {
                 Id = 0xa5,
-                Field0 = client.ObjectId,
+                Field0 = objectId,
                 Field1 = 0x11150
             });
 
@@ -590,7 +594,7 @@ namespace Mooege.Core.GS.Universe
             });
             #endregion
 
-            client.PacketId += 30 * 2;
+            //client.PacketId += 30 * 2;
             client.SendMessage(new DWordDataMessage()
             {
                 Id = 0x89,

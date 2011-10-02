@@ -68,7 +68,7 @@ namespace Mooege.Core.GS.NPC
             //{
             //    Id = 0x7b,
             //    Field0 = ID,
-            //    Field1 = 0x789E00E2,
+            //    Field1 = Client.Player.Hero.Id,
             //    Field2 = 0x2,
             //    Field3 = false,
             //});
@@ -168,7 +168,7 @@ namespace Mooege.Core.GS.NPC
             //{
             //    Id = 0x7b,
             //    Field0 = ID,
-            //    Field1 = 0x789E00E2,
+            //    Field1 = Client.Player.Hero.Id,
             //    Field2 = 0x2,
             //    Field3 = false,
             //});

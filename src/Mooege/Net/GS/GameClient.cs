@@ -40,7 +40,7 @@ namespace Mooege.Net.GS
         public Player Player { get; set; }
         public int PacketId = 0x227 + 20;
         public int Tick = 0;
-        public int ObjectId = 0x78f50114 + 100;
+        
         public IList<int> ObjectIdsSpawned = null;
 
         public bool IsLoggingOut;
