@@ -81,11 +81,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Common\Items\Affix.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\AttributesCreatorFactory.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\IItemAttributesCreator.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\PotionAttributesCreator.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributesCreator.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\PotionAttributeCreator.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributeCreator.cs" />
     <Compile Include="Core\GS\Universe\Inventory.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
@@ -461,5 +461,8 @@
       <Project>{4CC19847-6F24-4453-9E31-126F94308AB9}</Project>
       <Name>LibMooNet</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\GS\Inventory\" />
   </ItemGroup>
 </Project>

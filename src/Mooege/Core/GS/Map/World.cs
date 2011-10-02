@@ -68,14 +68,14 @@ namespace Mooege.Core.GS.Map
         public Actor GetActor(int ID)
         {
             for (int x = 0; x < Actors.Count; x++)
-                if (Actors[x].Id == ID) return Actors[x];
+                if (Actors[x].DynamicId == ID) return Actors[x];
             return null;
         }
 
         public Portal GetPortal(int ID)
         {
             for (int x = 0; x < Portals.Count; x++)
-                if (Portals[x].ActorRef.Id == ID) return Portals[x];
+                if (Portals[x].ActorRef.DynamicId == ID) return Portals[x];
             return null;
         }
 
@@ -155,7 +155,7 @@ namespace Mooege.Core.GS.Map
 
             //this check is here so no duplicate portals are in a world and thus a portal actor isn't revealed twice to a player
             foreach (var portal in Portals)
-                if (portal.ActorRef.Id == ActorID) return;
+                if (portal.ActorRef.DynamicId == ActorID) return;
 
             Portal p = new Portal();
             p.PortalMessage = new PortalSpecifierMessage(data.Skip(2).ToArray());
@@ -214,7 +214,7 @@ namespace Mooege.Core.GS.Map
                     if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.Blacklist)) continue;
                     if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.NPCs)) continue;
                     
-                    if(actor.Id == 2065563791)
+                    if(actor.DynamicId == 2065563791)
                         actor.Reveal(hero);
                 }
 

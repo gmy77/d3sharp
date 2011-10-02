@@ -21,12 +21,11 @@ using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.Common.Items.ItemCreation
 {
-    class DefaultAttributeCreator : IItemAttributeCreator
+    class PotionAttributeCreator: IItemAttributeCreator
     {
         public void CreateAttributes(Item item)
-        {
-            item.AttributeList.Add(new NetAttributeKeyValue{ Attribute = GameAttribute.Attributes[0x0115], Int = 1,}); // Itemquality 
-            item.AttributeList.Add(new NetAttributeKeyValue{ Attribute = GameAttribute.Attributes[0x0125], Int = unchecked((int)2286800181),}); // Seed            
+        {            
+            item.AttributeList.Add(new NetAttributeKeyValue { Attribute = GameAttribute.Attributes[82], Float = 250.0f, }); // Given Health 
         }
     }
 }

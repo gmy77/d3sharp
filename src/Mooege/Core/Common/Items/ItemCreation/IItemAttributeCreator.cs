@@ -16,17 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message;
-
 namespace Mooege.Core.Common.Items.ItemCreation
 {
-    class DefaultAttributeCreator : IItemAttributeCreator
+    public interface IItemAttributeCreator
     {
-        public void CreateAttributes(Item item)
-        {
-            item.AttributeList.Add(new NetAttributeKeyValue{ Attribute = GameAttribute.Attributes[0x0115], Int = 1,}); // Itemquality 
-            item.AttributeList.Add(new NetAttributeKeyValue{ Attribute = GameAttribute.Attributes[0x0125], Int = unchecked((int)2286800181),}); // Seed            
-        }
+        void CreateAttributes(Item item);
     }
 }

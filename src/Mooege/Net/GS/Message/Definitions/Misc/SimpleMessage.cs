@@ -77,7 +77,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Field0 = 0x000FFFFF,
@@ -90,7 +90,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Field0 = 0x00020CBE,
@@ -103,7 +103,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Field0 = 0x00033C40,
@@ -116,7 +116,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Attribute = GameAttribute.Attributes[0x00D7], // Immobolize
@@ -128,7 +128,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Attribute = GameAttribute.Attributes[0x00D6], // Untargetable
@@ -140,7 +140,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Attribute = GameAttribute.Attributes[0x01D2], // CantStartDisplayedPowers
@@ -152,7 +152,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Field0 = 0x00020CBE,
@@ -165,7 +165,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Attribute = GameAttribute.Attributes[0x024C], // Disabled
@@ -177,7 +177,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Attribute = GameAttribute.Attributes[0x012C], // Hidden
@@ -189,7 +189,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Field0 = 0x00033C40,
@@ -202,7 +202,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Field0 = 0x00020CBE,
@@ -215,7 +215,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Attribute = GameAttribute.Attributes[0x0046], // Loading
@@ -227,7 +227,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Field0 = 0x00033C40,
@@ -240,7 +240,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Attribute = GameAttribute.Attributes[0x0045], // Invulnerable
@@ -252,7 +252,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Field0 = 0x00020CBE,
@@ -265,7 +265,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new AttributeSetValueMessage()
                         {
                             Id = 0x004C,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = new NetAttributeKeyValue()
                             {
                                 Field0 = 0x00033C40,
@@ -279,7 +279,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new ACDCollFlagsMessage()
                         {
                             Id = 0x00A6,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = 0x00000008,
                         });
 
@@ -294,7 +294,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         client.SendMessage(new TrickleMessage()
                         {
                             Id = 0x0042,
-                            Field0 = hero.Id,
+                            Field0 = hero.DynamicId,
                             Field1 = client.Player.Hero.ClassSNO,
                             Field2 = new WorldPlace()
                             {

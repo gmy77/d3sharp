@@ -30,14 +30,14 @@ namespace Mooege.Core.Common.Items
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
 
-        private static int nextObjectIdenifier = 0x78A000E6;        
-        private GameClient client;
+        private static int _nextObjectIdenifier = 0x78A000E6;        
+        private readonly GameClient _client;
 
         public ItemTypeGenerator(GameClient client){
-            this.client = client;
+            this._client = client;
         }
 
-        public Item generateRandomElement(ItemType itemType)
+        public Item GenerateRandomElement(ItemType itemType)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace Mooege.Core.Common.Items
                 // the itemname structure Itemtype_ModeNumber example: BOOTS_001 , BELT_104
                 // where mode is 0 = normal , 1 = nightmare, 2 = hell
                 // there are missing snoId for nightmare and hell so just use items from normal mode
-                String modeId = "0";
+                const string modeId = "0";
 
                 String querypart = String.Format("from items where itemname like '{0}_{1}%'", itemType.ToString(), modeId);
                 String countQuery = String.Format("SELECT count(*) {0}", querypart);
@@ -79,49 +79,44 @@ namespace Mooege.Core.Common.Items
                 {
                     var itemName = (String)reader.GetString(0);
                     var snoId = (int)reader.GetInt32(1);
-                    return createItem(itemName, snoId, itemType);
+                    return CreateItem(itemName, snoId, itemType);
                 }
             }
             catch (Exception e)
             {
-                Logger.ErrorException(e, "Error generating Item of type: " + itemType.ToString());
+                Logger.ErrorException(e, "Error generating item of type: {0}", itemType.ToString());
             }
             return null;
         }
 
-
-        public Item createItem(String itemName, int snoId, ItemType itemType)
+        public Item CreateItem(String itemName, int snoId, ItemType itemType)
         {
             Item item = Generate(itemName, snoId, itemType);
-            List<IItemAttributesCreator> attributesCreators = new AttributesCreatorFactory().create(itemType);            
-            foreach (IItemAttributesCreator creator in attributesCreators)
+            List<IItemAttributeCreator> attributesCreators = new AttributeCreatorFactory().Create(itemType);            
+            foreach (IItemAttributeCreator creator in attributesCreators)
             {
                 creator.CreateAttributes(item);
             }
             return item;
         }
 
-
         private Item Generate(String itemName, int snoId, ItemType itemType)
         {
             int itemId = CreateUniqueItemId();
             uint gbid = StringHashHelper.HashItemName(itemName);
-            Item item = new Item(itemId, gbid, itemType);
-            item.SnoId = snoId;
+            var item = new Item(itemId, gbid, itemType) {SNOId = snoId};
 
-            client.items[itemId] = item;
+            _client.items[itemId] = item;
 
             return item;
         }
 
-        private int CreateUniqueItemId()
+        private static int CreateUniqueItemId()
         {
             // TODO: identifier musst calculated correctly 
             // this way conflicts with ids used for mobs are possible
-            return nextObjectIdenifier++;
+            return _nextObjectIdenifier++;
         }
-
-
     }
 
 }
