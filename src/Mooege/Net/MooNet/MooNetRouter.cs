@@ -53,8 +53,6 @@ namespace Mooege.Net.MooNet
                 return;
             }
 
-            //var method = service.DescriptorForType.Methods[(int)header.MethodID - 1];
-            //Logger.Warn("METHODID: {0}, from header: {1}", (uint)method.Options[bnet.protocol.Rpc.MethodId.Descriptor], header.MethodID);
             var method = service.DescriptorForType.Methods.Single(m => (uint)m.Options[bnet.protocol.Rpc.MethodId.Descriptor] == header.MethodID);
             var proto = service.GetRequestPrototype(method);
             var builder = proto.WeakCreateBuilderForType();
@@ -62,7 +60,7 @@ namespace Mooege.Net.MooNet
             try
             {
                 var message = builder.WeakMergeFrom(CodedInputStream.CreateInstance(packet.Payload.ToArray())).WeakBuild();
-                lock (service) // lock the service so that it's in-context client does not get changed..
+                lock (service) // lock the service so that its in-context client does not get changed..
                 {
                     //Logger.Debug("service-call data:{0}", message.ToString());
                     ((IServerService) service).Client = (IMooNetClient)connection.Client;
@@ -71,7 +69,7 @@ namespace Mooege.Net.MooNet
             }
             catch (NotImplementedException)
             {
-                Logger.Debug("Unimplemented service method: {0} {1}", service.GetType().Name, method.Name);
+                Logger.Warn("Unimplemented service method: {0}.{1}", service.GetType().Name, method.Name);
             }
             catch (UninitializedMessageException e)
             {

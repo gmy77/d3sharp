@@ -52,7 +52,7 @@ namespace Mooege.Core.MooNet.Services
         public override void SendMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SendMessageRequest request, System.Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("SendMessage()");
-            //Logger.Warn("request:\n{0}", request.ToString());
+            //Logger.Debug("request:\n{0}", request.ToString());
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());

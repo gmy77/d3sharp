@@ -21,6 +21,12 @@ using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Net.MooNet;
 
+// FIXME: An RPCObject will never get released at runtime because we don't remove it from
+// RPCObjectManager until the dtor actually gets called. The dtor, of course, never gets
+// called during runtime because the object is still referenced in RPCObjectManager.Objects.
+
+// TODO: RPCObject should probably remove all subscribers when getting released.
+
 namespace Mooege.Core.MooNet.Objects
 {
     /// <summary>
@@ -74,7 +80,7 @@ namespace Mooege.Core.MooNet.Objects
         {
             if (!this.Subscribers.Contains(client))
             {
-                Logger.Warn("Attempted to remove subscriber {0}", client.Connection.RemoteEndPoint.ToString());
+                Logger.Warn("Attempted to remove non-subscriber {0}", client.Connection.RemoteEndPoint.ToString());
                 return;
             }
             // Unmap the object from the client
@@ -102,7 +108,7 @@ namespace Mooege.Core.MooNet.Objects
         //        this.NotifySubscriptionAdded(subscriber);
         //    }
         //}
-        
+
         #region de-ctor
 
         // IDisposable pattern: http://msdn.microsoft.com/en-us/library/fs2xkftw%28VS.80%29.aspx
@@ -118,8 +124,8 @@ namespace Mooege.Core.MooNet.Objects
         private void Dispose(bool disposing)
         {
             if (this._disposed) return; // If it's already disposed, just get out of here
-            if (disposing)  { } // Dispose any managed resources - here we don't have any
-            
+            if (disposing) { } // Dispose any managed resources - here we don't have any
+
             RPCObjectManager.Release(this); // Release our dynamic ID
 
             _disposed = true;

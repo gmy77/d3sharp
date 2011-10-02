@@ -40,7 +40,8 @@ namespace Mooege.Core.Common.Toons
 
         public static Account GetAccountByToonLowID(ulong id)
         {
-            return (from pair in Toons where pair.Value.PersistentID == id select pair.Value).FirstOrDefault().Owner;
+            var toon = (from pair in Toons where pair.Value.PersistentID == id select pair.Value).FirstOrDefault();
+            return (toon != null) ? toon.Owner : null;
         }
 
         public static Toon GetToonByLowID(ulong id)

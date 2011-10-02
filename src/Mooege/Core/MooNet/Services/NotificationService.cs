@@ -17,13 +17,10 @@
  */
 
 using System;
-using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Net.MooNet;
-using bnet.protocol;
-using bnet.protocol.notification;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -33,42 +30,44 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public IMooNetClient Client { get; set; }
 
-        public override void SendNotification(IRpcController controller, Notification request, Action<NoData> done)
+        public override void SendNotification(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.notification.Notification request, Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("SendNotification()");
-            Logger.Debug("notification:\n{0}", request.ToString());
-/*
+            //Logger.Debug("notification:\n{0}", request.ToString());
+
             switch (request.GetNotificationType())
             {
                 case NotificationTypeHelper.NotificationType.Whisper:
-                    // Hackztime deluxe
-                    // TODO: The notification on the recipient's side will end up with no name, and
-                    // the recipient doesn't even send a subscribe request or something like that when trying to respond
-                    // Need more data to figure this out..
+                    // NOTE: Real implementation doesn't even handle the situation where neither client knows about the other.
+                    // Client requires prior knowledge of sender and target (and even then it cannot whisper by using the /whisper command).
+                    var notif = bnet.protocol.notification.Notification.CreateBuilder(request)
+                        .SetSenderId(this.Client.CurrentToon.BnetEntityID)
+                        .Build();
+                    //Logger.Debug("Sending notification:\n{0}", notif.ToString());
                     var account = ToonManager.GetAccountByToonLowID(request.TargetId.Low);
                     var method = bnet.protocol.notification.NotificationListener.Descriptor.FindMethodByName("OnNotificationReceived");
-                    account.LoggedInBNetClient.CallMethod(method, request, 0);
+                    account.LoggedInBNetClient.CallMethod(method, notif);
                     break;
                 default:
                     Logger.Warn("Unhandled notification type: {0}", request.Type);
                     break;
-            }*/
+            }
 
-            var builder = NoData.CreateBuilder();
+            var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
 
-        public override void RegisterClient(IRpcController controller, RegisterClientRequest request, Action<NoData> done)
+        public override void RegisterClient(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.notification.RegisterClientRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void UnregisterClient(IRpcController controller, UnregisterClientRequest request, Action<NoData> done)
+        public override void UnregisterClient(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.notification.UnregisterClientRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void FindClient(IRpcController controller, FindClientRequest request, Action<FindClientResponse> done)
+        public override void FindClient(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.notification.FindClientRequest request, Action<bnet.protocol.notification.FindClientResponse> done)
         {
             throw new NotImplementedException();
         }

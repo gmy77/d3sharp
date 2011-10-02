@@ -27,10 +27,11 @@ namespace Mooege.Core.MooNet.Objects
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         private static ulong _nextId=0;
-        private static Dictionary<ulong, RPCObject> Objects = new Dictionary<ulong, RPCObject>();
+        private static Dictionary<ulong, RPCObject> Objects;
 
         static RPCObjectManager()
         {
+            Objects = new Dictionary<ulong, RPCObject>();
             Objects[0] = null;
         }
 
@@ -45,17 +46,8 @@ namespace Mooege.Core.MooNet.Objects
         
         public static void Release(RPCObject obj)
         {
-            Logger.Debug("Releasing object {0}", obj.DynamicId);
-            /*if (obj.Initialized)
-            {
-                if (obj.DynamicId == 0 || !Objects.ContainsKey(obj.DynamicId))
-                    throw new Exception("Given object was already released");
-                Objects.Remove(obj.DynamicId);
-            }
-            else
-            {
-                Logger.Debug("RPCObject with ID={0} tried to release twice", obj.DynamicId);
-            }*/
+            Logger.Trace("Releasing object {0}", obj.DynamicId);
+            Objects.Remove(obj.DynamicId);
         }
         
         public static ulong Next()

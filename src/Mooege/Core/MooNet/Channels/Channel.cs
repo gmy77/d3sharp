@@ -197,7 +197,7 @@ namespace Mooege.Core.MooNet.Channels
                     .SetSelf(pair.Value.BnetMember)
                     .AddMember(bnetMember)
                     .Build();
-                //Logger.Warn("NotifyAdd:\n{0}", message.ToString());
+                //Logger.Debug("NotifyAdd:\n{0}", message.ToString());
                 pair.Key.CallMethod(method, message, this.DynamicId);
             }
             client.CurrentChannel = this;

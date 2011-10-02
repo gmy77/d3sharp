@@ -93,7 +93,7 @@ namespace Mooege.Core.MooNet.Services
         public override void SendInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, System.Action<bnet.protocol.invitation.SendInvitationResponse> done)
         {            
             var invitee = ToonManager.GetToonByLowID(request.TargetId.Low);
-            Logger.Warn(String.Format("{0} invited {1} to his channel.", Client.CurrentToon.Name, invitee.Name));
+            Logger.Debug("{0} invited {1} to his channel", Client.CurrentToon.Name, invitee.Name);
             
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
             var extensionBytes = request.UnknownFields.FieldDictionary[105].LengthDelimitedList[0].ToByteArray();
