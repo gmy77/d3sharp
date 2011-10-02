@@ -30,6 +30,7 @@ using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.Common.Items;
 
 namespace Mooege.Core.GS.Universe
 {
@@ -40,12 +41,13 @@ namespace Mooege.Core.GS.Universe
         public GameClient Client { get; set; }
         public Hero Hero { get; set; }
         public Universe Universe;
-
+        
         public Player(GameClient client, Universe universe, Toon bnetToon)
         {
             this.Client = client;
             this.Universe = universe;
             this.Hero = new Hero(client, universe, bnetToon);
+
         }
 
         /// <summary>
@@ -1158,9 +1160,7 @@ namespace Mooege.Core.GS.Universe
                                        Field0 = 0x00000000,
                                        Field1 = 0x789E00E2,
                                    });
-
-            Client.SendMessage(Hero.GetVisualInventory());
-
+            
             Client.SendMessage(new PlayerActorSetInitialMessage()
                                    {
                                        Id = 0x0039,

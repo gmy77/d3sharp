@@ -33,6 +33,10 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.GS.Data.SNO;
+using Mooege.Core.Common.Items;
+using Mooege.Core.GS.NPC;
+
 
 namespace Mooege.Core.GS.Universe
 {
@@ -48,7 +52,6 @@ namespace Mooege.Core.GS.Universe
         {
             this._worlds = new List<World>();
             this.PlayerManager = new PlayerManager(this);
-
             InitializeUniverse();
         }
 
@@ -59,13 +62,16 @@ namespace Mooege.Core.GS.Universe
                 case Consumers.Universe:
                     this.Consume(client, message);
                     break;
+                case Consumers.Inventory:
+                    client.Player.Hero.Inventory.Consume(client, message);
+                    break;
                 case Consumers.PlayerManager:
                     this.PlayerManager.Consume(client, message);
                     break;
                 case Consumers.Hero:
                     client.Player.Hero.Consume(client, message);
                     break;
-            }
+              }
         }
 
         public void Consume(GameClient client, GameMessage message)
@@ -98,7 +104,9 @@ namespace Mooege.Core.GS.Universe
 
                         //packet data
                         if (data[0].Equals("p") && data.Length >= 2)
-                        {
+                        {                
+ 
+                           
                             int packettype = int.Parse(data[1]);
                             switch (packettype)
                             {
@@ -226,6 +234,18 @@ namespace Mooege.Core.GS.Universe
             return null;
         }
 
+        BasicNPC GetNPC(int NpcId)
+        {
+            for (int x = 0; x < _worlds.Count; x++)
+            {
+                BasicNPC npc = _worlds[x].GetNpc(NpcId);
+                if (npc != null) return npc;
+            }
+            return null;
+        }
+
+
+
         public void ChangeToonWorld(GameClient client, int WorldID, Vector3D Pos)
         {
             Hero hero = client.Player.Hero;
@@ -311,9 +331,28 @@ namespace Mooege.Core.GS.Universe
                 return;
             }
 
+            // Check if it is an Interaction with an item....
+            Actor a = this.GetActor(message.Field1);
+            if (a != null)
+            {
+                if(client.items.ContainsKey(message.Field1))
+                {                    
+                    client.Player.Hero.Inventory.PickUp(message);
+                    return;
+                }
+  
+            }
+
             else if (client.ObjectIdsSpawned == null || !client.ObjectIdsSpawned.Contains(message.Field1)) return;
 
             client.ObjectIdsSpawned.Remove(message.Field1);
+            BasicNPC npc = GetWorld(client.Player.Hero.WorldId).GetNpc(message.Field1);            
+
+            Hero hero = client.Player.Hero;
+            SpawnRandomDrop(hero, npc.Location.Field0);
+
+            
+            
 
             var killAni = new int[]{
                     0x2cd7,
@@ -437,6 +476,60 @@ namespace Mooege.Core.GS.Universe
             });
         }
 
+        private void SpawnRandomDrop(Hero hero, Vector3D postition)
+        {
+            Random random = new Random();
+
+            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(hero.InGameClient);            
+            
+            // randomize ItemType 
+            ItemType[] allValues = (ItemType[])Enum.GetValues(typeof(ItemType));
+            ItemType type = allValues[random.Next(allValues.Length)];           
+            Item item = itemGenerator.generateRandomElement(type);
+            DropItem(hero, item, postition);
+        }
+
+        public void DropItem(Hero hero, Item item, Vector3D postition)
+        {
+            Random random = new Random();           
+
+            Actor itemActor = new Actor()
+            {
+                GBHandle = new GBHandle()
+                {
+                    Field0 = 2,
+                    Field1 = item.Gbid,
+                },
+                InventoryLocationData = null,
+                Scale = 1.35f,
+                Position = postition,
+                WorldId = hero.WorldId,
+                RotationAmount = 0.768145f,
+                RotationAxis = new Vector3D()
+                {
+                    X = 0f,
+                    Y = 0f,
+                    Z = (float)random.NextDouble(),
+                },
+                SnoId = item.SnoId,
+                Id = item.ItemId,
+            };
+
+            GetWorld(hero.WorldId).AddActor(itemActor);
+            itemActor.Reveal(hero);
+            item.Reveal(hero);
+
+            hero.InGameClient.PacketId += 10 * 2;
+            hero.InGameClient.SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = hero.InGameClient.PacketId,
+            });
+
+            hero.InGameClient.FlushOutgoingBuffer();
+
+        }
+
         public void SpawnMob(GameClient client, int mobId) // this shoudn't even rely on client or it's position though i know this is just a hack atm ;) /raist.
         {
             int nId = mobId;
@@ -454,51 +547,11 @@ namespace Mooege.Core.GS.Universe
             client.ObjectIdsSpawned.Add(client.ObjectId);
 
             #region ACDEnterKnown Hittable Zombie
-            client.SendMessage(new ACDEnterKnownMessage()
-            {
-                Id = 0x003B,
-                Field0 = client.ObjectId,
-                Field1 = nId,
-                Field2 = 0x8,
-                Field3 = 0x0,
-                Field4 = new WorldLocationMessageData()
-                {
-                    Field0 = 1.35f,
-                    Field1 = new PRTransform()
-                    {
-                        Field0 = new Quaternion()
-                        {
-                            Amount = 0.768145f,
-                            Axis = new Vector3D()
-                            {
-                                X = 0f,
-                                Y = 0f,
-                                Z = -0.640276f,
-                            },
-                        },
-                        ReferencePoint = new Vector3D()
-                        {
-                            X = client.Player.Hero.Position.X + 5,
-                            Y = client.Player.Hero.Position.Y + 5,
-                            Z = client.Player.Hero.Position.Z,
-                        },
-                    },
-                    Field2 = 0x772E0000,
-                },
-                Field5 = null,
-                Field6 = new GBHandle()
-                {
-                    Field0 = 1,
-                    Field1 = 1,
-                },
-                Field7 = 0x00000001,
-                Field8 = nId,
-                Field9 = 0x0,
-                Field10 = 0x0,
-                Field11 = 0x0,
-                Field12 = 0x0,
-                Field13 = 0x0
-            });
+            Vector3D pos = client.Player.Hero.Position;
+            BasicNPC mob = new BasicNPC(client.ObjectId, mobId, new WorldPlace { Field0 = new Vector3D(pos.X-5,pos.Y-5, pos.Z),});
+            GetWorld(client.Player.Hero.WorldId).AddNpc(mob);
+            mob.Reveal(client);
+
             client.SendMessage(new AffixMessage()
             {
                 Id = 0x48,

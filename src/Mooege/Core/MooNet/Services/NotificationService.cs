@@ -34,7 +34,7 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("SendNotification()");
             //Logger.Debug("notification:\n{0}", request.ToString());
-
+            /*
             switch (request.GetNotificationType())
             {
                 case NotificationTypeHelper.NotificationType.Whisper:
@@ -51,7 +51,7 @@ namespace Mooege.Core.MooNet.Services
                 default:
                     Logger.Warn("Unhandled notification type: {0}", request.Type);
                     break;
-            }
+            }*/
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());

@@ -21,33 +21,32 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
-    [IncomingMessage(Opcodes.InventoryRequestMoveMessage1, Consumers.Inventory)]
-    public class InventoryRequestMoveMessage : GameMessage
+    [IncomingMessage(Opcodes.ANNDataMessage9, Consumers.Inventory)]
+    public class InventoryDropItemMessage : GameMessage
     {
-        public int Field0;
-        public InvLoc Field1;
-
+        public int ItemId;
+        //TODO: find out about unknown data
+        public byte[] Unknown; 
+        
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = new InvLoc();
-            Field1.Parse(buffer);
+            ItemId = buffer.ReadInt(32);
+           
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
+            buffer.WriteInt(32, ItemId);
+           
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("InventoryRequestMoveMessage:");
+            b.AppendLine("InventoryDropItemMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            Field1.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("ItemId: 0x" + ItemId.ToString("X8"));                  
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

@@ -1,4 +1,4 @@
-﻿﻿/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,11 +25,12 @@ using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Hero;
-using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.GS.Ingame.Universe;
+using Mooege.Net.GS.Message.Definitions.Inventory;
 
 namespace Mooege.Core.GS.Universe
 {
@@ -40,8 +41,10 @@ namespace Mooege.Core.GS.Universe
 
         public int CurrentWorldSNO;
         public SkillSet SkillSet;
+        public Inventory Inventory;
 
         public GameClient InGameClient { get; private set; }
+
 
         public List<World> RevealedWorlds;
         public List<Scene> RevealedScenes;
@@ -53,6 +56,7 @@ namespace Mooege.Core.GS.Universe
             this.Universe = universe;
             this.Properties = toon;
             this.CurrentWorldSNO = 0x115EE;
+            this.Inventory = new Inventory(this);          
 
             this.SkillSet = new Skills.SkillSet(this.Properties.Class);
 
@@ -208,7 +212,7 @@ namespace Mooege.Core.GS.Universe
         public World CurrentWorld
         {
             get { return this.Universe.GetWorld(this.WorldId); }
-        }
+        }        
 
         public int ClassSNO
         {

@@ -23,6 +23,7 @@ using Mooege.Common;
 using Mooege.Core.GS.Universe;
 using Mooege.Net.GS.Message;
 using Mooege.Net.MooNet;
+using Mooege.Core.Common.Items;
 
 namespace Mooege.Net.GS
 {
@@ -36,6 +37,9 @@ namespace Mooege.Net.GS
         private readonly GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         private readonly GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
 
+        // for some testing
+        public Dictionary<int, Item> items = new Dictionary<int, Item>();  // array of items without specific place in inventory
+        //
         public Universe Universe;    
         public Player Player { get; set; }
         public int PacketId = 0x227 + 20;
