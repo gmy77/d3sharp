@@ -248,7 +248,7 @@ namespace Mooege.Common
             switch (level)
             {
                 case Level.Trace: Console.ForegroundColor = ConsoleColor.DarkGray; break;
-                case Level.Debug: Console.ForegroundColor = ConsoleColor.Blue; break;
+                case Level.Debug: Console.ForegroundColor = ConsoleColor.Cyan; break;
                 case Level.Info: Console.ForegroundColor = ConsoleColor.White; break;
                 case Level.Warn: Console.ForegroundColor = ConsoleColor.Yellow; break;
                 case Level.Error: Console.ForegroundColor = ConsoleColor.Magenta; break;
