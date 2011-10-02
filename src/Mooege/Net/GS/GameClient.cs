@@ -71,13 +71,13 @@ namespace Mooege.Net.GS
                     {
                         if (message.Consumer != Consumers.None) this.Universe.Route(this, message);
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
-                        else Logger.Debug("{0} has no consumer or self-handler.", message.GetType());
+                        else Logger.Warn("{0} has no consumer or self-handler.", message.GetType());
 
                         //Logger.LogIncoming(message);
                     }
                     catch (NotImplementedException)
                     {
-                        Logger.Debug("Unhandled game message: 0x{0:X4} {1}", message.Id, message.GetType().Name);
+                        Logger.Warn("Unhandled game message: 0x{0:X4} {1}", message.Id, message.GetType().Name);
                     }
                 }
 
