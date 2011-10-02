@@ -25,7 +25,7 @@ namespace Mooege.Net.GS.Message.Definitions.Hero
         public bool Field0;
 
 
-
+        public GoldModifiedMessage() : base(Opcodes.GoldModifiedMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

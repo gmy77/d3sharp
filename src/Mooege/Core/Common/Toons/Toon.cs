@@ -403,17 +403,6 @@ namespace Mooege.Core.Common.Toons
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
         }
-//<<<<<<< HEAD
-
-//        //////////////////////////////////////////////////////////////////////////
-//        // ingame data required by the universe follows
-
-//        public int CurrentWorldID;
-//        public int CurrentWorldSNO;
-//        public float PosX, PosY, PosZ;
-//        public List<int> RevealedWorlds;
-//=======
-//>>>>>>> 8574c238179fe15ed89f064963d15f70293617bc
     }
 
     public enum ToonClass

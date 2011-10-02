@@ -25,6 +25,8 @@ namespace Mooege.Net.GS.Message.Definitions.Player
         public int Field0;
         public int Field1;
 
+        public PlayerActorSetInitialMessage() : base(Opcodes.PlayerActorSetInitialMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);

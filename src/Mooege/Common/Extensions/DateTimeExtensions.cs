@@ -26,5 +26,10 @@ namespace Mooege.Common.Extensions
         {
             return (uint)((time.ToUniversalTime().Ticks - 621355968000000000L) / 10000000L);
         }
+
+        public static ulong ToExtendedEpoch(this DateTime time)
+        {
+            return (ulong)((time.ToUniversalTime().Ticks - 621355968000000000L) / 10L);
+        }
     }
 }
