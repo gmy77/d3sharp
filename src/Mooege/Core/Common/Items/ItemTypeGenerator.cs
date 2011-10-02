@@ -30,7 +30,7 @@ namespace Mooege.Core.Common.Items
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
 
-        private static int _nextObjectIdenifier = 0x78A000E6;        
+        private static int _nextObjectIdentifier = 0x78A000E6;
         private readonly GameClient _client;
 
         public ItemTypeGenerator(GameClient client){
@@ -64,7 +64,7 @@ namespace Mooege.Core.Common.Items
                     itemsCount = reader.GetInt32(0);
                 }
 
-                // Now select random element 
+                // Now select random element
                 int selectedElementNr = RandomHelper.Next(itemsCount);
                 String selectRandom = String.Format("SELECT itemname, snoId {0} limit {1},1", querypart, selectedElementNr);
                 cmd = new SQLiteCommand(selectRandom, Storage.GameDataDBManager.Connection);
@@ -92,8 +92,8 @@ namespace Mooege.Core.Common.Items
         public Item CreateItem(String itemName, int snoId, ItemType itemType)
         {
             Item item = Generate(itemName, snoId, itemType);
-            List<IItemAttributeCreator> attributesCreators = new AttributeCreatorFactory().Create(itemType);            
-            foreach (IItemAttributeCreator creator in attributesCreators)
+            List<IItemAttributeCreator> attributeCreators = new AttributeCreatorFactory().Create(itemType);
+            foreach (IItemAttributeCreator creator in attributeCreators)
             {
                 creator.CreateAttributes(item);
             }
@@ -113,9 +113,9 @@ namespace Mooege.Core.Common.Items
 
         private static int CreateUniqueItemId()
         {
-            // TODO: identifier musst calculated correctly 
+            // TODO: identifier must calculated correctly
             // this way conflicts with ids used for mobs are possible
-            return _nextObjectIdenifier++;
+            return _nextObjectIdentifier++;
         }
     }
 
