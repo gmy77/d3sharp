@@ -716,6 +716,5 @@ namespace Mooege.Net.GS.Message
             new GameAttribute(707, -1, -1, 1, 1, "", "", "Taunt_Target_ACD", GameAttributeEncoding.Int, 0, 0, 0, 32),
             new GameAttribute(708, 0, -1, 0, 0, "", "", "UI_Only_Percent_Damage_Increase", GameAttributeEncoding.Float16, 1, 0, 0, 16)
         };
-
     }
 }

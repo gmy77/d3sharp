@@ -106,14 +106,12 @@ namespace Mooege.Core.Common.Toons
             this.Flags = flags;
             this.Level = level;
             this.Owner = owner;
-
-            var itemsGenerator = new Items.ItemTypeGenerator();
-
+           
             var visualItems = new[]
                             {
                                 // Head
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid( itemsGenerator.generateRandomElement(Items.ItemType.Helm).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -121,7 +119,7 @@ namespace Mooege.Core.Common.Toons
 
                                 // Chest
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.ChestArmor).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -129,7 +127,7 @@ namespace Mooege.Core.Common.Toons
 
                                 // Feet
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Boots).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -137,7 +135,7 @@ namespace Mooege.Core.Common.Toons
 
                                 // Hands
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Gloves).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -145,7 +143,7 @@ namespace Mooege.Core.Common.Toons
 
                                 // Weapon (1)
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Sword_1H).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -153,7 +151,7 @@ namespace Mooege.Core.Common.Toons
 
                                 // Weapon (2)
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Shield).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -161,7 +159,7 @@ namespace Mooege.Core.Common.Toons
 
                                 // Shoulders
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Shoulders).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)
@@ -169,7 +167,7 @@ namespace Mooege.Core.Common.Toons
 
                                 // Legs
                                 D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(itemsGenerator.generateRandomElement(Items.ItemType.Pants).Gbid)
+                                    .SetGbid(0)
                                     .SetDyeType(0)
                                     .SetItemEffectType(0)
                                     .SetEffectLevel(0)

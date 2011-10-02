@@ -57,17 +57,24 @@ namespace Mooege.Core.GS.Map
             return null;
         }
 
+        public BasicNPC GetNpc(int ID)
+        {
+            for (int x = 0; x < NPCs.Count; x++)
+                if (NPCs[x].ID == ID) return NPCs[x];
+            return null;
+        }
+
         public Actor GetActor(int ID)
         {
             for (int x = 0; x < Actors.Count; x++)
-                if (Actors[x].Id == ID) return Actors[x];
+                if (Actors[x].DynamicId == ID) return Actors[x];
             return null;
         }
 
         public Portal GetPortal(int ID)
         {
             for (int x = 0; x < Portals.Count; x++)
-                if (Portals[x].ActorRef.Id == ID) return Portals[x];
+                if (Portals[x].ActorRef.DynamicId == ID) return Portals[x];
             return null;
         }
 
@@ -86,8 +93,8 @@ namespace Mooege.Core.GS.Map
         {
             return Actors.Any(
                 t =>
-                    t.SnoId == actor.SnoId && 
-                    t.Position.X == actor.Position.X && 
+                    t.SnoId == actor.SnoId &&
+                    t.Position.X == actor.Position.X &&
                     t.Position.Y == actor.Position.Y &&
                     t.Position.Z == actor.Position.Z);
         }
@@ -120,11 +127,23 @@ namespace Mooege.Core.GS.Map
             s.Map = new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID);
         }
 
+
+        public void AddActor(Actor actor)
+        {
+            Actors.Add(actor);
+        }
+
+        public void AddNpc(BasicNPC npc)
+        {
+            NPCs.Add(npc);
+        }
+
+
         public void AddActor(string line)
         {
             var actor = new Actor();
-            if (!actor.ParseFrom(this.WorldID, line)) return; // if not valid actor (inventory using items), just don't add it to list.            
-            if(!this.ActorExists(actor)) Actors.Add(actor); // filter duplicate actors.
+            if (!actor.ParseFrom(this.WorldID, line)) return; // if not valid actor (inventory using items), just don't add it to list.
+            if (!this.ActorExists(actor)) Actors.Add(actor); // filter duplicate actors.
         }
 
         public void AddPortal(string Line)
@@ -135,7 +154,7 @@ namespace Mooege.Core.GS.Map
 
             //this check is here so no duplicate portals are in a world and thus a portal actor isn't revealed twice to a player
             foreach (var portal in Portals)
-                if (portal.ActorRef.Id == ActorID) return;
+                if (portal.ActorRef.DynamicId == ActorID) return;
 
             Portal p = new Portal();
             p.PortalMessage = new PortalSpecifierMessage(data.Skip(2).ToArray());
@@ -152,7 +171,7 @@ namespace Mooege.Core.GS.Map
         }
 
         public void SortScenes()
-        {   
+        {
             //this makes sure no scene is referenced before it is revealed to a player
             Scenes.Sort(SceneSorter);
         }
@@ -193,6 +212,8 @@ namespace Mooege.Core.GS.Map
                 {
                     if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.Blacklist)) continue;
                     if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.NPCs)) continue;
+                    // Commenting this out since it will lag the client to hell with all actors revealed
+                    // TODO: We need proper location-aware reveal logic for _all_ objects; even world chunks
                     //actor.Reveal(hero);
                 }
 
@@ -203,7 +224,6 @@ namespace Mooege.Core.GS.Map
                     portal.Reveal(hero);
                 }
             }
-
         }
 
         public void DestroyWorld(Hero hero)

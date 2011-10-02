@@ -20,16 +20,18 @@ using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Net.GS.Message.Definitions.Misc;
 
 namespace Mooege.Core.GS.NPC
 {
     public class BasicNPC
     {
         public int ID;
-        float HP;
-        float MaxHP;
-
-        GameClient Client;
+        private float HP;
+        private float MaxHP;
+        private int snoId;
+        public WorldPlace Location;
 
         public void Die(int anim)
         {
@@ -51,6 +53,9 @@ namespace Mooege.Core.GS.NPC
                     0x2cda,
                     0x2cd9
             };
+
+            
+            #region old
             //Game.SendMessage(new PlayEffectMessage()
             //{
             //    Id = 0x7a,
@@ -189,218 +194,60 @@ namespace Mooege.Core.GS.NPC
             //});
 
             //Game.FlushOutgoingBuffer();
+            #endregion
+        }
+
+        public BasicNPC(int objectId, int snoId, WorldPlace location)
+        {
+            this.ID = objectId;
+            this.snoId = snoId;
+           
+            this.Location = location;
+
 
         }
 
-        public BasicNPC(int objectId, ref GameClient g)
-        {
-            ID = objectId;
-            Client = g;
-            //Game.SendMessage(new AffixMessage()
-            //{
-            //    Id = 0x48,
-            //    Field0 = objectId,
-            //    Field1 = 0x1,
-            //    aAffixGBIDs = new int[0]
-            //});
-            //Game.SendMessage(new AffixMessage()
-            //{
-            //    Id = 0x48,
-            //    Field0 = objectId,
-            //    Field1 = 0x2,
-            //    aAffixGBIDs = new int[0]
-            //});
-            //Game.SendMessage(new ACDCollFlagsMessage
-            //{
-            //    Id = 0xa6,
-            //    Field0 = objectId,
-            //    Field1 = 0x1
-            //});
-
-            Client.SendMessage(new AttributesSetValuesMessage
+        public void Reveal(GameClient client){
+            client.SendMessage(new ACDEnterKnownMessage()
             {
-                Id = 0x4d,
-                Field0 = objectId,
-                atKeyVals = new NetAttributeKeyValue[15] {
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[214],
-                        Int = 0
+                Id = 0x003B,
+                Field0 = this.ID,
+                Field1 = snoId,
+                Field2 = 0x8,
+                Field3 = 0x0,
+                Field4 = new WorldLocationMessageData()
+                {
+                    Field0 = 1.35f,
+                    Field1 = new PRTransform()
+                    {
+                        Field0 = new Quaternion()
+                        {
+                            Amount = 0.768145f,
+                            Axis = new Vector3D()
+                            {
+                                X = 0f,
+                                Y = 0f,
+                                Z = -0.640276f,
+                            },
+                        },
+                        ReferencePoint = Location.Field0,
                     },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[464],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 1048575,
-                        Attribute = GameAttribute.Attributes[441],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30582,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30286,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30285,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30284,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30283,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30290,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 79486,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30286,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30285,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30284,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30283,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30290,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    }
-                }
-
+                    Field2 = 0x772E0000,
+                },
+                Field5 = null,
+                Field6 = new GBHandle()
+                {
+                    Field0 = 1,
+                    Field1 = 1,
+                },
+                Field7 = 0x00000001,
+                Field8 = snoId,
+                Field9 = 0x0,
+                Field10 = 0x0,
+                Field11 = 0x0,
+                Field12 = 0x0,
+                Field13 = 0x0
             });
-
-            Client.SendMessage(new AttributesSetValuesMessage
-            {
-                Id = 0x4d,
-                Field0 = objectId,
-                atKeyVals = new NetAttributeKeyValue[9] {
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[86],
-                        Float = 4.546875f
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 79486,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[84],
-                        Float = 4.546875f
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[81],
-                        Int = 0
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[77],
-                        Float = 4.546875f
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[69],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30582,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[67],
-                        Int = 10
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[38],
-                        Int = 1
-                    }
-                }
-
-            });
-
-
-            //Game.SendMessage(new ACDGroupMessage
-            //{
-            //    Id = 0xb8,
-            //    Field0 = objectId,
-            //    Field1 = unchecked((int)0xb59b8de4),
-            //    Field2 = unchecked((int)0xffffffff)
-            //});
-
-            //Game.SendMessage(new ANNDataMessage
-            //{
-            //    Id = 0x3e,
-            //    Field0 = objectId
-            //});
-
-            //Game.SendMessage(new ACDTranslateFacingMessage
-            //{
-            //    Id = 0x70,
-            //    Field0 = objectId,
-            //    Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI),
-            //    Field2 = false
-            //});
-
-            //Game.SendMessage(new SetIdleAnimationMessage
-            //{
-            //    Id = 0xa5,
-            //    Field0 = objectId,
-            //    Field1 = 0x11150
-            //});
-
-            //Game.SendMessage(new SNONameDataMessage
-            //{
-            //    Id = 0xd3,
-            //    Field0 = new SNOName
-            //    {
-            //        Field0 = 0x1,
-            //        Field1 = 6652
-            //    }
-            //});
-
-            //Game.packetId += 30 * 2;
-            //Game.SendMessage(new DWordDataMessage()
-            //{
-            //    Id = 0x89,
-            //    Field0 = Game.packetId,
-            //});
-
-            //Game.tick += 20;
-            //Game.SendMessage(new EndOfTickMessage()
-            //{
-            //    Id = 0x008D,
-            //    Field0 = Game.tick - 20,
-            //    Field1 = Game.tick
-            //});
-
         }
     }
 }

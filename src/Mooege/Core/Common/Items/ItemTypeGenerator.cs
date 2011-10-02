@@ -20,6 +20,9 @@ using System;
 using System.Data.SQLite;
 using Mooege.Common;
 using Mooege.Common.Helpers;
+using System.Collections.Generic;
+using Mooege.Net.GS;
+using Mooege.Core.Common.Items.ItemCreation;
 
 namespace Mooege.Core.Common.Items
 {
@@ -27,23 +30,43 @@ namespace Mooege.Core.Common.Items
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
 
-        public Item generateRandomElement(ItemType itemType)
+        private static int _nextObjectIdentifier = 0x78A000E6;
+        private readonly GameClient _client;
+
+        public ItemTypeGenerator(GameClient client){
+            this._client = client;
+        }
+
+        public Item GenerateRandomElement(ItemType itemType)
         {
             try
             {
-
                 // select count of Items with correct Type
-                // the itemname structure ITEMTYPE_NUMBER example: BOOTS_001 , BELT_004
-                String querypart = String.Format("from items where itemname like '{0}_%'", itemType.ToString());
+                // the itemname structure Itemtype_ModeNumber example: BOOTS_001 , BELT_104
+                // where mode is 0 = normal , 1 = nightmare, 2 = hell
+                // there are missing snoId for nightmare and hell so just use items from normal mode
+                const string modeId = "0";
+
+                String querypart = String.Format("from items where itemname like '{0}_{1}%'", itemType.ToString(), modeId);
                 String countQuery = String.Format("SELECT count(*) {0}", querypart);
                 var cmd = new SQLiteCommand(countQuery, Storage.GameDataDBManager.Connection);
                 var reader = cmd.ExecuteReader();
                 reader.Read();
                 int itemsCount = reader.GetInt32(0);
 
-                // Now select random element 
+                if (itemsCount == 0)
+                {
+                    querypart = String.Format("from items where itemname like '{0}%'", itemType.ToString());
+                    countQuery = String.Format("SELECT count(*) {0}", querypart);
+                    cmd = new SQLiteCommand(countQuery, Storage.GameDataDBManager.Connection);
+                    reader = cmd.ExecuteReader();
+                    reader.Read();
+                    itemsCount = reader.GetInt32(0);
+                }
+
+                // Now select random element
                 int selectedElementNr = RandomHelper.Next(itemsCount);
-                String selectRandom = String.Format("SELECT itemname {0} limit {1},1", querypart, selectedElementNr);
+                String selectRandom = String.Format("SELECT itemname, snoId {0} limit {1},1", querypart, selectedElementNr);
                 cmd = new SQLiteCommand(selectRandom, Storage.GameDataDBManager.Connection);
                 reader = cmd.ExecuteReader();
 
@@ -55,21 +78,45 @@ namespace Mooege.Core.Common.Items
                 while (reader.Read())
                 {
                     var itemName = (String)reader.GetString(0);
-                    var id = (int)StringHashHelper.HashItemName(itemName);
-                    var item = new Item(id, itemType);
-                    return item;
+                    var snoId = (int)reader.GetInt32(1);
+                    return CreateItem(itemName, snoId, itemType);
                 }
-
             }
             catch (Exception e)
             {
-                Logger.ErrorException(e, "Error generating Item");
+                Logger.ErrorException(e, "Error generating item of type: {0}", itemType.ToString());
             }
-
             return null;
         }
 
+        public Item CreateItem(String itemName, int snoId, ItemType itemType)
+        {
+            Item item = Generate(itemName, snoId, itemType);
+            List<IItemAttributeCreator> attributeCreators = new AttributeCreatorFactory().Create(itemType);
+            foreach (IItemAttributeCreator creator in attributeCreators)
+            {
+                creator.CreateAttributes(item);
+            }
+            return item;
+        }
 
+        private Item Generate(String itemName, int snoId, ItemType itemType)
+        {
+            int itemId = CreateUniqueItemId();
+            uint gbid = StringHashHelper.HashItemName(itemName);
+            var item = new Item(itemId, gbid, itemType) {SNOId = snoId};
+
+            _client.items[itemId] = item;
+
+            return item;
+        }
+
+        private static int CreateUniqueItemId()
+        {
+            // TODO: identifier must calculated correctly
+            // this way conflicts with ids used for mobs are possible
+            return _nextObjectIdentifier++;
+        }
     }
 
 }
