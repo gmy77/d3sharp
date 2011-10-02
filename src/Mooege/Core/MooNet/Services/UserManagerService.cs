@@ -45,7 +45,7 @@ namespace Mooege.Core.MooNet.Services
                 if (player.CurrentToon != null)
                 {
                     recentPlayer.SetPlayer(player.CurrentToon.BnetEntityID);
-                    Logger.Warn("RecentPlayer => " + player.CurrentToon);
+                    Logger.Debug("RecentPlayer => " + player.CurrentToon);
                     builder.AddRecentPlayers(recentPlayer);
                 }
             }

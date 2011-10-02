@@ -45,7 +45,7 @@ namespace Mooege.Core.MooNet.Services
             // Set the client that requested the creation of channel as the owner
             channel.SetOwner((MooNetClient)Client);
 
-            Logger.Warn("Created a new channel {0}:{1} for toon {2}", channel.BnetEntityId.High, channel.BnetEntityId.Low, Client.CurrentToon.Name);
+            Logger.Debug("Created a new channel {0}:{1} for toon {2}", channel.BnetEntityId.High, channel.BnetEntityId.Low, Client.CurrentToon.Name);
         }
 
         public override void JoinChannel(IRpcController controller, JoinChannelRequest request, Action<JoinChannelResponse> done)
@@ -56,7 +56,7 @@ namespace Mooege.Core.MooNet.Services
         public override void GetChannelInfo(IRpcController controller, GetChannelInfoRequest request, Action<GetChannelInfoResponse> done)
         {
             Logger.Trace("GetChannelInfoRequest()");
-            Logger.Warn("Request to channel {0}:{1} by toon {2}", request.ChannelId.High, request.ChannelId.Low, Client.CurrentToon.Name);
+            Logger.Debug("Request to channel {0}:{1} by toon {2}", request.ChannelId.High, request.ChannelId.Low, Client.CurrentToon.Name);
 
             var builder = bnet.protocol.channel.GetChannelInfoResponse.CreateBuilder();
             var channel = ChannelManager.GetChannelByEntityId(request.ChannelId);

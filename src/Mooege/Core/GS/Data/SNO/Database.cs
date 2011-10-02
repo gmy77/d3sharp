@@ -153,14 +153,14 @@ namespace Mooege.Core.GS.Data.SNO
         public int RandomID()
         {
             int id = RandomHelper.RandomValue(this.Global).ID;
-            //Logger.Warn("Grabbed random global ID: {0}", id);
+            //Logger.Debug("Grabbed random global ID: {0}", id);
             return id;
         }
 
         public int RandomID(SNOGroup grp)
         {
             int id = RandomHelper.RandomValue(this.Grouped[grp]).ID;
-            //Logger.Warn("Grabbed random ID for group {0}: {1}", Enum.GetName(typeof(SNOGroup), grp), id);
+            //Logger.Debug("Grabbed random ID for group {0}: {1}", Enum.GetName(typeof(SNOGroup), grp), id);
             return id;
         }
     }

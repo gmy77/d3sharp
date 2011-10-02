@@ -341,8 +341,7 @@ namespace Mooege.Core.Common.Toons
 
         public override string ToString()
         {
-            return String.Format("Name: {0} High: {1} Low: {2}", this.Name, this.BnetEntityID.High,
-                                 this.BnetEntityID.Low);
+            return String.Format("Name: {0} ID: {1}:{2}", this.Name, this.BnetEntityID.High, this.BnetEntityID.Low);
         }
 
         public void SaveToDB()
