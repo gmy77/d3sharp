@@ -34,24 +34,27 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("SendNotification()");
             //Logger.Debug("notification:\n{0}", request.ToString());
-            /*
             switch (request.GetNotificationType())
             {
                 case NotificationTypeHelper.NotificationType.Whisper:
+                    
                     // NOTE: Real implementation doesn't even handle the situation where neither client knows about the other.
                     // Client requires prior knowledge of sender and target (and even then it cannot whisper by using the /whisper command).
-                    var notif = bnet.protocol.notification.Notification.CreateBuilder(request)
+
+                    Logger.Trace(string.Format("NotificationRequest by {0} to {1}", this.Client.CurrentToon, ToonManager.GetToonByLowID(request.TargetId.Low)));
+
+                    var notification = bnet.protocol.notification.Notification.CreateBuilder(request)
                         .SetSenderId(this.Client.CurrentToon.BnetEntityID)
                         .Build();
-                    //Logger.Debug("Sending notification:\n{0}", notif.ToString());
+
                     var account = ToonManager.GetAccountByToonLowID(request.TargetId.Low);
                     var method = bnet.protocol.notification.NotificationListener.Descriptor.FindMethodByName("OnNotificationReceived");
-                    account.LoggedInBNetClient.CallMethod(method, notif);
+                    account.LoggedInBNetClient.CallMethod(method, notification);
                     break;
                 default:
                     Logger.Warn("Unhandled notification type: {0}", request.Type);
                     break;
-            }*/
+            }
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());

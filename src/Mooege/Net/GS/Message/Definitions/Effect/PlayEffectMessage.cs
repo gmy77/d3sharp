@@ -26,8 +26,7 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
         public int Field1;
         public int? Field2;
 
-
-
+        public PlayEffectMessage() : base(Opcodes.PlayEffectMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

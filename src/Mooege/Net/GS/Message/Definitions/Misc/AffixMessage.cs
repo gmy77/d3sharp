@@ -27,8 +27,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         // MaxLength = 32
         public int /* gbid */[] aAffixGBIDs;
 
-
-
+        public AffixMessage() : base(Opcodes.AffixMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

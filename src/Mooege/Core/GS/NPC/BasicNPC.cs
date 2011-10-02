@@ -73,7 +73,7 @@ namespace Mooege.Core.GS.NPC
             //{
             //    Id = 0x7b,
             //    Field0 = ID,
-            //    Field1 = 0x789E00E2,
+            //    Field1 = Client.Player.Hero.Id,
             //    Field2 = 0x2,
             //    Field3 = false,
             //});
@@ -173,7 +173,7 @@ namespace Mooege.Core.GS.NPC
             //{
             //    Id = 0x7b,
             //    Field0 = ID,
-            //    Field1 = 0x789E00E2,
+            //    Field1 = Client.Player.Hero.Id,
             //    Field2 = 0x2,
             //    Field3 = false,
             //});
@@ -211,7 +211,7 @@ namespace Mooege.Core.GS.NPC
             client.SendMessage(new ACDEnterKnownMessage()
             {
                 Id = 0x003B,
-                Field0 = client.ObjectId,
+                Field0 = this.ID,
                 Field1 = snoId,
                 Field2 = 0x8,
                 Field3 = 0x0,

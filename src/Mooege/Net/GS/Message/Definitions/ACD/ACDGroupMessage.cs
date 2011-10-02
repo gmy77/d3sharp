@@ -27,7 +27,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int Field2;
 
 
-
+        public ACDGroupMessage() : base(Opcodes.ACDGroupMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

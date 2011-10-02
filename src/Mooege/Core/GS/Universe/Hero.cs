@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Map;
@@ -36,6 +37,8 @@ namespace Mooege.Core.GS.Universe
 {
     public class Hero : Actor, IMessageConsumer // should extend actor actually?? /raist
     {
+        static readonly Logger Logger = LogManager.CreateLogger();
+
         public Toon Properties { get; private set; }
         public Universe Universe { get; private set; }
 
@@ -65,7 +68,7 @@ namespace Mooege.Core.GS.Universe
             RevealedActors = new List<Actor>();
 
             // actor values
-            this.Id = 0x789E00E2;
+            this.Id = universe.NextObjectId;
             this.SnoId = this.ClassSNO;
             this.Field2 = 0x00000009;
             this.Field3 = 0x00000000;
@@ -191,7 +194,7 @@ namespace Mooege.Core.GS.Universe
         {
             return new VisualInventoryMessage
             {
-                Field0 = 0x789E00E2,
+                Field0 = this.Id,
                 EquipmentList =
                     new VisualEquipment
                     {

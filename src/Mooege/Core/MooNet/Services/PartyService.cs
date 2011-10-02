@@ -55,8 +55,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void GetChannelInfo(IRpcController controller, GetChannelInfoRequest request, Action<GetChannelInfoResponse> done)
         {
-            Logger.Trace("GetChannelInfoRequest()");
-            Logger.Debug("Request to channel {0}:{1} by toon {2}", request.ChannelId.High, request.ChannelId.Low, Client.CurrentToon.Name);
+            Logger.Trace("GetChannelInfoRequest() to channel {0}:{1} by toon {2}", request.ChannelId.High, request.ChannelId.Low, Client.CurrentToon.Name);
 
             var builder = bnet.protocol.channel.GetChannelInfoResponse.CreateBuilder();
             var channel = ChannelManager.GetChannelByEntityId(request.ChannelId);

@@ -28,8 +28,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         public int? Field2;
         public int Field3;
 
-
-
+        public FloatingAmountMessage() : base(Opcodes.FloatingAmountMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
