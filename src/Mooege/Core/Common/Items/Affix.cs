@@ -25,28 +25,28 @@ namespace Mooege.Core.Common.Items
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
         public int AffixGbid { get; set; }
-  
+
         public Affix(int gbid)
         {
-            AffixGbid = gbid;         
+            AffixGbid = gbid;
         }
 
         public override String ToString()
         {
-            return String.Format("{0}",AffixGbid);
+            return String.Format("{0}", AffixGbid);
         }
 
         public static Affix Parse(String affixString)
         {
             try
-            {              
-                int gbid = int.Parse(affixString);    
+            {
+                int gbid = int.Parse(affixString);
                 var affix = new Affix(gbid);
                 return affix;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                throw new Exception("Affix can not be parsed: " + affixString, e);
+                throw new Exception(String.Format("Affix can not be parsed: {0}", affixString), e);
             }
         }
 

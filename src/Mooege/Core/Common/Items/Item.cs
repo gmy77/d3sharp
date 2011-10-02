@@ -36,10 +36,10 @@ namespace Mooege.Core.Common.Items
         Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, Wand, Ring, FistWeapon_1H,
         HealthPotion
 
-        /* Not working  at the moment
-         * 
+        /* Not working at the moment:
          *  // ChestArmor                   --> does not work because there are missing itemnames for normal mode, just for nightmare and hell and some "a" and "b" variants... -> need to figure out which should be used
-         *  // ThrownWeapon, ThrowingAxe    --> does not work because there are no snoId in Actors.txt */
+         *  // ThrownWeapon, ThrowingAxe    --> does not work because there are no snoId in Actors.txt
+         */
     }
 
     public class Item

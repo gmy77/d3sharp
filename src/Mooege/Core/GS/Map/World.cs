@@ -56,7 +56,6 @@ namespace Mooege.Core.GS.Map
                 if (Scenes[x].ID == ID) return Scenes[x];
             return null;
         }
-        
 
         public BasicNPC GetNpc(int ID)
         {
@@ -94,8 +93,8 @@ namespace Mooege.Core.GS.Map
         {
             return Actors.Any(
                 t =>
-                    t.SnoId == actor.SnoId && 
-                    t.Position.X == actor.Position.X && 
+                    t.SnoId == actor.SnoId &&
+                    t.Position.X == actor.Position.X &&
                     t.Position.Y == actor.Position.Y &&
                     t.Position.Z == actor.Position.Z);
         }
@@ -131,7 +130,7 @@ namespace Mooege.Core.GS.Map
 
         public void AddActor(Actor actor)
         {
-            Actors.Add(actor);                 
+            Actors.Add(actor);
         }
 
         public void AddNpc(BasicNPC npc)
@@ -143,8 +142,8 @@ namespace Mooege.Core.GS.Map
         public void AddActor(string line)
         {
             var actor = new Actor();
-            if (!actor.ParseFrom(this.WorldID, line)) return; // if not valid actor (inventory using items), just don't add it to list.            
-            if(!this.ActorExists(actor)) Actors.Add(actor); // filter duplicate actors.
+            if (!actor.ParseFrom(this.WorldID, line)) return; // if not valid actor (inventory using items), just don't add it to list.
+            if (!this.ActorExists(actor)) Actors.Add(actor); // filter duplicate actors.
         }
 
         public void AddPortal(string Line)
@@ -172,7 +171,7 @@ namespace Mooege.Core.GS.Map
         }
 
         public void SortScenes()
-        {   
+        {
             //this makes sure no scene is referenced before it is revealed to a player
             Scenes.Sort(SceneSorter);
         }
@@ -213,9 +212,9 @@ namespace Mooege.Core.GS.Map
                 {
                     if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.Blacklist)) continue;
                     if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.NPCs)) continue;
-                    
-                    if(actor.DynamicId == 2065563791)
-                        actor.Reveal(hero);
+                    // Commenting this out since it will lag the client to hell with all actors revealed
+                    // TODO: We need proper location-aware reveal logic for _all_ objects; even world chunks
+                    //actor.Reveal(hero);
                 }
 
                 //reveal portals

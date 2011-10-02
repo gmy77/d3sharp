@@ -39,7 +39,7 @@ namespace Mooege.Core.GS.Actors
         public int Field7;
         public int Field8;
         public int Field9;
-        public byte Field10;        
+        public byte Field10;
 
         public void Reveal(Hero toon)
         {
@@ -87,7 +87,7 @@ namespace Mooege.Core.GS.Actors
 
             this.WorldId = worldId;
 
-            this.DynamicId = int.Parse(data[4]);            
+            this.DynamicId = int.Parse(data[4]);
             this.SnoId = int.Parse(data[5]);
             this.Field2 = int.Parse(data[6]);
             this.Field3 = int.Parse(data[7]);
