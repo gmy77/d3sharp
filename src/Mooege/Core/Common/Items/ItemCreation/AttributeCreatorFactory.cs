@@ -16,39 +16,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using Mooege.Common;
+using System.Collections.Generic;
 
-namespace Mooege.Core.Common.Items
+namespace Mooege.Core.Common.Items.ItemCreation
 {
-    public class Affix
+    internal class AttributeCreatorFactory
     {
-        public static readonly Logger Logger = LogManager.CreateLogger();
-        public int AffixGbid { get; set; }
-  
-        public Affix(int gbid)
+        public List<IItemAttributeCreator> Create(ItemType itemType)
         {
-            AffixGbid = gbid;         
-        }
+            var creatorList = new List<IItemAttributeCreator> {new DefaultAttributeCreator()};
 
-        public override String ToString()
-        {
-            return String.Format("{0}",AffixGbid);
-        }
+            if (Item.IsWeapon(itemType)) creatorList.Add(new WeaponAttributeCreator());
+            else if (Item.IsPotion(itemType))  creatorList.Add(new PotionAttributeCreator());
 
-        public static Affix Parse(String affixString)
-        {
-            try
-            {              
-                int gbid = int.Parse(affixString);    
-                var affix = new Affix(gbid);
-                return affix;
-            }
-            catch(Exception e)
-            {
-                throw new Exception("Affix can not be parsed: " + affixString, e);
-            }
+            return creatorList;
         }
-
     }
 }

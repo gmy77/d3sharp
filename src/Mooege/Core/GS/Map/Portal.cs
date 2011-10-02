@@ -39,7 +39,7 @@ namespace Mooege.Core.GS.Map
                 hero.InGameClient.SendMessage(new AffixMessage()
                 {
                     Id = 0x48,
-                    Field0 = ActorRef.Id,
+                    Field0 = ActorRef.DynamicId,
                     Field1 = 1,
                     aAffixGBIDs = new int[0]
                 });
@@ -47,7 +47,7 @@ namespace Mooege.Core.GS.Map
                 hero.InGameClient.SendMessage(new AffixMessage()
                 {
                     Id = 0x48,
-                    Field0 = ActorRef.Id,
+                    Field0 = ActorRef.DynamicId,
                     Field1 = 2,
                     aAffixGBIDs = new int[0]
                 });
@@ -57,14 +57,14 @@ namespace Mooege.Core.GS.Map
                 hero.InGameClient.SendMessage(new ACDCollFlagsMessage()
                 {
                     Id = 0x00A6,
-                    Field0 = ActorRef.Id,
+                    Field0 = ActorRef.DynamicId,
                     Field1 = 0x00000001,
                 });
 
                 hero.InGameClient.SendMessage(new AttributesSetValuesMessage()
                 {
                     Id = 0x004D,
-                    Field0 = ActorRef.Id,
+                    Field0 = ActorRef.DynamicId,
                     atKeyVals = new NetAttributeKeyValue[7]
                     {
                          new NetAttributeKeyValue()
@@ -115,7 +115,7 @@ namespace Mooege.Core.GS.Map
                 hero.InGameClient.SendMessage(new ACDGroupMessage()
                 {
                     Id = 0x00B8,
-                    Field0 = ActorRef.Id,
+                    Field0 = ActorRef.DynamicId,
                     Field1 = -1,
                     Field2 = -1,
                 });
@@ -123,13 +123,13 @@ namespace Mooege.Core.GS.Map
                 hero.InGameClient.SendMessage(new ANNDataMessage()
                 {
                     Id = 0x003E,
-                    Field0 = ActorRef.Id,
+                    Field0 = ActorRef.DynamicId,
                 });
 
                 hero.InGameClient.SendMessage(new ACDTranslateFacingMessage()
                 {
                     Id = 0x0070,
-                    Field0 = ActorRef.Id,
+                    Field0 = ActorRef.DynamicId,
                     Field1 = 0f,
                     Field2 = false,
                 });

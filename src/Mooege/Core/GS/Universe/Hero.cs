@@ -30,7 +30,6 @@ using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Core.GS.Ingame.Universe;
 using Mooege.Net.GS.Message.Definitions.Inventory;
 
 namespace Mooege.Core.GS.Universe
@@ -47,7 +46,6 @@ namespace Mooege.Core.GS.Universe
         public Inventory Inventory;
 
         public GameClient InGameClient { get; private set; }
-
 
         public List<World> RevealedWorlds;
         public List<Scene> RevealedScenes;
@@ -68,7 +66,7 @@ namespace Mooege.Core.GS.Universe
             RevealedActors = new List<Actor>();
 
             // actor values
-            this.Id = universe.NextObjectId;
+            this.DynamicId = universe.NextObjectId;
             this.SnoId = this.ClassSNO;
             this.Field2 = 0x00000009;
             this.Field3 = 0x00000000;
@@ -194,7 +192,7 @@ namespace Mooege.Core.GS.Universe
         {
             return new VisualInventoryMessage
             {
-                Field0 = this.Id,
+                Field0 = this.DynamicId,
                 EquipmentList =
                     new VisualEquipment
                     {

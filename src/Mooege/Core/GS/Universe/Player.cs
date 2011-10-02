@@ -26,11 +26,9 @@ using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Definitions.Connection;
 using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Hero;
-using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Core.Common.Items;
 
 namespace Mooege.Core.GS.Universe
 {
@@ -111,7 +109,7 @@ namespace Mooege.Core.GS.Universe
                                        Field7 = this.Hero.GetStateData(),
                                        Field8 = false, //announce party join
                                        Field9 = 0x00000001,
-                                       Field10 = this.Hero.Id,
+                                       Field10 = this.Hero.DynamicId,
                                    });            
 
             // reveal the hero
@@ -119,7 +117,7 @@ namespace Mooege.Core.GS.Universe
 
             Client.SendMessage(new ACDCollFlagsMessage()
                                    {
-                                       Field0 = this.Hero.Id,
+                                       Field0 = this.Hero.DynamicId,
                                        Field1 = 0x00000000,
                                    });
 
@@ -283,12 +281,12 @@ namespace Mooege.Core.GS.Universe
             attribs[GameAttribute.Backpack_Slots] = 60;
             attribs[GameAttribute.General_Cooldown] = 0;
 
-            attribs.SendMessage(Client, this.Hero.Id);
+            attribs.SendMessage(Client, this.Hero.DynamicId);
             
             Client.SendMessage(new ACDGroupMessage()
                                    {
                                        Id = 0x00B8,
-                                       Field0 = this.Hero.Id,
+                                       Field0 = this.Hero.DynamicId,
                                        Field1 = -1,
                                        Field2 = -1,
                                    });
@@ -296,13 +294,13 @@ namespace Mooege.Core.GS.Universe
             Client.SendMessage(new ANNDataMessage()
                                    {
                                        Id = 0x003E,
-                                       Field0 = this.Hero.Id,
+                                       Field0 = this.Hero.DynamicId,
                                    });
 
             Client.SendMessage(new ACDTranslateFacingMessage()
                                    {
                                        Id = 0x0070,
-                                       Field0 = this.Hero.Id,
+                                       Field0 = this.Hero.DynamicId,
                                        Field1 = 3.022712f,
                                        Field2 = false,
                                    });
@@ -310,12 +308,12 @@ namespace Mooege.Core.GS.Universe
             Client.SendMessage(new PlayerEnterKnownMessage()
                                    {
                                        Field0 = 0x00000000,
-                                       Field1 = this.Hero.Id,
+                                       Field1 = this.Hero.DynamicId,
                                    });
             
             Client.SendMessage(new PlayerActorSetInitialMessage()
                                    {
-                                       Field0 = this.Hero.Id,
+                                       Field0 = this.Hero.DynamicId,
                                        Field1 = 0x00000000,
                                    });
 
@@ -341,7 +339,7 @@ namespace Mooege.Core.GS.Universe
 
             Client.SendMessage(new AttributeSetValueMessage()
                                    {
-                                       Field0 = this.Hero.Id,
+                                       Field0 = this.Hero.DynamicId,
                                        Field1 = new NetAttributeKeyValue()
                                                     {
                                                         Attribute = GameAttribute.Attributes[0x005B], // Hitpoints_Healed_Target

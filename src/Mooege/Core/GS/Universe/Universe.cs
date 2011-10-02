@@ -280,7 +280,7 @@ namespace Mooege.Core.GS.Universe
             client.SendMessage(new ACDWorldPositionMessage
             {
                 Id = 0x3f,
-                Field0 = hero.Id,
+                Field0 = hero.DynamicId,
                 Field1 = new WorldLocationMessageData
                 {
                     Field0 = 1.43f,
@@ -392,7 +392,7 @@ namespace Mooege.Core.GS.Universe
             {
                 Id = 0x7b,
                 Field0 = message.Field1,
-                Field1 = client.Player.Hero.Id,
+                Field1 = client.Player.Hero.DynamicId,
                 Field2 = 0x2,
                 Field3 = false,
             });
@@ -467,7 +467,7 @@ namespace Mooege.Core.GS.Universe
             {
                 Id = 0x7b,
                 Field0 = message.Field1,
-                Field1 = client.Player.Hero.Id,
+                Field1 = client.Player.Hero.DynamicId,
                 Field2 = 0x2,
                 Field3 = false,
             });
@@ -488,7 +488,7 @@ namespace Mooege.Core.GS.Universe
             // randomize ItemType 
             ItemType[] allValues = (ItemType[])Enum.GetValues(typeof(ItemType));
             ItemType type = allValues[random.Next(allValues.Length)];           
-            Item item = itemGenerator.generateRandomElement(type);
+            Item item = itemGenerator.GenerateRandomElement(type);
             DropItem(hero, item, postition);
         }
 
@@ -514,8 +514,8 @@ namespace Mooege.Core.GS.Universe
                     Y = 0f,
                     Z = (float)random.NextDouble(),
                 },
-                SnoId = item.SnoId,
-                Id = item.ItemId,
+                SnoId = item.SNOId,
+                DynamicId = item.ItemId,
             };
 
             GetWorld(hero.WorldId).AddActor(itemActor);
