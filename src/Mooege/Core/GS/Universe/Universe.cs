@@ -35,6 +35,7 @@ using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Data.SNO;
 using Mooege.Core.Common.Items;
+using Mooege.Core.GS.NPC;
 
 
 namespace Mooege.Core.GS.Universe
@@ -233,6 +234,18 @@ namespace Mooege.Core.GS.Universe
             return null;
         }
 
+        BasicNPC GetNPC(int NpcId)
+        {
+            for (int x = 0; x < _worlds.Count; x++)
+            {
+                BasicNPC npc = _worlds[x].GetNpc(NpcId);
+                if (npc != null) return npc;
+            }
+            return null;
+        }
+
+
+
         public void ChangeToonWorld(GameClient client, int WorldID, Vector3D Pos)
         {
             Hero hero = client.Player.Hero;
@@ -333,11 +346,10 @@ namespace Mooege.Core.GS.Universe
             else if (client.ObjectIdsSpawned == null || !client.ObjectIdsSpawned.Contains(message.Field1)) return;
 
             client.ObjectIdsSpawned.Remove(message.Field1);
+            BasicNPC npc = GetWorld(client.Player.Hero.WorldId).GetNpc(message.Field1);            
 
             Hero hero = client.Player.Hero;
-           
-
-            SpawnRandomDrop(hero, hero.Position);
+            SpawnRandomDrop(hero, npc.Location.Field0);
 
             
             
@@ -535,51 +547,11 @@ namespace Mooege.Core.GS.Universe
             client.ObjectIdsSpawned.Add(client.ObjectId);
 
             #region ACDEnterKnown Hittable Zombie
-            client.SendMessage(new ACDEnterKnownMessage()
-            {
-                Id = 0x003B,
-                Field0 = client.ObjectId,
-                Field1 = nId,
-                Field2 = 0x8,
-                Field3 = 0x0,
-                Field4 = new WorldLocationMessageData()
-                {
-                    Field0 = 1.35f,
-                    Field1 = new PRTransform()
-                    {
-                        Field0 = new Quaternion()
-                        {
-                            Amount = 0.768145f,
-                            Axis = new Vector3D()
-                            {
-                                X = 0f,
-                                Y = 0f,
-                                Z = -0.640276f,
-                            },
-                        },
-                        ReferencePoint = new Vector3D()
-                        {
-                            X = client.Player.Hero.Position.X + 5,
-                            Y = client.Player.Hero.Position.Y + 5,
-                            Z = client.Player.Hero.Position.Z,
-                        },
-                    },
-                    Field2 = 0x772E0000,
-                },
-                Field5 = null,
-                Field6 = new GBHandle()
-                {
-                    Field0 = 1,
-                    Field1 = 1,
-                },
-                Field7 = 0x00000001,
-                Field8 = nId,
-                Field9 = 0x0,
-                Field10 = 0x0,
-                Field11 = 0x0,
-                Field12 = 0x0,
-                Field13 = 0x0
-            });
+            Vector3D pos = client.Player.Hero.Position;
+            BasicNPC mob = new BasicNPC(client.ObjectId, mobId, new WorldPlace { Field0 = new Vector3D(pos.X-5,pos.Y-5, pos.Z),});
+            GetWorld(client.Player.Hero.WorldId).AddNpc(mob);
+            mob.Reveal(client);
+
             client.SendMessage(new AffixMessage()
             {
                 Id = 0x48,

@@ -56,6 +56,14 @@ namespace Mooege.Core.GS.Map
                 if (Scenes[x].ID == ID) return Scenes[x];
             return null;
         }
+        
+
+        public BasicNPC GetNpc(int ID)
+        {
+            for (int x = 0; x < NPCs.Count; x++)
+                if (NPCs[x].ID == ID) return NPCs[x];
+            return null;
+        }
 
         public Actor GetActor(int ID)
         {
@@ -124,6 +132,11 @@ namespace Mooege.Core.GS.Map
         public void AddActor(Actor actor)
         {
             Actors.Add(actor);                 
+        }
+
+        public void AddNpc(BasicNPC npc)
+        {
+            NPCs.Add(npc);
         }
 
 
