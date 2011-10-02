@@ -506,6 +506,16 @@ namespace Mooege.Core.GS.Universe
             GetWorld(hero.WorldId).AddActor(itemActor);
             itemActor.Reveal(hero);
             item.Reveal(hero);
+
+            hero.InGameClient.PacketId += 10 * 2;
+            hero.InGameClient.SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = hero.InGameClient.PacketId,
+            });
+
+            hero.InGameClient.FlushOutgoingBuffer();
+
         }
 
         public void SpawnMob(GameClient client, int mobId) // this shoudn't even rely on client or it's position though i know this is just a hack atm ;) /raist.

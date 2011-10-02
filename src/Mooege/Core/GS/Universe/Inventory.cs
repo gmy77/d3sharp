@@ -12,6 +12,7 @@ using Mooege.Net.GS.Message.Definitions.Combat;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Core.Common.Items;
 
 namespace Mooege.Core.GS.Ingame.Universe
 {
@@ -44,15 +45,26 @@ namespace Mooege.Core.GS.Ingame.Universe
             public int Column;
         }
 
+        public Inventory(Hero owner)
+        {
+            this.owner = owner;
+            backpack = new int[6, 10];
+            equipment = new int[8];
+        }
+
+
         // This should be in the database#
         // Do all items need a rectangual space in diablo 3?
         private InventorySize GetItemInventorySize(int itemID)
         {
-            //Actor actor = owner.CurrentWorld.GetActor(owner.InGameClient.items[itemID].Gbid);
-            
-            //if (actor.SnoId == 4440) return new InventorySize() { Width = 1, Height = 1 }; // minor health potion
-            //if (actor.SnoId == 3245) return new InventorySize() { Width = 1, Height = 2 }; // hand axe 1
-
+            if (Item.isWeapon(owner.InGameClient.items[itemID].Type))
+            {
+                return new InventorySize() { Width = 1, Height = 2 };
+            }
+            else if (Item.isPotion(owner.InGameClient.items[itemID].Type))
+            {
+                return new InventorySize() { Width = 1, Height = 1 };
+            }
 
             return new InventorySize() { Width = 1, Height = 2 };
         }
@@ -204,22 +216,26 @@ namespace Mooege.Core.GS.Ingame.Universe
                     equipment[i] = 0;
         }
 
-        void AcceptMoveRequest(int ItemId, int equipmentSlot, int row, int column)
+        void AcceptMoveRequest(int ItemId, InvLoc inventoryLocation)
         {
+
+            InventoryLocationMessageData inventoryLocationMessage = new InventoryLocationMessageData()
+                {
+                    Field0 = inventoryLocation.Field0, // Inventory Owner
+                    Field1 = inventoryLocation.Field1, // EquipmentSlot
+                    Field2 = new IVector2D()
+                    {
+                        Field0 = inventoryLocation.Field2, // Row
+                        Field1 = inventoryLocation.Field3, // Column
+                    },
+                };
+            
+
             owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
             {
                 Id = (int)Opcodes.ACDInventoryPositionMessage,
                 Field0 = ItemId,
-                Field1 = new InventoryLocationMessageData()
-                {
-                    Field0 = owner.Id, // Inventory Owner
-                    Field1 = equipmentSlot, // EquipmentSlot
-                    Field2 = new IVector2D()
-                    {
-                        Field0 = row, // Row
-                        Field1 = column, // Column
-                    },
-                },
+                Field1 = inventoryLocationMessage,
                 Field2 = 1 // what does this do?  // 0- source item not disappearing from inventory, 1 - Moving, any other possibilities? its an int32
             });
 
@@ -231,17 +247,6 @@ namespace Mooege.Core.GS.Ingame.Universe
             });
 
             owner.InGameClient.FlushOutgoingBuffer();
-        }
-
-        public Inventory(Hero owner)
-        {
-            this.owner = owner;
-            backpack = new int[6, 10];
-            equipment = new int[8];
-
-            // TODO this is for testing. When using ACDEnterKnown to place items in inventory, make sure to add them here as well
-            AddItem(0x789E01f2, 0, 0);
-            AddItem(0x789E01f7, 0, 2);
         }
 
         /// <summary>
@@ -355,7 +360,8 @@ namespace Mooege.Core.GS.Ingame.Universe
                     Logger.Debug("Equip Item {0}", request.AsText());
                     RemoveItem(request.Field0);
                     EquipItem(request.Field0, request.Field1.Field1);
-                    AcceptMoveRequest(request.Field0, request.Field1.Field1, request.Field1.Field2, request.Field1.Field3);
+                             
+                    AcceptMoveRequest(request.Field0, request.Field1);
                     RefreshVisual(request.Field1.Field0);
                 }
             }
@@ -376,7 +382,7 @@ namespace Mooege.Core.GS.Ingame.Universe
                         RemoveItem(request.Field0);
                     }
                     AddItem(request.Field0, request.Field1.Field3, request.Field1.Field2);
-                    AcceptMoveRequest(request.Field0, request.Field1.Field1, request.Field1.Field2, request.Field1.Field3);
+                    AcceptMoveRequest(request.Field0, request.Field1);
                 }
             }
         }
@@ -440,9 +446,8 @@ namespace Mooege.Core.GS.Ingame.Universe
                 RemoveItem(msg.ItemId);
             }
 
-            owner.Universe.DropItem(owner, owner.InGameClient.items[msg.ItemId], owner.Position);
-            AcceptMoveRequest(msg.ItemId, 0, -1, -1);
-            owner.InGameClient.FlushOutgoingBuffer();
+            AcceptMoveRequest(msg.ItemId, new InvLoc { Field0 = owner.Id, Field1 = -1, Field2 = -1, Field3 = -1 });                     
+            owner.Universe.DropItem(owner, owner.InGameClient.items[msg.ItemId], owner.Position);            
         }
 
         public void Consume(GameClient client, GameMessage message)
