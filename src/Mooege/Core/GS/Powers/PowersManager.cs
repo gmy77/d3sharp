@@ -138,6 +138,10 @@ namespace Mooege.Core.GS.Powers
             }
             else if (powerId == Skills.Skills.Wizard.Signature.Electrocute) // electrocute
             {
+                // channeled power
+                if (!_channelingActors.Contains(user))
+                    _channelingActors.Add(user);
+
                 LookAt(user, targetPos);
 
                 IList<IPowerTarget> targets;
