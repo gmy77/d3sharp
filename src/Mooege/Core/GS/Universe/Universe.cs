@@ -34,6 +34,7 @@ using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Powers;
+using System.Threading;
 
 namespace Mooege.Core.GS.Universe
 {
@@ -47,14 +48,21 @@ namespace Mooege.Core.GS.Universe
 
         public PowersManager PowersManager;
 
+        public readonly int TicksPerSecond = 30;
+        private Thread _tickThread;
+
         public Universe()
         {
+            _tickThread = new Thread(() => _tickThread_Run());
+
             this._worlds = new List<World>();
             this.PlayerManager = new PlayerManager(this);
 
             this.PowersManager = new PowersManager(this);
 
             InitializeUniverse();
+
+            _tickThread.Start();
         }
 
         public void Route(GameClient client, GameMessage message)
@@ -76,6 +84,19 @@ namespace Mooege.Core.GS.Universe
         public void Consume(GameClient client, GameMessage message)
         {
             if (message is TargetMessage) OnToonTargetChange(client, (TargetMessage)message);
+        }
+
+        public void _tickThread_Run()
+        {
+            // TODO: needs to have exit condition, probably either PlayerManager.Players.Count or a manual shutdown flag
+            while (true)
+            {
+                lock (this)
+                {
+                    PowersManager.Tick();
+                }
+                Thread.Sleep(1000 / TicksPerSecond);
+            }
         }
 
         void InitializeUniverse()

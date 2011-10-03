@@ -54,37 +54,40 @@ namespace Mooege.Net.GS
 
         public void Parse(ConnectionDataEventArgs e)
         {
-            //Console.WriteLine(e.Data.Dump());
-
-            _incomingBuffer.AppendData(e.Data.ToArray());
-
-            while (_incomingBuffer.IsPacketAvailable())
+            lock (Universe)
             {
-                int end = _incomingBuffer.Position;
-                end += _incomingBuffer.ReadInt(32) * 8;
+                //Console.WriteLine(e.Data.Dump());
 
-                while ((end - _incomingBuffer.Position) >= 9)
+                _incomingBuffer.AppendData(e.Data.ToArray());
+
+                while (_incomingBuffer.IsPacketAvailable())
                 {
-                    GameMessage message = _incomingBuffer.ParseMessage();
-                    if (message == null) continue;
-                    try
-                    {
-                        if (message.Consumer != Consumers.None) this.Universe.Route(this, message);
-                        else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
-                        else Logger.Warn("Got an incoming message that has no consumer or self-handler: {0}", message.GetType());
+                    int end = _incomingBuffer.Position;
+                    end += _incomingBuffer.ReadInt(32) * 8;
 
-                        //Logger.LogIncoming(message);
-                    }
-                    catch (NotImplementedException)
+                    while ((end - _incomingBuffer.Position) >= 9)
                     {
-                        Logger.Debug("Unhandled game message: 0x{0:X4} {1}", message.Id, message.GetType().Name);
+                        GameMessage message = _incomingBuffer.ParseMessage();
+                        if (message == null) continue;
+                        try
+                        {
+                            if (message.Consumer != Consumers.None) this.Universe.Route(this, message);
+                            else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
+                            else Logger.Warn("Got an incoming message that has no consumer or self-handler: {0}", message.GetType());
+
+                            Logger.LogIncoming(message);
+                        }
+                        catch (NotImplementedException)
+                        {
+                            Logger.Debug("Unhandled game message: 0x{0:X4} {1}", message.Id, message.GetType().Name);
+                        }
                     }
+
+                    _incomingBuffer.Position = end;
                 }
-
-                _incomingBuffer.Position = end;
+                _incomingBuffer.ConsumeData();
+                FlushOutgoingBuffer();
             }
-            _incomingBuffer.ConsumeData();
-            FlushOutgoingBuffer();
         }
 
         public void SendMessage(GameMessage message)

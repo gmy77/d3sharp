@@ -22,14 +22,14 @@ namespace Mooege.Core.GS.Powers
     {
         public Vector3D position;
         public DateTime timeout;
-        public List<int> ids;
+        public IList<ClientObjectId> ids;
     }
 
-    public interface IDamageable
+    public interface IPowerTarget
     {
         void ReceiveDamage(Actor from, float amount, int type);
         Vector3D GetPosition();
-        int GetId();
+        IList<ClientObjectId> GetIds();
     }
 
     public class PowersManager
@@ -38,17 +38,23 @@ namespace Mooege.Core.GS.Powers
         private PowersMobTester _mobtester;
 
         private Universe.Universe _universe;
+
         private List<Effect> _effects = new List<Effect>();
         private Random _rand = new Random();
+        private List<Actor> _channelingActors = new List<Actor>();
+        // TODO: multiple proxies per user needed?
         private Dictionary<Actor, Effect> _proxies = new Dictionary<Actor, Effect>();
 
-        private DateTime _castTimeout = DateTime.MinValue;
+        // channeled spells fire extremely fast, we need some way to slow down damage and graphic effects,
+        // while still updating position/targeting data.
+        private Dictionary<Actor, DateTime> _castDelays = new Dictionary<Actor, DateTime>();
 
-        private IEnumerable<IDamageable> Damageables
+        // supplies Powers with all available targets.
+        private IEnumerable<IPowerTarget> Targets
         {
             get
             {
-                return PowersMobTester.Damageables;
+                return PowersMobTester.PowerTargets;
             }
         }
 
@@ -66,15 +72,15 @@ namespace Mooege.Core.GS.Powers
 
         public void UsePower(Actor user, int powerId, int targetId = -1, Vector3D targetPos = null)
         {
-            IDamageable target;
+            IPowerTarget target;
 
             if (targetId == -1)
             {
                 target = null;
             }
-            else if (GetDamagableFromId(targetId) != null)
+            else if (GetPowerTargetFromId(targetId) != null)
             {
-                target = GetDamagableFromId(targetId);
+                target = GetPowerTargetFromId(targetId);
                 targetPos = target.GetPosition();
             }
             else
@@ -85,15 +91,7 @@ namespace Mooege.Core.GS.Powers
             if (targetPos == null)
                 targetPos = new Vector3D(0, 0, 0);
 
-            // TODO: needs to be done in out-of-band thread eventually
-            Tick();
-
-            // HACK: some spells (electrocute, disintegrate) have insane cast speeds, not
-            // sure how server handles this, maybe its just because ticks aren't implemented.
-            if (DateTime.Now < _castTimeout)
-                return;
-            _castTimeout = DateTime.Now.AddMilliseconds(100);
-
+            #region Conceptual power implementations
             // TODO: need to split this out into multiple files eventually
             if (powerId == Skills.Skills.Monk.SpiritSpenders.BlindingFlash) // used for spawning stuff right now
             {
@@ -106,14 +104,17 @@ namespace Mooege.Core.GS.Powers
                     if (Math.Abs(user.Position.X - targetPos.X) < 15f &&
                         Math.Abs(user.Position.Y - targetPos.Y) < 15f)
                     {
-                        SendMessage(new PlayHitEffectMessage()
+                        foreach (ClientObjectId clid in target.GetIds())
                         {
-                            Id = 0x7b,
-                            Field0 = target.GetId(),
-                            Field1 = user.Id,
-                            Field2 = 0,
-                            Field3 = false
-                        });
+                            clid.client.SendMessage(new PlayHitEffectMessage()
+                            {
+                                Id = 0x7b,
+                                Field0 = clid.id,
+                                Field1 = user.Id,
+                                Field2 = 0,
+                                Field3 = false
+                            });
+                        }
                         DoDamage(user, target, 25f, 0);
                         SendDWordTick();
                         FlushOutgoingBuffer();
@@ -124,114 +125,49 @@ namespace Mooege.Core.GS.Powers
             else if (powerId == Skills.Skills.Wizard.Utility.FrostNova) // testing skill
             {
                 //if (target == null) break;
-
-                // try to level up!
-
-                SendMessage(new PlayerLevel()
-                {
-                    Id = 0x98,
-                    Field0 = 0,
-                    Field1 = 2
-                });
-                SendMessage(new PlayConvLineMessage()
-                {
-                    Id = 0xba,
-                    Field0 = user.Id,
-                    Field1 = new int[9]
-                    {
-                        user.Id, -1, -1, -1, -1, -1, -1, -1, -1
-                    },
-                    Field2 = new PlayLineParams()
-                    {
-                        snoConversation = 0x2a777,
-                        Field1 = 0,
-                        Field2 = false,
-                        Field3 = 0,
-                        Field4 = 0,
-                        Field5 = -1,
-                        Field6 = 2,
-                        Field7 = 1,
-                        Field8 = 2,
-                        snoSpeakerActor = 0x0000197e,
-                        Field10 = "aaa",
-                        Field11 = 2,
-                        Field12 = -1,
-                        Field13 = 0x32,
-                        Field14 = 0x5a,
-                        Field15 = 0x32
-                    },
-                    Field3 = 0x32
-                });
-                SendDWordTick();
-
-                FlushOutgoingBuffer();
             }
             else if (powerId == Skills.Skills.Wizard.Signature.Electrocute) // electrocute
             {
-                // TODO: refactor this targetting style and effect messages out of here
-                IList<IDamageable> targets;
-                List<int> effect_targets = new List<int>();
+                bool delayed = CastDelay(user);
+                if (delayed)
+                {
+                    // just update proxy if needed and return
+                    if (target == null)
+                    {
+                        GetProxyEffectFor(user, targetPos);
+                        SendDWordTick();
+                        FlushOutgoingBuffer();
+                    }
+                    return;
+                }
+
+                LookAt(user, targetPos);
+
+                IList<IPowerTarget> targets;
                 if (target == null)
                 {
-                    effect_targets.Add(GetProxyIdFor(user, targetPos));
-                    targets = new List<IDamageable>();
+                    targets = new List<IPowerTarget>();
+                    PlayRopeEffectToActor(0x78c0, GetIdsForActor(user), GetProxyEffectFor(user, targetPos).ids);
+                    SendDWordTick();
                 }
                 else
                 {
                     targets = FindTargetsInRadius(targetPos, 15f, 1);
                     targets.Insert(0, target);
-                    foreach (var d in targets)
-                        effect_targets.Add(d.GetId());
-                }
-
-                // look at target
-                float facing = (float)Math.Atan2(targetPos.Y - user.Position.Y, targetPos.X - user.Position.X);
-                SendMessage(new ACDTranslateFacingMessage
-                {
-                    Id = 0x70,
-                    Field0 = user.Id,
-                    Field1 = facing,
-                    Field2 = false
-                });
-
-                int effect_source = user.Id;
-                foreach (int id in effect_targets)
-                {
-                    //SendMessage(new PlayEffectMessage() // sound effect
-                    //{
-                    //    Id = 0x7a,
-                    //    Field0 = id,
-                    //    Field1 = 0,
-                    //    Field2 = 0x07
-                    //});
-                    if (! (_proxies.ContainsKey(user) && _proxies[user].ids.Contains(id))) // only run if not proxy object
+                    IList<ClientObjectId> effect_source = GetIdsForActor(user);
+                    foreach (IPowerTarget tar in targets)
                     {
-                        SendMessage(new PlayHitEffectMessage() // hit lightining
-                        {
-                            Id = 0x7b,
-                            Field0 = id,
-                            Field1 = user.Id,
-                            Field2 = 2,
-                            Field3 = false
-                        });
+                        PlayHitEffect(2, effect_source, tar.GetIds());
+                        PlayRopeEffectToActor(0x78c0, effect_source, tar.GetIds());
+                        SendDWordTick();
+
+                        effect_source = tar.GetIds();
                     }
-                    SendMessage(new RopeEffectMessageACDToACD() // bolt
-                    {
-                        Id = 0x00ab,
-                        Field0 = 0x078C0,
-                        Field1 = effect_source,
-                        Field2 = 4,
-                        Field3 = id,
-                        Field4 = 1
-                    });
-                    SendDWordTick();
-
-                    effect_source = id;
                 }
 
-                foreach (IDamageable d in targets)
+                foreach (IPowerTarget t in targets)
                 {
-                    DoDamage(user, d, 12, 0);
+                    DoDamage(user, t, 12, 0);
                 }
                 FlushOutgoingBuffer();
             }
@@ -246,8 +182,8 @@ namespace Mooege.Core.GS.Powers
 
                     SpawnEffect(user, 61419, spos);
 
-                    IList<IDamageable> hits = FindTargetsInRadius(spos, 6f);
-                    foreach (IDamageable x in hits)
+                    IList<IPowerTarget> hits = FindTargetsInRadius(spos, 6f);
+                    foreach (IPowerTarget x in hits)
                     {
                         DoDamage(user, x, 20f, 0);
                     }
@@ -262,8 +198,8 @@ namespace Mooege.Core.GS.Powers
 
                 System.Threading.Thread.Sleep(400);
 
-                IList<IDamageable> hits = FindTargetsInRadius(targetPos, 10f);
-                foreach (IDamageable x in hits)
+                IList<IPowerTarget> hits = FindTargetsInRadius(targetPos, 10f);
+                foreach (IPowerTarget x in hits)
                 {
                     DoDamage(user, x, 100f, 0);
                 }
@@ -275,10 +211,10 @@ namespace Mooege.Core.GS.Powers
                 FlushOutgoingBuffer();
                 System.Threading.Thread.Sleep(2000);
                 SpawnEffect(user, 86769, targetPos);
-                SpawnEffect(user, 90364, targetPos); //, -1.0f, 5000);
+                SpawnEffect(user, 90364, targetPos, -1, 4000);
 
-                IList<IDamageable> hits = FindTargetsInRadius(targetPos, 13f);
-                foreach (IDamageable x in hits)
+                IList<IPowerTarget> hits = FindTargetsInRadius(targetPos, 13f);
+                foreach (IPowerTarget x in hits)
                 {
                     DoDamage(user, x, 150f, 0);
                 }
@@ -286,7 +222,16 @@ namespace Mooege.Core.GS.Powers
             }
             else if (powerId == Skills.Skills.Wizard.Offensive.Disintegrate)
             {
-                //SpawnEffect(user, 52687, targetPos);
+                Effect pid = GetProxyEffectFor(user, targetPos);
+                if (!_channelingActors.Contains(user))
+                {
+                    _channelingActors.Add(user);
+                    PlayRopeEffectToActor(30888, GetIdsForActor(user), pid.ids);
+                }
+                SendDWordTick();
+
+                //DoDamage(user, target, 12, 0);
+                FlushOutgoingBuffer();
             }
             else if (powerId == Skills.Skills.Monk.SpiritSpenders.SevenSidedStrike)
             {
@@ -296,7 +241,7 @@ namespace Mooege.Core.GS.Powers
                 else
                     startpos = targetPos;
 
-                IList<IDamageable> nearby = FindTargetsInRadius(startpos, 20f, 7);
+                IList<IPowerTarget> nearby = FindTargetsInRadius(startpos, 20f, 7);
                 for (int n = 0; n < 7; ++n)
                 {
                     if (nearby.Count > 0)
@@ -309,6 +254,91 @@ namespace Mooege.Core.GS.Powers
                     System.Threading.Thread.Sleep(100);
                 }
             }
+            #endregion // conceptual power implementations
+        }
+
+        private bool CastDelay(Actor user)
+        {
+            if (!_castDelays.ContainsKey(user) || DateTime.Now > _castDelays[user])
+            {
+                _castDelays[user] = DateTime.Now.AddMilliseconds(150);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public void CancelChanneledPower(Universe.Hero hero, int powerId)
+        {
+            if (_channelingActors.Contains(hero))
+                _channelingActors.Remove(hero);
+
+            if (_proxies.ContainsKey(hero))
+            {
+                KillSpawnedEffect(_proxies[hero]);
+                _proxies.Remove(hero);
+            }
+        }
+
+        private void PlayHitEffect(int effectId, IList<ClientObjectId> from, IList<ClientObjectId> target)
+        {
+            foreach (ClientObjectId clid in target)
+            {
+                clid.client.SendMessage(new PlayHitEffectMessage()
+                {
+                    Id = 0x7b,
+                    Field0 = clid.id,
+                    Field1 = from.First(clo => clo.client == clid.client).id,
+                    Field2 = effectId,
+                    Field3 = false
+                });
+            }
+        }
+
+        private void PlayRopeEffectToActor(int effectId, IList<ClientObjectId> from, IList<ClientObjectId> target)
+        {
+            foreach (ClientObjectId clid in target)
+            {
+                clid.client.SendMessage(new RopeEffectMessageACDToACD()
+                {
+                    Id = 0x00ab,
+                    Field0 = effectId,
+                    Field1 = from.First(clo => clo.client == clid.client).id,
+                    Field2 = 4,
+                    Field3 = clid.id,
+                    Field4 = 1
+                });
+            }
+        }
+
+        private void LookAt(Actor actor, Vector3D targetPos)
+        {
+            float facing = (float)Math.Atan2(targetPos.Y - actor.Position.Y, targetPos.X - actor.Position.X);
+            foreach (ClientObjectId clid in GetIdsForActor(actor))
+            {
+                clid.client.SendMessage(new ACDTranslateFacingMessage
+                {
+                    Id = 0x70,
+                    Field0 = clid.id,
+                    Field1 = facing,
+                    Field2 = false
+                });
+            }
+        }
+
+        private IList<ClientObjectId> GetIdsForActor(Actor actor)
+        {
+            // HACK: actor doesn't current track per-client ids so we just hard wire it to player0
+            return new List<ClientObjectId>()
+            {
+                new ClientObjectId()
+                {
+                    id = actor.Id,
+                    client = _universe.PlayerManager.Players[0].Client
+                }
+            };
         }
 
         private void CleanUpEffects()
@@ -330,19 +360,18 @@ namespace Mooege.Core.GS.Powers
         {
             get
             {
-                foreach (GameClient client in _universe.PlayerManager.Players.Select(p => p.Client))
-                {
-                    yield return client;
-                }
+                return _universe.PlayerManager.Players.Select(p => p.Client);
             }
         }
 
         private Effect SpawnEffectObject(Actor from, int effectId, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
         {
-            Effect effect = new Effect();
-            effect.ids = new List<int>();
-            effect.position = position;
-            effect.timeout = DateTime.Now.AddMilliseconds(timeout);
+            Effect effect = new Effect()
+            {
+                ids = new List<ClientObjectId>(),
+                position = position,
+                timeout = DateTime.Now.AddMilliseconds(timeout)
+            };
 
             if (angle == -1f)
                 angle = (float)_rand.NextDouble() * 360f;
@@ -352,17 +381,15 @@ namespace Mooege.Core.GS.Powers
 
             foreach (GameClient client in _clients)
             {
-                int nId = effectId;
-
-                client.ObjectId++;
-                effect.ids.Add(client.ObjectId);
+                ClientObjectId clid = ClientObjectId.GenerateNewId(client);
+                effect.ids.Add(clid);
 
                 #region ACDEnterKnown Hittable Zombie
                 client.SendMessage(new ACDEnterKnownMessage()
                 {
                     Id = 0x003B,
-                    Field0 = client.ObjectId,
-                    Field1 = nId,
+                    Field0 = clid.id,
+                    Field1 = effectId,
                     Field2 = 0x8,
                     Field3 = 0x0,
                     Field4 = new WorldLocationMessageData()
@@ -396,7 +423,7 @@ namespace Mooege.Core.GS.Powers
                         Field1 = 1,
                     },
                     Field7 = 0x00000001,
-                    Field8 = nId,
+                    Field8 = effectId,
                     Field9 = 0x0,
                     Field10 = 0x0,
                     Field11 = 0x0,
@@ -406,21 +433,21 @@ namespace Mooege.Core.GS.Powers
                 client.SendMessage(new AffixMessage()
                 {
                     Id = 0x48,
-                    Field0 = client.ObjectId,
+                    Field0 = clid.id,
                     Field1 = 0x1,
                     aAffixGBIDs = new int[0]
                 });
                 client.SendMessage(new AffixMessage()
                 {
                     Id = 0x48,
-                    Field0 = client.ObjectId,
+                    Field0 = clid.id,
                     Field1 = 0x2,
                     aAffixGBIDs = new int[0]
                 });
                 client.SendMessage(new ACDCollFlagsMessage
                 {
                     Id = 0xa6,
-                    Field0 = client.ObjectId,
+                    Field0 = clid.id,
                     Field1 = 0x1
                 });
 
@@ -430,7 +457,7 @@ namespace Mooege.Core.GS.Powers
                 client.SendMessage(new ACDGroupMessage
                 {
                     Id = 0xb8,
-                    Field0 = client.ObjectId,
+                    Field0 = clid.id,
                     Field1 = unchecked((int)0xb59b8de4),
                     Field2 = unchecked((int)0xffffffff)
                 });
@@ -438,13 +465,13 @@ namespace Mooege.Core.GS.Powers
                 client.SendMessage(new ANNDataMessage
                 {
                     Id = 0x3e,
-                    Field0 = client.ObjectId
+                    Field0 = clid.id
                 });
 
                 client.SendMessage(new ACDTranslateFacingMessage
                 {
                     Id = 0x70,
-                    Field0 = client.ObjectId,
+                    Field0 = clid.id,
                     Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI), // TODO: make this use angle
                     Field2 = false
                 });
@@ -452,7 +479,7 @@ namespace Mooege.Core.GS.Powers
                 client.SendMessage(new SetIdleAnimationMessage
                 {
                     Id = 0xa5,
-                    Field0 = client.ObjectId,
+                    Field0 = clid.id,
                     Field1 = 0x11150
                 });
 
@@ -462,7 +489,7 @@ namespace Mooege.Core.GS.Powers
                     Field0 = new SNOName
                     {
                         Field0 = 0x1,
-                        Field1 = nId
+                        Field1 = effectId
                     }
                 });
                 #endregion
@@ -492,173 +519,28 @@ namespace Mooege.Core.GS.Powers
 
         private void KillSpawnedEffect(Effect effect)
         {
-            foreach (GameClient client in _clients)
+            foreach (ClientObjectId clid in effect.ids)
             {
-                foreach (int id in effect.ids)
+                clid.client.SendMessage(new ANNDataMessage()
                 {
-                    var killAni = new int[]
-                    {
-                        0x2cd7,
-                        0x2cd4,
-                        0x01b378,
-                        0x2cdc,
-                        0x02f2,
-                        0x2ccf,
-                        0x2cd0,
-                        0x2cd1,
-                        0x2cd2,
-                        0x2cd3,
-                        0x2cd5,
-                        0x01b144,
-                        0x2cd6,
-                        0x2cd8,
-                        0x2cda,
-                        0x2cd9
-                    };
-                    client.SendMessage(new PlayEffectMessage()
-                    {
-                        Id = 0x7a,
-                        Field0 = id,
-                        Field1 = 0x0,
-                        Field2 = 0x2,
-                    });
-                    client.SendMessage(new PlayEffectMessage()
-                    {
-                        Id = 0x7a,
-                        Field0 = id,
-                        Field1 = 0xc,
-                    });
-                    client.SendMessage(new PlayHitEffectMessage()
-                    {
-                        Id = 0x7b,
-                        Field0 = id,
-                        Field1 = 0x789E00E2,
-                        Field2 = 0x2,
-                        Field3 = false,
-                    });
+                    Id = 0x3c,
+                    Field0 = clid.id,
+                });
 
-                    //client.SendMessage(new FloatingNumberMessage()
-                    //{
-                    //    Id = 0xd0,
-                    //    Field0 = id,
-                    //    Field1 = 9001.0f,
-                    //    Field2 = 0,
-                    //});
-
-                    client.SendMessage(new ANNDataMessage()
-                    {
-                        Id = 0x6d,
-                        Field0 = id,
-                    });
-
-                    int ani = killAni[RandomHelper.Next(killAni.Length)];
-                    //Logger.Info("Ani used: " + ani);
-
-                    client.SendMessage(new PlayAnimationMessage()
-                    {
-                        Id = 0x6c,
-                        Field0 = id,
-                        Field1 = 0xb,
-                        Field2 = 0,
-                        tAnim = new PlayAnimationMessageSpec[1]
+                clid.client.PacketId += 10 * 2;
+                clid.client.SendMessage(new DWordDataMessage()
                 {
-                    new PlayAnimationMessageSpec()
-                    {
-                        Field0 = 0x2,
-                        Field1 = ani,
-                        Field2 = 0x0,
-                        Field3 = 1f
-                    }
-                }
-                    });
-
-                    client.PacketId += 10 * 2;
-                    client.SendMessage(new DWordDataMessage()
-                    {
-                        Id = 0x89,
-                        Field0 = client.PacketId,
-                    });
-
-                    client.SendMessage(new ANNDataMessage()
-                    {
-                        Id = 0xc5,
-                        Field0 = id,
-                    });
-
-                    client.SendMessage(new AttributeSetValueMessage
-                    {
-                        Id = 0x4c,
-                        Field0 = id,
-                        Field1 = new NetAttributeKeyValue
-                        {
-                            Attribute = GameAttribute.Attributes[0x4d],
-                            Float = 0
-                        }
-                    });
-
-                    client.SendMessage(new AttributeSetValueMessage
-                    {
-                        Id = 0x4c,
-                        Field0 = id,
-                        Field1 = new NetAttributeKeyValue
-                        {
-                            Attribute = GameAttribute.Attributes[0x1c2],
-                            Int = 1
-                        }
-                    });
-
-                    client.SendMessage(new AttributeSetValueMessage
-                    {
-                        Id = 0x4c,
-                        Field0 = id,
-                        Field1 = new NetAttributeKeyValue
-                        {
-                            Attribute = GameAttribute.Attributes[0x1c5],
-                            Int = 1
-                        }
-                    });
-                    client.SendMessage(new PlayEffectMessage()
-                    {
-                        Id = 0x7a,
-                        Field0 = id,
-                        Field1 = 0xc,
-                    });
-                    client.SendMessage(new PlayEffectMessage()
-                    {
-                        Id = 0x7a,
-                        Field0 = id,
-                        Field1 = 0x37,
-                    });
-                    client.SendMessage(new PlayHitEffectMessage()
-                    {
-                        Id = 0x7b,
-                        Field0 = id,
-                        Field1 = 0x789E00E2,
-                        Field2 = 0x2,
-                        Field3 = false,
-                    });
-
-                    client.SendMessage(new ANNDataMessage()
-                    {
-                        Id = 0x3c,
-                        Field0 = id,
-                    });
-
-                    client.PacketId += 10 * 2;
-                    client.SendMessage(new DWordDataMessage()
-                    {
-                        Id = 0x89,
-                        Field0 = client.PacketId,
-                    });
-                }
-                client.FlushOutgoingBuffer();
+                    Id = 0x89,
+                    Field0 = clid.client.PacketId,
+                });
+                clid.client.FlushOutgoingBuffer();
             }
         }
 
-        private IList<IDamageable> FindTargetsInRadius(Vector3D center, float radius, int maxCount = -1)
+        private IList<IPowerTarget> FindTargetsInRadius(Vector3D center, float radius, int maxCount = -1)
         {
-            List<IDamageable> hits = new List<IDamageable>();
-            foreach (IDamageable d in Damageables)
+            List<IPowerTarget> hits = new List<IPowerTarget>();
+            foreach (IPowerTarget d in Targets)
             {
                 if (hits.Count == maxCount)
                     break;
@@ -673,85 +555,90 @@ namespace Mooege.Core.GS.Powers
             return hits;
         }
 
-        private int GetProxyIdFor(Actor from, Vector3D pos)
+        private Effect GetProxyEffectFor(Actor from, Vector3D pos)
         {
             if (!_proxies.ContainsKey(from))
             {
                 _proxies[from] = SpawnEffectObject(from, 187359, pos);
             }
-            foreach (GameClient client in _clients)
+            else
             {
-                SendMessage(new ACDWorldPositionMessage()
+                foreach (ClientObjectId clid in _proxies[from].ids)
                 {
-                    Id = 0x003f,
-                    Field0 = _proxies[from].ids[0], // HACK: make ids associative
-                    Field1 = new WorldLocationMessageData()
+                    // not working
+                    //clid.client.SendMessage(new ACDTranslateNormalMessage()
+                    //{
+                    //    Id = 0x6e,
+                    //    Field0 = clid.id,
+                    //    Position = pos,
+                    //    Field2 = 5.5f,
+                    //    Field5 = 1032
+                    //});
+                    clid.client.SendMessage(new ACDWorldPositionMessage()
                     {
-                        Field0 = 1f,
-                        Field1 = new PRTransform()
+                        Id = 0x003f,
+                        Field0 = clid.id,
+                        Field1 = new WorldLocationMessageData()
                         {
-                            Field0 = new Quaternion()
+                            Field0 = 1f,
+                            Field1 = new PRTransform()
                             {
-                                Amount = 0.768145f,
-                                Axis = new Vector3D(0, 0, -0.640276f)
+                                Field0 = new Quaternion()
+                                {
+                                    Amount = 0.768145f,
+                                    Axis = new Vector3D(0, 0, -0.640276f)
+                                },
+                                ReferencePoint = pos
                             },
-                            ReferencePoint = pos
-                        },
-                        Field2 = from.WorldId, // 0x772E0000,
-                    }
-                });
+                            Field2 = from.WorldId,
+                        }
+                    });
+                }
             }
 
-            return _proxies[from].ids[0]; // HACK: make ids associative
+            return _proxies[from];
         }
 
-        private void DoDamage(Actor from, IDamageable to, float amount, int type)
+        private void DoDamage(Actor from, IPowerTarget target, float amount, int type)
         {
-            SendMessage(new FloatingNumberMessage()
+            foreach (ClientObjectId clid in target.GetIds())
             {
-                Id = 0xd0,
-                Field0 = to.GetId(),
-                Field1 = amount,
-                Field2 = type,
-            });
-            SendDWordTick();
-            to.ReceiveDamage(from, amount, type);
-            FlushOutgoingBuffer();
-        }
-
-        private void DoDamage(Actor from, IList<IDamageable> to_list, float amount, int type)
-        {
-            foreach (IDamageable dam in to_list)
-            {
-                SendMessage(new FloatingNumberMessage()
+                clid.client.SendMessage(new FloatingNumberMessage()
                 {
                     Id = 0xd0,
-                    Field0 = dam.GetId(),
+                    Field0 = clid.id,
                     Field1 = amount,
                     Field2 = type,
                 });
+            }
+            SendDWordTick();
+            target.ReceiveDamage(from, amount, type);
+            FlushOutgoingBuffer();
+        }
+
+        private void DoDamage(Actor from, IList<IPowerTarget> target_list, float amount, int type)
+        {
+            foreach (IPowerTarget target in target_list)
+            {
+                foreach (ClientObjectId clid in target.GetIds())
+                {
+                    clid.client.SendMessage(new FloatingNumberMessage()
+                    {
+                        Id = 0xd0,
+                        Field0 = clid.id,
+                        Field1 = amount,
+                        Field2 = type,
+                    });
+                }
                 SendDWordTick();
-                dam.ReceiveDamage(from, amount, type);
+                target.ReceiveDamage(from, amount, type);
             }
             FlushOutgoingBuffer();
         }
 
-        private IDamageable GetDamagableFromId(int id)
+        private IPowerTarget GetPowerTargetFromId(int id)
         {
-            foreach (IDamageable d in Damageables)
-            {
-                if (d.GetId() == id)
-                    return d;
-            }
-            return null;
-        }
-
-        private void SendMessage(GameMessage msg)
-        {
-            foreach (GameClient client in _clients)
-            {
-                client.SendMessage(msg);
-            }
+            return Targets.FirstOrDefault(t => t.GetIds().Any(clid => clid.id == id));
         }
 
         private void FlushOutgoingBuffer()
@@ -767,7 +654,7 @@ namespace Mooege.Core.GS.Powers
             foreach (GameClient client in _clients)
             {
                 client.PacketId += 10 * 2;
-                SendMessage(new DWordDataMessage()
+                client.SendMessage(new DWordDataMessage()
                 {
                     Id = 0x89,
                     Field0 = client.PacketId,

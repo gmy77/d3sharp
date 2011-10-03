@@ -12,12 +12,13 @@ using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Effect;
+using Mooege.Core.GS.Universe;
 
 namespace Mooege.Core.GS.Powers
 {
-    public class SimpleMob : IDamageable
+    public class SimpleMob : IPowerTarget
     {
-        public int id;
+        public IList<ClientObjectId> ids;
         public Vector3D position;
         public PowersMobTester owner;
         public float hp;
@@ -36,17 +37,17 @@ namespace Mooege.Core.GS.Powers
             return position;
         }
 
-        public int GetId()
+        public IList<ClientObjectId> GetIds()
         {
-            return id;
+            return ids;
         }
     }
 
-    // simple hackish mob spawner, all mobs created by all instances of it are available via the Damageables
+    // simple hackish mob spawner, all mobs created by all instances of it are available via the PowerTargets
     // property, horribly un-threadsafe :)
     public class PowersMobTester
     {
-        public static IEnumerable<IDamageable> Damageables
+        public static IEnumerable<IPowerTarget> PowerTargets
         {
             get
             {
@@ -77,18 +78,20 @@ namespace Mooege.Core.GS.Powers
 
         public IList<SimpleMob> SpawnMob(int count = 10)
         {
-            GameClient client = _universe.PlayerManager.Players[0].Client;
+            // HACK: use player0's properties for spawning center
+            Player player0 = _universe.PlayerManager.Players[0];
 
-            int[] mobids = { 4282, 3893, 6652, 5428, 5346, 6024, 5393, 5433, 5467 };
+            // mob id list to select from when spawning
+            int[] mobids = { 3893};//4282, 3893, 6652, 5428, 5346, 6024, 5393, 5433, 5467 };
 
             IList<SimpleMob> created = new List<SimpleMob>();
 
             for (int n = 0; n < count; ++n)
             {
                 Vector3D position = new Vector3D();
-                position.X = client.Player.Hero.Position.X;
-                position.Y = client.Player.Hero.Position.Y;
-                position.Z = client.Player.Hero.Position.Z;
+                position.X = player0.Hero.Position.X;
+                position.Y = player0.Hero.Position.Y;
+                position.Z = player0.Hero.Position.Z;
                 if ((n % 2) == 0)
                 {
                     position.X += (float)(RandomHelper.NextDouble() * 20);
@@ -102,10 +105,9 @@ namespace Mooege.Core.GS.Powers
 
                 int nId = mobids[RandomHelper.Next(mobids.Length - 1)];
 
-                client.ObjectId++;
                 SimpleMob mob = new SimpleMob()
                 {
-                    id = client.ObjectId,
+                    ids = new List<ClientObjectId>(),
                     hp = 50,
                     position = position,
                     owner = this,
@@ -114,78 +116,84 @@ namespace Mooege.Core.GS.Powers
                 _mobs.Add(mob);
                 created.Add(mob);
 
-                #region ACDEnterKnown Hittable Zombie
-                client.SendMessage(new ACDEnterKnownMessage()
+                foreach (GameClient client in _clients)
                 {
-                    Id = 0x003B,
-                    Field0 = client.ObjectId,
-                    Field1 = nId,
-                    Field2 = 0x8,
-                    Field3 = 0x0,
-                    Field4 = new WorldLocationMessageData()
+                    ClientObjectId clid = ClientObjectId.GenerateNewId(client);
+                    mob.ids.Add(clid);
+
+                    #region ACDEnterKnown Hittable Zombie
+                    client.SendMessage(new ACDEnterKnownMessage()
                     {
-                        Field0 = 1.35f,
-                        Field1 = new PRTransform()
+                        Id = 0x003B,
+                        Field0 = clid.id,
+                        Field1 = nId,
+                        Field2 = 0x8,
+                        Field3 = 0x0,
+                        Field4 = new WorldLocationMessageData()
                         {
-                            Field0 = new Quaternion()
+                            Field0 = 1.35f,
+                            Field1 = new PRTransform()
                             {
-                                Amount = 0.768145f,
-                                Axis = new Vector3D()
+                                Field0 = new Quaternion()
                                 {
-                                    X = 0f,
-                                    Y = 0f,
-                                    Z = -0.640276f,
+                                    Amount = 0.768145f,
+                                    Axis = new Vector3D()
+                                    {
+                                        X = 0f,
+                                        Y = 0f,
+                                        Z = -0.640276f,
+                                    },
+                                },
+                                ReferencePoint = new Vector3D()
+                                {
+                                    X = position.X + 5,
+                                    Y = position.Y + 5,
+                                    Z = position.Z,
                                 },
                             },
-                            ReferencePoint = new Vector3D()
-                            {
-                                X = position.X + 5,
-                                Y = position.Y + 5,
-                                Z = position.Z,
-                            },
+                            // HACK: always spawns in player0's world
+                            Field2 = player0.Hero.WorldId,
                         },
-                        Field2 = _universe.PlayerManager.Players[0].Hero.WorldId, // 0x772E0000,
-                    },
-                    Field5 = null,
-                    Field6 = new GBHandle()
+                        Field5 = null,
+                        Field6 = new GBHandle()
+                        {
+                            Field0 = 1,
+                            Field1 = 1,
+                        },
+                        Field7 = 0x00000001,
+                        Field8 = nId,
+                        Field9 = 0x0,
+                        Field10 = 0x0,
+                        Field11 = 0x0,
+                        Field12 = 0x0,
+                        Field13 = 0x0
+                    });
+                    client.SendMessage(new AffixMessage()
                     {
-                        Field0 = 1,
-                        Field1 = 1,
-                    },
-                    Field7 = 0x00000001,
-                    Field8 = nId,
-                    Field9 = 0x0,
-                    Field10 = 0x0,
-                    Field11 = 0x0,
-                    Field12 = 0x0,
-                    Field13 = 0x0
-                });
-                client.SendMessage(new AffixMessage()
-                {
-                    Id = 0x48,
-                    Field0 = client.ObjectId,
-                    Field1 = 0x1,
-                    aAffixGBIDs = new int[0]
-                });
-                client.SendMessage(new AffixMessage()
-                {
-                    Id = 0x48,
-                    Field0 = client.ObjectId,
-                    Field1 = 0x2,
-                    aAffixGBIDs = new int[0]
-                });
-                client.SendMessage(new ACDCollFlagsMessage
-                {
-                    Id = 0xa6,
-                    Field0 = client.ObjectId,
-                    Field1 = 0x1
-                });
+                        Id = 0x48,
+                        Field0 = clid.id,
+                        Field1 = 0x1,
+                        aAffixGBIDs = new int[0]
+                    });
+                    client.SendMessage(new AffixMessage()
+                    {
+                        Id = 0x48,
+                        Field0 = clid.id,
+                        Field1 = 0x2,
+                        aAffixGBIDs = new int[0]
+                    });
+                    client.SendMessage(new ACDCollFlagsMessage
+                    {
+                        Id = 0xa6,
+                        Field0 = clid.id,
+                        Field1 = 0x1
+                    });
 
-                client.SendMessage(new AttributesSetValuesMessage
-                {
-                    Id = 0x4d,
-                    Field0 = client.ObjectId,
-                    atKeyVals = new NetAttributeKeyValue[15] {
+                    client.SendMessage(new AttributesSetValuesMessage
+                    {
+                        Id = 0x4d,
+                        Field0 = clid.id,
+                        atKeyVals = new NetAttributeKeyValue[15] {
                     new NetAttributeKeyValue {
                         Attribute = GameAttribute.Attributes[214],
                         Int = 0
@@ -261,13 +269,13 @@ namespace Mooege.Core.GS.Powers
                     }
                 }
 
-                });
+                    });
 
-                client.SendMessage(new AttributesSetValuesMessage
-                {
-                    Id = 0x4d,
-                    Field0 = client.ObjectId,
-                    atKeyVals = new NetAttributeKeyValue[9] {
+                    client.SendMessage(new AttributesSetValuesMessage
+                    {
+                        Id = 0x4d,
+                        Field0 = clid.id,
+                        atKeyVals = new NetAttributeKeyValue[9] {
                     new NetAttributeKeyValue {
                         Attribute = GameAttribute.Attributes[86],
                         Float = 4.546875f
@@ -308,64 +316,67 @@ namespace Mooege.Core.GS.Powers
                     }
                 }
 
-                });
+                    });
 
 
-                client.SendMessage(new ACDGroupMessage
-                {
-                    Id = 0xb8,
-                    Field0 = client.ObjectId,
-                    Field1 = unchecked((int)0xb59b8de4),
-                    Field2 = unchecked((int)0xffffffff)
-                });
-
-                client.SendMessage(new ANNDataMessage
-                {
-                    Id = 0x3e,
-                    Field0 = client.ObjectId
-                });
-
-                client.SendMessage(new ACDTranslateFacingMessage
-                {
-                    Id = 0x70,
-                    Field0 = client.ObjectId,
-                    Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI),
-                    Field2 = false
-                });
-
-                client.SendMessage(new SetIdleAnimationMessage
-                {
-                    Id = 0xa5,
-                    Field0 = client.ObjectId,
-                    Field1 = 0x11150
-                });
-
-                client.SendMessage(new SNONameDataMessage
-                {
-                    Id = 0xd3,
-                    Field0 = new SNOName
+                    client.SendMessage(new ACDGroupMessage
                     {
-                        Field0 = 0x1,
-                        Field1 = nId
-                    }
-                });
-                #endregion
+                        Id = 0xb8,
+                        Field0 = clid.id,
+                        Field1 = unchecked((int)0xb59b8de4),
+                        Field2 = unchecked((int)0xffffffff)
+                    });
 
-                client.PacketId += 30 * 2;
-                client.SendMessage(new DWordDataMessage()
-                {
-                    Id = 0x89,
-                    Field0 = client.PacketId,
-                });
-                client.Tick += 20;
-                client.SendMessage(new EndOfTickMessage()
-                {
-                    Id = 0x008D,
-                    Field0 = client.Tick - 20,
-                    Field1 = client.Tick
-                });
+                    client.SendMessage(new ANNDataMessage
+                    {
+                        Id = 0x3e,
+                        Field0 = clid.id
+                    });
+
+                    client.SendMessage(new ACDTranslateFacingMessage
+                    {
+                        Id = 0x70,
+                        Field0 = clid.id,
+                        Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI),
+                        Field2 = false
+                    });
+
+                    client.SendMessage(new SetIdleAnimationMessage
+                    {
+                        Id = 0xa5,
+                        Field0 = clid.id,
+                        Field1 = 0x11150
+                    });
+
+                    client.SendMessage(new SNONameDataMessage
+                    {
+                        Id = 0xd3,
+                        Field0 = new SNOName
+                        {
+                            Field0 = 0x1,
+                            Field1 = nId
+                        }
+                    });
+                    #endregion
+
+                    client.PacketId += 30 * 2;
+                    client.SendMessage(new DWordDataMessage()
+                    {
+                        Id = 0x89,
+                        Field0 = client.PacketId,
+                    });
+                    client.Tick += 20;
+                    client.SendMessage(new EndOfTickMessage()
+                    {
+                        Id = 0x008D,
+                        Field0 = client.Tick - 20,
+                        Field1 = client.Tick
+                    });
+                }
             }
-            client.FlushOutgoingBuffer();
+
+            foreach (GameClient client in _clients)
+                client.FlushOutgoingBuffer();
 
             return created;
         }
@@ -374,10 +385,11 @@ namespace Mooege.Core.GS.Powers
         {
             mob.dead = true;
             _mobs.Remove(mob);
-            GameClient client = _universe.PlayerManager.Players[0].Client;
 
-            var killAni = new int[]{
-                    0x2cd7,
+            foreach (ClientObjectId clid in mob.ids)
+            {
+                var killAni = new int[]{ 8207
+                    /*0x2cd7,
                     0x2cd4,
                     0x01b378,
                     0x2cdc,
@@ -392,38 +404,38 @@ namespace Mooege.Core.GS.Powers
                     0x2cd6,
                     0x2cd8,
                     0x2cda,
-                    0x2cd9
-            };
-            client.SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = mob.id,
-                Field1 = 0x0,
-                Field2 = 0x2,
-            });
-            client.SendMessage(new PlayEffectMessage()
-            {
-                Id = 0x7a,
-                Field0 = mob.id,
-                Field1 = 0xc,
-            });
+                    0x2cd9*/
+                };
+                clid.client.SendMessage(new PlayEffectMessage()
+                {
+                    Id = 0x7a,
+                    Field0 = clid.id,
+                    Field1 = 0x0,
+                    Field2 = 0x2,
+                });
+                clid.client.SendMessage(new PlayEffectMessage()
+                {
+                    Id = 0x7a,
+                    Field0 = clid.id,
+                    Field1 = 0xc,
+                });
 
-            client.SendMessage(new ANNDataMessage()
-            {
-                Id = 0x6d,
-                Field0 = mob.id,
-            });
+                clid.client.SendMessage(new ANNDataMessage()
+                {
+                    Id = 0x6d,
+                    Field0 = clid.id,
+                });
 
-            int ani = killAni[RandomHelper.Next(killAni.Length)];
-            //Logger.Info("Ani used: " + ani);
+                int ani = killAni[RandomHelper.Next(killAni.Length)];
+                //Logger.Info("Ani used: " + ani);
 
-            client.SendMessage(new PlayAnimationMessage()
-            {
-                Id = 0x6c,
-                Field0 = mob.id,
-                Field1 = 0xb,
-                Field2 = 0,
-                tAnim = new PlayAnimationMessageSpec[1]
+                clid.client.SendMessage(new PlayAnimationMessage()
+                {
+                    Id = 0x6c,
+                    Field0 = clid.id,
+                    Field1 = 0xb,
+                    Field2 = 0,
+                    tAnim = new PlayAnimationMessageSpec[1]
                 {
                     new PlayAnimationMessageSpec()
                     {
@@ -433,83 +445,62 @@ namespace Mooege.Core.GS.Powers
                         Field3 = 1f
                     }
                 }
-            });
+                });
 
-            client.PacketId += 10 * 2;
-            client.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = client.PacketId,
-            });
-
-            client.SendMessage(new ANNDataMessage()
-            {
-                Id = 0xc5,
-                Field0 = mob.id,
-            });
-
-            client.SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = mob.id,
-                Field1 = new NetAttributeKeyValue
+                clid.client.PacketId += 10 * 2;
+                clid.client.SendMessage(new DWordDataMessage()
                 {
-                    Attribute = GameAttribute.Attributes[0x4d],
-                    Float = 0
-                }
-            });
+                    Id = 0x89,
+                    Field0 = clid.client.PacketId,
+                });
 
-            client.SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = mob.id,
-                Field1 = new NetAttributeKeyValue
+                clid.client.SendMessage(new ANNDataMessage()
                 {
-                    Attribute = GameAttribute.Attributes[0x1c2],
-                    Int = 1
-                }
-            });
+                    Id = 0xc5,
+                    Field0 = clid.id,
+                });
 
-            client.SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = mob.id,
-                Field1 = new NetAttributeKeyValue
+                clid.client.SendMessage(new AttributeSetValueMessage
                 {
-                    Attribute = GameAttribute.Attributes[0x1c5],
-                    Int = 1
-                }
-            });
+                    Id = 0x4c,
+                    Field0 = clid.id,
+                    Field1 = new NetAttributeKeyValue
+                    {
+                        Attribute = GameAttribute.Attributes[0x4d],
+                        Float = 0
+                    }
+                });
 
-            // blacken corpses
-            //client.SendMessage(new PlayEffectMessage()
-            //{
-            //    Id = 0x7a,
-            //    Field0 = testMob.id,
-            //    Field1 = 0xc,
-            //});
-            //client.SendMessage(new PlayEffectMessage()
-            //{
-            //    Id = 0x7a,
-            //    Field0 = testMob.id,
-            //    Field1 = 0x37,
-            //});
-            //client.SendMessage(new PlayHitEffectMessage()
-            //{
-            //    Id = 0x7b,
-            //    Field0 = testMob.id,
-            //    Field1 = 0x789E00E2,
-            //    Field2 = 0x2,
-            //    Field3 = false,
-            //});
+                clid.client.SendMessage(new AttributeSetValueMessage
+                {
+                    Id = 0x4c,
+                    Field0 = clid.id,
+                    Field1 = new NetAttributeKeyValue
+                    {
+                        Attribute = GameAttribute.Attributes[0x1c2],
+                        Int = 1
+                    }
+                });
 
-            client.PacketId += 10 * 2;
-            client.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = client.PacketId,
-            });
-            client.FlushOutgoingBuffer();
+                clid.client.SendMessage(new AttributeSetValueMessage
+                {
+                    Id = 0x4c,
+                    Field0 = clid.id,
+                    Field1 = new NetAttributeKeyValue
+                    {
+                        Attribute = GameAttribute.Attributes[0x1c5],
+                        Int = 1
+                    }
+                });
+
+                clid.client.PacketId += 10 * 2;
+                clid.client.SendMessage(new DWordDataMessage()
+                {
+                    Id = 0x89,
+                    Field0 = clid.client.PacketId,
+                });
+                clid.client.FlushOutgoingBuffer();
+            }
 
             mob.deleteTimeout = DateTime.Now.AddMilliseconds(100);
             _mobsToDelete.Add(mob);
@@ -517,17 +508,19 @@ namespace Mooege.Core.GS.Powers
 
         public void Tick()
         {
-            GameClient client = _universe.PlayerManager.Players[0].Client;
             List<SimpleMob> survivors = new List<SimpleMob>();
             foreach (SimpleMob mob in _mobsToDelete)
             {
                 if (DateTime.Now > mob.deleteTimeout)
                 {
-                    client.SendMessage(new ANNDataMessage()
+                    foreach (ClientObjectId clid in mob.ids)
                     {
-                        Id = 0x3c,
-                        Field0 = mob.id,
-                    });
+                        clid.client.SendMessage(new ANNDataMessage()
+                        {
+                            Id = 0x3c,
+                            Field0 = clid.id,
+                        });
+                    }
                 }
                 else
                 {
@@ -535,6 +528,17 @@ namespace Mooege.Core.GS.Powers
                 }
             }
             _mobsToDelete = survivors;
+        }
+
+        private IEnumerable<GameClient> _clients
+        {
+            get
+            {
+                foreach (GameClient client in _universe.PlayerManager.Players.Select(p => p.Client))
+                {
+                    yield return client;
+                }
+            }
         }
     }
 }
