@@ -34,7 +34,7 @@ namespace Mooege.Core.Common.Items
         Helm, Gloves, Boots, Belt, Shoulders, Pants, Bracers, Shield, Quiver, Orb,
         Axe_1H, Axe_2H, CombatStaff_2H, Dagger, Mace_1H, Mace_2H, Sword_1H,
         Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, Wand, Ring, FistWeapon_1H,
-        HealthPotion
+        HealthPotion, Gold
 
         /* Not working at the moment:
          *  // ChestArmor                   --> does not work because there are missing itemnames for normal mode, just for nightmare and hell and some "a" and "b" variants... -> need to figure out which should be used
@@ -51,7 +51,6 @@ namespace Mooege.Core.Common.Items
         public int Count { get; set; } // <- amount?
 
         public List<Affix> AffixList { get; set; }
-        //public List<NetAttributeKeyValue> AttributeList { get; set; }
         public GameAttributeMap Attributes { get; set; }
 
         public Item(int id, uint gbid, ItemType type)
@@ -62,7 +61,6 @@ namespace Mooege.Core.Common.Items
             Type = type;
 
             AffixList = new List<Affix>();
-            //AttributeList = new List<NetAttributeKeyValue>();
             Attributes = new GameAttributeMap();
         }
 
@@ -182,7 +180,10 @@ namespace Mooege.Core.Common.Items
                 Field1 = 0x00000080,
             });
 
-
+            if (Type == ItemType.Gold) 
+            {
+                Attributes[GameAttribute.Gold] = Count;
+            }
             Attributes.SendMessage(client, ItemId);
             //SendAttributes(AttributeList, client);
 

@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common;
@@ -87,6 +88,23 @@ namespace Mooege.Core.GS.Map
                     Actors[i].Position.Y == y &&
                     Actors[i].Position.Z == z) return Actors[i];
             return null;
+        }
+
+        public List<Actor> GetActorsInRange(int snoID, float x, float y, float z, float range)
+        {
+            List<Actor> result = new List<Actor>();
+            for(int i = 0; i < Actors.Count; i++)
+            {
+                if(Actors[i].SnoId == snoID &&
+                    (Math.Sqrt(
+                        Math.Pow(Actors[i].Position.X - x, 2) + 
+                        Math.Pow(Actors[i].Position.Y - y, 2) +
+                        Math.Pow(Actors[i].Position.Z - z, 2)) <= range))
+                {
+                    result.Add(Actors[i]);
+                }
+            }
+            return result;
         }
 
         public bool ActorExists(Actor actor)

@@ -353,6 +353,7 @@ namespace Mooege.Core.GS.Universe
 
             Hero hero = client.Player.Hero;
             SpawnRandomDrop(hero, npc.Location.Field0);
+            SpawnGold(hero, npc.Location.Field0);
 
             
             
@@ -481,15 +482,21 @@ namespace Mooege.Core.GS.Universe
 
         private void SpawnRandomDrop(Hero hero, Vector3D postition)
         {
-            Random random = new Random();
-
             ItemTypeGenerator itemGenerator = new ItemTypeGenerator(hero.InGameClient);            
             
             // randomize ItemType 
             ItemType[] allValues = (ItemType[])Enum.GetValues(typeof(ItemType));
-            ItemType type = allValues[random.Next(allValues.Length)];           
+            ItemType type = allValues[RandomHelper.Next(allValues.Length)];           
             Item item = itemGenerator.GenerateRandomElement(type);
             DropItem(hero, item, postition);
+        }
+
+        private void SpawnGold(Hero hero, Vector3D position) 
+        {
+            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(hero.InGameClient);
+            Item item = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
+            item.Count = RandomHelper.Next(1, 3);
+            DropItem(hero, item, position);
         }
 
         public void DropItem(Hero hero, Item item, Vector3D postition)

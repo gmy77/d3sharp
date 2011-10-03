@@ -111,11 +111,9 @@ namespace Mooege.Core.Common.Items
             return item;
         }
 
-        private static int CreateUniqueItemId()
+        private int CreateUniqueItemId()
         {
-            // TODO: identifier must calculated correctly
-            // this way conflicts with ids used for mobs are possible
-            return _nextObjectIdentifier++;
+            return _client.Universe.NextObjectId;
         }
     }
 

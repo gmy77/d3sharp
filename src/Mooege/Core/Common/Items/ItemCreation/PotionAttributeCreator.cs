@@ -26,7 +26,7 @@ namespace Mooege.Core.Common.Items.ItemCreation
         public void CreateAttributes(Item item)
         {
             item.Attributes[GameAttribute.Hitpoints_Granted] = 250f;
-            //item.AttributeList.Add(new NetAttributeKeyValue { Attribute = GameAttribute.Hitpoints_Granted, Float = 250.0f, }); 
+            item.Attributes[GameAttribute.ItemStackQuantityLo] = 1;
         }
     }
 }

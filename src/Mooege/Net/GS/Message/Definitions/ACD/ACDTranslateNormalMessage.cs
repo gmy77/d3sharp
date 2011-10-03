@@ -16,7 +16,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Mooege.Core.Common.Items;
+using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
@@ -37,6 +41,44 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         {
             if (this.Position != null)
                 client.Player.Hero.Position = this.Position;
+
+            // looking for gold to pick up
+            var actorList = client.Player.Hero.CurrentWorld.GetActorsInRange(0x00000178, this.Position.X, this.Position.Y, this.Position.Z, 20f);
+            foreach (var actor in actorList) 
+            {
+                Item item;
+
+                if (client.items.TryGetValue(actor.DynamicId, out item) && item.Type == ItemType.Gold) 
+                {
+                    client.SendMessage(new FloatingAmountMessage() {
+                        Field0 = new WorldPlace() {
+                            Field0 = this.Position,
+                            Field1 = client.Player.Hero.CurrentWorld.WorldID,
+                        },
+                        Field1 = item.Count,
+                        Field3 = 0x1c,
+                    });
+                    client.SendMessage(new ANNDataMessage()
+                    {
+                        Id = 0x003C,
+                        Field0 = actor.DynamicId,
+                    });
+
+                    client.Player.Hero.Inventory.PickUpGold(actor.DynamicId);
+
+                    client.PacketId += 10 * 2;
+                    client.SendMessage(new DWordDataMessage()
+                    {
+                        Id = 0x89,
+                        Field0 = client.PacketId,
+                    });
+
+                    client.FlushOutgoingBuffer();
+
+                    client.items.Remove(actor.DynamicId);
+                    // should delete from World also
+                }
+            }
         }
 
         public override void Parse(GameBitBuffer buffer)
