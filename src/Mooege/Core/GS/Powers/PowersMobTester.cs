@@ -76,12 +76,12 @@ namespace Mooege.Core.GS.Powers
             _universe = null;
         }
 
-        public IList<SimpleMob> SpawnMob(int count = 10)
+        public IList<SimpleMob> SpawnMob(int count = 10, int mobcode = -1)
         {
             // HACK: use player0's properties for spawning center
             Player player0 = _universe.PlayerManager.Players[0];
 
-            // mob id list to select from when spawning
+            // mob id list to select from when spawning if mobcode == -1
             int[] mobids = { 4282, 3893, 6652, 5428, 5346, 6024, 5393, 5433, 5467 };
 
             IList<SimpleMob> created = new List<SimpleMob>();
@@ -103,7 +103,11 @@ namespace Mooege.Core.GS.Powers
                     position.Y -= (float)(RandomHelper.NextDouble() * 20);
                 }
 
-                int nId = mobids[RandomHelper.Next(mobids.Length - 1)];
+                int nId;
+                if (mobcode == -1)
+                    nId = mobids[RandomHelper.Next(mobids.Length - 1)];
+                else
+                    nId = mobcode;
 
                 SimpleMob mob = new SimpleMob()
                 {

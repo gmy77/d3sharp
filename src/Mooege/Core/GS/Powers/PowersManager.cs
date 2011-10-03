@@ -15,6 +15,7 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Definitions.Player;
+using Mooege.Common;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -27,6 +28,8 @@ namespace Mooege.Core.GS.Powers
 
     public class PowersManager
     {
+        static readonly Logger Logger = LogManager.CreateLogger();
+
         // temporary testing helper
         private PowersMobTester _mobtester;
 
@@ -63,7 +66,9 @@ namespace Mooege.Core.GS.Powers
             _mobtester.Tick();
         }
 
-        public void UsePower(Actor user, int powerId, int targetId = -1, Vector3D targetPos = null)
+        private IList<ClientObjectId> last_frost_spawn = null;
+
+        public void UsePower(Actor user, int powerId, int targetId = -1, Vector3D targetPos = null, TargetMessage message = null)
         {
             IPowerTarget target;
 
@@ -132,9 +137,31 @@ namespace Mooege.Core.GS.Powers
 
                 }
             }
-            else if (powerId == Skills.Skills.Wizard.Utility.FrostNova) // testing skill
+
+            else if (powerId == Skills.Skills.Monk.SpiritGenerator.DeadlyReach)
             {
-                //if (target == null) break;
+                if (message.Field5 == 0)
+                    PlayEffectGroupActorToActor(71921, GetIdsForActor(user), GetProxyEffectFor(user, targetPos).ids);
+                else if (message.Field5 == 1)
+                    PlayEffectGroupActorToActor(72134, GetIdsForActor(user), GetProxyEffectFor(user, targetPos).ids);
+                else if (message.Field5 == 2)
+                    PlayEffectGroupActorToActor(72331, GetIdsForActor(user), GetProxyEffectFor(user, targetPos).ids);
+                
+                SendDWordTick();
+            }
+            else if (powerId == Skills.Skills.Monk.SpiritGenerator.FistsOfThunder)
+            {
+                //Logger.Error("preplay: {0}\ndword: {1}\ntick: {2}", 1000* BitConverter.ToSingle(BitConverter.GetBytes(message.Field6.Field2), 0),
+                //    _clients.First().PacketId, _clients.First().Tick);
+
+                if (message.Field5 == 0)
+                    PlayEffectGroupActorToActor(96176, GetIdsForActor(user), GetProxyEffectFor(user, targetPos).ids);
+                else if (message.Field5 == 1)
+                    PlayEffectGroupActorToActor(96176, GetIdsForActor(user), GetProxyEffectFor(user, targetPos).ids);
+                else if (message.Field5 == 2)
+                    PlayEffectGroupActorToActor(96178, GetIdsForActor(user), GetProxyEffectFor(user, targetPos).ids);
+
+                SendDWordTick();
             }
             else if (powerId == Skills.Skills.Wizard.Signature.Electrocute) // electrocute
             {
@@ -148,7 +175,7 @@ namespace Mooege.Core.GS.Powers
                 if (target == null)
                 {
                     targets = new List<IPowerTarget>();
-                    PlayRopeEffectToActor(0x78c0, GetIdsForActor(user), GetProxyEffectFor(user, targetPos).ids);
+                    PlayRopeEffectActorToActor(0x78c0, GetIdsForActor(user), GetProxyEffectFor(user, targetPos).ids);
                     SendDWordTick();
                 }
                 else
@@ -159,7 +186,7 @@ namespace Mooege.Core.GS.Powers
                     foreach (IPowerTarget tar in targets)
                     {
                         PlayHitEffect(2, effect_source, tar.GetIds());
-                        PlayRopeEffectToActor(0x78c0, effect_source, tar.GetIds());
+                        PlayRopeEffectActorToActor(0x78c0, effect_source, tar.GetIds());
                         SendDWordTick();
 
                         effect_source = tar.GetIds();
@@ -227,7 +254,7 @@ namespace Mooege.Core.GS.Powers
                 if (!_channelingActors.Contains(user))
                 {
                     _channelingActors.Add(user);
-                    PlayRopeEffectToActor(30888, GetIdsForActor(user), pid.ids);
+                    PlayRopeEffectActorToActor(30888, GetIdsForActor(user), pid.ids);
                 }
                 SendDWordTick();
 
@@ -298,7 +325,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private void PlayRopeEffectToActor(int effectId, IList<ClientObjectId> from, IList<ClientObjectId> target)
+        private void PlayRopeEffectActorToActor(int effectId, IList<ClientObjectId> from, IList<ClientObjectId> target)
         {
             foreach (ClientObjectId clid in target)
             {
@@ -310,6 +337,20 @@ namespace Mooege.Core.GS.Powers
                     Field2 = 4,
                     Field3 = clid.id,
                     Field4 = 1
+                });
+            }
+        }
+
+        private void PlayEffectGroupActorToActor(int effectId, IList<ClientObjectId> from, IList<ClientObjectId> target)
+        {
+            foreach (ClientObjectId clid in target)
+            {
+                clid.client.SendMessage(new EffectGroupACDToACDMessage()
+                {
+                    Id = 0xaa,
+                    Field0 = effectId,
+                    Field1 = from.First(clo => clo.client == clid.client).id,
+                    Field2 = clid.id
                 });
             }
         }

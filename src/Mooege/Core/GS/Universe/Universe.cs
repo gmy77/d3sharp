@@ -371,7 +371,7 @@ namespace Mooege.Core.GS.Universe
             }
             else
             {
-                PowersManager.UsePower(client.Player.Hero, message.snoPower, message.Field1, message.Field2.Field0);
+                PowersManager.UsePower(client.Player.Hero, message.snoPower, message.Field1, message.Field2.Field0, message);
                 return;
             }
 

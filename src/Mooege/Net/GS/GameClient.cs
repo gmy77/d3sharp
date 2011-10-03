@@ -79,7 +79,7 @@ namespace Mooege.Net.GS
                             else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                             else Logger.Warn("{0} has no consumer or self-handler.", message.GetType());
 
-                            //Logger.LogIncoming(message);
+                            Logger.LogIncoming(message);
                         }
                         catch (NotImplementedException)
                         {
