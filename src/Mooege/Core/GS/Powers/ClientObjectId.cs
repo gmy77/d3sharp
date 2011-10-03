@@ -14,11 +14,10 @@ namespace Mooege.Core.GS.Powers
 
         public static ClientObjectId GenerateNewId(GameClient client)
         {
-            client.ObjectId++;
             return new ClientObjectId()
             {
                 client = client,
-                id = client.ObjectId
+                id = client.Universe.NextObjectId
             };
         }
     }

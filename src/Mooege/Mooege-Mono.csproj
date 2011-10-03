@@ -80,6 +80,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Common\Items\Affix.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\PotionAttributeCreator.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributeCreator.cs" />
+    <Compile Include="Core\GS\Universe\Inventory.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
@@ -100,6 +107,7 @@
     <Compile Include="Core\GS\Map\Scene.cs" />
     <Compile Include="Core\GS\Map\World.cs" />
     <Compile Include="Core\GS\NPC\BasicNPC.cs" />
+    <Compile Include="Core\MooNet\Invitation\ChannelInvitationManager.cs" />
     <Compile Include="Core\MooNet\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\MooNet\OnlinePlayers.cs" />
     <Compile Include="Core\MooNet\Services\AuthenticationService.cs" />
@@ -136,6 +144,7 @@
     <Compile Include="Core\GS\Data\SNO\Config.cs" />
     <Compile Include="Core\GS\Data\SNO\Database.cs" />
     <Compile Include="Core\GS\Data\SNO\Set.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.Array.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Net\GS\Message\GameAttributeMap.cs" />
@@ -392,7 +401,9 @@
       <Link>Assets\toon.db</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -450,5 +461,8 @@
       <Project>{4CC19847-6F24-4453-9E31-126F94308AB9}</Project>
       <Name>LibMooNet</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\GS\Inventory\" />
   </ItemGroup>
 </Project>

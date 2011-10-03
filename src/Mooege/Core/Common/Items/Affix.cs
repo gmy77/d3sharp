@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,39 +16,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Text;
-using Mooege.Net.GS.Message.Fields;
+using System;
+using Mooege.Common;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Core.Common.Items
 {
-    public class SNONameDataMessage : GameMessage
+    public class Affix
     {
-        public SNOName Field0;
+        public static readonly Logger Logger = LogManager.CreateLogger();
+        public int AffixGbid { get; set; }
 
-        public SNONameDataMessage() : base(Opcodes.SNONameDataMessage) { }
-
-        public override void Parse(GameBitBuffer buffer)
+        public Affix(int gbid)
         {
-            Field0 = new SNOName();
-            Field0.Parse(buffer);
+            AffixGbid = gbid;
         }
 
-        public override void Encode(GameBitBuffer buffer)
+        public override String ToString()
         {
-            Field0.Encode(buffer);
+            return String.Format("{0}", AffixGbid);
         }
 
-        public override void AsText(StringBuilder b, int pad)
+        public static Affix Parse(String affixString)
         {
-            b.Append(' ', pad);
-            b.AppendLine("SNONameDataMessage:");
-            b.Append(' ', pad++);
-            b.AppendLine("{");
-            Field0.AsText(b, pad);
-            b.Append(' ', --pad);
-            b.AppendLine("}");
+            try
+            {
+                int gbid = int.Parse(affixString);
+                var affix = new Affix(gbid);
+                return affix;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(String.Format("Affix can not be parsed: {0}", affixString), e);
+            }
         }
-
 
     }
 }

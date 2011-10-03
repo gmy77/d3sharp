@@ -19,32 +19,34 @@
 using System.Text;
 using Mooege.Net.GS.Message.Fields;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
-    public class SNONameDataMessage : GameMessage
+    [IncomingMessage(Opcodes.ANNDataMessage9, Consumers.Inventory)]
+    public class InventoryDropItemMessage : GameMessage
     {
-        public SNOName Field0;
-
-        public SNONameDataMessage() : base(Opcodes.SNONameDataMessage) { }
-
+        public int ItemId;
+        //TODO: find out about unknown data
+        public byte[] Unknown; 
+        
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = new SNOName();
-            Field0.Parse(buffer);
+            ItemId = buffer.ReadInt(32);
+           
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            Field0.Encode(buffer);
+            buffer.WriteInt(32, ItemId);
+           
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("SNONameDataMessage:");
+            b.AppendLine("InventoryDropItemMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            Field0.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("ItemId: 0x" + ItemId.ToString("X8"));                  
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

@@ -42,8 +42,10 @@ namespace Mooege
             LogManager.AttachLogTarget(new ConsoleTarget(Level.Trace));
             LogManager.AttachLogTarget(new FileTarget(Level.Trace, "mooege-log.txt"));
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
             PrintBanner();
             PrintLicense();
+            Console.ResetColor();
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
             StartupServers();
@@ -80,7 +82,6 @@ namespace Mooege
 
         private static void PrintBanner()
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(@"  _ __ ___    ___    ___    ___   __ _   ___ ");
             Console.WriteLine(@" | '_ ` _ \  / _ \  / _ \  / _ \ / _` | / _ \");
             Console.WriteLine(@" | | | | | || (_) || (_) ||  __/| (_| ||  __/");

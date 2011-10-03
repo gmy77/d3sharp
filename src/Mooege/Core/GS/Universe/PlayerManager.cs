@@ -58,7 +58,8 @@ namespace Mooege.Core.GS.Universe
             client.Player = player;
             this.Players.Add(player);
 
-            player.Greet(message);            
+            player.Greet(message);
+            
         }
     }
 }

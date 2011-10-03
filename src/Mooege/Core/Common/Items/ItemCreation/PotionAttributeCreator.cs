@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,39 +16,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Text;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Net.GS.Message;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Core.Common.Items.ItemCreation
 {
-    public class SNONameDataMessage : GameMessage
+    class PotionAttributeCreator: IItemAttributeCreator
     {
-        public SNOName Field0;
-
-        public SNONameDataMessage() : base(Opcodes.SNONameDataMessage) { }
-
-        public override void Parse(GameBitBuffer buffer)
-        {
-            Field0 = new SNOName();
-            Field0.Parse(buffer);
+        public void CreateAttributes(Item item)
+        {            
+            item.AttributeList.Add(new NetAttributeKeyValue { Attribute = GameAttribute.Attributes[82], Float = 250.0f, }); // Given Health 
         }
-
-        public override void Encode(GameBitBuffer buffer)
-        {
-            Field0.Encode(buffer);
-        }
-
-        public override void AsText(StringBuilder b, int pad)
-        {
-            b.Append(' ', pad);
-            b.AppendLine("SNONameDataMessage:");
-            b.Append(' ', pad++);
-            b.AppendLine("{");
-            Field0.AsText(b, pad);
-            b.Append(' ', --pad);
-            b.AppendLine("}");
-        }
-
-
     }
 }

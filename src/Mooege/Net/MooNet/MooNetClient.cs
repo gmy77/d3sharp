@@ -33,7 +33,7 @@ namespace Mooege.Net.MooNet
     public sealed class MooNetClient : IMooNetClient 
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public Dictionary<uint, uint> Services { get; set; }
+        public Dictionary<uint, uint> Services { get; private set; }
         public Account Account { get; set; }
         private int _requestCounter = 0;
 
@@ -44,7 +44,7 @@ namespace Mooege.Net.MooNet
         public IConnection Connection { get; set; }
 
         /// <summary>
-        /// Object id map as with remote object id as key, local object id as value.
+        /// Object ID map with local object ID as key and remote object ID as value.
         /// </summary>
         private Dictionary<ulong, ulong> MappedObjects { get; set; }
 
@@ -58,7 +58,6 @@ namespace Mooege.Net.MooNet
         // rpc to client
         public void CallMethod(MethodDescriptor method, IMessage request)
         {
-            Logger.Debug("CallMethod with 0 localObjectId");
             CallMethod(method, request, 0);
         }
 
@@ -76,7 +75,7 @@ namespace Mooege.Net.MooNet
             var serviceId = this.Services[serviceHash];
             var remoteObjectId = GetRemoteObjectID(localObjectId);
 
-            Logger.Debug("Calling {0} localObjectId={1}, remoteObjectId={2}", method.FullName, localObjectId, remoteObjectId);
+            Logger.Trace("Calling {0} localObjectId={1}, remoteObjectId={2}", method.FullName, localObjectId, remoteObjectId);
 
             var packet = new Packet(
                 new Header((byte)serviceId, (uint)(method.Index + 1), this._requestCounter++, (uint)request.SerializedSize, remoteObjectId),
@@ -121,9 +120,6 @@ namespace Mooege.Net.MooNet
 
         public ulong GetRemoteObjectID(ulong localObjectId)
         {
-            // TODO: Check for conflicts
-            // TODO: Handle exceptions-- should be fatal?
-            //       Maybe we can not bother once ID tracker/generator is in
             if (localObjectId == 0)
                 return 0; // null/unused/unset
             else

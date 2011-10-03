@@ -25,7 +25,7 @@ namespace Mooege.Core.GS.Actors
 {
     public class Actor
     {
-        public int Id;
+        public int DynamicId;
         public int SnoId;
         public int WorldId;
         public int Field2;
@@ -39,7 +39,7 @@ namespace Mooege.Core.GS.Actors
         public int Field7;
         public int Field8;
         public int Field9;
-        public byte Field10;        
+        public byte Field10;
 
         public void Reveal(Hero toon)
         {
@@ -48,7 +48,7 @@ namespace Mooege.Core.GS.Actors
 
             var msg = new ACDEnterKnownMessage
                           {
-                              Field0 = Id,
+                              Field0 = DynamicId,
                               Field1 = SnoId,
                               Field2 = Field2,
                               Field3 = Field3,
@@ -74,7 +74,7 @@ namespace Mooege.Core.GS.Actors
         {
             if (!hero.RevealedActors.Contains(this)) return; //not revealed yet
 
-            hero.InGameClient.SendMessage(new ANNDataMessage() { Id=0x3c, Field0=Id, });
+            hero.InGameClient.SendMessage(new ANNDataMessage() { Id=0x3c, Field0=DynamicId, });
             hero.InGameClient.FlushOutgoingBuffer();
             hero.RevealedActors.Remove(this);
         }
@@ -86,7 +86,8 @@ namespace Mooege.Core.GS.Actors
             if (int.Parse(data[2]) == 0) return false; //skip inventory using items as their use is unknown
 
             this.WorldId = worldId;
-            this.Id = int.Parse(data[4]);
+
+            this.DynamicId = int.Parse(data[4]);
             this.SnoId = int.Parse(data[5]);
             this.Field2 = int.Parse(data[6]);
             this.Field3 = int.Parse(data[7]);

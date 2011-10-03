@@ -1,4 +1,4 @@
-﻿﻿/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Map;
@@ -25,21 +26,24 @@ using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Hero;
-using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Net.GS.Message.Definitions.Inventory;
 
 namespace Mooege.Core.GS.Universe
 {
     public class Hero : Actor, IMessageConsumer // should extend actor actually?? /raist
     {
+        static readonly Logger Logger = LogManager.CreateLogger();
+
         public Toon Properties { get; private set; }
         public Universe Universe { get; private set; }
 
         public int CurrentWorldSNO;
         public SkillSet SkillSet;
+        public Inventory Inventory;
 
         public GameClient InGameClient { get; private set; }
 
@@ -53,6 +57,7 @@ namespace Mooege.Core.GS.Universe
             this.Universe = universe;
             this.Properties = toon;
             this.CurrentWorldSNO = 0x115EE;
+            this.Inventory = new Inventory(this);          
 
             this.SkillSet = new Skills.SkillSet(this.Properties.Class);
 
@@ -61,7 +66,7 @@ namespace Mooege.Core.GS.Universe
             RevealedActors = new List<Actor>();
 
             // actor values
-            this.Id = 0x789E00E2;
+            this.DynamicId = universe.NextObjectId;
             this.SnoId = this.ClassSNO;
             this.Field2 = 0x00000009;
             this.Field3 = 0x00000000;
@@ -187,7 +192,7 @@ namespace Mooege.Core.GS.Universe
         {
             return new VisualInventoryMessage
             {
-                Field0 = 0x789E00E2,
+                Field0 = this.DynamicId,
                 EquipmentList =
                     new VisualEquipment
                     {
@@ -208,7 +213,7 @@ namespace Mooege.Core.GS.Universe
         public World CurrentWorld
         {
             get { return this.Universe.GetWorld(this.WorldId); }
-        }
+        }        
 
         public int ClassSNO
         {

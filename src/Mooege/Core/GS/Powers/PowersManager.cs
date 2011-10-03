@@ -110,7 +110,7 @@ namespace Mooege.Core.GS.Powers
                             {
                                 Id = 0x7b,
                                 Field0 = clid.id,
-                                Field1 = user.Id,
+                                Field1 = user.DynamicId,
                                 Field2 = 0,
                                 Field3 = false
                             });
@@ -335,7 +335,7 @@ namespace Mooege.Core.GS.Powers
             {
                 new ClientObjectId()
                 {
-                    id = actor.Id,
+                    id = actor.DynamicId,
                     client = _universe.PlayerManager.Players[0].Client
                 }
             };

@@ -21,13 +21,11 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
+    [IncomingMessage(Opcodes.InventoryRequestMoveMessage1, Consumers.Inventory)]
     public class InventoryRequestMoveMessage : GameMessage
     {
         public int Field0;
         public InvLoc Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

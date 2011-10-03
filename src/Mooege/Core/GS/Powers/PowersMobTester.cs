@@ -388,6 +388,10 @@ namespace Mooege.Core.GS.Powers
 
             foreach (ClientObjectId clid in mob.ids)
             {
+                // HACK: I guess I'll throw in the item spawn code here, with a random chance instead of every time
+                if (RandomHelper.Next(1, 5) == 1)
+                    _universe.SpawnRandomDrop(clid.client.Player.Hero, mob.position);
+
                 var killAni = new int[]{ 8207
                     /*0x2cd7,
                     0x2cd4,
