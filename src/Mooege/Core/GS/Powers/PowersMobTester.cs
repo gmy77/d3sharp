@@ -395,6 +395,7 @@ namespace Mooege.Core.GS.Powers
                 // HACK: I guess I'll throw in the item spawn code here, with a random chance instead of every time
                 if (RandomHelper.Next(1, 5) == 1)
                     _universe.SpawnRandomDrop(clid.client.Player.Hero, mob.position);
+                _universe.SpawnGold(clid.client.Player.Hero, mob.position);
 
                 var killAni = new int[]{
                     0x2cd7,

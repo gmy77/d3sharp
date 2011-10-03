@@ -607,15 +607,6 @@ namespace Mooege.Core.GS.Powers
             {
                 foreach (ClientObjectId clid in _proxies[from].ids)
                 {
-                    // not working
-                    //clid.client.SendMessage(new ACDTranslateNormalMessage()
-                    //{
-                    //    Id = 0x6e,
-                    //    Field0 = clid.id,
-                    //    Position = pos,
-                    //    Field2 = 5.5f,
-                    //    Field5 = 1032
-                    //});
                     clid.client.SendMessage(new ACDWorldPositionMessage()
                     {
                         Id = 0x003f,

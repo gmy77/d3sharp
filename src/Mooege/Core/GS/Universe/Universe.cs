@@ -48,7 +48,7 @@ namespace Mooege.Core.GS.Universe
         private readonly List<World> _worlds;
 
         public PlayerManager PlayerManager { get; private set; }
-        int ObjectId = 0x78f50114 + 100;
+        private int _nextObjectId = 1;
 
         public PowersManager PowersManager;
 
@@ -67,7 +67,7 @@ namespace Mooege.Core.GS.Universe
             _tickThread.Start();
         }
 
-        public int NextObjectId { get { return ObjectId++; } }
+        public int NextObjectId { get { return ++_nextObjectId; } }
 
         public void Route(GameClient client, GameMessage message)
         {
@@ -131,9 +131,7 @@ namespace Mooege.Core.GS.Universe
 
                         //packet data
                         if (data[0].Equals("p") && data.Length >= 2)
-                        {                
- 
-                           
+                        {
                             int packettype = int.Parse(data[1]);
                             switch (packettype)
                             {
@@ -153,7 +151,7 @@ namespace Mooege.Core.GS.Universe
                                     }
                                     break;
 
-                                case 0x3b: //new actor     
+                                case 0x3b: //new actor
                                     {
                                         int WorldID = int.Parse(data[16]);
                                         World w = GetWorld(WorldID);
@@ -161,7 +159,7 @@ namespace Mooege.Core.GS.Universe
                                     }
                                     break;
 
-                                case 0x44: //new map scene 
+                                case 0x44: //new map scene
                                     {
                                         int WorldID = int.Parse(data[11]);
                                         World w = GetWorld(WorldID);
@@ -289,7 +287,7 @@ namespace Mooege.Core.GS.Universe
                 if (x.WorldID == hero.WorldId)
                     currentworld = x;
 
-            if (newworld == null || currentworld == null) return; //don't go to a world we don't have in the universe
+            if (newworld == null || currentworld==null) return; //don't go to a world we don't have in the universe
 
             currentworld.DestroyWorld(hero);
 
@@ -362,12 +360,11 @@ namespace Mooege.Core.GS.Universe
             Actor a = this.GetActor(message.Field1);
             if (a != null)
             {
-                if (client.items.ContainsKey(message.Field1))
+                if(client.items.ContainsKey(message.Field1))
                 {
                     client.Player.Hero.Inventory.PickUp(message);
                     return;
                 }
-
             }
             else
             {
@@ -380,13 +377,11 @@ namespace Mooege.Core.GS.Universe
             //else if (client.ObjectIdsSpawned == null || !client.ObjectIdsSpawned.Contains(message.Field1)) return;
 
             client.ObjectIdsSpawned.Remove(message.Field1);
-            BasicNPC npc = GetWorld(client.Player.Hero.WorldId).GetNpc(message.Field1);            
+            BasicNPC npc = GetWorld(client.Player.Hero.WorldId).GetNpc(message.Field1);
 
             Hero hero = client.Player.Hero;
             SpawnRandomDrop(hero, npc.Location.Field0);
-
-            
-            
+            SpawnGold(hero, npc.Location.Field0);
 
             var killAni = new int[]{
                     0x2cd7,
@@ -512,20 +507,26 @@ namespace Mooege.Core.GS.Universe
 
         public void SpawnRandomDrop(Hero hero, Vector3D postition)
         {
-            Random random = new Random();
+            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(hero.InGameClient);
 
-            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(hero.InGameClient);            
-            
-            // randomize ItemType 
+            // randomize ItemType
             ItemType[] allValues = (ItemType[])Enum.GetValues(typeof(ItemType));
-            ItemType type = allValues[random.Next(allValues.Length)];           
+            ItemType type = allValues[RandomHelper.Next(allValues.Length)];
             Item item = itemGenerator.GenerateRandomElement(type);
             DropItem(hero, item, postition);
         }
 
+        public void SpawnGold(Hero hero, Vector3D position)
+        {
+            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(hero.InGameClient);
+            Item item = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
+            item.Count = RandomHelper.Next(1, 3);
+            DropItem(hero, item, position);
+        }
+
         public void DropItem(Hero hero, Item item, Vector3D postition)
         {
-            Random random = new Random();           
+            Random random = new Random();
 
             Actor itemActor = new Actor()
             {
@@ -611,7 +612,7 @@ namespace Mooege.Core.GS.Universe
             GameAttributeMap attribs = new GameAttributeMap();
             attribs[GameAttribute.Untargetable] = false;
             attribs[GameAttribute.Uninterruptible] = true;
-            attribs[GameAttribute.Buff_Visual_Effect, 1048575] = true;            
+            attribs[GameAttribute.Buff_Visual_Effect, 1048575] = true;
             attribs[GameAttribute.Buff_Icon_Count0, 30582] = 1;
             attribs[GameAttribute.Buff_Icon_Count0, 30286] = 1;
             attribs[GameAttribute.Buff_Icon_Count0, 30285] = 1;

@@ -337,16 +337,10 @@ namespace Mooege.Core.GS.Universe
 
             Client.FlushOutgoingBuffer();
 
-            Client.SendMessage(new AttributeSetValueMessage()
-                                   {
-                                       Field0 = this.Hero.DynamicId,
-                                       Field1 = new NetAttributeKeyValue()
-                                                    {
-                                                        Attribute = GameAttribute.Attributes[0x005B], // Hitpoints_Healed_Target
-                                                        Int = 0x00000000,
-                                                        Float = 76f,
-                                                    },
-                                   });
+            attribs = new GameAttributeMap();
+            attribs[GameAttribute.Hitpoints_Healed_Target] = 76f;
+            attribs.SendMessage(Client, this.Hero.DynamicId);
+
             Client.SendMessage(new DWordDataMessage() // TICK
                                    {
                                        Id = 0x0089,
