@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
@@ -265,6 +266,11 @@ namespace Mooege.Core.MooNet.Channels
         public bool HasUser(MooNetClient client)
         {
             return this.Members.Any(pair => pair.Key == client);
+        }
+
+        public bool HasToon(Toon toon) // checks if given toon is already channels member
+        {
+            return this.Members.Any(pair => pair.Value.Identity.ToonId.Low == toon.BnetEntityID.Low);
         }
 
         // Reasons the client tries to remove a member

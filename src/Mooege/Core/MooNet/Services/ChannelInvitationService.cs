@@ -61,6 +61,8 @@ namespace Mooege.Core.MooNet.Services
         public override void SendInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.invitation.SendInvitationResponse> done)
         {
             var invitee = ToonManager.GetToonByLowID(request.TargetId.Low);
+            if (this.Client.CurrentChannel.HasToon(invitee)) return; // don't allow a second invitation if invitee is already a member of client's current channel.
+
             Logger.Debug("{0} invited {1} to his channel", Client.CurrentToon.Name, invitee.Name);
 
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
@@ -74,7 +76,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetRejoin(false).Build();
 
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder(); // also need to add creation_time, expiration_time.
-            invitation.SetId(ChannelInvitationManager.InvitationIdCounter)
+            invitation.SetId(ChannelInvitationManager.InvitationIdCounter++)
                 .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetToonId(Client.CurrentToon.BnetEntityID).Build())
                 .SetInviterName(Client.CurrentToon.Name)
                 .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetToonId(request.TargetId).Build())
