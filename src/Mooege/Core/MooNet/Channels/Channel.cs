@@ -119,6 +119,19 @@ namespace Mooege.Core.MooNet.Channels
             this.AddMember(client);
         }
 
+        public void SendMessage(MooNetClient client, bnet.protocol.channel.Message message)
+        {
+            var notification =
+                bnet.protocol.channel.SendMessageNotification.CreateBuilder().SetAgentId(client.CurrentToon.BnetEntityID)
+                    .SetMessage(message).SetRequiredPrivileges(0).Build();
+                    
+
+            foreach (var pair in this.Members) // send to all members of channel even to the actual one that sent the message else he'll not see his own message.
+            {
+                pair.Key.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifySendMessage"),notification, this.DynamicId);
+            }
+        }
+
         public void RemoveOwner(RemoveReason reason)
         {
             if (this.Owner != null)
