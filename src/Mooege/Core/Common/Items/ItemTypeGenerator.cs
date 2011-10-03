@@ -30,7 +30,6 @@ namespace Mooege.Core.Common.Items
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
 
-        private static int _nextObjectIdentifier = 0x78A000E6;
         private readonly GameClient _client;
 
         public ItemTypeGenerator(GameClient client){
@@ -102,18 +101,13 @@ namespace Mooege.Core.Common.Items
 
         private Item Generate(String itemName, int snoId, ItemType itemType)
         {
-            int itemId = CreateUniqueItemId();
+            int itemId = _client.Universe.NextObjectId;
             uint gbid = StringHashHelper.HashItemName(itemName);
             var item = new Item(itemId, gbid, itemType) {SNOId = snoId};
 
             _client.items[itemId] = item;
 
             return item;
-        }
-
-        private int CreateUniqueItemId()
-        {
-            return _client.Universe.NextObjectId;
         }
     }
 

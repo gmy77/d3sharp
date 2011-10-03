@@ -452,11 +452,11 @@ namespace Mooege.Core.GS.Universe
             else return;
         }
 
-        public void PickUpGold(int itemId) 
+        public void PickUpGold(int itemId)
         {
             Item collectedItem = _owner.InGameClient.items[itemId];
             Item goldItem;
-            if (_goldObjectId == 0) 
+            if (_goldObjectId == 0)
             {
                 Logger.Debug("creating gold item");
                 ItemTypeGenerator itemGenerator = new ItemTypeGenerator(_owner.InGameClient);
@@ -465,8 +465,8 @@ namespace Mooege.Core.GS.Universe
                 goldItem.Count = collectedItem.Count;
 
                 goldItem.RevealInInventory(_owner, 0, 0, 18); // Equipment slot 18 ==> Gold
-                
-            } else 
+            }
+            else
             {
                 goldItem = _owner.InGameClient.items[_goldObjectId];
                 goldItem.Count += collectedItem.Count;
