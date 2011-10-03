@@ -27,34 +27,6 @@ namespace Mooege.Core.MooNet.Channels
 {
     public class Channel : RPCObject
     {
-        // Reasons the client tries to remove a member
-        // TODO: Need more data to complete this
-        public enum RemoveRequestReason : uint
-        {
-            RequestedBySelf = 0x00   // Default; generally when the client quits or leaves a channel (for example, when switching toons)
-            // Kick is probably 0x01 or somesuch
-        }
-
-        // Reasons a member was removed (sent in NotifyRemove)
-        public enum RemoveReason : uint
-        {
-            Kicked = 0x00,           // The member was kicked
-            Left = 0x01              // The member left
-        }
-
-        public static RemoveReason GetRemoveReasonForRequest(RemoveRequestReason reqreason)
-        {
-            switch (reqreason)
-            {
-                case RemoveRequestReason.RequestedBySelf:
-                    return RemoveReason.Left;
-                default:
-                    Logger.Warn("No RemoveReason for given RemoveRequestReason: {0}", Enum.GetName(typeof(RemoveRequestReason), reqreason));
-                    break;
-            }
-            return RemoveReason.Left;
-        }
-
         public bnet.protocol.EntityId BnetEntityId { get; private set; }
         public D3.OnlineService.EntityId D3EntityId { get; private set; }
 
@@ -141,6 +113,12 @@ namespace Mooege.Core.MooNet.Channels
             AddMember(client);
         }
 
+        public void Join(MooNetClient client, ulong remoteObjectId)
+        {
+            client.MapLocalObjectID(this.DynamicId, remoteObjectId);
+            this.AddMember(client);
+        }
+
         public void RemoveOwner(RemoveReason reason)
         {
             if (this.Owner != null)
@@ -166,14 +144,11 @@ namespace Mooege.Core.MooNet.Channels
             var identity = client.GetIdentity(false, false, true);
 
             bool isOwner = client == this.Owner;
-            var addedMember = new Member(identity,
-                (isOwner) ? Member.Privilege.UnkCreator : Member.Privilege.UnkMember);
+            var addedMember = new Member(identity,(isOwner) ? Member.Privilege.UnkCreator : Member.Privilege.UnkMember);
 
             if (this.Members.Count > 0)
             {
-                addedMember.AddRoles(
-                    (isOwner) ? Member.Role.PartyLeader : Member.Role.PartyMember,
-                    Member.Role.ChannelMember);
+                addedMember.AddRoles((isOwner) ? Member.Role.PartyLeader : Member.Role.PartyMember, Member.Role.ChannelMember);
             }
             else
             {
@@ -185,22 +160,27 @@ namespace Mooege.Core.MooNet.Channels
 
             // Cache the built state and member
             var channelState = this.State;
-            var bnetMember = addedMember.BnetMember;
 
-            var method = bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd");
-            foreach (var pair in this.Members)
+            // added member should recieve a NotifyAdd.
+            var addNotification = bnet.protocol.channel.AddNotification.CreateBuilder()
+                .SetChannelState(channelState)
+                .SetSelf(addedMember.BnetMember)
+                .AddRangeMember(this.Members.Values.ToList().Select(member => member.BnetMember).ToList()).Build();
+
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), addNotification, this.DynamicId);
+            
+            client.CurrentChannel = this; // set clients current channel to one he just joined.
+
+            if (this.Members.Count < 2) return;
+
+            // other members should recieve a NotifyJoin.
+            var joinNotification = bnet.protocol.channel.JoinNotification.CreateBuilder()
+                .SetMember(addedMember.BnetMember).Build();
+
+            foreach (var pair in this.Members.Where(pair => pair.Value != addedMember)) // only send this to previous members of the channel.
             {
-                var message = bnet.protocol.channel.AddNotification.CreateBuilder()
-                    .SetChannelState(channelState)
-                    // Set the Self property for each call on each client
-                    // TODO: This may not be necessary here (this field is optional); check the caps
-                    .SetSelf(pair.Value.BnetMember)
-                    .AddMember(bnetMember)
-                    .Build();
-                //Logger.Debug("NotifyAdd:\n{0}", message.ToString());
-                pair.Key.CallMethod(method, message, this.DynamicId);
+                pair.Key.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyJoin"), joinNotification, this.DynamicId);
             }
-            client.CurrentChannel = this;
         }
 
         public void Dissolve()
@@ -272,6 +252,34 @@ namespace Mooege.Core.MooNet.Channels
         public bool HasUser(MooNetClient client)
         {
             return this.Members.Any(pair => pair.Key == client);
+        }
+
+        // Reasons the client tries to remove a member
+        // TODO: Need more data to complete this
+        public enum RemoveRequestReason : uint
+        {
+            RequestedBySelf = 0x00   // Default; generally when the client quits or leaves a channel (for example, when switching toons)
+            // Kick is probably 0x01 or somesuch
+        }
+
+        // Reasons a member was removed (sent in NotifyRemove)
+        public enum RemoveReason : uint
+        {
+            Kicked = 0x00,           // The member was kicked
+            Left = 0x01              // The member left
+        }
+
+        public static RemoveReason GetRemoveReasonForRequest(RemoveRequestReason reqreason)
+        {
+            switch (reqreason)
+            {
+                case RemoveRequestReason.RequestedBySelf:
+                    return RemoveReason.Left;
+                default:
+                    Logger.Warn("No RemoveReason for given RemoveRequestReason: {0}", Enum.GetName(typeof(RemoveRequestReason), reqreason));
+                    break;
+            }
+            return RemoveReason.Left;
         }
     }
 }
