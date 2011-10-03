@@ -25,13 +25,6 @@ namespace Mooege.Core.GS.Powers
         public IList<ClientObjectId> ids;
     }
 
-    public interface IPowerTarget
-    {
-        void ReceiveDamage(Actor from, float amount, int type);
-        Vector3D GetPosition();
-        IList<ClientObjectId> GetIds();
-    }
-
     public class PowersManager
     {
         // temporary testing helper
@@ -91,6 +84,23 @@ namespace Mooege.Core.GS.Powers
             if (targetPos == null)
                 targetPos = new Vector3D(0, 0, 0);
 
+            // do casting delay if using channeled power
+            if (_channelingActors.Contains(user))
+            {
+                bool delayed = CastDelay(user);
+                if (delayed)
+                {
+                    // update proxy if needed
+                    if (target == null)
+                    {
+                        GetProxyEffectFor(user, targetPos);
+                        SendDWordTick();
+                        FlushOutgoingBuffer();
+                    }
+                    return;
+                }
+            }
+
             #region Conceptual power implementations
             // TODO: need to split this out into multiple files eventually
             if (powerId == Skills.Skills.Monk.SpiritSpenders.BlindingFlash) // used for spawning stuff right now
@@ -111,7 +121,7 @@ namespace Mooege.Core.GS.Powers
                                 Id = 0x7b,
                                 Field0 = clid.id,
                                 Field1 = user.DynamicId,
-                                Field2 = 0,
+                                Field2 = 4,
                                 Field3 = false
                             });
                         }
@@ -128,19 +138,6 @@ namespace Mooege.Core.GS.Powers
             }
             else if (powerId == Skills.Skills.Wizard.Signature.Electrocute) // electrocute
             {
-                bool delayed = CastDelay(user);
-                if (delayed)
-                {
-                    // just update proxy if needed and return
-                    if (target == null)
-                    {
-                        GetProxyEffectFor(user, targetPos);
-                        SendDWordTick();
-                        FlushOutgoingBuffer();
-                    }
-                    return;
-                }
-
                 LookAt(user, targetPos);
 
                 IList<IPowerTarget> targets;
@@ -261,7 +258,7 @@ namespace Mooege.Core.GS.Powers
         {
             if (!_castDelays.ContainsKey(user) || DateTime.Now > _castDelays[user])
             {
-                _castDelays[user] = DateTime.Now.AddMilliseconds(150);
+                _castDelays[user] = DateTime.Now.AddMilliseconds(150); // TODO: might need to make this set per-power
                 return false;
             }
             else

@@ -82,7 +82,7 @@ namespace Mooege.Core.GS.Powers
             Player player0 = _universe.PlayerManager.Players[0];
 
             // mob id list to select from when spawning
-            int[] mobids = { 3893};//4282, 3893, 6652, 5428, 5346, 6024, 5393, 5433, 5467 };
+            int[] mobids = { 4282, 3893, 6652, 5428, 5346, 6024, 5393, 5433, 5467 };
 
             IList<SimpleMob> created = new List<SimpleMob>();
 
@@ -392,8 +392,8 @@ namespace Mooege.Core.GS.Powers
                 if (RandomHelper.Next(1, 5) == 1)
                     _universe.SpawnRandomDrop(clid.client.Player.Hero, mob.position);
 
-                var killAni = new int[]{ 8207
-                    /*0x2cd7,
+                var killAni = new int[]{
+                    0x2cd7,
                     0x2cd4,
                     0x01b378,
                     0x2cdc,
@@ -408,7 +408,7 @@ namespace Mooege.Core.GS.Powers
                     0x2cd6,
                     0x2cd8,
                     0x2cda,
-                    0x2cd9*/
+                    0x2cd9
                 };
                 clid.client.SendMessage(new PlayEffectMessage()
                 {
