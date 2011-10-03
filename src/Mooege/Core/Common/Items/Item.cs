@@ -82,6 +82,16 @@ namespace Mooege.Core.Common.Items
             return (itemType == ItemType.HealthPotion);
         }
 
+        public static bool IsRing(ItemType itemType)
+        {
+            return (itemType == ItemType.Ring);
+        }
+
+        public static bool IsBelt(ItemType itemType)
+        {
+            return (itemType == ItemType.Belt);
+        }
+
         public static bool IsWeapon(ItemType itemType)
         {
             return (itemType == ItemType.Axe_1H
