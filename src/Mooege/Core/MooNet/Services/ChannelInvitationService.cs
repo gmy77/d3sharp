@@ -31,7 +31,7 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public IMooNetClient Client { get; set; }
 
-        public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SubscribeRequest request, System.Action<bnet.protocol.channel_invitation.SubscribeResponse> done)
+        public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SubscribeRequest request, Action<bnet.protocol.channel_invitation.SubscribeResponse> done)
         {
             Logger.Trace("Subscribe()");
 
@@ -40,24 +40,29 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void AcceptInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.AcceptInvitationRequest request, System.Action<bnet.protocol.channel_invitation.AcceptInvitationResponse> done)
+        public override void AcceptInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.AcceptInvitationRequest request, Action<bnet.protocol.channel_invitation.AcceptInvitationResponse> done)
+        {
+            var response = bnet.protocol.channel_invitation.AcceptInvitationResponse.CreateBuilder().SetObjectId(ChannelInvitationManager.Instance.DynamicId).Build();
+            done(response);
+
+            ChannelInvitationManager.Instance.HandleAccept((MooNetClient) this.Client, request);
+        }
+
+        public override void DeclineInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void DeclineInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, System.Action<bnet.protocol.NoData> done)
+        public override void RevokeInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.RevokeInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void RevokeInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.RevokeInvitationRequest request, System.Action<bnet.protocol.NoData> done)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SendInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, System.Action<bnet.protocol.invitation.SendInvitationResponse> done)
+        public override void SendInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.invitation.SendInvitationResponse> done)
         {
             var invitee = ToonManager.GetToonByLowID(request.TargetId.Low);
+            if (this.Client.CurrentChannel.HasToon(invitee)) return; // don't allow a second invitation if invitee is already a member of client's current channel.
+
             Logger.Debug("{0} invited {1} to his channel", Client.CurrentToon.Name, invitee.Name);
 
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
@@ -71,7 +76,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetRejoin(false).Build();
 
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder(); // also need to add creation_time, expiration_time.
-            invitation.SetId(ChannelInvitationManager.InvitationIdCounter)
+            invitation.SetId(ChannelInvitationManager.InvitationIdCounter++)
                 .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetToonId(Client.CurrentToon.BnetEntityID).Build())
                 .SetInviterName(Client.CurrentToon.Name)
                 .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetToonId(request.TargetId).Build())
@@ -79,7 +84,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetInvitationMessage(request.InvitationMessage)
                 .SetCreationTime(DateTime.Now.ToExtendedEpoch())
                 .SetExpirationTime(DateTime.Now.ToUnixTime() + request.ExpirationTime)
-                .SetExtension(bnet.protocol.channel_invitation.Invitation.ChannelInvitation, channelInvitation);
+                .SetExtension(bnet.protocol.channel_invitation.Invitation.ChannelInvitation, channelInvitation);            
 
             // oh blizz, cmon. your buggy client even doesn't care this message at all but waits the UpdateChannelStateNotification with embedded invitation proto to show "invitation sent message".
             // ADVICE TO POTENTIAL BLIZZ-WORKER READING THIS;
@@ -102,7 +107,7 @@ namespace Mooege.Core.MooNet.Services
             ChannelInvitationManager.Instance.HandleInvitation((MooNetClient)this.Client, invitation.Build());
         }
 
-        public override void SuggestInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SuggestInvitationRequest request, System.Action<bnet.protocol.NoData> done)
+        public override void SuggestInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SuggestInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
             // "request to join party"
 
