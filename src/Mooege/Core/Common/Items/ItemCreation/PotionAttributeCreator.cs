@@ -24,8 +24,9 @@ namespace Mooege.Core.Common.Items.ItemCreation
     class PotionAttributeCreator: IItemAttributeCreator
     {
         public void CreateAttributes(Item item)
-        {            
-            item.AttributeList.Add(new NetAttributeKeyValue { Attribute = GameAttribute.Attributes[82], Float = 250.0f, }); // Given Health 
+        {
+            item.Attributes[GameAttribute.Hitpoints_Granted] = 250f;
+            item.Attributes[GameAttribute.ItemStackQuantityLo] = 1;
         }
     }
 }

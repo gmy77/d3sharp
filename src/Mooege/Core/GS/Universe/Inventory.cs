@@ -46,6 +46,7 @@ namespace Mooege.Core.GS.Universe
 
         private int[] _equipment;      // array of equiped items_id  (not item)
         private int[,] _backpack;      // backpack array
+        private int _goldObjectId;
 
         private readonly Hero _owner; // Used, because most information is not in the item class but Actors managed by the world
 
@@ -65,6 +66,7 @@ namespace Mooege.Core.GS.Universe
             this._owner = owner;
             this._backpack = new int[6, 10];
             this._equipment = new int[8];
+            this._goldObjectId = 0;
         }
 
         // This should be in the database#
@@ -239,7 +241,6 @@ namespace Mooege.Core.GS.Universe
                     },
                 };
 
-
             _owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
             {
                 Id = (int)Opcodes.ACDInventoryPositionMessage,
@@ -270,7 +271,7 @@ namespace Mooege.Core.GS.Universe
         }
 
         /// <summary>
-        /// Checks wheter the inventory contains an item
+        /// Checks whether the inventory contains an item
         /// </summary>
         public bool Contains(int itemId)
         {
@@ -409,30 +410,14 @@ namespace Mooege.Core.GS.Universe
             _owner.InGameClient.items[msg.Field1].Count = _owner.InGameClient.items[msg.Field1].Count + (int)msg.Field2;
 
             // Update source
-            _owner.InGameClient.SendMessage(new AttributeSetValueMessage
-            {
-                Id = (int)Opcodes.AttributeSetValueMessage,
-                Field0 = msg.Field0,
-                Field1 = new NetAttributeKeyValue
-                {
-                    Attribute = GameAttribute.Attributes[0x0121],       // ItemStackQuantityLo
-                    Int = _owner.InGameClient.items[msg.Field0].Count,   // quantity
-                    Float = 0f,
-                }
-            });
+            GameAttributeMap attributes = new GameAttributeMap();
+            attributes[GameAttribute.ItemStackQuantityLo] = _owner.InGameClient.items[msg.Field0].Count;
+            attributes.SendMessage(_owner.InGameClient, msg.Field0);
 
             // Update target
-            _owner.InGameClient.SendMessage(new AttributeSetValueMessage
-            {
-                Id = 0x4c,
-                Field0 = msg.Field1,
-                Field1 = new NetAttributeKeyValue
-                {
-                    Attribute = GameAttribute.Attributes[0x0121],       // ItemStackQuantityLo
-                    Int = _owner.InGameClient.items[msg.Field1].Count,   // count
-                    Float = 0f,
-                }
-            });
+            attributes = new GameAttributeMap();
+            attributes[GameAttribute.ItemStackQuantityLo] = _owner.InGameClient.items[msg.Field1].Count;
+            attributes.SendMessage(_owner.InGameClient, msg.Field1);
 
             _owner.InGameClient.PacketId += 10 * 2;
             _owner.InGameClient.SendMessage(new DWordDataMessage()
@@ -465,6 +450,31 @@ namespace Mooege.Core.GS.Universe
             else if (message is InventoryStackTransferMessage) OnInventoryStackTransferMessage(message as InventoryStackTransferMessage);
             else if (message is InventoryDropItemMessage) OnInventoryDropItemMessage(message as InventoryDropItemMessage);
             else return;
+        }
+
+        public void PickUpGold(int itemId)
+        {
+            Item collectedItem = _owner.InGameClient.items[itemId];
+            Item goldItem;
+            if (_goldObjectId == 0)
+            {
+                Logger.Debug("creating gold item");
+                ItemTypeGenerator itemGenerator = new ItemTypeGenerator(_owner.InGameClient);
+                goldItem = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
+                _goldObjectId = goldItem.ItemId;
+                goldItem.Count = collectedItem.Count;
+
+                goldItem.RevealInInventory(_owner, 0, 0, 18); // Equipment slot 18 ==> Gold
+            }
+            else
+            {
+                goldItem = _owner.InGameClient.items[_goldObjectId];
+                goldItem.Count += collectedItem.Count;
+            }
+
+            GameAttributeMap attributes = new GameAttributeMap();
+            attributes[GameAttribute.ItemStackQuantityLo] = goldItem.Count;
+            attributes.SendMessage(_owner.InGameClient, _goldObjectId);
         }
     }
 }
