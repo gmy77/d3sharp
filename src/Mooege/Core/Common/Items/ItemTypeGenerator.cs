@@ -56,6 +56,7 @@ namespace Mooege.Core.Common.Items
 
                 if (itemsCount == 0)
                 {
+                    // items which depends not on an mode like healthPotions do have another itemname structure without modeId
                     querypart = String.Format("from items where itemname like '{0}%' and snoId!= 0", itemType.ToString());
                     countQuery = String.Format("SELECT count(*) {0}", querypart);
                     cmd = new SQLiteCommand(countQuery, Storage.GameDataDBManager.Connection);
