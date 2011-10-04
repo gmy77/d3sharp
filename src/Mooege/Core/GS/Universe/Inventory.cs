@@ -65,7 +65,7 @@ namespace Mooege.Core.GS.Universe
         {
             this._owner = owner;
             this._backpack = new int[6, 10];
-            this._equipment = new int[8];
+            this._equipment = new int[16];
             this._goldObjectId = 0;
         }
 
@@ -81,19 +81,28 @@ namespace Mooege.Core.GS.Universe
             {
                 return new InventorySize() { Width = 1, Height = 1 };
             }
+            else if (Item.IsRing(_owner.InGameClient.items[itemID].Type))
+            {
+                return new InventorySize() { Width = 1, Height = 1 };
+            }
+            else if (Item.IsBelt(_owner.InGameClient.items[itemID].Type))
+            {
+                return new InventorySize() { Width = 1, Height = 1 };
+            }
 
             return new InventorySize() { Width = 1, Height = 2 };
         }
 
         private bool FreeSpace(int droppedItemID, int row, int column)
         {
+            bool result = true;
             InventorySize size = GetItemInventorySize(droppedItemID);
 
             for (int r = row; r < Math.Min(row + size.Height, Rows); r++)
                 for (int c = column; c < Math.Min(column + size.Width, Columns); c++)
-                    if (_backpack[r, c] != 0)
-                        return false;
-            return true;
+                    if ((_backpack[r, c] != 0) && (_backpack[r, c] != droppedItemID))
+                        result = false;
+            return result;
         }
 
         /// <summary>
@@ -108,15 +117,15 @@ namespace Mooege.Core.GS.Universe
             var overlapping = new List<int>();
 
             // For every slot...
-            for (int r = row; r < Rows; r++)
-                for (int c = 0; c < Columns; c++)
+            for (int r = row; r < _backpack.GetLength(0) && r < row + dropSize.Height; r++)
+                for (int c = column; c < _backpack.GetLength(1) && c < column + dropSize.Width; c++)
 
                     // that contains an item other than the one we want to drop
                     if (_backpack[r, c] != 0 && _backpack[r, c] != droppedItemID) //TODO this would break for an item with id 0
 
                         // add it to the list if if dropping the item in <row, column> would need the same slot
-                        if (r >= row && r <= row + dropSize.Height)
-                            if (c >= column && c <= column + dropSize.Width)
+                        //if (r >= row && r <= row + dropSize.Height)
+                        //    if (c >= column && c <= column + dropSize.Width)
                                 if (!overlapping.Contains(_backpack[r, c]))
                                     overlapping.Add(_backpack[r, c]);
 
@@ -290,8 +299,8 @@ namespace Mooege.Core.GS.Universe
         {
             InventorySize size = GetItemInventorySize(itemID);
 
-            for (int r = 0; r < Rows - size.Width + 1; r++)
-                for (int c = 0; c < Columns - size.Height + 1; c++)
+            for (int r = 0; r <= Rows - size.Height; r++)
+                for (int c = 0; c <= Columns - size.Width; c++)
                     if (CollectOverlappingItems(itemID, r, c) == 0)
                         return new InventorySlot() { Row = r, Column = c };
             return null;

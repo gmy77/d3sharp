@@ -41,8 +41,7 @@ namespace Mooege.Net.MooNet
         public static void Identify(IConnection connection, CodedInputStream stream)
         {
             var header = new Header(stream);
-            var payload = new byte[header.PayloadLength];
-            payload = stream.ReadRawBytes((int)header.PayloadLength);
+            var payload = stream.ReadRawBytes((int) header.PayloadLength);
 
             var packet = new Packet(header, payload);
             var service = Service.GetByID(header.ServiceID);
