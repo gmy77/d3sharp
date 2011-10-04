@@ -79,19 +79,9 @@ namespace Mooege.Core.GS.Universe
         // Do all items need a rectangual space in diablo 3?
         private InventorySize GetItemInventorySize(int itemID)
         {
-            if (Item.IsWeapon(_owner.InGameClient.items[itemID].Type))
-            {
-                return new InventorySize() { Width = 1, Height = 2 };
-            }
-            else if (Item.IsPotion(_owner.InGameClient.items[itemID].Type))
-            {
-                return new InventorySize() { Width = 1, Height = 1 };
-            }
-            else if (Item.IsRing(_owner.InGameClient.items[itemID].Type))
-            {
-                return new InventorySize() { Width = 1, Height = 1 };
-            }
-            else if (Item.IsBelt(_owner.InGameClient.items[itemID].Type))
+            ItemType type = _owner.InGameClient.items[itemID].Type;
+
+            if (Item.IsPotion(type) || Item.IsAccessory(type))
             {
                 return new InventorySize() { Width = 1, Height = 1 };
             }

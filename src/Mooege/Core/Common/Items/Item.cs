@@ -81,14 +81,9 @@ namespace Mooege.Core.Common.Items
             return (itemType == ItemType.HealthPotion);
         }
 
-        public static bool IsRing(ItemType itemType)
+        public static bool IsAccessory(ItemType itemType)
         {
-            return (itemType == ItemType.Ring);
-        }
-
-        public static bool IsBelt(ItemType itemType)
-        {
-            return (itemType == ItemType.Belt);
+            return (itemType == ItemType.Ring || itemType == ItemType.Belt || itemType == ItemType.Amulet);
         }
 
         public static bool IsWeapon(ItemType itemType)
@@ -267,6 +262,5 @@ namespace Mooege.Core.Common.Items
                 tempList.RemoveRange(0, selectCount);
             }
         }
-
     }
 }
