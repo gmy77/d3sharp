@@ -16,38 +16,26 @@ using Mooege.Core.GS.Universe;
 
 namespace Mooege.Core.GS.Powers
 {
-    public class SimpleMob : IPowerTarget
+    public class SimpleMob : Actor
     {
-        public IList<ClientObjectId> ids;
-        public Vector3D position;
         public PowersMobTester owner;
-        public float hp;
         public DateTime deleteTimeout;
+        public float hp;
         public bool dead;
 
         public void ReceiveDamage(Actor from, float amount, int type)
         {
             hp -= amount;
             if (!dead && hp <= 0.0f)
-                owner.KillMob(this);
-        }
-
-        public Vector3D GetPosition()
-        {
-            return position;
-        }
-
-        public IList<ClientObjectId> GetIds()
-        {
-            return ids;
+                owner.KillMob(from, this);
         }
     }
 
-    // simple hackish mob spawner, all mobs created by all instances of it are available via the PowerTargets
-    // property, horribly un-threadsafe :)
+    // simple hackish mob spawner, all mobs created by all instances of it are available via the AllMobs
+    // property
     public class PowersMobTester
     {
-        public static IEnumerable<IPowerTarget> PowerTargets
+        public static IEnumerable<SimpleMob> AllMobs
         {
             get
             {
@@ -61,7 +49,8 @@ namespace Mooege.Core.GS.Powers
 
         private List<SimpleMob> _mobs = new List<SimpleMob>();
         private Universe.Universe _universe;
-        // list of mobs that are to be deleted, can't do it right away because it causes crashes
+        // list of mobs that are to be deleted, can't do it right away because
+        // it causes crashes when ropes are attached to the actor
         private List<SimpleMob> _mobsToDelete = new List<SimpleMob>();
 
         public PowersMobTester(Universe.Universe universe)
@@ -76,11 +65,8 @@ namespace Mooege.Core.GS.Powers
             _universe = null;
         }
 
-        public IList<SimpleMob> SpawnMob(int count = 10, int mobcode = -1)
+        public IList<SimpleMob> SpawnMob(Actor user, int count = 10, int mobcode = -1)
         {
-            // HACK: use player0's properties for spawning center
-            Player player0 = _universe.PlayerManager.Players[0];
-
             // mob id list to select from when spawning if mobcode == -1
             int[] mobids = { 4282, 3893, 6652, 5428, 5346, 6024, 5393, 5433, 5467 };
 
@@ -89,9 +75,9 @@ namespace Mooege.Core.GS.Powers
             for (int n = 0; n < count; ++n)
             {
                 Vector3D position = new Vector3D();
-                position.X = player0.Hero.Position.X;
-                position.Y = player0.Hero.Position.Y;
-                position.Z = player0.Hero.Position.Z;
+                position.X = user.Position.X;
+                position.Y = user.Position.Y;
+                position.Z = user.Position.Z;
                 if ((n % 2) == 0)
                 {
                     position.X += (float)(RandomHelper.NextDouble() * 20);
@@ -111,222 +97,86 @@ namespace Mooege.Core.GS.Powers
 
                 SimpleMob mob = new SimpleMob()
                 {
-                    ids = new List<ClientObjectId>(),
+                    DynamicId = _universe.NextObjectId,
+                    Position = position,
+                    SnoId = nId,
+                    Scale = 1.35f,
+                    RotationAmount = 1f,
+                    RotationAxis = new Vector3D(0, 0, 0),
+                    WorldId = user.WorldId,
+                    GBHandle = new GBHandle()
+                    {
+                        Field0 = 1,
+                        Field1 = 1,
+                    },
+                    Field2 = 0x8,
+                    Field3 = 0x0,
+                    // TODO might need more
                     hp = 50,
-                    position = position,
                     owner = this,
                     dead = false,
                 };
                 _mobs.Add(mob);
                 created.Add(mob);
 
-                foreach (GameClient client in _clients)
+                foreach (GameClient client in _clientsInSameWorld(user))
                 {
-                    ClientObjectId clid = ClientObjectId.GenerateNewId(client);
-                    mob.ids.Add(clid);
+                    mob.Reveal(client.Player.Hero);
 
-                    #region ACDEnterKnown Hittable Zombie
-                    client.SendMessage(new ACDEnterKnownMessage()
-                    {
-                        Id = 0x003B,
-                        Field0 = clid.id,
-                        Field1 = nId,
-                        Field2 = 0x8,
-                        Field3 = 0x0,
-                        Field4 = new WorldLocationMessageData()
-                        {
-                            Field0 = 1.35f,
-                            Field1 = new PRTransform()
-                            {
-                                Field0 = new Quaternion()
-                                {
-                                    Amount = 0.768145f,
-                                    Axis = new Vector3D()
-                                    {
-                                        X = 0f,
-                                        Y = 0f,
-                                        Z = -0.640276f,
-                                    },
-                                },
-                                ReferencePoint = new Vector3D()
-                                {
-                                    X = position.X + 5,
-                                    Y = position.Y + 5,
-                                    Z = position.Z,
-                                },
-                            },
-                            // HACK: always spawns in player0's world
-                            Field2 = player0.Hero.WorldId,
-                        },
-                        Field5 = null,
-                        Field6 = new GBHandle()
-                        {
-                            Field0 = 1,
-                            Field1 = 1,
-                        },
-                        Field7 = 0x00000001,
-                        Field8 = nId,
-                        Field9 = 0x0,
-                        Field10 = 0x0,
-                        Field11 = 0x0,
-                        Field12 = 0x0,
-                        Field13 = 0x0
-                    });
                     client.SendMessage(new AffixMessage()
                     {
                         Id = 0x48,
-                        Field0 = clid.id,
+                        Field0 = mob.DynamicId,
                         Field1 = 0x1,
                         aAffixGBIDs = new int[0]
                     });
                     client.SendMessage(new AffixMessage()
                     {
                         Id = 0x48,
-                        Field0 = clid.id,
+                        Field0 = mob.DynamicId,
                         Field1 = 0x2,
                         aAffixGBIDs = new int[0]
                     });
                     client.SendMessage(new ACDCollFlagsMessage
                     {
                         Id = 0xa6,
-                        Field0 = clid.id,
+                        Field0 = mob.DynamicId,
                         Field1 = 0x1
                     });
 
-                    client.SendMessage(new AttributesSetValuesMessage
-                    {
-                        Id = 0x4d,
-                        Field0 = clid.id,
-                        atKeyVals = new NetAttributeKeyValue[15] {
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[214],
-                        Int = 0
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[464],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 1048575,
-                        Attribute = GameAttribute.Attributes[441],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30582,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30286,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30285,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30284,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30283,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30290,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 79486,
-                        Attribute = GameAttribute.Attributes[560],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30286,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30285,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30284,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30283,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30290,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    }
-                }
+                    GameAttributeMap attribs = new GameAttributeMap();
+                    attribs[GameAttribute.Untargetable] = false;
+                    attribs[GameAttribute.Uninterruptible] = true;
+                    attribs[GameAttribute.Buff_Visual_Effect, 1048575] = true;
+                    attribs[GameAttribute.Buff_Icon_Count0, 30582] = 1;
+                    attribs[GameAttribute.Buff_Icon_Count0, 30286] = 1;
+                    attribs[GameAttribute.Buff_Icon_Count0, 30285] = 1;
+                    attribs[GameAttribute.Buff_Icon_Count0, 30284] = 1;
+                    attribs[GameAttribute.Buff_Icon_Count0, 30283] = 1;
+                    attribs[GameAttribute.Buff_Icon_Count0, 30290] = 1;
+                    attribs[GameAttribute.Buff_Icon_Count0, 79486] = 1;
+                    attribs[GameAttribute.Buff_Active, 30286] = true;
+                    attribs[GameAttribute.Buff_Active, 30285] = true;
+                    attribs[GameAttribute.Buff_Active, 30284] = true;
+                    attribs[GameAttribute.Buff_Active, 30283] = true;
+                    attribs[GameAttribute.Buff_Active, 30290] = true;
 
-                    });
+                    attribs[GameAttribute.Hitpoints_Max_Total] = 4.546875f;
+                    attribs[GameAttribute.Buff_Active, 79486] = true;
+                    attribs[GameAttribute.Hitpoints_Max] = 4.546875f;
+                    attribs[GameAttribute.Hitpoints_Total_From_Level] = 0f;
+                    attribs[GameAttribute.Hitpoints_Cur] = 4.546875f;
+                    attribs[GameAttribute.Invulnerable] = true;
+                    attribs[GameAttribute.Buff_Active, 30582] = true;
+                    attribs[GameAttribute.TeamID] = 10;
+                    attribs[GameAttribute.Level] = 1;
 
-                    client.SendMessage(new AttributesSetValuesMessage
-                    {
-                        Id = 0x4d,
-                        Field0 = clid.id,
-                        atKeyVals = new NetAttributeKeyValue[9] {
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[86],
-                        Float = 4.546875f
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 79486,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[84],
-                        Float = 4.546875f
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[81],
-                        Int = 0
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[77],
-                        Float = 4.546875f
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[69],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Field0 = 30582,
-                        Attribute = GameAttribute.Attributes[460],
-                        Int = 1
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[67],
-                        Int = 10
-                    },
-                    new NetAttributeKeyValue {
-                        Attribute = GameAttribute.Attributes[38],
-                        Int = 1
-                    }
-                }
-
-                    });
-
+                    attribs.SendMessage(client, mob.DynamicId);
 
                     client.SendMessage(new ACDGroupMessage
                     {
                         Id = 0xb8,
-                        Field0 = clid.id,
+                        Field0 = mob.DynamicId,
                         Field1 = unchecked((int)0xb59b8de4),
                         Field2 = unchecked((int)0xffffffff)
                     });
@@ -334,13 +184,13 @@ namespace Mooege.Core.GS.Powers
                     client.SendMessage(new ANNDataMessage
                     {
                         Id = 0x3e,
-                        Field0 = clid.id
+                        Field0 = mob.DynamicId
                     });
 
                     client.SendMessage(new ACDTranslateFacingMessage
                     {
                         Id = 0x70,
-                        Field0 = clid.id,
+                        Field0 = mob.DynamicId,
                         Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI),
                         Field2 = false
                     });
@@ -348,7 +198,7 @@ namespace Mooege.Core.GS.Powers
                     client.SendMessage(new SetIdleAnimationMessage
                     {
                         Id = 0xa5,
-                        Field0 = clid.id,
+                        Field0 = mob.DynamicId,
                         Field1 = 0x11150
                     });
 
@@ -361,7 +211,6 @@ namespace Mooege.Core.GS.Powers
                             Field1 = nId
                         }
                     });
-                    #endregion
 
                     client.PacketId += 30 * 2;
                     client.SendMessage(new DWordDataMessage()
@@ -376,26 +225,24 @@ namespace Mooege.Core.GS.Powers
                         Field0 = client.Tick - 20,
                         Field1 = client.Tick
                     });
+
+                    client.FlushOutgoingBuffer();
                 }
             }
-
-            foreach (GameClient client in _clients)
-                client.FlushOutgoingBuffer();
-
             return created;
         }
 
-        public void KillMob(SimpleMob mob)
+        public void KillMob(Actor user, SimpleMob mob)
         {
             mob.dead = true;
             _mobs.Remove(mob);
 
-            foreach (ClientObjectId clid in mob.ids)
+            foreach (GameClient client in _clientsInSameWorld(user))
             {
                 // HACK: I guess I'll throw in the item spawn code here, with a random chance instead of every time
                 if (RandomHelper.Next(1, 5) == 1)
-                    _universe.SpawnRandomDrop(clid.client.Player.Hero, mob.position);
-                _universe.SpawnGold(clid.client.Player.Hero, mob.position);
+                    _universe.SpawnRandomDrop((Hero)user, mob.Position);
+                _universe.SpawnGold((Hero)user, mob.Position);
 
                 var killAni = new int[]{
                     0x2cd7,
@@ -415,33 +262,33 @@ namespace Mooege.Core.GS.Powers
                     0x2cda,
                     0x2cd9
                 };
-                clid.client.SendMessage(new PlayEffectMessage()
+                client.SendMessage(new PlayEffectMessage()
                 {
                     Id = 0x7a,
-                    Field0 = clid.id,
+                    Field0 = mob.DynamicId,
                     Field1 = 0x0,
                     Field2 = 0x2,
                 });
-                clid.client.SendMessage(new PlayEffectMessage()
+                client.SendMessage(new PlayEffectMessage()
                 {
                     Id = 0x7a,
-                    Field0 = clid.id,
+                    Field0 = mob.DynamicId,
                     Field1 = 0xc,
                 });
 
-                clid.client.SendMessage(new ANNDataMessage()
+                client.SendMessage(new ANNDataMessage()
                 {
                     Id = 0x6d,
-                    Field0 = clid.id,
+                    Field0 = mob.DynamicId,
                 });
 
                 int ani = killAni[RandomHelper.Next(killAni.Length)];
                 //Logger.Info("Ani used: " + ani);
 
-                clid.client.SendMessage(new PlayAnimationMessage()
+                client.SendMessage(new PlayAnimationMessage()
                 {
                     Id = 0x6c,
-                    Field0 = clid.id,
+                    Field0 = mob.DynamicId,
                     Field1 = 0xb,
                     Field2 = 0,
                     tAnim = new PlayAnimationMessageSpec[1]
@@ -456,23 +303,23 @@ namespace Mooege.Core.GS.Powers
                 }
                 });
 
-                clid.client.PacketId += 10 * 2;
-                clid.client.SendMessage(new DWordDataMessage()
+                client.PacketId += 10 * 2;
+                client.SendMessage(new DWordDataMessage()
                 {
                     Id = 0x89,
-                    Field0 = clid.client.PacketId,
+                    Field0 = client.PacketId,
                 });
 
-                clid.client.SendMessage(new ANNDataMessage()
+                client.SendMessage(new ANNDataMessage()
                 {
                     Id = 0xc5,
-                    Field0 = clid.id,
+                    Field0 = mob.DynamicId,
                 });
 
-                clid.client.SendMessage(new AttributeSetValueMessage
+                client.SendMessage(new AttributeSetValueMessage
                 {
                     Id = 0x4c,
-                    Field0 = clid.id,
+                    Field0 = mob.DynamicId,
                     Field1 = new NetAttributeKeyValue
                     {
                         Attribute = GameAttribute.Attributes[0x4d],
@@ -480,10 +327,10 @@ namespace Mooege.Core.GS.Powers
                     }
                 });
 
-                clid.client.SendMessage(new AttributeSetValueMessage
+                client.SendMessage(new AttributeSetValueMessage
                 {
                     Id = 0x4c,
-                    Field0 = clid.id,
+                    Field0 = mob.DynamicId,
                     Field1 = new NetAttributeKeyValue
                     {
                         Attribute = GameAttribute.Attributes[0x1c2],
@@ -491,10 +338,10 @@ namespace Mooege.Core.GS.Powers
                     }
                 });
 
-                clid.client.SendMessage(new AttributeSetValueMessage
+                client.SendMessage(new AttributeSetValueMessage
                 {
                     Id = 0x4c,
-                    Field0 = clid.id,
+                    Field0 = mob.DynamicId,
                     Field1 = new NetAttributeKeyValue
                     {
                         Attribute = GameAttribute.Attributes[0x1c5],
@@ -502,13 +349,13 @@ namespace Mooege.Core.GS.Powers
                     }
                 });
 
-                clid.client.PacketId += 10 * 2;
-                clid.client.SendMessage(new DWordDataMessage()
+                client.PacketId += 10 * 2;
+                client.SendMessage(new DWordDataMessage()
                 {
                     Id = 0x89,
-                    Field0 = clid.client.PacketId,
+                    Field0 = client.PacketId,
                 });
-                clid.client.FlushOutgoingBuffer();
+                client.FlushOutgoingBuffer();
             }
 
             mob.deleteTimeout = DateTime.Now.AddMilliseconds(100);
@@ -522,13 +369,9 @@ namespace Mooege.Core.GS.Powers
             {
                 if (DateTime.Now > mob.deleteTimeout)
                 {
-                    foreach (ClientObjectId clid in mob.ids)
+                    foreach (GameClient client in _clientsInSameWorld(mob))
                     {
-                        clid.client.SendMessage(new ANNDataMessage()
-                        {
-                            Id = 0x3c,
-                            Field0 = clid.id,
-                        });
+                        mob.Destroy(client.Player.Hero);
                     }
                 }
                 else
@@ -539,15 +382,11 @@ namespace Mooege.Core.GS.Powers
             _mobsToDelete = survivors;
         }
 
-        private IEnumerable<GameClient> _clients
+        private IEnumerable<GameClient> _clientsInSameWorld(Actor actor)
         {
-            get
-            {
-                foreach (GameClient client in _universe.PlayerManager.Players.Select(p => p.Client))
-                {
-                    yield return client;
-                }
-            }
+            return _universe.PlayerManager.Players
+                                          .FindAll(p => p.Hero.WorldId == actor.WorldId)
+                                          .Select(p => p.Client);
         }
     }
 }

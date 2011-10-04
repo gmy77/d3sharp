@@ -81,8 +81,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\GS\Powers\ClientObjectId.cs" />
-    <Compile Include="Core\GS\Powers\IPowerTarget.cs" />
     <Compile Include="Core\GS\Powers\PowersManager.cs" />
     <Compile Include="Core\GS\Powers\PowersMobTester.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
