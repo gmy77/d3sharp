@@ -626,7 +626,7 @@ namespace Mooege.Core.GS.Universe
             {
                 Id = 0x70,
                 Field0 = objectId,
-                Field1 = 0.8f,
+                Field1 = (float)(RandomHelper.NextDouble() * 2.0 * Math.PI),
                 Field2 = false
             });
 

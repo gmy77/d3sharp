@@ -16,8 +16,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Data.SNO;
@@ -31,15 +29,6 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
     {
         public int /* sno */ snoPower;
         public AnimPreplayData Field1;
-        public static int current = -1;
-
-        public static TValue NextValue<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
-        {
-            List<TValue> values = Enumerable.ToList(dictionary.Values);
-            current++;
-            return values[current];
-        }
-
 
         public void Handle(GameClient client)
         {
@@ -47,7 +36,7 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
 
             var oldPosField1 = client.Player.Hero.Position.Y;
             var oldPosField2 = client.Player.Hero.Position.Z;
-            for (var i = 0; i < 1; i++)
+            for (var i = 0; i < 10; i++)
             {
                 if ((i % 2) == 0)
                 {
@@ -59,12 +48,7 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
                     client.Player.Hero.Position.X -= (float)(RandomHelper.NextDouble() * 20);
                     client.Player.Hero.Position.Y -= (float)(RandomHelper.NextDouble() * 20);
                 }
-
-                int npcID = NextValue(SNODatabase.Instance.Grouped[SNOGroup.Mobs]).ID;
-
-                client.Player.Universe.SpawnMob(client, npcID);
-                Logger.Debug(string.Format("Spawned: {0}", npcID));
-                
+                client.Player.Universe.SpawnMob(client, SNODatabase.Instance.RandomID(SNOGroup.NPCs));
             }
 
             client.Player.Hero.Position.Y = oldPosField1;
