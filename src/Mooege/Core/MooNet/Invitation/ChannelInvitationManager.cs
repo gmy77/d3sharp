@@ -16,7 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
 using System.Linq;
+using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
 
@@ -27,6 +29,8 @@ namespace Mooege.Core.MooNet.Invitation
         private static readonly ChannelInvitationManager _instance = new ChannelInvitationManager();
         public static ChannelInvitationManager Instance { get { return _instance; } }
 
+        public Dictionary<ulong, bnet.protocol.invitation.Invitation> OnGoingInvitations = new Dictionary<ulong, bnet.protocol.invitation.Invitation>();
+
         public static ulong InvitationIdCounter = 1;
 
         public void HandleInvitation(MooNetClient client, bnet.protocol.invitation.Invitation invitation)
@@ -34,8 +38,31 @@ namespace Mooege.Core.MooNet.Invitation
             MooNetClient invitee = this.Subscribers.FirstOrDefault(subscriber => subscriber.CurrentToon.BnetEntityID.Low == invitation.InviteeIdentity.ToonId.Low);
             if (invitee == null) return; // if we can't find invite just return - though we should actually check for it until expiration time.
 
+            this.OnGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.
+
             var notification = bnet.protocol.channel_invitation.InvitationAddedNotification.CreateBuilder().SetInvitation(invitation);
             invitee.CallMethod(bnet.protocol.channel_invitation.ChannelInvitationNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationAdded"), notification.Build(), this.DynamicId);
+        }
+
+        public void HandleAccept(MooNetClient client, bnet.protocol.channel_invitation.AcceptInvitationRequest request)
+        {
+            var invitation = this.OnGoingInvitations[request.InvitationId];
+
+            var channel =
+                ChannelManager.GetChannelByEntityId(
+                    invitation.GetExtension(bnet.protocol.channel_invitation.Invitation.ChannelInvitation).
+                        ChannelDescription.ChannelId);
+
+            channel.Join(client, request.ObjectId);
+            channel.AddMember(client);
+
+            var notification = bnet.protocol.channel_invitation.InvitationRemovedNotification.CreateBuilder().SetInvitation(invitation).SetReason(0); // 0 - means success?
+            client.CallMethod(bnet.protocol.channel_invitation.ChannelInvitationNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationRemoved"), notification.Build(), this.DynamicId);
+        }
+
+        public void HandleDecline(MooNetClient client, bnet.protocol.invitation.GenericRequest request)
+        {
+            
         }
     }
 }
