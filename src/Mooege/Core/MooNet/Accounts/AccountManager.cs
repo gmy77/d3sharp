@@ -47,11 +47,6 @@ namespace Mooege.Core.MooNet.Accounts
             return account;
         }
 
-        public static Account GetAccountByEntityID(bnet.protocol.EntityId entityId)
-        {
-            return Accounts.Where(account => account.Value.BnetAccountID == entityId).Select(account => account.Value).FirstOrDefault();
-        }
-
         public static Account GetAccountByPersistantID(ulong persistantId)
         {
             return Accounts.Where(account => account.Value.PersistentID == persistantId).Select(account => account.Value).FirstOrDefault();

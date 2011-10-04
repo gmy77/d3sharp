@@ -35,7 +35,7 @@ namespace Mooege.Core.MooNet.Services
             var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
 
             Client.Account = account;
-            Client.Account.LoggedInBNetClient = (MooNetClient)Client;
+            Client.Account.LoggedInClient = (MooNetClient)Client;
 
             var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
                 .SetAccount(Client.Account.BnetAccountID)

@@ -21,7 +21,6 @@ using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Net.MooNet;
-using bnet.protocol;
 
 // TODO: Need to do some more testing and inspection to make sure that
 // responding before performing the action requested is proper
@@ -55,7 +54,7 @@ namespace Mooege.Core.MooNet.Services
                     break;
             }
 
-            var builder = NoData.CreateBuilder();
+            var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
 
@@ -67,10 +66,9 @@ namespace Mooege.Core.MooNet.Services
             switch (request.EntityId.GetHighIdType())
             {
                 case EntityIdHelper.HighIdType.AccountId:
-                    var account = AccountManager.GetAccountByEntityID(request.EntityId);
+                    var account = AccountManager.GetAccountByPersistantID(request.EntityId.Low);
                     // The client will probably make sure it doesn't unsubscribe to a null ID, but just to make sure..
-                    if (account != null)
-                        account.RemoveSubscriber((MooNetClient)this.Client);
+                    if (account != null) account.RemoveSubscriber((MooNetClient)this.Client);
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
                     var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
@@ -87,8 +85,7 @@ namespace Mooege.Core.MooNet.Services
         }
 
         public override void Update(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UpdateRequest request, System.Action<bnet.protocol.NoData> done)
-        {
-            Logger.Trace("Update() {0}: {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
+        {            
             //Logger.Warn("request:\n{0}", request.ToString());
             // This "UpdateRequest" is not, as it may seem, a request to update the client on the state of an object,
             // but instead the *client* requesting to change fields on an object that it has subscribed to.
@@ -97,31 +94,48 @@ namespace Mooege.Core.MooNet.Services
             switch (request.EntityId.GetHighIdType())
             {
                 case EntityIdHelper.HighIdType.AccountId:
-                    var account = AccountManager.GetAccountByEntityID(request.EntityId);
+                    var account = AccountManager.GetAccountByPersistantID(request.EntityId.Low);
+                    Logger.Trace("Update:Account: {0} {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
-                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);                    
+                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
+                    Logger.Trace("Update:Toon: {0}", toon);
                     break;
                 default:
                     Logger.Warn("Recieved an unhandled Presence.Update request with type {0}", request.EntityId.GetHighIdType());
                     break;
             }
 
-            var builder = NoData.CreateBuilder();
+            var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
 
         public override void Query(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.QueryRequest request, System.Action<bnet.protocol.presence.QueryResponse> done)
-        {
-            Logger.Trace("Query() {0}: {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
-
+        {            
             var builder = bnet.protocol.presence.QueryResponse.CreateBuilder();
-            var toon = ToonManager.GetToonByLowID(request.EntityId.Low);                       
 
-            foreach(var key in request.KeyList)
+            switch (request.EntityId.GetHighIdType())
             {
-                var field = toon.QueryField(key);
-                if (field != null) builder.AddField(field);
+                case EntityIdHelper.HighIdType.AccountId:
+                    Logger.Trace("Query:Account: {0} {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
+                    var account = AccountManager.GetAccountByPersistantID(request.EntityId.Low);
+                    foreach(var key in request.KeyList)
+                    {
+                        var field = account.QueryField(key);
+                        if (field != null) builder.AddField(field);
+                    }
+
+                    break;
+                case EntityIdHelper.HighIdType.ToonId:
+                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
+                    Logger.Trace("Query:Toon: {0}", toon);                    
+                    foreach (var key in request.KeyList)
+                    {
+                        var field = toon.QueryField(key);
+                        if (field != null) builder.AddField(field);
+                    }
+
+                    break;
             }
 
             done(builder.Build());

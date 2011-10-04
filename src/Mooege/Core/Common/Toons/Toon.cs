@@ -242,11 +242,16 @@ namespace Mooege.Core.Common.Toons
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if the client is online
                     {
-                        if(this.Owner.LoggedInBNetClient!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInBNetClient.CurrentChannel.D3EntityId.ToByteString()).Build());
+                        if(this.Owner.LoggedInClient!=null && this.Owner.LoggedInClient.CurrentChannel!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());
+                        else field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().Build());
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 2) // Current screen (all known values are just "in-menu"; also see ScreenStatuses sent in ChannelService.UpdateChannelState)
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build());
+                    }
+                    else
+                    {
+                        Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
                     }
                     break;
                 case FieldKeyHelper.Program.BNet:
@@ -265,6 +270,10 @@ namespace Mooege.Core.Common.Toons
                     else if (queryKey.Group == 3 && queryKey.Field == 9) // Program - always D3
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build());
+                    }
+                    else
+                    {
+                        Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
                     }
                     break;
             }

@@ -35,7 +35,7 @@ namespace Mooege.Core.MooNet.Accounts
         public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
         public string Email { get; private set; }
 
-        public MooNetClient LoggedInBNetClient { get; set; }
+        public MooNetClient LoggedInClient { get; set; }
 
         public D3.Account.Digest Digest
         {
@@ -96,6 +96,32 @@ namespace Mooege.Core.MooNet.Accounts
                 .SetSigilColorIndex(7)
                 .SetUseSigilVariant(true)
                 .Build();
+        }
+
+        public bnet.protocol.presence.Field QueryField(bnet.protocol.presence.FieldKey queryKey)
+        {
+            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(queryKey);
+
+            switch ((FieldKeyHelper.Program)queryKey.Program)
+            {
+                case FieldKeyHelper.Program.D3:
+                    if (queryKey.Group == 1 && queryKey.Field == 1) // Account's selected toon.
+                    {
+                        if(this.LoggedInClient!=null) // check if the account is online actually.
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LoggedInClient.CurrentToon.D3EntityID.ToByteString()).Build());
+                    }
+                    else
+                    {
+                        Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
+                    }
+                    break;
+                case FieldKeyHelper.Program.BNet:
+                    Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
+                    break;
+            }
+
+
+            return field.HasValue ? field.Build() : null;
         }
 
         protected override void NotifySubscriptionAdded(MooNetClient client)
