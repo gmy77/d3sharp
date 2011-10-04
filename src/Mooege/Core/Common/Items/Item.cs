@@ -34,11 +34,10 @@ namespace Mooege.Core.Common.Items
         Helm, Gloves, Boots, Belt, Shoulders, Pants, Bracers, Shield, Quiver, Orb,
         Axe_1H, Axe_2H, CombatStaff_2H, Dagger, Mace_1H, Mace_2H, Sword_1H,
         Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, Wand, Ring, FistWeapon_1H,
-        HealthPotion, Gold
+        HealthPotion, Gold, ChestArmor 
 
-        /* Not working at the moment:
-         *  // ChestArmor                   --> does not work because there are missing itemnames for normal mode, just for nightmare and hell and some "a" and "b" variants... -> need to figure out which should be used
-         *  // ThrownWeapon, ThrowingAxe    --> does not work because there are no snoId in Actors.txt
+        /* Not working at the moment:      
+         *  // ThrownWeapon, ThrowingAxe    --> does not work because there are no snoId in Actors.txt. Do they actually drop in the D3 beta?
          */
     }
 

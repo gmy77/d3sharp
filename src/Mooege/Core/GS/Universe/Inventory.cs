@@ -47,7 +47,13 @@ namespace Mooege.Core.GS.Universe
         private int[] _equipment;      // array of equiped items_id  (not item)
         private int[,] _backpack;      // backpack array
         private int _goldObjectId;
-
+        
+        // these ids are transmitted by the client when equipping an item         
+        private enum EquipmentSlotId{
+            Amulett = 0, Helm = 1, Chest = 2, Off_Hand = 3, Main_Hand = 4, Hands = 5, Belt = 6, 
+            Feet = 7, Shoulders = 8, Legs = 9, Bracers = 10, Ring_right = 11, Ring_left = 12
+        }
+        
         private readonly Hero _owner; // Used, because most information is not in the item class but Actors managed by the world
 
         public struct InventorySize
@@ -176,15 +182,14 @@ namespace Mooege.Core.GS.Universe
                 {
                     Equipments = new VisualItem[8]
                     {
-                        GetEquipmentItem(0),
-                        GetEquipmentItem(1),
-                        GetEquipmentItem(2),
-                        GetEquipmentItem(3),
-                        GetEquipmentItem(4),
-                        GetEquipmentItem(5),
-                        GetEquipmentItem(6),
-                        GetEquipmentItem(7),
-
+                        GetEquipmentItem(EquipmentSlotId.Helm),
+                        GetEquipmentItem(EquipmentSlotId.Chest),
+                        GetEquipmentItem(EquipmentSlotId.Feet),
+                        GetEquipmentItem(EquipmentSlotId.Hands),
+                        GetEquipmentItem(EquipmentSlotId.Main_Hand),
+                        GetEquipmentItem(EquipmentSlotId.Off_Hand),
+                        GetEquipmentItem(EquipmentSlotId.Shoulders),
+                        GetEquipmentItem(EquipmentSlotId.Legs),
                     },
                 },
             });
@@ -201,9 +206,9 @@ namespace Mooege.Core.GS.Universe
             _owner.InGameClient.FlushOutgoingBuffer();
         }
 
-        public VisualItem GetEquipmentItem(int equipSlot)
+        private VisualItem GetEquipmentItem(EquipmentSlotId equipSlot)
         {
-            if (_equipment[equipSlot] == 0)
+            if (_equipment[(int)equipSlot] == 0)
             {
                 return new VisualItem()
                 {
@@ -215,7 +220,7 @@ namespace Mooege.Core.GS.Universe
             }
             else
             {
-                return _owner.InGameClient.items[_equipment[equipSlot]].CreateVisualItem();
+                return _owner.InGameClient.items[_equipment[(int)equipSlot]].CreateVisualItem();
             }
         }
 
