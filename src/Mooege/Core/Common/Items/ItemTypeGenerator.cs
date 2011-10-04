@@ -46,7 +46,8 @@ namespace Mooege.Core.Common.Items
                 // there are missing snoId for nightmare and hell so just use items from normal mode
                 const string modeId = "0";
 
-                String querypart = String.Format("from items where itemname like '{0}_{1}%'", itemType.ToString(), modeId);
+                // snoId may not be 0 to prevent creating items which cannot renderd at the client.                
+                String querypart = String.Format("from items where itemname like '{0}_{1}%' and snoId!= 0", itemType.ToString(), modeId);
                 String countQuery = String.Format("SELECT count(*) {0}", querypart);
                 var cmd = new SQLiteCommand(countQuery, Storage.GameDataDBManager.Connection);
                 var reader = cmd.ExecuteReader();
@@ -55,7 +56,7 @@ namespace Mooege.Core.Common.Items
 
                 if (itemsCount == 0)
                 {
-                    querypart = String.Format("from items where itemname like '{0}%'", itemType.ToString());
+                    querypart = String.Format("from items where itemname like '{0}%' and snoId!= 0", itemType.ToString());
                     countQuery = String.Format("SELECT count(*) {0}", querypart);
                     cmd = new SQLiteCommand(countQuery, Storage.GameDataDBManager.Connection);
                     reader = cmd.ExecuteReader();
@@ -102,11 +103,9 @@ namespace Mooege.Core.Common.Items
         private Item Generate(String itemName, int snoId, ItemType itemType)
         {
             int itemId = _client.Universe.NextObjectId;
-            uint gbid = StringHashHelper.HashItemName(itemName);
+            int gbid = StringHashHelper.HashItemName(itemName);
             var item = new Item(itemId, gbid, itemType) {SNOId = snoId};
-
             _client.items[itemId] = item;
-
             return item;
         }
     }

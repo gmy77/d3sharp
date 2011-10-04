@@ -58,7 +58,7 @@ namespace Mooege.Core.GS.Map
             return null;
         }
 
-        public BasicNPC GetNpc(int ID)
+        public BasicNPC GetNPC(int ID)
         {
             for (int x = 0; x < NPCs.Count; x++)
                 if (NPCs[x].ID == ID) return NPCs[x];
@@ -90,16 +90,15 @@ namespace Mooege.Core.GS.Map
             return null;
         }
 
-        public List<Actor> GetActorsInRange(int snoID, float x, float y, float z, float range)
+        public List<Actor> GetActorsInRange(float x, float y, float z, float range)
         {
             List<Actor> result = new List<Actor>();
             for(int i = 0; i < Actors.Count; i++)
             {
-                if(Actors[i].SnoId == snoID &&
-                    (Math.Sqrt(
+                if(Math.Sqrt(
                         Math.Pow(Actors[i].Position.X - x, 2) + 
                         Math.Pow(Actors[i].Position.Y - y, 2) +
-                        Math.Pow(Actors[i].Position.Z - z, 2)) <= range))
+                        Math.Pow(Actors[i].Position.Z - z, 2)) <= range)
                 {
                     result.Add(Actors[i]);
                 }
@@ -151,7 +150,7 @@ namespace Mooege.Core.GS.Map
             Actors.Add(actor);
         }
 
-        public void AddNpc(BasicNPC npc)
+        public void AddNPC(BasicNPC npc)
         {
             NPCs.Add(npc);
         }

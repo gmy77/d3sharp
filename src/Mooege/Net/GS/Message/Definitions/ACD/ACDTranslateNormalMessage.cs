@@ -43,7 +43,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
                 client.Player.Hero.Position = this.Position;
 
             // looking for gold to pick up
-            var actorList = client.Player.Hero.CurrentWorld.GetActorsInRange(0x00000178, this.Position.X, this.Position.Y, this.Position.Z, 20f);
+            var actorList = client.Player.Hero.CurrentWorld.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
             foreach (var actor in actorList) 
             {
                 Item item;

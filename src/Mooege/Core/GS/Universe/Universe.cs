@@ -239,7 +239,7 @@ namespace Mooege.Core.GS.Universe
         {
             for (int x = 0; x < _worlds.Count; x++)
             {
-                BasicNPC npc = _worlds[x].GetNpc(NpcId);
+                BasicNPC npc = _worlds[x].GetNPC(NpcId);
                 if (npc != null) return npc;
             }
             return null;
@@ -346,7 +346,7 @@ namespace Mooege.Core.GS.Universe
             else if (client.ObjectIdsSpawned == null || !client.ObjectIdsSpawned.Contains(message.Field1)) return;
 
             client.ObjectIdsSpawned.Remove(message.Field1);
-            BasicNPC npc = GetWorld(client.Player.Hero.WorldId).GetNpc(message.Field1);
+            BasicNPC npc = GetWorld(client.Player.Hero.WorldId).GetNPC(message.Field1);
 
             Hero hero = client.Player.Hero;
             SpawnRandomDrop(hero, npc.Location.Field0);
@@ -488,7 +488,7 @@ namespace Mooege.Core.GS.Universe
         private void SpawnGold(Hero hero, Vector3D position)
         {
             ItemTypeGenerator itemGenerator = new ItemTypeGenerator(hero.InGameClient);
-            Item item = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
+            Item item = itemGenerator.GenerateRandomElement(ItemType.Gold);
             item.Count = RandomHelper.Next(1, 3);
             DropItem(hero, item, position);
         }
@@ -554,7 +554,7 @@ namespace Mooege.Core.GS.Universe
             #region ACDEnterKnown Hittable Zombie
             Vector3D pos = client.Player.Hero.Position;
             BasicNPC mob = new BasicNPC(objectId, mobId, new WorldPlace { Field0 = new Vector3D(pos.X - 5, pos.Y - 5, pos.Z), });
-            GetWorld(client.Player.Hero.WorldId).AddNpc(mob);
+            GetWorld(client.Player.Hero.WorldId).AddNPC(mob);
             mob.Reveal(client);
 
             client.SendMessage(new AffixMessage()

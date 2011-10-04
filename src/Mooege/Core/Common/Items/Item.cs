@@ -34,7 +34,7 @@ namespace Mooege.Core.Common.Items
         Helm, Gloves, Boots, Belt, Shoulders, Pants, Bracers, Shield, Quiver, Orb,
         Axe_1H, Axe_2H, CombatStaff_2H, Dagger, Mace_1H, Mace_2H, Sword_1H,
         Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, Wand, Ring, FistWeapon_1H,
-        HealthPotion, Gold, ChestArmor 
+        HealthPotion, Gold, ChestArmor, Amulet
 
         /* Not working at the moment:      
          *  // ThrownWeapon, ThrowingAxe    --> does not work because there are no snoId in Actors.txt. Do they actually drop in the D3 beta?
@@ -52,10 +52,10 @@ namespace Mooege.Core.Common.Items
         public List<Affix> AffixList { get; set; }
         public GameAttributeMap Attributes { get; set; }
 
-        public Item(int id, uint gbid, ItemType type)
+        public Item(int id, int gbid, ItemType type)
         {
             ItemId = id;
-            Gbid = unchecked((int)gbid);
+            Gbid = gbid;
             Count = 1;
             Type = type;
 
