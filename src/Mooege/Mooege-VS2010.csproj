@@ -109,6 +109,7 @@
     <Compile Include="Core\GS\Map\World.cs" />
     <Compile Include="Core\GS\NPC\BasicNPC.cs" />
     <Compile Include="Core\MooNet\Invitation\ChannelInvitationManager.cs" />
+    <Compile Include="Core\MooNet\Invitation\FriendInvitationManager.cs" />
     <Compile Include="Core\MooNet\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\MooNet\OnlinePlayers.cs" />
     <Compile Include="Core\MooNet\Services\AuthenticationService.cs" />
@@ -134,7 +135,7 @@
     <Compile Include="Core\GS\Skills\SkillSet.cs" />
     <Compile Include="Core\GS\Skills\Skills.cs" />
     <Compile Include="Core\Common\Storage\DBManager.cs" />
-    <Compile Include="Core\Common\Storage\GamedataDBManager.cs" />
+    <Compile Include="Core\Common\Storage\GameDataDBManager.cs" />
     <Compile Include="Core\Common\Toons\Toon.cs" />
     <Compile Include="Core\Common\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Common\Toons\ToonManager.cs" />
@@ -390,16 +391,16 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <None Include="..\..\assets\account.db">
+      <Link>Assets\account.db</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\assets\config.ini">
       <Link>config.ini</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\gamedata.db">
       <Link>Assets\gamedata.db</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\assets\toon.db">
-      <Link>Assets\toon.db</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.config">

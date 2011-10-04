@@ -20,10 +20,9 @@ using System;
 using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Common.Extensions;
+using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Invitation;
 using Mooege.Net.MooNet;
-using bnet.protocol;
-using bnet.protocol.friends;
-using bnet.protocol.invitation;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -33,81 +32,84 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public IMooNetClient Client { get; set; }
 
-        public override void SubscribeToFriends(IRpcController controller, SubscribeToFriendsRequest request, Action<SubscribeToFriendsResponse> done)
+        public override void SubscribeToFriends(IRpcController controller, bnet.protocol.friends.SubscribeToFriendsRequest request, Action<bnet.protocol.friends.SubscribeToFriendsResponse> done)
         {
-            Logger.Trace("SubscribeToFriends()");
-            var builder = SubscribeToFriendsResponse.CreateBuilder()
+            Logger.Trace("Subscribe()");
+
+            FriendInvitationManager.Instance.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
+            
+            var builder = bnet.protocol.friends.SubscribeToFriendsResponse.CreateBuilder()
                 .SetMaxFriends(127)
                 .SetMaxReceivedInvitations(127)
                 .SetMaxSentInvitations(127);
             done(builder.Build());
         }
 
-        public override void SendInvitation(IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<SendInvitationResponse> done)
+        public override void SendInvitation(IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.invitation.SendInvitationResponse> done)
         {
-            Logger.Trace("SendInvitation() Stub");
+            Logger.Trace("SendInvitation()");
 
-            //TODO: Set these to the corect values.
-            const ulong accountHandle = 0x0000000000000000;
-            const ulong gameAccountHandle = 0x0000000000000000;
+            // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
+            var extensionBytes = request.UnknownFields.FieldDictionary[103].LengthDelimitedList[0].ToByteArray();
+            var friendRequest = bnet.protocol.friends.SendInvitationRequest.ParseFrom(extensionBytes);
+
+            if (friendRequest.TargetEmail.ToLower() == this.Client.Account.Email.ToLower()) return; // don't allow him to invite himself - and we should actually return an error!
+                                                                                                    // also he shouldn't be allowed to invite his current friends - put that check too!. /rai
+
+            var inviteee = AccountManager.GetAccountByEmail(friendRequest.TargetEmail);
+            if (inviteee == null) return; // we need send an error response here /raist.
 
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder()
-                .SetCreationTime(DateTime.Now.ToUnixTime())
-                .SetExpirationTime(request.ExpirationTime)
-                .SetId(0)
-                .SetInvitationMessage(request.InvitationMessage)
-                .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder()
-                                        .SetAccountId(bnet.protocol.EntityId.CreateBuilder().SetHigh(accountHandle).SetLow(0x1).Build()) //TODO: Change SetLow to an actual index in the database.
-                                        .SetGameAccountId(bnet.protocol.EntityId.CreateBuilder().SetHigh(gameAccountHandle).SetLow(0x1).Build()) //TODO: Change SetLow to an actual index in the database.
-                                        .Build())
-                .SetInviteeName("FriendName") //TODO: Set this to the name retrieved from the database.
-                .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder()
-                                        .SetAccountId(bnet.protocol.EntityId.CreateBuilder().SetHigh(accountHandle).SetLow(0x0).Build()) //TODO: Change SetLow to an actual index in the database.
-                                        .SetGameAccountId(bnet.protocol.EntityId.CreateBuilder().SetHigh(gameAccountHandle).SetLow(0x0).Build()) //TODO: Change SetLow to an actual index in the database.
-                                        .Build())
-                .SetInviterName("YourName") //TODO: Set this to the name retrieved from the database.
-                .Build();
+            .SetId(FriendInvitationManager.InvitationIdCounter++) // we may actually need to store invitation ids in database with the actual invitation there. /raist.
+            .SetInviterIdentity(this.Client.GetIdentity(true, false, false))
+            .SetInviteeName(this.Client.Account.Email) // we shoulde be instead using account owner's name here.
+            .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(inviteee.BnetAccountID))
+            .SetInviteeName(inviteee.Email) // again we should be instead using invitee's name.
+            .SetCreationTime(DateTime.Now.ToUnixTime())
+            .SetExpirationTime(86400); // 1 day
 
-            var builder = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder().SetInvitation(invitation);
-            done(builder.Build());
+            var response = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder()
+                .SetInvitation(invitation);
+
+            done(response.Build());
         }
 
-        public override void AcceptInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
+        public override void AcceptInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void RevokeInvitation(IRpcController controller, GenericRequest request, Action<NoData> done)
+        public override void RevokeInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void DeclineInvitation(IRpcController controller, GenericRequest request, Action<NoData> done)
+        public override void DeclineInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void IgnoreInvitation(IRpcController controller, GenericRequest request, Action<NoData> done)
+        public override void IgnoreInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void RemoveFriend(IRpcController controller, GenericFriendRequest request, Action<GenericFriendResponse> done)
+        public override void RemoveFriend(IRpcController controller, bnet.protocol.friends.GenericFriendRequest request, Action<bnet.protocol.friends.GenericFriendResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ViewFriends(IRpcController controller, ViewFriendsRequest request, Action<ViewFriendsResponse> done)
+        public override void ViewFriends(IRpcController controller, bnet.protocol.friends.ViewFriendsRequest request, Action<bnet.protocol.friends.ViewFriendsResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateFriendState(IRpcController controller, UpdateFriendStateRequest request, Action<UpdateFriendStateResponse> done)
+        public override void UpdateFriendState(IRpcController controller, bnet.protocol.friends.UpdateFriendStateRequest request, Action<bnet.protocol.friends.UpdateFriendStateResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void UnsubscribeToFriends(IRpcController controller, UnsubscribeToFriendsRequest request, Action<NoData> done)
+        public override void UnsubscribeToFriends(IRpcController controller, bnet.protocol.friends.UnsubscribeToFriendsRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }

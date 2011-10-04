@@ -17,33 +17,18 @@
  */
 
 using System;
-using System.Data.SQLite;
-using Mooege.Common;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Mooege.Core.MooNet.Objects;
 
-namespace Mooege.Core.Common.Storage
+namespace Mooege.Core.MooNet.Invitation
 {
-    // just a quick hack - not to be meant a final layer.
-    public static class DBManager
+    public class FriendInvitationManager : RPCObject
     {
-        public static SQLiteConnection Connection { get; private set; }
-        public static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly FriendInvitationManager _instance = new FriendInvitationManager();
+        public static FriendInvitationManager Instance { get { return _instance; } }
 
-        static DBManager()
-        {
-            Connect();            
-        }
-
-        private static void Connect()
-        {
-            try
-            {
-                Connection = new SQLiteConnection(String.Format("Data Source={0}/Assets/account.db", Config.Instance.AssetsRoot));
-                Connection.Open();
-            }
-            catch (Exception e)
-            {
-                Logger.FatalException(e, "Connect()");
-            }
-        }
+        public static ulong InvitationIdCounter = 1;
     }
 }

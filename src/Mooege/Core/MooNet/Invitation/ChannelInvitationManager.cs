@@ -35,7 +35,7 @@ namespace Mooege.Core.MooNet.Invitation
 
         public void HandleInvitation(MooNetClient client, bnet.protocol.invitation.Invitation invitation)
         {
-            MooNetClient invitee = this.Subscribers.FirstOrDefault(subscriber => subscriber.CurrentToon.BnetEntityID.Low == invitation.InviteeIdentity.ToonId.Low);
+            var invitee = this.Subscribers.FirstOrDefault(subscriber => subscriber.CurrentToon.BnetEntityID.Low == invitation.InviteeIdentity.ToonId.Low);
             if (invitee == null) return; // if we can't find invite just return - though we should actually check for it until expiration time.
 
             this.OnGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.

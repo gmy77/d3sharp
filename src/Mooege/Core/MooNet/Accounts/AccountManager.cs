@@ -35,16 +35,14 @@ namespace Mooege.Core.MooNet.Accounts
 
         public static Account GetAccountByEmail(string email)
         {
-            Account account;
+            return Accounts.ContainsKey(email) ? Accounts[email] : null;
+        }
 
-            if (Accounts.ContainsKey(email))
-                account = Accounts[email];
-            else
-            {
-                account = new Account(email);
-                Accounts.Add(email, account);
-                account.SaveToDB();
-            }
+        public static Account CreateAccount(string email)
+        {
+            var account = new Account(email);
+            Accounts.Add(email, account);
+            account.SaveToDB();
 
             return account;
         }
