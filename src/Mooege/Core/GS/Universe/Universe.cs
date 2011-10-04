@@ -488,7 +488,7 @@ namespace Mooege.Core.GS.Universe
         private void SpawnGold(Hero hero, Vector3D position)
         {
             ItemTypeGenerator itemGenerator = new ItemTypeGenerator(hero.InGameClient);
-            Item item = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
+            Item item = itemGenerator.GenerateRandomElement(ItemType.Gold);
             item.Count = RandomHelper.Next(1, 3);
             DropItem(hero, item, position);
         }
