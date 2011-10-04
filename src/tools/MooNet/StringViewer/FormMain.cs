@@ -39,7 +39,7 @@ namespace StringViewer
             string typename = textBoxProtoType.Text;
             if (typename.Trim() == string.Empty)
                 return;
-            var type = Type.GetType(typename + ", D3Proto");
+            var type = Type.GetType(typename + ", LibMooNet");
             if (type == null)
             {
                 richTextBoxProto.Text = "(no type)";
