@@ -40,14 +40,12 @@ namespace Mooege.Core.MooNet.Services
             switch (request.EntityId.GetHighIdType())
             {
                 case EntityIdHelper.HighIdType.AccountId:
-                    this.Client.Account.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
+                    var account = AccountManager.GetAccountByPersistantID(request.EntityId.Low);
+                    account.AddSubscriber((MooNetClient) this.Client, request.ObjectId);
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
                     var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
-                    // The client will send us a Subscribe with ToonId of 0 the first time it
-                    // tries to create a toon with a name that already exists. Let's handle that here.
-                    if (toon != null)
-                        toon.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
+                    if (toon != null) toon.AddSubscriber((MooNetClient)this.Client, request.ObjectId); // The client will send us a Subscribe with ToonId of 0 the first time it tries to create a toon with a name that already exists. Let's handle that here.
                     break;
                 default:
                     Logger.Warn("Recieved an unhandled Presence.Subscribe request with type {0}", request.EntityId.GetHighIdType());
