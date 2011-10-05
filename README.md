@@ -2,13 +2,13 @@
 
 * Read the [FAQ](/mooege/mooege/wiki/FAQ) before asking!
 * Read the [WARNING](https://github.com/mooege/mooege/blob/master/WARNING) before starting to use this software!
+* Check [mooege.org](http://www.mooege.org) and [forums](http://www.mooege.org/index).
 * Status: Will get you ingame.. not much else.
 * IRC (**irc.synirc.net**):
   - **#mooege.chat** (general chat)
   - **#mooege** (dev talk)
   - **#mooege.announce** (_only_ announcements and the commit feed)
 * [Twitter](http://twitter.com/#!/mooege), [commit feed](http://twitter.com/#!/MooegeDev)
-* [Forum](http://www.mooege.org/)
 
 Copyright (C) 2011 mooege project
 
