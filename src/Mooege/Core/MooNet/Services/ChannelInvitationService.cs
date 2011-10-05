@@ -30,22 +30,23 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public IMooNetClient Client { get; set; }
+        private readonly ChannelInvitationManager _invitationManager = new ChannelInvitationManager();
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SubscribeRequest request, Action<bnet.protocol.channel_invitation.SubscribeResponse> done)
         {
             Logger.Trace("Subscribe()");
 
-            ChannelInvitationManager.Instance.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
+            this._invitationManager.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
             var builder = bnet.protocol.channel_invitation.SubscribeResponse.CreateBuilder();
             done(builder.Build());
         }
 
         public override void AcceptInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.AcceptInvitationRequest request, Action<bnet.protocol.channel_invitation.AcceptInvitationResponse> done)
         {
-            var response = bnet.protocol.channel_invitation.AcceptInvitationResponse.CreateBuilder().SetObjectId(ChannelInvitationManager.Instance.DynamicId).Build();
+            var response = bnet.protocol.channel_invitation.AcceptInvitationResponse.CreateBuilder().SetObjectId(this._invitationManager.DynamicId).Build();
             done(response);
 
-            ChannelInvitationManager.Instance.HandleAccept((MooNetClient) this.Client, request);
+            this._invitationManager.HandleAccept((MooNetClient)this.Client, request);
         }
 
         public override void DeclineInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
@@ -104,7 +105,7 @@ namespace Mooege.Core.MooNet.Services
             Client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), notification.Build(), Client.CurrentChannel.DynamicId);
 
             // notify the invitee on invitation.
-            ChannelInvitationManager.Instance.HandleInvitation((MooNetClient)this.Client, invitation.Build());
+            this._invitationManager.HandleInvitation((MooNetClient)this.Client, invitation.Build());
         }
 
         public override void SuggestInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SuggestInvitationRequest request, Action<bnet.protocol.NoData> done)

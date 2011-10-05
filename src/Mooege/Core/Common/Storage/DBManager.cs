@@ -37,7 +37,7 @@ namespace Mooege.Core.Common.Storage
         {
             try
             {
-                Connection = new SQLiteConnection(String.Format("Data Source={0}/Assets/toon.db", Config.Instance.AssetsRoot));
+                Connection = new SQLiteConnection(String.Format("Data Source={0}/Assets/account.db", Config.Instance.AssetsRoot));
                 Connection.Open();
             }
             catch (Exception e)
