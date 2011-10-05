@@ -215,7 +215,7 @@ namespace Mooege.Core.GS.Universe
         }
 
         /// <summary>
-        /// Equips an item in an equipment slote
+        /// Equips an item in an equipment slot
         /// </summary>
         void EquipItem(int itemID, int slot)
         {
@@ -224,12 +224,17 @@ namespace Mooege.Core.GS.Universe
 
         /// <summary>
         /// Removes an item from the equipment slot it uses
+        /// returns the used equipmentSlot
         /// </summary>
-        void UnequipItem(int itemID)
+        int UnequipItem(int itemID)
         {
             for (int i = 0; i < EquipmentSlots; i++)
                 if (_equipment[i] == itemID)
+                {
                     _equipment[i] = 0;
+                    return i;
+                }
+            return 0;
         }
 
         void AcceptMoveRequest(int itemId, InvLoc inventoryLocation)
@@ -367,8 +372,11 @@ namespace Mooege.Core.GS.Universe
             {
                 System.Diagnostics.Debug.Assert(Contains(request.Field0) || IsItemEquipped(request.Field0), "Request to equip unknown item");
 
-                // TODO find out swapping items, so no equipping when the slot is occupied
-                if (request.Field1.Field1 < EquipmentSlots && this._equipment[request.Field1.Field1] == 0)
+
+                
+                int oldEquipItem = this._equipment[request.Field1.Field1];
+                // EquipmentSlot is empty
+                if (oldEquipItem == 0)
                 {
                     Logger.Debug("Equip Item {0}", request.AsText());
                     RemoveItem(request.Field0);
@@ -376,6 +384,39 @@ namespace Mooege.Core.GS.Universe
 
                     AcceptMoveRequest(request.Field0, request.Field1);
                     RefreshVisual(request.Field1.Field0);
+                }
+                else
+                {
+
+                    // check if item is already equipt in other equipmentSLot
+                    if (IsItemEquipped(request.Field0))
+                    {
+                        // switch the two equiped items
+                        int oldEquipmentSlot = UnequipItem(request.Field0);
+                        EquipItem(request.Field0, request.Field1.Field1);
+                        AcceptMoveRequest(request.Field0, request.Field1);
+
+                        EquipItem(oldEquipItem, oldEquipmentSlot);
+                        AcceptMoveRequest(oldEquipItem, new InvLoc { Field0 = _owner.DynamicId, Field1 = oldEquipmentSlot, Field2 = -1, Field3 = -1 });
+
+                        RefreshVisual(request.Field1.Field0);
+
+                    }
+                    else
+                    {
+                        RemoveItem(request.Field0);
+                        EquipItem(request.Field0, request.Field1.Field1);
+                        AcceptMoveRequest(request.Field0, request.Field1);
+                        RefreshVisual(request.Field1.Field0);
+
+                        InventorySlot? slot = FindSlotForItem(oldEquipItem);
+                        AddItem(oldEquipItem, slot.Value.Row, slot.Value.Column);
+                        AcceptMoveRequest(oldEquipItem, new InvLoc { Field0 = _owner.DynamicId, Field1 = 0, Field2 = slot.Value.Row, Field3 = slot.Value.Column });                    
+
+                    }
+                    
+
+                    
                 }
             }
 
@@ -443,7 +484,7 @@ namespace Mooege.Core.GS.Universe
                 RemoveItem(msg.ItemId);
             }
 
-            AcceptMoveRequest(msg.ItemId, new InvLoc { Field0 = _owner.DynamicId, Field1 = -1, Field2 = -1, Field3 = -1 });
+            AcceptMoveRequest(msg.ItemId, new InvLoc { Field0 = _owner.DynamicId, Field1 = 0, Field2 = -1, Field3 = -1 });
             _owner.Universe.DropItem(_owner, _owner.InGameClient.items[msg.ItemId], _owner.Position);
         }
 
