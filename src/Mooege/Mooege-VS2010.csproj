@@ -81,6 +81,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\GS\Powers\Implementations\Barbarian.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\DemonHunter.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\Melee.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\Monk.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\WitchDoctor.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\Wizard.cs" />
+    <Compile Include="Core\GS\Powers\PowerImplementationAttribute.cs" />
+    <Compile Include="Core\GS\Powers\PowerImplementation.cs" />
+    <Compile Include="Core\GS\Powers\PowerParameters.cs" />
     <Compile Include="Core\GS\Powers\PowersManager.cs" />
     <Compile Include="Core\GS\Powers\PowersMobTester.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />

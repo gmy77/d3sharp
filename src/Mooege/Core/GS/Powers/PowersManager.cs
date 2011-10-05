@@ -19,7 +19,7 @@ using Mooege.Common;
 
 namespace Mooege.Core.GS.Powers
 {
-    internal class Effect : Actor
+    public class Effect : Actor
     {
         public DateTime timeout;
     }
@@ -43,6 +43,15 @@ namespace Mooege.Core.GS.Powers
         // while still updating position/targeting data.
         private Dictionary<Actor, DateTime> _castDelays = new Dictionary<Actor, DateTime>();
 
+        // list of all waiting to execute powers
+        class WaitingPower
+        {
+            public IEnumerator<int> PowerEnumerator;
+            public DateTime Timeout;
+            public Actor User;
+        }
+        List<WaitingPower> _waitingPowers = new List<WaitingPower>();
+
         // supplies Powers with all available targets.
         private IEnumerable<Actor> Targets
         {
@@ -60,6 +69,7 @@ namespace Mooege.Core.GS.Powers
 
         public void Tick()
         {
+            UpdateWaitingPowers();
             CleanUpEffects();
             _mobtester.Tick();
         }
@@ -95,183 +105,95 @@ namespace Mooege.Core.GS.Powers
                     if (target == null)
                     {
                         GetProxyEffectFor(user, targetPos);
-                            SendDWordTickFor(user);
+                        SendDWordTickFor(user);
                     }
                     return;
                 }
             }
 
-            #region Conceptual power implementations
-            // TODO: need to split this out into multiple files eventually
-            if (powerId == Skills.Skills.Monk.SpiritSpenders.BlindingFlash) // used for spawning stuff right now
+            if (powerId == Skills.Skills.Monk.SpiritSpenders.BlindingFlash) // HACK: intercepted to use for spawning test mobs
             {
                 _mobtester.SpawnMob(user);
             }
-            else if (powerId == Skills.Skills.BasicAttack) // TODO: actual generic basic attack? or always melee?
+            else
             {
-                if (target != null)
+                // find and run an implementation
+                var implementation = PowerImplementation.ImplementationForId(powerId);
+                if (implementation != null)
                 {
-                    if (Math.Abs(user.Position.X - targetPos.X) < 15f &&
-                        Math.Abs(user.Position.Y - targetPos.Y) < 15f)
+                    IEnumerable<int> powerExe = implementation.Run(new PowerParameters()
                     {
-                        foreach (GameClient client in _clientsInSameWorld(user))
-                        {
-                            client.SendMessage(new PlayHitEffectMessage()
-                            {
-                                Id = 0x7b,
-                                Field0 = target.DynamicId,
-                                Field1 = user.DynamicId,
-                                Field2 = 4,
-                                Field3 = false
-                            });
+                        User = user,
+                        Target = target,
+                        TargetPosition = targetPos,
+                        Message = message
+                    },
+                    this);
 
-                            SendDWordTick(client);
-                        }
-                        DoDamage(user, target, 25f, 0);
+                    var powerEnum = powerExe.GetEnumerator();
+                    // actual power will first run here, if it yielded a value process it in the waiting list
+                    if (powerEnum.MoveNext())
+                    {
+                        AddWaitingPower(_waitingPowers, powerEnum, user);
                     }
-                }
-            }
-
-            else if (powerId == Skills.Skills.Monk.SpiritGenerator.DeadlyReach)
-            {
-                if (message.Field5 == 0)
-                    PlayEffectGroupActorToActor(71921, user, GetProxyEffectFor(user, targetPos));
-                else if (message.Field5 == 1)
-                    PlayEffectGroupActorToActor(72134, user, GetProxyEffectFor(user, targetPos));
-                else if (message.Field5 == 2)
-                    PlayEffectGroupActorToActor(72331, user, GetProxyEffectFor(user, targetPos));
-                
-                SendDWordTickFor(user);
-            }
-            else if (powerId == Skills.Skills.Monk.SpiritGenerator.FistsOfThunder)
-            {
-                //Logger.Error("preplay: {0}\ndword: {1}\ntick: {2}", 1000* BitConverter.ToSingle(BitConverter.GetBytes(message.Field6.Field2), 0),
-                //    _clients.First().PacketId, _clients.First().Tick);
-
-                if (message.Field5 == 0)
-                    PlayEffectGroupActorToActor(96176, user, GetProxyEffectFor(user, targetPos));
-                else if (message.Field5 == 1)
-                    PlayEffectGroupActorToActor(96176, user, GetProxyEffectFor(user, targetPos));
-                else if (message.Field5 == 2)
-                    PlayEffectGroupActorToActor(96178, user, GetProxyEffectFor(user, targetPos));
-
-                SendDWordTickFor(user);
-            }
-            else if (powerId == Skills.Skills.Wizard.Signature.Electrocute) // electrocute
-            {
-                // channeled power
-                if (!_channelingActors.Contains(user))
-                    _channelingActors.Add(user);
-
-                LookAt(user, targetPos);
-
-                IList<Actor> targets;
-                if (target == null)
-                {
-                    targets = new List<Actor>();
-                    PlayRopeEffectActorToActor(0x78c0, user, GetProxyEffectFor(user, targetPos));
+                    // send tick after executing power
                     SendDWordTickFor(user);
                 }
-                else
-                {
-                    targets = FindActorsInRadius(targetPos, 15f, 1);
-                    targets.Insert(0, target);
-                    Actor effect_source = user;
-                    foreach (Actor actor in targets)
-                    {
-                        PlayHitEffect(2, effect_source, actor);
-                        PlayRopeEffectActorToActor(0x78c0, effect_source, actor);
-                        SendDWordTickFor(actor);
-
-                        effect_source = actor;
-                    }
-                }
-
-                DoDamage(user, targets, 12, 0);
-            }
-            else if (powerId == Skills.Skills.Wizard.Signature.MagicMissile)
-            {
-                for (int step = 1; step < 10; ++step)
-                {
-                    var spos = new Vector3D();
-                    spos.X = user.Position.X + ((targetPos.X - user.Position.X) * (step * 0.10f));
-                    spos.Y = user.Position.Y + ((targetPos.Y - user.Position.Y) * (step * 0.10f));
-                    spos.Z = user.Position.Z + ((targetPos.Z - user.Position.Z) * (step * 0.10f));
-
-                    SpawnEffect(user, 61419, spos);
-
-                    IList<Actor> hits = FindActorsInRadius(spos, 6f);
-                    DoDamage(user, hits, 20f, 0);
-                    System.Threading.Thread.Sleep(100);
-                }
-            }
-            else if (powerId == Skills.Skills.Wizard.Offensive.Hydra) // demonic meteor
-            {
-                SpawnEffect(user, 185366, targetPos);
-                foreach (GameClient client in _clientsInSameWorld(user))
-                    client.FlushOutgoingBuffer();
-
-                System.Threading.Thread.Sleep(400);
-
-                IList<Actor> hits = FindActorsInRadius(targetPos, 10f);
-                DoDamage(user, hits, 100f, 0);
-            }
-            else if (powerId == Skills.Skills.Wizard.Offensive.Meteor)
-            {
-                SpawnEffect(user, 86790, targetPos);
-                foreach (GameClient client in _clientsInSameWorld(user))
-                    client.FlushOutgoingBuffer();
-                System.Threading.Thread.Sleep(2000);
-                SpawnEffect(user, 86769, targetPos);
-                SpawnEffect(user, 90364, targetPos, -1, 4000);
-
-                IList<Actor> hits = FindActorsInRadius(targetPos, 13f);
-                DoDamage(user, hits, 150f, 0);
-            }
-            else if (powerId == Skills.Skills.Wizard.Offensive.Disintegrate)
-            {
-                Effect pid = GetProxyEffectFor(user, targetPos);
-                if (!_channelingActors.Contains(user))
-                {
-                    _channelingActors.Add(user);
-                    PlayRopeEffectActorToActor(30888, user, pid);
-                }
-                SendDWordTickFor(pid);
-
-                //DoDamage(user, target, 12, 0);
-            }
-            else if (powerId == Skills.Skills.Monk.SpiritSpenders.SevenSidedStrike)
-            {
-                Vector3D startpos;
-                if (target == null)
-                    startpos = user.Position;
-                else
-                    startpos = targetPos;
-
-                IList<Actor> nearby = FindActorsInRadius(startpos, 20f, 7);
-                for (int n = 0; n < 7; ++n)
-                {
-                    if (nearby.Count > 0)
-                    {
-                        SpawnEffect(user, 99063, nearby[0].Position);
-                        DoDamage(user, nearby[0], 100f, 0);
-                        nearby.RemoveAt(0);
-                    }
-                    foreach (GameClient client in _clientsInSameWorld(user))
-                        client.FlushOutgoingBuffer();
-                    System.Threading.Thread.Sleep(100);
-                }
-            }
-            #endregion // conceptual power implementations
+            }                
         }
 
-        private void SendDWordTickFor(Actor user)
+        private void AddWaitingPower(IList<WaitingPower> list, IEnumerator<int> powerEnum, Actor user)
+        {
+            WaitingPower wait = new WaitingPower();
+            wait.PowerEnumerator = powerEnum;
+            wait.User = user;
+            if (powerEnum.Current == 0)
+                wait.Timeout = DateTime.MinValue;
+            else
+                wait.Timeout = DateTime.Now.AddMilliseconds(powerEnum.Current);
+
+            list.Add(wait);
+        }
+
+        private void UpdateWaitingPowers()
+        {
+            List<WaitingPower> newWaitList = new List<WaitingPower>();
+            foreach (WaitingPower wait in _waitingPowers)
+            {
+                if (DateTime.Now > wait.Timeout)
+                {
+                    if (wait.PowerEnumerator.MoveNext())
+                    {
+                        // re-add with new timeout
+                        AddWaitingPower(newWaitList, wait.PowerEnumerator, wait.User);
+                    }
+                    // else did not request another wait
+
+                    // send dword tick after every power execute
+                    SendDWordTickFor(wait.User);
+                }
+                else
+                {
+                    // re-add with same timeout
+                    newWaitList.Add(wait);
+                }
+            }
+            _waitingPowers = newWaitList;
+
+            // HACK: just flush all clients right now
+            foreach (GameClient client in _universe.PlayerManager.Players.Select(p => p.Client))
+            {
+                client.FlushOutgoingBuffer();
+            }
+        }
+
+        public void SendDWordTickFor(Actor user)
         {
             foreach (GameClient client in _clientsInSameWorld(user))
                 SendDWordTick(client);
         }
 
-        private bool CastDelay(Actor user)
+        public bool CastDelay(Actor user)
         {
             if (!_castDelays.ContainsKey(user) || DateTime.Now > _castDelays[user])
             {
@@ -296,7 +218,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private void PlayHitEffect(int effectId, Actor from, Actor target)
+        public void PlayHitEffect(int effectId, Actor from, Actor target)
         {
             foreach (GameClient client in _clientsInSameWorld(target))
             {
@@ -311,7 +233,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private void PlayRopeEffectActorToActor(int effectId, Actor from, Actor target)
+        public void PlayRopeEffectActorToActor(int effectId, Actor from, Actor target)
         {
             foreach (GameClient client in _clientsInSameWorld(target))
             {
@@ -327,7 +249,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private void PlayEffectGroupActorToActor(int effectId, Actor from, Actor target)
+        public void PlayEffectGroupActorToActor(int effectId, Actor from, Actor target)
         {
             foreach (GameClient client in _clientsInSameWorld(target))
             {
@@ -341,7 +263,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private void LookAt(Actor actor, Vector3D targetPos)
+        public void LookAt(Actor actor, Vector3D targetPos)
         {
             float facing = (float)Math.Atan2(targetPos.Y - actor.Position.Y, targetPos.X - actor.Position.X);
             foreach (GameClient client in _clientsInSameWorld(actor))
@@ -378,7 +300,7 @@ namespace Mooege.Core.GS.Powers
                                           .Select(p => p.Client);
         }
 
-        private Effect SpawnEffectObject(Actor from, int effectId, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
+        public Effect SpawnEffectObject(Actor from, int effectId, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
         {
             if (angle == -1f)
                 angle = (float)_rand.NextDouble() * 360f;
@@ -482,12 +404,12 @@ namespace Mooege.Core.GS.Powers
             return effect;
         }
 
-        private void SpawnEffect(Actor from, int effectId, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
+        public void SpawnEffect(Actor from, int effectId, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
         {
             _effects.Add(SpawnEffectObject(from, effectId, position, angle, timeout));
         }
 
-        private void KillSpawnedEffect(Effect effect)
+        public void KillSpawnedEffect(Effect effect)
         {
             foreach (GameClient client in _clientsInSameWorld(effect))
             {
@@ -507,7 +429,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private IList<Actor> FindActorsInRadius(Vector3D center, float radius, int maxCount = -1)
+        public IList<Actor> FindActorsInRadius(Vector3D center, float radius, int maxCount = -1)
         {
             List<Actor> hits = new List<Actor>();
             foreach (Actor actor in Targets)
@@ -525,7 +447,7 @@ namespace Mooege.Core.GS.Powers
             return hits;
         }
 
-        private Effect GetProxyEffectFor(Actor from, Vector3D pos)
+        public Effect GetProxyEffectFor(Actor from, Vector3D pos)
         {
             if (!_proxies.ContainsKey(from))
             {
@@ -539,7 +461,7 @@ namespace Mooege.Core.GS.Powers
             return _proxies[from];
         }
 
-        private void RepositionActor(Actor from, Vector3D pos)
+        public void RepositionActor(Actor from, Vector3D pos)
         {
             from.Position = pos;
             foreach (GameClient client in _clientsInSameWorld(from))
@@ -566,7 +488,23 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private void DoDamage(Actor from, Actor target, float amount, int type)
+        public void MoveActorNormal(Actor actor, Vector3D pos)
+        {
+            actor.Position = pos;
+            foreach (GameClient client in _clientsInSameWorld(actor))
+            {
+                client.SendMessage(new ACDTranslateNormalMessage()
+                {
+                    Id = 0x6e,
+                    Field0 = actor.DynamicId,
+                    Position = pos,
+                    Field2 = 0f, // TODO: convert quaternion rotation for this?
+                    Field3 = false,
+                    Field4 = 1.0f,
+                });
+            }
+        }
+        public void DoDamage(Actor from, Actor target, float amount, int type)
         {
             foreach (GameClient client in _clientsInSameWorld(target))
             {
@@ -586,7 +524,7 @@ namespace Mooege.Core.GS.Powers
                 ((SimpleMob)target).ReceiveDamage(from, amount, type);
         }
 
-        private void DoDamage(Actor from, IList<Actor> target_list, float amount, int type)
+        public void DoDamage(Actor from, IList<Actor> target_list, float amount, int type)
         {
             foreach (Actor target in target_list)
             {
@@ -609,12 +547,12 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private Actor GetActorFromId(int id)
+        public Actor GetActorFromId(int id)
         {
             return Targets.FirstOrDefault(t => t.DynamicId == id);
         }
 
-        private void SendDWordTick(GameClient client)
+        public void SendDWordTick(GameClient client)
         {
             client.PacketId += 10 * 2;
             client.SendMessage(new DWordDataMessage()
@@ -622,6 +560,12 @@ namespace Mooege.Core.GS.Powers
                 Id = 0x89,
                 Field0 = client.PacketId,
             });
+        }
+
+        public void AddChannelingActor(Actor actor)
+        {
+            if (!_channelingActors.Contains(actor))
+                _channelingActors.Add(actor);
         }
     }
 }
