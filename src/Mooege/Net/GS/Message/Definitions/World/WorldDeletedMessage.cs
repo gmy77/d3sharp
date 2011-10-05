@@ -22,16 +22,16 @@ namespace Mooege.Net.GS.Message.Definitions.World
 {
     public class WorldDeletedMessage : GameMessage
     {
-        public int Field0;
+        public uint WorldID; // World's DynamicID
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            WorldID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteUInt(32, WorldID);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -40,7 +40,7 @@ namespace Mooege.Net.GS.Message.Definitions.World
             b.AppendLine("WorldDeletedMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("WorldID: 0x" + WorldID.ToString("X8") + " (" + WorldID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

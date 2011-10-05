@@ -11,6 +11,6 @@
          Universe,
          PlayerManager,
          Inventory,
-         Hero
+         Player
      }
  }

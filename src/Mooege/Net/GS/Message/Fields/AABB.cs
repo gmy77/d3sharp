@@ -22,21 +22,21 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class AABB
     {
-        public Vector3D Field0;
-        public Vector3D Field1;
+        public Vector3D Min;
+        public Vector3D Max;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = new Vector3D();
-            Field0.Parse(buffer);
-            Field1 = new Vector3D();
-            Field1.Parse(buffer);
+            Min = new Vector3D();
+            Min.Parse(buffer);
+            Max = new Vector3D();
+            Max.Parse(buffer);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            Field0.Encode(buffer);
-            Field1.Encode(buffer);
+            Min.Encode(buffer);
+            Max.Encode(buffer);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -45,8 +45,8 @@ namespace Mooege.Net.GS.Message.Fields
             b.AppendLine("AABB:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            Field0.AsText(b, pad);
-            Field1.AsText(b, pad);
+            Min.AsText(b, pad);
+            Max.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

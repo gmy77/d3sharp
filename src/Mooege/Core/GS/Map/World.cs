@@ -20,10 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common;
+using Mooege.Core.GS.Game;
+using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Data.SNO;
 using Mooege.Core.GS.NPC;
-using Mooege.Core.GS.Universe;
+using Mooege.Core.GS.Data.SNO;
+using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Scene;
@@ -31,77 +33,226 @@ using Mooege.Net.GS.Message.Definitions.World;
 
 namespace Mooege.Core.GS.Map
 {
-    public class World
+    public class World : IDynamicObject
     {
         static readonly Logger Logger = LogManager.CreateLogger();
-        private List<BasicNPC> NPCs;
-        private List<Actor> Actors;
-        private List<Scene> Scenes;
-        private List<Portal> Portals;
 
-        public int WorldID;
-        public int WorldSNO;
+        public Mooege.Core.GS.Game.Game Game { get; private set; }
+        public uint DynamicID { get; private set; }
 
-        public World(int ID)
+        private Dictionary<uint, Scene> Scenes;
+        private Dictionary<uint, Portal> Portals;
+        private Dictionary<uint, Actor> Actors;
+        private Dictionary<uint, Player> Players;
+        private Dictionary<uint, Item> Items;
+
+        public int WorldSNO { get; set; }
+
+        public World(Mooege.Core.GS.Game.Game game)
         {
-            NPCs = new List<BasicNPC>();
-            Actors = new List<Actor>();
-            Scenes = new List<Scene>();
-            Portals = new List<Portal>();
-            WorldID = ID;
+            this.Game = game;
+            this.DynamicID = this.Game.NewWorldID;
+            this.Game.AddWorld(this);
+
+            this.Scenes = new Dictionary<uint, Scene>();
+            this.Portals = new Dictionary<uint, Portal>();
+            this.Actors = new Dictionary<uint, Actor>();
+            this.Players = new Dictionary<uint, Player>();
+            this.Items = new Dictionary<uint, Item>();
         }
 
-        public Scene GetScene(int ID)
+        #region Collections
+
+        // Adding
+        public void AddScene(Scene obj)
         {
-            for (int x = 0; x < Scenes.Count; x++)
-                if (Scenes[x].ID == ID) return Scenes[x];
+            if (obj.DynamicID == 0 || this.Scenes.ContainsKey(obj.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was already present ({0})", obj.DynamicID));
+            this.Scenes.Add(obj.DynamicID, obj);
+        }
+
+        public void AddPortal(Portal obj)
+        {
+            if (obj.DynamicID == 0 || this.Portals.ContainsKey(obj.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was already present ({0})", obj.DynamicID));
+            this.Portals.Add(obj.DynamicID, obj);
+        }
+
+        public void AddActor(Actor obj)
+        {
+            if (obj.DynamicID == 0 || this.Actors.ContainsKey(obj.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was already present ({0})", obj.DynamicID));
+            this.Actors.Add(obj.DynamicID, obj);
+        }
+
+        public void AddPlayer(Player obj)
+        {
+            if (obj.DynamicID == 0 || this.Players.ContainsKey(obj.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was already present ({0})", obj.DynamicID));
+            this.Players.Add(obj.DynamicID, obj);
+        }
+
+        public void AddItem(Item obj)
+        {
+            if (obj.DynamicID == 0 || this.Items.ContainsKey(obj.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was already present ({0})", obj.DynamicID));
+            this.Items.Add(obj.DynamicID, obj);
+        }
+
+        // Removing
+        public void RemoveScene(Scene obj)
+        {
+            if (obj.DynamicID == 0 || !this.Scenes.ContainsKey(obj.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was not present ({0})", obj.DynamicID));
+            this.Scenes.Remove(obj.DynamicID);
+        }
+
+        public void RemovePortal(Portal obj)
+        {
+            if (obj.DynamicID == 0 || !this.Portals.ContainsKey(obj.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was not present ({0})", obj.DynamicID));
+            this.Portals.Remove(obj.DynamicID);
+        }
+
+        public void RemoveActor(Actor obj)
+        {
+            if (obj.DynamicID == 0 || !this.Actors.ContainsKey(obj.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was not present ({0})", obj.DynamicID));
+            this.Actors.Remove(obj.DynamicID);
+        }
+
+        public void RemovePlayer(Player obj)
+        {
+            if (obj.DynamicID == 0 || !this.Players.ContainsKey(obj.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was not present ({0})", obj.DynamicID));
+            this.Players.Remove(obj.DynamicID);
+        }
+
+        public void RemoveItem(Item obj)
+        {
+            if (obj.DynamicID == 0 || !this.Items.ContainsKey(obj.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was not present ({0})", obj.DynamicID));
+            this.Items.Remove(obj.DynamicID);
+        }
+
+        // Getters
+        public Scene GetScene(uint dynamicID)
+        {
+            Scene scene;
+            this.Scenes.TryGetValue(dynamicID, out scene);
+            return scene;
+        }
+
+        public Portal GetPortal(uint dynamicID)
+        {
+            Portal portal;
+            this.Portals.TryGetValue(dynamicID, out portal);
+            return portal;
+        }
+
+        public Actor GetActor(uint dynamicID)
+        {
+            Actor actor;
+            this.Actors.TryGetValue(dynamicID, out actor);
+            return actor;
+        }
+
+        public Actor GetActor(uint dynamicID, ActorType matchType)
+        {
+            var actor = GetActor(dynamicID);
+            if (actor != null)
+            {
+                if (actor.ActorType == matchType)
+                    return actor;
+                else
+                    Logger.Warn("Attempted to get actor ID {0} as a {1}, whereas the actor is type {2}",
+                        dynamicID, Enum.GetName(typeof(ActorType), matchType), Enum.GetName(typeof(ActorType), actor.ActorType));
+            }
             return null;
         }
 
-        public BasicNPC GetNpc(int ID)
+        public Player GetPlayer(uint dynamicID)
         {
-            for (int x = 0; x < NPCs.Count; x++)
-                if (NPCs[x].ID == ID) return NPCs[x];
-            return null;
+            Player player;
+            this.Players.TryGetValue(dynamicID, out player);
+            return player;
         }
 
-        public Actor GetActor(int ID)
+        public Item GetItem(uint dynamicID)
         {
-            for (int x = 0; x < Actors.Count; x++)
-                if (Actors[x].DynamicId == ID) return Actors[x];
-            return null;
+            Item item;
+            this.Items.TryGetValue(dynamicID, out item);
+            return item;
         }
 
-        public Portal GetPortal(int ID)
+        // Existence
+        public bool HasScene(uint dynamicID)
         {
-            for (int x = 0; x < Portals.Count; x++)
-                if (Portals[x].ActorRef.DynamicId == ID) return Portals[x];
-            return null;
+            return this.Scenes.ContainsKey(dynamicID);
         }
 
-        //get actor by snoid and x,y,z position - this is a helper function to prune duplicate entries from the packet data
+        public bool HasPortal(uint dynamicID)
+        {
+            return this.Portals.ContainsKey(dynamicID);
+        }
+
+        public bool HasActor(uint dynamicID, ActorType matchType)
+        {
+            var actor = GetActor(dynamicID, matchType);
+            return actor != null;
+        }
+
+        public bool HasPlayer(uint dynamicID)
+        {
+            return this.Players.ContainsKey(dynamicID);
+        }
+
+        public bool HasActor(uint dynamicID)
+        {
+            return this.Actors.ContainsKey(dynamicID);
+        }
+
+        public bool HasNPC(uint dynamicID)
+        {
+            return HasActor(dynamicID, ActorType.NPC);
+        }
+
+        public bool HasMonster(uint dynamicID)
+        {
+            return HasActor(dynamicID, ActorType.Monster);
+        }
+
+        public bool HasItem(uint dynamicID)
+        {
+            return this.Items.ContainsKey(dynamicID);
+        }
+
+        // get actor by snoid and x,y,z position - this is a helper function to prune duplicate entries from the packet data
         public Actor GetActor(int snoID, float x, float y, float z)
         {
-            for (int i = 0; i < Actors.Count; i++)
-                if (Actors[i].SnoId == snoID &&
-                    Actors[i].Position.X == x &&
-                    Actors[i].Position.Y == y &&
-                    Actors[i].Position.Z == z) return Actors[i];
+            foreach (var actor in this.Actors.Values)
+            {
+                if (actor.AppearanceSNO == snoID &&
+                    actor.Position.X == x &&
+                    actor.Position.Y == y &&
+                    actor.Position.Z == z)
+                    return actor;
+            }
             return null;
         }
 
         public List<Actor> GetActorsInRange(int snoID, float x, float y, float z, float range)
         {
             List<Actor> result = new List<Actor>();
-            for(int i = 0; i < Actors.Count; i++)
+            foreach (var actor in this.Actors.Values)
             {
-                if(Actors[i].SnoId == snoID &&
+                if (actor.AppearanceSNO == snoID &&
                     (Math.Sqrt(
-                        Math.Pow(Actors[i].Position.X - x, 2) + 
-                        Math.Pow(Actors[i].Position.Y - y, 2) +
-                        Math.Pow(Actors[i].Position.Z - z, 2)) <= range))
+                        Math.Pow(actor.Position.X - x, 2) +
+                        Math.Pow(actor.Position.Y - y, 2) +
+                        Math.Pow(actor.Position.Z - z, 2)) <= range))
                 {
-                    result.Add(Actors[i]);
+                    result.Add(actor);
                 }
             }
             return result;
@@ -111,176 +262,92 @@ namespace Mooege.Core.GS.Map
         {
             return Actors.Any(
                 t =>
-                    t.SnoId == actor.SnoId &&
-                    t.Position.X == actor.Position.X &&
-                    t.Position.Y == actor.Position.Y &&
-                    t.Position.Z == actor.Position.Z);
+                    t.Value.AppearanceSNO == actor.AppearanceSNO &&
+                    t.Value.Position.X == actor.Position.X &&
+                    t.Value.Position.Y == actor.Position.Y &&
+                    t.Value.Position.Z == actor.Position.Z);
         }
 
-        public void AddScene(string Line)
+        // Why do we need to sort scenes?
+        /*private int SceneSorter(Scene x, Scene y)
         {
-            string[] data = Line.Split(' ');
-            int SceneID=int.Parse(data[46]);
-
-            Scene s = GetScene(SceneID);
-            if (s != null) return;
-
-            s = new Scene();
-            s.ID = SceneID;
-
-            s.SceneData = new RevealSceneMessage(data.Skip(2).ToArray(),WorldID);
-
-            Scenes.Add(s);
-        }
-
-        public void AddMapScene(string Line)
-        {
-            string[] data = Line.Split(' ');
-            int SceneID = int.Parse(data[2]);
-
-            Scene s = GetScene(SceneID);
-
-            if (s==null) return;
-
-            s.Map = new MapRevealSceneMessage(data.Skip(2).ToArray(), WorldID);
-        }
-
-
-        public void AddActor(Actor actor)
-        {
-            Actors.Add(actor);
-        }
-
-        public void AddNpc(BasicNPC npc)
-        {
-            NPCs.Add(npc);
-        }
-
-
-        public void AddActor(string line)
-        {
-            var actor = new Actor();
-            if (!actor.ParseFrom(this.WorldID, line)) return; // if not valid actor (inventory using items), just don't add it to list.
-            if (!this.ActorExists(actor)) Actors.Add(actor); // filter duplicate actors.
-        }
-
-        public void AddPortal(string Line)
-        {
-            string[] data = Line.Split(' ');
-
-            int ActorID = int.Parse(data[2]);
-
-            //this check is here so no duplicate portals are in a world and thus a portal actor isn't revealed twice to a player
-            foreach (var portal in Portals)
-                if (portal.ActorRef.DynamicId == ActorID) return;
-
-            Portal p = new Portal();
-            p.PortalMessage = new PortalSpecifierMessage(data.Skip(2).ToArray());
-            p.ActorRef=GetActor(ActorID);
-
-            Portals.Add(p);
-        }
-
-        private int SceneSorter(Scene x, Scene y)
-        {
-            if (x.SceneData.WorldID != y.SceneData.WorldID) return x.SceneData.WorldID - y.SceneData.WorldID;
+            if (x.SceneData.DynamicID != y.SceneData.DynamicID) return x.SceneData.DynamicID - y.SceneData.DynamicID;
             if (x.SceneData.ParentChunkID != y.SceneData.ParentChunkID) return x.SceneData.ParentChunkID - y.SceneData.ParentChunkID;
             return 0;
         }
 
         public void SortScenes()
         {
-            //this makes sure no scene is referenced before it is revealed to a player
+            // this makes sure no scene is referenced before it is revealed to a player
             Scenes.Sort(SceneSorter);
-        }
+        }*/
 
-        public void Reveal(Hero hero)
+        #endregion // Collections
+
+        public void Reveal(Player player)
         {
-            bool found=hero.RevealedWorlds.Contains(this);
+            bool found=player.RevealedWorlds.ContainsKey(this.DynamicID);
 
             if (!found)
             {
-                //reveal world to player
-                hero.InGameClient.SendMessage(new RevealWorldMessage()
+                // reveal world to player
+                player.InGameClient.SendMessage(new RevealWorldMessage()
                 {
-                    Id = 0x0037,
-                    Field0 = WorldID,
-                    Field1 = WorldSNO,
+                    WorldID = this.DynamicID,
+                    WorldSNO = this.WorldSNO,
                 });
-                hero.RevealedWorlds.Add(this);
+                player.RevealedWorlds.Add(this.DynamicID, this);
             }
 
-            //player enters world
-            hero.InGameClient.SendMessage(new EnterWorldMessage()
+            // player enters world
+            player.InGameClient.SendMessage(new EnterWorldMessage()
             {
-                Id = 0x0033,
-                Field0 = hero.Position,
-                Field1 = WorldID,
-                Field2 = WorldSNO,
+                EnterPosition = player.Position,
+                WorldID = this.DynamicID,
+                WorldSNO = this.WorldSNO,
             });
 
-            //just reveal the whole thing to the player for now
-            foreach (var scene in Scenes)
-                scene.Reveal(hero);
+            // just reveal the whole thing to the player for now
+            foreach (var scene in Scenes.Values)
+                scene.Reveal(player);
 
             if (!found)
             {
-                //reveal actors
-                foreach (var actor in Actors)
+                // reveal actors
+                foreach (var actor in Actors.Values)
                 {
-                    if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.Blacklist)) continue;
-                    if (SNODatabase.Instance.IsOfGroup(actor.SnoId, SNOGroup.NPCs)) continue;
+                    if (SNODatabase.Instance.IsOfGroup(actor.AppearanceSNO, SNOGroup.Blacklist)) continue;
+                    if (SNODatabase.Instance.IsOfGroup(actor.AppearanceSNO, SNOGroup.NPCs)) continue;
                     // Commenting this out since it will lag the client to hell with all actors revealed
-                    // TODO: We need proper location-aware reveal logic for _all_ objects; even world chunks
-                    //actor.Reveal(hero);
+                    // TODO: We need proper location-aware reveal logic for _all_ objects, even scenes
+                    //actor.Reveal(player);
                 }
 
-                //reveal portals
-                Logger.Info("Revealing portals for world " + WorldID);
-                foreach (Portal portal in Portals)
+                // reveal portals
+                Logger.Info("Revealing portals for world " + DynamicID);
+                foreach (Portal portal in Portals.Values)
                 {
-                    portal.Reveal(hero);
+                    portal.Reveal(player);
                 }
             }
         }
 
-        public void DestroyWorld(Hero hero)
+        public void DestroyWorld(Player player)
         {
-            //for (int x = hero.RevealedActors.Count - 1; x >= 0; x-- )
-            //    if (hero.RevealedActors[x].RevealMessage.Field4.Field2 == WorldID) hero.RevealedActors[x].Destroy(hero);
+            // TODO: Destroy and release all objects in the world
+            //foreach (var actor in player.RevealedActors.Values)
+            //    if (actor.RevealMessage.Field4.Field2 == this.DynamicID) actor.Destroy(player);
 
-            //for (int x = hero.RevealedScenes.Count - 1; x >= 0; x--)
-            //    if (hero.RevealedScenes[x].SceneData.WorldID == WorldID) hero.RevealedScenes[x].Destroy(hero);
+            //foreach (var scene in player.RevealedScenes.Values)
+            //    if (scene.SceneData.DynamicID == this.DynamicID) scene.Destroy(player);
 
-            //hero.Owner.LoggedInBNetClient.InGameClient.SendMessage(new WorldDeletedMessage() { Id = 0xd9, Field0 = WorldID, });
-            hero.InGameClient.FlushOutgoingBuffer();
-        }
-
-        void CreateNPC(int objectId)
-        {
-            //NPCs.Add(new BasicNPC(objectId, ref Client));
+            //player.Owner.LoggedInBNetClient.InGameClient.SendMessage(new WorldDeletedMessage() { Id = 0xd9, Field0 = DynamicID, });
+            player.InGameClient.FlushOutgoingBuffer();
         }
 
         public void Tick()
         {
             //world time based code comes here later, call this X times a second (where x is around 20 imo)
-        }
-
-        public void HandleTarget(int ID)
-        {
-            List<BasicNPC> removelist = new List<BasicNPC>();
-            foreach (BasicNPC b in NPCs)
-            {
-                if (b.ID == ID)
-                {
-                    b.Die(0);
-                    removelist.Add(b);
-                }
-            }
-            foreach (BasicNPC b in removelist)
-            {
-                NPCs.Remove(b);
-            }
         }
     }
 }

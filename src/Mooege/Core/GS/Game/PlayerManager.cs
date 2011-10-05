@@ -24,17 +24,16 @@ using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Game;
 
-namespace Mooege.Core.GS.Universe
+namespace Mooege.Core.GS.Game
 {
-    public class PlayerManager:IMessageConsumer
+    public class PlayerManager : IMessageConsumer
     {
         static readonly Logger Logger = LogManager.CreateLogger();
-        public Universe Universe { get; private set; }
-        public List<Player> Players = new List<Player>();
+        public Game Game { get; private set; }
 
-        public PlayerManager(Universe universe)
+        public PlayerManager(Game game)
         {
-            this.Universe = universe;
+            this.Game = game;
         }
 
         public void Consume(GameClient client, GameMessage message)
@@ -43,23 +42,19 @@ namespace Mooege.Core.GS.Universe
         }
 
         public void OnNewPlayer(GameClient client, JoinBNetGameMessage message)
-        {           
+        {
             client.BnetClient = GameManager.AvailableGames[(ulong)message.GameId].Clients.FirstOrDefault();
-            
             if (client.BnetClient == null)
             {
                 Logger.Warn("Couldn't find bnet client for joined client/player!");
                 return;
-            }                
+            }
 
             client.BnetClient.InGameClient = client;
-            
-            var player = new Player(client, this.Universe, client.BnetClient.CurrentToon);
-            client.Player = player;
-            this.Players.Add(player);
 
+            var player = new Player(this.Game.StartWorld, client, client.BnetClient.CurrentToon);
+            client.Player = player;
             player.Greet(message);
-            
         }
     }
 }

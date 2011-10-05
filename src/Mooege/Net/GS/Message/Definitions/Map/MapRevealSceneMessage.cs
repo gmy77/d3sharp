@@ -23,28 +23,30 @@ namespace Mooege.Net.GS.Message.Definitions.Map
 {
     public class MapRevealSceneMessage : GameMessage
     {
-        public int ChunkID;
-        public int /* sno */ snoScene;
-        public PRTransform Field2;
-        public int Field3;
+        public uint ChunkID;
+        public uint /* sno */ SceneSNO;
+        public PRTransform Transform;
+        public uint WorldID;
         public int MiniMapVisibility;
+
+        public MapRevealSceneMessage() : base(Opcodes.MapRevealSceneMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            ChunkID = buffer.ReadInt(32);
-            snoScene = buffer.ReadInt(32);
-            Field2 = new PRTransform();
-            Field2.Parse(buffer);
-            Field3 = buffer.ReadInt(32);
+            ChunkID = buffer.ReadUInt(32);
+            SceneSNO = buffer.ReadUInt(32);
+            Transform = new PRTransform();
+            Transform.Parse(buffer);
+            WorldID = buffer.ReadUInt(32);
             MiniMapVisibility = buffer.ReadInt(3);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, ChunkID);
-            buffer.WriteInt(32, snoScene);
-            Field2.Encode(buffer);
-            buffer.WriteInt(32, Field3);
+            buffer.WriteUInt(32, ChunkID);
+            buffer.WriteUInt(32, SceneSNO);
+            Transform.Encode(buffer);
+            buffer.WriteUInt(32, WorldID);
             buffer.WriteInt(3, MiniMapVisibility);
         }
 
@@ -55,47 +57,12 @@ namespace Mooege.Net.GS.Message.Definitions.Map
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("ChunkID: 0x" + ChunkID.ToString("X8") + " (" + ChunkID + ")");
-            b.Append(' ', pad); b.AppendLine("snoScene: 0x" + snoScene.ToString("X8"));
-            Field2.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
+            b.Append(' ', pad); b.AppendLine("SceneSNO: 0x" + SceneSNO.ToString("X8"));
+            Transform.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("WorldID: 0x" + WorldID.ToString("X8") + " (" + WorldID + ")");
             b.Append(' ', pad); b.AppendLine("MiniMapVisibility: 0x" + MiniMapVisibility.ToString("X8") + " (" + MiniMapVisibility + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-        public MapRevealSceneMessage()
-        {
-
-        }
-
-        public MapRevealSceneMessage(string[] data2, int f3)
-        {
-            Id = 0x0044;
-            ChunkID = int.Parse(data2[0]);
-            snoScene = int.Parse(data2[1]);
-            Field2 = new PRTransform()
-                         {
-                             Field0 = new Quaternion()
-                                          {
-                                              Amount = float.Parse(data2[5], System.Globalization.CultureInfo.InvariantCulture),
-                                              Axis = new Vector3D()
-                                                           {
-                                                               X = float.Parse(data2[2], System.Globalization.CultureInfo.InvariantCulture),
-                                                               Y = float.Parse(data2[3], System.Globalization.CultureInfo.InvariantCulture),
-                                                               Z = float.Parse(data2[4], System.Globalization.CultureInfo.InvariantCulture),
-                                                           },
-                                          },
-                             ReferencePoint = new Vector3D()
-                                          {
-                                              X = float.Parse(data2[6], System.Globalization.CultureInfo.InvariantCulture),
-                                              Y = float.Parse(data2[7], System.Globalization.CultureInfo.InvariantCulture),
-                                              Z = float.Parse(data2[8], System.Globalization.CultureInfo.InvariantCulture),
-                                          },
-                         };
-            Field3 = f3;//int.Parse(data2[9]),
-            MiniMapVisibility = int.Parse(data2[10]);
-        }
-
-
     }
 }

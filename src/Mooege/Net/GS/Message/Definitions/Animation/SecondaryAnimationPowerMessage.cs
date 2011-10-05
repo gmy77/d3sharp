@@ -34,25 +34,25 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
         {
             if (snoPower != Skills.Monk.SpiritSpenders.BlindingFlash) return;
 
-            var oldPosField1 = client.Player.Hero.Position.Y;
-            var oldPosField2 = client.Player.Hero.Position.Z;
+            var oldPosField1 = client.Player.Position.Y;
+            var oldPosField2 = client.Player.Position.Z;
             for (var i = 0; i < 10; i++)
             {
                 if ((i % 2) == 0)
                 {
-                    client.Player.Hero.Position.X += (float)(RandomHelper.NextDouble() * 20);
-                    client.Player.Hero.Position.Y += (float)(RandomHelper.NextDouble() * 20);
+                    client.Player.Position.X += (float)(RandomHelper.NextDouble() * 20);
+                    client.Player.Position.Y += (float)(RandomHelper.NextDouble() * 20);
                 }
                 else
                 {
-                    client.Player.Hero.Position.X -= (float)(RandomHelper.NextDouble() * 20);
-                    client.Player.Hero.Position.Y -= (float)(RandomHelper.NextDouble() * 20);
+                    client.Player.Position.X -= (float)(RandomHelper.NextDouble() * 20);
+                    client.Player.Position.Y -= (float)(RandomHelper.NextDouble() * 20);
                 }
-                client.Player.Universe.SpawnMob(client, SNODatabase.Instance.RandomID(SNOGroup.NPCs));
+                //client.Player.Game.SpawnMob(client, SNODatabase.Instance.RandomID(SNOGroup.NPCs));
             }
 
-            client.Player.Hero.Position.Y = oldPosField1;
-            client.Player.Hero.Position.Z = oldPosField2;
+            client.Player.Position.Y = oldPosField1;
+            client.Player.Position.Z = oldPosField2;
         }
 
         public override void Parse(GameBitBuffer buffer)

@@ -20,7 +20,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Mooege.Common;
-using Mooege.Core.GS.Universe;
+using Mooege.Core.GS.Game;
 using Mooege.Net.GS.Message;
 using Mooege.Net.MooNet;
 using Mooege.Core.Common.Items;
@@ -37,22 +37,21 @@ namespace Mooege.Net.GS
         private readonly GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         private readonly GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
 
-        // for some testing
-        public Dictionary<int, Item> items = new Dictionary<int, Item>();  // array of items without specific place in inventory
-        //
-        public Universe Universe;    
+        // TODO: This should be in the Player class.. called something like GroundItems.
+        //       If the player drops an item, it will go to the world's global ground collection, rather than the player's collection
+        public Dictionary<uint, Item> Items = new Dictionary<uint, Item>();  // array of items without specific place in inventory
+
+        public Game Game;
         public Player Player { get; set; }
-        public int PacketId = 0x227 + 20;
+        public int PacketId = 0x227 + 20; // TODO: We need proper packet ID incrementing
         public int Tick = 0;
-        
-        public IList<int> ObjectIdsSpawned = null;
 
         public bool IsLoggingOut;
 
-        public GameClient(IConnection connection, Universe universe)
-        {            
+        public GameClient(IConnection connection, Game game)
+        {
             this.Connection = connection;
-            this.Universe = universe;
+            this.Game = game;
             _outgoingBuffer.WriteInt(32, 0);
         }
 
@@ -73,7 +72,7 @@ namespace Mooege.Net.GS
                     if (message == null) continue;
                     try
                     {
-                        if (message.Consumer != Consumers.None) this.Universe.Route(this, message);
+                        if (message.Consumer != Consumers.None) this.Game.Route(this, message);
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                         else Logger.Warn("{0} has no consumer or self-handler.", message.GetType());
 

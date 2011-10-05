@@ -19,15 +19,17 @@
 using System.Text;
 using Mooege.Net.GS.Message.Fields;
 
+// TODO: This doesn't belong in the Combat namespace since it is used to target objects such as items or portals in the world
+
 namespace Mooege.Net.GS.Message.Definitions.Combat
 {
     [IncomingMessage(Opcodes.TargetMessage,Consumers.Universe)]
     public class TargetMessage : GameMessage
     {
         public int Field0;
-        public int Field1;
+        public uint TargetID; // Targeted actor's DynamicID
         public WorldPlace Field2;
-        public int /* sno */ snoPower;
+        public int /* sno */ PowerSNO; // SNO of the power that was used on the targeted actor
         public int Field4;
         public int Field5;
         public AnimPreplayData Field6;
@@ -35,10 +37,10 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(2) + (-1);
-            Field1 = buffer.ReadInt(32);
+            TargetID = buffer.ReadUInt(32);
             Field2 = new WorldPlace();
             Field2.Parse(buffer);
-            snoPower = buffer.ReadInt(32);
+            PowerSNO = buffer.ReadInt(32);
             Field4 = buffer.ReadInt(32);
             Field5 = buffer.ReadInt(2);
             if (buffer.ReadBool())
@@ -51,9 +53,9 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(2, Field0 - (-1));
-            buffer.WriteInt(32, Field1);
+            buffer.WriteUInt(32, TargetID);
             Field2.Encode(buffer);
-            buffer.WriteInt(32, snoPower);
+            buffer.WriteInt(32, PowerSNO);
             buffer.WriteInt(32, Field4);
             buffer.WriteInt(2, Field5);
             buffer.WriteBool(Field6 != null);
@@ -70,9 +72,9 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("TargetID: 0x" + TargetID.ToString("X8") + " (" + TargetID + ")");
             Field2.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("snoPower: 0x" + snoPower.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("PowerSNO: 0x" + PowerSNO.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
             b.Append(' ', pad); b.AppendLine("Field5: 0x" + Field5.ToString("X8") + " (" + Field5 + ")");
             if (Field6 != null)

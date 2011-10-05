@@ -30,9 +30,11 @@ namespace Mooege.Core.Common.Items
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
 
+        // This is an incredibly confusing design choice..
         private readonly GameClient _client;
 
-        public ItemTypeGenerator(GameClient client){
+        public ItemTypeGenerator(GameClient client)
+        {
             this._client = client;
         }
 
@@ -101,15 +103,11 @@ namespace Mooege.Core.Common.Items
 
         private Item Generate(String itemName, int snoId, ItemType itemType)
         {
-            int itemId = _client.Universe.NextObjectId;
-            uint gbid = StringHashHelper.HashItemName(itemName);
-            var item = new Item(itemId, gbid, itemType) {SNOId = snoId};
-
-            _client.items[itemId] = item;
-
+            int gbid = StringHashHelper.HashItemName(itemName);
+            var item = new Item(_client.Player.World, gbid, itemType) { AppearanceSNO = snoId };
+            _client.Items[item.DynamicID] = item;
             return item;
         }
     }
-
 }
 

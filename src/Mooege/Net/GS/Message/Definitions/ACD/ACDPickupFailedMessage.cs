@@ -29,18 +29,20 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             OnlyOneItemAllowed = 4
         }
 
-        public int ItemId;
+        public uint ItemID; // Item's DynamicID
         public Reasons Reason;
+
+        public ACDPickupFailedMessage() : base(Opcodes.ACDPickupFailedMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            ItemId = buffer.ReadInt(32);
+            ItemID = buffer.ReadUInt(32);
             Reason = (Reasons)buffer.ReadInt(3);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, ItemId);
+            buffer.WriteUInt(32, ItemID);
             buffer.WriteInt(3, (int)Reason);
         }
 
@@ -50,7 +52,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDPickupFailedMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + ItemId.ToString("X8") + " (" + ItemId + ")");
+            b.Append(' ', pad); b.AppendLine("ItemID: 0x" + ItemID.ToString("X8") + " (" + ItemID + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + ((int)(Reason)).ToString("X8") + " (" + Reason + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");

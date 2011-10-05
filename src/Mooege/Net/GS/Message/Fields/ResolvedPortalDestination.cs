@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Fields
     public class ResolvedPortalDestination
     {
         public int /* sno */ snoWorld;
-        public int Field1;
+        public int Field1; // Target world's DynamicID?
         public int /* sno */ snoDestLevelArea;
 
         public void Parse(GameBitBuffer buffer)

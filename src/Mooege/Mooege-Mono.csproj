@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -41,6 +41,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -86,7 +87,6 @@
     <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\PotionAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributeCreator.cs" />
-    <Compile Include="Core\GS\Universe\Inventory.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
@@ -106,7 +106,6 @@
     <Compile Include="Core\GS\Map\Portal.cs" />
     <Compile Include="Core\GS\Map\Scene.cs" />
     <Compile Include="Core\GS\Map\World.cs" />
-    <Compile Include="Core\GS\NPC\BasicNPC.cs" />
     <Compile Include="Core\MooNet\Invitation\ChannelInvitationManager.cs" />
     <Compile Include="Core\MooNet\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\MooNet\OnlinePlayers.cs" />
@@ -137,10 +136,6 @@
     <Compile Include="Core\Common\Toons\Toon.cs" />
     <Compile Include="Core\Common\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Common\Toons\ToonManager.cs" />
-    <Compile Include="Core\GS\Universe\Hero.cs" />
-    <Compile Include="Core\GS\Universe\Player.cs" />
-    <Compile Include="Core\GS\Universe\PlayerManager.cs" />
-    <Compile Include="Core\GS\Universe\Universe.cs" />
     <Compile Include="Core\GS\Data\SNO\Config.cs" />
     <Compile Include="Core\GS\Data\SNO\Database.cs" />
     <Compile Include="Core\GS\Data\SNO\Set.cs" />
@@ -386,6 +381,14 @@
     <Compile Include="Core\MooNet\Objects\RPCObjectManager.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObject.cs" />
     <Compile Include="Core\Common\Storage\Config.cs" />
+    <Compile Include="Core\GS\Game\Game.cs" />
+    <Compile Include="Core\GS\Game\Inventory.cs" />
+    <Compile Include="Core\GS\Game\Player.cs" />
+    <Compile Include="Core\GS\Game\PlayerManager.cs" />
+    <Compile Include="Core\GS\Objects\IDynamicObjectManager.cs" />
+    <Compile Include="Core\GS\Objects\IWorldObject.cs" />
+    <Compile Include="Core\GS\Actors\Monster.cs" />
+    <Compile Include="Core\GS\Objects\IDynamicObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -461,8 +464,5 @@
       <Project>{4CC19847-6F24-4453-9E31-126F94308AB9}</Project>
       <Name>LibMooNet</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\GS\Inventory\" />
   </ItemGroup>
 </Project>

@@ -16,6 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using Mooege.Core.GS.Game;
+using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Actors;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Attribute;
@@ -25,37 +28,33 @@ using Mooege.Net.GS.Message.Definitions.Misc;
 
 namespace Mooege.Core.GS.NPC
 {
-    public class BasicNPC
+    public class Mob : Actor
     {
-        public int ID;
-        private float HP;
-        private float MaxHP;
-        private int snoId;
-        public WorldPlace Location;
+        public override ActorType ActorType { get { return ActorType.Monster; } }
 
-        public void Die(int anim)
+        public Mob(World world, int actorSNO, Vector3D position)
+            : base(world, world.Game.NewMonsterID)
         {
-            var killAni = new int[]{
-                    0x2cd7,
-                    0x2cd4,
-                    0x01b378,
-                    0x2cdc,
-                    0x02f2,
-                    0x2ccf,
-                    0x2cd0,
-                    0x2cd1,
-                    0x2cd2,
-                    0x2cd3,
-                    0x2cd5,
-                    0x01b144,
-                    0x2cd6,
-                    0x2cd8,
-                    0x2cda,
-                    0x2cd9
-            };
+            this.AppearanceSNO = actorSNO;
+            this.Position = position;
+            // FIXME: This is hardcoded crap
+            this.Field2 = 0x8;
+            this.Field3 = 0x0;
+            this.Scale = 1.35f;
+            this.RotationAmount = 0.768145f;
+            this.RotationAxis.X = 0f; this.RotationAxis.Y = 0f; this.RotationAxis.Z = -0.640276f;
+            this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
+            this.Field7 = 0x00000001;
+            this.Field8 = AppearanceSNO;
+            this.Field10 = 0x0;
+            this.Field11 = 0x0;
+            this.Field12 = 0x0;
+            this.Field13 = 0x0;
+        }
 
-            
-            #region old
+        // Ye olde, kept for proper implementation..
+        //public void Die()
+        //{
             //Game.SendMessage(new PlayEffectMessage()
             //{
             //    Id = 0x7a,
@@ -192,62 +191,6 @@ namespace Mooege.Core.GS.NPC
             //    Field0 = Game.tick - 20,
             //    Field1 = Game.tick
             //});
-
-            //Game.FlushOutgoingBuffer();
-            #endregion
-        }
-
-        public BasicNPC(int objectId, int snoId, WorldPlace location)
-        {
-            this.ID = objectId;
-            this.snoId = snoId;
-           
-            this.Location = location;
-
-
-        }
-
-        public void Reveal(GameClient client){
-            client.SendMessage(new ACDEnterKnownMessage()
-            {
-                Id = 0x003B,
-                Field0 = this.ID,
-                Field1 = snoId,
-                Field2 = 0x8,
-                Field3 = 0x0,
-                Field4 = new WorldLocationMessageData()
-                {
-                    Field0 = 1.35f,
-                    Field1 = new PRTransform()
-                    {
-                        Field0 = new Quaternion()
-                        {
-                            Amount = 0.768145f,
-                            Axis = new Vector3D()
-                            {
-                                X = 0f,
-                                Y = 0f,
-                                Z = -0.640276f,
-                            },
-                        },
-                        ReferencePoint = Location.Field0,
-                    },
-                    Field2 = 0x772E0000,
-                },
-                Field5 = null,
-                Field6 = new GBHandle()
-                {
-                    Field0 = 1,
-                    Field1 = 1,
-                },
-                Field7 = 0x00000001,
-                Field8 = snoId,
-                Field9 = 0x0,
-                Field10 = 0x0,
-                Field11 = 0x0,
-                Field12 = 0x0,
-                Field13 = 0x0
-            });
-        }
+        //}
     }
 }

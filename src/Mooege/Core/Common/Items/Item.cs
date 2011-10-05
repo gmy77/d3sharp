@@ -17,6 +17,9 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Core.GS.Game;
+using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Map;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Fields;
@@ -24,11 +27,11 @@ using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Attribute;
-using Mooege.Core.GS.Universe;
+
+// TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
 
 namespace Mooege.Core.Common.Items
 {
-
     public enum ItemType
     {
         Helm, Gloves, Boots, Belt, Shoulders, Pants, Bracers, Shield, Quiver, Orb,
@@ -42,26 +45,74 @@ namespace Mooege.Core.Common.Items
          */
     }
 
-    public class Item
+    public class Item : Actor
     {
-        public int ItemId { get; set; }
-        public int Gbid { get; set; }
-        public int SNOId { get; set; }
-        public ItemType Type { get; set; }
+        public override ActorType ActorType { get { return ActorType.Item; } }
+
+        public Player Owner { get; set; }
+
+        public ItemType ItemType { get; set; }
         public int Count { get; set; } // <- amount?
 
         public List<Affix> AffixList { get; set; }
-        public GameAttributeMap Attributes { get; set; }
 
-        public Item(int id, uint gbid, ItemType type)
+        public int EquipmentSlot;
+        public IVector2D InventoryLocation { get; private set; }
+
+        public override WorldLocationMessageData WorldLocationMessage
         {
-            ItemId = id;
-            Gbid = unchecked((int)gbid);
-            Count = 1;
-            Type = type;
+            get { return (this.Owner != null) ? null : base.WorldLocationMessage; }
+        }
 
-            AffixList = new List<Affix>();
-            Attributes = new GameAttributeMap();
+        public override InventoryLocationMessageData InventoryLocationMessage
+        {
+            get
+            {
+                return (this.Owner == null)
+                ? null
+                : new InventoryLocationMessageData
+                {
+                    OwnerID = this.Owner.DynamicID,
+                    EquipmentSlot = this.EquipmentSlot,
+                    InventoryLocation = this.InventoryLocation
+                };
+            }
+        }
+
+        public InvLoc InvLoc
+        {
+            get
+            {
+                return new InvLoc
+                {
+                    OwnerID = (this.Owner != null) ? this.Owner.DynamicID : 0,
+                    Row = this.InventoryLocation.Y,
+                    Column = this.InventoryLocation.X
+                };
+            }
+        }
+
+        public Item(World world, int gbid, ItemType type)
+            : base(world, world.Game.NewItemID)
+        {
+            this.Game.AddItem(this);
+            this.World.AddItem(this);
+            this.GBHandle.Type = (int)GBHandleType.Item;
+            this.GBHandle.GBID = gbid;
+            this.Count = 1;
+            this.ItemType = type;
+
+            this.AffixList = new List<Affix>();
+
+            this.EquipmentSlot = 0;
+            this.InventoryLocation = new IVector2D { X = 0, Y = 0 };
+
+            this.Field2 = 0x0000001A;
+            this.Field3 = 0x00000001;
+            this.Field7 = -1;
+            this.Field8 = -1;
+            this.Field9 = 0x00000001;
+            this.Field10 = 0x00;
         }
 
         // There are 2 VisualItemClasses... any way to use the builder to create a D3 Message?
@@ -69,12 +120,11 @@ namespace Mooege.Core.Common.Items
         {
             return new VisualItem()
             {
-                GbId = Gbid,
+                GbId = this.GBHandle.GBID,
                 Field1 = 0,
                 Field2 = 0,
                 Field3 = -1
             };
-
         }
 
         public static bool IsPotion(ItemType itemType)
@@ -115,159 +165,88 @@ namespace Mooege.Core.Common.Items
                 );
         }
 
-        public void RevealInInventory(Hero hero, int row, int column, int equipmentSlot)
+        // TODO: Some of this stuff should probably only be set when the item is in the inventory/on the ground
+        public override void Reveal(Player player)
         {
-
-            var inventorylocation = new InventoryLocationMessageData()
-                    {
-                        Field0 = hero.DynamicId,
-                        Field1 = equipmentSlot,
-                        Field2 = new IVector2D()
-                        {
-                            Field0 = row,
-                            Field1 = column,
-                        },
-                    };
-
-            var msg = new ACDEnterKnownMessage()
-            {
-                Id = 0x003B,
-                Field0 = ItemId,
-                Field1 = SNOId,
-                Field2 = 0x0000001A,
-                Field3 = 0x00000001,
-                Field4 = null,
-                Field5 = inventorylocation,
-                Field6 = new GBHandle()
-                {
-                    Field0 = 0x00000002,
-                    Field1 = Gbid,
-                },
-                Field7 = -1,
-                Field8 = -1,
-                Field9 = 0x00000001,
-                Field10 = 0x00,
-            };
-
-            hero.InGameClient.SendMessage(msg);
-
-            Reveal(hero);
-        }
-
-        public void Reveal(Hero hero)
-        {
-
-            GameClient client = hero.InGameClient;
-
-            var affixGbis = new int[AffixList.Count];
+            base.Reveal(player);
+            GameClient client = player.InGameClient;
+            var AffixGBIDs = new int[AffixList.Count];
             for (int i = 0; i < AffixList.Count; i++)
             {
-                affixGbis[i] = AffixList[i].AffixGbid;
+                AffixGBIDs[i] = AffixList[i].AffixGbid;
             }
 
             client.SendMessage(new AffixMessage()
             {
-                Id = 0x0048,
-                Field0 = ItemId,
+                ActorID = this.DynamicID,
                 Field1 = 0x00000001,
-                aAffixGBIDs = affixGbis,
+                aAffixGBIDs = AffixGBIDs,
 
             });
 
             client.SendMessage(new AffixMessage()
             {
-                Id = 0x0048,
-                Field0 = ItemId,
+                ActorID = this.DynamicID,
                 Field1 = 0x00000002,
-                aAffixGBIDs = affixGbis,
+                aAffixGBIDs = AffixGBIDs,
             });
-
 
             client.SendMessage(new ACDCollFlagsMessage()
             {
-                Id = 0x00A6,
-                Field0 = ItemId,
-                Field1 = 0x00000080,
+                ActorID = this.DynamicID,
+                CollFlags = 0x00000080,
             });
 
-            if (Type == ItemType.Gold) 
+            if (this.ItemType == ItemType.Gold)
             {
-                Attributes[GameAttribute.Gold] = Count;
+                Attributes[GameAttribute.Gold] = this.Count;
             }
-            Attributes.SendMessage(client, ItemId);
+            Attributes.SendMessage(client, this.DynamicID);
             //SendAttributes(AttributeList, client);
 
             client.SendMessage(new ACDGroupMessage()
             {
-                Id = 0x00B8,
-                Field0 = ItemId,
+                ActorID = this.DynamicID,
                 Field1 = -1,
                 Field2 = -1,
             });
 
-            client.SendMessage(new ANNDataMessage()
+            client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage1)
             {
-                Id = 0x003E,
-                Field0 = ItemId,
+                ActorID = this.DynamicID,
             });
 
             client.SendMessage(new SNONameDataMessage()
             {
-                Id = 0x00D3,
-                Field0 = new SNOName()
+                Name = new SNOName()
                 {
-                    Field0 = 0x00000001,
-                    Field1 = SNOId,
+                    Group = 0x00000001, // Same as this.Field9?
+                    Handle = this.AppearanceSNO,
                 },
             });
 
             /* in the original dump this was sent. But don't know for what its good for
-
             foreach (NetAttributeKeyValue attr in netAttributesList){
                 client.SendMessage(new AttributeSetValueMessage()
-                {                   
-                    Id = 0x004C,
-                    Field0 = ItemId,
+                {
+                    Field0 = this.DynamicID,
                     Field1 = attr,
                 });
             };  */
 
+            // Drop effect/sound?
             client.SendMessage(new PlayEffectMessage()
             {
-                Id = 0x007A,
-                Field0 = ItemId,
+                ActorID = this.DynamicID,
                 Field1 = 0x00000027,
             });
 
-
             client.SendMessage(new ACDInventoryUpdateActorSNO()
             {
-                Id = 0x0041,
-                Field0 = ItemId,
-                Field1 = SNOId,
+                ItemID = this.DynamicID,
+                ItemSNO = this.AppearanceSNO,
             });
-
             client.FlushOutgoingBuffer();
         }
-
-        private void SendAttributes(List<NetAttributeKeyValue> netAttributesList, GameClient client)
-        {
-            // Attributes can't be send all together
-            // must be split up to part of max 15 attributes at once
-            var tempList = new List<NetAttributeKeyValue>(netAttributesList);
-
-            while (tempList.Count > 0)
-            {
-                int selectCount = (tempList.Count > 15) ? 15 : tempList.Count;
-                client.SendMessage(new AttributesSetValuesMessage()
-                {
-                    Id = 0x004D,
-                    Field0 = ItemId,
-                    atKeyVals = tempList.GetRange(0, selectCount).ToArray(),
-                });
-                tempList.RemoveRange(0, selectCount);
-            }
-        }
-
     }
 }

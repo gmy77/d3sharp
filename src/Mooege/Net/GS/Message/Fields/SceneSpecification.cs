@@ -156,7 +156,5 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

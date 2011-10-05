@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,28 +16,27 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Linq;
-using System.Text;
+using Mooege.Core.GS.Game;
+using Mooege.Core.GS.Map;
+using Mooege.Net.GS.Message.Fields;
 
-namespace Mooege.Common.Helpers
+// NOTE: This interface can probably inherit IDynamicObject
+
+namespace Mooege.Core.GS.Objects
 {
-    public class StringHashHelper
+    public interface IWorldObject
     {
-        // Used on the full name of a proto service for their ServiceHash and for toon names
-        public static uint HashIdentity(string input)
-        {
-            var bytes = Encoding.ASCII.GetBytes(input);
-            return bytes.Aggregate(0x811C9DC5, (current, t) => 0x1000193 * (t ^ current));
-        }
+        /// <summary>
+        /// The object's world.
+        /// </summary>
+        World World { get; set; }
 
-        // Hash algorithm used for item names
-        public static int HashItemName(string input)
-        {
-            int hash = 0;
-            input = input.ToLower();
-            for (int i = 0; i < input.Length; ++i)
-                hash = (hash << 5) + hash + input[i];
-            return hash;
-        }
+        float Scale { get; set; }
+        float RotationAmount { get; set; }
+        Vector3D RotationAxis { get; set; }
+        Vector3D Position { get; set; }
+
+        void Reveal(Player player);
+        void Destroy(Player player);
     }
 }
