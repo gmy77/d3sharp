@@ -21,6 +21,7 @@ using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Common.Extensions;
 using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Friends;
 using Mooege.Core.MooNet.Invitation;
 using Mooege.Net.MooNet;
 
@@ -31,12 +32,13 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public IMooNetClient Client { get; set; }
+        private readonly FriendManager _invitationManager = new FriendManager();
 
         public override void SubscribeToFriends(IRpcController controller, bnet.protocol.friends.SubscribeToFriendsRequest request, Action<bnet.protocol.friends.SubscribeToFriendsResponse> done)
         {
             Logger.Trace("Subscribe()");
 
-            FriendInvitationManager.Instance.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
+            this._invitationManager.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
             
             var builder = bnet.protocol.friends.SubscribeToFriendsResponse.CreateBuilder()
                 .SetMaxFriends(127)
@@ -60,7 +62,7 @@ namespace Mooege.Core.MooNet.Services
             if (inviteee == null) return; // we need send an error response here /raist.
 
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder()
-            .SetId(FriendInvitationManager.InvitationIdCounter++) // we may actually need to store invitation ids in database with the actual invitation there. /raist.
+            .SetId(FriendManager.InvitationIdCounter++) // we may actually need to store invitation ids in database with the actual invitation there. /raist.
             .SetInviterIdentity(this.Client.GetIdentity(true, false, false))
             .SetInviterName(this.Client.Account.Email) // we shoulde be instead using account owner's name here.
             .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(inviteee.BnetAccountID))
@@ -74,7 +76,7 @@ namespace Mooege.Core.MooNet.Services
             done(response.Build());
 
             // notify the invitee on invitation.
-            FriendInvitationManager.Instance.HandleInvitation((MooNetClient)this.Client, invitation.Build());
+            this._invitationManager.HandleInvitation((MooNetClient)this.Client, invitation.Build());
         }
 
         public override void AcceptInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
@@ -82,7 +84,7 @@ namespace Mooege.Core.MooNet.Services
             var response = bnet.protocol.NoData.CreateBuilder();
             done(response.Build());
 
-            FriendInvitationManager.Instance.HandleAccept((MooNetClient) this.Client, request);
+            this._invitationManager.HandleAccept((MooNetClient)this.Client, request);
         }
 
         public override void RevokeInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)

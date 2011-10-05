@@ -19,6 +19,7 @@
 using System;
 using Mooege.Common;
 using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Services

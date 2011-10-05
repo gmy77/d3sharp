@@ -26,9 +26,6 @@ namespace Mooege.Core.MooNet.Invitation
 {
     public class ChannelInvitationManager : RPCObject
     {
-        private static readonly ChannelInvitationManager _instance = new ChannelInvitationManager();
-        public static ChannelInvitationManager Instance { get { return _instance; } }
-
         private readonly Dictionary<ulong, bnet.protocol.invitation.Invitation> _onGoingInvitations = new Dictionary<ulong, bnet.protocol.invitation.Invitation>();
 
         public static ulong InvitationIdCounter = 1;

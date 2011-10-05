@@ -19,7 +19,7 @@
 using System.Collections.Generic;
 using Mooege.Net.MooNet;
 
-namespace Mooege.Core.MooNet
+namespace Mooege.Core.MooNet.Online
 {
     public static class OnlinePlayers
     {
