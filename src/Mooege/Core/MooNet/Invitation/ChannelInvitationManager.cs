@@ -26,19 +26,16 @@ namespace Mooege.Core.MooNet.Invitation
 {
     public class ChannelInvitationManager : RPCObject
     {
-        private static readonly ChannelInvitationManager _instance = new ChannelInvitationManager();
-        public static ChannelInvitationManager Instance { get { return _instance; } }
-
-        public Dictionary<ulong, bnet.protocol.invitation.Invitation> OnGoingInvitations = new Dictionary<ulong, bnet.protocol.invitation.Invitation>();
+        private readonly Dictionary<ulong, bnet.protocol.invitation.Invitation> _onGoingInvitations = new Dictionary<ulong, bnet.protocol.invitation.Invitation>();
 
         public static ulong InvitationIdCounter = 1;
 
         public void HandleInvitation(MooNetClient client, bnet.protocol.invitation.Invitation invitation)
         {
-            MooNetClient invitee = this.Subscribers.FirstOrDefault(subscriber => subscriber.CurrentToon.BnetEntityID.Low == invitation.InviteeIdentity.ToonId.Low);
+            var invitee = this.Subscribers.FirstOrDefault(subscriber => subscriber.CurrentToon.BnetEntityID.Low == invitation.InviteeIdentity.ToonId.Low);
             if (invitee == null) return; // if we can't find invite just return - though we should actually check for it until expiration time.
 
-            this.OnGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.
+            this._onGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.
 
             var notification = bnet.protocol.channel_invitation.InvitationAddedNotification.CreateBuilder().SetInvitation(invitation);
             invitee.CallMethod(bnet.protocol.channel_invitation.ChannelInvitationNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationAdded"), notification.Build(), this.DynamicId);
@@ -46,7 +43,7 @@ namespace Mooege.Core.MooNet.Invitation
 
         public void HandleAccept(MooNetClient client, bnet.protocol.channel_invitation.AcceptInvitationRequest request)
         {
-            var invitation = this.OnGoingInvitations[request.InvitationId];
+            var invitation = this._onGoingInvitations[request.InvitationId];
 
             var channel =
                 ChannelManager.GetChannelByEntityId(
