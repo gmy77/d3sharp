@@ -35,23 +35,16 @@ namespace Mooege.Core.MooNet.Accounts
 
         public static Account GetAccountByEmail(string email)
         {
-            Account account;
-
-            if (Accounts.ContainsKey(email))
-                account = Accounts[email];
-            else
-            {
-                account = new Account(email);
-                Accounts.Add(email, account);
-                account.SaveToDB();
-            }
-
-            return account;
+            return Accounts.ContainsKey(email) ? Accounts[email] : null;
         }
 
-        public static Account GetAccountByEntityID(bnet.protocol.EntityId entityId)
+        public static Account CreateAccount(string email)
         {
-            return Accounts.Where(account => account.Value.BnetAccountID == entityId).Select(account => account.Value).FirstOrDefault();
+            var account = new Account(email);
+            Accounts.Add(email, account);
+            account.SaveToDB();
+
+            return account;
         }
 
         public static Account GetAccountByPersistantID(ulong persistantId)
