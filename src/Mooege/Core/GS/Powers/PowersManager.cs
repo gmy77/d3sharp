@@ -217,6 +217,11 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
+        public bool ChannelingCanceled(Actor actor)
+        {
+            return _channelingActors.ContainsKey(actor);
+        }
+
         public void PlaySoundEffect(int effectId, Actor target)
         {
             if (target == null) return;

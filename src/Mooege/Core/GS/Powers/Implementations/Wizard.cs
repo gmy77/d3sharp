@@ -137,4 +137,34 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield break;
         }
     }
+
+    [PowerImplementationAttribute(0x00020D38/*Skills.Skills.Wizard.Offensive.ArcaneTorrent*/)]
+    public class WizardArcaneTorrent : PowerImplementation
+    {
+        public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
+        {
+            fx.RegisterChannelingPower(pp.User, 200);
+
+            if (!pp.UserIsChanneling)
+            {
+                Actor targetProxy = fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
+                Actor userProxy = fx.GetChanneledProxy(pp.User, 1, pp.User.Position);
+                fx.ActorLookAt(userProxy, pp.TargetPosition);
+                fx.PlayEffectGroupActorToActor(97385, userProxy, userProxy);
+                fx.PlayEffectGroupActorToActor(134442, userProxy, targetProxy);
+            }
+
+            if (!pp.ThrottledCast)
+            {
+                yield return 800;
+                // update proxy target location laggy
+                if (fx.ChannelingCanceled(pp.User))
+                    fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
+
+                fx.SpawnEffect(pp.User, 97821, pp.TargetPosition);
+                fx.DoDamage(pp.User, fx.FindActorsInRadius(pp.TargetPosition, 6f), 20, 0);
+            }
+            yield break;
+        }
+    }
 }
