@@ -117,8 +117,7 @@ namespace Mooege.Core.Common.Items
                 || itemType == ItemType.CombatStaff_2H
                 || itemType == ItemType.Spear
                 || itemType == ItemType.Staff
-                || itemType == ItemType.Polearm
-                || itemType == ItemType.Wand);
+                || itemType == ItemType.Polearm);
         }
 
         public void RevealInInventory(Hero hero, int row, int column, int equipmentSlot)
