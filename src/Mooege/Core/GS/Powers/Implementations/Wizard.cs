@@ -28,17 +28,23 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
         {
-            // channeled power
-            fx.AddChannelingActor(pp.User);
+            fx.RegisterChannelingPower(pp.User, 150);
 
-            fx.LookAt(pp.User, pp.TargetPosition);
+            fx.ActorLookAt(pp.User, pp.TargetPosition);
+
+            // if throttling only update proxy if needed, then exit
+            if (pp.ThrottledCast)
+            {
+                if (pp.Target == null)
+                    fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
+                yield break;
+            }
 
             IList<Actor> targets;
             if (pp.Target == null)
             {
                 targets = new List<Actor>();
-                fx.PlayRopeEffectActorToActor(0x78c0, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
-                fx.SendDWordTickFor(pp.User);
+                fx.PlayRopeEffectActorToActor(0x78c0, pp.User, fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition));
             }
             else
             {
@@ -49,8 +55,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                 {
                     fx.PlayHitEffect(2, effect_source, actor);
                     fx.PlayRopeEffectActorToActor(0x78c0, effect_source, actor);
-                    fx.SendDWordTickFor(actor);
-
                     effect_source = actor;
                 }
             }
@@ -101,15 +105,35 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
         {
-            // TODO: damage and hit effects
-            //Effect pid = fx.GetProxyEffectFor(fx.pp.User, pp.TargetPosition);
-            //if (!_channelingActors.Contains(pp.User))
-            //{
-            //    _channelingActors.Add(pp.User);
-            //    PlayRopeEffectActorToActor(30888, pp.User, pid);
-            //}
+            fx.RegisterChannelingPower(pp.User);
 
+            // TODO: hit effects
+            Effect pid = fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
+            if (! pp.UserIsChanneling)
+            {
+                fx.PlayRopeEffectActorToActor(30888, pp.User, pid);
+            }
+
+            // TODO: beam damage
             //DoDamage(user, target, 12, 0);
+            yield break;
+        }
+    }
+
+    [PowerImplementationAttribute(0x0000784C/*Skills.Skills.Wizard.Offensive.WaveOfForce*/)]
+    public class WizardWaveOfForce : PowerImplementation
+    {
+        public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
+        {
+            yield return 350;
+            fx.PlayEffectGroupActorToActor(19356, pp.User, fx.SpawnTempProxy(pp.User, pp.User.Position));
+
+            IList<Actor> hits = fx.FindActorsInRadius(pp.User.Position, 20);
+            foreach (Actor actor in hits)
+            {
+                fx.DoKnockback(pp.User, actor, 10f);
+                fx.DoDamage(pp.User, actor, 20, 0);
+            }
             yield break;
         }
     }

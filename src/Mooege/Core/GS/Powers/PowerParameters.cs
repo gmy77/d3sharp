@@ -14,5 +14,7 @@ namespace Mooege.Core.GS.Powers
         public Actor Target;
         public Vector3D TargetPosition;
         public TargetMessage Message;
+        public bool UserIsChanneling;
+        public bool ThrottledCast;
     }
 }

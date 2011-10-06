@@ -119,7 +119,7 @@ namespace Mooege.Core.GS.Powers
                 _mobs.Add(mob);
                 created.Add(mob);
 
-                foreach (GameClient client in _clientsInSameWorld(user))
+                foreach (GameClient client in _revealedClientsFor(user))
                 {
                     mob.Reveal(client.Player.Hero);
 
@@ -237,7 +237,7 @@ namespace Mooege.Core.GS.Powers
             mob.dead = true;
             _mobs.Remove(mob);
 
-            foreach (GameClient client in _clientsInSameWorld(user))
+            foreach (GameClient client in _revealedClientsFor(user))
             {
                 // HACK: I guess I'll throw in the item spawn code here, with a random chance instead of every time
                 if (RandomHelper.Next(1, 5) == 1)
@@ -369,7 +369,7 @@ namespace Mooege.Core.GS.Powers
             {
                 if (DateTime.Now > mob.deleteTimeout)
                 {
-                    foreach (GameClient client in _clientsInSameWorld(mob))
+                    foreach (GameClient client in _revealedClientsFor(mob))
                     {
                         mob.Destroy(client.Player.Hero);
                     }
@@ -382,7 +382,7 @@ namespace Mooege.Core.GS.Powers
             _mobsToDelete = survivors;
         }
 
-        private IEnumerable<GameClient> _clientsInSameWorld(Actor actor)
+        private IEnumerable<GameClient> _revealedClientsFor(Actor actor)
         {
             return _universe.PlayerManager.Players
                                           .FindAll(p => p.Hero.WorldId == actor.WorldId)

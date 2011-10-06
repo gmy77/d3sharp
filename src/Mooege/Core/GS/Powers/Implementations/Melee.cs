@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mooege.Core.GS.Skills;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -10,14 +11,10 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
         {
-            if (pp.Target != null)
+            if (fx.WillHitMeleeTarget(pp.User, pp.Target))
             {
-                if (Math.Abs(pp.User.Position.X - pp.TargetPosition.X) < 15f &&
-                    Math.Abs(pp.User.Position.Y - pp.TargetPosition.Y) < 15f)
-                {
-                    fx.PlayHitEffect(2, pp.User, pp.Target);
-                    fx.DoDamage(pp.User, pp.Target, 25f, 0);
-                }
+                fx.PlayHitEffect(2, pp.User, pp.Target);
+                fx.DoDamage(pp.User, pp.Target, 25f, 0);
             }
             yield break;
         }

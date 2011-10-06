@@ -35,13 +35,15 @@ namespace Mooege.Core.GS.Powers
 
         private List<Effect> _effects = new List<Effect>();
         private Random _rand = new Random();
-        private List<Actor> _channelingActors = new List<Actor>();
-        // TODO: multiple proxies per user needed?
-        private Dictionary<Actor, Effect> _proxies = new Dictionary<Actor, Effect>();
 
-        // channeled spells fire extremely fast, we need some way to slow down damage and graphic effects,
-        // while still updating position/targeting data.
-        private Dictionary<Actor, DateTime> _castDelays = new Dictionary<Actor, DateTime>();
+        // tracking information for currently channel-casting actors
+        class ChanneledCast
+        {
+            public DateTime CastDelay;
+            public IList<Effect> Effects;
+            public int CastDelayAmount;
+        }
+        private Dictionary<Actor, ChanneledCast> _channelingActors = new Dictionary<Actor, ChanneledCast>();
 
         // list of all waiting to execute powers
         class WaitingPower
@@ -95,38 +97,40 @@ namespace Mooege.Core.GS.Powers
             if (targetPos == null)
                 targetPos = new Vector3D(0, 0, 0);
 
-            // do casting delay if using channeled power
-            if (_channelingActors.Contains(user))
-            {
-                bool delayed = CastDelay(user);
-                if (delayed)
-                {
-                    // update proxy if needed
-                    if (target == null)
-                    {
-                        GetProxyEffectFor(user, targetPos);
-                        SendDWordTickFor(user);
-                    }
-                    return;
-                }
-            }
-
             if (powerId == Skills.Skills.Monk.SpiritSpenders.BlindingFlash) // HACK: intercepted to use for spawning test mobs
             {
                 _mobtester.SpawnMob(user);
             }
             else
             {
-                // find and run an implementation
+                // find and run a power implementation
                 var implementation = PowerImplementation.ImplementationForId(powerId);
                 if (implementation != null)
                 {
-                    IEnumerable<int> powerExe = implementation.Run(new PowerParameters()
+                    // process channeled skill params
+                    bool userIsChanneling = false;
+                    bool throttledCast = false;
+                    if (_channelingActors.ContainsKey(user))
+                    {
+                        userIsChanneling = true;
+                        if (DateTime.Now > _channelingActors[user].CastDelay)
+                        {
+                            _channelingActors[user].CastDelay = DateTime.Now.AddMilliseconds(_channelingActors[user].CastDelayAmount);
+                        }
+                        else
+                        {
+                            throttledCast = true;
+                        }
+                    }
+
+                    IEnumerable<int> powerExe = implementation.Run(new PowerParameters
                     {
                         User = user,
                         Target = target,
                         TargetPosition = targetPos,
-                        Message = message
+                        Message = message,
+                        UserIsChanneling = userIsChanneling,
+                        ThrottledCast = throttledCast,
                     },
                     this);
 
@@ -187,40 +191,53 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public void SendDWordTickFor(Actor user)
+        public void RegisterChannelingPower(Actor user, int castDelayAmount = 0)
         {
-            foreach (GameClient client in _clientsInSameWorld(user))
-                SendDWordTick(client);
-        }
-
-        public bool CastDelay(Actor user)
-        {
-            if (!_castDelays.ContainsKey(user) || DateTime.Now > _castDelays[user])
+            if (!_channelingActors.ContainsKey(user))
             {
-                _castDelays[user] = DateTime.Now.AddMilliseconds(150); // TODO: might need to make this set per-power
-                return false;
-            }
-            else
-            {
-                return true;
+                _channelingActors.Add(user, new ChanneledCast
+                {
+                    CastDelay = DateTime.Now.AddMilliseconds(castDelayAmount),
+                    CastDelayAmount = castDelayAmount,
+                    Effects = null,
+                });
             }
         }
 
         public void CancelChanneledPower(Actor user, int powerId)
         {
-            if (_channelingActors.Contains(user))
-                _channelingActors.Remove(user);
-
-            if (_proxies.ContainsKey(user))
+            if (_channelingActors.ContainsKey(user))
             {
-                KillSpawnedEffect(_proxies[user]);
-                _proxies.Remove(user);
+                if (_channelingActors[user].Effects != null)
+                {
+                    foreach (Effect effect in _channelingActors[user].Effects)
+                        KillSpawnedEffect(effect);
+                }
+                _channelingActors.Remove(user);
+            }
+        }
+
+        public void PlaySoundEffect(int effectId, Actor target)
+        {
+            if (target == null) return;
+
+            foreach (GameClient client in _revealedClientsFor(target))
+            {
+                client.SendMessage(new PlayEffectMessage()
+                {
+                    Id = 0x7a,
+                    Field0 = target.DynamicId,
+                    Field1 = effectId,
+                    Field2 = 0x0, // TODO: figure out what this is: 0x2,
+                });
             }
         }
 
         public void PlayHitEffect(int effectId, Actor from, Actor target)
         {
-            foreach (GameClient client in _clientsInSameWorld(target))
+            if (target == null) return;
+
+            foreach (GameClient client in _revealedClientsFor(target))
             {
                 client.SendMessage(new PlayHitEffectMessage()
                 {
@@ -235,7 +252,9 @@ namespace Mooege.Core.GS.Powers
 
         public void PlayRopeEffectActorToActor(int effectId, Actor from, Actor target)
         {
-            foreach (GameClient client in _clientsInSameWorld(target))
+            if (target == null) return;
+
+            foreach (GameClient client in _revealedClientsFor(target))
             {
                 client.SendMessage(new RopeEffectMessageACDToACD()
                 {
@@ -251,7 +270,9 @@ namespace Mooege.Core.GS.Powers
 
         public void PlayEffectGroupActorToActor(int effectId, Actor from, Actor target)
         {
-            foreach (GameClient client in _clientsInSameWorld(target))
+            if (target == null) return;
+
+            foreach (GameClient client in _revealedClientsFor(target))
             {
                 client.SendMessage(new EffectGroupACDToACDMessage()
                 {
@@ -263,47 +284,41 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public void LookAt(Actor actor, Vector3D targetPos)
+        public void ActorLookAt(Actor actor, Vector3D targetPos)
         {
-            float facing = (float)Math.Atan2(targetPos.Y - actor.Position.Y, targetPos.X - actor.Position.X);
-            foreach (GameClient client in _clientsInSameWorld(actor))
+            foreach (GameClient client in _revealedClientsFor(actor))
             {
                 client.SendMessage(new ACDTranslateFacingMessage
                 {
                     Id = 0x70,
                     Field0 = actor.DynamicId,
-                    Field1 = facing,
+                    Field1 = AngleLookAt(actor.Position, targetPos),
                     Field2 = false
                 });
             }
         }
 
-        private void CleanUpEffects()
+        public float AngleLookAt(Vector3D a, Vector3D b)
         {
-            List<Effect> survivors = new List<Effect>();
-            var curtime = DateTime.Now;
-            foreach (Effect effect in _effects)
-            {
-                if (curtime > effect.timeout)
-                    KillSpawnedEffect(effect);
-                else
-                    survivors.Add(effect);
-            }
-
-            _effects = survivors;
+            return (float)Math.Atan2(b.Y - a.Y, b.X - a.X);
         }
 
-        private IEnumerable<GameClient> _clientsInSameWorld(Actor actor)
+        public void DoKnockback(Actor user, Actor target, float amount)
         {
-            return _universe.PlayerManager.Players
-                                          .FindAll(p => p.Hero.WorldId == actor.WorldId)
-                                          .Select(p => p.Client);
+            if (target == null) return;
+
+            // TODO: figure out how to implement with amount
+            Vector3D move = new Vector3D();
+            move.Z = target.Position.Z;
+            move.X = target.Position.X + (target.Position.X - user.Position.X);
+            move.Y = target.Position.Y + (target.Position.Y - user.Position.Y);
+            MoveActorNormal(target, move);
         }
 
-        public Effect SpawnEffectObject(Actor from, int effectId, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
+        private Effect SpawnEffectInstance(Actor from, int effectId, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
         {
             if (angle == -1f)
-                angle = (float)_rand.NextDouble() * 360f;
+                angle = (float)(_rand.NextDouble() * (Math.PI * 2));
 
             Effect effect = new Effect()
             {
@@ -314,77 +329,22 @@ namespace Mooege.Core.GS.Powers
                 RotationAmount = (float)Math.Cos(angle / 2f),
                 RotationAxis = new Vector3D(0, 0, (float)Math.Sin(angle / 2f)),
                 WorldId = from.WorldId,
+                // TODO: this stuff needed?
                 GBHandle = new GBHandle()
                 {
                     Field0 = 1,
                     Field1 = 1,
                 },
                 Field2 = 0x8,
-                Field3 = 0x0,
                 //Field7 = 0x01,
                 //Field8 = effectId,
-                // TODO might need more
+                
                 timeout = DateTime.Now.AddMilliseconds(timeout)
             };
             
-            foreach (GameClient client in _clientsInSameWorld(from))
+            foreach (GameClient client in _revealedClientsFor(from))
             {
                 effect.Reveal(client.Player.Hero);
-
-                client.SendMessage(new AffixMessage()
-                {
-                    Id = 0x48,
-                    Field0 = effect.DynamicId,
-                    Field1 = 0x1,
-                    aAffixGBIDs = new int[0]
-                });
-                client.SendMessage(new AffixMessage()
-                {
-                    Id = 0x48,
-                    Field0 = effect.DynamicId,
-                    Field1 = 0x2,
-                    aAffixGBIDs = new int[0]
-                });
-                client.SendMessage(new ACDCollFlagsMessage
-                {
-                    Id = 0xa6,
-                    Field0 = effect.DynamicId,
-                    Field1 = 0x1
-                });
-
-                // removed attribute set code
-                /////////////////////////////
-
-                client.SendMessage(new ACDGroupMessage
-                {
-                    Id = 0xb8,
-                    Field0 = effect.DynamicId,
-                    Field1 = unchecked((int)0xb59b8de4),
-                    Field2 = unchecked((int)0xffffffff)
-                });
-
-                client.SendMessage(new ANNDataMessage
-                {
-                    Id = 0x3e,
-                    Field0 = effect.DynamicId
-                });
-
-                client.SendMessage(new SetIdleAnimationMessage
-                {
-                    Id = 0xa5,
-                    Field0 = effect.DynamicId,
-                    Field1 = 0x11150
-                });
-
-                client.SendMessage(new SNONameDataMessage
-                {
-                    Id = 0xd3,
-                    Field0 = new SNOName
-                    {
-                        Field0 = 0x1,
-                        Field1 = effectId
-                    }
-                });
 
                 client.PacketId += 30 * 2;
                 client.SendMessage(new DWordDataMessage()
@@ -406,18 +366,20 @@ namespace Mooege.Core.GS.Powers
 
         public void SpawnEffect(Actor from, int effectId, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
         {
-            _effects.Add(SpawnEffectObject(from, effectId, position, angle, timeout));
+            _effects.Add(SpawnEffectInstance(from, effectId, position, angle, timeout));
+        }
+
+        public void SpawnEffect(Actor from, int effectId, Vector3D position, Actor point_to_actor, int timeout = 2000)
+        {
+            float angle = (point_to_actor != null) ? AngleLookAt(from.Position, point_to_actor.Position) : -1f;
+            _effects.Add(SpawnEffectInstance(from, effectId, position, angle, timeout));
         }
 
         public void KillSpawnedEffect(Effect effect)
         {
-            foreach (GameClient client in _clientsInSameWorld(effect))
+            foreach (GameClient client in _revealedClientsFor(effect))
             {
-                client.SendMessage(new ANNDataMessage()
-                {
-                    Id = 0x3c,
-                    Field0 = effect.DynamicId,
-                });
+                effect.Destroy(client.Player.Hero);
 
                 client.PacketId += 10 * 2;
                 client.SendMessage(new DWordDataMessage()
@@ -437,6 +399,7 @@ namespace Mooege.Core.GS.Powers
                 if (hits.Count == maxCount)
                     break;
 
+                // TODO: needs to be actual sphere radius, not box :)
                 if (Math.Abs(actor.Position.X - center.X) < radius &&
                     Math.Abs(actor.Position.Y - center.Y) < radius &&
                     Math.Abs(actor.Position.Z - center.Z) < radius)
@@ -447,42 +410,61 @@ namespace Mooege.Core.GS.Powers
             return hits;
         }
 
-        public Effect GetProxyEffectFor(Actor from, Vector3D pos)
+        public bool WillHitMeleeTarget(Actor user, Actor target)
         {
-            if (!_proxies.ContainsKey(from))
-            {
-                _proxies[from] = SpawnEffectObject(from, 187359, pos);
-            }
-            else
-            {
-                RepositionActor(_proxies[from], pos);
-            }
-
-            return _proxies[from];
+            if (target == null) return false;
+            return (Math.Abs(user.Position.X - target.Position.X) < 15f &&
+                    Math.Abs(user.Position.Y - target.Position.Y) < 15f);
         }
 
-        public void RepositionActor(Actor from, Vector3D pos)
+        public Effect SpawnTempProxy(Actor from, Vector3D pos, int timeout = 2000)
         {
-            from.Position = pos;
-            foreach (GameClient client in _clientsInSameWorld(from))
+            Effect effect = SpawnEffectInstance(from, 187359, pos, 0, timeout);
+            _effects.Add(effect);
+            return effect;
+        }
+
+        public Effect GetChanneledProxy(Actor user, int index, Vector3D pos)
+        {
+            ChanneledCast channeled = _channelingActors[user];
+            if (channeled.Effects == null)
+                channeled.Effects = new List<Effect>();
+
+            // ensure effects list is at least big enough for specified index
+            while (channeled.Effects.Count < index + 1)
+            {
+                channeled.Effects.Add(SpawnEffectInstance(user, 187359, pos, 0));
+            }
+
+            RepositionActor(channeled.Effects[index], pos);
+
+            return channeled.Effects[index];
+        }
+
+        public void RepositionActor(Actor actor, Vector3D pos)
+        {
+            if (actor == null) return;
+
+            actor.Position = pos;
+            foreach (GameClient client in _revealedClientsFor(actor))
             {
                 client.SendMessage(new ACDWorldPositionMessage()
                 {
                     Id = 0x003f,
-                    Field0 = from.DynamicId,
+                    Field0 = actor.DynamicId,
                     Field1 = new WorldLocationMessageData()
                     {
-                        Field0 = from.Scale,
+                        Field0 = actor.Scale,
                         Field1 = new PRTransform()
                         {
                             Field0 = new Quaternion()
                             {
-                                Amount = from.RotationAmount,
-                                Axis = from.RotationAxis
+                                Amount = actor.RotationAmount,
+                                Axis = actor.RotationAxis
                             },
                             ReferencePoint = pos
                         },
-                        Field2 = from.WorldId,
+                        Field2 = actor.WorldId,
                     }
                 });
             }
@@ -490,8 +472,10 @@ namespace Mooege.Core.GS.Powers
 
         public void MoveActorNormal(Actor actor, Vector3D pos)
         {
+            if (actor == null) return;
+
             actor.Position = pos;
-            foreach (GameClient client in _clientsInSameWorld(actor))
+            foreach (GameClient client in _revealedClientsFor(actor))
             {
                 client.SendMessage(new ACDTranslateNormalMessage()
                 {
@@ -506,7 +490,9 @@ namespace Mooege.Core.GS.Powers
         }
         public void DoDamage(Actor from, Actor target, float amount, int type)
         {
-            foreach (GameClient client in _clientsInSameWorld(target))
+            if (target == null) return;
+
+            foreach (GameClient client in _revealedClientsFor(target))
             {
                 client.SendMessage(new FloatingNumberMessage()
                 {
@@ -528,7 +514,7 @@ namespace Mooege.Core.GS.Powers
         {
             foreach (Actor target in target_list)
             {
-                foreach (GameClient client in _clientsInSameWorld(target))
+                foreach (GameClient client in _revealedClientsFor(target))
                 {
                     client.SendMessage(new FloatingNumberMessage()
                     {
@@ -547,12 +533,40 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public Actor GetActorFromId(int id)
+        private Actor GetActorFromId(int id)
         {
             return Targets.FirstOrDefault(t => t.DynamicId == id);
         }
 
-        public void SendDWordTick(GameClient client)
+        private void CleanUpEffects()
+        {
+            List<Effect> survivors = new List<Effect>();
+            var curtime = DateTime.Now;
+            foreach (Effect effect in _effects)
+            {
+                if (curtime > effect.timeout)
+                    KillSpawnedEffect(effect);
+                else
+                    survivors.Add(effect);
+            }
+
+            _effects = survivors;
+        }
+
+        private IEnumerable<GameClient> _revealedClientsFor(Actor actor)
+        {
+            return _universe.PlayerManager.Players
+                                          .FindAll(p => p.Hero.RevealedActors.Contains(actor))
+                                          .Select(p => p.Client);
+        }
+
+        private void SendDWordTickFor(Actor user)
+        {
+            foreach (GameClient client in _revealedClientsFor(user))
+                SendDWordTick(client);
+        }
+
+        private void SendDWordTick(GameClient client)
         {
             client.PacketId += 10 * 2;
             client.SendMessage(new DWordDataMessage()
@@ -560,12 +574,6 @@ namespace Mooege.Core.GS.Powers
                 Id = 0x89,
                 Field0 = client.PacketId,
             });
-        }
-
-        public void AddChannelingActor(Actor actor)
-        {
-            if (!_channelingActors.Contains(actor))
-                _channelingActors.Add(actor);
         }
     }
 }

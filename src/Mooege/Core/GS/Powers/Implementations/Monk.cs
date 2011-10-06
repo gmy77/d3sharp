@@ -14,11 +14,17 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
         {
             if (pp.Message.Field5 == 0)
-                fx.PlayEffectGroupActorToActor(71921, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+                fx.PlayEffectGroupActorToActor(71921, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
             else if (pp.Message.Field5 == 1)
-                fx.PlayEffectGroupActorToActor(72134, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+                fx.PlayEffectGroupActorToActor(72134, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
             else if (pp.Message.Field5 == 2)
-                fx.PlayEffectGroupActorToActor(72331, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+                fx.PlayEffectGroupActorToActor(72331, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
+
+            if (fx.WillHitMeleeTarget(pp.User, pp.Target))
+            {
+                fx.PlayHitEffect(5, pp.User, pp.Target);
+                fx.DoDamage(pp.User, pp.Target, 25f, 0);
+            }
 
             yield break;
         }
@@ -30,11 +36,17 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
         {
             if (pp.Message.Field5 == 0)
-                fx.PlayEffectGroupActorToActor(96176, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+                fx.PlayEffectGroupActorToActor(96176, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
             else if (pp.Message.Field5 == 1)
-                fx.PlayEffectGroupActorToActor(96176, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+                fx.PlayEffectGroupActorToActor(96176, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
             else if (pp.Message.Field5 == 2)
-                fx.PlayEffectGroupActorToActor(96178, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+                fx.PlayEffectGroupActorToActor(96178, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
+
+            if (fx.WillHitMeleeTarget(pp.User, pp.Target))
+            {
+                fx.PlayHitEffect(2, pp.User, pp.Target);
+                fx.DoDamage(pp.User, pp.Target, 25f, 0);
+            }
 
             yield break;
         }
@@ -74,12 +86,29 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
         {
             if (pp.Message.Field5 == 0)
-                fx.PlayEffectGroupActorToActor(18987, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+                fx.PlayEffectGroupActorToActor(18987, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
             else if (pp.Message.Field5 == 1)
-                fx.PlayEffectGroupActorToActor(18988, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+                fx.PlayEffectGroupActorToActor(18988, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
             else if (pp.Message.Field5 == 2)
-                fx.PlayEffectGroupActorToActor(96519, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+                fx.PlayEffectGroupActorToActor(96519, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
 
+            if (pp.Message.Field5 != 2)
+            {
+                if (fx.WillHitMeleeTarget(pp.User, pp.Target))
+                {
+                    fx.PlayHitEffect(6, pp.User, pp.Target);
+                    fx.DoDamage(pp.User, pp.Target, 25f, 0);
+                }
+            }
+            else
+            {
+                IList<Actor> hits = fx.FindActorsInRadius(pp.User.Position, 10);
+                foreach (Actor hit in hits)
+                {
+                    fx.PlayHitEffect(6, pp.User, hit);
+                    fx.DoDamage(pp.User, hit, 25f, 0);
+                }
+            }
             yield break;
         }
     }
@@ -90,11 +119,17 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
         {
             if (pp.Message.Field5 == 0)
-                fx.PlayEffectGroupActorToActor(142471, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+                fx.PlayEffectGroupActorToActor(142471, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
             else if (pp.Message.Field5 == 1)
-                fx.PlayEffectGroupActorToActor(142471, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+                fx.PlayEffectGroupActorToActor(142471, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
             else if (pp.Message.Field5 == 2)
-                fx.PlayEffectGroupActorToActor(142473, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+                fx.PlayEffectGroupActorToActor(142473, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
+
+            if (fx.WillHitMeleeTarget(pp.User, pp.Target))
+            {
+                fx.PlayHitEffect(0, pp.User, pp.Target);
+                fx.DoDamage(pp.User, pp.Target, 25f, 0);
+            }
 
             yield break;
         }
@@ -107,11 +142,11 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             // TODO: make buffs disappear so skill can be implemented
             //if (pp.Message.Field5 == 0)
-            //    fx.PlayEffectGroupActorToActor(73953, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+            //    fx.PlayEffectGroupActorToActor(73953, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
             //else if (pp.Message.Field5 == 1)
-            //    fx.PlayEffectGroupActorToActor(73953, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+            //    fx.PlayEffectGroupActorToActor(73953, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
             //else if (pp.Message.Field5 == 2)
-            //    fx.PlayEffectGroupActorToActor(73953, pp.User, fx.GetProxyEffectFor(pp.User, pp.TargetPosition));
+            //    fx.PlayEffectGroupActorToActor(73953, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
 
             yield break;
         }
