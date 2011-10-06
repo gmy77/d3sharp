@@ -50,7 +50,7 @@ namespace Mooege.Core.MooNet.Services
 
                     var account = ToonManager.GetAccountByToonLowID(request.TargetId.Low);
                     var method = bnet.protocol.notification.NotificationListener.Descriptor.FindMethodByName("OnNotificationReceived");
-                    account.LoggedInBNetClient.CallMethod(method, notification);
+                    account.LoggedInClient.CallMethod(method, notification);
                     break;
                 default:
                     Logger.Warn("Unhandled notification type: {0}", request.Type);
