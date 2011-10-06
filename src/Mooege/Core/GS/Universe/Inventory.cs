@@ -131,7 +131,7 @@ namespace Mooege.Core.GS.Universe
         /// <summary>
         /// Removes and item from the backpack
         /// </summary>
-        private void RemoveItem(int itemID)
+        private void RemoveBackbackItem(int itemID)
         {
             for (int r = 0; r < Rows; r++)
                 for (int c = 0; c < Columns; c++)
@@ -142,7 +142,7 @@ namespace Mooege.Core.GS.Universe
         /// <summary>
         /// Adds an item to the backpack
         /// </summary>
-        void AddItem(int itemID, int row, int column)
+        void AddBackbackItem(int itemID, int row, int column)
         {
             InventorySize size = GetItemInventorySize(itemID);
 
@@ -155,6 +155,7 @@ namespace Mooege.Core.GS.Universe
                     System.Diagnostics.Debug.Assert(_backpack[r, c] == 0, "You need to remove an item from the backpack before placing another item there");
                     _backpack[r, c] = itemID;
                 }
+            AcceptMoveRequest(itemID, new InvLoc { Field0 = _owner.DynamicId, Field1 = 0, Field2 = column, Field3 = row });                    
         }
 
         /// <summary>
@@ -162,12 +163,12 @@ namespace Mooege.Core.GS.Universe
         /// TODO: this should go to hero class
         /// </summary>
         /// <param name="playerID"></param>
-        void RefreshVisual(int playerID)
+        void RefreshVisual()
         {
             _owner.InGameClient.SendMessage(new VisualInventoryMessage()
             {
                 Id = (int)Opcodes.VisualInventoryMessage,
-                Field0 = playerID,
+                Field0 = _owner.DynamicId,
                 EquipmentList = new VisualEquipment()
                 {
                     Equipments = new VisualItem[8]
@@ -220,6 +221,7 @@ namespace Mooege.Core.GS.Universe
         void EquipItem(int itemID, int slot)
         {
             _equipment[slot] = itemID;
+            AcceptMoveRequest(itemID, new InvLoc { Field0 = _owner.DynamicId, Field1 = slot, Field2 = -1, Field3 = -1 });   
         }
 
         /// <summary>
@@ -328,24 +330,7 @@ namespace Mooege.Core.GS.Universe
             }
             else
             {
-                AddItem(msg.Field1, freeSlot.Value.Row, freeSlot.Value.Column);
-
-                _owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
-                {
-                    Id = (int)Opcodes.ACDInventoryPositionMessage,
-                    Field0 = msg.Field1,    // ItemID
-                    Field1 = new InventoryLocationMessageData()
-                    {
-                        Field0 = _owner.DynamicId, // Inventory Owner
-                        Field1 = 0x00000000, // EquipmentSlot
-                        Field2 = new IVector2D()
-                        {
-                            Field0 = freeSlot.Value.Column,
-                            Field1 = freeSlot.Value.Row
-                        },
-                    },
-                    Field2 = 1  // TODO, find out what this is and why it must be 1...is it an enum?
-                });
+                AddBackbackItem(msg.Field1, freeSlot.Value.Row, freeSlot.Value.Column);
             }
 
             // Finalize
@@ -370,53 +355,42 @@ namespace Mooege.Core.GS.Universe
             // Request to equip item from backpack
             if (request.Field1.Field1 != 0)
             {
+
                 System.Diagnostics.Debug.Assert(Contains(request.Field0) || IsItemEquipped(request.Field0), "Request to equip unknown item");
-
-
                 
-                int oldEquipItem = this._equipment[request.Field1.Field1];
-                // EquipmentSlot is empty
-                if (oldEquipItem == 0)
+                int itemToEquip = request.Field0;
+                int targetEquipSlot = request.Field1.Field1;
+                if (IsValidEquipRequest(itemToEquip, targetEquipSlot))
                 {
-                    Logger.Debug("Equip Item {0}", request.AsText());
-                    RemoveItem(request.Field0);
-                    EquipItem(request.Field0, request.Field1.Field1);
+                    int oldEquipItem = this._equipment[targetEquipSlot];
 
-                    AcceptMoveRequest(request.Field0, request.Field1);
-                    RefreshVisual(request.Field1.Field0);
-                }
-                else
-                {
-
-                    // check if item is already equipt in other equipmentSLot
-                    if (IsItemEquipped(request.Field0))
+                    // check if equipment slot is empty
+                    if (oldEquipItem == 0)
                     {
-                        // switch the two equiped items
-                        int oldEquipmentSlot = UnequipItem(request.Field0);
-                        EquipItem(request.Field0, request.Field1.Field1);
-                        AcceptMoveRequest(request.Field0, request.Field1);
-
-                        EquipItem(oldEquipItem, oldEquipmentSlot);
-                        AcceptMoveRequest(oldEquipItem, new InvLoc { Field0 = _owner.DynamicId, Field1 = oldEquipmentSlot, Field2 = -1, Field3 = -1 });
-
-                        RefreshVisual(request.Field1.Field0);
-
+                        RemoveBackbackItem(itemToEquip);
+                        EquipItem(itemToEquip, targetEquipSlot);
                     }
                     else
                     {
-                        RemoveItem(request.Field0);
-                        EquipItem(request.Field0, request.Field1.Field1);
-                        AcceptMoveRequest(request.Field0, request.Field1);
-                        RefreshVisual(request.Field1.Field0);
-
-                        InventorySlot? slot = FindSlotForItem(oldEquipItem);
-                        AddItem(oldEquipItem, slot.Value.Row, slot.Value.Column);
-                        AcceptMoveRequest(oldEquipItem, new InvLoc { Field0 = _owner.DynamicId, Field1 = 0, Field2 = slot.Value.Row, Field3 = slot.Value.Column });                    
-
+                        // check if item is already equipped at another equipmentslot
+                        if (IsItemEquipped(itemToEquip))
+                        {
+                            // switch both items
+                            int oldEquipmentSlot = UnequipItem(itemToEquip);
+                            EquipItem(itemToEquip, targetEquipSlot);
+                            EquipItem(oldEquipItem, oldEquipmentSlot);
+                        }
+                        else
+                        {
+                            // equip item and place other item in the backpack
+                            RemoveBackbackItem(itemToEquip);
+                            EquipItem(itemToEquip, targetEquipSlot);
+                            InventorySlot? slot = FindSlotForItem(oldEquipItem);
+                            AddBackbackItem(oldEquipItem, slot.Value.Row, slot.Value.Column);
+                        }
                     }
-                    
 
-                    
+                    RefreshVisual();
                 }
             }
 
@@ -427,18 +401,69 @@ namespace Mooege.Core.GS.Universe
                 {
                     if (IsItemEquipped(request.Field0))
                     {
-                        Logger.Debug("Unequip item {0}", request.AsText());
                         UnequipItem(request.Field0);
-                        RefreshVisual(request.Field1.Field0);
+                        RefreshVisual();
                     }
                     else
                     {
-                        RemoveItem(request.Field0);
+                        RemoveBackbackItem(request.Field0);
                     }
-                    AddItem(request.Field0, request.Field1.Field3, request.Field1.Field2);
-                    AcceptMoveRequest(request.Field0, request.Field1);
+                    AddBackbackItem(request.Field0, request.Field1.Field3, request.Field1.Field2);                    
                 }
             }
+        }
+
+        private bool IsValidEquipRequest(int itemId, int equipmentSlot)
+        {
+
+            ItemType type = _owner.InGameClient.items[itemId].Type;
+                
+            if (equipmentSlot == (int)EquipmentSlotId.Main_Hand)
+            {
+                if (Item.Is2H(type))
+                {
+                    int itemOffHandId = _equipment[(int)EquipmentSlotId.Off_Hand];
+                    if (itemOffHandId != 0)
+                    {
+                        UnequipItem(itemOffHandId);
+                        InventorySlot? slot = FindSlotForItem(itemOffHandId);
+                        AddBackbackItem(itemOffHandId, slot.Value.Row, slot.Value.Column);
+                    }
+                }
+            }
+            else if (equipmentSlot == (int)EquipmentSlotId.Off_Hand)
+            {
+
+                int itemMainHandId = _equipment[(int)EquipmentSlotId.Main_Hand];
+                
+                if (Item.Is2H(type))
+                {   
+                    if(itemMainHandId != 0)
+                    {
+                        UnequipItem(itemMainHandId);
+                        InventorySlot? slot = FindSlotForItem(itemMainHandId);
+                        AddBackbackItem(itemMainHandId, slot.Value.Row, slot.Value.Column);
+                    }
+                    RemoveBackbackItem(itemId);
+                    EquipItem(itemId, (int)EquipmentSlotId.Main_Hand);
+                    RefreshVisual();
+                    return false;
+                }
+
+                             
+                if (itemMainHandId != 0)
+                {
+
+                    ItemType mainHandItemType = _owner.InGameClient.items[itemMainHandId].Type;
+                    if (Item.Is2H(mainHandItemType))
+                    {
+                        return false;
+                    }
+                }
+           }
+
+
+            return true;
         }
 
         public void OnInventorySplitStackMessage(InventorySplitStackMessage msg)
@@ -477,11 +502,11 @@ namespace Mooege.Core.GS.Universe
             if (IsItemEquipped(msg.ItemId))
             {
                 UnequipItem(msg.ItemId);
-                RefreshVisual(_owner.DynamicId);
+                RefreshVisual();
             }
             else
             {
-                RemoveItem(msg.ItemId);
+                RemoveBackbackItem(msg.ItemId);
             }
 
             AcceptMoveRequest(msg.ItemId, new InvLoc { Field0 = _owner.DynamicId, Field1 = 0, Field2 = -1, Field3 = -1 });

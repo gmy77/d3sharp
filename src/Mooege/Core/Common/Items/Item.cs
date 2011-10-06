@@ -109,6 +109,18 @@ namespace Mooege.Core.Common.Items
                 );
         }
 
+        public static bool Is2H(ItemType itemType)
+        {
+            return (itemType == ItemType.Sword_2H
+                || itemType == ItemType.Axe_2H
+                || itemType == ItemType.Mace_2H
+                || itemType == ItemType.CombatStaff_2H
+                || itemType == ItemType.Spear
+                || itemType == ItemType.Staff
+                || itemType == ItemType.Polearm
+                || itemType == ItemType.Wand);
+        }
+
         public void RevealInInventory(Hero hero, int row, int column, int equipmentSlot)
         {
 
