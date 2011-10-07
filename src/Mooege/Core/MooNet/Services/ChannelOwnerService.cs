@@ -50,7 +50,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void JoinChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.JoinChannelRequest request, System.Action<bnet.protocol.channel.JoinChannelResponse> done)
         {
-            Logger.Trace("JoinChannel()");
+            Logger.Warn("ChannelOwnerService:JoinChannel()");
 
             var builder = bnet.protocol.channel.JoinChannelResponse.CreateBuilder().SetObjectId(67122); // should be fixed with the actual joined channel object id.
             done(builder.Build());

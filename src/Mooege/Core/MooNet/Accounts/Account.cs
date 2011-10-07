@@ -22,6 +22,7 @@ using System.Data.SQLite;
 using System.Linq;
 using Mooege.Core.Common.Storage;
 using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Friends;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
@@ -34,11 +35,10 @@ namespace Mooege.Core.MooNet.Accounts
         public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
         public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
         public string Email { get; private set; }
-
-        public MooNetClient LoggedInClient { get; set; }
+        
         public bool IsOnline { get { return this.LoggedInClient != null; } }
 
-        private static D3.OnlineService.EntityId _accountHasNoToons =
+        private static readonly D3.OnlineService.EntityId AccountHasNoToons =
             D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).Build();
 
         public D3.Account.Digest Digest
@@ -57,11 +57,46 @@ namespace Mooege.Core.MooNet.Accounts
                 }
                 else
                 {
-                    lastPlayedHeroId = _accountHasNoToons;
+                    lastPlayedHeroId = AccountHasNoToons;
                 }
 
                 builder.SetLastPlayedHeroId(lastPlayedHeroId);
                 return builder.Build();
+            }
+        }
+
+        private MooNetClient _loggedInClient;
+
+        public MooNetClient LoggedInClient
+        {
+            get
+            {
+                return this._loggedInClient;
+            }
+            set
+            {
+                this._loggedInClient = value;
+                
+                // notify friends.
+                if (FriendManager.Friends[this.BnetAccountID.Low].Count == 0) return; // if account has no friends just skip.
+
+                var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
+                var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
+                var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+
+                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetAccountID).AddFieldOperation(operation).Build();
+                var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+                var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
+
+                foreach (var friend in FriendManager.Friends[this.BnetAccountID.Low])
+                {
+                    var account = AccountManager.GetAccountByPersistantID(friend.Id.Low);
+                    if (account == null || account.LoggedInClient == null) return; // only send to friends that are online.
+
+                    account.LoggedInClient.CallMethod(
+                        bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"),
+                        notification, this.DynamicId);
+                }
             }
         }
 
@@ -172,10 +207,10 @@ namespace Mooege.Core.MooNet.Accounts
             var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
 
             // Put in addnotification message
-            var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
+            var notification = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
 
             // Make the rpc call
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.DynamicId);
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), notification.Build(), this.DynamicId);
         }
 
         public void SaveToDB()

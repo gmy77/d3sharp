@@ -22,6 +22,7 @@ using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Online
 {
+    // probably will not need this when we actually send players from last game to recent players window.
     public static class PlayerManager
     {
         private static readonly List<MooNetClient> OnlinePlayersList = new List<MooNetClient>();
@@ -31,32 +32,14 @@ namespace Mooege.Core.MooNet.Online
             get { return OnlinePlayersList; } // just provide a setter so the actual list can not be modified.
         }
 
-        public static event EventHandler<PlayerEventArgs> OnPlayerConnected;
-
         public static void PlayerConnected(MooNetClient client)
         {
             OnlinePlayersList.Add(client);
-            var handler = OnPlayerConnected;
-            if (handler != null) handler(null, new PlayerEventArgs(client));
         }
-
-        public static event EventHandler<PlayerEventArgs> OnPlayerDisconnected;
 
         public static void PlayerDisconnected(MooNetClient client)
         {
             OnlinePlayersList.Remove(client);
-            var handler = OnPlayerDisconnected;
-            if (handler != null) handler(null, new PlayerEventArgs(client));
-        }
-    }
-
-    public class PlayerEventArgs:EventArgs
-    {
-        public MooNetClient Client { get; private set; }
-
-        public PlayerEventArgs(MooNetClient client)
-        {
-            this.Client = client;
         }
     }
 }

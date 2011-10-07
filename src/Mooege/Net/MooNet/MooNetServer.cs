@@ -39,6 +39,7 @@ namespace Mooege.Net.MooNet
         private void MooNetServer_OnDisconnect(object sender, ConnectionEventArgs e)
         {
             Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
+            ((MooNetClient)e.Connection.Client).Account.LoggedInClient = null;
             PlayerManager.PlayerDisconnected((MooNetClient)e.Connection.Client);
         }
         
