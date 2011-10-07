@@ -22,7 +22,6 @@ using Mooege.Common;
 using Mooege.Common.Extensions;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Friends;
-using Mooege.Core.MooNet.Invitation;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Services
@@ -32,20 +31,19 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public IMooNetClient Client { get; set; }
-        private readonly FriendManager _friendManager = new FriendManager();
 
         public override void SubscribeToFriends(IRpcController controller, bnet.protocol.friends.SubscribeToFriendsRequest request, Action<bnet.protocol.friends.SubscribeToFriendsResponse> done)
         {
             Logger.Trace("Subscribe()");
 
-            this._friendManager.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
+            FriendManager.Instance.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
             
             var builder = bnet.protocol.friends.SubscribeToFriendsResponse.CreateBuilder()
                 .SetMaxFriends(127)
                 .SetMaxReceivedInvitations(127)
                 .SetMaxSentInvitations(127);
 
-            foreach(var friend in this._friendManager.Friends[this.Client.Account.BnetAccountID.Low]) // send friends list.
+            foreach (var friend in FriendManager.Friends[this.Client.Account.BnetAccountID.Low]) // send friends list.
             {
                 builder.AddFriends(friend);
             }
@@ -68,7 +66,7 @@ namespace Mooege.Core.MooNet.Services
             if (inviteee == null) return; // we need send an error response here /raist.
 
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder()
-            .SetId(_friendManager.InvitationIdCounter++) // we may actually need to store invitation ids in database with the actual invitation there. /raist.
+            .SetId(FriendManager.InvitationIdCounter++) // we may actually need to store invitation ids in database with the actual invitation there. /raist.
             .SetInviterIdentity(this.Client.GetIdentity(true, false, false))
             .SetInviterName(this.Client.Account.Email) // we shoulde be instead using account owner's name here.
             .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(inviteee.BnetAccountID))
@@ -82,7 +80,7 @@ namespace Mooege.Core.MooNet.Services
             done(response.Build());
 
             // notify the invitee on invitation.
-            this._friendManager.HandleInvitation((MooNetClient)this.Client, invitation.Build());
+            FriendManager.HandleInvitation((MooNetClient)this.Client, invitation.Build());
         }
 
         public override void AcceptInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
@@ -90,7 +88,7 @@ namespace Mooege.Core.MooNet.Services
             var response = bnet.protocol.NoData.CreateBuilder();
             done(response.Build());
 
-            this._friendManager.HandleAccept((MooNetClient)this.Client, request);
+            FriendManager.HandleAccept((MooNetClient)this.Client, request);
         }
 
         public override void RevokeInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)

@@ -114,7 +114,7 @@
     <Compile Include="Core\MooNet\Invitation\ChannelInvitationManager.cs" />
     <Compile Include="Core\MooNet\Friends\FriendManager.cs" />
     <Compile Include="Core\MooNet\Objects\PersistentRPCObject.cs" />
-    <Compile Include="Core\MooNet\Online\OnlinePlayers.cs" />
+    <Compile Include="Core\MooNet\Online\PlayerManager.cs" />
     <Compile Include="Core\MooNet\Services\AuthenticationService.cs" />
     <Compile Include="Core\MooNet\Services\BaseService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelInvitationService.cs" />
