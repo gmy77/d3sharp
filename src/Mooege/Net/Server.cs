@@ -104,6 +104,7 @@ namespace Mooege.Net
                 connection.BeginReceive(ReceiveCallback, connection); // Begin receiving on the new connection connection.
                 Listener.BeginAccept(AcceptCallback, null); // Continue receiving other incoming connection asynchronously.
             }
+            catch (NullReferenceException) { } // we recive this after issuing server-shutdown, just ignore it.
             catch (Exception e)
             {
                 Logger.DebugException(e, "AcceptCallback");

@@ -99,6 +99,8 @@
     <Compile Include="Core\MooNet\Channels\Member.cs" />
     <Compile Include="Common\Config\Config.cs" />
     <Compile Include="Common\Config\ConfigManager.cs" />
+    <Compile Include="Core\MooNet\Commands\CommandManager.cs" />
+    <Compile Include="Core\MooNet\Commands\ServerCommandAttribute.cs" />
     <Compile Include="Core\MooNet\Games\Game.cs" />
     <Compile Include="Core\MooNet\Games\GameManager.cs" />
     <Compile Include="Core\MooNet\Helpers\EntityIdHelper.cs" />
