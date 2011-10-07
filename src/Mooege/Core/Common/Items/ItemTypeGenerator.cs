@@ -105,7 +105,7 @@ namespace Mooege.Core.Common.Items
         {
             int gbid = StringHashHelper.HashItemName(itemName);
             var item = new Item(_client.Player.World, gbid, itemType) { AppearanceSNO = snoId };
-            _client.Items[item.DynamicID] = item;
+            _client.Player.GroundItems[item.DynamicID] = item;
             return item;
         }
     }

@@ -40,7 +40,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     {
         public void Handle(GameClient client)
         {
-            Mooege.Core.GS.Game.Player player = client.Player;
+            var player = client.Player;
             switch (this.Id)
             {
                 case 0x0030: // Sent with DwordDataMessage(0x0125, Value:0) and SimpleMessage(0x0125)

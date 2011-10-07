@@ -23,7 +23,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Combat
 {
-    [IncomingMessage(Opcodes.TargetMessage,Consumers.Universe)]
+    [IncomingMessage(Opcodes.TargetMessage,Consumers.Player)]
     public class TargetMessage : GameMessage
     {
         public int Field0;

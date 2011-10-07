@@ -46,11 +46,12 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
                 client.Player.Position = this.Position;
 
             // looking for gold to pick up
+            // TODO: Need to consider items on the ground globally as well (and this doesn't belong here)
             var actorList = client.Player.World.GetActorsInRange(0x00000178, this.Position.X, this.Position.Y, this.Position.Z, 20f);
             foreach (var actor in actorList)
             {
                 Item item;
-                if (client.Items.TryGetValue(actor.DynamicID, out item) && item.ItemType == ItemType.Gold)
+                if (client.Player.GroundItems.TryGetValue(actor.DynamicID, out item) && item.ItemType == ItemType.Gold)
                 {
                     client.SendMessage(new FloatingAmountMessage() {
                         Place = new WorldPlace() {
@@ -60,7 +61,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
                         Count = item.Count,
                         Field3 = 0x1c,
                     });
-                    client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage1)
+                    // NOTE: ANNDataMessage6 is probably "AddToInventory"
+                    client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6)
                     {
                         ActorID = actor.DynamicID,
                     });
@@ -76,7 +78,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
                     client.FlushOutgoingBuffer();
 
-                    client.Items.Remove(actor.DynamicID);
+                    client.Player.GroundItems.Remove(actor.DynamicID);
                     // should delete from World also
                 }
             }

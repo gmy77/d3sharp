@@ -52,7 +52,7 @@ namespace Mooege.Core.GS.Game
 
             client.BnetClient.InGameClient = client;
 
-            var player = new Player(this.Game.StartWorld, client, client.BnetClient.CurrentToon);
+            var player = new Mooege.Core.GS.Player.Player(this.Game.StartWorld, client, client.BnetClient.CurrentToon);
             client.Player = player;
             player.Greet(message);
         }

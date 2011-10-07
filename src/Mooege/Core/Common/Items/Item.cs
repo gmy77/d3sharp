@@ -49,7 +49,7 @@ namespace Mooege.Core.Common.Items
     {
         public override ActorType ActorType { get { return ActorType.Item; } }
 
-        public Player Owner { get; set; }
+        public Mooege.Core.GS.Player.Player Owner { get; set; }
 
         public ItemType ItemType { get; set; }
         public int Count { get; set; } // <- amount?
@@ -93,10 +93,8 @@ namespace Mooege.Core.Common.Items
         }
 
         public Item(World world, int gbid, ItemType type)
-            : base(world, world.Game.NewItemID)
+            : base(world, world.NewActorID)
         {
-            this.Game.AddItem(this);
-            this.World.AddItem(this);
             this.GBHandle.Type = (int)GBHandleType.Item;
             this.GBHandle.GBID = gbid;
             this.Count = 1;
@@ -113,6 +111,7 @@ namespace Mooege.Core.Common.Items
             this.Field8 = -1;
             this.Field9 = 0x00000001;
             this.Field10 = 0x00;
+            this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
         // There are 2 VisualItemClasses... any way to use the builder to create a D3 Message?
@@ -165,8 +164,16 @@ namespace Mooege.Core.Common.Items
                 );
         }
 
+        public void Drop(Vector3D position)
+        {
+            this.Owner = null;
+            this.Position = position;
+            // TODO: Notify the world so that players get the state change
+        }
+
         // TODO: Some of this stuff should probably only be set when the item is in the inventory/on the ground
-        public override void Reveal(Player player)
+        // FIXME: Hardcoded crap
+        public override void Reveal(Mooege.Core.GS.Player.Player player)
         {
             base.Reveal(player);
             GameClient client = player.InGameClient;
@@ -201,8 +208,7 @@ namespace Mooege.Core.Common.Items
             {
                 Attributes[GameAttribute.Gold] = this.Count;
             }
-            Attributes.SendMessage(client, this.DynamicID);
-            //SendAttributes(AttributeList, client);
+            this.Attributes.SendMessage(client, this.DynamicID);
 
             client.SendMessage(new ACDGroupMessage()
             {
@@ -211,7 +217,7 @@ namespace Mooege.Core.Common.Items
                 Field2 = -1,
             });
 
-            client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage1)
+            client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage7)
             {
                 ActorID = this.DynamicID,
             });

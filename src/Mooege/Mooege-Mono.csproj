@@ -56,9 +56,6 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp">
     </Reference>
-    <Reference Include="PowerCollections">
-      <HintPath>..\..\dep\PowerCollections.dll</HintPath>
-    </Reference>
     <Reference Include="System">
     </Reference>
     <Reference Include="System.Core">
@@ -81,6 +78,9 @@
     <Reference Include="System.Data.SQLite, Version=1.0.74.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dep\sqlite\sqlite-managed\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\dep\PowerCollections.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -136,7 +136,6 @@
     <Compile Include="Core\GS\Skills\SkillSet.cs" />
     <Compile Include="Core\GS\Skills\Skills.cs" />
     <Compile Include="Core\Common\Storage\DBManager.cs" />
-    <Compile Include="Core\Common\Storage\GameDataDBManager.cs" />
     <Compile Include="Core\Common\Toons\Toon.cs" />
     <Compile Include="Core\Common\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Common\Toons\ToonManager.cs" />
@@ -386,13 +385,14 @@
     <Compile Include="Core\MooNet\Objects\RPCObject.cs" />
     <Compile Include="Core\Common\Storage\Config.cs" />
     <Compile Include="Core\GS\Game\Game.cs" />
-    <Compile Include="Core\GS\Game\Inventory.cs" />
-    <Compile Include="Core\GS\Game\Player.cs" />
     <Compile Include="Core\GS\Game\PlayerManager.cs" />
-    <Compile Include="Core\GS\Objects\IDynamicObjectManager.cs" />
-    <Compile Include="Core\GS\Objects\IWorldObject.cs" />
     <Compile Include="Core\GS\Actors\Monster.cs" />
-    <Compile Include="Core\GS\Objects\IDynamicObject.cs" />
+    <Compile Include="Core\Common\Storage\GamedataDBManager.cs" />
+    <Compile Include="Core\GS\Objects\WorldObject.cs" />
+    <Compile Include="Core\GS\Objects\DynamicObject.cs" />
+    <Compile Include="Core\GS\Objects\IRevealable.cs" />
+    <Compile Include="Core\GS\Player\Inventory.cs" />
+    <Compile Include="Core\GS\Player\Player.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

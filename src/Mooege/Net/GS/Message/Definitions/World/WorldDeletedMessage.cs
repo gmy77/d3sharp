@@ -24,6 +24,8 @@ namespace Mooege.Net.GS.Message.Definitions.World
     {
         public uint WorldID; // World's DynamicID
 
+        public WorldDeletedMessage() : base(Opcodes.WorldDeletedMessage) {}
+
         public override void Parse(GameBitBuffer buffer)
         {
             WorldID = buffer.ReadUInt(32);

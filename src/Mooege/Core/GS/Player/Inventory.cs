@@ -29,12 +29,8 @@ using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.Common.Items;
 
-namespace Mooege.Core.GS.Game
+namespace Mooege.Core.GS.Player
 {
-    // Items are stored for this moment in GameClient,
-    // this shold be esier way to generate specific or random item by any player...
-    // Putting all game items outside and place in some class in future schuld make esier way to load and save to database
-
     // Backpack is organized by adding an item to EVERY slot it fills
     public class Inventory : IMessageConsumer
     {
@@ -44,26 +40,31 @@ namespace Mooege.Core.GS.Game
         public int Columns { get { return _backpack.GetLength(1); } }
         public int EquipmentSlots { get { return _equipment.GetLength(0); } }
 
+        // Access by ID
+        public Dictionary<uint, Item> Items { get; private set; }
+
         private uint[] _equipment;      // array of equiped items_id  (not item)
         private uint[,] _backpack;      // backpack array
         private Item _goldItem;
 
-        private readonly Player _owner; // Used, because most information is not in the item class but Actors managed by the world
+        private readonly Mooege.Core.GS.Player.Player _owner; // Used, because most information is not in the item class but Actors managed by the world
 
         public struct InventorySize
         {
             public int Width;
             public int Height;
         }
+
         private struct InventorySlot
         {
             public int Row;
             public int Column;
         }
 
-        public Inventory(Player owner)
+        public Inventory(Mooege.Core.GS.Player.Player owner)
         {
             this._owner = owner;
+            this.Items = new Dictionary<uint, Item>();
             this._equipment = new uint[16];
             this._backpack = new uint[6, 10];
             this._goldItem = null;
@@ -294,7 +295,7 @@ namespace Mooege.Core.GS.Game
         /// <summary>
         /// Returns whether an item is equipped
         /// </summary>
-        bool IsItemEquipped(uint itemID)
+        public bool IsItemEquipped(uint itemID)
         {
             for (int i = 0; i < EquipmentSlots; i++)
                 if (_equipment[i] == itemID)
@@ -302,7 +303,7 @@ namespace Mooege.Core.GS.Game
             return false;
         }
 
-        bool IsItemEquipped(Item item)
+        public bool IsItemEquipped(Item item)
         {
             return IsItemEquipped(item.DynamicID);
         }
@@ -338,7 +339,7 @@ namespace Mooege.Core.GS.Game
             return null;
         }
 
-        void AcceptMoveRequest(Item item)
+        private void AcceptMoveRequest(Item item)
         {
             // TODO: Move to Item class
             _owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
@@ -360,35 +361,35 @@ namespace Mooege.Core.GS.Game
         /// <summary>
         /// Picks an item up after client request
         /// </summary>
-        public void PickUp(TargetMessage msg)
+        /// <returns>true if the item was picked up, or false if the player could not pick up the item.</returns>
+        public bool PickUp(Item item)
         {
-            Item targetedItem = _owner.World.GetItem(msg.TargetID);
-
-            System.Diagnostics.Debug.Assert(!Contains(msg.TargetID) && !IsItemEquipped(msg.TargetID), "Item already in inventory");
-            // TODO: Ensure target is an item and it exists
+            System.Diagnostics.Debug.Assert(!Contains(item) && !IsItemEquipped(item), "Item already in inventory");
             // TODO: Autoequip when equipment slot is empty
 
-            InventorySlot? freeSlot = FindSlotForItem(targetedItem);
+            bool success = false;
+            InventorySlot? freeSlot = FindSlotForItem(item);
             if (freeSlot == null)
             {
                 // Inventory full
                 _owner.InGameClient.SendMessage(new ACDPickupFailedMessage()
                 {
-                    ItemID = msg.TargetID,
+                    ItemID = item.DynamicID,
                     Reason = ACDPickupFailedMessage.Reasons.InventoryFull
                 });
             }
             else
             {
-                AddItem(targetedItem, freeSlot.Value.Row, freeSlot.Value.Column);
+                AddItem(item, freeSlot.Value.Row, freeSlot.Value.Column);
 
                 // TODO: Item class should handle this
                 _owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
                 {
-                    ItemID = targetedItem.DynamicID,
-                    InventoryLocation = targetedItem.InventoryLocationMessage,
+                    ItemID = item.DynamicID,
+                    InventoryLocation = item.InventoryLocationMessage,
                     Field2 = 1 // TODO: find out what this is and why it must be 1...is it an enum?
                 });
+                success = true;
             }
 
             // Finalize
@@ -400,6 +401,7 @@ namespace Mooege.Core.GS.Game
                 Field0 = _owner.InGameClient.PacketId,
             });
             _owner.InGameClient.FlushOutgoingBuffer();
+            return success;
         }
 
         /// <summary>
@@ -457,8 +459,8 @@ namespace Mooege.Core.GS.Game
         /// </summary>
         public void OnInventoryStackTransferMessage(InventoryStackTransferMessage msg)
         {
-            Item itemFrom = _owner.InGameClient.Items[msg.FromID];
-            Item itemTo = _owner.InGameClient.Items[msg.ToID];
+            Item itemFrom = this.Items[msg.FromID];
+            Item itemTo = this.Items[msg.ToID];
 
             itemFrom.Count = (itemFrom.Count) - ((int)msg.Amount);
             itemTo.Count = itemTo.Count + (int)msg.Amount;
@@ -496,7 +498,7 @@ namespace Mooege.Core.GS.Game
                 RemoveItem(item);
             }
             AcceptMoveRequest(item);
-            _owner.Game.DropItem(_owner, item, _owner.Position);
+            item.Drop(_owner.Position);
         }
 
         public void Consume(GameClient client, GameMessage message)
@@ -511,7 +513,7 @@ namespace Mooege.Core.GS.Game
         // TODO: The inventory's gold item should not be created here
         public void PickUpGold(uint itemID)
         {
-            Item collectedItem = _owner.InGameClient.Items[itemID];
+            Item collectedItem = _owner.GroundItems[itemID];
             if (_goldItem == null)
             {
                 ItemTypeGenerator itemGenerator = new ItemTypeGenerator(_owner.InGameClient);

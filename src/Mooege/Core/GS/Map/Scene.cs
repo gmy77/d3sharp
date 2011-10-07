@@ -16,25 +16,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
 using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Objects;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Net.GS.Message.Definitions.Scene;
 
+// NOTE: Scenes are typically (always, hopefully) 240x240 in size. Cells are 60x60 with
+//  subscenes able to be positioned relative to their parents
+
 namespace Mooege.Core.GS.Map
 {
-    sealed public class Scene : IDynamicObject, IWorldObject
+    public sealed class Scene : WorldObject
     {
-        public Mooege.Core.GS.Game.Game Game { get; private set; }
-        public uint DynamicID { get; private set; }
-
-        public World World { get; set; }
-
-        public float Scale { get; set; }
-        public float RotationAmount { get; set; }
-        public Vector3D RotationAxis { get; set; }
-        public Vector3D Position { get; set; }
+        public override World World
+        {
+            set
+            {
+                if (this._world != value)
+                {
+                    if (this._world != null)
+                        this._world.AddScene(this);
+                    this._world = value;
+                    if (this._world != null)
+                        this._world.RemoveScene(this);
+                }
+            }
+        }
 
         // TODO: Put message fields into this class
         public MapRevealSceneMessage Map;
@@ -42,10 +51,13 @@ namespace Mooege.Core.GS.Map
 
         public int MiniMapVisibility;
 
+        public readonly IVector2D Cell;
         public int SceneSNO;
         public uint ParentChunkID;
         public int SceneGroupSNO;
-        public int /* gbid */[] arAppliedLabels; // MaxLength = 256
+        public int /* gbid */[] AppliedLabels; // MaxLength = 256
+
+        public readonly List<Scene> Subscenes;
 
         public PRTransform Transform
         {
@@ -53,38 +65,35 @@ namespace Mooege.Core.GS.Map
         }
 
         public Scene(World world)
+            : base(world, world.NewSceneID)
         {
-            this.Game = world.Game;
-            this.DynamicID = world.Game.NewSceneID;
-            this.World = world;
-            this.World.AddScene(this);
-
             this.Scale = 1.0f;
             this.RotationAmount = 0.0f;
-            this.RotationAxis = new Vector3D();
-            this.Position = new Vector3D();
+            this.Subscenes = new List<Scene>();
+
+            this.World.AddScene(this);
         }
 
-        public void Reveal(Player player)
+        public override void Reveal(Mooege.Core.GS.Player.Player player)
         {
-            if (player.RevealedScenes.ContainsKey(this.DynamicID)) return; //already revealed
+            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return; //already revealed
             if (SceneData != null)
             {
                 player.InGameClient.SendMessage(SceneData);
-                player.RevealedScenes.Add(this.DynamicID, this);
+                player.RevealedObjects.Add(this.DynamicID, this);
             }
             if (Map != null) player.InGameClient.SendMessage(Map);
             player.InGameClient.FlushOutgoingBuffer();
         }
 
-        public void Destroy(Player player)
+        public override void Unreveal(Mooege.Core.GS.Player.Player player)
         {
-            if (!player.RevealedScenes.ContainsKey(this.DynamicID)) return; //not revealed yet
+            if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return; //not revealed yet
             if (SceneData != null)
             {
                 player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID });
                 player.InGameClient.FlushOutgoingBuffer();
-                player.RevealedScenes.Remove(this.DynamicID);
+                player.RevealedObjects.Remove(this.DynamicID);
             }
         }
     }

@@ -40,53 +40,41 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Core.GS.Game
 {
-    public class Game : IDynamicObjectManager, IMessageConsumer
+    public class Game : IMessageConsumer
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
         public PlayerManager PlayerManager { get; private set; }
 
-        private Dictionary<uint, World> Worlds;
-        private Dictionary<uint, Actor> Actors;
-        private Dictionary<uint, Player> Players;
-        private Dictionary<uint, Item> Items;
+        private Dictionary<uint, DynamicObject> Objects;
+        // NOTE: This tracks by WorldSNO rather than by DynamicID; this.Objects _does_ still contain the world since it is a DynamicObject
+        private Dictionary<int, World> Worlds;
 
         public World StartWorld { get; private set; }
 
-        // These are split up just so that we can tell what an object's type is by its ID
-        private uint _lastWorldID   = 0x01000000;
-        private uint _lastSceneID   = 0x03000000;
-        private uint _lastPlayerID  = 0x00000001;
-        private uint _lastActorID   = 0x00100000;
-        private uint _lastNPCID     = 0x00400000;
-        private uint _lastMonsterID = 0x00600000;
-        private uint _lastItemID    = 0x00800000;
+        private uint _lastObjectID = 0x00000001;
+        private uint _lastSceneID  = 0x04000000;
+        private uint _lastWorldID  = 0x07000000;
 
         // TODO: Need overrun handling and existence checking
-        public uint NewWorldID { get { return _lastWorldID++; } }
+        public uint NewObjectID { get { return _lastObjectID++; } }
         public uint NewSceneID { get { return _lastSceneID++; } }
-        public uint NewPlayerID { get { return _lastPlayerID++; } }
-        public uint NewActorID { get { return _lastActorID++; } }
-        public uint NewNPCID { get { return _lastNPCID++; } }
-        public uint NewMonsterID { get { return _lastMonsterID++; } }
-        public uint NewItemID { get { return _lastItemID++; } }
+        public uint NewWorldID { get { return _lastWorldID++; } }
 
         public Game()
         {
-            this.Worlds = new Dictionary<uint, World>();
-            this.Actors = new Dictionary<uint, Actor>();
-            this.Players = new Dictionary<uint, Player>();
-            this.Items = new Dictionary<uint, Item>();
+            this.Objects = new Dictionary<uint, DynamicObject>();
+            this.Worlds = new Dictionary<int, World>();
             this.PlayerManager = new PlayerManager(this);
             // FIXME: This is a stub for the moment
-            this.StartWorld = new World(this);
+            this.StartWorld = new World(this, 1);
         }
 
         public void Route(GameClient client, GameMessage message)
         {
             switch (message.Consumer)
             {
-                case Consumers.Universe:
+                case Consumers.Game:
                     this.Consume(client, message);
                     break;
                 case Consumers.Inventory:
@@ -103,213 +91,74 @@ namespace Mooege.Core.GS.Game
 
         public void Consume(GameClient client, GameMessage message)
         {
-            if (message is TargetMessage) OnTargeted(client, (TargetMessage)message);
         }
 
-        #region Collections
+        #region Tracking
 
-        // Adding
-        public void AddWorld(World obj)
+        public void StartTracking(DynamicObject obj)
         {
-            if (obj.DynamicID == 0 || this.Worlds.ContainsKey(obj.DynamicID))
-                throw new Exception(String.Format("Object has an invalid ID or was already present ({0})", obj.DynamicID));
-            this.Worlds.Add(obj.DynamicID, obj);
+            if (obj.DynamicID == 0 || IsTracking(obj))
+                throw new Exception(String.Format("Object has an invalid ID or was already being tracked (ID = {0})", obj.DynamicID));
+            this.Objects.Add(obj.DynamicID, obj);
         }
 
-        public void AddActor(Actor obj)
+        public void EndTracking(DynamicObject obj)
         {
-            if (obj.DynamicID == 0 || this.Actors.ContainsKey(obj.DynamicID))
-                throw new Exception(String.Format("Object has an invalid ID or was already present ({0})", obj.DynamicID));
-            this.Actors.Add(obj.DynamicID, obj);
+            if (obj.DynamicID == 0 || !IsTracking(obj))
+                throw new Exception(String.Format("Object has an invalid ID or was not being tracked (ID = {0})", obj.DynamicID));
+            this.Objects.Remove(obj.DynamicID);
         }
 
-        public void AddPlayer(Player obj)
+        public DynamicObject GetObject(uint dynamicID)
         {
-            if (obj.DynamicID == 0 || this.Players.ContainsKey(obj.DynamicID))
-                throw new Exception(String.Format("Object has an invalid ID or was already present ({0})", obj.DynamicID));
-            this.Players.Add(obj.DynamicID, obj);
+            DynamicObject obj;
+            this.Objects.TryGetValue(dynamicID, out obj);
+            return obj;
         }
 
-        public void AddItem(Item obj)
+        public bool IsTracking(uint dynamicID)
         {
-            if (obj.DynamicID == 0 || this.Items.ContainsKey(obj.DynamicID))
-                throw new Exception(String.Format("Object has an invalid ID or was already present ({0})", obj.DynamicID));
-            this.Items.Add(obj.DynamicID, obj);
+            return this.Objects.ContainsKey(dynamicID);
         }
 
-        // Removing
-        public void RemoveWorld(World obj)
+        public bool IsTracking(DynamicObject obj)
         {
-            if (obj.DynamicID == 0 || !this.Worlds.ContainsKey(obj.DynamicID))
-                throw new Exception(String.Format("Object has an invalid ID or was not present ({0})", obj.DynamicID));
-            this.Worlds.Remove(obj.DynamicID);
+            return this.Objects.ContainsKey(obj.DynamicID);
         }
 
-        public void RemoveActor(Actor obj)
+        #endregion // Tracking
+
+        #region World collection
+
+        public void AddWorld(World world)
         {
-            if (obj.DynamicID == 0 || !this.Actors.ContainsKey(obj.DynamicID))
-                throw new Exception(String.Format("Object has an invalid ID or was not present ({0})", obj.DynamicID));
-            this.Actors.Remove(obj.DynamicID);
+            if (world.WorldSNO == -1 || WorldExists(world.WorldSNO))
+                throw new Exception(String.Format("World has an invalid SNO or was already being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.WorldSNO));
+            this.Worlds.Add(world.WorldSNO, world);
         }
 
-        public void RemovePlayer(Player obj)
+        public void RemoveWorld(World world)
         {
-            if (obj.DynamicID == 0 || !this.Players.ContainsKey(obj.DynamicID))
-                throw new Exception(String.Format("Object has an invalid ID or was not present ({0})", obj.DynamicID));
-            this.Players.Remove(obj.DynamicID);
+            if (world.WorldSNO == -1 || !WorldExists(world.WorldSNO))
+                throw new Exception(String.Format("World has an invalid SNO or was not being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.WorldSNO));
+            this.Worlds.Remove(world.WorldSNO);
         }
 
-        public void RemoveItem(Item obj)
-        {
-            if (obj.DynamicID == 0 || !this.Items.ContainsKey(obj.DynamicID))
-                throw new Exception(String.Format("Object has an invalid ID or was not present ({0})", obj.DynamicID));
-            this.Items.Remove(obj.DynamicID);
-        }
-
-        // Getters
-        public World GetWorld(uint dynamicID)
+        public World GetWorld(int worldSNO)
         {
             World world;
-            this.Worlds.TryGetValue(dynamicID, out world);
+            this.Worlds.TryGetValue(worldSNO, out world);
             return world;
         }
 
-        public Actor GetActor(uint dynamicID)
+        public bool WorldExists(int worldSNO)
         {
-            Actor actor;
-            this.Actors.TryGetValue(dynamicID, out actor);
-            return actor;
+            return this.Worlds.ContainsKey(worldSNO);
         }
 
-        public Actor GetActor(uint dynamicID, ActorType matchType)
-        {
-            var actor = GetActor(dynamicID);
-            if (actor != null)
-            {
-                if (actor.ActorType == matchType)
-                    return actor;
-                else
-                    Logger.Warn("Attempted to get actor ID {0} as a {1}, whereas the actor is type {2}",
-                        dynamicID, Enum.GetName(typeof(ActorType), matchType), Enum.GetName(typeof(ActorType), actor.ActorType));
-            }
-            return null;
-        }
+        #endregion // World collection
 
-        public Player GetPlayer(uint dynamicID)
-        {
-            Player player;
-            this.Players.TryGetValue(dynamicID, out player);
-            return player;
-        }
-
-        public Item GetItem(uint dynamicID)
-        {
-            Item item;
-            this.Items.TryGetValue(dynamicID, out item);
-            return item;
-        }
-
-        // Existence
-        public bool HasActor(uint dynamicID, ActorType matchType)
-        {
-            var actor = GetActor(dynamicID, matchType);
-            return actor != null;
-        }
-
-        public bool HasWorld(uint dynamicID)
-        {
-            return this.Worlds.ContainsKey(dynamicID);
-        }
-
-        public bool HasPlayer(uint dynamicID)
-        {
-            return this.Players.ContainsKey(dynamicID);
-        }
-
-        public bool HasActor(uint dynamicID)
-        {
-            return this.Actors.ContainsKey(dynamicID);
-        }
-
-        public bool HasNPC(uint dynamicID)
-        {
-            return HasActor(dynamicID, ActorType.NPC);
-        }
-
-        public bool HasMonster(uint dynamicID)
-        {
-            return HasActor(dynamicID, ActorType.Monster);
-        }
-
-        public bool HasItem(uint dynamicID)
-        {
-            return this.Items.ContainsKey(dynamicID);
-        }
-
-        #endregion // Collections
-
-        public void ChangeToonWorld(GameClient client, uint worldID, Vector3D pos)
-        {
-            Player player = client.Player;
-            World newWorld = GetWorld(worldID);
-            World currentWorld = player.World;
-
-            if (newWorld == null/* || currentWorld==null*/) return; //don't go to a world we don't have in the universe
-
-            // TODO: Should be renamed to differentiate between actual world destruction and removing the player from the world
-            if (currentWorld != null)
-                currentWorld.DestroyWorld(player);
-
-            player.World = newWorld;
-            player.Position.X = pos.X;
-            player.Position.Y = pos.Y;
-            player.Position.Z = pos.Z;
-
-            newWorld.Reveal(player);
-            player.SendWorldPosition(client.Player);
-            client.FlushOutgoingBuffer();
-
-            client.SendMessage(new PlayerWarpedMessage()
-            {
-                Field0 = 9,
-                Field1 = 0f,
-            });
-
-            client.PacketId += 40 * 2;
-            client.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = client.PacketId,
-            });
-
-            client.FlushOutgoingBuffer();
-        }
-
-        private void OnTargeted(GameClient client, TargetMessage message)
-        {
-            //Logger.Info("Player interaction with " + message.AsText());
-
-            Portal p = client.Player.World.GetPortal(message.TargetID);
-            if (p != null)
-            {
-                //we have a transition between worlds here
-                ChangeToonWorld(client, p.TargetWorldID, p.TargetPos); //targetpos will always be valid as otherwise the portal wouldn't be targetable
-                return;
-            }
-
-            // Check if it is an Interaction with an item....
-            Actor a = this.GetActor(message.TargetID);
-            if (a != null)
-            {
-                if (client.Items.ContainsKey(message.TargetID))
-                {
-                    client.Player.Inventory.PickUp(message);
-                    return;
-                }
-            }
-        }
-
-        private void SpawnRandomDrop(Player player, Vector3D postition)
+        private void SpawnRandomDrop(Mooege.Core.GS.Player.Player player, Vector3D postition)
         {
             ItemTypeGenerator itemGenerator = new ItemTypeGenerator(player.InGameClient);
             // randomize ItemType
@@ -319,7 +168,7 @@ namespace Mooege.Core.GS.Game
             DropItem(player, item, postition);
         }
 
-        private void SpawnGold(Player player, Vector3D position)
+        private void SpawnGold(Mooege.Core.GS.Player.Player player, Vector3D position)
         {
             ItemTypeGenerator itemGenerator = new ItemTypeGenerator(player.InGameClient);
             Item item = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
@@ -328,9 +177,9 @@ namespace Mooege.Core.GS.Game
         }
 
         // TODO: Redo this
-        public void DropItem(Player player, Item item, Vector3D postition)
+        public void DropItem(Mooege.Core.GS.Player.Player player, Item item, Vector3D postition)
         {}
-        /*public void DropItem(Player player, Item item, Vector3D postition)
+        /*public void DropItem(Mooege.Core.GS.Player.Player player, Item item, Vector3D postition)
         {
             // Items are actors; shouldn't do this
             Actor itemActor = new Actor(player.World)
@@ -444,7 +293,7 @@ namespace Mooege.Core.GS.Game
                 Field2 = unchecked((int)0xffffffff)
             });
 
-            client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage1)
+            client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage24)
             {
                 ActorID = objectId
             });

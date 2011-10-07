@@ -16,20 +16,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Core.GS.Game;
+using Mooege.Core.GS.Player;
 
 namespace Mooege.Core.GS.Objects
 {
-    public interface IDynamicObject
+    public interface IRevealable
     {
-        /// <summary>
-        /// The game the object belongs to.
-        /// </summary>
-        Mooege.Core.GS.Game.Game Game { get; }
-
-        /// <summary>
-        /// The dynamic unique runtime ID for the actor.
-        /// </summary>
-        uint DynamicID { get; }
+        void Reveal(Mooege.Core.GS.Player.Player player);
+        void Unreveal(Mooege.Core.GS.Player.Player player);
     }
 }

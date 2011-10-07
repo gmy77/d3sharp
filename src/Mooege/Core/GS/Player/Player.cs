@@ -22,6 +22,7 @@ using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.Common.Items;
 using Mooege.Core.GS.Game;
+using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Skills;
@@ -32,16 +33,18 @@ using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Act;
 using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Definitions.Connection;
+using Mooege.Net.GS.Message.Definitions.Combat;
 using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Inventory;
+using Mooege.Net.GS.Message.Definitions.World;
 
-// NOTE: Merged Hero into Player since dumped structures imply that they are the same thing
+// TODO: Player should use a message queue and only flush to socket when a tick is finished
 
-namespace Mooege.Core.GS.Game
+namespace Mooege.Core.GS.Player
 {
     public class Player : Actor
     {
@@ -52,28 +55,26 @@ namespace Mooege.Core.GS.Game
         public GameClient InGameClient { get; set; }
 
         public Toon Properties { get; private set; }
-
         public SkillSet SkillSet;
         public Inventory Inventory;
 
-        public Dictionary<uint, World> RevealedWorlds;
-        public Dictionary<uint, Scene> RevealedScenes; // Will have to be a list if scene IDs are per-world
-        public Dictionary<uint, Actor> RevealedActors;
+        public Dictionary<uint, IRevealable> RevealedObjects { get; private set; }
+
+        // Collection of items that only the player can see. This is only used when items drop from killing an actor
+        // TODO: Might want to just have a field on the item itself to indicate whether it is visible to only one player
+        public Dictionary<uint, Item> GroundItems { get; private set; }
 
         public Player(World world, GameClient client, Toon bnetToon)
-            : base(world, world.Game.NewPlayerID)
+            : base(world, world.NewPlayerID)
         {
-            this.Game.AddPlayer(this);
-            this.World.AddPlayer(this);
             this.InGameClient = client;
 
             this.Properties = bnetToon;
             this.Inventory = new Inventory(this);
             this.SkillSet = new Skills.SkillSet(this.Properties.Class);
 
-            RevealedWorlds = new Dictionary<uint, World>();
-            RevealedScenes = new Dictionary<uint, Scene>();
-            RevealedActors = new Dictionary<uint, Actor>();
+            this.RevealedObjects = new Dictionary<uint, IRevealable>();
+            this.GroundItems = new Dictionary<uint, Item>();
 
             // actor values
             this.AppearanceSNO = this.ClassSNO;
@@ -87,22 +88,173 @@ namespace Mooege.Core.GS.Game
             this.Position.Y = 2828.75f;
             this.Position.Z = 59.075588f;
 
-            //den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
-            //inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
+            // den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
+            // inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
             // adrias hut: this.Position.X = 1768.750000f; this.Position.Y = 2921.250000f; this.Position.Z = 20.333143f;
-            // cemetry of forsaken: this.Position.X = 2041.250000f; this.Position.Y = 1778.750000f; this.Position.Z = 0.426203f;
-            //defiled crypt level 2: this.WorldId = 2000289804; this.Position.X = 158.750000f; this.Position.Y = 76.250000f; this.Position.Z = 0.100000f;
+            // cemetery of the forsaken: this.Position.X = 2041.250000f; this.Position.Y = 1778.750000f; this.Position.Z = 0.426203f;
+            // defiled crypt level 2: this.WorldId = 2000289804; this.Position.X = 158.750000f; this.Position.Y = 76.250000f; this.Position.Z = 0.100000f;
 
-            this.GBHandle = new GBHandle()
-            {
-                Type = (int)GBHandleType.Player,
-                GBID = this.Properties.ClassID,
-            };
+            this.GBHandle.Type = (int)GBHandleType.Player;
+            this.GBHandle.GBID = this.Properties.ClassID;
 
             this.Field7 = -1;
             this.Field8 = -1;
             this.Field9 = 0x00000000;
             this.Field10 = 0x0;
+
+            #region Attributes
+            this.Attributes[GameAttribute.SkillKit] = this.SkillKit;
+            this.Attributes[GameAttribute.Buff_Active, 0x33C40] = true;
+            this.Attributes[GameAttribute.Skill, 0x7545] = 1;
+            this.Attributes[GameAttribute.Skill_Total, 0x7545] = 1;
+            this.Attributes[GameAttribute.Resistance_Total, 0x226] = 0.5f;
+            this.Attributes[GameAttribute.Resistance, 0x226] = 0.5f;
+            this.Attributes[GameAttribute.Immobolize] = true;
+            this.Attributes[GameAttribute.Untargetable] = true;
+            this.Attributes[GameAttribute.Skill_Total, 0x76B7] = 1;
+            this.Attributes[GameAttribute.Skill, 0x76B7] = 1;
+            this.Attributes[GameAttribute.Skill, 0x6DF] = 1;
+            this.Attributes[GameAttribute.Buff_Active, 0xCE11] = true;
+            this.Attributes[GameAttribute.CantStartDisplayedPowers] = true;
+            this.Attributes[GameAttribute.Skill_Total, 0x216FA] = 1;
+            this.Attributes[GameAttribute.Skill, 0x176C4] = 1;
+            this.Attributes[GameAttribute.Skill, 0x216FA] = 1;
+            this.Attributes[GameAttribute.Skill_Total, 0x176C4] = 1;
+            this.Attributes[GameAttribute.Skill_Total, 0x6DF] = 1;
+            this.Attributes[GameAttribute.Resistance, 0xDE] = 0.5f;
+            this.Attributes[GameAttribute.Resistance_Total, 0xDE] = 0.5f;
+            this.Attributes[GameAttribute.Get_Hit_Recovery] = 6f;
+            this.Attributes[GameAttribute.Get_Hit_Recovery_Per_Level] = 1f;
+            this.Attributes[GameAttribute.Get_Hit_Recovery_Base] = 5f;
+            this.Attributes[GameAttribute.Skill, 0x7780] = 1;
+            this.Attributes[GameAttribute.Get_Hit_Max] = 60f;
+            this.Attributes[GameAttribute.Skill_Total, 0x7780] = 1;
+            this.Attributes[GameAttribute.Get_Hit_Max_Per_Level] = 10f;
+            this.Attributes[GameAttribute.Get_Hit_Max_Base] = 50f;
+            this.Attributes[GameAttribute.Resistance_Total, 0] = 3.051758E-05f; // im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
+            this.Attributes[GameAttribute.Resistance_Total, 1] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Resistance_Total, 2] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Resistance_Total, 3] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Resistance_Total, 4] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Resistance_Total, 5] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Resistance_Total, 6] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Dodge_Rating_Total] = 3.051758E-05f;
+            this.Attributes[GameAttribute.IsTrialActor] = true;
+            this.Attributes[GameAttribute.Buff_Visual_Effect, 0xFFFFF] = true;
+            this.Attributes[GameAttribute.Crit_Percent_Cap] = 0x3F400000;
+            this.Attributes[GameAttribute.Resource_Cur, this.ResourceID] = 200f;
+            this.Attributes[GameAttribute.Resource_Max, this.ResourceID] = 200f;
+            this.Attributes[GameAttribute.Resource_Max_Total, this.ResourceID] = 200f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total_All] = 2f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_All] = 1f;
+            this.Attributes[GameAttribute.Resource_Regen_Total, this.ResourceID] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Resource_Effective_Max, this.ResourceID] = 200f;
+            this.Attributes[GameAttribute.Damage_Min_Subtotal, 0xFFFFF] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Total, 0xFFFFF] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 0xFFFFF] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Attacks_Per_Second_Item_CurrentHand] = 1.199219f;
+            this.Attributes[GameAttribute.Attacks_Per_Second_Item_Total_MainHand] = 1.199219f;
+            this.Attributes[GameAttribute.Attacks_Per_Second_Total] = 1.199219f;
+            this.Attributes[GameAttribute.Attacks_Per_Second] = 1f;
+            this.Attributes[GameAttribute.Attacks_Per_Second_Item_MainHand] = 1.199219f;
+            this.Attributes[GameAttribute.Attacks_Per_Second_Item_Total] = 1.199219f;
+            this.Attributes[GameAttribute.Buff_Icon_End_Tick0, 0x00033C40] = 0x000003FB;
+            this.Attributes[GameAttribute.Attacks_Per_Second_Item_Subtotal] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Attacks_Per_Second_Item] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x00033C40] = 0x00000077;
+            this.Attributes[GameAttribute.Hit_Chance] = 1f;
+            this.Attributes[GameAttribute.Casting_Speed_Total] = 1f;
+            this.Attributes[GameAttribute.Casting_Speed] = 1f;
+            this.Attributes[GameAttribute.Movement_Scalar_Total] = 1f;
+            this.Attributes[GameAttribute.Skill_Total, 0x0002EC66] = 0;
+            this.Attributes[GameAttribute.Movement_Scalar_Capped_Total] = 1f;
+            this.Attributes[GameAttribute.Movement_Scalar_Subtotal] = 1f;
+            this.Attributes[GameAttribute.Strafing_Rate_Total] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Sprinting_Rate_Total] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Running_Rate_Total] = 0.3598633f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total_MainHand, 0] = 2f;
+            this.Attributes[GameAttribute.Walking_Rate_Total] = 0.2797852f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_MainHand, 0] = 1f;
+            this.Attributes[GameAttribute.Damage_Delta_Total, 1] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Delta_Total, 2] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Delta_Total, 3] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Delta_Total, 4] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Delta_Total, 5] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Delta_Total, 6] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Delta_Total, 0] = 1f;
+            this.Attributes[GameAttribute.Running_Rate] = 0.3598633f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 1] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 2] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 3] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 4] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 5] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 6] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 0] = 2f;
+            this.Attributes[GameAttribute.Walking_Rate] = 0.2797852f;
+            this.Attributes[GameAttribute.Damage_Min_Total, 1] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Total, 2] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Total, 3] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Total, 4] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Total, 5] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Total, 6] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 1] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 2] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 3] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 4] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 5] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 6] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Total, 0] = 2f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 0] = 1f;
+            this.Attributes[GameAttribute.Movement_Scalar] = 1f;
+            this.Attributes[GameAttribute.Damage_Min_Subtotal, 1] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Subtotal, 2] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Subtotal, 3] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Subtotal, 4] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Subtotal, 5] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Subtotal, 6] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Damage_Min_Subtotal, 0] = 2f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 1f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_SubTotal, 0] = 1f;
+            this.Attributes[GameAttribute.Damage_Weapon_Max, 0] = 3f;
+            this.Attributes[GameAttribute.Damage_Weapon_Max_Total, 0] = 3f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] = 1f;
+            this.Attributes[GameAttribute.Trait, 0x0000CE11] = 1;
+            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 2f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] = 2f;
+            this.Attributes[GameAttribute.Skill, 0x0000CE11] = 1;
+            this.Attributes[GameAttribute.Skill_Total, 0x0000CE11] = 1;
+            this.Attributes[GameAttribute.Resource_Type_Primary] = this.ResourceID;
+            this.Attributes[GameAttribute.Hitpoints_Max_Total] = 76f;
+            this.Attributes[GameAttribute.Hitpoints_Max] = 40f;
+            this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality] = 36f;
+            this.Attributes[GameAttribute.Hitpoints_Factor_Vitality] = 4f;
+            this.Attributes[GameAttribute.Hitpoints_Factor_Level] = 4f;
+            this.Attributes[GameAttribute.Hitpoints_Cur] = 76f;
+            this.Attributes[GameAttribute.Disabled] = true;
+            this.Attributes[GameAttribute.Loading] = true;
+            this.Attributes[GameAttribute.Invulnerable] = true;
+            this.Attributes[GameAttribute.TeamID] = 2;
+            this.Attributes[GameAttribute.Skill_Total, 0xFFFFF] = 1;
+            this.Attributes[GameAttribute.Skill, 0xFFFFF] = 1;
+            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x0000CE11] = 1;
+            this.Attributes[GameAttribute.Hidden] = true;
+            this.Attributes[GameAttribute.Level_Cap] = 13;
+            this.Attributes[GameAttribute.Level] = this.Properties.Level;
+            this.Attributes[GameAttribute.Experience_Next] = 1200;
+            this.Attributes[GameAttribute.Experience_Granted] = 1000;
+            this.Attributes[GameAttribute.Armor_Total] = 0;
+            this.Attributes[GameAttribute.Defense] = 10f;
+            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x00033C40] = 1;
+            this.Attributes[GameAttribute.Vitality] = 9f;
+            this.Attributes[GameAttribute.Precision] = 11f;
+            this.Attributes[GameAttribute.Attack] = 10f;
+            this.Attributes[GameAttribute.Shared_Stash_Slots] = 14;
+            this.Attributes[GameAttribute.Backpack_Slots] = 60;
+            this.Attributes[GameAttribute.General_Cooldown] = 0;
+            #endregion // Attributes
+
+            this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
         public void Consume(GameClient client, GameMessage message)
@@ -110,12 +262,14 @@ namespace Mooege.Core.GS.Game
             if (message is AssignActiveSkillMessage) OnAssignActiveSkill(client, (AssignActiveSkillMessage)message);
             else if (message is AssignPassiveSkillMessage) OnAssignPassiveSkill(client, (AssignPassiveSkillMessage)message);
             else if (message is PlayerChangeHotbarButtonMessage) OnPlayerChangeHotbarButtonMessage(client, (PlayerChangeHotbarButtonMessage)message);
+            else if (message is TargetMessage) OnObjectTargeted(client, (TargetMessage)message);
             else return;
 
             UpdateState();
             client.FlushOutgoingBuffer();
         }
 
+        // TODO: This needs to be cleaned up
         /// <summary>
         /// Greets the player and sends the client initial data it needs to get in-game.
         /// </summary>
@@ -159,11 +313,10 @@ namespace Mooege.Core.GS.Game
                 Field1 = true,
             });
 
-            //reveal world to the toon
             if (this.World != null)
                 this.World.Reveal(this);
 
-            // send newplayermessage.
+            // Notify the client of the new player
             InGameClient.SendMessage(new NewPlayerMessage
             {
                 Field0 = 0x00000000, //Party frame (0x00000000 hide, 0x00000001 show)
@@ -180,7 +333,7 @@ namespace Mooege.Core.GS.Game
             });
 
             // reveal the hero
-            Reveal(this);
+            this.Reveal(this);
 
             InGameClient.SendMessage(new ACDCollFlagsMessage
             {
@@ -188,167 +341,7 @@ namespace Mooege.Core.GS.Game
                 CollFlags = 0x00000000,
             });
 
-            GameAttributeMap attribs = new GameAttributeMap();
-            attribs[GameAttribute.SkillKit] = this.SkillKit;
-            attribs[GameAttribute.Buff_Active, 0x33C40] = true;
-            attribs[GameAttribute.Skill, 0x7545] = 1;
-            attribs[GameAttribute.Skill_Total, 0x7545] = 1;
-            attribs[GameAttribute.Resistance_Total, 0x226] = 0.5f;
-            attribs[GameAttribute.Resistance, 0x226] = 0.5f;
-            attribs[GameAttribute.Immobolize] = true;
-            attribs[GameAttribute.Untargetable] = true;
-            attribs[GameAttribute.Skill_Total, 0x76B7] = 1;
-            attribs[GameAttribute.Skill, 0x76B7] = 1;
-            attribs[GameAttribute.Skill, 0x6DF] = 1;
-            attribs[GameAttribute.Buff_Active, 0xCE11] = true;
-            attribs[GameAttribute.CantStartDisplayedPowers] = true;
-            attribs[GameAttribute.Skill_Total, 0x216FA] = 1;
-            attribs[GameAttribute.Skill, 0x176C4] = 1;
-            //--
-            attribs[GameAttribute.Skill, 0x216FA] = 1;
-            attribs[GameAttribute.Skill_Total, 0x176C4] = 1;
-            attribs[GameAttribute.Skill_Total, 0x6DF] = 1;
-            attribs[GameAttribute.Resistance, 0xDE] = 0.5f;
-            attribs[GameAttribute.Resistance_Total, 0xDE] = 0.5f;
-            attribs[GameAttribute.Get_Hit_Recovery] = 6f;
-            attribs[GameAttribute.Get_Hit_Recovery_Per_Level] = 1f;
-            attribs[GameAttribute.Get_Hit_Recovery_Base] = 5f;
-            attribs[GameAttribute.Skill, 0x7780] = 1;
-            attribs[GameAttribute.Get_Hit_Max] = 60f;
-            attribs[GameAttribute.Skill_Total, 0x7780] = 1;
-            attribs[GameAttribute.Get_Hit_Max_Per_Level] = 10f;
-            attribs[GameAttribute.Get_Hit_Max_Base] = 50f;
-            attribs[GameAttribute.Resistance_Total, 0] = 3.051758E-05f; // im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
-            attribs[GameAttribute.Resistance_Total, 1] = 3.051758E-05f;
-            //--
-            attribs[GameAttribute.Resistance_Total, 2] = 3.051758E-05f;
-            attribs[GameAttribute.Resistance_Total, 3] = 3.051758E-05f;
-            attribs[GameAttribute.Resistance_Total, 4] = 3.051758E-05f;
-            attribs[GameAttribute.Resistance_Total, 5] = 3.051758E-05f;
-            attribs[GameAttribute.Resistance_Total, 6] = 3.051758E-05f;
-            attribs[GameAttribute.Dodge_Rating_Total] = 3.051758E-05f;
-            attribs[GameAttribute.IsTrialActor] = true;
-            attribs[GameAttribute.Buff_Visual_Effect, 0xFFFFF] = true;
-            attribs[GameAttribute.Crit_Percent_Cap] = 0x3F400000;
-            attribs[GameAttribute.Resource_Cur, this.ResourceID] = 200f;
-            attribs[GameAttribute.Resource_Max, this.ResourceID] = 200f;
-            attribs[GameAttribute.Resource_Max_Total, this.ResourceID] = 200f;
-            attribs[GameAttribute.Damage_Weapon_Min_Total_All] = 2f;
-            attribs[GameAttribute.Damage_Weapon_Delta_Total_All] = 1f;
-            attribs[GameAttribute.Resource_Regen_Total, this.ResourceID] = 3.051758E-05f;
-            //--
-            attribs[GameAttribute.Resource_Effective_Max, this.ResourceID] = 200f;
-            attribs[GameAttribute.Damage_Min_Subtotal, 0xFFFFF] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Min_Total, 0xFFFFF] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 0xFFFFF] = 3.051758E-05f;
-            attribs[GameAttribute.Attacks_Per_Second_Item_CurrentHand] = 1.199219f;
-            attribs[GameAttribute.Attacks_Per_Second_Item_Total_MainHand] = 1.199219f;
-            attribs[GameAttribute.Attacks_Per_Second_Total] = 1.199219f;
-            attribs[GameAttribute.Attacks_Per_Second] = 1f;
-            attribs[GameAttribute.Attacks_Per_Second_Item_MainHand] = 1.199219f;
-            attribs[GameAttribute.Attacks_Per_Second_Item_Total] = 1.199219f;
-            attribs[GameAttribute.Buff_Icon_End_Tick0, 0x00033C40] = 0x000003FB;
-            attribs[GameAttribute.Attacks_Per_Second_Item_Subtotal] = 3.051758E-05f;
-            attribs[GameAttribute.Attacks_Per_Second_Item] = 3.051758E-05f;
-            attribs[GameAttribute.Buff_Icon_Start_Tick0, 0x00033C40] = 0x00000077;
-            attribs[GameAttribute.Hit_Chance] = 1f;
-            //--
-            attribs[GameAttribute.Casting_Speed_Total] = 1f;
-            attribs[GameAttribute.Casting_Speed] = 1f;
-            attribs[GameAttribute.Movement_Scalar_Total] = 1f;
-            attribs[GameAttribute.Skill_Total, 0x0002EC66] = 0;
-            attribs[GameAttribute.Movement_Scalar_Capped_Total] = 1f;
-            attribs[GameAttribute.Movement_Scalar_Subtotal] = 1f;
-            attribs[GameAttribute.Strafing_Rate_Total] = 3.051758E-05f;
-            attribs[GameAttribute.Sprinting_Rate_Total] = 3.051758E-05f;
-            attribs[GameAttribute.Running_Rate_Total] = 0.3598633f;
-            attribs[GameAttribute.Damage_Weapon_Min_Total_MainHand, 0] = 2f;
-            attribs[GameAttribute.Walking_Rate_Total] = 0.2797852f;
-            attribs[GameAttribute.Damage_Weapon_Delta_Total_MainHand, 0] = 1f;
-            attribs[GameAttribute.Damage_Delta_Total, 1] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Delta_Total, 2] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Delta_Total, 3] = 3.051758E-05f;
-            //--
-            attribs[GameAttribute.Damage_Delta_Total, 4] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Delta_Total, 5] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Delta_Total, 6] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Delta_Total, 0] = 1f;
-            attribs[GameAttribute.Running_Rate] = 0.3598633f;
-            attribs[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 1] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 2] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 3] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 4] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 5] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 6] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 0] = 2f;
-            attribs[GameAttribute.Walking_Rate] = 0.2797852f;
-            attribs[GameAttribute.Damage_Min_Total, 1] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Min_Total, 2] = 3.051758E-05f;
-            //--
-            attribs[GameAttribute.Damage_Min_Total, 3] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Min_Total, 4] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Min_Total, 5] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Min_Total, 6] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 1] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 2] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 3] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 4] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 5] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 6] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Min_Total, 0] = 2f;
-            attribs[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 0] = 1f;
-            attribs[GameAttribute.Movement_Scalar] = 1f;
-            attribs[GameAttribute.Damage_Min_Subtotal, 1] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Min_Subtotal, 2] = 3.051758E-05f;
-            //--
-            attribs[GameAttribute.Damage_Min_Subtotal, 3] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Min_Subtotal, 4] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Min_Subtotal, 5] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Min_Subtotal, 6] = 3.051758E-05f;
-            attribs[GameAttribute.Damage_Min_Subtotal, 0] = 2f;
-            attribs[GameAttribute.Damage_Weapon_Delta, 0] = 1f;
-            attribs[GameAttribute.Damage_Weapon_Delta_SubTotal, 0] = 1f;
-            attribs[GameAttribute.Damage_Weapon_Max, 0] = 3f;
-            attribs[GameAttribute.Damage_Weapon_Max_Total, 0] = 3f;
-            attribs[GameAttribute.Damage_Weapon_Delta_Total, 0] = 1f;
-            attribs[GameAttribute.Trait, 0x0000CE11] = 1;
-            attribs[GameAttribute.Damage_Weapon_Min, 0] = 2f;
-            attribs[GameAttribute.Damage_Weapon_Min_Total, 0] = 2f;
-            attribs[GameAttribute.Skill, 0x0000CE11] = 1;
-            attribs[GameAttribute.Skill_Total, 0x0000CE11] = 1;
-            //--
-            attribs[GameAttribute.Resource_Type_Primary] = this.ResourceID;
-            attribs[GameAttribute.Hitpoints_Max_Total] = 76f;
-            attribs[GameAttribute.Hitpoints_Max] = 40f;
-            attribs[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
-            attribs[GameAttribute.Hitpoints_Total_From_Vitality] = 36f;
-            attribs[GameAttribute.Hitpoints_Factor_Vitality] = 4f;
-            attribs[GameAttribute.Hitpoints_Factor_Level] = 4f;
-            attribs[GameAttribute.Hitpoints_Cur] = 76f;
-            attribs[GameAttribute.Disabled] = true;
-            attribs[GameAttribute.Loading] = true;
-            attribs[GameAttribute.Invulnerable] = true;
-            attribs[GameAttribute.TeamID] = 2;
-            attribs[GameAttribute.Skill_Total, 0xFFFFF] = 1;
-            attribs[GameAttribute.Skill, 0xFFFFF] = 1;
-            attribs[GameAttribute.Buff_Icon_Count0, 0x0000CE11] = 1;
-            //--
-            attribs[GameAttribute.Hidden] = true;
-            attribs[GameAttribute.Level_Cap] = 13;
-            attribs[GameAttribute.Level] = this.Properties.Level;
-            attribs[GameAttribute.Experience_Next] = 1200;
-            attribs[GameAttribute.Experience_Granted] = 1000;
-            attribs[GameAttribute.Armor_Total] = 0;
-            attribs[GameAttribute.Defense] = 10f;
-            attribs[GameAttribute.Buff_Icon_Count0, 0x00033C40] = 1;
-            attribs[GameAttribute.Vitality] = 9f;
-            attribs[GameAttribute.Precision] = 11f;
-            attribs[GameAttribute.Attack] = 10f;
-            attribs[GameAttribute.Shared_Stash_Slots] = 14;
-            attribs[GameAttribute.Backpack_Slots] = 60;
-            attribs[GameAttribute.General_Cooldown] = 0;
-
-            attribs.SendMessage(InGameClient, this.DynamicID);
+            this.Attributes.SendMessage(InGameClient, this.DynamicID);
 
             InGameClient.SendMessage(new ACDGroupMessage()
             {
@@ -357,7 +350,7 @@ namespace Mooege.Core.GS.Game
                 Field2 = -1,
             });
 
-            InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage1)
+            InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage7)
             {
                 ActorID = this.DynamicID,
             });
@@ -389,7 +382,6 @@ namespace Mooege.Core.GS.Game
                     Handle = this.ClassSNO,
                 },
             });
-
             InGameClient.FlushOutgoingBuffer();
 
             InGameClient.SendMessage(new DWordDataMessage() // TICK
@@ -397,10 +389,10 @@ namespace Mooege.Core.GS.Game
                 Id = 0x0089,
                 Field0 = 0x00000077,
             });
-
             InGameClient.FlushOutgoingBuffer();
 
-            attribs = new GameAttributeMap();
+            // FIXME: hackedy hack
+            var attribs = new GameAttributeMap();
             attribs[GameAttribute.Hitpoints_Healed_Target] = 76f;
             attribs.SendMessage(InGameClient, this.DynamicID);
 
@@ -409,8 +401,65 @@ namespace Mooege.Core.GS.Game
                 Id = 0x0089,
                 Field0 = 0x0000007D,
             });
-
             InGameClient.FlushOutgoingBuffer();
+        }
+
+        public override void OnEnter(World world)
+        {
+            // FIXME: Hardcoded crap
+            // Player enters world
+            this.InGameClient.SendMessage(new EnterWorldMessage()
+            {
+                EnterPosition = this.Position,
+                WorldID = this.DynamicID,
+                WorldSNO = this.World.WorldSNO,
+            });
+            this.InGameClient.SendMessage(new PlayerWarpedMessage()
+            {
+                Field0 = 9,
+                Field1 = 0f,
+            });
+            this.InGameClient.PacketId += 40 * 2;
+            this.InGameClient.SendMessage(new DWordDataMessage()
+            {
+                Id = 0x89,
+                Field0 = this.InGameClient.PacketId,
+            });
+            this.InGameClient.FlushOutgoingBuffer();
+        }
+
+        public override void OnLeave(World world)
+        {
+        }
+
+        // Message handlers
+        private void OnObjectTargeted(GameClient client, TargetMessage message)
+        {
+            // TODO: Should just have an OnTargeted method on Actor and call it from here
+            //Logger.Info("Player interaction with {0}", message.AsText());
+            Portal p = this.World.GetPortal(message.TargetID);
+            if (p != null)
+            {
+                // Player clicked a portal
+                World world = this.World.Game.GetWorld(p.Destination.WorldSNO);
+                if (world != null)
+                    this.TransferTo(world, p.TargetPos);
+                else
+                    Logger.Warn("Portal's destination world does not exist (WorldSNO = {0})", p.Destination.WorldSNO);
+                return;
+            }
+
+            Item item = this.World.GetItem(message.TargetID);
+            if (item != null)
+            {
+                // Player clicked an item
+                if (this.Inventory.PickUp(item))
+                {
+                    if (this.GroundItems.ContainsKey(item.DynamicID))
+                        this.GroundItems.Remove(item.DynamicID);
+                }
+                return;
+            }
         }
 
         private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
@@ -449,6 +498,8 @@ namespace Mooege.Core.GS.Game
                 Field0 = this.InGameClient.PacketId,
             });
         }
+
+        // Properties
 
         public HeroStateData GetStateData()
         {

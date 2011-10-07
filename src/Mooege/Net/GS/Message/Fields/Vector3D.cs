@@ -26,13 +26,87 @@ namespace Mooege.Net.GS.Message.Fields
         public float Y;
         public float Z;
 
-        public Vector3D(){}
+        public Vector3D()
+        {
+            this.X = 0;
+            this.Y = 0;
+            this.Z = 0;
+        }
 
         public Vector3D(float x, float y, float z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
+        }
+
+        public void Set(float x, float y, float z)
+        {
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+        }
+
+        public void Set(Vector3D vec)
+        {
+            this.X = vec.X;
+            this.Y = vec.Y;
+            this.Z = vec.Z;
+        }
+
+        public static bool operator ==(Vector3D a, Vector3D b)
+        {
+            return a.X == b.X
+                && a.Y == b.Y
+                && a.Z == b.Z;
+        }
+
+        public static bool operator !=(Vector3D a, Vector3D b)
+        {
+            return !(a == b);
+        }
+
+        public static bool operator >(Vector3D a, Vector3D b)
+        {
+            return a.X > b.X
+                && a.Y > b.Y
+                && a.Z > b.Z;
+        }
+
+        public static bool operator <(Vector3D a, Vector3D b)
+        {
+            return !(a > b);
+        }
+
+        public static bool operator >=(Vector3D a, Vector3D b)
+        {
+            return a.X >= b.X
+                && a.Y >= b.Y
+                && a.Z >= b.Z;
+        }
+
+        public static bool operator <=(Vector3D a, Vector3D b)
+        {
+            return a.X <= b.X
+                && a.Y <= b.Y
+                && a.Z <= b.Z;
+        }
+
+        public override bool Equals(object o)
+        {
+            if (o == (object)this)
+                return true;
+            var v = o as Vector3D;
+            if (v != null)
+            {
+                return v == this;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode();
         }
 
         public void Parse(GameBitBuffer buffer)

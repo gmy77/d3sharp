@@ -8,7 +8,7 @@
      public enum Consumers
      {
          None,
-         Universe,
+         Game,
          PlayerManager,
          Inventory,
          Player

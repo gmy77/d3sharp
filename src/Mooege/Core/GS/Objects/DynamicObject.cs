@@ -16,27 +16,27 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Core.GS.Game;
-using Mooege.Core.GS.Map;
-using Mooege.Net.GS.Message.Fields;
-
-// NOTE: This interface can probably inherit IDynamicObject
-
 namespace Mooege.Core.GS.Objects
 {
-    public interface IWorldObject
+    public abstract class DynamicObject
     {
         /// <summary>
-        /// The object's world.
+        /// The dynamic unique runtime ID for the actor.
         /// </summary>
-        World World { get; set; }
+        public readonly uint DynamicID;
 
-        float Scale { get; set; }
-        float RotationAmount { get; set; }
-        Vector3D RotationAxis { get; set; }
-        Vector3D Position { get; set; }
+        /// <summary>
+        /// Initialization constructor.
+        /// </summary>
+        /// <param name="dynamicID">The dynamic ID to initialize with.</param>
+        protected DynamicObject(uint dynamicID)
+        {
+            this.DynamicID = dynamicID;
+        }
 
-        void Reveal(Player player);
-        void Destroy(Player player);
+        /// <summary>
+        /// Destroy the object. This should remove any references to the object throughout GS.
+        /// </summary>
+        public abstract void Destroy();
     }
 }

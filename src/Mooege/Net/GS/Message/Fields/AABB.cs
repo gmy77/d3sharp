@@ -25,6 +25,32 @@ namespace Mooege.Net.GS.Message.Fields
         public Vector3D Min;
         public Vector3D Max;
 
+        public bool IsWithin(Vector3D v)
+        {
+            if (v >= this.Min &&
+                v <= this.Max)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool Intersects(AABB other)
+        {
+            if (// Max < o.Min
+                this.Max.X < other.Min.X ||
+                this.Max.Y < other.Min.Y ||
+                this.Max.Z < other.Min.Z ||
+                // Min > o.Max
+                this.Min.X > other.Max.X ||
+                this.Min.Y > other.Max.Y ||
+                this.Min.Z > other.Max.Z)
+            {
+                return false;
+            }
+            return true; // Intersects if above fails
+        }
+
         public void Parse(GameBitBuffer buffer)
         {
             Min = new Vector3D();
@@ -50,7 +76,5 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

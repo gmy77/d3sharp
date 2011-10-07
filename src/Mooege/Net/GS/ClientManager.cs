@@ -19,13 +19,14 @@ namespace Mooege.Net.GS
             Games.Add(game);
 
             var gameClient = new GameClient(e.Connection, game);
+            gameClient.Game = game;
             e.Connection.Client = gameClient;
         }
 
         public static void OnDisconnect(object sender, ConnectionEventArgs e)
         {
             Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
-            Games.Remove(((GameClient) e.Connection.Client).Player.Game);
+            Games.Remove(((GameClient)e.Connection.Client).Game);
         }
     }
 }

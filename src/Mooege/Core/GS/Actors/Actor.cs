@@ -18,7 +18,7 @@
 
 using System;
 using System.Collections.Generic;
-using Mooege.Core.GS.Game;
+using Mooege.Core.GS.Player;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS;
@@ -30,6 +30,8 @@ using Mooege.Net.GS.Message.Definitions.Attribute;
 
 // TODO: Actor needs to use a nullable object for world position and a getter for inventory position (which is only used by Item)
 //       Or just a boolean parameter in Reveal to specify which location member is to be sent/nulled
+
+// TODO: Need to move all of the remaining ACD fields into Actor (such as the affix list)
 
 namespace Mooege.Core.GS.Actors
 {
@@ -53,29 +55,45 @@ namespace Mooege.Core.GS.Actors
     // This should probably be the same as GBHandleType (probably merge them once all actor classes are created)
     public enum ActorType
     {
-        GenericActor, // TODO: Should remove this when everything is properly laid out and Actor should be abstract
-        Player, // Message structure and dumped data suggests that the actor is a player
+        Player,
         NPC,
         Monster,
         Item,
-        Portal,
-        PowerEffect
+        Portal
     }
 
     // Base actor
-    public class Actor : IDynamicObject, IWorldObject
+    public abstract class Actor : WorldObject
     {
-        public Mooege.Core.GS.Game.Game Game { get; private set; }
-        public uint DynamicID { get; private set; }
+        // Actors can change worlds and have a specific addition/removal scheme
+        // We'll just override the setter to handle all of this automagically
+        public override World World
+        {
+            set
+            {
+                if (this._world != value)
+                {
+                    if (this._world != null)
+                        this._world.Leave(this);
+                    this._world = value;
+                    if (this._world != null)
+                        this._world.Enter(this);
+                }
+            }
+        }
 
-        public virtual ActorType ActorType { get { return ActorType.GenericActor; } }
+        public sealed override Vector3D Position
+        {
+            set
+            {
+                var old = this._position;
+                this._position.Set(value);
+                this.OnMove(old);
+                this.World.OnActorMove(this, old); // TODO: Should notify its scene instead
+            }
+        }
 
-        public World World { get; set; }
-
-        public float Scale { get; set; }
-        public float RotationAmount { get; set; }
-        public Vector3D RotationAxis { get; set; }
-        public Vector3D Position { get; set; }
+        public abstract ActorType ActorType { get; }
 
         public GameAttributeMap Attributes { get; private set; }
 
@@ -110,35 +128,52 @@ namespace Mooege.Core.GS.Actors
             get { return null; }
         }
 
-        public Actor(World world, uint dynamicID)
+        public virtual ACDWorldPositionMessage ACDWorldPositionMessage
         {
-            // NOTE: Base class does _not_ add the actor to the game since deriving classes may want to place themselves in a separate collection (like Item)
-            if (world == null)
-                throw new Exception("World cannot be null");
-            this.Game = world.Game;
-            this.DynamicID = dynamicID;
-            this.World = world;
-            this.RotationAxis = new Vector3D();
-            this.Position = new Vector3D();
+            get { return new ACDWorldPositionMessage { ActorID = this.DynamicID, WorldLocation = this.WorldLocationMessage }; }
+        }
+
+        protected Actor(World world, uint dynamicID)
+            : base(world, dynamicID)
+        {
             this.Attributes = new GameAttributeMap();
             this.AppearanceSNO = -1;
             this.GBHandle = new GBHandle();
         }
 
-        public virtual void Reveal(Player player)
+        // NOTE: When using this, you should *not* set the actor's world. It is done for you
+        public void TransferTo(World targetWorld, Vector3D pos)
         {
-            if (player.RevealedActors.ContainsKey(this.DynamicID)) return; // already revealed
-            player.RevealedActors.Add(this.DynamicID, this);
+            this.Position = pos;
+            this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
+        }
+
+        public virtual void OnEnter(World world)
+        {
+        }
+
+        public virtual void OnLeave(World world)
+        {
+        }
+
+        protected virtual void OnMove(Vector3D prevPosition)
+        {
+        }
+
+        public override void Reveal(Mooege.Core.GS.Player.Player player)
+        {
+            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return; // already revealed
+            player.RevealedObjects.Add(this.DynamicID, this);
 
             var msg = new ACDEnterKnownMessage
             {
                 ActorID = this.DynamicID,
-                AppearanceSNO = AppearanceSNO,
+                AppearanceSNO = this.AppearanceSNO,
                 Field2 = Field2,
                 Field3 = Field3,
                 WorldLocation = this.WorldLocationMessage,
                 InventoryLocation = this.InventoryLocationMessage,
-                GBHandle = GBHandle,
+                GBHandle = this.GBHandle,
                 Field7 = Field7,
                 Field8 = Field8,
                 Field9 = Field9,
@@ -150,41 +185,12 @@ namespace Mooege.Core.GS.Actors
             player.InGameClient.SendMessageNow(msg);
         }
 
-        public virtual void Destroy(Player player)
+        public override void Unreveal(Mooege.Core.GS.Player.Player player)
         {
-            if (!player.RevealedActors.ContainsKey(this.DynamicID)) return; // not revealed yet
-
-            player.InGameClient.SendMessageNow(new ANNDataMessage(Opcodes.ANNDataMessage1) { ActorID = this.DynamicID, });
-            player.RevealedActors.Remove(this.DynamicID);
-        }
-
-        public void SendWorldPosition(Player player)
-        {
-            player.InGameClient.SendMessage(new ACDWorldPositionMessage
-            {
-                ActorID = this.DynamicID,
-                WorldLocation = this.WorldLocationMessage
-            });
-            player.InGameClient.FlushOutgoingBuffer();
-        }
-
-        private void SendAttributes(List<NetAttributeKeyValue> netAttributesList, Player player)
-        {
-            GameClient client = player.InGameClient;
-            // Attributes can't be send all together
-            // must be split up to part of max 15 attributes at once
-            var tempList = new List<NetAttributeKeyValue>(netAttributesList);
-
-            while (tempList.Count > 0)
-            {
-                int selectCount = (tempList.Count > 15) ? 15 : tempList.Count;
-                client.SendMessage(new AttributesSetValuesMessage()
-                {
-                    ActorID = this.DynamicID,
-                    atKeyVals = tempList.GetRange(0, selectCount).ToArray(),
-                });
-                tempList.RemoveRange(0, selectCount);
-            }
+            if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return; // not revealed yet
+            // NOTE: This message ID is probably "DestroyActor". ANNDataMessage7 is used for addition/creation
+            player.InGameClient.SendMessageNow(new ANNDataMessage(Opcodes.ANNDataMessage6) { ActorID = this.DynamicID });
+            player.RevealedObjects.Remove(this.DynamicID);
         }
     }
 }

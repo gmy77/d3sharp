@@ -21,6 +21,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.GS.Game;
+using Mooege.Core.GS.Player;
 using Mooege.Net.GS.Message;
 using Mooege.Net.MooNet;
 using Mooege.Core.Common.Items;
@@ -37,12 +38,8 @@ namespace Mooege.Net.GS
         private readonly GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         private readonly GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
 
-        // TODO: This should be in the Player class.. called something like GroundItems.
-        //       If the player drops an item, it will go to the world's global ground collection, rather than the player's collection
-        public Dictionary<uint, Item> Items = new Dictionary<uint, Item>();  // array of items without specific place in inventory
-
-        public Game Game;
-        public Player Player { get; set; }
+        public Mooege.Core.GS.Game.Game Game;
+        public Mooege.Core.GS.Player.Player Player { get; set; }
         public int PacketId = 0x227 + 20; // TODO: We need proper packet ID incrementing
         public int Tick = 0;
 

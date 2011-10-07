@@ -33,7 +33,7 @@ namespace Mooege.Core.GS.NPC
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
         public Mob(World world, int actorSNO, Vector3D position)
-            : base(world, world.Game.NewMonsterID)
+            : base(world, world.NewActorID)
         {
             this.AppearanceSNO = actorSNO;
             this.Position = position;
@@ -50,6 +50,7 @@ namespace Mooege.Core.GS.NPC
             this.Field11 = 0x0;
             this.Field12 = 0x0;
             this.Field13 = 0x0;
+            this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
         // Ye olde, kept for proper implementation..

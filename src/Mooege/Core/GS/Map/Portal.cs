@@ -18,7 +18,7 @@
 
 ﻿using Mooege.Common;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Game;
+using Mooege.Core.GS.Player;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.ACD;
@@ -36,20 +36,16 @@ namespace Mooege.Core.GS.Map
 
         public override ActorType ActorType { get { return ActorType.Portal; } }
 
-        public ResolvedPortalDestination Destination = new ResolvedPortalDestination();
-
-        public uint TargetWorldID;
+        public ResolvedPortalDestination Destination { get; private set; }
         public Vector3D TargetPos;
 
         public Portal(World world)
-            : base(world, world.Game.NewActorID)
+            : base(world, world.NewActorID)
         {
-            this.Game.AddActor(this);
-            this.World.AddPortal(this);
-
-            // uncomment this constructor to show all portals in the world, even those that will crash the client on entry
-            // useful for determining which actor the portal is.
-            //this.TargetPos = new Vector3D();
+            this.Destination = new ResolvedPortalDestination();
+            this.Destination.WorldSNO = -1;
+            this.Destination.DestLevelAreaSNO = -1;
+            this.TargetPos = new Vector3D();
 
             // FIXME: Hardcoded crap
             this.Attributes[GameAttribute.MinimapActive] = true;
@@ -59,18 +55,21 @@ namespace Mooege.Core.GS.Map
             this.Attributes[GameAttribute.Hitpoints_Cur] = 0.0009994507f;
             this.Attributes[GameAttribute.TeamID] = 1;
             this.Attributes[GameAttribute.Level] = 1;
+
+            this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
-        public override void Reveal(Player player)
+        public override void Reveal(Mooege.Core.GS.Player.Player player)
         {
             if (TargetPos != null)
-                //targetpos!=null in this case is used to detect if the portal has been completely initialized to have a target
-                //if it doesn't have one, it won't be displayed - otherwise the client would crash from this.
+                // targetpos!=null in this case is used to detect if the portal has been completely initialized to have a target
+                // if it doesn't have one, it won't be displayed - otherwise the client would crash from this.
             {
-                //Logger.Info("Revealing portal: " + PortalMessage.AsText());
+                //Logger.Info("Revealing portal {0}", PortalMessage.AsText());
 
                 base.Reveal(player);
 
+                // FIXME: Hardcoded crap
                 player.InGameClient.SendMessage(new AffixMessage()
                 {
                     ActorID = this.DynamicID,
@@ -96,6 +95,7 @@ namespace Mooege.Core.GS.Map
                     ActorID = this.DynamicID,
                     CollFlags = 0x00000001,
                 });
+
                 this.Attributes.SendMessage(player.InGameClient, this.DynamicID);
 
                 player.InGameClient.SendMessage(new ACDGroupMessage()
@@ -105,7 +105,7 @@ namespace Mooege.Core.GS.Map
                     Field2 = -1,
                 });
 
-                player.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage1)
+                player.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage7)
                 {
                     ActorID = this.DynamicID,
                 });
@@ -118,6 +118,11 @@ namespace Mooege.Core.GS.Map
                 });
             }
             player.InGameClient.FlushOutgoingBuffer();
+        }
+
+        public override void Unreveal(Mooege.Core.GS.Player.Player player)
+        {
+            // TODO
         }
     }
 }
