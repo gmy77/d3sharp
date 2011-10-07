@@ -36,6 +36,10 @@ namespace Mooege.Core.MooNet.Accounts
         public string Email { get; private set; }
 
         public MooNetClient LoggedInClient { get; set; }
+        public bool IsOnline { get { return this.LoggedInClient != null; } }
+
+        private static D3.OnlineService.EntityId _accountHasNoToons =
+            D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).Build();
 
         public D3.Account.Digest Digest
         {
@@ -45,11 +49,18 @@ namespace Mooege.Core.MooNet.Accounts
                     .SetBannerConfiguration(this.BannerConfiguration)
                     .SetFlags(0);
 
-                builder.SetLastPlayedHeroId(
-                    (Toons.Count > 0)
-                    ? Toons.First().Value.D3EntityID
-                    : D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0)
-                    .Build());
+                D3.OnlineService.EntityId lastPlayedHeroId;
+                if(Toons.Count>0)
+                {
+                    lastPlayedHeroId = Toons.First().Value.D3EntityID; // we should actually hold player's last hero in database. /raist
+                    this.LoggedInClient.CurrentToon = Toons.First().Value; 
+                }
+                else
+                {
+                    lastPlayedHeroId = _accountHasNoToons;
+                }
+
+                builder.SetLastPlayedHeroId(lastPlayedHeroId);
                 return builder.Build();
             }
         }
@@ -133,9 +144,9 @@ namespace Mooege.Core.MooNet.Accounts
             var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Email).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build());
 
-            // Hardcoded boolean - always true
+            // Account online?
             var fieldKey2 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
-            var field2 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey2).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
+            var field2 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey2).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build());
 
             // Selected toon
