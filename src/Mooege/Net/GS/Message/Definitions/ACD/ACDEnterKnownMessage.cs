@@ -24,7 +24,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
     public class ACDEnterKnownMessage : GameMessage
     {
         public uint ActorID; // The actor's DynamicID
-        public int /* sno */ AppearanceSNO;
+        public int /* sno */ ActorSNO;
         public int Field2;
         public int Field3;
         public WorldLocationMessageData WorldLocation;
@@ -43,7 +43,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public override void Parse(GameBitBuffer buffer)
         {
             ActorID = buffer.ReadUInt(32);
-            AppearanceSNO = buffer.ReadInt(32);
+            ActorSNO = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(5);
             Field3 = buffer.ReadInt(2) + (-1);
             if (buffer.ReadBool())
@@ -79,7 +79,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteUInt(32, ActorID);
-            buffer.WriteInt(32, AppearanceSNO);
+            buffer.WriteInt(32, ActorSNO);
             buffer.WriteInt(5, Field2);
             buffer.WriteInt(2, Field3 - (-1));
             buffer.WriteBool(WorldLocation != null);
@@ -121,7 +121,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
-            b.Append(' ', pad); b.AppendLine("AppearanceSNO: 0x" + AppearanceSNO.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("ActorSNO: 0x" + ActorSNO.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
             if (WorldLocation != null)

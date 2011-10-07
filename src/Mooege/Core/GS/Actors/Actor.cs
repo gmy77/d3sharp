@@ -97,7 +97,7 @@ namespace Mooege.Core.GS.Actors
 
         public GameAttributeMap Attributes { get; private set; }
 
-        public int AppearanceSNO { get; set; }
+        public int ActorSNO { get; set; }
         public GBHandle GBHandle { get; set; }
 
         // Some ACD uncertainties
@@ -137,7 +137,7 @@ namespace Mooege.Core.GS.Actors
             : base(world, dynamicID)
         {
             this.Attributes = new GameAttributeMap();
-            this.AppearanceSNO = -1;
+            this.ActorSNO = -1;
             this.GBHandle = new GBHandle();
         }
 
@@ -168,7 +168,7 @@ namespace Mooege.Core.GS.Actors
             var msg = new ACDEnterKnownMessage
             {
                 ActorID = this.DynamicID,
-                AppearanceSNO = this.AppearanceSNO,
+                ActorSNO = this.ActorSNO,
                 Field2 = Field2,
                 Field3 = Field3,
                 WorldLocation = this.WorldLocationMessage,

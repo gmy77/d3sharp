@@ -200,7 +200,7 @@ namespace Mooege.Core.GS.Game
                     Y = 0f,
                     Z = (float)RandomHelper.NextDouble(),
                 },
-                AppearanceSNO = item.AppearanceSNO,
+                ActorSNO = item.ActorSNO,
                 DynamicID = item.DynamicID,
             };
 

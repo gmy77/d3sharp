@@ -227,7 +227,7 @@ namespace Mooege.Core.Common.Items
                 Name = new SNOName()
                 {
                     Group = 0x00000001, // Same as this.Field9?
-                    Handle = this.AppearanceSNO,
+                    Handle = this.ActorSNO,
                 },
             });
 
@@ -250,7 +250,7 @@ namespace Mooege.Core.Common.Items
             client.SendMessage(new ACDInventoryUpdateActorSNO()
             {
                 ItemID = this.DynamicID,
-                ItemSNO = this.AppearanceSNO,
+                ItemSNO = this.ActorSNO,
             });
             client.FlushOutgoingBuffer();
         }

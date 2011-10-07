@@ -24,6 +24,8 @@ using System.Collections.Generic;
 using Mooege.Net.GS;
 using Mooege.Core.Common.Items.ItemCreation;
 
+// FIXME: Most of this stuff should be elsewhere and not explicitly generate items to the player's GroundItems collection
+
 namespace Mooege.Core.Common.Items
 {
     class ItemTypeGenerator
@@ -90,9 +92,9 @@ namespace Mooege.Core.Common.Items
             return null;
         }
 
-        public Item CreateItem(String itemName, int snoId, ItemType itemType)
+        public Item CreateItem(String itemName, int actorSNO, ItemType itemType)
         {
-            Item item = Generate(itemName, snoId, itemType);
+            Item item = Generate(itemName, actorSNO, itemType);
             List<IItemAttributeCreator> attributeCreators = new AttributeCreatorFactory().Create(itemType);
             foreach (IItemAttributeCreator creator in attributeCreators)
             {
@@ -101,10 +103,10 @@ namespace Mooege.Core.Common.Items
             return item;
         }
 
-        private Item Generate(String itemName, int snoId, ItemType itemType)
+        private Item Generate(String itemName, int actorSNO, ItemType itemType)
         {
             int gbid = StringHashHelper.HashItemName(itemName);
-            var item = new Item(_client.Player.World, gbid, itemType) { AppearanceSNO = snoId };
+            var item = new Item(_client.Player.World, gbid, itemType) { ActorSNO = actorSNO };
             _client.Player.GroundItems[item.DynamicID] = item;
             return item;
         }

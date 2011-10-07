@@ -77,7 +77,7 @@ namespace Mooege.Core.GS.Player
             this.GroundItems = new Dictionary<uint, Item>();
 
             // actor values
-            this.AppearanceSNO = this.ClassSNO;
+            this.ActorSNO = this.ClassSNO;
             this.Field2 = 0x00000009;
             this.Field3 = 0x00000000;
             this.Scale = ModelScale;

@@ -313,7 +313,7 @@ namespace Mooege.Core.GS.Map
             var result = new List<Actor>();
             foreach (var actor in this.Actors.Values)
             {
-                if (actor.AppearanceSNO == SNO &&
+                if (actor.ActorSNO == SNO &&
                     (Math.Sqrt(
                         Math.Pow(actor.Position.X - x, 2) +
                         Math.Pow(actor.Position.Y - y, 2) +

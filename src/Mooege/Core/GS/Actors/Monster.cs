@@ -35,7 +35,7 @@ namespace Mooege.Core.GS.NPC
         public Mob(World world, int actorSNO, Vector3D position)
             : base(world, world.NewActorID)
         {
-            this.AppearanceSNO = actorSNO;
+            this.ActorSNO = actorSNO;
             this.Position = position;
             // FIXME: This is hardcoded crap
             this.Field2 = 0x8;
@@ -45,7 +45,7 @@ namespace Mooege.Core.GS.NPC
             this.RotationAxis.X = 0f; this.RotationAxis.Y = 0f; this.RotationAxis.Z = -0.640276f;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
             this.Field7 = 0x00000001;
-            this.Field8 = AppearanceSNO;
+            this.Field8 = ActorSNO;
             this.Field10 = 0x0;
             this.Field11 = 0x0;
             this.Field12 = 0x0;
