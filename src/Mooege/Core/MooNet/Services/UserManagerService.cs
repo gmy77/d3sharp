@@ -38,17 +38,14 @@ namespace Mooege.Core.MooNet.Services
             // temp hack: send him all online players on server where he should be normally get list of player he met in his last few games /raist.
 
             var builder = SubscribeToUserManagerResponse.CreateBuilder();
-            foreach (var player in OnlinePlayers.Players)
+            foreach (var client in PlayerManager.OnlinePlayers)
             {
-                if (player == this.Client)
-                    continue; // Don't add the requester to the list
-                var recentPlayer = RecentPlayer.CreateBuilder();
-                if (player.CurrentToon != null)
-                {
-                    recentPlayer.SetPlayer(player.CurrentToon.BnetEntityID);
-                    Logger.Debug("RecentPlayer => " + player.CurrentToon);
-                    builder.AddRecentPlayers(recentPlayer);
-                }
+                if (client == this.Client) continue; // Don't add the requester to the list                
+                if (client.CurrentToon == null) continue;
+
+                Logger.Debug("RecentPlayer => " + client.CurrentToon);
+                var recentPlayer = RecentPlayer.CreateBuilder().SetPlayer(client.CurrentToon.BnetEntityID);
+                builder.AddRecentPlayers(recentPlayer);
             }
 
             done(builder.Build());

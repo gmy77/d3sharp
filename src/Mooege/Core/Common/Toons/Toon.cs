@@ -52,9 +52,22 @@ namespace Mooege.Core.Common.Toons
         public D3.Hero.Digest Digest { get; private set; }
         public D3.Hero.VisualEquipment Equipment { get; private set; }
 
-        public Account Owner { get; set; }       
+        public Account Owner { get; set; }
         
-        //TODO: Toons should be linked to accounts here. /raist
+        public bool IsSelected
+        {
+            get
+            {
+                if (!this.Owner.IsOnline) return false;
+                else
+                {
+                    if (this.Owner.LoggedInClient.CurrentToon != null)
+                        return this.Owner.LoggedInClient.CurrentToon.BnetEntityID == this.BnetEntityID;
+                    else
+                        return false;
+                }
+            }
+        }
 
         public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
             :base(persistantId)
@@ -260,9 +273,9 @@ namespace Mooege.Core.Common.Toons
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build());
                     }
-                    else if (queryKey.Group == 3 && queryKey.Field == 3) // Whether the toon is online
+                    else if (queryKey.Group == 3 && queryKey.Field == 3) // Whether the toon is selected one for owner account.
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsSelected).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 5) // Away status - 0 for online
                     {
@@ -316,9 +329,9 @@ namespace Mooege.Core.Common.Toons
             var field6 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey6).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field6).Build());
 
-            // Whether the toon is online
+            // Is it selected toon?
             var fieldKey7 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 3, 0);
-            var field7 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey7).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
+            var field7 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey7).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsSelected).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field7).Build());
 
             // Program - FourCC "D3"
