@@ -115,7 +115,6 @@ namespace Mooege.Core.Common.Items
                 || itemType == ItemType.Axe_2H
                 || itemType == ItemType.Mace_2H
                 || itemType == ItemType.CombatStaff_2H
-                || itemType == ItemType.Spear
                 || itemType == ItemType.Staff
                 || itemType == ItemType.Polearm);
         }
