@@ -123,15 +123,40 @@ namespace Mooege
                 return;
             }
 
-            var processorTime = new PerformanceCounter {CategoryName = "Processor", CounterName = "% Processor Time", InstanceName = "_Total"};
-            var exceptionsThrown = new PerformanceCounter { CategoryName = ".NET CLR Exceptions", CounterName = "# of Exceps Thrown", InstanceName=Process.GetCurrentProcess().ProcessName };
-            var physicalThreads = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current physical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
-            var logicalThreads = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current logical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
-            var contentionRate = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "Contention Rate / sec", InstanceName = Process.GetCurrentProcess().ProcessName };
+            output.AppendFormat("\nGC Allocated Memory: {0}KB ", GC.GetTotalMemory(true)/1024);
 
-            output.AppendFormat(
-                "\nGC Allocated Memory: {0} KB Processor Time: {1}% Exceptions Thrown: {2}\nThreads - Physical: {3}, Logical: {4} Contention Rate: {5}/sec",
-                GC.GetTotalMemory(true)/1024,processorTime.NextValue(), exceptionsThrown.NextValue(), physicalThreads.NextValue(), logicalThreads.NextValue(),contentionRate.NextValue());
+            if (PerformanceCounterCategory.Exists("Processor") && PerformanceCounterCategory.CounterExists("% Processor Time", "Processor"))
+            {
+                var processorTimeCounter = new PerformanceCounter { CategoryName = "Processor", CounterName = "% Processor Time", InstanceName = "_Total" };
+                output.AppendFormat("Processor Time: {0}%", processorTimeCounter.NextValue());
+            }
+
+            if (PerformanceCounterCategory.Exists(".NET CLR LocksAndThreads"))
+            {
+                if(PerformanceCounterCategory.CounterExists("# of current physical Threads", ".NET CLR LocksAndThreads"))
+                {
+                    var physicalThreadsCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current physical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
+                    output.AppendFormat("\nPhysical Threads: {0} ", physicalThreadsCounter.NextValue());
+                }
+
+                if(PerformanceCounterCategory.CounterExists("# of current logical Threads", ".NET CLR LocksAndThreads"))
+                {
+                    var logicalThreadsCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current logical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
+                    output.AppendFormat("Logical Threads: {0} ", logicalThreadsCounter.NextValue());
+                }
+
+                if (PerformanceCounterCategory.CounterExists("Contention Rate / sec", ".NET CLR LocksAndThreads"))
+                {
+                    var contentionRateCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "Contention Rate / sec", InstanceName = Process.GetCurrentProcess().ProcessName };
+                    output.AppendFormat("Contention Rate: {0}/sec", contentionRateCounter.NextValue());
+                }
+            }
+
+            if (PerformanceCounterCategory.Exists(".NET CLR Exceptions") && PerformanceCounterCategory.CounterExists("# of Exceps Thrown", ".NET CLR Exceptions"))
+            {
+                var exceptionsThrownCounter = new PerformanceCounter { CategoryName = ".NET CLR Exceptions", CounterName = "# of Exceps Thrown", InstanceName = Process.GetCurrentProcess().ProcessName };
+                output.AppendFormat("\nExceptions Thrown: {0}", exceptionsThrownCounter.NextValue());
+            }
 
             Console.WriteLine(output.ToString());
         }
