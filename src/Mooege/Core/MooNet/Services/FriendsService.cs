@@ -30,13 +30,13 @@ namespace Mooege.Core.MooNet.Services
     public class FriendsService : bnet.protocol.friends.FriendsService,IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IMooNetClient Client { get; set; }
+        public MooNetClient Client { get; set; }
 
         public override void SubscribeToFriends(IRpcController controller, bnet.protocol.friends.SubscribeToFriendsRequest request, Action<bnet.protocol.friends.SubscribeToFriendsResponse> done)
         {
             Logger.Trace("Subscribe()");
 
-            FriendManager.Instance.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
+            FriendManager.Instance.AddSubscriber(this.Client, request.ObjectId);
             
             var builder = bnet.protocol.friends.SubscribeToFriendsResponse.CreateBuilder()
                 .SetMaxFriends(127)
@@ -80,7 +80,7 @@ namespace Mooege.Core.MooNet.Services
             done(response.Build());
 
             // notify the invitee on invitation.
-            FriendManager.HandleInvitation((MooNetClient)this.Client, invitation.Build());
+            FriendManager.HandleInvitation(this.Client, invitation.Build());
         }
 
         public override void AcceptInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
@@ -88,7 +88,7 @@ namespace Mooege.Core.MooNet.Services
             var response = bnet.protocol.NoData.CreateBuilder();
             done(response.Build());
 
-            FriendManager.HandleAccept((MooNetClient)this.Client, request);
+            FriendManager.HandleAccept(this.Client, request);
         }
 
         public override void RevokeInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)

@@ -28,7 +28,7 @@ namespace Mooege.Core.MooNet.Services
     public class ToonExternalService : ToonServiceExternal, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IMooNetClient Client { get; set; }
+        public MooNetClient Client { get; set; }
 
         public override void ToonList(Google.ProtocolBuffers.IRpcController controller, ToonListRequest request, Action<ToonListResponse> done)
         {

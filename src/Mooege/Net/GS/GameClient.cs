@@ -30,7 +30,7 @@ using Mooege.Core.Common.Items;
 
 namespace Mooege.Net.GS
 {
-    public sealed class GameClient : IGameClient
+    public sealed class GameClient : IClient
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
