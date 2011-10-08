@@ -25,6 +25,8 @@ using Mooege.Common.Helpers;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Channels;
+using Mooege.Core.MooNet.Friends;
+using Mooege.Core.MooNet.Helpers;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet.Packets;
 
@@ -38,7 +40,41 @@ namespace Mooege.Net.MooNet
         private int _requestCounter = 0;
 
         public Toon CurrentToon { get; set; }
-        public Channel CurrentChannel { get; set; }
+
+        private Channel _currentChannel;
+        public Channel CurrentChannel
+        {
+            get
+            {
+                return _currentChannel;    
+            } 
+            set
+            {
+                this._currentChannel = value;
+                if (value == null) return;
+
+                //// notify friends.
+                //if (FriendManager.Friends[this.Account.BnetAccountID.Low].Count == 0) return; // if account has no friends just skip.
+
+                //var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 4, 1, 0);
+                //var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(value.D3EntityId.ToByteString()).Build()).Build();
+                //var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+
+                //var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.Account.BnetAccountID).AddFieldOperation(operation).Build();
+                //var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+                //var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
+
+                //foreach (var friend in FriendManager.Friends[this.Account.BnetAccountID.Low])
+                //{
+                //    var account = AccountManager.GetAccountByPersistantID(friend.Id.Low);
+                //    if (account == null || account.LoggedInClient == null) return; // only send to friends that are online.
+
+                //    account.LoggedInClient.CallMethod(
+                //        bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"),
+                //        notification, this.Account.DynamicId);
+                //}
+            }
+        }
         public GameClient InGameClient { get; set; }
 
         public IConnection Connection { get; set; }
