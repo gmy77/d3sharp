@@ -59,7 +59,10 @@ namespace Mooege.Core.MooNet.Services
 
         public override void RevokeInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.RevokeInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            var builder = bnet.protocol.NoData.CreateBuilder();
+            done(builder.Build());
+
+            this._invitationManager.Revoke((MooNetClient) this.Client, request);
         }
 
         public override void SendInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.invitation.SendInvitationResponse> done)
@@ -113,14 +116,14 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SuggestInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SuggestInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
-            // "request to join party"
-            var builder = bnet.protocol.NoData.CreateBuilder();
-            done(builder.Build());
+            throw new NotImplementedException();
         }
 
-        public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.UnsubscribeRequest request, System.Action<bnet.protocol.NoData> done)
+        public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.UnsubscribeRequest request, Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            this._invitationManager.RemoveSubscriber((MooNetClient) Client);
+            var builder = bnet.protocol.NoData.CreateBuilder();
+            done(builder.Build());
         }
     }
 }
