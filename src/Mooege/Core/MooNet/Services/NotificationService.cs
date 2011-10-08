@@ -44,7 +44,7 @@ namespace Mooege.Core.MooNet.Services
 
                     Logger.Trace(string.Format("NotificationRequest by {0} to {1}", this.Client.CurrentToon, ToonManager.GetToonByLowID(request.TargetId.Low)));
 
-                    var account = ToonManager.GetAccountByToonLowID(request.TargetId.Low);
+                    var account = ToonManager.GetOwnerAccountByToonLowId(request.TargetId.Low);
                     if (account.LoggedInClient == null) return;
 
                     var notification = bnet.protocol.notification.Notification.CreateBuilder(request)
