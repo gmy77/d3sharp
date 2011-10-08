@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Objects;
+using Mooege.Core.GS.Generators;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.NPC;
@@ -38,6 +39,8 @@ using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
 
+// TODO: Move scene stuff into a Map class (which can also handle the efficiency stuff and object grouping)
+
 namespace Mooege.Core.GS.Game
 {
     public class Game : IMessageConsumer
@@ -50,7 +53,10 @@ namespace Mooege.Core.GS.Game
         // NOTE: This tracks by WorldSNO rather than by DynamicID; this.Objects _does_ still contain the world since it is a DynamicObject
         private Dictionary<int, World> Worlds;
 
-        public World StartWorld { get; private set; }
+        public int StartWorldSNO { get; private set; }
+        public World StartWorld { get { return GetWorld(this.StartWorldSNO); } }
+
+        private readonly WorldGenerator WorldGenerator;
 
         private uint _lastObjectID = 0x00000001;
         private uint _lastSceneID  = 0x04000000;
@@ -66,8 +72,9 @@ namespace Mooege.Core.GS.Game
             this.Objects = new Dictionary<uint, DynamicObject>();
             this.Worlds = new Dictionary<int, World>();
             this.PlayerManager = new PlayerManager(this);
-            // FIXME: This is a stub for the moment
-            this.StartWorld = new World(this, 1);
+            this.WorldGenerator = new WorldGenerator(this);
+            // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff
+            this.StartWorldSNO = 71150;
         }
 
         public void Route(GameClient client, GameMessage message)
@@ -148,6 +155,13 @@ namespace Mooege.Core.GS.Game
         {
             World world;
             this.Worlds.TryGetValue(worldSNO, out world);
+            // If it doesn't exist, try to load it
+            if (world == null)
+            {
+                world = this.WorldGenerator.GenerateWorld(worldSNO);
+                if (world == null)
+                    Logger.Warn(String.Format("Failed to generate world (SNO = {0})", worldSNO));
+            }
             return world;
         }
 
@@ -165,7 +179,7 @@ namespace Mooege.Core.GS.Game
             ItemType[] allValues = (ItemType[])Enum.GetValues(typeof(ItemType));
             ItemType type = allValues[RandomHelper.Next(allValues.Length)];
             Item item = itemGenerator.GenerateRandomElement(type);
-            DropItem(player, item, postition);
+            item.Drop(player, postition);
         }
 
         private void SpawnGold(Mooege.Core.GS.Player.Player player, Vector3D position)
@@ -173,48 +187,8 @@ namespace Mooege.Core.GS.Game
             ItemTypeGenerator itemGenerator = new ItemTypeGenerator(player.InGameClient);
             Item item = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
             item.Count = RandomHelper.Next(1, 3);
-            DropItem(player, item, position);
+            item.Drop(player, position);
         }
-
-        // TODO: Redo this
-        public void DropItem(Mooege.Core.GS.Player.Player player, Item item, Vector3D postition)
-        {}
-        /*public void DropItem(Mooege.Core.GS.Player.Player player, Item item, Vector3D postition)
-        {
-            // Items are actors; shouldn't do this
-            Actor itemActor = new Actor(player.World)
-            {
-                GBHandle = new GBHandle()
-                {
-                    Type = 2,
-                    GBId = item.GBID,
-                },
-                InventoryLocationData = null,
-                Scale = 1.35f,
-                Position = postition,
-                World = player.World,
-                RotationAmount = 0.768145f,
-                RotationAxis = new Vector3D()
-                {
-                    X = 0f,
-                    Y = 0f,
-                    Z = (float)RandomHelper.NextDouble(),
-                },
-                ActorSNO = item.ActorSNO,
-                DynamicID = item.DynamicID,
-            };
-
-            itemActor.Reveal(player);
-            item.Reveal(player);
-
-            player.InGameClient.PacketId += 10 * 2;
-            player.InGameClient.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = player.InGameClient.PacketId,
-            });
-            player.InGameClient.FlushOutgoingBuffer();
-        }*/
 
         // this shouldn't even rely on client or its position though; i know this is just a hack atm ;) /raist.
         // FIXME: Horriblest thing ever

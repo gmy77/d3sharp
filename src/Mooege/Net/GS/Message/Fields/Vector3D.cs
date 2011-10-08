@@ -56,9 +56,9 @@ namespace Mooege.Net.GS.Message.Fields
 
         public static bool operator ==(Vector3D a, Vector3D b)
         {
-            return a.X == b.X
-                && a.Y == b.Y
-                && a.Z == b.Z;
+            if (object.ReferenceEquals(null, a))
+                return object.ReferenceEquals(null, b);
+            return a.Equals(b);
         }
 
         public static bool operator !=(Vector3D a, Vector3D b)
@@ -68,6 +68,8 @@ namespace Mooege.Net.GS.Message.Fields
 
         public static bool operator >(Vector3D a, Vector3D b)
         {
+            if (object.ReferenceEquals(null, a))
+                return !object.ReferenceEquals(null, b);
             return a.X > b.X
                 && a.Y > b.Y
                 && a.Z > b.Z;
@@ -80,6 +82,8 @@ namespace Mooege.Net.GS.Message.Fields
 
         public static bool operator >=(Vector3D a, Vector3D b)
         {
+            if (object.ReferenceEquals(null, a))
+                return object.ReferenceEquals(null, b);
             return a.X >= b.X
                 && a.Y >= b.Y
                 && a.Z >= b.Z;
@@ -87,6 +91,8 @@ namespace Mooege.Net.GS.Message.Fields
 
         public static bool operator <=(Vector3D a, Vector3D b)
         {
+            if (object.ReferenceEquals(null, a))
+                return object.ReferenceEquals(null, b);
             return a.X <= b.X
                 && a.Y <= b.Y
                 && a.Z <= b.Z;
@@ -94,12 +100,14 @@ namespace Mooege.Net.GS.Message.Fields
 
         public override bool Equals(object o)
         {
-            if (o == (object)this)
+            if (object.ReferenceEquals(this, o))
                 return true;
             var v = o as Vector3D;
             if (v != null)
             {
-                return v == this;
+                return this.X == v.X
+                    && this.Y == v.Y
+                    && this.Z == v.Z;
             }
             return false;
         }
@@ -130,11 +138,11 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: " + X.ToString("G"));
+            b.AppendLine("X: " + X.ToString("G"));
             b.Append(' ', pad);
-            b.AppendLine("Field1: " + Y.ToString("G"));
+            b.AppendLine("Y: " + Y.ToString("G"));
             b.Append(' ', pad);
-            b.AppendLine("Field2: " + Z.ToString("G"));
+            b.AppendLine("Z: " + Z.ToString("G"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

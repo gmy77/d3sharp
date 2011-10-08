@@ -47,10 +47,12 @@ namespace Mooege.Core.GS.Map
         public Mooege.Core.GS.Game.Game Game { get; private set; }
 
         private Dictionary<uint, Scene> Scenes;
+        //private List<Scene> Scenes;
         private Dictionary<uint, Actor> Actors;
-        private Dictionary<uint, Mooege.Core.GS.Player.Player> Players; // Temporary for fast iteration for now since move/enter/leave handling is at the world level instead of the scene level
+        private Dictionary<uint, Mooege.Core.GS.Player.Player> Players; // Temporary for fast iteration for now since move/enter/leave handling is currently at the world level instead of the scene level
 
         public int WorldSNO { get; set; }
+        public Vector3D StartPosition { get; private set; }
 
         public uint NewSceneID { get { return this.Game.NewSceneID; } }
         public uint NewActorID { get { return this.Game.NewObjectID; } }
@@ -62,11 +64,13 @@ namespace Mooege.Core.GS.Map
             this.Game = game;
             this.Game.StartTracking(this);
             this.Scenes = new Dictionary<uint, Scene>();
+            //this.Scenes = new List<Scene>();
             this.Actors = new Dictionary<uint, Actor>();
             this.Players = new Dictionary<uint, Mooege.Core.GS.Player.Player>();
 
             // NOTE: WorldSNO must be valid before adding it to the game
             this.WorldSNO = worldSNO;
+            this.StartPosition = new Vector3D();
             this.Game.AddWorld(this);
         }
 
@@ -132,7 +136,12 @@ namespace Mooege.Core.GS.Map
                     WorldID = this.DynamicID,
                     WorldSNO = this.WorldSNO,
                 });
-                player.RevealedObjects.Add(this.DynamicID, this);
+                player.InGameClient.SendMessage(new EnterWorldMessage()
+                {
+                    EnterPosition = player.Position,
+                    WorldID = this.DynamicID,
+                    WorldSNO = this.WorldSNO,
+                });
 
                 // Revealing all scenes for now..
                 Logger.Info("Revealing scenes for world {0}", this.DynamicID);
@@ -149,6 +158,7 @@ namespace Mooege.Core.GS.Map
                 {
                     actor.Reveal(player);
                 }
+                player.RevealedObjects.Add(this.DynamicID, this);
             }
         }
 
@@ -180,14 +190,15 @@ namespace Mooege.Core.GS.Map
         // Adding
         public void AddScene(Scene obj)
         {
-            if (obj.DynamicID == 0 || this.Scenes.ContainsKey(obj.DynamicID))
+            if (obj.DynamicID == 0 || HasScene(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", obj.DynamicID));
             this.Scenes.Add(obj.DynamicID, obj);
+            //this.Scenes.Add(obj);
         }
 
         private void AddActor(Actor obj)
         {
-            if (obj.DynamicID == 0 || this.Actors.ContainsKey(obj.DynamicID))
+            if (obj.DynamicID == 0 || HasActor(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", obj.DynamicID));
             this.Actors.Add(obj.DynamicID, obj);
             if (obj.ActorType == ActorType.Player) // temp
@@ -196,7 +207,7 @@ namespace Mooege.Core.GS.Map
 
         private void AddPlayer(Mooege.Core.GS.Player.Player obj)
         {
-            if (obj.DynamicID == 0 || this.Players.ContainsKey(obj.DynamicID))
+            if (obj.DynamicID == 0 || HasPlayer(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", obj.DynamicID));
             this.Players.Add(obj.DynamicID, obj);
         }
@@ -204,9 +215,10 @@ namespace Mooege.Core.GS.Map
         // Removing
         public void RemoveScene(Scene obj)
         {
-            if (obj.DynamicID == 0 || !this.Scenes.ContainsKey(obj.DynamicID))
+            if (obj.DynamicID == 0 || !HasScene(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", obj.DynamicID));
             this.Scenes.Remove(obj.DynamicID);
+            //this.Scenes.Remove(obj);
         }
 
         private void RemoveActor(Actor obj)
@@ -231,6 +243,7 @@ namespace Mooege.Core.GS.Map
             Scene scene;
             this.Scenes.TryGetValue(dynamicID, out scene);
             return scene;
+            //return this.Scenes.Where(scene => scene.DynamicID == dynamicID).FirstOrDefault();
         }
 
         public Actor GetActor(uint dynamicID)
@@ -275,6 +288,7 @@ namespace Mooege.Core.GS.Map
         public bool HasScene(uint dynamicID)
         {
             return this.Scenes.ContainsKey(dynamicID);
+            //return this.Scenes.Any(scene => scene.DynamicID == dynamicID);
         }
 
         public bool HasActor(uint dynamicID)
@@ -306,6 +320,19 @@ namespace Mooege.Core.GS.Map
         public bool HasItem(uint dynamicID)
         {
             return HasActor(dynamicID, ActorType.Item);
+        }
+
+        private int SceneSorter(Scene x, Scene y)
+        {
+            if (x.World.DynamicID != y.World.DynamicID) return unchecked((int)x.World.DynamicID) - unchecked((int)y.World.DynamicID);
+            if (x.ParentChunkID != y.ParentChunkID) return unchecked((int)x.ParentChunkID) - unchecked((int)y.ParentChunkID);
+            return 0;
+        }
+
+        public void SortScenes()
+        {
+            // "this makes sure no scene is referenced before it is revealed to a player"
+            //this.Scenes.Sort(SceneSorter);
         }
 
         public List<Actor> GetActorsInRange(int SNO, float x, float y, float z, float range)

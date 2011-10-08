@@ -498,7 +498,7 @@ namespace Mooege.Core.GS.Player
                 RemoveItem(item);
             }
             AcceptMoveRequest(item);
-            item.Drop(_owner.Position);
+            item.Drop(null, _owner.Position);
         }
 
         public void Consume(GameClient client, GameMessage message)

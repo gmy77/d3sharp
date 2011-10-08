@@ -23,6 +23,11 @@ using Mooege.Core.MooNet.Games;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Game;
+using Mooege.Net.GS.Message.Definitions.Act;
+using Mooege.Net.GS.Message.Definitions.Player;
+using Mooege.Net.GS.Message.Definitions.Connection;
+using Mooege.Net.GS.Message.Definitions.Hero;
+using Mooege.Net.GS.Message.Definitions.Misc;
 
 namespace Mooege.Core.GS.Game
 {
@@ -52,9 +57,35 @@ namespace Mooege.Core.GS.Game
 
             client.BnetClient.InGameClient = client;
 
+            client.SendMessageNow(new VersionsMessage(message.SNOPackHash));
+            client.SendMessage(new ConnectionEstablishedMessage
+            {
+                Field0 = 0x00000000,
+                Field1 = 0x4BB91A16,
+                SNOPackHash = message.SNOPackHash,
+            });
+            client.SendMessage(new GameSetupMessage
+            {
+                Field0 = 0x00000077,
+            });
+            client.SendMessage(new SavePointInfoMessage
+            {
+                snoLevelArea = -1,
+            });
+            client.SendMessage(new HearthPortalInfoMessage
+            {
+                snoLevelArea = -1,
+                Field1 = -1,
+            });
+            // transition player to act so client can load act related data? /raist
+            client.SendMessage(new ActTransitionMessage
+            {
+                Field0 = 0x00000000,
+                Field1 = true,
+            });
+
             var player = new Mooege.Core.GS.Player.Player(this.Game.StartWorld, client, client.BnetClient.CurrentToon);
             client.Player = player;
-            player.Greet(message);
         }
     }
 }

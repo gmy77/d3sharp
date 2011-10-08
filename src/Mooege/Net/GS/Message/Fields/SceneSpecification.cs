@@ -22,7 +22,7 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class SceneSpecification
     {
-        public int Field0;
+        public int CellZ; // Position.Z rounded down
         public IVector2D Cell;
         // MaxLength = 4
         public int /* sno */[] arSnoLevelAreas; //area names
@@ -46,7 +46,7 @@ namespace Mooege.Net.GS.Message.Fields
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            CellZ = buffer.ReadInt(32);
             Cell = new IVector2D();
             Cell.Parse(buffer);
             arSnoLevelAreas = new int /* sno */[4];
@@ -73,7 +73,7 @@ namespace Mooege.Net.GS.Message.Fields
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, CellZ);
             Cell.Encode(buffer);
             for (int i = 0; i < arSnoLevelAreas.Length; i++) buffer.WriteInt(32, arSnoLevelAreas[i]);
             buffer.WriteInt(32, snoPrevWorld);
@@ -102,7 +102,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.AppendLine("CellZ: 0x" + CellZ.ToString("X8") + " (" + CellZ + ")");
             Cell.AsText(b, pad);
             b.Append(' ', pad);
             b.AppendLine("arSnoLevelAreas:");

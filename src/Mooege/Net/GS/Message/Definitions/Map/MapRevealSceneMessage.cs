@@ -24,7 +24,7 @@ namespace Mooege.Net.GS.Message.Definitions.Map
     public class MapRevealSceneMessage : GameMessage
     {
         public uint ChunkID;
-        public uint /* sno */ SceneSNO;
+        public int /* sno */ SceneSNO;
         public PRTransform Transform;
         public uint WorldID;
         public int MiniMapVisibility;
@@ -34,7 +34,7 @@ namespace Mooege.Net.GS.Message.Definitions.Map
         public override void Parse(GameBitBuffer buffer)
         {
             ChunkID = buffer.ReadUInt(32);
-            SceneSNO = buffer.ReadUInt(32);
+            SceneSNO = buffer.ReadInt(32);
             Transform = new PRTransform();
             Transform.Parse(buffer);
             WorldID = buffer.ReadUInt(32);
@@ -44,7 +44,7 @@ namespace Mooege.Net.GS.Message.Definitions.Map
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteUInt(32, ChunkID);
-            buffer.WriteUInt(32, SceneSNO);
+            buffer.WriteInt(32, SceneSNO);
             Transform.Encode(buffer);
             buffer.WriteUInt(32, WorldID);
             buffer.WriteInt(3, MiniMapVisibility);

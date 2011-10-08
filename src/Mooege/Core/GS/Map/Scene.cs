@@ -45,17 +45,50 @@ namespace Mooege.Core.GS.Map
             }
         }
 
-        // TODO: Put message fields into this class
-        public MapRevealSceneMessage Map;
-        public RevealSceneMessage SceneData;
+        public uint ParentChunkID
+        {
+            get { return (this.Parent != null) ? this.Parent.DynamicID : 0xFFFFFFFF; }
+        }
 
-        public int MiniMapVisibility;
+        public RevealSceneMessage RevealMessage
+        {
+            get
+            {
+                return new RevealSceneMessage
+                {
+                    WorldID = this.World.DynamicID,
+                    SceneSpec = this.SceneSpec,
+                    ChunkID = this.DynamicID,
+                    Transform = this.Transform,
+                    SceneSNO = this.SceneSNO,
+                    ParentChunkID = this.ParentChunkID,
+                    SceneGroupSNO = this.SceneGroupSNO,
+                    arAppliedLabels = this.AppliedLabels
+                };
+            }
+        }
 
-        public readonly IVector2D Cell;
+        public MapRevealSceneMessage MapRevealMessage
+        {
+            get
+            {
+                return new MapRevealSceneMessage
+                {
+                    ChunkID = this.DynamicID,
+                    SceneSNO = this.SceneSNO,
+                    Transform = this.Transform,
+                    WorldID = this.World.DynamicID,
+                    MiniMapVisibility = this.MiniMapVisibility
+                };
+            }
+        }
+
+        public SceneSpecification SceneSpec;
         public int SceneSNO;
-        public uint ParentChunkID;
+        public Scene Parent;
         public int SceneGroupSNO;
         public int /* gbid */[] AppliedLabels; // MaxLength = 256
+        public int MiniMapVisibility;
 
         public readonly List<Scene> Subscenes;
 
@@ -64,37 +97,43 @@ namespace Mooege.Core.GS.Map
             get { return new PRTransform { Rotation = new Quaternion { Amount = this.RotationAmount, Axis = this.RotationAxis }, ReferencePoint = this.Position }; }
         }
 
-        public Scene(World world)
+        public Scene(World world, int sceneSNO, Scene parent)
             : base(world, world.NewSceneID)
         {
             this.Scale = 1.0f;
             this.RotationAmount = 0.0f;
             this.Subscenes = new List<Scene>();
 
+            this.SceneSNO = sceneSNO;
+            this.Parent = parent;
+            this.AppliedLabels = new int[0];
+
             this.World.AddScene(this);
         }
 
         public override void Reveal(Mooege.Core.GS.Player.Player player)
         {
-            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return; //already revealed
-            if (SceneData != null)
+            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return; // already revealed
+            player.RevealedObjects.Add(this.DynamicID, this);
+            player.InGameClient.SendMessage(this.RevealMessage);
+            player.InGameClient.SendMessage(this.MapRevealMessage);
+            foreach (var sub in this.Subscenes)
             {
-                player.InGameClient.SendMessage(SceneData);
-                player.RevealedObjects.Add(this.DynamicID, this);
+                sub.Reveal(player);
             }
-            if (Map != null) player.InGameClient.SendMessage(Map);
             player.InGameClient.FlushOutgoingBuffer();
         }
 
         public override void Unreveal(Mooege.Core.GS.Player.Player player)
         {
-            if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return; //not revealed yet
-            if (SceneData != null)
+            if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return; // not revealed yet
+            player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID });
+            player.InGameClient.FlushOutgoingBuffer();
+            foreach (var sub in this.Subscenes)
             {
-                player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID });
-                player.InGameClient.FlushOutgoingBuffer();
-                player.RevealedObjects.Remove(this.DynamicID);
+                sub.Unreveal(player);
             }
+            player.RevealedObjects.Remove(this.DynamicID);
         }
     }
 }

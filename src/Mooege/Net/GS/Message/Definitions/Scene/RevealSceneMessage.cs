@@ -27,7 +27,7 @@ namespace Mooege.Net.GS.Message.Definitions.Scene
         public SceneSpecification SceneSpec;
         public uint ChunkID;
         public int /* sno */ SceneSNO;
-        public PRTransform Position;
+        public PRTransform Transform;
         public uint ParentChunkID;
         public int /* sno */ SceneGroupSNO;
         // MaxLength = 256
@@ -42,8 +42,8 @@ namespace Mooege.Net.GS.Message.Definitions.Scene
             SceneSpec.Parse(buffer);
             ChunkID = buffer.ReadUInt(32);
             SceneSNO = buffer.ReadInt(32);
-            Position = new PRTransform();
-            Position.Parse(buffer);
+            Transform = new PRTransform();
+            Transform.Parse(buffer);
             ParentChunkID = buffer.ReadUInt(32);
             SceneGroupSNO = buffer.ReadInt(32);
             arAppliedLabels = new int /* gbid */[buffer.ReadInt(9)];
@@ -56,7 +56,7 @@ namespace Mooege.Net.GS.Message.Definitions.Scene
             SceneSpec.Encode(buffer);
             buffer.WriteUInt(32, ChunkID);
             buffer.WriteInt(32, SceneSNO);
-            Position.Encode(buffer);
+            Transform.Encode(buffer);
             buffer.WriteUInt(32, ParentChunkID);
             buffer.WriteInt(32, SceneGroupSNO);
             buffer.WriteInt(9, arAppliedLabels.Length);
@@ -73,7 +73,7 @@ namespace Mooege.Net.GS.Message.Definitions.Scene
             SceneSpec.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("ChunkID: 0x" + ChunkID.ToString("X8") + " (" + ChunkID + ")");
             b.Append(' ', pad); b.AppendLine("SceneSNO: 0x" + SceneSNO.ToString("X8"));
-            Position.AsText(b, pad);
+            Transform.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("ParentChunkID: 0x" + ParentChunkID.ToString("X8") + " (" + ParentChunkID + ")");
             b.Append(' ', pad); b.AppendLine("SceneGroupSNO: 0x" + SceneGroupSNO.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("arAppliedLabels:");

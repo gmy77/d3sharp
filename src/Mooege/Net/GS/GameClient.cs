@@ -26,6 +26,8 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.MooNet;
 using Mooege.Core.Common.Items;
 
+// TODO: Client should probably just flush on every message, or use a queue with a very small quota..
+
 namespace Mooege.Net.GS
 {
     public sealed class GameClient : IGameClient
@@ -41,7 +43,7 @@ namespace Mooege.Net.GS
         public Mooege.Core.GS.Game.Game Game;
         public Mooege.Core.GS.Player.Player Player { get; set; }
         public int PacketId = 0x227 + 20; // TODO: We need proper packet ID incrementing
-        public int Tick = 0;
+        public int Tick = 0; // ... and proper ticking
 
         public bool IsLoggingOut;
 

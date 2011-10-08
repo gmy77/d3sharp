@@ -42,8 +42,6 @@ using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Definitions.World;
 
-// TODO: Player should use a message queue and only flush to socket when a tick is finished
-
 namespace Mooege.Core.GS.Player
 {
     public class Player : Actor
@@ -269,52 +267,11 @@ namespace Mooege.Core.GS.Player
             client.FlushOutgoingBuffer();
         }
 
-        // TODO: This needs to be cleaned up
-        /// <summary>
-        /// Greets the player and sends the client initial data it needs to get in-game.
-        /// </summary>
-        /// <param name="message"></param>
-        public void Greet(JoinBNetGameMessage message)
+        // FIXME: Hardcoded crap
+        // FIXME: The new player stuff only needs to be called when the player joins the game
+        public override void OnEnter(World world)
         {
-            Logger.Trace("Greeting player {0} and positioning him to {1}", this.Properties.Name, this.Position);
-
-            // send versions message
-            InGameClient.SendMessageNow(new VersionsMessage(message.SNOPackHash));
-
-            // send connection established message.
-            InGameClient.SendMessage(new ConnectionEstablishedMessage
-            {
-                Field0 = 0x00000000,
-                Field1 = 0x4BB91A16,
-                SNOPackHash = message.SNOPackHash,
-            });
-
-            // game setup message.
-            InGameClient.SendMessage(new GameSetupMessage
-            {
-                Field0 = 0x00000077,
-            });
-
-            InGameClient.SendMessage(new SavePointInfoMessage
-            {
-                snoLevelArea = -1,
-            });
-
-            InGameClient.SendMessage(new HearthPortalInfoMessage
-            {
-                snoLevelArea = -1,
-                Field1 = -1,
-            });
-
-            // transition player to act so client can load act related data? /raist
-            InGameClient.SendMessage(new ActTransitionMessage
-            {
-                Field0 = 0x00000000,
-                Field1 = true,
-            });
-
-            if (this.World != null)
-                this.World.Reveal(this);
+            this.World.Reveal(this);
 
             // Notify the client of the new player
             InGameClient.SendMessage(new NewPlayerMessage
@@ -332,9 +289,6 @@ namespace Mooege.Core.GS.Player
                 ActorID = this.DynamicID,
             });
 
-            // reveal the hero
-            this.Reveal(this);
-
             InGameClient.SendMessage(new ACDCollFlagsMessage
             {
                 ActorID = this.DynamicID,
@@ -343,38 +297,39 @@ namespace Mooege.Core.GS.Player
 
             this.Attributes.SendMessage(InGameClient, this.DynamicID);
 
-            InGameClient.SendMessage(new ACDGroupMessage()
+            // TODO: Pretty sure most of this stuff can be (and probably should be) put into Actor.Reveal()
+            this.InGameClient.SendMessage(new ACDGroupMessage()
             {
                 ActorID = this.DynamicID,
                 Field1 = -1,
                 Field2 = -1,
             });
 
-            InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage7)
+            this.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage7)
             {
                 ActorID = this.DynamicID,
             });
 
-            InGameClient.SendMessage(new ACDTranslateFacingMessage(Opcodes.ACDTranslateFacingMessage1)
+            this.InGameClient.SendMessage(new ACDTranslateFacingMessage(Opcodes.ACDTranslateFacingMessage1)
             {
                 ActorID = this.DynamicID,
                 Angle = 3.022712f,
                 Field2 = false,
             });
 
-            InGameClient.SendMessage(new PlayerEnterKnownMessage()
+            this.InGameClient.SendMessage(new PlayerEnterKnownMessage()
             {
                 Field0 = 0x00000000,
                 PlayerID = this.DynamicID,
             });
 
-            InGameClient.SendMessage(new PlayerActorSetInitialMessage()
+            this.InGameClient.SendMessage(new PlayerActorSetInitialMessage()
             {
                 PlayerID = this.DynamicID,
                 Field1 = 0x00000000,
             });
 
-            InGameClient.SendMessage(new SNONameDataMessage()
+            this.InGameClient.SendMessage(new SNONameDataMessage()
             {
                 Name = new SNOName()
                 {
@@ -382,48 +337,31 @@ namespace Mooege.Core.GS.Player
                     Handle = this.ClassSNO,
                 },
             });
-            InGameClient.FlushOutgoingBuffer();
+            this.InGameClient.FlushOutgoingBuffer();
 
-            InGameClient.SendMessage(new DWordDataMessage() // TICK
+            this.InGameClient.SendMessage(new PlayerWarpedMessage()
+            {
+                Field0 = 9,
+                Field1 = 0f,
+            });
+
+            this.InGameClient.SendMessage(new DWordDataMessage() // TICK
             {
                 Id = 0x0089,
                 Field0 = 0x00000077,
             });
-            InGameClient.FlushOutgoingBuffer();
+            this.InGameClient.FlushOutgoingBuffer();
 
             // FIXME: hackedy hack
             var attribs = new GameAttributeMap();
             attribs[GameAttribute.Hitpoints_Healed_Target] = 76f;
             attribs.SendMessage(InGameClient, this.DynamicID);
 
-            InGameClient.SendMessage(new DWordDataMessage() // TICK
-            {
-                Id = 0x0089,
-                Field0 = 0x0000007D,
-            });
-            InGameClient.FlushOutgoingBuffer();
-        }
-
-        public override void OnEnter(World world)
-        {
-            // FIXME: Hardcoded crap
-            // Player enters world
-            this.InGameClient.SendMessage(new EnterWorldMessage()
-            {
-                EnterPosition = this.Position,
-                WorldID = this.DynamicID,
-                WorldSNO = this.World.WorldSNO,
-            });
-            this.InGameClient.SendMessage(new PlayerWarpedMessage()
-            {
-                Field0 = 9,
-                Field1 = 0f,
-            });
             this.InGameClient.PacketId += 40 * 2;
             this.InGameClient.SendMessage(new DWordDataMessage()
             {
                 Id = 0x89,
-                Field0 = this.InGameClient.PacketId,
+                Field0 = 0x0000007D//this.InGameClient.PacketId,
             });
             this.InGameClient.FlushOutgoingBuffer();
         }

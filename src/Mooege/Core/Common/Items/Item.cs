@@ -164,11 +164,12 @@ namespace Mooege.Core.Common.Items
                 );
         }
 
-        public void Drop(Vector3D position)
+        public void Drop(Mooege.Core.GS.Player.Player owner, Vector3D position)
         {
-            this.Owner = null;
+            this.Owner = owner;
             this.Position = position;
             // TODO: Notify the world so that players get the state change
+            // TODO: Need to place on the owner's GroundItems instead of globally if the owner is non-null
         }
 
         // TODO: Some of this stuff should probably only be set when the item is in the inventory/on the ground

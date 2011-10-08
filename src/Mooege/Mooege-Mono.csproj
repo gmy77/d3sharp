@@ -82,6 +82,9 @@
     <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\dep\PowerCollections.dll</HintPath>
     </Reference>
+    <Reference Include="ductsharp, Version=1.0.4297.40362, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\dep\ductsharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Common\Items\Affix.cs" />
@@ -395,6 +398,7 @@
     <Compile Include="Core\GS\Objects\IRevealable.cs" />
     <Compile Include="Core\GS\Player\Inventory.cs" />
     <Compile Include="Core\GS\Player\Player.cs" />
+    <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -432,12 +436,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\assets\Maps\darkcellar.txt">
-      <Link>Assets\Maps\darkcellar.txt</Link>
+    <Content Include="..\..\assets\Maps\worlds.txt">
+      <Link>Assets\Maps\worlds.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\assets\Maps\universe.txt">
-      <Link>Assets\Maps\universe.txt</Link>
+    <Content Include="..\..\assets\Maps\Worlds\NewTristram.txt">
+      <Link>Assets\Maps\Worlds\NewTristram.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\assets\SNO\Actors.txt">
@@ -462,6 +466,10 @@
     </Content>
     <Content Include="..\..\assets\SNO\Powers.txt">
       <Link>Assets\SNO\Powers.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\assets\SNO\Scenes.txt">
+      <Link>Assets\SNO\Scenes.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
