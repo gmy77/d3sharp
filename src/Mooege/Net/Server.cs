@@ -92,6 +92,8 @@ namespace Mooege.Net
 
         private void AcceptCallback(IAsyncResult result)
         {
+            if (Listener == null) return;
+
             try
             {
                 var socket = Listener.EndAccept(result); // Finish accepting the incoming connection.
@@ -104,6 +106,7 @@ namespace Mooege.Net
                 connection.BeginReceive(ReceiveCallback, connection); // Begin receiving on the new connection connection.
                 Listener.BeginAccept(AcceptCallback, null); // Continue receiving other incoming connection asynchronously.
             }
+            catch (NullReferenceException) { } // we recive this after issuing server-shutdown, just ignore it.
             catch (Exception e)
             {
                 Logger.DebugException(e, "AcceptCallback");
@@ -264,7 +267,17 @@ namespace Mooege.Net
             if (!IsListening) return;
 
             // Close the listener socket.
-            if (Listener != null) Listener.Close();
+            if (Listener != null)
+            {
+                Listener.Close();
+                Listener = null;
+            }
+
+            // Disconnect the clients.
+            foreach(var connection in this.Connections.ToList()) // use ToList() so we don't get collection modified exception there
+            {
+                connection.Value.Disconnect();
+            }
 
             Listener = null;
             IsListening = false;

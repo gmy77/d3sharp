@@ -17,33 +17,20 @@
  */
 
 using System;
-using System.Data.SQLite;
-using Mooege.Common;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Mooege.Core.Common.Storage
+namespace Mooege.Core.MooNet.Commands
 {
-    // just a quick hack - not to be meant a final layer.
-    public static class DBManager
+    [AttributeUsage(AttributeTargets.Method)]
+    public class ServerCommandAttribute : Attribute
     {
-        public static SQLiteConnection Connection { get; private set; }
-        public static readonly Logger Logger = LogManager.CreateLogger();
+        public string Command { get; private set; }
 
-        static DBManager()
+        public ServerCommandAttribute(string command)
         {
-            Connect();            
-        }
-
-        private static void Connect()
-        {
-            try
-            {
-                Connection = new SQLiteConnection(String.Format("Data Source={0}/Assets/account.db", Config.Instance.AssetsRoot));
-                Connection.Open();
-            }
-            catch (Exception e)
-            {
-                Logger.FatalException(e, "Connect()");
-            }
+            this.Command = command.ToLower();
         }
     }
 }

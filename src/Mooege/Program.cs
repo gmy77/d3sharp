@@ -17,9 +17,14 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using Mooege.Common;
+using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Commands;
+using Mooege.Core.MooNet.Online;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet;
 
@@ -29,8 +34,11 @@ namespace Mooege
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        private static MooNetServer _bnetServer;
-        private static GameServer _gameServer;
+        public static MooNetServer MooNetServer;
+        public static GameServer GameServer;
+
+        public static Thread MooNetServerThread;
+        public static Thread GameServerThread;
 
         public static void Main(string[] args)
         {
@@ -53,30 +61,18 @@ namespace Mooege
 
         private static void StartupServers()
         {
-            _bnetServer = new MooNetServer();
-            _gameServer = new GameServer();
+            MooNetServer = new MooNetServer();
+            MooNetServerThread = new Thread(MooNetServer.Run) {IsBackground = true};
+            MooNetServerThread.Start();
 
-            var bnetServerThread = new Thread(_bnetServer.Run) { IsBackground = true };
-            bnetServerThread.Start();
+            GameServer = new GameServer();
+            GameServerThread = new Thread(GameServer.Run) { IsBackground = true };
+            GameServerThread.Start();
 
-            var gameServerThread = new Thread(_gameServer.Run) { IsBackground = true };
-            gameServerThread.Start();
-
-            // Read user input indefinitely
-            // TODO: Replace with proper command parsing and execution
             while (true)
             {
                 var line = Console.ReadLine();
-                if (!string.Equals("quit", line, StringComparison.OrdinalIgnoreCase)
-                 && !string.Equals("exit", line, StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                Logger.Info("Shutting down servers...");
-                _bnetServer.Shutdown();
-                _gameServer.Shutdown();
-                break;
+                CommandManager.Parse(line);                
             }
         }
 
@@ -106,5 +102,190 @@ namespace Mooege
                 Logger.ErrorException((e.ExceptionObject as Exception), "Caught unhandled exception.");
             Console.ReadLine();
         }
+
+        #region general commands 
+
+        [ServerCommand("stats")]
+        public static void Stats(string parameters)
+        {
+            // warning: only use mono-enabled counters here - http://www.mono-project.com/Mono_Performance_Counters
+
+            if(parameters.ToLower()=="help")
+            {
+                Console.WriteLine("stats [detailed]");
+                return;
+            }
+
+            var output = new StringBuilder();
+            output.AppendFormat("Total Accounts: {0}, Online Players: {1}", AccountManager.TotalAccounts, PlayerManager.OnlinePlayers.Count);
+
+            if (parameters.ToLower() != "detailed")
+            {
+                Console.WriteLine(output.ToString());
+                return;
+            }
+
+            output.AppendFormat("\nGC Allocated Memory: {0}KB ", GC.GetTotalMemory(true)/1024);
+
+            if (PerformanceCounterCategory.Exists("Processor") && PerformanceCounterCategory.CounterExists("% Processor Time", "Processor"))
+            {
+                var processorTimeCounter = new PerformanceCounter { CategoryName = "Processor", CounterName = "% Processor Time", InstanceName = "_Total" };
+                output.AppendFormat("Processor Time: {0}%", processorTimeCounter.NextValue());
+            }
+
+            if (PerformanceCounterCategory.Exists(".NET CLR LocksAndThreads"))
+            {
+                if(PerformanceCounterCategory.CounterExists("# of current physical Threads", ".NET CLR LocksAndThreads"))
+                {
+                    var physicalThreadsCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current physical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
+                    output.AppendFormat("\nPhysical Threads: {0} ", physicalThreadsCounter.NextValue());
+                }
+
+                if(PerformanceCounterCategory.CounterExists("# of current logical Threads", ".NET CLR LocksAndThreads"))
+                {
+                    var logicalThreadsCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current logical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
+                    output.AppendFormat("Logical Threads: {0} ", logicalThreadsCounter.NextValue());
+                }
+
+                if (PerformanceCounterCategory.CounterExists("Contention Rate / sec", ".NET CLR LocksAndThreads"))
+                {
+                    var contentionRateCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "Contention Rate / sec", InstanceName = Process.GetCurrentProcess().ProcessName };
+                    output.AppendFormat("Contention Rate: {0}/sec", contentionRateCounter.NextValue());
+                }
+            }
+
+            if (PerformanceCounterCategory.Exists(".NET CLR Exceptions") && PerformanceCounterCategory.CounterExists("# of Exceps Thrown", ".NET CLR Exceptions"))
+            {
+                var exceptionsThrownCounter = new PerformanceCounter { CategoryName = ".NET CLR Exceptions", CounterName = "# of Exceps Thrown", InstanceName = Process.GetCurrentProcess().ProcessName };
+                output.AppendFormat("\nExceptions Thrown: {0}", exceptionsThrownCounter.NextValue());
+            }
+
+            Console.WriteLine(output.ToString());
+        }
+
+        [ServerCommand("version")]
+        public static void Version(string parameters)
+        {
+            Console.WriteLine("v{0}", Assembly.GetExecutingAssembly().GetName().Version);
+        }
+
+        private static DateTime _startupTime = DateTime.Now; 
+
+        [ServerCommand("uptime")]
+        public static void Uptime(string parameters)
+        {
+            var uptime = DateTime.Now - _startupTime;
+            Console.WriteLine("Uptime: {0} days, {1} hours, {2} minutes, {3} seconds.", uptime.Days, uptime.Hours, uptime.Minutes, uptime.Seconds);
+        }
+
+        [ServerCommand("shutdown")]
+        public static void Shutdown(string parameters)
+        {
+            if (MooNetServer != null)
+            {
+                Logger.Warn("Shutting down MooNet-Server..");
+                MooNetServer.Shutdown();
+            }
+
+            if (GameServer != null)
+            {
+                Logger.Warn("Shutting down Game-Server..");
+                GameServer.Shutdown();
+            }
+
+            Environment.Exit(0);
+        }
+
+        [ServerCommand("stop")]
+        public static void Stop(string parameters) // actually server.cs should be providing us start/stop/restart methods /raist.
+        {
+            var stopMooNetServer = false;
+            var stopGameServer = false;
+
+            if (parameters.ToLower() == "help")
+            {
+                Console.WriteLine("stop [all|moonet|gs]");
+                return;
+            }
+
+            if(parameters==String.Empty || parameters=="all")
+            {
+                stopMooNetServer = true;
+                stopGameServer = true;
+            }
+
+            if (parameters == "mnet") stopMooNetServer = true;
+            if (parameters == "gs") stopGameServer = true;
+
+            if (stopMooNetServer)
+            {
+                if (MooNetServer != null)
+                {
+                    Logger.Warn("Stopping MooNet-Server..");
+                    MooNetServer.Shutdown();
+                    MooNetServerThread.Abort();
+                    MooNetServer = null;
+                }
+                else Console.WriteLine("MooNet-Server is already stopped");
+            }
+
+            if (stopGameServer)
+            {
+                if (GameServer != null)
+                {
+                    Logger.Warn("Stopping Game-Server..");
+                    GameServer.Shutdown();
+                    GameServerThread.Abort();
+                    GameServer = null;
+                }
+                else Console.WriteLine("Game-Server is already stopped");
+            }            
+        }
+
+        [ServerCommand("start")]
+        public static void Start(string parameters) // actually server.cs should be providing us start/stop/restart methods /raist.
+        {
+            var startMooNetServer = false;
+            var startGameServer = false;
+
+            if (parameters.ToLower() == "help")
+            {
+                Console.WriteLine("start [all|mnet|gs]");
+                return;
+            }
+
+            if (parameters == String.Empty || parameters == "all")
+            {
+                startMooNetServer = true;
+                startGameServer = true;
+            }
+
+            if (parameters == "mnet") startMooNetServer = true;
+            if (parameters == "gs") startGameServer = true;
+
+            if (startMooNetServer)
+            {
+                if (MooNetServer == null)
+                {
+                    MooNetServer = new MooNetServer();
+                    MooNetServerThread = new Thread(MooNetServer.Run) { IsBackground = true };
+                    MooNetServerThread.Start();
+                }
+                else Console.WriteLine("MooNet-Server is already running");
+            }
+
+            if (startGameServer)
+            {
+                if (GameServer == null)
+                {
+                    GameServer = new GameServer();
+                    GameServerThread = new Thread(GameServer.Run) { IsBackground = true };
+                    GameServerThread.Start();
+                }
+                else Console.WriteLine("Game-Server is already running");
+            }
+        }
+
+        #endregion
     }
 }
