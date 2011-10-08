@@ -18,11 +18,12 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Mooege.Core.MooNet.Channels;
+using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
 
-namespace Mooege.Core.MooNet.Invitation
+namespace Mooege.Core.MooNet.Channels
 {
     public class ChannelInvitationManager : RPCObject
     {
@@ -44,22 +45,36 @@ namespace Mooege.Core.MooNet.Invitation
         public void HandleAccept(MooNetClient client, bnet.protocol.channel_invitation.AcceptInvitationRequest request)
         {
             var invitation = this._onGoingInvitations[request.InvitationId];
-
-            var channel =
-                ChannelManager.GetChannelByEntityId(
-                    invitation.GetExtension(bnet.protocol.channel_invitation.Invitation.ChannelInvitation).
-                        ChannelDescription.ChannelId);
+            var channel = ChannelManager.GetChannelByEntityId(invitation.GetExtension(bnet.protocol.channel_invitation.Invitation.ChannelInvitation).ChannelDescription.ChannelId);
 
             channel.Join(client, request.ObjectId);
             channel.AddMember(client);
 
-            var notification = bnet.protocol.channel_invitation.InvitationRemovedNotification.CreateBuilder().SetInvitation(invitation).SetReason(0); // 0 - means success?
+            var notification = bnet.protocol.channel_invitation.InvitationRemovedNotification.CreateBuilder().SetInvitation(invitation).SetReason((uint)InvitationRemoveReason.Accepted);
             client.CallMethod(bnet.protocol.channel_invitation.ChannelInvitationNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationRemoved"), notification.Build(), this.DynamicId);
         }
 
         public void HandleDecline(MooNetClient client, bnet.protocol.invitation.GenericRequest request)
         {
-            
+            if (!this._onGoingInvitations.ContainsKey(request.InvitationId)) return;
+            var invitation = this._onGoingInvitations[request.InvitationId];
+
+            var inviter = ToonManager.GetToonByLowID(invitation.InviterIdentity.ToonId.Low);
+            if (inviter == null || inviter.Owner.LoggedInClient == null) return;
+
+            var notification =
+                bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
+                .SetAgentId(bnet.protocol.EntityId.CreateBuilder().SetHigh(0).SetLow(0)) // caps have this set to high: 0 low: 0 /raist.
+                .SetStateChange(bnet.protocol.channel.ChannelState.CreateBuilder().AddInvitation(invitation)
+                .SetReason((uint) InvitationRemoveReason.Declined));
+
+            inviter.Owner.LoggedInClient.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), notification.Build(), inviter.Owner.LoggedInClient.CurrentChannel.DynamicId);
+        }
+
+        public enum InvitationRemoveReason : uint // not sure -- and don't have all the values yet /raist.
+        {
+            Accepted = 0x0,
+            Declined = 0x1
         }
     }
 }

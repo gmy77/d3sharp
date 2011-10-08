@@ -20,7 +20,7 @@ using System;
 using Mooege.Common;
 using Mooege.Common.Extensions;
 using Mooege.Core.Common.Toons;
-using Mooege.Core.MooNet.Invitation;
+using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Services
@@ -51,7 +51,10 @@ namespace Mooege.Core.MooNet.Services
 
         public override void DeclineInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            var respone = bnet.protocol.NoData.CreateBuilder();
+            done(respone.Build());
+
+            this._invitationManager.HandleDecline((MooNetClient) this.Client, request);
         }
 
         public override void RevokeInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.RevokeInvitationRequest request, Action<bnet.protocol.NoData> done)
@@ -111,7 +114,6 @@ namespace Mooege.Core.MooNet.Services
         public override void SuggestInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SuggestInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
             // "request to join party"
-
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
