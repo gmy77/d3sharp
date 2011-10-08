@@ -82,7 +82,8 @@
     <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\dep\PowerCollections.dll</HintPath>
     </Reference>
-    <Reference Include="ductsharp, Version=1.0.4297.40362, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="ductsharp, Version=1.0.4298.19963, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dep\ductsharp.dll</HintPath>
     </Reference>
   </ItemGroup>
