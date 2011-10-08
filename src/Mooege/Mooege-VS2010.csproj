@@ -158,7 +158,6 @@
     <Compile Include="Net\MooNet\MooNetClient.cs" />
     <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />
-    <Compile Include="Net\MooNet\IMooNetClient.cs" />
     <Compile Include="Net\MooNet\Packets\Header.cs" />
     <Compile Include="Net\MooNet\Packets\Packet.cs" />
     <Compile Include="Net\GS\ClientManager.cs" />
@@ -208,7 +207,6 @@
     <Compile Include="Net\GS\Message\ISelfHandler.cs" />
     <Compile Include="Net\GS\Message\GameMessage.cs" />
     <Compile Include="Net\GS\GameServer.cs" />
-    <Compile Include="Net\GS\IGameClient.cs" />
     <Compile Include="Net\GS\Message\IncomingMessageAttribute.cs" />
     <Compile Include="Net\GS\Message\Fields\HeroStateData.cs" />
     <Compile Include="Net\GS\Message\Opcodes.cs" />
