@@ -22,19 +22,19 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class SNOName
     {
-        public int /* sno_group */ Field0;
-        public int /* snoname_handle */ Field1;
+        public int /* sno_group */ Group;
+        public int /* snoname_handle */ Handle;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            Group = buffer.ReadInt(32);
+            Handle = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, Group);
+            buffer.WriteInt(32, Handle);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -44,9 +44,9 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
+            b.AppendLine("Group: 0x" + Group.ToString("X8"));
             b.Append(' ', pad);
-            b.AppendLine("Field1: 0x" + Field1.ToString("X8"));
+            b.AppendLine("Handle: 0x" + Handle.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

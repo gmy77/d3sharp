@@ -28,7 +28,7 @@ namespace Mooege.Core.MooNet.Services
     public class NotificationService : bnet.protocol.notification.NotificationService, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IMooNetClient Client { get; set; }
+        public MooNetClient Client { get; set; }
 
         public override void SendNotification(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.notification.Notification request, Action<bnet.protocol.NoData> done)
         {

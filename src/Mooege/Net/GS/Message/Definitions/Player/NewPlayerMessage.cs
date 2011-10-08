@@ -30,13 +30,12 @@ namespace Mooege.Net.GS.Message.Definitions.Player
         public int Field4;
         public int /* sno */ snoActorPortrait;
         public int Field6;
-        public HeroStateData Field7;
+        public HeroStateData StateData;
         public bool Field8;
         public int Field9;
-        public int Field10;
+        public uint ActorID; // Hero's DynamicID
 
-
-
+        public NewPlayerMessage() : base(Opcodes.NewPlayerMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
@@ -47,11 +46,11 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             Field4 = buffer.ReadInt(3) + (-1);
             snoActorPortrait = buffer.ReadInt(32);
             Field6 = buffer.ReadInt(7);
-            Field7 = new HeroStateData();
-            Field7.Parse(buffer);
+            StateData = new HeroStateData();
+            StateData.Parse(buffer);
             Field8 = buffer.ReadBool();
             Field9 = buffer.ReadInt(32);
-            Field10 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -63,10 +62,10 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             buffer.WriteInt(3, Field4 - (-1));
             buffer.WriteInt(32, snoActorPortrait);
             buffer.WriteInt(7, Field6);
-            Field7.Encode(buffer);
+            StateData.Encode(buffer);
             buffer.WriteBool(Field8);
             buffer.WriteInt(32, Field9);
-            buffer.WriteInt(32, Field10);
+            buffer.WriteUInt(32, ActorID);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -82,10 +81,10 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
             b.Append(' ', pad); b.AppendLine("snoActorPortrait: 0x" + snoActorPortrait.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Field6: 0x" + Field6.ToString("X8") + " (" + Field6 + ")");
-            Field7.AsText(b, pad);
+            StateData.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("Field8: " + (Field8 ? "true" : "false"));
             b.Append(' ', pad); b.AppendLine("Field9: 0x" + Field9.ToString("X8") + " (" + Field9 + ")");
-            b.Append(' ', pad); b.AppendLine("Field10: 0x" + Field10.ToString("X8") + " (" + Field10 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

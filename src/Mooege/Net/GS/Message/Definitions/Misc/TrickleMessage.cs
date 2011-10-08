@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     public class TrickleMessage : GameMessage
     {
-        public int Field0;
+        public uint ActorID;
         public int /* sno */ Field1;
         public WorldPlace Field2;
         public int? Field3;
@@ -39,12 +39,11 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         public float? Field13;
         public float? Field14;
 
-
-
+        public TrickleMessage() : base(Opcodes.TrickleMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
             Field1 = buffer.ReadInt(32);
             Field2 = new WorldPlace();
             Field2.Parse(buffer);
@@ -91,7 +90,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteUInt(32, ActorID);
             buffer.WriteInt(32, Field1);
             Field2.Encode(buffer);
             buffer.WriteBool(Field3.HasValue);
@@ -150,7 +149,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("TrickleMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8"));
             Field2.AsText(b, pad);
             if (Field3.HasValue)

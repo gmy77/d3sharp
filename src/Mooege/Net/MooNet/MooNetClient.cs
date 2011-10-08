@@ -32,7 +32,7 @@ using Mooege.Net.MooNet.Packets;
 
 namespace Mooege.Net.MooNet
 {
-    public sealed class MooNetClient : IMooNetClient 
+    public sealed class MooNetClient : IClient
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public Dictionary<uint, uint> Services { get; private set; }
@@ -53,7 +53,8 @@ namespace Mooege.Net.MooNet
                 this._currentChannel = value;
                 if (value == null) return;
 
-                //// notify friends.
+                // still trying to figure a bit below - commented meanwhile /raist. 
+                // notify friends.
                 //if (FriendManager.Friends[this.Account.BnetAccountID.Low].Count == 0) return; // if account has no friends just skip.
 
                 //var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 4, 1, 0);

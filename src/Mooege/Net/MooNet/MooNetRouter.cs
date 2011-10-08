@@ -62,7 +62,7 @@ namespace Mooege.Net.MooNet
                 lock (service) // lock the service so that its in-context client does not get changed..
                 {
                     //Logger.Debug("service-call data:{0}", message.ToString());
-                    ((IServerService) service).Client = (IMooNetClient)connection.Client;
+                    ((IServerService)service).Client = (MooNetClient)connection.Client;
                     service.CallMethod(method, null, message, (msg => SendResponse(connection, header.RequestID, msg)));
                 }
             }

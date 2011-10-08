@@ -22,19 +22,19 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class GBHandle
     {
-        public int Field0;
-        public int Field1;
+        public int Type; // Probably.
+        public int GBID;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(6) + (-2);
-            Field1 = buffer.ReadInt(32);
+            Type = buffer.ReadInt(6) + (-2);
+            GBID = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(6, Field0 - (-2));
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(6, Type - (-2));
+            buffer.WriteInt(32, GBID);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -44,13 +44,11 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.AppendLine("Type: 0x" + Type.ToString("X8") + " (" + Type + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.AppendLine("GBID: 0x" + GBID.ToString("X8") + " (" + GBID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

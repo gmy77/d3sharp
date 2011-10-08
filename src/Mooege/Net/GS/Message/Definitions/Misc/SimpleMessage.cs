@@ -18,7 +18,7 @@
 
 using System;
 using System.Text;
-using Mooege.Core.GS.Universe;
+using Mooege.Core.GS.Game;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Attribute;
@@ -40,11 +40,12 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     {
         public void Handle(GameClient client)
         {
-            Mooege.Core.GS.Universe.Hero hero = client.Player.Hero;
+            var player = client.Player;
             switch (this.Id)
             {
                 case 0x0030: // Sent with DwordDataMessage(0x0125, Value:0) and SimpleMessage(0x0125)
                     {
+                        // What the dickens is this stuff
                         #region hardcoded1
                         #region HirelingInfo
                         client.SendMessage(new HirelingInfoUpdateMessage()
@@ -93,15 +94,14 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         attributes[GameAttribute.Invulnerable] = false;
                         attributes[GameAttribute.Buff_Icon_Count0, 0x20CBE] = 1;
                         attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x33C40] = 0;
-                        attributes.SendMessage(client, hero.DynamicId);
+                        attributes.SendMessage(client, player.DynamicID);
 
                         #endregion
 
                         client.SendMessage(new ACDCollFlagsMessage()
                         {
-                            Id = 0x00A6,
-                            Field0 = hero.DynamicId,
-                            Field1 = 0x00000008,
+                            ActorID = player.DynamicID,
+                            CollFlags = 0x00000008,
                         });
 
                         client.SendMessage(new DWordDataMessage()
@@ -112,20 +112,21 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         #endregion
                         client.FlushOutgoingBuffer();
                         #region hardcoded2
+                        // NOTE: This is very similar to ACDEnterKnown fields
+                        // TODO: Map proper values from the actor..
                         client.SendMessage(new TrickleMessage()
                         {
-                            Id = 0x0042,
-                            Field0 = hero.DynamicId,
-                            Field1 = client.Player.Hero.ClassSNO,
+                            ActorID = player.DynamicID,
+                            Field1 = client.Player.ClassSNO,
                             Field2 = new WorldPlace()
                             {
-                                Field0 = new Vector3D()
+                                Position = new Vector3D()
                                 {
                                     X = 3143.75f,
                                     Y = 2828.75f,
                                     Z = 59.07559f,
                                 },
-                                Field1 = client.Player.Hero.WorldId,
+                                WorldID = client.Player.World.DynamicID,
                             },
                             Field3 = 0x00000000,
                             Field4 = 0x00026186,

@@ -27,7 +27,7 @@ using Mooege.Common.Extensions;
 namespace Mooege.Net
 {
     public class Server : IDisposable
-    {       
+    {
         public bool IsListening { get; private set; }
         public int Port { get; private set; }
 
@@ -36,7 +36,7 @@ namespace Mooege.Net
         protected object ConnectionLock = new object();
 
         public delegate void ConnectionEventHandler(object sender, ConnectionEventArgs e);
-        public delegate void ConnectionDataEventHandler(object sender, ConnectionDataEventArgs e);        
+        public delegate void ConnectionDataEventHandler(object sender, ConnectionDataEventArgs e);
 
         public event ConnectionEventHandler OnConnect;
         public event ConnectionEventHandler OnDisconnect;
@@ -51,7 +51,7 @@ namespace Mooege.Net
         #region listener
 
         public virtual bool Listen(string bindIP, int port)
-        {            
+        {
             // Check if the server has been disposed.
             if (_disposed) throw new ObjectDisposedException(this.GetType().Name, "Server has been disposed.");
 
@@ -60,7 +60,7 @@ namespace Mooege.Net
 
             // Create new TCP socket and set socket options.
             Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            
+
             // Setup our options:
             // * NoDelay - don't use packet coalescing
             // * DontLinger - don't keep sockets around once they've been disconnected
@@ -86,7 +86,7 @@ namespace Mooege.Net
 
             // Begin accepting any incoming connections asynchronously.
             Listener.BeginAccept(AcceptCallback, null);
-            
+
             return true;
         }
 
@@ -162,7 +162,7 @@ namespace Mooege.Net
             {
                 while (bytesRemaining > 0) // Ensure we send every byte.
                 {
-                    var bytesSent = connection.Socket.Send(buffer, totalBytesSent, bytesRemaining, flags); // Send the remaining data.                    
+                    var bytesSent = connection.Socket.Send(buffer, totalBytesSent, bytesRemaining, flags); // Send the remaining data.
                     if (bytesSent > 0)
                         OnDataSent(new ConnectionDataEventArgs(connection, buffer.Enumerate(totalBytesSent, bytesSent))); // Raise the Data Sent event.
 
@@ -222,7 +222,7 @@ namespace Mooege.Net
             if (handler != null) handler(this, e);
         }
 
-        #endregion 
+        #endregion
 
         #region disconnect & shutdown handlers
 
@@ -248,12 +248,12 @@ namespace Mooege.Net
 
             connection.Socket.Disconnect(false);
             RemoveConnection(connection, true);
-        }             
-       
+        }
+
         private void RemoveConnection(Connection connection, bool raiseEvent)
         {
             // Remove the connection from the dictionary and raise the OnDisconnection event.
-            lock (ConnectionLock) 
+            lock (ConnectionLock)
                 if (Connections.Remove(connection.Socket) && raiseEvent)
                     OnClientDisconnect(new ConnectionEventArgs(connection));
         }
@@ -299,7 +299,7 @@ namespace Mooege.Net
 
             if (disposing)
             {
-                Shutdown(); // Close the listener socket.                
+                Shutdown(); // Close the listener socket.
                 DisconnectAll(); // Disconnect all users.
             }
 

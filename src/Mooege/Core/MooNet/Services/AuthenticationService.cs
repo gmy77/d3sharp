@@ -28,7 +28,7 @@ namespace Mooege.Core.MooNet.Services
     public class AuthenticationService:bnet.protocol.authentication.AuthenticationServer, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IMooNetClient Client { get; set; }
+        public MooNetClient Client { get; set; }
 
         public override void Logon(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.LogonRequest request, Action<bnet.protocol.authentication.LogonResponse> done)
         {
@@ -36,7 +36,7 @@ namespace Mooege.Core.MooNet.Services
             var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
 
             Client.Account = account;
-            Client.Account.LoggedInClient = (MooNetClient)Client;
+            Client.Account.LoggedInClient = Client;
 
             var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
                 .SetAccount(Client.Account.BnetAccountID)
@@ -44,7 +44,7 @@ namespace Mooege.Core.MooNet.Services
 
             done(builder.Build());
 
-            PlayerManager.PlayerConnected((MooNetClient)this.Client);
+            PlayerManager.PlayerConnected(this.Client);
         }
 
         public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.ModuleMessageRequest request, Action<bnet.protocol.NoData> done)
