@@ -44,7 +44,7 @@ namespace Mooege.Core.MooNet.Services
 
             done(builder.Build());
 
-            OnlinePlayers.Players.Add((MooNetClient)Client);
+            PlayerManager.PlayerConnected((MooNetClient)this.Client);
         }
 
         public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.ModuleMessageRequest request, Action<bnet.protocol.NoData> done)
