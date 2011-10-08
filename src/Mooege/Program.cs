@@ -145,7 +145,7 @@ namespace Mooege
                     output.AppendFormat("Logical Threads: {0} ", logicalThreadsCounter.NextValue());
                 }
 
-                if(PerformanceCounterCategory.CounterExists("# of current logical Threads", ".NET CLR LocksAndThreads"))
+                if (PerformanceCounterCategory.CounterExists("Contention Rate / sec", ".NET CLR LocksAndThreads"))
                 {
                     var contentionRateCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "Contention Rate / sec", InstanceName = Process.GetCurrentProcess().ProcessName };
                     output.AppendFormat("Contention Rate: {0}/sec", contentionRateCounter.NextValue());
