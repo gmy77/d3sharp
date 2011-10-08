@@ -28,7 +28,8 @@ namespace Mooege.Core.GS.Data.SNO
     {
         Unknown,
         Actor,          // .acr
-        Power           // .pow
+        Power,          // .pow
+        Scene           // .scn
     }
 
     public enum SNOGroup
@@ -38,7 +39,8 @@ namespace Mooege.Core.GS.Data.SNO
         NPCs,
         Mobs,
         Powers,
-        Blacklist
+        Blacklist,
+        Scenes
     }
 
     public struct SNOID
@@ -53,7 +55,7 @@ namespace Mooege.Core.GS.Data.SNO
             this.ID = id;
             this.Name = name;
         }
-        
+
         public override string ToString()
         {
             return String.Format("Type: {0:10} ID: {1:10}  Name: {2}", this.Type, this.ID, this.Name);
@@ -140,6 +142,7 @@ namespace Mooege.Core.GS.Data.SNO
             {
                 case SNOGroup.Ungrouped:
                 case SNOGroup.Actors:
+                case SNOGroup.Scenes:
                     return false;
             }
             return true;

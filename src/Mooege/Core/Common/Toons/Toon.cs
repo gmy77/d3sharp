@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using Mooege.Common.Helpers;
 using Mooege.Core.Common.Storage;
@@ -51,9 +52,22 @@ namespace Mooege.Core.Common.Toons
         public D3.Hero.Digest Digest { get; private set; }
         public D3.Hero.VisualEquipment Equipment { get; private set; }
 
-        public Account Owner { get; set; }       
+        public Account Owner { get; set; }
         
-        //TODO: Toons should be linked to accounts here. /raist
+        public bool IsSelected
+        {
+            get
+            {
+                if (!this.Owner.IsOnline) return false;
+                else
+                {
+                    if (this.Owner.LoggedInClient.CurrentToon != null)
+                        return this.Owner.LoggedInClient.CurrentToon.BnetEntityID == this.BnetEntityID;
+                    else
+                        return false;
+                }
+            }
+        }
 
         public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
             :base(persistantId)
@@ -242,11 +256,16 @@ namespace Mooege.Core.Common.Toons
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if the client is online
                     {
-                        if(this.Owner.LoggedInBNetClient!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInBNetClient.CurrentChannel.D3EntityId.ToByteString()).Build());
+                        if(this.Owner.LoggedInClient!=null && this.Owner.LoggedInClient.CurrentChannel!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());
+                        else field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().Build());
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 2) // Current screen (all known values are just "in-menu"; also see ScreenStatuses sent in ChannelService.UpdateChannelState)
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build());
+                    }
+                    else
+                    {
+                        Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
                     }
                     break;
                 case FieldKeyHelper.Program.BNet:
@@ -254,9 +273,9 @@ namespace Mooege.Core.Common.Toons
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build());
                     }
-                    else if (queryKey.Group == 3 && queryKey.Field == 3) // Whether the toon is online
+                    else if (queryKey.Group == 3 && queryKey.Field == 3) // Whether the toon is selected one for owner account.
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsSelected).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 5) // Away status - 0 for online
                     {
@@ -266,6 +285,10 @@ namespace Mooege.Core.Common.Toons
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build());
                     }
+                    else
+                    {
+                        Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
+                    }
                     break;
             }
 
@@ -274,58 +297,55 @@ namespace Mooege.Core.Common.Toons
 
         protected override void NotifySubscriptionAdded(MooNetClient client)
         {
-            // Check docs/rpc/fields.txt for fields keys
+            var operations = new List<bnet.protocol.presence.FieldOperation>();
 
             // Banner configuration
             var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 2, 1, 0);
             var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(client.Account.BannerConfiguration.ToByteString()).Build()).Build();
-            var fieldOperation1 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build());
 
             // Class
             var fieldKey2 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 1, 0);
             var field2 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey2).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.ClassID).Build()).Build();
-            var fieldOperation2 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build());
 
             // Level
             var fieldKey3 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 2, 0);
             var field3 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey3).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.Level).Build()).Build();
-            var fieldOperation3 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field3).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field3).Build());
 
             // Equipment
             var fieldKey4 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 3, 0);
             var field4 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey4).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Equipment.ToByteString()).Build()).Build();
-            var fieldOperation4 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field4).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field4).Build());
 
             // Flags
             var fieldKey5 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 4, 0);
             var field5 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey5).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.Flags | ToonFlags.BothUnknowns)).Build()).Build();
-            var fieldOperation5 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field5).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field5).Build());
 
             // Name
             var fieldKey6 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 2, 0);
             var field6 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey6).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build()).Build();
-            var fieldOperation6 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field6).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field6).Build());
 
-            // Whether the toon is online
+            // Is it selected toon?
             var fieldKey7 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 3, 0);
-            var field7 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey7).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
-            var fieldOperation7 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field7).Build();
+            var field7 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey7).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsSelected).Build()).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field7).Build());
 
             // Program - FourCC "D3"
             var fieldKey8 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 9, 0);
             var field8 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey8).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build()).Build();
-            var fieldOperation8 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field8).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field8).Build());
 
             // Unknown int - maybe highest completed act? /raist
             var fieldKey9 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 9, 10);
             var field9 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey9).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build()).Build();
-            var fieldOperation9 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field9).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field9).Build());
 
             // Create a presence.ChannelState
-            var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityID)
-                .AddFieldOperation(fieldOperation1).AddFieldOperation(fieldOperation2).AddFieldOperation(fieldOperation3).AddFieldOperation(fieldOperation4)
-                .AddFieldOperation(fieldOperation5).AddFieldOperation(fieldOperation6).AddFieldOperation(fieldOperation7).AddFieldOperation(fieldOperation8)
-                .AddFieldOperation(fieldOperation9).Build();
+            var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityID).AddRangeFieldOperation(operations).Build();
 
             // Embed in channel.ChannelState
             var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);

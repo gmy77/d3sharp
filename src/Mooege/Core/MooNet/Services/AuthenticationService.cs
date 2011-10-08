@@ -19,22 +19,24 @@
 using System;
 using Mooege.Common;
 using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
-using bnet.protocol.authentication;
 
 namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x1, serviceName: "bnet.protocol.authentication.AuthenticationServer")]
-    public class AuthenticationService:AuthenticationServer, IServerService
+    public class AuthenticationService:bnet.protocol.authentication.AuthenticationServer, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public IMooNetClient Client { get; set; }
 
-        public override void Logon(Google.ProtocolBuffers.IRpcController controller, LogonRequest request, System.Action<LogonResponse> done)
+        public override void Logon(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.LogonRequest request, Action<bnet.protocol.authentication.LogonResponse> done)
         {
             Logger.Trace("LogonRequest(); Email={0}", request.Email);
-            Client.Account = AccountManager.GetAccountByEmail(request.Email);
-            Client.Account.LoggedInBNetClient = (MooNetClient)Client;
+            var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
+
+            Client.Account = account;
+            Client.Account.LoggedInClient = (MooNetClient)Client;
 
             var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
                 .SetAccount(Client.Account.BnetAccountID)
@@ -42,10 +44,10 @@ namespace Mooege.Core.MooNet.Services
 
             done(builder.Build());
 
-            OnlinePlayers.Players.Add((MooNetClient)Client);
+            PlayerManager.PlayerConnected((MooNetClient)this.Client);
         }
 
-        public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, ModuleMessageRequest request, System.Action<bnet.protocol.NoData> done)
+        public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.ModuleMessageRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }

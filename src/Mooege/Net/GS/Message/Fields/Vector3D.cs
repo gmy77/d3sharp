@@ -26,13 +26,95 @@ namespace Mooege.Net.GS.Message.Fields
         public float Y;
         public float Z;
 
-        public Vector3D(){}
+        public Vector3D()
+        {
+            this.X = 0;
+            this.Y = 0;
+            this.Z = 0;
+        }
 
         public Vector3D(float x, float y, float z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
+        }
+
+        public void Set(float x, float y, float z)
+        {
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+        }
+
+        public void Set(Vector3D vec)
+        {
+            this.X = vec.X;
+            this.Y = vec.Y;
+            this.Z = vec.Z;
+        }
+
+        public static bool operator ==(Vector3D a, Vector3D b)
+        {
+            if (object.ReferenceEquals(null, a))
+                return object.ReferenceEquals(null, b);
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Vector3D a, Vector3D b)
+        {
+            return !(a == b);
+        }
+
+        public static bool operator >(Vector3D a, Vector3D b)
+        {
+            if (object.ReferenceEquals(null, a))
+                return !object.ReferenceEquals(null, b);
+            return a.X > b.X
+                && a.Y > b.Y
+                && a.Z > b.Z;
+        }
+
+        public static bool operator <(Vector3D a, Vector3D b)
+        {
+            return !(a > b);
+        }
+
+        public static bool operator >=(Vector3D a, Vector3D b)
+        {
+            if (object.ReferenceEquals(null, a))
+                return object.ReferenceEquals(null, b);
+            return a.X >= b.X
+                && a.Y >= b.Y
+                && a.Z >= b.Z;
+        }
+
+        public static bool operator <=(Vector3D a, Vector3D b)
+        {
+            if (object.ReferenceEquals(null, a))
+                return object.ReferenceEquals(null, b);
+            return a.X <= b.X
+                && a.Y <= b.Y
+                && a.Z <= b.Z;
+        }
+
+        public override bool Equals(object o)
+        {
+            if (object.ReferenceEquals(this, o))
+                return true;
+            var v = o as Vector3D;
+            if (v != null)
+            {
+                return this.X == v.X
+                    && this.Y == v.Y
+                    && this.Z == v.Z;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode();
         }
 
         public void Parse(GameBitBuffer buffer)
@@ -56,11 +138,11 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: " + X.ToString("G"));
+            b.AppendLine("X: " + X.ToString("G"));
             b.Append(' ', pad);
-            b.AppendLine("Field1: " + Y.ToString("G"));
+            b.AppendLine("Y: " + Y.ToString("G"));
             b.Append(' ', pad);
-            b.AppendLine("Field2: " + Z.ToString("G"));
+            b.AppendLine("Z: " + Z.ToString("G"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

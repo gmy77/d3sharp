@@ -16,129 +16,181 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Core.GS.Universe;
+using System;
+using System.Collections.Generic;
+using Mooege.Core.GS.Player;
+using Mooege.Core.GS.Objects;
+using Mooege.Core.GS.Map;
+using Mooege.Net.GS;
+using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Net.GS.Message.Fields;
+using Mooege.Net.GS.Message.Definitions.Attribute;
+
+// TODO: Actor needs to use a nullable object for world position and a getter for inventory position (which is only used by Item)
+//       Or just a boolean parameter in Reveal to specify which location member is to be sent/nulled
+
+// TODO: Need to move all of the remaining ACD fields into Actor (such as the affix list)
 
 namespace Mooege.Core.GS.Actors
 {
-    public class Actor
+    // This is used for GBHandle.Type; uncertain if used elsewhere
+    public enum GBHandleType : int
     {
-        public int DynamicId;
-        public int SnoId;
-        public int WorldId;
-        public int Field2;
-        public int Field3;
-        public float Scale;
-        public float RotationAmount;
-        public Vector3D RotationAxis;
-        public Vector3D Position = new Vector3D();
-        public InventoryLocationMessageData InventoryLocationData;
-        public GBHandle GBHandle;
-        public int Field7;
-        public int Field8;
-        public int Field9;
-        public byte Field10;
+        Invalid = 0,
+        Monster = 1,
+        Gizmo = 2,
+        ClientEffect = 3,
+        ServerProp = 4,
+        Environment = 5,
+        Critter = 6,
+        Player = 7,
+        Item = 8,
+        AxeSymbol = 9,
+        Projectile = 10,
+        CustomBrain = 11
+    }
 
-        public void Reveal(Hero toon)
+    // This should probably be the same as GBHandleType (probably merge them once all actor classes are created)
+    public enum ActorType
+    {
+        Player,
+        NPC,
+        Monster,
+        Item,
+        Portal
+    }
+
+    // Base actor
+    public abstract class Actor : WorldObject
+    {
+        // Actors can change worlds and have a specific addition/removal scheme
+        // We'll just override the setter to handle all of this automagically
+        public override World World
         {
-            if (toon.RevealedActors.Contains(this)) return; //already revealed
-            toon.RevealedActors.Add(this);
+            set
+            {
+                if (this._world != value)
+                {
+                    if (this._world != null)
+                        this._world.Leave(this);
+                    this._world = value;
+                    if (this._world != null)
+                        this._world.Enter(this);
+                }
+            }
+        }
+
+        public sealed override Vector3D Position
+        {
+            set
+            {
+                var old = this._position;
+                this._position.Set(value);
+                this.OnMove(old);
+                this.World.OnActorMove(this, old); // TODO: Should notify its scene instead
+            }
+        }
+
+        public abstract ActorType ActorType { get; }
+
+        public GameAttributeMap Attributes { get; private set; }
+
+        public int ActorSNO { get; set; }
+        public GBHandle GBHandle { get; set; }
+
+        // Some ACD uncertainties
+        public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc
+        public int Field3 = 0x00000001; // TODO: What dis?
+        public int Field7 = -1;
+        public int Field8 = -1; // Animation set SNO?
+        public int Field9; // SNOName.Group?
+        public byte Field10 = 0x00;
+        public int? /* sno */ Field11 = null;
+        public int? Field12 = null;
+        public int? Field13 = null;
+
+        public virtual WorldLocationMessageData WorldLocationMessage
+        {
+            get { return new WorldLocationMessageData { Scale = this.Scale, Transform = this.Transform, WorldID = this.World.DynamicID }; }
+        }
+
+        // NOTE: May want pack all of the location stuff into a PRTransform field called Position or Transform
+        public virtual PRTransform Transform
+        {
+            get { return new PRTransform { Rotation = new Quaternion { Amount = this.RotationAmount, Axis = this.RotationAxis }, ReferencePoint = this.Position }; }
+        }
+
+        // Only used in Item
+        public virtual InventoryLocationMessageData InventoryLocationMessage
+        {
+            get { return null; }
+        }
+
+        public virtual ACDWorldPositionMessage ACDWorldPositionMessage
+        {
+            get { return new ACDWorldPositionMessage { ActorID = this.DynamicID, WorldLocation = this.WorldLocationMessage }; }
+        }
+
+        protected Actor(World world, uint dynamicID)
+            : base(world, dynamicID)
+        {
+            this.Attributes = new GameAttributeMap();
+            this.ActorSNO = -1;
+            this.GBHandle = new GBHandle();
+        }
+
+        // NOTE: When using this, you should *not* set the actor's world. It is done for you
+        public void TransferTo(World targetWorld, Vector3D pos)
+        {
+            this.Position = pos;
+            this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
+        }
+
+        public virtual void OnEnter(World world)
+        {
+        }
+
+        public virtual void OnLeave(World world)
+        {
+        }
+
+        protected virtual void OnMove(Vector3D prevPosition)
+        {
+        }
+
+        public override void Reveal(Mooege.Core.GS.Player.Player player)
+        {
+            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return; // already revealed
+            player.RevealedObjects.Add(this.DynamicID, this);
 
             var msg = new ACDEnterKnownMessage
-                          {
-                              Field0 = DynamicId,
-                              Field1 = SnoId,
-                              Field2 = Field2,
-                              Field3 = Field3,
-                              Field4 = new WorldLocationMessageData
-                                           {
-                                               Field0 = Scale,
-                                               Field1 = new PRTransform { Field0 = new Quaternion { Amount = RotationAmount, Axis = RotationAxis, }, ReferencePoint = Position, },
-                                               Field2 = WorldId,
-                                           },
-                              Field5 = InventoryLocationData,
-                              Field6 = GBHandle,
-                              Field7 = Field7,
-                              Field8 = Field8,
-                              Field9 = Field9,
-                              Field10 = Field10,
-                          };
-
-            toon.InGameClient.SendMessage(msg);
-            toon.InGameClient.FlushOutgoingBuffer();
-        }
-
-        public void Destroy(Hero hero)
-        {
-            if (!hero.RevealedActors.Contains(this)) return; //not revealed yet
-
-            hero.InGameClient.SendMessage(new ANNDataMessage() { Id=0x3c, Field0=DynamicId, });
-            hero.InGameClient.FlushOutgoingBuffer();
-            hero.RevealedActors.Remove(this);
-        }
-
-        public bool ParseFrom(int worldId, string line)
-        {
-            var data = line.Split(' ');
-
-            if (int.Parse(data[2]) == 0) return false; //skip inventory using items as their use is unknown
-
-            this.WorldId = worldId;
-
-            this.DynamicId = int.Parse(data[4]);
-            this.SnoId = int.Parse(data[5]);
-            this.Field2 = int.Parse(data[6]);
-            this.Field3 = int.Parse(data[7]);
-
-            if (int.Parse(data[2]) > 0)
             {
-                this.Scale = float.Parse(data[8], System.Globalization.CultureInfo.InvariantCulture);
-                this.RotationAmount = float.Parse(data[12], System.Globalization.CultureInfo.InvariantCulture);
-                this.RotationAxis = new Vector3D()
-                                        {
-                                            X = float.Parse(data[9], System.Globalization.CultureInfo.InvariantCulture),
-                                            Y = float.Parse(data[10], System.Globalization.CultureInfo.InvariantCulture),
-                                            Z = float.Parse(data[11], System.Globalization.CultureInfo.InvariantCulture),
-                                        };
-
-                this.Position = new Vector3D()
-                                    {
-                                        X = float.Parse(data[13], System.Globalization.CultureInfo.InvariantCulture),
-                                        Y = float.Parse(data[14], System.Globalization.CultureInfo.InvariantCulture),
-                                        Z = float.Parse(data[15], System.Globalization.CultureInfo.InvariantCulture),
-                                    };
-            }
-
-            // data[14] = world_id
-
-            if (int.Parse(data[3]) > 0)
-            {
-                this.InventoryLocationData = new InventoryLocationMessageData()
-                {
-                    Field0 = int.Parse(data[17]),
-                    Field1 = int.Parse(data[18]),
-                    Field2 = new IVector2D()
-                    {
-                        Field0 = int.Parse(data[19]),
-                        Field1 = int.Parse(data[20]),
-                    }
-                };
-            }
-
-            this.GBHandle = new GBHandle()
-            {
-                Field0 = int.Parse(data[21]),
-                Field1 = int.Parse(data[22]),
+                ActorID = this.DynamicID,
+                ActorSNO = this.ActorSNO,
+                Field2 = Field2,
+                Field3 = Field3,
+                WorldLocation = this.WorldLocationMessage,
+                InventoryLocation = this.InventoryLocationMessage,
+                GBHandle = this.GBHandle,
+                Field7 = Field7,
+                Field8 = Field8,
+                Field9 = Field9,
+                Field10 = Field10,
+                Field11 = Field11,
+                Field12 = Field12,
+                Field13 = Field13,
             };
+            player.InGameClient.SendMessageNow(msg);
+        }
 
-            this.Field7 = int.Parse(data[23]);
-            this.Field8 = int.Parse(data[24]);
-            this.Field9 = int.Parse(data[25]);
-            this.Field10 = byte.Parse(data[26]);
-
-            return true;
+        public override void Unreveal(Mooege.Core.GS.Player.Player player)
+        {
+            if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return; // not revealed yet
+            // NOTE: This message ID is probably "DestroyActor". ANNDataMessage7 is used for addition/creation
+            player.InGameClient.SendMessageNow(new ANNDataMessage(Opcodes.ANNDataMessage6) { ActorID = this.DynamicID });
+            player.RevealedObjects.Remove(this.DynamicID);
         }
     }
 }

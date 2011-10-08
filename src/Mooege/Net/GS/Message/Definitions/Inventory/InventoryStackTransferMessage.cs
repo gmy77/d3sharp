@@ -23,22 +23,22 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
     [IncomingMessage(Opcodes.InventoryStackTransferMessage, Consumers.Inventory)]
     public class InventoryStackTransferMessage : GameMessage
     {
-        public int Field0;
-        public int Field1;
-        public long Field2;
+        public uint FromID;
+        public uint ToID;
+        public ulong Amount;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
-            Field2 = buffer.ReadInt64(64);
+            FromID = buffer.ReadUInt(32);
+            ToID = buffer.ReadUInt(32);
+            Amount = buffer.ReadUInt64(64);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
-            buffer.WriteInt64(64, Field2);
+            buffer.WriteUInt(32, FromID);
+            buffer.WriteUInt(32, ToID);
+            buffer.WriteUInt64(64, Amount);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -47,9 +47,9 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
             b.AppendLine("InventoryStackTransferMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X16"));
+            b.Append(' ', pad); b.AppendLine("FromID: 0x" + FromID.ToString("X8") + " (" + FromID + ")");
+            b.Append(' ', pad); b.AppendLine("ToID: 0x" + ToID.ToString("X8") + " (" + ToID + ")");
+            b.Append(' ', pad); b.AppendLine("Amount: 0x" + Amount.ToString("X16"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

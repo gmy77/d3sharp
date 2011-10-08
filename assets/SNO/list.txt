@@ -3,3 +3,4 @@ NPCs NPCs.txt
 Mobs Mobs.txt
 Powers Powers.txt
 Blacklist Blacklist.txt
+Scenes Scenes.txt

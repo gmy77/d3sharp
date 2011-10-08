@@ -22,20 +22,20 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class PRTransform
     {
-        public Quaternion Field0;
+        public Quaternion Rotation;
         public Vector3D ReferencePoint;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = new Quaternion();
-            Field0.Parse(buffer);
+            Rotation = new Quaternion();
+            Rotation.Parse(buffer);
             ReferencePoint = new Vector3D();
             ReferencePoint.Parse(buffer);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            Field0.Encode(buffer);
+            Rotation.Encode(buffer);
             ReferencePoint.Encode(buffer);
         }
 
@@ -45,7 +45,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.AppendLine("PRTransform:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            Field0.AsText(b, pad);
+            Rotation.AsText(b, pad);
             ReferencePoint.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");

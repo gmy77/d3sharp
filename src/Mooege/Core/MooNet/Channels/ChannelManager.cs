@@ -27,7 +27,7 @@ namespace Mooege.Core.MooNet.Channels
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        public readonly static Dictionary<ulong, Channel> Channels =
+        private readonly static Dictionary<ulong, Channel> Channels =
             new Dictionary<ulong, Channel>();
 
         public static Channel CreateNewChannel(MooNetClient client, ulong remoteObjectId)

@@ -46,7 +46,7 @@ namespace Mooege.Core.MooNet.Objects
         /// <summary>
         /// List of clients that subscribed for notifications when this object updates its states.
         /// </summary>
-        protected List<MooNetClient> Subscribers { get; private set; }
+        public List<MooNetClient> Subscribers { get; private set; }
 
         /// <summary>
         /// Constructor which can only be called by derived objects.

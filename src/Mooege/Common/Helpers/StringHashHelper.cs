@@ -31,9 +31,9 @@ namespace Mooege.Common.Helpers
         }
 
         // Hash algorithm used for item names
-        public static uint HashItemName(string input)
+        public static int HashItemName(string input)
         {
-            uint hash = 0;
+            int hash = 0;
             input = input.ToLower();
             for (int i = 0; i < input.Length; ++i)
                 hash = (hash << 5) + hash + input[i];

@@ -16,13 +16,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using Mooege.Net.MooNet;
 
-namespace Mooege.Core.MooNet
+namespace Mooege.Core.MooNet.Online
 {
-    public static class OnlinePlayers
+    // probably will not need this when we actually send players from last game to recent players window.
+    public static class PlayerManager
     {
-        public static List<MooNetClient> Players = new List<MooNetClient>();
+        private static readonly List<MooNetClient> OnlinePlayersList = new List<MooNetClient>();
+
+        public static List<MooNetClient> OnlinePlayers 
+        {
+            get { return OnlinePlayersList; } // just provide a setter so the actual list can not be modified.
+        }
+
+        public static void PlayerConnected(MooNetClient client)
+        {
+            OnlinePlayersList.Add(client);
+        }
+
+        public static void PlayerDisconnected(MooNetClient client)
+        {
+            OnlinePlayersList.Remove(client);
+        }
     }
 }

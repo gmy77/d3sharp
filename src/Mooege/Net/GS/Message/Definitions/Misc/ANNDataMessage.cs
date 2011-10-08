@@ -22,19 +22,18 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     public class ANNDataMessage : GameMessage
     {
-        public int Field0;
+        public uint ActorID; // Actor's DynamicID
 
-
-
+        public ANNDataMessage(Opcodes id) : base(id) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteUInt(32, ActorID);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -43,7 +42,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("ANNDataMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
