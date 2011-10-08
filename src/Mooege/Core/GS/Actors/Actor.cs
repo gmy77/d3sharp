@@ -113,7 +113,17 @@ namespace Mooege.Core.GS.Actors
 
         public virtual WorldLocationMessageData WorldLocationMessage
         {
-            get { return new WorldLocationMessageData { Scale = this.Scale, Transform = this.Transform, WorldID = this.World.DynamicID }; }
+            get
+            {
+                return HasWorldLocation
+                ? new WorldLocationMessageData { Scale = this.Scale, Transform = this.Transform, WorldID = this.World.DynamicID }
+                : null;
+            }
+        }
+
+        public virtual bool HasWorldLocation
+        {
+            get { return true; }
         }
 
         // NOTE: May want pack all of the location stuff into a PRTransform field called Position or Transform
@@ -157,6 +167,10 @@ namespace Mooege.Core.GS.Actors
         }
 
         protected virtual void OnMove(Vector3D prevPosition)
+        {
+        }
+
+        public virtual void OnTargeted(Mooege.Core.GS.Player.Player player)
         {
         }
 

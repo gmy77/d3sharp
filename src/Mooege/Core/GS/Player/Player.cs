@@ -345,6 +345,7 @@ namespace Mooege.Core.GS.Player
                 Field1 = 0f,
             });
 
+            // This "tick" stuff is somehow required to use these values.. /komiga
             this.InGameClient.SendMessage(new DWordDataMessage() // TICK
             {
                 Id = 0x0089,
@@ -361,7 +362,7 @@ namespace Mooege.Core.GS.Player
             this.InGameClient.SendMessage(new DWordDataMessage()
             {
                 Id = 0x89,
-                Field0 = 0x0000007D//this.InGameClient.PacketId,
+                Field0 = 0x0000007D //this.InGameClient.PacketId,
             });
             this.InGameClient.FlushOutgoingBuffer();
         }
@@ -373,31 +374,11 @@ namespace Mooege.Core.GS.Player
         // Message handlers
         private void OnObjectTargeted(GameClient client, TargetMessage message)
         {
-            // TODO: Should just have an OnTargeted method on Actor and call it from here
-            //Logger.Info("Player interaction with {0}", message.AsText());
-            Portal p = this.World.GetPortal(message.TargetID);
-            if (p != null)
-            {
-                // Player clicked a portal
-                World world = this.World.Game.GetWorld(p.Destination.WorldSNO);
-                if (world != null)
-                    this.TransferTo(world, p.TargetPos);
-                else
-                    Logger.Warn("Portal's destination world does not exist (WorldSNO = {0})", p.Destination.WorldSNO);
-                return;
-            }
-
-            Item item = this.World.GetItem(message.TargetID);
-            if (item != null)
-            {
-                // Player clicked an item
-                if (this.Inventory.PickUp(item))
-                {
-                    if (this.GroundItems.ContainsKey(item.DynamicID))
-                        this.GroundItems.Remove(item.DynamicID);
-                }
-                return;
-            }
+            Actor actor = this.World.GetActor(message.TargetID);
+            if (actor != null)
+                actor.OnTargeted(this);
+            else
+                Logger.Warn("Player targeted an invalid object (ID = {0})", message.TargetID);
         }
 
         private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)

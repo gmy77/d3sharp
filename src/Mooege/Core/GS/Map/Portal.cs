@@ -32,7 +32,7 @@ namespace Mooege.Core.GS.Map
 {
     public class Portal : Actor
     {
-        //static readonly Logger Logger = LogManager.CreateLogger();
+        static readonly Logger Logger = LogManager.CreateLogger();
 
         public override ActorType ActorType { get { return ActorType.Portal; } }
 
@@ -122,7 +122,15 @@ namespace Mooege.Core.GS.Map
 
         public override void Unreveal(Mooege.Core.GS.Player.Player player)
         {
-            // TODO
+        }
+
+        public override void OnTargeted(Mooege.Core.GS.Player.Player player)
+        {
+            World world = this.World.Game.GetWorld(this.Destination.WorldSNO);
+            if (world != null)
+                player.TransferTo(world, this.TargetPos);
+            else
+                Logger.Warn("Portal's destination world does not exist (WorldSNO = {0})", this.Destination.WorldSNO);
         }
     }
 }

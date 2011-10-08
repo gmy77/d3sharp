@@ -22,22 +22,21 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
 {
     public class SetIdleAnimationMessage : GameMessage
     {
-        public int Field0;
-        public int Field1;
+        public uint ActorID;
+        public int AnimationSNO;
 
-
-
+        public SetIdleAnimationMessage() : base(Opcodes.SetIdleAnimationMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
+            AnimationSNO = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteUInt(32, ActorID);
+            buffer.WriteInt(32, AnimationSNO);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -46,8 +45,8 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
             b.AppendLine("SetIdleAnimationMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            b.Append(' ', pad); b.AppendLine("AnimationSNO: 0x" + AnimationSNO.ToString("X8") + " (" + AnimationSNO + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

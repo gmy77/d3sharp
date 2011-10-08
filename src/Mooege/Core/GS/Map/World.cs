@@ -20,11 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common;
+using Mooege.Common.Helpers;
 using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Player;
-using Mooege.Core.GS.NPC;
 using Mooege.Core.GS.Data.SNO;
 using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message;
@@ -74,6 +74,25 @@ namespace Mooege.Core.GS.Map
             this.Game.AddWorld(this);
         }
 
+        public void BroadcastIfRevealed(GameMessage message, Actor actor)
+        {
+            foreach (var player in this.Players.Values)
+            {
+                if (player.RevealedObjects.ContainsKey(actor.DynamicID))
+                {
+                    player.InGameClient.SendMessageNow(message);
+                }
+            }
+        }
+
+        public void BroadcastGlobal(GameMessage message)
+        {
+            foreach (var player in this.Players.Values)
+            {
+                player.InGameClient.SendMessageNow(message);
+            }
+        }
+
         public void BroadcastInclusive(GameMessage message, Actor actor)
         {
             var players = this.GetPlayersInRange(actor.Position, 480.0f);
@@ -98,7 +117,8 @@ namespace Mooege.Core.GS.Map
         public void OnActorMove(Actor actor, Vector3D prevPosition)
         {
             // TODO: Unreveal from players that are now outside the actor's range
-            BroadcastExclusive(actor.ACDWorldPositionMessage, actor);
+            if (actor.HasWorldLocation)
+                BroadcastIfRevealed(actor.ACDWorldPositionMessage, actor);
         }
 
         // TODO: NewPlayer messages should be broadcasted at the Game level, which means we may have to track players separately from objects in Game
@@ -107,7 +127,9 @@ namespace Mooege.Core.GS.Map
             this.AddActor(actor);
             actor.OnEnter(this);
             // Broadcast reveal
-            var players = this.GetPlayersInRange(actor.Position, 480.0f);
+            // NOTE: Revealing to all right now since the flow results in actors that have initial positions that are not within the range of the player
+            var players = this.Players.Values; //this.GetPlayersInRange(actor.Position, 480.0f);
+            Logger.Debug("Enter {0}, reveal to {1} players", actor.DynamicID, players.Count);
             foreach (var player in players)
             {
                 actor.Reveal(player);
@@ -118,8 +140,8 @@ namespace Mooege.Core.GS.Map
         {
             actor.OnLeave(this);
             // Broadcast unreveal
-            var players = this.GetPlayersInRange(actor.Position, 480.0f);
-            foreach (var player in players)
+            Logger.Debug("Leave {0}, unreveal to {1} players", actor.DynamicID, this.Players.Count);
+            foreach (var player in this.Players.Values)
             {
                 actor.Unreveal(player);
             }
@@ -151,8 +173,7 @@ namespace Mooege.Core.GS.Map
                 }
 
                 // Reveal all actors
-                // TODO: We need proper location-aware reveal logic for _all_ objects
-                //       This can be done on the scene level once that bit is in
+                // TODO: We need proper location-aware reveal logic for _all_ objects. This can be done on the scene level once that bit is in. /komiga
                 Logger.Info("Revealing all actors for world {0}", this.DynamicID);
                 foreach (var actor in Actors.Values)
                 {
@@ -164,7 +185,7 @@ namespace Mooege.Core.GS.Map
 
         public void Unreveal(Mooege.Core.GS.Player.Player player)
         {
-            // TODO: Unreveal all objects in the world? I think the client will do this on its own when it gets a WorldDeletedMessage
+            // TODO: Unreveal all objects in the world? I think the client will do this on its own when it gets a WorldDeletedMessage /komiga
             //foreach (var obj in player.RevealedObjects.Values)
             //    if (obj.DynamicID == this.DynamicID) obj.Unreveal(player);
 
@@ -183,6 +204,31 @@ namespace Mooege.Core.GS.Map
         // TODO: All the things.
         public void Tick()
         {
+        }
+
+        public void SpawnMob(Mooege.Core.GS.Player.Player player, int actorSNO, Vector3D position)
+        {
+            new Monster(player.World, actorSNO, position);
+        }
+
+        public void SpawnRandomDrop(Mooege.Core.GS.Player.Player player, Vector3D position)
+        {
+            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(player.InGameClient);
+            // randomize ItemType
+            ItemType[] allValues = (ItemType[])Enum.GetValues(typeof(ItemType));
+            ItemType type = allValues[RandomHelper.Next(allValues.Length)];
+            Item item = itemGenerator.GenerateRandomElement(type);
+            item.Drop(null, position); // NOTE: The owner field for an item is only set when it is in the owner's inventory. /komiga
+            player.GroundItems[item.DynamicID] = item; // FIXME: Hacky. /komiga
+        }
+
+        public void SpawnGold(Mooege.Core.GS.Player.Player player, Vector3D position)
+        {
+            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(player.InGameClient);
+            Item item = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
+            item.Count = RandomHelper.Next(1, 3);
+            item.Drop(null, position);
+            player.GroundItems[item.DynamicID] = item;
         }
 
         #region Collections

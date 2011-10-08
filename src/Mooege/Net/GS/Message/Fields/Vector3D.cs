@@ -33,11 +33,14 @@ namespace Mooege.Net.GS.Message.Fields
             this.Z = 0;
         }
 
+        public Vector3D(Vector3D vec)
+        {
+            Set(vec);
+        }
+
         public Vector3D(float x, float y, float z)
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            Set(x, y, z);
         }
 
         public void Set(float x, float y, float z)
@@ -49,6 +52,8 @@ namespace Mooege.Net.GS.Message.Fields
 
         public void Set(Vector3D vec)
         {
+            if (vec == null)
+                return;
             this.X = vec.X;
             this.Y = vec.Y;
             this.Z = vec.Z;

@@ -49,7 +49,7 @@ namespace Mooege.Core.Common.Items
     {
         public override ActorType ActorType { get { return ActorType.Item; } }
 
-        public Mooege.Core.GS.Player.Player Owner { get; set; }
+        public Mooege.Core.GS.Player.Player Owner { get; set; } // Only set when the player has the item in its inventory. /komiga
 
         public ItemType ItemType { get; set; }
         public int Count { get; set; } // <- amount?
@@ -59,16 +59,16 @@ namespace Mooege.Core.Common.Items
         public int EquipmentSlot;
         public IVector2D InventoryLocation { get; private set; }
 
-        public override WorldLocationMessageData WorldLocationMessage
+        public override bool HasWorldLocation
         {
-            get { return (this.Owner != null) ? null : base.WorldLocationMessage; }
+            get { return this.Owner == null; }
         }
 
         public override InventoryLocationMessageData InventoryLocationMessage
         {
             get
             {
-                return (this.Owner == null)
+                return HasWorldLocation
                 ? null
                 : new InventoryLocationMessageData
                 {
@@ -169,7 +169,11 @@ namespace Mooege.Core.Common.Items
             this.Owner = owner;
             this.Position = position;
             // TODO: Notify the world so that players get the state change
-            // TODO: Need to place on the owner's GroundItems instead of globally if the owner is non-null
+        }
+
+        public override void OnTargeted(Mooege.Core.GS.Player.Player player)
+        {
+            player.Inventory.PickUp(this);
         }
 
         // TODO: Some of this stuff should probably only be set when the item is in the inventory/on the ground
@@ -231,15 +235,6 @@ namespace Mooege.Core.Common.Items
                     Handle = this.ActorSNO,
                 },
             });
-
-            /* in the original dump this was sent. But don't know for what its good for
-            foreach (NetAttributeKeyValue attr in netAttributesList){
-                client.SendMessage(new AttributeSetValueMessage()
-                {
-                    Field0 = this.DynamicID,
-                    Field1 = attr,
-                });
-            };  */
 
             // Drop effect/sound?
             client.SendMessage(new PlayEffectMessage()

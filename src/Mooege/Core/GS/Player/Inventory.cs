@@ -382,6 +382,9 @@ namespace Mooege.Core.GS.Player
             {
                 AddItem(item, freeSlot.Value.Row, freeSlot.Value.Column);
 
+                if (_owner.GroundItems.ContainsKey(item.DynamicID))
+                    _owner.GroundItems.Remove(item.DynamicID);
+
                 // TODO: Item class should handle this
                 _owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
                 {
@@ -424,7 +427,7 @@ namespace Mooege.Core.GS.Player
                     RemoveItem(item);
                     EquipItem(item, request.Location.EquipmentSlot);
                     AcceptMoveRequest(item);
-                    RefreshVisual(request.Location.OwnerID);
+                    RefreshVisual(_owner.DynamicID);
                 }
             }
 
@@ -437,7 +440,7 @@ namespace Mooege.Core.GS.Player
                     {
                         Logger.Debug("Unequip item {0}", request.AsText());
                         UnequipItem(item); // Unequip the item
-                        RefreshVisual(request.Location.OwnerID); // Refresh the visual equipment for the player
+                        RefreshVisual(_owner.DynamicID); // Refresh the visual equipment for the player
                     }
                     else
                     {
