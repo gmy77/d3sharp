@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Mooege.Common;
+using Mooege.Common.Helpers;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Inventory;
@@ -43,9 +44,9 @@ namespace Mooege.Core.GS.Player
         // Access by ID
         public Dictionary<uint, Item> Items { get; private set; }
 
-        private uint[] _equipment;      // array of equiped items_id  (not item)
-        private uint[,] _backpack;      // backpack array
-        private Item _goldItem;
+        private readonly uint[] _equipment;      // array of equiped items_id  (not item)
+        private readonly uint[,] _backpack;      // backpack array
+        private Item _inventoryGold;
 
         private readonly Mooege.Core.GS.Player.Player _owner; // Used, because most information is not in the item class but Actors managed by the world
 
@@ -67,7 +68,6 @@ namespace Mooege.Core.GS.Player
             this.Items = new Dictionary<uint, Item>();
             this._equipment = new uint[16];
             this._backpack = new uint[6, 10];
-            this._goldItem = null;
         }
 
         // This should be in the database#
@@ -448,7 +448,7 @@ namespace Mooege.Core.GS.Player
             Item itemFrom = this.Items[msg.FromID];
             Item itemTo = this.Items[msg.ToID];
 
-            itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -=  (int)msg.Amount;
+            itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
             itemTo.Attributes[GameAttribute.ItemStackQuantityLo] += (int)msg.Amount;
 
             // TODO: This needs to change the attribute on the item itself. /komiga
@@ -499,24 +499,22 @@ namespace Mooege.Core.GS.Player
         // TODO: The inventory's gold item should not be created here. /komiga
         public void PickUpGold(uint itemID)
         {
-            Item collectedItem = _owner.GroundItems[itemID];
-            if (_goldItem == null)
+            var collectedGold = _owner.GroundItems[itemID];
+            if (collectedGold == null) return;
+
+            if (this._inventoryGold == null)
             {
-                ItemTypeGenerator itemGenerator = new ItemTypeGenerator(_owner.InGameClient);
-                _goldItem = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
-                _goldItem.Attributes[GameAttribute.Gold] = collectedItem.Attributes[GameAttribute.Gold];
-                _goldItem.Owner = _owner;
-                _goldItem.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
-                _goldItem.Reveal(_owner);
+                this._inventoryGold = ItemGenerator.CreateGold(this._owner, collectedGold.Attributes[GameAttribute.Gold]);
+                this._inventoryGold.Owner = this._owner;
+                this._inventoryGold.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
+                this._inventoryGold.Reveal(this._owner);
             }
             else
-            {
-                _goldItem.Attributes[GameAttribute.Gold] += collectedItem.Attributes[GameAttribute.Gold];
-            }
+                _inventoryGold.Attributes[GameAttribute.Gold] += collectedGold.Attributes[GameAttribute.Gold];           
 
-            GameAttributeMap attributes = new GameAttributeMap();
-            attributes[GameAttribute.ItemStackQuantityLo] = _goldItem.Attributes[GameAttribute.Gold];
-            attributes.SendMessage(_owner.InGameClient, _goldItem.DynamicID);
+            var attributes = new GameAttributeMap();
+            attributes[GameAttribute.ItemStackQuantityLo] = _inventoryGold.Attributes[GameAttribute.Gold];
+            attributes.SendMessage(_owner.InGameClient, _inventoryGold.DynamicID);
         }
     }
 }

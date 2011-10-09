@@ -111,7 +111,7 @@
     <Compile Include="Core\MooNet\Helpers\NotificationTypeHelper.cs" />
     <Compile Include="Common\Helpers\RandomHelper.cs" />
     <Compile Include="Core\Common\Items\Item.cs" />
-    <Compile Include="Core\Common\Items\ItemTypeGenerator.cs" />
+    <Compile Include="Core\Common\Items\ItemGenerator.cs" />
     <Compile Include="Core\GS\Map\Portal.cs" />
     <Compile Include="Core\GS\Map\Scene.cs" />
     <Compile Include="Core\GS\Map\World.cs" />

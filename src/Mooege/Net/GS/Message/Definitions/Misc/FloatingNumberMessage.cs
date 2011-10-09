@@ -20,7 +20,6 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    // TODO Rename because it not only displays numbers but also text... or delete this comment
     public class FloatingNumberMessage : GameMessage
     {
         // Enums members with a color in their name display a colored number
