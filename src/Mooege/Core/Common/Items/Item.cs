@@ -55,9 +55,7 @@ namespace Mooege.Core.Common.Items
         public Mooege.Core.GS.Player.Player Owner { get; set; } // Only set when the player has the item in its inventory. /komiga
 
         public ItemType ItemType { get; set; }
-        public int Count { get; set; } // <- amount?
 
-        public List<Affix> AffixList { get; set; }
 
         public int EquipmentSlot { get; private set; }
         public IVector2D InventoryLocation { get; private set; } // Column, row; NOTE: Call SetInventoryLocation() instead of setting fields on this
@@ -99,11 +97,7 @@ namespace Mooege.Core.Common.Items
             this.ActorSNO = actorSNO;
             this.GBHandle.Type = (int)GBHandleType.Gizmo;
             this.GBHandle.GBID = gbid;
-            this.Count = 1;
             this.ItemType = type;
-
-            this.AffixList = new List<Affix>();
-
             this.EquipmentSlot = 0;
             this.InventoryLocation = new IVector2D { X = 0, Y = 0 };
 
@@ -194,51 +188,9 @@ namespace Mooege.Core.Common.Items
         {
             base.Reveal(player);
             GameClient client = player.InGameClient;
-            var AffixGBIDs = new int[AffixList.Count];
-            for (int i = 0; i < AffixList.Count; i++)
-            {
-                AffixGBIDs[i] = AffixList[i].AffixGbid;
-            }
 
-            client.SendMessage(new AffixMessage()
-            {
-                ActorID = this.DynamicID,
-                Field1 = 0x00000001,
-                aAffixGBIDs = AffixGBIDs,
-
-            });
-
-            client.SendMessage(new AffixMessage()
-            {
-                ActorID = this.DynamicID,
-                Field1 = 0x00000002,
-                aAffixGBIDs = AffixGBIDs,
-            });
-
-            client.SendMessage(new ACDCollFlagsMessage()
-            {
-                ActorID = this.DynamicID,
-                CollFlags = 0x00000080,
-            });
-
-            if (this.ItemType == ItemType.Gold)
-            {
-                Attributes[GameAttribute.Gold] = this.Count;
-            }
-            this.Attributes.SendMessage(client, this.DynamicID);
-
-            client.SendMessage(new ACDGroupMessage()
-            {
-                ActorID = this.DynamicID,
-                Field1 = -1,
-                Field2 = -1,
-            });
-
-            client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage7)
-            {
-                ActorID = this.DynamicID,
-            });
-
+            // Whats this?
+            /*
             client.SendMessage(new SNONameDataMessage()
             {
                 Name = new SNOName()
@@ -247,19 +199,22 @@ namespace Mooege.Core.Common.Items
                     Handle = this.ActorSNO,
                 },
             });
+             */
 
-            // Drop effect/sound?
+            // Drop effect/sound? TODO find out
             client.SendMessage(new PlayEffectMessage()
             {
                 ActorID = this.DynamicID,
                 Field1 = 0x00000027,
             });
 
-            client.SendMessage(new ACDInventoryUpdateActorSNO()
+             //Why updating with the same sno?
+            /*client.SendMessage(new ACDInventoryUpdateActorSNO()
             {
                 ItemID = this.DynamicID,
                 ItemSNO = this.ActorSNO,
             });
+             */
             client.FlushOutgoingBuffer();
         }
     }

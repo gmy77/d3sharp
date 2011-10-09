@@ -58,7 +58,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
                             Position = this.Position,
                             WorldID = client.Player.World.DynamicID,
                         },
-                        Count = item.Count,
+                        Count = item.Attributes[GameAttribute.Gold],
                         Field3 = 0x1c,
                     });
                     // NOTE: ANNDataMessage6 is probably "AddToInventory"

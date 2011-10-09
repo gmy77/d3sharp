@@ -448,19 +448,19 @@ namespace Mooege.Core.GS.Player
             Item itemFrom = this.Items[msg.FromID];
             Item itemTo = this.Items[msg.ToID];
 
-            itemFrom.Count = (itemFrom.Count) - ((int)msg.Amount);
-            itemTo.Count = itemTo.Count + (int)msg.Amount;
+            itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -=  (int)msg.Amount;
+            itemTo.Attributes[GameAttribute.ItemStackQuantityLo] += (int)msg.Amount;
 
             // TODO: This needs to change the attribute on the item itself. /komiga
             // Update source
             GameAttributeMap attributes = new GameAttributeMap();
-            attributes[GameAttribute.ItemStackQuantityLo] = itemFrom.Count;
+            attributes[GameAttribute.ItemStackQuantityLo] = itemFrom.Attributes[GameAttribute.ItemStackQuantityLo];
             attributes.SendMessage(_owner.InGameClient, itemFrom.DynamicID);
 
             // TODO: This needs to change the attribute on the item itself. /komiga
             // Update target
             attributes = new GameAttributeMap();
-            attributes[GameAttribute.ItemStackQuantityLo] = itemTo.Count;
+            attributes[GameAttribute.ItemStackQuantityLo] = itemTo.Attributes[GameAttribute.ItemStackQuantityLo];
             attributes.SendMessage(_owner.InGameClient, itemTo.DynamicID);
 
             _owner.InGameClient.PacketId += 10 * 2;
@@ -504,18 +504,18 @@ namespace Mooege.Core.GS.Player
             {
                 ItemTypeGenerator itemGenerator = new ItemTypeGenerator(_owner.InGameClient);
                 _goldItem = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
-                _goldItem.Count = collectedItem.Count;
+                _goldItem.Attributes[GameAttribute.Gold] = collectedItem.Attributes[GameAttribute.Gold];
                 _goldItem.Owner = _owner;
                 _goldItem.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
                 _goldItem.Reveal(_owner);
             }
             else
             {
-                _goldItem.Count += collectedItem.Count;
+                _goldItem.Attributes[GameAttribute.Gold] += collectedItem.Attributes[GameAttribute.Gold];
             }
 
             GameAttributeMap attributes = new GameAttributeMap();
-            attributes[GameAttribute.ItemStackQuantityLo] = _goldItem.Count;
+            attributes[GameAttribute.ItemStackQuantityLo] = _goldItem.Attributes[GameAttribute.Gold];
             attributes.SendMessage(_owner.InGameClient, _goldItem.DynamicID);
         }
     }

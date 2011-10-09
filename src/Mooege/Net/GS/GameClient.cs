@@ -27,7 +27,7 @@ using Mooege.Net.MooNet;
 using Mooege.Core.Common.Items;
 
 // TODO: Client should probably just flush on every message, or use a queue with a very small quota..
-
+// consider: The client seems to not interpret received messages until a tick message which makes flushing earlier less useful
 namespace Mooege.Net.GS
 {
     public sealed class GameClient : IClient

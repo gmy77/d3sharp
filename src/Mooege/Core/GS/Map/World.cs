@@ -217,6 +217,12 @@ namespace Mooege.Core.GS.Map
             // randomize ItemType
             ItemType[] allValues = (ItemType[])Enum.GetValues(typeof(ItemType));
             ItemType type = allValues[RandomHelper.Next(allValues.Length)];
+            if (type == ItemType.Gold)
+            {
+                SpawnGold(player, position);
+                return;
+            }
+
             Item item = itemGenerator.GenerateRandomElement(type);
             item.Drop(null, position); // NOTE: The owner field for an item is only set when it is in the owner's inventory. /komiga
             player.GroundItems[item.DynamicID] = item; // FIXME: Hacky. /komiga
@@ -226,7 +232,8 @@ namespace Mooege.Core.GS.Map
         {
             ItemTypeGenerator itemGenerator = new ItemTypeGenerator(player.InGameClient);
             Item item = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
-            item.Count = RandomHelper.Next(1, 3);
+            item.Attributes[GameAttribute.Gold] = RandomHelper.Next(1, 3);
+            item.Attributes.SendMessage(player.InGameClient, item.DynamicID); // TODO Hack that send the whole attribute map - need selfbroadcasting
             item.Drop(null, position);
             player.GroundItems[item.DynamicID] = item;
         }

@@ -97,44 +97,20 @@ namespace Mooege.Core.GS.Actors
         public override void Reveal(Mooege.Core.GS.Player.Player player)
         {
             base.Reveal(player);
-            this.Attributes.SendMessage(player.InGameClient, this.DynamicID);
-
-            player.InGameClient.SendMessage(new AffixMessage()
-            {
-                ActorID = this.DynamicID,
-                Field1 = 0x1,
-                aAffixGBIDs = new int[0]
-            });
-            player.InGameClient.SendMessage(new AffixMessage()
-            {
-                ActorID = this.DynamicID,
-                Field1 = 0x2,
-                aAffixGBIDs = new int[0]
-            });
-            player.InGameClient.SendMessage(new ACDCollFlagsMessage
-            {
-                ActorID = this.DynamicID,
-                CollFlags = 0x1
-            });
-
-            player.InGameClient.SendMessage(new ACDGroupMessage
-            {
-                ActorID = this.DynamicID,
-                Field1 = unchecked((int)0xb59b8de4),
-                Field2 = -1
-            });
-
+ 
+            /* Dont know what this does
             player.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage24)
             {
                 ActorID = this.DynamicID
             });
-
+            */
             player.InGameClient.SendMessage(new SetIdleAnimationMessage
             {
                 ActorID = this.DynamicID,
                 AnimationSNO = this.AnimationSNO
             });
 
+            /*
             player.InGameClient.SendMessage(new SNONameDataMessage
             {
                 Name = new SNOName
@@ -143,6 +119,7 @@ namespace Mooege.Core.GS.Actors
                     Handle = this.ActorSNO
                 }
             });
+             */
 
             player.InGameClient.PacketId += 30 * 2;
             player.InGameClient.SendMessage(new DWordDataMessage()
