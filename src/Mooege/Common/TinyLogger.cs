@@ -179,12 +179,18 @@ namespace Mooege.Common
 
         public override void LogMessage(Level level, string logger, string message)
         {
-            this._logStream.WriteLine(string.Format("[{0}] [{1}]: {2}", level.ToString().PadLeft(5), logger, message));
+            lock (this) // we need this here until we seperate gs / moonet /raist
+            {
+                this._logStream.WriteLine(string.Format("[{0}] [{1}]: {2}", level.ToString().PadLeft(5), logger, message));
+            }
         }
 
         public override void LogException(Level level, string logger, string message, Exception exception)
         {
-            this._logStream.WriteLine(string.Format("[{0}] [{1}]: {2} - [Exception] {3}", level.ToString().PadLeft(5), logger, message, exception));
+            lock (this)
+            {
+                this._logStream.WriteLine(string.Format("[{0}] [{1}]: {2} - [Exception] {3}", level.ToString().PadLeft(5), logger, message, exception));
+            }
         }
 
         #region de-ctor

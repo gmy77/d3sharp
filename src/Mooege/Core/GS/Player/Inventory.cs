@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Mooege.Common;
+using Mooege.Common.Helpers;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Inventory;

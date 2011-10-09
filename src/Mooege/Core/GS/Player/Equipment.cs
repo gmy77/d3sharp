@@ -20,13 +20,13 @@ namespace Mooege.Core.GS.Player
         public int EquipmentSlots { get { return _equipment.GetLength(0); } }
         
         private readonly Mooege.Core.GS.Player.Player _owner; // Used, because most information is not in the item class but Actors managed by the world
-        private Item _goldItem;
+        private Item _inventoryGold;
 
         private uint[] _equipment;      // array of equiped items_id  (not item)
 
         public Equipment(Player owner){
             this._equipment = new uint[16];
-            this._goldItem = null;           
+            this._inventoryGold = null;           
             this._owner = owner;
         }
        
@@ -115,21 +115,20 @@ namespace Mooege.Core.GS.Player
 
         internal Item AddGoldItem(Item collectedItem)
         {
-            if (_goldItem == null)
+            if (_inventoryGold == null)
             {
-                ItemTypeGenerator itemGenerator = new ItemTypeGenerator(_owner.InGameClient);
-                _goldItem = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
-                _goldItem.Count = collectedItem.Count;
-                _goldItem.Owner = _owner;
-                _goldItem.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
-                _goldItem.Reveal(_owner);
+                _inventoryGold = ItemGenerator.CreateGold(_owner, collectedItem.Count);
+                _inventoryGold.Count = collectedItem.Count;
+                _inventoryGold.Owner = _owner;
+                _inventoryGold.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
+                _inventoryGold.Reveal(_owner);
             }
             else
             {
-                _goldItem.Count += collectedItem.Count;
+                _inventoryGold.Count += collectedItem.Count;
             }
 
-            return _goldItem;
+            return _inventoryGold;
         }
 
         internal Item GetEquipment(int targetEquipSlot)

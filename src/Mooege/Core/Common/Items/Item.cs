@@ -18,7 +18,6 @@
 
 using System.Collections.Generic;
 using Mooege.Common;
-using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS;
@@ -27,8 +26,8 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Core.Common.Items.ItemCreation;
+using Mooege.Net.GS.Message.Definitions.Attribute;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
 
@@ -36,10 +35,11 @@ namespace Mooege.Core.Common.Items
 {
     public enum ItemType
     {
-        Helm, Gloves, Boots, Belt, Shoulders, Pants, Bracers, Shield, Quiver, Orb,
-        Axe_1H, Axe_2H, CombatStaff_2H, Dagger, Mace_1H, Mace_2H, Sword_1H,
-        Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, Wand, Ring, FistWeapon_1H,
-        HealthPotion, Gold, ChestArmor, Amulet, HealthGlobe
+        Unknown, Helm, Gloves, Boots, Belt, Shoulders, Pants, Bracers, Shield, Quiver, Orb,
+        Axe_1H, Axe_2H, CombatStaff_2H, Staff, Dagger, Mace_1H, Mace_2H, Sword_1H,
+        Sword_2H, Crossbow, Bow, Spear, Polearm, Wand, Ring, FistWeapon_1H, ThrownWeapon, ThrowingAxe, ChestArmor, 
+        HealthPotion, Gold, HealthGlobe, Dye, Elixir, Charm, Scroll, SpellRune, Rune, 
+        Amethyst, Diamond, Emarald, Ruby, Sapphire, Emerald, Topaz, Skull, Backpack, Potion, Amulet, Scepter, Rod, Journal
 
         /* Not working at the moment:      
          *  // ThrownWeapon, ThrowingAxe    --> does not work because there are no snoId in Actors.txt. Do they actually drop in the D3 beta?
@@ -274,25 +274,6 @@ namespace Mooege.Core.Common.Items
                 ItemSNO = this.ActorSNO,
             });
             client.FlushOutgoingBuffer();
-        }
-		// Needed?
-        private void SendAttributes(List<NetAttributeKeyValue> netAttributesList, GameClient client)
-        {
-            // Attributes can't be send all together
-            // must be split up to part of max 15 attributes at once
-            var tempList = new List<NetAttributeKeyValue>(netAttributesList);
-
-            while (tempList.Count > 0)
-            {
-                int selectCount = (tempList.Count > 15) ? 15 : tempList.Count;
-                client.SendMessage(new AttributesSetValuesMessage()
-                {
-                    Id = 0x004D,
-                    ActorID = DynamicID,
-                    atKeyVals = tempList.GetRange(0, selectCount).ToArray(),
-                });
-                tempList.RemoveRange(0, selectCount);
-            }
-        }
+        }		
     }
 }
