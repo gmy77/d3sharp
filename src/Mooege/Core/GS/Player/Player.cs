@@ -379,9 +379,13 @@ namespace Mooege.Core.GS.Player
         {
             Actor actor = this.World.GetActor(message.TargetID);
             if (actor != null)
+            {
                 actor.OnTargeted(this);
+            }
             else
-                Logger.Warn("Player targeted an invalid object (ID = {0})", message.TargetID);
+            {
+                //Logger.Warn("Player targeted an invalid object (ID = {0})", message.TargetID);
+            }
         }
 
         private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
