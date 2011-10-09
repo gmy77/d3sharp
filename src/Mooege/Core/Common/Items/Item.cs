@@ -26,6 +26,8 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Core.Common.Items.ItemCreation;
+using Mooege.Net.GS.Message.Definitions.Attribute;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
 
@@ -39,9 +41,8 @@ namespace Mooege.Core.Common.Items
         HealthPotion, Gold, HealthGlobe, Dye, Elixir, Charm, Scroll, SpellRune, Rune, 
         Amethyst, Diamond, Emarald, Ruby, Sapphire, Emerald, Topaz, Skull, Backpack, Potion, Amulet, Scepter, Rod, Journal
 
-        /* Not working at the moment:
-         *  // ChestArmor                   --> does not work because there are missing itemnames for normal mode, just for nightmare and hell and some "a" and "b" variants... -> need to figure out which should be used
-         *  // ThrownWeapon, ThrowingAxe    --> does not work because there are no snoId in Actors.txt
+        /* Not working at the moment:      
+         *  // ThrownWeapon, ThrowingAxe    --> does not work because there are no snoId in Actors.txt. Do they actually drop in the D3 beta?
          */
     }
 
@@ -112,6 +113,13 @@ namespace Mooege.Core.Common.Items
             this.Field8 = 0;
             this.Field9 = 0x00000000;
             this.Field10 = 0x00;
+
+            List<IItemAttributeCreator> attributeCreators = new AttributeCreatorFactory().Create(type);
+            foreach (IItemAttributeCreator creator in attributeCreators)
+            {
+                creator.CreateAttributes(this);
+            }
+
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
@@ -132,14 +140,9 @@ namespace Mooege.Core.Common.Items
             return (itemType == ItemType.HealthPotion);
         }
 
-        public static bool IsRing(ItemType itemType)
+        public static bool IsAccessory(ItemType itemType)
         {
-            return (itemType == ItemType.Ring);
-        }
-
-        public static bool IsBelt(ItemType itemType)
-        {
-            return (itemType == ItemType.Belt);
+            return (itemType == ItemType.Ring || itemType == ItemType.Belt || itemType == ItemType.Amulet);
         }
 
         public static bool IsWeapon(ItemType itemType)
@@ -164,6 +167,17 @@ namespace Mooege.Core.Common.Items
                 || itemType == ItemType.Wand
                 );
         }
+
+ 		public static bool Is2H(ItemType itemType)
+        {
+            return (itemType == ItemType.Sword_2H
+                || itemType == ItemType.Axe_2H
+                || itemType == ItemType.Mace_2H
+                || itemType == ItemType.CombatStaff_2H
+                || itemType == ItemType.Staff
+                || itemType == ItemType.Polearm);
+        }
+
 
         public void SetInventoryLocation(int equipmentSlot, int column, int row)
         {
@@ -260,6 +274,6 @@ namespace Mooege.Core.Common.Items
                 ItemSNO = this.ActorSNO,
             });
             client.FlushOutgoingBuffer();
-        }
+        }		
     }
 }
