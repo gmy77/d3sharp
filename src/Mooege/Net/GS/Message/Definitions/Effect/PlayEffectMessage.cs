@@ -22,7 +22,7 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
 {
     public class PlayEffectMessage : GameMessage
     {
-        public int Field0;
+        public uint ActorID; // Actor's DynamicID
         public int Field1;
         public int? Field2;
 
@@ -30,7 +30,7 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
             Field1 = buffer.ReadInt(7) + (-1);
             if (buffer.ReadBool())
             {
@@ -40,7 +40,7 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteUInt(32, ActorID);
             buffer.WriteInt(7, Field1 - (-1));
             buffer.WriteBool(Field2.HasValue);
             if (Field2.HasValue)
@@ -55,7 +55,7 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
             b.AppendLine("PlayEffectMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             if (Field2.HasValue)
             {

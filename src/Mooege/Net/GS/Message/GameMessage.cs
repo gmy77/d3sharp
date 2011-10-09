@@ -30,7 +30,6 @@ namespace Mooege.Net.GS.Message
 
         protected static readonly Logger Logger = LogManager.CreateLogger();
 
-
         private static readonly Dictionary<Opcodes, Type> MessageTypes = new Dictionary<Opcodes, Type>();
         private static readonly Dictionary<Opcodes, Consumers> MessageConsumers = new Dictionary<Opcodes, Consumers>();
 
@@ -81,14 +80,14 @@ namespace Mooege.Net.GS.Message
             return msg;
         }
 
-        public GameMessage() {}
+        protected GameMessage() {}
 
-        public GameMessage(int id)
+        protected GameMessage(int id)
         {
             this.Id = id;
         }
 
-        public GameMessage(Opcodes opcode)
+        protected GameMessage(Opcodes opcode)
         {
             this.Id = (int)opcode;
         }

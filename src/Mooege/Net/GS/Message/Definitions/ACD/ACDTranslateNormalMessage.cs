@@ -16,17 +16,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Mooege.Core.Common.Items;
+using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
-    [IncomingMessage(new[] { Opcodes.ACDTranslateNormalMessage1, Opcodes.ACDTranslateNormalMessage2 })]
+    [IncomingMessage(new[]{
+        Opcodes.ACDTranslateNormalMessage1,
+        Opcodes.ACDTranslateNormalMessage2
+    })]
     public class ACDTranslateNormalMessage : GameMessage, ISelfHandler
     {
-        public int Field0;
+        public int Field0; // TODO: Confirm that this is the actor ID
         public Vector3D Position;
-        public float /* angle */? Field2;
+        public float /* angle */? Angle;
         public bool? Field3;
         public float? Field4;
         public int? Field5;
@@ -36,7 +43,45 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public void Handle(GameClient client)
         {
             if (this.Position != null)
-                client.Player.Hero.Position = this.Position;
+                client.Player.Position = this.Position;
+
+            // looking for gold to pick up
+            // TODO: Need to consider items on the ground globally as well (and this doesn't belong here)
+            var actorList = client.Player.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
+            foreach (var actor in actorList)
+            {
+                Item item;
+                if (client.Player.GroundItems.TryGetValue(actor.DynamicID, out item) && item.ItemType == ItemType.Gold)
+                {
+                    client.SendMessage(new FloatingAmountMessage() {
+                        Place = new WorldPlace() {
+                            Position = this.Position,
+                            WorldID = client.Player.World.DynamicID,
+                        },
+                        Count = item.Count,
+                        Field3 = 0x1c,
+                    });
+                    // NOTE: ANNDataMessage6 is probably "AddToInventory"
+                    client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6)
+                    {
+                        ActorID = actor.DynamicID,
+                    });
+
+                    client.Player.Inventory.PickUpGold(actor.DynamicID);
+
+                    client.PacketId += 10 * 2;
+                    client.SendMessage(new DWordDataMessage()
+                    {
+                        Id = 0x89,
+                        Field0 = client.PacketId,
+                    });
+
+                    client.FlushOutgoingBuffer();
+
+                    client.Player.GroundItems.Remove(actor.DynamicID);
+                    // should delete from World also
+                }
+            }
         }
 
         public override void Parse(GameBitBuffer buffer)
@@ -49,7 +94,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             }
             if (buffer.ReadBool())
             {
-                Field2 = buffer.ReadFloat32();
+                Angle = buffer.ReadFloat32();
             }
             if (buffer.ReadBool())
             {
@@ -81,10 +126,10 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             {
                 Position.Encode(buffer);
             }
-            buffer.WriteBool(Field2.HasValue);
-            if (Field2.HasValue)
+            buffer.WriteBool(Angle.HasValue);
+            if (Angle.HasValue)
             {
-                buffer.WriteFloat32(Field2.Value);
+                buffer.WriteFloat32(Angle.Value);
             }
             buffer.WriteBool(Field3.HasValue);
             if (Field3.HasValue)
@@ -124,9 +169,9 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             {
                 Position.AsText(b, pad);
             }
-            if (Field2.HasValue)
+            if (Angle.HasValue)
             {
-                b.Append(' ', pad); b.AppendLine("Field2.Value: " + Field2.Value.ToString("G"));
+                b.Append(' ', pad); b.AppendLine("Angle.Value: " + Angle.Value.ToString("G"));
             }
             if (Field3.HasValue)
             {

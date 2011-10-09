@@ -34,9 +34,7 @@ namespace Mooege.Common
         Info,
         Warn,
         Error,
-        Fatal,
-        Incoming,
-        Outgoing,
+        Fatal
     }
 
     public static class LogManager
@@ -129,6 +127,14 @@ namespace Mooege.Common
         public void Fatal(string message) { Log(Level.Fatal, message, null); }
         public void Fatal(string message, params object[] args) { Log(Level.Fatal, message, args); }
 
+        // moonet packet loggers
+        public void LogIncoming(Google.ProtocolBuffers.IMessage msg) { Log(Level.Trace, msg.AsText(), null); }
+        public void LogOutgoing(Google.ProtocolBuffers.IMessage msg) { Log(Level.Trace, msg.AsText(), null); }
+
+        // ingame packet loggers
+        public void LogIncoming(GameMessage msg) { Log(Level.Trace, msg.AsText(), null); }
+        public void LogOutgoing(GameMessage msg) { Log(Level.Trace, msg.AsText(), null); }
+
         public void TraceException(Exception exception, string message) { LogException(Level.Trace, message, null, exception); }
         public void TraceException(Exception exception, string message, params object[] args) { LogException(Level.Trace, message, args, exception); }
 
@@ -146,11 +152,6 @@ namespace Mooege.Common
 
         public void FatalException(Exception exception, string message) { LogException(Level.Fatal, message, null, exception); }
         public void FatalException(Exception exception, string message, params object[] args) { LogException(Level.Fatal, message, args, exception); }
-
-        public void LogIncoming(Google.ProtocolBuffers.IMessage msg) { Log(Level.Incoming, msg.AsText(), null); }
-        public void LogOutgoing(Google.ProtocolBuffers.IMessage msg) { Log(Level.Outgoing, msg.AsText(), null); }
-        public void LogIncoming(GameMessage msg) { Log(Level.Incoming, msg.AsText(), null); }
-        public void LogOutgoing(GameMessage msg) { Log(Level.Outgoing, msg.AsText(), null); }
     }
 
     public class Target
@@ -178,12 +179,18 @@ namespace Mooege.Common
 
         public override void LogMessage(Level level, string logger, string message)
         {
-            this._logStream.WriteLine(string.Format("[{0}] [{1}]: {2}", level.ToString().PadLeft(5), logger, message));
+            lock (this) // we need this here until we seperate gs / moonet /raist
+            {
+                this._logStream.WriteLine(string.Format("[{0}] [{1}]: {2}", level.ToString().PadLeft(5), logger, message));
+            }
         }
 
         public override void LogException(Level level, string logger, string message, Exception exception)
         {
-            this._logStream.WriteLine(string.Format("[{0}] [{1}]: {2} - [Exception] {3}", level.ToString().PadLeft(5), logger, message, exception));
+            lock (this)
+            {
+                this._logStream.WriteLine(string.Format("[{0}] [{1}]: {2} - [Exception] {3}", level.ToString().PadLeft(5), logger, message, exception));
+            }
         }
 
         #region de-ctor
@@ -253,8 +260,6 @@ namespace Mooege.Common
                 case Level.Warn: Console.ForegroundColor = ConsoleColor.Yellow; break;
                 case Level.Error: Console.ForegroundColor = ConsoleColor.Magenta; break;
                 case Level.Fatal: Console.ForegroundColor = ConsoleColor.Red; break;
-                case Level.Incoming:
-                case Level.Outgoing: Console.ForegroundColor = ConsoleColor.White; break;
                 default: break;
             }
         }

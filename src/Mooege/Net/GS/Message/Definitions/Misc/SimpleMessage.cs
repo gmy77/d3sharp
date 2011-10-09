@@ -18,7 +18,8 @@
 
 using System;
 using System.Text;
-using Mooege.Core.GS.Universe;
+using Mooege.Core.GS.Game;
+using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Definitions.Game;
@@ -39,11 +40,12 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     {
         public void Handle(GameClient client)
         {
-            Mooege.Core.GS.Universe.Hero hero = client.Player.Hero;
+            var player = client.Player;
             switch (this.Id)
             {
                 case 0x0030: // Sent with DwordDataMessage(0x0125, Value:0) and SimpleMessage(0x0125)
                     {
+                        // What the dickens is this stuff
                         #region hardcoded1
                         #region HirelingInfo
                         client.SendMessage(new HirelingInfoUpdateMessage()
@@ -74,213 +76,32 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         });
                         #endregion
                         #region Player Attribute Values
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Field0 = 0x000FFFFF,
-                                Attribute = GameAttribute.Attributes[0x015B], // Banter_Cooldown
-                                Int = 0x000007C9,
-                                Float = 0f,
-                            },
-                        });
 
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Field0 = 0x00020CBE,
-                                Attribute = GameAttribute.Attributes[0x01CC], // Buff_Active
-                                Int = 0x00000001,
-                                Float = 0f,
-                            },
-                        });
+                        GameAttributeMap attributes = new GameAttributeMap();
+                        attributes[GameAttribute.Banter_Cooldown, 0xFFFFF] = 0x000007C9;
+                        attributes[GameAttribute.Buff_Active, 0x20CBE] = true;
+                        attributes[GameAttribute.Buff_Active, 0x33C40] = false;
+                        attributes[GameAttribute.Immobolize] = false;
+                        attributes[GameAttribute.Untargetable] = false;
+                        attributes[GameAttribute.CantStartDisplayedPowers] = false;
+                        attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x20CBE] = 0xC1;
+                        attributes[GameAttribute.Disabled] = false;
+                        attributes[GameAttribute.Hidden] = false;
+                        attributes[GameAttribute.Buff_Icon_Count0, 0x33C40] = 0;
+                        attributes[GameAttribute.Buff_Icon_End_Tick0, 0x20CBE] = 0x7C9;
+                        attributes[GameAttribute.Loading] = false;
+                        attributes[GameAttribute.Buff_Icon_End_Tick0, 0x33C40] = 0;
+                        attributes[GameAttribute.Invulnerable] = false;
+                        attributes[GameAttribute.Buff_Icon_Count0, 0x20CBE] = 1;
+                        attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x33C40] = 0;
+                        attributes.SendMessage(client, player.DynamicID);
 
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Field0 = 0x00033C40,
-                                Attribute = GameAttribute.Attributes[0x01CC], // Buff_Active
-                                Int = 0x00000000,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Attribute = GameAttribute.Attributes[0x00D7], // Immobolize
-                                Int = 0x00000000,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Attribute = GameAttribute.Attributes[0x00D6], // Untargetable
-                                Int = 0x00000000,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Attribute = GameAttribute.Attributes[0x01D2], // CantStartDisplayedPowers
-                                Int = 0x00000000,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Field0 = 0x00020CBE,
-                                Attribute = GameAttribute.Attributes[0x01BA], // Buff_Icon_Start_Tick0
-                                Int = 0x000000C1,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Attribute = GameAttribute.Attributes[0x024C], // Disabled
-                                Int = 0x00000000,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Attribute = GameAttribute.Attributes[0x012C], // Hidden
-                                Int = 0x00000000,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Field0 = 0x00033C40,
-                                Attribute = GameAttribute.Attributes[0x0230], // Buff_Icon_Count0
-                                Int = 0x00000000,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Field0 = 0x00020CBE,
-                                Attribute = GameAttribute.Attributes[0x01BE], // Buff_Icon_End_Tick0
-                                Int = 0x000007C9,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Attribute = GameAttribute.Attributes[0x0046], // Loading
-                                Int = 0x00000000,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Field0 = 0x00033C40,
-                                Attribute = GameAttribute.Attributes[0x01BE], // Buff_Icon_End_Tick0
-                                Int = 0x00000000,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Attribute = GameAttribute.Attributes[0x0045], // Invulnerable
-                                Int = 0x00000000,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Field0 = 0x00020CBE,
-                                Attribute = GameAttribute.Attributes[0x0230], // Buff_Icon_Count0
-                                Int = 0x00000001,
-                                Float = 0f,
-                            },
-                        });
-
-                        client.SendMessage(new AttributeSetValueMessage()
-                        {
-                            Id = 0x004C,
-                            Field0 = hero.Id,
-                            Field1 = new NetAttributeKeyValue()
-                            {
-                                Field0 = 0x00033C40,
-                                Attribute = GameAttribute.Attributes[0x01BA], // Buff_Icon_Start_Tick0
-                                Int = 0x00000000,
-                                Float = 0f,
-                            },
-                        });
                         #endregion
 
                         client.SendMessage(new ACDCollFlagsMessage()
                         {
-                            Id = 0x00A6,
-                            Field0 = hero.Id,
-                            Field1 = 0x00000008,
+                            ActorID = player.DynamicID,
+                            CollFlags = 0x00000008,
                         });
 
                         client.SendMessage(new DWordDataMessage()
@@ -291,20 +112,21 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         #endregion
                         client.FlushOutgoingBuffer();
                         #region hardcoded2
+                        // NOTE: This is very similar to ACDEnterKnown fields
+                        // TODO: Map proper values from the actor..
                         client.SendMessage(new TrickleMessage()
                         {
-                            Id = 0x0042,
-                            Field0 = hero.Id,
-                            Field1 = client.Player.Hero.ClassSNO,
+                            ActorID = player.DynamicID,
+                            Field1 = client.Player.ClassSNO,
                             Field2 = new WorldPlace()
                             {
-                                Field0 = new Vector3D()
+                                Position = new Vector3D()
                                 {
                                     X = 3143.75f,
                                     Y = 2828.75f,
                                     Z = 59.07559f,
                                 },
-                                Field1 = client.Player.Hero.WorldId,
+                                WorldID = client.Player.World.DynamicID,
                             },
                             Field3 = 0x00000000,
                             Field4 = 0x00026186,

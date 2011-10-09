@@ -20,14 +20,17 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Mooege.Common;
-using Mooege.Core.GS.Universe;
+using Mooege.Core.GS.Game;
+using Mooege.Core.GS.Player;
 using Mooege.Net.GS.Message;
 using Mooege.Net.MooNet;
 using Mooege.Core.Common.Items;
 
+// TODO: Client should probably just flush on every message, or use a queue with a very small quota..
+
 namespace Mooege.Net.GS
 {
-    public sealed class GameClient : IGameClient
+    public sealed class GameClient : IClient
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -37,22 +40,17 @@ namespace Mooege.Net.GS
         private readonly GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         private readonly GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
 
-        // for some testing
-        public Dictionary<int, Item> items = new Dictionary<int, Item>();  // array of items without specific place in inventory
-        //
-        public Universe Universe;    
-        public Player Player { get; set; }
-        public int PacketId = 0x227 + 20;
-        public int Tick = 0;
-        
-        public IList<int> ObjectIdsSpawned = null;
+        public Mooege.Core.GS.Game.Game Game;
+        public Mooege.Core.GS.Player.Player Player { get; set; }
+        public int PacketId = 0x227 + 20; // TODO: We need proper packet ID incrementing
+        public int Tick = 0; // ... and proper ticking
 
         public bool IsLoggingOut;
 
-        public GameClient(IConnection connection, Universe universe)
-        {            
+        public GameClient(IConnection connection, Game game)
+        {
             this.Connection = connection;
-            this.Universe = universe;
+            this.Game = game;
             _outgoingBuffer.WriteInt(32, 0);
         }
 
@@ -73,7 +71,7 @@ namespace Mooege.Net.GS
                     if (message == null) continue;
                     try
                     {
-                        if (message.Consumer != Consumers.None) this.Universe.Route(this, message);
+                        if (message.Consumer != Consumers.None) this.Game.Route(this, message);
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                         else Logger.Warn("{0} has no consumer or self-handler.", message.GetType());
 

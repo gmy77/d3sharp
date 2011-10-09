@@ -22,6 +22,7 @@ using System.Data.SQLite;
 using System.Linq;
 using Mooege.Core.Common.Storage;
 using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Friends;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
@@ -34,8 +35,11 @@ namespace Mooege.Core.MooNet.Accounts
         public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
         public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
         public string Email { get; private set; }
+        
+        public bool IsOnline { get { return this.LoggedInClient != null; } }
 
-        public MooNetClient LoggedInBNetClient { get; set; }
+        private static readonly D3.OnlineService.EntityId AccountHasNoToons =
+            D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).Build();
 
         public D3.Account.Digest Digest
         {
@@ -45,12 +49,54 @@ namespace Mooege.Core.MooNet.Accounts
                     .SetBannerConfiguration(this.BannerConfiguration)
                     .SetFlags(0);
 
-                builder.SetLastPlayedHeroId(
-                    (Toons.Count > 0)
-                    ? Toons.First().Value.D3EntityID
-                    : D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0)
-                    .Build());
+                D3.OnlineService.EntityId lastPlayedHeroId;
+                if(Toons.Count>0)
+                {
+                    lastPlayedHeroId = Toons.First().Value.D3EntityID; // we should actually hold player's last hero in database. /raist
+                    this.LoggedInClient.CurrentToon = Toons.First().Value; 
+                }
+                else
+                {
+                    lastPlayedHeroId = AccountHasNoToons;
+                }
+
+                builder.SetLastPlayedHeroId(lastPlayedHeroId);
                 return builder.Build();
+            }
+        }
+
+        private MooNetClient _loggedInClient;
+
+        public MooNetClient LoggedInClient
+        {
+            get
+            {
+                return this._loggedInClient;
+            }
+            set
+            {
+                this._loggedInClient = value;
+                
+                // notify friends.
+                if (FriendManager.Friends[this.BnetAccountID.Low].Count == 0) return; // if account has no friends just skip.
+
+                var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
+                var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
+                var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+
+                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetAccountID).AddFieldOperation(operation).Build();
+                var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+                var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
+
+                foreach (var friend in FriendManager.Friends[this.BnetAccountID.Low])
+                {
+                    var account = AccountManager.GetAccountByPersistantID(friend.Id.Low);
+                    if (account == null || account.LoggedInClient == null) return; // only send to friends that are online.
+
+                    account.LoggedInClient.CallMethod(
+                        bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"),
+                        notification, this.DynamicId);
+                }
             }
         }
 
@@ -98,32 +144,73 @@ namespace Mooege.Core.MooNet.Accounts
                 .Build();
         }
 
+        public bnet.protocol.presence.Field QueryField(bnet.protocol.presence.FieldKey queryKey)
+        {
+            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(queryKey);
+
+            switch ((FieldKeyHelper.Program)queryKey.Program)
+            {
+                case FieldKeyHelper.Program.D3:
+                    if (queryKey.Group == 1 && queryKey.Field == 1) // Account's selected toon.
+                    {
+                        if(this.LoggedInClient!=null) // check if the account is online actually.
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LoggedInClient.CurrentToon.D3EntityID.ToByteString()).Build());
+                    }
+                    else
+                    {
+                        Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
+                    }
+                    break;
+                case FieldKeyHelper.Program.BNet:
+                    Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
+                    break;
+            }
+
+
+            return field.HasValue ? field.Build() : null;
+        }
+
         protected override void NotifySubscriptionAdded(MooNetClient client)
         {
-            // Check docs/rpc/fields.txt for fields keys
+            var operations = new List<bnet.protocol.presence.FieldOperation>();
 
-            // RealID name field
-            // NOTE: Probably won't ever use this for its actual purpose, but showing the email in final might not be a good idea
+            // RealID name field - NOTE: Probably won't ever use this for its actual purpose, but showing the email in final might not be a good idea
             var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet,1, 1, 0);
             var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Email).Build()).Build();
-            var fieldOperation1 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build());
 
-            // Hardcoded boolean - always true
+            // Account online?
             var fieldKey2 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
-            var field2 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey2).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
-            var fieldOperation2 = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build();
+            var field2 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey2).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build());
+
+            // Selected toon
+            if (this.LoggedInClient != null && this.LoggedInClient.CurrentToon!=null)
+            {
+                var fieldKey3 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 1, 0);
+                var field3 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey3).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LoggedInClient.CurrentToon.D3EntityID.ToByteString()).Build()).Build();
+                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field3).Build());
+            }
+
+            // toon list
+            foreach(var pair in this.Toons)
+            {
+                var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 4, 0);
+                var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(pair.Value.BnetEntityID.ToByteString()).Build()).Build();
+                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build());
+            }
 
             // Create a presence.ChannelState
-            var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetAccountID).AddFieldOperation(fieldOperation1).AddFieldOperation(fieldOperation2).Build();
+            var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetAccountID).AddRangeFieldOperation(operations).Build();
 
             // Embed in channel.ChannelState
             var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
 
             // Put in addnotification message
-            var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
+            var notification = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
 
             // Make the rpc call
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.DynamicId);
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), notification.Build(), this.DynamicId);
         }
 
         public void SaveToDB()

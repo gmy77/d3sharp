@@ -23,23 +23,25 @@ namespace Mooege.Net.GS.Message.Definitions.World
 {
     public class EnterWorldMessage : GameMessage
     {
-        public Vector3D Field0;
-        public int Field1;
-        public int /* sno */ Field2;
+        public Vector3D EnterPosition;
+        public uint WorldID; // World's DynamicID
+        public int /* sno */ WorldSNO;
+
+        public EnterWorldMessage() : base(Opcodes.EnterWorldMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = new Vector3D();
-            Field0.Parse(buffer);
-            Field1 = buffer.ReadInt(32);
-            Field2 = buffer.ReadInt(32);
+            EnterPosition = new Vector3D();
+            EnterPosition.Parse(buffer);
+            WorldID = buffer.ReadUInt(32);
+            WorldSNO = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            Field0.Encode(buffer);
-            buffer.WriteInt(32, Field1);
-            buffer.WriteInt(32, Field2);
+            EnterPosition.Encode(buffer);
+            buffer.WriteUInt(32, WorldID);
+            buffer.WriteInt(32, WorldSNO);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -48,13 +50,11 @@ namespace Mooege.Net.GS.Message.Definitions.World
             b.AppendLine("EnterWorldMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            Field0.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8"));
+            EnterPosition.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("WorldID: 0x" + WorldID.ToString("X8") + " (" + WorldID + ")");
+            b.Append(' ', pad); b.AppendLine("WorldSNO: 0x" + WorldSNO.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

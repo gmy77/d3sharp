@@ -41,6 +41,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -78,15 +79,23 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dep\sqlite\sqlite-managed\System.Data.SQLite.dll</HintPath>
     </Reference>
+    <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\dep\PowerCollections.dll</HintPath>
+    </Reference>
+    <Reference Include="ductsharp, Version=1.0.4298.19963, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dep\ductsharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-	<Compile Include="Core\Common\Items\Affix.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\AttributesCreatorFactory.cs" />
+    <Compile Include="Core\Common\Items\Affix.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\IItemAttributesCreator.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\PotionAttributesCreator.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributesCreator.cs" />
-    <Compile Include="Core\GS\Universe\Inventory.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\PotionAttributeCreator.cs" />
+    <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributeCreator.cs" />
+    <Compile Include="Core\GS\Player\Equipment.cs" />
+    <Compile Include="Core\GS\Player\Stash.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
@@ -95,6 +104,8 @@
     <Compile Include="Core\MooNet\Channels\Member.cs" />
     <Compile Include="Common\Config\Config.cs" />
     <Compile Include="Common\Config\ConfigManager.cs" />
+    <Compile Include="Core\MooNet\Commands\CommandManager.cs" />
+    <Compile Include="Core\MooNet\Commands\ServerCommandAttribute.cs" />
     <Compile Include="Core\MooNet\Games\Game.cs" />
     <Compile Include="Core\MooNet\Games\GameManager.cs" />
     <Compile Include="Core\MooNet\Helpers\EntityIdHelper.cs" />
@@ -106,10 +117,10 @@
     <Compile Include="Core\GS\Map\Portal.cs" />
     <Compile Include="Core\GS\Map\Scene.cs" />
     <Compile Include="Core\GS\Map\World.cs" />
-    <Compile Include="Core\GS\NPC\BasicNPC.cs" />
-	<Compile Include="Core\MooNet\Invitation\ChannelInvitationManager.cs" />
+    <Compile Include="Core\MooNet\Channels\ChannelInvitationManager.cs" />
+    <Compile Include="Core\MooNet\Friends\FriendManager.cs" />
     <Compile Include="Core\MooNet\Objects\PersistentRPCObject.cs" />
-    <Compile Include="Core\MooNet\OnlinePlayers.cs" />
+    <Compile Include="Core\MooNet\Online\PlayerManager.cs" />
     <Compile Include="Core\MooNet\Services\AuthenticationService.cs" />
     <Compile Include="Core\MooNet\Services\BaseService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelInvitationService.cs" />
@@ -133,25 +144,19 @@
     <Compile Include="Core\GS\Skills\SkillSet.cs" />
     <Compile Include="Core\GS\Skills\Skills.cs" />
     <Compile Include="Core\Common\Storage\DBManager.cs" />
-    <Compile Include="Core\Common\Storage\GamedataDBManager.cs" />
     <Compile Include="Core\Common\Toons\Toon.cs" />
     <Compile Include="Core\Common\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Common\Toons\ToonManager.cs" />
-    <Compile Include="Core\GS\Universe\Hero.cs" />
-    <Compile Include="Core\GS\Universe\Player.cs" />
-    <Compile Include="Core\GS\Universe\PlayerManager.cs" />
-    <Compile Include="Core\GS\Universe\Universe.cs" />
     <Compile Include="Core\GS\Data\SNO\Config.cs" />
     <Compile Include="Core\GS\Data\SNO\Database.cs" />
     <Compile Include="Core\GS\Data\SNO\Set.cs" />
-	<Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.Array.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Net\GS\Message\GameAttributeMap.cs" />
     <Compile Include="Net\MooNet\MooNetClient.cs" />
     <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />
-    <Compile Include="Net\MooNet\IMooNetClient.cs" />
     <Compile Include="Net\MooNet\Packets\Header.cs" />
     <Compile Include="Net\MooNet\Packets\Packet.cs" />
     <Compile Include="Net\GS\ClientManager.cs" />
@@ -201,7 +206,6 @@
     <Compile Include="Net\GS\Message\ISelfHandler.cs" />
     <Compile Include="Net\GS\Message\GameMessage.cs" />
     <Compile Include="Net\GS\GameServer.cs" />
-    <Compile Include="Net\GS\IGameClient.cs" />
     <Compile Include="Net\GS\Message\IncomingMessageAttribute.cs" />
     <Compile Include="Net\GS\Message\Fields\HeroStateData.cs" />
     <Compile Include="Net\GS\Message\Opcodes.cs" />
@@ -386,9 +390,23 @@
     <Compile Include="Core\MooNet\Objects\RPCObjectManager.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObject.cs" />
     <Compile Include="Core\Common\Storage\Config.cs" />
+    <Compile Include="Core\GS\Game\Game.cs" />
+    <Compile Include="Core\GS\Game\PlayerManager.cs" />
+    <Compile Include="Core\GS\Actors\Monster.cs" />
+    <Compile Include="Core\Common\Storage\GamedataDBManager.cs" />
+    <Compile Include="Core\GS\Objects\WorldObject.cs" />
+    <Compile Include="Core\GS\Objects\DynamicObject.cs" />
+    <Compile Include="Core\GS\Objects\IRevealable.cs" />
+    <Compile Include="Core\GS\Player\Inventory.cs" />
+    <Compile Include="Core\GS\Player\Player.cs" />
+    <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <None Include="..\..\assets\account.db">
+      <Link>Assets\account.db</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\assets\config.ini">
       <Link>config.ini</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -397,11 +415,9 @@
       <Link>Assets\gamedata.db</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\assets\toon.db">
-      <Link>Assets\toon.db</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
     </None>
-    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -421,12 +437,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\assets\Maps\darkcellar.txt">
-      <Link>Assets\Maps\darkcellar.txt</Link>
+    <Content Include="..\..\assets\Maps\worlds.txt">
+      <Link>Assets\Maps\worlds.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\assets\Maps\universe.txt">
-      <Link>Assets\Maps\universe.txt</Link>
+    <Content Include="..\..\assets\Maps\Worlds\NewTristram.txt">
+      <Link>Assets\Maps\Worlds\NewTristram.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\assets\SNO\Actors.txt">
@@ -451,6 +467,10 @@
     </Content>
     <Content Include="..\..\assets\SNO\Powers.txt">
       <Link>Assets\SNO\Powers.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\assets\SNO\Scenes.txt">
+      <Link>Assets\SNO\Scenes.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

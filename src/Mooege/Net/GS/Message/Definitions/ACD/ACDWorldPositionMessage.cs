@@ -23,20 +23,22 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 {
     public class ACDWorldPositionMessage : GameMessage
     {
-        public int Field0;
-        public WorldLocationMessageData Field1;
+        public uint ActorID; // Actor's DynamicID
+        public WorldLocationMessageData WorldLocation;
+
+        public ACDWorldPositionMessage() : base(Opcodes.ACDWorldPositionMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = new WorldLocationMessageData();
-            Field1.Parse(buffer);
+            ActorID = buffer.ReadUInt(32);
+            WorldLocation = new WorldLocationMessageData();
+            WorldLocation.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
+            buffer.WriteUInt(32, ActorID);
+            WorldLocation.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -45,8 +47,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDWorldPositionMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            Field1.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            WorldLocation.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

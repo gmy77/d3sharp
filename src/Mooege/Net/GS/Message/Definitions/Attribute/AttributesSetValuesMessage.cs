@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Definitions.Attribute
 {
     public class AttributesSetValuesMessage : GameMessage
     {
-        public int Field0;
+        public uint ActorID; // Actor's DynamicID
         // MaxLength = 15
         public NetAttributeKeyValue[] atKeyVals;
 
@@ -31,7 +31,7 @@ namespace Mooege.Net.GS.Message.Definitions.Attribute
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
             atKeyVals = new NetAttributeKeyValue[buffer.ReadInt(4)];
             for (int i = 0; i < atKeyVals.Length; i++) { atKeyVals[i] = new NetAttributeKeyValue(); atKeyVals[i].Parse(buffer); }
             for (int i = 0; i < atKeyVals.Length; i++) { atKeyVals[i].ParseValue(buffer); }
@@ -39,7 +39,7 @@ namespace Mooege.Net.GS.Message.Definitions.Attribute
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteUInt(32, ActorID);
             buffer.WriteInt(4, atKeyVals.Length);
             for (int i = 0; i < atKeyVals.Length; i++) { atKeyVals[i].Encode(buffer); }
             for (int i = 0; i < atKeyVals.Length; i++) { atKeyVals[i].EncodeValue(buffer); }
@@ -51,7 +51,7 @@ namespace Mooege.Net.GS.Message.Definitions.Attribute
             b.AppendLine("AttributesSetValuesMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', pad); b.AppendLine("atKeyVals:");
             b.Append(' ', pad); b.AppendLine("{");
             for (int i = 0; i < atKeyVals.Length; i++) { atKeyVals[i].AsText(b, pad + 1); b.AppendLine(); }

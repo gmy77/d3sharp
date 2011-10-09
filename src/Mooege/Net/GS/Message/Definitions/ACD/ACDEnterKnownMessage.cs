@@ -23,18 +23,18 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 {
     public class ACDEnterKnownMessage : GameMessage
     {
-        public int Field0;
-        public int /* sno */ Field1;
+        public uint ActorID; // The actor's DynamicID
+        public int /* sno */ ActorSNO;
         public int Field2;
         public int Field3;
-        public WorldLocationMessageData Field4;
-        public InventoryLocationMessageData Field5;
-        public GBHandle Field6;
+        public WorldLocationMessageData WorldLocation;
+        public InventoryLocationMessageData InventoryLocation;
+        public GBHandle GBHandle;
         public int Field7;
         public int Field8;
         public int Field9;
         public byte Field10;
-        public int /* sno */? Field11;
+        public int? /* sno */ Field11;
         public int? Field12;
         public int? Field13;
 
@@ -42,22 +42,22 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
+            ActorSNO = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(5);
             Field3 = buffer.ReadInt(2) + (-1);
             if (buffer.ReadBool())
             {
-                Field4 = new WorldLocationMessageData();
-                Field4.Parse(buffer);
+                WorldLocation = new WorldLocationMessageData();
+                WorldLocation.Parse(buffer);
             }
             if (buffer.ReadBool())
             {
-                Field5 = new InventoryLocationMessageData();
-                Field5.Parse(buffer);
+                InventoryLocation = new InventoryLocationMessageData();
+                InventoryLocation.Parse(buffer);
             }
-            Field6 = new GBHandle();
-            Field6.Parse(buffer);
+            GBHandle = new GBHandle();
+            GBHandle.Parse(buffer);
             Field7 = buffer.ReadInt(32);
             Field8 = buffer.ReadInt(32);
             Field9 = buffer.ReadInt(4) + (-1);
@@ -78,21 +78,21 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteUInt(32, ActorID);
+            buffer.WriteInt(32, ActorSNO);
             buffer.WriteInt(5, Field2);
             buffer.WriteInt(2, Field3 - (-1));
-            buffer.WriteBool(Field4 != null);
-            if (Field4 != null)
+            buffer.WriteBool(WorldLocation != null);
+            if (WorldLocation != null)
             {
-                Field4.Encode(buffer);
+                WorldLocation.Encode(buffer);
             }
-            buffer.WriteBool(Field5 != null);
-            if (Field5 != null)
+            buffer.WriteBool(InventoryLocation != null);
+            if (InventoryLocation != null)
             {
-                Field5.Encode(buffer);
+                InventoryLocation.Encode(buffer);
             }
-            Field6.Encode(buffer);
+            GBHandle.Encode(buffer);
             buffer.WriteInt(32, Field7);
             buffer.WriteInt(32, Field8);
             buffer.WriteInt(4, Field9 - (-1));
@@ -120,19 +120,19 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDEnterKnownMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            b.Append(' ', pad); b.AppendLine("ActorSNO: 0x" + ActorSNO.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
-            if (Field4 != null)
+            if (WorldLocation != null)
             {
-                Field4.AsText(b, pad);
+                WorldLocation.AsText(b, pad);
             }
-            if (Field5 != null)
+            if (InventoryLocation != null)
             {
-                Field5.AsText(b, pad);
+                InventoryLocation.AsText(b, pad);
             }
-            Field6.AsText(b, pad);
+            GBHandle.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("Field7: 0x" + Field7.ToString("X8") + " (" + Field7 + ")");
             b.Append(' ', pad); b.AppendLine("Field8: 0x" + Field8.ToString("X8") + " (" + Field8 + ")");
             b.Append(' ', pad); b.AppendLine("Field9: 0x" + Field9.ToString("X8") + " (" + Field9 + ")");

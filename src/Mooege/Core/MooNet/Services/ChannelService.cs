@@ -27,7 +27,7 @@ namespace Mooege.Core.MooNet.Services
     public class ChannelService : bnet.protocol.channel.Channel, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IMooNetClient Client { get; set; }
+        public MooNetClient Client { get; set; }
 
         public override void AddMember(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.AddMemberRequest request, System.Action<bnet.protocol.NoData> done)
         {
@@ -46,16 +46,18 @@ namespace Mooege.Core.MooNet.Services
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
-            this.Client.CurrentChannel.RemoveMember((MooNetClient)this.Client, Channel.GetRemoveReasonForRequest((Channel.RemoveRequestReason)request.Reason));
+            this.Client.CurrentChannel.RemoveMember(this.Client, Channel.GetRemoveReasonForRequest((Channel.RemoveRequestReason)request.Reason));
         }
 
         public override void SendMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SendMessageRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("SendMessage()");
-            //Logger.Debug("request:\n{0}", request.ToString());
+            Logger.Trace("ChannelService.SendMessage()");
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
+
+            if (!request.HasMessage) return; // only continue if the request actually contains a message.
+            this.Client.CurrentChannel.SendMessage(this.Client, request.Message); // let channel itself to broadcast message to it's members.            
         }
 
         public override void SetRoles(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SetRolesRequest request, System.Action<bnet.protocol.NoData> done)

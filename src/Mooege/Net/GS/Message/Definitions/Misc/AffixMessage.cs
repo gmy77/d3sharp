@@ -22,7 +22,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     public class AffixMessage : GameMessage
     {
-        public int Field0;
+        public uint ActorID; // Actor's DynamicID
         public int Field1;
         // MaxLength = 32
         public int /* gbid */[] aAffixGBIDs;
@@ -31,7 +31,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
             Field1 = buffer.ReadInt(2);
             aAffixGBIDs = new int /* gbid */[buffer.ReadInt(6)];
             for (int i = 0; i < aAffixGBIDs.Length; i++) aAffixGBIDs[i] = buffer.ReadInt(32);
@@ -39,7 +39,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteUInt(32, ActorID);
             buffer.WriteInt(2, Field1);
             buffer.WriteInt(6, aAffixGBIDs.Length);
             for (int i = 0; i < aAffixGBIDs.Length; i++) buffer.WriteInt(32, aAffixGBIDs[i]);
@@ -51,7 +51,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("AffixMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', pad); b.AppendLine("aAffixGBIDs:");
             b.Append(' ', pad); b.AppendLine("{");

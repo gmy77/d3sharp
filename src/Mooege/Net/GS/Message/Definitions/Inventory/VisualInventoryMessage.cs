@@ -23,21 +23,21 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
     public class VisualInventoryMessage : GameMessage
     {
-        public int Field0;
+        public uint ActorID; // Player's DynamicID
         public VisualEquipment EquipmentList;
 
-        public VisualInventoryMessage():base(Opcodes.VisualInventoryMessage){}
+        public VisualInventoryMessage() : base(Opcodes.VisualInventoryMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
             EquipmentList = new VisualEquipment();
             EquipmentList.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteUInt(32, ActorID);
             EquipmentList.Encode(buffer);
         }
 
@@ -47,12 +47,10 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
             b.AppendLine("VisualInventoryMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             EquipmentList.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }
