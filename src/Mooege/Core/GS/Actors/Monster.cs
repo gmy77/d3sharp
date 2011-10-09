@@ -181,7 +181,7 @@ namespace Mooege.Core.GS.Actors
             {
                 ActorID = this.DynamicID,
                 Number = 9001.0f,
-                Field2 = 0,
+                Type = FloatingNumberMessage.FloatType.White,
             }, this);
 
             this.World.BroadcastIfRevealed(new ANNDataMessage(Opcodes.ANNDataMessage13)
