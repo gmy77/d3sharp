@@ -260,9 +260,8 @@ namespace Mooege.Core.GS.Actors
                 Field3 = false,
             }, this);
 
-            // FIXME: Crashes the game. Likely has to do with the reveal stuff in Item.. Possibly referencing a dynamic ID before the client has been notified
-            //this.World.SpawnRandomDrop(player, this.Position);
-            //this.World.SpawnGold(player, this.Position);
+            this.World.SpawnRandomDrop(player, this.Position);
+            this.World.SpawnGold(player, this.Position);
             this.Destroy();
         }
     }

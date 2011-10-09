@@ -156,10 +156,8 @@ namespace Mooege.Core.GS.Player
                     if (_backpack[r, c] == item.DynamicID)
                     {
                         _backpack[r, c] = 0;
+                        item.SetInventoryLocation(-1, -1, -1);
                         item.Owner = null;
-                        item.EquipmentSlot = 0;
-                        item.InventoryLocation.X = 0;
-                        item.InventoryLocation.Y = 0;
                     }
                 }
             }
@@ -186,9 +184,7 @@ namespace Mooege.Core.GS.Player
                     System.Diagnostics.Debug.Assert(_backpack[r, c] == 0, "You need to remove an item from the backpack before placing another item there");
                     _backpack[r, c] = item.DynamicID;
                     item.Owner = _owner;
-                    item.InventoryLocation.X = c;
-                    item.InventoryLocation.Y = r;
-                    item.EquipmentSlot = 0;
+                    item.SetInventoryLocation(0, c, r);
                 }
         }
 
@@ -224,7 +220,7 @@ namespace Mooege.Core.GS.Player
             });
 
             // Finalize
-            // TODO find out if that is necessary
+            // Hardcoded tick keeps the game updated.. /komiga
             _owner.InGameClient.PacketId += 10 * 2;
             _owner.InGameClient.SendMessage(new DWordDataMessage()
             {
@@ -259,9 +255,7 @@ namespace Mooege.Core.GS.Player
         {
             _equipment[slot] = item.DynamicID;
             item.Owner = _owner;
-            item.EquipmentSlot = slot;
-            item.InventoryLocation.X = 0;
-            item.InventoryLocation.Y = 0;
+            item.SetInventoryLocation(slot, 0, 0);
         }
 
         void EquipItem(uint itemID, int slot)
@@ -279,10 +273,8 @@ namespace Mooege.Core.GS.Player
                 if (_equipment[i] == item.DynamicID)
                 {
                     _equipment[i] = 0;
-                    item.EquipmentSlot = 0;
+                    item.SetInventoryLocation(-1, -1, -1);
                     item.Owner = null;
-                    item.InventoryLocation.X = 0;
-                    item.InventoryLocation.Y = 0;
                 }
             }
         }
@@ -341,13 +333,12 @@ namespace Mooege.Core.GS.Player
 
         private void AcceptMoveRequest(Item item)
         {
-            // TODO: Move to Item class
-            _owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
+            /*_owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
             {
                 ItemID = item.DynamicID,
                 InventoryLocation = item.InventoryLocationMessage,
                 Field2 = 1 // what does this do?  // 0 - source item not disappearing from inventory, 1 - Moving, any other possibilities? its an int32
-            });
+            });*/
 
             _owner.InGameClient.PacketId += 10 * 2;
             _owner.InGameClient.SendMessage(new DWordDataMessage()
@@ -384,19 +375,11 @@ namespace Mooege.Core.GS.Player
 
                 if (_owner.GroundItems.ContainsKey(item.DynamicID))
                     _owner.GroundItems.Remove(item.DynamicID);
-
-                // TODO: Item class should handle this
-                _owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
-                {
-                    ItemID = item.DynamicID,
-                    InventoryLocation = item.InventoryLocationMessage,
-                    Field2 = 1 // TODO: find out what this is and why it must be 1...is it an enum?
-                });
                 success = true;
             }
 
             // Finalize
-            // TODO find out if that is necessary
+            // Hardcoded tick keeps the game updated.. /komiga
             _owner.InGameClient.PacketId += 10 * 2;
             _owner.InGameClient.SendMessage(new DWordDataMessage()
             {
@@ -468,13 +451,13 @@ namespace Mooege.Core.GS.Player
             itemFrom.Count = (itemFrom.Count) - ((int)msg.Amount);
             itemTo.Count = itemTo.Count + (int)msg.Amount;
 
-            // TODO: This needs to change the attribute on the item itself
+            // TODO: This needs to change the attribute on the item itself. /komiga
             // Update source
             GameAttributeMap attributes = new GameAttributeMap();
             attributes[GameAttribute.ItemStackQuantityLo] = itemFrom.Count;
             attributes.SendMessage(_owner.InGameClient, itemFrom.DynamicID);
 
-            // TODO: This needs to change the attribute on the item itself
+            // TODO: This needs to change the attribute on the item itself. /komiga
             // Update target
             attributes = new GameAttributeMap();
             attributes[GameAttribute.ItemStackQuantityLo] = itemTo.Count;
@@ -513,7 +496,7 @@ namespace Mooege.Core.GS.Player
             else return;
         }
 
-        // TODO: The inventory's gold item should not be created here
+        // TODO: The inventory's gold item should not be created here. /komiga
         public void PickUpGold(uint itemID)
         {
             Item collectedItem = _owner.GroundItems[itemID];
@@ -522,7 +505,8 @@ namespace Mooege.Core.GS.Player
                 ItemTypeGenerator itemGenerator = new ItemTypeGenerator(_owner.InGameClient);
                 _goldItem = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
                 _goldItem.Count = collectedItem.Count;
-                _goldItem.EquipmentSlot = 18; // Equipment slot 18 ==> Gold
+                _goldItem.Owner = _owner;
+                _goldItem.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
                 _goldItem.Reveal(_owner);
             }
             else

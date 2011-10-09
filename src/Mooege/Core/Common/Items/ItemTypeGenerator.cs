@@ -32,7 +32,7 @@ namespace Mooege.Core.Common.Items
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
 
-        // This is an incredibly confusing design choice..
+        // This is an incredibly confusing design choice.. /komiga
         private readonly GameClient _client;
 
         public ItemTypeGenerator(GameClient client)
@@ -106,7 +106,7 @@ namespace Mooege.Core.Common.Items
         private Item Generate(String itemName, int actorSNO, ItemType itemType)
         {
             int gbid = StringHashHelper.HashItemName(itemName);
-            var item = new Item(_client.Player.World, gbid, itemType) { ActorSNO = actorSNO };
+            var item = new Item(_client.Player.World, actorSNO, gbid, itemType);
             _client.Player.GroundItems[item.DynamicID] = item;
             return item;
         }
