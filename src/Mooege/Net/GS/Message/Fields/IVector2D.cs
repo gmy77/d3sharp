@@ -22,19 +22,19 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class IVector2D
     {
-        public int Field0;
-        public int Field1;
+        public int X;
+        public int Y;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            X = buffer.ReadInt(32);
+            Y = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, X);
+            buffer.WriteInt(32, Y);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -44,9 +44,9 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.AppendLine("X: 0x" + X.ToString("X8") + " (" + X + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.AppendLine("Y: 0x" + Y.ToString("X8") + " (" + Y + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

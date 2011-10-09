@@ -22,19 +22,21 @@ namespace Mooege.Net.GS.Message.Definitions.Scene
 {
     public class DestroySceneMessage : GameMessage
     {
-        public int Field0;
-        public int Field1;
+        public uint WorldID;
+        public uint SceneID;
+
+        public DestroySceneMessage() : base(Opcodes.DestroySceneMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            WorldID = buffer.ReadUInt(32);
+            SceneID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteUInt(32, WorldID);
+            buffer.WriteUInt(32, SceneID);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -43,8 +45,8 @@ namespace Mooege.Net.GS.Message.Definitions.Scene
             b.AppendLine("DestroySceneMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("WorldID: 0x" + WorldID.ToString("X8") + " (" + WorldID + ")");
+            b.Append(' ', pad); b.AppendLine("SceneID: 0x" + SceneID.ToString("X8") + " (" + SceneID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

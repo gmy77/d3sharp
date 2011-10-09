@@ -26,9 +26,6 @@ namespace Mooege.Net.GS.Message.Definitions.Hero
         public int Field0;
         public EntityId Field1;
 
-
-
-
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(2) + (-1);
@@ -53,7 +50,5 @@ namespace Mooege.Net.GS.Message.Definitions.Hero
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

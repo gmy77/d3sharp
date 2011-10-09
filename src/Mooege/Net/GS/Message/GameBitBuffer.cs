@@ -164,6 +164,11 @@ namespace Mooege.Net.GS.Message
             return result;
         }
 
+        public uint ReadUInt(int length)
+        {
+            return unchecked((uint)ReadInt(length));
+        }
+
         public void WriteInt(int length, int value)
         {
             MakeAvailable(length);
@@ -180,6 +185,11 @@ namespace Mooege.Net.GS.Message
                 if (Position > Length)
                     Length = Position;
             }
+        }
+
+        public void WriteUInt(int length, uint value)
+        {
+            WriteInt(length, unchecked((int)value));
         }
 
         byte[] _floatBuffer = new byte[4];
@@ -199,7 +209,6 @@ namespace Mooege.Net.GS.Message
             WriteInt(32, BitConverter.ToInt32(BitConverter.GetBytes(value), 0));
         }
 
-
         public long ReadInt64(int length)
         {
             int count = length >= 32 ? 32 : length;
@@ -208,6 +217,11 @@ namespace Mooege.Net.GS.Message
             if (count > 0)
                 result = (result << count) | (long)(uint)ReadInt(count);
             return result;
+        }
+
+        public ulong ReadUInt64(int length)
+        {
+            return unchecked((ulong)ReadInt64(length));
         }
 
         public void WriteInt64(int length, long value)
@@ -223,6 +237,11 @@ namespace Mooege.Net.GS.Message
             int count = length - 32;
             WriteInt(32, (int)(uint)(value >> count));
             WriteInt(count, (int)(uint)value);
+        }
+
+        public void WriteUInt64(int length, ulong value)
+        {
+            WriteInt64(length, unchecked((long)value));
         }
 
         static Encoding IBM437 = Encoding.GetEncoding(437);

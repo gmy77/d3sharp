@@ -21,7 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
-    [IncomingMessage(Opcodes.PlayerChangeHotbarButtonMessage, Consumers.Hero)]
+    [IncomingMessage(Opcodes.PlayerChangeHotbarButtonMessage, Consumers.Player)]
     public class PlayerChangeHotbarButtonMessage : GameMessage
     {
         public int BarIndex;

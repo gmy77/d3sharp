@@ -23,19 +23,19 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     public class SNONameDataMessage : GameMessage
     {
-        public SNOName Field0;
+        public SNOName Name;
 
         public SNONameDataMessage() : base(Opcodes.SNONameDataMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = new SNOName();
-            Field0.Parse(buffer);
+            Name = new SNOName();
+            Name.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            Field0.Encode(buffer);
+            Name.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -44,7 +44,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("SNONameDataMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            Field0.AsText(b, pad);
+            Name.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

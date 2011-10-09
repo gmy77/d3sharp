@@ -8,9 +8,9 @@
      public enum Consumers
      {
          None,
-         Universe,
+         Game,
          PlayerManager,
          Inventory,
-         Hero
+         Player
      }
  }

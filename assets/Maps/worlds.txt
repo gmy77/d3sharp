@@ -1,0 +1,2 @@
+
+"Worlds/NewTristram.txt" = 71150

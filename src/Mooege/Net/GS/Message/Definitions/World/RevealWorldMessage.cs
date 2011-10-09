@@ -22,19 +22,21 @@ namespace Mooege.Net.GS.Message.Definitions.World
 {
     public class RevealWorldMessage : GameMessage
     {
-        public int Field0;
-        public int /* sno */ Field1;
+        public uint WorldID; // World's DynamicID
+        public int /* sno */ WorldSNO;
+
+        public RevealWorldMessage() : base(Opcodes.RevealWorldMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            WorldID = buffer.ReadUInt(32);
+            WorldSNO = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteUInt(32, WorldID);
+            buffer.WriteInt(32, WorldSNO);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -43,8 +45,8 @@ namespace Mooege.Net.GS.Message.Definitions.World
             b.AppendLine("RevealWorldMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("WorldID: 0x" + WorldID.ToString("X8") + " (" + WorldID + ")");
+            b.Append(' ', pad); b.AppendLine("WorldSNO: 0x" + WorldSNO.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

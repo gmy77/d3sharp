@@ -26,7 +26,7 @@ namespace Mooege.Core.MooNet.Services
     public class ChannelOwnerService : bnet.protocol.channel.ChannelOwner, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IMooNetClient Client { get; set; }
+        public MooNetClient Client { get; set; }
 
         public override void CreateChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.CreateChannelRequest request, System.Action<bnet.protocol.channel.CreateChannelResponse> done)
         {
@@ -51,7 +51,7 @@ namespace Mooege.Core.MooNet.Services
         public override void JoinChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.JoinChannelRequest request, System.Action<bnet.protocol.channel.JoinChannelResponse> done)
         {
             Logger.Warn("ChannelOwnerService:JoinChannel()");
-
+            
             var builder = bnet.protocol.channel.JoinChannelResponse.CreateBuilder().SetObjectId(67122); // should be fixed with the actual joined channel object id.
             done(builder.Build());
         }

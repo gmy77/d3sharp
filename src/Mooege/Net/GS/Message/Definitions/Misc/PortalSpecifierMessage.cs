@@ -23,23 +23,22 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     public class PortalSpecifierMessage : GameMessage
     {
-        public int Field0;
-        public ResolvedPortalDestination Field1;
+        public uint ActorID; // Portal's DynamicID
+        public ResolvedPortalDestination Destination;
 
-
-
+        public PortalSpecifierMessage() : base(Opcodes.PortalSpecifierMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = new ResolvedPortalDestination();
-            Field1.Parse(buffer);
+            ActorID = buffer.ReadUInt(32);
+            Destination = new ResolvedPortalDestination();
+            Destination.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
+            buffer.WriteUInt(32, ActorID);
+            Destination.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -48,24 +47,10 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("PortalSpecifierMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            Field1.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            Destination.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-        public PortalSpecifierMessage(string[] Data)
-        {
-            Id = 0x004B;
-            Field0 = int.Parse(Data[0]);
-            Field1 = new ResolvedPortalDestination()
-            {
-                snoWorld=int.Parse(Data[1]),
-                Field1=int.Parse(Data[2]),
-                snoDestLevelArea=int.Parse(Data[3]),
-            };
-        }
-
-
     }
 }

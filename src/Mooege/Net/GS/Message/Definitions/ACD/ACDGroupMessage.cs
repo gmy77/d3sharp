@@ -22,23 +22,22 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 {
     public class ACDGroupMessage : GameMessage
     {
-        public int Field0;
+        public uint ActorID; // Actor's DynamicID
         public int Field1;
         public int Field2;
-
 
         public ACDGroupMessage() : base(Opcodes.ACDGroupMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
             Field1 = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteUInt(32, ActorID);
             buffer.WriteInt(32, Field1);
             buffer.WriteInt(32, Field2);
         }
@@ -49,7 +48,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDGroupMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
             b.Append(' ', --pad);

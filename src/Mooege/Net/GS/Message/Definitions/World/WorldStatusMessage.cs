@@ -22,18 +22,18 @@ namespace Mooege.Net.GS.Message.Definitions.World
 {
     public class WorldStatusMessage : GameMessage
     {
-        public int Field0;
+        public uint WorldID; // World's DynamicID
         public bool Field1;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            WorldID = buffer.ReadUInt(32);
             Field1 = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteUInt(32, WorldID);
             buffer.WriteBool(Field1);
         }
 
@@ -43,7 +43,7 @@ namespace Mooege.Net.GS.Message.Definitions.World
             b.AppendLine("WorldStatusMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("WorldID: 0x" + WorldID.ToString("X8") + " (" + WorldID + ")");
             b.Append(' ', pad); b.AppendLine("Field1: " + (Field1 ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");

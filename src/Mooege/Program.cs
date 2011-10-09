@@ -37,6 +37,9 @@ namespace Mooege
         public static MooNetServer MooNetServer;
         public static GameServer GameServer;
 
+        public static Thread MooNetServerThread;
+        public static Thread GameServerThread;
+
         public static void Main(string[] args)
         {
             // Watch for unhandled exceptions
@@ -59,13 +62,12 @@ namespace Mooege
         private static void StartupServers()
         {
             MooNetServer = new MooNetServer();
+            MooNetServerThread = new Thread(MooNetServer.Run) {IsBackground = true};
+            MooNetServerThread.Start();
+
             GameServer = new GameServer();
-
-            var bnetServerThread = new Thread(MooNetServer.Run) { IsBackground = true };
-            bnetServerThread.Start();
-
-            var gameServerThread = new Thread(GameServer.Run) { IsBackground = true };
-            gameServerThread.Start();
+            GameServerThread = new Thread(GameServer.Run) { IsBackground = true };
+            GameServerThread.Start();
 
             while (true)
             {
@@ -123,15 +125,40 @@ namespace Mooege
                 return;
             }
 
-            var processorTime = new PerformanceCounter {CategoryName = "Processor", CounterName = "% Processor Time", InstanceName = "_Total"};
-            var exceptionsThrown = new PerformanceCounter { CategoryName = ".NET CLR Exceptions", CounterName = "# of Exceps Thrown", InstanceName=Process.GetCurrentProcess().ProcessName };
-            var physicalThreads = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current physical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
-            var logicalThreads = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current logical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
-            var contentionRate = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "Contention Rate / sec", InstanceName = Process.GetCurrentProcess().ProcessName };
+            output.AppendFormat("\nGC Allocated Memory: {0}KB ", GC.GetTotalMemory(true)/1024);
 
-            output.AppendFormat(
-                "\nGC Allocated Memory: {0} KB Processor Time: {1}% Exceptions Thrown: {2}\nThreads - Physical: {3}, Logical: {4} Contention Rate: {5}/sec",
-                GC.GetTotalMemory(true)/1024,processorTime.NextValue(), exceptionsThrown.NextValue(), physicalThreads.NextValue(), logicalThreads.NextValue(),contentionRate.NextValue());
+            if (PerformanceCounterCategory.Exists("Processor") && PerformanceCounterCategory.CounterExists("% Processor Time", "Processor"))
+            {
+                var processorTimeCounter = new PerformanceCounter { CategoryName = "Processor", CounterName = "% Processor Time", InstanceName = "_Total" };
+                output.AppendFormat("Processor Time: {0}%", processorTimeCounter.NextValue());
+            }
+
+            if (PerformanceCounterCategory.Exists(".NET CLR LocksAndThreads"))
+            {
+                if(PerformanceCounterCategory.CounterExists("# of current physical Threads", ".NET CLR LocksAndThreads"))
+                {
+                    var physicalThreadsCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current physical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
+                    output.AppendFormat("\nPhysical Threads: {0} ", physicalThreadsCounter.NextValue());
+                }
+
+                if(PerformanceCounterCategory.CounterExists("# of current logical Threads", ".NET CLR LocksAndThreads"))
+                {
+                    var logicalThreadsCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current logical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
+                    output.AppendFormat("Logical Threads: {0} ", logicalThreadsCounter.NextValue());
+                }
+
+                if (PerformanceCounterCategory.CounterExists("Contention Rate / sec", ".NET CLR LocksAndThreads"))
+                {
+                    var contentionRateCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "Contention Rate / sec", InstanceName = Process.GetCurrentProcess().ProcessName };
+                    output.AppendFormat("Contention Rate: {0}/sec", contentionRateCounter.NextValue());
+                }
+            }
+
+            if (PerformanceCounterCategory.Exists(".NET CLR Exceptions") && PerformanceCounterCategory.CounterExists("# of Exceps Thrown", ".NET CLR Exceptions"))
+            {
+                var exceptionsThrownCounter = new PerformanceCounter { CategoryName = ".NET CLR Exceptions", CounterName = "# of Exceps Thrown", InstanceName = Process.GetCurrentProcess().ProcessName };
+                output.AppendFormat("\nExceptions Thrown: {0}", exceptionsThrownCounter.NextValue());
+            }
 
             Console.WriteLine(output.ToString());
         }
@@ -142,23 +169,120 @@ namespace Mooege
             Console.WriteLine("v{0}", Assembly.GetExecutingAssembly().GetName().Version);
         }
 
+        private static DateTime _startupTime = DateTime.Now; 
+
+        [ServerCommand("uptime")]
+        public static void Uptime(string parameters)
+        {
+            var uptime = DateTime.Now - _startupTime;
+            Console.WriteLine("Uptime: {0} days, {1} hours, {2} minutes, {3} seconds.", uptime.Days, uptime.Hours, uptime.Minutes, uptime.Seconds);
+        }
+
         [ServerCommand("shutdown")]
         public static void Shutdown(string parameters)
         {
-            if (MooNetServer == null && GameServer == null) return;
-
             if (MooNetServer != null)
             {
                 Logger.Warn("Shutting down MooNet-Server..");
                 MooNetServer.Shutdown();
-                MooNetServer = null;
             }
 
             if (GameServer != null)
             {
                 Logger.Warn("Shutting down Game-Server..");
                 GameServer.Shutdown();
-                GameServer = null;
+            }
+
+            Environment.Exit(0);
+        }
+
+        [ServerCommand("stop")]
+        public static void Stop(string parameters) // actually server.cs should be providing us start/stop/restart methods /raist.
+        {
+            var stopMooNetServer = false;
+            var stopGameServer = false;
+
+            if (parameters.ToLower() == "help")
+            {
+                Console.WriteLine("stop [all|moonet|gs]");
+                return;
+            }
+
+            if(parameters==String.Empty || parameters=="all")
+            {
+                stopMooNetServer = true;
+                stopGameServer = true;
+            }
+
+            if (parameters == "mnet") stopMooNetServer = true;
+            if (parameters == "gs") stopGameServer = true;
+
+            if (stopMooNetServer)
+            {
+                if (MooNetServer != null)
+                {
+                    Logger.Warn("Stopping MooNet-Server..");
+                    MooNetServer.Shutdown();
+                    MooNetServerThread.Abort();
+                    MooNetServer = null;
+                }
+                else Console.WriteLine("MooNet-Server is already stopped");
+            }
+
+            if (stopGameServer)
+            {
+                if (GameServer != null)
+                {
+                    Logger.Warn("Stopping Game-Server..");
+                    GameServer.Shutdown();
+                    GameServerThread.Abort();
+                    GameServer = null;
+                }
+                else Console.WriteLine("Game-Server is already stopped");
+            }            
+        }
+
+        [ServerCommand("start")]
+        public static void Start(string parameters) // actually server.cs should be providing us start/stop/restart methods /raist.
+        {
+            var startMooNetServer = false;
+            var startGameServer = false;
+
+            if (parameters.ToLower() == "help")
+            {
+                Console.WriteLine("start [all|mnet|gs]");
+                return;
+            }
+
+            if (parameters == String.Empty || parameters == "all")
+            {
+                startMooNetServer = true;
+                startGameServer = true;
+            }
+
+            if (parameters == "mnet") startMooNetServer = true;
+            if (parameters == "gs") startGameServer = true;
+
+            if (startMooNetServer)
+            {
+                if (MooNetServer == null)
+                {
+                    MooNetServer = new MooNetServer();
+                    MooNetServerThread = new Thread(MooNetServer.Run) { IsBackground = true };
+                    MooNetServerThread.Start();
+                }
+                else Console.WriteLine("MooNet-Server is already running");
+            }
+
+            if (startGameServer)
+            {
+                if (GameServer == null)
+                {
+                    GameServer = new GameServer();
+                    GameServerThread = new Thread(GameServer.Run) { IsBackground = true };
+                    GameServerThread.Start();
+                }
+                else Console.WriteLine("Game-Server is already running");
             }
         }
 

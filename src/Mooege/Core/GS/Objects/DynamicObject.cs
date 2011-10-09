@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,9 +16,27 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Net.GS
+namespace Mooege.Core.GS.Objects
 {
-    public interface IGameClient : IClient
+    public abstract class DynamicObject
     {
+        /// <summary>
+        /// The dynamic unique runtime ID for the actor.
+        /// </summary>
+        public readonly uint DynamicID;
+
+        /// <summary>
+        /// Initialization constructor.
+        /// </summary>
+        /// <param name="dynamicID">The dynamic ID to initialize with.</param>
+        protected DynamicObject(uint dynamicID)
+        {
+            this.DynamicID = dynamicID;
+        }
+
+        /// <summary>
+        /// Destroy the object. This should remove any references to the object throughout GS.
+        /// </summary>
+        public abstract void Destroy();
     }
 }
