@@ -17,6 +17,7 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Common;
 using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Map;
@@ -47,6 +48,8 @@ namespace Mooege.Core.Common.Items
 
     public class Item : Actor
     {
+        private static readonly Logger Logger = LogManager.CreateLogger();
+
         public override ActorType ActorType { get { return ActorType.Item; } }
 
         public Mooege.Core.GS.Player.Player Owner { get; set; } // Only set when the player has the item in its inventory. /komiga
@@ -56,8 +59,8 @@ namespace Mooege.Core.Common.Items
 
         public List<Affix> AffixList { get; set; }
 
-        public int EquipmentSlot;
-        public IVector2D InventoryLocation { get; private set; }
+        public int EquipmentSlot { get; private set; }
+        public IVector2D InventoryLocation { get; private set; } // Column, row; NOTE: Call SetInventoryLocation() instead of setting fields on this
 
         public override bool HasWorldLocation
         {
@@ -68,11 +71,9 @@ namespace Mooege.Core.Common.Items
         {
             get
             {
-                return HasWorldLocation
-                ? null
-                : new InventoryLocationMessageData
+                return new InventoryLocationMessageData
                 {
-                    OwnerID = this.Owner.DynamicID,
+                    OwnerID = (this.Owner != null) ? this.Owner.DynamicID : 0,
                     EquipmentSlot = this.EquipmentSlot,
                     InventoryLocation = this.InventoryLocation
                 };
@@ -92,10 +93,11 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        public Item(World world, int gbid, ItemType type)
+        public Item(World world, int actorSNO, int gbid, ItemType type)
             : base(world, world.NewActorID)
         {
-            this.GBHandle.Type = (int)GBHandleType.Item;
+            this.ActorSNO = actorSNO;
+            this.GBHandle.Type = (int)GBHandleType.Gizmo;
             this.GBHandle.GBID = gbid;
             this.Count = 1;
             this.ItemType = type;
@@ -105,11 +107,11 @@ namespace Mooege.Core.Common.Items
             this.EquipmentSlot = 0;
             this.InventoryLocation = new IVector2D { X = 0, Y = 0 };
 
-            this.Field2 = 0x0000001A;
-            this.Field3 = 0x00000001;
-            this.Field7 = -1;
-            this.Field8 = -1;
-            this.Field9 = 0x00000001;
+            this.Field2 = 0x00000000;
+            this.Field3 = 0x00000000;
+            this.Field7 = 0;
+            this.Field8 = 0;
+            this.Field9 = 0x00000000;
             this.Field10 = 0x00;
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
@@ -164,6 +166,15 @@ namespace Mooege.Core.Common.Items
                 );
         }
 
+        public void SetInventoryLocation(int equipmentSlot, int column, int row)
+        {
+            this.EquipmentSlot = equipmentSlot;
+            this.InventoryLocation.X = column;
+            this.InventoryLocation.Y = row;
+            if (this.Owner != null)
+                this.Owner.InGameClient.SendMessageNow(this.ACDInventoryPositionMessage);
+        }
+
         public void Drop(Mooege.Core.GS.Player.Player owner, Vector3D position)
         {
             this.Owner = owner;
@@ -173,6 +184,7 @@ namespace Mooege.Core.Common.Items
 
         public override void OnTargeted(Mooege.Core.GS.Player.Player player)
         {
+            //Logger.Trace("OnTargeted");
             player.Inventory.PickUp(this);
         }
 

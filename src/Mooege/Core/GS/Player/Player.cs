@@ -42,6 +42,9 @@ using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Definitions.World;
 
+// TODO: When the player moves, it will set the Position property which will bounce back to the player again.
+//       That is unnecessary and we should exclude the player from receiving it in that case. /komiga
+
 namespace Mooege.Core.GS.Player
 {
     public class Player : Actor

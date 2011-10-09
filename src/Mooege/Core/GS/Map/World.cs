@@ -129,7 +129,7 @@ namespace Mooege.Core.GS.Map
             // Broadcast reveal
             // NOTE: Revealing to all right now since the flow results in actors that have initial positions that are not within the range of the player
             var players = this.Players.Values; //this.GetPlayersInRange(actor.Position, 480.0f);
-            Logger.Debug("Enter {0}, reveal to {1} players", actor.DynamicID, players.Count);
+            //Logger.Debug("Enter {0}, reveal to {1} players", actor.DynamicID, players.Count);
             foreach (var player in players)
             {
                 actor.Reveal(player);
@@ -140,7 +140,7 @@ namespace Mooege.Core.GS.Map
         {
             actor.OnLeave(this);
             // Broadcast unreveal
-            Logger.Debug("Leave {0}, unreveal to {1} players", actor.DynamicID, this.Players.Count);
+            //Logger.Debug("Leave {0}, unreveal to {1} players", actor.DynamicID, this.Players.Count);
             foreach (var player in this.Players.Values)
             {
                 actor.Unreveal(player);

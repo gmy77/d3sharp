@@ -86,7 +86,7 @@ namespace Mooege.Core.GS.Actors
         {
             set
             {
-                var old = this._position;
+                var old = new Vector3D(this._position);
                 this._position.Set(value);
                 this.OnMove(old);
                 this.World.OnActorMove(this, old); // TODO: Should notify its scene instead
@@ -115,9 +115,7 @@ namespace Mooege.Core.GS.Actors
         {
             get
             {
-                return HasWorldLocation
-                ? new WorldLocationMessageData { Scale = this.Scale, Transform = this.Transform, WorldID = this.World.DynamicID }
-                : null;
+                return new WorldLocationMessageData { Scale = this.Scale, Transform = this.Transform, WorldID = this.World.DynamicID };
             }
         }
 
@@ -132,15 +130,28 @@ namespace Mooege.Core.GS.Actors
             get { return new PRTransform { Rotation = new Quaternion { Amount = this.RotationAmount, Axis = this.RotationAxis }, ReferencePoint = this.Position }; }
         }
 
-        // Only used in Item
+        // Only used in Item; stubbed here to prevent an overrun in some cases. /komiga
         public virtual InventoryLocationMessageData InventoryLocationMessage
         {
-            get { return null; }
+            get { return new InventoryLocationMessageData{ OwnerID = 0, EquipmentSlot = 0, InventoryLocation = new IVector2D() }; }
         }
 
         public virtual ACDWorldPositionMessage ACDWorldPositionMessage
         {
             get { return new ACDWorldPositionMessage { ActorID = this.DynamicID, WorldLocation = this.WorldLocationMessage }; }
+        }
+
+        public virtual ACDInventoryPositionMessage ACDInventoryPositionMessage
+        {
+            get
+            {
+                return new ACDInventoryPositionMessage()
+                {
+                    ItemID = this.DynamicID,
+                    InventoryLocation = this.InventoryLocationMessage,
+                    Field2 = 1 // TODO: find out what this is and why it must be 1...is it an enum?
+                };
+            }
         }
 
         protected Actor(World world, uint dynamicID)
@@ -149,6 +160,9 @@ namespace Mooege.Core.GS.Actors
             this.Attributes = new GameAttributeMap();
             this.ActorSNO = -1;
             this.GBHandle = new GBHandle();
+            this.Scale = 1.0f;
+            this.RotationAmount = 0.0f;
+            this.RotationAxis.Set(0.0f, 0.0f, 1.0f);
         }
 
         // NOTE: When using this, you should *not* set the actor's world. It is done for you
@@ -185,8 +199,8 @@ namespace Mooege.Core.GS.Actors
                 ActorSNO = this.ActorSNO,
                 Field2 = Field2,
                 Field3 = Field3,
-                WorldLocation = this.WorldLocationMessage,
-                InventoryLocation = this.InventoryLocationMessage,
+                WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
+                InventoryLocation = this.HasWorldLocation ? null : this.InventoryLocationMessage,
                 GBHandle = this.GBHandle,
                 Field7 = Field7,
                 Field8 = Field8,
