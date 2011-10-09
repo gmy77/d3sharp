@@ -31,300 +31,24 @@ using Mooege.Core.Common.Items;
 
 namespace Mooege.Core.GS.Player
 {
-    // Backpack is organized by adding an item to EVERY slot it fills
+
     public class Inventory : IMessageConsumer
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
-        public int Rows { get { return _backpack.GetLength(0); } }
-        public int Columns { get { return _backpack.GetLength(1); } }
-        public int EquipmentSlots { get { return _equipment.GetLength(0); } }
-
         // Access by ID
-        public Dictionary<uint, Item> Items { get; private set; }
-        
-        // these ids are transmitted by the client when equipping an item         
-        private enum EquipmentSlotId{
-            Helm = 1, Chest = 2, Off_Hand = 3, Main_Hand = 4, Hands = 5, Belt = 6, Feet = 7,
-            Shoulders = 8, Legs = 9, Bracers = 10, Ring_right = 11, Ring_left = 12, Amulett = 13
-        }
-        
-        private uint[] _equipment;      // array of equiped items_id  (not item)
-        private uint[,] _backpack;      // backpack array
-        private Item _goldItem;
-
+        public Dictionary<uint, Item> Items { get; private set; } // Not needed atm. Whats the suppose of it?
         private readonly Mooege.Core.GS.Player.Player _owner; // Used, because most information is not in the item class but Actors managed by the world
 
-        public struct InventorySize
-        {
-            public int Width;
-            public int Height;
-        }
-
-        private struct InventorySlot
-        {
-            public int Row;
-            public int Column;
-        }
+        private Equipment _equipment;
+        private Stash _inventoryStash;
 
         public Inventory(Mooege.Core.GS.Player.Player owner)
         {
             this._owner = owner;
             this.Items = new Dictionary<uint, Item>();
-            this._equipment = new uint[16];
-            this._backpack = new uint[6, 10];
-            this._goldItem = null;
-        }
-
-        // This should be in the database#
-        // Do all items need a rectangual space in diablo 3?
-        private InventorySize GetItemInventorySize(Item item)
-        {
-            if (Item.IsPotion(item.ItemType) || Item.IsAccessory(item.ItemType))
-            {
-                return new InventorySize() { Width = 1, Height = 1 };
-            }
-
-            return new InventorySize() { Width = 1, Height = 2 };
-        }
-
-        private InventorySize GetItemInventorySize(uint itemID)
-        {
-            Item item = _owner.World.GetItem(itemID);
-            return GetItemInventorySize(item);
-        }
-
-        private bool FreeSpace(Item item, int row, int column)
-        {
-            bool result = true;
-            InventorySize size = GetItemInventorySize(item);
-
-            for (int r = row; r < Math.Min(row + size.Height, Rows); r++)
-                for (int c = column; c < Math.Min(column + size.Width, Columns); c++)
-                    if ((_backpack[r, c] != 0) && (_backpack[r, c] != item.DynamicID))
-                        result = false;
-            return result;
-        }
-
-        private bool FreeSpace(uint itemID, int row, int column)
-        {
-            return FreeSpace(_owner.World.GetItem(itemID), row, column);
-        }
-
-        /// <summary>
-        /// Collects (counts) the items overlapping with the item about to be dropped.
-        /// If there are none, drop item
-        /// If there is exacly one, swap it with item (TODO)
-        /// If there are more, item cannot be dropped
-        /// </summary>
-        private int CollectOverlappingItems(uint droppedItemID, int row, int column)
-        {
-            InventorySize dropSize = GetItemInventorySize(droppedItemID);
-            var overlapping = new List<uint>();
-
-            // For every slot...
-            for (int r = row; r < _backpack.GetLength(0) && r < row + dropSize.Height; r++)
-                for (int c = column; c < _backpack.GetLength(1) && c < column + dropSize.Width; c++)
-
-                    // that contains an item other than the one we want to drop
-                    if (_backpack[r, c] != 0 && _backpack[r, c] != droppedItemID) //TODO this would break for an item with id 0
-
-                        // add it to the list if if dropping the item in <row, column> would need the same slot
-                        //if (r >= row && r <= row + dropSize.Height)
-                        //    if (c >= column && c <= column + dropSize.Width)
-                                if (!overlapping.Contains(_backpack[r, c]))
-                                    overlapping.Add(_backpack[r, c]);
-
-            return overlapping.Count;
-        }
-
-        /// <summary>
-        /// Removes an item from the backpack
-        /// </summary>
-        private void RemoveItem(Item item)
-        {
-            for (int r = 0; r < Rows; r++)
-            {
-                for (int c = 0; c < Columns; c++)
-                {
-                    if (_backpack[r, c] == item.DynamicID)
-                    {
-                        _backpack[r, c] = 0;
-                        item.SetInventoryLocation(-1, -1, -1);
-                        item.Owner = null;
-                    }
-                }
-            }
-        }
-
-        private void RemoveItem(uint itemID)
-        {
-            RemoveItem(_owner.World.GetItem(itemID));
-        }
-
-        /// <summary>
-        /// Adds an item to the backpack
-        /// </summary>
-        void AddItem(Item item, int row, int column)
-        {
-            InventorySize size = GetItemInventorySize(item);
-
-            //check backpack boundaries
-            if (row + size.Width > Rows || column + size.Width > Columns) return;
-
-            for (int r = row; r < Math.Min(row + size.Height, Rows); r++)
-                for (int c = column; c < Math.Min(column + size.Width, Columns); c++)
-                {
-                    System.Diagnostics.Debug.Assert(_backpack[r, c] == 0, "You need to remove an item from the backpack before placing another item there");
-                    _backpack[r, c] = item.DynamicID;                    
-                }
-
-            item.Owner = _owner;
-            item.SetInventoryLocation(0, column, row);
-            AcceptMoveRequest(item);                    
-        }
-
-        void AddItem(uint itemID, int row, int column)
-        {
-            AddItem(_owner.World.GetItem(itemID), row, column);
-        }
-
-        /// <summary>
-        /// Refreshes the visual appearance of the hero
-        /// TODO: this should go to hero class
-        /// </summary>
-        /// <param name="actorID"></param>
-        void RefreshVisual()
-        {
-            _owner.InGameClient.SendMessage(new VisualInventoryMessage()
-            {
-                ActorID = _owner.DynamicID,
-                EquipmentList = new VisualEquipment()
-                {
-                    Equipment = new VisualItem[8]
-                    {
-                        GetEquipmentItem(EquipmentSlotId.Helm),
-                        GetEquipmentItem(EquipmentSlotId.Chest),
-                        GetEquipmentItem(EquipmentSlotId.Feet),
-                        GetEquipmentItem(EquipmentSlotId.Hands),
-                        GetEquipmentItem(EquipmentSlotId.Main_Hand),
-                        GetEquipmentItem(EquipmentSlotId.Off_Hand),
-                        GetEquipmentItem(EquipmentSlotId.Shoulders),
-                        GetEquipmentItem(EquipmentSlotId.Legs),
-                    },
-                },
-            });
-
-            // Finalize
-            // Hardcoded tick keeps the game updated.. /komiga
-            _owner.InGameClient.PacketId += 10 * 2;
-            _owner.InGameClient.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = _owner.InGameClient.PacketId,
-            });
-            _owner.InGameClient.FlushOutgoingBuffer();
-        }
-
-        private VisualItem GetEquipmentItem(EquipmentSlotId equipSlot)
-        {
-            if (_equipment[(int)equipSlot] == 0)
-            {
-                return new VisualItem()
-                {
-                    GbId = 0,
-                    Field1 = 0,
-                    Field2 = 0,
-                    Field3 = 0,
-                };
-            }
-            else
-            {
-                return _owner.World.GetItem(_equipment[(int)equipSlot]).CreateVisualItem();
-            }
-        }
-
-        /// <summary>
-        /// Equips an item in an equipment slot
-        /// </summary>
-        void EquipItem(Item item, int slot)
-        {
-            _equipment[slot] = item.DynamicID;
-            item.Owner = _owner;
-            item.SetInventoryLocation(slot, 0, 0);
-            AcceptMoveRequest(item);   
-        }
-
-        void EquipItem(uint itemID, int slot)
-        {
-            EquipItem(_owner.World.GetItem(itemID), slot);
-        }
-
-        /// <summary>
-        /// Removes an item from the equipment slot it uses
-        /// returns the used equipmentSlot
-        /// </summary>
-        int UnequipItem(Item item)
-        {
-            for (int i = 0; i < EquipmentSlots; i++)
-            {
-                if (_equipment[i] == item.DynamicID)
-                {
-                    _equipment[i] = 0;
-                    item.SetInventoryLocation(-1, -1, -1);
-                    item.Owner = null;
-                    return i;
-                }
-            }
-
-            return 0;
-        }     
-
-        /// <summary>
-        /// Returns whether an item is equipped
-        /// </summary>
-        public bool IsItemEquipped(uint itemID)
-        {
-            for (int i = 0; i < EquipmentSlots; i++)
-                if (_equipment[i] == itemID)
-                    return true;
-            return false;
-        }
-
-        public bool IsItemEquipped(Item item)
-        {
-            return IsItemEquipped(item.DynamicID);
-        }
-
-        /// <summary>
-        /// Checks whether the inventory contains an item
-        /// </summary>
-        public bool Contains(uint itemID)
-        {
-            for (int r = 0; r < Rows; r++)
-                for (int c = 0; c < Columns; c++)
-                    if (_backpack[r, c] == itemID)
-                        return true;
-            return false;
-        }
-
-        public bool Contains(Item item)
-        {
-            return Contains(item.DynamicID);
-        }
-
-        /// <summary>
-        /// Find an inventory slot with enough space for an item
-        /// </summary>
-        /// <returns>Slot or null if there is no space in the backpack</returns>
-        private InventorySlot? FindSlotForItem(Item item)
-        {
-            InventorySize size = GetItemInventorySize(item);
-            for (int r = 0; r <= Rows - size.Height; r++)
-                for (int c = 0; c <= Columns - size.Width; c++)
-                    if (CollectOverlappingItems(item.DynamicID, r, c) == 0)
-                        return new InventorySlot() { Row = r, Column = c };
-            return null;
+            this._equipment = new Equipment(owner);
+            this._inventoryStash = new Stash(owner, 6, 10);
         }
 
         private void AcceptMoveRequest(Item item)
@@ -345,34 +69,22 @@ namespace Mooege.Core.GS.Player
             _owner.InGameClient.FlushOutgoingBuffer();
         }
 
-        /// <summary>
-        /// Picks an item up after client request
+
+         /// <summary>
+        /// Refreshes the visual appearance of the hero
+        /// TODO: this should go to hero class
         /// </summary>
-        /// <returns>true if the item was picked up, or false if the player could not pick up the item.</returns>
-        public bool PickUp(Item item)
+        /// <param name="actorID"></param>
+        void RefreshVisual()
         {
-            System.Diagnostics.Debug.Assert(!Contains(item) && !IsItemEquipped(item), "Item already in inventory");
-            // TODO: Autoequip when equipment slot is empty
-
-            bool success = false;
-            InventorySlot? freeSlot = FindSlotForItem(item);
-            if (freeSlot == null)
+            _owner.InGameClient.SendMessage(new VisualInventoryMessage()
             {
-                // Inventory full
-                _owner.InGameClient.SendMessage(new ACDPickupFailedMessage()
+                ActorID = _owner.DynamicID,
+                EquipmentList = new VisualEquipment()
                 {
-                    ItemID = item.DynamicID,
-                    Reason = ACDPickupFailedMessage.Reasons.InventoryFull
-                });
-            }
-            else
-            {
-                AddItem(item, freeSlot.Value.Row, freeSlot.Value.Column);
-
-                if (_owner.GroundItems.ContainsKey(item.DynamicID))
-                    _owner.GroundItems.Remove(item.DynamicID);
-                success = true;
-            }
+                    Equipment = _equipment.GetVisualEquipment()
+                },
+            });
 
             // Finalize
             // Hardcoded tick keeps the game updated.. /komiga
@@ -383,6 +95,40 @@ namespace Mooege.Core.GS.Player
                 Field0 = _owner.InGameClient.PacketId,
             });
             _owner.InGameClient.FlushOutgoingBuffer();
+        }
+
+        
+
+
+        /// <summary>
+        /// Picks an item up after client request
+        /// </summary>
+        /// <returns>true if the item was picked up, or false if the player could not pick up the item.</returns>
+        public bool PickUp(Item item)
+        {
+            System.Diagnostics.Debug.Assert(!_inventoryStash.Contains(item) && !_equipment.IsItemEquipped(item), "Item already in inventory");
+            // TODO: Autoequip when equipment slot is empty
+
+            bool success = false;
+            if (!_inventoryStash.HasFreeSpace(item))
+            {
+                // Inventory full
+                _owner.InGameClient.SendMessage(new ACDPickupFailedMessage()
+                {
+                    ItemID = item.DynamicID,
+                    Reason = ACDPickupFailedMessage.Reasons.InventoryFull
+                });
+            }
+            else
+            {
+                _inventoryStash.AddItem(item);
+
+                if (_owner.GroundItems.ContainsKey(item.DynamicID))
+                    _owner.GroundItems.Remove(item.DynamicID);
+                success = true;
+            }
+
+            AcceptMoveRequest(item);
             return success;
         }
 
@@ -397,37 +143,39 @@ namespace Mooege.Core.GS.Player
             // Request to equip item from backpack
             if (request.Location.EquipmentSlot != 0)
             {
-                System.Diagnostics.Debug.Assert(Contains(request.ItemID) || IsItemEquipped(request.ItemID), "Request to equip unknown item");
+                System.Diagnostics.Debug.Assert(_inventoryStash.Contains(request.ItemID) || _equipment.IsItemEquipped(request.ItemID), "Request to equip unknown item");
                                
                 int targetEquipSlot = request.Location.EquipmentSlot;
-                if (IsValidEquipRequest(item, targetEquipSlot))
+                if (IsValidEquipmentRequest(item, targetEquipSlot))
                 {
-                    Item oldEquipItem = _owner.World.GetItem(this._equipment[targetEquipSlot]);
+                    Item oldEquipItem = _equipment.GetEquipment(targetEquipSlot);
                     
                     // check if equipment slot is empty
                     if (oldEquipItem == null)
                     {
-                        RemoveItem(item);
-                        EquipItem(item, targetEquipSlot);
+                        _inventoryStash.RemoveItem(item);
+                        _equipment.EquipItem(item, targetEquipSlot);
+                        AcceptMoveRequest(item);
                     }
                     else
                     {
                         // check if item is already equipped at another equipmentslot
-                        if (IsItemEquipped(item))
+                        if (_equipment.IsItemEquipped(item))
                         {
                             // switch both items
-                            int oldEquipmentSlot = UnequipItem(item);
-                            EquipItem(item, targetEquipSlot);
-                            EquipItem(oldEquipItem, oldEquipmentSlot);
+                            int oldEquipmentSlot = _equipment.UnequipItem(item);
+                            _equipment.EquipItem(item, targetEquipSlot);
+                            _equipment.EquipItem(oldEquipItem, oldEquipmentSlot);
                         }
                         else
                         {
                             // equip item and place other item in the backpack
-                            RemoveItem(item);
-                            EquipItem(item, targetEquipSlot);
-                            InventorySlot? slot = FindSlotForItem(oldEquipItem);
-                            AddItem(oldEquipItem, slot.Value.Row, slot.Value.Column);
+                            _inventoryStash.RemoveItem(item);
+                            _equipment.EquipItem(item, targetEquipSlot);                            
+                            _inventoryStash.AddItem(oldEquipItem);
                         }
+                        AcceptMoveRequest(item);
+                        AcceptMoveRequest(oldEquipItem);
                     }
 
                     RefreshVisual();
@@ -437,24 +185,30 @@ namespace Mooege.Core.GS.Player
             // Request to move an item (from backpack or equipmentslot)
             else
             {
-                if (FreeSpace(item, request.Location.Row, request.Location.Column))
+                if (_inventoryStash.FreeSpace(item, request.Location.Row, request.Location.Column))
                 {
-                    if (IsItemEquipped(item))
+                    if (_equipment.IsItemEquipped(item))
                     {
-                        UnequipItem(item); // Unequip the item
+                        _equipment.UnequipItem(item); // Unequip the item
                         RefreshVisual();
                     }
                     else
                     {
-                        RemoveItem(item);
+                        _inventoryStash.RemoveItem(item);
                     }
-                    AddItem(item, request.Location.Row, request.Location.Column);
-                    
+                    _inventoryStash.AddItem(item, request.Location.Row, request.Location.Column);
+                    AcceptMoveRequest(item);                   
                 }
             }
         }
 
-        private bool IsValidEquipRequest(Item item, int equipmentSlot)
+        /// <summary>
+        /// Checks if Item can be equipped at that slot. Handels equipment for Two-Handed-Weapons.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="equipmentSlot"></param>
+        /// <returns></returns>
+        private bool IsValidEquipmentRequest(Item item, int equipmentSlot)
         {
 
             ItemType type = item.ItemType;
@@ -463,50 +217,43 @@ namespace Mooege.Core.GS.Player
             {
                 if (Item.Is2H(type))
                 {
-                    uint itemOffHandId = _equipment[(int)EquipmentSlotId.Off_Hand];
-                    
-                    if (itemOffHandId != 0)
-                    {
-                        Item itemOffHand = _owner.World.GetItem(itemOffHandId);
-                        UnequipItem(itemOffHand);
-                        InventorySlot? slot = FindSlotForItem(itemOffHand);
-                        AddItem(itemOffHandId, slot.Value.Row, slot.Value.Column);
+                    Item itemOffHand = _equipment.GetEquipment(EquipmentSlotId.Off_Hand);                    
+                    if (itemOffHand != null)
+                    {                       
+                        _equipment.UnequipItem(itemOffHand);                      
+                        _inventoryStash.AddItem(itemOffHand);
+                        AcceptMoveRequest(itemOffHand);
                     }
                 }
             }
             else if (equipmentSlot == (int)EquipmentSlotId.Off_Hand)
             {
-
-                uint itemMainHandId = _equipment[(int)EquipmentSlotId.Main_Hand];
-                
+                Item itemMainHand = _equipment.GetEquipment(EquipmentSlotId.Main_Hand);                
                 if (Item.Is2H(type))
                 {   
-                    if(itemMainHandId != 0)
+                    if(itemMainHand != null)
                     {
-
-                        Item itemMainHand = _owner.World.GetItem(itemMainHandId);
-                        UnequipItem(itemMainHand);
-                        InventorySlot? slot = FindSlotForItem(itemMainHand);
-                        AddItem(itemMainHandId, slot.Value.Row, slot.Value.Column);
+                        _equipment.UnequipItem(itemMainHand);
+                        _inventoryStash.AddItem(itemMainHand);
+                        AcceptMoveRequest(itemMainHand);
                     }
-                    RemoveItem(item);
-                    EquipItem(item, (int)EquipmentSlotId.Main_Hand);
+                    _inventoryStash.RemoveItem(item);
+                    _equipment.EquipItem(item, (int)EquipmentSlotId.Main_Hand);
+                    AcceptMoveRequest(item); 
+                   
                     RefreshVisual();
+                    // All equipment commands are executed. the original EquipmentRequest is invalid at this moment
                     return false;
                 }
-
                              
-                if (itemMainHandId != 0)
+                if (itemMainHand != null)
                 {
-                    Item itemMainHand = _owner.World.GetItem(itemMainHandId);                    
                     if (Item.Is2H(itemMainHand.ItemType))
                     {
                         return false;
                     }
                 }
-           }
-
-
+            }
             return true;
         }
 
@@ -520,8 +267,8 @@ namespace Mooege.Core.GS.Player
         /// </summary>
         public void OnInventoryStackTransferMessage(InventoryStackTransferMessage msg)
         {
-            Item itemFrom = this.Items[msg.FromID];
-            Item itemTo = this.Items[msg.ToID];
+            Item itemFrom = _owner.World.GetItem(msg.FromID);
+            Item itemTo = _owner.World.GetItem(msg.ToID);
 
             itemFrom.Count = (itemFrom.Count) - ((int)msg.Amount);
             itemTo.Count = itemTo.Count + (int)msg.Amount;
@@ -549,14 +296,14 @@ namespace Mooege.Core.GS.Player
         private void OnInventoryDropItemMessage(InventoryDropItemMessage msg)
         {
             Item item = _owner.World.GetItem(msg.ItemID);
-            if (IsItemEquipped(item))
+            if (_equipment.IsItemEquipped(item))
             {
-                UnequipItem(item);
+                _equipment.UnequipItem(item);
                 RefreshVisual();
             }
             else
             {
-                RemoveItem(item);
+                _inventoryStash.RemoveItem(item);
             }            
             item.Drop(null, _owner.Position);
             AcceptMoveRequest(item);
@@ -575,23 +322,11 @@ namespace Mooege.Core.GS.Player
         public void PickUpGold(uint itemID)
         {
             Item collectedItem = _owner.GroundItems[itemID];
-            if (_goldItem == null)
-            {
-                ItemTypeGenerator itemGenerator = new ItemTypeGenerator(_owner.InGameClient);
-                _goldItem = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
-                _goldItem.Count = collectedItem.Count;
-                _goldItem.Owner = _owner;
-                _goldItem.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
-                _goldItem.Reveal(_owner);
-            }
-            else
-            {
-                _goldItem.Count += collectedItem.Count;
-            }
+            Item sumGoldItem = _equipment.AddGoldItem(collectedItem);
 
             GameAttributeMap attributes = new GameAttributeMap();
-            attributes[GameAttribute.ItemStackQuantityLo] = _goldItem.Count;
-            attributes.SendMessage(_owner.InGameClient, _goldItem.DynamicID);
+            attributes[GameAttribute.ItemStackQuantityLo] = sumGoldItem.Count;
+            attributes.SendMessage(_owner.InGameClient, sumGoldItem.DynamicID);
         }
     }
 }
