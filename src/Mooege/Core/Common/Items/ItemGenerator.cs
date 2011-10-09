@@ -50,7 +50,6 @@ namespace Mooege.Core.Common.Items
 
         static ItemGenerator()
         {
-            Logger.Info("Loading items database..");
             LoadItems();
             ValidDefinitions = ItemDefinitions.Values.Where(definition => definition.SNOId != 0).ToList();
         }
@@ -116,6 +115,13 @@ namespace Mooege.Core.Common.Items
                 creator.CreateAttributes(item);
             }
 
+            return item;
+        }
+
+        public static Item CreateGold(Player player, int amount)
+        {
+            var item = Cook(player, "Gold1", 0x00000178, ItemType.Gold);
+            item.Count = amount;
             return item;
         }
     }

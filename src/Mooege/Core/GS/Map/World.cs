@@ -18,20 +18,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Mooege.Common;
 using Mooege.Common.Helpers;
-using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Player;
-using Mooege.Core.GS.Data.SNO;
 using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.Map;
-using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Net.GS.Message.Definitions.Scene;
 using Mooege.Net.GS.Message.Definitions.World;
 
 // NOTE: Scenes are actually laid out in cells with Subscenes filling in certain areas under a Scene.
@@ -221,8 +214,7 @@ namespace Mooege.Core.GS.Map
 
         public void SpawnGold(Mooege.Core.GS.Player.Player player, Vector3D position)
         {
-            var item = ItemGenerator.Cook(player, "Gold1", 0x00000178, ItemType.Gold);
-            item.Count = RandomHelper.Next(1, 3);
+            var item = ItemGenerator.CreateGold(player, RandomHelper.Next(1, 3)); // somehow the actual ammount is not shown on ground /raist.
             item.Drop(null, position);
             player.GroundItems[item.DynamicID] = item;
         }
