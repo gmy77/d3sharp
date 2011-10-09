@@ -47,7 +47,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
             // looking for gold to pick up
             // TODO: Need to consider items on the ground globally as well (and this doesn't belong here)
-            var actorList = client.Player.World.GetActorsInRange(0x00000178, this.Position.X, this.Position.Y, this.Position.Z, 20f);
+            var actorList = client.Player.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
             foreach (var actor in actorList)
             {
                 Item item;

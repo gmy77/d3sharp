@@ -30,6 +30,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public float /* angle */ Angle;
         public bool Field2;
 
+        public ACDTranslateFacingMessage() {}
         public ACDTranslateFacingMessage(Opcodes id) : base(id) {}
 
         public override void Parse(GameBitBuffer buffer)
