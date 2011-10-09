@@ -28,6 +28,7 @@ using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Attribute;
+using Mooege.Core.Common.Items.ItemCreation;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
 
@@ -112,6 +113,13 @@ namespace Mooege.Core.Common.Items
             this.Field8 = 0;
             this.Field9 = 0x00000000;
             this.Field10 = 0x00;
+
+            List<IItemAttributeCreator> attributeCreators = new AttributeCreatorFactory().Create(type);
+            foreach (IItemAttributeCreator creator in attributeCreators)
+            {
+                creator.CreateAttributes(this);
+            }
+
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 

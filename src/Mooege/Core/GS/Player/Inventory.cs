@@ -268,7 +268,7 @@ namespace Mooege.Core.GS.Player
         {
             for (int i = 0; i < EquipmentSlots; i++)
             {
-                if (_equipment[i] == item.DynamicID)                
+                if (_equipment[i] == item.DynamicID)
                 {
                     _equipment[i] = 0;
                     item.SetInventoryLocation(-1, -1, -1);

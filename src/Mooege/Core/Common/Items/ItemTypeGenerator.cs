@@ -96,17 +96,6 @@ namespace Mooege.Core.Common.Items
 
         public Item CreateItem(String itemName, int actorSNO, ItemType itemType)
         {
-            Item item = Generate(itemName, actorSNO, itemType);
-            List<IItemAttributeCreator> attributeCreators = new AttributeCreatorFactory().Create(itemType);
-            foreach (IItemAttributeCreator creator in attributeCreators)
-            {
-                creator.CreateAttributes(item);
-            }
-            return item;
-        }
-
-        private Item Generate(String itemName, int actorSNO, ItemType itemType)
-        {
             int gbid = StringHashHelper.HashItemName(itemName);
             var item = new Item(_client.Player.World, actorSNO, gbid, itemType);
             _client.Player.GroundItems[item.DynamicID] = item;
