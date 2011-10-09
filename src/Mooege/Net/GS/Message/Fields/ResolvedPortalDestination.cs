@@ -22,22 +22,22 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class ResolvedPortalDestination
     {
-        public int /* sno */ snoWorld;
-        public int Field1;
-        public int /* sno */ snoDestLevelArea;
+        public int /* sno */ WorldSNO;
+        public int Field1; // *Not* the target world's DynamicID; observed as: 0xAC, 0xDF, 0x02, 0x05, 0xDC, 0x08, 0x07, 0x6B, 0x8D, 0xF6, etc.
+        public int /* sno */ DestLevelAreaSNO;
 
         public void Parse(GameBitBuffer buffer)
         {
-            snoWorld = buffer.ReadInt(32);
+            WorldSNO = buffer.ReadInt(32);
             Field1 = buffer.ReadInt(32);
-            snoDestLevelArea = buffer.ReadInt(32);
+            DestLevelAreaSNO = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, snoWorld);
+            buffer.WriteInt(32, WorldSNO);
             buffer.WriteInt(32, Field1);
-            buffer.WriteInt(32, snoDestLevelArea);
+            buffer.WriteInt(32, DestLevelAreaSNO);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -47,11 +47,11 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("snoWorld: 0x" + snoWorld.ToString("X8"));
+            b.AppendLine("WorldSNO: 0x" + WorldSNO.ToString("X8"));
             b.Append(' ', pad);
             b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', pad);
-            b.AppendLine("snoDestLevelArea: 0x" + snoDestLevelArea.ToString("X8"));
+            b.AppendLine("DestLevelAreaSNO: 0x" + DestLevelAreaSNO.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

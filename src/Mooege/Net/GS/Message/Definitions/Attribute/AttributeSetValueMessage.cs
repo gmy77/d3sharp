@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Definitions.Attribute
 {
     public class AttributeSetValueMessage : GameMessage
     {
-        public int Field0;
+        public uint ActorID; // Actor's DynamicID
         public NetAttributeKeyValue Field1;
 
         public AttributeSetValueMessage() : base(Opcodes.AttributeSetValueMessage) { }
@@ -31,7 +31,7 @@ namespace Mooege.Net.GS.Message.Definitions.Attribute
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
             Field1 = new NetAttributeKeyValue();
             Field1.Parse(buffer);
             Field1.ParseValue(buffer);
@@ -39,7 +39,7 @@ namespace Mooege.Net.GS.Message.Definitions.Attribute
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteUInt(32, ActorID);
             Field1.Encode(buffer);
             Field1.EncodeValue(buffer);
         }
@@ -50,7 +50,7 @@ namespace Mooege.Net.GS.Message.Definitions.Attribute
             b.AppendLine("AttributeSetValueMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             Field1.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");

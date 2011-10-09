@@ -24,20 +24,20 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
     [IncomingMessage(Opcodes.InventoryRequestMoveMessage1, Consumers.Inventory)]
     public class InventoryRequestMoveMessage : GameMessage
     {
-        public int Field0;
-        public InvLoc Field1;
+        public uint ItemID; // Item's DynamicID
+        public InvLoc Location;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = new InvLoc();
-            Field1.Parse(buffer);
+            ItemID = buffer.ReadUInt(32);
+            Location = new InvLoc();
+            Location.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
+            buffer.WriteUInt(32, ItemID);
+            Location.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -46,8 +46,8 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
             b.AppendLine("InventoryRequestMoveMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            Field1.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("ItemID: 0x" + ItemID.ToString("X8") + " (" + ItemID + ")");
+            Location.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

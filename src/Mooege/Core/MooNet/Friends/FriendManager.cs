@@ -16,56 +16,52 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
+using Mooege.Core.Common.Storage;
 using Wintellect.PowerCollections;
 
 namespace Mooege.Core.MooNet.Friends
 {
     public class FriendManager : RPCObject
     {
-        private readonly MultiDictionary<bnet.protocol.EntityId, bnet.protocol.friends.Friend> _friends =
-            new MultiDictionary<bnet.protocol.EntityId, bnet.protocol.friends.Friend>(true);
+        private static readonly FriendManager _instance = new FriendManager();
+        public static FriendManager Instance { get { return _instance; } }
 
-        private readonly Dictionary<ulong, bnet.protocol.invitation.Invitation> _onGoingInvitations =
+        public static readonly MultiDictionary<ulong, bnet.protocol.friends.Friend> Friends =
+            new MultiDictionary<ulong, bnet.protocol.friends.Friend>(true);
+
+        public static readonly Dictionary<ulong, bnet.protocol.invitation.Invitation> OnGoingInvitations =
             new Dictionary<ulong, bnet.protocol.invitation.Invitation>();
 
         public static ulong InvitationIdCounter = 1;
 
-        private void NotifyFriends(Account account)
+        static FriendManager()
         {
-
+            LoadFriendships();
         }
 
-        private void SendFriends(Account account)
+        public static void HandleInvitation(MooNetClient client, bnet.protocol.invitation.Invitation invitation)
         {
-            if (!_friends.ContainsKey(account.BnetAccountID)) return;
-            var friends = _friends[account.BnetAccountID];
-
-            foreach (var friend in friends)
-            {
-
-            }
-        }
-
-        public void HandleInvitation(MooNetClient client, bnet.protocol.invitation.Invitation invitation)
-        {
-            var invitee = this.Subscribers.FirstOrDefault(subscriber => subscriber.Account.BnetAccountID.Low == invitation.InviteeIdentity.AccountId.Low);
+            var invitee = Instance.Subscribers.FirstOrDefault(subscriber => subscriber.Account.BnetAccountID.Low == invitation.InviteeIdentity.AccountId.Low);
             if (invitee == null) return; // if we can't find invite just return - though we should actually check for it until expiration time and store this in database.
 
-            this._onGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.
+            OnGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.
 
             var notification = bnet.protocol.friends.InvitationAddedNotification.CreateBuilder().SetInvitation(invitation);
-            invitee.CallMethod(bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationAdded"), notification.Build(), this.DynamicId);
+            invitee.CallMethod(bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationAdded"), notification.Build(), Instance.DynamicId);
         }
 
-        public void HandleAccept(MooNetClient client, bnet.protocol.invitation.GenericRequest request)
+        public static void HandleAccept(MooNetClient client, bnet.protocol.invitation.GenericRequest request)
         {
-            if (!this._onGoingInvitations.ContainsKey(request.InvitationId)) return;
-            var invitation = this._onGoingInvitations[request.InvitationId];
+            if (!OnGoingInvitations.ContainsKey(request.InvitationId)) return;
+            var invitation = OnGoingInvitations[request.InvitationId];
 
             var inviter = AccountManager.GetAccountByPersistantID(invitation.InviterIdentity.AccountId.Low);
             var invitee = AccountManager.GetAccountByPersistantID(invitation.InviteeIdentity.AccountId.Low);
@@ -77,31 +73,63 @@ namespace Mooege.Core.MooNet.Friends
                 .SetReason(0) // success?
                 .SetAddedFriend(inviteeAsFriend).Build();
 
-            inviter.LoggedInClient.CallMethod(bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationRemoved"), notificationToInviter, this.DynamicId);
+            inviter.LoggedInClient.CallMethod(bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationRemoved"), notificationToInviter, Instance.DynamicId);
             
             var notificationToInvitee = bnet.protocol.friends.InvitationRemovedNotification.CreateBuilder()
                 .SetInvitation(invitation)
                 .SetReason(0) // success?
                 .SetAddedFriend(inviterAsFriend).Build();
 
-            invitee.LoggedInClient.CallMethod(bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationRemoved"), notificationToInvitee, this.DynamicId);
+            invitee.LoggedInClient.CallMethod(bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationRemoved"), notificationToInvitee, Instance.DynamicId);
 
-            _friends.Add(inviter.BnetAccountID, inviteeAsFriend);
+            Friends.Add(inviter.BnetAccountID.Low, inviteeAsFriend);
+            AddFriendshipToDB(inviter,invitee);
 
             // send friend added notification to inviter
             var friendAddedNotificationToInviter = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviteeAsFriend).Build();
             inviter.LoggedInClient.CallMethod(
                 bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyFriendAdded"), friendAddedNotificationToInviter,
-                this.DynamicId);
+                Instance.DynamicId);
 
             // send friend added notification to invitee 
             var friendAddedNotificationToInvitee = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviterAsFriend).Build();
             invitee.LoggedInClient.CallMethod(
                 bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyFriendAdded"), friendAddedNotificationToInvitee,
-                this.DynamicId);
+                Instance.DynamicId);
+        }
 
-            //this.SendFriends(account); // sends notification about its friends to account.
-            //this.NotifyFriends(account); // send notifications to account's friends too.
+        private static void AddFriendshipToDB(Account inviter, Account invitee)
+        {
+            try
+            {
+                var query = string.Format("INSERT INTO friends (accountId, friendId) VALUES({0},{1}); INSERT INTO friends (accountId, friendId) VALUES({2},{3});", inviter.BnetAccountID.Low, invitee.BnetAccountID.Low, invitee.BnetAccountID.Low, inviter.BnetAccountID.Low);
+
+                var cmd = new SQLiteCommand(query, DBManager.Connection);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e, "FriendManager.AddFriendshipToDB()");
+            }
+        }
+
+        private static void LoadFriendships() // load friends from database.
+        {
+            const string query = "SELECT * from friends";
+            var cmd = new SQLiteCommand(query, DBManager.Connection);
+            var reader = cmd.ExecuteReader();
+
+            if (!reader.HasRows) return;
+
+            while (reader.Read())
+            {
+                var friend =
+                    bnet.protocol.friends.Friend.CreateBuilder().SetId(
+                        bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).
+                            SetLow((ulong)reader.GetInt64(1))).Build();
+
+                Friends.Add((ulong)reader.GetInt64(0), friend);
+            }
         }
     }
 }

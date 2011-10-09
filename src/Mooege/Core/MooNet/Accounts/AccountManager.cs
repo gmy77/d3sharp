@@ -26,7 +26,12 @@ namespace Mooege.Core.MooNet.Accounts
 {
     public static class AccountManager
     {
-        public static readonly Dictionary<string, Account> Accounts = new Dictionary<string, Account>();
+        private static readonly Dictionary<string, Account> Accounts = new Dictionary<string, Account>();
+
+        public static int TotalAccounts
+        {
+            get { return Accounts.Count; }
+        }
 
         static AccountManager()
         {

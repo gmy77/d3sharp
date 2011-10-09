@@ -16,24 +16,33 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using Mooege.Core.MooNet.Online;
+
 namespace Mooege.Net.MooNet
 {
     public sealed class MooNetServer : Server
     {
         public MooNetServer()
         {
-            this.OnConnect += BnetServer_OnConnect;
-            this.OnDisconnect += (sender, e) => Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
+            this.OnConnect += MooNetServer_OnConnect;
+            this.OnDisconnect += MooNetServer_OnDisconnect;
             this.DataReceived += (sender, e) => MooNetRouter.Route(e);
             this.DataSent += (sender, e) => { };
         }
 
-        void BnetServer_OnConnect(object sender, ConnectionEventArgs e)
+        private void MooNetServer_OnConnect(object sender, ConnectionEventArgs e)
         {
             Logger.Trace("MooNet-Client connected: {0}", e.Connection.ToString());
             e.Connection.Client = new MooNetClient(e.Connection);
         }
 
+        private void MooNetServer_OnDisconnect(object sender, ConnectionEventArgs e)
+        {
+            Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
+            ((MooNetClient)e.Connection.Client).Account.LoggedInClient = null;
+            PlayerManager.PlayerDisconnected((MooNetClient)e.Connection.Client);
+        }
+        
         public override void Run()
         {
             // we can't listen for port 1119 because D3 and the launcher (agent) communicates on that port through loopback.

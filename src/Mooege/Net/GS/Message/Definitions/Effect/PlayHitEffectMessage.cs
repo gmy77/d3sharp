@@ -22,26 +22,25 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
 {
     public class PlayHitEffectMessage : GameMessage
     {
-        public int Field0;
-        public int Field1;
+        public uint ActorID;
+        public uint HitDealer; // Player that made the hit. /komiga
         public int Field2;
         public bool Field3;
 
-
-
+        public PlayHitEffectMessage() : base(Opcodes.PlayHitEffectMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
+            HitDealer = buffer.ReadUInt(32);
             Field2 = buffer.ReadInt(3) + (-1);
             Field3 = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteUInt(32, ActorID);
+            buffer.WriteUInt(32, HitDealer);
             buffer.WriteInt(3, Field2 - (-1));
             buffer.WriteBool(Field3);
         }
@@ -52,8 +51,8 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
             b.AppendLine("PlayHitEffectMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            b.Append(' ', pad); b.AppendLine("HitDealer: 0x" + HitDealer.ToString("X8") + " (" + HitDealer + ")");
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
             b.Append(' ', pad); b.AppendLine("Field3: " + (Field3 ? "true" : "false"));
             b.Append(' ', --pad);
