@@ -502,8 +502,7 @@ namespace Mooege.Core.GS.Player
             Item collectedItem = _owner.GroundItems[itemID];
             if (_goldItem == null)
             {
-                ItemTypeGenerator itemGenerator = new ItemTypeGenerator(_owner.InGameClient);
-                _goldItem = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
+                _goldItem = ItemGenerator.Cook(_owner, "Gold1", 0x00000178, ItemType.Gold);
                 _goldItem.Count = collectedItem.Count;
                 _goldItem.Owner = _owner;
                 _goldItem.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
@@ -514,7 +513,7 @@ namespace Mooege.Core.GS.Player
                 _goldItem.Count += collectedItem.Count;
             }
 
-            GameAttributeMap attributes = new GameAttributeMap();
+            var attributes = new GameAttributeMap();
             attributes[GameAttribute.ItemStackQuantityLo] = _goldItem.Count;
             attributes.SendMessage(_owner.InGameClient, _goldItem.DynamicID);
         }

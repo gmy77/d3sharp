@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using Mooege.Common;
+using Mooege.Core.Common.Items;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Core.MooNet.Online;
@@ -53,9 +54,11 @@ namespace Mooege
             Console.ForegroundColor = ConsoleColor.Yellow;
             PrintBanner();
             PrintLicense();
-            Console.ResetColor();
+            Console.ResetColor();                      
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
+            Logger.Info("Item database loaded with a total of {0} item definitions", ItemGenerator.TotalItems);
+
             StartupServers();
         }
 

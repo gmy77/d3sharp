@@ -213,19 +213,15 @@ namespace Mooege.Core.GS.Map
 
         public void SpawnRandomDrop(Mooege.Core.GS.Player.Player player, Vector3D position)
         {
-            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(player.InGameClient);
-            // randomize ItemType
-            ItemType[] allValues = (ItemType[])Enum.GetValues(typeof(ItemType));
-            ItemType type = allValues[RandomHelper.Next(allValues.Length)];
-            Item item = itemGenerator.GenerateRandomElement(type);
+            var item = ItemGenerator.GenerateRandom(player);
+
             item.Drop(null, position); // NOTE: The owner field for an item is only set when it is in the owner's inventory. /komiga
             player.GroundItems[item.DynamicID] = item; // FIXME: Hacky. /komiga
         }
 
         public void SpawnGold(Mooege.Core.GS.Player.Player player, Vector3D position)
         {
-            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(player.InGameClient);
-            Item item = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
+            var item = ItemGenerator.Cook(player, "Gold1", 0x00000178, ItemType.Gold);
             item.Count = RandomHelper.Next(1, 3);
             item.Drop(null, position);
             player.GroundItems[item.DynamicID] = item;

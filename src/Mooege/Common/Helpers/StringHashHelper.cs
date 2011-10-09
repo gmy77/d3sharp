@@ -31,6 +31,7 @@ namespace Mooege.Common.Helpers
         }
 
         // Hash algorithm used for item names
+        // FIXME: Our item name hasher seems to be problematic, for some items even with valid snoId's, bad gbId's are hashed which crashes client on pickup. /raist.
         public static int HashItemName(string input)
         {
             int hash = 0;
