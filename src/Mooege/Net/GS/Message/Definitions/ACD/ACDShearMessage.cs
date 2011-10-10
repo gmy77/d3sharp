@@ -20,24 +20,26 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    /// <summary>
+    /// Sent to client to shear the visual model of an actor
+    /// </summary>
     public class ACDShearMessage : GameMessage
     {
-        public int Field0;
-        public float Field1;
+        public int ActorID;
+        public float Amount;    // 0 = no shearing
 
-
-
+        public ACDShearMessage() : base(Opcodes.ACDShearMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadFloat32();
+            ActorID = buffer.ReadInt(32);
+            Amount = buffer.ReadFloat32();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteFloat32(Field1);
+            buffer.WriteInt(32, ActorID);
+            buffer.WriteFloat32(Amount);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -46,8 +48,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDShearMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: " + Field1.ToString("G"));
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: " + Amount.ToString("G"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

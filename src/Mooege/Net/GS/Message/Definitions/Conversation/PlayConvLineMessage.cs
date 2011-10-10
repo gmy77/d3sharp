@@ -21,32 +21,35 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    /// <summary>
+    /// Plays a single line from a conversation.
+    /// Proper SNOconversation with correct LineID and correct Field4 will play everything (so far)
+    /// </summary>
     public class PlayConvLineMessage : GameMessage
     {
-        public int Field0;
+        public int ActorID;             // The SNO of this actor is used, to get a localized "Name" of the conversation participant for chat ouput
         // MaxLength = 9
-        public int[] Field1;
-        public PlayLineParams Field2;
-        public int Field3;
+        public int[] Field1;            // looks like a list of conversation participants
+        public PlayLineParams Params;
+        public int Field3;              // seems to be a running number across conversationlines. StopConvLine.Field0 == PlayConvLine.Field3 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
 
-
-
+        public PlayConvLineMessage() : base(Opcodes.PlayConvLineMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorID = buffer.ReadInt(32);
             Field1 = new int[9];
             for (int i = 0; i < Field1.Length; i++) Field1[i] = buffer.ReadInt(32);
-            Field2 = new PlayLineParams();
-            Field2.Parse(buffer);
+            Params = new PlayLineParams();
+            Params.Parse(buffer);
             Field3 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, ActorID);
             for (int i = 0; i < Field1.Length; i++) buffer.WriteInt(32, Field1[i]);
-            Field2.Encode(buffer);
+            Params.Encode(buffer);
             buffer.WriteInt(32, Field3);
         }
 
@@ -56,12 +59,12 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("PlayConvLineMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', pad); b.AppendLine("Field1:");
             b.Append(' ', pad); b.AppendLine("{");
             for (int i = 0; i < Field1.Length; ) { b.Append(' ', pad + 1); for (int j = 0; j < 8 && i < Field1.Length; j++, i++) { b.Append("0x" + Field1[i].ToString("X8") + ", "); } b.AppendLine(); }
             b.Append(' ', pad); b.AppendLine("}"); b.AppendLine();
-            Field2.AsText(b, pad);
+            Params.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");

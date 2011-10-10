@@ -21,22 +21,29 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    /// <summary>
+    /// Sent to client, to introduce a new actor.
+    /// </summary>
     public class ACDEnterKnownMessage : GameMessage
     {
         public uint ActorID; // The actor's DynamicID
         public int /* sno */ ActorSNO;
+
+        // For many actors, bit 0x8 is set the first time the item is introduced with ACDEnterKnown... if the item
+        // is later deleted with an ANN Message and reintroduced, 0x8 is NOT set... (StartLocation, BlockingCart, MarkerLocation)
+
         public int Field2;
-        public int Field3;
+        public int Field3;      // 0 = WorldLocationMessageData is set, 1 = InventoryLocationMessageData is set ...
         public WorldLocationMessageData WorldLocation;
         public InventoryLocationMessageData InventoryLocation;
         public GBHandle GBHandle;
         public int Field7;
-        public int Field8;
-        public int Field9;
+        public int Field8;      
+        public int Field9;      // Item quality if an item, otherwise 0
         public byte Field10;
         public int? /* sno */ Field11;
         public int? Field12;
-        public int? Field13;
+        public int? Field13;    // Seems to be a running number for all actors, just a counting how many actors there already are
 
         public ACDEnterKnownMessage() : base(Opcodes.ACDEnterKnownMessage) { }
 

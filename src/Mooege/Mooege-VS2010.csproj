@@ -314,7 +314,7 @@
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCInteractOptionsMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PetMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Animation\PlayAnimationMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\PlayConvLineMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Conversation\PlayConvLineMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayCutsceneMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Effect\PlayEffectMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerActorSetInitialMessage.cs" />
@@ -357,7 +357,7 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\SNODataMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\SNONameDataMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\SocketSpellMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\StopConvLineMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Conversation\StopConvLineMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Scene\SwapSceneMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Combat\TargetMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\TimedEventStartedMessage.cs" />

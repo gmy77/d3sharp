@@ -76,7 +76,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             {
                 b.Append(' ', pad); b.AppendLine("OptionalGoldAmount.Value: 0x" + OptionalGoldAmount.Value.ToString("X8") + " (" + OptionalGoldAmount.Value + ")");
             }
-            b.Append(' ', pad); b.AppendLine("Field3: 0x" + Type.ToString("X8") + " (" + Type + ")");
+            b.Append(' ', pad); b.AppendLine("Field3: 0x" + ((int)Type).ToString("X8") + " (" + Type + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

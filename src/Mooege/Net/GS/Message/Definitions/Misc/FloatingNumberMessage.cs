@@ -85,7 +85,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', pad); b.AppendLine("Number: " + Number.ToString("G"));
-            b.Append(' ', pad); b.AppendLine("Type: 0x" + Type.ToString("X8") + " (" + Type + ")");
+            b.Append(' ', pad); b.AppendLine("Type: 0x" + ((int)Type).ToString("X8") + " (" + Type + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
