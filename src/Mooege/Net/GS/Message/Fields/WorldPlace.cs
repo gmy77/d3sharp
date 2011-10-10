@@ -22,20 +22,20 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class WorldPlace
     {
-        public Vector3D Field0;
-        public int Field1;
+        public Vector3D Position;
+        public uint WorldID; // World's DynamicID
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = new Vector3D();
-            Field0.Parse(buffer);
-            Field1 = buffer.ReadInt(32);
+            Position = new Vector3D();
+            Position.Parse(buffer);
+            WorldID = buffer.ReadUInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            Field0.Encode(buffer);
-            buffer.WriteInt(32, Field1);
+            Position.Encode(buffer);
+            buffer.WriteUInt(32, WorldID);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -44,9 +44,9 @@ namespace Mooege.Net.GS.Message.Fields
             b.AppendLine("WorldPlace:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            Field0.AsText(b, pad);
+            Position.AsText(b, pad);
             b.Append(' ', pad);
-            b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.AppendLine("WorldID: 0x" + WorldID.ToString("X8") + " (" + WorldID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

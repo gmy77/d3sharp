@@ -24,20 +24,18 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
     [IncomingMessage(Opcodes.ANNDataMessage9, Consumers.Inventory)]
     public class InventoryDropItemMessage : GameMessage
     {
-        public int ItemId;
+        public uint ItemID; // Item's DynamicID
         //TODO: find out about unknown data
-        public byte[] Unknown; 
-        
+        public byte[] Unknown;
+
         public override void Parse(GameBitBuffer buffer)
         {
-            ItemId = buffer.ReadInt(32);
-           
+            ItemID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, ItemId);
-           
+            buffer.WriteUInt(32, ItemID);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -46,7 +44,7 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
             b.AppendLine("InventoryDropItemMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("ItemId: 0x" + ItemId.ToString("X8"));                  
+            b.Append(' ', pad); b.AppendLine("ItemID: 0x" + ItemID.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

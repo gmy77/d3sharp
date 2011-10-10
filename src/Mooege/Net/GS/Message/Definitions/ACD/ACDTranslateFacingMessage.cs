@@ -26,21 +26,24 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
     })]
     public class ACDTranslateFacingMessage : GameMessage
     {
-        public int Field0;
-        public float /* angle */ Field1;
+        public uint ActorID; // The actor's DynamicID
+        public float /* angle */ Angle;
         public bool Field2;
+
+        public ACDTranslateFacingMessage() {}
+        public ACDTranslateFacingMessage(Opcodes id) : base(id) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadFloat32();
+            ActorID = buffer.ReadUInt(32);
+            Angle = buffer.ReadFloat32();
             Field2 = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteFloat32(Field1);
+            buffer.WriteUInt(32, ActorID);
+            buffer.WriteFloat32(Angle);
             buffer.WriteBool(Field2);
         }
 
@@ -50,8 +53,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDTranslateFacingMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field1: " + Field1.ToString("G"));
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Angle: " + Angle.ToString("G"));
             b.Append(' ', pad); b.AppendLine("Field2: " + (Field2 ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");

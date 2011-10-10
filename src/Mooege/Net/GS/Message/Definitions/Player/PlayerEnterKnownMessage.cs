@@ -23,20 +23,20 @@ namespace Mooege.Net.GS.Message.Definitions.Player
     public class PlayerEnterKnownMessage : GameMessage
     {
         public int Field0;
-        public int Field1;
+        public uint PlayerID; // Player's DynamicID
 
         public PlayerEnterKnownMessage() : base(Opcodes.PlayerEnterKnownMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(3);
-            Field1 = buffer.ReadInt(32);
+            PlayerID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(3, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteUInt(32, PlayerID);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -46,7 +46,7 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("PlayerID: 0x" + PlayerID.ToString("X8") + " (" + PlayerID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

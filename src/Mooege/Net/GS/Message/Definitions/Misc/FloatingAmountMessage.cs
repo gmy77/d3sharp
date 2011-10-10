@@ -21,37 +21,47 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    /// <summary>
+    /// Displays either "+x Gold", "+x XP" or "+x Gold and +y XP" 
+    /// </summary>
     public class FloatingAmountMessage : GameMessage
     {
-        public WorldPlace Field0;
-        public int Field1;
-        public int? Field2;
-        public int Field3;
+        public enum FloatType : int
+        {
+            Gold = 0x1c,
+            XP = 0x1d,
+            Both = 0x1e         // XP in field1 and gold in field2 
+        }
+
+        public WorldPlace Place;
+        public int Amount;
+        public int? OptionalGoldAmount;
+        public FloatType Type;
 
         public FloatingAmountMessage() : base(Opcodes.FloatingAmountMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = new WorldPlace();
-            Field0.Parse(buffer);
-            Field1 = buffer.ReadInt(32);
+            Place = new WorldPlace();
+            Place.Parse(buffer);
+            Amount = buffer.ReadInt(32);
             if (buffer.ReadBool())
             {
-                Field2 = buffer.ReadInt(32);
+                OptionalGoldAmount = buffer.ReadInt(32);
             }
-            Field3 = buffer.ReadInt(6);
+            Type = (FloatType)buffer.ReadInt(6);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            Field0.Encode(buffer);
-            buffer.WriteInt(32, Field1);
-            buffer.WriteBool(Field2.HasValue);
-            if (Field2.HasValue)
+            Place.Encode(buffer);
+            buffer.WriteInt(32, Amount);
+            buffer.WriteBool(OptionalGoldAmount.HasValue);
+            if (OptionalGoldAmount.HasValue)
             {
-                buffer.WriteInt(32, Field2.Value);
+                buffer.WriteInt(32, OptionalGoldAmount.Value);
             }
-            buffer.WriteInt(6, Field3);
+            buffer.WriteInt(6, (int)Type);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -60,13 +70,13 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("FloatingAmountMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            Field0.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
-            if (Field2.HasValue)
+            Place.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("Amount: 0x" + Amount.ToString("X8") + " (" + Amount + ")");
+            if (OptionalGoldAmount.HasValue)
             {
-                b.Append(' ', pad); b.AppendLine("Field2.Value: 0x" + Field2.Value.ToString("X8") + " (" + Field2.Value + ")");
+                b.Append(' ', pad); b.AppendLine("OptionalGoldAmount.Value: 0x" + OptionalGoldAmount.Value.ToString("X8") + " (" + OptionalGoldAmount.Value + ")");
             }
-            b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
+            b.Append(' ', pad); b.AppendLine("Field3: 0x" + Type.ToString("X8") + " (" + Type + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

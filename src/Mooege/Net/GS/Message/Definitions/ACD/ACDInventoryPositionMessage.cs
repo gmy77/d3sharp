@@ -23,26 +23,26 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 {
     public class ACDInventoryPositionMessage : GameMessage
     {
-        public int Field0;
-        public InventoryLocationMessageData Field1;
+        public uint ItemID; // Item's DynamicID
+        public InventoryLocationMessageData InventoryLocation;
         public int Field2;
 
         public ACDInventoryPositionMessage() : base(Opcodes.ACDInventoryPositionMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = new InventoryLocationMessageData();
-            Field1.Parse(buffer);
+            ItemID = buffer.ReadUInt(32);
+            InventoryLocation = new InventoryLocationMessageData();
+            InventoryLocation.Parse(buffer);
             Field2 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            if (Field1 != null)
+            buffer.WriteUInt(32, ItemID);
+            if (InventoryLocation != null)
             {
-                Field1.Encode(buffer);
+                InventoryLocation.Encode(buffer);
             }
             buffer.WriteInt(32, Field2);
         }
@@ -53,10 +53,10 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDInventoryPositionMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            if (Field1 != null)
+            b.Append(' ', pad); b.AppendLine("ItemID: 0x" + ItemID.ToString("X8") + " (" + ItemID + ")");
+            if (InventoryLocation != null)
             {
-                Field1.AsText(b, pad);
+                InventoryLocation.AsText(b, pad);
             }
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
             b.Append(' ', --pad);

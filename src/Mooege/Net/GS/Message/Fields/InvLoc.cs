@@ -22,25 +22,25 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class InvLoc
     {
-        public int Field0;
-        public int Field1;
-        public int Field2;
-        public int Field3;
+        public uint OwnerID; // Owner's DynamicID
+        public int EquipmentSlot;
+        public int Column;
+        public int Row;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(5) + (-1);
-            Field2 = buffer.ReadInt(32);
-            Field3 = buffer.ReadInt(32);
+            OwnerID = buffer.ReadUInt(32);
+            EquipmentSlot = buffer.ReadInt(5) + (-1);
+            Column = buffer.ReadInt(32);
+            Row = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(5, Field1 - (-1));
-            buffer.WriteInt(32, Field2);
-            buffer.WriteInt(32, Field3);
+            buffer.WriteUInt(32, OwnerID);
+            buffer.WriteInt(5, EquipmentSlot - (-1));
+            buffer.WriteInt(32, Column);
+            buffer.WriteInt(32, Row);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -50,13 +50,13 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.AppendLine("OwnerID: 0x" + OwnerID.ToString("X8") + " (" + OwnerID + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.AppendLine("EquipmentSlot: 0x" + EquipmentSlot.ToString("X8") + " (" + EquipmentSlot + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.AppendLine("Column: 0x" + Column.ToString("X8") + " (" + Column + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
+            b.AppendLine("Row: 0x" + Row.ToString("X8") + " (" + Row + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

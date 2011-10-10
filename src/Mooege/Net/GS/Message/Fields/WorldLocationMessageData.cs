@@ -22,23 +22,23 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class WorldLocationMessageData
     {
-        public float Field0;
-        public PRTransform Field1;
-        public int Field2;
+        public float Scale;
+        public PRTransform Transform;
+        public uint WorldID;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadFloat32();
-            Field1 = new PRTransform();
-            Field1.Parse(buffer);
-            Field2 = buffer.ReadInt(32);
+            Scale = buffer.ReadFloat32();
+            Transform = new PRTransform();
+            Transform.Parse(buffer);
+            WorldID = buffer.ReadUInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteFloat32(Field0);
-            Field1.Encode(buffer);
-            buffer.WriteInt(32, Field2);
+            buffer.WriteFloat32(Scale);
+            Transform.Encode(buffer);
+            buffer.WriteUInt(32, WorldID);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -48,10 +48,10 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: " + Field0.ToString("G"));
-            Field1.AsText(b, pad);
+            b.AppendLine("Scale: " + Scale.ToString("G"));
+            Transform.AsText(b, pad);
             b.Append(' ', pad);
-            b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.AppendLine("WorldID: 0x" + WorldID.ToString("X8") + " (" + WorldID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

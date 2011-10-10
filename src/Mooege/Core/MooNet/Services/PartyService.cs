@@ -21,7 +21,6 @@ using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
-using bnet.protocol.channel;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -29,31 +28,31 @@ namespace Mooege.Core.MooNet.Services
     public class PartyService : bnet.protocol.party.PartyService,IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IMooNetClient Client { get; set; }
+        public MooNetClient Client { get; set; }
 
         // PartyService just uses ChannelService to create a new channel for the party.
-        public override void CreateChannel(IRpcController controller, CreateChannelRequest request, Action<CreateChannelResponse> done)
+        public override void CreateChannel(IRpcController controller, bnet.protocol.channel.CreateChannelRequest request, Action<bnet.protocol.channel.CreateChannelResponse> done)
         {
             Logger.Trace("CreateChannel()");
-            var channel = ChannelManager.CreateNewChannel((MooNetClient)this.Client, request.ObjectId);
-            var builder = CreateChannelResponse.CreateBuilder()
+            var channel = ChannelManager.CreateNewChannel(this.Client, request.ObjectId);
+            var builder = bnet.protocol.channel.CreateChannelResponse.CreateBuilder()
                 .SetObjectId(channel.DynamicId)
                 .SetChannelId(channel.BnetEntityId);
 
             done(builder.Build());
 
             // Set the client that requested the creation of channel as the owner
-            channel.SetOwner((MooNetClient)Client);
+            channel.SetOwner(Client);
 
             Logger.Debug("Created a new channel {0}:{1} for toon {2}", channel.BnetEntityId.High, channel.BnetEntityId.Low, Client.CurrentToon.Name);
         }
 
-        public override void JoinChannel(IRpcController controller, JoinChannelRequest request, Action<JoinChannelResponse> done)
+        public override void JoinChannel(IRpcController controller, bnet.protocol.channel.JoinChannelRequest request, Action<bnet.protocol.channel.JoinChannelResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void GetChannelInfo(IRpcController controller, GetChannelInfoRequest request, Action<GetChannelInfoResponse> done)
+        public override void GetChannelInfo(IRpcController controller, bnet.protocol.channel.GetChannelInfoRequest request, Action<bnet.protocol.channel.GetChannelInfoResponse> done)
         {
             Logger.Trace("GetChannelInfoRequest() to channel {0}:{1} by toon {2}", request.ChannelId.High, request.ChannelId.Low, Client.CurrentToon.Name);
 

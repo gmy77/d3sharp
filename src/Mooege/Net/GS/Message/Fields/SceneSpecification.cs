@@ -22,15 +22,15 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class SceneSpecification
     {
-        public int Field0;
-        public IVector2D Field1;
+        public int CellZ; // Position.Z rounded down
+        public IVector2D Cell;
         // MaxLength = 4
         public int /* sno */[] arSnoLevelAreas; //area names
         public int /* sno */ snoPrevWorld;
-        public int Field4;
+        public int Field4; // Probably PrevWorld's DynamicID
         public int /* sno */ snoPrevLevelArea;
         public int /* sno */ snoNextWorld;
-        public int Field7;
+        public int Field7; // Probably NextWorld's DynamicID
         public int /* sno */ snoNextLevelArea;
         public int /* sno */ snoMusic;
         public int /* sno */ snoCombatMusic;
@@ -46,9 +46,9 @@ namespace Mooege.Net.GS.Message.Fields
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = new IVector2D();
-            Field1.Parse(buffer);
+            CellZ = buffer.ReadInt(32);
+            Cell = new IVector2D();
+            Cell.Parse(buffer);
             arSnoLevelAreas = new int /* sno */[4];
             for (int i = 0; i < arSnoLevelAreas.Length; i++) arSnoLevelAreas[i] = buffer.ReadInt(32);
             snoPrevWorld = buffer.ReadInt(32);
@@ -73,8 +73,8 @@ namespace Mooege.Net.GS.Message.Fields
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
+            buffer.WriteInt(32, CellZ);
+            Cell.Encode(buffer);
             for (int i = 0; i < arSnoLevelAreas.Length; i++) buffer.WriteInt(32, arSnoLevelAreas[i]);
             buffer.WriteInt(32, snoPrevWorld);
             buffer.WriteInt(32, Field4);
@@ -102,8 +102,8 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            Field1.AsText(b, pad);
+            b.AppendLine("CellZ: 0x" + CellZ.ToString("X8") + " (" + CellZ + ")");
+            Cell.AsText(b, pad);
             b.Append(' ', pad);
             b.AppendLine("arSnoLevelAreas:");
             b.Append(' ', pad);
@@ -156,7 +156,5 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

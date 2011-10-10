@@ -20,7 +20,7 @@ using System;
 using Mooege.Common;
 using Mooege.Common.Extensions;
 using Mooege.Core.Common.Toons;
-using Mooege.Core.MooNet.Invitation;
+using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Services
@@ -29,33 +29,40 @@ namespace Mooege.Core.MooNet.Services
     public class ChannelInvitationService: bnet.protocol.channel_invitation.ChannelInvitationService, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public IMooNetClient Client { get; set; }
+        public MooNetClient Client { get; set; }
+        private readonly ChannelInvitationManager _invitationManager = new ChannelInvitationManager();
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SubscribeRequest request, Action<bnet.protocol.channel_invitation.SubscribeResponse> done)
         {
             Logger.Trace("Subscribe()");
 
-            ChannelInvitationManager.Instance.AddSubscriber((MooNetClient)this.Client, request.ObjectId);
+            this._invitationManager.AddSubscriber(this.Client, request.ObjectId);
             var builder = bnet.protocol.channel_invitation.SubscribeResponse.CreateBuilder();
             done(builder.Build());
         }
 
         public override void AcceptInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.AcceptInvitationRequest request, Action<bnet.protocol.channel_invitation.AcceptInvitationResponse> done)
         {
-            var response = bnet.protocol.channel_invitation.AcceptInvitationResponse.CreateBuilder().SetObjectId(ChannelInvitationManager.Instance.DynamicId).Build();
+            var response = bnet.protocol.channel_invitation.AcceptInvitationResponse.CreateBuilder().SetObjectId(this._invitationManager.DynamicId).Build();
             done(response);
 
-            ChannelInvitationManager.Instance.HandleAccept((MooNetClient) this.Client, request);
+            this._invitationManager.HandleAccept(this.Client, request);
         }
 
         public override void DeclineInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            var respone = bnet.protocol.NoData.CreateBuilder();
+            done(respone.Build());
+
+            this._invitationManager.HandleDecline(this.Client, request);
         }
 
         public override void RevokeInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.RevokeInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            var builder = bnet.protocol.NoData.CreateBuilder();
+            done(builder.Build());
+
+            this._invitationManager.Revoke(this.Client, request);
         }
 
         public override void SendInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.invitation.SendInvitationResponse> done)
@@ -104,20 +111,19 @@ namespace Mooege.Core.MooNet.Services
             Client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), notification.Build(), Client.CurrentChannel.DynamicId);
 
             // notify the invitee on invitation.
-            ChannelInvitationManager.Instance.HandleInvitation((MooNetClient)this.Client, invitation.Build());
+            this._invitationManager.HandleInvitation(this.Client, invitation.Build());
         }
 
         public override void SuggestInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SuggestInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
-            // "request to join party"
-
-            var builder = bnet.protocol.NoData.CreateBuilder();
-            done(builder.Build());
+            throw new NotImplementedException();
         }
 
-        public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.UnsubscribeRequest request, System.Action<bnet.protocol.NoData> done)
+        public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.UnsubscribeRequest request, Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            this._invitationManager.RemoveSubscriber(Client);
+            var builder = bnet.protocol.NoData.CreateBuilder();
+            done(builder.Build());
         }
     }
 }

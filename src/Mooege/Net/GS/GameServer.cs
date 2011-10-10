@@ -16,7 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Core.GS.Universe;
+using Mooege.Core.GS.Game;
+
+// TODO: GameServer should likely have a Game reference since it essentially routes messages to and from the game
 
 namespace Mooege.Net.GS
 {
@@ -38,10 +40,6 @@ namespace Mooege.Net.GS
 
         public override void Run()
         {
-            // we can't listen for port 1119 because D3 and the launcher (agent) communicates on that port through loopback.
-            // so we change our default port and start D3 with a shortcut like so:
-            //   "F:\Diablo III Beta\Diablo III.exe" -launch -auroraaddress 127.0.0.1:1345
-
             if (!this.Listen(Config.Instance.BindIP, Config.Instance.Port)) return;
             Logger.Info("Game-Server is listening on {0}:{1}...", Config.Instance.BindIP, Config.Instance.Port);
         }

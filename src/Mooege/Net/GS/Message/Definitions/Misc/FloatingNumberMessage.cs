@@ -22,22 +22,59 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     public class FloatingNumberMessage : GameMessage
     {
-        public int Field0;
-        public float Field1;
-        public int Field2;
+        // Enums members with a color in their name display a colored number
+        // others display a localized string. FloatType.Dodged displays a
+        // floating "Dodge"... crash sending (int)28 as type
+        public enum FloatType
+        {
+            White = 0,
+            WhiteCritical,
+            Golden,
+            Red2,              // GoldenCritical was expected
+            Red,
+            RedCritical,
+            Dodge,
+            Dodged,
+            Block,
+            Parry,
+            Green,
+            Absorbed,
+            Rooted,
+            Stunned,
+            Blinded,
+            Frozen,
+            Feared,
+            Charmed,
+            Taunted,
+            Snared,
+            AttackSlowed,
+            BrokeFreeze,
+            BrokeBlind,
+            BrokeStun,
+            BrokeRoot,
+            BrokeSnare,
+            BrokeFear,
+            Immune
+        }
+
+        public uint ActorID;
+        public float Number;
+        public FloatType Type;
+
+        public FloatingNumberMessage() : base(Opcodes.FloatingNumberMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadFloat32();
-            Field2 = buffer.ReadInt(6);
+            ActorID = buffer.ReadUInt(32);
+            Number = buffer.ReadFloat32();
+            Type = (FloatType)buffer.ReadInt(6);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteFloat32(Field1);
-            buffer.WriteInt(6, Field2);
+            buffer.WriteUInt(32, ActorID);
+            buffer.WriteFloat32(Number);
+            buffer.WriteInt(6, (int)Type);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -46,9 +83,9 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("FloatingNumberMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: " + Field1.ToString("G"));
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            b.Append(' ', pad); b.AppendLine("Number: " + Number.ToString("G"));
+            b.Append(' ', pad); b.AppendLine("Type: 0x" + Type.ToString("X8") + " (" + Type + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

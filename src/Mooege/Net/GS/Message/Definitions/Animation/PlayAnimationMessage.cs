@@ -23,18 +23,17 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
 {
     public class PlayAnimationMessage : GameMessage
     {
-        public int Field0;
+        public uint ActorID;
         public int Field1;
         public float Field2;
         // MaxLength = 3
         public PlayAnimationMessageSpec[] tAnim;
 
-
-
+        public PlayAnimationMessage() : base(Opcodes.PlayAnimationMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
             Field1 = buffer.ReadInt(4);
             Field2 = buffer.ReadFloat32();
             tAnim = new PlayAnimationMessageSpec[buffer.ReadInt(2)];
@@ -43,7 +42,7 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteUInt(32, ActorID);
             buffer.WriteInt(4, Field1);
             buffer.WriteFloat32(Field2);
             buffer.WriteInt(2, tAnim.Length);
@@ -56,7 +55,7 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
             b.AppendLine("PlayAnimationMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', pad); b.AppendLine("Field2: " + Field2.ToString("G"));
             b.Append(' ', pad); b.AppendLine("tAnim:");

@@ -16,12 +16,34 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Common;
+using Mooege.Core.GS.Map;
 
 namespace Mooege.Core.GS.Powers
 {
     public class Effect : Actor
     {
-        public DateTime timeout;
+        public override ActorType ActorType { get { return Actors.ActorType.Monster; } }
+
+        public Effect(Map.World world, int actorSNO, Vector3D position, float angle, int timeout)
+            : base(world, world.NewActorID)
+        {
+            this.ActorSNO = actorSNO;
+            RotationAmount = (float)Math.Cos(angle / 2f);
+            RotationAxis = new Vector3D(0, 0, (float)Math.Sin(angle / 2f));
+
+            // FIXME: This is hardcoded crap
+            this.Field2 = 0x8;
+            this.Field3 = 0x0;
+            this.Scale = 1.35f;
+            this.Position.Set(position);
+            this.GBHandle.Type = 1; this.GBHandle.GBID = 1; // TODO: use proper enum value
+
+            Timeout = DateTime.Now.AddMilliseconds(timeout);
+
+            world.Enter(this);
+        }
+
+        public DateTime Timeout;
     }
 
     public class PowersManager
@@ -31,7 +53,7 @@ namespace Mooege.Core.GS.Powers
         // temporary testing helper
         private PowersMobTester _mobtester;
 
-        private Universe.Universe _universe;
+        private Game.Game _game;
 
         private List<Effect> _effects = new List<Effect>();
         private Random _rand = new Random();
@@ -63,17 +85,16 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public PowersManager(Universe.Universe universe)
+        public PowersManager(Game.Game game)
         {
-            _mobtester = new PowersMobTester(universe);
-            _universe = universe;
+            _mobtester = new PowersMobTester();
+            _game = game;
         }
 
         public void Tick()
         {
             UpdateWaitingPowers();
-            CleanUpEffects();
-            _mobtester.Tick();
+            CleanUpEffects(); 
         }
 
         public void UsePower(Actor user, int powerId, int targetId = -1, Vector3D targetPos = null, TargetMessage message = null)
@@ -183,12 +204,6 @@ namespace Mooege.Core.GS.Powers
                 }
             }
             _waitingPowers = newWaitList;
-
-            // HACK: just flush all clients right now
-            foreach (GameClient client in _universe.PlayerManager.Players.Select(p => p.Client))
-            {
-                client.FlushOutgoingBuffer();
-            }
         }
 
         public void RegisterChannelingPower(Actor user, int castDelayAmount = 0)
@@ -231,7 +246,7 @@ namespace Mooege.Core.GS.Powers
                 client.SendMessage(new PlayEffectMessage()
                 {
                     Id = 0x7a,
-                    Field0 = target.DynamicId,
+                    ActorID = target.DynamicID,
                     Field1 = effectId,
                     Field2 = 0x0, // TODO: figure out what this is: 0x2,
                 });
@@ -247,8 +262,8 @@ namespace Mooege.Core.GS.Powers
                 client.SendMessage(new PlayHitEffectMessage()
                 {
                     Id = 0x7b,
-                    Field0 = target.DynamicId,
-                    Field1 = from.DynamicId,
+                    ActorID = target.DynamicID,
+                    HitDealer = from.DynamicID,
                     Field2 = effectId,
                     Field3 = false
                 });
@@ -265,9 +280,9 @@ namespace Mooege.Core.GS.Powers
                 {
                     Id = 0x00ab,
                     Field0 = effectId,
-                    Field1 = from.DynamicId,
+                    Field1 = (int)from.DynamicID,
                     Field2 = 4,
-                    Field3 = target.DynamicId,
+                    Field3 = (int)target.DynamicID,
                     Field4 = 1
                 });
             }
@@ -283,8 +298,8 @@ namespace Mooege.Core.GS.Powers
                 {
                     Id = 0xaa,
                     Field0 = effectId,
-                    Field1 = from.DynamicId,
-                    Field2 = target.DynamicId
+                    Field1 = (int)from.DynamicID,
+                    Field2 = (int)target.DynamicID
                 });
             }
         }
@@ -296,9 +311,9 @@ namespace Mooege.Core.GS.Powers
                 client.SendMessage(new ACDTranslateFacingMessage
                 {
                     Id = 0x70,
-                    Field0 = actor.DynamicId,
-                    Field1 = AngleLookAt(actor.Position, targetPos),
-                    Field2 = false
+                    ActorID = actor.DynamicID,
+                    Angle = AngleLookAt(actor.Position, targetPos),
+                    Field2 = false // true/false toggles whether to smoothly animate the change or instantly do it
                 });
             }
         }
@@ -320,37 +335,16 @@ namespace Mooege.Core.GS.Powers
             MoveActorNormal(target, move);
         }
 
-        private Effect SpawnEffectInstance(Actor from, int effectId, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
+        private Effect SpawnEffectInstance(Actor from, int actorSNO, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
         {
             if (angle == -1f)
                 angle = (float)(_rand.NextDouble() * (Math.PI * 2));
-
-            Effect effect = new Effect()
-            {
-                DynamicId = _universe.NextObjectId,
-                Position = position,
-                SnoId = effectId,
-                Scale = 1.35f,
-                RotationAmount = (float)Math.Cos(angle / 2f),
-                RotationAxis = new Vector3D(0, 0, (float)Math.Sin(angle / 2f)),
-                WorldId = from.WorldId,
-                // TODO: this stuff needed?
-                GBHandle = new GBHandle()
-                {
-                    Field0 = 1,
-                    Field1 = 1,
-                },
-                Field2 = 0x8,
-                //Field7 = 0x01,
-                //Field8 = effectId,
-                
-                timeout = DateTime.Now.AddMilliseconds(timeout)
-            };
             
+            Effect effect = new Effect(from.World, actorSNO, position, angle, timeout);                       
+            
+            // TODO: nuke this?
             foreach (GameClient client in _revealedClientsFor(from))
             {
-                effect.Reveal(client.Player.Hero);
-
                 client.PacketId += 30 * 2;
                 client.SendMessage(new DWordDataMessage()
                 {
@@ -364,6 +358,7 @@ namespace Mooege.Core.GS.Powers
                     Field0 = client.Tick - 20,
                     Field1 = client.Tick
                 });
+                client.FlushOutgoingBuffer();
             }
 
             return effect;
@@ -384,7 +379,7 @@ namespace Mooege.Core.GS.Powers
         {
             foreach (GameClient client in _revealedClientsFor(effect))
             {
-                effect.Destroy(client.Player.Hero);
+                effect.Destroy();
 
                 client.PacketId += 10 * 2;
                 client.SendMessage(new DWordDataMessage()
@@ -456,20 +451,20 @@ namespace Mooege.Core.GS.Powers
                 client.SendMessage(new ACDWorldPositionMessage()
                 {
                     Id = 0x003f,
-                    Field0 = actor.DynamicId,
-                    Field1 = new WorldLocationMessageData()
+                    ActorID = actor.DynamicID,
+                    WorldLocation = new WorldLocationMessageData()
                     {
-                        Field0 = actor.Scale,
-                        Field1 = new PRTransform()
+                        Scale = actor.Scale,
+                        Transform = new PRTransform()
                         {
-                            Field0 = new Quaternion()
+                            Rotation = new Quaternion()
                             {
                                 Amount = actor.RotationAmount,
                                 Axis = actor.RotationAxis
                             },
                             ReferencePoint = pos
                         },
-                        Field2 = actor.WorldId,
+                        WorldID = actor.World.DynamicID
                     }
                 });
             }
@@ -485,9 +480,9 @@ namespace Mooege.Core.GS.Powers
                 client.SendMessage(new ACDTranslateNormalMessage()
                 {
                     Id = 0x6e,
-                    Field0 = actor.DynamicId,
+                    Field0 = (int)actor.DynamicID,
                     Position = pos,
-                    Field2 = 0f, // TODO: convert quaternion rotation for this?
+                    Angle = 0f, // TODO: convert quaternion rotation for this?
                     Field3 = false,
                     Field4 = 1.0f,
                 });
@@ -502,9 +497,9 @@ namespace Mooege.Core.GS.Powers
                 client.SendMessage(new FloatingNumberMessage()
                 {
                     Id = 0xd0,
-                    Field0 = target.DynamicId,
-                    Field1 = amount,
-                    Field2 = type,
+                    ActorID = target.DynamicID,
+                    Number = amount,
+                    Type = FloatingNumberMessage.FloatType.White//type,
                 });
                 SendDWordTick(client);
                 client.FlushOutgoingBuffer();
@@ -524,9 +519,9 @@ namespace Mooege.Core.GS.Powers
                     client.SendMessage(new FloatingNumberMessage()
                     {
                         Id = 0xd0,
-                        Field0 = target.DynamicId,
-                        Field1 = amount,
-                        Field2 = type,
+                        ActorID = target.DynamicID,
+                        Number = amount,
+                        Type = FloatingNumberMessage.FloatType.White//type,
                     });
                     SendDWordTick(client);
                     client.FlushOutgoingBuffer();
@@ -540,7 +535,7 @@ namespace Mooege.Core.GS.Powers
 
         private Actor GetActorFromId(int id)
         {
-            return Targets.FirstOrDefault(t => t.DynamicId == id);
+            return Targets.FirstOrDefault(t => t.DynamicID == id);
         }
 
         private void CleanUpEffects()
@@ -549,7 +544,7 @@ namespace Mooege.Core.GS.Powers
             var curtime = DateTime.Now;
             foreach (Effect effect in _effects)
             {
-                if (curtime > effect.timeout)
+                if (curtime > effect.Timeout)
                     KillSpawnedEffect(effect);
                 else
                     survivors.Add(effect);
@@ -560,9 +555,8 @@ namespace Mooege.Core.GS.Powers
 
         private IEnumerable<GameClient> _revealedClientsFor(Actor actor)
         {
-            return _universe.PlayerManager.Players
-                                          .FindAll(p => p.Hero.RevealedActors.Contains(actor))
-                                          .Select(p => p.Client);
+            // HACK, probably going to nuke this whole function soon
+            return actor.World.GetPlayersInRange(actor.Position, 1000f).Select(p => p.InGameClient);
         }
 
         private void SendDWordTickFor(Actor user)

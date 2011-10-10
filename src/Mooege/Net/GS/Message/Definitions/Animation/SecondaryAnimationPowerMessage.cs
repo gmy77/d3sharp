@@ -27,17 +27,28 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
     [IncomingMessage(Opcodes.SecondaryAnimationPowerMessage)]
     public class SecondaryAnimationPowerMessage : GameMessage, ISelfHandler
     {
-        public int /* sno */ snoPower;
+        public int /* sno */ PowerSNO;
         public AnimPreplayData Field1;
 
         public void Handle(GameClient client)
         {
-            client.Universe.PowersManager.UsePower(client.Player.Hero, snoPower);
+            client.Game.PowersManager.UsePower(client.Player, PowerSNO);
+
+            //if (PowerSNO != Skills.Monk.SpiritSpenders.BlindingFlash) return;
+            //var player = client.Player;
+            //var pos = new Vector3D();
+            //pos.Z = player.Position.Z;
+            //for (var i = 0; i < 10; i++)
+            //{
+            //    pos.X = player.Position.X + (float)RandomHelper.NextDouble() * 20f;
+            //    pos.Y = player.Position.Y + (float)RandomHelper.NextDouble() * 20f;
+            //    player.World.SpawnMob(player, 6652/*SNODatabase.Instance.RandomID(SNOGroup.NPCs)*/, pos);
+            //}
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            snoPower = buffer.ReadInt(32);
+            PowerSNO = buffer.ReadInt(32);
             if (buffer.ReadBool())
             {
                 Field1 = new AnimPreplayData();
@@ -47,7 +58,7 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, snoPower);
+            buffer.WriteInt(32, PowerSNO);
             buffer.WriteBool(Field1 != null);
             if (Field1 != null)
             {
@@ -61,7 +72,7 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
             b.AppendLine("SecondaryAnimationPowerMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("snoPower: 0x" + snoPower.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("PowerSNO: 0x" + PowerSNO.ToString("X8"));
             if (Field1 != null)
             {
                 Field1.AsText(b, pad);
