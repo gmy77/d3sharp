@@ -16,8 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Linq;
 using System.Collections.Generic;
 using Google.ProtocolBuffers;
+using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
@@ -28,43 +30,68 @@ namespace Mooege.Core.MooNet.Games
     public class Game : RPCObject
     {
         /// <summary>
-        /// Bnet EntityID encoded ID.
+        /// bnet.protocol.EntityId encoded Id.
         /// </summary>
         public bnet.protocol.EntityId BnetEntityId { get; private set; }
 
+        /// <summary>
+        /// The channel bound to game.
+        /// </summary>
+        public Channel Channel { get; private set; }
+
+        /// <summary>
+        /// Game handle.
+        /// </summary>
         public bnet.protocol.game_master.GameHandle GameHandle { get; private set; }
 
-        public ulong RequestID { get; private set; }
         public ulong FactoryID { get; private set; }
+
+        public ulong RequestId { get; set; }
 
         public List<MooNetClient> Clients = new List<MooNetClient>();
 
         public static ulong RequestIdCounter = 0;
 
-        public Game(ulong factoryId)
+        public Game(Channel channel)
         {
-            this.RequestID = ++RequestIdCounter;
-            this.FactoryID = factoryId;
+            this.Channel = channel;
 
+            this.FactoryID = 14249086168335147635;
             this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameId).SetLow(this.DynamicId).Build();
             this.GameHandle = bnet.protocol.game_master.GameHandle.CreateBuilder().SetFactoryId(this.FactoryID).SetGameId(this.BnetEntityId).Build();
         }
 
-        public void ListenForGame(MooNetClient client)
+        public void StartGame(List<MooNetClient> clients, ulong objectId)
         {
-            // We should actually find the server's public-interface and use that
-            var connectionInfo =
-                bnet.protocol.game_master.ConnectInfo.CreateBuilder().SetToonId(client.CurrentToon.BnetEntityID).SetHost
-                    (Net.Utils.GetGameServerIPForClient(client)).SetPort(Config.Instance.Port).SetToken(ByteString.CopyFrom(new byte[] {0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84}))
-                    .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("SGameId").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.DynamicId).Build())).Build();
-                 
-            var builder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();
-            builder.AddConnectInfo(connectionInfo);
-            builder.SetRequestId(this.RequestID);
-            builder.SetGameHandle(this.GameHandle);
+            this.Clients = clients;
+            clients.First().MapLocalObjectID(this.DynamicId, objectId); // map remote object-id for party leader.
 
-            this.Clients.Add(client);
-            client.CallMethod(bnet.protocol.game_master.GameFactorySubscriber.Descriptor.FindMethodByName("NotifyGameFound"), builder.Build(), this.DynamicId);
+            foreach(var client in clients) // get all clients in game.
+            {
+                this.SendConnectionInfo(client);
+            }
+        }
+
+        private bnet.protocol.game_master.ConnectInfo GetConnectionInfoForClient(MooNetClient client)
+        {
+            //TODO: We should actually find the server's public-interface and use that /raist
+            return bnet.protocol.game_master.ConnectInfo.CreateBuilder().SetToonId(client.CurrentToon.BnetEntityID)
+                .SetHost(Net.Utils.GetGameServerIPForClient(client)).SetPort(Config.Instance.Port).SetToken(ByteString.CopyFrom(new byte[] { 0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84 }))
+                .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("SGameId").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.DynamicId).Build()))
+                .Build();
+        }
+
+        private void SendConnectionInfo(MooNetClient client)
+        {
+            if (client == this.Channel.Owner)
+            {
+                var builder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();
+                builder.AddConnectInfo(GetConnectionInfoForClient(client));
+                builder.SetRequestId(this.RequestId);
+                builder.SetGameHandle(this.GameHandle);
+
+                client.CallMethod(bnet.protocol.game_master.GameFactorySubscriber.Descriptor.FindMethodByName("NotifyGameFound"), builder.Build(), this.DynamicId);
+            }
         }
     }
 }

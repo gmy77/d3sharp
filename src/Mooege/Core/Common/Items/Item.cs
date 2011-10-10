@@ -21,14 +21,9 @@ using Mooege.Common;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Map;
 using Mooege.Core.Common.Items.ItemCreation;
-using Mooege.Net.GS;
-using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Combat;
-using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Net.GS.Message.Definitions.Attribute;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
 
@@ -40,11 +35,11 @@ namespace Mooege.Core.Common.Items
         Axe_1H, Axe_2H, CombatStaff_2H, Staff, Dagger, Mace_1H, Mace_2H, Sword_1H,
         Sword_2H, Crossbow, Bow, Spear, Polearm, Wand, Ring, FistWeapon_1H, ThrownWeapon, ThrowingAxe, ChestArmor, 
         HealthPotion, Gold, HealthGlobe, Dye, Elixir, Charm, Scroll, SpellRune, Rune, 
-        Amethyst, Diamond, Emarald, Ruby, Sapphire, Emerald, Topaz, Skull, Backpack, Potion, Amulet, Scepter, Rod, Journal
+        Amethyst, Emarald, Ruby, Emerald, Topaz, Skull, Backpack, Potion, Amulet, Scepter, Rod, Journal        
 
-        /* Not working at the moment:
-         *  // ThrownWeapon, ThrowingAxe    --> does not work because there are no snoId in Actors.txt. Do they actually drop in the D3 beta?
-         */
+        // Not working at the moment:
+        // ThrownWeapon, ThrowingAxe - does not work because there are no snoId in Actors.txt. Do they actually drop in the D3 beta? /angerwin?
+        // Diamond, Sapphire - I realised some days ago, that the Item type Diamond and Shappire (maybe not the only one) causes client crash and BAD GBID messages, although they actually have SNO IDs. /angerwin
     }
 
     public class Item : Actor

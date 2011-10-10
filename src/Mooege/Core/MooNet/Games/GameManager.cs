@@ -17,19 +17,47 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Channels;
+using Mooege.Net.MooNet;
+using bnet.protocol.game_master;
 
 namespace Mooege.Core.MooNet.Games
 {
     public static class GameManager
     {
+        /// <summary>
+        /// List of games.
+        /// </summary>
         public static readonly Dictionary<ulong, Game> AvailableGames =
             new Dictionary<ulong, Game>();
 
-        public static Game CreateGame(ulong factoryId)
+        /// <summary>
+        /// Request id counter for find-game requests.
+        /// </summary>
+        public static ulong RequestIdCounter = 0; // request Id counter for find game responses.
+
+        public static Game CreateGame(Channel channel)
         {
-            var game = new Game(factoryId);
+            var game = new Game(channel);
             AvailableGames.Add(game.DynamicId, game);
             return game;
+        }
+
+        public static void FindGame(MooNetClient client, ulong requestId, FindGameRequest request)
+        {
+            // We actually need to check request here and see if client wants to join a public game or create his own.
+
+            var clients = new List<MooNetClient>();
+            foreach(var player in request.PlayerList)
+            {
+                var toon = ToonManager.GetToonByLowID(player.ToonId.Low);
+                if(toon.Owner.LoggedInClient==null) continue;
+                clients.Add(toon.Owner.LoggedInClient);
+            }
+
+            client.CurrentChannel.Game.RequestId = requestId;
+            client.CurrentChannel.Game.StartGame(clients, request.ObjectId);            
         }
     }
 }

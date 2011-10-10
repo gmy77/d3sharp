@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Games;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
@@ -42,6 +43,11 @@ namespace Mooege.Core.MooNet.Channels
         /// Channel PrivacyLevel.
         /// </summary>
         public bnet.protocol.channel.ChannelState.Types.PrivacyLevel PrivacyLevel { get; private set; }
+
+        /// <summary>
+        /// The bound game for channel.
+        /// </summary>
+        public Game Game { get; private set; }
 
         /// <summary>
         /// Max number of members.
@@ -88,6 +94,8 @@ namespace Mooege.Core.MooNet.Channels
             // The client can't be set as the owner (or added as a member) here because the server must first make a response
             // to the client before using a mapped ID (presuming that this was called from a service).
             // We'll just let the caller do that for us.
+
+            this.Game = GameManager.CreateGame(this); // attach a game to channel.
         }
 
         #region common methods 

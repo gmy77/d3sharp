@@ -68,16 +68,13 @@ namespace Mooege.Core.MooNet.Services
         public override void FindGame(IRpcController controller, FindGameRequest request, Action<FindGameResponse> done)
         {            
             Logger.Trace("FindGame()");
-    
-            var game = GameManager.CreateGame(request.FactoryId);
 
-            // Map the remote ID
-            this.Client.MapLocalObjectID(game.DynamicId, request.ObjectId);
-            var builder = FindGameResponse.CreateBuilder().SetRequestId(game.RequestID);
+            var requestId = ++GameManager.RequestIdCounter;
+
+            var builder = FindGameResponse.CreateBuilder().SetRequestId(requestId);
             done(builder.Build());
 
-            // TODO: We should actually match the games that matches the filter
-            game.ListenForGame(this.Client);
+            GameManager.FindGame(this.Client, requestId, request);
         }
 
         public override void CancelFindGame(IRpcController controller, CancelFindGameRequest request, Action<NoData> done)
