@@ -501,17 +501,17 @@ namespace Mooege.Core.GS.Player
                 this.Attributes[GameAttribute.Level]++;
                 if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
                 else { this.Attributes[GameAttribute.Experience_Next] = 0; }
+
                 // todo: not always adding 2/2/2/1 on Levelup
                 this.Attributes[GameAttribute.Defense] = 10f + (this.Attributes[GameAttribute.Level] - 1f) * 2f;
                 this.Attributes[GameAttribute.Vitality] = 9f + (this.Attributes[GameAttribute.Level] - 1f) * 1f;
                 this.Attributes[GameAttribute.Precision] = 11f + (this.Attributes[GameAttribute.Level] - 1f) * 2f;
                 this.Attributes[GameAttribute.Attack] = 10f + (this.Attributes[GameAttribute.Level] - 1f) * 2f;
                 attribs[GameAttribute.Level] = this.Attributes[GameAttribute.Level];
-                // attribs[GameAttribute.Defense] = this.Attributes[GameAttribute.Defense] would throw an ArgumentOutOfRangeException
-                attribs[GameAttribute.Defense] = 10.0f + (this.Attributes[GameAttribute.Level] - 1.0f) * 2.0f;
-                attribs[GameAttribute.Vitality] = 9.0f + (this.Attributes[GameAttribute.Level] - 1.0f) * 1.0f;
-                attribs[GameAttribute.Precision] = 11.0f + (this.Attributes[GameAttribute.Level] - 1.0f) * 2.0f;
-                attribs[GameAttribute.Attack] = 11.0f + (this.Attributes[GameAttribute.Level] - 1.0f) * 2.0f;
+                attribs[GameAttribute.Defense] = this.Attributes[GameAttribute.Defense];
+                attribs[GameAttribute.Vitality] = this.Attributes[GameAttribute.Vitality];
+                attribs[GameAttribute.Precision] = this.Attributes[GameAttribute.Precision];
+                attribs[GameAttribute.Attack] = this.Attributes[GameAttribute.Attack];
                 attribs[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next];
                 attribs.SendMessage(this.InGameClient, this.DynamicID);
 
@@ -543,7 +543,7 @@ namespace Mooege.Core.GS.Player
             attribs[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next];
             attribs.SendMessage(this.InGameClient, this.DynamicID);
 
-            // this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
+            //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
         }
 
         public int ClassSNO

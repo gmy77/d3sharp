@@ -151,7 +151,6 @@ namespace Mooege.Core.GS.Actors
                     0x2cd9
             };
 
-            //int newexp = (int)Math.Ceiling(npc.HP * 1);
             player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
 
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
