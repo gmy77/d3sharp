@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Definitions.Player
 {
     public class NewPlayerMessage : GameMessage
     {
-        public int Field0;
+        public int PlayerIndex;
         public string Field1;
         public string ToonName;
         public int Field3;
@@ -39,7 +39,7 @@ namespace Mooege.Net.GS.Message.Definitions.Player
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(3);
+            PlayerIndex = buffer.ReadInt(3);
             Field1 = buffer.ReadCharArray(128);
             ToonName = buffer.ReadCharArray(101);
             Field3 = buffer.ReadInt(5) + (-1);
@@ -55,7 +55,7 @@ namespace Mooege.Net.GS.Message.Definitions.Player
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(3, Field0);
+            buffer.WriteInt(3, PlayerIndex);
             buffer.WriteCharArray(128, Field1);
             buffer.WriteCharArray(101, ToonName);
             buffer.WriteInt(5, Field3 - (-1));
@@ -74,7 +74,7 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             b.AppendLine("NewPlayerMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + PlayerIndex.ToString("X8") + " (" + PlayerIndex + ")");
             b.Append(' ', pad); b.AppendLine("Field1: \"" + Field1 + "\"");
             b.Append(' ', pad); b.AppendLine("ToonName: \"" + ToonName + "\"");
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");

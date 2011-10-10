@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.GS.Objects;
@@ -24,6 +25,7 @@ using Mooege.Core.GS.Generators;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Player;
 
 // TODO: Move scene stuff into a Map class (which can also handle the efficiency stuff and object grouping)
 
@@ -35,7 +37,9 @@ namespace Mooege.Core.GS.Game
 
         public int GameId { get; private set; }
 
-        public Dictionary<GameClient, Player.Player> Players = new Dictionary<GameClient, Player.Player>();
+        public ConcurrentDictionary<GameClient, Player.Player> Players = new ConcurrentDictionary<GameClient, Player.Player>();
+
+        public int PlayerIndexCounter = -1;
 
         private readonly Dictionary<uint, DynamicObject> _objects;
         private readonly Dictionary<int, World> _worlds; // NOTE: This tracks by WorldSNO rather than by DynamicID; this.Objects _does_ still contain the world since it is a DynamicObject
@@ -84,10 +88,38 @@ namespace Mooege.Core.GS.Game
             // for possile future messages consumed by game.
         }
 
-        public void Enter(Player.Player player)
+        public void Enter(Player.Player newPlayer)
         {
-            this.Players.Add(player.InGameClient, player);
-        }        
+            Logger.Trace("{0} [{1}] joined game.", newPlayer.Properties.Name, newPlayer.DynamicID);
+            this.Players.TryAdd(newPlayer.InGameClient, newPlayer);
+
+            foreach(var pair in this.Players)
+            {
+                this.NotifyNewPlayer(newPlayer, pair.Value); // notify target player about new player joining the game.
+            }
+
+            newPlayer.World.Enter(newPlayer); // Enter only once all fields have been initialized to prevent a run condition
+        }     
+   
+        private void NotifyNewPlayer(Player.Player newPlayer, Player.Player target)
+        {
+            target.InGameClient.SendMessage(new NewPlayerMessage
+            {
+                PlayerIndex = newPlayer.PlayerIndex, // player index
+                Field1 = "", //Owner name?
+                ToonName = newPlayer.Properties.Name,
+                Field3 = 0x00000002, //party frame class
+                Field4 = 0x00000004, //party frame level
+                snoActorPortrait = newPlayer.ClassSNO, //party frame portrait
+                Field6 = 0x00000001,
+                StateData = newPlayer.GetStateData(),
+                Field8 = this.Players.Count != 1, //announce party join
+                Field9 = 0x00000001,
+                ActorID = newPlayer.DynamicID,
+            });
+            Logger.Warn("{0} is notified about {1} joining the game", target.Properties.Name, newPlayer.Properties.Name);
+        }
+
 
         #region Tracking
 

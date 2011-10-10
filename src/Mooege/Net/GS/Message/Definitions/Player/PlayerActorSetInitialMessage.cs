@@ -23,20 +23,20 @@ namespace Mooege.Net.GS.Message.Definitions.Player
     public class PlayerActorSetInitialMessage : GameMessage
     {
         public uint PlayerID; // Player's DynamicID
-        public int Field1;
+        public int PlayerIndex;
 
         public PlayerActorSetInitialMessage() : base(Opcodes.PlayerActorSetInitialMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
             PlayerID = buffer.ReadUInt(32);
-            Field1 = buffer.ReadInt(3);
+            PlayerIndex = buffer.ReadInt(3);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteUInt(32, PlayerID);
-            buffer.WriteInt(3, Field1);
+            buffer.WriteInt(3, PlayerIndex);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -46,7 +46,7 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("PlayerID: 0x" + PlayerID.ToString("X8") + " (" + PlayerID + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + PlayerIndex.ToString("X8") + " (" + PlayerIndex + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

@@ -37,9 +37,6 @@ namespace Mooege.Net.GS
 
         void GameServer_DataReceived(object sender, ConnectionDataEventArgs e)
         {
-            var client = ((GameClient)e.Connection.Client);
-            if(client.Player!=null) Logger.Info("Incoming data from: " + client.Player.Properties.Name);
-
             var connection = (Connection)e.Connection;
             ((GameClient)connection.Client).Parse(e);
         }

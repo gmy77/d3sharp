@@ -108,6 +108,7 @@ namespace Mooege.Net.GS
             });
 
             client.Player = new Player(game.StartWorld, client, toon);
+            Logger.Warn("Player {0}-{1}", client.Player.Properties.Name, client.Player.PlayerIndex);
             game.Enter(client.Player);
         }
     

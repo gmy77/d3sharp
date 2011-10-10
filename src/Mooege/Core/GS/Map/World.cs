@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Common.Helpers;
@@ -41,8 +42,8 @@ namespace Mooege.Core.GS.Map
 
         private Dictionary<uint, Scene> Scenes;
         //private List<Scene> Scenes;
-        private Dictionary<uint, Actor> Actors;
-        private Dictionary<uint, Mooege.Core.GS.Player.Player> Players; // Temporary for fast iteration for now since move/enter/leave handling is currently at the world level instead of the scene level
+        private readonly ConcurrentDictionary<uint, Actor> Actors;
+        private readonly ConcurrentDictionary<uint, Mooege.Core.GS.Player.Player> Players; // Temporary for fast iteration for now since move/enter/leave handling is currently at the world level instead of the scene level
 
         public int WorldSNO { get; set; }
         public Vector3D StartPosition { get; private set; }
@@ -58,8 +59,8 @@ namespace Mooege.Core.GS.Map
             this.Game.StartTracking(this);
             this.Scenes = new Dictionary<uint, Scene>();
             //this.Scenes = new List<Scene>();
-            this.Actors = new Dictionary<uint, Actor>();
-            this.Players = new Dictionary<uint, Mooege.Core.GS.Player.Player>();
+            this.Actors = new ConcurrentDictionary<uint, Actor>();
+            this.Players = new ConcurrentDictionary<uint, Mooege.Core.GS.Player.Player>();
 
             // NOTE: WorldSNO must be valid before adding it to the game
             this.WorldSNO = worldSNO;
@@ -121,10 +122,13 @@ namespace Mooege.Core.GS.Map
             actor.OnEnter(this);
             // Broadcast reveal
             // NOTE: Revealing to all right now since the flow results in actors that have initial positions that are not within the range of the player. /komiga
+            
             var players = this.Players.Values; //this.GetPlayersInRange(actor.Position, 480.0f);
-            //Logger.Debug("Enter {0}, reveal to {1} players", actor.DynamicID, players.Count);
+            
             foreach (var player in players)
             {
+                if (actor == player) continue; // we don't need to re-reveal him to himself.
+                if(actor is Player.Player) Logger.Debug("Enter: Revealing player: {0}[{1}] to {2}[{3}]",((Player.Player)actor).Properties.Name ,actor.DynamicID, player.Properties.Name,player.DynamicID);
                 actor.Reveal(player);
             }
         }
@@ -172,6 +176,7 @@ namespace Mooege.Core.GS.Map
             foreach (var actor in Actors.Values)
             {
                 actor.Reveal(player);
+                if(actor is Player.Player) Logger.Debug("Revaling player {0}[{1}] to player {2}[{3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
             }
             player.RevealedObjects.Add(this.DynamicID, this);
             return true;
@@ -239,7 +244,8 @@ namespace Mooege.Core.GS.Map
         {
             if (obj.DynamicID == 0 || HasActor(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", obj.DynamicID));
-            this.Actors.Add(obj.DynamicID, obj);
+            this.Actors.TryAdd(obj.DynamicID, obj);
+
             if (obj.ActorType == ActorType.Player) // temp
                 this.AddPlayer((Mooege.Core.GS.Player.Player)obj);
         }
@@ -248,7 +254,8 @@ namespace Mooege.Core.GS.Map
         {
             if (obj.DynamicID == 0 || HasPlayer(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", obj.DynamicID));
-            this.Players.Add(obj.DynamicID, obj);
+
+            this.Players.TryAdd(obj.DynamicID, obj);
         }
 
         // Removing
@@ -264,7 +271,9 @@ namespace Mooege.Core.GS.Map
         {
             if (obj.DynamicID == 0 || !this.Actors.ContainsKey(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", obj.DynamicID));
-            this.Actors.Remove(obj.DynamicID);
+            Actor actor;
+            this.Actors.TryRemove(obj.DynamicID, out actor);
+
             if (obj.ActorType == ActorType.Player) // temp
                 this.RemovePlayer((Mooege.Core.GS.Player.Player)obj);
         }
@@ -273,7 +282,9 @@ namespace Mooege.Core.GS.Map
         {
             if (obj.DynamicID == 0 || !this.Players.ContainsKey(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", obj.DynamicID));
-            this.Players.Remove(obj.DynamicID);
+
+            Player.Player player;
+            this.Players.TryRemove(obj.DynamicID,out player);
         }
 
         // Getters
