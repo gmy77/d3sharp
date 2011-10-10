@@ -24,23 +24,23 @@ using bnet.protocol.game_master;
 
 namespace Mooege.Core.MooNet.Games
 {
-    public static class GameManager
+    public static class GameCreatorManager
     {
         /// <summary>
         /// List of games.
         /// </summary>
-        public static readonly Dictionary<ulong, Game> AvailableGames =
-            new Dictionary<ulong, Game>();
+        private static readonly Dictionary<ulong, GameCreator> GameCreators =
+            new Dictionary<ulong, GameCreator>();
 
         /// <summary>
         /// Request id counter for find-game requests.
         /// </summary>
         public static ulong RequestIdCounter = 0; // request Id counter for find game responses.
 
-        public static Game CreateGame(Channel channel)
+        public static GameCreator CreateGame(Channel channel)
         {
-            var game = new Game(channel);
-            AvailableGames.Add(game.DynamicId, game);
+            var game = new GameCreator(channel);
+            GameCreators.Add(game.DynamicId, game);
             return game;
         }
 

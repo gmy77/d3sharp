@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.Common.Items;
-using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Actors;
@@ -29,18 +28,12 @@ using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Net.GS.Message.Definitions.Act;
-using Mooege.Net.GS.Message.Definitions.Attribute;
-using Mooege.Net.GS.Message.Definitions.Connection;
 using Mooege.Net.GS.Message.Definitions.Combat;
-using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Inventory;
-using Mooege.Net.GS.Message.Definitions.World;
 
 // TODO: When the player moves, it will set the Position property which will bounce back to the player again.
 //       That is unnecessary and we should exclude the player from receiving it in that case. /komiga
@@ -72,7 +65,7 @@ namespace Mooege.Core.GS.Player
 
             this.Properties = bnetToon;
             this.Inventory = new Inventory(this);
-            this.SkillSet = new Skills.SkillSet(this.Properties.Class);
+            this.SkillSet = new SkillSet(this.Properties.Class);
 
             this.RevealedObjects = new Dictionary<uint, IRevealable>();
             this.GroundItems = new Dictionary<uint, Item>();

@@ -47,7 +47,7 @@ namespace Mooege.Core.MooNet.Channels
         /// <summary>
         /// The bound game for channel.
         /// </summary>
-        public Game Game { get; private set; }
+        public GameCreator Game { get; private set; }
 
         /// <summary>
         /// Max number of members.
@@ -95,7 +95,7 @@ namespace Mooege.Core.MooNet.Channels
             // to the client before using a mapped ID (presuming that this was called from a service).
             // We'll just let the caller do that for us.
 
-            this.Game = GameManager.CreateGame(this); // attach a game to channel.
+            this.Game = GameCreatorManager.CreateGame(this); // attach a game to channel.
         }
 
         #region common methods 

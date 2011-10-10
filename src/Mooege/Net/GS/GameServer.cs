@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using Mooege.Common;
 using Mooege.Core.GS.Game;
 
 // TODO: GameServer should likely have a Game reference since it essentially routes messages to and from the game
@@ -24,16 +25,21 @@ namespace Mooege.Net.GS
 {
     public sealed class GameServer : Server
     {
+        private static readonly Logger Logger = LogManager.CreateLogger();
+
         public GameServer()
         {
-            this.OnConnect += ClientManager.OnConnect;
-            this.OnDisconnect += ClientManager.OnDisconnect;
+            this.OnConnect += ClientManager.Instance.OnConnect;
+            this.OnDisconnect += ClientManager.Instance.OnDisconnect;
             this.DataReceived += GameServer_DataReceived;
             this.DataSent += (sender, e) => { };
         }
 
         void GameServer_DataReceived(object sender, ConnectionDataEventArgs e)
         {
+            var client = ((GameClient)e.Connection.Client);
+            if(client.Player!=null) Logger.Info("Incoming data from: " + client.Player.Properties.Name);
+
             var connection = (Connection)e.Connection;
             ((GameClient)connection.Client).Parse(e);
         }

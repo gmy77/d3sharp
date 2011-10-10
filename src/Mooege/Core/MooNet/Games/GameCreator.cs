@@ -27,7 +27,7 @@ using Config = Mooege.Net.GS.Config;
 
 namespace Mooege.Core.MooNet.Games
 {
-    public class Game : RPCObject
+    public class GameCreator : RPCObject
     {
         /// <summary>
         /// bnet.protocol.EntityId encoded Id.
@@ -39,6 +39,8 @@ namespace Mooege.Core.MooNet.Games
         /// </summary>
         public Channel Channel { get; private set; }
 
+        public Core.GS.Game.Game InGame { get; private set; }
+
         /// <summary>
         /// Game handle.
         /// </summary>
@@ -48,11 +50,9 @@ namespace Mooege.Core.MooNet.Games
 
         public ulong RequestId { get; set; }
 
-        public List<MooNetClient> Clients = new List<MooNetClient>();
-
         public static ulong RequestIdCounter = 0;
 
-        public Game(Channel channel)
+        public GameCreator(Channel channel)
         {
             this.Channel = channel;
 
@@ -63,7 +63,8 @@ namespace Mooege.Core.MooNet.Games
 
         public void StartGame(List<MooNetClient> clients, ulong objectId)
         {
-            this.Clients = clients;
+            this.InGame = GS.Game.GameManager.CreateGame((int) this.DynamicId); // create the ingame.
+
             clients.First().MapLocalObjectID(this.DynamicId, objectId); // map remote object-id for party leader.
 
             foreach(var client in clients) // get all clients in game.
