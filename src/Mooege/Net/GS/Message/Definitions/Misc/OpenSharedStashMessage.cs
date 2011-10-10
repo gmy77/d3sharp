@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -15,51 +15,44 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 using System.Text;
-using Mooege.Net.GS.Message.Fields;
 
-namespace Mooege.Net.GS.Message.Definitions.Inventory
+namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    [IncomingMessage(Opcodes.InventoryRequestUseMessage)]
-    public class InventoryRequestUseMessage : GameMessage
+    /// <summary>
+    /// Sent to the client, to open the inventory of a known actor as stash inventory
+    /// </summary>
+    [IncomingMessage(Opcodes.OpenSharedStashMessage)]
+    public class OpenSharedStashMessage : GameMessage
     {
-        public int Field0;
-        public int Field1;
-        public int Field2;
-        public WorldPlace Field3;
+        public int ActorId;
+
+        public OpenSharedStashMessage() { }
+        public OpenSharedStashMessage(int stashId)
+            : base(Opcodes.OpenSharedStashMessage)
+        {
+            ActorId = stashId;
+        }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(2) + (-1);
-            Field2 = buffer.ReadInt(32);
-            Field3 = new WorldPlace();
-            Field3.Parse(buffer);
+            ActorId = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(2, Field1 - (-1));
-            buffer.WriteInt(32, Field2);
-            Field3.Encode(buffer);
+            buffer.WriteInt(32, ActorId);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("InventoryRequestUseMessage:");
+            b.AppendLine("OpenSharedStackMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
-            Field3.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("ActorId: 0x" + ActorId.ToString("X8") + " (" + ActorId + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

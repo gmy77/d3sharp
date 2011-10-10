@@ -48,9 +48,9 @@ namespace Mooege.Net.GS.Message
         GenericBlobMessage5 = 31, // len: 	
         ANNDataMessage1 = 32, // len: 	12
         SimpleMessage3 = 33, // len: 	8
-        ANNDataMessage2 = 34, // len: 	12
-        ANNDataMessage3 = 35, // len: 	12
-        ANNDataMessage4 = 36, // len: 	12
+        OpenTradeWindow = 34, // len: 	12          former ANNDataMessage2
+        RequestBuyItemMessage = 35, // len: 	12, former ANNDataMessage3
+        RequestSellItemMessage = 36, // len: 	12, former ANNDataMessage4
         ANNDataMessage5 = 37, // len: 	12
         LogoutContextMessage1 = 38, // len: 	16
         LogoutTickTimeMessage = 39, // len: 	20
@@ -170,7 +170,7 @@ namespace Mooege.Net.GS.Message
         GenericBlobMessage7 = 150, // len: 	
         PlayerInteractMessage = 151, // len: 	16
         PlayerLevel = 152, // len: 	16
-        ANNDataMessage19 = 153, // len: 	12
+        OpenSharedStashMessage = 153, // len: 	12, former ANNDataMessage19
         ACDPickupFailedMessage = 154, // len: 	16
         PetMessage = 155, // len: 	24
         ANNDataMessage20 = 156, // len: 	12
@@ -240,7 +240,7 @@ namespace Mooege.Net.GS.Message
         SNODataMessage4 = 221, // len: 	12
         ActTransitionStartedMessage = 222, // len: 	16
         SimpleMessage16 = 223, // len: 	8
-        SimpleMessage17 = 224, // len: 	8
+        RequestBuySharedStashSlotsMessage = 224, // len: 	8   former SimpleMessage17
         PlayerQuestMessage1 = 225, // len: 	16
         PlayerQuestMessage2 = 226, // len: 	16
         PlayerDeSyncSnapMessage = 227, // len: 	28

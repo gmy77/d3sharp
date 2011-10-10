@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,49 +17,44 @@
  */
 
 using System.Text;
-using Mooege.Net.GS.Message.Fields;
 
-namespace Mooege.Net.GS.Message.Definitions.Inventory
+namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    [IncomingMessage(Opcodes.InventoryRequestUseMessage)]
-    public class InventoryRequestUseMessage : GameMessage
+    /// <summary>
+    /// Sent by the client, when the player sells an item to a vendor via trade window (not when using cauldron of jordan)
+    /// </summary>
+    [IncomingMessage(Opcodes.RequestSellItemMessage)]
+    public class RequestSellItemMessage : GameMessage
     {
-        public int Field0;
-        public int Field1;
-        public int Field2;
-        public WorldPlace Field3;
+        public int ItemId;
+
+        public RequestSellItemMessage() { }
+        public RequestSellItemMessage(int itemID)
+            : base(Opcodes.RequestSellItemMessage)
+        {
+            ItemId = itemID;
+        }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(2) + (-1);
-            Field2 = buffer.ReadInt(32);
-            Field3 = new WorldPlace();
-            Field3.Parse(buffer);
+            ItemId = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(2, Field1 - (-1));
-            buffer.WriteInt(32, Field2);
-            Field3.Encode(buffer);
+            buffer.WriteInt(32, ItemId);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("InventoryRequestUseMessage:");
+            b.AppendLine("SellItemMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
-            Field3.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("ItemId: 0x" + ItemId.ToString("X8") + " (" + ItemId + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
 
     }
 }
