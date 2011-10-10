@@ -65,7 +65,7 @@ namespace Mooege.Core.GS.Objects
             world.Game.EndTracking(this);
         }
 
-        public abstract void Reveal(Mooege.Core.GS.Player.Player player);
-        public abstract void Unreveal(Mooege.Core.GS.Player.Player player);
+        public abstract bool Reveal(Mooege.Core.GS.Player.Player player);
+        public abstract bool Unreveal(Mooege.Core.GS.Player.Player player);
     }
 }

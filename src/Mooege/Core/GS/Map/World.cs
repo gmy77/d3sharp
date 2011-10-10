@@ -120,7 +120,7 @@ namespace Mooege.Core.GS.Map
             this.AddActor(actor);
             actor.OnEnter(this);
             // Broadcast reveal
-            // NOTE: Revealing to all right now since the flow results in actors that have initial positions that are not within the range of the player
+            // NOTE: Revealing to all right now since the flow results in actors that have initial positions that are not within the range of the player. /komiga
             var players = this.Players.Values; //this.GetPlayersInRange(actor.Position, 480.0f);
             //Logger.Debug("Enter {0}, reveal to {1} players", actor.DynamicID, players.Count);
             foreach (var player in players)
@@ -141,49 +141,54 @@ namespace Mooege.Core.GS.Map
             this.RemoveActor(actor);
         }
 
-        public void Reveal(Mooege.Core.GS.Player.Player player)
+        public bool Reveal(Mooege.Core.GS.Player.Player player)
         {
-            if (!player.RevealedObjects.ContainsKey(this.DynamicID))
+            if (player.RevealedObjects.ContainsKey(this.DynamicID))
+                return false;
+
+            // Reveal world to player
+            player.InGameClient.SendMessage(new RevealWorldMessage()
             {
-                // Reveal world to player
-                player.InGameClient.SendMessage(new RevealWorldMessage()
-                {
-                    WorldID = this.DynamicID,
-                    WorldSNO = this.WorldSNO,
-                });
-                player.InGameClient.SendMessage(new EnterWorldMessage()
-                {
-                    EnterPosition = player.Position,
-                    WorldID = this.DynamicID,
-                    WorldSNO = this.WorldSNO,
-                });
+                WorldID = this.DynamicID,
+                WorldSNO = this.WorldSNO,
+            });
+            player.InGameClient.SendMessage(new EnterWorldMessage()
+            {
+                EnterPosition = player.Position,
+                WorldID = this.DynamicID,
+                WorldSNO = this.WorldSNO,
+            });
 
-                // Revealing all scenes for now..
-                Logger.Info("Revealing scenes for world {0}", this.DynamicID);
-                foreach (var scene in this.Scenes.Values)
-                {
-                    scene.Reveal(player);
-                }
-
-                // Reveal all actors
-                // TODO: We need proper location-aware reveal logic for _all_ objects. This can be done on the scene level once that bit is in. /komiga
-                Logger.Info("Revealing all actors for world {0}", this.DynamicID);
-                foreach (var actor in Actors.Values)
-                {
-                    actor.Reveal(player);
-                }
-                player.RevealedObjects.Add(this.DynamicID, this);
+            // Revealing all scenes for now..
+            Logger.Info("Revealing scenes for world {0}", this.DynamicID);
+            foreach (var scene in this.Scenes.Values)
+            {
+                scene.Reveal(player);
             }
+
+            // Reveal all actors
+            // TODO: We need proper location-aware reveal logic for _all_ objects. This can be done on the scene level once that bit is in. /komiga
+            Logger.Info("Revealing all actors for world {0}", this.DynamicID);
+            foreach (var actor in Actors.Values)
+            {
+                actor.Reveal(player);
+            }
+            player.RevealedObjects.Add(this.DynamicID, this);
+            return true;
         }
 
-        public void Unreveal(Mooege.Core.GS.Player.Player player)
+        public bool Unreveal(Mooege.Core.GS.Player.Player player)
         {
+            if (!player.RevealedObjects.ContainsKey(this.DynamicID))
+                return false;
+
             // TODO: Unreveal all objects in the world? I think the client will do this on its own when it gets a WorldDeletedMessage /komiga
             //foreach (var obj in player.RevealedObjects.Values)
             //    if (obj.DynamicID == this.DynamicID) obj.Unreveal(player);
 
             player.InGameClient.SendMessage(new WorldDeletedMessage() { WorldID = DynamicID });
             player.InGameClient.FlushOutgoingBuffer();
+            return true;
         }
 
         public override void Destroy()
