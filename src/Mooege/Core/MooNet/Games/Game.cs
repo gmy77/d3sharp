@@ -83,7 +83,7 @@ namespace Mooege.Core.MooNet.Games
 
         private void SendConnectionInfo(MooNetClient client)
         {
-            if (client == this.Channel.Owner)
+            if (client == this.Channel.Owner) // we should send a GameFoundNotification to part leader
             {
                 var builder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();
                 builder.AddConnectInfo(GetConnectionInfoForClient(client));
@@ -91,6 +91,29 @@ namespace Mooege.Core.MooNet.Games
                 builder.SetGameHandle(this.GameHandle);
 
                 client.CallMethod(bnet.protocol.game_master.GameFactorySubscriber.Descriptor.FindMethodByName("NotifyGameFound"), builder.Build(), this.DynamicId);
+            }
+            else // where as other members should get a bnet.protocol.notification.Notification
+            {
+                var connectionInfo = GetConnectionInfoForClient(client);
+
+                var connectionInfoAttribute =
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("connection_info")
+                        .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(connectionInfo.ToByteString()).Build())
+                        .Build();
+
+                var gameHandleAttribute =
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("game_handle")
+                        .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.GameHandle.ToByteString()).Build())
+                        .Build();
+
+                var builder = bnet.protocol.notification.Notification.CreateBuilder()
+                    .SetSenderId(this.Channel.Owner.CurrentToon.BnetEntityID)
+                    .SetTargetId(client.CurrentToon.BnetEntityID)
+                    .SetType("GAME_CONNECTION_INFO")
+                    .AddAttribute(connectionInfoAttribute)
+                    .AddAttribute(gameHandleAttribute);
+
+                client.CallMethod(bnet.protocol.notification.NotificationListener.Descriptor.FindMethodByName("OnNotificationReceived"), builder.Build());
             }
         }
     }
