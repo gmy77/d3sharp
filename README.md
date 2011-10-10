@@ -8,7 +8,7 @@
   - **#mooege.chat** (general chat)
   - **#mooege** (dev talk)
   - **#mooege.announce** (_only_ announcements and the commit feed)
-* [Twitter](http://twitter.com/#!/mooege), [commit feed](http://twitter.com/#!/MooegeDev)
+* [Twitter](http://twitter.com/#!/mooege), [commit feed](http://twitter.com/#!/mooegelog)
 
 Copyright (C) 2011 mooege project
 
