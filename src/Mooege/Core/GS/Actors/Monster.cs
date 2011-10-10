@@ -89,15 +89,16 @@ namespace Mooege.Core.GS.Actors
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
-        public override void OnTargeted(Mooege.Core.GS.Player.Player player)
+        public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
             this.Die(player);
         }
 
-        public override void Reveal(Mooege.Core.GS.Player.Player player)
+        public override bool Reveal(Mooege.Core.GS.Player.Player player)
         {
-            base.Reveal(player);
- 
+            if (!base.Reveal(player))
+                return false;
+
             /* Dont know what this does
             player.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage24)
             {
@@ -109,17 +110,6 @@ namespace Mooege.Core.GS.Actors
                 ActorID = this.DynamicID,
                 AnimationSNO = this.AnimationSNO
             });
-
-            /*
-            player.InGameClient.SendMessage(new SNONameDataMessage
-            {
-                Name = new SNOName
-                {
-                    Group = 0x1,
-                    Handle = this.ActorSNO
-                }
-            });
-             */
 
             player.InGameClient.PacketId += 30 * 2;
             player.InGameClient.SendMessage(new DWordDataMessage()
@@ -135,6 +125,7 @@ namespace Mooege.Core.GS.Actors
                 Field1 = player.InGameClient.Tick
             });
             player.InGameClient.FlushOutgoingBuffer();
+            return true;
         }
 
         // FIXME: Hardcoded hell. /komiga

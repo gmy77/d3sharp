@@ -20,13 +20,14 @@ using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Map;
+using Mooege.Core.Common.Items.ItemCreation;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Effect;
+using Mooege.Net.GS.Message.Definitions.Combat;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Core.Common.Items.ItemCreation;
 using Mooege.Net.GS.Message.Definitions.Attribute;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
@@ -41,7 +42,7 @@ namespace Mooege.Core.Common.Items
         HealthPotion, Gold, HealthGlobe, Dye, Elixir, Charm, Scroll, SpellRune, Rune, 
         Amethyst, Diamond, Emarald, Ruby, Sapphire, Emerald, Topaz, Skull, Backpack, Potion, Amulet, Scepter, Rod, Journal
 
-        /* Not working at the moment:      
+        /* Not working at the moment:
          *  // ThrownWeapon, ThrowingAxe    --> does not work because there are no snoId in Actors.txt. Do they actually drop in the D3 beta?
          */
     }
@@ -85,6 +86,7 @@ namespace Mooege.Core.Common.Items
                 return new InvLoc
                 {
                     OwnerID = (this.Owner != null) ? this.Owner.DynamicID : 0,
+                    EquipmentSlot = this.EquipmentSlot,
                     Row = this.InventoryLocation.Y,
                     Column = this.InventoryLocation.X
                 };
@@ -162,7 +164,7 @@ namespace Mooege.Core.Common.Items
                 );
         }
 
- 		public static bool Is2H(ItemType itemType)
+        public static bool Is2H(ItemType itemType)
         {
             return (itemType == ItemType.Sword_2H
                 || itemType == ItemType.Axe_2H
@@ -189,46 +191,33 @@ namespace Mooege.Core.Common.Items
             // TODO: Notify the world so that players get the state change
         }
 
-        public override void OnTargeted(Mooege.Core.GS.Player.Player player)
+        public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
             //Logger.Trace("OnTargeted");
             player.Inventory.PickUp(this);
         }
 
-        // TODO: Some of this stuff should probably only be set when the item is in the inventory/on the ground
-        // FIXME: Hardcoded crap
-        public override void Reveal(Mooege.Core.GS.Player.Player player)
+        public override bool Reveal(Mooege.Core.GS.Player.Player player)
         {
-            base.Reveal(player);
-            GameClient client = player.InGameClient;
-
-            // Whats this?
-            /*
-            client.SendMessage(new SNONameDataMessage()
-            {
-                Name = new SNOName()
-                {
-                    Group = 0x00000001, // Same as this.Field9?
-                    Handle = this.ActorSNO,
-                },
-            });
-             */
+            if (!base.Reveal(player))
+                return false;
 
             // Drop effect/sound? TODO find out
-            client.SendMessage(new PlayEffectMessage()
+            player.InGameClient.SendMessage(new PlayEffectMessage()
             {
                 ActorID = this.DynamicID,
                 Field1 = 0x00000027,
             });
 
              //Why updating with the same sno?
-            /*client.SendMessage(new ACDInventoryUpdateActorSNO()
+            /*player.InGameClient.SendMessage(new ACDInventoryUpdateActorSNO()
             {
                 ItemID = this.DynamicID,
                 ItemSNO = this.ActorSNO,
             });
              */
-            client.FlushOutgoingBuffer();
-        }		
+            player.InGameClient.FlushOutgoingBuffer();
+            return true;
+        }
     }
 }

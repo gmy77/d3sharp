@@ -22,7 +22,16 @@ namespace Mooege.Core.GS.Objects
 {
     public interface IRevealable
     {
-        void Reveal(Mooege.Core.GS.Player.Player player);
-        void Unreveal(Mooege.Core.GS.Player.Player player);
+        /// <summary>
+        /// Reveals the object to a player.
+        /// </summary>
+        /// <returns>true if the object was revealed or false if the object was already revealed.</returns>
+        bool Reveal(Mooege.Core.GS.Player.Player player);
+
+        /// <summary>
+        /// Unreveals the object from a player.
+        /// </summary>
+        /// <returns>true if the object was unrevealed or false if the object wasn't already revealed.</returns>
+        bool Unreveal(Mooege.Core.GS.Player.Player player);
     }
 }

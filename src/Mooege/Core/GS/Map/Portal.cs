@@ -23,10 +23,9 @@ using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Attribute;
+using Mooege.Net.GS.Message.Definitions.Combat;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
-
-// TODO: What should the GBHandle for this actor type be?
 
 namespace Mooege.Core.GS.Map
 {
@@ -47,7 +46,9 @@ namespace Mooege.Core.GS.Map
             this.Destination.DestLevelAreaSNO = -1;
             this.TargetPos = new Vector3D();
 
-            // FIXME: Hardcoded crap
+            this.CollFlags = 0x00000001;
+
+            // FIXME: Hardcoded crap; probably don't need to set most of these. /komiga
             this.Attributes[GameAttribute.MinimapActive] = true;
             this.Attributes[GameAttribute.Hitpoints_Max_Total] = 1f;
             this.Attributes[GameAttribute.Hitpoints_Max] = 0.0009994507f;
@@ -59,7 +60,7 @@ namespace Mooege.Core.GS.Map
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
-        public override void Reveal(Mooege.Core.GS.Player.Player player)
+        public override bool Reveal(Mooege.Core.GS.Player.Player player)
         {
             if (TargetPos != null)
                 // targetpos!=null in this case is used to detect if the portal has been completely initialized to have a target
@@ -67,22 +68,8 @@ namespace Mooege.Core.GS.Map
             {
                 //Logger.Info("Revealing portal {0}", PortalMessage.AsText());
 
-                base.Reveal(player);
-
-                // FIXME: Hardcoded crap
-                player.InGameClient.SendMessage(new AffixMessage()
-                {
-                    ActorID = this.DynamicID,
-                    Field1 = 1,
-                    aAffixGBIDs = new int[0]
-                });
-
-                player.InGameClient.SendMessage(new AffixMessage()
-                {
-                    ActorID = this.DynamicID,
-                    Field1 = 2,
-                    aAffixGBIDs = new int[0]
-                });
+                if (!base.Reveal(player))
+                    return false;
 
                 player.InGameClient.SendMessage(new PortalSpecifierMessage()
                 {
@@ -90,41 +77,20 @@ namespace Mooege.Core.GS.Map
                     Destination = this.Destination
                 });
 
-                player.InGameClient.SendMessage(new ACDCollFlagsMessage()
-                {
-                    ActorID = this.DynamicID,
-                    CollFlags = 0x00000001,
-                });
-
-                this.Attributes.SendMessage(player.InGameClient, this.DynamicID);
-
-                player.InGameClient.SendMessage(new ACDGroupMessage()
-                {
-                    ActorID = this.DynamicID,
-                    Field1 = -1,
-                    Field2 = -1,
-                });
-
-                player.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage7)
-                {
-                    ActorID = this.DynamicID,
-                });
-
-                player.InGameClient.SendMessage(new ACDTranslateFacingMessage(Opcodes.ACDTranslateFacingMessage1)
+                // Probably unnecessary since the transform is ACD data and is set in the EnterKnown. /komiga
+                /*player.InGameClient.SendMessage(new ACDTranslateFacingMessage(Opcodes.ACDTranslateFacingMessage1)
                 {
                     ActorID = this.DynamicID,
                     Angle = 0f,
                     Field2 = false,
-                });
+                });*/
+                player.InGameClient.FlushOutgoingBuffer();
+                return true;
             }
-            player.InGameClient.FlushOutgoingBuffer();
+            return false;
         }
 
-        public override void Unreveal(Mooege.Core.GS.Player.Player player)
-        {
-        }
-
-        public override void OnTargeted(Mooege.Core.GS.Player.Player player)
+        public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
             World world = this.World.Game.GetWorld(this.Destination.WorldSNO);
             if (world != null)
