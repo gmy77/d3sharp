@@ -444,50 +444,25 @@ namespace Mooege.Core.GS.Powers
         public void RepositionActor(Actor actor, Vector3D pos)
         {
             if (actor == null) return;
-
             actor.Position = pos;
-            foreach (GameClient client in _revealedClientsFor(actor))
-            {
-                client.SendMessage(new ACDWorldPositionMessage()
-                {
-                    Id = 0x003f,
-                    ActorID = actor.DynamicID,
-                    WorldLocation = new WorldLocationMessageData()
-                    {
-                        Scale = actor.Scale,
-                        Transform = new PRTransform()
-                        {
-                            Rotation = new Quaternion()
-                            {
-                                Amount = actor.RotationAmount,
-                                Axis = actor.RotationAxis
-                            },
-                            ReferencePoint = pos
-                        },
-                        WorldID = actor.World.DynamicID
-                    }
-                });
-            }
         }
 
         public void MoveActorNormal(Actor actor, Vector3D pos)
         {
             if (actor == null) return;
 
-            actor.Position = pos;
-            foreach (GameClient client in _revealedClientsFor(actor))
+            actor.Position.Set(pos);
+            actor.World.BroadcastIfRevealed(new ACDTranslateNormalMessage()
             {
-                client.SendMessage(new ACDTranslateNormalMessage()
-                {
-                    Id = 0x6e,
-                    Field0 = (int)actor.DynamicID,
-                    Position = pos,
-                    Angle = 0f, // TODO: convert quaternion rotation for this?
-                    Field3 = false,
-                    Field4 = 1.0f,
-                });
-            }
+                Id = 0x6e,
+                Field0 = (int)actor.DynamicID,
+                Position = pos,
+                Angle = 0f, // TODO: convert quaternion rotation for this?
+                Field3 = false,
+                Field4 = 1.0f,
+            }, actor);
         }
+
         public void DoDamage(Actor from, Actor target, float amount, int type)
         {
             if (target == null) return;
@@ -507,7 +482,11 @@ namespace Mooege.Core.GS.Powers
 
             // TODO: handling more damagable types
             if (target is SimpleMob)
+            {
                 ((SimpleMob)target).ReceiveDamage(from, amount, type);
+                // TODO: figure out where these ought to be in the new GS code.
+                SendDWordTickFor(from);
+            }
         }
 
         public void DoDamage(Actor from, IList<Actor> target_list, float amount, int type)
@@ -529,7 +508,11 @@ namespace Mooege.Core.GS.Powers
 
                 // TODO: handling more damagable types
                 if (target is SimpleMob)
+                {
                     ((SimpleMob)target).ReceiveDamage(from, amount, type);
+                    // TODO: figure out where these ought to be in the new GS code.
+                    SendDWordTickFor(from);
+                }
             }
         }
 
