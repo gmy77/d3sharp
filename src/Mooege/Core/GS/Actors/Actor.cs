@@ -16,18 +16,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
-using Mooege.Core.GS.Player;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
-using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Net.GS.Message.Definitions.Combat;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Core.Common.Items;
 
 // TODO: Need to move all of the remaining ACD fields into Actor (such as the affix list)

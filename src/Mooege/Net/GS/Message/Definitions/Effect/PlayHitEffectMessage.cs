@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Effect
 {
+    [Message(Opcodes.PlayHitEffectMessage)]
     public class PlayHitEffectMessage : GameMessage
     {
         public uint ActorID;

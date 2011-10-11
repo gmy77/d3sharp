@@ -20,21 +20,21 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {
+    [Message(Opcodes.QuitGameMessage)]
     public class QuitGameMessage : GameMessage
     {
-        public int Field0;
+        public int PlayerIndex;
 
-
-
+        public QuitGameMessage() : base(Opcodes.QuitGameMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(3);
+            PlayerIndex = buffer.ReadInt(3);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(3, Field0);
+            buffer.WriteInt(3, PlayerIndex);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -43,7 +43,7 @@ namespace Mooege.Net.GS.Message.Definitions.Game
             b.AppendLine("QuitGameMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("PlayerIndex: 0x" + PlayerIndex.ToString("X8") + " (" + PlayerIndex + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

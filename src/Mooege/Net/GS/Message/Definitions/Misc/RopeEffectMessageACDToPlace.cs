@@ -21,15 +21,13 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.RopeEffectMessageACDToPlace)]
     public class RopeEffectMessageACDToPlace : GameMessage
     {
         public int /* sno */ Field0;
         public int Field1;
         public int Field2;
         public WorldPlace Field3;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

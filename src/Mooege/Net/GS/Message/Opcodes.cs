@@ -51,7 +51,7 @@ namespace Mooege.Net.GS.Message
         OpenTradeWindow = 34, // len: 	12          former ANNDataMessage2
         RequestBuyItemMessage = 35, // len: 	12, former ANNDataMessage3
         RequestSellItemMessage = 36, // len: 	12, former ANNDataMessage4
-        ANNDataMessage5 = 37, // len: 	12
+        RequestUseCauldronOfJordanMessage = 37, // len: 	12  former ANNDataMessage5
         LogoutContextMessage1 = 38, // len: 	16
         LogoutTickTimeMessage = 39, // len: 	20
         LogoutComplete = 40, // len: 	8
@@ -176,7 +176,7 @@ namespace Mooege.Net.GS.Message
         ANNDataMessage20 = 156, // len: 	12
         HirelingInfoUpdateMessage = 157, // len: 	24
         UIElementMessage = 158, // len: 	16
-        BoolDataMessage = 159, // len: 	12
+        PlayerBusyMessage = 159, // len: 	12      //  former: BoolDataMessage
         TradeMessage1 = 160, // len: 	56
         TradeMessage2 = 161, // len: 	56
         PlayerIndexMessage3 = 162, // len: 	12
@@ -244,7 +244,7 @@ namespace Mooege.Net.GS.Message
         PlayerQuestMessage1 = 225, // len: 	16
         PlayerQuestMessage2 = 226, // len: 	16
         PlayerDeSyncSnapMessage = 227, // len: 	28
-        ANNDataMessage27 = 228, // len: 	12
+        RequestUseNephalemCubeMessage = 228, // len: 	12              former ANNDataMessage27
         SalvageResultsMessage = 229, // len: 	60
         SimpleMessage18 = 230, // len: 	8
         ChatMessage2 = 231, // len: 	528

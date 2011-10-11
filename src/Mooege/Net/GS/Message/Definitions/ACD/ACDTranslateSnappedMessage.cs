@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDTranslateSnappedMessage)]
     public class ACDTranslateSnappedMessage : GameMessage
     {
         public int Field0;
@@ -28,9 +29,6 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public float /* angle */ Field2;
         public bool Field3;
         public int Field4;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

@@ -21,13 +21,13 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Attribute
 {
+    [Message(Opcodes.AttributeSetValueMessage)]
     public class AttributeSetValueMessage : GameMessage
     {
         public uint ActorID; // Actor's DynamicID
         public NetAttributeKeyValue Field1;
 
         public AttributeSetValueMessage() : base(Opcodes.AttributeSetValueMessage) { }
-
 
         public override void Parse(GameBitBuffer buffer)
         {

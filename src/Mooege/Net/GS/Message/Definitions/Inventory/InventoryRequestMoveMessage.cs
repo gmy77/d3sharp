@@ -21,7 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
-    [IncomingMessage(Opcodes.InventoryRequestMoveMessage1, Consumers.Inventory)]
+    [Message(Opcodes.InventoryRequestMoveMessage1, Consumers.Inventory)]
     public class InventoryRequestMoveMessage : GameMessage
     {
         public uint ItemID; // Item's DynamicID

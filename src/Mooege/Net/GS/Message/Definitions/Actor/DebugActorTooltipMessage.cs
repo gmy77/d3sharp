@@ -20,13 +20,11 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Actor
 {
+    [Message(Opcodes.DebugActorTooltipMessage)]
     public class DebugActorTooltipMessage : GameMessage
     {
         public int Field0;
         public string Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

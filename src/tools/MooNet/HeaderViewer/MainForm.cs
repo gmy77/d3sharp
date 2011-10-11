@@ -1,14 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿/*
+ * Copyright (C) 2011 mooege project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System;
 using System.Windows.Forms;
 using Google.ProtocolBuffers;
+using Mooege.Tools.Helpers;
 
-namespace HeaderViewer
+namespace Mooege.Tools.HeaderViewer
 {
     public partial class MainForm : Form
     {
@@ -29,8 +42,8 @@ namespace HeaderViewer
                 byte[] array = new byte[bytestring.Length / 2];
                 for (int i = 0, j = 0; i < bytestring.Length - 1; i+=2, ++j)
                 {
-                    int b = (MooNetHelpers.Conversion.ParseDigit(bytestring[i]) * 16)
-                           + MooNetHelpers.Conversion.ParseDigit(bytestring[i+1]);
+                    int b = (Conversion.ParseDigit(bytestring[i]) * 16)
+                           + Conversion.ParseDigit(bytestring[i+1]);
                     array[j] = (byte)b;
                 }
                 ParseHeader(array);

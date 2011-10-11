@@ -19,7 +19,7 @@
 using System;
 using System.Text;
 
-namespace MooNetHelpers
+namespace Mooege.Tools.Helpers
 {
     public static class Extensions
     {

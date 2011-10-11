@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {
+    [Message(Opcodes.CreateBNetGameMessage)]
     public class CreateBNetGameMessage : GameMessage
     {
         public string Field0;
@@ -34,9 +35,6 @@ namespace Mooege.Net.GS.Message.Definitions.Game
         public int Field9;
         public int Field10;
         public short Field11;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

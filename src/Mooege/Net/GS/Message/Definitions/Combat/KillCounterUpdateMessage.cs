@@ -20,15 +20,13 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Combat
 {
+    [Message(Opcodes.KillCounterUpdateMessage)]
     public class KillCounterUpdateMessage : GameMessage
     {
         public int Field0;
         public int Field1;
         public int Field2;
         public bool Field3;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

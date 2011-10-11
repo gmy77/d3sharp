@@ -21,14 +21,12 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.ProjectileStickMessage)]
     public class ProjectileStickMessage : GameMessage
     {
         public Vector3D Field0;
         public int Field1;
         public int /* sno */ Field2;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

@@ -18,17 +18,14 @@
 
 using System;
 using System.Text;
-using Mooege.Core.GS.Game;
-using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Hireling;
 using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    [IncomingMessage(new[]{
+    [Message(new[]{
         Opcodes.SimpleMessage1,Opcodes.SimpleMessage2, Opcodes.SimpleMessage3,Opcodes.SimpleMessage5,Opcodes.SimpleMessage6,Opcodes.SimpleMessage7,Opcodes.SimpleMessage8,
         Opcodes.SimpleMessage9,Opcodes.SimpleMessage10,Opcodes.SimpleMessage11, Opcodes.SimpleMessage12,Opcodes.SimpleMessage13,Opcodes.SimpleMessage14,Opcodes.SimpleMessage15,
         Opcodes.SimpleMessage16,Opcodes.SimpleMessage18,Opcodes.SimpleMessage19,Opcodes.SimpleMessage20,Opcodes.SimpleMessage21,Opcodes.SimpleMessage22,
@@ -147,18 +144,18 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                     }
                     break;
                 case 0x0028: // Logout complete (sent when delay timer expires on client side)
-                    if (client.IsLoggingOut)
-                    {
-                        client.SendMessageNow(new QuitGameMessage()
-                        {
-                            Id = 0x0003,
-                            // Field0 - quit reason?
-                            // 0 - logout
-                            // 1 - kicked by party leader
-                            // 2 - disconnected due to client-server (version?) missmatch
-                            Field0 = 0,
-                        });
-                    }
+                    //if (client.IsLoggingOut)
+                    //{
+                    //    client.SendMessageNow(new QuitGameMessage()
+                    //    {
+                    //        Id = 0x0003,
+                    //        // Field0 - quit reason?
+                    //        // 0 - logout
+                    //        // 1 - kicked by party leader
+                    //        // 2 - disconnected due to client-server (version?) missmatch
+                    //        PlayerIndex = 0,
+                    //    });
+                    //}
                     break;
                 default:
                     throw new NotImplementedException();

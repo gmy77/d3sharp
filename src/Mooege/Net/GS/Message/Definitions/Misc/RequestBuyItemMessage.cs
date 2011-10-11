@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     /// <summary>
     /// Sent by the client, when the player buys an item from a vendor
     /// </summary>
-    [IncomingMessage(Opcodes.RequestBuyItemMessage)]
+    [Message(Opcodes.RequestBuyItemMessage)]
     public class RequestBuyItemMessage : GameMessage
     {
         public int ItemActorId;

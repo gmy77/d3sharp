@@ -20,13 +20,11 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDLookAtMessage)]
     public class ACDLookAtMessage : GameMessage
     {
         public int Field0;
         public int Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

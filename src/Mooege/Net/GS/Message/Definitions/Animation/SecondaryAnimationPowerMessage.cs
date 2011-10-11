@@ -18,13 +18,12 @@
 
 using System.Text;
 using Mooege.Common.Helpers;
-using Mooege.Core.GS.Data.SNO;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Animation
 {
-    [IncomingMessage(Opcodes.SecondaryAnimationPowerMessage)]
+    [Message(Opcodes.SecondaryAnimationPowerMessage)]
     public class SecondaryAnimationPowerMessage : GameMessage,ISelfHandler
     {
         public int /* sno */ PowerSNO;

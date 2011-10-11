@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Team
 {
+    [Message(Opcodes.RevealTeamMessage)]
     public class RevealTeamMessage : GameMessage
     {
         public int Field0;
