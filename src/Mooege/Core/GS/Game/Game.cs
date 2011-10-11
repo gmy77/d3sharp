@@ -91,7 +91,6 @@ namespace Mooege.Core.GS.Game
 
         public void Enter(Player.Player joinedPlayer)
         {
-            Logger.Trace("{0} [{1}] joined game.", joinedPlayer.Properties.Name, joinedPlayer.DynamicID);
             this.Players.TryAdd(joinedPlayer.InGameClient, joinedPlayer);
 
 

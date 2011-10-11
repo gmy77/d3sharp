@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mooege-VS2010", "..\..\..\s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMooNet", "..\..\..\src\LibMooNet\LibMooNet.csproj", "{4CC19847-6F24-4453-9E31-126F94308AB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GSPacketDumper", "..\..\..\src\Tools\GameServer\GSPacketDumper\GSPacketDumper.csproj", "{F8B009EE-3628-4A7A-B0BD-E131DDE0DC66}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GSPacketDumper", "..\..\..\src\tools\GameServer\GSPacketDumper\GSPacketDumper.csproj", "{F8B009EE-3628-4A7A-B0BD-E131DDE0DC66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +18,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}.Debug|Any CPU.Build.0 = Debug|x86
 		{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}.Debug|x86.ActiveCfg = Debug|x86
@@ -38,6 +39,7 @@ Global
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|x86.ActiveCfg = Release|Any CPU
 		{F8B009EE-3628-4A7A-B0BD-E131DDE0DC66}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{F8B009EE-3628-4A7A-B0BD-E131DDE0DC66}.Debug|Any CPU.Build.0 = Debug|x86
 		{F8B009EE-3628-4A7A-B0BD-E131DDE0DC66}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{F8B009EE-3628-4A7A-B0BD-E131DDE0DC66}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{F8B009EE-3628-4A7A-B0BD-E131DDE0DC66}.Debug|x86.ActiveCfg = Debug|x86
@@ -48,10 +50,10 @@ Global
 		{F8B009EE-3628-4A7A-B0BD-E131DDE0DC66}.Release|x86.ActiveCfg = Release|x86
 		{F8B009EE-3628-4A7A-B0BD-E131DDE0DC66}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = ..\..\..\src\tools\GameServer\GSPacketDumper\GSPacketDumper.csproj
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = ..\..\..\src\tools\GS\D3Types\D3ClassGenerator\D3ClassGenerator.csproj
 	EndGlobalSection
 EndGlobal
