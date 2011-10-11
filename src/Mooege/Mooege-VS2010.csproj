@@ -150,9 +150,12 @@
     <Compile Include="Core\GS\Data\SNO\Config.cs" />
     <Compile Include="Core\GS\Data\SNO\Database.cs" />
     <Compile Include="Core\GS\Data\SNO\Set.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\OpenSharedStashMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\OpenTradeWindow.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBusyMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestBuyItemMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestBuySharedStashSlots.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestSellItemMessage.cs" />

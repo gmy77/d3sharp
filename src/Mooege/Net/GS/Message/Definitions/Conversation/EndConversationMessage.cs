@@ -22,7 +22,7 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
     /// <summary>
     /// Sent to the client
-    /// TODO What does this message actually do? sending it not changes nothing. 
+    /// TODO What does this message actually do? sending it not changes nothing. - farmy
     /// </summary>
     public class EndConversationMessage : GameMessage
     {

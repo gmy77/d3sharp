@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,40 +21,40 @@ using System.Text;
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     /// <summary>
-    /// Sent to the client. No idea what it does.. everything works without it so far. (does not stop playback) - farmy
+    /// Sent by the client if the player busy state changes. It is true if the player
+    /// is currently in game menues or with an open trade window
     /// </summary>
-    public class StopConvLineMessage : GameMessage
+    [IncomingMessage(Opcodes.PlayerBusyMessage)]
+    public class PlayerBusyMessage : GameMessage, ISelfHandler
     {
-        public int Field0;  // seems to be a running number across conversationlines. StopConvLine.Field0 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
-        public bool Field1;
-
-        public StopConvLineMessage() : base(Opcodes.StopConvLineMessage)  {}
-
+        public bool Busy;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadBool();
+            Busy = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteBool(Field1);
+            buffer.WriteBool(Busy);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("StopConvLineMessage:");
+            b.AppendLine("BoolDataMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: " + (Field1 ? "true" : "false"));
+            b.Append(' ', pad); b.AppendLine("Busy: " + (Busy ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
 
-
+        public void Handle(GameClient client)
+        {
+            // TODO: PlayerBusyMessage - The status change is sent back to the client,
+            // I am waiting for an autosyncing implementation of GameAttributes - farmy
+            client.Player.Attributes[GameAttribute.Busy] = this.Busy;
+        }
     }
 }

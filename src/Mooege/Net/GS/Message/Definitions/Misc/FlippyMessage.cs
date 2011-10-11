@@ -22,16 +22,16 @@ using Mooege.Net.GS.Message.Fields;
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     /// <summary>
-    /// Sent to the client to create a world animation. Like in gold flipping before dropping or
-    /// highlighting the area around around important items
+    /// Sent to the client to create a world animation. Like in gold flipping before gold dropping or
+    /// highlighting the area around around important items.
     /// </summary>
     public class FlippyMessage : GameMessage
     {
-        // TODO Verify SNOs, there are to few samples to be sure
+        // TODO Verify SNOs, there are to few samples to be sure - farmy
         public int ActorID;             // Effect is created at the actors location
         public int SNOParticleEffect;   // SNO for a particle effect or 0x6d82 (default_flippy) for an appearance effect
         public int SNOAppearance;       // -1 for a particle effect or SNO of the animation effect. eg Axe_flippy etc
-        public Vector3D Field3;         // no idea
+        public Vector3D Field3;         // no idea ... my tests always take the actor position - farmy
 
         public FlippyMessage() : base(Opcodes.FlippyMessage) { }
 

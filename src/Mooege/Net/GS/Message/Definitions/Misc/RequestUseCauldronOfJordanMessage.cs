@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,40 +21,35 @@ using System.Text;
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     /// <summary>
-    /// Sent to the client. No idea what it does.. everything works without it so far. (does not stop playback) - farmy
+    /// Sent by the client, when the player uses cauldron of jordan on an item
     /// </summary>
-    public class StopConvLineMessage : GameMessage
+    [IncomingMessage(Opcodes.RequestUseCauldronOfJordanMessage)]
+    public class RequestUseCauldronOfJordanMessage : GameMessage
     {
-        public int Field0;  // seems to be a running number across conversationlines. StopConvLine.Field0 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
-        public bool Field1;
+        public uint ActorID; // Id of the target
 
-        public StopConvLineMessage() : base(Opcodes.StopConvLineMessage)  {}
-
+        public RequestUseCauldronOfJordanMessage() : base(Opcodes.RequestUseCauldronOfJordanMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadBool();
+            ActorID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteBool(Field1);
+            buffer.WriteUInt(32, ActorID);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("StopConvLineMessage:");
+            b.AppendLine("RequestUseCauldronOfJordanMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: " + (Field1 ? "true" : "false"));
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
 
     }
 }

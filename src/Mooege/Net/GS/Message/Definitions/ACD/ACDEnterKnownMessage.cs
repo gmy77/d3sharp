@@ -31,6 +31,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
         // For many actors, bit 0x8 is set the first time the item is introduced with ACDEnterKnown... if the item
         // is later deleted with an ANN Message and reintroduced, 0x8 is NOT set... (StartLocation, BlockingCart, MarkerLocation)
+        // - farmy
 
         public int Field2;
         public int Field3;      // 0 = WorldLocationMessageData is set, 1 = InventoryLocationMessageData is set ...
