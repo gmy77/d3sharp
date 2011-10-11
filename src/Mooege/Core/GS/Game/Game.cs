@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Mooege.Common;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Generators;
@@ -88,36 +89,44 @@ namespace Mooege.Core.GS.Game
             // for possile future messages consumed by game.
         }
 
-        public void Enter(Player.Player newPlayer)
+        public void Enter(Player.Player joinedPlayer)
         {
-            Logger.Trace("{0} [{1}] joined game.", newPlayer.Properties.Name, newPlayer.DynamicID);
-            this.Players.TryAdd(newPlayer.InGameClient, newPlayer);
+            Logger.Trace("{0} [{1}] joined game.", joinedPlayer.Properties.Name, joinedPlayer.DynamicID);
+            this.Players.TryAdd(joinedPlayer.InGameClient, joinedPlayer);
 
-            foreach(var pair in this.Players)
+
+            // send all players in the game to new player that just joined (including him)
+            foreach (var pair in this.Players)
             {
-                this.NotifyNewPlayer(newPlayer, pair.Value); // notify target player about new player joining the game.
+                this.SendNewPlayerMessage(joinedPlayer, pair.Value);
             }
 
-            newPlayer.World.Enter(newPlayer); // Enter only once all fields have been initialized to prevent a run condition
-        }     
-   
-        private void NotifyNewPlayer(Player.Player newPlayer, Player.Player target)
+            // send other players NewPlayerMessage b@
+            //foreach (var pair in this.Players.Where(pair => pair.Value != joinedPlayer))
+            //{
+            //    this.SendNewPlayerMessage(pair.Value, joinedPlayer);
+            //}
+
+            joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition
+        }
+
+        private void SendNewPlayerMessage(Player.Player target, Player.Player joinedPlayer)
         {
             target.InGameClient.SendMessage(new NewPlayerMessage
             {
-                PlayerIndex = newPlayer.PlayerIndex, // player index
+                PlayerIndex = joinedPlayer.PlayerIndex, // player index
                 Field1 = "", //Owner name?
-                ToonName = newPlayer.Properties.Name,
+                ToonName = joinedPlayer.Properties.Name,
                 Field3 = 0x00000002, //party frame class
                 Field4 = 0x00000004, //party frame level
-                snoActorPortrait = newPlayer.ClassSNO, //party frame portrait
+                snoActorPortrait = joinedPlayer.ClassSNO, //party frame portrait
                 Field6 = 0x00000001,
-                StateData = newPlayer.GetStateData(),
+                StateData = joinedPlayer.GetStateData(),
                 Field8 = this.Players.Count != 1, //announce party join
                 Field9 = 0x00000001,
-                ActorID = newPlayer.DynamicID,
+                ActorID = joinedPlayer.DynamicID,
             });
-            Logger.Warn("{0} is notified about {1} joining the game", target.Properties.Name, newPlayer.Properties.Name);
+            Logger.Debug("{0}[PlayerIndex: {1}] is notified about {2}[PlayerIndex: {3}] joining the game.", target.Properties.Name, target.PlayerIndex, joinedPlayer.Properties.Name, joinedPlayer.PlayerIndex);
         }
 
 

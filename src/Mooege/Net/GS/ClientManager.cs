@@ -60,57 +60,60 @@ namespace Mooege.Net.GS
         private void OnJoinGame(GameClient client, JoinBNetGameMessage message)
         {
             var game = GameManager.GetGameById(message.GameId);
-            var toon = ToonManager.GetToonByLowID((ulong)message.ToonEntityId.Low);
-
-            client.Game = game;
-
-            if (toon.Owner.LoggedInClient == null)
+            lock (game)
             {
-                Logger.Warn("Client doesn't seem to be connected to moonet, dropping him..");
-                client.Connection.Disconnect();
-                return; // if moonet connection is lost, don't allow him to get in.
+                var toon = ToonManager.GetToonByLowID((ulong) message.ToonEntityId.Low);
+
+                client.Game = game;
+
+                if (toon.Owner.LoggedInClient == null)
+                {
+                    Logger.Warn("Client doesn't seem to be connected to moonet, dropping him..");
+                    client.Connection.Disconnect();
+                    return; // if moonet connection is lost, don't allow him to get in.
+                }
+
+                // Set references between MooNetClient and GameClient.
+                client.BnetClient = toon.Owner.LoggedInClient;
+                client.BnetClient.InGameClient = client;
+
+                client.Player = new Player(game.StartWorld, client, toon);
+                Logger.Warn("Player {0}-{1}", client.Player.Properties.Name, client.Player.PlayerIndex);
+
+                client.SendMessageNow(new VersionsMessage(message.SNOPackHash));
+
+                client.SendMessage(new ConnectionEstablishedMessage
+                {
+                    Field0 = client.Player.PlayerIndex,
+                    Field1 = 0x4BB91A16,
+                    SNOPackHash = message.SNOPackHash,
+                });
+
+                client.SendMessage(new GameSetupMessage
+                {
+                    Field0 = 0x00000077,
+                });
+
+                client.SendMessage(new SavePointInfoMessage
+                {
+                    snoLevelArea = -1,
+                });
+
+                client.SendMessage(new HearthPortalInfoMessage
+                {
+                    snoLevelArea = -1,
+                    Field1 = -1,
+                });
+
+                // transition player to act so client can load act related data? /raist
+                client.SendMessage(new ActTransitionMessage
+                {
+                    Field0 = 0x00000000,
+                    Field1 = true,
+                });
+
+                game.Enter(client.Player);
             }
-            
-            // Set references between MooNetClient and GameClient.
-            client.BnetClient = toon.Owner.LoggedInClient;
-            client.BnetClient.InGameClient = client;
-
-            client.SendMessageNow(new VersionsMessage(message.SNOPackHash));
-
-            client.SendMessage(new ConnectionEstablishedMessage
-            {
-                Field0 = 0x00000000,
-                Field1 = 0x4BB91A16,
-                SNOPackHash = message.SNOPackHash,
-            });
-
-            client.SendMessage(new GameSetupMessage
-            {
-                Field0 = 0x00000077,
-            });
-
-            client.SendMessage(new SavePointInfoMessage
-            {
-                snoLevelArea = -1,
-            });
-
-            client.SendMessage(new HearthPortalInfoMessage
-            {
-                snoLevelArea = -1,
-                Field1 = -1,
-            });
-
-            // transition player to act so client can load act related data? /raist
-            client.SendMessage(new ActTransitionMessage
-            {
-                Field0 = 0x00000000,
-                Field1 = true,
-            });
-
-            client.Player = new Player(game.StartWorld, client, toon);
-            Logger.Warn("Player {0}-{1}", client.Player.Properties.Name, client.Player.PlayerIndex);
-            game.Enter(client.Player);
-        }
-    
+        }    
     }
 }
