@@ -75,7 +75,7 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             b.AppendLine("NewPlayerMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + PlayerIndex.ToString("X8") + " (" + PlayerIndex + ")");
+            b.Append(' ', pad); b.AppendLine("PlayerIndex: 0x" + PlayerIndex.ToString("X8") + " (" + PlayerIndex + ")");
             b.Append(' ', pad); b.AppendLine("Field1: \"" + Field1 + "\"");
             b.Append(' ', pad); b.AppendLine("ToonName: \"" + ToonName + "\"");
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");

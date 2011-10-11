@@ -50,7 +50,7 @@ namespace Mooege.Core.GS.Player
         
         public GameClient InGameClient { get; set; }
 
-        public int PlayerIndex { get; private set; } // player index: 0 to 7.
+        public int PlayerIndex { get; private set; } 
 
         public Toon Properties { get; private set; }
         public SkillSet SkillSet;
@@ -66,7 +66,7 @@ namespace Mooege.Core.GS.Player
             : base(world, world.NewPlayerID)
         {
             this.InGameClient = client;
-            this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter);
+            this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // make it atomic.
 
             this.Properties = bnetToon;
             this.Inventory = new Inventory(this);
