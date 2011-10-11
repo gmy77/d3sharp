@@ -122,12 +122,10 @@ namespace Mooege.Core.GS.Map
             actor.OnEnter(this);
             // Broadcast reveal
             // NOTE: Revealing to all right now since the flow results in actors that have initial positions that are not within the range of the player. /komiga
-            
+
             var players = this.Players.Values; //this.GetPlayersInRange(actor.Position, 480.0f);
-            
             foreach (var player in players)
             {
-                if (actor == player) continue; // we don't need to re-reveal him to himself.
                 if (actor is Player.Player) Logger.Debug("Enter: Revealing player: {0}[DynamicId:{1}] to {2}[DynamicId:{3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
                 actor.Reveal(player);
             }
@@ -175,10 +173,12 @@ namespace Mooege.Core.GS.Map
             Logger.Info("Revealing all actors for world {0}", this.DynamicID);
             foreach (var actor in Actors.Values)
             {
-                actor.Reveal(player);
-                if(actor is Player.Player) Logger.Debug("Revaling player {0}[{1}] to player {2}[{3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
+                if (actor is Player.Player) Logger.Debug("Revaling player {0}[DynamicId: {1}] to player {2}[DynamicId: {3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
+                actor.Reveal(player);                
             }
+
             player.RevealedObjects.Add(this.DynamicID, this);
+
             return true;
         }
 
