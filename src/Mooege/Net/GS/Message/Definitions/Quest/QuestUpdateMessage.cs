@@ -20,31 +20,37 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Quest
 {
+    /// <summary>
+    /// Sent to the client to inform him, that a certain step of a quest is completed and
+    /// makes him display the task list for the next step
+    /// </summary>
     [Message(Opcodes.QuestUpdateMessage)]
     public class QuestUpdateMessage : GameMessage
     {
-        public int /* sno */ snoQuest;
-        public int /* sno */ snoLevelArea;
-        public int Field2;
-        public bool Field3;
-        public bool Field4;
+        public int snoQuest;
+        public int snoLevelArea;
+        public int StepID;          // ID of the step, for which the task list should be displayed
+        public bool Field3;         // not sure, if not set to true, nothing happens - farmy
+        public bool Failed;         // Quest failed
+
+        public QuestUpdateMessage() : base(Opcodes.QuestUpdateMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
             snoQuest = buffer.ReadInt(32);
             snoLevelArea = buffer.ReadInt(32);
-            Field2 = buffer.ReadInt(32);
+            StepID = buffer.ReadInt(32);
             Field3 = buffer.ReadBool();
-            Field4 = buffer.ReadBool();
+            Failed = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, snoQuest);
             buffer.WriteInt(32, snoLevelArea);
-            buffer.WriteInt(32, Field2);
+            buffer.WriteInt(32, StepID);
             buffer.WriteBool(Field3);
-            buffer.WriteBool(Field4);
+            buffer.WriteBool(Failed);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -55,9 +61,9 @@ namespace Mooege.Net.GS.Message.Definitions.Quest
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("snoQuest: 0x" + snoQuest.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("snoLevelArea: 0x" + snoLevelArea.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.Append(' ', pad); b.AppendLine("StepID: 0x" + StepID.ToString("X8") + " (" + StepID + ")");
             b.Append(' ', pad); b.AppendLine("Field3: " + (Field3 ? "true" : "false"));
-            b.Append(' ', pad); b.AppendLine("Field4: " + (Field4 ? "true" : "false"));
+            b.Append(' ', pad); b.AppendLine("Failed: " + (Failed ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
