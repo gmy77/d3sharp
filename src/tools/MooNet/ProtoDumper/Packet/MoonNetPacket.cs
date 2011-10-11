@@ -16,22 +16,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Mooege.Tools.StringViewer
+namespace Mooege.Tools.ProtoDumper.Packet
 {
-    static class Program
+    public class MoonNetPacket
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        public MooNetHeader Header { get; protected set; }
+        public IEnumerable<byte> Payload { get; set; }
+
+        public MoonNetPacket(MooNetHeader header, byte[] payload)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+            this.Header = header;
+            this.Payload = payload;
+        }
+
+        public int Length
+        {
+            get { return this.Header.Data.Length + this.Payload.ToArray().Length; }
+        }
+
+        public byte[] GetRawPacketData()
+        {
+            return this.Header.Data.Append(this.Payload.ToArray());
         }
     }
 }

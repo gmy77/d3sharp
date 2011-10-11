@@ -17,21 +17,25 @@
  */
 
 using System;
-using System.Windows.Forms;
 
-namespace Mooege.Tools.StringViewer
+namespace Mooege.Tools.ProtoDumper
 {
-    static class Program
+    class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+            // Check command line
+            if (args.Length != 1)
+            {
+                Console.WriteLine("usage: " + Environment.GetCommandLineArgs()[0] + " <filename>");
+                return;
+            }
+
+            Console.WriteLine("Demystifying packets:");
+            PcapReader.Read(args[0]);
+            Console.WriteLine("[done]..");
+
+            Console.ReadLine();
         }
     }
 }

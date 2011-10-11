@@ -17,21 +17,23 @@
  */
 
 using System;
-using System.Windows.Forms;
+using Google.ProtocolBuffers;
+using bnet.protocol;
+using bnet.protocol.authentication;
 
-namespace Mooege.Tools.StringViewer
+namespace Mooege.Tools.ProtoDumper.Services
 {
-    static class Program
+    [Service(serviceID: 0x1, serviceName: "bnet.protocol.authentication.AuthenticationServer")]
+    public class AuthenticationService:AuthenticationServer
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        public override void Logon(IRpcController controller, LogonRequest request, Action<LogonResponse> done)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+            ProtoOutputBuffer.Write(request.GetType(), request.ToString());
+        }
+
+        public override void ModuleMessage(IRpcController controller, ModuleMessageRequest request, Action<NoData> done)
+        {
+            ProtoOutputBuffer.Write(request.GetType(), request.ToString());
         }
     }
 }

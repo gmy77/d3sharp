@@ -17,21 +17,18 @@
  */
 
 using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
 
-namespace Mooege.Tools.StringViewer
+namespace Mooege.Tools.ProtoDumper
 {
-    static class Program
+    public static class ProtoOutputBuffer
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        private static List<string> _buffer = new List<string>();
+
+        public static void Write(Type requesttype, string proto)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+            Console.WriteLine(requesttype.FullName);
+            _buffer.Add(proto);
         }
     }
 }
