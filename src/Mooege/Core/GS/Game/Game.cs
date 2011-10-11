@@ -93,18 +93,17 @@ namespace Mooege.Core.GS.Game
         {
             this.Players.TryAdd(joinedPlayer.InGameClient, joinedPlayer);
 
-
             // send all players in the game to new player that just joined (including him)
             foreach (var pair in this.Players)
             {
                 this.SendNewPlayerMessage(joinedPlayer, pair.Value);
             }
 
-            // send other players NewPlayerMessage b@
-            //foreach (var pair in this.Players.Where(pair => pair.Value != joinedPlayer))
-            //{
-            //    this.SendNewPlayerMessage(pair.Value, joinedPlayer);
-            //}
+            // notify other players about or new player too.
+            foreach (var pair in this.Players.Where(pair => pair.Value != joinedPlayer))
+            {
+                this.SendNewPlayerMessage(pair.Value, joinedPlayer);
+            }
 
             joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition
         }

@@ -312,14 +312,18 @@ namespace Mooege.Core.GS.Player
             player.InGameClient.SendMessage(new PlayerEnterKnownMessage()
             {
                 PlayerIndex = this.PlayerIndex,
-                PlayerID = this.DynamicID,
+                ActorId = this.DynamicID,
             });
 
-            player.InGameClient.SendMessage(new PlayerActorSetInitialMessage()
+            if (this == player) // only send this to player itself. Warning: don't remove this check or you'll make the game start crashing! /raist.
             {
-                PlayerID = this.DynamicID,
-                PlayerIndex = this.PlayerIndex,
-            });
+                player.InGameClient.SendMessage(new PlayerActorSetInitialMessage()
+                {
+                    ActorId = this.DynamicID,
+                    PlayerIndex = this.PlayerIndex,
+                });
+            }
+
             player.InGameClient.FlushOutgoingBuffer();
             return true;
         }
