@@ -20,14 +20,12 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Chat
 {
+    [Message(Opcodes.ChatMessage)]
     public class ChatMessage : GameMessage
     {
         public int Field0;
         public int Field1;
         public string Field2;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

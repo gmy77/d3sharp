@@ -20,12 +20,10 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Audio
 {
+    [Message(Opcodes.PlayMusicMessage)]
     public class PlayMusicMessage : GameMessage
     {
         public int /* sno */ snoMusic;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

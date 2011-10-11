@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.EntityIdMessage)]
     public class EntityIdMessage : GameMessage
     {
         public EntityId Field0;

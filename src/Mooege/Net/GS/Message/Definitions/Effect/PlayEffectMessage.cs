@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Effect
 {
+    [Message(Opcodes.PlayEffectMessage)]
     public class PlayEffectMessage : GameMessage
     {
         public uint ActorID; // Actor's DynamicID

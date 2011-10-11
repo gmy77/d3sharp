@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Hero
 {
+    [Message(Opcodes.GoldModifiedMessage)]
     public class GoldModifiedMessage : GameMessage
     {
         public bool Modified;

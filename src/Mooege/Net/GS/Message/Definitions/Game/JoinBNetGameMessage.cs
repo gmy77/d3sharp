@@ -21,10 +21,10 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {
-    [IncomingMessage(Opcodes.JoinBNetGameMessage,Consumers.PlayerManager)]
+    [Message(Opcodes.JoinBNetGameMessage,Consumers.ClientManager)]
     public class JoinBNetGameMessage : GameMessage
     {
-        public EntityId Field0;  // this *is* the toon id /raist.
+        public EntityId ToonEntityId;  // this *is* the toon id /raist.
         public GameId Field1;
         public int GameId; // and this is the SGameId there we set in Mooege.Core.MooNet.Games.Game.cs when we send the connection info to client /raist.
         public long Field3;
@@ -34,8 +34,8 @@ namespace Mooege.Net.GS.Message.Definitions.Game
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = new EntityId();
-            Field0.Parse(buffer);
+            ToonEntityId = new EntityId();
+            ToonEntityId.Parse(buffer);
             Field1 = new GameId();
             Field1.Parse(buffer);
             GameId = buffer.ReadInt(32);
@@ -47,7 +47,7 @@ namespace Mooege.Net.GS.Message.Definitions.Game
 
         public override void Encode(GameBitBuffer buffer)
         {
-            Field0.Encode(buffer);
+            ToonEntityId.Encode(buffer);
             Field1.Encode(buffer);
             buffer.WriteInt(32, GameId);
             buffer.WriteInt64(64, Field3);
@@ -62,7 +62,7 @@ namespace Mooege.Net.GS.Message.Definitions.Game
             b.AppendLine("JoinBNetGameMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            Field0.AsText(b, pad);
+            ToonEntityId.AsText(b, pad);
             Field1.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + GameId.ToString("X8") + " (" + GameId + ")");
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X16"));

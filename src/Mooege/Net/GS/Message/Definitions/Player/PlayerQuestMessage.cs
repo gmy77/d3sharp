@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
+    [Message(new[] {Opcodes.PlayerQuestMessage1, Opcodes.PlayerQuestMessage2})]
     public class PlayerQuestMessage : GameMessage
     {
         public int Field0;

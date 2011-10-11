@@ -20,10 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Connection
 {
-    [IncomingMessage(new[] {
-        Opcodes.LogoutContextMessage1,
-        Opcodes.LogoutContextMessage2
-    })]
+    [Message(new[] { Opcodes.LogoutContextMessage1, Opcodes.LogoutContextMessage2 })]
     public class LogoutContextMessage : GameMessage,ISelfHandler
     {
         public bool Field0;

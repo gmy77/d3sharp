@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    [IncomingMessage(new[] {
+    [Message(new[] {
         Opcodes.DWordDataMessage1,Opcodes.DWordDataMessage2,Opcodes.DWordDataMessage3,Opcodes.DWordDataMessage4,Opcodes.DWordDataMessage5,Opcodes.DWordDataMessage6,
         Opcodes.DWordDataMessage7,Opcodes.DWordDataMessage8,Opcodes.DWordDataMessage9,Opcodes.DWordDataMessage10,Opcodes.DWordDataMessage11})]
     public class DWordDataMessage : GameMessage, ISelfHandler

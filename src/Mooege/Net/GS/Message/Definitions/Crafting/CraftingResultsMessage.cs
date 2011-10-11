@@ -20,14 +20,12 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Crafting
 {
+    [Message(Opcodes.CraftingResultsMessage)]
     public class CraftingResultsMessage : GameMessage
     {
         public int Field0;
         public int /* gbid */ Field1;
         public int Field2;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

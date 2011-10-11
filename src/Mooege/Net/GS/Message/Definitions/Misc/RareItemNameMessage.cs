@@ -21,13 +21,11 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.RareItemNameMessage)]
     public class RareItemNameMessage : GameMessage
     {
         public int Field0;
         public RareItemName Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

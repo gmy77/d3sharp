@@ -21,15 +21,13 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.NPC
 {
+    [Message(Opcodes.NPCInteractOptionsMessage)]
     public class NPCInteractOptionsMessage : GameMessage
     {
         public int Field0;
         // MaxLength = 20
         public NPCInteraction[] tNPCInteraction;
         public int Field2;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

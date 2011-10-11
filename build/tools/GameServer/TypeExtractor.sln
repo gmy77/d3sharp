@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3ClassGenerator", "..\..\..\src\tools\GameServer\TypeExtractor\D3ClassGenerator\D3ClassGenerator.csproj", "{D716B26C-469E-4292-A0DB-C6A2FD058E0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3TypeDescriptor", "..\..\..\src\tools\GameServer\TypeExtractor\D3TypeDescriptor\D3TypeDescriptor.csproj", "{F4367152-8294-4CF1-A984-3CD7B58DDEAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3TypeDump", "..\..\..\src\tools\GameServer\TypeExtractor\D3TypeDump\D3TypeDump.csproj", "{940EE21E-198E-4FFC-A0C0-55F3317CF20D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{940EE21E-198E-4FFC-A0C0-55F3317CF20D}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{940EE21E-198E-4FFC-A0C0-55F3317CF20D}.Debug|Any CPU.Build.0 = Debug|x86
+		{940EE21E-198E-4FFC-A0C0-55F3317CF20D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{940EE21E-198E-4FFC-A0C0-55F3317CF20D}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{940EE21E-198E-4FFC-A0C0-55F3317CF20D}.Debug|x86.ActiveCfg = Debug|x86
+		{940EE21E-198E-4FFC-A0C0-55F3317CF20D}.Debug|x86.Build.0 = Debug|x86
+		{940EE21E-198E-4FFC-A0C0-55F3317CF20D}.Release|Any CPU.ActiveCfg = Release|x86
+		{940EE21E-198E-4FFC-A0C0-55F3317CF20D}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{940EE21E-198E-4FFC-A0C0-55F3317CF20D}.Release|Mixed Platforms.Build.0 = Release|x86
+		{940EE21E-198E-4FFC-A0C0-55F3317CF20D}.Release|x86.ActiveCfg = Release|x86
+		{940EE21E-198E-4FFC-A0C0-55F3317CF20D}.Release|x86.Build.0 = Release|x86
+		{D716B26C-469E-4292-A0DB-C6A2FD058E0C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{D716B26C-469E-4292-A0DB-C6A2FD058E0C}.Debug|Any CPU.Build.0 = Debug|x86
+		{D716B26C-469E-4292-A0DB-C6A2FD058E0C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{D716B26C-469E-4292-A0DB-C6A2FD058E0C}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{D716B26C-469E-4292-A0DB-C6A2FD058E0C}.Debug|x86.ActiveCfg = Debug|x86
+		{D716B26C-469E-4292-A0DB-C6A2FD058E0C}.Debug|x86.Build.0 = Debug|x86
+		{D716B26C-469E-4292-A0DB-C6A2FD058E0C}.Release|Any CPU.ActiveCfg = Release|x86
+		{D716B26C-469E-4292-A0DB-C6A2FD058E0C}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{D716B26C-469E-4292-A0DB-C6A2FD058E0C}.Release|Mixed Platforms.Build.0 = Release|x86
+		{D716B26C-469E-4292-A0DB-C6A2FD058E0C}.Release|x86.ActiveCfg = Release|x86
+		{D716B26C-469E-4292-A0DB-C6A2FD058E0C}.Release|x86.Build.0 = Release|x86
+		{F4367152-8294-4CF1-A984-3CD7B58DDEAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4367152-8294-4CF1-A984-3CD7B58DDEAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4367152-8294-4CF1-A984-3CD7B58DDEAD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F4367152-8294-4CF1-A984-3CD7B58DDEAD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F4367152-8294-4CF1-A984-3CD7B58DDEAD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F4367152-8294-4CF1-A984-3CD7B58DDEAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4367152-8294-4CF1-A984-3CD7B58DDEAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4367152-8294-4CF1-A984-3CD7B58DDEAD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F4367152-8294-4CF1-A984-3CD7B58DDEAD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F4367152-8294-4CF1-A984-3CD7B58DDEAD}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = ..\..\..\src\tools\GameServer\TypeExtractor\D3TypeDump\D3TypeDump.csproj
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

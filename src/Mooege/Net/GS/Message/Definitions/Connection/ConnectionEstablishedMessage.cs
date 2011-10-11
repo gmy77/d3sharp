@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Connection
 {
-    [IncomingMessage(Opcodes.ConnectionEstablishedMessage)]
+    [Message(Opcodes.ConnectionEstablishedMessage)]
     public class ConnectionEstablishedMessage : GameMessage
     {
         public int Field0;

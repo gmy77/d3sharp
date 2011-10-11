@@ -20,13 +20,11 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {
+    [Message(Opcodes.GameTestingSamplingStartMessage)]
     public class GameTestingSamplingStartMessage : GameMessage
     {
         public int /* sno */ Field0;
         public int /* sno */ Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

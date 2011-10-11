@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.SavePointInfoMessage)]
     public class SavePointInfoMessage : GameMessage
     {
         public int /* sno */ snoLevelArea;

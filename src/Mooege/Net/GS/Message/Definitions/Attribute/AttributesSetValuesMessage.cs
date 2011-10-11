@@ -21,11 +21,11 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Attribute
 {
+    [Message(Opcodes.AttributesSetValuesMessage)]
     public class AttributesSetValuesMessage : GameMessage
     {
-        public uint ActorID; // Actor's DynamicID
-        // MaxLength = 15
-        public NetAttributeKeyValue[] atKeyVals;
+        public uint ActorID; // Actor's DynamicID        
+        public NetAttributeKeyValue[] atKeyVals; // MaxLength = 15
 
         public AttributesSetValuesMessage() : base(Opcodes.AttributesSetValuesMessage) { }
 

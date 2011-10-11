@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDPickupFailedMessage)]
     public class ACDPickupFailedMessage : GameMessage
     {
         public enum Reasons : int
