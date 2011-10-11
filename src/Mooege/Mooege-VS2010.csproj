@@ -454,8 +454,16 @@
       <Link>Assets\SNO\Actors.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\assets\SNO\Animations.txt">
+      <Link>Assets\SNO\Animations.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\assets\SNO\Blacklist.txt">
       <Link>Assets\SNO\Blacklist.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\assets\SNO\Effects.txt">
+      <Link>Assets\SNO\Effects.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\assets\SNO\list.txt">
@@ -476,12 +484,6 @@
     </Content>
     <Content Include="..\..\assets\SNO\Scenes.txt">
       <Link>Assets\SNO\Scenes.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\SNO\Animations.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\SNO\Effects.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
