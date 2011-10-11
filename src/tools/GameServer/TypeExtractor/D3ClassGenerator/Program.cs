@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using D3TypeDescriptor;
@@ -17,16 +18,20 @@ namespace D3ClassGenerator
             int protocolHash;
             var descriptors = TypeDescriptor.LoadXml(doc.Root, out protocolHash);
 
-
             var structs = TypeDescriptor.FilterGameMessageStructures(descriptors);
+
+            var writer = new StreamWriter("output.cs");
 
             foreach (var s in structs)
             {
-                StringBuilder b = new StringBuilder();
+                var b = new StringBuilder();
                 s.GenerateClass(b, 4);
-                Console.WriteLine(b.ToString());
+                writer.WriteLine(b.ToString());
             }
 
+            writer.Close();
+
+            Console.WriteLine("done");
             Console.ReadLine();
         }
     }

@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Definitions.Connection
     [Message(Opcodes.ConnectionEstablishedMessage)]
     public class ConnectionEstablishedMessage : GameMessage
     {
-        public int Field0;
+        public int PlayerIndex;
         public int Field1;
         public int SNOPackHash;
 
@@ -31,14 +31,14 @@ namespace Mooege.Net.GS.Message.Definitions.Connection
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(3);
+            PlayerIndex = buffer.ReadInt(3);
             Field1 = buffer.ReadInt(32);
             SNOPackHash = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(3, Field0);
+            buffer.WriteInt(3, PlayerIndex);
             buffer.WriteInt(32, Field1);
             buffer.WriteInt(32, SNOPackHash);
         }
@@ -49,7 +49,7 @@ namespace Mooege.Net.GS.Message.Definitions.Connection
             b.AppendLine("ConnectionEstablishedMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("PlayerIndex: 0x" + PlayerIndex.ToString("X8") + " (" + PlayerIndex + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + SNOPackHash.ToString("X8") + " (" + SNOPackHash + ")");
             b.Append(' ', --pad);

@@ -144,18 +144,18 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                     }
                     break;
                 case 0x0028: // Logout complete (sent when delay timer expires on client side)
-                    if (client.IsLoggingOut)
-                    {
-                        client.SendMessageNow(new QuitGameMessage()
-                        {
-                            Id = 0x0003,
-                            // Field0 - quit reason?
-                            // 0 - logout
-                            // 1 - kicked by party leader
-                            // 2 - disconnected due to client-server (version?) missmatch
-                            Field0 = 0,
-                        });
-                    }
+                    //if (client.IsLoggingOut)
+                    //{
+                    //    client.SendMessageNow(new QuitGameMessage()
+                    //    {
+                    //        Id = 0x0003,
+                    //        // Field0 - quit reason?
+                    //        // 0 - logout
+                    //        // 1 - kicked by party leader
+                    //        // 2 - disconnected due to client-server (version?) missmatch
+                    //        PlayerIndex = 0,
+                    //    });
+                    //}
                     break;
                 default:
                     throw new NotImplementedException();

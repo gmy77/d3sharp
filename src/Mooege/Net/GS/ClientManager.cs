@@ -84,7 +84,7 @@ namespace Mooege.Net.GS
 
                 client.SendMessage(new ConnectionEstablishedMessage
                 {
-                    Field0 = client.Player.PlayerIndex,
+                    PlayerIndex = client.Player.PlayerIndex,
                     Field1 = 0x4BB91A16,
                     SNOPackHash = message.SNOPackHash,
                 });
