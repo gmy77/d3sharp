@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDEnterKnownMessage)]
     public class ACDEnterKnownMessage : GameMessage
     {
         public uint ActorID; // The actor's DynamicID

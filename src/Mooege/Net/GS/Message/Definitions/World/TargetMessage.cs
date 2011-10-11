@@ -19,11 +19,9 @@
 using System.Text;
 using Mooege.Net.GS.Message.Fields;
 
-// TODO: This doesn't belong in the Combat namespace since it is used to target objects such as items or portals in the world
-
-namespace Mooege.Net.GS.Message.Definitions.Combat
+namespace Mooege.Net.GS.Message.Definitions.World
 {
-    [IncomingMessage(Opcodes.TargetMessage,Consumers.Player)]
+    [Message(Opcodes.TargetMessage,Consumers.Player)]
     public class TargetMessage : GameMessage
     {
         public int Field0;

@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
+    [Message(Opcodes.PlayerWarpedMessage)]
     public class PlayerWarpedMessage : GameMessage
     {
         public int Field0;

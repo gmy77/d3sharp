@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Combat
 {
+    [Message(Opcodes.VictimMessage)]
     public class VictimMessage : GameMessage
     {
         public int Field0;
@@ -32,9 +33,6 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
         // MaxLength = 2
         public int /* gbid */[] Field7;
         public int /* sno */ snoPowerDmgSource;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

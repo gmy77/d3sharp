@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDTranslateDetPathSinMessage)]
     public class ACDTranslateDetPathSinMessage : GameMessage
     {
         public int Field0;

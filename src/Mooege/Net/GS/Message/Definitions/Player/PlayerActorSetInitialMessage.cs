@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
+    [Message(Opcodes.PlayerActorSetInitialMessage)]
     public class PlayerActorSetInitialMessage : GameMessage
     {
         public uint PlayerID; // Player's DynamicID

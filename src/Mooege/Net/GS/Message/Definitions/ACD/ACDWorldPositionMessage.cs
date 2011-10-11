@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDWorldPositionMessage)]
     public class ACDWorldPositionMessage : GameMessage
     {
         public uint ActorID; // Actor's DynamicID

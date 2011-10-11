@@ -22,24 +22,26 @@ using System.Collections.Generic;
 namespace Mooege.Net.GS.Message
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class IncomingMessageAttribute : Attribute
+    public class MessageAttribute : Attribute
     {
         public List<Opcodes> Opcodes { get; private set; }
         public Consumers Consumer { get; private set; }
 
-        public IncomingMessageAttribute(Opcodes opcode, Consumers consumer = Consumers.None)
+        public MessageAttribute(Opcodes opcode, Consumers consumer = Consumers.None)
         {
             this.Opcodes = new List<Opcodes> {opcode};
             this.Consumer = consumer;
         }
 
-        public IncomingMessageAttribute(Opcodes[] opcodes)
+        public MessageAttribute(Opcodes[] opcodes, Consumers consumer = Consumers.None)
         {
             this.Opcodes = new List<Opcodes>();
+            this.Consumer = consumer;
+
             foreach (var opcode in opcodes)
             {
                 this.Opcodes.Add(opcode);
-            }
+            }            
         }
     }
 }

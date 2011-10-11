@@ -20,12 +20,10 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.HelperDetachMessage)]
     public class HelperDetachMessage : GameMessage
     {
         public int Field0;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

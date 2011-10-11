@@ -15,14 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Stash
 {
     /// <summary>
     /// Sent to the client, to open the inventory of a known actor as stash inventory
     /// </summary>
-    [IncomingMessage(Opcodes.OpenSharedStashMessage)]
+    [Message(Opcodes.OpenSharedStashMessage)]
     public class OpenSharedStashMessage : GameMessage
     {
         public int ActorId;

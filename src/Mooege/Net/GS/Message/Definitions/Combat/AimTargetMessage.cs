@@ -21,15 +21,13 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Combat
 {
+    [Message(Opcodes.AimTargetMessage)]
     public class AimTargetMessage : GameMessage
     {
         public int Field0;
         public int Field1;
         public int Field2;
         public WorldPlace Field3;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

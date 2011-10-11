@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,40 +18,44 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Trade
 {
-    public class TryWaypointMessage : GameMessage
+    /// <summary>
+    /// Show a trade window. The inventory 0x14 (20) for an actor is
+    /// shown as trade offerings 
+    /// </summary>
+    [Message(Opcodes.OpenTradeWindow )]
+    public class OpenTradeWindowMessage : GameMessage
     {
-        public int Field0;
-        public int Field1;
+        public int ActorID;
 
-
-
+        public OpenTradeWindowMessage() { }
+        public OpenTradeWindowMessage(int actorID)
+            : base(Opcodes.OpenTradeWindow)
+        {
+            ActorID = actorID;
+        }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(5) + (-1);
+            ActorID = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(5, Field1 - (-1));
+            buffer.WriteInt(32, ActorID);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("TryWaypointMessage:");
+            b.AppendLine("OpenTradeWindowMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
 
     }
 }

@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     /// <summary>
     /// Sent by the client, when the player sells an item to a vendor via trade window (not when using cauldron of jordan)
     /// </summary>
-    [IncomingMessage(Opcodes.RequestSellItemMessage)]
+    [Message(Opcodes.RequestSellItemMessage)]
     public class RequestSellItemMessage : GameMessage
     {
         public int ItemId;

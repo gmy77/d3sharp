@@ -24,6 +24,8 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     /// <summary>
     /// Displays either "+x Gold", "+x XP" or "+x Gold and +y XP" 
     /// </summary>
+
+    [Message(Opcodes.FloatingAmountMessage)]
     public class FloatingAmountMessage : GameMessage
     {
         public enum FloatType : int

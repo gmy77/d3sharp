@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Scene
 {
+    [Message(Opcodes.DestroySceneMessage)]
     public class DestroySceneMessage : GameMessage
     {
         public uint WorldID;

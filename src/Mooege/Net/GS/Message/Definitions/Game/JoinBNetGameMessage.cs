@@ -21,7 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {
-    [IncomingMessage(Opcodes.JoinBNetGameMessage,Consumers.ClientManager)]
+    [Message(Opcodes.JoinBNetGameMessage,Consumers.ClientManager)]
     public class JoinBNetGameMessage : GameMessage
     {
         public EntityId ToonEntityId;  // this *is* the toon id /raist.

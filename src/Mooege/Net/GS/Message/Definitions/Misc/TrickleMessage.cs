@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.TrickleMessage)]
     public class TrickleMessage : GameMessage
     {
         public uint ActorID;

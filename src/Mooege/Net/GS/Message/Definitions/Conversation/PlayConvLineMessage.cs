@@ -19,8 +19,9 @@
 using System.Text;
 using Mooege.Net.GS.Message.Fields;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
+    [Message(Opcodes.PlayConvLineMessage)]
     public class PlayConvLineMessage : GameMessage
     {
         public int Field0;
@@ -28,9 +29,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         public int[] Field1;
         public PlayLineParams Field2;
         public int Field3;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

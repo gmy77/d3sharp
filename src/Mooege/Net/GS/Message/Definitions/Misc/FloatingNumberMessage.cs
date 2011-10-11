@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.FloatingNumberMessage)]
     public class FloatingNumberMessage : GameMessage
     {
         // Enums members with a color in their name display a colored number

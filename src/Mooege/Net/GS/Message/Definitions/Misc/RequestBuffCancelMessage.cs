@@ -20,13 +20,11 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.RequestBuffCancelMessage)]
     public class RequestBuffCancelMessage : GameMessage
     {
         public int /* sno */ Field0;
         public int Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

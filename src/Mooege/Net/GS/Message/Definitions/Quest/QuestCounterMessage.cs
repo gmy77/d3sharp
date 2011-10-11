@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Quest
 {
+    [Message(Opcodes.QuestCounterMessage)]
     public class QuestCounterMessage : GameMessage
     {
         public int /* sno */ snoQuest;

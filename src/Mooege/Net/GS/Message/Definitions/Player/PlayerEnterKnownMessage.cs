@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
+    [Message(Opcodes.PlayerEnterKnownMessage)]
     public class PlayerEnterKnownMessage : GameMessage
     {
         public int PlayerIndex;

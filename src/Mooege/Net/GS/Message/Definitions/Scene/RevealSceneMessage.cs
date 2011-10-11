@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Scene
 {
+    [Message(Opcodes.RevealSceneMessage)]
     public class RevealSceneMessage : GameMessage
     {
         public uint WorldID;

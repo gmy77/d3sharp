@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
+    [Message(Opcodes.NewPlayerMessage)]
     public class NewPlayerMessage : GameMessage
     {
         public int PlayerIndex;

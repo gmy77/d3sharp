@@ -25,10 +25,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
-    [IncomingMessage(new[]{
-        Opcodes.ACDTranslateNormalMessage1,
-        Opcodes.ACDTranslateNormalMessage2
-    })]
+    [Message(new[]{ Opcodes.ACDTranslateNormalMessage1, Opcodes.ACDTranslateNormalMessage2 })]
     public class ACDTranslateNormalMessage : GameMessage, ISelfHandler
     {
         public int Field0; // TODO: Confirm that this is the actor ID

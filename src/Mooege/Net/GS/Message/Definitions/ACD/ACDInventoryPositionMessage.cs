@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDInventoryPositionMessage)]
     public class ACDInventoryPositionMessage : GameMessage
     {
         public uint ItemID; // Item's DynamicID

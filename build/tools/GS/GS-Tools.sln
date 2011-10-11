@@ -51,4 +51,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = ..\..\..\src\tools\GS\D3Types\D3ClassGenerator\D3ClassGenerator.csproj
+	EndGlobalSection
 EndGlobal

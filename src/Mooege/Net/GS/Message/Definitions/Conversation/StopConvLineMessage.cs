@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,35 +18,34 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
-    /// <summary>
-    ///  Sent by the client, when the player clicks on the button to expand the size of his shared stash
-    /// </summary>
-    [IncomingMessage(Opcodes.RequestBuySharedStashSlotsMessage)]
-    public class RequestBuySharedStashSlotsMessage : GameMessage
+    [Message(Opcodes.StopConvLineMessage)]
+    public class StopConvLineMessage : GameMessage
     {
-        public bool Field0;
-
-        public RequestBuySharedStashSlotsMessage() : base(Opcodes.RequestBuySharedStashSlotsMessage) { }
+        public int Field0;
+        public bool Field1;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadBool();
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteBool(Field0);
+            buffer.WriteInt(32, Field0);
+            buffer.WriteBool(Field1);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("RequestBuySharedStashSlots:");
+            b.AppendLine("StopConvLineMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: " + (Field0 ? "true" : "false"));
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: " + (Field1 ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

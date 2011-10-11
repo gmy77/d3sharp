@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDInventoryUpdateActorSNO)]
     public class ACDInventoryUpdateActorSNO : GameMessage
     {
         public uint ItemID; // The item's DynamicID

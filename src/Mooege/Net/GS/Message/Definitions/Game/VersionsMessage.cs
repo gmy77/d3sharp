@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {
+    [Message(Opcodes.VersionsMessage)]
     public class VersionsMessage : GameMessage
     {
         public int SNOPackHash;
@@ -32,6 +33,8 @@ namespace Mooege.Net.GS.Message.Definitions.Game
             this.ProtocolHash = ImplementedProtocolHash;
             this.Version = "0.3.0.7333";
         }
+
+        public VersionsMessage():base(Opcodes.VersionsMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

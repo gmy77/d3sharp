@@ -21,6 +21,7 @@ using Mooege.Common;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Map;
 using Mooege.Core.Common.Items.ItemCreation;
+using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Combat;

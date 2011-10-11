@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.RopeEffectMessageACDToACD)]
     public class RopeEffectMessageACDToACD : GameMessage
     {
         public int /* sno */ Field0;
@@ -27,9 +28,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         public int Field2;
         public int Field3;
         public int Field4;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {
