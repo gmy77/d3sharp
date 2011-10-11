@@ -27,6 +27,7 @@ namespace D3ClassGenerator
                 Console.WriteLine(b.ToString());
             }
 
+            Console.ReadLine();
         }
     }
 }

@@ -31,6 +31,9 @@ namespace GSDumper {
         private static readonly GameBitBuffer IncomingBuffer = new GameBitBuffer(512);
         private static readonly GameBitBuffer OutgoingBuffer = new GameBitBuffer(512);
 
+        private const string GameServerRange = "12.129.237.0/24";
+        private const string GameServerIPPattern = "12.129.237";
+
         public static void Read(string file)
         {
             var selectedDevice = new OfflinePacketDevice(file);
@@ -42,7 +45,7 @@ namespace GSDumper {
                                     PacketDeviceOpenAttributes.Promiscuous, // promiscuous mode
                                     1000)) // read timeout
             {
-                communicator.SetFilter("tcp port 1119 and ip host 12.129.237.196");
+                communicator.SetFilter("tcp port 1119 and ip net "+ GameServerRange);
 
                 // Read and dispatch packets until EOF is reached
                 communicator.ReceivePackets(0, DispatcherHandler);
@@ -101,7 +104,7 @@ namespace GSDumper {
 
             Console.Write(".");
 
-            if (packet.Ethernet.IpV4.Destination == new PcapDotNet.Packets.IpV4.IpV4Address("12.129.237.196")) HandleIncomingPacket(packet);
+            if (packet.Ethernet.IpV4.Destination.ToString().StartsWith(GameServerIPPattern)) HandleIncomingPacket(packet);
             else HandleOutgoingPacket(packet);
         }
     }

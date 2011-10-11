@@ -14,7 +14,10 @@ namespace D3TypeDump
         static void Main(string[] args)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-            TypeDump.DumpDescriptors();            
+            TypeDump.DumpDescriptors();
+
+            Console.WriteLine("done");
+            Console.ReadLine();
         }
     }
 
