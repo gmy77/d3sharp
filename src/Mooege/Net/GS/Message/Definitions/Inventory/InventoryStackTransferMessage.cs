@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
-    [IncomingMessage(Opcodes.InventoryStackTransferMessage, Consumers.Inventory)]
+    [Message(Opcodes.InventoryStackTransferMessage, Consumers.Inventory)]
     public class InventoryStackTransferMessage : GameMessage
     {
         public uint FromID;

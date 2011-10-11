@@ -25,7 +25,8 @@ using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Definitions.Combat;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Net.GS.Message.Fields;
+﻿using Mooege.Net.GS.Message.Definitions.World;
+﻿using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Core.GS.Map
 {

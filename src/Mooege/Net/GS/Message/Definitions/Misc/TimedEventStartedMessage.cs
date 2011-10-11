@@ -21,12 +21,10 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.TimedEventStartedMessage)]
     public class TimedEventStartedMessage : GameMessage
     {
         public ActiveEvent Field0;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

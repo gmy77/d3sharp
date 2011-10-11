@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDTranslateFixedMessage)]
     public class ACDTranslateFixedMessage : GameMessage
     {
         public int Field0;
@@ -28,9 +29,6 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int Field2;
         public int Field3;
         public int /* sno */ Field4;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.World
 {
+    [Message(Opcodes.WeatherOverrideMessage)]
     public class WeatherOverrideMessage : GameMessage
     {
         public float Field0;

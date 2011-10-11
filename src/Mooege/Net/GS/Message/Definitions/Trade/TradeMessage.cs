@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Trade
 {
+    [Message(new[] {Opcodes.TradeMessage1, Opcodes.TradeMessage2})]
     public class TradeMessage : GameMessage
     {
         public int Field0;

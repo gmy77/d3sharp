@@ -21,15 +21,13 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Console
 {
+    [Message(new[]{Opcodes.TryConsoleCommand1, Opcodes.TryConsoleCommand2})]
     public class TryConsoleCommand : GameMessage
     {
         public string Field0;
         public int Field1;
         public WorldPlace Field2;
         public int Field3;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

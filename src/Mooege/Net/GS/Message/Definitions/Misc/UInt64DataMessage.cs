@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.UInt64DataMessage)]
     public class UInt64DataMessage : GameMessage
     {
         public long Field0;

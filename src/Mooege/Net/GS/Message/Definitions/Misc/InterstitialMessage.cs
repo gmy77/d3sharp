@@ -20,13 +20,11 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.InterstitialMessage)]
     public class InterstitialMessage : GameMessage
     {
         public int Field0;
         public bool Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

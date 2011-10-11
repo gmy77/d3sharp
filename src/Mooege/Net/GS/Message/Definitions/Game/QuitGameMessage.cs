@@ -20,12 +20,10 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {
+    [Message(Opcodes.QuitGameMessage)]
     public class QuitGameMessage : GameMessage
     {
         public int Field0;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

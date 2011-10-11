@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.World
 {
+    [Message(Opcodes.WorldStatusMessage)]
     public class WorldStatusMessage : GameMessage
     {
         public uint WorldID; // World's DynamicID

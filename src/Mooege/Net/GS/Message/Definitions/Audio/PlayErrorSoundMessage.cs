@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Audio
 {
+    [Message(Opcodes.PlayErrorSoundMessage)]
     public class PlayErrorSoundMessage : GameMessage
     {
         public int Field0;

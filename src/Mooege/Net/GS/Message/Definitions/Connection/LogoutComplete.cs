@@ -21,7 +21,7 @@ using Mooege.Net.GS.Message.Definitions.Game;
 
 namespace Mooege.Net.GS.Message.Definitions.Connection
 {
-    [IncomingMessage(Opcodes.LogoutComplete)]
+    [Message(Opcodes.LogoutComplete)]
     public class LogoutComplete : GameMessage,ISelfHandler
     {
         public void Handle(GameClient client)

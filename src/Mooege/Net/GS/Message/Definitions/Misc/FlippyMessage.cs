@@ -21,15 +21,13 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.FlippyMessage)]
     public class FlippyMessage : GameMessage
     {
         public int Field0;
         public int /* sno */ Field1;
         public int /* sno */ Field2;
         public Vector3D Field3;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

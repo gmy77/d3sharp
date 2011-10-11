@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDTranslateArcMessage)]
     public class ACDTranslateArcMessage : GameMessage
     {
         public int Field0;
@@ -32,9 +33,6 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public float Field6;
         public int /* sno */ Field7;
         public float Field8;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {
