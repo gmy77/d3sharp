@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Map
 {
+    [Message(Opcodes.MapRevealSceneMessage)]
     public class MapRevealSceneMessage : GameMessage
     {
         public uint ChunkID;

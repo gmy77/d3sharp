@@ -17,16 +17,16 @@
  */
 
 using System;
-using System.IO;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Mooege.Common;
-using Mooege.Common.Helpers;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Generators;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Fields;
+using Mooege.Net.GS.Message.Definitions.Player;
 
 // TODO: Move scene stuff into a Map class (which can also handle the efficiency stuff and object grouping)
 
@@ -36,16 +36,19 @@ namespace Mooege.Core.GS.Game
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
-        public PlayerManager PlayerManager { get; private set; }
+        public int GameId { get; private set; }
 
-        private Dictionary<uint, DynamicObject> Objects;
-        // NOTE: This tracks by WorldSNO rather than by DynamicID; this.Objects _does_ still contain the world since it is a DynamicObject
-        private Dictionary<int, World> Worlds;
+        public ConcurrentDictionary<GameClient, Player.Player> Players = new ConcurrentDictionary<GameClient, Player.Player>();
+
+        public int PlayerIndexCounter = -1;
+
+        private readonly Dictionary<uint, DynamicObject> _objects;
+        private readonly Dictionary<int, World> _worlds; // NOTE: This tracks by WorldSNO rather than by DynamicID; this.Objects _does_ still contain the world since it is a DynamicObject
 
         public int StartWorldSNO { get; private set; }
         public World StartWorld { get { return GetWorld(this.StartWorldSNO); } }
 
-        private readonly WorldGenerator WorldGenerator;
+        private readonly WorldGenerator _worldGenerator;
 
         private uint _lastObjectID = 0x00000001;
         private uint _lastSceneID  = 0x04000000;
@@ -56,14 +59,13 @@ namespace Mooege.Core.GS.Game
         public uint NewSceneID { get { return _lastSceneID++; } }
         public uint NewWorldID { get { return _lastWorldID++; } }
 
-        public Game()
+        public Game(int gameId)
         {
-            this.Objects = new Dictionary<uint, DynamicObject>();
-            this.Worlds = new Dictionary<int, World>();
-            this.PlayerManager = new PlayerManager(this);
-            this.WorldGenerator = new WorldGenerator(this);
-            // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff
-            this.StartWorldSNO = 71150;
+            this.GameId = gameId;
+            this._objects = new Dictionary<uint, DynamicObject>();
+            this._worlds = new Dictionary<int, World>();
+            this._worldGenerator = new WorldGenerator(this);
+            this.StartWorldSNO = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff
         }
 
         public void Route(GameClient client, GameMessage message)
@@ -76,9 +78,6 @@ namespace Mooege.Core.GS.Game
                 case Consumers.Inventory:
                     client.Player.Inventory.Consume(client, message);
                     break;
-                case Consumers.PlayerManager:
-                    this.PlayerManager.Consume(client, message);
-                    break;
                 case Consumers.Player:
                     client.Player.Consume(client, message);
                     break;
@@ -87,7 +86,48 @@ namespace Mooege.Core.GS.Game
 
         public void Consume(GameClient client, GameMessage message)
         {
+            // for possile future messages consumed by game.
         }
+
+        public void Enter(Player.Player joinedPlayer)
+        {
+            this.Players.TryAdd(joinedPlayer.InGameClient, joinedPlayer);
+
+
+            // send all players in the game to new player that just joined (including him)
+            foreach (var pair in this.Players)
+            {
+                this.SendNewPlayerMessage(joinedPlayer, pair.Value);
+            }
+
+            // send other players NewPlayerMessage b@
+            //foreach (var pair in this.Players.Where(pair => pair.Value != joinedPlayer))
+            //{
+            //    this.SendNewPlayerMessage(pair.Value, joinedPlayer);
+            //}
+
+            joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition
+        }
+
+        private void SendNewPlayerMessage(Player.Player target, Player.Player joinedPlayer)
+        {
+            target.InGameClient.SendMessage(new NewPlayerMessage
+            {
+                PlayerIndex = joinedPlayer.PlayerIndex, // player index
+                Field1 = "", //Owner name?
+                ToonName = joinedPlayer.Properties.Name,
+                Field3 = 0x00000002, //party frame class
+                Field4 = 0x00000004, //party frame level
+                snoActorPortrait = joinedPlayer.ClassSNO, //party frame portrait
+                Field6 = 0x00000001,
+                StateData = joinedPlayer.GetStateData(),
+                Field8 = this.Players.Count != 1, //announce party join
+                Field9 = 0x00000001,
+                ActorID = joinedPlayer.DynamicID,
+            });
+            Logger.Debug("{0}[PlayerIndex: {1}] is notified about {2}[PlayerIndex: {3}] joining the game.", target.Properties.Name, target.PlayerIndex, joinedPlayer.Properties.Name, joinedPlayer.PlayerIndex);
+        }
+
 
         #region Tracking
 
@@ -95,31 +135,31 @@ namespace Mooege.Core.GS.Game
         {
             if (obj.DynamicID == 0 || IsTracking(obj))
                 throw new Exception(String.Format("Object has an invalid ID or was already being tracked (ID = {0})", obj.DynamicID));
-            this.Objects.Add(obj.DynamicID, obj);
+            this._objects.Add(obj.DynamicID, obj);
         }
 
         public void EndTracking(DynamicObject obj)
         {
             if (obj.DynamicID == 0 || !IsTracking(obj))
                 throw new Exception(String.Format("Object has an invalid ID or was not being tracked (ID = {0})", obj.DynamicID));
-            this.Objects.Remove(obj.DynamicID);
+            this._objects.Remove(obj.DynamicID);
         }
 
         public DynamicObject GetObject(uint dynamicID)
         {
             DynamicObject obj;
-            this.Objects.TryGetValue(dynamicID, out obj);
+            this._objects.TryGetValue(dynamicID, out obj);
             return obj;
         }
 
         public bool IsTracking(uint dynamicID)
         {
-            return this.Objects.ContainsKey(dynamicID);
+            return this._objects.ContainsKey(dynamicID);
         }
 
         public bool IsTracking(DynamicObject obj)
         {
-            return this.Objects.ContainsKey(obj.DynamicID);
+            return this._objects.ContainsKey(obj.DynamicID);
         }
 
         #endregion // Tracking
@@ -130,24 +170,24 @@ namespace Mooege.Core.GS.Game
         {
             if (world.WorldSNO == -1 || WorldExists(world.WorldSNO))
                 throw new Exception(String.Format("World has an invalid SNO or was already being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.WorldSNO));
-            this.Worlds.Add(world.WorldSNO, world);
+            this._worlds.Add(world.WorldSNO, world);
         }
 
         public void RemoveWorld(World world)
         {
             if (world.WorldSNO == -1 || !WorldExists(world.WorldSNO))
                 throw new Exception(String.Format("World has an invalid SNO or was not being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.WorldSNO));
-            this.Worlds.Remove(world.WorldSNO);
+            this._worlds.Remove(world.WorldSNO);
         }
 
         public World GetWorld(int worldSNO)
         {
             World world;
-            this.Worlds.TryGetValue(worldSNO, out world);
+            this._worlds.TryGetValue(worldSNO, out world);
             // If it doesn't exist, try to load it
             if (world == null)
             {
-                world = this.WorldGenerator.GenerateWorld(worldSNO);
+                world = this._worldGenerator.GenerateWorld(worldSNO);
                 if (world == null)
                     Logger.Warn(String.Format("Failed to generate world (SNO = {0})", worldSNO));
             }
@@ -156,7 +196,7 @@ namespace Mooege.Core.GS.Game
 
         public bool WorldExists(int worldSNO)
         {
-            return this.Worlds.ContainsKey(worldSNO);
+            return this._worlds.ContainsKey(worldSNO);
         }
 
         #endregion // World collection

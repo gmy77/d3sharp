@@ -24,7 +24,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     /// Sent by the client if the player busy state changes. It is true if the player
     /// is currently in game menues or with an open trade window
     /// </summary>
-    [IncomingMessage(Opcodes.PlayerBusyMessage)]
+    [Message(Opcodes.PlayerBusyMessage)]
     public class PlayerBusyMessage : GameMessage, ISelfHandler
     {
         public bool Busy;

@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.PortalSpecifierMessage)]
     public class PortalSpecifierMessage : GameMessage
     {
         public uint ActorID; // Portal's DynamicID

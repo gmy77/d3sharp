@@ -20,15 +20,13 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Hireling
 {
+    [Message(Opcodes.HirelingInfoUpdateMessage)]
     public class HirelingInfoUpdateMessage : GameMessage
     {
         public int Field0;
         public bool Field1;
         public int Field2;
         public int Field3;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

@@ -18,29 +18,24 @@
 
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading;
 using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.Common.Items;
-using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Net.GS.Message.Definitions.Act;
-using Mooege.Net.GS.Message.Definitions.Attribute;
-using Mooege.Net.GS.Message.Definitions.Connection;
 using Mooege.Net.GS.Message.Definitions.Combat;
-using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Inventory;
-using Mooege.Net.GS.Message.Definitions.World;
 
 // TODO: When the player moves, it will set the Position property which will bounce back to the player again.
 //       That is unnecessary and we should exclude the player from receiving it in that case. /komiga
@@ -52,8 +47,10 @@ namespace Mooege.Core.GS.Player
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         public override ActorType ActorType { get { return ActorType.Player; } }
-
+        
         public GameClient InGameClient { get; set; }
+
+        public int PlayerIndex { get; private set; } // player index: 0 to 7.
 
         public Toon Properties { get; private set; }
         public SkillSet SkillSet;
@@ -69,10 +66,11 @@ namespace Mooege.Core.GS.Player
             : base(world, world.NewPlayerID)
         {
             this.InGameClient = client;
+            this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter);
 
             this.Properties = bnetToon;
             this.Inventory = new Inventory(this);
-            this.SkillSet = new Skills.SkillSet(this.Properties.Class);
+            this.SkillSet = new SkillSet(this.Properties.Class);
 
             this.RevealedObjects = new Dictionary<uint, IRevealable>();
             this.GroundItems = new Dictionary<uint, Item>();
@@ -254,25 +252,7 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Shared_Stash_Slots] = 14;
             this.Attributes[GameAttribute.Backpack_Slots] = 60;
             this.Attributes[GameAttribute.General_Cooldown] = 0;
-            #endregion // Attributes
-
-            // Notify the client of the new player
-            this.InGameClient.SendMessage(new NewPlayerMessage
-            {
-                Field0 = 0x00000000, //Party frame (0x00000000 hide, 0x00000001 show)
-                Field1 = "", //Owner name?
-                ToonName = this.Properties.Name,
-                Field3 = 0x00000002, //party frame class
-                Field4 = 0x00000004, //party frame level
-                snoActorPortrait = this.ClassSNO, //party frame portrait
-                Field6 = 0x00000001,
-                StateData = this.GetStateData(),
-                Field8 = false, //announce party join
-                Field9 = 0x00000001,
-                ActorID = this.DynamicID,
-            });
-
-            this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
+            #endregion // Attributes            
         }
 
         public void Consume(GameClient client, GameMessage message)
@@ -331,14 +311,14 @@ namespace Mooege.Core.GS.Player
 
             player.InGameClient.SendMessage(new PlayerEnterKnownMessage()
             {
-                Field0 = 0x00000000,
+                PlayerIndex = this.PlayerIndex,
                 PlayerID = this.DynamicID,
             });
 
             player.InGameClient.SendMessage(new PlayerActorSetInitialMessage()
             {
                 PlayerID = this.DynamicID,
-                Field1 = 0x00000000,
+                PlayerIndex = this.PlayerIndex,
             });
             player.InGameClient.FlushOutgoingBuffer();
             return true;

@@ -20,14 +20,12 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Effect
 {
+    [Message(Opcodes.EffectGroupACDToACDMessage)]
     public class EffectGroupACDToACDMessage : GameMessage
     {
         public int /* sno */ Field0;
         public int Field1;
         public int Field2;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

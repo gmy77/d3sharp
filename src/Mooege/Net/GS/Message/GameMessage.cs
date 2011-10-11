@@ -41,9 +41,9 @@ namespace Mooege.Net.GS.Message
             {
                 if (type.IsSubclassOf(typeof(GameMessage)))
                 {
-                    var attributes = (IncomingMessageAttribute[])type.GetCustomAttributes(typeof(IncomingMessageAttribute), true);
+                    var attributes = (MessageAttribute[])type.GetCustomAttributes(typeof(MessageAttribute), true);
                     if (attributes.Length == 0) continue;
-                    foreach (IncomingMessageAttribute attribute in attributes)
+                    foreach (MessageAttribute attribute in attributes)
                     {
                         foreach (var opcode in attribute.Opcodes)
                         {
@@ -63,7 +63,9 @@ namespace Mooege.Net.GS.Message
                 return null;
             }
 
-            var msg = (T)Activator.CreateInstance(MessageTypes[opcode]);
+            var ctorWithParameterExists = MessageTypes[opcode].GetConstructor(new[] { typeof(Opcodes) }) != null;
+            var msg = (T)Activator.CreateInstance(MessageTypes[opcode], ctorWithParameterExists? new object[] { opcode } : null );
+
             msg.Id = (int)opcode;
             msg.Consumer = MessageConsumers[opcode];
             return msg;

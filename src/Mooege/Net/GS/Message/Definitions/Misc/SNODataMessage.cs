@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    [IncomingMessage(new [] {Opcodes.SNODataMessage1, Opcodes.SNODataMessage2, Opcodes.SNODataMessage3, Opcodes.SNODataMessage4, Opcodes.SNODataMessage5, Opcodes.SNODataMessage6, Opcodes.SNODataMessage7})]
+    [Message(new [] {Opcodes.SNODataMessage1, Opcodes.SNODataMessage2, Opcodes.SNODataMessage3, Opcodes.SNODataMessage4, Opcodes.SNODataMessage5, Opcodes.SNODataMessage6, Opcodes.SNODataMessage7})]
     public class SNODataMessage : GameMessage
     {
         public int /* sno */ Field0;

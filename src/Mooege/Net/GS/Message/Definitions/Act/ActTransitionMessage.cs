@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Act
 {
+    [Message(Opcodes.ActTransitionMessage)]
     public class ActTransitionMessage : GameMessage
     {
         public int Field0;

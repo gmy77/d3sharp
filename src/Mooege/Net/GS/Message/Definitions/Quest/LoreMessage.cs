@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Quest
 {
+    [Message(new[] {Opcodes.LoreMessage1,Opcodes.LoreMessage2})]
     public class LoreMessage : GameMessage
     {
         public int /* sno */ snoLore;

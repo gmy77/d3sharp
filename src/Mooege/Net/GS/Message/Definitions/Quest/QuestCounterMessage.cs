@@ -24,6 +24,7 @@ namespace Mooege.Net.GS.Message.Definitions.Quest
     /// Sent to the client to update one quest counter. Each quest consists of a sequence of steps. In each step, a list
     /// of tasks must be completed. The questcounter shows the progress of a single task.
     /// </summary>
+    [Message(Opcodes.QuestCounterMessage)]
     public class QuestCounterMessage : GameMessage
     {
         public int snoQuest;

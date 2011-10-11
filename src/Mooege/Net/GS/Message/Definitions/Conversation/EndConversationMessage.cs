@@ -24,14 +24,13 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
     /// Sent to the client
     /// TODO What does this message actually do? sending it not changes nothing. - farmy
     /// </summary>
+    [Message(Opcodes.EndConversationMessage)]
     public class EndConversationMessage : GameMessage
     {
         public int Field0;          // seems to be a running number across conversationlines. StopConvLine.Field0 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
         public int SNOConversation;
         public int ActorID;         // Actor that begun conversation in PlayConvLine
-
         public EndConversationMessage() : base(Opcodes.EndConversationMessage) { }
-
 
         public override void Parse(GameBitBuffer buffer)
         {

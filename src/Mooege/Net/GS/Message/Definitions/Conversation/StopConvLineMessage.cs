@@ -18,19 +18,18 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
     /// <summary>
     /// Sent to the client. No idea what it does.. everything works without it so far. (does not stop playback) - farmy
     /// </summary>
+    [Message(Opcodes.EndConversationMessage)]
     public class StopConvLineMessage : GameMessage
     {
         public int Field0;  // seems to be a running number across conversationlines. StopConvLine.Field0 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
         public bool Field1;
 
         public StopConvLineMessage() : base(Opcodes.StopConvLineMessage)  {}
-
-
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);

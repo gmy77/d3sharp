@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Animation
 {
+    [Message(Opcodes.PlayAnimationMessage)]
     public class PlayAnimationMessage : GameMessage
     {
         public uint ActorID;

@@ -24,6 +24,7 @@ namespace Mooege.Net.GS.Message.Definitions.Quest
     /// Sent to the client to inform him, that a certain step of a quest is completed and
     /// makes him display the task list for the next step
     /// </summary>
+    [Message(Opcodes.QuestUpdateMessage)]
     public class QuestUpdateMessage : GameMessage
     {
         public int snoQuest;

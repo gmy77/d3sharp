@@ -22,19 +22,19 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class EntityId
     {
-        public long Field0;
-        public long Field1;
+        public long High;
+        public long Low;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt64(64);
-            Field1 = buffer.ReadInt64(64);
+            High = buffer.ReadInt64(64);
+            Low = buffer.ReadInt64(64);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt64(64, Field0);
-            buffer.WriteInt64(64, Field1);
+            buffer.WriteInt64(64, High);
+            buffer.WriteInt64(64, Low);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -44,9 +44,9 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X16"));
+            b.AppendLine("Field0: 0x" + High.ToString("X16"));
             b.Append(' ', pad);
-            b.AppendLine("Field1: 0x" + Field1.ToString("X16"));
+            b.AppendLine("Field1: 0x" + Low.ToString("X16"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

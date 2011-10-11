@@ -25,6 +25,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     /// Sent to the client to create a world animation. Like in gold flipping before gold dropping or
     /// highlighting the area around around important items.
     /// </summary>
+    [Message(Opcodes.FlippyMessage)]
     public class FlippyMessage : GameMessage
     {
         // TODO Verify SNOs, there are to few samples to be sure - farmy
@@ -32,7 +33,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         public int SNOParticleEffect;   // SNO for a particle effect or 0x6d82 (default_flippy) for an appearance effect
         public int SNOAppearance;       // -1 for a particle effect or SNO of the animation effect. eg Axe_flippy etc
         public Vector3D Field3;         // no idea ... my tests always take the actor position - farmy
-
         public FlippyMessage() : base(Opcodes.FlippyMessage) { }
 
         public override void Parse(GameBitBuffer buffer)

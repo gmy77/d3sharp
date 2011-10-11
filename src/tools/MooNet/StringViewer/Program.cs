@@ -19,7 +19,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace StringViewer
+namespace Mooege.Tools.StringViewer
 {
     static class Program
     {

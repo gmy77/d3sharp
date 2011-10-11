@@ -23,11 +23,11 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
     /// <summary>
     /// Sent to client to shear the visual model of an actor
     /// </summary>
+    [Message(Opcodes.ACDShearMessage)]
     public class ACDShearMessage : GameMessage
     {
         public int ActorID;
         public float Amount;    // 0 = no shearing
-
         public ACDShearMessage() : base(Opcodes.ACDShearMessage) { }
 
         public override void Parse(GameBitBuffer buffer)

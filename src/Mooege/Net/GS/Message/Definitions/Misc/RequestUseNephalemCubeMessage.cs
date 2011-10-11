@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     /// <summary>
     /// Sent by the client, when the player uses nephalem cube on an item
     /// </summary>
-    [IncomingMessage(Opcodes.RequestUseNephalemCubeMessage)]
+    [Message(Opcodes.RequestUseNephalemCubeMessage)]
     public class RequestUseNephalemCubeMessage : GameMessage
     {
         public uint ActorID; // Id of the target

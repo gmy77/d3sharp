@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     /// <summary>
     /// Sent by the client, when the player uses cauldron of jordan on an item
     /// </summary>
-    [IncomingMessage(Opcodes.RequestUseCauldronOfJordanMessage)]
+    [Message(Opcodes.RequestUseCauldronOfJordanMessage)]
     public class RequestUseCauldronOfJordanMessage : GameMessage
     {
         public uint ActorID; // Id of the target

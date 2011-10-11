@@ -24,6 +24,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
     /// <summary>
     /// Sent to client, to introduce a new actor.
     /// </summary>
+    [Message(Opcodes.ACDEnterKnownMessage)]
     public class ACDEnterKnownMessage : GameMessage
     {
         public uint ActorID; // The actor's DynamicID

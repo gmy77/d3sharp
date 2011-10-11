@@ -19,12 +19,13 @@
 using System.Text;
 using Mooege.Net.GS.Message.Fields;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
     /// <summary>
     /// Plays a single line from a conversation.
     /// Proper SNOconversation with correct LineID and correct Field4 will play everything (so far) - farmy
     /// </summary>
+    [Message(Opcodes.PlayConvLineMessage)]
     public class PlayConvLineMessage : GameMessage
     {
         public int ActorID;             // The SNO of this actor is used, to get a localized "Name" of the conversation participant for chat ouput
@@ -32,7 +33,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         public int[] Field1;            // looks like a list of conversation participants - farmy
         public PlayLineParams Params;
         public int Field3;              // seems to be a running number across conversationlines. StopConvLine.Field0 == PlayConvLine.Field3 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
-
         public PlayConvLineMessage() : base(Opcodes.PlayConvLineMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
