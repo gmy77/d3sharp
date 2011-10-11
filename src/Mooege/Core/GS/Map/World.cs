@@ -128,7 +128,7 @@ namespace Mooege.Core.GS.Map
             foreach (var player in players)
             {
                 if (actor == player) continue; // we don't need to re-reveal him to himself.
-                if(actor is Player.Player) Logger.Debug("Enter: Revealing player: {0}[{1}] to {2}[{3}]",((Player.Player)actor).Properties.Name ,actor.DynamicID, player.Properties.Name,player.DynamicID);
+                if (actor is Player.Player) Logger.Debug("Enter: Revealing player: {0}[DynamicId:{1}] to {2}[DynamicId:{3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
                 actor.Reveal(player);
             }
         }
