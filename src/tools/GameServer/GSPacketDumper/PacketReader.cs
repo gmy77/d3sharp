@@ -23,7 +23,7 @@ using Mooege.Net.GS.Message;
 using PcapDotNet.Core;
 using PcapDotNet.Packets;
 
-namespace GSDumper {
+namespace GSPacketDumper {
     public static class PacketReader 
     {
         private static readonly Logger Logger = LogManager.CreateLogger();

@@ -8,8 +8,8 @@
     <ProjectGuid>{F8B009EE-3628-4A7A-B0BD-E131DDE0DC66}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GSDumper</RootNamespace>
-    <AssemblyName>GSDumper</AssemblyName>
+    <RootNamespace>GSPacketDumper</RootNamespace>
+    <AssemblyName>GSPacketDumper</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>

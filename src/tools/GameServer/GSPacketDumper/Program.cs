@@ -20,7 +20,7 @@ using System;
 using System.IO;
 using Mooege.Common;
 
-namespace GSDumper {
+namespace GSPacketDumper {
     class Program {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -49,9 +49,7 @@ namespace GSDumper {
 
             Console.WriteLine("Demystifying packets:");
             PacketReader.Read(args[0]);
-            Console.WriteLine("\n\n[done]");
-
-            Console.ReadLine();
+            Console.WriteLine("\n\n[done]");            
         }
 
         private static void PrintLicense()
