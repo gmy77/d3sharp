@@ -197,7 +197,7 @@ namespace Mooege.Net.GS.Message
 
         public float this[GameAttributeF attribute]
         {
-            get { return GetAttributeValue(attribute, null).Value; }
+            get { return GetAttributeValue(attribute, null).ValueF; }
             set { SetAttributeValue(attribute, null, new GameAttributeValue(value)); }
         }
 
