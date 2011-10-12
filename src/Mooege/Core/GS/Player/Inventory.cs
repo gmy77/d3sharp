@@ -61,24 +61,21 @@ namespace Mooege.Core.GS.Player
 
          /// <summary>
         /// Refreshes the visual appearance of the hero
-        /// TODO: this should go to hero class
         /// </summary>
-        /// <param name="actorID"></param>
-        void RefreshVisual()
-        {
-            _owner.InGameClient.SendMessage(new VisualInventoryMessage()
-            {
-                ActorID = _owner.DynamicID,
-                EquipmentList = new VisualEquipment()
-                {
-                    Equipment = _equipment.GetVisualEquipment()
-                },
-            });
-        }
+        public void SendVisualInvetory(Player player)
+         {
+             var message = new VisualInventoryMessage()
+                               {
+                                   ActorID = this._owner.DynamicID,
+                                   EquipmentList = new VisualEquipment()
+                                                       {
+                                                           Equipment = this._equipment.GetVisualEquipment()
+                                                       },
+                               };
 
+             player.InGameClient.SendMessage(message);             
+         }
         
-
-
         /// <summary>
         /// Picks an item up after client request
         /// </summary>
@@ -157,7 +154,7 @@ namespace Mooege.Core.GS.Player
                         AcceptMoveRequest(oldEquipItem);
                     }
 
-                    RefreshVisual();
+                    SendVisualInvetory(this._owner);
                 }
             }
 
@@ -169,7 +166,7 @@ namespace Mooege.Core.GS.Player
                     if (_equipment.IsItemEquipped(item))
                     {
                         _equipment.UnequipItem(item); // Unequip the item
-                        RefreshVisual();
+                        SendVisualInvetory(this._owner);
                     }
                     else
                     {
@@ -220,7 +217,7 @@ namespace Mooege.Core.GS.Player
                     _equipment.EquipItem(item, (int)EquipmentSlotId.Main_Hand);
                     AcceptMoveRequest(item); 
                    
-                    RefreshVisual();
+                    SendVisualInvetory(this._owner);
                     // All equipment commands are executed. the original EquipmentRequest is invalid at this moment
                     return false;
                 }
@@ -272,7 +269,7 @@ namespace Mooege.Core.GS.Player
             if (_equipment.IsItemEquipped(item))
             {
                 _equipment.UnequipItem(item);
-                RefreshVisual();
+                SendVisualInvetory(this._owner);
             }
             else
             {

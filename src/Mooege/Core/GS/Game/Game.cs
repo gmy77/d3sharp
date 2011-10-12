@@ -27,7 +27,10 @@ using Mooege.Core.GS.Generators;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Game;
+using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
+using Mooege.Net.GS.Message.Fields;
 
 // TODO: Move scene stuff into a Map class (which can also handle the efficiency stuff and object grouping)
 
@@ -133,6 +136,21 @@ namespace Mooege.Core.GS.Game
                 this.SendNewPlayerMessage(pair.Value, joinedPlayer);
             }
 
+            joinedPlayer.InGameClient.SendMessage(new GameSyncedDataMessage
+            {
+                Field0 = new GameSyncedData
+                            {
+                                Field0 = false,
+                                Field1 = 0x0,
+                                Field2 = 0x0,
+                                Field3 = 0x0,
+                                Field4 = 0x0,
+                                Field5 = 0x0,
+                                Field6 = new[] {0x0, 0x0},
+                                Field7 = new[] {0x0, 0x0}
+                            }
+            });
+
             joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition
             joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
         }
@@ -145,14 +163,17 @@ namespace Mooege.Core.GS.Game
                 Field1 = "", //Owner name?
                 ToonName = joinedPlayer.Properties.Name,
                 Field3 = 0x00000002, //party frame class
-                Field4 = 0x00000004, //party frame level
+                Field4 = target!=joinedPlayer? 0x2 : 0x4, //party frame level /boyc - may mean something different /raist.
                 snoActorPortrait = joinedPlayer.ClassSNO, //party frame portrait
-                Field6 = 0x00000001,
+                Field6 = 0x0000000A,
                 StateData = joinedPlayer.GetStateData(),
                 Field8 = this.Players.Count != 1, //announce party join
                 Field9 = 0x00000001,
                 ActorID = joinedPlayer.DynamicID,
             });
+
+            target.InGameClient.SendMessage(joinedPlayer.GetPlayerBanner()); // send player banner proto - D3.GameMessage.PlayerBanner
+
             Logger.Debug("{0}[PlayerIndex: {1}] is notified about {2}[PlayerIndex: {3}] joining the game.", target.Properties.Name, target.PlayerIndex, joinedPlayer.Properties.Name, joinedPlayer.PlayerIndex);
         }
 

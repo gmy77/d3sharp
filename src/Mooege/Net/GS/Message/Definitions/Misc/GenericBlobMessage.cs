@@ -28,6 +28,8 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     {
         public byte[] Data;
 
+        public GenericBlobMessage(Opcodes opcode):base(opcode) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Data = buffer.ReadBlob(32);

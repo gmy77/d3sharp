@@ -23,12 +23,15 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Tick
 {
-    [Message(Opcodes.DWordDataMessage6)]
+    [Message(Opcodes.GameTickMessage)]
     public class GameTickMessage:GameMessage
     {
         public int Tick;
 
-        public GameTickMessage(int tick):base(Opcodes.DWordDataMessage6)
+        public GameTickMessage() : base(Opcodes.GameTickMessage) { }
+
+        public GameTickMessage(int tick)
+            : base(Opcodes.GameTickMessage)
         {
             this.Tick = tick;   
         }

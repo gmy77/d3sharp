@@ -28,13 +28,12 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Hero;
-using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
-using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Definitions.Effect;
 
 
@@ -292,11 +291,14 @@ namespace Mooege.Core.GS.Player
             if (!base.Reveal(player))
                 return false;
 
-            player.InGameClient.SendMessage(new PlayerWarpedMessage()
+            if (this == player) // only send this when player's own actor being is revealed. /raist.
             {
-                Field0 = 9,
-                Field1 = 0f,
-            });
+                player.InGameClient.SendMessage(new PlayerWarpedMessage()
+                                                    {
+                                                        Field0 = 9,
+                                                        Field1 = 0f,
+                                                    });
+            }
 
             player.InGameClient.SendMessage(new PlayerEnterKnownMessage()
             {
@@ -304,7 +306,7 @@ namespace Mooege.Core.GS.Player
                 ActorId = this.DynamicID,
             });
 
-            //if(this!=player) player.InGameClient.SendMessage(this.GetVisualInventory()); // should we sent it to other players? /raist
+            this.Inventory.SendVisualInvetory(player); 
 
             if (this == player) // only send this to player itself. Warning: don't remove this check or you'll make the game start crashing! /raist.
             {
@@ -402,28 +404,6 @@ namespace Mooege.Core.GS.Player
                 snoTraits = this.SkillSet.PassiveSkills,
                 Field9 = new SavePointData() { snoWorld = -1, Field1 = -1, },
                 m_SeenTutorials = this.SeenTutorials,
-            };
-        }
-
-        public VisualInventoryMessage GetVisualInventory()
-        {
-            return new VisualInventoryMessage
-            {
-                ActorID = this.DynamicID,
-                EquipmentList =
-                    new VisualEquipment
-                    {
-                        Equipment =
-                            Properties.Equipment.VisualItemList.Select(
-                                equipment =>
-                                new VisualItem
-                                {
-                                    GbId = equipment.Gbid,
-                                    Field1 = 0x0,
-                                    Field2 = 0x0,
-                                    Field3 = -1
-                                }).ToArray()
-                    }
             };
         }
 
@@ -690,5 +670,15 @@ namespace Mooege.Core.GS.Player
             new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
             new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
         };
+
+        public GenericBlobMessage GetPlayerBanner()
+        {
+            var playerBanner = D3.GameMessage.PlayerBanner.CreateBuilder()
+                .SetPlayerIndex((uint) this.PlayerIndex)
+                .SetBanner(this.Properties.Owner.BannerConfiguration)
+                .Build();
+
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage6) {Data = playerBanner.ToByteArray()};
+        }
     }
 }

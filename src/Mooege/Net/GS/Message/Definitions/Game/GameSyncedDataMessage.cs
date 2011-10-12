@@ -26,6 +26,8 @@ namespace Mooege.Net.GS.Message.Definitions.Game
     {
         public GameSyncedData Field0;
 
+        public GameSyncedDataMessage():base(Opcodes.GameSyncedDataMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = new GameSyncedData();
