@@ -455,6 +455,10 @@
       <Link>Assets\Maps\Worlds\NewTristram.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\assets\Maps\Worlds\Quick.txt">
+      <Link>Assets\Maps\Worlds\Quick.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\assets\SNO\Actors.txt">
       <Link>Assets\SNO\Actors.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

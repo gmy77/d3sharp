@@ -102,14 +102,24 @@ namespace Mooege.Net.GS
             }
         }
 
-        public void FlushOutgoingBuffer()
-        {            
+        public void SendTick()
+        {
             lock (this)
             {
                 this.Tick += this.Game.TickFrequency;
                 if (_outgoingBuffer.Length <= 32) return;
 
                 this.SendMessage(new GameTickMessage(this.Tick)); // send the tick.
+                this.FlushOutgoingBuffer();
+            }
+        }
+
+        public void FlushOutgoingBuffer()
+        {
+            lock (this)
+            {
+                if (_outgoingBuffer.Length <= 32) return;
+
                 var data = _outgoingBuffer.GetPacketAndReset();
                 Connection.Send(data);
             }
