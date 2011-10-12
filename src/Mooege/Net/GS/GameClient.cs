@@ -102,7 +102,7 @@ namespace Mooege.Net.GS
             }
         }
 
-        public void FlushBuffer()
+        public void FlushOutgoingBuffer()
         {            
             lock (this)
             {

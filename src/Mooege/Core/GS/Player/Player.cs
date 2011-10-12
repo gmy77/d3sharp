@@ -269,7 +269,7 @@ namespace Mooege.Core.GS.Player
 
         public override void Update()
         {
-            this.InGameClient.FlushBuffer(); // flush buffers if we need to which will eventually send the required ticks.
+            this.InGameClient.FlushOutgoingBuffer(); // flush buffers if we need to which will eventually send the required ticks.
         }
 
         // FIXME: Hardcoded crap
