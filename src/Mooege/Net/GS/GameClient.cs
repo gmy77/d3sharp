@@ -18,13 +18,13 @@
 
 using System;
 using System.Linq;
-using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Player;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Definitions.Tick;
 using Mooege.Net.MooNet;
-using Mooege.Core.Common.Items;
 
 // TODO: Client should probably just flush on every message, or use a queue with a very small quota..
 // consider: The client seems to not interpret received messages until a tick message which makes flushing earlier less useful
@@ -42,13 +42,14 @@ namespace Mooege.Net.GS
 
         public Game Game { get; set; }
         public Player Player { get; set; }
-        public int PacketId = 0x227 + 20; // TODO: We need proper packet ID incrementing
-        public int Tick = 0; // ... and proper ticking
+
+        public int Tick {get; private set;}
 
         public bool IsLoggingOut;
 
         public GameClient(IConnection connection)
         {
+            this.Tick = 100; // setting this value to some value like 0 does not work. / raist.
             this.Connection = connection;
             _outgoingBuffer.WriteInt(32, 0);
         }
@@ -89,26 +90,26 @@ namespace Mooege.Net.GS
 
                 _incomingBuffer.Position = end;
             }
-            _incomingBuffer.ConsumeData();
-            FlushOutgoingBuffer();
+            _incomingBuffer.ConsumeData();                       
         }
 
         public void SendMessage(GameMessage message)
         {
-            //Logger.LogOutgoing(message);
-            _outgoingBuffer.EncodeMessage(message);
-        }
-
-        public void SendMessageNow(GameMessage message)
-        {
-            SendMessage(message);
-            FlushOutgoingBuffer();
-        }
-
-        public void FlushOutgoingBuffer()
-        {
-            if (_outgoingBuffer.Length > 32)
+            lock (this)
             {
+                //Logger.LogOutgoing(message);
+                _outgoingBuffer.EncodeMessage(message);
+            }
+        }
+
+        public void FlushBuffer()
+        {            
+            lock (this)
+            {
+                this.Tick += this.Game.TickFrequency;
+                if (_outgoingBuffer.Length <= 32) return;
+
+                this.SendMessage(new GameTickMessage(this.Tick)); // send the tick.
                 var data = _outgoingBuffer.GetPacketAndReset();
                 Connection.Send(data);
             }

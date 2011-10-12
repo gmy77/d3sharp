@@ -80,7 +80,7 @@ namespace Mooege.Net.GS
                 client.Player = new Player(game.StartWorld, client, toon);
                 Logger.Debug("Player {0}[PlayerIndex: {1}] connected.", client.Player.Properties.Name, client.Player.PlayerIndex);
 
-                client.SendMessageNow(new VersionsMessage(message.SNOPackHash));
+                client.SendMessage(new VersionsMessage(message.SNOPackHash));
 
                 client.SendMessage(new ConnectionEstablishedMessage
                 {

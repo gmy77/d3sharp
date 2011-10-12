@@ -20,6 +20,7 @@ using System;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Tick;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Animation;
@@ -85,6 +86,16 @@ namespace Mooege.Core.GS.Actors
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
+        public override void Update()
+        {
+            this.Brain(); // let him think. /raist 
+        }
+
+        public virtual void Brain()
+        {
+            // intellectual activities goes here ;) /raist
+        }
+
         public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
             this.Die(player);
@@ -101,26 +112,19 @@ namespace Mooege.Core.GS.Actors
                 ActorID = this.DynamicID
             });
             */
+
             player.InGameClient.SendMessage(new SetIdleAnimationMessage
             {
                 ActorID = this.DynamicID,
                 AnimationSNO = this.AnimationSNO
             });
 
-            player.InGameClient.PacketId += 30 * 2;
-            player.InGameClient.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = player.InGameClient.PacketId,
-            });
-            player.InGameClient.Tick += 20;
             player.InGameClient.SendMessage(new EndOfTickMessage()
             {
-                Id = 0x008D,
-                Field0 = player.InGameClient.Tick - 20,
-                Field1 = player.InGameClient.Tick
+                Field0 = player.InGameClient.Tick,
+                Field1 = player.InGameClient.Tick+20
             });
-            player.InGameClient.FlushOutgoingBuffer();
+
             return true;
         }
 

@@ -85,7 +85,7 @@ namespace Mooege.Core.GS.Map
                     Angle = 0f,
                     Field2 = false,
                 });*/
-                player.InGameClient.FlushOutgoingBuffer();
+
                 return true;
             }
             return false;
