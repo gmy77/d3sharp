@@ -43,13 +43,13 @@ namespace Mooege.Net.GS
         public Game Game { get; set; }
         public Player Player { get; set; }
 
-        public int Tick {get; private set;}
+        public bool TickingEnabled { get; set; }
 
         public bool IsLoggingOut;
 
         public GameClient(IConnection connection)
         {
-            this.Tick = 100; // setting this value to some value like 0 does not work. / raist.
+            this.TickingEnabled = false;
             this.Connection = connection;
             _outgoingBuffer.WriteInt(32, 0);
         }
@@ -106,10 +106,9 @@ namespace Mooege.Net.GS
         {
             lock (this)
             {
-                this.Tick += this.Game.TickFrequency;
                 if (_outgoingBuffer.Length <= 32) return;
 
-                this.SendMessage(new GameTickMessage(this.Tick)); // send the tick.
+                if (this.TickingEnabled) this.SendMessage(new GameTickMessage(this.Game.Tick)); // send the tick.
                 this.FlushOutgoingBuffer();
             }
         }
@@ -119,7 +118,7 @@ namespace Mooege.Net.GS
             lock (this)
             {
                 if (_outgoingBuffer.Length <= 32) return;
-
+                
                 var data = _outgoingBuffer.GetPacketAndReset();
                 Connection.Send(data);
             }

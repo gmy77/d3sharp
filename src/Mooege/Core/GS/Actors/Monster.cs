@@ -121,8 +121,8 @@ namespace Mooege.Core.GS.Actors
 
             player.InGameClient.SendMessage(new EndOfTickMessage()
             {
-                Field0 = player.InGameClient.Tick,
-                Field1 = player.InGameClient.Tick+20
+                Field0 = player.InGameClient.Game.Tick,
+                Field1 = player.InGameClient.Game.Tick + 20
             });
 
             return true;
