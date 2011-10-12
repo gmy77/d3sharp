@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,48 +16,40 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Connection
+namespace Mooege.Net.GS.Message.Definitions.Tick
 {
-    [Message(new[] { Opcodes.LogoutContextMessage1, Opcodes.LogoutContextMessage2 })]
-    public class LogoutContextMessage : GameMessage,ISelfHandler
+    [Message(Opcodes.DWordDataMessage6)]
+    public class GameTickMessage:GameMessage
     {
-        public bool Field0;
+        public int Tick;
 
-        public void Handle(GameClient client)
+        public GameTickMessage(int tick):base(Opcodes.DWordDataMessage6)
         {
-            client.IsLoggingOut = !client.IsLoggingOut;
-
-            if (client.IsLoggingOut)
-            {
-                client.SendMessage(new LogoutTickTimeMessage()
-                {
-                    Id = 0x0027,
-                    Field0 = false, // true - logout with party?
-                    Field1 = 0, // delay 1, make this equal to 0 for instant logout
-                    Field2 = 0, // delay 2
-                });
-            }
+            this.Tick = tick;   
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadBool();
+            Tick = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteBool(Field0);
+            buffer.WriteInt(32, Tick);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("LogoutContextMessage:");
+            b.AppendLine("DWordDataMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: " + (Field0 ? "true" : "false"));
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Tick.ToString("X8") + " (" + Tick + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

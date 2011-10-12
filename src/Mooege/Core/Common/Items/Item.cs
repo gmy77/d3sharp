@@ -177,7 +177,7 @@ namespace Mooege.Core.Common.Items
             this.InventoryLocation.X = column;
             this.InventoryLocation.Y = row;
             if (this.Owner != null)
-                this.Owner.InGameClient.SendMessageNow(this.ACDInventoryPositionMessage);
+                this.Owner.InGameClient.SendMessage(this.ACDInventoryPositionMessage);
         }
 
         public void Drop(Mooege.Core.GS.Player.Player owner, Vector3D position)
@@ -212,7 +212,7 @@ namespace Mooege.Core.Common.Items
                 ItemSNO = this.ActorSNO,
             });
              */
-            player.InGameClient.FlushOutgoingBuffer();
+
             return true;
         }
     }

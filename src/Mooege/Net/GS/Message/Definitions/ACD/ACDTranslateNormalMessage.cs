@@ -66,15 +66,6 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
                     client.Player.Inventory.PickUpGold(actor.DynamicID);
 
-                    client.PacketId += 10 * 2;
-                    client.SendMessage(new DWordDataMessage()
-                    {
-                        Id = 0x89,
-                        Field0 = client.PacketId,
-                    });
-
-                    client.FlushOutgoingBuffer();
-
                     client.Player.GroundItems.Remove(actor.DynamicID);
                     // should delete from World also
                 }
