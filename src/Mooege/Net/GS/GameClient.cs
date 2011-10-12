@@ -43,13 +43,13 @@ namespace Mooege.Net.GS
         public Game Game { get; set; }
         public Player Player { get; set; }
 
-        public int Tick {get; private set;}
+        public bool TickingEnabled { get; set; }
 
         public bool IsLoggingOut;
 
         public GameClient(IConnection connection)
         {
-            this.Tick = 100; // setting this value to some value like 0 does not work. / raist.
+            this.TickingEnabled = false;
             this.Connection = connection;
             _outgoingBuffer.WriteInt(32, 0);
         }
@@ -80,7 +80,7 @@ namespace Mooege.Net.GS
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                         else Logger.Warn("{0} has no consumer or self-handler.", message.GetType());
 
-                        //Logger.LogIncoming(message);
+                        Logger.LogIncoming(message); // change ConsoleTarget's level to Level.Dump in program.cs if u want to see messages on console.
                     }
                     catch (NotImplementedException)
                     {
@@ -90,15 +90,15 @@ namespace Mooege.Net.GS
 
                 _incomingBuffer.Position = end;
             }
-            _incomingBuffer.ConsumeData();                       
+            _incomingBuffer.ConsumeData();
         }
 
         public void SendMessage(GameMessage message)
         {
             lock (this)
             {
-                //Logger.LogOutgoing(message);
-                _outgoingBuffer.EncodeMessage(message);
+                Logger.LogOutgoing(message);
+                _outgoingBuffer.EncodeMessage(message); // change ConsoleTarget's level to Level.Dump in program.cs if u want to see messages on console.
             }
         }
 
@@ -106,10 +106,9 @@ namespace Mooege.Net.GS
         {
             lock (this)
             {
-                this.Tick += this.Game.TickFrequency;
                 if (_outgoingBuffer.Length <= 32) return;
 
-                this.SendMessage(new GameTickMessage(this.Tick)); // send the tick.
+                if (this.TickingEnabled) this.SendMessage(new GameTickMessage(this.Game.Tick)); // send the tick.
                 this.FlushOutgoingBuffer();
             }
         }
@@ -119,7 +118,7 @@ namespace Mooege.Net.GS
             lock (this)
             {
                 if (_outgoingBuffer.Length <= 32) return;
-
+                
                 var data = _outgoingBuffer.GetPacketAndReset();
                 Connection.Send(data);
             }

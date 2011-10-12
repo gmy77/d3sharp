@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Mooege.Common;
@@ -55,7 +56,13 @@ namespace Mooege.Core.GS.Game
 
         public PowersManager PowersManager;
 
-        public readonly int TickFrequency=10;
+        public readonly int UpdateFrequency=100;
+        private int _tickCounter;
+        
+        public int Tick
+        {
+            get { return _tickCounter; }
+        }
 
         private uint _lastObjectID = 0x00000001;
         private uint _lastSceneID  = 0x04000000;
@@ -84,6 +91,8 @@ namespace Mooege.Core.GS.Game
         {
             while (true)
             {
+                Interlocked.Add(ref this._tickCounter, 20);
+
                 // only update worlds with active players in it - so mob's brain() in empty worlds doesn't get called and take actions for nothing. /raist.
                 foreach (var pair in this._worlds.Where(pair => pair.Value.HasPlayersIn)) 
                 {
@@ -92,7 +101,7 @@ namespace Mooege.Core.GS.Game
 
                 this.PowersManager.Update();
 
-                Thread.Sleep(TickFrequency*10);
+                Thread.Sleep(UpdateFrequency);
             }
         }
 
@@ -134,6 +143,7 @@ namespace Mooege.Core.GS.Game
             }
 
             joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition
+            joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
         }
 
         private void SendNewPlayerMessage(Player.Player target, Player.Player joinedPlayer)
