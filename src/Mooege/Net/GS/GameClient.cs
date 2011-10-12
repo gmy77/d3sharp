@@ -32,7 +32,7 @@ namespace Mooege.Net.GS
 {
     public sealed class GameClient : IClient
     {
-        static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger();
 
         public IConnection Connection { get; set; }
         public MooNetClient BnetClient { get; set; }
@@ -40,55 +40,71 @@ namespace Mooege.Net.GS
         private readonly GameBitBuffer _incomingBuffer = new GameBitBuffer(512);
         private readonly GameBitBuffer _outgoingBuffer = new GameBitBuffer(ushort.MaxValue);
 
-        public Mooege.Core.GS.Game.Game Game;
-        public Mooege.Core.GS.Player.Player Player { get; set; }
+        public Game Game { get; set; }
+        public Player Player { get; set; }
         public int PacketId = 0x227 + 20; // TODO: We need proper packet ID incrementing
         public int Tick = 0; // ... and proper ticking
 
         public bool IsLoggingOut;
 
-        public GameClient(IConnection connection, Game game)
+        public GameClient(IConnection connection)
         {
             this.Connection = connection;
-            this.Game = game;
             _outgoingBuffer.WriteInt(32, 0);
         }
 
         public void Parse(ConnectionDataEventArgs e)
         {
-            lock (Game)
+            // NOTE: intentionally not indented right now so git merges won't be so retarded
+            // NOTE: Manually using Threading.Monitor instead of lock() since Parse() can be called
+            // now before this.Game is initialized.
+            bool gameLocked = false;
+            try
             {
-                //Console.WriteLine(e.Data.Dump());
+            if (Game != null)
+                System.Threading.Monitor.Enter(Game, ref gameLocked);
 
-                _incomingBuffer.AppendData(e.Data.ToArray());
+            //Console.WriteLine(e.Data.Dump());
 
-                while (_incomingBuffer.IsPacketAvailable())
+            _incomingBuffer.AppendData(e.Data.ToArray());
+
+            while (_incomingBuffer.IsPacketAvailable())
+            {
+                int end = _incomingBuffer.Position;
+                end += _incomingBuffer.ReadInt(32) * 8;
+
+                while ((end - _incomingBuffer.Position) >= 9)
                 {
-                    int end = _incomingBuffer.Position;
-                    end += _incomingBuffer.ReadInt(32) * 8;
-
-                    while ((end - _incomingBuffer.Position) >= 9)
+                    var message = _incomingBuffer.ParseMessage();
+                    if (message == null) continue;
+                    try
                     {
-                        GameMessage message = _incomingBuffer.ParseMessage();
-                        if (message == null) continue;
-                        try
+                        if (message.Consumer != Consumers.None)
                         {
-                            if (message.Consumer != Consumers.None) this.Game.Route(this, message);
-                            else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
-                            else Logger.Warn("{0} has no consumer or self-handler.", message.GetType());
+                            if (message.Consumer == Consumers.ClientManager) ClientManager.Instance.Consume(this, message); // Client should be greeted by ClientManager and sent initial game-setup messages.
+                            else this.Game.Route(this, message);
+                        }
 
-                            //Logger.LogIncoming(message);
-                        }
-                        catch (NotImplementedException)
-                        {
-                            Logger.Warn("Unhandled game message: 0x{0:X4} {1}", message.Id, message.GetType().Name);
-                        }
+                        else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
+                        else Logger.Warn("{0} has no consumer or self-handler.", message.GetType());
+
+                        //Logger.LogIncoming(message);
                     }
-
-                    _incomingBuffer.Position = end;
+                    catch (NotImplementedException)
+                    {
+                        Logger.Warn("Unhandled game message: 0x{0:X4} {1}", message.Id, message.GetType().Name);
+                    }
                 }
-                _incomingBuffer.ConsumeData();
-                FlushOutgoingBuffer();
+
+                _incomingBuffer.Position = end;
+            }
+            _incomingBuffer.ConsumeData();
+            FlushOutgoingBuffer();
+            } // try
+            finally
+            {
+                if (gameLocked)
+                    System.Threading.Monitor.Exit(Game);
             }
         }
 

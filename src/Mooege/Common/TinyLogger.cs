@@ -132,8 +132,8 @@ namespace Mooege.Common
         public void LogOutgoing(Google.ProtocolBuffers.IMessage msg) { Log(Level.Trace, msg.AsText(), null); }
 
         // ingame packet loggers
-        public void LogIncoming(GameMessage msg) { Log(Level.Trace, msg.AsText(), null); }
-        public void LogOutgoing(GameMessage msg) { Log(Level.Trace, msg.AsText(), null); }
+        public void LogIncoming(GameMessage msg) { Log(Level.Trace, "[I] " + msg.AsText(), null); }
+        public void LogOutgoing(GameMessage msg) { Log(Level.Trace, "[O] " + msg.AsText(), null); }
 
         public void TraceException(Exception exception, string message) { LogException(Level.Trace, message, null, exception); }
         public void TraceException(Exception exception, string message, params object[] args) { LogException(Level.Trace, message, args, exception); }

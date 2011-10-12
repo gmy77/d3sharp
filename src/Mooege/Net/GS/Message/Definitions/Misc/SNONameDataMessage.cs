@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.SNONameDataMessage)]
     public class SNONameDataMessage : GameMessage
     {
         public SNOName Name;

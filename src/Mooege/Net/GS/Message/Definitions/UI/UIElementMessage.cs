@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.UI
 {
+    [Message(Opcodes.UIElementMessage)]
     public class UIElementMessage : GameMessage
     {
         public int Field0;

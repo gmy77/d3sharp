@@ -20,12 +20,10 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(new [] {Opcodes.DataIDDataMessage1, Opcodes.DataIDDataMessage2})]
     public class DataIDDataMessage : GameMessage
     {
         public int Field0;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

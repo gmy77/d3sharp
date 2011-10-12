@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDTranslateDetPathSpiralMessage)]
     public class ACDTranslateDetPathSpiralMessage : GameMessage
     {
         public int Field0;
@@ -30,9 +31,6 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int Field4;
         public int Field5;
         public DPathSinData Field6;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

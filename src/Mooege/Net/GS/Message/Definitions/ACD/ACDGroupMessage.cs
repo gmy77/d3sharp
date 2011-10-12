@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDGroupMessage)]
     public class ACDGroupMessage : GameMessage
     {
         public uint ActorID; // Actor's DynamicID

@@ -20,13 +20,11 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Encounter
 {
+    [Message(new[] {Opcodes.BossEncounterMessage1, Opcodes.BossEncounterMessage2})]
     public class BossEncounterMessage : GameMessage
     {
         public int Field0;
         public int /* sno */ snoEncounter;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

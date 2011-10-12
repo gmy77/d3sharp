@@ -20,13 +20,11 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Enchant
 {
+    [Message(Opcodes.EnchantItemMessage)]
     public class EnchantItemMessage : GameMessage
     {
         public int Field0;
         public int /* gbid */ Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

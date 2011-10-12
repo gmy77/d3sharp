@@ -62,7 +62,7 @@ namespace Mooege.Core.MooNet.Services
             var heroCreateParams = D3.OnlineService.HeroCreateParams.ParseFrom(request.AttributeList[0].Value.MessageValue);
             var builder = CreateToonResponse.CreateBuilder();
 
-            var toon = new Toon(request.Name, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 60, Client.Account);
+            var toon = new Toon(request.Name, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account);
             if (ToonManager.SaveToon(toon)) builder.SetToon(toon.BnetEntityID);
             done(builder.Build());
         }

@@ -4,12 +4,12 @@ StartPos 3143.750000 2828.750000 59.075588
 
 scenes {
 
-/*
-// The first scene the player starts on. Uncomment this and comment everything else for quick-load testing
+
+/* // The first scene the player starts on. Uncomment this and comment everything else for quick-load testing
 scene {
 	Unified 33349 0 0 0 19947 156038 -1 -1 -1 0 -1 -1 0 -1 -1 -1 160591 -1 78368 -1 -1 -1 0 -1 0 0 0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 0 0 0.0 0.0 0.0 1.0 3060.0 2760.0 0.0 -1
-}
-*/
+} */
+
 
 scene {
 	Unified 33347 0 0 0 202446 -1 19947 -1 -1 0 -1 -1 0 -1 137975 -1 160591 -1 78368 -1 -1 -1 0 -1 0 0 0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 0 0 0.0 0.0 0.0 1.0 2580.0 2760.0 0.0 -1

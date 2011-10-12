@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Hero
 {
+    [Message(Opcodes.HearthPortalInfoMessage)]
     public class HearthPortalInfoMessage : GameMessage
     {
         public int /* sno */ snoLevelArea;

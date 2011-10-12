@@ -20,10 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
-    [IncomingMessage(new[] {
-        Opcodes.ACDTranslateFacingMessage1,
-        Opcodes.ACDTranslateFacingMessage2
-    })]
+    [Message(new[] { Opcodes.ACDTranslateFacingMessage1, Opcodes.ACDTranslateFacingMessage2 })]
     public class ACDTranslateFacingMessage : GameMessage
     {
         public uint ActorID; // The actor's DynamicID

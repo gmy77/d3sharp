@@ -21,13 +21,11 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDChangeGBHandleMessage)]
     public class ACDChangeGBHandleMessage : GameMessage
     {
         public int Field0;
         public GBHandle Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

@@ -20,13 +20,11 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Camera
 {
+    [Message(Opcodes.BossZoomMessage)]
     public class BossZoomMessage : GameMessage
     {
         public float Field0;
         public float Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

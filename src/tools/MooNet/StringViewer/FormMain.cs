@@ -20,9 +20,9 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using Google.ProtocolBuffers;
-using MooNetHelpers;
+using Mooege.Tools.Helpers;
 
-namespace StringViewer
+namespace Mooege.Tools.StringViewer
 {
     public partial class FormMain : Form
     {
@@ -32,11 +32,12 @@ namespace StringViewer
         public FormMain()
         {
             InitializeComponent();
+            this.comboBoxOutputType.SelectedIndex = 0;
         }
 
         private void UpdateProtoOutput()
         {
-            string typename = textBoxProtoType.Text;
+            string typename = textBoxProtoType.Text.Trim();
             if (typename.Trim() == string.Empty)
                 return;
             var type = Type.GetType(typename + ", LibMooNet");
@@ -88,13 +89,11 @@ namespace StringViewer
             UpdateProtoOutput();
         }
 
-        private void csharpizeButton_Click(object sender, EventArgs e)
+        private void comboBoxOutputType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (textBoxInput.Text.Trim() == string.Empty) return;
+
             _arrayize = !_arrayize;
-            if (_arrayize)
-                csharpizeButton.Text = "Outputting C# array";
-            else
-                csharpizeButton.Text = "Ouputting raw";
             UpdateHexOutput();
         }
     }

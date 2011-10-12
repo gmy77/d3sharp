@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {
+    [Message(Opcodes.BNetJoinGameRequestResultMessage)]
     public class BNetJoinGameRequestResultMessage : GameMessage
     {
         public int Field0;
@@ -31,9 +32,6 @@ namespace Mooege.Net.GS.Message.Definitions.Game
         public int Field5;
         public int Field6;
         public short Field7;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

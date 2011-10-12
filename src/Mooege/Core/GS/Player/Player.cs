@@ -18,29 +18,26 @@
 
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading;
 using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.Common.Items;
-using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Net.GS.Message.Definitions.Act;
-using Mooege.Net.GS.Message.Definitions.Attribute;
-using Mooege.Net.GS.Message.Definitions.Connection;
 using Mooege.Net.GS.Message.Definitions.Combat;
-using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Inventory;
-using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Net.GS.Message.Definitions.Effect;
+
 
 // TODO: When the player moves, it will set the Position property which will bounce back to the player again.
 //       That is unnecessary and we should exclude the player from receiving it in that case. /komiga
@@ -52,8 +49,10 @@ namespace Mooege.Core.GS.Player
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         public override ActorType ActorType { get { return ActorType.Player; } }
-
+        
         public GameClient InGameClient { get; set; }
+
+        public int PlayerIndex { get; private set; } 
 
         public Toon Properties { get; private set; }
         public SkillSet SkillSet;
@@ -69,10 +68,11 @@ namespace Mooege.Core.GS.Player
             : base(world, world.NewPlayerID)
         {
             this.InGameClient = client;
+            this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // make it atomic.
 
             this.Properties = bnetToon;
             this.Inventory = new Inventory(this);
-            this.SkillSet = new Skills.SkillSet(this.Properties.Class);
+            this.SkillSet = new SkillSet(this.Properties.Class);
 
             this.RevealedObjects = new Dictionary<uint, IRevealable>();
             this.GroundItems = new Dictionary<uint, Item>();
@@ -246,33 +246,15 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Experience_Next] = 1200;
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             this.Attributes[GameAttribute.Armor_Total] = 0;
-            this.Attributes[GameAttribute.Defense] = 10f;
+            this.Attributes[GameAttribute.Defense] = 10.0f;
             this.Attributes[GameAttribute.Buff_Icon_Count0, 0x00033C40] = 1;
-            this.Attributes[GameAttribute.Vitality] = 9f;
-            this.Attributes[GameAttribute.Precision] = 11f;
-            this.Attributes[GameAttribute.Attack] = 10f;
+            this.Attributes[GameAttribute.Vitality] = 9.0f;
+            this.Attributes[GameAttribute.Precision] = 11.0f;
+            this.Attributes[GameAttribute.Attack] = 10.0f;
             this.Attributes[GameAttribute.Shared_Stash_Slots] = 14;
             this.Attributes[GameAttribute.Backpack_Slots] = 60;
             this.Attributes[GameAttribute.General_Cooldown] = 0;
-            #endregion // Attributes
-
-            // Notify the client of the new player
-            this.InGameClient.SendMessage(new NewPlayerMessage
-            {
-                Field0 = 0x00000000, //Party frame (0x00000000 hide, 0x00000001 show)
-                Field1 = "", //Owner name?
-                ToonName = this.Properties.Name,
-                Field3 = 0x00000002, //party frame class
-                Field4 = 0x00000004, //party frame level
-                snoActorPortrait = this.ClassSNO, //party frame portrait
-                Field6 = 0x00000001,
-                StateData = this.GetStateData(),
-                Field8 = false, //announce party join
-                Field9 = 0x00000001,
-                ActorID = this.DynamicID,
-            });
-
-            this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
+            #endregion // Attributes            
         }
 
         public void Consume(GameClient client, GameMessage message)
@@ -331,15 +313,19 @@ namespace Mooege.Core.GS.Player
 
             player.InGameClient.SendMessage(new PlayerEnterKnownMessage()
             {
-                Field0 = 0x00000000,
-                PlayerID = this.DynamicID,
+                PlayerIndex = this.PlayerIndex,
+                ActorId = this.DynamicID,
             });
 
-            player.InGameClient.SendMessage(new PlayerActorSetInitialMessage()
+            if (this == player) // only send this to player itself. Warning: don't remove this check or you'll make the game start crashing! /raist.
             {
-                PlayerID = this.DynamicID,
-                Field1 = 0x00000000,
-            });
+                player.InGameClient.SendMessage(new PlayerActorSetInitialMessage()
+                {
+                    ActorId = this.DynamicID,
+                    PlayerIndex = this.PlayerIndex,
+                });
+            }
+
             player.InGameClient.FlushOutgoingBuffer();
             return true;
         }
@@ -462,6 +448,91 @@ namespace Mooege.Core.GS.Player
             };
         }
 
+        public static int[] LevelBorders = 
+        {
+            0, 1200, 2250, 4000, 6050, 8500, 11700, 15400, 19500, 24000, /* Level 1-10 */
+            28900, 34200, 39900, 44100, 45000, 46200, 48300, 50400, 52500, 54600, /* Level 11-20 */
+            56700, 58800, 60900, 63000, 65100, 67200, 69300, 71400, 73500, 75600, /* Level 21-30 */
+            77700, 81700, 85800, 90000, 94300, 98700, 103200, 107800, 112500, 117300, /* Level 31-40 */
+            122200, 127200, 132300, 137500, 142800, 148200, 153700, 159300, 165000, 170800, /* Level 41-50 */
+            176700, 182700, 188800, 195000, 201300, 207700, 214200, 220800, 227500, 234300, /* Level 51-60 */
+            241200, 248200, 255300, 262500, 269800, 277200, 284700, 292300, 300000, 307800, /* Level 61-70 */
+            315700, 323700, 331800, 340000, 348300, 356700, 365200, 373800, 382500, 391300, /* Level 71-80 */
+            400200, 409200, 418300, 427500, 436800, 446200, 455700, 465300, 475000, 484800, /* Level 81-90 */
+            494700, 504700, 514800, 525000, 535300, 545700, 556200, 566800, 577500 /* Level 91-99 */
+        };
+
+        public static int[] LevelUpEffects =
+        {
+            85186, 85186, 85186, 85186, 85186, 85190, 85190, 85190, 85190, 85190, /* Level 1-10 */
+            85187, 85187, 85187, 85187, 85187, 85187, 85187, 85187, 85187, 85187, /* Level 11-20 */
+            85192, 85192, 85192, 85192, 85192, 85192, 85192, 85192, 85192, 85192, /* Level 21-30 */
+            85192, 85192, 85192, 85192, 85192, 85192, 85192, 85192, 85192, 85192, /* Level 31-40 */
+            85192, 85192, 85192, 85192, 85192, 85192, 85192, 85192, 85192, 85192, /* Level 41-50 */
+            85194, 85194, 85194, 85194, 85194, 85194, 85194, 85194, 85194, 85194, /* Level 51-60 */
+            85194, 85194, 85194, 85194, 85194, 85194, 85194, 85194, 85194, 85194, /* Level 61-70 */
+            85194, 85194, 85194, 85194, 85194, 85194, 85194, 85194, 85194, 85194, /* Level 71-80 */
+            85195, 85195, 85195, 85195, 85195, 85195, 85195, 85195, 85195, 85195, /* Level 81-90 */
+            85195, 85195, 85195, 85195, 85195, 85195, 85195, 85195, 85195, 85195 /* Level 91-99 */
+        };
+
+        public void UpdateExp(int addedExp)
+        {
+            GameAttributeMap attribs = new GameAttributeMap();
+
+            this.Attributes[GameAttribute.Experience_Next] -= addedExp;
+
+            // Levelup
+            if ((this.Attributes[GameAttribute.Experience_Next] <= 0) && (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]))
+            {
+                this.Attributes[GameAttribute.Level]++;
+                if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
+                else { this.Attributes[GameAttribute.Experience_Next] = 0; }
+
+                // todo: not always adding 2/2/2/1 on Levelup
+                this.Attributes[GameAttribute.Defense] = 10f + (this.Attributes[GameAttribute.Level] - 1f) * 2f;
+                this.Attributes[GameAttribute.Vitality] = 9f + (this.Attributes[GameAttribute.Level] - 1f) * 1f;
+                this.Attributes[GameAttribute.Precision] = 11f + (this.Attributes[GameAttribute.Level] - 1f) * 2f;
+                this.Attributes[GameAttribute.Attack] = 10f + (this.Attributes[GameAttribute.Level] - 1f) * 2f;
+                attribs[GameAttribute.Level] = this.Attributes[GameAttribute.Level];
+                attribs[GameAttribute.Defense] = this.Attributes[GameAttribute.Defense];
+                attribs[GameAttribute.Vitality] = this.Attributes[GameAttribute.Vitality];
+                attribs[GameAttribute.Precision] = this.Attributes[GameAttribute.Precision];
+                attribs[GameAttribute.Attack] = this.Attributes[GameAttribute.Attack];
+                attribs[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next];
+                attribs.SendMessage(this.InGameClient, this.DynamicID);
+
+                this.InGameClient.SendMessage(new PlayerLevel()
+                {
+                    Id = 0x98,
+                    Field0 = 0x00000000,
+                    Field1 = this.Attributes[GameAttribute.Level],
+                });
+
+                this.InGameClient.SendMessage(new PlayEffectMessage()
+                {
+                    Id = 0x7a,
+                    ActorID = this.DynamicID,
+                    Field1 = 6,
+                });
+                this.InGameClient.SendMessage(new PlayEffectMessage()
+                {
+                    Id = 0x7a,
+                    ActorID = this.DynamicID,
+                    Field1 = 32,
+                    Field2 = LevelUpEffects[this.Attributes[GameAttribute.Level]],
+                });
+            }
+
+            // constant 0 exp at Level_Cap
+            if (this.Attributes[GameAttribute.Experience_Next] < 0) { this.Attributes[GameAttribute.Experience_Next] = 0; }
+
+            attribs[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next];
+            attribs.SendMessage(this.InGameClient, this.DynamicID);
+
+            //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
+        }
+
         public int ClassSNO
         {
             get
@@ -506,19 +577,18 @@ namespace Mooege.Core.GS.Player
         {
             get
             {
-                //dummy values, need confirmation from dump
                 switch (this.Properties.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 1.22f;
+                        return 1.2f;
                     case ToonClass.DemonHunter:
-                        return 1.43f;
+                        return 1.35f;
                     case ToonClass.Monk:
                         return 1.43f;
                     case ToonClass.WitchDoctor:
-                        return 1.43f;
+                        return 1.1f;
                     case ToonClass.Wizard:
-                        return 1.43f;
+                        return 1.3f;
                 }
                 return 1.43f;
             }

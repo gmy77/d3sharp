@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Map
 {
+    [Message(Opcodes.MapMarkerInfoMessage)]
     public class MapMarkerInfoMessage : GameMessage
     {
         public int Field0;
@@ -36,9 +37,6 @@ namespace Mooege.Net.GS.Message.Definitions.Map
         public bool Field10;
         public bool Field11;
         public int Field12;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

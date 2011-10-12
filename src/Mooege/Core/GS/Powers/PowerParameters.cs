@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Mooege.Core.GS.Actors;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.Combat;
+using Mooege.Net.GS.Message.Definitions.World;
 
 namespace Mooege.Core.GS.Powers
 {

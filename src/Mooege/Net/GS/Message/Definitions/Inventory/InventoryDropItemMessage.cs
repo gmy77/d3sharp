@@ -21,7 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
-    [IncomingMessage(Opcodes.ANNDataMessage9, Consumers.Inventory)]
+    [Message(Opcodes.ANNDataMessage9, Consumers.Inventory)]
     public class InventoryDropItemMessage : GameMessage
     {
         public uint ItemID; // Item's DynamicID

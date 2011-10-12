@@ -21,21 +21,16 @@ using Mooege.Net.GS.Message.Definitions.Game;
 
 namespace Mooege.Net.GS.Message.Definitions.Connection
 {
-    [IncomingMessage(Opcodes.LogoutComplete)]
+    [Message(Opcodes.LogoutComplete)]
     public class LogoutComplete : GameMessage,ISelfHandler
     {
         public void Handle(GameClient client)
         {
             if (client.IsLoggingOut)
             {
-                client.SendMessageNow(new QuitGameMessage()
+                client.SendMessageNow(new QuitGameMessage() // should be sent to all players i guess /raist.
                 {
-                    Id = 0x0003,
-                    // Field0 - quit reason?
-                    // 0 - logout
-                    // 1 - kicked by party leader
-                    // 2 - disconnected due to client-server (version?) missmatch
-                    Field0 = 0,
+                    PlayerIndex = client.Player.PlayerIndex,
                 });
             }
         }

@@ -20,13 +20,11 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.NetworkAddressMessage)]
     public class NetworkAddressMessage : GameMessage
     {
         public int Field0;
         public short Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

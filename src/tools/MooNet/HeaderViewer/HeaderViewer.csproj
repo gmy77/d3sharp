@@ -8,8 +8,8 @@
     <ProjectGuid>{19F1717B-23ED-475F-AC31-1ACD1155B590}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HeaderViewer</RootNamespace>
-    <AssemblyName>HeaderParser</AssemblyName>
+    <RootNamespace>Mooege.Tools.HeaderViewer</RootNamespace>
+    <AssemblyName>Mooege.Tools.HeaderViewer</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

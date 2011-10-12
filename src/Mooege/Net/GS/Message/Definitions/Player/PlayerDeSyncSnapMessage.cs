@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
+    [Message(Opcodes.PlayerDeSyncSnapMessage)]
     public class PlayerDeSyncSnapMessage : GameMessage
     {
         public WorldPlace Field0;

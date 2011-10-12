@@ -17,6 +17,7 @@ using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Common;
 using Mooege.Core.GS.Map;
+using Mooege.Net.GS.Message.Definitions.World;
 
 namespace Mooege.Core.GS.Powers
 {
