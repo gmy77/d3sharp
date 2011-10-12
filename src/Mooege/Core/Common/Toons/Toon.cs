@@ -51,6 +51,7 @@ namespace Mooege.Core.Common.Toons
         public byte Level { get; private set; }
         public D3.Hero.Digest Digest { get; private set; }
         public D3.Hero.VisualEquipment Equipment { get; private set; }
+        public AwayStatusFlags AwayStatus { get; private set; }
 
         public Account Owner { get; set; }
         
@@ -279,7 +280,7 @@ namespace Mooege.Core.Common.Toons
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 5) // Away status - 0 for online
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)this.AwayStatus).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 9) // Program - always D3
                     {
@@ -293,6 +294,64 @@ namespace Mooege.Core.Common.Toons
             }
 
             return field.HasValue ? field.Build() : null;
+        }
+
+        public void Update(bnet.protocol.presence.FieldOperation operation)
+        {
+            switch (operation.Operation)
+            {
+                case bnet.protocol.presence.FieldOperation.Types.OperationType.SET:
+                    doSet(operation.Field);
+                    break;
+                case bnet.protocol.presence.FieldOperation.Types.OperationType.CLEAR:
+                    doClear(operation.Field);
+                    break;
+            }
+        }
+
+        private void doSet(bnet.protocol.presence.Field field)
+        {
+            switch ((FieldKeyHelper.Program)field.Key.Program)
+            {
+                case FieldKeyHelper.Program.D3:
+                    if (field.Key.Group == 4)
+                    {
+                        //Group 4 fields 2, 2, and 3 gets spammed on whenever a client logs in or out.
+                        //catching it in this if to stop Logger.Warn spam.
+                    }
+                    else
+                    {
+                        Logger.Warn("Unknown set-field: {0}, {1}, {2} := {3}", field.Key.Program, field.Key.Group, field.Key.Field, field.Value);
+                    }
+                    break;
+                case FieldKeyHelper.Program.BNet:
+                    if (field.Key.Group == 3 && field.Key.Field == 5) // Away status
+                    {
+                        AwayStatus = (AwayStatusFlags)field.Value.IntValue;
+                    }
+                    else
+                    {
+                        Logger.Warn("Unknown set-field: {0}, {1}, {2} := {3}", field.Key.Program, field.Key.Group, field.Key.Field, field.Value);
+                    }
+                    break;
+            }
+        }
+
+        private void doClear(bnet.protocol.presence.Field field)
+        {
+            switch ((FieldKeyHelper.Program)field.Key.Program)
+            {
+                case FieldKeyHelper.Program.D3:
+                    {
+                        Logger.Warn("Unknown clear-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
+                    }
+                    break;
+                case FieldKeyHelper.Program.BNet:
+                    {
+                        Logger.Warn("Unknown clear-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
+                    }
+                    break;
+            }
         }
 
         protected override void NotifySubscriptionAdded(MooNetClient client)
@@ -333,6 +392,11 @@ namespace Mooege.Core.Common.Toons
             var fieldKey7 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 3, 0);
             var field7 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey7).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsSelected).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field7).Build());
+
+            //AwayStatus - Available, Away, Busy
+            var fieldKey10 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 5, 0);
+            var field10 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey10).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.AwayStatus)).Build()).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field10).Build());
 
             // Program - FourCC "D3"
             var fieldKey8 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 9, 0);
@@ -444,4 +508,14 @@ namespace Mooege.Core.Common.Toons
         Unknown2=0x2000000,
         BothUnknowns=Unknown1 | Unknown2
     }
+
+    //assuming its a flag since the values are powers of 2.
+    [Flags]
+    public enum AwayStatusFlags : uint
+    {
+        Available=0x00,
+        Away=0x02,
+        Busy=0x04
+    }
+
 }
