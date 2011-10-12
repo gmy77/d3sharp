@@ -21,7 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
-    [IncomingMessage(Opcodes.InventorySplitStackMessage, Consumers.Inventory)]
+    [Message(Opcodes.InventorySplitStackMessage, Consumers.Inventory)]
     public class InventorySplitStackMessage : GameMessage
     {
         public int Field0;

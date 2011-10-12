@@ -25,10 +25,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
-    [IncomingMessage(new[]{
-        Opcodes.ACDTranslateNormalMessage1,
-        Opcodes.ACDTranslateNormalMessage2
-    })]
+    [Message(new[]{ Opcodes.ACDTranslateNormalMessage1, Opcodes.ACDTranslateNormalMessage2 })]
     public class ACDTranslateNormalMessage : GameMessage, ISelfHandler
     {
         public int Field0; // TODO: Confirm that this is the actor ID
@@ -47,7 +44,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
             // looking for gold to pick up
             // TODO: Need to consider items on the ground globally as well (and this doesn't belong here)
-            var actorList = client.Player.World.GetActorsInRange(0x00000178, this.Position.X, this.Position.Y, this.Position.Z, 20f);
+            var actorList = client.Player.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
             foreach (var actor in actorList)
             {
                 Item item;
@@ -58,8 +55,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
                             Position = this.Position,
                             WorldID = client.Player.World.DynamicID,
                         },
-                        Count = item.Count,
-                        Field3 = 0x1c,
+                        Amount = item.Attributes[GameAttribute.Gold],
+                        Type = FloatingAmountMessage.FloatType.Gold,
                     });
                     // NOTE: ANNDataMessage6 is probably "AddToInventory"
                     client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6)

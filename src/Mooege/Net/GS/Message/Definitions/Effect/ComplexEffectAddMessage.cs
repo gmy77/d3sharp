@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Effect
 {
+    [Message(Opcodes.ComplexEffectAddMessage)]
     public class ComplexEffectAddMessage : GameMessage
     {
         public int Field0;
@@ -29,9 +30,6 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
         public int Field4;
         public int Field5;
         public int Field6;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

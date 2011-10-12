@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Text
 {
+    [Message(Opcodes.BroadcastTextMessage)]
     public class BroadcastTextMessage : GameMessage
     {
         public string Field0;

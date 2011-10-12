@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
+    [Message(Opcodes.InventoryRequestUseMessage)]
     public class InventoryRequestUseMessage : GameMessage
     {
         public int Field0;

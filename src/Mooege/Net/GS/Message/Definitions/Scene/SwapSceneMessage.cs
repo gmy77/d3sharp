@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Scene
 {
+    [Message(Opcodes.SwapSceneMessage)]
     public class SwapSceneMessage : GameMessage
     {
         public int Field0;

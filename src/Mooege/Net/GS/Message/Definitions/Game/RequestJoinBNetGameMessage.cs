@@ -21,14 +21,12 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {
+    [Message(Opcodes.RequestJoinBNetGameMessage)]
     public class RequestJoinBNetGameMessage : GameMessage
     {
         public GameId Field0;
         public EntityId Field1;
         public int Field2;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

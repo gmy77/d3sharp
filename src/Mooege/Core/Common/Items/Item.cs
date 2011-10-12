@@ -18,16 +18,13 @@
 
 using System.Collections.Generic;
 using Mooege.Common;
-using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Map;
-using Mooege.Net.GS;
-using Mooege.Net.GS.Message;
+using Mooege.Core.Common.Items.ItemCreation;
+using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Effect;
-using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Net.GS.Message.Definitions.Attribute;
+using Mooege.Net.GS.Message.Definitions.Combat;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
 
@@ -35,15 +32,15 @@ namespace Mooege.Core.Common.Items
 {
     public enum ItemType
     {
-        Helm, Gloves, Boots, Belt, Shoulders, Pants, Bracers, Shield, Quiver, Orb,
-        Axe_1H, Axe_2H, CombatStaff_2H, Dagger, Mace_1H, Mace_2H, Sword_1H,
-        Sword_2H, Bow, Crossbow, Spear, Staff, Polearm, Wand, Ring, FistWeapon_1H,
-        HealthPotion, Gold
+        Unknown, Helm, Gloves, Boots, Belt, Shoulders, Pants, Bracers, Shield, Quiver, Orb,
+        Axe_1H, Axe_2H, CombatStaff_2H, Staff, Dagger, Mace_1H, Mace_2H, Sword_1H,
+        Sword_2H, Crossbow, Bow, Spear, Polearm, Wand, Ring, FistWeapon_1H, ThrownWeapon, ThrowingAxe, ChestArmor, 
+        HealthPotion, Gold, HealthGlobe, Dye, Elixir, Charm, Scroll, SpellRune, Rune, 
+        Amethyst, Emarald, Ruby, Emerald, Topaz, Skull, Backpack, Potion, Amulet, Scepter, Rod, Journal        
 
-        /* Not working at the moment:
-         *  // ChestArmor                   --> does not work because there are missing itemnames for normal mode, just for nightmare and hell and some "a" and "b" variants... -> need to figure out which should be used
-         *  // ThrownWeapon, ThrowingAxe    --> does not work because there are no snoId in Actors.txt
-         */
+        // Not working at the moment:
+        // ThrownWeapon, ThrowingAxe - does not work because there are no snoId in Actors.txt. Do they actually drop in the D3 beta? /angerwin?
+        // Diamond, Sapphire - I realised some days ago, that the Item type Diamond and Shappire (maybe not the only one) causes client crash and BAD GBID messages, although they actually have SNO IDs. /angerwin
     }
 
     public class Item : Actor
@@ -55,9 +52,7 @@ namespace Mooege.Core.Common.Items
         public Mooege.Core.GS.Player.Player Owner { get; set; } // Only set when the player has the item in its inventory. /komiga
 
         public ItemType ItemType { get; set; }
-        public int Count { get; set; } // <- amount?
 
-        public List<Affix> AffixList { get; set; }
 
         public int EquipmentSlot { get; private set; }
         public IVector2D InventoryLocation { get; private set; } // Column, row; NOTE: Call SetInventoryLocation() instead of setting fields on this
@@ -87,6 +82,7 @@ namespace Mooege.Core.Common.Items
                 return new InvLoc
                 {
                     OwnerID = (this.Owner != null) ? this.Owner.DynamicID : 0,
+                    EquipmentSlot = this.EquipmentSlot,
                     Row = this.InventoryLocation.Y,
                     Column = this.InventoryLocation.X
                 };
@@ -99,11 +95,7 @@ namespace Mooege.Core.Common.Items
             this.ActorSNO = actorSNO;
             this.GBHandle.Type = (int)GBHandleType.Gizmo;
             this.GBHandle.GBID = gbid;
-            this.Count = 1;
             this.ItemType = type;
-
-            this.AffixList = new List<Affix>();
-
             this.EquipmentSlot = 0;
             this.InventoryLocation = new IVector2D { X = 0, Y = 0 };
 
@@ -113,6 +105,13 @@ namespace Mooege.Core.Common.Items
             this.Field8 = 0;
             this.Field9 = 0x00000000;
             this.Field10 = 0x00;
+
+            List<IItemAttributeCreator> attributeCreators = new AttributeCreatorFactory().Create(type);
+            foreach (IItemAttributeCreator creator in attributeCreators)
+            {
+                creator.CreateAttributes(this);
+            }
+
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
@@ -133,14 +132,9 @@ namespace Mooege.Core.Common.Items
             return (itemType == ItemType.HealthPotion);
         }
 
-        public static bool IsRing(ItemType itemType)
+        public static bool IsAccessory(ItemType itemType)
         {
-            return (itemType == ItemType.Ring);
-        }
-
-        public static bool IsBelt(ItemType itemType)
-        {
-            return (itemType == ItemType.Belt);
+            return (itemType == ItemType.Ring || itemType == ItemType.Belt || itemType == ItemType.Amulet);
         }
 
         public static bool IsWeapon(ItemType itemType)
@@ -166,6 +160,17 @@ namespace Mooege.Core.Common.Items
                 );
         }
 
+        public static bool Is2H(ItemType itemType)
+        {
+            return (itemType == ItemType.Sword_2H
+                || itemType == ItemType.Axe_2H
+                || itemType == ItemType.Mace_2H
+                || itemType == ItemType.CombatStaff_2H
+                || itemType == ItemType.Staff
+                || itemType == ItemType.Polearm);
+        }
+
+
         public void SetInventoryLocation(int equipmentSlot, int column, int row)
         {
             this.EquipmentSlot = equipmentSlot;
@@ -182,85 +187,33 @@ namespace Mooege.Core.Common.Items
             // TODO: Notify the world so that players get the state change
         }
 
-        public override void OnTargeted(Mooege.Core.GS.Player.Player player)
+        public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
             //Logger.Trace("OnTargeted");
             player.Inventory.PickUp(this);
         }
 
-        // TODO: Some of this stuff should probably only be set when the item is in the inventory/on the ground
-        // FIXME: Hardcoded crap
-        public override void Reveal(Mooege.Core.GS.Player.Player player)
+        public override bool Reveal(Mooege.Core.GS.Player.Player player)
         {
-            base.Reveal(player);
-            GameClient client = player.InGameClient;
-            var AffixGBIDs = new int[AffixList.Count];
-            for (int i = 0; i < AffixList.Count; i++)
-            {
-                AffixGBIDs[i] = AffixList[i].AffixGbid;
-            }
+            if (!base.Reveal(player))
+                return false;
 
-            client.SendMessage(new AffixMessage()
-            {
-                ActorID = this.DynamicID,
-                Field1 = 0x00000001,
-                aAffixGBIDs = AffixGBIDs,
-
-            });
-
-            client.SendMessage(new AffixMessage()
-            {
-                ActorID = this.DynamicID,
-                Field1 = 0x00000002,
-                aAffixGBIDs = AffixGBIDs,
-            });
-
-            client.SendMessage(new ACDCollFlagsMessage()
-            {
-                ActorID = this.DynamicID,
-                CollFlags = 0x00000080,
-            });
-
-            if (this.ItemType == ItemType.Gold)
-            {
-                Attributes[GameAttribute.Gold] = this.Count;
-            }
-            this.Attributes.SendMessage(client, this.DynamicID);
-
-            client.SendMessage(new ACDGroupMessage()
-            {
-                ActorID = this.DynamicID,
-                Field1 = -1,
-                Field2 = -1,
-            });
-
-            client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage7)
-            {
-                ActorID = this.DynamicID,
-            });
-
-            client.SendMessage(new SNONameDataMessage()
-            {
-                Name = new SNOName()
-                {
-                    Group = 0x00000001, // Same as this.Field9?
-                    Handle = this.ActorSNO,
-                },
-            });
-
-            // Drop effect/sound?
-            client.SendMessage(new PlayEffectMessage()
+            // Drop effect/sound? TODO find out
+            player.InGameClient.SendMessage(new PlayEffectMessage()
             {
                 ActorID = this.DynamicID,
                 Field1 = 0x00000027,
             });
 
-            client.SendMessage(new ACDInventoryUpdateActorSNO()
+             //Why updating with the same sno?
+            /*player.InGameClient.SendMessage(new ACDInventoryUpdateActorSNO()
             {
                 ItemID = this.DynamicID,
                 ItemSNO = this.ActorSNO,
             });
-            client.FlushOutgoingBuffer();
+             */
+            player.InGameClient.FlushOutgoingBuffer();
+            return true;
         }
     }
 }

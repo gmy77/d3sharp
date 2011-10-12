@@ -20,14 +20,12 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.BlizzconCVarsMessage)]
     public class BlizzconCVarsMessage : GameMessage
     {
         public bool Field0;
         public bool Field1;
         public bool Field2;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

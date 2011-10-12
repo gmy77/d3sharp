@@ -20,12 +20,10 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.ReturnPointInfoMessage)]
     public class ReturnPointInfoMessage : GameMessage
     {
         public int /* sno */ snoLevelArea;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

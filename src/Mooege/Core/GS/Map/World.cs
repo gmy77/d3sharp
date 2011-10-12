@@ -17,21 +17,15 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using Mooege.Common;
 using Mooege.Common.Helpers;
-using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Player;
-using Mooege.Core.GS.Data.SNO;
 using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.Map;
-using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Net.GS.Message.Definitions.Scene;
 using Mooege.Net.GS.Message.Definitions.World;
 
 // NOTE: Scenes are actually laid out in cells with Subscenes filling in certain areas under a Scene.
@@ -48,8 +42,8 @@ namespace Mooege.Core.GS.Map
 
         private Dictionary<uint, Scene> Scenes;
         //private List<Scene> Scenes;
-        private Dictionary<uint, Actor> Actors;
-        private Dictionary<uint, Mooege.Core.GS.Player.Player> Players; // Temporary for fast iteration for now since move/enter/leave handling is currently at the world level instead of the scene level
+        private readonly ConcurrentDictionary<uint, Actor> Actors;
+        private readonly ConcurrentDictionary<uint, Mooege.Core.GS.Player.Player> Players; // Temporary for fast iteration for now since move/enter/leave handling is currently at the world level instead of the scene level
 
         public int WorldSNO { get; set; }
         public Vector3D StartPosition { get; private set; }
@@ -65,8 +59,8 @@ namespace Mooege.Core.GS.Map
             this.Game.StartTracking(this);
             this.Scenes = new Dictionary<uint, Scene>();
             //this.Scenes = new List<Scene>();
-            this.Actors = new Dictionary<uint, Actor>();
-            this.Players = new Dictionary<uint, Mooege.Core.GS.Player.Player>();
+            this.Actors = new ConcurrentDictionary<uint, Actor>();
+            this.Players = new ConcurrentDictionary<uint, Mooege.Core.GS.Player.Player>();
 
             // NOTE: WorldSNO must be valid before adding it to the game
             this.WorldSNO = worldSNO;
@@ -127,11 +121,12 @@ namespace Mooege.Core.GS.Map
             this.AddActor(actor);
             actor.OnEnter(this);
             // Broadcast reveal
-            // NOTE: Revealing to all right now since the flow results in actors that have initial positions that are not within the range of the player
+            // NOTE: Revealing to all right now since the flow results in actors that have initial positions that are not within the range of the player. /komiga
+
             var players = this.Players.Values; //this.GetPlayersInRange(actor.Position, 480.0f);
-            //Logger.Debug("Enter {0}, reveal to {1} players", actor.DynamicID, players.Count);
             foreach (var player in players)
             {
+                if (actor is Player.Player) Logger.Debug("Enter: Revealing player: {0}[DynamicId:{1}] to {2}[DynamicId:{3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
                 actor.Reveal(player);
             }
         }
@@ -148,49 +143,57 @@ namespace Mooege.Core.GS.Map
             this.RemoveActor(actor);
         }
 
-        public void Reveal(Mooege.Core.GS.Player.Player player)
+        public bool Reveal(Mooege.Core.GS.Player.Player player)
         {
-            if (!player.RevealedObjects.ContainsKey(this.DynamicID))
+            if (player.RevealedObjects.ContainsKey(this.DynamicID))
+                return false;
+
+            // Reveal world to player
+            player.InGameClient.SendMessage(new RevealWorldMessage()
             {
-                // Reveal world to player
-                player.InGameClient.SendMessage(new RevealWorldMessage()
-                {
-                    WorldID = this.DynamicID,
-                    WorldSNO = this.WorldSNO,
-                });
-                player.InGameClient.SendMessage(new EnterWorldMessage()
-                {
-                    EnterPosition = player.Position,
-                    WorldID = this.DynamicID,
-                    WorldSNO = this.WorldSNO,
-                });
+                WorldID = this.DynamicID,
+                WorldSNO = this.WorldSNO,
+            });
+            player.InGameClient.SendMessage(new EnterWorldMessage()
+            {
+                EnterPosition = player.Position,
+                WorldID = this.DynamicID,
+                WorldSNO = this.WorldSNO,
+            });
 
-                // Revealing all scenes for now..
-                Logger.Info("Revealing scenes for world {0}", this.DynamicID);
-                foreach (var scene in this.Scenes.Values)
-                {
-                    scene.Reveal(player);
-                }
-
-                // Reveal all actors
-                // TODO: We need proper location-aware reveal logic for _all_ objects. This can be done on the scene level once that bit is in. /komiga
-                Logger.Info("Revealing all actors for world {0}", this.DynamicID);
-                foreach (var actor in Actors.Values)
-                {
-                    actor.Reveal(player);
-                }
-                player.RevealedObjects.Add(this.DynamicID, this);
+            // Revealing all scenes for now..
+            Logger.Info("Revealing scenes for world {0}", this.DynamicID);
+            foreach (var scene in this.Scenes.Values)
+            {
+                scene.Reveal(player);
             }
+
+            // Reveal all actors
+            // TODO: We need proper location-aware reveal logic for _all_ objects. This can be done on the scene level once that bit is in. /komiga
+            Logger.Info("Revealing all actors for world {0}", this.DynamicID);
+            foreach (var actor in Actors.Values)
+            {
+                if (actor is Player.Player) Logger.Debug("Revaling player {0}[DynamicId: {1}] to player {2}[DynamicId: {3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
+                actor.Reveal(player);                
+            }
+
+            player.RevealedObjects.Add(this.DynamicID, this);
+
+            return true;
         }
 
-        public void Unreveal(Mooege.Core.GS.Player.Player player)
+        public bool Unreveal(Mooege.Core.GS.Player.Player player)
         {
+            if (!player.RevealedObjects.ContainsKey(this.DynamicID))
+                return false;
+
             // TODO: Unreveal all objects in the world? I think the client will do this on its own when it gets a WorldDeletedMessage /komiga
             //foreach (var obj in player.RevealedObjects.Values)
             //    if (obj.DynamicID == this.DynamicID) obj.Unreveal(player);
 
             player.InGameClient.SendMessage(new WorldDeletedMessage() { WorldID = DynamicID });
             player.InGameClient.FlushOutgoingBuffer();
+            return true;
         }
 
         public override void Destroy()
@@ -213,20 +216,15 @@ namespace Mooege.Core.GS.Map
 
         public void SpawnRandomDrop(Mooege.Core.GS.Player.Player player, Vector3D position)
         {
-            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(player.InGameClient);
-            // randomize ItemType
-            ItemType[] allValues = (ItemType[])Enum.GetValues(typeof(ItemType));
-            ItemType type = allValues[RandomHelper.Next(allValues.Length)];
-            Item item = itemGenerator.GenerateRandomElement(type);
+            var item = ItemGenerator.GenerateRandom(player);
+
             item.Drop(null, position); // NOTE: The owner field for an item is only set when it is in the owner's inventory. /komiga
             player.GroundItems[item.DynamicID] = item; // FIXME: Hacky. /komiga
         }
 
         public void SpawnGold(Mooege.Core.GS.Player.Player player, Vector3D position)
         {
-            ItemTypeGenerator itemGenerator = new ItemTypeGenerator(player.InGameClient);
-            Item item = itemGenerator.CreateItem("Gold1", 0x00000178, ItemType.Gold);
-            item.Count = RandomHelper.Next(1, 3);
+            var item = ItemGenerator.CreateGold(player, RandomHelper.Next(1, 3)); // somehow the actual ammount is not shown on ground /raist.
             item.Drop(null, position);
             player.GroundItems[item.DynamicID] = item;
         }
@@ -246,7 +244,8 @@ namespace Mooege.Core.GS.Map
         {
             if (obj.DynamicID == 0 || HasActor(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", obj.DynamicID));
-            this.Actors.Add(obj.DynamicID, obj);
+            this.Actors.TryAdd(obj.DynamicID, obj);
+
             if (obj.ActorType == ActorType.Player) // temp
                 this.AddPlayer((Mooege.Core.GS.Player.Player)obj);
         }
@@ -255,7 +254,8 @@ namespace Mooege.Core.GS.Map
         {
             if (obj.DynamicID == 0 || HasPlayer(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", obj.DynamicID));
-            this.Players.Add(obj.DynamicID, obj);
+
+            this.Players.TryAdd(obj.DynamicID, obj);
         }
 
         // Removing
@@ -271,7 +271,9 @@ namespace Mooege.Core.GS.Map
         {
             if (obj.DynamicID == 0 || !this.Actors.ContainsKey(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", obj.DynamicID));
-            this.Actors.Remove(obj.DynamicID);
+            Actor actor;
+            this.Actors.TryRemove(obj.DynamicID, out actor);
+
             if (obj.ActorType == ActorType.Player) // temp
                 this.RemovePlayer((Mooege.Core.GS.Player.Player)obj);
         }
@@ -280,7 +282,9 @@ namespace Mooege.Core.GS.Map
         {
             if (obj.DynamicID == 0 || !this.Players.ContainsKey(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", obj.DynamicID));
-            this.Players.Remove(obj.DynamicID);
+
+            Player.Player player;
+            this.Players.TryRemove(obj.DynamicID,out player);
         }
 
         // Getters

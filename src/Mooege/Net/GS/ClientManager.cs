@@ -18,33 +18,102 @@
 
 using System.Collections.Generic;
 using Mooege.Common;
+using Mooege.Core.Common.Toons;
 using Mooege.Core.GS.Game;
+using Mooege.Core.GS.Player;
+using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Act;
+using Mooege.Net.GS.Message.Definitions.Connection;
+using Mooege.Net.GS.Message.Definitions.Game;
+using Mooege.Net.GS.Message.Definitions.Hero;
+using Mooege.Net.GS.Message.Definitions.Misc;
 
 namespace Mooege.Net.GS
 {
-    public class ClientManager
+    public class ClientManager : IMessageConsumer
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly ClientManager _instance = new ClientManager();
+        public static ClientManager Instance { get { return _instance; } }
 
-        public static List<Game> Games = new List<Game>();
+        public List<Game> Games = new List<Game>();
 
-        public static void OnConnect(object sender, ConnectionEventArgs e)
+        public void OnConnect(object sender, ConnectionEventArgs e)
         {
             Logger.Trace("Game-Client connected: {0}", e.Connection.ToString());
-
-            // atm, just creating a game - though clients should be able to join existing ones.
-            var game = new Game();
-            Games.Add(game);
-
-            var gameClient = new GameClient(e.Connection, game);
-            gameClient.Game = game;
+            
+            var gameClient = new GameClient(e.Connection);
             e.Connection.Client = gameClient;
         }
 
-        public static void OnDisconnect(object sender, ConnectionEventArgs e)
+        public void OnDisconnect(object sender, ConnectionEventArgs e)
         {
             Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
             Games.Remove(((GameClient)e.Connection.Client).Game);
         }
+
+        public void Consume(GameClient client, GameMessage message)
+        {
+            if (message is JoinBNetGameMessage) OnJoinGame(client, (JoinBNetGameMessage)message);
+        }
+
+        private void OnJoinGame(GameClient client, JoinBNetGameMessage message)
+        {
+            var game = GameManager.GetGameById(message.GameId);
+            lock (game)
+            {
+                var toon = ToonManager.GetToonByLowID((ulong) message.ToonEntityId.Low);
+
+                client.Game = game;
+
+                if (toon.Owner.LoggedInClient == null)
+                {
+                    Logger.Warn("Client doesn't seem to be connected to moonet, dropping him..");
+                    client.Connection.Disconnect();
+                    return; // if moonet connection is lost, don't allow him to get in.
+                }
+
+                // Set references between MooNetClient and GameClient.
+                client.BnetClient = toon.Owner.LoggedInClient;
+                client.BnetClient.InGameClient = client;
+
+                client.Player = new Player(game.StartWorld, client, toon);
+                Logger.Debug("Player {0}[PlayerIndex: {1}] connected.", client.Player.Properties.Name, client.Player.PlayerIndex);
+
+                client.SendMessageNow(new VersionsMessage(message.SNOPackHash));
+
+                client.SendMessage(new ConnectionEstablishedMessage
+                {
+                    PlayerIndex = client.Player.PlayerIndex,
+                    Field1 = 0x4BB91A16,
+                    SNOPackHash = message.SNOPackHash,
+                });
+
+                client.SendMessage(new GameSetupMessage
+                {
+                    Field0 = 0x00000077,
+                });
+
+                client.SendMessage(new SavePointInfoMessage
+                {
+                    snoLevelArea = -1,
+                });
+
+                client.SendMessage(new HearthPortalInfoMessage
+                {
+                    snoLevelArea = -1,
+                    Field1 = -1,
+                });
+
+                // transition player to act so client can load act related data? /raist
+                client.SendMessage(new ActTransitionMessage
+                {
+                    Field0 = 0x00000000,
+                    Field1 = true,
+                });
+
+                game.Enter(client.Player);
+            }
+        }    
     }
 }

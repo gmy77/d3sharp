@@ -1,4 +1,4 @@
-﻿namespace StringViewer
+﻿namespace Mooege.Tools.StringViewer
 {
     partial class FormMain
     {
@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBoxInput = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.csharpizeButton = new System.Windows.Forms.Button();
+            this.comboBoxOutputType = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.hexBox = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.richTextBoxProto = new System.Windows.Forms.RichTextBox();
@@ -44,12 +46,12 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.textBoxInput);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(12, 9);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(894, 177);
+            this.groupBox1.Size = new System.Drawing.Size(429, 123);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Input Proto String";
@@ -61,76 +63,96 @@
             this.textBoxInput.Multiline = true;
             this.textBoxInput.Name = "textBoxInput";
             this.textBoxInput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxInput.Size = new System.Drawing.Size(888, 158);
+            this.textBoxInput.Size = new System.Drawing.Size(423, 104);
             this.textBoxInput.TabIndex = 0;
             this.textBoxInput.TextChanged += new System.EventHandler(this.textBoxInput_TextChanged);
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.csharpizeButton);
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.comboBoxOutputType);
+            this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.hexBox);
-            this.groupBox2.Location = new System.Drawing.Point(12, 192);
+            this.groupBox2.Location = new System.Drawing.Point(12, 138);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(894, 177);
+            this.groupBox2.Size = new System.Drawing.Size(429, 177);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Hex Output";
             // 
-            // csharpizeButton
+            // comboBoxOutputType
             // 
-            this.csharpizeButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.csharpizeButton.Location = new System.Drawing.Point(3, 16);
-            this.csharpizeButton.Name = "csharpizeButton";
-            this.csharpizeButton.Size = new System.Drawing.Size(888, 29);
-            this.csharpizeButton.TabIndex = 1;
-            this.csharpizeButton.Text = "Outputting raw";
-            this.csharpizeButton.UseVisualStyleBackColor = true;
-            this.csharpizeButton.Click += new System.EventHandler(this.csharpizeButton_Click);
+            this.comboBoxOutputType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxOutputType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxOutputType.FormattingEnabled = true;
+            this.comboBoxOutputType.Items.AddRange(new object[] {
+            "Raw",
+            "C# Array"});
+            this.comboBoxOutputType.Location = new System.Drawing.Point(49, 23);
+            this.comboBoxOutputType.Name = "comboBoxOutputType";
+            this.comboBoxOutputType.Size = new System.Drawing.Size(374, 21);
+            this.comboBoxOutputType.TabIndex = 2;
+            this.comboBoxOutputType.SelectedIndexChanged += new System.EventHandler(this.comboBoxOutputType_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(9, 26);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(34, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Type:";
             // 
             // hexBox
             // 
-            this.hexBox.Location = new System.Drawing.Point(3, 51);
+            this.hexBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.hexBox.Location = new System.Drawing.Point(12, 51);
             this.hexBox.Multiline = true;
             this.hexBox.Name = "hexBox";
-            this.hexBox.Size = new System.Drawing.Size(888, 123);
+            this.hexBox.ReadOnly = true;
+            this.hexBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.hexBox.Size = new System.Drawing.Size(411, 120);
             this.hexBox.TabIndex = 0;
             // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.richTextBoxProto);
             this.groupBox3.Controls.Add(this.textBoxProtoType);
             this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Location = new System.Drawing.Point(15, 375);
+            this.groupBox3.Location = new System.Drawing.Point(15, 321);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(894, 177);
+            this.groupBox3.Size = new System.Drawing.Size(429, 177);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Proto Output";
             // 
             // richTextBoxProto
             // 
-            this.richTextBoxProto.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBoxProto.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxProto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.richTextBoxProto.Location = new System.Drawing.Point(6, 45);
+            this.richTextBoxProto.Location = new System.Drawing.Point(9, 45);
             this.richTextBoxProto.Name = "richTextBoxProto";
-            this.richTextBoxProto.Size = new System.Drawing.Size(1380, 183);
+            this.richTextBoxProto.ReadOnly = true;
+            this.richTextBoxProto.Size = new System.Drawing.Size(411, 126);
             this.richTextBoxProto.TabIndex = 5;
             this.richTextBoxProto.Text = "";
             // 
             // textBoxProtoType
             // 
-            this.textBoxProtoType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxProtoType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxProtoType.Location = new System.Drawing.Point(126, 16);
             this.textBoxProtoType.Name = "textBoxProtoType";
-            this.textBoxProtoType.Size = new System.Drawing.Size(762, 20);
+            this.textBoxProtoType.Size = new System.Drawing.Size(297, 20);
             this.textBoxProtoType.TabIndex = 4;
             this.textBoxProtoType.TextChanged += new System.EventHandler(this.textBoxProtoType_TextChanged);
             // 
@@ -147,12 +169,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(918, 566);
+            this.ClientSize = new System.Drawing.Size(453, 510);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMain";
-            this.Text = "ProtoString Viewer";
+            this.Text = "String Viewer";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -173,7 +196,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox richTextBoxProto;
         private System.Windows.Forms.TextBox hexBox;
-        private System.Windows.Forms.Button csharpizeButton;
+        private System.Windows.Forms.ComboBox comboBoxOutputType;
+        private System.Windows.Forms.Label label2;
     }
 }
 

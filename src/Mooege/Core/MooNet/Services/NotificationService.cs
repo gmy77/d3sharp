@@ -34,7 +34,6 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("SendNotification()");
             //Logger.Debug("notification:\n{0}", request.ToString());
-
             switch (request.GetNotificationType())
             {
                 case NotificationTypeHelper.NotificationType.Whisper:

@@ -111,9 +111,9 @@ namespace Mooege.Core.GS.Map
             this.World.AddScene(this);
         }
 
-        public override void Reveal(Mooege.Core.GS.Player.Player player)
+        public override bool Reveal(Mooege.Core.GS.Player.Player player)
         {
-            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return; // already revealed
+            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
             player.RevealedObjects.Add(this.DynamicID, this);
             player.InGameClient.SendMessage(this.RevealMessage);
             player.InGameClient.SendMessage(this.MapRevealMessage);
@@ -122,11 +122,12 @@ namespace Mooege.Core.GS.Map
                 sub.Reveal(player);
             }
             player.InGameClient.FlushOutgoingBuffer();
+            return true;
         }
 
-        public override void Unreveal(Mooege.Core.GS.Player.Player player)
+        public override bool Unreveal(Mooege.Core.GS.Player.Player player)
         {
-            if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return; // not revealed yet
+            if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // not revealed yet
             player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID });
             player.InGameClient.FlushOutgoingBuffer();
             foreach (var sub in this.Subscenes)
@@ -134,6 +135,7 @@ namespace Mooege.Core.GS.Map
                 sub.Unreveal(player);
             }
             player.RevealedObjects.Remove(this.DynamicID);
+            return true;
         }
     }
 }
