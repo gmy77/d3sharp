@@ -18,7 +18,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             fx.SpawnEffect(pp.User, 86769, pp.TargetPosition);
             fx.SpawnEffect(pp.User, 90364, pp.TargetPosition, -1, 4000);
 
-            IList<Actor> hits = fx.FindActorsInRadius(pp.TargetPosition, 13f);
+            IList<Actor> hits = fx.FindActorsInRange(pp.User, pp.TargetPosition, 13f);
             fx.DoDamage(pp.User, hits, 150f, 0);
         }
     }
@@ -40,26 +40,25 @@ namespace Mooege.Core.GS.Powers.Implementations
                 yield break;
             }
 
-            IList<Actor> targets;
             if (pp.Target == null)
             {
-                targets = new List<Actor>();
                 fx.PlayRopeEffectActorToActor(0x78c0, pp.User, fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition));
             }
             else
             {
-                targets = fx.FindActorsInRadius(pp.TargetPosition, 15f, 1);
-                targets.Insert(0, pp.Target);
-                Actor effect_source = pp.User;
-                foreach (Actor actor in targets)
+                fx.PlayHitEffect(2, pp.User, pp.Target);
+                fx.PlayRopeEffectActorToActor(0x78c0, pp.User, pp.Target);
+                fx.DoDamage(pp.User, pp.Target, 12, 0);
+                // bounce
+                var bounce_target = fx.FindActorsInRange(pp.User, pp.TargetPosition, 15f, 1).FirstOrDefault();
+                if (bounce_target != null)
                 {
-                    fx.PlayHitEffect(2, effect_source, actor);
-                    fx.PlayRopeEffectActorToActor(0x78c0, effect_source, actor);
-                    effect_source = actor;
+                    fx.PlayHitEffect(2, pp.Target, bounce_target);
+                    fx.PlayRopeEffectActorToActor(0x78c0, pp.Target, bounce_target);
+                    fx.DoDamage(pp.User, pp.Target, 6, 0);
                 }
             }
-
-            fx.DoDamage(pp.User, targets, 12, 0);
+            
             yield break;
         }
     }
@@ -79,7 +78,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                 fx.SpawnEffect(pp.User, 61419, spos);
 
-                IList<Actor> hits = fx.FindActorsInRadius(spos, 6f);
+                IList<Actor> hits = fx.FindActorsInRange(pp.User, spos, 6f);
                 fx.DoDamage(pp.User, hits, 60f, 0);
                 yield return 100;
             }
@@ -95,7 +94,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             fx.SpawnEffect(pp.User, 185366, pp.TargetPosition);
             yield return 400;
 
-            IList<Actor> hits = fx.FindActorsInRadius(pp.TargetPosition, 10f);
+            IList<Actor> hits = fx.FindActorsInRange(pp.User, pp.TargetPosition, 10f);
             fx.DoDamage(pp.User, hits, 100f, 0);
         }
     }
@@ -128,7 +127,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield return 350;
             fx.PlayEffectGroupActorToActor(19356, pp.User, fx.SpawnTempProxy(pp.User, pp.User.Position));
 
-            IList<Actor> hits = fx.FindActorsInRadius(pp.User.Position, 20);
+            IList<Actor> hits = fx.FindActorsInRange(pp.User, pp.User.Position, 20);
             foreach (Actor actor in hits)
             {
                 fx.DoKnockback(pp.User, actor, 10f);
@@ -158,11 +157,10 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 yield return 800;
                 // update proxy target location laggy
-                if (fx.ChannelingCanceled(pp.User))
-                    fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
+                fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
 
                 fx.SpawnEffect(pp.User, 97821, pp.TargetPosition);
-                fx.DoDamage(pp.User, fx.FindActorsInRadius(pp.TargetPosition, 6f), 20, 0);
+                fx.DoDamage(pp.User, fx.FindActorsInRange(pp.User, pp.TargetPosition, 6f), 20, 0);
             }
             yield break;
         }

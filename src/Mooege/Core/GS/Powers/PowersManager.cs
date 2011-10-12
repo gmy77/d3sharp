@@ -163,7 +163,7 @@ namespace Mooege.Core.GS.Powers
                         AddWaitingPower(_waitingPowers, powerEnum, user);
                     }
                     // send tick after executing power
-                    SendDWordTickFor(user);
+                    SendDWordTickFor(user.World);
                 }
             }                
         }
@@ -196,7 +196,7 @@ namespace Mooege.Core.GS.Powers
                     // else did not request another wait
 
                     // send dword tick after every power execute
-                    SendDWordTickFor(wait.User);
+                    SendDWordTickFor(wait.User.World);
                 }
                 else
                 {
@@ -233,90 +233,70 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public bool ChannelingCanceled(Actor actor)
-        {
-            return _channelingActors.ContainsKey(actor);
-        }
-
-        public void PlaySoundEffect(int effectId, Actor target)
+        public void PlayEffect(int effectId, Actor target)
         {
             if (target == null) return;
 
-            foreach (GameClient client in _revealedClientsFor(target))
+            target.World.BroadcastIfRevealed(new PlayEffectMessage
             {
-                client.SendMessage(new PlayEffectMessage()
-                {
-                    Id = 0x7a,
-                    ActorID = target.DynamicID,
-                    Field1 = effectId,
-                    Field2 = 0x0, // TODO: figure out what this is: 0x2,
-                });
-            }
+                Id = 0x7a,
+                ActorID = target.DynamicID,
+                Field1 = effectId,
+                Field2 = 0x0, // TODO: figure out what this is: 0x2,
+            }, target);
         }
 
         public void PlayHitEffect(int effectId, Actor from, Actor target)
         {
             if (target == null) return;
 
-            foreach (GameClient client in _revealedClientsFor(target))
+            target.World.BroadcastIfRevealed(new PlayHitEffectMessage
             {
-                client.SendMessage(new PlayHitEffectMessage()
-                {
-                    Id = 0x7b,
-                    ActorID = target.DynamicID,
-                    HitDealer = from.DynamicID,
-                    Field2 = effectId,
-                    Field3 = false
-                });
-            }
+                Id = 0x7b,
+                ActorID = target.DynamicID,
+                HitDealer = from.DynamicID,
+                Field2 = effectId,
+                Field3 = false
+            }, target);
         }
 
         public void PlayRopeEffectActorToActor(int effectId, Actor from, Actor target)
         {
             if (target == null) return;
 
-            foreach (GameClient client in _revealedClientsFor(target))
+            target.World.BroadcastIfRevealed(new RopeEffectMessageACDToACD
             {
-                client.SendMessage(new RopeEffectMessageACDToACD()
-                {
-                    Id = 0x00ab,
-                    Field0 = effectId,
-                    Field1 = (int)from.DynamicID,
-                    Field2 = 4,
-                    Field3 = (int)target.DynamicID,
-                    Field4 = 1
-                });
-            }
+                Id = 0x00ab,
+                Field0 = effectId,
+                Field1 = (int)from.DynamicID,
+                Field2 = 4,
+                Field3 = (int)target.DynamicID,
+                Field4 = 1
+            }, target);
         }
 
         public void PlayEffectGroupActorToActor(int effectId, Actor from, Actor target)
         {
             if (target == null) return;
 
-            foreach (GameClient client in _revealedClientsFor(target))
+            target.World.BroadcastIfRevealed(new EffectGroupACDToACDMessage
             {
-                client.SendMessage(new EffectGroupACDToACDMessage()
-                {
-                    Id = 0xaa,
-                    Field0 = effectId,
-                    Field1 = (int)from.DynamicID,
-                    Field2 = (int)target.DynamicID
-                });
-            }
+                Id = 0xaa,
+                Field0 = effectId,
+                Field1 = (int)from.DynamicID,
+                Field2 = (int)target.DynamicID
+            }, target);
         }
 
         public void ActorLookAt(Actor actor, Vector3D targetPos)
         {
-            foreach (GameClient client in _revealedClientsFor(actor))
+            actor.World.BroadcastIfRevealed(new ACDTranslateFacingMessage
             {
-                client.SendMessage(new ACDTranslateFacingMessage
-                {
-                    Id = 0x70,
-                    ActorID = actor.DynamicID,
-                    Angle = AngleLookAt(actor.Position, targetPos),
-                    Field2 = false // true/false toggles whether to smoothly animate the change or instantly do it
-                });
-            }
+                Id = 0x70,
+                ActorID = actor.DynamicID,
+                Angle = AngleLookAt(actor.Position, targetPos),
+                Field2 = false // true/false toggles whether to smoothly animate the change or instantly do it
+            }, actor);
         }
 
         public float AngleLookAt(Vector3D a, Vector3D b)
@@ -341,27 +321,7 @@ namespace Mooege.Core.GS.Powers
             if (angle == -1f)
                 angle = (float)(_rand.NextDouble() * (Math.PI * 2));
             
-            Effect effect = new Effect(from.World, actorSNO, position, angle, timeout);                       
-            
-            // TODO: nuke this?
-            foreach (GameClient client in _revealedClientsFor(from))
-            {
-                client.PacketId += 30 * 2;
-                client.SendMessage(new DWordDataMessage()
-                {
-                    Id = 0x89,
-                    Field0 = client.PacketId,
-                });
-                client.Tick += 20;
-                client.SendMessage(new EndOfTickMessage()
-                {
-                    Id = 0x008D,
-                    Field0 = client.Tick - 20,
-                    Field1 = client.Tick
-                });
-                client.FlushOutgoingBuffer();
-            }
-
+            Effect effect = new Effect(from.World, actorSNO, position, angle, timeout);
             return effect;
         }
 
@@ -378,44 +338,33 @@ namespace Mooege.Core.GS.Powers
 
         public void KillSpawnedEffect(Effect effect)
         {
-            foreach (GameClient client in _revealedClientsFor(effect))
-            {
-                effect.Destroy();
-
-                client.PacketId += 10 * 2;
-                client.SendMessage(new DWordDataMessage()
-                {
-                    Id = 0x89,
-                    Field0 = client.PacketId,
-                });
-                client.FlushOutgoingBuffer();
-            }
+            var world = effect.World;
+            effect.Destroy();
+            SendDWordTickFor(world);
         }
 
-        public IList<Actor> FindActorsInRadius(Vector3D center, float radius, int maxCount = -1)
+        public IList<Actor> FindActorsInRange(Actor user, Vector3D center, float range, int maxCount = -1)
         {
             List<Actor> hits = new List<Actor>();
-            foreach (Actor actor in Targets)
+            foreach (Actor actor in user.World.GetActorsInRange(center, range))
             {
                 if (hits.Count == maxCount)
                     break;
 
-                // TODO: needs to be actual sphere radius, not box :)
-                if (Math.Abs(actor.Position.X - center.X) < radius &&
-                    Math.Abs(actor.Position.Y - center.Y) < radius &&
-                    Math.Abs(actor.Position.Z - center.Z) < radius)
-                {
+                // TODO: only work with more than just SimpleMobs
+                if (actor is SimpleMob)
                     hits.Add(actor);
-                }
             }
+
             return hits;
         }
 
         public bool WillHitMeleeTarget(Actor user, Actor target)
         {
             if (target == null) return false;
-            return (Math.Abs(user.Position.X - target.Position.X) < 15f &&
-                    Math.Abs(user.Position.Y - target.Position.Y) < 15f);
+            return (Math.Sqrt(
+                        Math.Pow(user.Position.X - target.Position.X, 2) +
+                        Math.Pow(user.Position.Y - target.Position.Y, 2)) <= 13f);
         }
 
         public Effect SpawnTempProxy(Actor from, Vector3D pos, int timeout = 2000)
@@ -427,6 +376,8 @@ namespace Mooege.Core.GS.Powers
 
         public Effect GetChanneledProxy(Actor user, int index, Vector3D pos)
         {
+            if (!_channelingActors.ContainsKey(user)) return null;
+
             ChanneledCast channeled = _channelingActors[user];
             if (channeled.Effects == null)
                 channeled.Effects = new List<Effect>();
@@ -445,6 +396,7 @@ namespace Mooege.Core.GS.Powers
         public void RepositionActor(Actor actor, Vector3D pos)
         {
             if (actor == null) return;
+            // rely on Position setter to use WorldPositionMessage
             actor.Position = pos;
         }
 
@@ -468,25 +420,18 @@ namespace Mooege.Core.GS.Powers
         {
             if (target == null) return;
 
-            foreach (GameClient client in _revealedClientsFor(target))
+            target.World.BroadcastIfRevealed(new FloatingNumberMessage
             {
-                client.SendMessage(new FloatingNumberMessage()
-                {
-                    Id = 0xd0,
-                    ActorID = target.DynamicID,
-                    Number = amount,
-                    Type = FloatingNumberMessage.FloatType.White//type,
-                });
-                SendDWordTick(client);
-                client.FlushOutgoingBuffer();
-            }
+                Id = 0xd0,
+                ActorID = target.DynamicID,
+                Number = amount,
+                Type = FloatingNumberMessage.FloatType.White//type,
+            }, target);
 
             // TODO: handling more damagable types
             if (target is SimpleMob)
             {
                 ((SimpleMob)target).ReceiveDamage(from, amount, type);
-                // TODO: figure out where these ought to be in the new GS code.
-                SendDWordTickFor(from);
             }
         }
 
@@ -494,26 +439,7 @@ namespace Mooege.Core.GS.Powers
         {
             foreach (Actor target in target_list)
             {
-                foreach (GameClient client in _revealedClientsFor(target))
-                {
-                    client.SendMessage(new FloatingNumberMessage()
-                    {
-                        Id = 0xd0,
-                        ActorID = target.DynamicID,
-                        Number = amount,
-                        Type = FloatingNumberMessage.FloatType.White//type,
-                    });
-                    SendDWordTick(client);
-                    client.FlushOutgoingBuffer();
-                }
-
-                // TODO: handling more damagable types
-                if (target is SimpleMob)
-                {
-                    ((SimpleMob)target).ReceiveDamage(from, amount, type);
-                    // TODO: figure out where these ought to be in the new GS code.
-                    SendDWordTickFor(from);
-                }
+                DoDamage(from, target, amount, type);
             }
         }
 
@@ -537,26 +463,19 @@ namespace Mooege.Core.GS.Powers
             _effects = survivors;
         }
 
-        private IEnumerable<GameClient> _revealedClientsFor(Actor actor)
+        private void SendDWordTickFor(World world)
         {
-            // HACK, probably going to nuke this whole function soon
-            return actor.World.GetPlayersInRange(actor.Position, 1000f).Select(p => p.InGameClient);
-        }
-
-        private void SendDWordTickFor(Actor user)
-        {
-            foreach (GameClient client in _revealedClientsFor(user))
-                SendDWordTick(client);
-        }
-
-        private void SendDWordTick(GameClient client)
-        {
-            client.PacketId += 10 * 2;
-            client.SendMessage(new DWordDataMessage()
+            // HACK: just sends tick to all players in specified world
+            foreach (GameClient client in world.Game.Players.Values.Where(p => p.World == world).Select(p => p.InGameClient))
             {
-                Id = 0x89,
-                Field0 = client.PacketId,
-            });
+                client.PacketId += 10 * 2;
+                client.SendMessage(new DWordDataMessage()
+                {
+                    Id = 0x89,
+                    Field0 = client.PacketId,
+                });
+                client.FlushOutgoingBuffer();
+            }
         }
     }
 }

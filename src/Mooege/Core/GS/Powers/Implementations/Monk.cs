@@ -65,7 +65,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             
             for (int n = 0; n < 7; ++n)
             {
-                IList<Actor> nearby = fx.FindActorsInRadius(startpos, 20f, 1);
+                IList<Actor> nearby = fx.FindActorsInRange(pp.User, startpos, 20f, 1);
                 if (nearby.Count > 0)
                 {
                     fx.SpawnEffect(pp.User, 99063, nearby[0].Position);
@@ -102,7 +102,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
             else
             {
-                IList<Actor> hits = fx.FindActorsInRadius(pp.User.Position, 10);
+                IList<Actor> hits = fx.FindActorsInRange(pp.User, pp.User.Position, 10);
                 foreach (Actor hit in hits)
                 {
                     fx.PlayHitEffect(6, pp.User, hit);
