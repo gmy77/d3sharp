@@ -575,19 +575,18 @@ namespace Mooege.Core.GS.Player
         {
             get
             {
-                //dummy values, need confirmation from dump
                 switch (this.Properties.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 1.22f;
+                        return 1.2f;
                     case ToonClass.DemonHunter:
-                        return 1.43f;
+                        return 1.35f;
                     case ToonClass.Monk:
                         return 1.43f;
                     case ToonClass.WitchDoctor:
-                        return 1.43f;
+                        return 1.1f;
                     case ToonClass.Wizard:
-                        return 1.43f;
+                        return 1.3f;
                 }
                 return 1.43f;
             }
