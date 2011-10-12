@@ -92,7 +92,7 @@ namespace Mooege.Core.GS.Powers
             _game = game;
         }
 
-        public void Tick()
+        public void Update()
         {
             UpdateWaitingPowers();
             CleanUpEffects(); 
@@ -162,8 +162,6 @@ namespace Mooege.Core.GS.Powers
                     {
                         AddWaitingPower(_waitingPowers, powerEnum, user);
                     }
-                    // send tick after executing power
-                    SendDWordTickFor(user.World);
                 }
             }                
         }
@@ -194,9 +192,6 @@ namespace Mooege.Core.GS.Powers
                         AddWaitingPower(newWaitList, wait.PowerEnumerator, wait.User);
                     }
                     // else did not request another wait
-
-                    // send dword tick after every power execute
-                    SendDWordTickFor(wait.User.World);
                 }
                 else
                 {
@@ -338,9 +333,7 @@ namespace Mooege.Core.GS.Powers
 
         public void KillSpawnedEffect(Effect effect)
         {
-            var world = effect.World;
             effect.Destroy();
-            SendDWordTickFor(world);
         }
 
         public IList<Actor> FindActorsInRange(Actor user, Vector3D center, float range, int maxCount = -1)
@@ -461,21 +454,6 @@ namespace Mooege.Core.GS.Powers
             }
 
             _effects = survivors;
-        }
-
-        private void SendDWordTickFor(World world)
-        {
-            // HACK: just sends tick to all players in specified world
-            foreach (GameClient client in world.Game.Players.Values.Where(p => p.World == world).Select(p => p.InGameClient))
-            {
-                client.PacketId += 10 * 2;
-                client.SendMessage(new DWordDataMessage()
-                {
-                    Id = 0x89,
-                    Field0 = client.PacketId,
-                });
-                client.FlushOutgoingBuffer();
-            }
         }
     }
 }

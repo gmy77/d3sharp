@@ -172,6 +172,7 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestBuyItemMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Stash\RequestBuySharedStashSlots.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestSellItemMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Tick\GameTickMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Trade\OpenTradeWindow.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.Array.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
@@ -289,7 +290,7 @@
     <Compile Include="Net\GS\Message\Definitions\Enchant\EnchantItemMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Encounter\EncounterInviteStateMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\EndConversationMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\EndOfTickMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Tick\EndOfTickMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\World\EnterWorldMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\EntityIdMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\FlippyMessage.cs" />
@@ -464,6 +465,10 @@
     </Content>
     <Content Include="..\..\assets\Maps\Worlds\NewTristram.txt">
       <Link>Assets\Maps\Worlds\NewTristram.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\assets\Maps\Worlds\Quick.txt">
+      <Link>Assets\Maps\Worlds\Quick.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\assets\SNO\Actors.txt">

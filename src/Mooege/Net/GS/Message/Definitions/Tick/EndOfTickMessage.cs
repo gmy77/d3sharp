@@ -18,13 +18,15 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Tick
 {
     [Message(Opcodes.EndOfTickMessage)]
     public class EndOfTickMessage : GameMessage
     {
         public int Field0;
         public int Field1;
+
+        public EndOfTickMessage() : base(Opcodes.EndOfTickMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

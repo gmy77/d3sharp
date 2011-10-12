@@ -30,7 +30,6 @@ using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.Combat;
 using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
@@ -266,7 +265,11 @@ namespace Mooege.Core.GS.Player
             else return;
 
             UpdateState();
-            client.FlushOutgoingBuffer();
+        }
+
+        public override void Update()
+        {
+            this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
 
         // FIXME: Hardcoded crap
@@ -274,26 +277,10 @@ namespace Mooege.Core.GS.Player
         {
             this.World.Reveal(this);
 
-            // This "tick" stuff is somehow required to use these values.. /komiga
-            this.InGameClient.SendMessage(new DWordDataMessage() // TICK
-            {
-                Id = 0x0089,
-                Field0 = 0x00000077,
-            });
-            this.InGameClient.FlushOutgoingBuffer();
-
             // FIXME: hackedy hack
             var attribs = new GameAttributeMap();
             attribs[GameAttribute.Hitpoints_Healed_Target] = 76f;
             attribs.SendMessage(InGameClient, this.DynamicID);
-
-            this.InGameClient.PacketId += 40 * 2;
-            this.InGameClient.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = 0x0000007D //this.InGameClient.PacketId,
-            });
-            this.InGameClient.FlushOutgoingBuffer();
         }
 
         public override void OnLeave(World world)
@@ -317,6 +304,8 @@ namespace Mooege.Core.GS.Player
                 ActorId = this.DynamicID,
             });
 
+            //if(this!=player) player.InGameClient.SendMessage(this.GetVisualInventory()); // should we sent it to other players? /raist
+
             if (this == player) // only send this to player itself. Warning: don't remove this check or you'll make the game start crashing! /raist.
             {
                 player.InGameClient.SendMessage(new PlayerActorSetInitialMessage()
@@ -325,8 +314,7 @@ namespace Mooege.Core.GS.Player
                     PlayerIndex = this.PlayerIndex,
                 });
             }
-
-            player.InGameClient.FlushOutgoingBuffer();
+            
             return true;
         }
 
@@ -373,13 +361,6 @@ namespace Mooege.Core.GS.Player
             this.InGameClient.SendMessage(new HeroStateMessage
             {
                 State = this.GetStateData()
-            });
-
-            this.InGameClient.PacketId += 10 * 2;
-            this.InGameClient.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = this.InGameClient.PacketId,
             });
         }
 

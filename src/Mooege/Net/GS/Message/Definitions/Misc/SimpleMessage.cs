@@ -107,7 +107,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                             Field0 = 0x000000C1,
                         });
                         #endregion
-                        client.FlushOutgoingBuffer();
+                        
                         #region hardcoded2
                         // NOTE: This is very similar to ACDEnterKnown fields
                         // TODO: Map proper values from the actor..
@@ -140,7 +140,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                             Field0 = 0x000000D1,
                         });
                         #endregion
-                        client.FlushOutgoingBuffer();
+                        
                     }
                     break;
                 case 0x0028: // Logout complete (sent when delay timer expires on client side)

@@ -277,7 +277,7 @@ namespace Mooege.Core.GS.Actors
             {
                 Name = this.SNOName
             });
-            player.InGameClient.FlushOutgoingBuffer();
+
             return true;
         }
 
@@ -289,7 +289,7 @@ namespace Mooege.Core.GS.Actors
         {
             if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // not revealed yet
             // NOTE: This message ID is probably "DestroyActor". ANNDataMessage7 is used for addition/creation
-            player.InGameClient.SendMessageNow(new ANNDataMessage(Opcodes.ANNDataMessage6) { ActorID = this.DynamicID });
+            player.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6) { ActorID = this.DynamicID });
             player.RevealedObjects.Remove(this.DynamicID);
             return true;
         }
