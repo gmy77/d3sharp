@@ -11,7 +11,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
         {
-            if (fx.WillHitMeleeTarget(pp.User, pp.Target))
+            if (fx.CanHitMeleeTarget(pp.User, pp.Target))
             {
                 fx.PlayHitEffect(2, pp.User, pp.Target);
                 fx.DoDamage(pp.User, pp.Target, 25f, 0);

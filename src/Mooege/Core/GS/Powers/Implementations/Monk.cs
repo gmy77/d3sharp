@@ -8,7 +8,7 @@ using Mooege.Core.GS.Actors;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
-    [PowerImplementationAttribute(0x00017713/*Skills.Skills.Monk.SpiritGenerator.DeadlyReach*/)]
+    [PowerImplementationAttribute(Skills.Skills.Monk.SpiritGenerator.DeadlyReach)]
     public class MonkDeadlyReach : PowerImplementation
     {
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
@@ -20,7 +20,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             else if (pp.Message.Field5 == 2)
                 fx.PlayEffectGroupActorToActor(72331, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
 
-            if (fx.WillHitMeleeTarget(pp.User, pp.Target))
+            if (fx.CanHitMeleeTarget(pp.User, pp.Target, 16f)) // TODO: figure out exactly how long the deadly reach is
             {
                 fx.PlayHitEffect(5, pp.User, pp.Target);
                 fx.DoDamage(pp.User, pp.Target, 25f, 0);
@@ -30,7 +30,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-    [PowerImplementationAttribute(0x000176C4/*Skills.Skills.Monk.SpiritGenerator.FistsOfThunder*/)]
+    [PowerImplementationAttribute(Skills.Skills.Monk.SpiritGenerator.FistsOfThunder)]
     public class MonkFistsOfThunder : PowerImplementation
     {
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
@@ -42,7 +42,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             else if (pp.Message.Field5 == 2)
                 fx.PlayEffectGroupActorToActor(96178, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
 
-            if (fx.WillHitMeleeTarget(pp.User, pp.Target))
+            if (fx.CanHitMeleeTarget(pp.User, pp.Target))
             {
                 fx.PlayHitEffect(2, pp.User, pp.Target);
                 fx.DoDamage(pp.User, pp.Target, 25f, 0);
@@ -52,7 +52,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-    [PowerImplementationAttribute(0x000179B6/*Skills.Skills.Monk.SpiritSpenders.SevenSidedStrike*/)]
+    [PowerImplementationAttribute(Skills.Skills.Monk.SpiritSpenders.SevenSidedStrike)]
     public class MonkSevenSidedStrike : PowerImplementation
     {
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
@@ -80,7 +80,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-    [PowerImplementationAttribute(0x00017837/*Skills.Skills.Monk.SpiritGenerator.CripplingWave*/)]
+    [PowerImplementationAttribute(Skills.Skills.Monk.SpiritGenerator.CripplingWave)]
     public class MonkCripplingWave : PowerImplementation
     {
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
@@ -94,7 +94,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (pp.Message.Field5 != 2)
             {
-                if (fx.WillHitMeleeTarget(pp.User, pp.Target))
+                if (fx.CanHitMeleeTarget(pp.User, pp.Target))
                 {
                     fx.PlayHitEffect(6, pp.User, pp.Target);
                     fx.DoDamage(pp.User, pp.Target, 25f, 0);
@@ -113,7 +113,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-    [PowerImplementationAttribute(0x00017C30/*Skills.Skills.Monk.SpiritGenerator.ExplodingPalm*/)]
+    [PowerImplementationAttribute(Skills.Skills.Monk.SpiritGenerator.ExplodingPalm)]
     public class MonkExplodingPalm : PowerImplementation
     {
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
@@ -125,7 +125,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             else if (pp.Message.Field5 == 2)
                 fx.PlayEffectGroupActorToActor(142473, pp.User, fx.SpawnTempProxy(pp.User, pp.TargetPosition));
 
-            if (fx.WillHitMeleeTarget(pp.User, pp.Target))
+            if (fx.CanHitMeleeTarget(pp.User, pp.Target))
             {
                 fx.PlayHitEffect(0, pp.User, pp.Target);
                 fx.DoDamage(pp.User, pp.Target, 25f, 0);
@@ -135,7 +135,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-    [PowerImplementationAttribute(0x0001775A/*Skills.Skills.Monk.SpiritGenerator.SweepingWind*/)]
+    [PowerImplementationAttribute(Skills.Skills.Monk.SpiritGenerator.SweepingWind)]
     public class MonkSweepingWind : PowerImplementation
     {
         public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)

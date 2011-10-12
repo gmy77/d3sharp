@@ -352,12 +352,13 @@ namespace Mooege.Core.GS.Powers
             return hits;
         }
 
-        public bool WillHitMeleeTarget(Actor user, Actor target)
+        public bool CanHitMeleeTarget(Actor user, Actor target, float range = 13f)
         {
             if (target == null) return false;
             return (Math.Sqrt(
                         Math.Pow(user.Position.X - target.Position.X, 2) +
-                        Math.Pow(user.Position.Y - target.Position.Y, 2)) <= 13f);
+                        Math.Pow(user.Position.Y - target.Position.Y, 2) +
+                        Math.Pow(user.Position.Z - target.Position.Z, 2)) <= range);
         }
 
         public Effect SpawnTempProxy(Actor from, Vector3D pos, int timeout = 2000)
