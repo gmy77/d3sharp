@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,16 +17,17 @@
  */
 
 using System.Text;
-using Mooege.Core.Common.Items;
-using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
 
-namespace Mooege.Net.GS.Message.Definitions.ACD
+namespace Mooege.Net.GS.Message.Definitions.Actor
 {
-    [Message(new[]{ Opcodes.ACDTranslateNormalMessage1, Opcodes.ACDTranslateNormalMessage2 }, Consumers.Player)]
-    public class ACDTranslateNormalMessage : GameMessage
+    /// <summary>
+    /// Sent by server to clients to notify about an actor movement.
+    /// </summary>
+    [Message(Opcodes.NotifyActorMovementMessage)]
+    public class NotifyActorMovementMessage : GameMessage
     {
-        public int Field0; // TODO: Confirm that this is the actor ID
+        public int ActorId;
         public Vector3D Position;
         public float /* angle */? Angle;
         public bool? Field3;
@@ -35,9 +36,11 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int? Field6;
         public int? Field7;
 
+        public NotifyActorMovementMessage():base(Opcodes.NotifyActorMovementMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorId = buffer.ReadInt(32);
             if (buffer.ReadBool())
             {
                 Position = new Vector3D();
@@ -71,7 +74,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, ActorId);
             buffer.WriteBool(Position != null);
             if (Position != null)
             {
@@ -115,7 +118,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDTranslateNormalMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("ActorId: 0x" + ActorId.ToString("X8"));
             if (Position != null)
             {
                 Position.AsText(b, pad);

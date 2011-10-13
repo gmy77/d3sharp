@@ -29,6 +29,7 @@ using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
@@ -262,7 +263,7 @@ namespace Mooege.Core.GS.Player
             else if (message is AssignPassiveSkillMessage) OnAssignPassiveSkill(client, (AssignPassiveSkillMessage)message);
             else if (message is PlayerChangeHotbarButtonMessage) OnPlayerChangeHotbarButtonMessage(client, (PlayerChangeHotbarButtonMessage)message);
             else if (message is TargetMessage) OnObjectTargeted(client, (TargetMessage)message);
-            else if (message is ACDTranslateNormalMessage) OnPlayerMovement(client, (ACDTranslateNormalMessage)message);
+            else if (message is PlayerMovementMessage) OnPlayerMovement(client, (PlayerMovementMessage)message);
             else return;
 
             UpdateState();
@@ -273,15 +274,17 @@ namespace Mooege.Core.GS.Player
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
 
-        private void OnPlayerMovement(GameClient client, ACDTranslateNormalMessage message)
+        private void OnPlayerMovement(GameClient client, PlayerMovementMessage message)
         {
-            if (message.Position != null)
-                this.Position = message.Position;
+            // here we should also be checking the position and see if it's valid. If not we should be resetting player to a good position with ACDWorldPositionMessage 
+            // so we can have a basic precaution for hacks & exploits /raist.
 
-            var msg = new ACDTranslateNormalMessage
+            if (message.Position != null)
+                this.Position = message.Position; 
+
+            var msg = new NotifyActorMovementMessage
                              {
-                                 Id = (int) Opcodes.ACDTranslateNormalMessage1,
-                                 Field0 = (int) this.DynamicID,
+                                 ActorId = message.ActorId,
                                  Position = this.Position,
                                  Angle = message.Angle,
                                  Field3 = false,
@@ -290,7 +293,7 @@ namespace Mooege.Core.GS.Player
                                  Field6 = message.Field6
                              };
 
-            this.World.BroadcastExclusive(msg, this); // TODO: Should notify its scene instead /raist.
+            this.World.BroadcastExclusive(msg, this); // TODO: We should be instead notifying currentscene we're in. /raist.
 
             this.CollectGold();
         }
