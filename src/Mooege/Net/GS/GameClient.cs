@@ -45,6 +45,8 @@ namespace Mooege.Net.GS
 
         public bool TickingEnabled { get; set; }
 
+        private object _bufferLock = new object(); // we should be locking on this private object, locking on gameclient (this) may cause deadlocks. detailed information: http://msdn.microsoft.com/fr-fr/magazine/cc188793%28en-us%29.aspx /raist.
+
         public bool IsLoggingOut;
 
         public GameClient(IConnection connection)
@@ -93,18 +95,19 @@ namespace Mooege.Net.GS
             _incomingBuffer.ConsumeData();
         }
 
-        public void SendMessage(GameMessage message)
+        public void SendMessage(GameMessage message, bool flushImmediatly=false)
         {
-            lock (this)
+            lock (this._bufferLock)
             {
                 Logger.LogOutgoing(message);
                 _outgoingBuffer.EncodeMessage(message); // change ConsoleTarget's level to Level.Dump in program.cs if u want to see messages on console.
+                if (flushImmediatly) this.SendTick();
             }
         }
 
         public void SendTick()
         {
-            lock (this)
+            lock (this._bufferLock)
             {
                 if (_outgoingBuffer.Length <= 32) return;
 
@@ -113,9 +116,9 @@ namespace Mooege.Net.GS
             }
         }
 
-        public void FlushOutgoingBuffer()
+        private void FlushOutgoingBuffer()
         {
-            lock (this)
+            lock (this._bufferLock)
             {
                 if (_outgoingBuffer.Length <= 32) return;
                 

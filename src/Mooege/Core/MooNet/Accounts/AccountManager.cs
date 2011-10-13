@@ -52,9 +52,9 @@ namespace Mooege.Core.MooNet.Accounts
             return account;
         }
 
-        public static Account GetAccountByPersistantID(ulong persistantId)
+        public static Account GetAccountByPersistentID(ulong persistentId)
         {
-            return Accounts.Where(account => account.Value.PersistentID == persistantId).Select(account => account.Value).FirstOrDefault();
+            return Accounts.Where(account => account.Value.PersistentID == persistentId).Select(account => account.Value).FirstOrDefault();
         }
 
         private static void LoadAccounts()
@@ -74,7 +74,7 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        public static ulong GetNextAvailablePersistantId()
+        public static ulong GetNextAvailablePersistentId()
         {
             var cmd = new SQLiteCommand("SELECT max(id) from accounts", DBManager.Connection);
             try

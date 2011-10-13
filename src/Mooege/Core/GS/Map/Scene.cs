@@ -116,12 +116,12 @@ namespace Mooege.Core.GS.Map
             if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
             player.RevealedObjects.Add(this.DynamicID, this);
             player.InGameClient.SendMessage(this.RevealMessage);
-            player.InGameClient.SendMessage(this.MapRevealMessage);
+            player.InGameClient.SendMessage(this.MapRevealMessage,true);
             foreach (var sub in this.Subscenes)
             {
                 sub.Reveal(player);
             }
-            player.InGameClient.FlushOutgoingBuffer(); // we need to exclusively flush outgoing buffer here - or client will be just disconnecting. /raist.
+            
             
             return true;
         }
@@ -129,8 +129,8 @@ namespace Mooege.Core.GS.Map
         public override bool Unreveal(Mooege.Core.GS.Player.Player player)
         {
             if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // not revealed yet
-            player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID });
-            player.InGameClient.FlushOutgoingBuffer(); // not sure about this one /raist.
+            player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID },true);
+            
             
             foreach (var sub in this.Subscenes)
             {
