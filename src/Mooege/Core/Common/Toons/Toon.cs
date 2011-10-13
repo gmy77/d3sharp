@@ -301,22 +301,22 @@ namespace Mooege.Core.Common.Toons
             switch (operation.Operation)
             {
                 case bnet.protocol.presence.FieldOperation.Types.OperationType.SET:
-                    doSet(operation.Field);
+                    DoSet(operation.Field);
                     break;
                 case bnet.protocol.presence.FieldOperation.Types.OperationType.CLEAR:
-                    doClear(operation.Field);
+                    DoClear(operation.Field);
                     break;
             }
         }
 
-        private void doSet(bnet.protocol.presence.Field field)
+        private void DoSet(bnet.protocol.presence.Field field)
         {
             switch ((FieldKeyHelper.Program)field.Key.Program)
             {
                 case FieldKeyHelper.Program.D3:
                     if (field.Key.Group == 4)
                     {
-                        //Group 4 fields 2, 2, and 3 gets spammed on whenever a client logs in or out.
+                        //Group 4 fields 1, 2, and 3 get spammed whenever a client logs in or out.
                         //catching it in this if to stop Logger.Warn spam.
                     }
                     else
@@ -337,7 +337,7 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        private void doClear(bnet.protocol.presence.Field field)
+        private void DoClear(bnet.protocol.presence.Field field)
         {
             switch ((FieldKeyHelper.Program)field.Key.Program)
             {
