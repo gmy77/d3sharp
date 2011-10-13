@@ -142,7 +142,7 @@ namespace Mooege.Core.GS.Map
             var players = this._players.Values; //this.GetPlayersInRange(actor.Position, 480.0f);
             foreach (var player in players)
             {
-                if (actor is Player.Player) Logger.Debug("Enter: Revealing player: {0}[DynamicId:{1}] to {2}[DynamicId:{3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
+                if (actor is Player.Player) Logger.Debug("Revealing player: {0}[DynamicId:{1}] to {2}[DynamicId:{3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
                 actor.Reveal(player);
             }
         }
@@ -189,7 +189,6 @@ namespace Mooege.Core.GS.Map
             Logger.Info("Revealing all actors for world {0}", this.DynamicID);
             foreach (var actor in _actors.Values)
             {
-                if (actor is Player.Player) Logger.Debug("Revaling player {0}[DynamicId: {1}] to player {2}[DynamicId: {3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
                 actor.Reveal(player);                
             }
 
