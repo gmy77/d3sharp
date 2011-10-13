@@ -154,7 +154,7 @@ namespace Mooege.Net.GS.Message
         ANNDataMessage16 = 134, // len: 	12
         AimTargetMessage = 135, // len: 	36
         ACDChangeGBHandleMessage = 136, // len: 	20
-        DWordDataMessage6 = 137, // len: 	12
+        GameTickMessage = 137, // len: 	12
         LearnedSkillMessage = 138, // len: 	524
         DataIDDataMessage1 = 139, // len: 	12
         DataIDDataMessage2 = 140, // len: 	12

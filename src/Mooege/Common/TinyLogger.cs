@@ -29,6 +29,7 @@ namespace Mooege.Common
 {
     public enum Level
     {
+        Dump, // used for logging packets.
         Trace,
         Debug,
         Info,
@@ -72,7 +73,7 @@ namespace Mooege.Common
             if (!LogManager.Enabled) return;
             if (LogManager.Targets.Count == 0) return;
 
-            foreach (var target in LogManager.Targets.Where(target => level >= target.MinimumLevel))
+            foreach (var target in LogManager.Targets.Where(target => level >= target.MinimumLevel && level <= target.MaximumLevel))
             {
                 target.LogMessage(level, logger, message);
             }
@@ -83,7 +84,7 @@ namespace Mooege.Common
             if (!LogManager.Enabled) return;
             if (LogManager.Targets.Count == 0) return;
 
-            foreach (var target in LogManager.Targets.Where(target => level >= target.MinimumLevel))
+            foreach (var target in LogManager.Targets.Where(target => level >= target.MinimumLevel && level <= target.MaximumLevel))
             {
                 target.LogException(level, logger, message, exception);
             }
@@ -128,12 +129,12 @@ namespace Mooege.Common
         public void Fatal(string message, params object[] args) { Log(Level.Fatal, message, args); }
 
         // moonet packet loggers
-        public void LogIncoming(Google.ProtocolBuffers.IMessage msg) { Log(Level.Trace, msg.AsText(), null); }
-        public void LogOutgoing(Google.ProtocolBuffers.IMessage msg) { Log(Level.Trace, msg.AsText(), null); }
+        public void LogIncoming(Google.ProtocolBuffers.IMessage msg) { Log(Level.Dump, msg.AsText(), null); }
+        public void LogOutgoing(Google.ProtocolBuffers.IMessage msg) { Log(Level.Dump, msg.AsText(), null); }
 
         // ingame packet loggers
-        public void LogIncoming(GameMessage msg) { Log(Level.Trace, "[I] " + msg.AsText(), null); }
-        public void LogOutgoing(GameMessage msg) { Log(Level.Trace, "[O] " + msg.AsText(), null); }
+        public void LogIncoming(GameMessage msg) { Log(Level.Dump, "[I] " + msg.AsText(), null); }
+        public void LogOutgoing(GameMessage msg) { Log(Level.Dump, "[O] " + msg.AsText(), null); }
 
         public void TraceException(Exception exception, string message) { LogException(Level.Trace, message, null, exception); }
         public void TraceException(Exception exception, string message, params object[] args) { LogException(Level.Trace, message, args, exception); }
@@ -157,8 +158,14 @@ namespace Mooege.Common
     public class Target
     {
         public Level MinimumLevel { get; protected set; }
+        public Level MaximumLevel { get; protected set; }
         public virtual void LogMessage(Level level, string logger, string message) { throw new NotSupportedException(); }
         public virtual void LogException(Level level, string logger, string message, Exception exception) { throw new NotSupportedException(); }
+
+        public Target()
+        {
+            this.MaximumLevel = Level.Fatal;
+        }
     }
 
     public class FileTarget : Target, IDisposable
@@ -168,13 +175,13 @@ namespace Mooege.Common
         private FileStream _fileStream;
         private StreamWriter _logStream;
 
-        public FileTarget(Level minLevel, string filePath)
+        public FileTarget(string filePath, Level minLevel, Level maxLevel = Level.Fatal, FileMode fileMode = FileMode.Append)
         {
             MinimumLevel = minLevel;
+            MaximumLevel = maxLevel;
             _filePath = filePath;
-            this._fileStream = new FileStream(_filePath, FileMode.Append, FileAccess.Write);
-            this._logStream = new StreamWriter(this._fileStream);
-            this._logStream.AutoFlush = true;
+            this._fileStream = new FileStream(_filePath, fileMode, FileAccess.Write);
+            this._logStream = new StreamWriter(this._fileStream) {AutoFlush = true};
         }
 
         public override void LogMessage(Level level, string logger, string message)
@@ -229,10 +236,6 @@ namespace Mooege.Common
 
     public class ConsoleTarget : Target
     {
-        // Win32 API constants.
-        private const int StdOutputHandle = -11;
-        private const int CodePage = 437;
-
         public ConsoleTarget(Level minLevel, bool initConsole = false)
         {
             MinimumLevel = minLevel;
@@ -254,6 +257,7 @@ namespace Mooege.Common
         {
             switch (level)
             {
+                case Level.Dump: Console.ForegroundColor = ConsoleColor.DarkGray; break;
                 case Level.Trace: Console.ForegroundColor = ConsoleColor.DarkGray; break;
                 case Level.Debug: Console.ForegroundColor = ConsoleColor.Cyan; break;
                 case Level.Info: Console.ForegroundColor = ConsoleColor.White; break;

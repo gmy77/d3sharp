@@ -28,7 +28,7 @@ namespace Mooege.Net.GS.Message.Definitions.Connection
         {
             if (client.IsLoggingOut)
             {
-                client.SendMessageNow(new QuitGameMessage() // should be sent to all players i guess /raist.
+                client.SendMessage(new QuitGameMessage() // should be sent to all players i guess /raist.
                 {
                     PlayerIndex = client.Player.PlayerIndex,
                 });

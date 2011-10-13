@@ -18,13 +18,13 @@
 
 using System;
 using System.Linq;
-using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Player;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Definitions.Tick;
 using Mooege.Net.MooNet;
-using Mooege.Core.Common.Items;
 
 // TODO: Client should probably just flush on every message, or use a queue with a very small quota..
 // consider: The client seems to not interpret received messages until a tick message which makes flushing earlier less useful
@@ -42,13 +42,14 @@ namespace Mooege.Net.GS
 
         public Game Game { get; set; }
         public Player Player { get; set; }
-        public int PacketId = 0x227 + 20; // TODO: We need proper packet ID incrementing
-        public int Tick = 0; // ... and proper ticking
+
+        public bool TickingEnabled { get; set; }
 
         public bool IsLoggingOut;
 
         public GameClient(IConnection connection)
         {
+            this.TickingEnabled = false;
             this.Connection = connection;
             _outgoingBuffer.WriteInt(32, 0);
         }
@@ -79,7 +80,7 @@ namespace Mooege.Net.GS
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                         else Logger.Warn("{0} has no consumer or self-handler.", message.GetType());
 
-                        //Logger.LogIncoming(message);
+                        Logger.LogIncoming(message); // change ConsoleTarget's level to Level.Dump in program.cs if u want to see messages on console.
                     }
                     catch (NotImplementedException)
                     {
@@ -90,25 +91,34 @@ namespace Mooege.Net.GS
                 _incomingBuffer.Position = end;
             }
             _incomingBuffer.ConsumeData();
-            FlushOutgoingBuffer();
         }
 
         public void SendMessage(GameMessage message)
         {
-            //Logger.LogOutgoing(message);
-            _outgoingBuffer.EncodeMessage(message);
+            lock (this)
+            {
+                Logger.LogOutgoing(message);
+                _outgoingBuffer.EncodeMessage(message); // change ConsoleTarget's level to Level.Dump in program.cs if u want to see messages on console.
+            }
         }
 
-        public void SendMessageNow(GameMessage message)
+        public void SendTick()
         {
-            SendMessage(message);
-            FlushOutgoingBuffer();
+            lock (this)
+            {
+                if (_outgoingBuffer.Length <= 32) return;
+
+                if (this.TickingEnabled) this.SendMessage(new GameTickMessage(this.Game.Tick)); // send the tick.
+                this.FlushOutgoingBuffer();
+            }
         }
 
         public void FlushOutgoingBuffer()
         {
-            if (_outgoingBuffer.Length > 32)
+            lock (this)
             {
+                if (_outgoingBuffer.Length <= 32) return;
+                
                 var data = _outgoingBuffer.GetPacketAndReset();
                 Connection.Send(data);
             }

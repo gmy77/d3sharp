@@ -28,14 +28,12 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.Combat;
 using Mooege.Net.GS.Message.Definitions.Hero;
-using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
-using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Definitions.Effect;
 
 
@@ -233,14 +231,14 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Hitpoints_Factor_Vitality] = 4f;
             this.Attributes[GameAttribute.Hitpoints_Factor_Level] = 4f;
             this.Attributes[GameAttribute.Hitpoints_Cur] = 76f;
-            this.Attributes[GameAttribute.Disabled] = true;
-            this.Attributes[GameAttribute.Loading] = true;
-            this.Attributes[GameAttribute.Invulnerable] = true;
+            //this.Attributes[GameAttribute.Disabled] = true;
+            //this.Attributes[GameAttribute.Loading] = true;
+            //this.Attributes[GameAttribute.Invulnerable] = true;
             this.Attributes[GameAttribute.TeamID] = 2;
             this.Attributes[GameAttribute.Skill_Total, 0xFFFFF] = 1;
             this.Attributes[GameAttribute.Skill, 0xFFFFF] = 1;
             this.Attributes[GameAttribute.Buff_Icon_Count0, 0x0000CE11] = 1;
-            this.Attributes[GameAttribute.Hidden] = true;
+            this.Attributes[GameAttribute.Hidden] = false;
             this.Attributes[GameAttribute.Level_Cap] = 13;
             this.Attributes[GameAttribute.Level] = this.Properties.Level;
             this.Attributes[GameAttribute.Experience_Next] = 1200;
@@ -266,7 +264,11 @@ namespace Mooege.Core.GS.Player
             else return;
 
             UpdateState();
-            client.FlushOutgoingBuffer();
+        }
+
+        public override void Update()
+        {
+            this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
 
         // FIXME: Hardcoded crap
@@ -274,26 +276,10 @@ namespace Mooege.Core.GS.Player
         {
             this.World.Reveal(this);
 
-            // This "tick" stuff is somehow required to use these values.. /komiga
-            this.InGameClient.SendMessage(new DWordDataMessage() // TICK
-            {
-                Id = 0x0089,
-                Field0 = 0x00000077,
-            });
-            this.InGameClient.FlushOutgoingBuffer();
-
             // FIXME: hackedy hack
             var attribs = new GameAttributeMap();
             attribs[GameAttribute.Hitpoints_Healed_Target] = 76f;
             attribs.SendMessage(InGameClient, this.DynamicID);
-
-            this.InGameClient.PacketId += 40 * 2;
-            this.InGameClient.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = 0x0000007D //this.InGameClient.PacketId,
-            });
-            this.InGameClient.FlushOutgoingBuffer();
         }
 
         public override void OnLeave(World world)
@@ -305,17 +291,22 @@ namespace Mooege.Core.GS.Player
             if (!base.Reveal(player))
                 return false;
 
-            player.InGameClient.SendMessage(new PlayerWarpedMessage()
+            if (this == player) // only send this when player's own actor being is revealed. /raist.
             {
-                Field0 = 9,
-                Field1 = 0f,
-            });
+                player.InGameClient.SendMessage(new PlayerWarpedMessage()
+                                                    {
+                                                        Field0 = 9,
+                                                        Field1 = 0f,
+                                                    });
+            }
 
             player.InGameClient.SendMessage(new PlayerEnterKnownMessage()
             {
                 PlayerIndex = this.PlayerIndex,
                 ActorId = this.DynamicID,
             });
+
+            this.Inventory.SendVisualInvetory(player); 
 
             if (this == player) // only send this to player itself. Warning: don't remove this check or you'll make the game start crashing! /raist.
             {
@@ -325,8 +316,7 @@ namespace Mooege.Core.GS.Player
                     PlayerIndex = this.PlayerIndex,
                 });
             }
-
-            player.InGameClient.FlushOutgoingBuffer();
+            
             return true;
         }
 
@@ -372,13 +362,6 @@ namespace Mooege.Core.GS.Player
             {
                 State = this.GetStateData()
             });
-
-            this.InGameClient.PacketId += 10 * 2;
-            this.InGameClient.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = this.InGameClient.PacketId,
-            });
         }
 
         // Properties
@@ -421,28 +404,6 @@ namespace Mooege.Core.GS.Player
                 snoTraits = this.SkillSet.PassiveSkills,
                 Field9 = new SavePointData() { snoWorld = -1, Field1 = -1, },
                 m_SeenTutorials = this.SeenTutorials,
-            };
-        }
-
-        public VisualInventoryMessage GetVisualInventory()
-        {
-            return new VisualInventoryMessage
-            {
-                ActorID = this.DynamicID,
-                EquipmentList =
-                    new VisualEquipment
-                    {
-                        Equipment =
-                            Properties.Equipment.VisualItemList.Select(
-                                equipment =>
-                                new VisualItem
-                                {
-                                    GbId = equipment.Gbid,
-                                    Field1 = 0x0,
-                                    Field2 = 0x0,
-                                    Field3 = -1
-                                }).ToArray()
-                    }
             };
         }
 
@@ -709,5 +670,15 @@ namespace Mooege.Core.GS.Player
             new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
             new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
         };
+
+        public GenericBlobMessage GetPlayerBanner()
+        {
+            var playerBanner = D3.GameMessage.PlayerBanner.CreateBuilder()
+                .SetPlayerIndex((uint) this.PlayerIndex)
+                .SetBanner(this.Properties.Owner.BannerConfiguration)
+                .Build();
+
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage6) {Data = playerBanner.ToByteArray()};
+        }
     }
 }

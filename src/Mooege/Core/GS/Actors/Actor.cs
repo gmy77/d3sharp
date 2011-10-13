@@ -109,7 +109,7 @@ namespace Mooege.Core.GS.Actors
         public SNOName SNOName { get; private set; }
 
         // Some ACD uncertainties
-        public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc
+        public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself
         public int Field3 = 0x00000001; // TODO: What dis? <-- I guess its just 0 for WorldItem and 1 for InventoryItem // Farmy
         public int Field7 = -1;
         public int Field8 = -1; // Animation set SNO?
@@ -224,6 +224,11 @@ namespace Mooege.Core.GS.Actors
                 Field12 = Field12,
                 Field13 = Field13,
             };
+
+            // normaly when we send acdenterknown for players own actor it's set to 0x09. But while sending the acdenterknown for another player's actor we should set it to 0x01. /raist
+            if ((this is Player.Player) && this != player) 
+                msg.Field2 = 0x01; 
+
             player.InGameClient.SendMessage(msg);
 
             // Affixes of the actor, two messages with 1 and 2,i guess prefix and suffix so it does not
@@ -277,7 +282,7 @@ namespace Mooege.Core.GS.Actors
             {
                 Name = this.SNOName
             });
-            player.InGameClient.FlushOutgoingBuffer();
+
             return true;
         }
 
@@ -289,7 +294,7 @@ namespace Mooege.Core.GS.Actors
         {
             if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // not revealed yet
             // NOTE: This message ID is probably "DestroyActor". ANNDataMessage7 is used for addition/creation
-            player.InGameClient.SendMessageNow(new ANNDataMessage(Opcodes.ANNDataMessage6) { ActorID = this.DynamicID });
+            player.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6) { ActorID = this.DynamicID });
             player.RevealedObjects.Remove(this.DynamicID);
             return true;
         }

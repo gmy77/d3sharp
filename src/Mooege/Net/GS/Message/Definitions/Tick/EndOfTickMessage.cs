@@ -18,48 +18,40 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Connection
+namespace Mooege.Net.GS.Message.Definitions.Tick
 {
-    [Message(new[] { Opcodes.LogoutContextMessage1, Opcodes.LogoutContextMessage2 })]
-    public class LogoutContextMessage : GameMessage,ISelfHandler
+    [Message(Opcodes.EndOfTickMessage)]
+    public class EndOfTickMessage : GameMessage
     {
-        public bool Field0;
+        public int Field0;
+        public int Field1;
 
-        public void Handle(GameClient client)
-        {
-            client.IsLoggingOut = !client.IsLoggingOut;
-
-            if (client.IsLoggingOut)
-            {
-                client.SendMessage(new LogoutTickTimeMessage()
-                {
-                    Id = 0x0027,
-                    Field0 = false, // true - logout with party?
-                    Field1 = 0, // delay 1, make this equal to 0 for instant logout
-                    Field2 = 0, // delay 2
-                });
-            }
-        }
+        public EndOfTickMessage() : base(Opcodes.EndOfTickMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadBool();
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteBool(Field0);
+            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, Field1);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("LogoutContextMessage:");
+            b.AppendLine("EndOfTickMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: " + (Field0 ? "true" : "false"));
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
+
+
     }
 }

@@ -59,7 +59,6 @@ namespace Mooege.Net.GS.Message
             var list = GetMessageList(actorID);
             foreach (var msg in list)
                 client.SendMessage(msg);
-            client.FlushOutgoingBuffer();
         }
 
         public List<GameMessage> GetMessageList(uint actorID)
