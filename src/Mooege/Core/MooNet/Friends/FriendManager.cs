@@ -63,8 +63,8 @@ namespace Mooege.Core.MooNet.Friends
             if (!OnGoingInvitations.ContainsKey(request.InvitationId)) return;
             var invitation = OnGoingInvitations[request.InvitationId];
 
-            var inviter = AccountManager.GetAccountByPersistantID(invitation.InviterIdentity.AccountId.Low);
-            var invitee = AccountManager.GetAccountByPersistantID(invitation.InviteeIdentity.AccountId.Low);
+            var inviter = AccountManager.GetAccountByPersistentID(invitation.InviterIdentity.AccountId.Low);
+            var invitee = AccountManager.GetAccountByPersistentID(invitation.InviteeIdentity.AccountId.Low);
             var inviteeAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(invitation.InviteeIdentity.AccountId).Build();
             var inviterAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(invitation.InviterIdentity.AccountId).Build();
 

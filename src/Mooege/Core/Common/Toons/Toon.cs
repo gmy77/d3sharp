@@ -70,10 +70,10 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        public Toon(ulong persistantId, string name, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
-            :base(persistantId)
+        public Toon(ulong persistentId, string name, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
+            :base(persistentId)
         {
-            this.SetFields(name, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistantID((ulong)accountId));
+            this.SetFields(name, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistentID((ulong)accountId));
         }
 
         public Toon(string name, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
