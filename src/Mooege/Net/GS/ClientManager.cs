@@ -89,9 +89,9 @@ namespace Mooege.Net.GS
                     SNOPackHash = message.SNOPackHash,
                 });
 
-                client.SendMessage(new GameSetupMessage
+                client.SendMessage(new GameSetupMessage // should be the current tick for the game /raist.
                 {
-                    Field0 = 0x00000077,
+                    Field0 = game.Tick,
                 });
 
                 client.SendMessage(new SavePointInfoMessage
