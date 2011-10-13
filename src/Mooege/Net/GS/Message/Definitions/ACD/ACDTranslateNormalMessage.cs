@@ -23,8 +23,8 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
-    [Message(new[]{ Opcodes.ACDTranslateNormalMessage1, Opcodes.ACDTranslateNormalMessage2 })]
-    public class ACDTranslateNormalMessage : GameMessage, ISelfHandler
+    [Message(new[]{ Opcodes.ACDTranslateNormalMessage1, Opcodes.ACDTranslateNormalMessage2 }, Consumers.Player)]
+    public class ACDTranslateNormalMessage : GameMessage
     {
         public int Field0; // TODO: Confirm that this is the actor ID
         public Vector3D Position;
@@ -34,41 +34,6 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int? Field5;
         public int? Field6;
         public int? Field7;
-
-        public void Handle(GameClient client)
-        {
-            if (this.Position != null)
-                client.Player.Position = this.Position;
-
-            // looking for gold to pick up
-            // TODO: Need to consider items on the ground globally as well (and this doesn't belong here)
-            var actorList = client.Player.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
-            foreach (var actor in actorList)
-            {
-                Item item;
-                if (client.Player.GroundItems.TryGetValue(actor.DynamicID, out item) && item.ItemType == ItemType.Gold)
-                {
-                    client.SendMessage(new FloatingAmountMessage() {
-                        Place = new WorldPlace() {
-                            Position = this.Position,
-                            WorldID = client.Player.World.DynamicID,
-                        },
-                        Amount = item.Attributes[GameAttribute.Gold],
-                        Type = FloatingAmountMessage.FloatType.Gold,
-                    });
-                    // NOTE: ANNDataMessage6 is probably "AddToInventory"
-                    client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6)
-                    {
-                        ActorID = actor.DynamicID,
-                    });
-
-                    client.Player.Inventory.PickUpGold(actor.DynamicID);
-
-                    client.Player.GroundItems.Remove(actor.DynamicID);
-                    // should delete from World also
-                }
-            }
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

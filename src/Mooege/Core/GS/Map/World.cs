@@ -122,11 +122,8 @@ namespace Mooege.Core.GS.Map
             // TODO: Unreveal from players that are now outside the actor's range
 
             if (!actor.HasWorldLocation) return;
-
-            if (actor is Player.Player)
-                BroadcastExclusive(actor.ACDTranslateNormalMessage, actor); // brodcast this exclusively if actor is a player -- in other words, do not send position update message back to original player moving. /raist.
-            else
-                BroadcastIfRevealed(actor.ACDTranslateNormalMessage, actor);                                                                           
+            
+            // BroadcastIfRevealed(actor.ACDTranslateNormalMessage, actor); // movement should be ACDTranslateNormalMessage based not ACDWorldPositionMessage /raist.
         }
 
         // TODO: NewPlayer messages should be broadcasted at the Game level, which means we may have to track players separately from objects in Game
