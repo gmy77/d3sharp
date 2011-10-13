@@ -93,7 +93,7 @@ namespace Mooege.Core.Common.Items
 
             while (!found)
             {
-                itemDefinition = pool[RandomHelper.Next(0, ValidDefinitions.Count() - 1)];
+                itemDefinition = pool[RandomHelper.Next(0, pool.Count() - 1)];
 
                 // ignore items that mostly produce bad gbid's which crashes client on pickup eventually. 
                 if (itemDefinition.Type == ItemType.Unknown) continue;
