@@ -98,6 +98,10 @@ namespace Mooege.Core.MooNet.Services
                 case EntityIdHelper.HighIdType.ToonId:
                     var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
                     Logger.Trace("Update:Toon: {0}", toon);
+                    foreach(var fieldOp in request.FieldOperationList)
+                    {
+                        toon.Update(fieldOp);
+                    }
                     break;
                 default:
                     Logger.Warn("Recieved an unhandled Presence.Update request with type {0}", request.EntityId.GetHighIdType());

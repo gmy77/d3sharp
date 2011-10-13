@@ -18,6 +18,7 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -48,8 +49,10 @@ namespace Mooege
             
             // Don't forget this..
             LogManager.Enabled = true;
+            // We eventually need to make this configurable in config.ini. /raist.
             LogManager.AttachLogTarget(new ConsoleTarget(Level.Trace));
-            LogManager.AttachLogTarget(new FileTarget(Level.Trace, "mooege-log.txt"));
+            LogManager.AttachLogTarget(new FileTarget("mooege-log.txt", Level.Trace));
+            LogManager.AttachLogTarget(new FileTarget("mooege-dump.txt",Level.Dump, Level.Dump, FileMode.Create));
 
             Console.ForegroundColor = ConsoleColor.Yellow;
             PrintBanner();

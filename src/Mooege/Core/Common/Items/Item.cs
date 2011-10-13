@@ -24,7 +24,6 @@ using Mooege.Core.Common.Items.ItemCreation;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Effect;
-using Mooege.Net.GS.Message.Definitions.Combat;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
 
@@ -177,7 +176,7 @@ namespace Mooege.Core.Common.Items
             this.InventoryLocation.X = column;
             this.InventoryLocation.Y = row;
             if (this.Owner != null)
-                this.Owner.InGameClient.SendMessageNow(this.ACDInventoryPositionMessage);
+                this.Owner.InGameClient.SendMessage(this.ACDInventoryPositionMessage);
         }
 
         public void Drop(Mooege.Core.GS.Player.Player owner, Vector3D position)
@@ -212,7 +211,7 @@ namespace Mooege.Core.Common.Items
                 ItemSNO = this.ActorSNO,
             });
              */
-            player.InGameClient.FlushOutgoingBuffer();
+
             return true;
         }
     }

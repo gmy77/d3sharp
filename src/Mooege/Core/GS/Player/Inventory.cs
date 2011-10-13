@@ -16,17 +16,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
 using Mooege.Common;
-using Mooege.Common.Helpers;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Net.GS.Message.Definitions.Combat;
-using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.Common.Items;
 
@@ -60,47 +56,26 @@ namespace Mooege.Core.GS.Player
                 InventoryLocation = item.InventoryLocationMessage,
                 Field2 = 1 // what does this do?  // 0 - source item not disappearing from inventory, 1 - Moving, any other possibilities? its an int32
             });*/
-
-            _owner.InGameClient.PacketId += 10 * 2;
-            _owner.InGameClient.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = _owner.InGameClient.PacketId,
-            });
-            _owner.InGameClient.FlushOutgoingBuffer();
         }
 
 
          /// <summary>
         /// Refreshes the visual appearance of the hero
-        /// TODO: this should go to hero class
         /// </summary>
-        /// <param name="actorID"></param>
-        void RefreshVisual()
-        {
-            _owner.InGameClient.SendMessage(new VisualInventoryMessage()
-            {
-                ActorID = _owner.DynamicID,
-                EquipmentList = new VisualEquipment()
-                {
-                    Equipment = _equipment.GetVisualEquipment()
-                },
-            });
+        public void SendVisualInvetory(Player player)
+         {
+             var message = new VisualInventoryMessage()
+                               {
+                                   ActorID = this._owner.DynamicID,
+                                   EquipmentList = new VisualEquipment()
+                                                       {
+                                                           Equipment = this._equipment.GetVisualEquipment()
+                                                       },
+                               };
 
-            // Finalize
-            // Hardcoded tick keeps the game updated.. /komiga
-            _owner.InGameClient.PacketId += 10 * 2;
-            _owner.InGameClient.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = _owner.InGameClient.PacketId,
-            });
-            _owner.InGameClient.FlushOutgoingBuffer();
-        }
-
+             player.InGameClient.SendMessage(message);             
+         }
         
-
-
         /// <summary>
         /// Picks an item up after client request
         /// </summary>
@@ -179,7 +154,7 @@ namespace Mooege.Core.GS.Player
                         AcceptMoveRequest(oldEquipItem);
                     }
 
-                    RefreshVisual();
+                    SendVisualInvetory(this._owner);
                 }
             }
 
@@ -191,7 +166,7 @@ namespace Mooege.Core.GS.Player
                     if (_equipment.IsItemEquipped(item))
                     {
                         _equipment.UnequipItem(item); // Unequip the item
-                        RefreshVisual();
+                        SendVisualInvetory(this._owner);
                     }
                     else
                     {
@@ -242,7 +217,7 @@ namespace Mooege.Core.GS.Player
                     _equipment.EquipItem(item, (int)EquipmentSlotId.Main_Hand);
                     AcceptMoveRequest(item); 
                    
-                    RefreshVisual();
+                    SendVisualInvetory(this._owner);
                     // All equipment commands are executed. the original EquipmentRequest is invalid at this moment
                     return false;
                 }
@@ -286,13 +261,6 @@ namespace Mooege.Core.GS.Player
             attributes = new GameAttributeMap();
             attributes[GameAttribute.ItemStackQuantityLo] = itemTo.Attributes[GameAttribute.ItemStackQuantityLo];
             attributes.SendMessage(_owner.InGameClient, itemTo.DynamicID);
-
-            _owner.InGameClient.PacketId += 10 * 2;
-            _owner.InGameClient.SendMessage(new DWordDataMessage()
-            {
-                Id = 0x89,
-                Field0 = _owner.InGameClient.PacketId,
-            });
         }
 
         private void OnInventoryDropItemMessage(InventoryDropItemMessage msg)
@@ -301,7 +269,7 @@ namespace Mooege.Core.GS.Player
             if (_equipment.IsItemEquipped(item))
             {
                 _equipment.UnequipItem(item);
-                RefreshVisual();
+                SendVisualInvetory(this._owner);
             }
             else
             {

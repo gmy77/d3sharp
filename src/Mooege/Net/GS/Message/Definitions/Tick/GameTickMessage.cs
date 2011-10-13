@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,40 +16,45 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Tick
 {
-    [Message(Opcodes.EndOfTickMessage)]
-    public class EndOfTickMessage : GameMessage
+    [Message(Opcodes.GameTickMessage)]
+    public class GameTickMessage:GameMessage
     {
-        public int Field0;
-        public int Field1;
+        public int Tick;
+
+        public GameTickMessage() : base(Opcodes.GameTickMessage) { }
+
+        public GameTickMessage(int tick)
+            : base(Opcodes.GameTickMessage)
+        {
+            this.Tick = tick;   
+        }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            Tick = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, Tick);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("EndOfTickMessage:");
+            b.AppendLine("DWordDataMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Tick.ToString("X8") + " (" + Tick + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

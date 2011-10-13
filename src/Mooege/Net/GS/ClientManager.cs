@@ -78,9 +78,9 @@ namespace Mooege.Net.GS
                 client.BnetClient.InGameClient = client;
 
                 client.Player = new Player(game.StartWorld, client, toon);
-                Logger.Debug("Player {0}[PlayerIndex: {1}] connected.", client.Player.Properties.Name, client.Player.PlayerIndex);
+                Logger.Info("Player {0}[PlayerIndex: {1}] connected.", client.Player.Properties.Name, client.Player.PlayerIndex);
 
-                client.SendMessageNow(new VersionsMessage(message.SNOPackHash));
+                client.SendMessage(new VersionsMessage(message.SNOPackHash));
 
                 client.SendMessage(new ConnectionEstablishedMessage
                 {
@@ -89,9 +89,9 @@ namespace Mooege.Net.GS
                     SNOPackHash = message.SNOPackHash,
                 });
 
-                client.SendMessage(new GameSetupMessage
+                client.SendMessage(new GameSetupMessage // should be the current tick for the game /raist.
                 {
-                    Field0 = 0x00000077,
+                    Field0 = game.Tick,
                 });
 
                 client.SendMessage(new SavePointInfoMessage

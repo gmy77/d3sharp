@@ -18,15 +18,17 @@
 
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Mooege.Common;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Generators;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Player;
+using Mooege.Net.GS.Message.Fields;
 
 // TODO: Move scene stuff into a Map class (which can also handle the efficiency stuff and object grouping)
 
@@ -42,13 +44,21 @@ namespace Mooege.Core.GS.Game
 
         public int PlayerIndexCounter = -1;
 
-        private readonly Dictionary<uint, DynamicObject> _objects;
-        private readonly Dictionary<int, World> _worlds; // NOTE: This tracks by WorldSNO rather than by DynamicID; this.Objects _does_ still contain the world since it is a DynamicObject
+        private readonly ConcurrentDictionary<uint, DynamicObject> _objects;
+        private readonly ConcurrentDictionary<int, World> _worlds; // NOTE: This tracks by WorldSNO rather than by DynamicID; this.Objects _does_ still contain the world since it is a DynamicObject
 
         public int StartWorldSNO { get; private set; }
         public World StartWorld { get { return GetWorld(this.StartWorldSNO); } }
 
         private readonly WorldGenerator _worldGenerator;
+
+        public readonly int UpdateFrequency=100;
+        private int _tickCounter;
+        
+        public int Tick
+        {
+            get { return _tickCounter; }
+        }
 
         private uint _lastObjectID = 0x00000001;
         private uint _lastSceneID  = 0x04000000;
@@ -62,10 +72,29 @@ namespace Mooege.Core.GS.Game
         public Game(int gameId)
         {
             this.GameId = gameId;
-            this._objects = new Dictionary<uint, DynamicObject>();
-            this._worlds = new Dictionary<int, World>();
+            this._objects = new ConcurrentDictionary<uint, DynamicObject>();
+            this._worlds = new ConcurrentDictionary<int, World>();
             this._worldGenerator = new WorldGenerator(this);
             this.StartWorldSNO = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff
+
+            var loopThread=new Thread(Update) { IsBackground = true };
+            loopThread.Start();
+        }
+
+        public void Update() // the main game-loop.
+        {
+            while (true)
+            {
+                Interlocked.Add(ref this._tickCounter, 20);
+
+                // only update worlds with active players in it - so mob's brain() in empty worlds doesn't get called and take actions for nothing. /raist.
+                foreach (var pair in this._worlds.Where(pair => pair.Value.HasPlayersIn)) 
+                {
+                    pair.Value.Update();
+                }
+
+                Thread.Sleep(UpdateFrequency);
+            }
         }
 
         public void Route(GameClient client, GameMessage message)
@@ -105,7 +134,23 @@ namespace Mooege.Core.GS.Game
                 this.SendNewPlayerMessage(pair.Value, joinedPlayer);
             }
 
+            joinedPlayer.InGameClient.SendMessage(new GameSyncedDataMessage
+            {
+                Field0 = new GameSyncedData
+                            {
+                                Field0 = false,
+                                Field1 = 0x0,
+                                Field2 = 0x0,
+                                Field3 = 0x0,
+                                Field4 = 0x0,
+                                Field5 = 0x0,
+                                Field6 = new[] {0x0, 0x0},
+                                Field7 = new[] {0x0, 0x0}
+                            }
+            });
+
             joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition
+            joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
         }
 
         private void SendNewPlayerMessage(Player.Player target, Player.Player joinedPlayer)
@@ -116,15 +161,16 @@ namespace Mooege.Core.GS.Game
                 Field1 = "", //Owner name?
                 ToonName = joinedPlayer.Properties.Name,
                 Field3 = 0x00000002, //party frame class
-                Field4 = 0x00000004, //party frame level
+                Field4 = target!=joinedPlayer? 0x2 : 0x4, //party frame level /boyc - may mean something different /raist.
                 snoActorPortrait = joinedPlayer.ClassSNO, //party frame portrait
-                Field6 = 0x00000001,
+                Field6 = 0x0000000A,
                 StateData = joinedPlayer.GetStateData(),
                 Field8 = this.Players.Count != 1, //announce party join
                 Field9 = 0x00000001,
                 ActorID = joinedPlayer.DynamicID,
             });
-            Logger.Debug("{0}[PlayerIndex: {1}] is notified about {2}[PlayerIndex: {3}] joining the game.", target.Properties.Name, target.PlayerIndex, joinedPlayer.Properties.Name, joinedPlayer.PlayerIndex);
+
+            target.InGameClient.SendMessage(joinedPlayer.GetPlayerBanner()); // send player banner proto - D3.GameMessage.PlayerBanner
         }
 
 
@@ -134,14 +180,16 @@ namespace Mooege.Core.GS.Game
         {
             if (obj.DynamicID == 0 || IsTracking(obj))
                 throw new Exception(String.Format("Object has an invalid ID or was already being tracked (ID = {0})", obj.DynamicID));
-            this._objects.Add(obj.DynamicID, obj);
+            this._objects.TryAdd(obj.DynamicID, obj);
         }
 
         public void EndTracking(DynamicObject obj)
         {
             if (obj.DynamicID == 0 || !IsTracking(obj))
                 throw new Exception(String.Format("Object has an invalid ID or was not being tracked (ID = {0})", obj.DynamicID));
-            this._objects.Remove(obj.DynamicID);
+
+            DynamicObject removed;
+            this._objects.TryRemove(obj.DynamicID, out removed);
         }
 
         public DynamicObject GetObject(uint dynamicID)
@@ -169,26 +217,27 @@ namespace Mooege.Core.GS.Game
         {
             if (world.WorldSNO == -1 || WorldExists(world.WorldSNO))
                 throw new Exception(String.Format("World has an invalid SNO or was already being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.WorldSNO));
-            this._worlds.Add(world.WorldSNO, world);
+            this._worlds.TryAdd(world.WorldSNO, world);
         }
 
         public void RemoveWorld(World world)
         {
             if (world.WorldSNO == -1 || !WorldExists(world.WorldSNO))
                 throw new Exception(String.Format("World has an invalid SNO or was not being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.WorldSNO));
-            this._worlds.Remove(world.WorldSNO);
+
+            World removed;
+            this._worlds.TryRemove(world.WorldSNO, out removed);
         }
 
         public World GetWorld(int worldSNO)
         {
             World world;
             this._worlds.TryGetValue(worldSNO, out world);
-            // If it doesn't exist, try to load it
-            if (world == null)
+
+            if (world == null) // If it doesn't exist, try to load it
             {
                 world = this._worldGenerator.GenerateWorld(worldSNO);
-                if (world == null)
-                    Logger.Warn(String.Format("Failed to generate world (SNO = {0})", worldSNO));
+                if (world == null) Logger.Warn(String.Format("Failed to generate world (SNO = {0})", worldSNO));
             }
             return world;
         }
