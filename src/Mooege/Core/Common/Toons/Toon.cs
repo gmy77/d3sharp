@@ -51,7 +51,7 @@ namespace Mooege.Core.Common.Toons
         public byte Level { get; private set; }
         public D3.Hero.Digest Digest { get; private set; }
         public D3.Hero.VisualEquipment Equipment { get; private set; }
-        public AwayStatusFlags AwayStatus { get; private set; }
+        public AwayStatus AwayStatus { get; private set; }
 
         public Account Owner { get; set; }
         
@@ -327,7 +327,7 @@ namespace Mooege.Core.Common.Toons
                 case FieldKeyHelper.Program.BNet:
                     if (field.Key.Group == 3 && field.Key.Field == 5) // Away status
                     {
-                        AwayStatus = (AwayStatusFlags)field.Value.IntValue;
+                        AwayStatus = (AwayStatus)field.Value.IntValue;
                     }
                     else
                     {
@@ -509,12 +509,13 @@ namespace Mooege.Core.Common.Toons
         BothUnknowns=Unknown1 | Unknown2
     }
 
-    //assuming its a flag since the values are powers of 2.
-    [Flags]
-    public enum AwayStatusFlags : uint
+    //TODO: figure out what 1 and 3 represent, or if it is a flag since all observed values are powers of 2 so far /dustinconrad
+    public enum AwayStatus : uint
     {
         Available=0x00,
+        UnknownStatus1=0x01,
         Away=0x02,
+        UnknownStatus2=0x03,
         Busy=0x04
     }
 
