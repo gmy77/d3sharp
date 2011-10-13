@@ -142,7 +142,6 @@ namespace Mooege.Core.GS.Map
             var players = this._players.Values; //this.GetPlayersInRange(actor.Position, 480.0f);
             foreach (var player in players)
             {
-                if (actor is Player.Player) Logger.Debug("Revealing player: {0}[DynamicId:{1}] to {2}[DynamicId:{3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
                 actor.Reveal(player);
             }
         }

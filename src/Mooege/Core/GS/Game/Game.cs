@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Mooege.Common;
@@ -28,7 +27,6 @@ using Mooege.Core.GS.Map;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Game;
-using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
 
@@ -173,8 +171,6 @@ namespace Mooege.Core.GS.Game
             });
 
             target.InGameClient.SendMessage(joinedPlayer.GetPlayerBanner()); // send player banner proto - D3.GameMessage.PlayerBanner
-
-            Logger.Debug("{0}[PlayerIndex: {1}] is notified about {2}[PlayerIndex: {3}] joining the game.", target.Properties.Name, target.PlayerIndex, joinedPlayer.Properties.Name, joinedPlayer.PlayerIndex);
         }
 
 
