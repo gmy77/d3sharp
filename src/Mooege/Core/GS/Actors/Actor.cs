@@ -84,7 +84,7 @@ namespace Mooege.Core.GS.Actors
                 var old = new Vector3D(this._position);
                 this._position.Set(value);
                 this.OnMove(old);
-                this.World.OnActorMove(this, old); // TODO: Should notify its scene instead
+                this.World.OnActorMove(this, value); // TODO: Should notify its scene instead
             }
         }
 
@@ -146,6 +146,24 @@ namespace Mooege.Core.GS.Actors
         public virtual ACDWorldPositionMessage ACDWorldPositionMessage
         {
             get { return new ACDWorldPositionMessage { ActorID = this.DynamicID, WorldLocation = this.WorldLocationMessage }; }
+        }
+
+        public virtual ACDTranslateNormalMessage ACDTranslateNormalMessage
+        {
+            get
+            {
+                return new ACDTranslateNormalMessage
+                           {
+                               Id = (int) Opcodes.ACDTranslateNormalMessage1,
+                               Field0 = (int) this.DynamicID,
+                               Position = this.Position,
+                               Angle = 1.587237f,
+                               Field3 = false,
+                               Field4 = 0,
+                               Field5 = 0,
+                               Field6 = 0x00011070
+                           };
+            }
         }
 
         public virtual ACDInventoryPositionMessage ACDInventoryPositionMessage

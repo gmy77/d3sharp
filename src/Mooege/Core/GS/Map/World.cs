@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Mooege.Common;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Objects;
@@ -110,12 +111,9 @@ namespace Mooege.Core.GS.Map
         public void BroadcastExclusive(GameMessage message, Actor actor)
         {
             var players = this.GetPlayersInRange(actor.Position, 480.0f);
-            foreach (var player in players)
+            foreach (var player in players.Where(player => player != actor))
             {
-                if (player != actor)
-                {
-                    player.InGameClient.SendMessage(message);
-                }
+                player.InGameClient.SendMessage(message);
             }
         }
 
@@ -126,9 +124,9 @@ namespace Mooege.Core.GS.Map
             if (!actor.HasWorldLocation) return;
 
             if (actor is Player.Player)
-                BroadcastExclusive(actor.ACDWorldPositionMessage, actor); // brodcast this exclusively if actor is a player -- in other words, do not send position update message back to original player moving. /raist.
-            else 
-                BroadcastIfRevealed(actor.ACDWorldPositionMessage, actor);                                                                           
+                BroadcastExclusive(actor.ACDTranslateNormalMessage, actor); // brodcast this exclusively if actor is a player -- in other words, do not send position update message back to original player moving. /raist.
+            else
+                BroadcastIfRevealed(actor.ACDTranslateNormalMessage, actor);                                                                           
         }
 
         // TODO: NewPlayer messages should be broadcasted at the Game level, which means we may have to track players separately from objects in Game
