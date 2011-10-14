@@ -20,10 +20,7 @@ namespace Mooege.Core.Common.Storage
 {
     public sealed class Config : Mooege.Common.Config.Config
     {
-        public string AssetsRoot {
-            get { return this.GetString("AssetsRoot", "."); }
-            set { this.Set("AssetsRoot", value); }
-        }
+        public string AssetsRoot { get { return this.GetString("AssetsRoot", "."); } set { this.Set("AssetsRoot", value); } }
 
         private static readonly Config _instance = new Config();
         public static Config Instance { get { return _instance; } }
