@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mooege.Common;
 
 namespace Mooege.Core.GS.Game
 {
     public static class GameManager
     {
+        static readonly Logger Logger = LogManager.CreateLogger();
         private static readonly Dictionary<int, Game> Games = new Dictionary<int, Game>();
 
         public static Game CreateGame(int gameId)
@@ -21,29 +23,25 @@ namespace Mooege.Core.GS.Game
             return !Games.ContainsKey(gameId) ? null : Games[gameId];
         }
 
-        public static void RemovePlayerFromGame(Mooege.Net.GS.GameClient gameClient)
+        public static void RemovePlayerFromGame(Net.GS.GameClient gameClient)
         {
-            if (gameClient != null && gameClient.Game != null)
-            {
-                int gameId = gameClient.Game.GameId;
-                if (Games.ContainsKey(gameId))
-                {
-                    Game game = Games[gameId];
-                    if (game.Players.ContainsKey(gameClient))
-                    {
-                        Player.Player p = null;
-                        if (!game.Players.TryRemove(gameClient, out p))
-                        {
-                            //log something
-                        }
+            if (gameClient == null || gameClient.Game == null) return;
 
-                        if (game.Players.Count == 0)
-                        {
-                            //remove game
-                            Games.Remove(gameId);
-                        }
-                    }
-                }
+            var gameId = gameClient.Game.GameId;
+            if (!Games.ContainsKey(gameId)) return;
+
+            var game = Games[gameId];
+            if (!game.Players.ContainsKey(gameClient)) return;
+
+            Player.Player p = null;
+            if (!game.Players.TryRemove(gameClient, out p))
+            {
+                Logger.Error("Can't remove player ({0}) from game with id: {1}", gameClient.Player.Properties.Name, gameId);
+            }
+
+            if (game.Players.Count == 0)
+            {
+                Games.Remove(gameId); // we should be also disposing it /raist.
             }
         }
     }

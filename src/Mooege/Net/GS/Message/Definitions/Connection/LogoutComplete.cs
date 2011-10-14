@@ -33,7 +33,7 @@ namespace Mooege.Net.GS.Message.Definitions.Connection
                     PlayerIndex = client.Player.PlayerIndex,
                 });
 
-                Mooege.Core.GS.Game.GameManager.RemovePlayerFromGame(client);
+                Core.GS.Game.GameManager.RemovePlayerFromGame(client);
             }
         }
 
