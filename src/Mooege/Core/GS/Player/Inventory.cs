@@ -295,7 +295,7 @@ namespace Mooege.Core.GS.Player
             Item sumGoldItem = _equipment.AddGoldItem(collectedItem);
 
             GameAttributeMap attributes = new GameAttributeMap();
-            attributes[GameAttribute.ItemStackQuantityLo] = sumGoldItem.Attributes[GameAttribute.Gold];
+            attributes[GameAttribute.ItemStackQuantityLo] = sumGoldItem.Attributes[GameAttribute.ItemStackQuantityLo];
             attributes.SendMessage(_owner.InGameClient, sumGoldItem.DynamicID);
         }
     }
