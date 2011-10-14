@@ -46,6 +46,7 @@ namespace Mooege.Core.Common.Toons
         public ToonHandleHelper ToonHandle { get; private set; }
 
         public string Name { get; private set; }
+        public string HashCodeString { get; set; }
         public ToonClass Class { get; private set; }
         public ToonFlags Flags { get; private set; }
         public byte Level { get; private set; }
@@ -54,7 +55,7 @@ namespace Mooege.Core.Common.Toons
         public AwayStatus AwayStatus { get; private set; }
 
         public Account Owner { get; set; }
-        
+
         public bool IsSelected
         {
             get
@@ -70,16 +71,16 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        public Toon(ulong persistentId, string name, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
-            :base(persistentId)
+        public Toon(ulong persistentId, string name, string hashCodeString, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
+            : base(persistentId)
         {
-            this.SetFields(name, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistentID((ulong)accountId));
+            this.SetFields(name, hashCodeString, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistentID((ulong)accountId));
         }
 
-        public Toon(string name, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
-            : base(StringHashHelper.HashIdentity(name))
+        public Toon(string name, string hashCodeString, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
+            : base(StringHashHelper.HashIdentity(name + "#" + hashCodeString))
         {
-            this.SetFields(name, GetClassByID(classId), flags, level, account);
+            this.SetFields(name, hashCodeString, GetClassByID(classId), flags, level, account);
         }
 
         public int ClassID
@@ -111,17 +112,18 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        private void SetFields(string name, ToonClass @class, ToonFlags flags, byte level, Account owner)
+        private void SetFields(string name, string hashCodeString, ToonClass @class, ToonFlags flags, byte level, Account owner)
         {
             this.ToonHandle = new ToonHandleHelper(this.PersistentID);
             this.D3EntityID = this.ToonHandle.ToD3EntityID();
             this.BnetEntityID = this.ToonHandle.ToBnetEntityID();
             this.Name = name;
+            this.HashCodeString = hashCodeString;
             this.Class = @class;
             this.Flags = flags;
             this.Level = level;
             this.Owner = owner;
-           
+
             var visualItems = new[]
                             {
                                 // Head
@@ -257,7 +259,7 @@ namespace Mooege.Core.Common.Toons
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if the client is online
                     {
-                        if(this.Owner.LoggedInClient!=null && this.Owner.LoggedInClient.CurrentChannel!=null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());
+                        if (this.Owner.LoggedInClient != null && this.Owner.LoggedInClient.CurrentChannel != null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());
                         else field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().Build());
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 2) // Current screen (all known values are just "in-menu"; also see ScreenStatuses sent in ChannelService.UpdateChannelState)
@@ -418,7 +420,7 @@ namespace Mooege.Core.Common.Toons
             var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
 
             // Make the RPC call
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(),this.DynamicId);
+            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.DynamicId);
         }
 
         public override string ToString()
@@ -434,8 +436,8 @@ namespace Mooege.Core.Common.Toons
                 {
                     var query =
                         string.Format(
-                            "UPDATE toons SET name='{0}', class={1}, gender={2}, level={3}, accountId={4} WHERE id={5}",
-                            Name, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID, this.PersistentID);
+                            "UPDATE toons SET name='{0}', hashCode='{1}', class={2}, gender={3}, level={4}, accountId={5} WHERE id={6}",
+                            Name, this.HashCodeString, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -444,8 +446,8 @@ namespace Mooege.Core.Common.Toons
                 {
                     var query =
                         string.Format(
-                            "INSERT INTO toons (id, name, class, gender, level, accountId) VALUES({0},'{1}',{2},{3},{4},{5})",
-                            this.PersistentID, this.Name, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID);
+                            "INSERT INTO toons (id, name, hashCode, class, gender, level, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6})",
+                            this.PersistentID, this.Name, this.HashCodeString, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -501,22 +503,22 @@ namespace Mooege.Core.Common.Toons
     [Flags]
     public enum ToonFlags : uint
     {
-        Male=0x00,
-        Female=0x02,
+        Male = 0x00,
+        Female = 0x02,
         // TODO: These two need to be figured out still.. /plash
-        Unknown1=0x20,
-        Unknown2=0x2000000,
-        BothUnknowns=Unknown1 | Unknown2
+        Unknown1 = 0x20,
+        Unknown2 = 0x2000000,
+        BothUnknowns = Unknown1 | Unknown2
     }
 
     //TODO: figure out what 1 and 3 represent, or if it is a flag since all observed values are powers of 2 so far /dustinconrad
     public enum AwayStatus : uint
     {
-        Available=0x00,
-        UnknownStatus1=0x01,
-        Away=0x02,
-        UnknownStatus2=0x03,
-        Busy=0x04
+        Available = 0x00,
+        UnknownStatus1 = 0x01,
+        Away = 0x02,
+        UnknownStatus2 = 0x03,
+        Busy = 0x04
     }
 
 }
