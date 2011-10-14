@@ -51,11 +51,13 @@ namespace Mooege.Core.GS.Powers
             RotationAxis = new Vector3D(0, 0, (float)Math.Sin(angle / 2f));
 
             // FIXME: This is hardcoded crap
-            this.Field2 = 0x8;
+            this.Field2 = 0x8; // effect
             this.Field3 = 0x0;
-            this.Scale = 1.35f;
+            //this.Field7 = -1;
+            //this.Field8 = -1;
+            this.Scale = 1.35f; // TODO: should this be 1 for effects?
             this.Position.Set(position);
-            this.GBHandle.Type = 1; this.GBHandle.GBID = 1; // TODO: use proper enum value
+            this.GBHandle.Type = -1; this.GBHandle.GBID = -1; // TODO: use proper enum value
 
             Timeout = DateTime.Now.AddMilliseconds(timeout);
 
@@ -65,12 +67,12 @@ namespace Mooege.Core.GS.Powers
         public DateTime Timeout;
     }
 
-    public class PowersManager
+    public class PowerManager
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
         // temporary testing helper
-        private PowersMobTester _mobtester;
+        private PowerMobTester _mobtester;
 
         private Game.Game _game;
 
@@ -100,13 +102,13 @@ namespace Mooege.Core.GS.Powers
         {
             get
             {
-                return PowersMobTester.AllMobs;
+                return PowerMobTester.AllMobs;
             }
         }
 
-        public PowersManager(Game.Game game)
+        public PowerManager(Game.Game game)
         {
-            _mobtester = new PowersMobTester();
+            _mobtester = new PowerMobTester();
             _game = game;
         }
 
@@ -116,7 +118,7 @@ namespace Mooege.Core.GS.Powers
             CleanUpEffects(); 
         }
 
-        public void UsePower(Actor user, int powerId, int targetId = -1, Vector3D targetPos = null, TargetMessage message = null)
+        public void UsePower(Actor user, int powerSNO, int targetId = -1, Vector3D targetPos = null, TargetMessage message = null)
         {
             Actor target;
 
@@ -137,14 +139,14 @@ namespace Mooege.Core.GS.Powers
             if (targetPos == null)
                 targetPos = new Vector3D(0, 0, 0);
 
-            if (powerId == Skills.Skills.Monk.SpiritSpenders.BlindingFlash) // HACK: intercepted to use for spawning test mobs
+            if (powerSNO == Skills.Skills.Monk.SpiritSpenders.BlindingFlash) // HACK: intercepted to use for spawning test mobs
             {
                 _mobtester.SpawnMob(user);
             }
             else
             {
                 // find and run a power implementation
-                var implementation = PowerImplementation.ImplementationForId(powerId);
+                var implementation = PowerImplementation.ImplementationForId(powerSNO);
                 if (implementation != null)
                 {
                     // process channeled skill params
@@ -233,7 +235,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public void CancelChanneledPower(Actor user, int powerId)
+        public void CancelChanneledPower(Actor user, int powerSNO)
         {
             if (_channelingActors.ContainsKey(user))
             {
@@ -273,14 +275,14 @@ namespace Mooege.Core.GS.Powers
             }, target);
         }
 
-        public void PlayRopeEffectActorToActor(int effectId, Actor from, Actor target)
+        public void PlayRopeEffectActorToActor(int ropeSNO, Actor from, Actor target)
         {
             if (target == null) return;
 
             target.World.BroadcastIfRevealed(new RopeEffectMessageACDToACD
             {
                 Id = 0x00ab,
-                Field0 = effectId,
+                Field0 = ropeSNO,
                 Field1 = (int)from.DynamicID,
                 Field2 = 4,
                 Field3 = (int)target.DynamicID,
@@ -288,14 +290,14 @@ namespace Mooege.Core.GS.Powers
             }, target);
         }
 
-        public void PlayEffectGroupActorToActor(int effectId, Actor from, Actor target)
+        public void PlayEffectGroupActorToActor(int effectGroupSNO, Actor from, Actor target)
         {
             if (target == null) return;
 
             target.World.BroadcastIfRevealed(new EffectGroupACDToACDMessage
             {
                 Id = 0xaa,
-                Field0 = effectId,
+                Field0 = effectGroupSNO,
                 Field1 = (int)from.DynamicID,
                 Field2 = (int)target.DynamicID
             }, target);
@@ -321,11 +323,7 @@ namespace Mooege.Core.GS.Powers
         {
             if (target == null) return;
 
-            // TODO: figure out how to implement with amount
-            Vector3D move = new Vector3D();
-            move.Z = target.Position.Z;
-            move.X = target.Position.X + (target.Position.X - user.Position.X);
-            move.Y = target.Position.Y + (target.Position.Y - user.Position.Y);
+            var move = PowerUtils.ProjectAndTranslate2D(target.Position, user.Position, target.Position, amount);
             MoveActorNormal(target, move);
         }
 
@@ -338,15 +336,15 @@ namespace Mooege.Core.GS.Powers
             return effect;
         }
 
-        public void SpawnEffect(Actor from, int effectId, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
+        public void SpawnEffect(Actor from, int actorSNO, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
         {
-            _effects.Add(SpawnEffectInstance(from, effectId, position, angle, timeout));
+            _effects.Add(SpawnEffectInstance(from, actorSNO, position, angle, timeout));
         }
 
-        public void SpawnEffect(Actor from, int effectId, Vector3D position, Actor point_to_actor, int timeout = 2000)
+        public void SpawnEffect(Actor from, int actorSNO, Vector3D position, Actor point_to_actor, int timeout = 2000)
         {
             float angle = (point_to_actor != null) ? AngleLookAt(from.Position, point_to_actor.Position) : -1f;
-            _effects.Add(SpawnEffectInstance(from, effectId, position, angle, timeout));
+            _effects.Add(SpawnEffectInstance(from, actorSNO, position, angle, timeout));
         }
 
         public void KillSpawnedEffect(Effect effect)
@@ -363,7 +361,7 @@ namespace Mooege.Core.GS.Powers
                     break;
 
                 // TODO: only work with more than just SimpleMobs
-                if (actor is SimpleMob)
+                if (actor is SimpleMob || actor is Monster)
                     hits.Add(actor);
             }
 
@@ -386,7 +384,7 @@ namespace Mooege.Core.GS.Powers
             return effect;
         }
 
-        public Effect GetChanneledProxy(Actor user, int index, Vector3D pos)
+        public Effect GetChanneledEffect(Actor user, int index, int actorSNO, Vector3D pos)
         {
             if (!_channelingActors.ContainsKey(user)) return null;
 
@@ -397,12 +395,17 @@ namespace Mooege.Core.GS.Powers
             // ensure effects list is at least big enough for specified index
             while (channeled.Effects.Count < index + 1)
             {
-                channeled.Effects.Add(SpawnEffectInstance(user, 187359, pos, 0));
+                channeled.Effects.Add(SpawnEffectInstance(user, actorSNO, pos, 0));
             }
 
-            RepositionActor(channeled.Effects[index], pos);
+            MoveActorNormal(channeled.Effects[index], pos);
 
             return channeled.Effects[index];
+        }
+
+        public Effect GetChanneledProxy(Actor user, int index, Vector3D pos)
+        {
+            return GetChanneledEffect(user, index, 187359, pos);
         }
 
         public void RepositionActor(Actor actor, Vector3D pos)
@@ -424,13 +427,18 @@ namespace Mooege.Core.GS.Powers
                 Position = pos,
                 Angle = 0f, // TODO: convert quaternion rotation for this?
                 Field3 = false,
-                Field4 = 1.0f,
+                Field4 = 6f, // speed at which things animate
             }, actor);
         }
 
         public void DoDamage(Actor from, Actor target, float amount, int type)
         {
             if (target == null) return;
+            if (target.World == null)
+            {
+                // WTF is world null sometimes for? Probably race condition due to lack of GS locks
+                return;
+            }
 
             target.World.BroadcastIfRevealed(new FloatingNumberMessage
             {
@@ -444,6 +452,10 @@ namespace Mooege.Core.GS.Powers
             if (target is SimpleMob)
             {
                 ((SimpleMob)target).ReceiveDamage(from, amount, type);
+            }
+            else if (target is Monster && from is Player.Player)
+            {
+                ((Monster)target).Die((Player.Player)from);
             }
         }
 

@@ -27,7 +27,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     [PowerImplementationAttribute(0x00007780/*Skills.Skills.BasicAttack*/)]
     public class Melee : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
+        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
         {
             if (fx.CanHitMeleeTarget(pp.User, pp.Target))
             {

@@ -31,7 +31,7 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
 
         public void Handle(GameClient client)
         {
-            client.Game.PowersManager.UsePower(client.Player, PowerSNO);
+            client.Game.PowerManager.UsePower(client.Player, PowerSNO);
 
             //if (PowerSNO != Skills.Monk.SpiritSpenders.BlindingFlash) return;
             //var player = client.Player;

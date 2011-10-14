@@ -55,7 +55,7 @@ namespace Mooege.Core.GS.Game
 
         private readonly WorldGenerator _worldGenerator;
 
-        public PowersManager PowersManager;
+        public PowerManager PowerManager;
 
         public readonly int UpdateFrequency=100;
         private int _tickCounter;
@@ -82,7 +82,7 @@ namespace Mooege.Core.GS.Game
             this._worldGenerator = new WorldGenerator(this);
             this.StartWorldSNO = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff
 
-            this.PowersManager = new PowersManager(this);
+            this.PowerManager = new PowerManager(this);
 
             var loopThread=new Thread(Update) { IsBackground = true };
             loopThread.Start();
@@ -100,7 +100,7 @@ namespace Mooege.Core.GS.Game
                     pair.Value.Update();
                 }
 
-                this.PowersManager.Update();
+                this.PowerManager.Update();
 
                 Thread.Sleep(UpdateFrequency);
             }

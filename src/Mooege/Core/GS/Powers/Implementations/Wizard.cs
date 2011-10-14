@@ -29,7 +29,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.Meteor)]
     public class WizardMeteor : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
+        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
         {
             fx.SpawnEffect(pp.User, 86790, pp.TargetPosition);
             yield return 1900;
@@ -44,7 +44,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     [PowerImplementationAttribute(Skills.Skills.Wizard.Signature.Electrocute)]
     public class WizardElectrocute : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
+        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
         {
             fx.RegisterChannelingPower(pp.User, 150);
 
@@ -60,6 +60,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (pp.Target == null)
             {
+                // no target, just zap the air
                 fx.PlayRopeEffectActorToActor(0x78c0, pp.User, fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition));
             }
             else
@@ -73,7 +74,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 {
                     fx.PlayHitEffect(2, pp.Target, bounce_target);
                     fx.PlayRopeEffectActorToActor(0x78c0, pp.Target, bounce_target);
-                    fx.DoDamage(pp.User, pp.Target, 6, 0);
+                    fx.DoDamage(pp.User, bounce_target, 6, 0);
                 }
             }
             
@@ -84,7 +85,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     [PowerImplementationAttribute(Skills.Skills.Wizard.Signature.MagicMissile)]
     public class WizardMagicMissile : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
+        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
         {
             // HACK: made up spell, not real magic missile
             for (int step = 1; step < 10; ++step)
@@ -106,7 +107,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.Hydra)]
     public class WizardHydra : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
+        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
         {
             // HACK: made up demonic meteor spell, not real hydra
             fx.SpawnEffect(pp.User, 185366, pp.TargetPosition);
@@ -120,35 +121,56 @@ namespace Mooege.Core.GS.Powers.Implementations
     [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.Disintegrate)]
     public class WizardDisintegrate : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
-        {
-            fx.RegisterChannelingPower(pp.User);
+        const float BeamLength = 60f;
 
-            // TODO: hit effects
+        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        {
+            fx.RegisterChannelingPower(pp.User, 100);
+                        
+            // project beam end to always be a certain length
+            pp.TargetPosition = PowerUtils.ProjectAndTranslate2D(pp.TargetPosition, pp.User.Position,
+                                                               pp.User.Position, BeamLength);
+
+            if (!pp.ThrottledCast)
+            {
+                foreach (Actor actor in fx.FindActorsInRange(pp.User, pp.User.Position, BeamLength + 10f))
+                {
+                    if (PowerUtils.PointInBeam(actor.Position, pp.User.Position, pp.TargetPosition, 7f))
+                    {
+                        fx.PlayHitEffect(8, pp.User, actor);
+                        fx.PlayEffectGroupActorToActor(18793, actor, actor);
+                        fx.DoDamage(pp.User, actor, 10, 0);
+                    }
+                }
+            }
+
+            // always update effect locations
+            // can't make it spawn in the air 52687
+            //Effect pid = fx.GetChanneledEffect(pp.User, 0, 52687, pp.TargetPosition);
             Effect pid = fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
             if (! pp.UserIsChanneling)
             {
                 fx.PlayRopeEffectActorToActor(30888, pp.User, pid);
             }
 
-            // TODO: beam damage
-            //DoDamage(user, target, 12, 0);
             yield break;
         }
+
+
     }
 
     [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.WaveOfForce)]
     public class WizardWaveOfForce : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
+        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
         {
-            yield return 350;
+            yield return 350; // wait for wizard to land?
             fx.PlayEffectGroupActorToActor(19356, pp.User, fx.SpawnTempProxy(pp.User, pp.User.Position));
 
             IList<Actor> hits = fx.FindActorsInRange(pp.User, pp.User.Position, 20);
             foreach (Actor actor in hits)
             {
-                fx.DoKnockback(pp.User, actor, 10f);
+                fx.DoKnockback(pp.User, actor, 5f);
                 fx.DoDamage(pp.User, actor, 20, 0);
             }
             yield break;
@@ -158,7 +180,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.ArcaneTorrent)]
     public class WizardArcaneTorrent : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowersManager fx)
+        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
         {
             fx.RegisterChannelingPower(pp.User, 200);
 

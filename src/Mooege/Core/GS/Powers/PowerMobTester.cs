@@ -36,7 +36,7 @@ namespace Mooege.Core.GS.Powers
 {
     public class SimpleMob : Monster
     {
-        public PowersMobTester owner;
+        public PowerMobTester owner;
         public float hp;
         public bool dead;
 
@@ -55,7 +55,7 @@ namespace Mooege.Core.GS.Powers
 
     // simple hackish mob spawner, all mobs created by all instances of it are available via the AllMobs
     // property
-    public class PowersMobTester
+    public class PowerMobTester
     {
         public static IEnumerable<SimpleMob> AllMobs
         {
@@ -67,11 +67,11 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public static List<PowersMobTester> _mobtesters = new List<PowersMobTester>();
+        public static List<PowerMobTester> _mobtesters = new List<PowerMobTester>();
 
         private List<SimpleMob> _mobs = new List<SimpleMob>();
 
-        public PowersMobTester()
+        public PowerMobTester()
         {
             _mobtesters.Add(this);
         }

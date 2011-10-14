@@ -62,6 +62,6 @@ namespace Mooege.Core.GS.Powers
 
         // Called to start executing a power
         // return yield an int to specify in milliseconds how long to wait before continuing.
-        public abstract IEnumerable<int> Run(PowerParameters pp, PowersManager fx);
+        public abstract IEnumerable<int> Run(PowerParameters pp, PowerManager fx);
     }
 }
