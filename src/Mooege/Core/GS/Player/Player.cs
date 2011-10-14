@@ -35,6 +35,9 @@ using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Effect;
+using Mooege.Net.GS.Message.Definitions.Conversation;
+using Mooege.Common.Helpers;
+using Mooege.Net.GS.Message.Definitions.Combat;
 
 
 // TODO: When the player moves, it will set the Position property which will bounce back to the player again.
@@ -55,6 +58,8 @@ namespace Mooege.Core.GS.Player
         public Toon Properties { get; private set; }
         public SkillSet SkillSet;
         public Inventory Inventory;
+        public int killstreak = 0;
+        public int lastkilltick = 0;
 
         public Dictionary<uint, IRevealable> RevealedObjects { get; private set; }
 
@@ -268,6 +273,9 @@ namespace Mooege.Core.GS.Player
 
         public override void Update()
         {
+            CheckKillstreak();
+            // TODO: stop finished conversations
+
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
 
@@ -490,6 +498,57 @@ namespace Mooege.Core.GS.Player
             attribs.SendMessage(this.InGameClient, this.DynamicID);
 
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
+        }
+
+        public void CheckKillstreak()
+        {
+            if ((this.killstreak > 5) && (this.lastkilltick + 300 <= this.InGameClient.Game.Tick))
+            {
+                int expBonus = (this.killstreak - 5) * 10;
+
+                this.InGameClient.SendMessage(new KillCounterUpdateMessage()
+                {
+                    Id = 0xcd,
+                    Field0 = 0x00000000,
+                    Field1 = this.killstreak,
+                    Field2 = expBonus,
+                    Field3 = false,
+                });
+
+                this.killstreak = 0;
+                this.UpdateExp(expBonus);
+
+                this.InGameClient.SendMessage(new PlayConvLineMessage()
+                {
+                    Id = 0xba,
+                    ActorID = this.DynamicID,
+                    Field1 = new uint[9]
+                    {
+                        this.DynamicID, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
+                    },
+
+                    Params = new PlayLineParams()
+                    {
+                        SNOConversation = 0x0002A73F,
+                        Field1 = 0x00000001,
+                        Field2 = false,
+                        LineID = RandomHelper.Next(0, 8),
+                        Field4 = 0x00000000,
+                        Field5 = -1,
+                        Field6 = this.Properties.VoiceClassID,
+                        Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
+                        VoiceClassID = this.Properties.VoiceClassID,
+                        snoSpeakerActor = this._actorSNO,
+                        Name = this.Properties.Name,
+                        Field11 = 0x00000002,
+                        Field12 = -1,
+                        Field13 = 0x00000069,
+                        Field14 = 0x0000006E,
+                        Field15 = 0x00000032
+                    },
+                    Field3 = 0x00000069,
+                });
+            }
         }
 
         public int ClassSNO

@@ -81,7 +81,7 @@ namespace Mooege.Core.GS.Actors
             this.Attributes[GameAttribute.Buff_Active, 30582] = true;
             this.Attributes[GameAttribute.TeamID] = 10;
             this.Attributes[GameAttribute.Level] = 1;
-            this.Attributes[GameAttribute.Experience_Granted] = 525;
+            this.Attributes[GameAttribute.Experience_Granted] = 125;
 
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
@@ -149,6 +149,16 @@ namespace Mooege.Core.GS.Actors
                     0x2cda,
                     0x2cd9
             };
+
+            if (player.lastkilltick + 300 > player.InGameClient.Game.Tick)
+            {
+                player.killstreak++;
+            }
+            else
+            {
+                player.killstreak = 1;
+            }
+            player.lastkilltick = player.InGameClient.Game.Tick;
 
             player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
 

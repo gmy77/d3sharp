@@ -103,6 +103,27 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
+        public int VoiceClassID // Used for Conversations
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.DemonHunter:
+                        return 0;
+                    case ToonClass.Barbarian:
+                        return 1;
+                    case ToonClass.Wizard:
+                        return 2;
+                    case ToonClass.WitchDoctor:
+                        return 3;
+                    case ToonClass.Monk:
+                        return 4;
+                }
+                return 0;
+            }
+        }
+
         public int Gender
         {
             get
@@ -207,6 +228,8 @@ namespace Mooege.Core.Common.Toons
                 .SetLastPlayedQuestStep(-1)
                 .SetTimePlayed(0)
                 .Build();
+
+
         }
 
         private static ToonClass GetClassByID(int classId)

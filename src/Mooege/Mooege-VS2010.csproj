@@ -471,6 +471,10 @@
       <Link>Assets\SNO\Blacklist.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\assets\SNO\Conversations.txt">
+      <Link>Assets\SNO\Conversations.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\assets\SNO\Effects.txt">
       <Link>Assets\SNO\Effects.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

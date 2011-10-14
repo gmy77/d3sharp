@@ -26,15 +26,6 @@ namespace Mooege.Net.GS.Message.Fields
         Female = 1,
     }
 
-    public enum VoiceClass
-    {
-        DemonHunter = 0,
-        Barbarbarian = 1,
-        Wizard = 2,
-        WitchDoctor = 3,
-        Monk = 4
-    }
-
     public class PlayLineParams
     {
         public int SNOConversation;
@@ -46,9 +37,9 @@ namespace Mooege.Net.GS.Message.Fields
         // Set to 0 for a conversation line said by the player
         public int Field4;      
         public int Field5;          // have not seen != -1
-        public int Field6;          // -1 or Enum for player class
+        public int Field6;          // -1 or Enum for player class (same as VoiceClassID)
         public VoiceGender Gender;  // Used if Field4 set to 0, (Use hero's gender)
-        public VoiceClass Class;    // Used if Field4 set to 0, (Use hero's class)
+        public int VoiceClassID;    // Used if Field4 set to 0, (Use hero's class)
         public int /* sno */ snoSpeakerActor;   // no idea how and if that is used
         public string Name;         // Name of the actor if Field4 is set to 0 ("Hero speaking")
         public int Field11;
@@ -67,7 +58,7 @@ namespace Mooege.Net.GS.Message.Fields
             Field5 = buffer.ReadInt(32);
             Field6 = buffer.ReadInt(32);
             Gender = (VoiceGender)buffer.ReadInt(32);
-            Class = (VoiceClass)buffer.ReadInt(32);
+            VoiceClassID = buffer.ReadInt(32);
             snoSpeakerActor = buffer.ReadInt(32);
             Name = buffer.ReadCharArray(49);
             Field11 = buffer.ReadInt(32);
@@ -87,7 +78,7 @@ namespace Mooege.Net.GS.Message.Fields
             buffer.WriteInt(32, Field5);
             buffer.WriteInt(32, Field6);
             buffer.WriteInt(32, (int)Gender);
-            buffer.WriteInt(32, (int)Class);
+            buffer.WriteInt(32, VoiceClassID);
             buffer.WriteInt(32, snoSpeakerActor);
             buffer.WriteCharArray(49, Name);
             buffer.WriteInt(32, Field11);
@@ -120,7 +111,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("Gender: 0x" + ((int)Gender).ToString("X8") + " (" + Gender + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field8: 0x" + ((int)Class).ToString("X8") + " (" + Class + ")");
+            b.AppendLine("Field8: 0x" + (VoiceClassID).ToString("X8") + " (" + VoiceClassID + ")");
             b.Append(' ', pad);
             b.AppendLine("snoSpeakerActor: 0x" + snoSpeakerActor.ToString("X8"));
             b.Append(' ', pad);
