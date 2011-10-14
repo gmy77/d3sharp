@@ -150,17 +150,9 @@ namespace Mooege.Core.GS.Actors
                     0x2cd9
             };
 
-            if (player.lastkilltick + 300 > player.InGameClient.Game.Tick)
-            {
-                player.killstreak++;
-            }
-            else
-            {
-                player.killstreak = 1;
-            }
-            player.lastkilltick = player.InGameClient.Game.Tick;
-
             player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
+            player.UpdateExpBonusData();
+            player.lastKillTick = player.InGameClient.Game.Tick;
 
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {

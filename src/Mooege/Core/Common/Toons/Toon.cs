@@ -228,8 +228,6 @@ namespace Mooege.Core.Common.Toons
                 .SetLastPlayedQuestStep(-1)
                 .SetTimePlayed(0)
                 .Build();
-
-
         }
 
         private static ToonClass GetClassByID(int classId)

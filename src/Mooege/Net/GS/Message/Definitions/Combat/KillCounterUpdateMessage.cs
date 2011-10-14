@@ -63,7 +63,5 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }
