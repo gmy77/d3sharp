@@ -32,7 +32,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
         {
             fx.SpawnEffect(pp.User, 86790, pp.TargetPosition);
-            yield return 1900;
+            yield return 1900; // wait for meteor to hit
             fx.SpawnEffect(pp.User, 86769, pp.TargetPosition);
             fx.SpawnEffect(pp.User, 90364, pp.TargetPosition, -1, 4000);
 

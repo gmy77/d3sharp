@@ -53,7 +53,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     reachThickness = 8;
                     break;
                 default:
-                    // TODO: get some logging in powers implementations...
+                    // TODO: get some logging in power implementations...
                     yield break;
             }
 
