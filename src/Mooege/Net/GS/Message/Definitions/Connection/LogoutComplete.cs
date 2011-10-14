@@ -32,6 +32,8 @@ namespace Mooege.Net.GS.Message.Definitions.Connection
                 {
                     PlayerIndex = client.Player.PlayerIndex,
                 });
+
+                Core.GS.Game.GameManager.RemovePlayerFromGame(client);
             }
         }
 
