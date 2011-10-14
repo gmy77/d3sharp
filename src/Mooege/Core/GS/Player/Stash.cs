@@ -42,7 +42,7 @@ namespace Mooege.Core.GS.Player
         // Do all items need a rectangual space in diablo 3?
         private InventorySize GetItemInventorySize(Item item)
         {
-            if (Item.IsPotion(item.ItemType) || Item.IsAccessory(item.ItemType))
+            if (Item.IsPotion(item.ItemType) || Item.IsAccessory(item.ItemType) || Item.IsAccessory(item.ItemType))
             {
                 return new InventorySize() { Width = 1, Height = 1 };
             }
