@@ -84,7 +84,7 @@ namespace Mooege.Core.GS.Actors
                 var old = new Vector3D(this._position);
                 this._position.Set(value);
                 this.OnMove(old);
-                this.World.OnActorMove(this, old); // TODO: Should notify its scene instead
+                // we can't just broadcast position with ACDTranslateNormalMessage here or actors will be seem to leap. /raist.
             }
         }
 

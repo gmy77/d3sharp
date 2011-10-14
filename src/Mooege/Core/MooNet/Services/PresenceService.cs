@@ -40,7 +40,7 @@ namespace Mooege.Core.MooNet.Services
             switch (request.EntityId.GetHighIdType())
             {
                 case EntityIdHelper.HighIdType.AccountId:
-                    var account = AccountManager.GetAccountByPersistantID(request.EntityId.Low);
+                    var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
                     account.AddSubscriber(this.Client, request.ObjectId);
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
@@ -64,7 +64,7 @@ namespace Mooege.Core.MooNet.Services
             switch (request.EntityId.GetHighIdType())
             {
                 case EntityIdHelper.HighIdType.AccountId:
-                    var account = AccountManager.GetAccountByPersistantID(request.EntityId.Low);
+                    var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
                     // The client will probably make sure it doesn't unsubscribe to a null ID, but just to make sure..
                     if (account != null) account.RemoveSubscriber(this.Client);
                     break;
@@ -92,7 +92,7 @@ namespace Mooege.Core.MooNet.Services
             switch (request.EntityId.GetHighIdType())
             {
                 case EntityIdHelper.HighIdType.AccountId:
-                    var account = AccountManager.GetAccountByPersistantID(request.EntityId.Low);
+                    var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
                     Logger.Trace("Update:Account: {0} {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
@@ -120,7 +120,7 @@ namespace Mooege.Core.MooNet.Services
             {
                 case EntityIdHelper.HighIdType.AccountId:
                     Logger.Trace("Query:Account: {0} {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
-                    var account = AccountManager.GetAccountByPersistantID(request.EntityId.Low);
+                    var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
                     foreach(var key in request.KeyList)
                     {
                         var field = account.QueryField(key);

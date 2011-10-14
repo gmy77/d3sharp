@@ -28,6 +28,8 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
@@ -45,7 +47,7 @@ using Mooege.Net.GS.Message.Definitions.Combat;
 
 namespace Mooege.Core.GS.Player
 {
-    public class Player : Actor
+    public class Player : Actor, IMessageConsumer
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -266,6 +268,7 @@ namespace Mooege.Core.GS.Player
             else if (message is AssignPassiveSkillMessage) OnAssignPassiveSkill(client, (AssignPassiveSkillMessage)message);
             else if (message is PlayerChangeHotbarButtonMessage) OnPlayerChangeHotbarButtonMessage(client, (PlayerChangeHotbarButtonMessage)message);
             else if (message is TargetMessage) OnObjectTargeted(client, (TargetMessage)message);
+            else if (message is PlayerMovementMessage) OnPlayerMovement(client, (PlayerMovementMessage)message);
             else return;
 
             UpdateState();
@@ -277,6 +280,62 @@ namespace Mooege.Core.GS.Player
             // TODO: stop finished conversations
 
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
+        }
+
+        private void OnPlayerMovement(GameClient client, PlayerMovementMessage message)
+        {
+            // here we should also be checking the position and see if it's valid. If not we should be resetting player to a good position with ACDWorldPositionMessage 
+            // so we can have a basic precaution for hacks & exploits /raist.
+
+            if (message.Position != null)
+                this.Position = message.Position; 
+
+            var msg = new NotifyActorMovementMessage
+                             {
+                                 ActorId = message.ActorId,
+                                 Position = this.Position,
+                                 Angle = message.Angle,
+                                 Field3 = false,
+                                 Field4 = message.Field4,
+                                 Field5 = message.Field5,
+                                 Field6 = message.Field6
+                             };
+
+            this.World.BroadcastExclusive(msg, this); // TODO: We should be instead notifying currentscene we're in. /raist.
+
+            this.CollectGold();
+        }
+
+        private void CollectGold()
+        {
+            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
+            foreach (var actor in actorList)
+            {
+                Item item;
+                if (!this.GroundItems.TryGetValue(actor.DynamicID, out item) || item.ItemType != ItemType.Gold) continue;
+
+                this.InGameClient.SendMessage(new FloatingAmountMessage()
+                {
+                    Place = new WorldPlace()
+                    {
+                        Position = this.Position,
+                        WorldID = this.World.DynamicID,
+                    },
+
+                    Amount = item.Attributes[GameAttribute.Gold],
+                    Type = FloatingAmountMessage.FloatType.Gold,
+                });
+
+                // NOTE: ANNDataMessage6 is probably "AddToInventory"
+                this.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6)
+                {
+                    ActorID = actor.DynamicID,
+                });
+
+                this.Inventory.PickUpGold(actor.DynamicID);
+
+                this.GroundItems.Remove(actor.DynamicID); // should delete from World also
+            }
         }
 
         // FIXME: Hardcoded crap
