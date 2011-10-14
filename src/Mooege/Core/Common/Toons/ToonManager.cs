@@ -59,7 +59,6 @@ namespace Mooege.Core.Common.Toons
         public static bool SaveToon(Toon toon)
         {
 
-
             if (Toons.ContainsKey(toon.PersistentID)) //this should never happen again thanks to hashcode, but lets leave it in for now - Tharuler
             {
                 Logger.Error("Duplicate persistent toon id: {0}", toon.PersistentID);
@@ -67,7 +66,6 @@ namespace Mooege.Core.Common.Toons
             }
 
             Toons.Add(toon.PersistentID, toon);
-
             toon.SaveToDB(); //possible concurrency problem? 2 toon created with same name at same time could introduce a race condition for the same hashcode(chance of 1 in (1000-amount of toons with that name))
 
             Logger.Trace("Character {0} with HashCode #{1} added to database", toon.Name, toon.HashCodeString);
@@ -132,12 +130,11 @@ namespace Mooege.Core.Common.Toons
             Random rnd = new Random();
             if (codes == null) return rnd.Next(1, 1000).ToString("D3");
 
-
-            string hashCode = rnd.Next(1, 1000).ToString("D3");
-            while (codes.Contains(hashCode))
+            string hashCode;
+            do
             {
                 hashCode = rnd.Next(1, 1000).ToString("D3");
-            }
+            } while (codes.Contains(hashCode)) ;
             return hashCode;
 
         }
