@@ -31,13 +31,13 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
         {
             fx.SpawnEffect(pp.User, 3278, pp.User.Position, fx.AngleLookAt(pp.User.Position, pp.TargetPosition), 500);
-            yield return 200;
-            //if (fx.CanHitMeleeTarget(pp.User, pp.Target))
-            //{
+            yield return 200; // wait for swing animation
+            if (fx.CanHitMeleeTarget(pp.User, pp.Target))
+            {
                 fx.PlayEffectGroupActorToActor(18663, pp.User, pp.Target);
-                fx.DoKnockback(pp.User, pp.Target, 1f);
-                //fx.DoDamage(pp.User, pp.Target, 35, 0);
-            //}
+                fx.DoKnockback(pp.User, pp.Target, 4f);
+                fx.DoDamage(pp.User, pp.Target, 35, 0);
+            }
 
             yield break;
         }
