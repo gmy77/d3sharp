@@ -46,7 +46,8 @@ namespace Mooege.Core.Common.Toons
         public ToonHandleHelper ToonHandle { get; private set; }
 
         public string Name { get; private set; }
-        public string HashCodeString { get; set; }
+        public int HashCode { get; set; }
+        public string HashCodeString { get; private set; }
         public ToonClass Class { get; private set; }
         public ToonFlags Flags { get; private set; }
         public byte Level { get; private set; }
@@ -71,16 +72,16 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        public Toon(ulong persistentId, string name, string hashCodeString, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
+        public Toon(ulong persistentId, string name, int hashCode, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
             : base(persistentId)
         {
-            this.SetFields(name, hashCodeString, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistentID((ulong)accountId));
+            this.SetFields(name, hashCode, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistentID((ulong)accountId));
         }
 
-        public Toon(string name, string hashCodeString, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
-            : base(StringHashHelper.HashIdentity(name + "#" + hashCodeString))
+        public Toon(string name, int hashCode, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
+            : base(StringHashHelper.HashIdentity(name + "#" + hashCode.ToString("D3")))
         {
-            this.SetFields(name, hashCodeString, GetClassByID(classId), flags, level, account);
+            this.SetFields(name, hashCode, GetClassByID(classId), flags, level, account);
         }
 
         public int ClassID
@@ -112,13 +113,14 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        private void SetFields(string name, string hashCodeString, ToonClass @class, ToonFlags flags, byte level, Account owner)
+        private void SetFields(string name, int hashCode, ToonClass @class, ToonFlags flags, byte level, Account owner)
         {
             this.ToonHandle = new ToonHandleHelper(this.PersistentID);
             this.D3EntityID = this.ToonHandle.ToD3EntityID();
             this.BnetEntityID = this.ToonHandle.ToBnetEntityID();
             this.Name = name;
-            this.HashCodeString = hashCodeString;
+            this.HashCode = hashCode;
+            this.HashCodeString = HashCode.ToString("D3");
             this.Class = @class;
             this.Flags = flags;
             this.Level = level;
@@ -436,8 +438,8 @@ namespace Mooege.Core.Common.Toons
                 {
                     var query =
                         string.Format(
-                            "UPDATE toons SET name='{0}', hashCode='{1}', class={2}, gender={3}, level={4}, accountId={5} WHERE id={6}",
-                            Name, this.HashCodeString, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID, this.PersistentID);
+                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, accountId={5} WHERE id={6}",
+                            Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -447,7 +449,7 @@ namespace Mooege.Core.Common.Toons
                     var query =
                         string.Format(
                             "INSERT INTO toons (id, name, hashCode, class, gender, level, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6})",
-                            this.PersistentID, this.Name, this.HashCodeString, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID);
+                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();

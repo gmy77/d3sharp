@@ -95,12 +95,12 @@ namespace Mooege.Core.Common.Toons
             while (reader.Read())
             {
                 var databaseId = (ulong)reader.GetInt64(0);
-                var toon = new Toon(databaseId, reader.GetString(1), reader.GetString(6), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5));
+                var toon = new Toon(databaseId, reader.GetString(1), reader.GetInt32(6), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5));
                 Toons.Add(databaseId, toon);
             }
         }
 
-        public static string GetUnusedHashCodeForToonName(string name)
+        public static int GetUnusedHashCodeForToonName(string name)
         {
             var query = string.Format("SELECT hashCode from toons WHERE name='{0}'", name);
             Logger.Trace(query);
@@ -108,10 +108,10 @@ namespace Mooege.Core.Common.Toons
             var reader = cmd.ExecuteReader();
             if (!reader.HasRows) return GenerateHashCodeNotInList(null);
 
-            List<string> codes = new List<string>();
+            HashSet<int> codes = new HashSet<int>();
             while (reader.Read())
             {
-                var hashCode = reader.GetString(0);
+                var hashCode = reader.GetInt32(0);
                 codes.Add(hashCode);
             }
             return GenerateHashCodeNotInList(codes);
@@ -125,15 +125,15 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        private static string GenerateHashCodeNotInList(List<string> codes)
+        private static int GenerateHashCodeNotInList(HashSet<int> codes)
         {
             Random rnd = new Random();
-            if (codes == null) return rnd.Next(1, 1000).ToString("D3");
+            if (codes == null) return rnd.Next(1, 1000);
 
-            string hashCode;
+            int hashCode;
             do
             {
-                hashCode = rnd.Next(1, 1000).ToString("D3");
+                hashCode = rnd.Next(1, 1000);
             } while (codes.Contains(hashCode)) ;
             return hashCode;
 
