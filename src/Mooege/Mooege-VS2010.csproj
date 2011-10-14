@@ -164,6 +164,8 @@
     <Compile Include="Core\GS\Data\SNO\Database.cs" />
     <Compile Include="Core\GS\Data\SNO\Set.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\CancelChanneledSkillMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
@@ -250,7 +252,6 @@
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateFacingMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateFixedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateFixedUpdateMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateNormalMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateSnappedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateSyncMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDWorldPositionMessage.cs" />

@@ -244,21 +244,20 @@ namespace Mooege.Net.GS.Message
             WriteInt64(length, unchecked((long)value));
         }
 
-        static Encoding IBM437 = Encoding.GetEncoding(437);
         public string ReadCharArray(int maxLength)
         {
             int size = ReadInt(GetBitCount(maxLength));
             Position = (Position + 7) & (~7);
             if (!CheckAvailable(size * 8))
                 throw new GameBitBufferException("Not enough bits remaining.");
-            var result = IBM437.GetString(Data, Position >> 3, size);
+            var result = Encoding.UTF8.GetString(Data, Position >> 3, size);
             Position += size * 8;
             return result;
         }
 
         public void WriteCharArray(int maxLength, string value)
         {
-            var result = IBM437.GetBytes(value);
+            var result = Encoding.UTF8.GetBytes(value);
             WriteInt(GetBitCount(maxLength), result.Length);
             Position = (Position + 7) & (~7);
             MakeAvailable(result.Length * 8);

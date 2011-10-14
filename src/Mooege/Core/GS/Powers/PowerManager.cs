@@ -36,6 +36,7 @@ using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Common;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Net.GS.Message.Definitions.Actor;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -420,10 +421,10 @@ namespace Mooege.Core.GS.Powers
             if (actor == null) return;
 
             actor.Position.Set(pos);
-            actor.World.BroadcastIfRevealed(new ACDTranslateNormalMessage()
+            actor.World.BroadcastIfRevealed(new NotifyActorMovementMessage
             {
                 Id = 0x6e,
-                Field0 = (int)actor.DynamicID,
+                ActorId = (int)actor.DynamicID,
                 Position = pos,
                 Angle = 0f, // TODO: convert quaternion rotation for this?
                 Field3 = false,

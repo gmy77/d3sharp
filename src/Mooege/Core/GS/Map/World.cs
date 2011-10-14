@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Mooege.Common;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Objects;
@@ -110,12 +111,9 @@ namespace Mooege.Core.GS.Map
         public void BroadcastExclusive(GameMessage message, Actor actor)
         {
             var players = this.GetPlayersInRange(actor.Position, 480.0f);
-            foreach (var player in players)
+            foreach (var player in players.Where(player => player != actor))
             {
-                if (player != actor)
-                {
-                    player.InGameClient.SendMessage(message);
-                }
+                player.InGameClient.SendMessage(message);
             }
         }
 
@@ -124,11 +122,8 @@ namespace Mooege.Core.GS.Map
             // TODO: Unreveal from players that are now outside the actor's range
 
             if (!actor.HasWorldLocation) return;
-
-            if (actor is Player.Player)
-                BroadcastExclusive(actor.ACDWorldPositionMessage, actor); // brodcast this exclusively if actor is a player -- in other words, do not send position update message back to original player moving. /raist.
-            else 
-                BroadcastIfRevealed(actor.ACDWorldPositionMessage, actor);                                                                           
+            
+            // BroadcastIfRevealed(actor.ACDTranslateNormalMessage, actor); // movement should be ACDTranslateNormalMessage based not ACDWorldPositionMessage /raist.
         }
 
         // TODO: NewPlayer messages should be broadcasted at the Game level, which means we may have to track players separately from objects in Game
@@ -142,7 +137,6 @@ namespace Mooege.Core.GS.Map
             var players = this._players.Values; //this.GetPlayersInRange(actor.Position, 480.0f);
             foreach (var player in players)
             {
-                if (actor is Player.Player) Logger.Debug("Enter: Revealing player: {0}[DynamicId:{1}] to {2}[DynamicId:{3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
                 actor.Reveal(player);
             }
         }
@@ -189,7 +183,6 @@ namespace Mooege.Core.GS.Map
             Logger.Info("Revealing all actors for world {0}", this.DynamicID);
             foreach (var actor in _actors.Values)
             {
-                if (actor is Player.Player) Logger.Debug("Revaling player {0}[DynamicId: {1}] to player {2}[DynamicId: {3}]", ((Player.Player)actor).Properties.Name, actor.DynamicID, player.Properties.Name, player.DynamicID);
                 actor.Reveal(player);                
             }
 
