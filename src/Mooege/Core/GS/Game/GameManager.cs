@@ -20,5 +20,31 @@ namespace Mooege.Core.GS.Game
         {
             return !Games.ContainsKey(gameId) ? null : Games[gameId];
         }
+
+        public static void RemovePlayerFromGame(Mooege.Net.GS.GameClient gameClient)
+        {
+            if (gameClient != null && gameClient.Game != null)
+            {
+                int gameId = gameClient.Game.GameId;
+                if (Games.ContainsKey(gameId))
+                {
+                    Game game = Games[gameId];
+                    if (game.Players.ContainsKey(gameClient))
+                    {
+                        Player.Player p = null;
+                        if (!game.Players.TryRemove(gameClient, out p))
+                        {
+                            //log something
+                        }
+
+                        if (game.Players.Count == 0)
+                        {
+                            //remove game
+                            Games.Remove(gameId);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
