@@ -22,30 +22,20 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Mooege.Common.Extensions;
 using Mooege.Net.GS.Message;
 
 namespace Mooege.Common
 {
-    public enum Level
-    {
-        Dump, // used for logging packets.
-        Trace,
-        Debug,
-        Info,
-        Warn,
-        Error,
-        Fatal
-    }
-
     public static class LogManager
     {
         public static bool Enabled { get; set; }
 
-        internal readonly static List<Target> Targets = new List<Target>();
+        internal readonly static List<LogTarget> Targets = new List<LogTarget>();
         internal static readonly Dictionary<string, Logger> Loggers = new Dictionary<string, Logger>();
 
-        public static void AttachLogTarget(Target target)
+        public static void AttachLogTarget(LogTarget target)
         {
             Targets.Add(target);
         }
@@ -68,7 +58,7 @@ namespace Mooege.Common
 
     internal static class LogRouter
     {
-        public static void RouteMessage(Level level, string logger, string message)
+        public static void RouteMessage(Logger.Level level, string logger, string message)
         {
             if (!LogManager.Enabled) return;
             if (LogManager.Targets.Count == 0) return;
@@ -79,7 +69,7 @@ namespace Mooege.Common
             }
         }
 
-        public static void RouteException(Level level, string logger, string message, Exception exception)
+        public static void RouteException(Logger.Level level, string logger, string message, Exception exception)
         {
             if (!LogManager.Enabled) return;
             if (LogManager.Targets.Count == 0) return;
@@ -153,50 +143,73 @@ namespace Mooege.Common
 
         public void FatalException(Exception exception, string message) { LogException(Level.Fatal, message, null, exception); }
         public void FatalException(Exception exception, string message, params object[] args) { LogException(Level.Fatal, message, args, exception); }
-    }
 
-    public class Target
-    {
-        public Level MinimumLevel { get; protected set; }
-        public Level MaximumLevel { get; protected set; }
-        public virtual void LogMessage(Level level, string logger, string message) { throw new NotSupportedException(); }
-        public virtual void LogException(Level level, string logger, string message, Exception exception) { throw new NotSupportedException(); }
-
-        public Target()
+        public enum Level
         {
-            this.MaximumLevel = Level.Fatal;
+            Dump, // used for logging packets.
+            Trace,
+            Debug,
+            Info,
+            Warn,
+            Error,
+            Fatal
         }
     }
 
-    public class FileTarget : Target, IDisposable
+    public class LogTarget
     {
+        public Logger.Level MinimumLevel { get; protected set; }
+        public Logger.Level MaximumLevel { get; protected set; }
+        public bool IncludeTimeStamps { get; protected set; }
+
+        public virtual void LogMessage(Logger.Level level, string logger, string message) { throw new NotSupportedException(); }
+        public virtual void LogException(Logger.Level level, string logger, string message, Exception exception) { throw new NotSupportedException(); }        
+    }
+
+    public class FileTarget : LogTarget, IDisposable
+    {
+        private readonly string _fileName;
         private readonly string _filePath;
 
         private FileStream _fileStream;
         private StreamWriter _logStream;
 
-        public FileTarget(string filePath, Level minLevel, Level maxLevel = Level.Fatal, FileMode fileMode = FileMode.Append)
+        public FileTarget(string fileName, Logger.Level minLevel, Logger.Level maxLevel, bool includeTimeStamps, bool reset = false)
         {
-            MinimumLevel = minLevel;
-            MaximumLevel = maxLevel;
-            _filePath = filePath;
-            this._fileStream = new FileStream(_filePath, fileMode, FileAccess.Write);
+            this._fileName = fileName;
+            this._filePath = string.Format("{0}/{1}", LogConfig.Instance.LoggingRoot, _fileName);
+            this.MinimumLevel = minLevel;
+            this.MaximumLevel = maxLevel;
+            this.IncludeTimeStamps = includeTimeStamps;
+
+            if (!Directory.Exists(LogConfig.Instance.LoggingRoot)) // create logging directory if it does not exist.
+                Directory.CreateDirectory(LogConfig.Instance.LoggingRoot);
+
+            this._fileStream = new FileStream(_filePath, reset ? FileMode.Create : FileMode.Append, FileAccess.Write);
             this._logStream = new StreamWriter(this._fileStream) {AutoFlush = true};
         }
 
-        public override void LogMessage(Level level, string logger, string message)
+        public override void LogMessage(Logger.Level level, string logger, string message)
         {
             lock (this) // we need this here until we seperate gs / moonet /raist
             {
-                this._logStream.WriteLine(string.Format("[{0}] [{1}]: {2}", level.ToString().PadLeft(5), logger, message));
+                var timeStamp = this.IncludeTimeStamps
+                                    ? "[" + DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff") + "] "
+                                    : "";
+                
+                this._logStream.WriteLine(string.Format("{0}[{1}] [{2}]: {3}", timeStamp, level.ToString().PadLeft(5), logger, message));
             }
         }
 
-        public override void LogException(Level level, string logger, string message, Exception exception)
+        public override void LogException(Logger.Level level, string logger, string message, Exception exception)
         {
             lock (this)
             {
-                this._logStream.WriteLine(string.Format("[{0}] [{1}]: {2} - [Exception] {3}", level.ToString().PadLeft(5), logger, message, exception));
+                var timeStamp = this.IncludeTimeStamps
+                    ? "[" + DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff") + "] "
+                    : "";
+
+                this._logStream.WriteLine(string.Format("{0}[{1}] [{2}]: {3} - [Exception] {4}", timeStamp, level.ToString().PadLeft(5), logger, message, exception));
             }
         }
 
@@ -234,36 +247,46 @@ namespace Mooege.Common
         #endregion
     }
 
-    public class ConsoleTarget : Target
+    public class ConsoleTarget : LogTarget
     {
-        public ConsoleTarget(Level minLevel, bool initConsole = false)
+        public ConsoleTarget(Logger.Level minLevel, Logger.Level maxLevel, bool includeTimeStamps)
         {
             MinimumLevel = minLevel;
+            MaximumLevel = maxLevel;
+            this.IncludeTimeStamps = includeTimeStamps;
         }
         
-        public override void LogMessage(Level level, string logger, string message)
+        public override void LogMessage(Logger.Level level, string logger, string message)
         {
+            var timeStamp = this.IncludeTimeStamps
+                                ? "[" + DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff") + "] "
+                                : "";
+
             SetForeGroundColor(level);
-            Console.WriteLine(string.Format("[{0}] [{1}]: {2}", level.ToString().PadLeft(5), logger, message));
+            Console.WriteLine(string.Format("{0}[{1}] [{2}]: {3}", timeStamp, level.ToString().PadLeft(5), logger, message));
         }
 
-        public override void LogException(Level level, string logger, string message, Exception exception)
+        public override void LogException(Logger.Level level, string logger, string message, Exception exception)
         {
+            var timeStamp = this.IncludeTimeStamps
+                                ? "[" + DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff") + "] "
+                                : "";
+
             SetForeGroundColor(level);
-            Console.WriteLine(string.Format("[{0}] [{1}]: {2} - [Exception] {3}", level.ToString().PadLeft(5), logger, message, exception));
+            Console.WriteLine(string.Format("{0}[{1}] [{2}]: {3} - [Exception] {4}", timeStamp, level.ToString().PadLeft(5), logger, message, exception));
         }
 
-        private static void SetForeGroundColor(Level level)
+        private static void SetForeGroundColor(Logger.Level level)
         {
             switch (level)
             {
-                case Level.Dump: Console.ForegroundColor = ConsoleColor.DarkGray; break;
-                case Level.Trace: Console.ForegroundColor = ConsoleColor.DarkGray; break;
-                case Level.Debug: Console.ForegroundColor = ConsoleColor.Cyan; break;
-                case Level.Info: Console.ForegroundColor = ConsoleColor.White; break;
-                case Level.Warn: Console.ForegroundColor = ConsoleColor.Yellow; break;
-                case Level.Error: Console.ForegroundColor = ConsoleColor.Magenta; break;
-                case Level.Fatal: Console.ForegroundColor = ConsoleColor.Red; break;
+                case Logger.Level.Dump: Console.ForegroundColor = ConsoleColor.DarkGray; break;
+                case Logger.Level.Trace: Console.ForegroundColor = ConsoleColor.DarkGray; break;
+                case Logger.Level.Debug: Console.ForegroundColor = ConsoleColor.Cyan; break;
+                case Logger.Level.Info: Console.ForegroundColor = ConsoleColor.White; break;
+                case Logger.Level.Warn: Console.ForegroundColor = ConsoleColor.Yellow; break;
+                case Logger.Level.Error: Console.ForegroundColor = ConsoleColor.Magenta; break;
+                case Logger.Level.Fatal: Console.ForegroundColor = ConsoleColor.Red; break;
                 default: break;
             }
         }
