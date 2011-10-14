@@ -17,8 +17,11 @@
  */
 
 using System;
+using Google.ProtocolBuffers;
 using Mooege.Common;
+using Mooege.Common.Extensions;
 using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
 
@@ -30,26 +33,50 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
 
+        private readonly byte[] _moduleHash = "8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray(); // Password.dll
+        private SRP6 _srp6;
+
         public override void Logon(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.LogonRequest request, Action<bnet.protocol.authentication.LogonResponse> done)
         {
             Logger.Trace("LogonRequest(); Email={0}", request.Email);
-            var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
 
-            Client.Account = account;
-            Client.Account.LoggedInClient = Client;
+             // we should be also checking here version, program, locale and similar stuff /raist.
 
-            var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
-                .SetAccount(Client.Account.BnetAccountID)
-                .SetGameAccount(Client.Account.BnetGameAccountID);
+            this._srp6 = new SRP6(request.Email, "123");
 
-            done(builder.Build());
+            var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
+                .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
+                    .SetRegion(0x00005553) // us
+                    .SetUsage(0x61757468) // auth - password.dll
+                    .SetHash(ByteString.CopyFrom(_moduleHash)))
+                    .SetMessage(ByteString.CopyFrom(this._srp6.LogonChallenge))
+                    .Build();
 
-            PlayerManager.PlayerConnected(this.Client);
+            this.Client.ListenerId = request.ListenerId;
+            bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).ModuleLoad(controller, moduleLoadRequest, ModuleLoadRequestCallback);
+
+            //var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
+
+            //Client.Account = account;
+            //Client.Account.LoggedInClient = Client;
+
+            //var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
+            //    .SetAccount(Client.Account.BnetAccountID)
+            //    .SetGameAccount(Client.Account.BnetGameAccountID);
+
+            //done(builder.Build());
+
+            //PlayerManager.PlayerConnected(this.Client);
         }
 
         public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.ModuleMessageRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
+        }
+
+        private static void ModuleLoadRequestCallback(IMessage msg)
+        {
+            Logger.Trace("ModuleLoadResponse {0}", msg.ToString());
         }
     }
 }

@@ -35,12 +35,12 @@ namespace Mooege.Net.MooNet.Packets
 
         public int Length
         {
-            get { return this.Header.Data.Length + this.Payload.ToArray().Length; }
+            get { return this.Header.HeaderData.Length + this.Payload.ToArray().Length; }
         }
 
         public byte[] GetRawPacketData()
         {
-            return this.Header.Data.Append(this.Payload.ToArray());
+            return this.Header.HeaderData.Append(this.Payload.ToArray());
         }
 
         public override string ToString()
@@ -49,7 +49,7 @@ namespace Mooege.Net.MooNet.Packets
             string.Format(
                 "Header\t: {0}\nData\t: {1}- {2}",
                 this.Header,
-                this.Header.Data.HexDump(),
+                this.Header.HeaderData.HexDump(),
                 this.Payload.HexDump()
             );
         }

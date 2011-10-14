@@ -28,6 +28,7 @@ namespace Mooege.Net.MooNet
     public static class MooNetRouter
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
+        public const byte ServiceReply = 0xFE;
 
         public static void Route(ConnectionDataEventArgs e)
         {
@@ -40,9 +41,18 @@ namespace Mooege.Net.MooNet
 
         public static void Identify(IConnection connection, CodedInputStream stream)
         {
-            var header = new Header(stream);
-            var payload = stream.ReadRawBytes((int) header.PayloadLength);
+            var header = new Header(stream);            
 
+            if(header.ServiceID==ServiceReply)
+            {
+                var callback = ((MooNetClient)connection.Client).RPCCallbacks.Dequeue();
+
+                if (callback.RequestId == header.RequestID) callback.Action(ReadMessage(callback.Builder, stream));
+                else Logger.Warn("RPC callback contains unexpected requestId: {0} where {1} was expected", callback.RequestId, header.RequestID);
+                return;
+            }
+
+            var payload = header.GetPayload();
             var packet = new Packet(header, payload);
             var service = Service.GetByID(header.ServiceID);
 
@@ -78,6 +88,12 @@ namespace Mooege.Net.MooNet
             {
                 Logger.DebugException(e, string.Empty);
             }
+        }
+
+        public static IMessage ReadMessage(IBuilder builder, CodedInputStream stream)
+        {
+            stream.ReadMessage(builder, ExtensionRegistry.Empty);
+            return builder.WeakBuild();
         }
 
         private static void SendResponse(IConnection client, int requestId, IMessage message)

@@ -25,20 +25,21 @@ using Mooege.Common.Helpers;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Channels;
-using Mooege.Core.MooNet.Friends;
-using Mooege.Core.MooNet.Helpers;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet.Packets;
 
 namespace Mooege.Net.MooNet
 {
-    public sealed class MooNetClient : IClient
+    public sealed class MooNetClient : IClient, IRpcChannel
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
+        
         public Dictionary<uint, uint> Services { get; private set; }
-        public Account Account { get; set; }
+        public readonly Queue<RPCCallback> RPCCallbacks = new Queue<RPCCallback>();
+        public ulong ListenerId { get; set; } // used for client rpc-calls.
         private int _requestCounter = 0;
 
+        public Account Account { get; set; }                
         public Toon CurrentToon { get; set; }
 
         private Channel _currentChannel;
@@ -119,6 +120,33 @@ namespace Mooege.Net.MooNet
                 request.ToByteArray());
 
             this.Connection.Send(packet);
+        }
+
+        public void CallMethod(MethodDescriptor method, IRpcController controller, IMessage request, IMessage responsePrototype, Action<IMessage> done)
+        {
+            var serviceName = method.Service.FullName;
+            var serviceHash = StringHashHelper.HashIdentity(serviceName);
+
+            if (!this.Services.ContainsKey(serviceHash))
+            {
+                Logger.Error("Not bound to client service {0} [0x{1}] yet.", serviceName, serviceHash.ToString("X8"));
+                return;
+            }
+
+            var serviceId = this.Services[serviceHash];
+            var requestId = this._requestCounter++;
+            RPCCallbacks.Enqueue(new RPCCallback(done, responsePrototype.WeakToBuilder(), requestId));
+
+            var packet = new Packet(
+                new Header((byte) serviceId, GetMethodId(method), requestId, (uint) request.SerializedSize, this.ListenerId),
+                request.ToByteArray());
+
+            this.Connection.Send(packet);
+        }
+
+        private static uint GetMethodId(MethodDescriptor method)
+        {
+            return (uint)method.Options[bnet.protocol.Rpc.MethodId.Descriptor];
         }
 
         public bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon)

@@ -23,13 +23,15 @@ namespace Mooege.Net.MooNet.Packets
 {
     public class Header
     {
-        public byte[] Data { get; private set; }
+        public byte[] HeaderData { get; private set; }
 
         public byte ServiceID { get; private set; }
         public uint MethodID { get; private set; }
         public int RequestID { get; private set; }
         public ulong ObjectID { get; private set; }
         public uint PayloadLength { get; private set; }
+
+        private readonly CodedInputStream _inputStream = null;
 
         public Header()
         {            
@@ -44,15 +46,25 @@ namespace Mooege.Net.MooNet.Packets
 
         public Header(CodedInputStream stream)
         {
+            this._inputStream=stream;
             var serviceId = stream.ReadRawByte();
             var methodId = stream.ReadRawVarint32();
             var requestId = stream.ReadRawByte() | (stream.ReadRawByte() << 8);
 
             var objectId = 0UL;
             if (serviceId != 0xfe) objectId = stream.ReadRawVarint64();
-            var payloadLength = stream.ReadRawVarint32();
+            
 
-            this.SetData(serviceId, methodId, requestId, payloadLength, objectId);
+            this.ServiceID = serviceId;
+            this.MethodID = methodId;
+            this.RequestID = requestId;
+            this.ObjectID = objectId;
+        }
+
+        public byte[] GetPayload()
+        {
+            var payloadLength = this._inputStream.ReadRawVarint32();
+            return this._inputStream.ReadRawBytes((int)payloadLength);
         }
 
         private void SetData(byte serviceId, uint methodId, int requestId, uint payloadLength, ulong objectId)
@@ -74,7 +86,7 @@ namespace Mooege.Net.MooNet.Packets
                 output.WriteRawVarint32(this.PayloadLength);
                 output.Flush();
 
-                this.Data = stream.ToArray();
+                this.HeaderData = stream.ToArray();
             }
         }
 
