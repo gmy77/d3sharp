@@ -22,7 +22,7 @@ namespace Mooege
 {
     public sealed class LogConfig : Common.Config.Config
     {
-        public string LoggingRoot { get { return this.GetString("Root", @".\logs"); } set { this.Set("Root", value); } }
+        public string LoggingRoot { get { return this.GetString("Root", @"logs"); } set { this.Set("Root", value); } }
 
         public LogTargetConfig[] Targets = new[] { new LogTargetConfig("ConsoleLog"), new LogTargetConfig("ServerLog"), new LogTargetConfig("PacketLog") };
 

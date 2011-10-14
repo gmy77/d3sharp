@@ -177,7 +177,7 @@ namespace Mooege.Common
         public FileTarget(string fileName, Logger.Level minLevel, Logger.Level maxLevel, bool includeTimeStamps, bool reset = false)
         {
             this._fileName = fileName;
-            this._filePath = string.Format("{0}\\{1}", LogConfig.Instance.LoggingRoot, _fileName);
+            this._filePath = string.Format("{0}/{1}", LogConfig.Instance.LoggingRoot, _fileName);
             this.MinimumLevel = minLevel;
             this.MaximumLevel = maxLevel;
             this.IncludeTimeStamps = includeTimeStamps;
