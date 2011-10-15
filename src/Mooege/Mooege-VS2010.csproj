@@ -103,6 +103,7 @@
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
+    <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
     <Compile Include="Core\MooNet\Authentication\SRP6.cs" />
     <Compile Include="Core\MooNet\Channels\Channel.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelManager.cs" />

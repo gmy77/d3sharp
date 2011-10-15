@@ -71,7 +71,13 @@ namespace Mooege.Core.MooNet.Services
 
         public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.ModuleMessageRequest request, Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            var moduleMessage = request.Message.ToByteArray();
+            var command = moduleMessage[0];
+
+            done(bnet.protocol.NoData.CreateBuilder().Build());
+
+            if(request.ModuleId==0 && command==2)
+                AuthManager.HandleAuthResponse(this.Client, moduleMessage);
         }
 
         private static void ModuleLoadResponse(bnet.protocol.authentication.ModuleLoadResponse response)

@@ -51,6 +51,14 @@ namespace Mooege.Common.Extensions
             return result;
         }
 
+        public static bool CompareTo(this byte[] byteArray, byte[] second)
+        {
+            if (byteArray.Length != second.Length)
+                return false;
+
+            return !byteArray.Where((t, i) => second[i] != t).Any();
+        }
+
         public static string Dump(this byte[] array)
         {
             return EnumerableExtensions.Dump(array);

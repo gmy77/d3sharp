@@ -36,6 +36,22 @@ namespace Mooege.Core.MooNet.Authentication
         public string Password { get; private set; }
         public string AccountSalt { get; private set; }
 
+        /// <summary>
+        /// command == 0
+        /// byte accountSalt[32]; - static value per account (skipped when command == 1)
+        /// byte passwordSalt[32]; - static value per account
+        /// byte serverChallenge[128]; - changes every login
+        /// byte secondChallenge[128]; - changes every login
+        /// </summary>
+        public byte[] LogonChallenge { get; private set; }
+
+        /// <summary>
+        /// command == 3
+        /// byte M2[32];
+        /// byte secondProof[128]; // for veryfing secondChallenge
+        /// </summary>
+        public byte[] LogonProof { get; private set; }
+
         private readonly BigInteger s;
         private readonly BigInteger I;
         private readonly BigInteger v;
@@ -59,7 +75,9 @@ namespace Mooege.Core.MooNet.Authentication
 
         private readonly BigInteger N = NBytes.ToBigInteger();
         
-        private BigInteger _secondChallenge;
+        private readonly BigInteger _secondChallenge;
+        private BigInteger _secondProof;
+        private BigInteger _secondChallengeClient;
 
         public SRP6(string email, string password)
         {
@@ -123,10 +141,108 @@ namespace Mooege.Core.MooNet.Authentication
             return sc;
         }
 
-        /// byte accountSalt[32]; - static value per account
-        /// byte passwordSalt[32]; - static value per account
-        /// byte serverChallenge[128]; - changes every login
-        /// byte secondChallenge[128]; - changes every login
-        public byte[] LogonChallenge { get; private set; }
+        public BigInteger GetSecondProof(byte[] accountNameBytes, byte[] seed, byte[] secondChallenge)
+        {
+            byte[] spBytes = {
+                0x7D, 0x95, 0x74, 0x0C, 0xAD, 0x32, 0x17, 0x1C, 0xBA, 0x75, 0x02, 0xB3, 0xA5, 0xD1, 0x00, 0x5A, 
+                0x5A, 0x4C, 0x32, 0x3C, 0xD6, 0x3A, 0x94, 0xF2, 0x55, 0xDB, 0x05, 0x1E, 0x95, 0x30, 0x7D, 0xC2, 
+                0x69, 0xB8, 0x64, 0x90, 0xE2, 0x79, 0xCA, 0xD7, 0x5D, 0x8D, 0x77, 0x51, 0x7E, 0xC7, 0x29, 0xB7, 
+                0x03, 0x01, 0xB3, 0x62, 0xC4, 0x6D, 0xEA, 0x4F, 0xF5, 0x44, 0x6E, 0x9C, 0x05, 0x6F, 0x2C, 0x04, 
+                0xCA, 0x96, 0x32, 0x77, 0x21, 0x29, 0xB8, 0x83, 0xE0, 0x13, 0x3B, 0x5C, 0x99, 0x82, 0x08, 0x7B, 
+                0x63, 0xBF, 0x0D, 0xDA, 0xB7, 0x77, 0x63, 0xB4, 0xD1, 0xEF, 0x64, 0x60, 0x63, 0x5A, 0xBB, 0xDF, 
+                0x5C, 0xA5, 0x1C, 0xC3, 0x60, 0xCE, 0x8F, 0xD6, 0xC4, 0x15, 0x55, 0xBB, 0x6D, 0x99, 0xD2, 0x26, 
+                0x74, 0x1B, 0x4F, 0x2E, 0xE4, 0x42, 0x5C, 0xB5, 0x84, 0x44, 0x40, 0x60, 0xA7, 0xDD, 0x52, 0x18
+            };
+
+            var sp = spBytes.ToBigInteger();
+
+            return sp;
+        }
+
+        public bool Verify(byte[] ABytes, byte[] M1Bytes, byte[] seed)
+        {
+            this._secondChallengeClient = seed.ToBigInteger();
+            var A = ABytes.ToBigInteger();
+
+            var uBytes = _sha256.ComputeHash(new byte[0].Concat(ABytes).Concat(B.ToArray()).ToArray());
+            var u = uBytes.ToBigInteger();
+
+            var S = BigInteger.ModPow(A * BigInteger.ModPow(v, u, N), b, N);
+            
+            var KBytes = Calc_K(S.ToArray());
+            var t3Bytes = Hash_g_and_N_and_xor_them();
+
+            var t4 = _sha256.ComputeHash(Encoding.ASCII.GetBytes(this.AccountSalt));
+
+            var sBytes = s.ToArray();
+            var BBytes = B.ToArray();
+
+            var M = _sha256.ComputeHash(new byte[0]
+                                            .Concat(t3Bytes)
+                                            .Concat(t4)
+                                            .Concat(sBytes)
+                                            .Concat(ABytes)
+                                            .Concat(BBytes)
+                                            .Concat(KBytes)
+                                            .ToArray());
+
+            if (!M.CompareTo(M1Bytes))
+                return false;
+
+            var M2 = _sha256.ComputeHash(new byte[0]
+                                             .Concat(ABytes)
+                                             .Concat(M)
+                                             .Concat(KBytes)
+                                             .ToArray());
+
+            this._secondProof = GetSecondProof(Encoding.ASCII.GetBytes(this.Email), seed,
+                                               this._secondChallenge.ToArray());
+
+
+            LogonProof = new byte[0]
+                .Concat(new byte[] {3}) // command == 3
+                .Concat(M2) // M2
+                .Concat(this._secondProof.ToArray()) // secondProof
+                .ToArray();
+
+            return true;
+        }
+
+        //  Interleave SHA256 Key
+        private byte[] Calc_K(byte[] S)
+        {
+            var K = new byte[64];
+
+            var half_S = new byte[64];
+
+            for (int i = 0; i < 64; ++i)
+                half_S[i] = S[i * 2];
+
+            var p1 = _sha256.ComputeHash(half_S);
+
+            for (int i = 0; i < 32; ++i)
+                K[i * 2] = p1[i];
+
+            for (int i = 0; i < 64; ++i)
+                half_S[i] = S[i * 2 + 1];
+
+            var p2 = _sha256.ComputeHash(half_S);
+
+            for (int i = 0; i < 32; ++i)
+                K[i * 2 + 1] = p2[i];
+
+            return K;
+        }
+
+        private byte[] Hash_g_and_N_and_xor_them()
+        {
+            var hash_N = _sha256.ComputeHash(NBytes);
+            var hash_g = _sha256.ComputeHash(gBytes);
+
+            for (var i = 0; i < 32; ++i)
+                hash_N[i] ^= hash_g[i];
+
+            return hash_N;
+        }
     }
 }
