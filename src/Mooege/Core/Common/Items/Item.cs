@@ -128,12 +128,22 @@ namespace Mooege.Core.Common.Items
 
         public static bool IsPotion(ItemType itemType)
         {
-            return (itemType == ItemType.HealthPotion);
+            return (itemType == ItemType.Potion);
         }
 
         public static bool IsAccessory(ItemType itemType)
         {
             return (itemType == ItemType.Ring || itemType == ItemType.Belt || itemType == ItemType.Amulet);
+        }
+
+        public static bool IsRuneOrJewel(ItemType itemType)
+        {
+            return (itemType == ItemType.Amethyst || itemType == ItemType.Ruby || itemType == ItemType.Emerald || itemType == ItemType.Topaz || itemType == ItemType.Rune);
+        }
+
+        public static bool IsDye(ItemType itemType)
+        {
+            return (itemType == ItemType.Dye);
         }
 
         public static bool IsWeapon(ItemType itemType)
