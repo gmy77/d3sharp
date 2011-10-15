@@ -44,16 +44,11 @@ namespace Mooege.Core.MooNet.Services
             {
                 this.Client.AuthenticationCompleteSignal.WaitOne(); // wait the signal;
 
-                if(this.Client.AuthenticationErrorCode!= AuthenticationErrorCode.None)
+                if(this.Client.AuthenticationErrorCode != AuthenticationErrorCode.None)
                 {
                     done(bnet.protocol.authentication.LogonResponse.DefaultInstance);
                     return;
                 }
-
-                var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
-
-                Client.Account = account;
-                Client.Account.LoggedInClient = Client;
 
                 var builder = bnet.protocol.authentication.LogonResponse.
                     CreateBuilder()

@@ -23,8 +23,7 @@ using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using Mooege.Common.Extensions;
-
-// contains code from tomrus88 (https://github.com/tomrus88/d3proto/blob/master/Core/SRP.cs)
+using Mooege.Core.MooNet.Accounts;
 
 namespace Mooege.Core.MooNet.Authentication
 {
@@ -52,17 +51,16 @@ namespace Mooege.Core.MooNet.Authentication
         //   v    Password verifier
         // ---------------------------------------------------------------------------
 
-        private readonly SHA256Managed H = new SHA256Managed(); // H() One-way hash function.
+        private static readonly SHA256Managed H = new SHA256Managed(); // H() One-way hash function.
         private readonly BigInteger s; // users's salt.
         private readonly BigInteger I; // username.
         private readonly BigInteger v; // Password verifier -  v = g^x
         private readonly BigInteger b; // server's secret ephemeral value.
         private readonly BigInteger B; // server's public ephemeral value
 
-
-        public string Email { get; private set; }
-        public string Password { get; private set; }
+        public Account Account { get; private set; }
         public string AccountSalt { get; private set; }
+        public string Email { get; private set; }
 
         /// <summary>
         /// command == 0
@@ -81,7 +79,7 @@ namespace Mooege.Core.MooNet.Authentication
         public byte[] LogonProof { get; private set; }
 
         private static readonly byte[] gBytes = new byte[] { 0x02 };
-        private readonly BigInteger g = gBytes.ToBigInteger();
+        private static readonly BigInteger g = gBytes.ToBigInteger();
 
         private static readonly byte[] NBytes = new byte[]
             {
@@ -95,7 +93,7 @@ namespace Mooege.Core.MooNet.Authentication
                 0x29, 0x6F, 0x55, 0x7D, 0xE3, 0x0F, 0x77, 0x19, 0xE5, 0x6C, 0x30, 0xEB, 0xDE, 0xF6, 0xA7, 0x86
             };
 
-        private readonly BigInteger N = NBytes.ToBigInteger();
+        private static readonly BigInteger N = NBytes.ToBigInteger();
         
         private readonly BigInteger _secondChallenge;
         private BigInteger _secondProof;
@@ -104,8 +102,6 @@ namespace Mooege.Core.MooNet.Authentication
         public SRP6a(string email, string password)
         {
             this.Email = email;
-            this.Password = password;
-
             this.AccountSalt = H.ComputeHash(Encoding.ASCII.GetBytes(email)).ToHexString();
             var sBytes = GetRandomBytes(32);
             this.s = sBytes.ToBigInteger();
@@ -129,7 +125,7 @@ namespace Mooege.Core.MooNet.Authentication
             this._secondChallenge = this.GetSecondChallenge();
 
             this.LogonChallenge = new byte[0]
-                .Concat(new byte[] {0})
+                .Concat(new byte[] { 0 })
                 .Concat(this.AccountSalt.ToByteArray()) // account-salt
                 .Concat(sBytes) // password-salt
                 .Concat(B.ToArray()) // server challenge
@@ -137,7 +133,18 @@ namespace Mooege.Core.MooNet.Authentication
                 .ToArray();
         }
 
-        private static byte[] GetRandomBytes(int count)
+        public static byte[] CalculatePasswordVerifierForAccount(string email, string password, byte[] salt)
+        {
+            // x = H(s, p) -> s: randomly choosen salt, password: in plain-text.
+            // v = g^x (computes password verifier)
+
+            var x = H.ComputeHash(Encoding.ASCII.GetBytes(salt.ToString().ToUpper() + ":" + password.ToUpper())).ToBigInteger();
+            var v = BigInteger.ModPow(g, x, N);
+
+            return v.ToArray();
+        }
+
+        public static byte[] GetRandomBytes(int count)
         {
             var rnd = new Random();
             var result = new byte[count];
@@ -190,7 +197,7 @@ namespace Mooege.Core.MooNet.Authentication
             var u = uBytes.ToBigInteger();
 
             var S = BigInteger.ModPow(A * BigInteger.ModPow(v, u, N), b, N);
-            
+
             var KBytes = Calc_K(S.ToArray());
             var t3Bytes = Hash_g_and_N_and_xor_them();
 

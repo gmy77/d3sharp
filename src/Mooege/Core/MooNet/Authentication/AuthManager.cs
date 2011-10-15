@@ -16,16 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Common.Extensions;
 using Mooege.Core.MooNet.Accounts;
-using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Authentication
@@ -38,7 +34,30 @@ namespace Mooege.Core.MooNet.Authentication
 
         public static void StartAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
-            var srp6a = new SRP6a(request.Email, "123");
+            if (Config.Instance.BypassAuthentication)
+                ByPassAuthentication(client, request);
+            else
+                InitAuthentication(client, request);                                               
+        }
+
+        private static void ByPassAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
+        {
+            client.Account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email, request.Email);
+            client.Account.LoggedInClient = client;
+
+            client.AuthenticationCompleteSignal.Set();
+        }
+
+        private static void InitAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
+        {
+            var account = AccountManager.GetAccountByEmail(request.Email); // check if account exists.
+            if (account == null)
+            {
+                client.AuthenticationErrorCode = AuthenticationErrorCode.NoGameAccount;
+                client.AuthenticationCompleteSignal.Set();
+            }
+
+            var srp6a = new SRP6a(account.Email, "123");
             OngoingAuthentications.Add(client, srp6a);
 
             var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
@@ -72,6 +91,9 @@ namespace Mooege.Core.MooNet.Authentication
 
                 client.MakeRPC(() =>
                     bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => { }));
+
+                client.Account = AccountManager.GetAccountByEmail(srp6.Email);
+                client.Account.LoggedInClient = client;
             }
             else
             {

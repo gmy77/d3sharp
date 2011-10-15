@@ -43,9 +43,9 @@ namespace Mooege.Core.MooNet.Accounts
             return Accounts.ContainsKey(email) ? Accounts[email] : null;
         }
 
-        public static Account CreateAccount(string email)
+        public static Account CreateAccount(string email, string password)
         {
-            var account = new Account(email);
+            var account = new Account(email, password);
             Accounts.Add(email, account);
             account.SaveToDB();
 
@@ -67,9 +67,16 @@ namespace Mooege.Core.MooNet.Accounts
 
             while (reader.Read())
             {
-                var databaseId = (ulong)reader.GetInt64(0);
+                var accountId = (ulong)reader.GetInt64(0);
                 var email = reader.GetString(1);
-                var account = new Account(databaseId, email);
+
+                var salt = new byte[32];
+                var readBytes = reader.GetBytes(2, 0, salt, 0, 32);
+
+                var passwordVerifier = new byte[128];
+                readBytes = reader.GetBytes(3, 0, passwordVerifier, 0, 128);
+
+                var account = new Account(accountId, email, salt, passwordVerifier);
                 Accounts.Add(email, account);
             }
         }
