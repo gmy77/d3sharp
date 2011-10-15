@@ -32,28 +32,14 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
-
-        private readonly byte[] _moduleHash = "8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray(); // Password.dll
-        private SRP6 _srp6;
-
+        
         public override void Logon(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.LogonRequest request, Action<bnet.protocol.authentication.LogonResponse> done)
         {
             Logger.Trace("LogonRequest(); Email={0}", request.Email);
 
             // we should be also checking here version, program, locale and similar stuff /raist.
 
-            this._srp6 = new SRP6(request.Email, "123");
-
-            var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
-                .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
-                    .SetRegion(0x00005553) // us
-                    .SetUsage(0x61757468) // auth - password.dll
-                    .SetHash(ByteString.CopyFrom(_moduleHash)))
-                    .SetMessage(ByteString.CopyFrom(this._srp6.LogonChallenge))
-                    .Build();
-
-            this.Client.MakeRPCWithListenerId(request.ListenerId, () =>
-                bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).ModuleLoad(controller, moduleLoadRequest, ModuleLoadResponse));
+            AuthManager.StartAuthentication(this.Client, request);           
 
             //var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
 
@@ -77,12 +63,7 @@ namespace Mooege.Core.MooNet.Services
             done(bnet.protocol.NoData.CreateBuilder().Build());
 
             if(request.ModuleId==0 && command==2)
-                AuthManager.HandleAuthResponse(this.Client, moduleMessage);
-        }
-
-        private static void ModuleLoadResponse(bnet.protocol.authentication.ModuleLoadResponse response)
-        {
-            Logger.Trace("ModuleLoadResponse {0}", response.ToString());
+                AuthManager.HandleAuthResponse(this.Client, request.ModuleId, moduleMessage);
         }
     }
 }
