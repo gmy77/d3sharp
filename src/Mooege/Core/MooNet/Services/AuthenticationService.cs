@@ -55,9 +55,6 @@ namespace Mooege.Core.MooNet.Services
             this.Client.MakeRPCWithListenerId(request.ListenerId, () =>
                 bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).ModuleLoad(controller, moduleLoadRequest, ModuleLoadResponse));
 
-            //this.Client.ListenerId = request.ListenerId;
-            //bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).ModuleLoad(controller, moduleLoadRequest, ModuleLoadRequestCallback);
-
             //var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
 
             //Client.Account = account;
