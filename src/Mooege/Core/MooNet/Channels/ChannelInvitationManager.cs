@@ -40,9 +40,14 @@ namespace Mooege.Core.MooNet.Channels
             var notification = bnet.protocol.channel_invitation.InvitationAddedNotification.CreateBuilder().SetInvitation(invitation);
             
             //invitee.ListenerId = this.DynamicId;
-            invitee.TargetRPCObject(this);
-            bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(invitee).NotifyReceivedInvitationAdded(
-                null, notification.Build(), callback => { });                 
+            //invitee.TargetRPCObject(this);
+            //bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(invitee).NotifyReceivedInvitationAdded(
+            //    null, notification.Build(), callback => { });                 
+
+            invitee.MakeTargetedRPC(this,
+                                    () =>
+                                    bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(invitee).
+                                        NotifyReceivedInvitationAdded(null, notification.Build(), callback => { }));
 
             //invitee.CallMethod(bnet.protocol.channel_invitation.ChannelInvitationNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationAdded"), notification.Build(), this.DynamicId);
         }
@@ -63,10 +68,16 @@ namespace Mooege.Core.MooNet.Channels
 
             // notify invitee and let him remove the handled invitation.
 
-            client.TargetRPCObject(this);
+            //client.TargetRPCObject(this);
             //client.ListenerId = this.DynamicId;
-            bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(client).NotifyReceivedInvitationRemoved(
-                null, notification.Build(), callback => { });
+            //bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(client).NotifyReceivedInvitationRemoved(
+                //null, notification.Build(), callback => { });
+
+            client.MakeTargetedRPC(this,
+                                   () =>
+                                   bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(client).
+                                       NotifyReceivedInvitationRemoved(
+                                           null, notification.Build(), callback => { }));
 
             //client.CallMethod(bnet.protocol.channel_invitation.ChannelInvitationNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationRemoved"), notification.Build(), this.DynamicId);            
         }
@@ -89,9 +100,12 @@ namespace Mooege.Core.MooNet.Channels
 
             // notify invoker about the decline.
 
-            inviter.Owner.LoggedInClient.TargetRPCObject(inviter.Owner.LoggedInClient.CurrentChannel);
+            //inviter.Owner.LoggedInClient.TargetRPCObject(inviter.Owner.LoggedInClient.CurrentChannel);
             //inviter.Owner.LoggedInClient.ListenerId = inviter.Owner.LoggedInClient.CurrentChannel.DynamicId;
-            bnet.protocol.channel.ChannelSubscriber.CreateStub(inviter.Owner.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { });
+            //bnet.protocol.channel.ChannelSubscriber.CreateStub(inviter.Owner.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { });
+
+            inviter.Owner.LoggedInClient.MakeTargetedRPC(inviter.Owner.LoggedInClient.CurrentChannel, () =>
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(inviter.Owner.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
 
             //inviter.Owner.LoggedInClient.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), notification.Build(), inviter.Owner.LoggedInClient.CurrentChannel.DynamicId);
         }

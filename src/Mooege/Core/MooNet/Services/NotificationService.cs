@@ -53,9 +53,12 @@ namespace Mooege.Core.MooNet.Services
                     //var method = bnet.protocol.notification.NotificationListener.Descriptor.FindMethodByName("OnNotificationReceived");
 
                     //account.LoggedInClient.ListenerId = 0;
-                    account.LoggedInClient.ResetTarget();
-                    bnet.protocol.notification.NotificationListener.CreateStub(account.LoggedInClient).
-                        OnNotificationReceived(controller, notification, callback => { });
+                    //account.LoggedInClient.ResetTarget();
+                    //bnet.protocol.notification.NotificationListener.CreateStub(account.LoggedInClient).
+                    //    OnNotificationReceived(controller, notification, callback => { });
+
+                    account.LoggedInClient.MakeRPC(() => bnet.protocol.notification.NotificationListener.CreateStub(account.LoggedInClient).
+                                  OnNotificationReceived(controller, notification, callback => { }));
 
                     //account.LoggedInClient.CallMethod(method, notification);
                     break;

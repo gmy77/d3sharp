@@ -418,9 +418,12 @@ namespace Mooege.Core.Common.Toons
             var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
 
             // Make the RPC call
-            client.TargetRPCObject(this);
+            //client.TargetRPCObject(this);
             //client.ListenerId = this.DynamicId;
-            bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, builder.Build(), callback => { });
+            //bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, builder.Build(), callback => { });
+
+            client.MakeTargetedRPC(this, () => bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(
+                null, builder.Build(), callback => { }));
 
             //client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(),this.DynamicId);
         }

@@ -108,11 +108,14 @@ namespace Mooege.Core.MooNet.Services
                 .SetAgentId(Client.CurrentToon.BnetEntityID)
                 .SetStateChange(bnet.protocol.channel.ChannelState.CreateBuilder().AddInvitation(invitation.Clone()));
 
-            this.Client.TargetRPCObject(this.Client.CurrentChannel);
+            //this.Client.TargetRPCObject(this.Client.CurrentChannel);
             //this.Client.ListenerId = this.Client.CurrentChannel.DynamicId;
-            bnet.protocol.channel.ChannelSubscriber.CreateStub(Client).NotifyUpdateChannelState(controller,
-                                                                                                notification.Build(),
-                                                                                                callback => { });
+            //bnet.protocol.channel.ChannelSubscriber.CreateStub(Client).NotifyUpdateChannelState(controller,
+            //                                                                                    notification.Build(),
+            //                                                                                    callback => { });
+
+            this.Client.MakeTargetedRPC(this.Client.CurrentChannel, () =>
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(Client).NotifyUpdateChannelState(controller,notification.Build(),callback => { }));
 
             // Client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), notification.Build(), Client.CurrentChannel.DynamicId);
 

@@ -49,8 +49,7 @@ namespace Mooege.Net.MooNet
         private Dictionary<ulong, ulong> MappedObjects { get; set; }
 
         // rpc object targeter
-        private ulong _targetedObjectId;
-        public RPCObject Object { get; private set; }
+        private ulong _targetedRemoteObjectId;
 
         public Account Account { get; set; }                
         public Toon CurrentToon { get; set; }
@@ -125,25 +124,27 @@ namespace Mooege.Net.MooNet
         //    this.Connection.Send(packet);
         //}
 
-        public void MakeTargetedRPC(RPCObject @object, Action rpc)
+        public void MakeTargetedRPC(RPCObject targetObject, Action rpc)
         {
-            this._targetedObjectId = this.GetRemoteObjectID(@object.DynamicId);
-            Logger.Warn("RPC targeted object: {0} [localId: {1}, remoteId: {2}].", @object.ToString(),
-                         @object.DynamicId, this._targetedObjectId);
+            this._targetedRemoteObjectId = this.GetRemoteObjectID(targetObject.DynamicId);
+            Logger.Warn("[RPC] Targeted object: {0} [localId: {1}, remoteId: {2}].", targetObject.ToString(),
+                         targetObject.DynamicId, this._targetedRemoteObjectId);
 
             rpc();
         }
 
-        public void MakeRPCWithListenerId(uint listenerId, Action rpc)
+        public void MakeRPCWithListenerId(ulong listenerId, Action rpc)
         {
-            this._targetedObjectId = listenerId;
-            Logger.Trace("RPC targeted listenerId: {0}.", this._targetedObjectId);
+            this._targetedRemoteObjectId = listenerId;
+            Logger.Trace("[RPC] Targeted listenerId: {0}.", this._targetedRemoteObjectId);
 
             rpc();
         }
 
         public void MakeRPC(Action rpc)
         {
+            this._targetedRemoteObjectId = 0;
+            Logger.Trace("[RPC] with no targets.");
             rpc();
         }
 
@@ -161,12 +162,9 @@ namespace Mooege.Net.MooNet
             var serviceId = this.Services[serviceHash];
             var requestId = this._requestCounter++;
 
-            //var remoteObjectId = GetRemoteObjectID(this.ListenerId);
-            //Logger.Trace("Calling {0} localObjectId={1}, remoteObjectId={2}", method.FullName, this.ListenerId, remoteObjectId);
-
             RPCCallbacks.Enqueue(new RPCCallback(done, responsePrototype.WeakToBuilder(), requestId));
 
-            var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), requestId, this._targetedObjectId, request);               
+            var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), requestId, this._targetedRemoteObjectId, request);               
             this.Connection.Send(packet);
         }
 
@@ -213,27 +211,6 @@ namespace Mooege.Net.MooNet
             }
             else
                 return 0; // null/unused/unset 
-        }
-
-        public void TargetRPCObject(RPCObject @object)
-        {
-            this.Object = @object;
-            this._targetedObjectId = this.GetRemoteObjectID(@object.DynamicId);
-            Logger.Warn("Targeted rpc-object: {0} [localId: {1}, remoteId: {2}].", @object.ToString(),
-                         @object.DynamicId, this._targetedObjectId);
-        }
-
-        public void TargetListenerId(ulong listenerId)
-        {
-            this.Object = null;
-            this._targetedObjectId = listenerId;
-            Logger.Trace("Targeted direct listenerId: {0} without object.", this._targetedObjectId);
-        }
-
-        public void ResetTarget()
-        {
-            this.Object = null;
-            this._targetedObjectId = 0;
         }
     }
 }
