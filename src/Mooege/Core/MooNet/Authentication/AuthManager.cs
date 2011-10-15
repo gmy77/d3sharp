@@ -42,7 +42,7 @@ namespace Mooege.Core.MooNet.Authentication
 
         private static void ByPassAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
-            client.Account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email, request.Email);
+            client.Account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email, "123");
             client.Account.LoggedInClient = client;
 
             client.AuthenticationCompleteSignal.Set();
@@ -57,7 +57,7 @@ namespace Mooege.Core.MooNet.Authentication
                 client.AuthenticationCompleteSignal.Set();
             }
 
-            var srp6a = new SRP6a(account.Email, "123");
+            var srp6a = new SRP6a(account);
             OngoingAuthentications.Add(client, srp6a);
 
             var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
@@ -92,7 +92,7 @@ namespace Mooege.Core.MooNet.Authentication
                 client.MakeRPC(() =>
                     bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => { }));
 
-                client.Account = AccountManager.GetAccountByEmail(srp6.Email);
+                client.Account = AccountManager.GetAccountByEmail(srp6.Account.Email);
                 client.Account.LoggedInClient = client;
             }
             else
@@ -100,6 +100,7 @@ namespace Mooege.Core.MooNet.Authentication
                 client.AuthenticationErrorCode = AuthenticationErrorCode.InvalidCredentials;
             }
 
+            OngoingAuthentications.Remove(client);
             client.AuthenticationCompleteSignal.Set();
         }
 

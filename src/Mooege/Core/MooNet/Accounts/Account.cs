@@ -118,8 +118,8 @@ namespace Mooege.Core.MooNet.Accounts
         public Account(string email, string password) // Account with **newly generated** persistent ID
             : base()
         {            
-            var salt = SRP6A.GetRandomBytes(32);
-            var passwordVerifier = SRP6A.CalculatePasswordVerifierForAccount(email, password, salt);
+            var salt = SRP6a.GetRandomBytes(32);
+            var passwordVerifier = SRP6a.CalculatePasswordVerifierForAccount(email, password, salt);
 
             this.SetFields(email, salt, passwordVerifier);
         }
