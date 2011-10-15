@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
 using Mooege.Common;
@@ -32,6 +33,14 @@ using Mooege.Net.MooNet.RPC;
 
 namespace Mooege.Net.MooNet
 {
+    public enum AuthenticationErrorCode
+    {
+        None = 0,
+        InvalidCredentials = 3,
+        NoToonSelected = 11,
+        NoGameAccount = 12,
+    }
+
     public sealed class MooNetClient : IClient, IRpcChannel
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
@@ -39,6 +48,8 @@ namespace Mooege.Net.MooNet
         public GameClient InGameClient { get; set; }
         public IConnection Connection { get; set; }
 
+        public readonly AutoResetEvent AuthenticationCompleteSignal = new AutoResetEvent(false);
+        public AuthenticationErrorCode AuthenticationErrorCode;
 
         public Dictionary<uint, uint> Services { get; private set; }
         public readonly Queue<RPCCallback> RPCCallbacks = new Queue<RPCCallback>();
@@ -60,42 +71,6 @@ namespace Mooege.Net.MooNet
             this.Services = new Dictionary<uint, uint>();
             this.MappedObjects = new Dictionary<ulong, ulong>();
         }
-
-        private Channel _currentChannel;
-        public Channel CurrentChannel
-        {
-            get
-            {
-                return _currentChannel;
-            }
-            set
-            {
-                this._currentChannel = value;
-                if (value == null) return;
-
-                // still trying to figure a bit below - commented meanwhile /raist. 
-                // notify friends.
-                //if (FriendManager.Friends[this.Account.BnetAccountID.Low].Count == 0) return; // if account has no friends just skip.
-
-                //var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 4, 1, 0);
-                //var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(value.D3EntityId.ToByteString()).Build()).Build();
-                //var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
-
-                //var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.Account.BnetAccountID).AddFieldOperation(operation).Build();
-                //var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
-                //var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
-
-                //foreach (var friend in FriendManager.Friends[this.Account.BnetAccountID.Low])
-                //{
-                //    var account = AccountManager.GetAccountByPersistentID(friend.Id.Low);
-                //    if (account == null || account.LoggedInClient == null) return; // only send to friends that are online.
-
-                //    account.LoggedInClient.CallMethod(
-                //        bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"),
-                //        notification, this.Account.DynamicId);
-                //}
-            }
-        }       
 
         public bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon)
         {
@@ -178,6 +153,42 @@ namespace Mooege.Net.MooNet
         public ulong GetRemoteObjectID(ulong localObjectId)
         {
             return localObjectId != 0 ? this.MappedObjects[localObjectId] : 0;
+        }
+
+        private Channel _currentChannel;
+        public Channel CurrentChannel
+        {
+            get
+            {
+                return _currentChannel;
+            }
+            set
+            {
+                this._currentChannel = value;
+                if (value == null) return;
+
+                // still trying to figure a bit below - commented meanwhile /raist. 
+                // notify friends.
+                //if (FriendManager.Friends[this.Account.BnetAccountID.Low].Count == 0) return; // if account has no friends just skip.
+
+                //var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 4, 1, 0);
+                //var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(value.D3EntityId.ToByteString()).Build()).Build();
+                //var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+
+                //var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.Account.BnetAccountID).AddFieldOperation(operation).Build();
+                //var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+                //var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
+
+                //foreach (var friend in FriendManager.Friends[this.Account.BnetAccountID.Low])
+                //{
+                //    var account = AccountManager.GetAccountByPersistentID(friend.Id.Low);
+                //    if (account == null || account.LoggedInClient == null) return; // only send to friends that are online.
+
+                //    account.LoggedInClient.CallMethod(
+                //        bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"),
+                //        notification, this.Account.DynamicId);
+                //}
+            }
         }
     }
 }

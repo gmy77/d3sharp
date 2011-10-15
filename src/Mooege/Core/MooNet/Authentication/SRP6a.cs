@@ -28,9 +28,37 @@ using Mooege.Common.Extensions;
 
 namespace Mooege.Core.MooNet.Authentication
 {
-    public class SRP6
+    /// <summary>
+    /// SRP6-a implementation.
+    /// Specification: http://srp.stanford.edu/design.html
+    /// </summary>
+    public class SRP6a
     {
-        private readonly SHA256Managed _sha256 = new SHA256Managed();
+        // The following is a description of SRP-6 and 6a, the latest versions of SRP:
+        // ---------------------------------------------------------------------------
+        //   N    A large safe prime (N = 2q+1, where q is prime)
+        //        All arithmetic is done modulo N.
+        //   g    A generator modulo N
+        //   k    Multiplier parameter (k = H(N, g) in SRP-6a, k = 3 for legacy SRP-6)
+        //   s    User's salt
+        //   I    Username
+        //   p    Cleartext Password
+        //   H()  One-way hash function
+        //   ^    (Modular) Exponentiation
+        //   u    Random scrambling parameter
+        //   a,b  Secret ephemeral values
+        //   A,B  Public ephemeral values
+        //   x    Private key (derived from p and s)
+        //   v    Password verifier
+        // ---------------------------------------------------------------------------
+
+        private readonly SHA256Managed H = new SHA256Managed(); // H() One-way hash function.
+        private readonly BigInteger s; // users's salt.
+        private readonly BigInteger I; // username.
+        private readonly BigInteger v; // Password verifier -  v = g^x
+        private readonly BigInteger b; // server's secret ephemeral value.
+        private readonly BigInteger B; // server's public ephemeral value
+
 
         public string Email { get; private set; }
         public string Password { get; private set; }
@@ -51,12 +79,6 @@ namespace Mooege.Core.MooNet.Authentication
         /// byte secondProof[128]; // for veryfing secondChallenge
         /// </summary>
         public byte[] LogonProof { get; private set; }
-
-        private readonly BigInteger s;
-        private readonly BigInteger I;
-        private readonly BigInteger v;
-        private readonly BigInteger b;
-        private readonly BigInteger B;
 
         private static readonly byte[] gBytes = new byte[] { 0x02 };
         private readonly BigInteger g = gBytes.ToBigInteger();
@@ -79,19 +101,19 @@ namespace Mooege.Core.MooNet.Authentication
         private BigInteger _secondProof;
         private BigInteger _secondChallengeClient;
 
-        public SRP6(string email, string password)
+        public SRP6a(string email, string password)
         {
             this.Email = email;
             this.Password = password;
 
-            this.AccountSalt = _sha256.ComputeHash(Encoding.ASCII.GetBytes(email)).ToHexString();
+            this.AccountSalt = H.ComputeHash(Encoding.ASCII.GetBytes(email)).ToHexString();
             var sBytes = GetRandomBytes(32);
             this.s = sBytes.ToBigInteger();
 
-            var IBytes = _sha256.ComputeHash(Encoding.ASCII.GetBytes(this.AccountSalt.ToUpper() + ":" + password.ToUpper()));
+            var IBytes = H.ComputeHash(Encoding.ASCII.GetBytes(this.AccountSalt.ToUpper() + ":" + password.ToUpper()));
             this.I = IBytes.ToBigInteger();
 
-            var xBytes = _sha256.ComputeHash(new byte[0].Concat(sBytes).Concat(IBytes).ToArray());
+            var xBytes = H.ComputeHash(new byte[0].Concat(sBytes).Concat(IBytes).ToArray());
             var x = xBytes.ToBigInteger();
 
             this.v = BigInteger.ModPow(g, x, N);
@@ -99,7 +121,7 @@ namespace Mooege.Core.MooNet.Authentication
 
             var gMod = BigInteger.ModPow(g, b, N);
 
-            var kBytes = _sha256.ComputeHash(new byte[0].Concat(NBytes).Concat(gBytes).ToArray());
+            var kBytes = H.ComputeHash(new byte[0].Concat(NBytes).Concat(gBytes).ToArray());
             var k = kBytes.ToBigInteger();
 
             this.B = BigInteger.Remainder((v * k) + gMod, N);
@@ -108,7 +130,7 @@ namespace Mooege.Core.MooNet.Authentication
 
             this.LogonChallenge = new byte[0]
                 .Concat(new byte[] {0})
-                .Concat(this.AccountSalt.ToByteArray()) // accountt-salt
+                .Concat(this.AccountSalt.ToByteArray()) // account-salt
                 .Concat(sBytes) // password-salt
                 .Concat(B.ToArray()) // server challenge
                 .Concat(this._secondChallenge.ToArray()) // second challenge
@@ -159,12 +181,12 @@ namespace Mooege.Core.MooNet.Authentication
             return sp;
         }
 
-        public bool Verify(byte[] ABytes, byte[] M1Bytes, byte[] seed)
+        public bool Verify(byte[] ABytes, byte[] M_client, byte[] seed)
         {
             this._secondChallengeClient = seed.ToBigInteger();
             var A = ABytes.ToBigInteger();
 
-            var uBytes = _sha256.ComputeHash(new byte[0].Concat(ABytes).Concat(B.ToArray()).ToArray());
+            var uBytes = H.ComputeHash(new byte[0].Concat(ABytes).Concat(B.ToArray()).ToArray());
             var u = uBytes.ToBigInteger();
 
             var S = BigInteger.ModPow(A * BigInteger.ModPow(v, u, N), b, N);
@@ -172,12 +194,12 @@ namespace Mooege.Core.MooNet.Authentication
             var KBytes = Calc_K(S.ToArray());
             var t3Bytes = Hash_g_and_N_and_xor_them();
 
-            var t4 = _sha256.ComputeHash(Encoding.ASCII.GetBytes(this.AccountSalt));
+            var t4 = H.ComputeHash(Encoding.ASCII.GetBytes(this.AccountSalt));
 
             var sBytes = s.ToArray();
             var BBytes = B.ToArray();
 
-            var M = _sha256.ComputeHash(new byte[0]
+            var M = H.ComputeHash(new byte[0]
                                             .Concat(t3Bytes)
                                             .Concat(t4)
                                             .Concat(sBytes)
@@ -186,10 +208,12 @@ namespace Mooege.Core.MooNet.Authentication
                                             .Concat(KBytes)
                                             .ToArray());
 
-            if (!M.CompareTo(M1Bytes))
+            if (!M.CompareTo(M_client))
                 return false;
 
-            var M2 = _sha256.ComputeHash(new byte[0]
+            // proof of session key
+
+            var M_server = H.ComputeHash(new byte[0]
                                              .Concat(ABytes)
                                              .Concat(M)
                                              .Concat(KBytes)
@@ -198,11 +222,10 @@ namespace Mooege.Core.MooNet.Authentication
             this._secondProof = GetSecondProof(Encoding.ASCII.GetBytes(this.Email), seed,
                                                this._secondChallenge.ToArray());
 
-
             LogonProof = new byte[0]
-                .Concat(new byte[] {3}) // command == 3
-                .Concat(M2) // M2
-                .Concat(this._secondProof.ToArray()) // secondProof
+                .Concat(new byte[] { 3 }) // command == 3 - server sends proof of session key to client
+                .Concat(M_server) // proof of session key
+                .Concat(this._secondProof.ToArray()) // second proof
                 .ToArray();
 
             return true;
@@ -218,7 +241,7 @@ namespace Mooege.Core.MooNet.Authentication
             for (int i = 0; i < 64; ++i)
                 half_S[i] = S[i * 2];
 
-            var p1 = _sha256.ComputeHash(half_S);
+            var p1 = H.ComputeHash(half_S);
 
             for (int i = 0; i < 32; ++i)
                 K[i * 2] = p1[i];
@@ -226,7 +249,7 @@ namespace Mooege.Core.MooNet.Authentication
             for (int i = 0; i < 64; ++i)
                 half_S[i] = S[i * 2 + 1];
 
-            var p2 = _sha256.ComputeHash(half_S);
+            var p2 = H.ComputeHash(half_S);
 
             for (int i = 0; i < 32; ++i)
                 K[i * 2 + 1] = p2[i];
@@ -236,8 +259,8 @@ namespace Mooege.Core.MooNet.Authentication
 
         private byte[] Hash_g_and_N_and_xor_them()
         {
-            var hash_N = _sha256.ComputeHash(NBytes);
-            var hash_g = _sha256.ComputeHash(gBytes);
+            var hash_N = H.ComputeHash(NBytes);
+            var hash_g = H.ComputeHash(gBytes);
 
             for (var i = 0; i < 32; ++i)
                 hash_N[i] ^= hash_g[i];

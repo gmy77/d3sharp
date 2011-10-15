@@ -17,9 +17,8 @@
  */
 
 using System;
-using Google.ProtocolBuffers;
+using System.Threading;
 using Mooege.Common;
-using Mooege.Common.Extensions;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Online;
@@ -39,20 +38,35 @@ namespace Mooege.Core.MooNet.Services
 
             // we should be also checking here version, program, locale and similar stuff /raist.
 
-            AuthManager.StartAuthentication(this.Client, request);           
+            AuthManager.StartAuthentication(this.Client, request);
 
-            //var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
+            var authenticationThread = new Thread(() =>
+            {
+                this.Client.AuthenticationCompleteSignal.WaitOne(); // wait the signal;
 
-            //Client.Account = account;
-            //Client.Account.LoggedInClient = Client;
+                if(this.Client.AuthenticationErrorCode!= AuthenticationErrorCode.None)
+                {
+                    done(bnet.protocol.authentication.LogonResponse.DefaultInstance);
+                    return;
+                }
 
-            //var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
-            //    .SetAccount(Client.Account.BnetAccountID)
-            //    .SetGameAccount(Client.Account.BnetGameAccountID);
+                var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
 
-            //done(builder.Build());
+                Client.Account = account;
+                Client.Account.LoggedInClient = Client;
 
-            //PlayerManager.PlayerConnected(this.Client);
+                var builder = bnet.protocol.authentication.LogonResponse.
+                    CreateBuilder()
+                    .SetAccount(Client.Account.BnetAccountID)
+                    .SetGameAccount(Client.Account.BnetGameAccountID);
+
+                done(builder.Build());
+
+                PlayerManager.PlayerConnected(this.Client);
+
+            }) {IsBackground = true};
+
+            authenticationThread.Start();
         }
 
         public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.ModuleMessageRequest request, Action<bnet.protocol.NoData> done)

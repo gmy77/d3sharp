@@ -20,9 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Common.Extensions;
+using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Authentication
@@ -30,20 +33,20 @@ namespace Mooege.Core.MooNet.Authentication
     public static class AuthManager
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        private static readonly Dictionary<MooNetClient, SRP6> OngoingAuthentications = new Dictionary<MooNetClient, SRP6>();
+        private static readonly Dictionary<MooNetClient, SRP6a> OngoingAuthentications = new Dictionary<MooNetClient, SRP6a>();
         private static readonly byte[] ModuleHash = "8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray(); // Password.dll
 
         public static void StartAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
-            var srp6 = new SRP6(request.Email, "123");
-            OngoingAuthentications.Add(client, srp6);
+            var srp6a = new SRP6a(request.Email, "123");
+            OngoingAuthentications.Add(client, srp6a);
 
             var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
                 .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
                                      .SetRegion(0x00005553) // us
                                      .SetUsage(0x61757468) // auth - password.dll
                                      .SetHash(ByteString.CopyFrom(ModuleHash)))
-                .SetMessage(ByteString.CopyFrom(srp6.LogonChallenge))
+                .SetMessage(ByteString.CopyFrom(srp6a.LogonChallenge))
                 .Build();
 
             client.MakeRPCWithListenerId(request.ListenerId, () =>
@@ -57,21 +60,30 @@ namespace Mooege.Core.MooNet.Authentication
             var srp6 = OngoingAuthentications[client];
 
             byte[] A = authMessage.Skip(1).Take(128).ToArray();
-            byte[] M1 = authMessage.Skip(1 + 128).Take(32).ToArray();
+            byte[] M_client = authMessage.Skip(1 + 128).Take(32).ToArray();
             byte[] seed = authMessage.Skip(1 + 32 + 128).Take(128).ToArray();
 
-            if(srp6.Verify(A,M1,seed))
+            if(srp6.Verify(A,M_client,seed))
             {
-                bnet.protocol.authentication.ModuleMessageRequest.CreateBuilder()
+                var message = bnet.protocol.authentication.ModuleMessageRequest.CreateBuilder()
                     .SetModuleId(moduleId)
-                    .SetMessage(ByteString.CopyFrom(srp6.LogonProof)).Build();
+                    .SetMessage(ByteString.CopyFrom(srp6.LogonProof))
+                    .Build();
+
+                client.MakeRPC(() =>
+                    bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => { }));
+            }
+            else
+            {
+                client.AuthenticationErrorCode = AuthenticationErrorCode.InvalidCredentials;
             }
 
+            client.AuthenticationCompleteSignal.Set();
         }
 
-        private static void ModuleLoadResponse(bnet.protocol.authentication.ModuleLoadResponse response)
+        private static void ModuleLoadResponse(IMessage response)
         {
-            Logger.Trace("ModuleLoadResponse {0}", response.ToString());
+            Logger.Trace("{0}", response.ToString());
         }
     }
 }
