@@ -37,6 +37,10 @@ using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Effect;
+using Mooege.Net.GS.Message.Definitions.Conversation;
+using Mooege.Common.Helpers;
+using Mooege.Net.GS.Message.Definitions.Combat;
+using System;
 
 
 // TODO: When the player moves, it will set the Position property which will bounce back to the player again.
@@ -58,11 +62,24 @@ namespace Mooege.Core.GS.Player
         public SkillSet SkillSet;
         public Inventory Inventory;
 
+        // Used for Exp-Bonuses
+        private int _killstreakTickTime;
+        private int _killstreakPlayer;
+        private int _killstreakEnvironment;
+        private int _lastMonsterKillTick;
+        private int _lastMonsterAttackTick;
+        private int _lastMonsterAttackKills;
+        private int _lastEnvironmentDestroyTick;
+        private int _lastEnvironmentDestroyMonsterKills;
+        private int _lastEnvironmentDestroyMonsterKillTick;
+
         public Dictionary<uint, IRevealable> RevealedObjects { get; private set; }
 
         // Collection of items that only the player can see. This is only used when items drop from killing an actor
         // TODO: Might want to just have a field on the item itself to indicate whether it is visible to only one player
         public Dictionary<uint, Item> GroundItems { get; private set; }
+
+        public List<OpenConversation> OpenConversations { get; set; }
 
         public Player(World world, GameClient client, Toon bnetToon)
             : base(world, world.NewPlayerID)
@@ -76,6 +93,18 @@ namespace Mooege.Core.GS.Player
 
             this.RevealedObjects = new Dictionary<uint, IRevealable>();
             this.GroundItems = new Dictionary<uint, Item>();
+
+            this.OpenConversations = new List<OpenConversation>();
+
+            this._killstreakTickTime = 400;
+            this._killstreakPlayer = 0;
+            this._killstreakEnvironment = 0;
+            this._lastMonsterKillTick = 0;
+            this._lastMonsterAttackTick = 0;
+            this._lastMonsterAttackKills = 0;
+            this._lastEnvironmentDestroyTick = 0;
+            this._lastEnvironmentDestroyMonsterKills = 0;
+            this._lastEnvironmentDestroyMonsterKillTick = 0;
 
             // actor values
             this.ActorSNO = this.ClassSNO;
@@ -271,6 +300,12 @@ namespace Mooege.Core.GS.Player
 
         public override void Update()
         {
+            // Check the Killstreaks
+            CheckExpBonus(0);
+            CheckExpBonus(1);
+            // Check if there is an conversation to close in this tick
+            CheckOpenConversations();
+
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
 
@@ -385,7 +420,13 @@ namespace Mooege.Core.GS.Player
             Actor actor = this.World.GetActor(message.TargetID);
             if (actor != null)
             {
+                if ((actor.GBHandle.Type == 1) && (actor.Attributes[GameAttribute.TeamID] == 10))
+                {
+                    this._lastMonsterAttackTick = this.InGameClient.Game.Tick;
+                }
+
                 actor.OnTargeted(this, message);
+                CheckExpBonus(2);
             }
             else
             {
@@ -549,6 +590,207 @@ namespace Mooege.Core.GS.Player
             attribs.SendMessage(this.InGameClient, this.DynamicID);
 
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
+        }
+
+        public void UpdateExpBonusData(int attackerActorType, int defeatedActorType)
+        {
+            if (attackerActorType == 7) // Player
+            {
+                if (defeatedActorType == 1) // Monster
+                {
+                    // Massacre
+                    if (this._lastMonsterKillTick + this._killstreakTickTime > this.InGameClient.Game.Tick)
+                    {
+                        this._killstreakPlayer++;
+                    }
+                    else
+                    {
+                        this._killstreakPlayer = 1;
+                    }
+
+                    // MightyBlow
+                    if (Math.Abs(this._lastMonsterAttackTick - this.InGameClient.Game.Tick) <= 20)
+                    {
+                        this._lastMonsterAttackKills++;
+                    }
+                    else
+                    {
+                        this._lastMonsterAttackKills = 1;
+                    }
+
+                    this._lastMonsterKillTick = this.InGameClient.Game.Tick;
+                }
+                else if (defeatedActorType == 5) // Environment
+                {
+                    // Destruction
+                    if (this._lastEnvironmentDestroyTick + this._killstreakTickTime > this.InGameClient.Game.Tick)
+                    {
+                        this._killstreakEnvironment++;
+                    }
+                    else
+                    {
+                        this._killstreakEnvironment = 1;
+                    }
+
+                    this._lastEnvironmentDestroyTick = this.InGameClient.Game.Tick;
+                }
+            }
+            else if (attackerActorType == 5) // Environment
+            {
+                // Pulverized
+                if (Math.Abs(this._lastEnvironmentDestroyMonsterKillTick - this.InGameClient.Game.Tick) <= 20)
+                {
+                    this._lastEnvironmentDestroyMonsterKills++;
+                }
+                else
+                {
+                    this._lastEnvironmentDestroyMonsterKills = 1;
+                }
+
+                this._lastEnvironmentDestroyMonsterKillTick = this.InGameClient.Game.Tick;
+            }
+        }
+
+        public void CheckExpBonus(byte BonusType)
+        {
+            int defeated = 0;
+            int expBonus = 0;
+
+            switch (BonusType)
+            {
+                case 0: // Massacre
+                    {
+                        if ((this._killstreakPlayer > 5) && (this._lastMonsterKillTick + this._killstreakTickTime <= this.InGameClient.Game.Tick))
+                        {
+                            defeated = this._killstreakPlayer;
+                            expBonus = (this._killstreakPlayer - 5) * 10;
+
+                            this._killstreakPlayer = 0;
+                        }
+                        break;
+                    }
+                case 1: // Destruction
+                    {
+                        if ((this._killstreakEnvironment > 5) && (this._lastEnvironmentDestroyTick + this._killstreakTickTime <= this.InGameClient.Game.Tick))
+                        {
+                            defeated = this._killstreakEnvironment;
+                            expBonus = (this._killstreakEnvironment - 5) * 5;
+
+                            this._killstreakEnvironment = 0;
+                        }
+                        break;
+                    }
+                case 2: // Mighty Blow
+                    {
+                        if (this._lastMonsterAttackKills > 5)
+                        {
+                            defeated = this._lastMonsterAttackKills;
+                            expBonus = (this._lastMonsterAttackKills - 5) * 5;
+                        }
+                        this._lastMonsterAttackKills = 0;
+                        break;
+                    }
+                case 3: // Pulverized
+                    {
+                        if (this._lastEnvironmentDestroyMonsterKills > 3)
+                        {
+                            defeated = this._lastEnvironmentDestroyMonsterKills;
+                            expBonus = (this._lastEnvironmentDestroyMonsterKills - 3) * 10;
+                        }
+                        this._lastEnvironmentDestroyMonsterKills = 0;
+                        break;
+                    }
+                default:
+                    {
+                        Logger.Warn("Invalid Exp-Bonus-Type was checked.");
+                        return;
+                    }
+            }
+
+            if (expBonus > 0)
+            {
+                this.InGameClient.SendMessage(new KillCounterUpdateMessage()
+                {
+                    Id = 0xcd,
+                    Field0 = BonusType,
+                    Field1 = defeated,
+                    Field2 = expBonus,
+                    Field3 = false,
+                });
+
+                this.UpdateExp(expBonus);
+                PlayHeroConversation(0x0002A73F, RandomHelper.Next(0, 8));
+            }
+        }
+
+        public void PlayHeroConversation(int snoConversation, int lineID)
+        {
+            this.InGameClient.SendMessage(new PlayConvLineMessage()
+            {
+                Id = 0xba,
+                ActorID = this.DynamicID,
+                Field1 = new uint[9]
+                    {
+                        this.DynamicID, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
+                    },
+
+                Params = new PlayLineParams()
+                {
+                    SNOConversation = snoConversation,
+                    Field1 = 0x00000001,
+                    Field2 = false,
+                    LineID = lineID,
+                    Field4 = 0x00000000,
+                    Field5 = -1,
+                    Field6 = this.Properties.VoiceClassID,
+                    Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
+                    VoiceClassID = this.Properties.VoiceClassID,
+                    snoSpeakerActor = this._actorSNO,
+                    Name = this.Properties.Name,
+                    Field11 = 0x00000002,
+                    Field12 = -1,
+                    Field13 = 0x00000069,
+                    Field14 = 0x0000006E,
+                    Field15 = 0x00000032
+                },
+                Field3 = 0x00000069,
+            });
+
+            this.OpenConversations.Add(new OpenConversation(
+                new EndConversationMessage()
+                {
+                    ActorID = this.DynamicID,
+                    Field0 = 0x0000006E,
+                    SNOConversation = snoConversation
+                },
+                this.InGameClient.Game.Tick + 400
+            ));
+        }
+
+        public void CheckOpenConversations()
+        {
+            if(this.OpenConversations.Count > 0)
+            {
+                foreach(OpenConversation openConversation in this.OpenConversations)
+                {
+                    if(openConversation.endTick == this.InGameClient.Game.Tick)
+                    {
+                        this.InGameClient.SendMessage(openConversation.endConversationMessage);
+                    }
+                }
+            }
+        }
+
+        public struct OpenConversation
+        {
+            public EndConversationMessage endConversationMessage;
+            public int endTick;
+
+            public OpenConversation(EndConversationMessage endConversationMessage, int endTick)
+            {
+                this.endConversationMessage = endConversationMessage;
+                this.endTick = endTick;
+            }
         }
 
         public int ClassSNO
