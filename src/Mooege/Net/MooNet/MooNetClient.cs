@@ -39,17 +39,17 @@ namespace Mooege.Net.MooNet
         public GameClient InGameClient { get; set; }
         public IConnection Connection { get; set; }
 
+
         public Dictionary<uint, uint> Services { get; private set; }
         public readonly Queue<RPCCallback> RPCCallbacks = new Queue<RPCCallback>();
-        private int _requestCounter = 0;
-
+        
         /// <summary>
         /// Object ID map with local object ID as key and remote object ID as value.
         /// </summary>
         private Dictionary<ulong, ulong> MappedObjects { get; set; }
 
-        // rpc object targeter
-        private ulong _targetedRemoteObjectId;
+        private int _requestCounter = 0;
+        private ulong _targetedRemoteObjectId; // last targeted rpc object.
 
         public Account Account { get; set; }                
         public Toon CurrentToon { get; set; }
@@ -95,34 +95,17 @@ namespace Mooege.Net.MooNet
                 //        notification, this.Account.DynamicId);
                 //}
             }
+        }       
+
+        public bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon)
+        {
+            var identityBuilder = bnet.protocol.Identity.CreateBuilder();
+            if (acct) identityBuilder.SetAccountId(this.Account.BnetAccountID);
+            if (gameacct) identityBuilder.SetGameAccountId(this.Account.BnetGameAccountID);
+            if (toon && this.CurrentToon != null)
+                identityBuilder.SetToonId(this.CurrentToon.BnetEntityID);
+            return identityBuilder.Build();
         }
-
-        // rpc to client
-        //public void CallMethod(MethodDescriptor method, IMessage request)
-        //{
-        //    CallMethod(method, request, 0);
-        //}
-
-        //public void CallMethod(MethodDescriptor method, IMessage request, ulong localObjectId)
-        //{
-        //    var serviceName = method.Service.FullName;
-        //    var serviceHash = StringHashHelper.HashIdentity(serviceName);
-
-        //    if (!this.Services.ContainsKey(serviceHash))
-        //    {
-        //        Logger.Error("Not bound to client service {0} [0x{1}] yet.", serviceName, serviceHash.ToString("X8"));
-        //        return;
-        //    }
-
-        //    var serviceId = this.Services[serviceHash];
-        //    var remoteObjectId = GetRemoteObjectID(localObjectId);
-
-        //    Logger.Trace("Calling {0} localObjectId={1}, remoteObjectId={2}", method.FullName, localObjectId, remoteObjectId);
-
-        //    var packet = new PacketOut((byte) serviceId, MooNetRouter.GetMethodId(method), this._requestCounter++,remoteObjectId, request);
-
-        //    this.Connection.Send(packet);
-        //}
 
         public void MakeTargetedRPC(RPCObject targetObject, Action rpc)
         {
@@ -164,18 +147,8 @@ namespace Mooege.Net.MooNet
 
             RPCCallbacks.Enqueue(new RPCCallback(done, responsePrototype.WeakToBuilder(), requestId));
 
-            var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), requestId, this._targetedRemoteObjectId, request);               
+            var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), requestId, this._targetedRemoteObjectId, request);
             this.Connection.Send(packet);
-        }
-
-        public bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon)
-        {
-            var identityBuilder = bnet.protocol.Identity.CreateBuilder();
-            if (acct) identityBuilder.SetAccountId(this.Account.BnetAccountID);
-            if (gameacct) identityBuilder.SetGameAccountId(this.Account.BnetGameAccountID);
-            if (toon && this.CurrentToon != null)
-                identityBuilder.SetToonId(this.CurrentToon.BnetEntityID);
-            return identityBuilder.Build();
         }
 
         public void MapLocalObjectID(ulong localObjectId, ulong remoteObjectId)
@@ -204,13 +177,7 @@ namespace Mooege.Net.MooNet
 
         public ulong GetRemoteObjectID(ulong localObjectId)
         {
-            if (localObjectId != 0)
-            {
-                return this.MappedObjects[localObjectId];
-                //return this.MappedObjects.ContainsKey(localObjectId) ? this.MappedObjects[localObjectId] : 0;
-            }
-            else
-                return 0; // null/unused/unset 
+            return localObjectId != 0 ? this.MappedObjects[localObjectId] : 0;
         }
     }
 }

@@ -91,14 +91,8 @@ namespace Mooege.Core.MooNet.Games
                 builder.SetRequestId(this.RequestId);
                 builder.SetGameHandle(this.GameHandle);
 
-                //client.TargetRPCObject(this);
-                //client.ListenerId = this.DynamicId;
-                //bnet.protocol.game_master.GameFactorySubscriber.CreateStub(client).NotifyGameFound(null, builder.Build(), callback => { });
-
                 client.MakeTargetedRPC(this, () =>
                     bnet.protocol.game_master.GameFactorySubscriber.CreateStub(client).NotifyGameFound(null, builder.Build(), callback => { }));
-
-                //client.CallMethod(bnet.protocol.game_master.GameFactorySubscriber.Descriptor.FindMethodByName("NotifyGameFound"), builder.Build(), this.DynamicId);
             }
             else // where as other members should get a bnet.protocol.notification.Notification
             {
@@ -121,14 +115,7 @@ namespace Mooege.Core.MooNet.Games
                     .AddAttribute(connectionInfoAttribute)
                     .AddAttribute(gameHandleAttribute);
 
-
-                //client.ListenerId = 0;
-                //client.ResetTarget();
-                //bnet.protocol.notification.NotificationListener.CreateStub(client).OnNotificationReceived(null, builder.Build(), callback => { });
-
                 client.MakeRPC(() => bnet.protocol.notification.NotificationListener.CreateStub(client).OnNotificationReceived(null, builder.Build(), callback => { }));
-
-                //client.CallMethod(bnet.protocol.notification.NotificationListener.Descriptor.FindMethodByName("OnNotificationReceived"), builder.Build());
             }
         }
     }
