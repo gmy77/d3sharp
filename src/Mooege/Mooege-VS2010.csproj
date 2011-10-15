@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
+    <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
@@ -174,8 +175,6 @@
     <Compile Include="Net\MooNet\MooNetClient.cs" />
     <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />
-    <Compile Include="Net\MooNet\Packets\Header.cs" />
-    <Compile Include="Net\MooNet\Packets\Packet.cs" />
     <Compile Include="Net\GS\ClientManager.cs" />
     <Compile Include="Net\GS\Config.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignPassiveSkillMessage.cs" />
@@ -387,6 +386,8 @@
     <Compile Include="Net\GS\Message\Definitions\World\WorldDeletedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\World\WorldStatusMessage.cs" />
     <Compile Include="Net\IClient.cs" />
+    <Compile Include="Net\MooNet\Packets\PacketIn.cs" />
+    <Compile Include="Net\MooNet\Packets\PacketOut.cs" />
     <Compile Include="Net\MooNet\RPCCallback.cs" />
     <Compile Include="Net\NATConfig.cs" />
     <Compile Include="Net\Utils.cs" />

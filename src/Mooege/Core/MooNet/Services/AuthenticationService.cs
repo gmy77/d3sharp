@@ -40,7 +40,7 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("LogonRequest(); Email={0}", request.Email);
 
-             // we should be also checking here version, program, locale and similar stuff /raist.
+            // we should be also checking here version, program, locale and similar stuff /raist.
 
             this._srp6 = new SRP6(request.Email, "123");
 

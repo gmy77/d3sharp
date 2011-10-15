@@ -115,9 +115,7 @@ namespace Mooege.Net.MooNet
 
             Logger.Trace("Calling {0} localObjectId={1}, remoteObjectId={2}", method.FullName, localObjectId, remoteObjectId);
 
-            var packet = new Packet(
-                new Header((byte)serviceId, (uint)(method.Index + 1), this._requestCounter++, (uint)request.SerializedSize, remoteObjectId),
-                request.ToByteArray());
+            var packet = new PacketOut((byte) serviceId, MooNetRouter.GetMethodId(method), this._requestCounter++,remoteObjectId, request);
 
             this.Connection.Send(packet);
         }
@@ -137,16 +135,8 @@ namespace Mooege.Net.MooNet
             var requestId = this._requestCounter++;
             RPCCallbacks.Enqueue(new RPCCallback(done, responsePrototype.WeakToBuilder(), requestId));
 
-            var packet = new Packet(
-                new Header((byte) serviceId, GetMethodId(method), requestId, (uint) request.SerializedSize, this.ListenerId),
-                request.ToByteArray());
-
+            var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), requestId, this.ListenerId, request);               
             this.Connection.Send(packet);
-        }
-
-        private static uint GetMethodId(MethodDescriptor method)
-        {
-            return (uint)method.Options[bnet.protocol.Rpc.MethodId.Descriptor];
         }
 
         public bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon)
