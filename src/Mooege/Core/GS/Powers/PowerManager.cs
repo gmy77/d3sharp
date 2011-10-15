@@ -40,34 +40,6 @@ using Mooege.Net.GS.Message.Definitions.Actor;
 
 namespace Mooege.Core.GS.Powers
 {
-    public class Effect : Actor
-    {
-        public override ActorType ActorType { get { return Actors.ActorType.Monster; } }
-
-        public Effect(Map.World world, int actorSNO, Vector3D position, float angle, int timeout)
-            : base(world, world.NewActorID)
-        {
-            this.ActorSNO = actorSNO;
-            RotationAmount = (float)Math.Cos(angle / 2f);
-            RotationAxis = new Vector3D(0, 0, (float)Math.Sin(angle / 2f));
-
-            // FIXME: This is hardcoded crap
-            this.Field2 = 0x8; // effect
-            this.Field3 = 0x0;
-            //this.Field7 = -1;
-            //this.Field8 = -1;
-            this.Scale = 1.35f; // TODO: should this be 1 for effects?
-            this.Position.Set(position);
-            this.GBHandle.Type = -1; this.GBHandle.GBID = -1; // TODO: use proper enum value
-
-            Timeout = DateTime.Now.AddMilliseconds(timeout);
-
-            world.Enter(this);
-        }
-
-        public DateTime Timeout;
-    }
-
     public class PowerManager
     {
         static readonly Logger Logger = LogManager.CreateLogger();
@@ -119,17 +91,18 @@ namespace Mooege.Core.GS.Powers
             CleanUpEffects(); 
         }
 
-        public void UsePower(Actor user, int powerSNO, int targetId = -1, Vector3D targetPos = null, TargetMessage message = null)
+        public void UsePower(Actor user, int powerSNO, uint targetId = uint.MaxValue, Vector3D targetPos = null,
+                             TargetMessage message = null)
         {
             Actor target;
 
-            if (targetId == -1)
+            if (targetId == uint.MaxValue)
             {
                 target = null;
             }
-            else if (GetActorFromId(targetId) != null)
+            else if (GetActorFromId(user.World, targetId) != null)
             {
-                target = GetActorFromId(targetId);
+                target = GetActorFromId(user.World, targetId);
                 targetPos = target.Position;
             }
             else
@@ -399,7 +372,7 @@ namespace Mooege.Core.GS.Powers
                 channeled.Effects.Add(SpawnEffectInstance(user, actorSNO, pos, 0));
             }
 
-            MoveActorNormal(channeled.Effects[index], pos);
+            MoveActorNormal(channeled.Effects[index], pos, 8f);
 
             return channeled.Effects[index];
         }
@@ -416,7 +389,7 @@ namespace Mooege.Core.GS.Powers
             actor.Position = pos;
         }
 
-        public void MoveActorNormal(Actor actor, Vector3D pos)
+        public void MoveActorNormal(Actor actor, Vector3D pos, float speed = 1.0f)
         {
             if (actor == null) return;
 
@@ -428,7 +401,7 @@ namespace Mooege.Core.GS.Powers
                 Position = pos,
                 Angle = 0f, // TODO: convert quaternion rotation for this?
                 Field3 = false,
-                Field4 = 6f, // speed at which things animate
+                Field4 = speed,
             }, actor);
         }
 
@@ -468,9 +441,15 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private Actor GetActorFromId(int id)
+        private Actor GetActorFromId(World world, uint dynamicID)
         {
-            return Targets.FirstOrDefault(t => t.DynamicID == id);
+            Actor actor = Targets.FirstOrDefault(t => t.DynamicID == dynamicID);
+            if (actor == null)
+            {
+                // try looking in World's actor list for Monster instances
+                actor = world.GetActor(dynamicID, ActorType.Monster);
+            }
+            return actor;
         }
 
         private void CleanUpEffects()

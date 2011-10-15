@@ -382,7 +382,7 @@ namespace Mooege.Core.GS.Player
         // Message handlers
         private void OnObjectTargeted(GameClient client, TargetMessage message)
         {
-            this.World.Game.PowerManager.UsePower(this, message.PowerSNO, (int)message.TargetID, message.Field2.Position, message);
+            this.World.Game.PowerManager.UsePower(this, message.PowerSNO, message.TargetID, message.Field2.Position, message);
 
             //Actor actor = this.World.GetActor(message.TargetID);
             //if (actor != null)
