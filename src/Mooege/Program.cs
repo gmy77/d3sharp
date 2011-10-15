@@ -46,18 +46,13 @@ namespace Mooege
         {
             // Watch for unhandled exceptions
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
-            
-            // Don't forget this..
-            LogManager.Enabled = true;
-            // We eventually need to make this configurable in config.ini. /raist.
-            LogManager.AttachLogTarget(new ConsoleTarget(Level.Trace));
-            LogManager.AttachLogTarget(new FileTarget("mooege-log.txt", Level.Trace));
-            LogManager.AttachLogTarget(new FileTarget("mooege-dump.txt",Level.Dump, Level.Dump, FileMode.Create));
 
             Console.ForegroundColor = ConsoleColor.Yellow;
             PrintBanner();
             PrintLicense();
-            Console.ResetColor();                      
+            Console.ResetColor();
+
+            InitLoggers(); // init logging facility.
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
             Logger.Info("Item database loaded with a total of {0} item definitions", ItemGenerator.TotalItems);
@@ -82,6 +77,32 @@ namespace Mooege
             }
         }
 
+        private static void InitLoggers()
+        {
+            LogManager.Enabled = true;
+
+            foreach (var targetConfig in LogConfig.Instance.Targets)
+            {
+                if (!targetConfig.Enabled) continue;
+
+                LogTarget target = null;
+                switch (targetConfig.Target.ToLower())
+                {
+                    case "console":
+                        target = new ConsoleTarget(targetConfig.MinimumLevel, targetConfig.MaximumLevel,
+                                                   targetConfig.IncludeTimeStamps);
+                        break;
+                    case "file":
+                        target = new FileTarget(targetConfig.FileName, targetConfig.MinimumLevel,
+                                                targetConfig.MaximumLevel, targetConfig.IncludeTimeStamps,
+                                                targetConfig.ResetOnStartup);
+                        break;
+                }
+
+                if (target != null) LogManager.AttachLogTarget(target);
+            }
+        }
+
         private static void PrintBanner()
         {
             Console.WriteLine(@"  _ __ ___    ___    ___    ___   __ _   ___ ");
@@ -103,7 +124,7 @@ namespace Mooege
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
             if (e.IsTerminating)
-                Logger.FatalException((e.ExceptionObject as Exception), "Application terminating because of unhandled exception.");
+                Logger.FatalException((e.ExceptionObject as Exception), "Mooege terminating because of unhandled exception.");                
             else
                 Logger.ErrorException((e.ExceptionObject as Exception), "Caught unhandled exception.");
             Console.ReadLine();

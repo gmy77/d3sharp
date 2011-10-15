@@ -28,18 +28,18 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
     [Message(Opcodes.PlayConvLineMessage)]
     public class PlayConvLineMessage : GameMessage
     {
-        public int ActorID;             // The SNO of this actor is used, to get a localized "Name" of the conversation participant for chat ouput
+        public uint ActorID;             // The SNO of this actor is used, to get a localized "Name" of the conversation participant for chat ouput
         // MaxLength = 9
-        public int[] Field1;            // looks like a list of conversation participants - farmy
+        public uint[] Field1;            // looks like a list of conversation participants - farmy
         public PlayLineParams Params;
         public int Field3;              // seems to be a running number across conversationlines. StopConvLine.Field0 == PlayConvLine.Field3 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
         public PlayConvLineMessage() : base(Opcodes.PlayConvLineMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            ActorID = buffer.ReadInt(32);
-            Field1 = new int[9];
-            for (int i = 0; i < Field1.Length; i++) Field1[i] = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
+            Field1 = new uint[9];
+            for (int i = 0; i < Field1.Length; i++) Field1[i] = buffer.ReadUInt(32);
             Params = new PlayLineParams();
             Params.Parse(buffer);
             Field3 = buffer.ReadInt(32);
@@ -47,8 +47,8 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, ActorID);
-            for (int i = 0; i < Field1.Length; i++) buffer.WriteInt(32, Field1[i]);
+            buffer.WriteUInt(32, ActorID);
+            for (int i = 0; i < Field1.Length; i++) buffer.WriteUInt(32, Field1[i]);
             Params.Encode(buffer);
             buffer.WriteInt(32, Field3);
         }

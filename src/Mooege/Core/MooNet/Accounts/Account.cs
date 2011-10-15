@@ -90,7 +90,7 @@ namespace Mooege.Core.MooNet.Accounts
 
                 foreach (var friend in FriendManager.Friends[this.BnetAccountID.Low])
                 {
-                    var account = AccountManager.GetAccountByPersistantID(friend.Id.Low);
+                    var account = AccountManager.GetAccountByPersistentID(friend.Id.Low);
                     if (account == null || account.LoggedInClient == null) return; // only send to friends that are online.
 
                     account.LoggedInClient.CallMethod(
@@ -105,8 +105,8 @@ namespace Mooege.Core.MooNet.Accounts
             get { return ToonManager.GetToonsForAccount(this); }
         }
 
-        public Account(ulong persistantId, string email) // Account with given persistent ID
-            : base(persistantId)
+        public Account(ulong persistentId, string email) // Account with given persistent ID
+            : base(persistentId)
         {
             this.SetFields(email);
         }
@@ -117,13 +117,13 @@ namespace Mooege.Core.MooNet.Accounts
             this.SetFields(email);
         }
 
-        private static ulong? _persistantIdCounter = null;
+        private static ulong? _persistentIdCounter = null;
         protected override ulong GenerateNewPersistentId()
         {
-            if (_persistantIdCounter == null)
-                _persistantIdCounter = AccountManager.GetNextAvailablePersistantId();
+            if (_persistentIdCounter == null)
+                _persistentIdCounter = AccountManager.GetNextAvailablePersistentId();
 
-            return (ulong)++_persistantIdCounter;
+            return (ulong)++_persistentIdCounter;
         }
 
         private void SetFields(string email)

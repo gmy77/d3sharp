@@ -43,8 +43,13 @@ namespace Mooege.Common.Config
             }
             finally
             {
-                Parser.Alias.AddAlias("On", true); // adds aliases so we can use On and Off directives in ini files.
+                // adds aliases so we can use On and Off directives in ini files.
+                Parser.Alias.AddAlias("On", true); 
                 Parser.Alias.AddAlias("Off", false);
+
+                // logger level aliases.
+                Parser.Alias.AddAlias("MinimumLevel", Logger.Level.Trace);
+                Parser.Alias.AddAlias("MaximumLevel", Logger.Level.Trace);
             }
         }
 

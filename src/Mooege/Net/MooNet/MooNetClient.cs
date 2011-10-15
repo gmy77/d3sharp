@@ -67,7 +67,7 @@ namespace Mooege.Net.MooNet
 
                 //foreach (var friend in FriendManager.Friends[this.Account.BnetAccountID.Low])
                 //{
-                //    var account = AccountManager.GetAccountByPersistantID(friend.Id.Low);
+                //    var account = AccountManager.GetAccountByPersistentID(friend.Id.Low);
                 //    if (account == null || account.LoggedInClient == null) return; // only send to friends that are online.
 
                 //    account.LoggedInClient.CallMethod(

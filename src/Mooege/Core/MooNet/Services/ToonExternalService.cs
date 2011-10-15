@@ -49,7 +49,7 @@ namespace Mooege.Core.MooNet.Services
         public override void SelectToon(Google.ProtocolBuffers.IRpcController controller, SelectToonRequest request, Action<SelectToonResponse> done)
         {
             Logger.Trace("SelectToon()");
-            
+
             var builder = SelectToonResponse.CreateBuilder();
             var toon = ToonManager.GetToonByLowID(request.Toon.Low);
             this.Client.CurrentToon = toon;
@@ -62,7 +62,8 @@ namespace Mooege.Core.MooNet.Services
             var heroCreateParams = D3.OnlineService.HeroCreateParams.ParseFrom(request.AttributeList[0].Value.MessageValue);
             var builder = CreateToonResponse.CreateBuilder();
 
-            var toon = new Toon(request.Name, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account);
+            int hashCode = ToonManager.GetUnusedHashCodeForToonName(request.Name);
+            var toon = new Toon(request.Name, hashCode, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account);
             if (ToonManager.SaveToon(toon)) builder.SetToon(toon.BnetEntityID);
             done(builder.Build());
         }
@@ -70,7 +71,7 @@ namespace Mooege.Core.MooNet.Services
         public override void DeleteToon(Google.ProtocolBuffers.IRpcController controller, DeleteToonRequest request, Action<DeleteToonResponse> done)
         {
             Logger.Trace("DeleteToon()");
-            
+
             var id = request.Toon.Low;
             var toon = ToonManager.GetToonByLowID(id);
             ToonManager.DeleteToon(toon);

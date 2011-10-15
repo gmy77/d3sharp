@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,19 +16,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using Mooege.Core.Common.Items;
-using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
 
-namespace Mooege.Net.GS.Message.Definitions.ACD
+namespace Mooege.Net.GS.Message.Definitions.Actor
 {
-    [Message(new[]{ Opcodes.ACDTranslateNormalMessage1, Opcodes.ACDTranslateNormalMessage2 })]
-    public class ACDTranslateNormalMessage : GameMessage, ISelfHandler
+    /// <summary>
+    /// Sent by server to clients to notify about an actor movement.
+    /// </summary>
+    [Message(Opcodes.NotifyActorMovementMessage)]
+    public class NotifyActorMovementMessage : GameMessage
     {
-        public int Field0; // TODO: Confirm that this is the actor ID
+        public int ActorId;
         public Vector3D Position;
         public float /* angle */? Angle;
         public bool? Field3;
@@ -37,44 +36,11 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int? Field6;
         public int? Field7;
 
-        public void Handle(GameClient client)
-        {
-            if (this.Position != null)
-                client.Player.Position = this.Position;
-
-            // looking for gold to pick up
-            // TODO: Need to consider items on the ground globally as well (and this doesn't belong here)
-            var actorList = client.Player.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
-            foreach (var actor in actorList)
-            {
-                Item item;
-                if (client.Player.GroundItems.TryGetValue(actor.DynamicID, out item) && item.ItemType == ItemType.Gold)
-                {
-                    client.SendMessage(new FloatingAmountMessage() {
-                        Place = new WorldPlace() {
-                            Position = this.Position,
-                            WorldID = client.Player.World.DynamicID,
-                        },
-                        Amount = item.Attributes[GameAttribute.Gold],
-                        Type = FloatingAmountMessage.FloatType.Gold,
-                    });
-                    // NOTE: ANNDataMessage6 is probably "AddToInventory"
-                    client.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6)
-                    {
-                        ActorID = actor.DynamicID,
-                    });
-
-                    client.Player.Inventory.PickUpGold(actor.DynamicID);
-
-                    client.Player.GroundItems.Remove(actor.DynamicID);
-                    // should delete from World also
-                }
-            }
-        }
+        public NotifyActorMovementMessage():base(Opcodes.NotifyActorMovementMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorId = buffer.ReadInt(32);
             if (buffer.ReadBool())
             {
                 Position = new Vector3D();
@@ -108,7 +74,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, ActorId);
             buffer.WriteBool(Position != null);
             if (Position != null)
             {
@@ -152,7 +118,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDTranslateNormalMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("ActorId: 0x" + ActorId.ToString("X8"));
             if (Position != null)
             {
                 Position.AsText(b, pad);
