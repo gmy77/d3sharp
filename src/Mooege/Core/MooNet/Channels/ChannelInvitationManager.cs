@@ -38,7 +38,12 @@ namespace Mooege.Core.MooNet.Channels
             this._onGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.
 
             var notification = bnet.protocol.channel_invitation.InvitationAddedNotification.CreateBuilder().SetInvitation(invitation);
-            invitee.CallMethod(bnet.protocol.channel_invitation.ChannelInvitationNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationAdded"), notification.Build(), this.DynamicId);
+            
+            invitee.ListenerId = this.DynamicId;
+            bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(invitee).NotifyReceivedInvitationAdded(
+                null, notification.Build(), callback => { });                 
+
+            //invitee.CallMethod(bnet.protocol.channel_invitation.ChannelInvitationNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationAdded"), notification.Build(), this.DynamicId);
         }
 
         public void HandleAccept(MooNetClient client, bnet.protocol.channel_invitation.AcceptInvitationRequest request)
@@ -56,7 +61,12 @@ namespace Mooege.Core.MooNet.Channels
             this._onGoingInvitations.Remove(invitation.Id);
 
             // notify invitee and let him remove the handled invitation.
-            client.CallMethod(bnet.protocol.channel_invitation.ChannelInvitationNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationRemoved"), notification.Build(), this.DynamicId);            
+
+            client.ListenerId = this.DynamicId;
+            bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(client).NotifyReceivedInvitationRemoved(
+                null, notification.Build(), callback => { });
+
+            //client.CallMethod(bnet.protocol.channel_invitation.ChannelInvitationNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationRemoved"), notification.Build(), this.DynamicId);            
         }
 
         public void HandleDecline(MooNetClient client, bnet.protocol.invitation.GenericRequest request)
@@ -76,7 +86,11 @@ namespace Mooege.Core.MooNet.Channels
             this._onGoingInvitations.Remove(invitation.Id);
 
             // notify invoker about the decline.
-            inviter.Owner.LoggedInClient.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), notification.Build(), inviter.Owner.LoggedInClient.CurrentChannel.DynamicId);
+
+            inviter.Owner.LoggedInClient.ListenerId = inviter.Owner.LoggedInClient.CurrentChannel.DynamicId;
+            bnet.protocol.channel.ChannelSubscriber.CreateStub(inviter.Owner.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { });
+
+            //inviter.Owner.LoggedInClient.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"), notification.Build(), inviter.Owner.LoggedInClient.CurrentChannel.DynamicId);
         }
 
         public void Revoke(MooNetClient client, bnet.protocol.channel_invitation.RevokeInvitationRequest request)

@@ -42,31 +42,31 @@ namespace Mooege.Core.MooNet.Services
 
             // we should be also checking here version, program, locale and similar stuff /raist.
 
-            this._srp6 = new SRP6(request.Email, "123");
+            //this._srp6 = new SRP6(request.Email, "123");
 
-            var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
-                .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
-                    .SetRegion(0x00005553) // us
-                    .SetUsage(0x61757468) // auth - password.dll
-                    .SetHash(ByteString.CopyFrom(_moduleHash)))
-                    .SetMessage(ByteString.CopyFrom(this._srp6.LogonChallenge))
-                    .Build();
+            //var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
+            //    .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
+            //        .SetRegion(0x00005553) // us
+            //        .SetUsage(0x61757468) // auth - password.dll
+            //        .SetHash(ByteString.CopyFrom(_moduleHash)))
+            //        .SetMessage(ByteString.CopyFrom(this._srp6.LogonChallenge))
+            //        .Build();
 
-            this.Client.ListenerId = request.ListenerId;
-            bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).ModuleLoad(controller, moduleLoadRequest, ModuleLoadRequestCallback);
+            //this.Client.ListenerId = request.ListenerId;
+            //bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).ModuleLoad(controller, moduleLoadRequest, ModuleLoadRequestCallback);
 
-            //var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
+            var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
 
-            //Client.Account = account;
-            //Client.Account.LoggedInClient = Client;
+            Client.Account = account;
+            Client.Account.LoggedInClient = Client;
 
-            //var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
-            //    .SetAccount(Client.Account.BnetAccountID)
-            //    .SetGameAccount(Client.Account.BnetGameAccountID);
+            var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
+                .SetAccount(Client.Account.BnetAccountID)
+                .SetGameAccount(Client.Account.BnetGameAccountID);
 
-            //done(builder.Build());
+            done(builder.Build());
 
-            //PlayerManager.PlayerConnected(this.Client);
+            PlayerManager.PlayerConnected(this.Client);
         }
 
         public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.ModuleMessageRequest request, Action<bnet.protocol.NoData> done)

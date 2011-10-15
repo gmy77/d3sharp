@@ -50,8 +50,13 @@ namespace Mooege.Core.MooNet.Services
                         .SetSenderId(this.Client.CurrentToon.BnetEntityID)
                         .Build();
 
-                    var method = bnet.protocol.notification.NotificationListener.Descriptor.FindMethodByName("OnNotificationReceived");
-                    account.LoggedInClient.CallMethod(method, notification);
+                    //var method = bnet.protocol.notification.NotificationListener.Descriptor.FindMethodByName("OnNotificationReceived");
+
+                    account.LoggedInClient.ListenerId = 0;
+                    bnet.protocol.notification.NotificationListener.CreateStub(account.LoggedInClient).
+                        OnNotificationReceived(controller, notification, callback => { });
+
+                    //account.LoggedInClient.CallMethod(method, notification);
                     break;
                 default:
                     Logger.Warn("Unhandled notification type: {0}", request.Type);

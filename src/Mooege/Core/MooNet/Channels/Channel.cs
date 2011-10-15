@@ -188,7 +188,11 @@ namespace Mooege.Core.MooNet.Channels
                 .SetSelf(addedMember.BnetMember)
                 .AddRangeMember(this.Members.Values.ToList().Select(member => member.BnetMember).ToList()).Build();
 
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), addNotification, this.DynamicId);
+
+            client.ListenerId = this.DynamicId;
+            bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, addNotification, callback => { });
+
+            //client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), addNotification, this.DynamicId);
 
             client.CurrentChannel = this; // set clients current channel to one he just joined.
 
@@ -200,7 +204,10 @@ namespace Mooege.Core.MooNet.Channels
 
             foreach (var pair in this.Members.Where(pair => pair.Value != addedMember)) // only send this to previous members of the channel.
             {
-                pair.Key.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyJoin"), joinNotification, this.DynamicId);
+                pair.Key.ListenerId = this.DynamicId;
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(pair.Key).NotifyJoin(null, joinNotification, callback => { });
+
+                //pair.Key.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyJoin"), joinNotification, this.DynamicId);
             }
         }
 
@@ -251,10 +258,13 @@ namespace Mooege.Core.MooNet.Channels
                 .SetReason((uint)reason)
                 .Build();
             //Logger.Debug("NotifyRemove message:\n{0}", message.ToString());
-            var method = bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyRemove");
+
+            //var method = bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyRemove");
             foreach (var pair in this.Members)
             {
-                pair.Key.CallMethod(method, message, this.DynamicId);
+                pair.Key.ListenerId = this.DynamicId;
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(pair.Key).NotifyRemove(null, message, callback => { });
+                //pair.Key.CallMethod(method, message, this.DynamicId);
             }
             this.Members.Remove(client);
             client.CurrentChannel = null;
@@ -278,7 +288,10 @@ namespace Mooege.Core.MooNet.Channels
 
             foreach (var pair in this.Members) // send to all members of channel even to the actual one that sent the message else he'll not see his own message.
             {
-                pair.Key.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifySendMessage"),notification, this.DynamicId);
+                pair.Key.ListenerId = this.DynamicId;
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(pair.Key).NotifySendMessage(null, notification, callback => { });
+
+                //pair.Key.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifySendMessage"),notification, this.DynamicId);
             }
         }
 
