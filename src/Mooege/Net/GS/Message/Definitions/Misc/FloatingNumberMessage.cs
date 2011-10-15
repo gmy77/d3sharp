@@ -28,6 +28,8 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         // floating "Dodge"... crash sending (int)28 as type
         public enum FloatType
         {
+            _None_ = -1,
+
             White = 0,
             WhiteCritical,
             Golden,

@@ -50,7 +50,7 @@ namespace Mooege.Core.GS.Powers
         private Game.Game _game;
 
         private List<Effect> _effects = new List<Effect>();
-        private Random _rand = new Random();
+        public static Random Rnd = new Random();
 
         // tracking information for currently channel-casting actors
         class ChanneledCast
@@ -304,7 +304,7 @@ namespace Mooege.Core.GS.Powers
         private Effect SpawnEffectInstance(Actor from, int actorSNO, Vector3D position, float angle = -1f /*random*/, int timeout = 2000)
         {
             if (angle == -1f)
-                angle = (float)(_rand.NextDouble() * (Math.PI * 2));
+                angle = (float)(Rnd.NextDouble() * (Math.PI * 2));
             
             Effect effect = new Effect(from.World, actorSNO, position, angle, timeout);
             return effect;

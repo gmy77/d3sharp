@@ -198,6 +198,78 @@ namespace Mooege.Core.GS.Actors
         {
         }
 
+        #region setAttribute
+
+        //HACK, work for the moment
+        public void setAttribute(GameAttributeB attribute, GameAttributeValue value, int attributeKey = 0)
+        {
+            GameAttributeMap gam = new GameAttributeMap();
+
+            //Update server actor
+            if (attributeKey > 0)
+            {
+                this.Attributes[attribute, attributeKey] = value.ValueB;
+                gam[attribute, attributeKey] = value.ValueB;
+            }
+            else
+            {
+                this.Attributes[attribute] = value.ValueB;
+                gam[attribute] = value.ValueB;
+            }
+
+            foreach (Mooege.Core.GS.Player.Player player in this.World.GetPlayersInRange(this.Position, 150f))
+            {
+                gam.SendMessage(player.InGameClient, this.DynamicID);
+            }
+        }
+
+        //HACK, work for the moment
+        public void setAttribute(GameAttributeI attribute, GameAttributeValue value, int attributeKey = 0)
+        {
+            GameAttributeMap gam = new GameAttributeMap();
+
+            //Update server actor
+            if (attributeKey > 0)
+            {
+                this.Attributes[attribute, attributeKey] = value.Value;
+                gam[attribute, attributeKey] = value.Value;
+            }
+            else
+            {
+                this.Attributes[attribute] = value.Value;
+                gam[attribute] = value.Value;
+            }
+
+            foreach (Mooege.Core.GS.Player.Player player in this.World.GetPlayersInRange(this.Position, 150f))
+            {
+                gam.SendMessage(player.InGameClient, this.DynamicID);
+            }
+        }
+
+        //HACK, work for the moment
+        public void setAttribute(GameAttributeF attribute, GameAttributeValue value, int attributeKey = 0)
+        {
+            GameAttributeMap gam = new GameAttributeMap();
+
+            //Update server actor
+            if (attributeKey > 0)
+            {
+                this.Attributes[attribute, attributeKey] = value.ValueF;
+                gam[attribute, attributeKey] = value.ValueF;
+            }
+            else
+            {
+                this.Attributes[attribute] = value.ValueF;
+                gam[attribute] = value.ValueF;
+            }
+
+            foreach (Mooege.Core.GS.Player.Player player in this.World.GetPlayersInRange(this.Position, 150f))
+            {
+                gam.SendMessage(player.InGameClient, this.DynamicID);
+            }
+        }
+        #endregion
+
         /// <summary>
         /// Reveals an actor to a player.
         /// </summary>
