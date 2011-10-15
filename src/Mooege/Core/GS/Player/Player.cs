@@ -250,18 +250,10 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Shared_Stash_Slots] = 14;
             this.Attributes[GameAttribute.Backpack_Slots] = 60;
             this.Attributes[GameAttribute.General_Cooldown] = 0;
-
-            this.Attributes[GameAttribute.Attack] = 10.0f;
-            this.Attributes[GameAttribute.Precision] =
-                (this.Properties.Class == ToonClass.DemonHunter || this.Properties.Class == ToonClass.Monk) ? 11.0f :
-                ((this.Properties.Class == ToonClass.Barbarian || this.Properties.Class == ToonClass.WitchDoctor) ? 9.0f : 10.0f); // wizard starts with 10 precision
-            this.Attributes[GameAttribute.Defense] =
-                (this.Properties.Class == ToonClass.DemonHunter || this.Properties.Class == ToonClass.WitchDoctor) ? 9.0f :
-                (this.Properties.Class == ToonClass.Wizard ? 8.0f :
-                ((this.Properties.Class == ToonClass.Barbarian ? 11.0f : 10.0f))); // monk starts with 10 defense
-            this.Attributes[GameAttribute.Vitality] =
-                (this.Properties.Class == ToonClass.DemonHunter || this.Properties.Class == ToonClass.Wizard || this.Properties.Class == ToonClass.Monk) ? 9.0f :
-                (this.Properties.Class == ToonClass.WitchDoctor ? 10 : 11.0f); // barbarian starts with 11 vitality
+            this.Attributes[GameAttribute.Attack] = this.Properties.InitialAttack;
+            this.Attributes[GameAttribute.Precision] = this.Properties.InitialPrecision;
+            this.Attributes[GameAttribute.Defense] = this.Properties.InitialDefense;
+            this.Attributes[GameAttribute.Vitality] = this.Properties.InitialVitality;
             #endregion // Attributes            
         }
 

@@ -105,6 +105,90 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
+        public float InitialAttack
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 10f;
+                    case ToonClass.DemonHunter:
+                        return 10f;
+                    case ToonClass.Monk:
+                        return 10f;
+                    case ToonClass.WitchDoctor:
+                        return 10f;
+                    case ToonClass.Wizard:
+                        return 10f;
+                }
+                return 10f;
+            }
+        }
+
+        public float InitialPrecision
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 9f;
+                    case ToonClass.DemonHunter:
+                        return 11f;
+                    case ToonClass.Monk:
+                        return 11f;
+                    case ToonClass.WitchDoctor:
+                        return 9f;
+                    case ToonClass.Wizard:
+                        return 10f;
+                }
+                return 10f;
+            }
+        }
+
+        public float InitialDefense
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 11f;
+                    case ToonClass.DemonHunter:
+                        return 9f;
+                    case ToonClass.Monk:
+                        return 10f;
+                    case ToonClass.WitchDoctor:
+                        return 9f;
+                    case ToonClass.Wizard:
+                        return 8f;
+                }
+                return 10f;
+            }
+        }
+
+        public float InitialVitality
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 11f;
+                    case ToonClass.DemonHunter:
+                        return 9f;
+                    case ToonClass.Monk:
+                        return 9f;
+                    case ToonClass.WitchDoctor:
+                        return 10f;
+                    case ToonClass.Wizard:
+                        return 9f;
+                }
+                return 10f;
+            }
+        }
+
         public int Gender
         {
             get
