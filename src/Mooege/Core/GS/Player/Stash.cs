@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mooege.Common;
 using Mooege.Core.Common.Items;
 
 namespace Mooege.Core.GS.Player
@@ -10,9 +11,10 @@ namespace Mooege.Core.GS.Player
     /// <summary>
     /// This class handels the gridlayout of an stash. Possible usecases are the inventory backpack, shared stash, traders stash,...
     /// Stash is organized by adding an item to EVERY slot it fills
-    /// </summary>    
+    /// </summary>
     public class Stash
     {
+        static readonly Logger Logger = LogManager.CreateLogger();
 
         public int Rows { get { return _backpack.GetLength(0); } }
         public int Columns { get { return _backpack.GetLength(1); } }
@@ -34,8 +36,8 @@ namespace Mooege.Core.GS.Player
 
         public Stash(Player owner, int rows, int columns)
         {
-            this._backpack = new uint[rows, columns];           
-            this._owner = owner;            
+            this._backpack = new uint[rows, columns];
+            this._owner = owner;
         }
 
         // This should be in the database#
@@ -61,7 +63,7 @@ namespace Mooege.Core.GS.Player
                         result = false;
             return result;
         }
-       
+
         /// <summary>
         /// Collects (counts) the items overlapping with the item about to be dropped.
         /// If there are none, drop item
@@ -102,12 +104,12 @@ namespace Mooege.Core.GS.Player
                     {
                         _backpack[r, c] = 0;
                         item.SetInventoryLocation(-1, -1, -1);
-                        item.Owner = null;                       
+                        item.Owner = null;
                     }
                 }
             }
         }
-       
+
         /// <summary>
         /// Adds an item to the backpack
         /// </summary>
@@ -126,17 +128,26 @@ namespace Mooege.Core.GS.Player
                 }
 
             item.Owner = _owner;
-            item.SetInventoryLocation(0, column, row);                     
+            item.SetInventoryLocation(0, column, row);
         }
-      
+
         /// <summary>
         /// Adds an Item at a free spot to the backpack 
         /// </summary>
         /// <param name="item"></param>
-        public void AddItem(Item item)
+        public bool AddItem(Item item)
         {
             InventorySlot? slot = FindSlotForItem(item);
-            AddItem(item, slot.Value.Row, slot.Value.Column);
+            if (slot.HasValue)
+            {
+                AddItem(item, slot.Value.Row, slot.Value.Column);
+                return true;
+            }
+            else
+            {
+                Logger.Error("Can't find slot in backpack to add item {0}", item.SNOName);
+                return false;
+            }
         }
 
         public Boolean HasFreeSpace(Item item)
@@ -173,6 +184,6 @@ namespace Mooege.Core.GS.Player
                     if (CollectOverlappingItems(item, r, c) == 0)
                         return new InventorySlot() { Row = r, Column = c };
             return null;
-        }       
+        }
     }
 }
