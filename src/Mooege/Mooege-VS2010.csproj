@@ -388,7 +388,7 @@
     <Compile Include="Net\IClient.cs" />
     <Compile Include="Net\MooNet\Packets\PacketIn.cs" />
     <Compile Include="Net\MooNet\Packets\PacketOut.cs" />
-    <Compile Include="Net\MooNet\RPCCallback.cs" />
+    <Compile Include="Net\MooNet\RPC\RPCCallback.cs" />
     <Compile Include="Net\NATConfig.cs" />
     <Compile Include="Net\Utils.cs" />
     <Compile Include="Program.cs" />

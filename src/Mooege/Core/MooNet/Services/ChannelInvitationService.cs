@@ -108,7 +108,8 @@ namespace Mooege.Core.MooNet.Services
                 .SetAgentId(Client.CurrentToon.BnetEntityID)
                 .SetStateChange(bnet.protocol.channel.ChannelState.CreateBuilder().AddInvitation(invitation.Clone()));
 
-            this.Client.ListenerId = this.Client.CurrentChannel.DynamicId;
+            this.Client.TargetRPCObject(this.Client.CurrentChannel);
+            //this.Client.ListenerId = this.Client.CurrentChannel.DynamicId;
             bnet.protocol.channel.ChannelSubscriber.CreateStub(Client).NotifyUpdateChannelState(controller,
                                                                                                 notification.Build(),
                                                                                                 callback => { });

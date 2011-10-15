@@ -17,12 +17,9 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Google.ProtocolBuffers;
 
-namespace Mooege.Net.MooNet
+namespace Mooege.Net.MooNet.RPC
 {
     public class RPCCallback
     {

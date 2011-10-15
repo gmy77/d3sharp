@@ -189,7 +189,8 @@ namespace Mooege.Core.MooNet.Channels
                 .AddRangeMember(this.Members.Values.ToList().Select(member => member.BnetMember).ToList()).Build();
 
 
-            client.ListenerId = this.DynamicId;
+            client.TargetRPCObject(this);
+            //client.ListenerId = this.DynamicId;
             bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, addNotification, callback => { });
 
             //client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), addNotification, this.DynamicId);
@@ -204,7 +205,8 @@ namespace Mooege.Core.MooNet.Channels
 
             foreach (var pair in this.Members.Where(pair => pair.Value != addedMember)) // only send this to previous members of the channel.
             {
-                pair.Key.ListenerId = this.DynamicId;
+                pair.Key.TargetRPCObject(this);
+                //pair.Key.ListenerId = this.DynamicId;
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(pair.Key).NotifyJoin(null, joinNotification, callback => { });
 
                 //pair.Key.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyJoin"), joinNotification, this.DynamicId);
@@ -262,7 +264,8 @@ namespace Mooege.Core.MooNet.Channels
             //var method = bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyRemove");
             foreach (var pair in this.Members)
             {
-                pair.Key.ListenerId = this.DynamicId;
+                pair.Key.TargetRPCObject(this);
+                //pair.Key.ListenerId = this.DynamicId;
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(pair.Key).NotifyRemove(null, message, callback => { });
                 //pair.Key.CallMethod(method, message, this.DynamicId);
             }
@@ -288,7 +291,8 @@ namespace Mooege.Core.MooNet.Channels
 
             foreach (var pair in this.Members) // send to all members of channel even to the actual one that sent the message else he'll not see his own message.
             {
-                pair.Key.ListenerId = this.DynamicId;
+                pair.Key.TargetRPCObject(this);
+                //pair.Key.ListenerId = this.DynamicId;
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(pair.Key).NotifySendMessage(null, notification, callback => { });
 
                 //pair.Key.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifySendMessage"),notification, this.DynamicId);

@@ -93,7 +93,8 @@ namespace Mooege.Core.MooNet.Accounts
                     var account = AccountManager.GetAccountByPersistentID(friend.Id.Low);
                     if (account == null || account.LoggedInClient == null) return; // only send to friends that are online.
 
-                    account.LoggedInClient.ListenerId = this.DynamicId;
+                    account.LoggedInClient.TargetRPCObject(this);
+                    //account.LoggedInClient.ListenerId = this.DynamicId;
                     bnet.protocol.channel.ChannelSubscriber.CreateStub(account.LoggedInClient).NotifyUpdateChannelState(null, notification,
                                                                                                   callback => { });
 
@@ -214,7 +215,8 @@ namespace Mooege.Core.MooNet.Accounts
             var notification = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
 
             // Make the rpc call
-            client.ListenerId = this.DynamicId;
+            client.TargetRPCObject(this);
+            //client.ListenerId = this.DynamicId;
             bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, notification.Build(), callback => { });
 
             //client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), notification.Build(), this.DynamicId);
