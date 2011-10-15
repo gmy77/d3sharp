@@ -365,7 +365,7 @@ namespace Mooege.Core.GS.Player
                 ActorId = this.DynamicID,
             });
 
-            this.Inventory.SendVisualInvetory(player); 
+            this.Inventory.SendVisualInventory(player); 
 
             if (this == player) // only send this to player itself. Warning: don't remove this check or you'll make the game start crashing! /raist.
             {
