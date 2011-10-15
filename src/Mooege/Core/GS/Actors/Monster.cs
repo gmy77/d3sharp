@@ -151,8 +151,7 @@ namespace Mooege.Core.GS.Actors
             };
 
             player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
-            player.UpdateExpBonusData();
-            player.lastKillTick = player.InGameClient.Game.Tick;
+            player.UpdateExpBonusData(player.GBHandle.Type, this.GBHandle.Type);
 
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
