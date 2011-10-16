@@ -54,7 +54,7 @@ namespace Mooege.Core.MooNet.Authentication
             
             if (account == null) // we should be returning an error to client /raist.
             {
-                client.AuthenticationErrorCode = AuthenticationErrorCode.NoGameAccount;
+                client.AuthenticationErrorCode = MooNetClient.AuthenticationErrorCodes.NoGameAccount;
                 client.AuthenticationCompleteSignal.Set();
                 return;
             }
@@ -100,7 +100,7 @@ namespace Mooege.Core.MooNet.Authentication
             }
             else // authentication failed because of invalid credentals.
             {
-                client.AuthenticationErrorCode = AuthenticationErrorCode.InvalidCredentials;
+                client.AuthenticationErrorCode = MooNetClient.AuthenticationErrorCodes.InvalidCredentials;
             }
              
             OngoingAuthentications.Remove(client);

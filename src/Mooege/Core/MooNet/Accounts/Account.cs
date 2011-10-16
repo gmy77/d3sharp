@@ -40,7 +40,7 @@ namespace Mooege.Core.MooNet.Accounts
         public byte[] Salt { get; private set; }  // s- User's salt.
         public byte[] PasswordVerifier { get; private set; } // v - password verifier.
 
-        private string _password = null; // Only used while account creation and StorePlainTextPasswords is set to true in config.ini
+        private readonly string _password = null; // Only used while account creation and StorePlainTextPasswords is set to true in config.ini
 
         public bool IsOnline { get { return this.LoggedInClient != null; } }
 

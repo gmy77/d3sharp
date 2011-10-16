@@ -19,7 +19,6 @@
 using System;
 using System.Threading;
 using Mooege.Common;
-using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
@@ -44,7 +43,7 @@ namespace Mooege.Core.MooNet.Services
             {
                 this.Client.AuthenticationCompleteSignal.WaitOne(); // wait the signal;
 
-                if(this.Client.AuthenticationErrorCode != AuthenticationErrorCode.None)
+                if(this.Client.AuthenticationErrorCode != MooNetClient.AuthenticationErrorCodes.None)
                 {
                     done(bnet.protocol.authentication.LogonResponse.DefaultInstance);
                     return;
