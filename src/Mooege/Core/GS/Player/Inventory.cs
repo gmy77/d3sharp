@@ -73,7 +73,8 @@ namespace Mooege.Core.GS.Player
                                                        },
                                };
 
-             player.InGameClient.SendMessage(message);
+             //player.InGameClient.SendMessage(message);
+             player.World.BroadcastGlobal(message);
          }
         
         /// <summary>
