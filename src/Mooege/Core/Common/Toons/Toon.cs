@@ -133,17 +133,17 @@ namespace Mooege.Core.Common.Toons
                 switch (this.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 10f;
+                        return 10f + ((Level - 1) * 2);
                     case ToonClass.DemonHunter:
-                        return 10f;
+                        return 10f + ((Level - 1) * 2);
                     case ToonClass.Monk:
-                        return 10f;
+                        return 10f + ((Level - 1) * 2);
                     case ToonClass.WitchDoctor:
-                        return 10f;
+                        return 10f + ((Level - 1) * 2);
                     case ToonClass.Wizard:
-                        return 10f;
+                        return 10f + ((Level - 1) * 2);
                 }
-                return 10f;
+                return 10f + (Level - 1) * 2;
             }
         }
 
@@ -154,17 +154,17 @@ namespace Mooege.Core.Common.Toons
                 switch (this.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 9f;
+                        return 9f + (Level - 1);
                     case ToonClass.DemonHunter:
-                        return 11f;
+                        return 11f + ((Level - 1) * 2);
                     case ToonClass.Monk:
-                        return 11f;
+                        return 11f + ((Level - 1) * 2);
                     case ToonClass.WitchDoctor:
-                        return 9f;
+                        return 9f + ((Level - 1) * 2);
                     case ToonClass.Wizard:
-                        return 10f;
+                        return 10f + ((Level - 1) * 2);
                 }
-                return 10f;
+                return 10f + ((Level - 1) * 2);
             }
         }
 
@@ -175,17 +175,20 @@ namespace Mooege.Core.Common.Toons
                 switch (this.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 11f;
+                        return 11f + ((Level - 1) * 2);
                     case ToonClass.DemonHunter:
-                        return 9f;
+                        // For DH and Wizard, half the levels (starting with the first) give 2 defense => (Level / 2) * 2
+                        // and half give 1 defense => ((Level - 1) / 2) * 1
+                        // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
+                        return 9f + (((Level / 2) * 2) + ((Level - 1) / 2));
                     case ToonClass.Monk:
-                        return 10f;
+                        return 10f + ((Level - 1) * 2);
                     case ToonClass.WitchDoctor:
-                        return 9f;
+                        return 9f + ((Level - 1) * 2);
                     case ToonClass.Wizard:
-                        return 8f;
+                        return 8f + (((Level / 2) * 2) + ((Level - 1) / 2));
                 }
-                return 10f;
+                return 10f + ((Level - 1) * 2);
             }
         }
 
@@ -196,17 +199,20 @@ namespace Mooege.Core.Common.Toons
                 switch (this.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 11f;
+                        return 11f + ((Level-1) * 2);
                     case ToonClass.DemonHunter:
-                        return 9f;
+                        // For DH and Wizard, half the levels give 2 vit => ((Level - 1) / 2) * 2
+                        // and half (starting with the first) give 1 vit => (Level / 2) * 1
+                        // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
+                        return 9f + ((((Level - 1) / 2) * 2) + (Level / 2));
                     case ToonClass.Monk:
-                        return 9f;
+                        return 9f + (Level - 1);
                     case ToonClass.WitchDoctor:
-                        return 10f;
+                        return 10f + (Level - 1);
                     case ToonClass.Wizard:
-                        return 9f;
+                        return 9f + ((((Level - 1) / 2) * 2) + (Level / 2));
                 }
-                return 10f;
+                return 10f + ((Level - 1) * 2);
             }
         }
 
