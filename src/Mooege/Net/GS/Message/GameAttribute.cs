@@ -35,12 +35,9 @@ namespace Mooege.Net.GS.Message
         public int Value;
         [FieldOffset(0)]
         public float ValueF;
-        [FieldOffset(0)]
-        public bool ValueB;
 
-        public GameAttributeValue(int value) { ValueF = 0f; ValueB = false; Value = value; }
-        public GameAttributeValue(float value) { Value = 0; ValueB = false; ValueF = value; }
-        public GameAttributeValue(bool value) { Value = 0; ValueF = 0f; ValueB = value; }
+        public GameAttributeValue(int value) { ValueF = 0f; Value = value; }
+        public GameAttributeValue(float value) { Value = 0; ValueF = value; }
     }
 
     public partial class GameAttribute

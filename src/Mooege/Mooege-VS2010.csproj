@@ -88,6 +88,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\GS\Actors\Buffs\BooleanPropertyBuff.cs" />
+    <Compile Include="Core\GS\Actors\Buffs\Buffs.cs" />
+    <Compile Include="Core\GS\Actors\Buffs\TimedBuff.cs" />
     <Compile Include="Core\GS\Powers\Effect.cs" />
     <Compile Include="Core\GS\Powers\Implementations\Barbarian.cs" />
     <Compile Include="Core\GS\Powers\Implementations\DemonHunter.cs" />
