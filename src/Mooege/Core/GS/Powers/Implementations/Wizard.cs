@@ -136,9 +136,9 @@ namespace Mooege.Core.GS.Powers.Implementations
                 foreach (Actor actor in fx.FindActorsInRange(pp.User, pp.User.Position, BeamLength + 10f))
                 {
                     if (PowerUtils.PointInBeam(actor.Position, pp.User.Position, pp.TargetPosition, 7f))
-                    {
-                        fx.PlayHitEffect(8, pp.User, actor);
-                        fx.PlayEffectGroupActorToActor(18793, actor, actor);
+                    {  
+                        fx.PlayHitEffect(32, pp.User, actor);
+                        fx.PlayEffectGroupActorToActor(18793, actor, actor);                        
                         fx.DoDamage(pp.User, actor, 10, 0);
                     }
                 }
@@ -155,8 +155,6 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             yield break;
         }
-
-
     }
 
     [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.WaveOfForce)]
@@ -202,6 +200,143 @@ namespace Mooege.Core.GS.Powers.Implementations
                 fx.SpawnEffect(pp.User, 97821, pp.TargetPosition);
                 fx.DoDamage(pp.User, fx.FindActorsInRange(pp.User, pp.TargetPosition, 6f), 20, 0);
             }
+            yield break;
+        }
+    }
+
+    //bumbasher
+    [PowerImplementationAttribute(Skills.Skills.Wizard.Utility.FrostNova)]
+    public class WizardFrostNova : PowerImplementation
+    {
+        public const int FrostNova_Emitter = 4402; //plain frost nova effect
+        public const int FrostNova_Emitter_alabaster_unfreeze = 0x2e27a;
+        public const int FrostNova_Emitter_crimson_addDamage = 0x2e277;
+        public const int FrostNova_Emitter_golden_reduceCooldown = 0x2e279;
+        public const int FrostNova_Emitter_indigo_miniFrostNovas = 0x2e278;
+        public const int FrostNova_Minor_Emitter = 0x1133;
+
+        public List<int> Effects = new List<int>
+        {
+            FrostNova_Emitter,
+            FrostNova_Emitter_alabaster_unfreeze,
+            FrostNova_Emitter_crimson_addDamage,
+            FrostNova_Emitter_golden_reduceCooldown,
+            FrostNova_Emitter_indigo_miniFrostNovas,
+            FrostNova_Minor_Emitter
+        };
+
+        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        {
+            fx.SpawnEffect(pp.User, FrostNova_Emitter, pp.User.Position); //center on self
+
+            IList<Actor> hits = fx.FindActorsInRange(pp.User, pp.User.Position, 18); //FIXME: is the range correct? what units?
+            foreach (Actor actor in hits)
+            {
+                if (actor is Monster)
+                {
+                    Monster m = actor as Monster;
+                    m.AddFreezeBuff(4000); //freeze for 4 sec, TODO: use some level to increase duration or something
+                    fx.DoDamage(pp.User, actor, PowerManager.Rnd.Next(2, 4+1), 0); //does 2-4 damage, TODO: use player DPS or something
+                }                
+            }
+
+            yield break;
+        }
+    }
+
+    [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.Blizzard)]
+    public class WizardBlizzard : PowerImplementation
+    {
+        public const int Wizard_Blizzard = 0x1977;
+        public const int Wizard_Blizzard_addFreeze = 0x2d53f;
+        public const int Wizard_Blizzard_addSize = 0x2d53d;
+        public const int wizard_blizzard_addSize_panels = 0x2d490;
+        public const int Wizard_Blizzard_addTime = 0x2d53c;
+        public const int wizard_blizzard_addTime_panels = 0x2d473;
+        public const int wizard_blizzard_panels = 0xd28;
+        public const int Wizard_Blizzard_reduceCost = 0x2d53e;
+        public const int wizard_blizzard_reduceCost_panels = 0x2d4a9;
+        public const int Wizard_BlizzardRune_Mist = 0x1277a;
+
+        public static List<int> Effects = new List<int> 
+        {
+            Wizard_Blizzard,
+            Wizard_Blizzard_addFreeze,
+            Wizard_Blizzard_addSize,
+            wizard_blizzard_addSize_panels,
+            Wizard_Blizzard_addTime,
+            wizard_blizzard_addTime_panels,
+            wizard_blizzard_panels,
+            Wizard_Blizzard_reduceCost,
+            wizard_blizzard_reduceCost_panels,
+            Wizard_BlizzardRune_Mist
+        };
+
+        //deals 12-18 DPS for 3 seconds
+        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        {
+            fx.SpawnEffect(pp.User, Wizard_Blizzard, pp.TargetPosition);
+
+
+            //do damage for 3 seconds
+            const int blizzard_duration = 3;
+
+            for(int i=0; i<blizzard_duration; ++i)
+            {
+                IList<Actor> hits = fx.FindActorsInRange(pp.User, pp.TargetPosition, 18); //FIXME: is the range correct? what units?
+                foreach (Actor actor in hits)
+                {
+                    if (actor is Monster)
+                    {
+                        Monster m = actor as Monster;
+                        m.AddChillBuff(1000); //FIXME: does blizzard slows the monsters?
+                        fx.DoDamage(pp.User, actor, PowerManager.Rnd.Next(12, 18+1), 0);
+                    }
+                }
+
+                yield return 1000;
+            }
+
+            yield break;
+        }
+    }
+
+    [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.RayOfFrost)]
+    public class WizardRayOfFrost : PowerImplementation
+    {
+        const float BeamLength = 60f;
+
+        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx) //TODO: still WIP
+        {
+            fx.RegisterChannelingPower(pp.User, 100);
+
+            // project beam end to always be a certain length
+            pp.TargetPosition = PowerUtils.ProjectAndTranslate2D(pp.TargetPosition, pp.User.Position,
+                                                               pp.User.Position, BeamLength);
+
+            if (!pp.ThrottledCast)
+            {
+                foreach (Actor actor in fx.FindActorsInRange(pp.User, pp.User.Position, BeamLength + 10f))
+                {
+                    if (PowerUtils.PointInBeam(actor.Position, pp.User.Position, pp.TargetPosition, 7f))
+                    {
+                        //hit effects: 8 - disintegrate, 4 - some witch doctor green crap, 2 - electric, 1 - some fire methink, 16-ice particles, 
+                        fx.PlayHitEffect(64, pp.User, actor);
+                        fx.SpawnEffect(pp.User, 6535, actor.Position); //FIXME: it only need to last as long as the monster is getting hit
+                        fx.DoDamage(pp.User, actor, 10, 0);
+                    }
+                }
+            }
+
+            // always update effect locations
+            // can't make it spawn in the air 52687
+            //Effect pid = fx.GetChanneledEffect(pp.User, 0, 52687, pp.TargetPosition);
+            Effect pid = fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
+            if (!pp.UserIsChanneling)
+            {
+                fx.PlayRopeEffectActorToActor(30894, pp.User, pid);
+            }
+
             yield break;
         }
     }
