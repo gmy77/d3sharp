@@ -36,8 +36,6 @@ namespace Mooege.Net.GS
         private static readonly ClientManager _instance = new ClientManager();
         public static ClientManager Instance { get { return _instance; } }
 
-        public List<Game> Games = new List<Game>();
-
         public void OnConnect(object sender, ConnectionEventArgs e)
         {
             Logger.Trace("Game-Client connected: {0}", e.Connection.ToString());
@@ -49,7 +47,7 @@ namespace Mooege.Net.GS
         public void OnDisconnect(object sender, ConnectionEventArgs e)
         {
             Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
-            Games.Remove(((GameClient)e.Connection.Client).Game);
+            GameManager.RemovePlayerFromGame((GameClient)e.Connection.Client);
         }
 
         public void Consume(GameClient client, GameMessage message)
@@ -60,6 +58,12 @@ namespace Mooege.Net.GS
         private void OnJoinGame(GameClient client, JoinBNetGameMessage message)
         {
             var game = GameManager.GetGameById(message.GameId);
+            if (game == null)
+            {
+                Logger.Warn("Client provided message.GameId doesnt exists, dropping him..");
+                client.Connection.Disconnect();
+                return;
+            }
             lock (game)
             {
                 var toon = ToonManager.GetToonByLowID((ulong) message.ToonEntityId.Low);

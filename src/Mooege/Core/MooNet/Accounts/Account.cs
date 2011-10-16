@@ -22,6 +22,7 @@ using System.Data.SQLite;
 using System.Linq;
 using Mooege.Core.Common.Storage;
 using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Friends;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
@@ -34,8 +35,11 @@ namespace Mooege.Core.MooNet.Accounts
         public bnet.protocol.EntityId BnetAccountID { get; private set; }
         public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
         public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
-        public string Email { get; private set; }
         
+        public string Email { get; private set; } // I - Username
+        public byte[] Salt { get; private set; }  // s- User's salt.
+        public byte[] PasswordVerifier { get; private set; } // v - password verifier.
+
         public bool IsOnline { get { return this.LoggedInClient != null; } }
 
         private static readonly D3.OnlineService.EntityId AccountHasNoToons =
@@ -93,9 +97,9 @@ namespace Mooege.Core.MooNet.Accounts
                     var account = AccountManager.GetAccountByPersistentID(friend.Id.Low);
                     if (account == null || account.LoggedInClient == null) return; // only send to friends that are online.
 
-                    account.LoggedInClient.CallMethod(
-                        bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"),
-                        notification, this.DynamicId);
+                    // make the rpc call.
+                    account.LoggedInClient.MakeTargetedRPC(this, ()=> 
+                        bnet.protocol.channel.ChannelSubscriber.CreateStub(account.LoggedInClient).NotifyUpdateChannelState(null, notification,callback => { }));
                 }
             }
         }
@@ -105,16 +109,21 @@ namespace Mooege.Core.MooNet.Accounts
             get { return ToonManager.GetToonsForAccount(this); }
         }
 
-        public Account(ulong persistentId, string email) // Account with given persistent ID
+        public Account(ulong persistentId, string email, byte[] salt, byte[] passwordVerifier) // Account with given persistent ID
             : base(persistentId)
         {
-            this.SetFields(email);
+            this.SetFields(email,salt, passwordVerifier);
         }
 
-        public Account(string email) // Account with **newly generated** persistent ID
+        public Account(string email, string password) // Account with **newly generated** persistent ID
             : base()
         {
-            this.SetFields(email);
+            if (password.Length > 16) password = password.Substring(0, 16); // make sure the password does not exceed 16 chars.
+
+            var salt = SRP6a.GetRandomBytes(32);
+            var passwordVerifier = SRP6a.CalculatePasswordVerifierForAccount(email, password, salt);
+
+            this.SetFields(email, salt, passwordVerifier);
         }
 
         private static ulong? _persistentIdCounter = null;
@@ -126,9 +135,12 @@ namespace Mooege.Core.MooNet.Accounts
             return (ulong)++_persistentIdCounter;
         }
 
-        private void SetFields(string email)
+        private void SetFields(string email, byte[] salt, byte[] passwordVerifier)
         {
             this.Email = email;
+            this.Salt = salt;
+            this.PasswordVerifier = passwordVerifier;
+
             this.BnetAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.PersistentID).Build();
             this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(this.PersistentID).Build();
             this.BannerConfiguration = D3.Account.BannerConfiguration.CreateBuilder()
@@ -210,24 +222,46 @@ namespace Mooege.Core.MooNet.Accounts
             var notification = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
 
             // Make the rpc call
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), notification.Build(), this.DynamicId);
+            client.MakeTargetedRPC(this, () =>
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, notification.Build(), callback => { }));
         }
 
         public void SaveToDB()
         {
             try
             {
-                var query =
-                    string.Format(
-                        "INSERT INTO accounts (id, email) VALUES({0},'{1}')",
+                var query = string.Format("INSERT INTO accounts (id, email, salt, passwordVerifier) VALUES({0}, '{1}', @salt, @passwordVerifier)",
                         this.PersistentID, this.Email);
 
-                    var cmd = new SQLiteCommand(query, DBManager.Connection);
-                    cmd.ExecuteNonQuery();
+                    using(var cmd = new SQLiteCommand(query, DBManager.Connection))
+                    {
+                        cmd.Parameters.Add("@salt", System.Data.DbType.Binary, 32).Value = this.Salt;
+                        cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
+                        cmd.ExecuteNonQuery();
+                    }                    
             }
             catch (Exception e)
             {
                 Logger.ErrorException(e, "SaveToDB()");
+            }
+        }
+
+        public void UpdatePassword(string newPassword)
+        {
+            this.PasswordVerifier = SRP6a.CalculatePasswordVerifierForAccount(this.Email, newPassword, this.Salt);
+            try
+            {
+                var query = string.Format("UPDATE accounts SET passwordVerifier=@passwordVerifier WHERE id={0}", this.PersistentID);
+                
+                using (var cmd = new SQLiteCommand(query, DBManager.Connection))
+                {
+                    cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
+                    cmd.ExecuteNonQuery();
+                }    
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e, "UpdatePassword()");
             }
         }
     }

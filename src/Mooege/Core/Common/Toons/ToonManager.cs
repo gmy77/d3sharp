@@ -22,6 +22,7 @@ using System.Linq;
 using Mooege.Common;
 using Mooege.Core.Common.Storage;
 using Mooege.Core.MooNet.Accounts;
+using System;
 
 namespace Mooege.Core.Common.Toons
 {
@@ -51,19 +52,24 @@ namespace Mooege.Core.Common.Toons
 
         public static Dictionary<ulong, Toon> GetToonsForAccount(Account account)
         {
-            return Toons.Where(pair => (ulong)pair.Value.Owner.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
+            return Toons.Where(pair => pair.Value.Owner != null).Where(pair => pair.Value.Owner.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
+        //Method only used when creating a Toon for the first time, ambiguous method name - Tharuler
         public static bool SaveToon(Toon toon)
         {
-            if(Toons.ContainsKey(toon.PersistentID))
+
+            if (Toons.ContainsKey(toon.PersistentID)) //this should never happen again thanks to hashcode, but lets leave it in for now - Tharuler
             {
                 Logger.Error("Duplicate persistent toon id: {0}", toon.PersistentID);
                 return false;
             }
 
             Toons.Add(toon.PersistentID, toon);
-            toon.SaveToDB();
+            toon.SaveToDB(); //possible concurrency problem? 2 toon created with same name at same time could introduce a race condition for the same hashcode(chance of 1 in (1000-amount of toons with that name))
+
+            Logger.Trace("Character {0} with HashCode #{1} added to database", toon.Name, toon.HashCodeString);
+
             return true;
         }
 
@@ -86,20 +92,51 @@ namespace Mooege.Core.Common.Toons
 
             if (!reader.HasRows) return;
 
-            while(reader.Read())
+            while (reader.Read())
             {
-                var databaseId = (ulong) reader.GetInt64(0);
-                var toon = new Toon(databaseId, reader.GetString(1), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5));
+                var databaseId = (ulong)reader.GetInt64(0);
+                var toon = new Toon(databaseId, reader.GetString(1), reader.GetInt32(6), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5));
                 Toons.Add(databaseId, toon);
             }
         }
 
+        public static int GetUnusedHashCodeForToonName(string name)
+        {
+            var query = string.Format("SELECT hashCode from toons WHERE name='{0}'", name);
+            Logger.Trace(query);
+            var cmd = new SQLiteCommand(query, DBManager.Connection);
+            var reader = cmd.ExecuteReader();
+            if (!reader.HasRows) return GenerateHashCodeNotInList(null);
+
+            HashSet<int> codes = new HashSet<int>();
+            while (reader.Read())
+            {
+                var hashCode = reader.GetInt32(0);
+                codes.Add(hashCode);
+            }
+            return GenerateHashCodeNotInList(codes);
+        }
+
         public static void Sync()
         {
-            foreach(var pair in Toons)
+            foreach (var pair in Toons)
             {
                 pair.Value.SaveToDB();
             }
+        }
+
+        private static int GenerateHashCodeNotInList(HashSet<int> codes)
+        {
+            Random rnd = new Random();
+            if (codes == null) return rnd.Next(1, 1000);
+
+            int hashCode;
+            do
+            {
+                hashCode = rnd.Next(1, 1000);
+            } while (codes.Contains(hashCode)) ;
+            return hashCode;
+
         }
     }
 }

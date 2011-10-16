@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,29 +16,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
-using Mooege.Net.MooNet.Packets;
+using System;
+using Google.ProtocolBuffers;
 
-namespace Mooege.Net
+namespace Mooege.Net.MooNet.RPC
 {
-    public interface IConnection
+    public class RPCCallback
     {
-        bool IsConnected { get; }
-        IPEndPoint RemoteEndPoint { get; }
-        IPEndPoint LocalEndPoint { get; }
-        IClient Client { get; set; }
-        
-        int Send(PacketOut packet);
-        int Send(IEnumerable<byte> data);
-        int Send(IEnumerable<byte> data, SocketFlags flags);
-        int Send(byte[] buffer);
-        int Send(byte[] buffer, SocketFlags flags);
-        int Send(byte[] buffer, int start, int count);
-        int Send(byte[] buffer, int start, int count, SocketFlags flags);
+        public Action<IMessage> Action { get; private set; }
+        public IBuilder Builder { get; private set; }
+        public int RequestId { get; private set; }
 
-        void Disconnect();
+        public RPCCallback(Action<IMessage> action, IBuilder builder, int requestId)
+        {
+            this.Action = action;
+            this.Builder = builder;
+            this.RequestId = requestId;
+        }
     }
 }
-

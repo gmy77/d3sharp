@@ -20,12 +20,14 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using Google.ProtocolBuffers;
+using Google.ProtocolBuffers.Descriptors;
 using Mooege.Common;
 using Mooege.Net.MooNet.Packets;
 
 namespace Mooege.Net
 {
-    public class Connection : IConnection//, IRpcChannel
+    public class Connection : IConnection
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -82,10 +84,10 @@ namespace Mooege.Net
             return _socket.EndReceive(result);
         }
 
-        public int Send(Packet packet)
+        public int Send(PacketOut packet)
         {
             if (packet == null) throw new ArgumentNullException("packet");
-            return Send(packet.GetRawPacketData());
+            return Send(packet.Data);
         }
 
         public int Send(IEnumerable<byte> data)
