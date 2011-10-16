@@ -126,8 +126,8 @@ namespace Mooege.Core.MooNet.Authentication
             // x = H(s, p) -> s: randomly choosen salt
             // v = g^x (computes password verifier)
 
-            // bnet2 passwords: min 8 - max 16 chars.
-            if (password.Length > 16) password = password.Substring(0, 16); // make sure the password does not exceed 16 chars.
+            // TODO: it seems hashing identity-salt + password bugs for passwords with >11 chars or so.
+            // we need to get rid of that identity-salt in pBytes /raist.
 
             var identitySalt = H.ComputeHash(Encoding.ASCII.GetBytes(email)).ToHexString(); // Identity salt that's hashed using account email.
             var pBytes = H.ComputeHash(Encoding.ASCII.GetBytes(identitySalt.ToUpper() + ":" + password.ToUpper())); // p (identitySalt + password)

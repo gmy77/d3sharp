@@ -190,6 +190,12 @@ namespace Mooege.Core.MooNet.Accounts
                 return;
             }
 
+            if (password.Length < 8 || password.Length > 16)
+            {
+                Console.WriteLine("Password should be a minimum of 8 and a maximum of 16 characters.");
+                return;
+            }
+
             account.UpdatePassword(password);
             Logger.Info("Updated password for user {0}.", email);
         }

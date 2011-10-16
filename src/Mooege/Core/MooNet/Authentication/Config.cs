@@ -21,6 +21,7 @@ namespace Mooege.Core.MooNet.Authentication
     public sealed class Config : Mooege.Common.Config.Config
     {
         public bool BypassAuthentication { get { return this.GetBoolean("BypassAuthentication", true); } set { this.Set("BypassAuthentication", value); } }
+        public bool StorePlainTextPasswords { get { return this.GetBoolean("StorePlainTextPasswords", true); } set { this.Set("StorePlainTextPasswords", value); } }
 
         private static readonly Config _instance = new Config();
         public static Config Instance { get { return _instance; } }

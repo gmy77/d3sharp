@@ -40,6 +40,8 @@ namespace Mooege.Core.MooNet.Accounts
         public byte[] Salt { get; private set; }  // s- User's salt.
         public byte[] PasswordVerifier { get; private set; } // v - password verifier.
 
+        private string _password = null; // Only used while account creation and StorePlainTextPasswords is set to true in config.ini
+
         public bool IsOnline { get { return this.LoggedInClient != null; } }
 
         private static readonly D3.OnlineService.EntityId AccountHasNoToons =
@@ -117,7 +119,10 @@ namespace Mooege.Core.MooNet.Accounts
 
         public Account(string email, string password) // Account with **newly generated** persistent ID
             : base()
-        {            
+        {
+            if (password.Length > 16) password = password.Substring(0, 16); // make sure the password does not exceed 16 chars.
+            if (Authentication.Config.Instance.StorePlainTextPasswords) this._password = password;
+
             var salt = SRP6a.GetRandomBytes(32);
             var passwordVerifier = SRP6a.CalculatePasswordVerifierForAccount(email, password, salt);
 
@@ -228,8 +233,8 @@ namespace Mooege.Core.MooNet.Accounts
         {
             try
             {
-                var query = string.Format("INSERT INTO accounts (id, email, salt, passwordVerifier) VALUES({0}, '{1}', @salt, @passwordVerifier)",
-                        this.PersistentID, this.Email);
+                var query = string.Format("INSERT INTO accounts (id, email, salt, passwordVerifier, password) VALUES({0}, '{1}', @salt, @passwordVerifier, '{2}')",
+                        this.PersistentID, this.Email, this._password);
 
                     using(var cmd = new SQLiteCommand(query, DBManager.Connection))
                     {
@@ -249,8 +254,9 @@ namespace Mooege.Core.MooNet.Accounts
             this.PasswordVerifier = SRP6a.CalculatePasswordVerifierForAccount(this.Email, newPassword, this.Salt);
             try
             {
-                var query = string.Format("UPDATE accounts SET passwordVerifier=@passwordVerifier WHERE id={0}", this.PersistentID);
-
+                var query = string.Format("UPDATE accounts SET passwordVerifier=@passwordVerifier, password='{0}' WHERE id={1}",
+                       Authentication.Config.Instance.StorePlainTextPasswords ? newPassword : null, this.PersistentID);
+                
                 using (var cmd = new SQLiteCommand(query, DBManager.Connection))
                 {
                     cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
