@@ -87,9 +87,9 @@ namespace Mooege.Core.MooNet.Authentication
 
         /// <summary>
         /// Returns logon proof.
-        /// command == 3
-        /// byte M_server[32] - server proof of session.
-        /// byte secondProof[128]; // for veriyfing second challenge
+        /// command == 3 - server sends proof of session key to client
+        /// byte M_server[32] - server's proof of session key.
+        /// byte secondProof[128]; // for veriyfing second challenge.
         /// </summary>
         public byte[] LogonProof { get; private set; }        
 
@@ -114,13 +114,20 @@ namespace Mooege.Core.MooNet.Authentication
                 .ToArray();
         }
 
+        /// <summary>
+        /// Calculates password verifier for given email, password and salt.
+        /// </summary>
+        /// <param name="email">The account email.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="salt">The generated salt.</param>
+        /// <returns></returns>
         public static byte[] CalculatePasswordVerifierForAccount(string email, string password, byte[] salt)
         {
             // x = H(s, p) -> s: randomly choosen salt
             // v = g^x (computes password verifier)
 
             var identitySalt = H.ComputeHash(Encoding.ASCII.GetBytes(email)).ToHexString(); // Identity salt that's hashed using account email.
-            var pBytes = H.ComputeHash(Encoding.ASCII.GetBytes(identitySalt.ToUpper() + ":" + password.ToUpper())); // p bytes
+            var pBytes = H.ComputeHash(Encoding.ASCII.GetBytes(identitySalt.ToUpper() + ":" + password.ToUpper())); // p (identitySalt + password)
             var x = H.ComputeHash(new byte[0].Concat(salt).Concat(pBytes).ToArray()).ToBigInteger(); // x = H(s, p)
 
             return BigInteger.ModPow(g, x, N).ToArray();
@@ -128,47 +135,40 @@ namespace Mooege.Core.MooNet.Authentication
 
         public bool Verify(byte[] ABytes, byte[] M_client, byte[] seed)
         {
-            var secondChallengeClient = seed.ToBigInteger();
-            var A = ABytes.ToBigInteger();
+            var A = ABytes.ToBigInteger(); // client's public ephemeral
+            var u = H.ComputeHash(new byte[0].Concat(ABytes).Concat(B.ToArray()).ToArray()).ToBigInteger(); // Random scrambling parameter - u = H(A, B)
 
-            var uBytes = H.ComputeHash(new byte[0].Concat(ABytes).Concat(B.ToArray()).ToArray());
-            var u = uBytes.ToBigInteger();
+            var S_s = BigInteger.ModPow(A * BigInteger.ModPow(this.Account.PasswordVerifier.ToBigInteger(), u, N), b, N); // calculate server session key - S = (Av^u) ^ b     
+            var K = Calc_K(S_s.ToArray()).ToBigInteger(); // K = H(S) - Shared, strong session key.
 
-            var S = BigInteger.ModPow(A * BigInteger.ModPow(this.Account.PasswordVerifier.ToBigInteger(), u, N), b, N);
+            var hashgxorhashN = Hash_g_and_N_and_xor_them().ToBigInteger(); // H(N) ^ H(g)
+            var hashedIdentitySalt = H.ComputeHash(Encoding.ASCII.GetBytes(this.IdentitySalt)); // H(I)
 
-            var KBytes = Calc_K(S.ToArray());
-            var t3Bytes = Hash_g_and_N_and_xor_them();
-
-            var t4 = H.ComputeHash(Encoding.ASCII.GetBytes(this.IdentitySalt));
-
-            var sBytes = this.Account.Salt;
-            var BBytes = B.ToArray();
-
-            var M = H.ComputeHash(new byte[0]
-                                            .Concat(t3Bytes)
-                                            .Concat(t4)
-                                            .Concat(sBytes)
-                                            .Concat(ABytes)
-                                            .Concat(BBytes)
-                                            .Concat(KBytes)
-                                            .ToArray());
+            var M = H.ComputeHash(new byte[0] // verify client M_client - H(H(N) ^ H(g), H(I), s, A, B, K_c)
+                .Concat(hashgxorhashN.ToArray())
+                .Concat(hashedIdentitySalt)
+                .Concat(this.Account.Salt.ToArray())
+                .Concat(ABytes)
+                .Concat(B.ToArray())
+                .Concat(K.ToArray())
+                .ToArray());
 
             if (!M.CompareTo(M_client))
-                return false;
+                return false; // authentication failed because of invalid credentals.
 
-            // proof of session key
-
-            var M_server = H.ComputeHash(new byte[0]
-                                             .Concat(ABytes)
-                                             .Concat(M)
-                                             .Concat(KBytes)
-                                             .ToArray());
+            // calculate server proof of session key
+            var M_server = H.ComputeHash(new byte[0] // M_server = H(A, M_client, K)
+                .Concat(ABytes)
+                .Concat(M_client)
+                .Concat(K.ToArray())
+                .ToArray());
 
             var secondProof = GetSecondProof(Encoding.ASCII.GetBytes(this.Account.Email), seed, SecondChallenge.ToArray());
 
+            // cook logon proof message.
             LogonProof = new byte[0]
-                .Concat(new byte[] { 3 }) // command == 3 - server sends proof of session key to client
-                .Concat(M_server) // proof of session key
+                .Concat(new byte[] { 3 }) // command = 3 - server sends proof of session key to client
+                .Concat(M_server) // server's proof of session key
                 .Concat(secondProof.ToArray()) // second proof
                 .ToArray();
 
@@ -209,6 +209,10 @@ namespace Mooege.Core.MooNet.Authentication
             return K;
         }
 
+        /// <summary>
+        /// H(N) ^ H(g)
+        /// </summary>
+        /// <returns>byte[]</returns>
         private byte[] Hash_g_and_N_and_xor_them()
         {
             var hash_N = H.ComputeHash(N.ToArray());
@@ -255,7 +259,7 @@ namespace Mooege.Core.MooNet.Authentication
 
         public BigInteger GetSecondProof(byte[] accountNameBytes, byte[] seed, byte[] secondChallenge)
         {
-            byte[] spBytes = {
+            return new byte[] {
                 0x7D, 0x95, 0x74, 0x0C, 0xAD, 0x32, 0x17, 0x1C, 0xBA, 0x75, 0x02, 0xB3, 0xA5, 0xD1, 0x00, 0x5A, 
                 0x5A, 0x4C, 0x32, 0x3C, 0xD6, 0x3A, 0x94, 0xF2, 0x55, 0xDB, 0x05, 0x1E, 0x95, 0x30, 0x7D, 0xC2, 
                 0x69, 0xB8, 0x64, 0x90, 0xE2, 0x79, 0xCA, 0xD7, 0x5D, 0x8D, 0x77, 0x51, 0x7E, 0xC7, 0x29, 0xB7, 
@@ -264,11 +268,7 @@ namespace Mooege.Core.MooNet.Authentication
                 0x63, 0xBF, 0x0D, 0xDA, 0xB7, 0x77, 0x63, 0xB4, 0xD1, 0xEF, 0x64, 0x60, 0x63, 0x5A, 0xBB, 0xDF, 
                 0x5C, 0xA5, 0x1C, 0xC3, 0x60, 0xCE, 0x8F, 0xD6, 0xC4, 0x15, 0x55, 0xBB, 0x6D, 0x99, 0xD2, 0x26, 
                 0x74, 0x1B, 0x4F, 0x2E, 0xE4, 0x42, 0x5C, 0xB5, 0x84, 0x44, 0x40, 0x60, 0xA7, 0xDD, 0x52, 0x18
-            };
-
-            var sp = spBytes.ToBigInteger();
-
-            return sp;
+            }.ToBigInteger();
         }
     }
 }

@@ -45,26 +45,29 @@ namespace Mooege.Core.MooNet.Authentication
             client.Account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email, "123");
             client.Account.LoggedInClient = client;
 
-            client.AuthenticationCompleteSignal.Set();
+            client.AuthenticationCompleteSignal.Set(); // signal about completion of authentication processes so we can return the response for AuthenticationService:LogonRequest.
         }
 
         private static void InitAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
             var account = AccountManager.GetAccountByEmail(request.Email); // check if account exists.
-            if (account == null)
+            
+            if (account == null) // we should be returning an error to client /raist.
             {
                 client.AuthenticationErrorCode = AuthenticationErrorCode.NoGameAccount;
                 client.AuthenticationCompleteSignal.Set();
+                return;
             }
 
-            var srp6a = new SRP6a(account);
+            var srp6a = new SRP6a(account); // create srp6 handler to process the authentication.
             OngoingAuthentications.Add(client, srp6a);
 
+            // request client to load password.dll for authentication.
             var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
                 .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
-                                     .SetRegion(0x00005553) // us
-                                     .SetUsage(0x61757468) // auth - password.dll
-                                     .SetHash(ByteString.CopyFrom(ModuleHash)))
+                    .SetRegion(0x00005553) // us
+                    .SetUsage(0x61757468) // auth - password.dll
+                    .SetHash(ByteString.CopyFrom(ModuleHash)))
                 .SetMessage(ByteString.CopyFrom(srp6a.LogonChallenge))
                 .Build();
 
@@ -77,13 +80,13 @@ namespace Mooege.Core.MooNet.Authentication
             if(!OngoingAuthentications.ContainsKey(client)) return; // TODO: disconnect him also. /raist.
 
             var srp6 = OngoingAuthentications[client];
+            byte[] A = authMessage.Skip(1).Take(128).ToArray(); // client's public ephemeral
+            byte[] M_client = authMessage.Skip(1 + 128).Take(32).ToArray(); // client's proof of session key.
+            byte[] seed = authMessage.Skip(1 + 32 + 128).Take(128).ToArray(); // client's second challenge.
 
-            byte[] A = authMessage.Skip(1).Take(128).ToArray();
-            byte[] M_client = authMessage.Skip(1 + 128).Take(32).ToArray();
-            byte[] seed = authMessage.Skip(1 + 32 + 128).Take(128).ToArray();
-
-            if(srp6.Verify(A,M_client,seed))
+            if(srp6.Verify(A,M_client,seed)) // authentication sucesseful
             {
+                // send the logon proof.
                 var message = bnet.protocol.authentication.ModuleMessageRequest.CreateBuilder()
                     .SetModuleId(moduleId)
                     .SetMessage(ByteString.CopyFrom(srp6.LogonProof))
@@ -95,13 +98,13 @@ namespace Mooege.Core.MooNet.Authentication
                 client.Account = AccountManager.GetAccountByEmail(srp6.Account.Email);
                 client.Account.LoggedInClient = client;
             }
-            else
+            else // authentication failed because of invalid credentals.
             {
                 client.AuthenticationErrorCode = AuthenticationErrorCode.InvalidCredentials;
             }
-
+             
             OngoingAuthentications.Remove(client);
-            client.AuthenticationCompleteSignal.Set();
+            client.AuthenticationCompleteSignal.Set(); // signal about completion of authentication processes so we can return the response for AuthenticationService:LogonRequest.
         }
 
         private static void ModuleLoadResponse(IMessage response)
