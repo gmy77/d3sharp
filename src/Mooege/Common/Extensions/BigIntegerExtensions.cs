@@ -16,42 +16,29 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mooege.Common.Extensions;
+using System.Numerics;
+using System.Text;
 
-namespace Mooege.Net.MooNet.Packets
+namespace Mooege.Common.Extensions
 {
-    public class Packet
+    public static class BigIntegerExtensions
     {
-        public Header Header { get; protected set; }
-        public IEnumerable<byte> Payload { get; set; }
-
-        public Packet(Header header, byte[] payload)
+        public static BigInteger ToBigInteger(this byte[] src)
         {
-            this.Header = header;
-            this.Payload = payload;
+            var dst = new byte[src.Length + 1];
+            Array.Copy(src, dst, src.Length);
+            return new BigInteger(dst);
         }
 
-        public int Length
+        public static byte[] ToArray(this BigInteger b)
         {
-            get { return this.Header.Data.Length + this.Payload.ToArray().Length; }
-        }
-
-        public byte[] GetRawPacketData()
-        {
-            return this.Header.Data.Append(this.Payload.ToArray());
-        }
-
-        public override string ToString()
-        {
-            return
-            string.Format(
-                "Header\t: {0}\nData\t: {1}- {2}",
-                this.Header,
-                this.Header.Data.HexDump(),
-                this.Payload.HexDump()
-            );
+            var result = b.ToByteArray();
+            if (result[result.Length - 1] == 0 && (result.Length % 0x10) != 0)
+                Array.Resize(ref result, result.Length - 1);
+            return result;
         }
     }
 }

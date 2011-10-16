@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
 using Mooege.Common;
@@ -25,35 +26,219 @@ using Mooege.Common.Helpers;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Channels;
-using Mooege.Core.MooNet.Friends;
-using Mooege.Core.MooNet.Helpers;
+using Mooege.Core.MooNet.Objects;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet.Packets;
+using Mooege.Net.MooNet.RPC;
 
 namespace Mooege.Net.MooNet
 {
-    public sealed class MooNetClient : IClient
+    public sealed class MooNetClient : IClient, IRpcChannel
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        public Dictionary<uint, uint> Services { get; private set; }
-        public Account Account { get; set; }
-        private int _requestCounter = 0;
 
+        /// <summary>
+        /// TCP connection.
+        /// </summary>
+        public IConnection Connection { get; set; }
+
+        /// <summary>
+        /// Logged in gs client if any.
+        /// </summary>
+        public GameClient InGameClient { get; set; }
+
+        /// <summary>
+        /// Account for logged in client.
+        /// </summary>
+        public Account Account { get; set; }
+
+        /// <summary>
+        /// Selected toon for current account.
+        /// </summary>
         public Toon CurrentToon { get; set; }
+
+        /// <summary>
+        /// Client exported services dictionary.
+        /// </summary>
+        public Dictionary<uint, uint> Services { get; private set; }
+
+        /// <summary>
+        /// Allows AuthenticationService.LogonResponse to be post-poned until authentication process is done.
+        /// </summary>
+        public readonly AutoResetEvent AuthenticationCompleteSignal = new AutoResetEvent(false);
+
+        /// <summary>
+        /// Resulting error code for the authentication process.
+        /// </summary>
+        public AuthenticationErrorCodes AuthenticationErrorCode;
+
+        /// <summary>
+        /// Callback list for issued client RPCs.
+        /// </summary>
+        public readonly Queue<RPCCallback> RPCCallbacks = new Queue<RPCCallback>();
+        
+        /// <summary>
+        /// Object ID map with local object ID as key and remote object ID as value.
+        /// </summary>
+        private Dictionary<ulong, ulong> MappedObjects { get; set; }
+
+        /// <summary>
+        /// Request counter for RPCs.
+        /// </summary>
+        private int _requestCounter = 0;
+        
+        /// <summary>
+        /// Listener Id for upcoming rpc.
+        /// </summary>
+        private ulong _listenerId; // last targeted rpc object.
+        
+        public MooNetClient(IConnection connection)
+        {
+            this.Connection = connection;            
+            this.Services = new Dictionary<uint, uint>();
+            this.MappedObjects = new Dictionary<ulong, ulong>();
+        }
+
+        public bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon)
+        {
+            var identityBuilder = bnet.protocol.Identity.CreateBuilder();
+            if (acct) identityBuilder.SetAccountId(this.Account.BnetAccountID);
+            if (gameacct) identityBuilder.SetGameAccountId(this.Account.BnetGameAccountID);
+            if (toon && this.CurrentToon != null)
+                identityBuilder.SetToonId(this.CurrentToon.BnetEntityID);
+            return identityBuilder.Build();
+        }
+
+        #region rpc-call mechanism
+
+        /// <summary>
+        /// Allows you target an RPCObject while issuing a RPC.
+        /// </summary>
+        /// <param name="targetObject"><see cref="RPCObject"/></param>
+        /// <param name="rpc">The rpc action.</param>
+        public void MakeTargetedRPC(RPCObject targetObject, Action rpc)
+        {
+            this._listenerId = this.GetRemoteObjectID(targetObject.DynamicId);
+            Logger.Warn("[RPC] Targeted object: {0} [localId: {1}, remoteId: {2}].", targetObject.ToString(),
+                         targetObject.DynamicId, this._listenerId);
+
+            rpc();
+        }
+
+        /// <summary>
+        /// Allows you target an listener directly while issuing a RPC.
+        /// </summary>
+        /// <param name="listenerId">The listenerId over client.</param>
+        /// <param name="rpc">The rpc action.</param>
+        public void MakeRPCWithListenerId(ulong listenerId, Action rpc)
+        {
+            this._listenerId = listenerId;
+            Logger.Trace("[RPC] Targeted listenerId: {0}.", this._listenerId);
+
+            rpc();
+        }
+
+        /// <summary>
+        /// Allows you to issue an RPC without targeting any RPCObject/Listener.
+        /// </summary>
+        /// <param name="rpc">The rpc action.</param>
+        public void MakeRPC(Action rpc)
+        {
+            this._listenerId = 0;
+            Logger.Trace("[RPC] with no targets.");
+            rpc();
+        }
+
+        /// <summary>
+        /// Makes an RPC over remote client.
+        /// </summary>
+        /// <param name="method">The method to call.</param>
+        /// <param name="controller">The rpc controller.</param>
+        /// <param name="request">The request message.</param>
+        /// <param name="responsePrototype">The response message.</param>
+        /// <param name="done">Action to run when client responds RPC.</param>
+        public void CallMethod(MethodDescriptor method, IRpcController controller, IMessage request, IMessage responsePrototype, Action<IMessage> done)
+        {
+            var serviceName = method.Service.FullName;
+            var serviceHash = StringHashHelper.HashIdentity(serviceName);
+
+            if (!this.Services.ContainsKey(serviceHash))
+            {
+                Logger.Error("Not bound to client service {0} [0x{1}] yet.", serviceName, serviceHash.ToString("X8"));
+                return;
+            }
+
+            var serviceId = this.Services[serviceHash];
+            var requestId = this._requestCounter++;
+
+            RPCCallbacks.Enqueue(new RPCCallback(done, responsePrototype.WeakToBuilder(), requestId));
+
+            var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), requestId, this._listenerId, request);
+            this.Connection.Send(packet);
+        }
+
+        #endregion
+
+        #region object-mapping mechanism for rpc calls
+
+        /// <summary>
+        /// Maps a given local objectId to remote one over client.
+        /// </summary>
+        /// <param name="localObjectId">The local objectId.</param>
+        /// <param name="remoteObjectId">The remote objectId over client.</param>
+        public void MapLocalObjectID(ulong localObjectId, ulong remoteObjectId)
+        {
+            try
+            {
+                this.MappedObjects[localObjectId] = remoteObjectId;
+            }
+            catch (Exception e)
+            {
+                Logger.DebugException(e, "MapLocalObjectID()");
+            }
+        }
+
+        /// <summary>
+        /// Unmaps an existing local objectId.
+        /// </summary>
+        /// <param name="localObjectId"></param>
+        public void UnmapLocalObjectID(ulong localObjectId)
+        {
+            try
+            {
+                this.MappedObjects.Remove(localObjectId);
+            }
+            catch (Exception e)
+            {
+                Logger.DebugException(e, "UnmapLocalObjectID()");
+            }
+        }
+
+        /// <summary>
+        /// Returns the remote objectId for given localObjectId.
+        /// </summary>
+        /// <param name="localObjectId">The local objectId</param>
+        /// <returns>The remoteobjectId</returns>
+        public ulong GetRemoteObjectID(ulong localObjectId)
+        {
+            return localObjectId != 0 ? this.MappedObjects[localObjectId] : 0;
+        }
+
+        #endregion
 
         private Channel _currentChannel;
         public Channel CurrentChannel
         {
             get
             {
-                return _currentChannel;    
-            } 
+                return _currentChannel;
+            }
             set
             {
                 this._currentChannel = value;
                 if (value == null) return;
 
-                // still trying to figure a bit below - commented meanwhile /raist. 
+                #region still trying to figure a bit below - commented meanwhile /raist. 
                 // notify friends.
                 //if (FriendManager.Friends[this.Account.BnetAccountID.Low].Count == 0) return; // if account has no friends just skip.
 
@@ -74,93 +259,19 @@ namespace Mooege.Net.MooNet
                 //        bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"),
                 //        notification, this.Account.DynamicId);
                 //}
+                #endregion
             }
         }
-        public GameClient InGameClient { get; set; }
-
-        public IConnection Connection { get; set; }
 
         /// <summary>
-        /// Object ID map with local object ID as key and remote object ID as value.
+        /// Error codes for authentication process.
         /// </summary>
-        private Dictionary<ulong, ulong> MappedObjects { get; set; }
-
-        public MooNetClient(IConnection connection)
+        public enum AuthenticationErrorCodes
         {
-            this.Connection = connection;
-            this.Services = new Dictionary<uint, uint>();
-            this.MappedObjects = new Dictionary<ulong, ulong>();
-        }
-
-        // rpc to client
-        public void CallMethod(MethodDescriptor method, IMessage request)
-        {
-            CallMethod(method, request, 0);
-        }
-
-        public void CallMethod(MethodDescriptor method, IMessage request, ulong localObjectId)
-        {
-            var serviceName = method.Service.FullName;
-            var serviceHash = StringHashHelper.HashIdentity(serviceName);
-
-            if (!this.Services.ContainsKey(serviceHash))
-            {
-                Logger.Error("Not bound to client service {0} [0x{1}] yet.", serviceName, serviceHash.ToString("X8"));
-                return;
-            }
-
-            var serviceId = this.Services[serviceHash];
-            var remoteObjectId = GetRemoteObjectID(localObjectId);
-
-            Logger.Trace("Calling {0} localObjectId={1}, remoteObjectId={2}", method.FullName, localObjectId, remoteObjectId);
-
-            var packet = new Packet(
-                new Header((byte)serviceId, (uint)(method.Index + 1), this._requestCounter++, (uint)request.SerializedSize, remoteObjectId),
-                request.ToByteArray());
-
-            this.Connection.Send(packet);
-        }
-
-        public bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon)
-        {
-            var identityBuilder = bnet.protocol.Identity.CreateBuilder();
-            if (acct) identityBuilder.SetAccountId(this.Account.BnetAccountID);
-            if (gameacct) identityBuilder.SetGameAccountId(this.Account.BnetGameAccountID);
-            if (toon && this.CurrentToon != null)
-                identityBuilder.SetToonId(this.CurrentToon.BnetEntityID);
-            return identityBuilder.Build();
-        }
-
-        public void MapLocalObjectID(ulong localObjectId, ulong remoteObjectId)
-        {
-            try
-            {
-                this.MappedObjects[localObjectId] = remoteObjectId;
-            }
-            catch (Exception e)
-            {
-                Logger.DebugException(e, "MapLocalObjectID()");
-            }
-        }
-
-        public void UnmapLocalObjectID(ulong localObjectId)
-        {
-            try
-            {
-                this.MappedObjects.Remove(localObjectId);
-            }
-            catch (Exception e)
-            {
-                Logger.DebugException(e, "UnmapLocalObjectID()");
-            }
-        }
-
-        public ulong GetRemoteObjectID(ulong localObjectId)
-        {
-            if (localObjectId == 0)
-                return 0; // null/unused/unset
-            else
-                return this.MappedObjects[localObjectId];
+            None = 0,
+            InvalidCredentials = 3,
+            NoToonSelected = 11,
+            NoGameAccount = 12,
         }
     }
 }

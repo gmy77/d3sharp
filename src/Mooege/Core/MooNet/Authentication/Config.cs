@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,29 +16,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
-using Mooege.Net.MooNet.Packets;
-
-namespace Mooege.Net
+namespace Mooege.Core.MooNet.Authentication
 {
-    public interface IConnection
+    public sealed class Config : Mooege.Common.Config.Config
     {
-        bool IsConnected { get; }
-        IPEndPoint RemoteEndPoint { get; }
-        IPEndPoint LocalEndPoint { get; }
-        IClient Client { get; set; }
-        
-        int Send(PacketOut packet);
-        int Send(IEnumerable<byte> data);
-        int Send(IEnumerable<byte> data, SocketFlags flags);
-        int Send(byte[] buffer);
-        int Send(byte[] buffer, SocketFlags flags);
-        int Send(byte[] buffer, int start, int count);
-        int Send(byte[] buffer, int start, int count, SocketFlags flags);
+        public bool BypassAuthentication { get { return this.GetBoolean("BypassAuthentication", true); } set { this.Set("BypassAuthentication", value); } }
 
-        void Disconnect();
+        private static readonly Config _instance = new Config();
+        public static Config Instance { get { return _instance; } }
+        private Config() : base("Authentication") { }
     }
 }
-
