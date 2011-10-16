@@ -146,6 +146,11 @@ namespace Mooege.Core.Common.Items
             return (itemType == ItemType.Dye);
         }
 
+        public static bool IsJournalOrScroll(ItemType itemType)
+        {
+            return (itemType == ItemType.Journal || itemType == ItemType.Scroll);
+        }
+
         public static bool IsWeapon(ItemType itemType)
         {
             return (itemType == ItemType.Axe_1H

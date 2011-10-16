@@ -361,6 +361,7 @@ namespace Mooege.Core.GS.Player
             this.World.BroadcastExclusive(msg, this); // TODO: We should be instead notifying currentscene we're in. /raist.
 
             this.CollectGold();
+            this.CollectHealthGlobe();
         }
 
         private void CollectGold()
@@ -393,6 +394,43 @@ namespace Mooege.Core.GS.Player
 
                 this.GroundItems.Remove(actor.DynamicID); // should delete from World also
             }
+        }
+
+        private void CollectHealthGlobe()
+        {
+            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
+            foreach (Actor actor in actorList)
+            {
+                Item item;
+                if (!this.GroundItems.TryGetValue(actor.DynamicID, out item) || item.ItemType != ItemType.HealthGlobe) continue;
+
+                //This animation isn't the correct for collecting orbs, since i dont know what's the correct, i'll just use this
+                this.InGameClient.SendMessage(new FloatingNumberMessage()
+                {
+                    ActorID = this.DynamicID,
+                    Number = actor.Attributes[GameAttribute.Health_Globe_Bonus_Health], //for here, we need some customization on health orbs amounts
+                    Type = FloatingNumberMessage.FloatType.Green,
+                });
+
+                // NOTE: ANNDataMessage is probably the packet that removes things from the game.
+                this.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6)
+                {
+                    ActorID = actor.DynamicID,
+                });
+
+
+                this.AddHP(actor.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
+
+                this.GroundItems.Remove(actor.DynamicID); // should delete from World also
+            }
+        }
+
+        public void AddHP(float quantity)
+        {
+            if (this.Attributes[GameAttribute.Hitpoints_Cur] + 50.0f >= this.Attributes[GameAttribute.Hitpoints_Max])
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
+            else
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + 50.0f;
         }
 
         // FIXME: Hardcoded crap
