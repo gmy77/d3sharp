@@ -44,10 +44,10 @@ namespace Mooege.Core.GS.Skills
                 new HotbarButtonData { SNOSkill = ActiveSkills[5], ItemGBId = -1 }, // right-click
                 new HotbarButtonData { SNOSkill = ActiveSkills[0], ItemGBId = -1 }, // hidden-bar - left-click switch - which key??
                 new HotbarButtonData { SNOSkill = ActiveSkills[1], ItemGBId = -1 }, // hidden-bar - right-click switch (press x ingame)
-                new HotbarButtonData { SNOSkill = Mooege.Core.GS.Skills.Skills.Wizard.Utility.FrostNova, ItemGBId = -1 }, // bar-1
-                new HotbarButtonData { SNOSkill = Mooege.Core.GS.Skills.Skills.Wizard.Offensive.Blizzard, ItemGBId = -1 }, // bar-2
-                new HotbarButtonData { SNOSkill = Mooege.Core.GS.Skills.Skills.Wizard.Offensive.Disintegrate, ItemGBId = -1 }, // bar-3
-                new HotbarButtonData { SNOSkill = Mooege.Core.GS.Skills.Skills.Wizard.Offensive.RayOfFrost, ItemGBId = -1 }, // bar-4 
+                new HotbarButtonData { SNOSkill = ActiveSkills[0], ItemGBId = -1 }, // bar-1
+                new HotbarButtonData { SNOSkill = ActiveSkills[1], ItemGBId = -1 }, // bar-2
+                new HotbarButtonData { SNOSkill = ActiveSkills[2], ItemGBId = -1 }, // bar-3
+                new HotbarButtonData { SNOSkill = ActiveSkills[3], ItemGBId = -1 }, // bar-4 
                 new HotbarButtonData { SNOSkill = Skills.None, ItemGBId = 0x622256D4 } // bar-5 - potion
             };
 

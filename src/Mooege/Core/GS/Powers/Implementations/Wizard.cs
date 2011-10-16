@@ -310,6 +310,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             fx.RegisterChannelingPower(pp.User, 100);
 
+            fx.ActorLookAt(pp.User, pp.TargetPosition);
+
             // project beam end to always be a certain length
             pp.TargetPosition = PowerUtils.ProjectAndTranslate2D(pp.TargetPosition, pp.User.Position,
                                                                pp.User.Position, BeamLength);
@@ -322,7 +324,9 @@ namespace Mooege.Core.GS.Powers.Implementations
                     {
                         //hit effects: 8 - disintegrate, 4 - some witch doctor green crap, 2 - electric, 1 - some fire methink, 16-ice particles, 
                         fx.PlayHitEffect(64, pp.User, actor);
-                        fx.SpawnEffect(pp.User, 6535, actor.Position); //FIXME: it only need to last as long as the monster is getting hit
+                        //FIXME: it only need to last as long as the monster is getting hit
+                        // fixed? 100ms time limit seems make it a bit better /mdz
+                        fx.SpawnEffect(pp.User, 6535, actor.Position, 0, 100); 
                         fx.DoDamage(pp.User, actor, 10, 0);
                     }
                 }

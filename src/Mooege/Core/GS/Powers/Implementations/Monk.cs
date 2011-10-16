@@ -57,6 +57,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     yield break;
             }
 
+            // calculate end of attack reach
             pp.TargetPosition = PowerUtils.ProjectAndTranslate2D(pp.TargetPosition, pp.User.Position,
                                                    pp.User.Position, reachLength);
 

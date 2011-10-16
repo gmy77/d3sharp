@@ -318,11 +318,8 @@ namespace Mooege.Core.GS.Actors
                 gam[attribute] = value.Value != 0;
             }
 
-            foreach (Mooege.Core.GS.Player.Player player in this.World.GetPlayersInRange(this.Position, 150f))
-            {
-                gam.SendMessage(player.InGameClient, this.DynamicID);
-            }
-
+            foreach (GameMessage msg in Attributes.GetMessageList(this.DynamicID))
+                World.BroadcastIfRevealed(msg, this);
         }
 
         /// <summary>
