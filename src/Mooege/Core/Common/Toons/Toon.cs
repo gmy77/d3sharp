@@ -527,7 +527,8 @@ namespace Mooege.Core.Common.Toons
             var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
 
             // Make the RPC call
-            client.CallMethod(bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyAdd"), builder.Build(), this.DynamicId);
+            client.MakeTargetedRPC(this, () => 
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, builder.Build(), callback => { }));
         }
 
         public override string ToString()

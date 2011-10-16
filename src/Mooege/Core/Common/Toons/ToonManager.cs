@@ -52,7 +52,7 @@ namespace Mooege.Core.Common.Toons
 
         public static Dictionary<ulong, Toon> GetToonsForAccount(Account account)
         {
-            return Toons.Where(pair => (ulong)pair.Value.Owner.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
+            return Toons.Where(pair => pair.Value.Owner != null).Where(pair => pair.Value.Owner.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
         //Method only used when creating a Toon for the first time, ambiguous method name - Tharuler
