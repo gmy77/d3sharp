@@ -86,8 +86,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dep\ductsharp.dll</HintPath>
     </Reference>
+    <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
+    <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
@@ -100,6 +103,9 @@
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
+    <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
+    <Compile Include="Core\MooNet\Authentication\Config.cs" />
+    <Compile Include="Core\MooNet\Authentication\SRP6a.cs" />
     <Compile Include="Core\MooNet\Channels\Channel.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelManager.cs" />
     <Compile Include="Core\MooNet\Channels\Member.cs" />
@@ -171,8 +177,6 @@
     <Compile Include="Net\MooNet\MooNetClient.cs" />
     <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />
-    <Compile Include="Net\MooNet\Packets\Header.cs" />
-    <Compile Include="Net\MooNet\Packets\Packet.cs" />
     <Compile Include="Net\GS\ClientManager.cs" />
     <Compile Include="Net\GS\Config.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignPassiveSkillMessage.cs" />
@@ -384,6 +388,9 @@
     <Compile Include="Net\GS\Message\Definitions\World\WorldDeletedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\World\WorldStatusMessage.cs" />
     <Compile Include="Net\IClient.cs" />
+    <Compile Include="Net\MooNet\Packets\PacketIn.cs" />
+    <Compile Include="Net\MooNet\Packets\PacketOut.cs" />
+    <Compile Include="Net\MooNet\RPC\RPCCallback.cs" />
     <Compile Include="Net\NATConfig.cs" />
     <Compile Include="Net\Utils.cs" />
     <Compile Include="Program.cs" />
@@ -511,4 +518,5 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
 </Project>

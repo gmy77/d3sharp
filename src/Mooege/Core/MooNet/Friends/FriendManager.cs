@@ -55,7 +55,9 @@ namespace Mooege.Core.MooNet.Friends
             OnGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.
 
             var notification = bnet.protocol.friends.InvitationAddedNotification.CreateBuilder().SetInvitation(invitation);
-            invitee.CallMethod(bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationAdded"), notification.Build(), Instance.DynamicId);
+
+            invitee.MakeTargetedRPC(FriendManager.Instance, () =>
+                bnet.protocol.friends.FriendsNotify.CreateStub(invitee).NotifyReceivedInvitationAdded(null, notification.Build(), callback => { }));
         }
 
         public static void HandleAccept(MooNetClient client, bnet.protocol.invitation.GenericRequest request)
@@ -73,29 +75,31 @@ namespace Mooege.Core.MooNet.Friends
                 .SetReason(0) // success?
                 .SetAddedFriend(inviteeAsFriend).Build();
 
-            inviter.LoggedInClient.CallMethod(bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationRemoved"), notificationToInviter, Instance.DynamicId);
+            inviter.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                bnet.protocol.friends.FriendsNotify.CreateStub(inviter.LoggedInClient).NotifyReceivedInvitationRemoved(null, notificationToInviter,callback => { }));
             
             var notificationToInvitee = bnet.protocol.friends.InvitationRemovedNotification.CreateBuilder()
                 .SetInvitation(invitation)
                 .SetReason(0) // success?
                 .SetAddedFriend(inviterAsFriend).Build();
 
-            invitee.LoggedInClient.CallMethod(bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyReceivedInvitationRemoved"), notificationToInvitee, Instance.DynamicId);
+            invitee.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                bnet.protocol.friends.FriendsNotify.CreateStub(invitee.LoggedInClient).NotifyReceivedInvitationRemoved(null, notificationToInvitee,callback => { }));
 
             Friends.Add(inviter.BnetAccountID.Low, inviteeAsFriend);
             AddFriendshipToDB(inviter,invitee);
 
             // send friend added notification to inviter
             var friendAddedNotificationToInviter = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviteeAsFriend).Build();
-            inviter.LoggedInClient.CallMethod(
-                bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyFriendAdded"), friendAddedNotificationToInviter,
-                Instance.DynamicId);
+
+            inviter.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                bnet.protocol.friends.FriendsNotify.CreateStub(inviter.LoggedInClient).NotifyFriendAdded(null, friendAddedNotificationToInviter, callback => { }));
 
             // send friend added notification to invitee 
             var friendAddedNotificationToInvitee = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviterAsFriend).Build();
-            invitee.LoggedInClient.CallMethod(
-                bnet.protocol.friends.FriendsNotify.Descriptor.FindMethodByName("NotifyFriendAdded"), friendAddedNotificationToInvitee,
-                Instance.DynamicId);
+
+            invitee.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                bnet.protocol.friends.FriendsNotify.CreateStub(invitee.LoggedInClient).NotifyFriendAdded(null, friendAddedNotificationToInvitee, callback => { }));
         }
 
         private static void AddFriendshipToDB(Account inviter, Account invitee)
