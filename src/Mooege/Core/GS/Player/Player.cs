@@ -263,10 +263,10 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Experience_Next] = 1200;
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             this.Attributes[GameAttribute.Armor_Total] = 0;
-            this.Attributes[GameAttribute.Defense] = 10f;
-            this.Attributes[GameAttribute.Vitality] = 9f;
-            this.Attributes[GameAttribute.Precision] = 11f;
-            this.Attributes[GameAttribute.Attack] = 10f;
+            this.Attributes[GameAttribute.Attack] = this.Properties.InitialAttack;
+            this.Attributes[GameAttribute.Precision] = this.Properties.InitialPrecision;
+            this.Attributes[GameAttribute.Defense] = this.Properties.InitialDefense;
+            this.Attributes[GameAttribute.Vitality] = this.Properties.InitialVitality;
 
             //Resource
             this.Attributes[GameAttribute.Resource_Cur, this.ResourceID] = 200f;
@@ -578,11 +578,39 @@ namespace Mooege.Core.GS.Player
                 if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
                 else { this.Attributes[GameAttribute.Experience_Next] = 0; }
 
-                // todo: not always adding 2/2/2/1 on Levelup
-                this.Attributes[GameAttribute.Defense] = 10f + (this.Attributes[GameAttribute.Level] - 1f) * 2f;
-                this.Attributes[GameAttribute.Vitality] = 9f + (this.Attributes[GameAttribute.Level] - 1f) * 1f;
-                this.Attributes[GameAttribute.Precision] = 11f + (this.Attributes[GameAttribute.Level] - 1f) * 2f;
-                this.Attributes[GameAttribute.Attack] = 10f + (this.Attributes[GameAttribute.Level] - 1f) * 2f;
+                // Notes on attribute increment algorithm:
+                // Precision: Barbarian => +1, else => +2
+                // Defense:   Wizard or Demon Hunter => (lvl+1)%2+1, else => +2
+                // Vitality:  Wizard or Demon Hunter => lvl%2+1, Barbarian => +2, else +1
+                // Attack:    All +2
+                // Attack
+                this.Attributes[GameAttribute.Attack] += 2f;
+                // Precision
+                if (this.Properties.Class == ToonClass.Barbarian)
+                {
+                    this.Attributes[GameAttribute.Precision] += 1f;
+                }
+                else
+                {
+                    this.Attributes[GameAttribute.Precision] += 2f;
+                }
+                // Vitality and Defense
+                if ((this.Properties.Class == ToonClass.Wizard) || (this.Properties.Class == ToonClass.DemonHunter))
+                {
+                    this.Attributes[GameAttribute.Vitality] += (this.Attributes[GameAttribute.Level] % 2) + 1f;
+                    this.Attributes[GameAttribute.Defense] += ((this.Attributes[GameAttribute.Level] + 1) % 2) + 1f;
+                }
+                else if (this.Properties.Class == ToonClass.Barbarian)
+                {
+                    this.Attributes[GameAttribute.Vitality] += 2f;
+                    this.Attributes[GameAttribute.Defense] += 2f;
+                }
+                else
+                {
+                    this.Attributes[GameAttribute.Vitality] += 1f;
+                    this.Attributes[GameAttribute.Defense] += 2f;
+                }
+
                 attribs[GameAttribute.Level] = this.Attributes[GameAttribute.Level];
                 attribs[GameAttribute.Defense] = this.Attributes[GameAttribute.Defense];
                 attribs[GameAttribute.Vitality] = this.Attributes[GameAttribute.Vitality];
