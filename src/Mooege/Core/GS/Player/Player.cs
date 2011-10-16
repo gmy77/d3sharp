@@ -370,7 +370,9 @@ namespace Mooege.Core.GS.Player
             foreach (var actor in actorList)
             {
                 Item item;
-                if (!this.GroundItems.TryGetValue(actor.DynamicID, out item) || item.ItemType != ItemType.Gold) continue;
+                if (! (actor is Item)) continue;
+                item = (Item)actor;
+                if (item.ItemType != ItemType.Gold) continue;
 
                 this.InGameClient.SendMessage(new FloatingAmountMessage()
                 {
@@ -384,15 +386,10 @@ namespace Mooege.Core.GS.Player
                     Type = FloatingAmountMessage.FloatType.Gold,
                 });
 
-                // NOTE: ANNDataMessage6 is probably "AddToInventory"
-                this.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6)
-                {
-                    ActorID = actor.DynamicID,
-                });
+                this.Inventory.PickUpGold(item.DynamicID);
+              
 
-                this.Inventory.PickUpGold(actor.DynamicID);
-
-                this.GroundItems.Remove(actor.DynamicID); // should delete from World also
+                item.Destroy();
             }
         }
 
@@ -402,35 +399,36 @@ namespace Mooege.Core.GS.Player
             foreach (Actor actor in actorList)
             {
                 Item item;
-                if (!this.GroundItems.TryGetValue(actor.DynamicID, out item) || item.ItemType != ItemType.HealthGlobe) continue;
+                if (!(actor is Item)) continue;
+                item = (Item)actor;
+                if (item.ItemType != ItemType.HealthGlobe) continue;
 
                 //This animation isn't the correct for collecting orbs, since i dont know what's the correct, i'll just use this
                 this.InGameClient.SendMessage(new FloatingNumberMessage()
                 {
+
                     ActorID = this.DynamicID,
-                    Number = actor.Attributes[GameAttribute.Health_Globe_Bonus_Health], //for here, we need some customization on health orbs amounts
+                    Number = item.Attributes[GameAttribute.Health_Globe_Bonus_Health], //for here, we need some customization on health orbs amounts
                     Type = FloatingNumberMessage.FloatType.Green,
                 });
 
-                // NOTE: ANNDataMessage is probably the packet that removes things from the game.
-                this.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6)
-                {
-                    ActorID = actor.DynamicID,
-                });
+                this.AddHP(item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
 
+                item.Destroy();
 
-                this.AddHP(actor.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
-
-                this.GroundItems.Remove(actor.DynamicID); // should delete from World also
             }
         }
 
         public void AddHP(float quantity)
         {
-            if (this.Attributes[GameAttribute.Hitpoints_Cur] + 50.0f >= this.Attributes[GameAttribute.Hitpoints_Max])
+            if (this.Attributes[GameAttribute.Hitpoints_Cur] + quantity >= this.Attributes[GameAttribute.Hitpoints_Max])
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
             else
-                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + 50.0f;
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
+            if (this.Attributes[GameAttribute.Hitpoints_Cur] + quantity > this.Attributes[GameAttribute.Hitpoints_Max])
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
+            else
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
         }
 
         // FIXME: Hardcoded crap
