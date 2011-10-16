@@ -335,7 +335,7 @@ namespace Mooege.Core.GS.Player
             CheckExpBonus(1);
             // Check if there is an conversation to close in this tick
             CheckOpenConversations();
-
+            Logger.Trace("TickTock");
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
 
