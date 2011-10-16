@@ -45,10 +45,12 @@ namespace Mooege.Core.MooNet.Services
 
                 if(this.Client.AuthenticationErrorCode != MooNetClient.AuthenticationErrorCodes.None)
                 {
+                    Logger.Info("Authentication failed for {0} because of invalid credentals.", request.Email);
                     done(bnet.protocol.authentication.LogonResponse.DefaultInstance);
                     return;
                 }
 
+                Logger.Info("User {0} authenticated successfuly.", request.Email);
                 var builder = bnet.protocol.authentication.LogonResponse.
                     CreateBuilder()
                     .SetAccount(Client.Account.BnetAccountID)
