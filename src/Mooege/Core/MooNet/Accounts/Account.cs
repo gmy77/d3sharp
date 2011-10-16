@@ -228,9 +228,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             try
             {
-                var query =
-                    string.Format(
-                        "INSERT INTO accounts (id, email, salt, passwordVerifier) VALUES({0}, '{1}', @salt, @passwordVerifier)",
+                var query = string.Format("INSERT INTO accounts (id, email, salt, passwordVerifier) VALUES({0}, '{1}', @salt, @passwordVerifier)",
                         this.PersistentID, this.Email);
 
                     using(var cmd = new SQLiteCommand(query, DBManager.Connection))
@@ -243,6 +241,25 @@ namespace Mooege.Core.MooNet.Accounts
             catch (Exception e)
             {
                 Logger.ErrorException(e, "SaveToDB()");
+            }
+        }
+
+        public void UpdatePassword(string newPassword)
+        {
+            this.PasswordVerifier = SRP6a.CalculatePasswordVerifierForAccount(this.Email, newPassword, this.Salt);
+            try
+            {
+                var query = string.Format("UPDATE accounts SET passwordVerifier=@passwordVerifier WHERE id={0}", this.PersistentID);
+
+                using (var cmd = new SQLiteCommand(query, DBManager.Connection))
+                {
+                    cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
+                    cmd.ExecuteNonQuery();
+                }    
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e, "UpdatePassword()");
             }
         }
     }
