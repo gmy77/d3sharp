@@ -105,7 +105,28 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        public float InitialAttack
+        public int VoiceClassID // Used for Conversations
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.DemonHunter:
+                        return 0;
+                    case ToonClass.Barbarian:
+                        return 1;
+                    case ToonClass.Wizard:
+                        return 2;
+                    case ToonClass.WitchDoctor:
+                        return 3;
+                    case ToonClass.Monk:
+                        return 4;
+                }
+                return 0;
+            }
+        }
+
+        public float InitialAttack // Defines the amount of attack points with which a player starts
         {
             get
             {
@@ -126,7 +147,7 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        public float InitialPrecision
+        public float InitialPrecision // Defines the amount of precision points with which a player starts
         {
             get
             {
@@ -147,7 +168,7 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        public float InitialDefense
+        public float InitialDefense // Defines the amount of defense points with which a player starts
         {
             get
             {
@@ -168,7 +189,7 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        public float InitialVitality
+        public float InitialVitality // Defines the amount of vitality points with which a player starts
         {
             get
             {
