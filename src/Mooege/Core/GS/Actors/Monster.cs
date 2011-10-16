@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
@@ -26,6 +27,7 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Core.GS.Actors.Buffs;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -88,6 +90,7 @@ namespace Mooege.Core.GS.Actors
 
         public override void Update()
         {
+            base.Update();
             this.Brain(); // let him think. /raist 
         }
 
@@ -151,6 +154,8 @@ namespace Mooege.Core.GS.Actors
             };
 
             player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
+
+            StopAllBuffs();
 
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {

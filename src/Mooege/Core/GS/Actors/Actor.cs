@@ -25,6 +25,7 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Core.Common.Items;
+using Mooege.Core.GS.Actors.Buffs;
 
 // TODO: Need to move all of the remaining ACD fields into Actor (such as the affix list)
 
@@ -198,13 +199,140 @@ namespace Mooege.Core.GS.Actors
         {
         }
 
+        #region Buffs and Debuffs
+
+        List<TimedBuff> m_ActiveBuffs = new List<TimedBuff>(); //< list of all active buffs on the actor
+
+        bool ResertBuffDuration<T>(float miliseconds)
+        {
+            //if there is already a buff T then reset its duration
+            foreach (TimedBuff tb in m_ActiveBuffs)
+            {
+                if (tb is T)
+                {
+                    tb.ResetDurationTo(miliseconds);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        //duration in miliseconds
+        public void AddFreezeBuff(float miliseconds)
+        {
+            if (ResertBuffDuration<FreezeBuff>(miliseconds))
+                return;
+
+            //else, just add a new one
+            AddBuff(new FreezeBuff(miliseconds, this));
+        }
+
+        public void AddChillBuff(float miliseconds)
+        {
+            if (ResertBuffDuration<ChilledBuff>(miliseconds))
+                return;
+
+            //else, just add a new one
+            AddBuff(new ChilledBuff(miliseconds, this));
+        }
+
+        public void AddStunBuff(float miliseconds)
+        {
+            if (ResertBuffDuration<StunBuff>(miliseconds))
+                return;
+
+            //else, just add a new one
+            AddBuff(new StunBuff(miliseconds, this));
+        }
+
+        public void AddSlowBuff(float miliseconds, float amount)
+        {
+            if (ResertBuffDuration<SlowBuff>(miliseconds))
+                return;
+
+            //else, just add a new one
+            AddBuff(new SlowBuff(miliseconds, amount, this));
+        }
+
+        void AddBuff(TimedBuff buff)
+        {
+            m_ActiveBuffs.Add(buff);
+            buff.Apply();
+        }
+
+        private static bool RemoveAllExpired(TimedBuff tb)
+        {
+            return tb.Update();
+        }
+
+        void UpdateBuffs()
+        {
+            m_ActiveBuffs.RemoveAll(RemoveAllExpired);
+        }
+
+        protected void StopAllBuffs()
+        {
+            foreach (TimedBuff tb in m_ActiveBuffs)
+                tb.Remove();
+        }
+
+        #endregion
+
+        public override void Update()
+        {
+            base.Update();
+
+            UpdateBuffs();
+
+            //bumbasher: this is strange because it does nto work as intended, just dunno why, for now I'll use hackish setAttribute
+//             if (Attributes.IsDirty)
+//             {
+//                 List<GameMessage> msgs = Attributes.GetMessageList(this.DynamicID);
+//                 
+//                 foreach (Mooege.Core.GS.Player.Player player in this.World.GetPlayersInRange(this.Position, 150f))
+//                 {
+//                     foreach (GameMessage m in msgs)
+//                         player.InGameClient.SendMessage(m);
+//                 }
+// 
+//                 Attributes.IsDirty = false;
+//             }
+        }
+
+        //HACK, work for the moment
+        public void setAttribute(GameAttributeB attribute, GameAttributeValue value, int attributeKey = 0)
+        {
+            GameAttributeMap gam = new GameAttributeMap();
+
+            //Update server actor
+            if (attributeKey > 0)
+            {
+                this.Attributes[attribute, attributeKey] = value.Value != 0;
+                gam[attribute, attributeKey] = value.Value != 0;
+            }
+
+            else
+            {
+                this.Attributes[attribute] = value.Value != 0;
+                gam[attribute] = value.Value != 0;
+            }
+
+            foreach (Mooege.Core.GS.Player.Player player in this.World.GetPlayersInRange(this.Position, 150f))
+            {
+                gam.SendMessage(player.InGameClient, this.DynamicID);
+            }
+
+        }
+
         /// <summary>
         /// Reveals an actor to a player.
         /// </summary>
         /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
         public override bool Reveal(Mooege.Core.GS.Player.Player player)
         {
-            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
+            if (player.RevealedObjects.ContainsKey(this.DynamicID)) 
+                return false; // already revealed
             player.RevealedObjects.Add(this.DynamicID, this);
 
             var msg = new ACDEnterKnownMessage
@@ -225,7 +353,7 @@ namespace Mooege.Core.GS.Actors
                 Field13 = Field13,
             };
 
-            // normaly when we send acdenterknown for players own actor it's set to 0x09. But while sending the acdenterknown for another player's actor we should set it to 0x01. /raist
+            // normally when we send ACDEnterKnown for players own actor it's set to 0x09. But while sending the ACDEnterKnown for another player's actor we should set it to 0x01. /raist
             if ((this is Player.Player) && this != player) 
                 msg.Field2 = 0x01; 
 
