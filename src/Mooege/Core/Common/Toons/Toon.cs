@@ -105,6 +105,111 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
+        public int VoiceClassID // Used for Conversations
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.DemonHunter:
+                        return 0;
+                    case ToonClass.Barbarian:
+                        return 1;
+                    case ToonClass.Wizard:
+                        return 2;
+                    case ToonClass.WitchDoctor:
+                        return 3;
+                    case ToonClass.Monk:
+                        return 4;
+                }
+                return 0;
+            }
+        }
+
+        public float InitialAttack // Defines the amount of attack points with which a player starts
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 10f;
+                    case ToonClass.DemonHunter:
+                        return 10f;
+                    case ToonClass.Monk:
+                        return 10f;
+                    case ToonClass.WitchDoctor:
+                        return 10f;
+                    case ToonClass.Wizard:
+                        return 10f;
+                }
+                return 10f;
+            }
+        }
+
+        public float InitialPrecision // Defines the amount of precision points with which a player starts
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 9f;
+                    case ToonClass.DemonHunter:
+                        return 11f;
+                    case ToonClass.Monk:
+                        return 11f;
+                    case ToonClass.WitchDoctor:
+                        return 9f;
+                    case ToonClass.Wizard:
+                        return 10f;
+                }
+                return 10f;
+            }
+        }
+
+        public float InitialDefense // Defines the amount of defense points with which a player starts
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 11f;
+                    case ToonClass.DemonHunter:
+                        return 9f;
+                    case ToonClass.Monk:
+                        return 10f;
+                    case ToonClass.WitchDoctor:
+                        return 9f;
+                    case ToonClass.Wizard:
+                        return 8f;
+                }
+                return 10f;
+            }
+        }
+
+        public float InitialVitality // Defines the amount of vitality points with which a player starts
+        {
+            get
+            {
+                switch (this.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 11f;
+                    case ToonClass.DemonHunter:
+                        return 9f;
+                    case ToonClass.Monk:
+                        return 9f;
+                    case ToonClass.WitchDoctor:
+                        return 10f;
+                    case ToonClass.Wizard:
+                        return 9f;
+                }
+                return 10f;
+            }
+        }
+
         public int Gender
         {
             get
