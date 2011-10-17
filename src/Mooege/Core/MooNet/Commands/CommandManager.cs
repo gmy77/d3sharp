@@ -55,8 +55,10 @@ namespace Mooege.Core.MooNet.Commands
         /// <summary>
         /// Parses a read line from console.
         /// </summary>
-        /// <param name="line"></param>
-        public static bool TryParse(string line, MooNetClient client=null)
+        /// <param name="line">The line to be parsed.</param>
+        /// <param name="client">The invoker client if any.</param>
+        /// <param name="responseMedium">The response medium to command</param>
+        public static bool TryParse(string line, MooNetClient client=null, ResponseMediums responseMedium = ResponseMediums.Console)
         {
             var output = string.Empty;
             line = line.Trim().ToLower();
@@ -67,7 +69,7 @@ namespace Mooege.Core.MooNet.Commands
             if (line[0] != '!') // if line does not start with '!'
             {
                 output = "Unknown command: " + line;
-                if(client==null) Logger.Info(output); // only output 'unknown command' message to console.
+                if(client==null && responseMedium== ResponseMediums.Console) Logger.Info(output); // only output 'unknown command' message to console.
                     return false;
             }
 
@@ -87,8 +89,13 @@ namespace Mooege.Core.MooNet.Commands
                 if (client == null) // if it's invoked from console
                     Logger.Info(output); // output to console
                 else // if invoked by a client
-                    { } // send to client.
-
+                {
+                    if (responseMedium == ResponseMediums.Channel)
+                        client.SendMessage(output);
+                    else if(responseMedium== ResponseMediums.Whisper)
+                        client.SendWhisper(output);
+                }
+                    
                 return true;
             }
 
@@ -97,9 +104,14 @@ namespace Mooege.Core.MooNet.Commands
             if (client == null)
                 Logger.Info(output);
             else
-                { }
+            {
+                if (responseMedium == ResponseMediums.Channel)
+                    client.SendMessage(output);
+                else if (responseMedium == ResponseMediums.Whisper)
+                    client.SendWhisper(output);
+            }
 
-            return false;
+            return true;
         }
 
         // embedded commands
@@ -136,6 +148,16 @@ namespace Mooege.Core.MooNet.Commands
 
                 return "Unknown command: " + parameters;
             }
+        }
+
+        /// <summary>
+        /// Response mediums.
+        /// </summary>
+        public enum ResponseMediums
+        {
+            Console,
+            Channel,
+            Whisper
         }
     }
 }

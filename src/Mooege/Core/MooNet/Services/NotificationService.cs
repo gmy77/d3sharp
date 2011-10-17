@@ -19,6 +19,7 @@
 using System;
 using Mooege.Common;
 using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Commands;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Net.MooNet;
 
@@ -44,12 +45,17 @@ namespace Mooege.Core.MooNet.Services
                     var account = ToonManager.GetOwnerAccountByToonLowId(request.TargetId.Low);
                     if (account.LoggedInClient == null) return;
 
-                    var notification = bnet.protocol.notification.Notification.CreateBuilder(request)
-                        .SetSenderId(this.Client.CurrentToon.BnetEntityID)
-                        .Build();
+                    if (account is CommandHandlerAccount) // hackish way to enable server commands for players that are not in party.
+                        CommandHandlerAccount.Instance.ParseCommand(request, this.Client);
+                    else
+                    {
+                        var notification = bnet.protocol.notification.Notification.CreateBuilder(request)
+                            .SetSenderId(this.Client.CurrentToon.BnetEntityID)
+                            .Build();
 
-                    account.LoggedInClient.MakeRPC(() => bnet.protocol.notification.NotificationListener.CreateStub(account.LoggedInClient).
-                                  OnNotificationReceived(controller, notification, callback => { }));                    
+                        account.LoggedInClient.MakeRPC(() => bnet.protocol.notification.NotificationListener.CreateStub(account.LoggedInClient).
+                                      OnNotificationReceived(controller, notification, callback => { }));
+                    }
                     break;
                 default:
                     Logger.Warn("Unhandled notification type: {0}", request.Type);

@@ -52,7 +52,7 @@ namespace Mooege.Core.Common.Toons
         public ToonFlags Flags { get; private set; }
         public byte Level { get; private set; }
         public D3.Hero.Digest Digest { get; private set; }
-        public D3.Hero.VisualEquipment Equipment { get; private set; }
+        public D3.Hero.VisualEquipment Equipment { get; protected set; }
         public AwayStatus AwayStatus { get; private set; }
 
         public Account Owner { get; set; }
@@ -232,72 +232,16 @@ namespace Mooege.Core.Common.Toons
             this.Owner = owner;
 
             var visualItems = new[]
-                            {
-                                // Head
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Chest
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Feet
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Hands
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Weapon (1)
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Weapon (2)
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Shoulders
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Legs
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-                            };
-
+            {                                
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Head
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Chest
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Feet
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Hands
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Weapon (1)
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Weapon (2)
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Shoulders
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Legs
+            };
 
             this.Equipment = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
 

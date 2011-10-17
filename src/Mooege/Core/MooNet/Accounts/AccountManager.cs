@@ -22,6 +22,8 @@ using System.Data.SQLite;
 using System.Linq;
 using Mooege.Common;
 using Mooege.Core.Common.Storage;
+using Mooege.Core.MooNet.Commands;
+using Mooege.Core.MooNet.Online;
 
 namespace Mooege.Core.MooNet.Accounts
 {
@@ -37,6 +39,10 @@ namespace Mooege.Core.MooNet.Accounts
 
         static AccountManager()
         {
+            Accounts.Add(CommandHandlerAccount.Instance.Email, CommandHandlerAccount.Instance); // Hackish command handler account that we can send server commands. /raist
+            CommandHandlerAccount.Instance.LoggedInClient.CurrentToon = CommandHandlerToon.Instance;
+            PlayerManager.OnlinePlayers.Add(CommandHandlerAccount.Instance.LoggedInClient);
+
             LoadAccounts();
         }
 
