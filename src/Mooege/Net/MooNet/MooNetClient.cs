@@ -119,8 +119,8 @@ namespace Mooege.Net.MooNet
         public void MakeTargetedRPC(RPCObject targetObject, Action rpc)
         {
             this._listenerId = this.GetRemoteObjectID(targetObject.DynamicId);
-            Logger.Warn("[RPC] Targeted object: {0} [localId: {1}, remoteId: {2}].", targetObject.ToString(),
-                         targetObject.DynamicId, this._listenerId);
+            Logger.Trace("[RPC: {0}] Method: {1} Target: {2} [localId: {3}, remoteId: {4}].", this, rpc.Method,
+                         targetObject.ToString(), targetObject.DynamicId, this._listenerId);
 
             rpc();
         }
@@ -133,7 +133,7 @@ namespace Mooege.Net.MooNet
         public void MakeRPCWithListenerId(ulong listenerId, Action rpc)
         {
             this._listenerId = listenerId;
-            Logger.Trace("[RPC] Targeted listenerId: {0}.", this._listenerId);
+            Logger.Trace("[RPC: {0}] Method: {1} Target: (listenerId) {2}.", this, rpc.Method, this._listenerId);
 
             rpc();
         }
@@ -145,7 +145,7 @@ namespace Mooege.Net.MooNet
         public void MakeRPC(Action rpc)
         {
             this._listenerId = 0;
-            Logger.Trace("[RPC] with no targets.");
+            Logger.Trace("[RPC: {0}] Method: {1} Target: N/A", this, rpc.Method);
             rpc();
         }
 
@@ -225,6 +225,11 @@ namespace Mooege.Net.MooNet
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return String.Format("{{ Client: {0} }}", this.Account==null ? "??" : this.Account.Email);
+        }
 
         private Channel _currentChannel;
         public Channel CurrentChannel

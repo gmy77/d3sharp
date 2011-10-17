@@ -42,8 +42,8 @@ namespace Mooege.Core.MooNet.Services
         public override void RemoveMember(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.RemoveMemberRequest request, System.Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("RemoveMember()");
-            //Logger.Debug("request:\n{0}", request.ToString());
 
+            // TODO: we should be actually checking for which member has to be removed. /raist.            
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
             this.Client.CurrentChannel.RemoveMember(this.Client, Channel.GetRemoveReasonForRequest((Channel.RemoveRequestReason)request.Reason));
@@ -51,7 +51,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SendMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SendMessageRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("ChannelService.SendMessage()");
+            Logger.Trace("{0} sent a message to channel {1}.", this.Client.CurrentToon, this.Client.CurrentChannel);
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
@@ -67,13 +67,11 @@ namespace Mooege.Core.MooNet.Services
 
         public override void UpdateChannelState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateChannelStateRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            //Logger.Debug("request:\n{0}", request.ToString());
             throw new NotImplementedException();
         }
 
         public override void UpdateMemberState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateMemberStateRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            //Logger.Debug("request:\n{0}", request.ToString());
             throw new NotImplementedException();
         }
     }
