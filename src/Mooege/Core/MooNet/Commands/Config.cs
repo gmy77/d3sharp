@@ -16,25 +16,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Collections.Generic;
-using Mooege.Net.MooNet;
-
-namespace Mooege.Core.MooNet.Online
+namespace Mooege.Core.MooNet.Commands
 {
-    // probably will not need this when we actually send players from last game to recent players window.
-    public static class PlayerManager
+    public sealed class Config: Mooege.Common.Config.Config
     {
-        public static readonly List<MooNetClient> OnlinePlayers = new List<MooNetClient>();
+        public char CommandPrefix { get { return this.GetString("CommandPrefix", "!")[0]; } set { this.Set("CommandPrefix", value); } }
 
-        public static void PlayerConnected(MooNetClient client)
-        {
-            OnlinePlayers.Add(client);
-        }
-
-        public static void PlayerDisconnected(MooNetClient client)
-        {
-            OnlinePlayers.Remove(client);
-        }
+        private static readonly Config _instance = new Config();
+        public static Config Instance { get { return _instance; } }
+        private Config() : base("Commands") { }
     }
 }

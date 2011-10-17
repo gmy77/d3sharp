@@ -30,7 +30,8 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SubscribeToFollowers(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.followers.SubscribeToFollowersRequest request, System.Action<bnet.protocol.followers.SubscribeToFollowersResponse> done)
         {
-            Logger.Trace("SubscribeToFollowers()");
+            Logger.Trace("Subscribe() {0}", this.Client);
+
             var builder = bnet.protocol.followers.SubscribeToFollowersResponse.CreateBuilder();
             done(builder.Build());
         }

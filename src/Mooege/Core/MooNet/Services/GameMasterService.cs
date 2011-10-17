@@ -39,7 +39,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void ListFactories(IRpcController controller, ListFactoriesRequest request, Action<ListFactoriesResponse> done)
         {
-            Logger.Trace("ListFactories()");
+            Logger.Trace("ListFactories() {0}", this.Client);
 
             var description = GameFactoryDescription.CreateBuilder().SetId(14249086168335147635);
             var attributes = new bnet.protocol.attribute.Attribute[4]
@@ -67,7 +67,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void FindGame(IRpcController controller, FindGameRequest request, Action<FindGameResponse> done)
         {            
-            Logger.Trace("FindGame()");
+            Logger.Trace("FindGame() {0}", this.Client);
 
             var requestId = ++GameCreatorManager.RequestIdCounter;
 
