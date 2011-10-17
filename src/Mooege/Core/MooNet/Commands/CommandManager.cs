@@ -111,7 +111,7 @@ namespace Mooege.Core.MooNet.Commands
             if (client != null && commandAttribute.ConsoleOnly)
                 output = "You don't have enough privileges to run this command.";
             else
-                output = command.Invoke(parameters); // invoke the command
+                output = command.Invoke(parameters, client); // invoke the command
 
             // if invoked from console
             if (client == null)

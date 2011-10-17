@@ -34,9 +34,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             var @params = parameters.Split(' ');
             if (@params.Count() < 2)
-            {
                 return "Invalid arguments. Type 'help adduser' to get help.";
-            }
 
             var email = @params[0];
             var password = @params[1];
