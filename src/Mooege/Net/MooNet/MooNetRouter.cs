@@ -19,6 +19,7 @@
 using System;
 using System.Linq;
 using Google.ProtocolBuffers;
+using Google.ProtocolBuffers.Descriptors;
 using Mooege.Common;
 using Mooege.Core.MooNet.Services;
 using Mooege.Net.MooNet.Packets;
@@ -28,6 +29,7 @@ namespace Mooege.Net.MooNet
     public static class MooNetRouter
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
+        public const byte ServiceReply = 0xFE;
 
         public static void Route(ConnectionDataEventArgs e)
         {
@@ -40,30 +42,36 @@ namespace Mooege.Net.MooNet
 
         public static void Identify(IConnection connection, CodedInputStream stream)
         {
-            var header = new Header(stream);
-            var payload = stream.ReadRawBytes((int) header.PayloadLength);
-
-            var packet = new Packet(header, payload);
-            var service = Service.GetByID(header.ServiceID);
+            var client = (MooNetClient) connection.Client;
+            var packet = new PacketIn(stream);
+                  
+            if(packet.ServiceId==ServiceReply)
+            {
+                var callback = client.RPCCallbacks.Dequeue();
+                
+                if (callback.RequestId == packet.RequestId) callback.Action(packet.ReadMessage(callback.Builder));
+                else Logger.Warn("RPC callback contains unexpected requestId: {0} where {1} was expected", callback.RequestId, packet.RequestId);
+                return;
+            }
+            
+            var service = Service.GetByID(packet.ServiceId);
 
             if (service == null)
             {
-                Logger.Error("No service exists with id: 0x{0}", header.ServiceID.ToString("X2"));
+                Logger.Error("No service exists with id: 0x{0}", packet.ServiceId.ToString("X2"));
                 return;
             }
 
-            var method = service.DescriptorForType.Methods.Single(m => (uint)m.Options[bnet.protocol.Rpc.MethodId.Descriptor] == header.MethodID);
+            var method = service.DescriptorForType.Methods.Single(m => GetMethodId(m) == packet.MethodId);
             var proto = service.GetRequestPrototype(method);
-            var builder = proto.WeakCreateBuilderForType();
+            var message = packet.ReadMessage(proto.WeakToBuilder());
 
             try
             {
-                var message = builder.WeakMergeFrom(CodedInputStream.CreateInstance(packet.Payload.ToArray())).WeakBuild();
                 lock (service) // lock the service so that its in-context client does not get changed..
                 {
-                    //Logger.Debug("service-call data:{0}", message.ToString());
-                    ((IServerService)service).Client = (MooNetClient)connection.Client;
-                    service.CallMethod(method, null, message, (msg => SendResponse(connection, header.RequestID, msg)));
+                    ((IServerService)service).Client = client;
+                    service.CallMethod(method, null, message, (msg => SendRPCResponse(connection, packet.RequestId, msg)));
                 }
             }
             catch (NotImplementedException)
@@ -80,13 +88,15 @@ namespace Mooege.Net.MooNet
             }
         }
 
-        private static void SendResponse(IConnection client, int requestId, IMessage message)
+        public static uint GetMethodId(MethodDescriptor method)
         {
-            var packet = new Packet(
-                new Header(0xfe, 0x0, requestId, (uint)message.SerializedSize, 0),
-                message.ToByteArray());
+            return (uint)method.Options[bnet.protocol.Rpc.MethodId.Descriptor];
+        }
 
-            client.Send(packet);
+        private static void SendRPCResponse(IConnection connection, int requestId, IMessage message)
+        {
+            var packet = new PacketOut(ServiceReply, 0x0, requestId, message);
+            connection.Send(packet);
         }
     }
 }
