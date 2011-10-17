@@ -114,7 +114,8 @@ namespace Mooege.Core.Common.Items
                          definition.Type, definition.DifficultyMode, definition.SNOId, definition.GBId);
 
             var item = new Item(player.World, definition.SNOId, definition.GBId, definition.Type);
-            player.GroundItems[item.DynamicID] = item;
+            if (definition.Type != ItemType.HealthGlobe || definition.Type != ItemType.Gold)
+                player.GroundItems[item.DynamicID] = item;
 
             var attributeCreators = new AttributeCreatorFactory().Create(definition.Type);
             foreach (IItemAttributeCreator creator in attributeCreators)

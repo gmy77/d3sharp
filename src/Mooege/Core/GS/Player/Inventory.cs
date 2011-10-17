@@ -130,7 +130,12 @@ namespace Mooege.Core.GS.Player
                     // check if equipment slot is empty
                     if (oldEquipItem == null)
                     {
-                        _inventoryStash.RemoveItem(item);
+                        // determine if item is in backpack or switching item from position with target originally empty
+                        if (_inventoryStash.Contains(item))
+                            _inventoryStash.RemoveItem(item);
+                        else
+                            _equipment.UnequipItem(item);
+
                         _equipment.EquipItem(item, targetEquipSlot);
                         AcceptMoveRequest(item);
                     }
@@ -140,9 +145,13 @@ namespace Mooege.Core.GS.Player
                         if (_equipment.IsItemEquipped(item))
                         {
                             // switch both items
+                            if (!IsValidEquipmentRequest(oldEquipItem, item.EquipmentSlot))
+                                return;
+
                             int oldEquipmentSlot = _equipment.UnequipItem(item);
                             _equipment.EquipItem(item, targetEquipSlot);
                             _equipment.EquipItem(oldEquipItem, oldEquipmentSlot);
+
                         }
                         else
                         {
@@ -192,6 +201,10 @@ namespace Mooege.Core.GS.Player
                 
             if (equipmentSlot == (int)EquipmentSlotId.Main_Hand)
             {
+                // useful for 1hand + shield switching, this is to avoid shield to be go to main hand
+                if (!Item.IsWeapon(type))
+                    return false;
+
                 if (Item.Is2H(type))
                 {
                     Item itemOffHand = _equipment.GetEquipment(EquipmentSlotId.Off_Hand);
