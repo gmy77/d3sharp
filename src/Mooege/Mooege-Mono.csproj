@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -86,7 +86,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dep\ductsharp.dll</HintPath>
     </Reference>
-    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\opt\mono-2.10\lib\mono\4.0\System.Numerics.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
@@ -97,10 +100,12 @@
     <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\PotionAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributeCreator.cs" />
+    <Compile Include="Core\GS\Game\GameCommands.cs" />
     <Compile Include="Core\GS\Game\GameManager.cs" />
     <Compile Include="Core\GS\Player\Equipment.cs" />
     <Compile Include="Core\GS\Player\Stash.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
+    <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
     <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
@@ -111,8 +116,12 @@
     <Compile Include="Core\MooNet\Channels\Member.cs" />
     <Compile Include="Common\Config\Config.cs" />
     <Compile Include="Common\Config\ConfigManager.cs" />
+    <Compile Include="Core\MooNet\Commands\Config.cs" />
+    <Compile Include="Core\MooNet\Commands\ServerCommandHandler.cs" />
     <Compile Include="Core\MooNet\Commands\CommandManager.cs" />
-    <Compile Include="Core\MooNet\Commands\ServerCommandAttribute.cs" />
+    <Compile Include="Core\MooNet\Commands\CommandAttribute.cs" />
+    <Compile Include="Core\MooNet\Commands\Command.cs" />
+    <Compile Include="Core\MooNet\Commands\ServerCommands.cs" />
     <Compile Include="Core\MooNet\Games\GameCreator.cs" />
     <Compile Include="Core\MooNet\Games\GameCreatorManager.cs" />
     <Compile Include="Core\MooNet\Helpers\EntityIdHelper.cs" />
@@ -514,9 +523,6 @@
       <Project>{4CC19847-6F24-4453-9E31-126F94308AB9}</Project>
       <Name>LibMooNet</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup />
 </Project>

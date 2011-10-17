@@ -32,7 +32,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void ToonList(Google.ProtocolBuffers.IRpcController controller, ToonListRequest request, Action<ToonListResponse> done)
         {
-            Logger.Trace("ToonList()");
+            Logger.Trace("ToonList() {0}", this.Client.Account);
             var builder = ToonListResponse.CreateBuilder();
 
             if (Client.Account.Toons.Count > 0)
@@ -48,17 +48,16 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SelectToon(Google.ProtocolBuffers.IRpcController controller, SelectToonRequest request, Action<SelectToonResponse> done)
         {
-            Logger.Trace("SelectToon()");
-
             var builder = SelectToonResponse.CreateBuilder();
             var toon = ToonManager.GetToonByLowID(request.Toon.Low);
             this.Client.CurrentToon = toon;
             done(builder.Build());
+
+            Logger.Trace("SelectToon() {0}", toon);
         }
 
         public override void CreateToon(Google.ProtocolBuffers.IRpcController controller, CreateToonRequest request, Action<CreateToonResponse> done)
-        {
-            Logger.Trace("CreateToon()");
+        {            
             var heroCreateParams = D3.OnlineService.HeroCreateParams.ParseFrom(request.AttributeList[0].Value.MessageValue);
             var builder = CreateToonResponse.CreateBuilder();
 
@@ -66,18 +65,20 @@ namespace Mooege.Core.MooNet.Services
             var toon = new Toon(request.Name, hashCode, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account);
             if (ToonManager.SaveToon(toon)) builder.SetToon(toon.BnetEntityID);
             done(builder.Build());
+
+            Logger.Trace("CreateToon() {0}", toon);
         }
 
         public override void DeleteToon(Google.ProtocolBuffers.IRpcController controller, DeleteToonRequest request, Action<DeleteToonResponse> done)
-        {
-            Logger.Trace("DeleteToon()");
-
+        {            
             var id = request.Toon.Low;
             var toon = ToonManager.GetToonByLowID(id);
             ToonManager.DeleteToon(toon);
 
             var builder = bnet.protocol.toon.external.DeleteToonResponse.CreateBuilder();
             done(builder.Build());
+
+            Logger.Trace("DeleteToon() {0}",toon);
         }
     }
 }

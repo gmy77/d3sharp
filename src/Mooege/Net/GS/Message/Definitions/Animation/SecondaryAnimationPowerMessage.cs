@@ -30,18 +30,7 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
         public AnimPreplayData Field1;
 
         public void Handle(GameClient client)
-        {
-            if (PowerSNO != Skills.Monk.SpiritSpenders.BlindingFlash) return;
-            var player = client.Player;
-            var pos = new Vector3D();
-            pos.Z = player.Position.Z;
-            for (var i = 0; i < 10; i++)
-            {
-                pos.X = player.Position.X + (float)RandomHelper.NextDouble() * 20f;
-                pos.Y = player.Position.Y + (float)RandomHelper.NextDouble() * 20f;
-                player.World.SpawnMob(player, 6652/*SNODatabase.Instance.RandomID(SNOGroup.NPCs)*/, pos);
-            }
-        }
+        { }
 
         public override void Parse(GameBitBuffer buffer)
         {

@@ -32,21 +32,21 @@ namespace Mooege.Core.MooNet.Services
 
         public override void OpenTable(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.storage.OpenTableRequest request, System.Action<bnet.protocol.storage.OpenTableResponse> done)
         {
-            Logger.Trace("OpenTable()");
+            Logger.Trace("OpenTable() {0}", this.Client);
             var builder = bnet.protocol.storage.OpenTableResponse.CreateBuilder();
             done(builder.Build());
         }
 
         public override void OpenColumn(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.storage.OpenColumnRequest request, System.Action<bnet.protocol.storage.OpenColumnResponse> done)
         {
-            Logger.Trace("OpenColumn()");
+            Logger.Trace("OpenColumn() {0}", this.Client);
             var builder = bnet.protocol.storage.OpenColumnResponse.CreateBuilder();
             done(builder.Build());
         }
 
         public override void Execute(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.storage.ExecuteRequest request, System.Action<bnet.protocol.storage.ExecuteResponse> done)
         {
-            Logger.Trace("Execute()");
+            Logger.Trace("Execute() {0}", this.Client);
             bnet.protocol.storage.ExecuteResponse response = null;
             switch (request.QueryName)
             {

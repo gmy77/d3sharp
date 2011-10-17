@@ -33,7 +33,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SubscribeToUserManager(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.user_manager.SubscribeToUserManagerRequest request, System.Action<bnet.protocol.user_manager.SubscribeToUserManagerResponse> done)
         {
-            Logger.Trace("SubscribeToUserManager()");
+            Logger.Trace("Subscribe() {0}", this.Client);
 
             // temp hack: send him all online players on server where he should be normally get list of player he met in his last few games /raist.
 
