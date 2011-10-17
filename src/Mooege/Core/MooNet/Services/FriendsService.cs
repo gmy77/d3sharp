@@ -66,13 +66,14 @@ namespace Mooege.Core.MooNet.Services
             if (inviteee == null) return; // we need send an error response here /raist.
 
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder()
-            .SetId(FriendManager.InvitationIdCounter++) // we may actually need to store invitation ids in database with the actual invitation there. /raist.
-            .SetInviterIdentity(this.Client.GetIdentity(true, false, false))
-            .SetInviterName(this.Client.Account.Email) // we shoulde be instead using account owner's name here.
-            .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(inviteee.BnetAccountID))
-            .SetInviteeName(inviteee.Email) // again we should be instead using invitee's name.
-            .SetCreationTime(DateTime.Now.ToUnixTime())
-            .SetExpirationTime(86400); // 1 day
+                .SetId(FriendManager.InvitationIdCounter++) // we may actually need to store invitation ids in database with the actual invitation there. /raist.                
+                .SetInviterIdentity(this.Client.GetIdentity(true, false, false))
+                .SetInviterName(this.Client.Account.Email) // we shoulde be instead using account owner's name here.
+                .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(inviteee.BnetAccountID))
+                .SetInviteeName(inviteee.Email) // again we should be instead using invitee's name.
+                .SetInvitationMessage(request.InvitationMessage)
+                .SetCreationTime(DateTime.Now.ToUnixTime())
+                .SetExpirationTime(DateTime.Now.ToUnixTime() + request.ExpirationTime);
 
             var response = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder()
                 .SetInvitation(invitation.Clone());

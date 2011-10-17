@@ -423,10 +423,22 @@ namespace Mooege.Core.Common.Toons
             switch ((FieldKeyHelper.Program)field.Key.Program)
             {
                 case FieldKeyHelper.Program.D3:
-                    if (field.Key.Group == 4)
+                    if (field.Key.Group == 4 && field.Key.Field == 1)
+                    {   
+                        //don't know what to do with this yet, so far I have observed that the update value is always equal to the toon owner's current channel /dustinconrad
+                        if (field.Value.HasMessageValue && !field.Value.MessageValue.Equals(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()))
+                        {
+                            Logger.Warn("Toon owner's logged-in client channel is not equal to the channel specified in the update message");
+                        }
+                    }
+                    else if (field.Key.Group == 4 && field.Key.Field == 2)
                     {
-                        //Group 4 fields 1, 2, and 3 get spammed whenever a client logs in or out.
-                        //catching it in this if to stop Logger.Warn spam.
+                        //catch to stop Logger.Warn spam on client start and exit
+                        // should D3.4.2 int64 Current screen (0=in-menus, 1=in-menus, 3=in-menus); see ScreenStatus sent to ChannelService.UpdateChannelState call /raist
+                    }
+                    else if (field.Key.Group == 4 && field.Key.Field == 3)
+                    {
+                        //don't know what to do with this yet, looks to be the ToonFlags of the party leader/inviter /dustinconrad
                     }
                     else
                     {

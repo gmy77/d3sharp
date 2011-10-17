@@ -82,7 +82,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetServiceType(channelInvitationInfo.ServiceType)
                 .SetRejoin(false).Build();
 
-            var invitation = bnet.protocol.invitation.Invitation.CreateBuilder(); // also need to add creation_time, expiration_time.
+            var invitation = bnet.protocol.invitation.Invitation.CreateBuilder();
             invitation.SetId(ChannelInvitationManager.InvitationIdCounter++)
                 .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetToonId(Client.CurrentToon.BnetEntityID).Build())
                 .SetInviterName(Client.CurrentToon.Name)
