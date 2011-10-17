@@ -361,6 +361,7 @@ namespace Mooege.Core.GS.Player
             this.World.BroadcastExclusive(msg, this); // TODO: We should be instead notifying currentscene we're in. /raist.
 
             this.CollectGold();
+            this.CollectHealthGlobe();
         }
 
         private void CollectGold()
@@ -369,7 +370,9 @@ namespace Mooege.Core.GS.Player
             foreach (var actor in actorList)
             {
                 Item item;
-                if (!this.GroundItems.TryGetValue(actor.DynamicID, out item) || item.ItemType != ItemType.Gold) continue;
+                if (! (actor is Item)) continue;
+                item = (Item)actor;
+                if (item.ItemType != ItemType.Gold) continue;
 
                 this.InGameClient.SendMessage(new FloatingAmountMessage()
                 {
@@ -383,16 +386,49 @@ namespace Mooege.Core.GS.Player
                     Type = FloatingAmountMessage.FloatType.Gold,
                 });
 
-                // NOTE: ANNDataMessage6 is probably "AddToInventory"
-                this.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6)
+                this.Inventory.PickUpGold(item.DynamicID);
+              
+
+                item.Destroy();
+            }
+        }
+
+        private void CollectHealthGlobe()
+        {
+            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
+            foreach (Actor actor in actorList)
+            {
+                Item item;
+                if (!(actor is Item)) continue;
+                item = (Item)actor;
+                if (item.ItemType != ItemType.HealthGlobe) continue;
+
+                //This animation isn't the correct for collecting orbs, since i dont know what's the correct, i'll just use this
+                this.InGameClient.SendMessage(new FloatingNumberMessage()
                 {
-                    ActorID = actor.DynamicID,
+
+                    ActorID = this.DynamicID,
+                    Number = item.Attributes[GameAttribute.Health_Globe_Bonus_Health], //for here, we need some customization on health orbs amounts
+                    Type = FloatingNumberMessage.FloatType.Green,
                 });
 
-                this.Inventory.PickUpGold(actor.DynamicID);
+                this.AddHP(item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
 
-                this.GroundItems.Remove(actor.DynamicID); // should delete from World also
+                item.Destroy();
+
             }
+        }
+
+        public void AddHP(float quantity)
+        {
+            if (this.Attributes[GameAttribute.Hitpoints_Cur] + quantity >= this.Attributes[GameAttribute.Hitpoints_Max])
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
+            else
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
+            if (this.Attributes[GameAttribute.Hitpoints_Cur] + quantity > this.Attributes[GameAttribute.Hitpoints_Max])
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
+            else
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
         }
 
         // FIXME: Hardcoded crap
@@ -634,7 +670,15 @@ namespace Mooege.Core.GS.Player
                     ActorID = this.DynamicID,
                     Field1 = 6,
                 });
-                this.InGameClient.SendMessage(new PlayEffectMessage()
+                /*this.InGameClient.SendMessage(new PlayEffectMessage()
+                {
+                    Id = 0x7a,
+                    ActorID = this.DynamicID,
+                    Field1 = 32,
+                    Field2 = LevelUpEffects[this.Attributes[GameAttribute.Level]],
+                });*/
+
+                this.World.BroadcastGlobal(new PlayEffectMessage()
                 {
                     Id = 0x7a,
                     ActorID = this.DynamicID,

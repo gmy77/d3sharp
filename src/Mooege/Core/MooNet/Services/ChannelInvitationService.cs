@@ -34,7 +34,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SubscribeRequest request, Action<bnet.protocol.channel_invitation.SubscribeResponse> done)
         {
-            Logger.Trace("Subscribe()");
+            Logger.Trace("Subscribe() {0}",this.Client);
 
             this._invitationManager.AddSubscriber(this.Client, request.ObjectId);
             var builder = bnet.protocol.channel_invitation.SubscribeResponse.CreateBuilder();
@@ -43,6 +43,8 @@ namespace Mooege.Core.MooNet.Services
 
         public override void AcceptInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.AcceptInvitationRequest request, Action<bnet.protocol.channel_invitation.AcceptInvitationResponse> done)
         {
+            Logger.Trace("{0} accepted invitation.", this.Client.CurrentToon);
+
             var response = bnet.protocol.channel_invitation.AcceptInvitationResponse.CreateBuilder().SetObjectId(this._invitationManager.DynamicId).Build();
             done(response);
 
@@ -51,6 +53,8 @@ namespace Mooege.Core.MooNet.Services
 
         public override void DeclineInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
+            Logger.Trace("{0} declined invitation.", this.Client.CurrentToon);
+
             var respone = bnet.protocol.NoData.CreateBuilder();
             done(respone.Build());
 
@@ -59,6 +63,8 @@ namespace Mooege.Core.MooNet.Services
 
         public override void RevokeInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.RevokeInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
+            Logger.Trace("{0} revoked invitation.", this.Client.CurrentToon);
+
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
 
@@ -70,7 +76,7 @@ namespace Mooege.Core.MooNet.Services
             var invitee = ToonManager.GetToonByLowID(request.TargetId.Low);
             if (this.Client.CurrentChannel.HasToon(invitee)) return; // don't allow a second invitation if invitee is already a member of client's current channel.
 
-            Logger.Debug("{0} invited {1} to his channel", Client.CurrentToon.Name, invitee.Name);
+            Logger.Debug("{0} invited {1} to his channel.", Client.CurrentToon, invitee);
 
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
             var extensionBytes = request.UnknownFields.FieldDictionary[105].LengthDelimitedList[0].ToByteArray();
@@ -82,7 +88,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetServiceType(channelInvitationInfo.ServiceType)
                 .SetRejoin(false).Build();
 
-            var invitation = bnet.protocol.invitation.Invitation.CreateBuilder(); // also need to add creation_time, expiration_time.
+            var invitation = bnet.protocol.invitation.Invitation.CreateBuilder();
             invitation.SetId(ChannelInvitationManager.InvitationIdCounter++)
                 .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetToonId(Client.CurrentToon.BnetEntityID).Build())
                 .SetInviterName(Client.CurrentToon.Name)
@@ -117,11 +123,33 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SuggestInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SuggestInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            // TODO: does not seem to work /raist.
+
+            var suggester = this.Client.CurrentToon;
+            var suggestee = ToonManager.GetToonByLowID(request.ApprovalId.Low);
+            if(suggestee==null) return;
+
+            Logger.Debug("{0} suggested {1} to invite him.", suggester, suggestee);
+
+            // notify suggestee about it.
+            var suggestion = bnet.protocol.invitation.Suggestion.CreateBuilder()
+                .SetChannelId(request.ChannelId)
+                .SetSuggesterId(suggester.BnetEntityID)
+                .SetSuggesterName(suggester.Name)
+                .SetSuggesteeId(suggestee.BnetEntityID)
+                .SetSuggesteeName(suggestee.Name)
+                .Build();
+
+            var notification = bnet.protocol.channel_invitation.SuggestionAddedNotification.CreateBuilder().SetSuggestion(suggestion);
+
+            suggestee.Owner.LoggedInClient.MakeTargetedRPC(this._invitationManager, () => 
+                bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(suggestee.Owner.LoggedInClient).NotifyReceivedSuggestionAdded(null, notification.Build(), callback => { }));
         }
 
         public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.UnsubscribeRequest request, Action<bnet.protocol.NoData> done)
         {
+            Logger.Trace("Unsubscribe() {0}", this.Client);
+
             this._invitationManager.RemoveSubscriber(Client);
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());

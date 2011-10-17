@@ -17,24 +17,19 @@
  */
 
 using System;
-using System.Collections.Generic;
-using Mooege.Net.MooNet;
 
-namespace Mooege.Core.MooNet.Online
+namespace Mooege.Core.MooNet.Commands
 {
-    // probably will not need this when we actually send players from last game to recent players window.
-    public static class PlayerManager
+    [AttributeUsage(AttributeTargets.Class)]
+    public class CommandAttribute : Attribute
     {
-        public static readonly List<MooNetClient> OnlinePlayers = new List<MooNetClient>();
+        public string Command { get; private set; }
+        public bool ConsoleOnly { get; private set; } // TODO: we should be instead be checking user priviles here. /raist.
 
-        public static void PlayerConnected(MooNetClient client)
+        public CommandAttribute(string command, bool consoleOnly=false)
         {
-            OnlinePlayers.Add(client);
-        }
-
-        public static void PlayerDisconnected(MooNetClient client)
-        {
-            OnlinePlayers.Remove(client);
+            this.Command = command.ToLower();
+            this.ConsoleOnly = consoleOnly;
         }
     }
 }

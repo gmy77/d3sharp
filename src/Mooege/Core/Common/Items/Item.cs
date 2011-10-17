@@ -141,6 +141,11 @@ namespace Mooege.Core.Common.Items
             return (itemType == ItemType.Amethyst || itemType == ItemType.Ruby || itemType == ItemType.Emerald || itemType == ItemType.Topaz || itemType == ItemType.Rune);
         }
 
+        public static bool IsJournalOrScroll(ItemType itemType)
+        {
+            return (itemType == ItemType.Journal || itemType == ItemType.Scroll);
+        }
+
         public static bool IsDye(ItemType itemType)
         {
             return (itemType == ItemType.Dye);
