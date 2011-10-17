@@ -16,20 +16,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-
 namespace Mooege.Core.MooNet.Commands
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public class CommandAttribute : Attribute
+    public sealed class Config: Mooege.Common.Config.Config
     {
-        public string Command { get; private set; }
-        public bool ConsoleOnly { get; private set; } // TODO: we should be instead be checking user priviles here. /raist.
+        public char CommandPrefix { get { return this.GetString("CommandPrefix", "!")[0]; } set { this.Set("CommandPrefix", value); } }
 
-        public CommandAttribute(string command, bool consoleOnly=false)
-        {
-            this.Command = command.ToLower();
-            this.ConsoleOnly = consoleOnly;
-        }
+        private static readonly Config _instance = new Config();
+        public static Config Instance { get { return _instance; } }
+        private Config() : base("Commands") { }
     }
 }

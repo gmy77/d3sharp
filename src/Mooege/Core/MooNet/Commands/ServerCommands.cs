@@ -110,7 +110,7 @@ namespace Mooege.Core.MooNet.Commands
         }
     }
 
-    [Command("shutdown")]
+    [Command("shutdown", true)]
     public class ShutdownCommand : Command
     {
         public override string Help()
@@ -125,7 +125,7 @@ namespace Mooege.Core.MooNet.Commands
         }
     }
 
-    [Command("start")]
+    [Command("start", true)]
     public class StartCommand : Command
     {
         public override string Help()
@@ -171,7 +171,7 @@ namespace Mooege.Core.MooNet.Commands
         }
     }
 
-    [Command("stop")]
+    [Command("stop", true)]
     public class StopCommand : Command
     {
         public override string Help()
