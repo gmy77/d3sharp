@@ -34,7 +34,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SubscribeToFriends(IRpcController controller, bnet.protocol.friends.SubscribeToFriendsRequest request, Action<bnet.protocol.friends.SubscribeToFriendsResponse> done)
         {
-            Logger.Trace("Subscribe()");
+            Logger.Trace("Subscribe() {0}", this.Client);
 
             FriendManager.Instance.AddSubscriber(this.Client, request.ObjectId);
             
@@ -53,26 +53,26 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SendInvitation(IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.invitation.SendInvitationResponse> done)
         {
-            Logger.Trace("SendInvitation()");
-
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
             var extensionBytes = request.UnknownFields.FieldDictionary[103].LengthDelimitedList[0].ToByteArray();
             var friendRequest = bnet.protocol.friends.SendInvitationRequest.ParseFrom(extensionBytes);
 
             if (friendRequest.TargetEmail.ToLower() == this.Client.Account.Email.ToLower()) return; // don't allow him to invite himself - and we should actually return an error!
-                                                                                                    // also he shouldn't be allowed to invite his current friends - put that check too!. /rai
-
+                                                                                                    // also he shouldn't be allowed to invite his current friends - put that check too!. /raist
             var inviteee = AccountManager.GetAccountByEmail(friendRequest.TargetEmail);
             if (inviteee == null) return; // we need send an error response here /raist.
 
+            Logger.Trace("{0} sent {1} friend invitation.", this.Client.Account, inviteee);
+
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder()
-            .SetId(FriendManager.InvitationIdCounter++) // we may actually need to store invitation ids in database with the actual invitation there. /raist.
-            .SetInviterIdentity(this.Client.GetIdentity(true, false, false))
-            .SetInviterName(this.Client.Account.Email) // we shoulde be instead using account owner's name here.
-            .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(inviteee.BnetAccountID))
-            .SetInviteeName(inviteee.Email) // again we should be instead using invitee's name.
-            .SetCreationTime(DateTime.Now.ToUnixTime())
-            .SetExpirationTime(86400); // 1 day
+                .SetId(FriendManager.InvitationIdCounter++) // we may actually need to store invitation ids in database with the actual invitation there. /raist.                
+                .SetInviterIdentity(this.Client.GetIdentity(true, false, false))
+                .SetInviterName(this.Client.Account.Email) // we shoulde be instead using account owner's name here.
+                .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(inviteee.BnetAccountID))
+                .SetInviteeName(inviteee.Email) // again we should be instead using invitee's name.
+                .SetInvitationMessage(request.InvitationMessage)
+                .SetCreationTime(DateTime.Now.ToUnixTime())
+                .SetExpirationTime(DateTime.Now.ToUnixTime() + request.ExpirationTime);
 
             var response = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder()
                 .SetInvitation(invitation.Clone());
@@ -85,6 +85,8 @@ namespace Mooege.Core.MooNet.Services
 
         public override void AcceptInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
+            Logger.Trace("{0} invited friend invitation.", this.Client.Account);
+
             var response = bnet.protocol.NoData.CreateBuilder();
             done(response.Build());
 

@@ -19,6 +19,7 @@
 using System;
 using Mooege.Common;
 using Mooege.Core.MooNet.Channels;
+using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Services
@@ -42,8 +43,8 @@ namespace Mooege.Core.MooNet.Services
         public override void RemoveMember(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.RemoveMemberRequest request, System.Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("RemoveMember()");
-            //Logger.Debug("request:\n{0}", request.ToString());
 
+            // TODO: we should be actually checking for which member has to be removed. /raist.            
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
             this.Client.CurrentChannel.RemoveMember(this.Client, Channel.GetRemoveReasonForRequest((Channel.RemoveRequestReason)request.Reason));
@@ -51,13 +52,18 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SendMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SendMessageRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("ChannelService.SendMessage()");
+            Logger.Trace("{0} sent a message to channel {1}.", this.Client.CurrentToon, this.Client.CurrentChannel);
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
 
             if (!request.HasMessage) return; // only continue if the request actually contains a message.
-            this.Client.CurrentChannel.SendMessage(this.Client, request.Message); // let channel itself to broadcast message to it's members.            
+
+            if (!(request.Message.AttributeCount > 0 && request.Message.AttributeList[0].HasValue &&
+                CommandManager.TryParse(request.Message.AttributeList[0].Value.StringValue, this.Client, CommandManager.ResponseMediums.Channel))) // try parsing the message as a command   
+            {
+                this.Client.CurrentChannel.SendMessage(this.Client, request.Message); // if it's not - let channel itself to broadcast message to it's members.  
+            }
         }
 
         public override void SetRoles(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SetRolesRequest request, System.Action<bnet.protocol.NoData> done)
@@ -67,13 +73,11 @@ namespace Mooege.Core.MooNet.Services
 
         public override void UpdateChannelState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateChannelStateRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            //Logger.Debug("request:\n{0}", request.ToString());
             throw new NotImplementedException();
         }
 
         public override void UpdateMemberState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateMemberStateRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            //Logger.Debug("request:\n{0}", request.ToString());
             throw new NotImplementedException();
         }
     }
