@@ -30,19 +30,16 @@ namespace Mooege.Core.MooNet.Services
 
         public override void CreateChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.CreateChannelRequest request, System.Action<bnet.protocol.channel.CreateChannelResponse> done)
         {
-            Logger.Trace("CreateChannel()");
             throw new NotImplementedException();
         }
 
         public override void FindChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.FindChannelRequest request, System.Action<bnet.protocol.channel.FindChannelResponse> done)
         {
-            Logger.Trace("FindChannel()");
             throw new NotImplementedException();
         }
 
         public override void JoinChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.JoinChannelRequest request, System.Action<bnet.protocol.channel.JoinChannelResponse> done)
         {
-            Logger.Trace("JoinChannel()");
             throw new NotImplementedException();
         }
     }

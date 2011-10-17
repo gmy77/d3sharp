@@ -35,17 +35,23 @@ namespace Mooege.Core.MooNet.Services
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.SubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("Subscribe() {0}: {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
-
             switch (request.EntityId.GetHighIdType())
             {
                 case EntityIdHelper.HighIdType.AccountId:
                     var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
-                    account.AddSubscriber(this.Client, request.ObjectId);
+                    if (account != null)
+                    {
+                        Logger.Trace("Subscribe() {0} {1}", this.Client, account);
+                        account.AddSubscriber(this.Client, request.ObjectId);
+                    }
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
-                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
-                    if (toon != null) toon.AddSubscriber(this.Client, request.ObjectId); // The client will send us a Subscribe with ToonId of 0 the first time it tries to create a toon with a name that already exists. Let's handle that here.
+                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);                    
+                    if (toon != null) 
+                    {
+                        Logger.Trace("Subscribe() {0} {1}", this.Client, toon);
+                        toon.AddSubscriber(this.Client, request.ObjectId); // The client will send us a Subscribe with ToonId of 0 the first time it tries to create a toon with a name that already exists. Let's handle that here.
+                    }
                     break;
                 default:
                     Logger.Warn("Recieved an unhandled Presence.Subscribe request with type {0}", request.EntityId.GetHighIdType());
@@ -59,19 +65,25 @@ namespace Mooege.Core.MooNet.Services
         public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UnsubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("Unsubscribe()");
-            Logger.Debug("request:\n{0}", request.ToString());
             
             switch (request.EntityId.GetHighIdType())
             {
                 case EntityIdHelper.HighIdType.AccountId:
                     var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
                     // The client will probably make sure it doesn't unsubscribe to a null ID, but just to make sure..
-                    if (account != null) account.RemoveSubscriber(this.Client);
+                    if (account != null)
+                    {
+                        account.RemoveSubscriber(this.Client);
+                        Logger.Trace("Unsubscribe() {0} {1}", this.Client, account);
+                    }
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
                     var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
                     if (toon != null)
+                    {
                         toon.RemoveSubscriber(this.Client);
+                        Logger.Trace("Unsubscribe() {0} {1}", this.Client, toon);
+                    }
                     break;
                 default:
                     Logger.Warn("Recieved an unhandled Presence.Unsubscribe request with type {0}", request.EntityId.GetHighIdType());
@@ -93,11 +105,11 @@ namespace Mooege.Core.MooNet.Services
             {
                 case EntityIdHelper.HighIdType.AccountId:
                     var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
-                    Logger.Trace("Update:Account: {0} {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
+                    Logger.Trace("Update() {0} {1}", this.Client, account);
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
                     var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
-                    Logger.Trace("Update:Toon: {0}", toon);
+                    Logger.Trace("Update() {0} {1}", this.Client, toon);
                     foreach(var fieldOp in request.FieldOperationList)
                     {
                         toon.Update(fieldOp);
@@ -119,8 +131,8 @@ namespace Mooege.Core.MooNet.Services
             switch (request.EntityId.GetHighIdType())
             {
                 case EntityIdHelper.HighIdType.AccountId:
-                    Logger.Trace("Query:Account: {0} {1}", request.EntityId.GetHighIdType(), request.EntityId.Low);
                     var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
+                    Logger.Trace("Query() {0} {1}", this.Client, account);
                     foreach(var key in request.KeyList)
                     {
                         var field = account.QueryField(key);
@@ -130,7 +142,7 @@ namespace Mooege.Core.MooNet.Services
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
                     var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
-                    Logger.Trace("Query:Toon: {0}", toon);                    
+                    Logger.Trace("Query() {0} {1}", this.Client, toon);                    
                     foreach (var key in request.KeyList)
                     {
                         var field = toon.QueryField(key);

@@ -50,7 +50,7 @@ namespace Mooege.Core.MooNet.Services
             foreach (var serviceHash in request.ImportedServiceHashList)
             {
                 var serviceID = Service.GetByHash(serviceHash);
-                Logger.Trace("Bind() [export] Hash: 0x{0} ID: 0x{1} Service: {2} ", serviceHash.ToString("X8"), serviceID.ToString("X2"),
+                Logger.Trace("Bind() {0} [export] Hash: 0x{1} Id: 0x{2} Service: {3} ", this.Client, serviceHash.ToString("X8"), serviceID.ToString("X2"),
 
                 Service.GetByID(serviceID) != null ? Service.GetByID(serviceID).GetType().Name : "N/A");
                 requestedServiceIDs.Add(serviceID);
@@ -61,7 +61,7 @@ namespace Mooege.Core.MooNet.Services
             {
                 if (Client.Services.ContainsKey(service.Hash)) continue;
                 Client.Services.Add(service.Hash, service.Id);
-                Logger.Trace(string.Format("Bind() [import] Hash: 0x{0} ID: 0x{1}", service.Hash.ToString("X8"), service.Id.ToString("X2")));
+                Logger.Trace(string.Format("Bind() {0} [import] Hash: 0x{1} Id: 0x{2}", this.Client, service.Hash.ToString("X8"), service.Id.ToString("X2")));
             }
 
             var builder = BindResponse.CreateBuilder();
