@@ -632,7 +632,15 @@ namespace Mooege.Core.GS.Player
                     ActorID = this.DynamicID,
                     Field1 = 6,
                 });
-                this.InGameClient.SendMessage(new PlayEffectMessage()
+                /*this.InGameClient.SendMessage(new PlayEffectMessage()
+                {
+                    Id = 0x7a,
+                    ActorID = this.DynamicID,
+                    Field1 = 32,
+                    Field2 = LevelUpEffects[this.Attributes[GameAttribute.Level]],
+                });*/
+
+                this.World.BroadcastGlobal(new PlayEffectMessage()
                 {
                     Id = 0x7a,
                     ActorID = this.DynamicID,
