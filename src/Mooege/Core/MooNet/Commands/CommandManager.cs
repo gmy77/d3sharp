@@ -58,34 +58,47 @@ namespace Mooege.Core.MooNet.Commands
         /// <param name="line"></param>
         public static bool TryParse(string line, MooNetClient client=null)
         {
+            var output = string.Empty;
             line = line.Trim().ToLower();
-            if (line == String.Empty) 
+
+            if (line == String.Empty) // just return false, if message is empty.
                 return false;
 
-            if (line[0] != '!')
+            if (line[0] != '!') // if line does not start with '!'
             {
-                Logger.Info("Unknown command: " + line);
-                return false;
+                output = "Unknown command: " + line;
+                if(client==null) Logger.Info(output); // only output 'unknown command' message to console.
+                    return false;
             }
 
-            line = line.Substring(1);
-            var command = line.Split(' ')[0];
-            var parameters = String.Empty;
-            
-            if(line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).ToLower().Trim();
+            line = line.Substring(1); // advance to actual command.
+            var command = line.Split(' ')[0]; // get command
+            var parameters = String.Empty; 
+            if (line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).ToLower().Trim(); // get parameters if any.
 
-            foreach(var pair in Commands)
+            foreach(var pair in Commands) 
             {
                 if (pair.Key != command) continue;
 
-                var output = pair.Value.Invoke(parameters);
-                if (output.Trim() != string.Empty)
-                    Logger.Info(output);
+                output = pair.Value.Invoke(parameters); // invoke the command
+                if (output.Trim() == string.Empty) return false; // if command outputs an empty message, just ignore it.
+
+                // send the output to invoker
+                if (client == null) // if it's invoked from console
+                    Logger.Info(output); // output to console
+                else // if invoked by a client
+                    { } // send to client.
 
                 return true;
             }
 
-            Logger.Info("Unknown command: " + command);
+            // if execution reaches here, it means command was not found.
+            output = "Unknown command: " + line;
+            if (client == null)
+                Logger.Info(output);
+            else
+                { }
+
             return false;
         }
 

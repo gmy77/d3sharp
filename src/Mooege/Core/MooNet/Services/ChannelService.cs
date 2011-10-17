@@ -59,10 +59,11 @@ namespace Mooege.Core.MooNet.Services
 
             if (!request.HasMessage) return; // only continue if the request actually contains a message.
 
-            if(request.Message.AttributeCount>0 && request.Message.AttributeList[0].HasValue) 
-               
-            if(!CommandManager.TryParse(request.Message.AttributeList[0].Value.StringValue, this.Client)) // try parsing the message as a command
-                this.Client.CurrentChannel.SendMessage(this.Client, request.Message); // if it's not - let channel itself to broadcast message to it's members.            
+            if (!(request.Message.AttributeCount > 0 && request.Message.AttributeList[0].HasValue &&
+                CommandManager.TryParse(request.Message.AttributeList[0].Value.StringValue, this.Client))) // try parsing the message as a command   
+            {
+                this.Client.CurrentChannel.SendMessage(this.Client, request.Message); // if it's not - let channel itself to broadcast message to it's members.  
+            }
         }
 
         public override void SetRoles(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SetRolesRequest request, System.Action<bnet.protocol.NoData> done)
