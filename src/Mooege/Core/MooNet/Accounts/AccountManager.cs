@@ -22,7 +22,6 @@ using System.Data.SQLite;
 using System.Linq;
 using Mooege.Common;
 using Mooege.Core.Common.Storage;
-using Mooege.Core.MooNet.Commands;
 
 namespace Mooege.Core.MooNet.Accounts
 {
@@ -60,7 +59,7 @@ namespace Mooege.Core.MooNet.Accounts
             return Accounts.Where(account => account.Value.PersistentID == persistentId).Select(account => account.Value).FirstOrDefault();
         }
 
-        private static bool DeleteAccount(Account account)
+        public static bool DeleteAccount(Account account)
         {
             if (account == null) return false;
             if (!Accounts.ContainsKey(account.Email)) return false;
@@ -118,119 +117,6 @@ namespace Mooege.Core.MooNet.Accounts
             {
                 return 0;
             }
-        }
-
-        #region commands
-
-        [ServerCommand("adduser")]
-        public static void AddUser(string parameters)
-        {
-            if(parameters.ToLower()=="help")
-            {
-                Console.WriteLine("adduser email password");
-                return;
-            }
-
-            var @params = parameters.Split(' ');
-            if(@params.Count()<2)
-            {
-                Console.WriteLine("Invalid arguments. Type 'adduser help' to get help.");
-                return;
-            }
-
-            var email = @params[0];
-            var password = @params[1];
-
-            if(!email.Contains('@'))
-            {
-                Console.WriteLine("'{0}' is not a valid email address.", email);
-                return;
-            }
-
-            if(password.Length<8 || password.Length> 16)
-            {
-                Console.WriteLine("Password should be a minimum of 8 and a maximum of 16 characters.");
-                return;
-            }
-            
-            if( GetAccountByEmail(email)!=null)
-            {
-                Console.WriteLine("An account already exists for email address {0}.",email);
-                return;                
-            }
-
-            var account = CreateAccount(email, password);
-            Logger.Info("Created account {0}.", email);
-        }
-
-        [ServerCommand("updatepw")]
-        public static void UpdatePassword(string parameters)
-        {
-            if (parameters.ToLower() == "help")
-            {
-                Console.WriteLine("updatepw email password");
-                return;
-            }
-
-            var @params = parameters.Split(' ');
-            if (@params.Count() < 2)
-            {
-                Console.WriteLine("Invalid arguments. Type 'updatepw help' to get help.");
-                return;
-            }
-
-            var email = @params[0];
-            var password = @params[1];
-
-            var account = GetAccountByEmail(email);
-
-            if (account == null)
-            {
-                Console.WriteLine("No account with email '{0}' exists.", email);
-                return;
-            }
-
-            if (password.Length < 8 || password.Length > 16)
-            {
-                Console.WriteLine("Password should be a minimum of 8 and a maximum of 16 characters.");
-                return;
-            }
-
-            account.UpdatePassword(password);
-            Logger.Info("Updated password for user {0}.", email);
-        }
-
-        [ServerCommand("deluser")]
-        public static void DelUser(string parameters)
-        {
-            // TODO: we should be also deleting account's toons. /raist.
-
-            if (parameters.ToLower() == "help")
-            {
-                Console.WriteLine("deluser email");
-                return;
-            }
-
-            parameters = parameters.Trim();
-
-            if (parameters==string.Empty)
-            {
-                Console.WriteLine("Invalid arguments. Type 'deluser help' to get help.");
-                return;
-            }
-
-            var account = GetAccountByEmail(parameters);
-
-            if (account==null)
-            {
-                Console.WriteLine("No account with email '{0}' exists.", parameters);
-                return;
-            }
-
-            DeleteAccount(account);
-            Logger.Info("Deleted account {0}.", parameters);
-        }
-        
-        #endregion
+        }       
     }
 }

@@ -20,53 +20,109 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Mooege.Common;
+using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Commands
 {
     public static class CommandManager
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        private static readonly Dictionary<ServerCommandAttribute, MethodInfo> ServerCommands = new Dictionary<ServerCommandAttribute, MethodInfo>();
+        private static readonly Dictionary<string, Command> Commands = new Dictionary<string, Command>();
 
         static CommandManager()
         {
-            LoadCommands();
+            RegisterCommands();
         }
 
-        private static void LoadCommands()
+        private static void RegisterCommands()
         {
-            foreach(var type in Assembly.GetEntryAssembly().GetTypes())
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public);
-                foreach(var method in methods)
-                {
-                    object[] attributes = method.GetCustomAttributes(typeof(ServerCommandAttribute), true); // get the attributes of the packet.
-                    if (attributes.Length == 0 ) continue;
+                if (!type.IsSubclassOf(typeof(Command))) continue;
 
-                    var attribute = (ServerCommandAttribute) attributes[0];
-                    ServerCommands.Add(attribute, method);
-                }
+                var attributes = (CommandAttribute[])type.GetCustomAttributes(typeof(CommandAttribute), true);
+                if (attributes.Length == 0) continue;
+
+                var command = attributes[0].Command;
+                if (!Commands.ContainsKey(command))
+                    Commands.Add(command, (Command)Activator.CreateInstance(type));
+                else
+                    Logger.Warn("There exists an already registered command '{0}'.", command);
             }
         }
 
-        public static void Parse(string line)
+        /// <summary>
+        /// Parses a read line from console.
+        /// </summary>
+        /// <param name="line"></param>
+        public static bool TryParse(string line, MooNetClient client=null)
         {
-            line = line.Trim();
-            if (line == String.Empty) return;
-            string command = line.Split(' ')[0].ToLower();
-            string parameters = String.Empty;
-            
-            if(line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).ToLower();
+            line = line.Trim().ToLower();
+            if (line == String.Empty) 
+                return false;
 
-            foreach (var cmd in ServerCommands.Where(cmd => cmd.Key.Command == command))
+            if (line[0] != '!')
             {
-                cmd.Value.Invoke(null, new object[] {parameters});
-                return;
+                Logger.Info("Unknown command: " + line);
+                return false;
+            }
+
+            line = line.Substring(1);
+            var command = line.Split(' ')[0];
+            var parameters = String.Empty;
+            
+            if(line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).ToLower().Trim();
+
+            foreach(var pair in Commands)
+            {
+                if (pair.Key != command) continue;
+
+                var output = pair.Value.Invoke(parameters);
+                if (output.Trim() != string.Empty)
+                    Logger.Info(output);
+
+                return true;
             }
 
             Logger.Info("Unknown command: " + command);
+            return false;
+        }
+
+        // embedded commands
+
+        [Command("commands")]
+        public class CommandsCommand : Command
+        {            
+            public override string Invoke(string parameters, MooNetClient invokerClient = null)
+            {
+                var output = "Available commands: ";
+                output += Commands.Aggregate(string.Empty, (current, pair) => current + (pair.Key + ", "));
+                output += "\nType 'help <command>' to get help.";
+                return output;
+            }
+        }
+
+        [Command("help")]
+        public class HelpCommand : Command
+        {
+            public override string Invoke(string parameters, MooNetClient invokerClient = null)
+            {
+                if(parameters == string.Empty)
+                {
+                    return "usage: help <command>";
+                }
+
+                foreach (var pair in CommandManager.Commands)
+                {
+                    if (pair.Key != parameters) continue;
+
+                    var output = pair.Value.Help();
+                    return output != string.Empty ? output : "Help text not found for command: " + parameters;
+                }
+
+                return "Unknown command: " + parameters;
+            }
         }
     }
 }

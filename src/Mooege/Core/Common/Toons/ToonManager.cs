@@ -55,6 +55,11 @@ namespace Mooege.Core.Common.Toons
             return Toons.Where(pair => pair.Value.Owner != null).Where(pair => pair.Value.Owner.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
+        public static int TotalToons
+        {
+            get { return Toons.Count; }
+        }
+
         //Method only used when creating a Toon for the first time, ambiguous method name - Tharuler
         public static bool SaveToon(Toon toon)
         {
