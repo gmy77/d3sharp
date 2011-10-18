@@ -412,8 +412,12 @@ namespace Mooege.Core.GS.Player
                 });
 
                 foreach (var player in PlayerManager.OnlinePlayers)
+                {
                     if (player.CurrentToon.Name != "Server")
+                    {
                         player.InGameClient.Player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
+                    }
+                }
 
                 item.Destroy();
 
