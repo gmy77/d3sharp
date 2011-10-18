@@ -132,7 +132,6 @@ namespace Mooege.Core.Common.Items
         public static Item Cook(Player player, string name, int snoId, ItemType type)
         {
             var item = new Item(player.World, snoId, StringHashHelper.HashItemName(name), type);
-            Logger.Info("Creating item: {0} [type: {1}, sno:{2}]", name, type, snoId);
             //player.GroundItems[item.DynamicID] = item;
 
             var attributeCreators = new AttributeCreatorFactory().Create(type);
