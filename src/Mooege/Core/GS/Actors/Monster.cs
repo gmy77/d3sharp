@@ -234,6 +234,9 @@ namespace Mooege.Core.GS.Actors
 
             this.World.SpawnRandomDrop(player, this.Position);
             this.World.SpawnGold(player, this.Position);
+            int rGlobes = RandomHelper.Next(1, 100);
+            if (rGlobes < 20)
+                this.World.SpawnGlobe(player, this.Position);
             this.Destroy();
         }
     }

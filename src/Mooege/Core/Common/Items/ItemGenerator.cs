@@ -83,6 +83,7 @@ namespace Mooege.Core.Common.Items
         {
             var validDefinitions = ItemDefinitions[type].Where(definition => definition.SNOId != 0).ToList(); // only find item definitions with snoId!=0 for given itemtype.
             var itemDefinition = GetRandom(validDefinitions);
+
             return CreateItem(player, itemDefinition);
         }
 
@@ -95,6 +96,9 @@ namespace Mooege.Core.Common.Items
             {
                 itemDefinition = pool[RandomHelper.Next(0, pool.Count() - 1)];
 
+                // ignore gold and healthglobe, they should drop only when expect, not randomly
+                if (itemDefinition.Type == ItemType.Gold) continue;
+                if (itemDefinition.Type == ItemType.HealthGlobe) continue;
                 // ignore items that mostly produce bad gbid's which crashes client on pickup eventually. 
                 if (itemDefinition.Type == ItemType.Unknown) continue;
                 if (itemDefinition.Name.ToLower().Contains("pvp")) continue;
@@ -114,8 +118,6 @@ namespace Mooege.Core.Common.Items
                          definition.Type, definition.DifficultyMode, definition.SNOId, definition.GBId);
 
             var item = new Item(player.World, definition.SNOId, definition.GBId, definition.Type);
-            if (definition.Type != ItemType.HealthGlobe || definition.Type != ItemType.Gold)
-                player.GroundItems[item.DynamicID] = item;
 
             var attributeCreators = new AttributeCreatorFactory().Create(definition.Type);
             foreach (IItemAttributeCreator creator in attributeCreators)
@@ -130,7 +132,7 @@ namespace Mooege.Core.Common.Items
         public static Item Cook(Player player, string name, int snoId, ItemType type)
         {
             var item = new Item(player.World, snoId, StringHashHelper.HashItemName(name), type);
-            player.GroundItems[item.DynamicID] = item;
+            //player.GroundItems[item.DynamicID] = item;
 
             var attributeCreators = new AttributeCreatorFactory().Create(type);
             foreach (IItemAttributeCreator creator in attributeCreators)
@@ -149,6 +151,24 @@ namespace Mooege.Core.Common.Items
             var attributeMap = new GameAttributeMap();
             attributeMap[GameAttribute.Gold] = amount;
             attributeMap.SendMessage(player.InGameClient, item.DynamicID);
+            return item;
+        }
+
+        public static Item CreateGlobe(Player player, int amount)
+        {
+            int snoid;
+
+            if (amount > 10)
+                amount = 10 + ((amount - 10) * 5);
+
+            if (amount < 50)
+                snoid = 4267;
+            else
+                snoid = 85798;
+
+            var item = Cook(player, "HealthGlobe" + amount, snoid, ItemType.HealthGlobe);
+            item.Attributes[GameAttribute.Health_Globe_Bonus_Health] = amount;
+
             return item;
         }
     }
