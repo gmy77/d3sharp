@@ -270,6 +270,11 @@ namespace Mooege.Core.Common.Toons
                 .Build();
         }
 
+        public void LevelUp()
+        {
+            this.Level++;
+        }
+
         private static ToonClass GetClassByID(int classId)
         {
             switch (classId)
