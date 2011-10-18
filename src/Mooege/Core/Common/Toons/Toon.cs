@@ -103,7 +103,7 @@ namespace Mooege.Core.Common.Toons
         public Toon(string name, int hashCode, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
             : base(StringHashHelper.HashIdentity(name + "#" + hashCode.ToString("D3")))
         {
-            this.SetFields(name, hashCode, GetClassByID(classId), flags, level, account,0);
+            this.SetFields(name, hashCode, GetClassByID(classId), flags, level, account, 0);
         }
 
         public int ClassID
@@ -524,7 +524,7 @@ namespace Mooege.Core.Common.Toons
                 {
                     var query =
                         string.Format(
-                            "INSERT INTO toons (id, name, hashCode, class, gender, level, accountId,timePlayed) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7})",
+                            "INSERT INTO toons (id, name, hashCode, class, gender, level, timePlayed, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7})",
                             this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.TimePlayed, this.Owner.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);

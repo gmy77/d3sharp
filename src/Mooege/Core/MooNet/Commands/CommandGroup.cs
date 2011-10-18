@@ -28,19 +28,28 @@ namespace Mooege.Core.MooNet.Commands
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        public CommandGroupAttribute Attributes;
+        public CommandGroupAttribute Attributes { get; private set; }
 
         private readonly Dictionary<CommandAttribute, MethodInfo> _commands =
             new Dictionary<CommandAttribute, MethodInfo>();
 
-        public CommandGroup()
-        {            
+        public void Register(CommandGroupAttribute attributes)
+        {
+            this.Attributes = attributes;
+            this.RegisterDefaultCommand();
+            this.RegisterCommands();
+        }
+
+        private void RegisterCommands()
+        {
             foreach (var method in this.GetType().GetMethods())
             {
-                object[] attributes = method.GetCustomAttributes(typeof (CommandAttribute), true);
+                object[] attributes = method.GetCustomAttributes(typeof(CommandAttribute), true);
                 if (attributes.Length == 0) continue;
 
-                var attribute = (CommandAttribute) attributes[0];
+                var attribute = (CommandAttribute)attributes[0];
+                if (attribute is DefaultCommand) continue;
+
                 if (!this._commands.ContainsKey(attribute))
                     this._commands.Add(attribute, method);
                 else
@@ -48,32 +57,44 @@ namespace Mooege.Core.MooNet.Commands
             }
         }
 
-        public virtual string Handle(string parameters, MooNetClient invokerClient=null)
-        {
-            if (parameters == string.Empty)
+        private void RegisterDefaultCommand()
+        {           
+            foreach (var method in this.GetType().GetMethods())
             {
-                if (invokerClient != null && this.Attributes.MinUserLevel > invokerClient.Account.UserLevel)  // check for privileges.
-                    return "You don't have enough privileges to invoke that command.";
+                object[] attributes = method.GetCustomAttributes(typeof(DefaultCommand), true);
+                if (attributes.Length == 0) continue;
+                if (method.Name.ToLower() == "fallback") continue;
 
-                return this.Invoke(invokerClient);
+                this._commands.Add(new DefaultCommand(this.Attributes.MinUserLevel), method);
+                return;
             }
 
-            var @params = parameters.Split(' ');
-
-            foreach(var pair in this._commands)
-            {
-                if (@params[0] != pair.Key.Name) continue;
-
-                if (invokerClient != null && this.Attributes.MinUserLevel > invokerClient.Account.UserLevel)  // check for privileges.
-                    return "You don't have enough privileges to invoke that command.";
-
-                return (string)pair.Value.Invoke(this, new object[] { @params, invokerClient });
-            }
-
-            return string.Empty;
+            // set the fallback command if we couldn't find a defined DefaultCommand.
+            this._commands.Add(new DefaultCommand(this.Attributes.MinUserLevel), this.GetType().GetMethod("Fallback"));
         }
 
-        public virtual string GetHelp(string command)
+        public virtual string Handle(string parameters, MooNetClient invokerClient=null)
+        {
+            string[] @params=null;
+            CommandAttribute target = null;
+
+            if(parameters==string.Empty)
+                target = this.GetDefaultSubcommand();
+            else
+            {
+                @params = parameters.Split(' ');
+                target = this.GetSubcommand(@params[0]) ?? this.GetDefaultSubcommand();
+                @params = @params.Skip(1).ToArray();               
+            }
+
+            // check privileges.
+            if (invokerClient != null && target.MinUserLevel > invokerClient.Account.UserLevel)
+                return "You don't have enough privileges to invoke that command.";
+
+            return (string)this._commands[target].Invoke(this, new object[] { @params, invokerClient });
+        }
+
+        public string GetHelp(string command)
         {
             foreach (var pair in this._commands)
             {
@@ -84,15 +105,21 @@ namespace Mooege.Core.MooNet.Commands
             return string.Empty;
         }
 
-        /// <summary>
-        /// Parameterless command group handler.
-        /// </summary>
-        /// <param name="invokerClient">The invoker client if any.</param>
-        /// <returns><see cref="string"/></returns>
-        public virtual string Invoke(MooNetClient invokerClient = null)
+        [DefaultCommand]
+        public virtual string Fallback(string[] @params = null, MooNetClient invokerClient = null)
         {
-            var output = this._commands.Aggregate("Available sub-commands: ", (current, pair) => current + (pair.Key.Name + ", "));
+            var output = this._commands.Where(pair => pair.Key.Name != "fallback").Aggregate("Available subcommands: ", (current, pair) => current + (pair.Key.Name + ", "));
             return output.Substring(0, output.Length - 2) + ".";
+        }
+
+        protected CommandAttribute GetDefaultSubcommand()
+        {
+            return this._commands.Keys.First();
+        }
+
+        protected CommandAttribute GetSubcommand(string name)
+        {
+            return this._commands.Keys.FirstOrDefault(command => command.Name == name);
         }
     }
 }

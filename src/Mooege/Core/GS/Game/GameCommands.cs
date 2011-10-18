@@ -25,50 +25,49 @@ using Mooege.Net.MooNet;
 
 namespace Mooege.Core.GS.Game
 {
-    //[Command("Spawn")]
-    //public class SpawnCommand : Command
-    //{
-    //    public override string Help()
-    //    {
-    //        return "usage: spawn <amount> <actorSNO>";
-    //    }
+    [CommandGroup("spawn", "Spawns a mob.")]
+    public class SpawnCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Spawn(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
 
-    //    public override string Invoke(string parameters, MooNetClient invokerClient = null)
-    //    {
-    //        if (invokerClient == null)
-    //            return "You can not invoke this command from console.";
-            
-    //        if (invokerClient.InGameClient == null) 
-    //            return "You can only invoke this command while ingame.";
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
 
-    //        var player = invokerClient.InGameClient.Player;
-    //        var actorSNO = 6652; /* zombie */
-    //        var amount = 1;
+            var player = invokerClient.InGameClient.Player;
+            var actorSNO = 6652; /* zombie */
+            var amount = 1;
 
-    //        var @params = parameters.Split(' ');
-    //        if(@params.Count()<1)
-    //            return "Invalid arguments. Type 'help spawn' to get help.";
 
-    //        if (!Int32.TryParse(@params[0], out amount))
-    //            amount = 1;
+            if (@params != null)
+            {
+                if (@params.Count() < 1)
+                    return "Invalid arguments. Type 'help spawn' to get help.";
 
-    //        if (amount > 100) amount = 100;
-            
-    //        if(@params.Count()>1)
-    //            if (!Int32.TryParse(@params[1], out actorSNO))
-    //                actorSNO = 6652;
+                if (!Int32.TryParse(@params[0], out amount))
+                    amount = 1;
 
-    //        for(int i=0;i<amount;i++)
-    //        {
-    //            var position = new Vector3D(player.Position.X + (float) RandomHelper.NextDouble()*20f,
-    //                                        player.Position.Y + (float) RandomHelper.NextDouble()*20f, 
-    //                                        player.Position.Z);
+                if (amount > 100) amount = 100;
 
-    //            player.World.SpawnMob(player, actorSNO, position);
-    //        }
+                if (@params.Count() > 1)
+                    if (!Int32.TryParse(@params[1], out actorSNO))
+                        actorSNO = 6652;
+            }
 
-    //        return string.Format("Spawned {0} mobs with ActorSNO: {1}", amount, actorSNO);
-    //    }
-    //}
+            for (int i = 0; i < amount; i++)
+            {
+                var position = new Vector3D(player.Position.X + (float) RandomHelper.NextDouble()*20f,
+                                            player.Position.Y + (float) RandomHelper.NextDouble()*20f,
+                                            player.Position.Z);
+
+                player.World.SpawnMob(player, actorSNO, position);
+            }
+
+            return string.Format("Spawned {0} mobs with ActorSNO: {1}", amount, actorSNO);
+        }
+    }   
 }
 

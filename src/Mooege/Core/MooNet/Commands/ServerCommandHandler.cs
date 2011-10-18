@@ -35,7 +35,7 @@ namespace Mooege.Core.MooNet.Commands
         public static CommandHandlerAccount Instance { get { return _instance; } }
 
         private CommandHandlerAccount()
-            : base(0, "server@mooege", new byte[] {}, new byte[] {})
+            : base(0, "server@mooege", new byte[] {}, new byte[] {}, UserLevels.User)
         {
             this.LoggedInClient = new CommandHandlerClient(this);
         }

@@ -49,7 +49,7 @@ namespace Mooege.Core.MooNet.Commands
                     Logger.Warn("There exists an already registered command group named '{0}'.", groupAttribute.Name);
 
                 var commandGroup = (CommandGroup) Activator.CreateInstance(type);
-                commandGroup.Attributes = groupAttribute;
+                commandGroup.Register(groupAttribute);
                 CommandGroups.Add(groupAttribute, commandGroup);                   
             }
         }
@@ -147,7 +147,7 @@ namespace Mooege.Core.MooNet.Commands
         [CommandGroup("commands","Lists available commands for your user-level.")]
         public class CommandsCommandGroup : CommandGroup
         {
-            public override string Invoke(MooNetClient invokerClient = null)
+            public override string Fallback(string[] parameters = null, MooNetClient invokerClient = null)
             {
                 var output = CommandGroups.Aggregate("Available commands: ", (current, pair) => current + (pair.Key.Name + ", "));
                 output = output.Substring(0, output.Length - 2) + ".";
@@ -158,7 +158,7 @@ namespace Mooege.Core.MooNet.Commands
         [CommandGroup("help", "Oh no, we forgot to add a help to text to help command itself!")]
         public class HelpCommandGroup : CommandGroup
         {
-            public override string Invoke(MooNetClient invokerClient = null)
+            public override string Fallback(string[] parameters = null, MooNetClient invokerClient = null)
             {
                 return "usage: help <command>";
             }
@@ -166,7 +166,7 @@ namespace Mooege.Core.MooNet.Commands
             public override string Handle(string parameters, MooNetClient invokerClient = null)
             {
                 if (parameters == string.Empty)
-                    return this.Invoke(invokerClient);
+                    return this.Fallback();
 
                 var @params = parameters.Split(' ');
                 var group = @params[0];
