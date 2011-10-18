@@ -16,21 +16,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Commands
 {
-    [AttributeUsage(AttributeTargets.Method)]
-    public class ServerCommandAttribute : Attribute
+    /// <summary>
+    /// Interface for commands
+    /// </summary>
+    public class Command
     {
-        public string Command { get; private set; }
-
-        public ServerCommandAttribute(string command)
-        {
-            this.Command = command.ToLower();
-        }
+        public virtual string Help() { return string.Empty; }
+        public virtual string Invoke(string parameters, MooNetClient invokerClient = null) { return string.Empty; }
     }
 }

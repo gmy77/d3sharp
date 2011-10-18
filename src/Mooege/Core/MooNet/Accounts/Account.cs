@@ -264,5 +264,10 @@ namespace Mooege.Core.MooNet.Accounts
                 Logger.ErrorException(e, "UpdatePassword()");
             }
         }
+
+        public override string ToString()
+        {
+            return String.Format("{{ Account: {0} [lowId: {1}] }}", this.Email, this.BnetAccountID.Low);
+        }
     }
 }

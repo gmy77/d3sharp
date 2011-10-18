@@ -34,10 +34,7 @@ namespace Mooege.Core.GS.Skills
         {
             this.@Class = @class;
 
-            // this.ActiveSkills = Skills.GetActiveSkillsByClass(this.@Class).Take(6).ToArray(); - should be normally this way, but as we want a mob-spawn we hack it as below;
-            var hackedSkills = Skills.GetAllActiveSkillsByClass(this.@Class).Take(5).ToList();
-            hackedSkills.Add((int) Skills.Monk.SpiritSpenders.BlindingFlash);
-            this.ActiveSkills = hackedSkills.ToArray();
+            this.ActiveSkills = Skills.GetAllActiveSkillsByClass(this.@Class).Take(6).ToArray();
 
             this.HotBarSkills = new HotbarButtonData[9] {
                 new HotbarButtonData { SNOSkill = ActiveSkills[4], ItemGBId = -1 }, // left-click

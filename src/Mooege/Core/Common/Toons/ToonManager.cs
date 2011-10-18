@@ -16,13 +16,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using Mooege.Common;
 using Mooege.Core.Common.Storage;
 using Mooege.Core.MooNet.Accounts;
-using System;
+using Mooege.Core.MooNet.Commands;
 
 namespace Mooege.Core.Common.Toons
 {
@@ -36,6 +37,8 @@ namespace Mooege.Core.Common.Toons
 
         static ToonManager()
         {
+            Toons.Add(CommandHandlerToon.Instance.PersistentID, CommandHandlerToon.Instance); // Hackish command handler toon that we can send server commands. /raist.
+
             LoadToons();
         }
 
@@ -53,6 +56,11 @@ namespace Mooege.Core.Common.Toons
         public static Dictionary<ulong, Toon> GetToonsForAccount(Account account)
         {
             return Toons.Where(pair => pair.Value.Owner != null).Where(pair => pair.Value.Owner.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
+        }
+
+        public static int TotalToons
+        {
+            get { return Toons.Count; }
         }
 
         //Method only used when creating a Toon for the first time, ambiguous method name - Tharuler
@@ -108,7 +116,7 @@ namespace Mooege.Core.Common.Toons
             var reader = cmd.ExecuteReader();
             if (!reader.HasRows) return GenerateHashCodeNotInList(null);
 
-            HashSet<int> codes = new HashSet<int>();
+            var codes = new HashSet<int>();
             while (reader.Read())
             {
                 var hashCode = reader.GetInt32(0);

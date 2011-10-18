@@ -377,5 +377,10 @@ namespace Mooege.Core.MooNet.Channels
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return String.Format("{{ Channel: [id: {0}] [owner: {1}] }}", this.DynamicId, this.Owner.CurrentToon);
+        }
     }
 }
