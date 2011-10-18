@@ -38,6 +38,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             switch(Message.Field5)
             {
                 case 0:
+                    yield return WaitSeconds(0.1f);
                     effectSNO = 71921;
                     reachLength = 13;
                     reachThickness = 6;
@@ -48,12 +49,12 @@ namespace Mooege.Core.GS.Powers.Implementations
                     reachThickness = 8;
                     break;
                 case 2:
+                    yield return WaitSeconds(0.3f);
                     effectSNO = 72331;
-                    reachLength = 16;
+                    reachLength = 18;
                     reachThickness = 8;
                     break;
                 default:
-                    // TODO: get some logging in power implementations...
                     yield break;
             }
 
@@ -61,7 +62,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             TargetPosition = PowerUtils.ProjectAndTranslate2D(TargetPosition, User.Position,
                                                    User.Position, reachLength);
 
-            User.PlayEffectToActor(effectSNO, SpawnProxy(TargetPosition));
+            User.PlayEffect(effectSNO);
 
             foreach (Actor actor in GetTargetsInRange(User.Position, reachLength + 10f))
             {
@@ -84,20 +85,24 @@ namespace Mooege.Core.GS.Powers.Implementations
             switch (Message.Field5)
             {
                 case 0:
+                    yield return WaitSeconds(0.1f);
+                    User.PlayEffect(143570); // cast
+                    User.PlayEffect(96176); // projectile
+                    MeleeStageHit();
+                    break;
                 case 1:
-                    User.PlayEffectToActor(96176, SpawnProxy(TargetPosition));
-                    if (CanHitMeleeTarget(Target))
-                    {
-                        Target.PlayHitEffect(2, User);
-                        Damage(Target, 25f, 0);
-                    }
+                    User.PlayEffect(143561); // cast
+                    User.PlayEffect(96176); // projectile
+                    MeleeStageHit();
                     break;
                 case 2:
+                    yield return WaitSeconds(0.3f);
                     // put target position a little bit in front of the monk. represents the lightning ball
                     TargetPosition = PowerUtils.ProjectAndTranslate2D(TargetPosition, User.Position,
                                         User.Position, 8f);
 
-                    User.PlayEffectToActor(96178, SpawnProxy(TargetPosition));
+                    User.PlayEffect(143566); // cast
+                    User.PlayEffect(96178); // ball of lightning
 
                     foreach (Actor actor in GetTargetsInRange(TargetPosition, 7f))
                     {
@@ -105,11 +110,18 @@ namespace Mooege.Core.GS.Powers.Implementations
                         Damage(actor, 25f, 0);
                     }
                     break;
-                default:
-                    yield break;
             }
 
             yield break;
+        }
+
+        private void MeleeStageHit()
+        {
+            if (CanHitMeleeTarget(Target))
+            {
+                Target.PlayHitEffect(2, User);
+                Damage(Target, 25f, 0);
+            }
         }
     }
 
@@ -146,12 +158,23 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            if (Message.Field5 == 0)
-                User.PlayEffectToActor(18987, SpawnProxy(TargetPosition));
-            else if (Message.Field5 == 1)
-                User.PlayEffectToActor(18988, SpawnProxy(TargetPosition));
-            else if (Message.Field5 == 2)
-                User.PlayEffectToActor(96519, SpawnProxy(TargetPosition));
+            int effectSNO;
+            switch (Message.Field5)
+            {
+                case 0:
+                    effectSNO = 18987;
+                    break;
+                case 1:
+                    effectSNO = 18988;
+                    break;
+                case 2:
+                    effectSNO = 96519;
+                    break;
+                default:
+                    yield break;
+            }
+
+            User.PlayEffect(effectSNO);
 
             if (Message.Field5 != 2)
             {
@@ -163,7 +186,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
             else
             {
-                IList<Actor> hits = GetTargetsInRange(User.Position, 10);
+                IList<Actor> hits = GetTargetsInRange(User.Position, 10f);
                 foreach (Actor hit in hits)
                 {
                     hit.PlayHitEffect(6, User);
@@ -179,12 +202,23 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            if (Message.Field5 == 0)
-                User.PlayEffectToActor(142471, SpawnProxy(TargetPosition));
-            else if (Message.Field5 == 1)
-                User.PlayEffectToActor(142471, SpawnProxy(TargetPosition));
-            else if (Message.Field5 == 2)
-                User.PlayEffectToActor(142473, SpawnProxy(TargetPosition));
+            int effectSNO;
+            switch (Message.Field5)
+            {
+                case 0:
+                    effectSNO = 142471;
+                    break;
+                case 1:
+                    effectSNO = 142471;
+                    break;
+                case 2:
+                    effectSNO = 142473;
+                    break;
+                default:
+                    yield break;
+            }
+
+            User.PlayEffect(effectSNO);
 
             if (CanHitMeleeTarget(Target))
             {
@@ -201,6 +235,30 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
+            int effectSNO;
+            switch (Message.Field5)
+            {
+                case 0:
+                    effectSNO = 196981;
+                    break;
+                case 1:
+                    effectSNO = 196983;
+                    break;
+                case 2:
+                    effectSNO = 196984;
+                    break;
+                default:
+                    yield break;
+            }
+
+            User.PlayEffect(effectSNO);
+
+            if (CanHitMeleeTarget(Target))
+            {
+                Target.PlayHitEffect(0, User);
+                Damage(Target, 25f, 0);
+            }
+
             yield break;
         }
     }

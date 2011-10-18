@@ -32,10 +32,10 @@ namespace Mooege.Core.GS.Powers
 
     public class TickSecondsTimer : TickRelativeTimer
     {
-        const float TicksPerSecond = 60; // Game currently doesn't expose the tick increment rate
+        const float TickRate = 6; // Game currently doesn't expose the tick increment rate
 
         public TickSecondsTimer(Game.Game game, float seconds)
-            : base(game, (int)(TicksPerSecond * seconds))
+            : base(game, (int)(1000f / game.UpdateFrequency * TickRate * seconds))
         {
         }
     }

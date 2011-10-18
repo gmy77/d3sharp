@@ -66,13 +66,13 @@ namespace Mooege.Core.GS.Powers.Implementations
             else
             {
                 IList<Actor> targets = new List<Actor>() { Target };
-                var bounce_target = GetTargetsInRange(TargetPosition, 15f, 1).FirstOrDefault();
-                if (bounce_target != null)
+                while (targets.Count < 3) // original target + bounce 2 times
                 {
-                    targets.Add(bounce_target);
-                    var bounce_target2 = GetTargetsInRange(bounce_target.Position, 15f, 1).FirstOrDefault();
-                    if (bounce_target2 != null)
-                        targets.Add(bounce_target2);
+                    var bounce = GetTargetsInRange(targets.Last().Position, 15f, 3).FirstOrDefault(t => !targets.Contains(t));
+                    if (bounce != null)
+                        targets.Add(bounce);
+                    else
+                        break;
                 }
 
                 Actor ropeSource = User;
@@ -152,7 +152,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     if (PowerUtils.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
                     {  
                         actor.PlayHitEffect(32, User);
-                        actor.PlayEffectToActor(18793, actor);
+                        actor.PlayEffect(18793);
                         Damage(actor, 10, 0);
                     }
                 }
@@ -177,12 +177,13 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Run()
         {
             yield return WaitSeconds(0.350f); // wait for wizard to land?
-            User.PlayEffectToActor(19356, SpawnProxy(User.Position));
+            User.PlayEffect(19356);
 
             IList<Actor> hits = GetTargetsInRange(User.Position, 20);
             foreach (Actor actor in hits)
             {
                 Knockback(actor, 5f);
+                actor.AddStunBuff(2000f);
                 Damage(actor, 20, 0);
             }
             yield break;
@@ -201,13 +202,13 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Actor targetProxy = GetChanneledProxy(0, TargetPosition);
                 Actor userProxy = GetChanneledProxy(1, User.Position);
                 userProxy.FacingTranslate(TargetPosition);
-                userProxy.PlayEffectToActor(97385, userProxy);
+                userProxy.PlayEffect(97385);
                 userProxy.PlayEffectToActor(134442, targetProxy);
             }
 
             if (!ThrottledCast)
             {
-                yield return WaitSeconds(0.8f);
+                yield return WaitSeconds(0.9f);
                 // update proxy target location laggy
                 GetChanneledProxy(0, TargetPosition);
 
@@ -246,12 +247,8 @@ namespace Mooege.Core.GS.Powers.Implementations
             IList<Actor> hits = GetTargetsInRange(User.Position, 18); //FIXME: is the range correct? what units?
             foreach (Actor actor in hits)
             {
-                if (actor is Monster)
-                {
-                    Monster m = actor as Monster;
-                    m.AddFreezeBuff(4000); //freeze for 4 sec, TODO: use some level to increase duration or something
-                    Damage(actor, Rand.Next(2, 4+1), 0); //does 2-4 damage, TODO: use player DPS or something
-                }                
+                actor.AddFreezeBuff(4000); //freeze for 4 sec, TODO: use some level to increase duration or something
+                Damage(actor, Rand.Next(2, 4+1), 0); //does 2-4 damage, TODO: use player DPS or something
             }
 
             yield break;
@@ -291,7 +288,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             SpawnEffect(Wizard_Blizzard, TargetPosition);
 
-
             //do damage for 3 seconds
             const int blizzard_duration = 3;
 
@@ -300,12 +296,8 @@ namespace Mooege.Core.GS.Powers.Implementations
                 IList<Actor> hits = GetTargetsInRange(TargetPosition, 18); //FIXME: is the range correct? what units?
                 foreach (Actor actor in hits)
                 {
-                    if (actor is Monster)
-                    {
-                        Monster m = actor as Monster;
-                        m.AddChillBuff(1000); //FIXME: does blizzard slows the monsters?
-                        Damage(actor, Rand.Next(12, 18+1), 0);
-                    }
+                    actor.AddChillBuff(1000); //FIXME: does blizzard slows the monsters?
+                    Damage(actor, Rand.Next(12, 18+1), 0);
                 }
 
                 yield return WaitSeconds(1f);
