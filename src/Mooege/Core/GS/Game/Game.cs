@@ -52,7 +52,7 @@ namespace Mooege.Core.GS.Game
 
         private readonly WorldGenerator _worldGenerator;
 
-        public readonly int UpdateFrequency=100;
+        public readonly int UpdateFrequency=100; // updates game every 100ms - still not sure if we should be updating this frequent / raist.
         private int _tickCounter;
         
         public int Tick
@@ -85,7 +85,7 @@ namespace Mooege.Core.GS.Game
         {
             while (true)
             {
-                Interlocked.Add(ref this._tickCounter, 20);
+                Interlocked.Add(ref this._tickCounter, 6); // +6 ticks per 100ms. Verified by setting LogoutTickTimeMessage.Ticks to 600 which eventually renders a 10 sec logout timer on client. /raist
 
                 // only update worlds with active players in it - so mob's brain() in empty worlds doesn't get called and take actions for nothing. /raist.
                 foreach (var pair in this._worlds.Where(pair => pair.Value.HasPlayersIn)) 

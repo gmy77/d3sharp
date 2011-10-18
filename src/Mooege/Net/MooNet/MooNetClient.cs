@@ -26,6 +26,7 @@ using Mooege.Common.Helpers;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Channels;
+using Mooege.Core.MooNet.Commands;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet.Packets;
@@ -33,7 +34,7 @@ using Mooege.Net.MooNet.RPC;
 
 namespace Mooege.Net.MooNet
 {
-    public sealed class MooNetClient : IClient, IRpcChannel
+    public class MooNetClient : IClient, IRpcChannel
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -119,8 +120,8 @@ namespace Mooege.Net.MooNet
         public void MakeTargetedRPC(RPCObject targetObject, Action rpc)
         {
             this._listenerId = this.GetRemoteObjectID(targetObject.DynamicId);
-            Logger.Warn("[RPC] Targeted object: {0} [localId: {1}, remoteId: {2}].", targetObject.ToString(),
-                         targetObject.DynamicId, this._listenerId);
+            Logger.Trace("[RPC: {0}] Method: {1} Target: {2} [localId: {3}, remoteId: {4}].", this, rpc.Method,
+                         targetObject.ToString(), targetObject.DynamicId, this._listenerId);
 
             rpc();
         }
@@ -133,7 +134,7 @@ namespace Mooege.Net.MooNet
         public void MakeRPCWithListenerId(ulong listenerId, Action rpc)
         {
             this._listenerId = listenerId;
-            Logger.Trace("[RPC] Targeted listenerId: {0}.", this._listenerId);
+            Logger.Trace("[RPC: {0}] Method: {1} Target: (listenerId) {2}.", this, rpc.Method, this._listenerId);
 
             rpc();
         }
@@ -145,7 +146,7 @@ namespace Mooege.Net.MooNet
         public void MakeRPC(Action rpc)
         {
             this._listenerId = 0;
-            Logger.Trace("[RPC] with no targets.");
+            Logger.Trace("[RPC: {0}] Method: {1} Target: N/A", this, rpc.Method);
             rpc();
         }
 
@@ -225,6 +226,46 @@ namespace Mooege.Net.MooNet
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return String.Format("{{ Client: {0} }}", this.Account==null ? "??" : this.Account.Email);
+        }
+
+        /// <summary>
+        /// Sends a message to given client. Can be used for sending command replies.
+        /// </summary>
+        /// <param name="text">Message to send</param>
+        public void SendMessage(string text)
+        {
+            if (text.Trim() == string.Empty) return;
+
+            var message = bnet.protocol.channel.Message.CreateBuilder()
+                .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("message_text")
+                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(text).Build()).Build()).Build();
+
+            var notification = bnet.protocol.channel.SendMessageNotification.CreateBuilder().SetAgentId(this.CurrentToon.BnetEntityID)
+                .SetMessage(message).SetRequiredPrivileges(0).
+                Build();
+
+            this.MakeTargetedRPC(this.CurrentChannel, () =>
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(this).NotifySendMessage(null, notification, callback => { }));
+        }
+
+        public void SendWhisper(string text)
+        {
+            if (text.Trim() == string.Empty) return;
+
+            var notification = bnet.protocol.notification.Notification.CreateBuilder()
+                .SetTargetId(this.CurrentToon.BnetEntityID)
+                .SetType("WHISPER")
+                .SetSenderId(CommandHandlerAccount.Instance.LoggedInClient.CurrentToon.BnetEntityID)
+                .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("whisper")
+                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(text).Build()).Build()).Build();
+
+            this.MakeRPC(() => bnet.protocol.notification.NotificationListener.CreateStub(this).
+                OnNotificationReceived(null, notification, callback => { }));
+        }
 
         private Channel _currentChannel;
         public Channel CurrentChannel

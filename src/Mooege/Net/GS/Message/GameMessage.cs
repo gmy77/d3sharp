@@ -35,21 +35,18 @@ namespace Mooege.Net.GS.Message
 
         static GameMessage()
         {
-            Type[] types = Assembly.GetExecutingAssembly().GetTypes();
-
-            foreach (Type type in types)
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                if (type.IsSubclassOf(typeof(GameMessage)))
+                if (!type.IsSubclassOf(typeof (GameMessage))) continue;
+
+                var attributes = (MessageAttribute[])type.GetCustomAttributes(typeof(MessageAttribute), true);
+                if (attributes.Length == 0) continue;
+                foreach (MessageAttribute attribute in attributes)
                 {
-                    var attributes = (MessageAttribute[])type.GetCustomAttributes(typeof(MessageAttribute), true);
-                    if (attributes.Length == 0) continue;
-                    foreach (MessageAttribute attribute in attributes)
+                    foreach (var opcode in attribute.Opcodes)
                     {
-                        foreach (var opcode in attribute.Opcodes)
-                        {
-                            MessageTypes.Add(opcode, type);
-                            MessageConsumers.Add(opcode, attribute.Consumer);
-                        }
+                        MessageTypes.Add(opcode, type);
+                        MessageConsumers.Add(opcode, attribute.Consumer);
                     }
                 }
             }

@@ -52,7 +52,7 @@ namespace Mooege.Core.Common.Toons
         public ToonFlags Flags { get; private set; }
         public byte Level { get; private set; }
         public D3.Hero.Digest Digest { get; private set; }
-        public D3.Hero.VisualEquipment Equipment { get; private set; }
+        public D3.Hero.VisualEquipment Equipment { get; protected set; }
         public AwayStatus AwayStatus { get; private set; }
 
         public Account Owner { get; set; }
@@ -232,72 +232,16 @@ namespace Mooege.Core.Common.Toons
             this.Owner = owner;
 
             var visualItems = new[]
-                            {
-                                // Head
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Chest
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Feet
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Hands
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Weapon (1)
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Weapon (2)
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Shoulders
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-
-                                // Legs
-                                D3.Hero.VisualItem.CreateBuilder()
-                                    .SetGbid(0)
-                                    .SetDyeType(0)
-                                    .SetItemEffectType(0)
-                                    .SetEffectLevel(0)
-                                    .Build(),
-                            };
-
+            {                                
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Head
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Chest
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Feet
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Hands
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Weapon (1)
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Weapon (2)
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Shoulders
+                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Legs
+            };
 
             this.Equipment = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
 
@@ -423,10 +367,22 @@ namespace Mooege.Core.Common.Toons
             switch ((FieldKeyHelper.Program)field.Key.Program)
             {
                 case FieldKeyHelper.Program.D3:
-                    if (field.Key.Group == 4)
+                    if (field.Key.Group == 4 && field.Key.Field == 1)
+                    {   
+                        //don't know what to do with this yet, so far I have observed that the update value is always equal to the toon owner's current channel /dustinconrad
+                        if (field.Value.HasMessageValue && !field.Value.MessageValue.Equals(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()))
+                        {
+                            Logger.Warn("Toon owner's logged-in client channel is not equal to the channel specified in the update message");
+                        }
+                    }
+                    else if (field.Key.Group == 4 && field.Key.Field == 2)
                     {
-                        //Group 4 fields 1, 2, and 3 get spammed whenever a client logs in or out.
-                        //catching it in this if to stop Logger.Warn spam.
+                        //catch to stop Logger.Warn spam on client start and exit
+                        // should D3.4.2 int64 Current screen (0=in-menus, 1=in-menus, 3=in-menus); see ScreenStatus sent to ChannelService.UpdateChannelState call /raist
+                    }
+                    else if (field.Key.Group == 4 && field.Key.Field == 3)
+                    {
+                        //don't know what to do with this yet, looks to be the ToonFlags of the party leader/inviter /dustinconrad
                     }
                     else
                     {
@@ -533,7 +489,7 @@ namespace Mooege.Core.Common.Toons
 
         public override string ToString()
         {
-            return String.Format("Name: {0} ID: {1}:{2}", this.Name, this.BnetEntityID.High, this.BnetEntityID.Low);
+            return String.Format("{{ Toon: {0} [lowId: {1}] }}", this.Name, this.BnetEntityID.Low);
         }
 
         public void SaveToDB()
