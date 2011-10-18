@@ -100,10 +100,10 @@ namespace Mooege.Core.Common.Toons
             this.SetFields(name, hashCode, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistentID((ulong)accountId),timePlayed);
         }
 
-        public Toon(string name, int hashCode, int classId, ToonFlags flags, byte level, Account account,uint timePlayed) // Toon with **newly generated** persistent ID
+        public Toon(string name, int hashCode, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
             : base(StringHashHelper.HashIdentity(name + "#" + hashCode.ToString("D3")))
         {
-            this.SetFields(name, hashCode, GetClassByID(classId), flags, level, account,timePlayed);
+            this.SetFields(name, hashCode, GetClassByID(classId), flags, level, account,0);
         }
 
         public int ClassID

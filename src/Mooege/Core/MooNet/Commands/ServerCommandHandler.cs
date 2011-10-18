@@ -63,7 +63,7 @@ namespace Mooege.Core.MooNet.Commands
         public static CommandHandlerToon Instance { get { return _instance; } }
 
         private CommandHandlerToon()
-            : base("Server", 0, 0x1D4681B1, ToonFlags.Female, 99, CommandHandlerAccount.Instance,0)
+            : base("Server", 0, 0x1D4681B1, ToonFlags.Female, 99, CommandHandlerAccount.Instance)
         {
             this.Owner = CommandHandlerAccount.Instance;
             this.SetShinyEquipment(); // server needs shiny equipment! /raist.
