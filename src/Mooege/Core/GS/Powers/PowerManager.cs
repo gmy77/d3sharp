@@ -87,7 +87,9 @@ namespace Mooege.Core.GS.Powers
             if (targetPosition == null)
                 targetPosition = new Vector3D(0, 0, 0);
 
-            if (powerSNO == Skills.Skills.Monk.SpiritSpenders.BlindingFlash) // HACK: intercepted to use for spawning test mobs
+            // HACK: intercept hotbar skill 1 to always spawn test mobs.
+            if (user is Player.Player &&
+                powerSNO == ((Player.Player)user).SkillSet.HotBarSkills[4].SNOSkill) 
             {
                 PowersTestMonster.CreateTestMonsters(user.World, user.Position, 10);
             }
