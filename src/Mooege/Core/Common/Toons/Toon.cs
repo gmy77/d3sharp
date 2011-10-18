@@ -48,10 +48,11 @@ namespace Mooege.Core.Common.Toons
         public string Name { get; private set; }
         public int HashCode { get; set; }
         public uint TimePlayed { get; set; }
+        public uint LoginTime { get; set; }
         public string HashCodeString { get; private set; }
         public ToonClass Class { get; private set; }
         public ToonFlags Flags { get; private set; }
-        public byte Level { get; private set; }
+        public byte Level { get; set; }
         public D3.Hero.Digest Digest { get; private set; }
         public D3.Hero.VisualEquipment Equipment { get; private set; }
         public AwayStatus AwayStatus { get; private set; }
@@ -303,6 +304,11 @@ namespace Mooege.Core.Common.Toons
 
             this.Equipment = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
 
+            this.UpdateFields();
+        }
+
+        public void UpdateFields()
+        {
             this.Digest = D3.Hero.Digest.CreateBuilder().SetVersion(891)
                 .SetHeroId(this.D3EntityID)
                 .SetHeroName(this.Name)
@@ -316,7 +322,7 @@ namespace Mooege.Core.Common.Toons
                 .SetHighestUnlockedDifficulty(0)
                 .SetLastPlayedQuest(-1)
                 .SetLastPlayedQuestStep(-1)
-                .SetTimePlayed(timePlayed)
+                .SetTimePlayed(this.TimePlayed)
                 .Build();
         }
 
