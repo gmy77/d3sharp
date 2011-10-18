@@ -36,7 +36,7 @@ namespace Mooege.Core.GS.Game
         public override string Invoke(string parameters, MooNetClient invokerClient = null)
         {
             if (invokerClient == null)
-                return "You can not invoked this command from console.";
+                return "You can not invoke this command from console.";
             
             if (invokerClient.InGameClient == null) 
                 return "You can only invoke this command while ingame.";
