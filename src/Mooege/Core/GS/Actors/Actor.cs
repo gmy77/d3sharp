@@ -226,11 +226,12 @@ namespace Mooege.Core.GS.Actors
             };
 
             // normaly when we send acdenterknown for players own actor it's set to 0x09. But while sending the acdenterknown for another player's actor we should set it to 0x01. /raist
-            if ((this is Player.Player) && this != player) 
-                msg.Field2 = 0x01; 
+            if ((this is Player.Player) && this != player)
+                msg.Field2 = 0x01;
 
             player.InGameClient.SendMessage(msg);
 
+            /*
             // Affixes of the actor, two messages with 1 and 2,i guess prefix and suffix so it does not
             // make sense to send the same list twice. server does not do this
             var affixGbis = new int[AffixList.Count];
@@ -252,6 +253,7 @@ namespace Mooege.Core.GS.Actors
                 Field1 = 0x00000002,
                 aAffixGBIDs = affixGbis,
             });
+             */
 
             // Collision Flags
             player.InGameClient.SendMessage(new ACDCollFlagsMessage()

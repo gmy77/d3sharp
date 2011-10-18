@@ -17,13 +17,17 @@
  */
 
 using System.Collections.Generic;
+using System.Reflection;
 using Mooege.Common;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Map;
 using Mooege.Core.Common.Items.ItemCreation;
 using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Effect;
+using Mooege.Common.Helpers;
+using Mooege.Net.GS.Message;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
 
@@ -33,9 +37,9 @@ namespace Mooege.Core.Common.Items
     {
         Unknown, Helm, Gloves, Boots, Belt, Shoulders, Pants, Bracers, Shield, Quiver, Orb,
         Axe_1H, Axe_2H, CombatStaff_2H, Staff, Dagger, Mace_1H, Mace_2H, Sword_1H,
-        Sword_2H, Crossbow, Bow, Spear, Polearm, Wand, Ring, FistWeapon_1H, ThrownWeapon, ThrowingAxe, ChestArmor, 
-        HealthPotion, Gold, HealthGlobe, Dye, Elixir, Charm, Scroll, SpellRune, Rune, 
-        Amethyst, Emarald, Ruby, Emerald, Topaz, Skull, Backpack, Potion, Amulet, Scepter, Rod, Journal        
+        Sword_2H, Crossbow, Bow, Spear, Polearm, Wand, Ring, FistWeapon_1H, ThrownWeapon, ThrowingAxe, ChestArmor,
+        HealthPotion, Gold, HealthGlobe, Dye, Elixir, Charm, Scroll, SpellRune, Rune,
+        Amethyst, Emarald, Ruby, Emerald, Topaz, Skull, Backpack, Potion, Amulet, Scepter, Rod, Journal
 
         // Not working at the moment:
         // ThrownWeapon, ThrowingAxe - does not work because there are no snoId in Actors.txt. Do they actually drop in the D3 beta? /angerwin?
@@ -110,6 +114,7 @@ namespace Mooege.Core.Common.Items
             {
                 creator.CreateAttributes(this);
             }
+            AffixGenerator.Generate(this, 2);
 
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
@@ -174,6 +179,18 @@ namespace Mooege.Core.Common.Items
                 );
         }
 
+        public static bool IsArmor(ItemType itemType)
+        {
+            return (itemType == ItemType.Helm
+                || itemType == ItemType.Gloves
+                || itemType == ItemType.Boots
+                || itemType == ItemType.Belt
+                || itemType == ItemType.Shoulders
+                || itemType == ItemType.Pants
+                || itemType == ItemType.Bracers
+                );
+        }
+
         public static bool Is2H(ItemType itemType)
         {
             return (itemType == ItemType.Sword_2H
@@ -218,6 +235,79 @@ namespace Mooege.Core.Common.Items
                 ActorID = this.DynamicID,
                 Field1 = 0x00000027,
             });
+
+            var affixGbis = new int[AffixList.Count];
+            for (int i = 0; i < AffixList.Count; i++)
+            {
+                affixGbis[i] = AffixList[i].AffixGbid;
+            }
+
+            player.InGameClient.SendMessage(new AffixMessage()
+            {
+                ActorID = DynamicID,
+                Field1 = 0x00000001,
+                aAffixGBIDs = affixGbis,
+            });
+
+            player.InGameClient.SendMessage(new AffixMessage()
+            {
+                ActorID = DynamicID,
+                Field1 = 0x00000002,
+                aAffixGBIDs = new int[0],
+            });
+
+            /*
+            player.InGameClient.SendMessage(new AffixMessage()
+            {
+                ActorID = DynamicID,
+                Field1 = 0x00000001,
+                aAffixGBIDs = new int[] { StringHashHelper.HashItemName("AttPrec I") },
+
+            });
+
+            player.InGameClient.SendMessage(new AffixMessage()
+            {
+                ActorID = DynamicID,
+                Field1 = 0x00000002,
+                aAffixGBIDs = new int[] { },
+            });
+
+            GameAttributeI attr = (GameAttributeI)typeof(GameAttribute).GetField("Attack", BindingFlags.Static).GetValue(null);
+            Attributes[attr] = 2;
+
+            ItemRandomHelper ir;
+            uint t;
+            string s;
+
+            s = "";
+            ir = new ItemRandomHelper(Attributes[GameAttribute.Seed]);
+            for (int i = 0; i < 0; i++ )
+                t = ir.Next();
+            ir.ReinitSeed();
+            for (int i = 0; i < 10; i++ )
+                s += (ir.Next() % 6 + 1) + ", ";
+            Logger.Debug(s);
+
+            s = "";
+            ir = new ItemRandomHelper(Attributes[GameAttribute.Seed]);
+            for (int i = 0; i < 1; i++)
+                t = ir.Next();
+            ir.ReinitSeed();
+            for (int i = 0; i < 10; i++)
+                s += (ir.Next() % 6 + 1) + ", ";
+            Logger.Debug(s);
+
+            s = "";
+            ir = new ItemRandomHelper(Attributes[GameAttribute.Seed]);
+            for (int i = 0; i < 2; i++)
+                t = ir.Next();
+            ir.ReinitSeed();
+            for (int i = 0; i < 10; i++)
+                s += (ir.Next() % 6 + 1) + ", ";
+            Logger.Debug(s);
+
+            Logger.Debug("========================");
+             */
 
              //Why updating with the same sno?
             /*player.InGameClient.SendMessage(new ACDInventoryUpdateActorSNO()

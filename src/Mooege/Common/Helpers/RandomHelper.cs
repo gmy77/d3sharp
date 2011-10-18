@@ -68,4 +68,34 @@ namespace Mooege.Common.Helpers
             return values[_random.Next(size)];
         }
     }
+
+    public class ItemRandomHelper
+    {
+        uint a;
+        uint b;
+        public ItemRandomHelper(int seed)
+        {
+            a = (uint)seed;
+            b = 666;
+        }
+
+        public void ReinitSeed()
+        {
+            b = 666;
+        }
+
+        public uint Next()
+        {
+            ulong temp = 1791398085UL * (ulong)a + (ulong)b;
+            a = (uint)temp;
+            b = (uint)(temp >> 32);
+
+            return (uint)a;
+        }
+
+        public uint Next(int min, int max)
+        {
+            return (uint)min + Next() % (uint)(max - min + 1);
+        }
+    }
 }
