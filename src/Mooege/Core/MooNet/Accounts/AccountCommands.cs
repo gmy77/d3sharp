@@ -22,92 +22,107 @@ using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Accounts
 {
-    [Command("AddUser")]
-    public class AddUserCommand : Command
+    [CommandGroup("Account", "I couldn't come with a fucking help-text /raist")]
+    public class AccountCommandGroup: CommandGroup
     {
-        public override string Help()
+        public override string Invoke(MooNetClient invokerClient = null)
         {
-            return "usage: adduser email password";
+            return base.Invoke(invokerClient);
         }
 
-        public override string Invoke(string parameters, MooNetClient invokerClient = null)
+        [Command("add", "Allows you to add a new user account. Usage: account add <email> <password> [userlevel]", Account.UserLevels.GM)]
+        public string Add(string parameters, MooNetClient invokerClient=null)
         {
-            var @params = parameters.Split(' ');
-            if (@params.Count() < 2)
-                return "Invalid arguments. Type 'help adduser' to get help.";
-
-            var email = @params[0];
-            var password = @params[1];
-
-            if (!email.Contains('@'))
-                return string.Format("'{0}' is not a valid email address.", email);
-
-            if (password.Length < 8 || password.Length > 16)
-                return "Password should be a minimum of 8 and a maximum of 16 characters.";
-
-            if (AccountManager.GetAccountByEmail(email) != null)
-                return string.Format("An account already exists for email address {0}.", email);
-
-            var account = AccountManager.CreateAccount(email, password);
-            return string.Format("Created account {0}.", email);
+            return string.Empty;
         }
     }
 
-    [Command("DelUser")]
-    public class DelUserCommand : Command
-    {
-        public override string Help()
-        {
-            return "usage: deluser email";
-        }
+    //[Command("AddUser")]
+    //public class AddUserCommand : Command
+    //{
+    //    public override string Help()
+    //    {
+    //        return "usage: adduser email password";
+    //    }
 
-        public override string Invoke(string parameters, MooNetClient invokerClient = null)
-        {
-            // TODO: we should be also deleting account's toons. /raist.
+    //    public override string Invoke(string parameters, MooNetClient invokerClient = null)
+    //    {
+    //        var @params = parameters.Split(' ');
+    //        if (@params.Count() < 2)
+    //            return "Invalid arguments. Type 'help adduser' to get help.";
 
-            parameters = parameters.Trim();
+    //        var email = @params[0];
+    //        var password = @params[1];
 
-            if (parameters == string.Empty)
-                return "Invalid arguments. Type 'help deluser' to get help.";
+    //        if (!email.Contains('@'))
+    //            return string.Format("'{0}' is not a valid email address.", email);
 
-            var account = AccountManager.GetAccountByEmail(parameters);
+    //        if (password.Length < 8 || password.Length > 16)
+    //            return "Password should be a minimum of 8 and a maximum of 16 characters.";
 
-            if (account == null)
-                return string.Format("No account with email '{0}' exists.", parameters);
+    //        if (AccountManager.GetAccountByEmail(email) != null)
+    //            return string.Format("An account already exists for email address {0}.", email);
 
-            AccountManager.DeleteAccount(account);
-            return string.Format("Deleted account {0}.", parameters);
-        }
-    }
+    //        var account = AccountManager.CreateAccount(email, password);
+    //        return string.Format("Created account {0}.", email);
+    //    }
+    //}
 
-    [Command("SetPassword")]
-    public class SetPasswordCommand : Command
-    {
-        public override string Help()
-        {
-            return "usage: setpassword email password";
-        }
+    //[Command("DelUser")]
+    //public class DelUserCommand : Command
+    //{
+    //    public override string Help()
+    //    {
+    //        return "usage: deluser email";
+    //    }
 
-        public override string Invoke(string parameters, MooNetClient invokerClient = null)
-        {
-            var @params = parameters.Split(' ');
+    //    public override string Invoke(string parameters, MooNetClient invokerClient = null)
+    //    {
+    //        // TODO: we should be also deleting account's toons. /raist.
 
-            if (@params.Count() < 2)
-                return "Invalid arguments. Type 'help setpassword' to get help.";
+    //        parameters = parameters.Trim();
 
-            var email = @params[0];
-            var password = @params[1];
+    //        if (parameters == string.Empty)
+    //            return "Invalid arguments. Type 'help deluser' to get help.";
 
-            var account = AccountManager.GetAccountByEmail(email);
+    //        var account = AccountManager.GetAccountByEmail(parameters);
 
-            if (account == null)
-                return string.Format("No account with email '{0}' exists.", email);
+    //        if (account == null)
+    //            return string.Format("No account with email '{0}' exists.", parameters);
 
-            if (password.Length < 8 || password.Length > 16)
-                return "Password should be a minimum of 8 and a maximum of 16 characters.";
+    //        AccountManager.DeleteAccount(account);
+    //        return string.Format("Deleted account {0}.", parameters);
+    //    }
+    //}
 
-            account.UpdatePassword(password);
-            return string.Format("Updated password for user {0}.", email);
-        }
-    }
+    //[Command("SetPassword")]
+    //public class SetPasswordCommand : Command
+    //{
+    //    public override string Help()
+    //    {
+    //        return "usage: setpassword email password";
+    //    }
+
+    //    public override string Invoke(string parameters, MooNetClient invokerClient = null)
+    //    {
+    //        var @params = parameters.Split(' ');
+
+    //        if (@params.Count() < 2)
+    //            return "Invalid arguments. Type 'help setpassword' to get help.";
+
+    //        var email = @params[0];
+    //        var password = @params[1];
+
+    //        var account = AccountManager.GetAccountByEmail(email);
+
+    //        if (account == null)
+    //            return string.Format("No account with email '{0}' exists.", email);
+
+    //        if (password.Length < 8 || password.Length > 16)
+    //            return "Password should be a minimum of 8 and a maximum of 16 characters.";
+
+    //        account.UpdatePassword(password);
+    //        return string.Format("Updated password for user {0}.", email);
+    //    }
+    //}
 }

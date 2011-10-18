@@ -35,7 +35,8 @@ namespace Mooege.Core.MooNet.Accounts
         public bnet.protocol.EntityId BnetAccountID { get; private set; }
         public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
         public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
-        
+
+        public UserLevels UserLevel { get; private set; } // user level for account.
         public string Email { get; private set; } // I - Username
         public byte[] Salt { get; private set; }  // s- User's salt.
         public byte[] PasswordVerifier { get; private set; } // v - password verifier.
@@ -268,6 +269,17 @@ namespace Mooege.Core.MooNet.Accounts
         public override string ToString()
         {
             return String.Format("{{ Account: {0} [lowId: {1}] }}", this.Email, this.BnetAccountID.Low);
+        }
+
+        /// <summary>
+        /// User-levels.
+        /// </summary>
+        public enum UserLevels
+        {
+            User,
+            GM,
+            Admin,
+            Owner
         }
     }
 }

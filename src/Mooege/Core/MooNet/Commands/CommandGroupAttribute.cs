@@ -21,16 +21,16 @@ using Mooege.Core.MooNet.Accounts;
 
 namespace Mooege.Core.MooNet.Commands
 {
-    [AttributeUsage(AttributeTargets.Method)]
-    public class CommandAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Class)]
+    public class CommandGroupAttribute : Attribute
     {
         /// <summary>
-        /// Command's name.
+        /// Command group's name.
         /// </summary>
         public string Name { get; private set; }
 
         /// <summary>
-        /// Help text for command.
+        /// Help text for command group.
         /// </summary>
         public string Help { get; private set; }
 
@@ -39,9 +39,9 @@ namespace Mooege.Core.MooNet.Commands
         /// </summary>
         public Account.UserLevels MinUserLevel { get; private set; }
 
-        public CommandAttribute(string command, string help, Account.UserLevels minUserLevel = Account.UserLevels.User)
+        public CommandGroupAttribute(string name, string help, Account.UserLevels minUserLevel = Account.UserLevels.User)
         {
-            this.Name = command.ToLower();
+            this.Name = name.ToLower();
             this.Help = help;
             this.MinUserLevel = minUserLevel;
         }
