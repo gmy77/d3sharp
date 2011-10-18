@@ -27,6 +27,8 @@ using Mooege.Net.GS.Message.Definitions.Connection;
 using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Misc;
+using System;
+using Mooege.Common.Extensions;
 
 namespace Mooege.Net.GS
 {
@@ -35,6 +37,7 @@ namespace Mooege.Net.GS
         protected static readonly Logger Logger = LogManager.CreateLogger();
         private static readonly ClientManager _instance = new ClientManager();
         public static ClientManager Instance { get { return _instance; } }
+        
 
         public void OnConnect(object sender, ConnectionEventArgs e)
         {
@@ -47,6 +50,9 @@ namespace Mooege.Net.GS
         public void OnDisconnect(object sender, ConnectionEventArgs e)
         {
             Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
+            var toon = ((GameClient)e.Connection.Client).Player.Properties;
+            toon.TimePlayed += DateTimeExtensions.ToUnixTime(DateTime.UtcNow) - toon.LoginTime;
+            toon.SaveToDB();
             GameManager.RemovePlayerFromGame((GameClient)e.Connection.Client);
         }
 
@@ -115,6 +121,9 @@ namespace Mooege.Net.GS
                     Field0 = 0x00000000,
                     Field1 = true,
                 });
+
+                toon.LoginTime = DateTimeExtensions.ToUnixTime(DateTime.UtcNow);
+                Logger.Trace("Log in time:"+toon.LoginTime.ToString());
 
                 game.Enter(client.Player);
             }
