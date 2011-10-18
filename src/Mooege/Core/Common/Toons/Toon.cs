@@ -53,7 +53,27 @@ namespace Mooege.Core.Common.Toons
         public ToonClass Class { get; private set; }
         public ToonFlags Flags { get; private set; }
         public byte Level { get; private set; }
-        public D3.Hero.Digest Digest { get; private set; }
+        public D3.Hero.Digest Digest
+        {
+            get
+            {
+                return D3.Hero.Digest.CreateBuilder().SetVersion(891)
+                                .SetHeroId(this.D3EntityID)
+                                .SetHeroName(this.Name)
+                                .SetGbidClass((int)this.ClassID)
+                                .SetPlayerFlags((uint)this.Flags)
+                                .SetLevel(this.Level)
+                                .SetVisualEquipment(this.Equipment)
+                                .SetLastPlayedAct(0)
+                                .SetHighestUnlockedAct(0)
+                                .SetLastPlayedDifficulty(0)
+                                .SetHighestUnlockedDifficulty(0)
+                                .SetLastPlayedQuest(-1)
+                                .SetLastPlayedQuestStep(-1)
+                                .SetTimePlayed(this.TimePlayed)
+                                .Build();
+            }
+        }
         public D3.Hero.VisualEquipment Equipment { get; protected set; }
         public AwayStatus AwayStatus { get; private set; }
 
@@ -248,27 +268,8 @@ namespace Mooege.Core.Common.Toons
 
             this.Equipment = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
 
-            this.UpdateFields();
         }
 
-        public void UpdateFields()
-        {
-            this.Digest = D3.Hero.Digest.CreateBuilder().SetVersion(891)
-                .SetHeroId(this.D3EntityID)
-                .SetHeroName(this.Name)
-                .SetGbidClass((int)this.ClassID)
-                .SetPlayerFlags((uint)this.Flags)
-                .SetLevel(this.Level)
-                .SetVisualEquipment(this.Equipment)
-                .SetLastPlayedAct(0)
-                .SetHighestUnlockedAct(0)
-                .SetLastPlayedDifficulty(0)
-                .SetHighestUnlockedDifficulty(0)
-                .SetLastPlayedQuest(-1)
-                .SetLastPlayedQuestStep(-1)
-                .SetTimePlayed(this.TimePlayed)
-                .Build();
-        }
 
         public void LevelUp()
         {
