@@ -41,6 +41,7 @@ using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Combat;
 using System;
+using Mooege.Core.GS.Powers;
 
 
 // TODO: When the player moves, it will set the Position property which will bounce back to the player again.
@@ -80,6 +81,8 @@ namespace Mooege.Core.GS.Player
         public Dictionary<uint, Item> GroundItems { get; private set; }
 
         public List<OpenConversation> OpenConversations { get; set; }
+
+        public PowerManager PowerManager = new PowerManager();
 
         public Player(World world, GameClient client, Toon bnetToon)
             : base(world, world.NewPlayerID)
@@ -336,6 +339,8 @@ namespace Mooege.Core.GS.Player
             // Check if there is an conversation to close in this tick
             CheckOpenConversations();
 
+            this.PowerManager.Update();
+
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
 
@@ -483,7 +488,7 @@ namespace Mooege.Core.GS.Player
         // Message handlers
         private void OnObjectTargeted(GameClient client, TargetMessage message)
         {
-            this.World.Game.PowerManager.UsePower(this, message.PowerSNO, message.TargetID, message.Field2.Position, message);
+            PowerManager.UsePower(this, message.PowerSNO, message.TargetID, message.Field2.Position, message);
 
             //Actor actor = this.World.GetActor(message.TargetID);
             //if (actor != null)
@@ -877,7 +882,7 @@ namespace Mooege.Core.GS.Player
             {
                 foreach(OpenConversation openConversation in this.OpenConversations)
                 {
-                    if(openConversation.endTick == this.InGameClient.Game.Tick)
+                    if(openConversation.endTick >= this.InGameClient.Game.Tick)
                     {
                         this.InGameClient.SendMessage(openConversation.endConversationMessage);
                     }

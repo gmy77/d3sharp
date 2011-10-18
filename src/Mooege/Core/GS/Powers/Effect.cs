@@ -27,9 +27,11 @@ namespace Mooege.Core.GS.Powers
 {
     public class Effect : Actor
     {
-        public override ActorType ActorType { get { return Actors.ActorType.Monster; } }
+        public TickTimer Timeout;
 
-        public Effect(Map.World world, int actorSNO, Vector3D position, float angle, int timeout)
+        public override ActorType ActorType { get { return Actors.ActorType.Effect; } }
+
+        public Effect(Map.World world, int actorSNO, Vector3D position, float angle, TickTimer timeout = null)
             : base(world, world.NewActorID)
         {
             this.ActorSNO = actorSNO;
@@ -45,11 +47,17 @@ namespace Mooege.Core.GS.Powers
             this.Position.Set(position);
             this.GBHandle.Type = -1; this.GBHandle.GBID = -1; // TODO: use proper enum value
 
-            Timeout = DateTime.Now.AddMilliseconds(timeout);
-
+            Timeout = timeout;
+            
             world.Enter(this);
         }
 
-        public DateTime Timeout;
+        public override void Update()
+        {
+            base.Update();
+
+            if (Timeout != null && Timeout.TimedOut())
+                this.Destroy();
+        }
     }
 }

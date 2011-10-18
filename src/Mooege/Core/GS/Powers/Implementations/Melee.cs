@@ -24,15 +24,15 @@ using Mooege.Core.GS.Skills;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
-    [PowerImplementationAttribute(0x00007780/*Skills.Skills.BasicAttack*/)]
+    [ImplementsPowerSNO(0x00007780/*Skills.Skills.BasicAttack*/)]
     public class Melee : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        public override IEnumerable<TickTimer> Run()
         {
-            if (fx.CanHitMeleeTarget(pp.User, pp.Target))
+            if (CanHitMeleeTarget(Target))
             {
-                fx.PlayHitEffect(2, pp.User, pp.Target);
-                fx.DoDamage(pp.User, pp.Target, 25f, 0);
+                Target.PlayHitEffect(2, User);
+                Damage(Target, 25f, 0);
             }
             yield break;
         }

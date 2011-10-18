@@ -26,6 +26,9 @@ using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Core.Common.Items;
 using Mooege.Core.GS.Actors.Buffs;
+using Mooege.Net.GS.Message.Definitions.Actor;
+using System;
+using Mooege.Net.GS.Message.Definitions.Effect;
 
 // TODO: Need to move all of the remaining ACD fields into Actor (such as the affix list)
 
@@ -55,7 +58,8 @@ namespace Mooege.Core.GS.Actors
         NPC,
         Monster,
         Item,
-        Portal
+        Portal,
+        Effect
     }
 
     // Base actor
@@ -275,6 +279,97 @@ namespace Mooege.Core.GS.Actors
         {
             foreach (TimedBuff tb in m_ActiveBuffs)
                 tb.Remove();
+        }
+
+        #endregion
+
+        #region Movement/Translation
+
+        public void MoveTranslate(Vector3D destination, float speed = 1.0f)
+        {
+            Position.Set(destination);
+
+            World.BroadcastIfRevealed(new NotifyActorMovementMessage
+            {
+                Id = 0x6e,
+                ActorId = (int)DynamicID,
+                Position = destination,
+                Angle = 0f, // TODO: convert quaternion rotation to radians
+                Field3 = false,
+                Field4 = speed,
+            }, this);
+        }
+
+        public void FacingTranslate(Vector3D target, bool smoothly = true)
+        {
+            float radianAngle = (float)Math.Atan2(target.Y - Position.Y, target.X - Position.X);
+
+            // convert to quaternion and store in instance
+            RotationAmount = (float)Math.Cos(radianAngle / 2f);
+            RotationAxis = new Vector3D(0, 0, (float)Math.Sin(radianAngle / 2f));
+
+            World.BroadcastIfRevealed(new ACDTranslateFacingMessage
+            {
+                Id = 0x70,
+                ActorID = DynamicID,
+                Angle = radianAngle,
+                Field2 = smoothly // true/false toggles whether to smoothly animate the change or instantly do it
+            }, this);
+        }
+
+        #endregion
+
+        #region Effects
+
+        public void PlayEffect(int effectSNO)
+        {
+            World.BroadcastIfRevealed(new PlayEffectMessage
+            {
+                Id = 0x7a,
+                ActorID = DynamicID,
+                Field1 = 32, // 32 means Field2 is .efg sno it seems
+                Field2 = effectSNO
+            }, this);
+        }
+
+        public void PlayHitEffect(int hitEffect, Actor hitDealer)
+        {
+            World.BroadcastIfRevealed(new PlayHitEffectMessage
+            {
+                Id = 0x7b,
+                ActorID = DynamicID,
+                HitDealer = hitDealer.DynamicID,
+                Field2 = hitEffect,
+                Field3 = false
+            }, this);
+        }
+
+        public void AddRopeEffect(int ropeSNO, Actor target)
+        {
+            if (target == null) return;
+
+            World.BroadcastIfRevealed(new RopeEffectMessageACDToACD
+            {
+                Id = 0xab,
+                Field0 = ropeSNO,
+                Field1 = (int)DynamicID,
+                Field2 = 4,
+                Field3 = (int)target.DynamicID,
+                Field4 = 1
+            }, this);
+        }
+
+        public void PlayEffectToActor(int effectSNO, Actor target)
+        {
+            if (target == null) return;
+
+            World.BroadcastIfRevealed(new EffectGroupACDToACDMessage
+            {
+                Id = 0xaa,
+                Field0 = effectSNO,
+                Field1 = (int)DynamicID,
+                Field2 = (int)target.DynamicID
+            }, this);
         }
 
         #endregion

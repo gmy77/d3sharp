@@ -34,61 +34,35 @@ using Mooege.Core.GS.Map;
 
 namespace Mooege.Core.GS.Powers
 {
-    public class SimpleMob : Monster
+    // test monster that can take some damage
+    public class PowersTestMonster : Monster
     {
-        public PowerMobTester owner;
-        public float hp;
-        public bool dead;
+        public float HP;
+        public bool IsDead;
 
-        public SimpleMob(World world, int actorSNO, Vector3D position)
+        public PowersTestMonster(World world, int actorSNO, Vector3D position)
             : base(world, actorSNO, position)
         {
         }
 
         public void ReceiveDamage(Actor from, float amount, int type)
         {
-            hp -= amount;
-            if (!dead && hp <= 0.0f)
-                owner.KillMob(from, this);
-        }
-    }
-
-    // simple hackish mob spawner, all mobs created by all instances of it are available via the AllMobs
-    // property
-    public class PowerMobTester
-    {
-        public static IEnumerable<SimpleMob> AllMobs
-        {
-            get
+            HP -= amount;
+            if (!IsDead && HP <= 0.0f)
             {
-                foreach (var moblist in _mobtesters)
-                    foreach (var mob in moblist._mobs)
-                        yield return mob;
+                IsDead = true;
+                Die((Player.Player)from);
             }
         }
 
-        public static List<PowerMobTester> _mobtesters = new List<PowerMobTester>();
-
-        private List<SimpleMob> _mobs = new List<SimpleMob>();
-
-        public PowerMobTester()
+        public static void CreateTestMonsters(World world, Vector3D spawnPoint, int count)
         {
-            _mobtesters.Add(this);
-        }
-
-        public IList<SimpleMob> SpawnMob(Actor user, int count = 10, int actorSNO = -1)
-        {
-            // actor sno list to select from when spawning if actorSNO == -1
-            int[] mobids = { 4282, 3893, 6652, 5428, 5346, 6024, 5393, 5433, 5467 };
-
-            IList<SimpleMob> created = new List<SimpleMob>();
+            // list of actorSNO values to pick from when spawning
+            int[] actorSNO_values = { 4282, 3893, 6652, 5428, 5346, 6024, 5393, 5433, 5467 };
 
             for (int n = 0; n < count; ++n)
             {
-                Vector3D position = new Vector3D();
-                position.X = user.Position.X;
-                position.Y = user.Position.Y;
-                position.Z = user.Position.Z;
+                Vector3D position = new Vector3D(spawnPoint);
                 if ((n % 2) == 0)
                 {
                     position.X += (float)(RandomHelper.NextDouble() * 20);
@@ -100,26 +74,14 @@ namespace Mooege.Core.GS.Powers
                     position.Y -= (float)(RandomHelper.NextDouble() * 20);
                 }
 
-                if (actorSNO == -1)
-                    actorSNO = mobids[RandomHelper.Next(mobids.Length - 1)];
+                int actorSNO = actorSNO_values[RandomHelper.Next(actorSNO_values.Length - 1)];
 
-                SimpleMob mob = new SimpleMob(user.World, actorSNO, position)
+                PowersTestMonster mob = new PowersTestMonster(world, actorSNO, position)
                 {
-                    hp = 50,
-                    owner = this,
-                    dead = false,
+                    HP = 50,
+                    IsDead = false,
                 };
-                _mobs.Add(mob);
-                created.Add(mob);
             }
-            return created;
-        }
-
-        public void KillMob(Actor user, SimpleMob mob)
-        {
-            mob.dead = true;
-            _mobs.Remove(mob);
-            mob.Die((Player.Player)user);
         }
     }
 }

@@ -24,13 +24,13 @@ using System.Text;
 namespace Mooege.Core.GS.Powers
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class PowerImplementationAttribute : Attribute
+    public class ImplementsPowerSNO : Attribute
     {
-        public int Id;
+        public int PowerSNO;
 
-        public PowerImplementationAttribute(int id)
+        public ImplementsPowerSNO(int powerSNO)
         {
-            Id = id;
+            PowerSNO = powerSNO;
         }
     }
 }

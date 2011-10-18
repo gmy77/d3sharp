@@ -99,11 +99,11 @@
     <Compile Include="Core\GS\Powers\Implementations\Monk.cs" />
     <Compile Include="Core\GS\Powers\Implementations\WitchDoctor.cs" />
     <Compile Include="Core\GS\Powers\Implementations\Wizard.cs" />
-    <Compile Include="Core\GS\Powers\PowerImplementationAttribute.cs" />
+    <Compile Include="Core\GS\Powers\ImplementsPowerSNO.cs" />
     <Compile Include="Core\GS\Powers\PowerImplementation.cs" />
-    <Compile Include="Core\GS\Powers\PowerParameters.cs" />
+    <Compile Include="Core\GS\Powers\PowerLoader.cs" />
     <Compile Include="Core\GS\Powers\PowerManager.cs" />
-    <Compile Include="Core\GS\Powers\PowerMobTester.cs" />
+    <Compile Include="Core\GS\Powers\PowersTestMonster.cs" />
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
@@ -117,6 +117,7 @@
     <Compile Include="Core\GS\Player\Equipment.cs" />
     <Compile Include="Core\GS\Player\Stash.cs" />
     <Compile Include="Core\GS\Powers\PowerUtils.cs" />
+    <Compile Include="Core\GS\Powers\TickTimer.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />

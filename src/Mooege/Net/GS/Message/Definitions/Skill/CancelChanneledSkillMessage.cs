@@ -27,7 +27,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 
         public void Handle(GameClient client)
         {
-            client.Game.PowerManager.CancelChanneledPower(client.Player, Field0);
+            client.Player.PowerManager.CancelChanneledPower(Field0);
         }
 
         public override void Parse(GameBitBuffer buffer)

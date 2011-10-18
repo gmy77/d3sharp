@@ -53,8 +53,6 @@ namespace Mooege.Core.GS.Game
 
         private readonly WorldGenerator _worldGenerator;
 
-        public PowerManager PowerManager;
-
         public readonly int UpdateFrequency=100; // updates game every 100ms - still not sure if we should be updating this frequent / raist.
         private int _tickCounter;
         
@@ -79,9 +77,7 @@ namespace Mooege.Core.GS.Game
             this._worlds = new ConcurrentDictionary<int, World>();
             this._worldGenerator = new WorldGenerator(this);
             this.StartWorldSNO = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff
-
-            this.PowerManager = new PowerManager(this);
-
+            
             var loopThread=new Thread(Update) { IsBackground = true };
             loopThread.Start();
         }
@@ -97,8 +93,6 @@ namespace Mooege.Core.GS.Game
                 {
                     pair.Value.Update();
                 }
-
-                this.PowerManager.Update();
 
                 Thread.Sleep(UpdateFrequency);
             }

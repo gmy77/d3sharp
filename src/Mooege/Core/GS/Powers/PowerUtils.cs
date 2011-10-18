@@ -90,6 +90,11 @@ namespace Mooege.Core.GS.Powers
             return r;
         }
 
+        public static float AngleLookAt(Vector3D source, Vector3D target)
+        {
+            return (float)Math.Atan2(target.Y - source.Y, target.X - source.X);
+        }
+
         public static Vector3D ProjectAndTranslate2D(Vector3D a, Vector3D b, Vector3D position, float amount)
         {
             Vector3D r = new Vector3D(position);
@@ -136,13 +141,13 @@ namespace Mooege.Core.GS.Powers
                                                          float r4x, float r4y)
         {
             Vec2D corner = new Vec2D(r1x, r1y);
-            Vec2D pcorner = point - corner;
+            Vec2D local_point = point - corner;
             Vec2D side1 = new Vec2D(r2x, r2y) - corner;
             Vec2D side2 = new Vec2D(r4x, r4y) - corner;
-            return (0 <= pcorner.Dot(side1) &&
-                    pcorner.Dot(side1) <= side1.Dot(side1) &&
-                    0 <= pcorner.Dot(side2) &&
-                    pcorner.Dot(side2) <= side2.Dot(side2));
+            return (0 <= local_point.Dot(side1) &&
+                    local_point.Dot(side1) <= side1.Dot(side1) &&
+                    0 <= local_point.Dot(side2) &&
+                    local_point.Dot(side2) <= side2.Dot(side2));
         }
 
         #endregion // Math helpers

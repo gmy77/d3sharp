@@ -26,186 +26,200 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
-    [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.Meteor)]
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Meteor)]
     public class WizardMeteor : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        public override IEnumerable<TickTimer> Run()
         {
-            fx.SpawnEffect(pp.User, 86790, pp.TargetPosition);
-            yield return 1900; // wait for meteor to hit
-            fx.SpawnEffect(pp.User, 86769, pp.TargetPosition);
-            fx.SpawnEffect(pp.User, 90364, pp.TargetPosition, -1, 4000);
+            SpawnEffect(86790, TargetPosition);
+            yield return WaitSeconds(1.9f); // wait for meteor to hit
+            SpawnEffect(86769, TargetPosition);
+            SpawnEffect(90364, TargetPosition, -1, WaitSeconds(4f));
 
-            IList<Actor> hits = fx.FindActorsInRange(pp.User, pp.TargetPosition, 13f);
-            fx.DoDamage(pp.User, hits, 150f, 0);
+            IList<Actor> hits = GetTargetsInRange(TargetPosition, 13f);
+            Damage(hits, 150f, 0);
         }
     }
 
-    [PowerImplementationAttribute(Skills.Skills.Wizard.Signature.Electrocute)]
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.Electrocute)]
     public class WizardElectrocute : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        public override IEnumerable<TickTimer> Run()
         {
-            fx.RegisterChannelingPower(pp.User, 150);
+            RegisterChannelingPower(WaitSeconds(0.150f));
 
-            fx.ActorLookAt(pp.User, pp.TargetPosition);
+            User.FacingTranslate(TargetPosition);
 
             // if throttling only update proxy if needed, then exit
-            if (pp.ThrottledCast)
+            if (ThrottledCast)
             {
-                if (pp.Target == null)
-                    fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
+                if (Target == null)
+                    GetChanneledProxy(0, TargetPosition);
                 yield break;
             }
 
-            if (pp.Target == null)
+            if (Target == null)
             {
                 // no target, just zap the air
-                fx.PlayRopeEffectActorToActor(0x78c0, pp.User, fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition));
+                User.AddRopeEffect(0x78c0, GetChanneledProxy(0, TargetPosition));
             }
             else
             {
-                fx.PlayHitEffect(2, pp.User, pp.Target);
-                fx.PlayRopeEffectActorToActor(0x78c0, pp.User, pp.Target);
-                fx.DoDamage(pp.User, pp.Target, 12, 0);
-                // bounce
-                var bounce_target = fx.FindActorsInRange(pp.User, pp.TargetPosition, 15f, 1).FirstOrDefault();
+                IList<Actor> targets = new List<Actor>() { Target };
+                var bounce_target = GetTargetsInRange(TargetPosition, 15f, 1).FirstOrDefault();
                 if (bounce_target != null)
                 {
-                    fx.PlayHitEffect(2, pp.Target, bounce_target);
-                    fx.PlayRopeEffectActorToActor(0x78c0, pp.Target, bounce_target);
-                    fx.DoDamage(pp.User, bounce_target, 6, 0);
+                    targets.Add(bounce_target);
+                    var bounce_target2 = GetTargetsInRange(bounce_target.Position, 15f, 1).FirstOrDefault();
+                    if (bounce_target2 != null)
+                        targets.Add(bounce_target2);
                 }
+
+                Actor ropeSource = User;
+                foreach (Actor actor in targets)
+                {
+                    actor.PlayHitEffect(2, User);
+                    ropeSource.AddRopeEffect(0x78c0, actor);
+
+                    ropeSource = actor;
+                }
+
+                float damage = 12f;
+                foreach (Actor actor in targets)
+                {
+                    Damage(actor, damage, 0);
+                    damage /= 2f;
+                }                
             }
             
             yield break;
         }
     }
 
-    [PowerImplementationAttribute(Skills.Skills.Wizard.Signature.MagicMissile)]
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.MagicMissile)]
     public class WizardMagicMissile : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        public override IEnumerable<TickTimer> Run()
         {
             // HACK: made up spell, not real magic missile
             for (int step = 1; step < 10; ++step)
             {
                 var spos = new Vector3D();
-                spos.X = pp.User.Position.X + ((pp.TargetPosition.X - pp.User.Position.X) * (step * 0.10f));
-                spos.Y = pp.User.Position.Y + ((pp.TargetPosition.Y - pp.User.Position.Y) * (step * 0.10f));
-                spos.Z = pp.User.Position.Z + ((pp.TargetPosition.Z - pp.User.Position.Z) * (step * 0.10f));
+                spos.X = User.Position.X + ((TargetPosition.X - User.Position.X) * (step * 0.10f));
+                spos.Y = User.Position.Y + ((TargetPosition.Y - User.Position.Y) * (step * 0.10f));
+                spos.Z = User.Position.Z + ((TargetPosition.Z - User.Position.Z) * (step * 0.10f));
 
-                fx.SpawnEffect(pp.User, 61419, spos);
+                SpawnEffect(61419, spos);
 
-                IList<Actor> hits = fx.FindActorsInRange(pp.User, spos, 6f);
-                fx.DoDamage(pp.User, hits, 60f, 0);
-                yield return 100;
+                IList<Actor> hits = GetTargetsInRange(spos, 6f);
+                Damage(hits, 60f, 0);
+                yield return WaitSeconds(0.1f);
             }
         }
     }
 
-    [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.Hydra)]
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Hydra)]
     public class WizardHydra : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        public override IEnumerable<TickTimer> Run()
         {
             // HACK: made up demonic meteor spell, not real hydra
-            fx.SpawnEffect(pp.User, 185366, pp.TargetPosition);
-            yield return 400;
+            SpawnEffect(185366, TargetPosition);
+            yield return WaitSeconds(0.4f);
 
-            IList<Actor> hits = fx.FindActorsInRange(pp.User, pp.TargetPosition, 10f);
-            fx.DoDamage(pp.User, hits, 100f, 0);
+            IList<Actor> hits = GetTargetsInRange(TargetPosition, 10f);
+            Damage(hits, 100f, 0);
         }
     }
 
-    [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.Disintegrate)]
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Disintegrate)]
     public class WizardDisintegrate : PowerImplementation
     {
         const float BeamLength = 60f;
 
-        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        public override IEnumerable<TickTimer> Run()
         {
-            fx.RegisterChannelingPower(pp.User, 100);
+            RegisterChannelingPower(WaitSeconds(0.1f));
                         
             // project beam end to always be a certain length
-            pp.TargetPosition = PowerUtils.ProjectAndTranslate2D(pp.TargetPosition, pp.User.Position,
-                                                               pp.User.Position, BeamLength);
+            TargetPosition = PowerUtils.ProjectAndTranslate2D(TargetPosition, User.Position,
+                                                               User.Position, BeamLength);
 
-            if (!pp.ThrottledCast)
+            if (!ThrottledCast)
             {
-                foreach (Actor actor in fx.FindActorsInRange(pp.User, pp.User.Position, BeamLength + 10f))
+                foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
                 {
-                    if (PowerUtils.PointInBeam(actor.Position, pp.User.Position, pp.TargetPosition, 7f))
+                    if (PowerUtils.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
                     {  
-                        fx.PlayHitEffect(32, pp.User, actor);
-                        fx.PlayEffectGroupActorToActor(18793, actor, actor);                        
-                        fx.DoDamage(pp.User, actor, 10, 0);
+                        actor.PlayHitEffect(32, User);
+                        actor.PlayEffectToActor(18793, actor);
+                        Damage(actor, 10, 0);
                     }
                 }
             }
 
             // always update effect locations
             // can't make it spawn in the air 52687
-            //Effect pid = fx.GetChanneledEffect(pp.User, 0, 52687, pp.TargetPosition);
-            Effect pid = fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
-            if (! pp.UserIsChanneling)
+            //Effect pid = GetChanneledEffect(User, 0, 52687, TargetPosition);
+            Effect pid = GetChanneledProxy(0, TargetPosition);
+            if (! UserIsChanneling)
             {
-                fx.PlayRopeEffectActorToActor(30888, pp.User, pid);
+                User.AddRopeEffect(30888, pid);
             }
 
             yield break;
         }
     }
 
-    [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.WaveOfForce)]
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.WaveOfForce)]
     public class WizardWaveOfForce : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        public override IEnumerable<TickTimer> Run()
         {
-            yield return 350; // wait for wizard to land?
-            fx.PlayEffectGroupActorToActor(19356, pp.User, fx.SpawnTempProxy(pp.User, pp.User.Position));
+            yield return WaitSeconds(0.350f); // wait for wizard to land?
+            User.PlayEffectToActor(19356, SpawnProxy(User.Position));
 
-            IList<Actor> hits = fx.FindActorsInRange(pp.User, pp.User.Position, 20);
+            IList<Actor> hits = GetTargetsInRange(User.Position, 20);
             foreach (Actor actor in hits)
             {
-                fx.DoKnockback(pp.User, actor, 5f);
-                fx.DoDamage(pp.User, actor, 20, 0);
+                Knockback(actor, 5f);
+                Damage(actor, 20, 0);
             }
             yield break;
         }
     }
 
-    [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.ArcaneTorrent)]
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneTorrent)]
     public class WizardArcaneTorrent : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        public override IEnumerable<TickTimer> Run()
         {
-            fx.RegisterChannelingPower(pp.User, 200);
+            RegisterChannelingPower(WaitSeconds(0.2f));
 
-            if (!pp.UserIsChanneling)
+            if (!UserIsChanneling)
             {
-                Actor targetProxy = fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
-                Actor userProxy = fx.GetChanneledProxy(pp.User, 1, pp.User.Position);
-                fx.ActorLookAt(userProxy, pp.TargetPosition);
-                fx.PlayEffectGroupActorToActor(97385, userProxy, userProxy);
-                fx.PlayEffectGroupActorToActor(134442, userProxy, targetProxy);
+                Actor targetProxy = GetChanneledProxy(0, TargetPosition);
+                Actor userProxy = GetChanneledProxy(1, User.Position);
+                userProxy.FacingTranslate(TargetPosition);
+                userProxy.PlayEffectToActor(97385, userProxy);
+                userProxy.PlayEffectToActor(134442, targetProxy);
             }
 
-            if (!pp.ThrottledCast)
+            if (!ThrottledCast)
             {
-                yield return 800;
+                yield return WaitSeconds(0.8f);
                 // update proxy target location laggy
-                fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
+                GetChanneledProxy(0, TargetPosition);
 
-                fx.SpawnEffect(pp.User, 97821, pp.TargetPosition);
-                fx.DoDamage(pp.User, fx.FindActorsInRange(pp.User, pp.TargetPosition, 6f), 20, 0);
+                SpawnEffect(97821, TargetPosition);
+                Damage(GetTargetsInRange(TargetPosition, 6f), 20, 0);
             }
             yield break;
         }
     }
 
     //bumbasher
-    [PowerImplementationAttribute(Skills.Skills.Wizard.Utility.FrostNova)]
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.FrostNova)]
     public class WizardFrostNova : PowerImplementation
     {
         public const int FrostNova_Emitter = 4402; //plain frost nova effect
@@ -225,18 +239,18 @@ namespace Mooege.Core.GS.Powers.Implementations
             FrostNova_Minor_Emitter
         };
 
-        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        public override IEnumerable<TickTimer> Run()
         {
-            fx.SpawnEffect(pp.User, FrostNova_Emitter, pp.User.Position); //center on self
+            SpawnEffect(FrostNova_Emitter, User.Position); //center on self
 
-            IList<Actor> hits = fx.FindActorsInRange(pp.User, pp.User.Position, 18); //FIXME: is the range correct? what units?
+            IList<Actor> hits = GetTargetsInRange(User.Position, 18); //FIXME: is the range correct? what units?
             foreach (Actor actor in hits)
             {
                 if (actor is Monster)
                 {
                     Monster m = actor as Monster;
                     m.AddFreezeBuff(4000); //freeze for 4 sec, TODO: use some level to increase duration or something
-                    fx.DoDamage(pp.User, actor, PowerManager.Rnd.Next(2, 4+1), 0); //does 2-4 damage, TODO: use player DPS or something
+                    Damage(actor, Rand.Next(2, 4+1), 0); //does 2-4 damage, TODO: use player DPS or something
                 }                
             }
 
@@ -244,7 +258,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-    [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.Blizzard)]
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
     public class WizardBlizzard : PowerImplementation
     {
         public const int Wizard_Blizzard = 0x1977;
@@ -273,9 +287,9 @@ namespace Mooege.Core.GS.Powers.Implementations
         };
 
         //deals 12-18 DPS for 3 seconds
-        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        public override IEnumerable<TickTimer> Run()
         {
-            fx.SpawnEffect(pp.User, Wizard_Blizzard, pp.TargetPosition);
+            SpawnEffect(Wizard_Blizzard, TargetPosition);
 
 
             //do damage for 3 seconds
@@ -283,62 +297,62 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             for(int i=0; i<blizzard_duration; ++i)
             {
-                IList<Actor> hits = fx.FindActorsInRange(pp.User, pp.TargetPosition, 18); //FIXME: is the range correct? what units?
+                IList<Actor> hits = GetTargetsInRange(TargetPosition, 18); //FIXME: is the range correct? what units?
                 foreach (Actor actor in hits)
                 {
                     if (actor is Monster)
                     {
                         Monster m = actor as Monster;
                         m.AddChillBuff(1000); //FIXME: does blizzard slows the monsters?
-                        fx.DoDamage(pp.User, actor, PowerManager.Rnd.Next(12, 18+1), 0);
+                        Damage(actor, Rand.Next(12, 18+1), 0);
                     }
                 }
 
-                yield return 1000;
+                yield return WaitSeconds(1f);
             }
 
             yield break;
         }
     }
 
-    [PowerImplementationAttribute(Skills.Skills.Wizard.Offensive.RayOfFrost)]
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.RayOfFrost)]
     public class WizardRayOfFrost : PowerImplementation
     {
         const float BeamLength = 60f;
 
-        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx) //TODO: still WIP
+        public override IEnumerable<TickTimer> Run() //TODO: still WIP
         {
-            fx.RegisterChannelingPower(pp.User, 100);
+            RegisterChannelingPower(WaitSeconds(0.1f));
 
-            fx.ActorLookAt(pp.User, pp.TargetPosition);
+            User.FacingTranslate(TargetPosition);
 
             // project beam end to always be a certain length
-            pp.TargetPosition = PowerUtils.ProjectAndTranslate2D(pp.TargetPosition, pp.User.Position,
-                                                               pp.User.Position, BeamLength);
+            TargetPosition = PowerUtils.ProjectAndTranslate2D(TargetPosition, User.Position,
+                                                               User.Position, BeamLength);
 
-            if (!pp.ThrottledCast)
+            if (!ThrottledCast)
             {
-                foreach (Actor actor in fx.FindActorsInRange(pp.User, pp.User.Position, BeamLength + 10f))
+                foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
                 {
-                    if (PowerUtils.PointInBeam(actor.Position, pp.User.Position, pp.TargetPosition, 7f))
+                    if (PowerUtils.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
                     {
                         //hit effects: 8 - disintegrate, 4 - some witch doctor green crap, 2 - electric, 1 - some fire methink, 16-ice particles, 
-                        fx.PlayHitEffect(64, pp.User, actor);
+                        actor.PlayHitEffect(64, User);
                         //FIXME: it only need to last as long as the monster is getting hit
                         // fixed? 100ms time limit seems make it a bit better /mdz
-                        fx.SpawnEffect(pp.User, 6535, actor.Position, 0, 100); 
-                        fx.DoDamage(pp.User, actor, 10, 0);
+                        SpawnEffect(6535, actor.Position, 0, WaitSeconds(0.1f));
+                        Damage(actor, 10, 0);
                     }
                 }
             }
 
             // always update effect locations
             // can't make it spawn in the air 52687
-            //Effect pid = fx.GetChanneledEffect(pp.User, 0, 52687, pp.TargetPosition);
-            Effect pid = fx.GetChanneledProxy(pp.User, 0, pp.TargetPosition);
-            if (!pp.UserIsChanneling)
+            //Effect pid = GetChanneledEffect(User, 0, 52687, TargetPosition);
+            Effect pid = GetChanneledProxy(0, TargetPosition);
+            if (!UserIsChanneling)
             {
-                fx.PlayRopeEffectActorToActor(30894, pp.User, pid);
+                User.AddRopeEffect(30894, pid);
             }
 
             yield break;

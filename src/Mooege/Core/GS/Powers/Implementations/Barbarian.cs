@@ -25,18 +25,18 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
-    [PowerImplementationAttribute(Skills.Skills.Barbarian.FuryGenerators.Bash)]
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.Bash)]
     public class BarbarianBash : PowerImplementation
     {
-        public override IEnumerable<int> Run(PowerParameters pp, PowerManager fx)
+        public override IEnumerable<TickTimer> Run()
         {
-            fx.SpawnEffect(pp.User, 3278, pp.User.Position, fx.AngleLookAt(pp.User.Position, pp.TargetPosition), 500);
-            yield return 200; // wait for swing animation
-            if (fx.CanHitMeleeTarget(pp.User, pp.Target))
+            SpawnEffect(3278, User.Position, PowerUtils.AngleLookAt(User.Position, TargetPosition), WaitSeconds(0.5f));
+            yield return WaitSeconds(0.2f); // wait for swing animation
+            if (CanHitMeleeTarget(Target))
             {
-                fx.PlayEffectGroupActorToActor(18663, pp.User, pp.Target);
-                fx.DoKnockback(pp.User, pp.Target, 4f);
-                fx.DoDamage(pp.User, pp.Target, 35, 0);
+                User.PlayEffectToActor(18663, Target);
+                Knockback(Target, 4f);
+                Damage(Target, 35, 0);
             }
 
             yield break;
