@@ -260,7 +260,7 @@ namespace Mooege.Core.GS.Player
             //Basic stats
             this.Attributes[GameAttribute.Level_Cap] = 13;
             this.Attributes[GameAttribute.Level] = this.Properties.Level;
-            this.Attributes[GameAttribute.Experience_Next] = 1200;
+            this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Properties.Level];
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             this.Attributes[GameAttribute.Armor_Total] = 0;
             this.Attributes[GameAttribute.Attack] = this.Properties.InitialAttack;
@@ -335,7 +335,6 @@ namespace Mooege.Core.GS.Player
             CheckExpBonus(1);
             // Check if there is an conversation to close in this tick
             CheckOpenConversations();
-
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
 
@@ -444,6 +443,7 @@ namespace Mooege.Core.GS.Player
 
         public override void OnLeave(World world)
         {
+            Logger.Trace("Leaving world!");
         }
 
         public override bool Reveal(Mooege.Core.GS.Player.Player player)
@@ -611,6 +611,7 @@ namespace Mooege.Core.GS.Player
             if ((this.Attributes[GameAttribute.Experience_Next] <= 0) && (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]))
             {
                 this.Attributes[GameAttribute.Level]++;
+                this.Properties.LevelUp();
                 if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
                 else { this.Attributes[GameAttribute.Experience_Next] = 0; }
 
