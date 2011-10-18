@@ -113,7 +113,7 @@ namespace Mooege.Core.MooNet.Accounts
         public Account(ulong persistentId, string email, byte[] salt, byte[] passwordVerifier) // Account with given persistent ID
             : base(persistentId)
         {
-            this.SetFields(email,salt, passwordVerifier);
+            this.SetFields(email,salt, passwordVerifier, UserLevels.User);
         }
 
         public Account(string email, string password) // Account with **newly generated** persistent ID
@@ -124,7 +124,7 @@ namespace Mooege.Core.MooNet.Accounts
             var salt = SRP6a.GetRandomBytes(32);
             var passwordVerifier = SRP6a.CalculatePasswordVerifierForAccount(email, password, salt);
 
-            this.SetFields(email, salt, passwordVerifier);
+            this.SetFields(email, salt, passwordVerifier, UserLevels.User);
         }
 
         private static ulong? _persistentIdCounter = null;
@@ -136,11 +136,12 @@ namespace Mooege.Core.MooNet.Accounts
             return (ulong)++_persistentIdCounter;
         }
 
-        private void SetFields(string email, byte[] salt, byte[] passwordVerifier)
+        private void SetFields(string email, byte[] salt, byte[] passwordVerifier, UserLevels userLevel)
         {
             this.Email = email;
             this.Salt = salt;
             this.PasswordVerifier = passwordVerifier;
+            this.UserLevel = userLevel;
 
             this.BnetAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.PersistentID).Build();
             this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(this.PersistentID).Build();

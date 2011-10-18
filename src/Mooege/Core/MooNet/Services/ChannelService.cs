@@ -60,7 +60,7 @@ namespace Mooege.Core.MooNet.Services
             if (!request.HasMessage) return; // only continue if the request actually contains a message.
 
             if (!(request.Message.AttributeCount > 0 && request.Message.AttributeList[0].HasValue &&
-                CommandManager.TryParse(request.Message.AttributeList[0].Value.StringValue, this.Client, CommandManager.ResponseMediums.Channel))) // try parsing the message as a command   
+                CommandManager.TryParse(request.Message.AttributeList[0].Value.StringValue, this.Client, CommandManager.RespondOver.Channel))) // try parsing the message as a command   
             {
                 this.Client.CurrentChannel.SendMessage(this.Client, request.Message); // if it's not - let channel itself to broadcast message to it's members.  
             }

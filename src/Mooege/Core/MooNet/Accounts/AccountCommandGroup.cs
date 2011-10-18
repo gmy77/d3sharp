@@ -22,16 +22,11 @@ using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Accounts
 {
-    [CommandGroup("Account", "I couldn't come with a fucking help-text /raist")]
+    [CommandGroup("account", "Provides account managment commands.")]
     public class AccountCommandGroup: CommandGroup
     {
-        public override string Invoke(MooNetClient invokerClient = null)
-        {
-            return base.Invoke(invokerClient);
-        }
-
         [Command("add", "Allows you to add a new user account. Usage: account add <email> <password> [userlevel]", Account.UserLevels.GM)]
-        public string Add(string parameters, MooNetClient invokerClient=null)
+        public string Add(string[] parameters, MooNetClient invokerClient)
         {
             return string.Empty;
         }
