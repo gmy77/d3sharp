@@ -52,7 +52,7 @@ namespace Mooege.Core.Common.Toons
         public string HashCodeString { get; private set; }
         public ToonClass Class { get; private set; }
         public ToonFlags Flags { get; private set; }
-        public byte Level { get; set; }
+        public byte Level { get; private set; }
         public D3.Hero.Digest Digest { get; private set; }
         public D3.Hero.VisualEquipment Equipment { get; protected set; }
         public AwayStatus AwayStatus { get; private set; }
