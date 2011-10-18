@@ -35,6 +35,11 @@ namespace Mooege.Core.GS.Objects
         }
 
         /// <summary>
+        /// Tells object to update itself and notify it's childs.
+        /// </summary>
+        public virtual void Update() { }
+
+        /// <summary>
         /// Destroy the object. This should remove any references to the object throughout GS.
         /// </summary>
         public abstract void Destroy();

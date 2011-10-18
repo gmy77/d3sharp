@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Animation
 {
+    [Message(Opcodes.SetIdleAnimationMessage)]
     public class SetIdleAnimationMessage : GameMessage
     {
         public uint ActorID;

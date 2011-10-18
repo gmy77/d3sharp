@@ -20,13 +20,11 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.RemoveRagdollMessage)]
     public class RemoveRagdollMessage : GameMessage
     {
         public int Field0;
         public int /* sno */ Field1;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.SalvageResultsMessage)]
     public class SalvageResultsMessage : GameMessage
     {
         public int /* gbid */ gbidOriginalItem;
@@ -27,9 +28,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         public int Field2;
         // MaxLength = 10
         public int /* gbid */[] gbidNewItems;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

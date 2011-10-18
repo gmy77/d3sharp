@@ -17,8 +17,9 @@
  */
 
 using System;
+using System.Threading;
 using Mooege.Common;
-using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
 
@@ -29,27 +30,50 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
-
+        
         public override void Logon(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.LogonRequest request, Action<bnet.protocol.authentication.LogonResponse> done)
         {
             Logger.Trace("LogonRequest(); Email={0}", request.Email);
-            var account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email); // add a config option that sets this functionality, ie AllowAccountCreationOnFirstLogin.
 
-            Client.Account = account;
-            Client.Account.LoggedInClient = Client;
+            // we should be also checking here version, program, locale and similar stuff /raist.
 
-            var builder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
-                .SetAccount(Client.Account.BnetAccountID)
-                .SetGameAccount(Client.Account.BnetGameAccountID);
+            AuthManager.StartAuthentication(this.Client, request);
 
-            done(builder.Build());
+            var authenticationThread = new Thread(() =>
+            {
+                this.Client.AuthenticationCompleteSignal.WaitOne(); // wait the signal;
 
-            PlayerManager.PlayerConnected(this.Client);
+                if(this.Client.AuthenticationErrorCode != MooNetClient.AuthenticationErrorCodes.None)
+                {
+                    Logger.Info("Authentication failed for {0} because of invalid credentals.", request.Email);
+                    done(bnet.protocol.authentication.LogonResponse.DefaultInstance);
+                    return;
+                }
+
+                Logger.Info("User {0} authenticated successfuly.", request.Email);
+                var builder = bnet.protocol.authentication.LogonResponse.
+                    CreateBuilder()
+                    .SetAccount(Client.Account.BnetAccountID)
+                    .SetGameAccount(Client.Account.BnetGameAccountID);
+
+                done(builder.Build());
+
+                PlayerManager.PlayerConnected(this.Client);
+
+            }) {IsBackground = true};
+
+            authenticationThread.Start();
         }
 
         public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.ModuleMessageRequest request, Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            var moduleMessage = request.Message.ToByteArray();
+            var command = moduleMessage[0];
+
+            done(bnet.protocol.NoData.CreateBuilder().Build());
+
+            if(request.ModuleId==0 && command==2)
+                AuthManager.HandleAuthResponse(this.Client, request.ModuleId, moduleMessage);
         }
     }
 }

@@ -20,12 +20,10 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Audio
 {
+    [Message(Opcodes.PlayNonPositionalSoundMessage)]
     public class PlayNonPositionalSoundMessage : GameMessage
     {
         public int /* sno */ Field0;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

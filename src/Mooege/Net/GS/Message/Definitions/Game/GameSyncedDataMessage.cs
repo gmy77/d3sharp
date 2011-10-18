@@ -21,12 +21,12 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {
+    [Message(Opcodes.GameSyncedDataMessage)]
     public class GameSyncedDataMessage : GameMessage
     {
         public GameSyncedData Field0;
 
-
-
+        public GameSyncedDataMessage():base(Opcodes.GameSyncedDataMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

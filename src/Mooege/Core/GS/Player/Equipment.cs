@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Player
 {
@@ -117,15 +118,15 @@ namespace Mooege.Core.GS.Player
         {
             if (_inventoryGold == null)
             {
-                _inventoryGold = ItemGenerator.CreateGold(_owner, collectedItem.Count);
-                _inventoryGold.Count = collectedItem.Count;
+                _inventoryGold = ItemGenerator.CreateGold(_owner, collectedItem.Attributes[GameAttribute.Gold]);
+                _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = collectedItem.Attributes[GameAttribute.Gold];
                 _inventoryGold.Owner = _owner;
                 _inventoryGold.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
                 _inventoryGold.Reveal(_owner);
             }
             else
             {
-                _inventoryGold.Count += collectedItem.Count;
+                _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += collectedItem.Attributes[GameAttribute.Gold];
             }
 
             return _inventoryGold;

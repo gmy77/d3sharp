@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
+    [Message(Opcodes.PlayerInteractMessage)]
     public class PlayerInteractMessage : GameMessage
     {
         public int Field0;

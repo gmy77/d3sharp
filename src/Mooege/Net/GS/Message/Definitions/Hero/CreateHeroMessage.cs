@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Hero
 {
+    [Message(Opcodes.CreateHeroMessage)]
     public class CreateHeroMessage : GameMessage
     {
         public string Name;

@@ -8,8 +8,8 @@
      public enum Consumers
      {
          None,
+         ClientManager,
          Game,
-         PlayerManager,
          Inventory,
          Player
      }

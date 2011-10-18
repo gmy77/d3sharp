@@ -20,38 +20,47 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Fields
 {
+    public enum VoiceGender
+    {
+        Male = 0,
+        Female = 1,
+    }
+
     public class PlayLineParams
     {
-        public int /* sno */ snoConversation;
-        public int Field1;
-        public bool Field2;
-        public int Field3;
-        public int Field4;
-        public int Field5;
-        public int Field6;
-        public int Field7;
-        public int Field8;
-        public int /* sno */ snoSpeakerActor;
-        public string Field10;
+        public int SNOConversation;
+        public int Field1;          // have not seen != 0
+        public bool Field2;         // have not seen true
+        public int LineID;          // the ID of the line within the conversation
+        
+        // Participant to speak out? must mach what the lineID is expecting... eg. LineID == 6 expects 2 while LineID == 5 expects 1 (in a specific dialogue)
+        // Set to 0 for a conversation line said by the player
+        public int Field4;      
+        public int Field5;          // have not seen != -1
+        public int Field6;          // -1 or Enum for player class (same as VoiceClassID)
+        public VoiceGender Gender;  // Used if Field4 set to 0, (Use hero's gender)
+        public int VoiceClassID;    // Used if Field4 set to 0, (Use hero's class)
+        public int /* sno */ snoSpeakerActor;   // no idea how and if that is used
+        public string Name;         // Name of the actor if Field4 is set to 0 ("Hero speaking")
         public int Field11;
         public int Field12;
         public int Field13;
-        public int Field14;
+        public int Field14;         // seems to be a running number across conversationlines. StopConvLine.Field0 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
         public int Field15;
 
         public void Parse(GameBitBuffer buffer)
         {
-            snoConversation = buffer.ReadInt(32);
+            SNOConversation = buffer.ReadInt(32);
             Field1 = buffer.ReadInt(32);
             Field2 = buffer.ReadBool();
-            Field3 = buffer.ReadInt(32);
+            LineID = buffer.ReadInt(32);
             Field4 = buffer.ReadInt(32);
             Field5 = buffer.ReadInt(32);
             Field6 = buffer.ReadInt(32);
-            Field7 = buffer.ReadInt(32);
-            Field8 = buffer.ReadInt(32);
+            Gender = (VoiceGender)buffer.ReadInt(32);
+            VoiceClassID = buffer.ReadInt(32);
             snoSpeakerActor = buffer.ReadInt(32);
-            Field10 = buffer.ReadCharArray(49);
+            Name = buffer.ReadCharArray(49);
             Field11 = buffer.ReadInt(32);
             Field12 = buffer.ReadInt(32);
             Field13 = buffer.ReadInt(32);
@@ -61,17 +70,17 @@ namespace Mooege.Net.GS.Message.Fields
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, snoConversation);
+            buffer.WriteInt(32, SNOConversation);
             buffer.WriteInt(32, Field1);
             buffer.WriteBool(Field2);
-            buffer.WriteInt(32, Field3);
+            buffer.WriteInt(32, LineID);
             buffer.WriteInt(32, Field4);
             buffer.WriteInt(32, Field5);
             buffer.WriteInt(32, Field6);
-            buffer.WriteInt(32, Field7);
-            buffer.WriteInt(32, Field8);
+            buffer.WriteInt(32, (int)Gender);
+            buffer.WriteInt(32, VoiceClassID);
             buffer.WriteInt(32, snoSpeakerActor);
-            buffer.WriteCharArray(49, Field10);
+            buffer.WriteCharArray(49, Name);
             buffer.WriteInt(32, Field11);
             buffer.WriteInt(32, Field12);
             buffer.WriteInt(32, Field13);
@@ -86,13 +95,13 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("snoConversation: 0x" + snoConversation.ToString("X8"));
+            b.AppendLine("snoConversation: 0x" + SNOConversation.ToString("X8"));
             b.Append(' ', pad);
             b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', pad);
             b.AppendLine("Field2: " + (Field2 ? "true" : "false"));
             b.Append(' ', pad);
-            b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
+            b.AppendLine("LineID: 0x" + LineID.ToString("X8") + " (" + LineID + ")");
             b.Append(' ', pad);
             b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
             b.Append(' ', pad);
@@ -100,13 +109,13 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("Field6: 0x" + Field6.ToString("X8") + " (" + Field6 + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field7: 0x" + Field7.ToString("X8") + " (" + Field7 + ")");
+            b.AppendLine("Gender: 0x" + ((int)Gender).ToString("X8") + " (" + Gender + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field8: 0x" + Field8.ToString("X8") + " (" + Field8 + ")");
+            b.AppendLine("Field8: 0x" + (VoiceClassID).ToString("X8") + " (" + VoiceClassID + ")");
             b.Append(' ', pad);
             b.AppendLine("snoSpeakerActor: 0x" + snoSpeakerActor.ToString("X8"));
             b.Append(' ', pad);
-            b.AppendLine("Field10: \"" + Field10 + "\"");
+            b.AppendLine("Name: \"" + Name + "\"");
             b.Append(' ', pad);
             b.AppendLine("Field11: 0x" + Field11.ToString("X8") + " (" + Field11 + ")");
             b.Append(' ', pad);

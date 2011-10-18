@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.RareMonsterNamesMessage)]
     public class RareMonsterNamesMessage : GameMessage
     {
         public int Field0;

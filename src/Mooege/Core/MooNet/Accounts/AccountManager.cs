@@ -20,12 +20,16 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
+using Mooege.Common;
 using Mooege.Core.Common.Storage;
+using Mooege.Core.MooNet.Commands;
+using Mooege.Core.MooNet.Online;
 
 namespace Mooege.Core.MooNet.Accounts
 {
     public static class AccountManager
     {
+        private static readonly Logger Logger = LogManager.CreateLogger();
         private static readonly Dictionary<string, Account> Accounts = new Dictionary<string, Account>();
 
         public static int TotalAccounts
@@ -35,6 +39,10 @@ namespace Mooege.Core.MooNet.Accounts
 
         static AccountManager()
         {
+            Accounts.Add(CommandHandlerAccount.Instance.Email, CommandHandlerAccount.Instance); // Hackish command handler account that we can send server commands. /raist
+            CommandHandlerAccount.Instance.LoggedInClient.CurrentToon = CommandHandlerToon.Instance;
+            PlayerManager.OnlinePlayers.Add(CommandHandlerAccount.Instance.LoggedInClient);
+
             LoadAccounts();
         }
 
@@ -43,18 +51,41 @@ namespace Mooege.Core.MooNet.Accounts
             return Accounts.ContainsKey(email) ? Accounts[email] : null;
         }
 
-        public static Account CreateAccount(string email)
+        public static Account CreateAccount(string email, string password)
         {
-            var account = new Account(email);
+            var account = new Account(email, password);
             Accounts.Add(email, account);
             account.SaveToDB();
 
             return account;
         }
 
-        public static Account GetAccountByPersistantID(ulong persistantId)
+        public static Account GetAccountByPersistentID(ulong persistentId)
         {
-            return Accounts.Where(account => account.Value.PersistentID == persistantId).Select(account => account.Value).FirstOrDefault();
+            return Accounts.Where(account => account.Value.PersistentID == persistentId).Select(account => account.Value).FirstOrDefault();
+        }
+
+        public static bool DeleteAccount(Account account)
+        {
+            if (account == null) return false;
+            if (!Accounts.ContainsKey(account.Email)) return false;
+
+            try
+            {
+                var query = string.Format("DELETE from accounts where id={0}", account.PersistentID);
+                var cmd = new SQLiteCommand(query, DBManager.Connection);
+                cmd.ExecuteNonQuery();
+            }
+            catch(Exception e)
+            {
+                Logger.ErrorException(e, "DeleteAccount()");
+                return false;
+            }
+
+            Accounts.Remove(account.Email);
+            // we should be also disconnecting the account if he's online. /raist.
+
+            return true;
         }
 
         private static void LoadAccounts()
@@ -67,14 +98,21 @@ namespace Mooege.Core.MooNet.Accounts
 
             while (reader.Read())
             {
-                var databaseId = (ulong)reader.GetInt64(0);
+                var accountId = (ulong)reader.GetInt64(0);
                 var email = reader.GetString(1);
-                var account = new Account(databaseId, email);
+
+                var salt = new byte[32];
+                var readBytes = reader.GetBytes(2, 0, salt, 0, 32);
+
+                var passwordVerifier = new byte[128];
+                readBytes = reader.GetBytes(3, 0, passwordVerifier, 0, 128);
+
+                var account = new Account(accountId, email, salt, passwordVerifier);
                 Accounts.Add(email, account);
             }
         }
 
-        public static ulong GetNextAvailablePersistantId()
+        public static ulong GetNextAvailablePersistentId()
         {
             var cmd = new SQLiteCommand("SELECT max(id) from accounts", DBManager.Connection);
             try
@@ -85,6 +123,6 @@ namespace Mooege.Core.MooNet.Accounts
             {
                 return 0;
             }
-        }
+        }       
     }
 }

@@ -21,30 +21,34 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    /// <summary>
+    /// Sent to the client to create a world animation. Like in gold flipping before gold dropping or
+    /// highlighting the area around around important items.
+    /// </summary>
+    [Message(Opcodes.FlippyMessage)]
     public class FlippyMessage : GameMessage
     {
-        public int Field0;
-        public int /* sno */ Field1;
-        public int /* sno */ Field2;
-        public Vector3D Field3;
-
-
-
+        // TODO Verify SNOs, there are to few samples to be sure - farmy
+        public int ActorID;             // Effect is created at the actors location
+        public int SNOParticleEffect;   // SNO for a particle effect or 0x6d82 (default_flippy) for an appearance effect
+        public int SNOAppearance;       // -1 for a particle effect or SNO of the animation effect. eg Axe_flippy etc
+        public Vector3D Field3;         // no idea ... my tests always take the actor position - farmy
+        public FlippyMessage() : base(Opcodes.FlippyMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
-            Field2 = buffer.ReadInt(32);
+            ActorID = buffer.ReadInt(32);
+            SNOParticleEffect = buffer.ReadInt(32);
+            SNOAppearance = buffer.ReadInt(32);
             Field3 = new Vector3D();
             Field3.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
-            buffer.WriteInt(32, Field2);
+            buffer.WriteInt(32, ActorID);
+            buffer.WriteInt(32, SNOParticleEffect);
+            buffer.WriteInt(32, SNOAppearance);
             Field3.Encode(buffer);
         }
 
@@ -54,9 +58,9 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("FlippyMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            b.Append(' ', pad); b.AppendLine("SNOParticleEffect: 0x" + SNOParticleEffect.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("SNOAppearance: 0x" + SNOAppearance.ToString("X8"));
             Field3.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");

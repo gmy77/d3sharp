@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Skill
 {
+    [Message(Opcodes.LearnedSkillMessage)]
     public class LearnedSkillMessage : GameMessage
     {
         // MaxLength = 128

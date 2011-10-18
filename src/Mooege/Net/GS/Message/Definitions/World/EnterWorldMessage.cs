@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.World
 {
+    [Message(Opcodes.EnterWorldMessage)]
     public class EnterWorldMessage : GameMessage
     {
         public Vector3D EnterPosition;

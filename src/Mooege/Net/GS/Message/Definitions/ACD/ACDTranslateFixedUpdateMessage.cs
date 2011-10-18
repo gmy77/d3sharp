@@ -21,14 +21,12 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    [Message(Opcodes.ACDTranslateFixedUpdateMessage)]
     public class ACDTranslateFixedUpdateMessage : GameMessage
     {
         public int Field0;
         public Vector3D Field1;
         public Vector3D Field2;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

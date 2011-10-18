@@ -86,28 +86,41 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dep\ductsharp.dll</HintPath>
     </Reference>
+    <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
+    <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\PotionAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributeCreator.cs" />
+    <Compile Include="Core\GS\Game\GameCommands.cs" />
+    <Compile Include="Core\GS\Game\GameManager.cs" />
     <Compile Include="Core\GS\Player\Equipment.cs" />
     <Compile Include="Core\GS\Player\Stash.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
+    <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
+    <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
+    <Compile Include="Core\MooNet\Authentication\Config.cs" />
+    <Compile Include="Core\MooNet\Authentication\SRP6a.cs" />
     <Compile Include="Core\MooNet\Channels\Channel.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelManager.cs" />
     <Compile Include="Core\MooNet\Channels\Member.cs" />
     <Compile Include="Common\Config\Config.cs" />
     <Compile Include="Common\Config\ConfigManager.cs" />
+    <Compile Include="Core\MooNet\Commands\Config.cs" />
+    <Compile Include="Core\MooNet\Commands\ServerCommandHandler.cs" />
     <Compile Include="Core\MooNet\Commands\CommandManager.cs" />
-    <Compile Include="Core\MooNet\Commands\ServerCommandAttribute.cs" />
-    <Compile Include="Core\MooNet\Games\Game.cs" />
-    <Compile Include="Core\MooNet\Games\GameManager.cs" />
+    <Compile Include="Core\MooNet\Commands\CommandAttribute.cs" />
+    <Compile Include="Core\MooNet\Commands\Command.cs" />
+    <Compile Include="Core\MooNet\Commands\ServerCommands.cs" />
+    <Compile Include="Core\MooNet\Games\GameCreator.cs" />
+    <Compile Include="Core\MooNet\Games\GameCreatorManager.cs" />
     <Compile Include="Core\MooNet\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\MooNet\Helpers\FieldKeyHelper.cs" />
     <Compile Include="Core\MooNet\Helpers\NotificationTypeHelper.cs" />
@@ -150,15 +163,26 @@
     <Compile Include="Core\GS\Data\SNO\Config.cs" />
     <Compile Include="Core\GS\Data\SNO\Database.cs" />
     <Compile Include="Core\GS\Data\SNO\Set.cs" />
+    <Compile Include="LogConfig.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Skill\AssignSkillMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Stash\OpenSharedStashMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBusyMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\RequestBuyItemMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Stash\RequestBuySharedStashSlots.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\RequestSellItemMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Tick\GameTickMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Trade\OpenTradeWindow.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.Array.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Net\GS\Message\GameAttributeMap.cs" />
     <Compile Include="Net\MooNet\MooNetClient.cs" />
     <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />
-    <Compile Include="Net\MooNet\Packets\Header.cs" />
-    <Compile Include="Net\MooNet\Packets\Packet.cs" />
     <Compile Include="Net\GS\ClientManager.cs" />
     <Compile Include="Net\GS\Config.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignPassiveSkillMessage.cs" />
@@ -206,7 +230,7 @@
     <Compile Include="Net\GS\Message\ISelfHandler.cs" />
     <Compile Include="Net\GS\Message\GameMessage.cs" />
     <Compile Include="Net\GS\GameServer.cs" />
-    <Compile Include="Net\GS\Message\IncomingMessageAttribute.cs" />
+    <Compile Include="Net\GS\Message\MessageAttribute.cs" />
     <Compile Include="Net\GS\Message\Fields\HeroStateData.cs" />
     <Compile Include="Net\GS\Message\Opcodes.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDChangeActorMessage.cs" />
@@ -226,7 +250,6 @@
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateFacingMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateFixedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateFixedUpdateMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateNormalMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateSnappedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateSyncMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDWorldPositionMessage.cs" />
@@ -267,7 +290,7 @@
     <Compile Include="Net\GS\Message\Definitions\Enchant\EnchantItemMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Encounter\EncounterInviteStateMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\EndConversationMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\EndOfTickMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Tick\EndOfTickMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\World\EnterWorldMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\EntityIdMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\FlippyMessage.cs" />
@@ -309,7 +332,7 @@
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCInteractOptionsMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PetMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Animation\PlayAnimationMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\PlayConvLineMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Conversation\PlayConvLineMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayCutsceneMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Effect\PlayEffectMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerActorSetInitialMessage.cs" />
@@ -352,25 +375,28 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\SNODataMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\SNONameDataMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\SocketSpellMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\StopConvLineMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Conversation\StopConvLineMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Scene\SwapSceneMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Combat\TargetMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\World\TargetMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\TimedEventStartedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Trade\TradeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\TrickleMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Chat\TryChatMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Console\TryConsoleCommand.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\TryWaypointMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Waypoint\TryWaypointMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\UI\UIElementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\UInt64DataMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Game\VersionsMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Combat\VictimMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\VisualInventoryMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\WaypointActivatedMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Waypoint\WaypointActivatedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\World\WeatherOverrideMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\World\WorldDeletedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\World\WorldStatusMessage.cs" />
     <Compile Include="Net\IClient.cs" />
+    <Compile Include="Net\MooNet\Packets\PacketIn.cs" />
+    <Compile Include="Net\MooNet\Packets\PacketOut.cs" />
+    <Compile Include="Net\MooNet\RPC\RPCCallback.cs" />
     <Compile Include="Net\NATConfig.cs" />
     <Compile Include="Net\Utils.cs" />
     <Compile Include="Program.cs" />
@@ -391,7 +417,6 @@
     <Compile Include="Core\MooNet\Objects\RPCObject.cs" />
     <Compile Include="Core\Common\Storage\Config.cs" />
     <Compile Include="Core\GS\Game\Game.cs" />
-    <Compile Include="Core\GS\Game\PlayerManager.cs" />
     <Compile Include="Core\GS\Actors\Monster.cs" />
     <Compile Include="Core\Common\Storage\GamedataDBManager.cs" />
     <Compile Include="Core\GS\Objects\WorldObject.cs" />
@@ -445,12 +470,28 @@
       <Link>Assets\Maps\Worlds\NewTristram.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\assets\Maps\Worlds\Quick.txt">
+      <Link>Assets\Maps\Worlds\Quick.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\assets\SNO\Actors.txt">
       <Link>Assets\SNO\Actors.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\assets\SNO\Animations.txt">
+      <Link>Assets\SNO\Animations.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\assets\SNO\Blacklist.txt">
       <Link>Assets\SNO\Blacklist.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\assets\SNO\Conversations.txt">
+      <Link>Assets\SNO\Conversations.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\assets\SNO\Effects.txt">
+      <Link>Assets\SNO\Effects.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\assets\SNO\list.txt">
@@ -480,4 +521,5 @@
       <Name>LibMooNet</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
 </Project>

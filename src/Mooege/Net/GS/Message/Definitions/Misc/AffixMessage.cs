@@ -20,6 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    [Message(Opcodes.AffixMessage)]
     public class AffixMessage : GameMessage
     {
         public uint ActorID; // Actor's DynamicID

@@ -20,14 +20,12 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Encounter
 {
+    [Message(Opcodes.EncounterInviteStateMessage)]
     public class EncounterInviteStateMessage : GameMessage
     {
         public int Field0;
         public int Field1;
         public int Field2;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {

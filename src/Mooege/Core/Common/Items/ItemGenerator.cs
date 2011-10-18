@@ -27,6 +27,7 @@ using Mooege.Core.GS.Player;
 using Mooege.Net.GS;
 using Mooege.Core.Common.Items.ItemCreation;
 using Wintellect.PowerCollections;
+using Mooege.Net.GS.Message;
 
 // FIXME: Most of this stuff should be elsewhere and not explicitly generate items to the player's GroundItems collection / komiga?
 
@@ -72,7 +73,7 @@ namespace Mooege.Core.Common.Items
         // generates a random item.
         public static Item GenerateRandom(Player player)
         {
-            var itemDefinition = ValidDefinitions[RandomHelper.Next(0, ValidDefinitions.Count() - 1)];
+            var itemDefinition = GetRandom(ValidDefinitions);
             return CreateItem(player, itemDefinition);
         }
 
@@ -80,9 +81,30 @@ namespace Mooege.Core.Common.Items
         // we can also set a difficulty mode parameter here, but it seems current db doesnt have nightmare or hell-mode items with valid snoId's /raist.
         public static Item GenerateRandom(Player player, ItemType type)
         {
-            var validDefinitions = ItemDefinitions[type].Where(definition => definition.SNOId != 0).ToList(); // only find item definitions with snoId!=0.
-            var itemDefinition = validDefinitions[RandomHelper.Next(0, validDefinitions.Count() - 1)];
+            var validDefinitions = ItemDefinitions[type].Where(definition => definition.SNOId != 0).ToList(); // only find item definitions with snoId!=0 for given itemtype.
+            var itemDefinition = GetRandom(validDefinitions);
             return CreateItem(player, itemDefinition);
+        }
+
+        private static ItemDefinition GetRandom(List<ItemDefinition> pool)
+        {
+            var found = false;
+            ItemDefinition itemDefinition = null;
+
+            while (!found)
+            {
+                itemDefinition = pool[RandomHelper.Next(0, pool.Count() - 1)];
+
+                // ignore items that mostly produce bad gbid's which crashes client on pickup eventually. 
+                if (itemDefinition.Type == ItemType.Unknown) continue;
+                if (itemDefinition.Name.ToLower().Contains("pvp")) continue;
+                if (itemDefinition.Name.ToLower().Contains("unique")) continue;
+                if (itemDefinition.Name.ToLower().Contains("crafted")) continue;
+
+                found = true;
+            }
+
+            return itemDefinition;
         }
 
         // Creates an item based on supplied definition.
@@ -92,7 +114,8 @@ namespace Mooege.Core.Common.Items
                          definition.Type, definition.DifficultyMode, definition.SNOId, definition.GBId);
 
             var item = new Item(player.World, definition.SNOId, definition.GBId, definition.Type);
-            player.GroundItems[item.DynamicID] = item;
+            if (definition.Type != ItemType.HealthGlobe || definition.Type != ItemType.Gold)
+                player.GroundItems[item.DynamicID] = item;
 
             var attributeCreators = new AttributeCreatorFactory().Create(definition.Type);
             foreach (IItemAttributeCreator creator in attributeCreators)
@@ -121,7 +144,11 @@ namespace Mooege.Core.Common.Items
         public static Item CreateGold(Player player, int amount)
         {
             var item = Cook(player, "Gold1", 0x00000178, ItemType.Gold);
-            item.Count = amount;
+            item.Attributes[GameAttribute.Gold] = amount;
+
+            var attributeMap = new GameAttributeMap();
+            attributeMap[GameAttribute.Gold] = amount;
+            attributeMap.SendMessage(player.InGameClient, item.DynamicID);
             return item;
         }
     }

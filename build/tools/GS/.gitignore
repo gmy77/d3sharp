@@ -1,5 +1,4 @@
 /_ReSharper.GS-Tools/
-/*.6.0.ReSharper.user
-/*.suo
-/*.userprefs
-/*.user
+/GS-Tools.6.0.ReSharper.user
+/GS-Tools.suo
+/GS-Tools.userprefs

@@ -1,4 +1,4 @@
-﻿namespace HeaderViewer
+﻿namespace Mooege.Tools.HeaderViewer
 {
     partial class MainForm
     {
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.inputBox = new System.Windows.Forms.TextBox();
             this.outputBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
@@ -47,21 +48,25 @@
             this.outputBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.outputBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.outputBox.Location = new System.Drawing.Point(13, 40);
             this.outputBox.Multiline = true;
             this.outputBox.Name = "outputBox";
-            this.outputBox.Size = new System.Drawing.Size(340, 303);
+            this.outputBox.ReadOnly = true;
+            this.outputBox.Size = new System.Drawing.Size(340, 75);
             this.outputBox.TabIndex = 1;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 355);
+            this.ClientSize = new System.Drawing.Size(365, 127);
             this.Controls.Add(this.outputBox);
             this.Controls.Add(this.inputBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "Header Viewer";
+            this.Text = "Proto Packet Header Viewer";
             this.ResumeLayout(false);
             this.PerformLayout();
 

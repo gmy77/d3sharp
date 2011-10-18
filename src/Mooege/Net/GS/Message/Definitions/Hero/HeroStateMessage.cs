@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Hero
 {
+    [Message(Opcodes.HeroStateMessage)]
     public class HeroStateMessage : GameMessage
     {
         public HeroStateData State;

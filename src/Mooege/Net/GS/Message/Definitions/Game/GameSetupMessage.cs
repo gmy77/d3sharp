@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {
-    [IncomingMessage(Opcodes.GameSetupMessage)]
+    [Message(Opcodes.GameSetupMessage)]
     public class GameSetupMessage : GameMessage
     {
         public int Field0;

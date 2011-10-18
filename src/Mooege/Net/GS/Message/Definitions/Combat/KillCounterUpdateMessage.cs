@@ -20,15 +20,19 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Combat
 {
+    [Message(Opcodes.KillCounterUpdateMessage)]
     public class KillCounterUpdateMessage : GameMessage
     {
-        public int Field0;
-        public int Field1;
-        public int Field2;
+        public int Field0; //Bonus-Type
+        /*
+        0: Massacre
+        1: Destruction
+        2: Mighty Blow
+        3: Pulverized
+        */
+        public int Field1; //Monsters killed
+        public int Field2; //Expbonus
         public bool Field3;
-
-
-
 
         public override void Parse(GameBitBuffer buffer)
         {
@@ -59,7 +63,5 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

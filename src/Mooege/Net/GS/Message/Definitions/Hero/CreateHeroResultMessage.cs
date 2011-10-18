@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Hero
 {
+    [Message(Opcodes.CreateHeroResultMessage)]
     public class CreateHeroResultMessage : GameMessage
     {
         public int Field0;

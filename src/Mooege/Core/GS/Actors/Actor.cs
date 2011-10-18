@@ -16,20 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
-using Mooege.Core.GS.Player;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
-using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Net.GS.Message.Definitions.Attribute;
-
-// TODO: Actor needs to use a nullable object for world position and a getter for inventory position (which is only used by Item)
-//       Or just a boolean parameter in Reveal to specify which location member is to be sent/nulled
+using Mooege.Core.Common.Items;
 
 // TODO: Need to move all of the remaining ACD fields into Actor (such as the affix list)
 
@@ -89,20 +84,33 @@ namespace Mooege.Core.GS.Actors
                 var old = new Vector3D(this._position);
                 this._position.Set(value);
                 this.OnMove(old);
-                this.World.OnActorMove(this, old); // TODO: Should notify its scene instead
+                this.World.OnActorPositionChange(this, old); // TODO: Should notify its scene instead
             }
         }
 
         public abstract ActorType ActorType { get; }
 
         public GameAttributeMap Attributes { get; private set; }
+        public List<Affix> AffixList { get; set; }
 
-        public int ActorSNO { get; set; }
-        public GBHandle GBHandle { get; set; }
+        protected int _actorSNO;
+        public int ActorSNO
+        {
+            get { return _actorSNO; }
+            set
+            {
+                this._actorSNO = value;
+                this.SNOName.Handle = this.ActorSNO;
+            }
+        }
+
+        public int CollFlags { get; set; }
+        public GBHandle GBHandle { get; private set; }
+        public SNOName SNOName { get; private set; }
 
         // Some ACD uncertainties
-        public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc
-        public int Field3 = 0x00000001; // TODO: What dis?
+        public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself
+        public int Field3 = 0x00000001; // TODO: What dis? <-- I guess its just 0 for WorldItem and 1 for InventoryItem // Farmy
         public int Field7 = -1;
         public int Field8 = -1; // Animation set SNO?
         public int Field9; // SNOName.Group?
@@ -124,7 +132,6 @@ namespace Mooege.Core.GS.Actors
             get { return true; }
         }
 
-        // NOTE: May want pack all of the location stuff into a PRTransform field called Position or Transform
         public virtual PRTransform Transform
         {
             get { return new PRTransform { Rotation = new Quaternion { Amount = this.RotationAmount, Axis = this.RotationAxis }, ReferencePoint = this.Position }; }
@@ -158,8 +165,11 @@ namespace Mooege.Core.GS.Actors
             : base(world, dynamicID)
         {
             this.Attributes = new GameAttributeMap();
+            this.AffixList = new List<Affix>();
+            this.GBHandle = new GBHandle() { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
+            this.SNOName = new SNOName() { Group = 0x00000001, Handle = this.ActorSNO };
             this.ActorSNO = -1;
-            this.GBHandle = new GBHandle();
+            this.CollFlags = 0x00000000;
             this.Scale = 1.0f;
             this.RotationAmount = 0.0f;
             this.RotationAxis.Set(0.0f, 0.0f, 1.0f);
@@ -184,13 +194,17 @@ namespace Mooege.Core.GS.Actors
         {
         }
 
-        public virtual void OnTargeted(Mooege.Core.GS.Player.Player player)
+        public virtual void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
         }
 
-        public override void Reveal(Mooege.Core.GS.Player.Player player)
+        /// <summary>
+        /// Reveals an actor to a player.
+        /// </summary>
+        /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
+        public override bool Reveal(Mooege.Core.GS.Player.Player player)
         {
-            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return; // already revealed
+            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
             player.RevealedObjects.Add(this.DynamicID, this);
 
             var msg = new ACDEnterKnownMessage
@@ -198,7 +212,7 @@ namespace Mooege.Core.GS.Actors
                 ActorID = this.DynamicID,
                 ActorSNO = this.ActorSNO,
                 Field2 = Field2,
-                Field3 = Field3,
+                Field3 = Field3, // this.hasWorldLocation ? 0 : 1;
                 WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
                 InventoryLocation = this.HasWorldLocation ? null : this.InventoryLocationMessage,
                 GBHandle = this.GBHandle,
@@ -210,15 +224,79 @@ namespace Mooege.Core.GS.Actors
                 Field12 = Field12,
                 Field13 = Field13,
             };
-            player.InGameClient.SendMessageNow(msg);
+
+            // normaly when we send acdenterknown for players own actor it's set to 0x09. But while sending the acdenterknown for another player's actor we should set it to 0x01. /raist
+            if ((this is Player.Player) && this != player) 
+                msg.Field2 = 0x01; 
+
+            player.InGameClient.SendMessage(msg);
+
+            // Affixes of the actor, two messages with 1 and 2,i guess prefix and suffix so it does not
+            // make sense to send the same list twice. server does not do this
+            var affixGbis = new int[AffixList.Count];
+            for (int i = 0; i < AffixList.Count; i++)
+            {
+                affixGbis[i] = AffixList[i].AffixGbid;
+            }
+
+            player.InGameClient.SendMessage(new AffixMessage()
+            {
+                ActorID = DynamicID,
+                Field1 = 0x00000001,
+                aAffixGBIDs = affixGbis,
+            });
+
+            player.InGameClient.SendMessage(new AffixMessage()
+            {
+                ActorID = DynamicID,
+                Field1 = 0x00000002,
+                aAffixGBIDs = affixGbis,
+            });
+
+            // Collision Flags
+            player.InGameClient.SendMessage(new ACDCollFlagsMessage()
+            {
+                ActorID = DynamicID,
+                CollFlags = this.CollFlags
+            });
+
+            // Send Attributes
+            Attributes.SendMessage(player.InGameClient, DynamicID);
+
+            // Actor group
+            player.InGameClient.SendMessage(new ACDGroupMessage()
+            {
+                ActorID = DynamicID,
+                Field1 = -1,
+                Field2 = -1,
+            });
+
+            // Reveal actor (creates actor and makes it visible to the player)
+            player.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage7)
+            {
+                ActorID = DynamicID
+            });
+
+            // This is always sent even though it doesn't identify the actor. /komiga
+            player.InGameClient.SendMessage(new SNONameDataMessage()
+            {
+                Name = this.SNOName
+            });
+
+            return true;
         }
 
-        public override void Unreveal(Mooege.Core.GS.Player.Player player)
+        /// <summary>
+        /// Unreveals an actor from a player.
+        /// </summary>
+        /// <returns>true if the actor was unrevealed or false if the actor wasn't already revealed.</returns>
+        public override bool Unreveal(Mooege.Core.GS.Player.Player player)
         {
-            if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return; // not revealed yet
+            if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // not revealed yet
             // NOTE: This message ID is probably "DestroyActor". ANNDataMessage7 is used for addition/creation
-            player.InGameClient.SendMessageNow(new ANNDataMessage(Opcodes.ANNDataMessage6) { ActorID = this.DynamicID });
+            player.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6) { ActorID = this.DynamicID });
             player.RevealedObjects.Remove(this.DynamicID);
+            return true;
         }
     }
 }

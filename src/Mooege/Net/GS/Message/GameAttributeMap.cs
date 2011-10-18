@@ -59,7 +59,6 @@ namespace Mooege.Net.GS.Message
             var list = GetMessageList(actorID);
             foreach (var msg in list)
                 client.SendMessage(msg);
-            client.FlushOutgoingBuffer();
         }
 
         public List<GameMessage> GetMessageList(uint actorID)
@@ -197,7 +196,7 @@ namespace Mooege.Net.GS.Message
 
         public float this[GameAttributeF attribute]
         {
-            get { return GetAttributeValue(attribute, null).Value; }
+            get { return GetAttributeValue(attribute, null).ValueF; }
             set { SetAttributeValue(attribute, null, new GameAttributeValue(value)); }
         }
 

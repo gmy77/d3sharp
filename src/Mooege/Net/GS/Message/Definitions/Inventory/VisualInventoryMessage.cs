@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
+    [Message(Opcodes.VisualInventoryMessage)]
     public class VisualInventoryMessage : GameMessage
     {
         public uint ActorID; // Player's DynamicID

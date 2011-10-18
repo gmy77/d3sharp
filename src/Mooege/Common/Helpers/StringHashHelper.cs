@@ -24,6 +24,7 @@ namespace Mooege.Common.Helpers
     public class StringHashHelper
     {
         // Used on the full name of a proto service for their ServiceHash and for toon names
+        // This algorithm is FNV-1a with prime 0x1000193 /komiga
         public static uint HashIdentity(string input)
         {
             var bytes = Encoding.ASCII.GetBytes(input);
@@ -32,6 +33,8 @@ namespace Mooege.Common.Helpers
 
         // Hash algorithm used for item names
         // FIXME: Our item name hasher seems to be problematic, for some items even with valid snoId's, bad gbId's are hashed which crashes client on pickup. /raist.
+        // NOTE: This is the DJB algorithm with a base of 0; and is likely accurate, assuming the base is actually 0 (the normal DJB uses 5381 as the base).
+        //       Someone mentioned that the issues are due to not all assets being available in the beta for some items. /komiga
         public static int HashItemName(string input)
         {
             int hash = 0;
