@@ -1,0 +1,48 @@
+﻿/*
+ * Copyright (C) 2011 mooege project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace Mooege.Common.Helpers
+{
+    public static class FileHelpers
+    {
+        public static List<string> GetFilesRecursive(string directory, string filePattern="*.*")
+        {
+            var files = new List<string>(); // Store results in the file results list.
+            var stack = new Stack<string>(); // Store a stack of our directories.
+
+            stack.Push(directory); // Add initial directory.
+
+            while (stack.Count > 0) // Continue while there are directories to process
+            {
+                var topDir = stack.Pop(); // Get top directory
+                files.AddRange(Directory.GetFiles(topDir, filePattern)); // Add files at this directory to the result List.
+
+                foreach (var dir in Directory.GetDirectories(topDir)) // Add all directories at this directory.
+                {
+                    stack.Push(dir);
+                }
+            }
+
+            return files.Select(file => file.Replace("\\", "/")).ToList();
+        }
+    }
+}

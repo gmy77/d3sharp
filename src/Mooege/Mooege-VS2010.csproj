@@ -54,6 +54,15 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CrystalMpq">
+      <HintPath>..\..\dep\crystalmpq\CrystalMpq.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalMpq.Utility">
+      <HintPath>..\..\dep\crystalmpq\CrystalMpq.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\dep\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp">
     </Reference>
     <Reference Include="System">
@@ -91,12 +100,15 @@
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
+    <Compile Include="Common\Helpers\FileHelpers.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\PotionAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributeCreator.cs" />
+    <Compile Include="Core\MPQ\MPQPatchChain.cs" />
+    <Compile Include="Core\MPQ\MPQStorage.cs" />
     <Compile Include="Core\GS\Game\GameCommands.cs" />
     <Compile Include="Core\GS\Game\GameManager.cs" />
     <Compile Include="Core\GS\Player\Equipment.cs" />
@@ -438,6 +450,10 @@
     </None>
     <None Include="..\..\assets\gamedata.db">
       <Link>Assets\gamedata.db</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\MPQ\IMPORTANT">
+      <Link>Assets\MPQ\IMPORTANT</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.config">
