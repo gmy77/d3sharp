@@ -103,6 +103,16 @@ namespace Mooege.Core.MooNet.Commands
         }
     }
 
+    [CommandGroup("motd", "Renders message of the day.")]
+    public class MOTDCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string MOTD(string[] @params, MooNetClient invokerClient)
+        {
+            return "Message of the day:" + Net.MooNet.Config.Instance.MOTD;
+        }
+    }
+
     [CommandGroup("server", "Allows you to control servers and start/stop them.", Account.UserLevels.Admin)]
     public class ServerCommand : CommandGroup
     {

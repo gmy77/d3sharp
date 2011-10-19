@@ -123,10 +123,10 @@ namespace Mooege.Core.MooNet.Commands
             switch (respondOver)
             {
                 case RespondOver.Channel: // if invoked from client within a channel
-                    if (invokerClient != null) invokerClient.SendMessage(output);
+                    if (invokerClient != null) invokerClient.SendServerMessage(output);
                     break;
                 case RespondOver.Whisper: // if invoked from client with a whisper
-                    if (invokerClient != null) invokerClient.SendWhisper(output);
+                    if (invokerClient != null) invokerClient.SendServerWhisper(output);
                     break;
             }
             
