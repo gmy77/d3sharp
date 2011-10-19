@@ -35,7 +35,7 @@ namespace Mooege.Core.MooNet.Commands
         public static CommandHandlerAccount Instance { get { return _instance; } }
 
         private CommandHandlerAccount()
-            : base(0, "server@mooege", new byte[] {}, new byte[] {})
+            : base(0, "server@mooege", new byte[] {}, new byte[] {}, UserLevels.User)
         {
             this.LoggedInClient = new CommandHandlerClient(this);
         }
@@ -45,7 +45,7 @@ namespace Mooege.Core.MooNet.Commands
             if (request.Type != "WHISPER") return;
             if (request.AttributeCount <= 0 || !request.AttributeList[0].HasValue)  return;
 
-            CommandManager.TryParse(request.AttributeList[0].Value.StringValue, client, CommandManager.ResponseMediums.Whisper);
+            CommandManager.TryParse(request.AttributeList[0].Value.StringValue, client, CommandManager.RespondOver.Whisper);
         }
     }
 
