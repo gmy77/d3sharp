@@ -113,11 +113,11 @@
     <Compile Include="Core\MooNet\Channels\Member.cs" />
     <Compile Include="Common\Config\Config.cs" />
     <Compile Include="Common\Config\ConfigManager.cs" />
+    <Compile Include="Core\MooNet\Commands\CommandGroup.cs" />
     <Compile Include="Core\MooNet\Commands\Config.cs" />
     <Compile Include="Core\MooNet\Commands\ServerCommandHandler.cs" />
     <Compile Include="Core\MooNet\Commands\CommandManager.cs" />
     <Compile Include="Core\MooNet\Commands\CommandAttribute.cs" />
-    <Compile Include="Core\MooNet\Commands\Command.cs" />
     <Compile Include="Core\MooNet\Commands\ServerCommands.cs" />
     <Compile Include="Core\MooNet\Games\GameCreator.cs" />
     <Compile Include="Core\MooNet\Games\GameCreatorManager.cs" />

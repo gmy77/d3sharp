@@ -119,7 +119,7 @@ namespace Mooege
             while (true)
             {
                 var line = Console.ReadLine();
-                CommandManager.TryParse(line);
+                CommandManager.Parse(line);
             }
         }
 
