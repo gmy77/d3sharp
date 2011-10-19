@@ -89,13 +89,15 @@ namespace Mooege.Core.MooNet.Commands
             {
                 @params = parameters.Split(' ');
                 target = this.GetSubcommand(@params[0]) ?? this.GetDefaultSubcommand();
-                @params = @params.Skip(1).ToArray();               
+                
+                if (target != this.GetDefaultSubcommand())
+                    @params = @params.Skip(1).ToArray();
             }
 
             // check if the user has enough privileges to invoke the command.
             if (invokerClient != null && target.MinUserLevel > invokerClient.Account.UserLevel)
                 return "You don't have enough privileges to invoke that command.";
-
+            
             return (string)this._commands[target].Invoke(this, new object[] { @params, invokerClient });
         }
 
