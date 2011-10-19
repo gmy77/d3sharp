@@ -235,7 +235,12 @@ namespace Mooege.Core.GS.Map
         {
             var item = ItemGenerator.CreateGold(player, RandomHelper.Next(1, 3)); // somehow the actual ammount is not shown on ground /raist.
             item.Drop(null, position);
-            player.GroundItems[item.DynamicID] = item;
+        }
+
+        public void SpawnGlobe(Mooege.Core.GS.Player.Player player, Vector3D position)
+        {
+            var item = ItemGenerator.CreateGlobe(player, RandomHelper.Next(1, 28)); // somehow the actual ammount is not shown on ground /raist.
+            item.Drop(null, position);
         }
 
         #region Collections
