@@ -312,7 +312,7 @@ namespace Mooege.Core.GS.Player
         // TODO: The inventory's gold item should not be created here. /komiga
         public void PickUpGold(uint itemID)
         {
-            Item collectedItem = _owner.GroundItems[itemID];
+            Item collectedItem = _owner.World.GetItem(itemID);
             Item sumGoldItem = _equipment.AddGoldItem(collectedItem);
 
             GameAttributeMap attributes = new GameAttributeMap();

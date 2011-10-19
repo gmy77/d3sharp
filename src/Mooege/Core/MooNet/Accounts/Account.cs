@@ -39,6 +39,7 @@ namespace Mooege.Core.MooNet.Accounts
         public string Email { get; private set; } // I - Username
         public byte[] Salt { get; private set; }  // s- User's salt.
         public byte[] PasswordVerifier { get; private set; } // v - password verifier.
+        public UserLevels UserLevel { get; private set; } // user level for account.
 
         public bool IsOnline { get { return this.LoggedInClient != null; } }
 
@@ -109,13 +110,13 @@ namespace Mooege.Core.MooNet.Accounts
             get { return ToonManager.GetToonsForAccount(this); }
         }
 
-        public Account(ulong persistentId, string email, byte[] salt, byte[] passwordVerifier) // Account with given persistent ID
+        public Account(ulong persistentId, string email, byte[] salt, byte[] passwordVerifier, UserLevels userLevel) // Account with given persistent ID
             : base(persistentId)
         {
-            this.SetFields(email,salt, passwordVerifier);
+            this.SetFields(email,salt, passwordVerifier, userLevel);
         }
 
-        public Account(string email, string password) // Account with **newly generated** persistent ID
+        public Account(string email, string password, UserLevels userLevel) // Account with **newly generated** persistent ID
             : base()
         {
             if (password.Length > 16) password = password.Substring(0, 16); // make sure the password does not exceed 16 chars.
@@ -123,7 +124,7 @@ namespace Mooege.Core.MooNet.Accounts
             var salt = SRP6a.GetRandomBytes(32);
             var passwordVerifier = SRP6a.CalculatePasswordVerifierForAccount(email, password, salt);
 
-            this.SetFields(email, salt, passwordVerifier);
+            this.SetFields(email, salt, passwordVerifier, userLevel);
         }
 
         private static ulong? _persistentIdCounter = null;
@@ -135,11 +136,12 @@ namespace Mooege.Core.MooNet.Accounts
             return (ulong)++_persistentIdCounter;
         }
 
-        private void SetFields(string email, byte[] salt, byte[] passwordVerifier)
+        private void SetFields(string email, byte[] salt, byte[] passwordVerifier, UserLevels userLevel)
         {
             this.Email = email;
             this.Salt = salt;
             this.PasswordVerifier = passwordVerifier;
+            this.UserLevel = userLevel;
 
             this.BnetAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.PersistentID).Build();
             this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(this.PersistentID).Build();
@@ -230,8 +232,8 @@ namespace Mooege.Core.MooNet.Accounts
         {
             try
             {
-                var query = string.Format("INSERT INTO accounts (id, email, salt, passwordVerifier) VALUES({0}, '{1}', @salt, @passwordVerifier)",
-                        this.PersistentID, this.Email);
+                var query = string.Format("INSERT INTO accounts (id, email, salt, passwordVerifier, userLevel) VALUES({0}, '{1}', @salt, @passwordVerifier, {2})",
+                        this.PersistentID, this.Email, (byte)this.UserLevel);
 
                     using(var cmd = new SQLiteCommand(query, DBManager.Connection))
                     {
@@ -265,9 +267,35 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
+        public void UpdateUserLevel(UserLevels userLevel)
+        {
+            this.UserLevel = userLevel;
+            try
+            {
+                var query = string.Format("UPDATE accounts SET userLevel={0} WHERE id={1}", (byte)userLevel, this.PersistentID);
+                var cmd = new SQLiteCommand(query, DBManager.Connection);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e, "UpdateUserLevel()");
+            }
+        }
+
         public override string ToString()
         {
             return String.Format("{{ Account: {0} [lowId: {1}] }}", this.Email, this.BnetAccountID.Low);
+        }
+
+        /// <summary>
+        /// User-levels.
+        /// </summary>
+        public enum UserLevels : byte
+        {
+            User,
+            GM,
+            Admin,
+            Owner
         }
     }
 }

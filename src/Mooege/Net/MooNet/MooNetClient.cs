@@ -236,7 +236,7 @@ namespace Mooege.Net.MooNet
         /// Sends a message to given client. Can be used for sending command replies.
         /// </summary>
         /// <param name="text">Message to send</param>
-        public void SendMessage(string text)
+        public void SendServerMessage(string text)
         {
             if (text.Trim() == string.Empty) return;
 
@@ -252,7 +252,7 @@ namespace Mooege.Net.MooNet
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(this).NotifySendMessage(null, notification, callback => { }));
         }
 
-        public void SendWhisper(string text)
+        public void SendServerWhisper(string text)
         {
             if (text.Trim() == string.Empty) return;
 

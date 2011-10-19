@@ -86,15 +86,37 @@ namespace Mooege.Core.MooNet.Channels
         public void Revoke(MooNetClient client, bnet.protocol.channel_invitation.RevokeInvitationRequest request)
         {
             if (!this._onGoingInvitations.ContainsKey(request.InvitationId)) return;
+            var invitation = this._onGoingInvitations[request.InvitationId];
+
+            //notify inviter about revoke
+            var updateChannelNotification =
+                bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
+                .SetAgentId(bnet.protocol.EntityId.CreateBuilder().SetHigh(0).SetLow(0)) // caps have this set to high: 0 low: 0 /dustin
+                .SetStateChange(bnet.protocol.channel.ChannelState.CreateBuilder()
+                    .AddInvitation(invitation)
+                    .SetReason((uint)InvitationRemoveReason.Revoked));
+
             this._onGoingInvitations.Remove(request.InvitationId);
-            
-            //TODO: We should be also notifying invitee somehow /raist
+
+            client.MakeTargetedRPC(client.CurrentChannel, () =>
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, updateChannelNotification.Build(), callback => { }));
+
+            //notify invitee about revoke
+            var invitationRemoved =
+                bnet.protocol.channel_invitation.InvitationRemovedNotification.CreateBuilder()
+                .SetInvitation(invitation)
+                .SetReason((uint)InvitationRemoveReason.Revoked);
+
+            var invitee = ToonManager.GetToonByLowID(invitation.InviteeIdentity.ToonId.Low);
+            invitee.Owner.LoggedInClient.MakeTargetedRPC(this, () =>
+                bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(invitee.Owner.LoggedInClient).NotifyReceivedInvitationRemoved(null, invitationRemoved.Build(), callback => { }));
         }
 
         public enum InvitationRemoveReason : uint // not sure -- and don't have all the values yet /raist.
         {
             Accepted = 0x0,
-            Declined = 0x1
+            Declined = 0x1,
+            Revoked = 0x2
         }
     }
 }

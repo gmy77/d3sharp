@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -86,10 +86,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dep\ductsharp.dll</HintPath>
     </Reference>
-    <Reference Include="System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\opt\mono-2.10\lib\mono\4.0\System.Numerics.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
@@ -116,11 +113,11 @@
     <Compile Include="Core\MooNet\Channels\Member.cs" />
     <Compile Include="Common\Config\Config.cs" />
     <Compile Include="Common\Config\ConfigManager.cs" />
+    <Compile Include="Core\MooNet\Commands\CommandGroup.cs" />
     <Compile Include="Core\MooNet\Commands\Config.cs" />
     <Compile Include="Core\MooNet\Commands\ServerCommandHandler.cs" />
     <Compile Include="Core\MooNet\Commands\CommandManager.cs" />
     <Compile Include="Core\MooNet\Commands\CommandAttribute.cs" />
-    <Compile Include="Core\MooNet\Commands\Command.cs" />
     <Compile Include="Core\MooNet\Commands\ServerCommands.cs" />
     <Compile Include="Core\MooNet\Games\GameCreator.cs" />
     <Compile Include="Core\MooNet\Games\GameCreatorManager.cs" />

@@ -28,147 +28,191 @@ namespace Mooege.Core.MooNet.Commands
     public static class CommandManager
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        private static readonly Dictionary<CommandAttribute, Command> Commands = new Dictionary<CommandAttribute, Command>();
+        private static readonly Dictionary<CommandGroupAttribute, CommandGroup> CommandGroups = new Dictionary<CommandGroupAttribute, CommandGroup>();
 
         static CommandManager()
         {
-            RegisterCommands();
+            RegisterCommandGroups();
         }
 
-        private static void RegisterCommands()
+        private static void RegisterCommandGroups()
         {
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            foreach(var type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                if (!type.IsSubclassOf(typeof(Command))) continue;
+                if (!type.IsSubclassOf(typeof(CommandGroup))) continue;
 
-                var attributes = (CommandAttribute[])type.GetCustomAttributes(typeof(CommandAttribute), true);
+                var attributes = (CommandGroupAttribute[])type.GetCustomAttributes(typeof(CommandGroupAttribute), true);
                 if (attributes.Length == 0) continue;
 
-                var commandAttribute = attributes[0];
-                if (!Commands.ContainsKey(commandAttribute))
-                    Commands.Add(commandAttribute, (Command)Activator.CreateInstance(type));
-                else
-                    Logger.Warn("There exists an already registered command '{0}'.", commandAttribute.Command);
+                var groupAttribute = attributes[0];
+                if (CommandGroups.ContainsKey(groupAttribute))
+                    Logger.Warn("There exists an already registered command group named '{0}'.", groupAttribute.Name);
+
+                var commandGroup = (CommandGroup) Activator.CreateInstance(type);
+                commandGroup.Register(groupAttribute);
+                CommandGroups.Add(groupAttribute, commandGroup);                   
             }
         }
 
         /// <summary>
-        /// Parses a read line from console.
+        /// Parses a given line from console as a command if any.
         /// </summary>
         /// <param name="line">The line to be parsed.</param>
-        /// <param name="client">The invoker client if any.</param>
-        /// <param name="responseMedium">The response medium to command</param>
-        public static bool TryParse(string line, MooNetClient client=null, ResponseMediums responseMedium = ResponseMediums.Console)
+        public static void Parse(string line)
         {
-            var output = string.Empty;
-            line = line.Trim().ToLower();
+            string output = string.Empty;
+            string command;
+            string parameters;
+            var found = false;
 
-            if (line == String.Empty) // just return false, if message is empty.
-                return false;
+            if (line.Trim() == string.Empty) return;
 
-            if (line[0] != Config.Instance.CommandPrefix) // if line does not start with command-prefix
+            if(!ExtractCommandAndParameters(line, out command, out parameters))
             {
                 output = "Unknown command: " + line;
-                if(client==null && responseMedium== ResponseMediums.Console) Logger.Info(output); // only output 'unknown command' message to console.
-                    return false;
-            }
-
-            line = line.Substring(1); // advance to actual command.
-            var command = line.Split(' ')[0]; // get command
-            var parameters = String.Empty; 
-            if (line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).ToLower().Trim(); // get parameters if any.
-
-            foreach(var pair in Commands) 
-            {
-                if (pair.Key.Command != command) continue;
-                InvokeCommand(pair.Key, pair.Value, parameters, client, responseMedium);
-                return true;
-            }
-
-            // if execution reaches here, it means command was not found.
-            output = "Unknown command: " + line;
-
-            // if invoked from console
-            if (client == null)
-            {
-                Logger.Info(output);
-                return true;
-            }
-
-            // if invoked by a client
-            if (responseMedium == ResponseMediums.Channel)
-                client.SendMessage(output);
-            else if (responseMedium == ResponseMediums.Whisper)
-                client.SendWhisper(output);
-            
-            return true;
-        }
-
-        private static void InvokeCommand(CommandAttribute commandAttribute, Command command, string parameters, MooNetClient client = null, ResponseMediums responseMedium = ResponseMediums.Console)
-        {
-            var output = string.Empty;
-
-            if (client != null && commandAttribute.ConsoleOnly)
-                output = "You don't have enough privileges to run this command.";
-            else
-                output = command.Invoke(parameters, client); // invoke the command
-
-            // if invoked from console
-            if (client == null)
-            {
                 Logger.Info(output);
                 return;
             }
 
-            // if invoked by a client
-            if (responseMedium == ResponseMediums.Channel)
-                client.SendMessage(output);
-            else if (responseMedium == ResponseMediums.Whisper)
-                client.SendWhisper(output);
+            foreach (var pair in CommandGroups)
+            {
+                if (pair.Key.Name != command) continue;
+                output = pair.Value.Handle(parameters);
+                found = true;
+                break;
+            }
+
+            if (found == false)
+                output = string.Format("Unknown command: {0} {1}", command, parameters);
+
+            if (output != string.Empty)
+                Logger.Info(output);
         }
 
-        // embedded commands
 
-        [Command("commands")]
-        public class CommandsCommand : Command
-        {            
-            public override string Invoke(string parameters, MooNetClient invokerClient = null)
+        /// <summary>
+        /// Tries to parse given line as a server command.
+        /// </summary>
+        /// <param name="line">The line to be parsed.</param>
+        /// <param name="invokerClient">The invoker client if any.</param>
+        /// <param name="respondOver">The response medium to command</param>
+        /// <returns><see cref="bool"/></returns>
+        public static bool TryParse(string line, MooNetClient invokerClient, RespondOver respondOver)
+        {
+            string output = string.Empty;
+            string command;
+            string parameters;
+            var found = false;
+
+            if (!ExtractCommandAndParameters(line, out command, out parameters))
+                return false;
+
+            foreach(var pair in CommandGroups) 
+            {
+                if (pair.Key.Name != command) continue;
+                output = pair.Value.Handle(parameters, invokerClient);
+                found = true;
+                break;
+            }
+
+            if (found == false)
+                output = string.Format("Unknown command: {0} {1}", command, parameters);
+
+            if (output == string.Empty) return true;
+
+            switch (respondOver)
+            {
+                case RespondOver.Channel: // if invoked from client within a channel
+                    if (invokerClient != null) invokerClient.SendServerMessage(output);
+                    break;
+                case RespondOver.Whisper: // if invoked from client with a whisper
+                    if (invokerClient != null) invokerClient.SendServerWhisper(output);
+                    break;
+            }
+            
+            return true;
+        }
+
+        public static bool ExtractCommandAndParameters(string line, out string command, out string parameters)
+        {
+            line = line.Trim().ToLower();
+            command = string.Empty;
+            parameters = string.Empty;
+
+            if (line == string.Empty)
+                return false;
+
+            if (line[0] != Config.Instance.CommandPrefix) // if line does not start with command-prefix
+                return false;
+
+            line = line.Substring(1); // advance to actual command.
+            command = line.Split(' ')[0]; // get command
+            parameters = String.Empty;
+            if (line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).ToLower().Trim(); // get parameters if any.
+
+            return true;
+        }
+
+        [CommandGroup("commands","Lists available commands for your user-level.")]
+        public class CommandsCommandGroup : CommandGroup
+        {
+            public override string Fallback(string[] parameters = null, MooNetClient invokerClient = null)
             {
                 var output = "Available commands: ";
-                output += Commands.Aggregate(string.Empty, (current, pair) => current + (pair.Key.Command + ", "));
-                output += "\nType 'help <command>' to get help.";
-                return output;
+                foreach(var pair in CommandGroups)
+                {
+                    if (invokerClient != null && pair.Key.MinUserLevel > invokerClient.Account.UserLevel) continue;
+                    output += pair.Key.Name + ", ";
+                }
+
+                output = output.Substring(0, output.Length - 2) + ".";
+                return output + "\nType 'help <command>' to get help.";
             }
         }
 
-        [Command("help")]
-        public class HelpCommand : Command
+        [CommandGroup("help", "Oh no, we forgot to add a help to text to help command itself!")]
+        public class HelpCommandGroup : CommandGroup
         {
-            public override string Invoke(string parameters, MooNetClient invokerClient = null)
+            public override string Fallback(string[] parameters = null, MooNetClient invokerClient = null)
             {
-                if(parameters == string.Empty)
+                return "usage: help <command>";
+            }
+
+            public override string Handle(string parameters, MooNetClient invokerClient = null)
+            {
+                if (parameters == string.Empty)
+                    return this.Fallback();
+
+                string output = string.Empty;
+                bool found = false;
+                var @params = parameters.Split(' ');
+                var group = @params[0];
+                var command = @params.Count()>1 ? @params[1] : string.Empty;
+
+                foreach(var pair in CommandGroups)
                 {
-                    return "usage: help <command>";
+                    if (group != pair.Key.Name)
+                        continue;
+
+                    if (command == string.Empty)
+                        return pair.Key.Help;
+
+                    output = pair.Value.GetHelp(command);
+                    found = true;
                 }
 
-                foreach (var pair in CommandManager.Commands)
-                {
-                    if (pair.Key.Command != parameters) continue;
+                if (!found)
+                    output = string.Format("Unknown command: {0} {1}", group, command);
 
-                    var output = pair.Value.Help();
-                    return output != string.Empty ? output : "Help text not found for command: " + parameters;
-                }
-
-                return "Unknown command: " + parameters;
+                return output;
             }
         }
 
         /// <summary>
         /// Response mediums.
         /// </summary>
-        public enum ResponseMediums
+        public enum RespondOver
         {
-            Console,
             Channel,
             Whisper
         }

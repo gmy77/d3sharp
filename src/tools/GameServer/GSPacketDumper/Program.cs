@@ -41,11 +41,11 @@ namespace GSPacketDumper {
                 return;
             }
 
-            var outputFile = args[0] + ".txt";
+            var outputFile = Path.GetFileName(args[0]) + ".txt";
             if(File.Exists(outputFile)) File.Delete(outputFile);
 
             LogManager.Enabled = true;
-            LogManager.AttachLogTarget(new FileTarget(outputFile, Level.Dump));
+            LogManager.AttachLogTarget(new FileTarget(outputFile, Logger.Level.Dump, Logger.Level.Dump, true, true));
 
             Console.WriteLine("Demystifying packets:");
             PacketReader.Read(args[0]);
