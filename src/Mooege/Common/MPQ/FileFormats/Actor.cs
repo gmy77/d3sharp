@@ -26,7 +26,8 @@ using Mooege.Common.Extensions;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
-    public class ActorDefinition
+    [AssetFormat(SNOGroup.Actor,"acr")]
+    public class Actor: AssetFormat
     {
         /// <summary>
         /// SNO for actor.
@@ -38,7 +39,7 @@ namespace Mooege.Common.MPQ.FileFormats
         /// </summary>
         public int AnimSetSNO;
 
-        public ActorDefinition(MpqFile file)
+        public Actor(MpqFile file)
         {
             var stream = file.Open();
             stream.Seek(16, SeekOrigin.Begin);

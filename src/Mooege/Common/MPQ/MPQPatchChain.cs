@@ -28,8 +28,8 @@ namespace Mooege.Common.MPQ
     public class MPQPatchChain
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        protected readonly MpqFileSystem FileSystem = new MpqFileSystem();
 
+        public readonly MpqFileSystem FileSystem = new MpqFileSystem();
         public string BaseMPQFile { get; private set; }
         public string PatchPattern { get; private set; }
         public readonly SortedDictionary<int, string> MPQFileList = new SortedDictionary<int, string>();

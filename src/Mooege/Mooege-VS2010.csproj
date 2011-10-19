@@ -102,8 +102,11 @@
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Common\Extensions\MpqFileStreamExtensions.cs" />
     <Compile Include="Common\Helpers\FileHelpers.cs" />
+    <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\CoreData.cs" />
-    <Compile Include="Common\MPQ\FileFormats\ActorDefinition.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Actor.cs" />
+    <Compile Include="Common\MPQ\FileFormats\AssetFormat.cs" />
+    <Compile Include="Common\MPQ\FileFormats\AssetFormatAttribute.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
