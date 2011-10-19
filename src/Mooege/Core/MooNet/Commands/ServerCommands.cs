@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -27,192 +28,170 @@ using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Commands
 {
-    //[Command("stats")]
-    //public class StatsCommand: Command
-    //{
-    //    public override string Help()
-    //    {
-    //        return "usage: stats [detailed]";
-    //    }
+    [CommandGroup("stats", "Renders statistics.\nUsage: stats [system].")]
+    public class StatsCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Stats(string[] @params, MooNetClient invokerClient)
+        {
+            return string.Format("Total Accounts: {0}, Total Toons: {1} Online Players: {2} ",
+                                 AccountManager.TotalAccounts, ToonManager.TotalToons, PlayerManager.OnlinePlayers.Count);
+        }
 
-    //    public override string Invoke(string parameters, MooNetClient invokerClient = null)
-    //    {
-    //        var output = new StringBuilder();
-    //        output.AppendFormat("Total Accounts: {0}, Total Toons: {1} Online Players: {2} ", AccountManager.TotalAccounts, ToonManager.TotalToons, PlayerManager.OnlinePlayers.Count);
+        [Command("system", "Renders system statistics.")]
+        public string Detailed(string[] @params, MooNetClient invokerClient)
+        {
+            var output = new StringBuilder();
 
-    //        if (parameters.ToLower() != "detailed") return output.ToString();
+            output.AppendFormat("GC Allocated Memory: {0}KB ", GC.GetTotalMemory(true) / 1024);
 
-    //        output.AppendFormat("\nGC Allocated Memory: {0}KB ", GC.GetTotalMemory(true) / 1024);
+            if (PerformanceCounterCategory.Exists("Processor") && PerformanceCounterCategory.CounterExists("% Processor Time", "Processor"))
+            {
+                var processorTimeCounter = new PerformanceCounter { CategoryName = "Processor", CounterName = "% Processor Time", InstanceName = "_Total" };
+                output.AppendFormat("Processor Time: {0}%", processorTimeCounter.NextValue());
+            }
 
-    //        if (PerformanceCounterCategory.Exists("Processor") && PerformanceCounterCategory.CounterExists("% Processor Time", "Processor"))
-    //        {
-    //            var processorTimeCounter = new PerformanceCounter { CategoryName = "Processor", CounterName = "% Processor Time", InstanceName = "_Total" };
-    //            output.AppendFormat("Processor Time: {0}%", processorTimeCounter.NextValue());
-    //        }
+            if (PerformanceCounterCategory.Exists(".NET CLR LocksAndThreads"))
+            {
+                if (PerformanceCounterCategory.CounterExists("# of current physical Threads", ".NET CLR LocksAndThreads"))
+                {
+                    var physicalThreadsCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current physical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
+                    output.AppendFormat("\nPhysical Threads: {0} ", physicalThreadsCounter.NextValue());
+                }
 
-    //        if (PerformanceCounterCategory.Exists(".NET CLR LocksAndThreads"))
-    //        {
-    //            if (PerformanceCounterCategory.CounterExists("# of current physical Threads", ".NET CLR LocksAndThreads"))
-    //            {
-    //                var physicalThreadsCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current physical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
-    //                output.AppendFormat("\nPhysical Threads: {0} ", physicalThreadsCounter.NextValue());
-    //            }
+                if (PerformanceCounterCategory.CounterExists("# of current logical Threads", ".NET CLR LocksAndThreads"))
+                {
+                    var logicalThreadsCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current logical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
+                    output.AppendFormat("Logical Threads: {0} ", logicalThreadsCounter.NextValue());
+                }
 
-    //            if (PerformanceCounterCategory.CounterExists("# of current logical Threads", ".NET CLR LocksAndThreads"))
-    //            {
-    //                var logicalThreadsCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "# of current logical Threads", InstanceName = Process.GetCurrentProcess().ProcessName };
-    //                output.AppendFormat("Logical Threads: {0} ", logicalThreadsCounter.NextValue());
-    //            }
+                if (PerformanceCounterCategory.CounterExists("Contention Rate / sec", ".NET CLR LocksAndThreads"))
+                {
+                    var contentionRateCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "Contention Rate / sec", InstanceName = Process.GetCurrentProcess().ProcessName };
+                    output.AppendFormat("Contention Rate: {0}/sec", contentionRateCounter.NextValue());
+                }
+            }
 
-    //            if (PerformanceCounterCategory.CounterExists("Contention Rate / sec", ".NET CLR LocksAndThreads"))
-    //            {
-    //                var contentionRateCounter = new PerformanceCounter { CategoryName = ".NET CLR LocksAndThreads", CounterName = "Contention Rate / sec", InstanceName = Process.GetCurrentProcess().ProcessName };
-    //                output.AppendFormat("Contention Rate: {0}/sec", contentionRateCounter.NextValue());
-    //            }
-    //        }
+            if (PerformanceCounterCategory.Exists(".NET CLR Exceptions") && PerformanceCounterCategory.CounterExists("# of Exceps Thrown", ".NET CLR Exceptions"))
+            {
+                var exceptionsThrownCounter = new PerformanceCounter { CategoryName = ".NET CLR Exceptions", CounterName = "# of Exceps Thrown", InstanceName = Process.GetCurrentProcess().ProcessName };
+                output.AppendFormat("\nExceptions Thrown: {0}", exceptionsThrownCounter.NextValue());
+            }
 
-    //        if (PerformanceCounterCategory.Exists(".NET CLR Exceptions") && PerformanceCounterCategory.CounterExists("# of Exceps Thrown", ".NET CLR Exceptions"))
-    //        {
-    //            var exceptionsThrownCounter = new PerformanceCounter { CategoryName = ".NET CLR Exceptions", CounterName = "# of Exceps Thrown", InstanceName = Process.GetCurrentProcess().ProcessName };
-    //            output.AppendFormat("\nExceptions Thrown: {0}", exceptionsThrownCounter.NextValue());
-    //        }
+            return output.ToString();
+        }
+    }
 
-    //        return output.ToString();
-    //    }
-    //}
+    [CommandGroup("uptime", "Renders uptime statistics.")]
+    public class UptimeCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Uptime(string[] @params, MooNetClient invokerClient)
+        {
+            var uptime = DateTime.Now - Program.StartupTime;
+            return string.Format("Uptime: {0} days, {1} hours, {2} minutes, {3} seconds.", uptime.Days, uptime.Hours, uptime.Minutes, uptime.Seconds);
+        }
+    }
 
-    //[Command("version")]
-    //public class VersionCommand : Command
-    //{
-    //    public override string Help()
-    //    {
-    //        return "usage: version";
-    //    }
+    [CommandGroup("version", "Renders server version.")]
+    public class VersionCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Version(string[] @params, MooNetClient invokerClient)
+        {
+            return "mooege " + Assembly.GetExecutingAssembly().GetName().Version;
+        }
+    }
 
-    //    public override string Invoke(string parameters, MooNetClient invokerClient = null)
-    //    {
-    //        return "mooege " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
-    //    }
-    //}
+    [CommandGroup("server", "Allows you to control servers and start/stop them.", Account.UserLevels.Admin)]
+    public class ServerCommand : CommandGroup
+    {
+        [Command("start", "usage: server start [moonet|gs]")]
+        public string Start(string[] @params, MooNetClient invokerClient)
+        {
+            var startMooNet = false;
+            var startGS = false;
+            var output = string.Empty;
 
-    //[Command("Uptime")]
-    //public class UptimeCommand : Command
-    //{
-    //    public override string Help()
-    //    {
-    //        return "usage: uptime";
-    //    }
+            if (@params.Count() > 0)
+            {
+                switch (@params[0])
+                {
+                    case "moonet":
+                        startMooNet = true;
+                        break;
+                    case "gs":
+                        startGS = true;
+                        break;
+                }
+            }
+            else
+            {
+                startMooNet = true;
+                startGS = true;
+            }
 
-    //    public override string Invoke(string parameters, MooNetClient invokerClient = null)
-    //    {
-    //        var uptime = DateTime.Now - Program.StartupTime;
-    //        return string.Format("Uptime: {0} days, {1} hours, {2} minutes, {3} seconds.", uptime.Days, uptime.Hours, uptime.Minutes, uptime.Seconds);
-    //    }
-    //}
+            if (startMooNet)
+            {
+                if (!Program.StartMooNet())
+                    output += "MooNet server is already running. ";
+            }
 
-    //[Command("shutdown", true)]
-    //public class ShutdownCommand : Command
-    //{
-    //    public override string Help()
-    //    {
-    //        return "usage: shutdown";
-    //    }
-
-    //    public override string Invoke(string parameters, MooNetClient invokerClient = null)
-    //    {
-    //        Program.Shutdown();
-    //        return string.Empty;
-    //    }
-    //}
-
-    //[Command("start", true)]
-    //public class StartCommand : Command
-    //{
-    //    public override string Help()
-    //    {
-    //        return "usage: start [all|moonet|gs]";
-    //    }
-
-    //    public override string Invoke(string parameters, MooNetClient invokerClient = null)
-    //    {
-    //        var startMooNet = false;
-    //        var startGS = false;
-    //        var output = string.Empty;
-
-    //        switch (parameters)
-    //        {
-    //            case "all":
-    //            case "":
-    //                startMooNet = true;
-    //                startGS = true;
-    //                break;
-    //            case "moonet":
-    //                startMooNet = true;
-    //                break;
-    //            case "gs":
-    //                startGS = true;
-    //                break;
-    //        }
-
-    //        if (startMooNet)
-    //        {
-    //            if (!Program.StartMooNet())
-    //                output += "MooNet server is already running. ";
-    //        }
-
-    //        if(startGS)
-    //        {
-    //            if (!Program.StartGS())
-    //                output += "GS is already running. ";
+            if(startGS)
+            {
+                if (!Program.StartGS())
+                    output += "GS is already running. ";
                          
-    //        }
+            }
 
-    //        return output;
-    //    }
-    //}
+            return output;
+        }
 
-    //[Command("stop", true)]
-    //public class StopCommand : Command
-    //{
-    //    public override string Help()
-    //    {
-    //        return "usage: stop [all|moonet|gs]";
-    //    }
+        [Command("stop", "usage: server stop [moonet|gs]")]
+        public string Stop(string[] @params, MooNetClient invokerClient)
+        {
+            var stopMooNet = false;
+            var stopGS = false;
+            var output = string.Empty;
 
-    //    public override string Invoke(string parameters, MooNetClient invokerClient = null)
-    //    {
-    //        var stopMooNet = false;
-    //        var stopGS = false;
-    //        var output = string.Empty;
+            if(@params.Count() > 0)
+            {
+                switch (@params[0])
+                {
+                    case "moonet":
+                        stopMooNet = true;
+                        break;
+                    case "gs":
+                        stopGS = true;
+                        break;
+                }
+            }
+            else
+            {
+                stopMooNet = true;
+                stopGS = true;
+            }
 
-    //        switch (parameters)
-    //        {
-    //            case "all":
-    //            case "":
-    //                stopMooNet = true;
-    //                stopGS = true;
-    //                break;
-    //            case "moonet":
-    //                stopMooNet = true;
-    //                break;
-    //            case "gs":
-    //                stopGS = true;
-    //                break;
-    //        }
+            if (stopMooNet)
+            {
+                if (!Program.StopMooNet())
+                    output += "MooNet server is already stopped. ";
+            }
 
-    //        if (stopMooNet)
-    //        {
-    //            if (!Program.StopMooNet())
-    //                output += "MooNet server is already stopped. ";
-    //        }
+            if (stopGS)
+            {
+                if (!Program.StopGS())
+                    output += "GS is already stopped. ";
+            }
 
-    //        if (stopGS)
-    //        {
-    //            if (!Program.StopGS())
-    //                output += "GS is already stopped. ";
-    //        }
+            return output;
+        }
 
-    //        return output;
-    //    }
-    //}
+        [Command("shutdown", "usage: server shutdown")]
+        public string Shutdown(string[] @params, MooNetClient invokerClient)
+        {
+            Program.Shutdown();
+            return string.Empty;
+        }
+    }
 }

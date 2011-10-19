@@ -63,6 +63,9 @@ namespace Mooege.Core.MooNet.Commands
             string output = string.Empty;
             string command;
             string parameters;
+            var found = false;
+
+            if (line.Trim() == string.Empty) return;
 
             if(!ExtractCommandAndParameters(line, out command, out parameters))
             {
@@ -75,13 +78,15 @@ namespace Mooege.Core.MooNet.Commands
             {
                 if (pair.Key.Name != command) continue;
                 output = pair.Value.Handle(parameters);
+                found = true;
                 break;
             }
 
-            if (output == string.Empty)
+            if (found == false)
                 output = string.Format("Unknown command: {0} {1}", command, parameters);
 
-            Logger.Info(output);
+            if (output != string.Empty)
+                Logger.Info(output);
         }
 
 
@@ -97,6 +102,7 @@ namespace Mooege.Core.MooNet.Commands
             string output = string.Empty;
             string command;
             string parameters;
+            var found = false;
 
             if (!ExtractCommandAndParameters(line, out command, out parameters))
                 return false;
@@ -105,12 +111,15 @@ namespace Mooege.Core.MooNet.Commands
             {
                 if (pair.Key.Name != command) continue;
                 output = pair.Value.Handle(parameters, invokerClient);
+                found = true;
                 break;
             }
 
-            if (output == string.Empty)
+            if (found == false)
                 output = string.Format("Unknown command: {0} {1}", command, parameters);
-          
+
+            if (output == string.Empty) return true;
+
             switch (respondOver)
             {
                 case RespondOver.Channel: // if invoked from client within a channel
@@ -149,7 +158,13 @@ namespace Mooege.Core.MooNet.Commands
         {
             public override string Fallback(string[] parameters = null, MooNetClient invokerClient = null)
             {
-                var output = CommandGroups.Aggregate("Available commands: ", (current, pair) => current + (pair.Key.Name + ", "));
+                var output = "Available commands: ";
+                foreach(var pair in CommandGroups)
+                {
+                    if (invokerClient != null && pair.Key.MinUserLevel > invokerClient.Account.UserLevel) continue;
+                    output += pair.Key.Name + ", ";
+                }
+
                 output = output.Substring(0, output.Length - 2) + ".";
                 return output + "\nType 'help <command>' to get help.";
             }
@@ -168,6 +183,8 @@ namespace Mooege.Core.MooNet.Commands
                 if (parameters == string.Empty)
                     return this.Fallback();
 
+                string output = string.Empty;
+                bool found = false;
                 var @params = parameters.Split(' ');
                 var group = @params[0];
                 var command = @params.Count()>1 ? @params[1] : string.Empty;
@@ -180,12 +197,14 @@ namespace Mooege.Core.MooNet.Commands
                     if (command == string.Empty)
                         return pair.Key.Help;
 
-                    var output = pair.Value.GetHelp(command);
-                    if (output == string.Empty) output = string.Format("Unknown command: {0} {1}", group, command);
-                    return output;
+                    output = pair.Value.GetHelp(command);
+                    found = true;
                 }
 
-                return string.Empty;
+                if (!found)
+                    output = string.Format("Unknown command: {0} {1}", group, command);
+
+                return output;
             }
         }
 

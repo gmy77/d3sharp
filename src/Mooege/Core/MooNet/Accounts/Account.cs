@@ -269,6 +269,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         public void UpdateUserLevel(UserLevels userLevel)
         {
+            this.UserLevel = userLevel;
             try
             {
                 var query = string.Format("UPDATE accounts SET userLevel={0} WHERE id={1}", (byte)userLevel, this.PersistentID);

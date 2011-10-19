@@ -25,7 +25,22 @@ namespace Mooege.Core.MooNet.Accounts
     [CommandGroup("account", "Provides account managment commands.")]
     public class AccountCommands: CommandGroup
     {
-        [Command("add", "Allows you to add a new user account.\n Usage: account add <email> <password> [userlevel]", Account.UserLevels.GM)]
+        [Command("show","Shows information about given account\nUsage: account show <email>", Account.UserLevels.GM)]
+        public string Show(string[] @params, MooNetClient invokerClient)
+        {
+            if (@params.Count() < 1)
+                return "Invalid arguments. Type 'help account show' to get help.";
+
+            var email = @params[0];
+            var account = AccountManager.GetAccountByEmail(email);
+
+            if (account == null)
+                return string.Format("No account with email '{0}' exists.", email);
+
+            return string.Format("Email: {0} User Level: {1}", account.Email, account.UserLevel);
+        }
+
+        [Command("add", "Allows you to add a new user account.\nUsage: account add <email> <password> [userlevel]", Account.UserLevels.GM)]
         public string Add(string[] @params, MooNetClient invokerClient)
         {
             if (@params.Count() < 2)

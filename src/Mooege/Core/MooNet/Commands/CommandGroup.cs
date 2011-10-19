@@ -75,6 +75,11 @@ namespace Mooege.Core.MooNet.Commands
 
         public virtual string Handle(string parameters, MooNetClient invokerClient=null)
         {
+            // check if the user has enough privileges to access command group.
+            // check if the user has enough privileges to invoke the command.
+            if (invokerClient != null && this.Attributes.MinUserLevel > invokerClient.Account.UserLevel)
+                return "You don't have enough privileges to invoke that command.";
+
             string[] @params=null;
             CommandAttribute target = null;
 
@@ -87,7 +92,7 @@ namespace Mooege.Core.MooNet.Commands
                 @params = @params.Skip(1).ToArray();               
             }
 
-            // check privileges.
+            // check if the user has enough privileges to invoke the command.
             if (invokerClient != null && target.MinUserLevel > invokerClient.Account.UserLevel)
                 return "You don't have enough privileges to invoke that command.";
 
@@ -108,7 +113,14 @@ namespace Mooege.Core.MooNet.Commands
         [DefaultCommand]
         public virtual string Fallback(string[] @params = null, MooNetClient invokerClient = null)
         {
-            var output = this._commands.Where(pair => pair.Key.Name != "fallback").Aggregate("Available subcommands: ", (current, pair) => current + (pair.Key.Name + ", "));
+            var output = "Available subcommands: ";
+            foreach(var pair in this._commands)
+            {
+                if (pair.Key.Name.Trim() == string.Empty) continue; // skip fallback command.
+                if (invokerClient != null && pair.Key.MinUserLevel > invokerClient.Account.UserLevel) continue;
+                output += pair.Key.Name + ", ";
+            }
+
             return output.Substring(0, output.Length - 2) + ".";
         }
 

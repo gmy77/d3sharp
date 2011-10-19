@@ -25,7 +25,7 @@ using Mooege.Net.MooNet;
 
 namespace Mooege.Core.GS.Game
 {
-    [CommandGroup("spawn", "Spawns a mob.")]
+    [CommandGroup("spawn", "Spawns a mob.\nUsage: spawn [amount] [actorSNO]")]
     public class SpawnCommand : CommandGroup
     {
         [DefaultCommand]
