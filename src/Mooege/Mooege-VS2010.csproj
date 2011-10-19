@@ -100,15 +100,18 @@
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
+    <Compile Include="Common\Extensions\MpqFileStreamExtensions.cs" />
     <Compile Include="Common\Helpers\FileHelpers.cs" />
+    <Compile Include="Common\MPQ\CoreData.cs" />
+    <Compile Include="Common\MPQ\FileFormats\ActorDefinition.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\PotionAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributeCreator.cs" />
-    <Compile Include="Core\MPQ\MPQPatchChain.cs" />
-    <Compile Include="Core\MPQ\MPQStorage.cs" />
+    <Compile Include="Common\MPQ\MPQPatchChain.cs" />
+    <Compile Include="Common\MPQ\MPQStorage.cs" />
     <Compile Include="Core\GS\Game\GameCommands.cs" />
     <Compile Include="Core\GS\Game\GameManager.cs" />
     <Compile Include="Core\GS\Player\Equipment.cs" />

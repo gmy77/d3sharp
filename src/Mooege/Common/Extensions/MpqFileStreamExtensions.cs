@@ -16,16 +16,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Core.Common.Storage
-{
-    public sealed class Config : Mooege.Common.Config.Config
-    {
-        public string AssetsRoot { get { return this.GetString("AssetsRoot", "."); } set { this.Set("AssetsRoot", value); } }
-        public string Root { get { return this.GetString("Root", "Assets"); } set { this.Set("Root", value); } }
-        public string MPQRoot { get { return this.GetString("MPQRoot", "MPQ"); } set { this.Set("MPQRoot", value); } }
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using CrystalMpq;
 
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Storage") { }
+namespace Mooege.Common.Extensions
+{
+    public static class MpqFileStreamExtensions
+    {
+        public static int ReadInt32(this MpqFileStream stream)
+        {
+            var buffer = new byte[4];
+            int result = stream.Read(buffer, 0, 4);
+            return BitConverter.ToInt32(buffer, 0);
+        }
     }
 }

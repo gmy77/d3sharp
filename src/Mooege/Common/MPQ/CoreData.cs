@@ -18,36 +18,32 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using CrystalMpq;
-using CrystalMpq.Utility;
-using Mooege.Common;
-using Mooege.Common.Helpers;
+using System.Text;
+using Mooege.Common.MPQ.FileFormats;
 
-namespace Mooege.Core.MPQ
+namespace Mooege.Common.MPQ
 {
-    public static class MPQStorage
+    public class CoreData : MPQPatchChain
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
-        private readonly static string MpqRoot = Common.Storage.Config.Instance.MPQRoot;
+        public readonly Dictionary<int, ActorDefinition> Actors = new Dictionary<int, ActorDefinition>();
 
-        public static readonly List<string> MPQList;
-
-        static MPQStorage()
+        public CoreData()
+            : base("CoreData.mpq", "/base/d3-update-base-(?<version>.*?).MPQ")
         {
-            MPQList = FileHelpers.GetFilesRecursive(MpqRoot, "*.mpq");
-            var chain = new MPQPatchChain(GetMPQFile("CoreData.mpq"), "/base/d3-update-base-(?<version>.*?).MPQ");
+            this.LoadActors();
         }
 
-        public static string GetMPQFile(string name)
+        private void LoadActors()
         {
-            return MPQList.FirstOrDefault(file => file.Contains(name));
-        }
+            foreach(var file in this.FindMatchingFiles(".acr"))
+            {
+                var mpqFile = this.FileSystem.FindFile(file);
+                if (mpqFile == null || mpqFile.Size < 10) continue;
 
-        public static void Init()
-        {
-            
+                var actorDefinition = new ActorDefinition(mpqFile);
+                this.Actors.Add(actorDefinition.ActorSNO, actorDefinition);
+            }
         }
     }
 }
