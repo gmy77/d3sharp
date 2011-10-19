@@ -17,22 +17,17 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class AssetFormatAttribute : Attribute
+    public class FileFormatAttribute : Attribute
     {
         public SNOGroup Group { get; private set; }
-        public string Extentesion { get; private set; }
 
-        public AssetFormatAttribute(SNOGroup group, string extension)
+        public FileFormatAttribute(SNOGroup group)
         {
             this.Group = group;
-            this.Extentesion = extension;
         }
     }
 }

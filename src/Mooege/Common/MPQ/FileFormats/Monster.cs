@@ -22,27 +22,37 @@ using Mooege.Common.Extensions;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
-    [FileFormat(SNOGroup.Actor)]
-    public class Actor: FileFormat
+    [FileFormat(SNOGroup.Monster)]
+    public class Monster : FileFormat
     {
-        /// <summary>
-        /// SNO for actor.
-        /// </summary>
+        public int MonsterSNO;
         public int ActorSNO;
+        public int MonsterType; // Unsure - DarkLotus
+        public Levels Level = new Levels();
 
-        /// <summary>
-        /// SNO for actor's animset.
-        /// </summary>
-        public int AnimSetSNO;
-
-        public Actor(MpqFile file)
+        public Monster(MpqFile file)
         {
             var stream = file.Open();
             stream.Seek(16, SeekOrigin.Begin);
+            this.MonsterSNO = stream.ReadInt32();
+            stream.Position = 32;
             this.ActorSNO = stream.ReadInt32();
-            stream.Position = 120;
-            this.AnimSetSNO = stream.ReadInt32();
+            stream.Position = 48;
+            this.MonsterType = stream.ReadInt32();
+            stream.Position = 80;
+            this.Level.Normal = stream.ReadInt32();
+            this.Level.Nightmare = stream.ReadInt32();
+            this.Level.Hell = stream.ReadInt32();
+            this.Level.Inferno = stream.ReadInt32();            
             stream.Close();
+        }
+
+        public class Levels
+        {
+            public int Normal;
+            public int Nightmare;
+            public int Hell;
+            public int Inferno;
         }
     }
 }

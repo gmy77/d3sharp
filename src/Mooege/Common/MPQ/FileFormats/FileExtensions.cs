@@ -16,33 +16,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.IO;
-using CrystalMpq;
-using Mooege.Common.Extensions;
-
 namespace Mooege.Common.MPQ.FileFormats
 {
-    [FileFormat(SNOGroup.Actor)]
-    public class Actor: FileFormat
+    public static class FileExtensions
     {
-        /// <summary>
-        /// SNO for actor.
-        /// </summary>
-        public int ActorSNO;
-
-        /// <summary>
-        /// SNO for actor's animset.
-        /// </summary>
-        public int AnimSetSNO;
-
-        public Actor(MpqFile file)
+        public static string[] Extensions = new[]
         {
-            var stream = file.Open();
-            stream.Seek(16, SeekOrigin.Begin);
-            this.ActorSNO = stream.ReadInt32();
-            stream.Position = 120;
-            this.AnimSetSNO = stream.ReadInt32();
-            stream.Close();
-        }
+            "", ".acr", ".adv", ".aib", ".ais", ".ams", ".ani", ".an2",
+            ".ans", ".app", ".hro", ".clt", ".cnv", ".cnl", ".efg", ".enc",
+            "", ".xpl", ".flg", ".fnt", ".gam", ".glo", ".lvl", ".lit",
+            ".mrk", ".mon", ".obs", ".prt", ".phy", ".pow", "", ".qst",
+            ".rop", ".scn", ".scg", ".scr", ".shm", ".shd", ".shk", ".skl",
+            ".snd", ".sbk", ".stl", ".srf", ".tex", ".trl", ".ui", ".wth",
+            ".wrl", ".rcp", "", ".cnd", ".trs", ".acc", ".con", ".tme",
+            ".act", ".mat", ".qsr", ".lor", ".rev", ".phm", ".mus", ".tut",
+            ".bos",
+        };
     }
 }

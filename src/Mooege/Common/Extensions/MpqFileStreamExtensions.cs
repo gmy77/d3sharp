@@ -32,5 +32,19 @@ namespace Mooege.Common.Extensions
             int result = stream.Read(buffer, 0, 4);
             return BitConverter.ToInt32(buffer, 0);
         }
+
+        public static float ReadFloat(this MpqFileStream stream)
+        {
+            var buffer = new byte[4];
+            int result = stream.Read(buffer, 0, 4);
+            return BitConverter.ToSingle(buffer, 0);
+        }
+
+        public static Int16 ReadInt16(this MpqFileStream stream)
+        {
+            var buffer = new byte[2];
+            int result = stream.Read(buffer, 0, 2);
+            return BitConverter.ToInt16(buffer, 0);
+        }
     }
 }

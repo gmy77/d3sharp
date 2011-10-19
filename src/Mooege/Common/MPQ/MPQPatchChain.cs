@@ -56,7 +56,7 @@ namespace Mooege.Common.MPQ
             if (PatchPattern == null) return;
 
             /* match the mpq files for the patch chain */
-            var patchRegex = new Regex(this.PatchPattern, RegexOptions.Compiled);
+            var patchRegex = new Regex(this.PatchPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             foreach(var file in MPQStorage.MPQList)
             {
                 var match = patchRegex.Match(file);

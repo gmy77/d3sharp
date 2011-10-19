@@ -18,9 +18,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.Extensions;
 
@@ -29,10 +27,10 @@ namespace Mooege.Common.MPQ
     public class CoreData : MPQPatchChain
     {        
         public Dictionary<SNOGroup, Dictionary<int, Asset>> Assets = new Dictionary<SNOGroup, Dictionary<int, Asset>>();
-        public readonly Dictionary<AssetFormatAttribute, Type> AssetFormats = new Dictionary<AssetFormatAttribute, Type>();
+        public readonly Dictionary<SNOGroup, Type> AssetFormats = new Dictionary<SNOGroup, Type>();
 
         public CoreData()
-            : base("CoreData.mpq", "/base/d3-update-base-(?<version>.*?).MPQ")
+            : base("CoreData.mpq", "/base/d3-update-base-(?<version>.*?).mpq")
         { }
 
         public void Init()
@@ -49,11 +47,11 @@ namespace Mooege.Common.MPQ
 
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                if (!type.IsSubclassOf(typeof (AssetFormat))) continue;
-                var attributes = (AssetFormatAttribute[])type.GetCustomAttributes(typeof(AssetFormatAttribute), true);
+                if (!type.IsSubclassOf(typeof (FileFormat))) continue;
+                var attributes = (FileFormatAttribute[])type.GetCustomAttributes(typeof(FileFormatAttribute), true);
                 if (attributes.Length == 0) continue;
 
-                AssetFormats.Add(attributes[0], type);
+                AssetFormats.Add(attributes[0].Group, type);
             }
         }
 
@@ -67,8 +65,7 @@ namespace Mooege.Common.MPQ
                 Logger.Warn("Couldn't load CoreData catalog: toc.dat");
                 return;
             }
-
-            Logger.Info("Loading CoreData assets catalog..");
+            
             var stream = tocFile.Open();
             var assetsCount = stream.ReadInt32();
 
@@ -84,6 +81,8 @@ namespace Mooege.Common.MPQ
             }
 
             stream.Close();
+            
+            Logger.Info("Loaded a total of {0} assets.", assetsCount);
         }
     }
 
@@ -153,16 +152,4 @@ namespace Mooege.Common.MPQ
         Tutorial = 63,
         BossEncounter = 64,
     }
-
-    //static string[] snoExtensions = new string[65]
-    //{
-    //    "", ".acr", ".adv", ".aib", ".ais", ".ams", ".ani", ".an2",
-    //    ".ans", ".app", ".hro", ".clt", ".cnv", ".cnl", ".efg", ".enc", 
-    //    "", ".xpl", ".flg",  ".fnt", ".gam", ".glo", ".lvl", ".lit", 
-    //    ".mrk", ".mon", ".obs", ".prt", ".phy", ".pow", "", ".qst", 
-    //    ".rop", ".scn", ".scg", ".scr", ".shm", ".shd", ".shk", ".skl",
-    //    ".snd", ".sbk", ".stl", ".srf", ".tex", ".trl", ".ui", ".wth",
-    //    ".wrl", ".rcp", "", ".cnd", ".trs", ".acc", ".con", ".tme",
-    //    ".act", ".mat", ".qsr", ".lor", ".rev", ".phm", ".mus", ".tut", ".bos",
-    //};
 }

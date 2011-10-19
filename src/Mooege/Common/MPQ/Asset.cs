@@ -17,7 +17,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mooege.Common.MPQ.FileFormats;
@@ -27,33 +26,32 @@ namespace Mooege.Common.MPQ
     public class Asset
     {
         public SNOGroup Group {get; private set;}
-        public Int32 Id {get; private set;}
+        public Int32 SNOId {get; private set;}
         public string Name {get; private set;}
         public string FileName {get; private set;}
-        public AssetFormat Data {get; private set;}
+        public FileFormat Data {get; private set;}
 
-        public Asset(SNOGroup group, Int32 id, byte[] name)
+        public Asset(SNOGroup group, Int32 snoId, byte[] name)
         {
+            this.Data = null;
             this.Group = group;
-            this.Id = id;
+            this.SNOId = snoId;
             int count = 0; while (count < 128 && name[count] != 0) count++;
             this.Name = Encoding.UTF8.GetString(name.Take(count).ToArray());
-            this.FileName = group + "\\" + this.Name;
+            this.FileName = group + "\\" + this.Name + FileFormats.FileExtensions.Extensions[(int)group];                        
+
             this.Load();
         }
 
         private void Load()
         {
-            this.Data = null;
-
-            var assetFormatAttibutes = MPQStorage.CoreData.AssetFormats.FirstOrDefault(pair => pair.Key.Group == this.Group).Key;
-            var assetFormatType = MPQStorage.CoreData.AssetFormats.FirstOrDefault(pair => pair.Key.Group == this.Group).Value;
-            if (assetFormatAttibutes == null || assetFormatType == null) return;
-
-            var file = MPQStorage.CoreData.FileSystem.FindFile(this.FileName + "." + assetFormatAttibutes.Extentesion);
+            if (!MPQStorage.CoreData.AssetFormats.ContainsKey(this.Group)) return;
+            var formatType = MPQStorage.CoreData.AssetFormats[this.Group];
+            
+            var file = MPQStorage.CoreData.FileSystem.FindFile(this.FileName);
             if (file == null || file.Size < 10) return;
 
-            this.Data = (AssetFormat) Activator.CreateInstance(assetFormatType, new object[] {file});
+            this.Data = (FileFormat) Activator.CreateInstance(formatType, new object[] {file});
         }
     }
 }

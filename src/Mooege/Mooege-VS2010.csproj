@@ -105,8 +105,12 @@
     <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\CoreData.cs" />
     <Compile Include="Common\MPQ\FileFormats\Actor.cs" />
-    <Compile Include="Common\MPQ\FileFormats\AssetFormat.cs" />
-    <Compile Include="Common\MPQ\FileFormats\AssetFormatAttribute.cs" />
+    <Compile Include="Common\MPQ\FileFormats\AnimSet.cs" />
+    <Compile Include="Common\MPQ\FileFormats\FileExtensions.cs" />
+    <Compile Include="Common\MPQ\FileFormats\FileFormat.cs" />
+    <Compile Include="Common\MPQ\FileFormats\FileFormatAttribute.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Monster.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Scene.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
