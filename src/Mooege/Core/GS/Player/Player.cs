@@ -40,6 +40,7 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Combat;
+using Mooege.Core.MooNet.Online;
 using System;
 using Mooege.Core.GS.Powers;
 
@@ -263,7 +264,7 @@ namespace Mooege.Core.GS.Player
             //Basic stats
             this.Attributes[GameAttribute.Level_Cap] = 13;
             this.Attributes[GameAttribute.Level] = this.Properties.Level;
-            this.Attributes[GameAttribute.Experience_Next] = 1200;
+            this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Properties.Level];
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             this.Attributes[GameAttribute.Armor_Total] = 0;
             this.Attributes[GameAttribute.Attack] = this.Properties.InitialAttack;
@@ -371,7 +372,7 @@ namespace Mooege.Core.GS.Player
 
         private void CollectGold()
         {
-            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
+            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 5f);
             foreach (var actor in actorList)
             {
                 Item item;
@@ -400,7 +401,7 @@ namespace Mooege.Core.GS.Player
 
         private void CollectHealthGlobe()
         {
-            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
+            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 5f);
             foreach (Actor actor in actorList)
             {
                 Item item;
@@ -408,29 +409,35 @@ namespace Mooege.Core.GS.Player
                 item = (Item)actor;
                 if (item.ItemType != ItemType.HealthGlobe) continue;
 
-                //This animation isn't the correct for collecting orbs, since i dont know what's the correct, i'll just use this
-                this.InGameClient.SendMessage(new FloatingNumberMessage()
+                //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
+                this.InGameClient.SendMessage(new PlayEffectMessage()
                 {
-
                     ActorID = this.DynamicID,
-                    Number = item.Attributes[GameAttribute.Health_Globe_Bonus_Health], //for here, we need some customization on health orbs amounts
-                    Type = FloatingNumberMessage.FloatType.Green,
+                    Field1=7
                 });
 
-                this.AddHP(item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
+                foreach (var player in PlayerManager.OnlinePlayers)
+                {
+                    if (player.CurrentToon.Name != "Server")
+                    {
+                        player.InGameClient.Player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
+                    }
+                }
 
                 item.Destroy();
 
             }
         }
 
+        public void AddPercentageHP(int percentage)
+        {
+            float quantity = (percentage * this.Attributes[GameAttribute.Hitpoints_Max]) / 100;
+            this.AddHP(quantity);
+        }
+
         public void AddHP(float quantity)
         {
             if (this.Attributes[GameAttribute.Hitpoints_Cur] + quantity >= this.Attributes[GameAttribute.Hitpoints_Max])
-                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
-            else
-                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
-            if (this.Attributes[GameAttribute.Hitpoints_Cur] + quantity > this.Attributes[GameAttribute.Hitpoints_Max])
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
             else
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
@@ -449,6 +456,7 @@ namespace Mooege.Core.GS.Player
 
         public override void OnLeave(World world)
         {
+            Logger.Trace("Leaving world!");
         }
 
         public override bool Reveal(Mooege.Core.GS.Player.Player player)
@@ -618,6 +626,7 @@ namespace Mooege.Core.GS.Player
             if ((this.Attributes[GameAttribute.Experience_Next] <= 0) && (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]))
             {
                 this.Attributes[GameAttribute.Level]++;
+                this.Properties.LevelUp();
                 if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
                 else { this.Attributes[GameAttribute.Experience_Next] = 0; }
 
