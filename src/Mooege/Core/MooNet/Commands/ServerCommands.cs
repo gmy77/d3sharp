@@ -38,7 +38,7 @@ namespace Mooege.Core.MooNet.Commands
                                  AccountManager.TotalAccounts, ToonManager.TotalToons, PlayerManager.OnlinePlayers.Count);
         }
 
-        [Command("system", "Renders system statistics.")]
+        [Command("system", "Renders system statistics.", Account.UserLevels.Admin)]
         public string Detailed(string[] @params, MooNetClient invokerClient)
         {
             var output = new StringBuilder();
