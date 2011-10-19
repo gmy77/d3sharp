@@ -30,11 +30,11 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            SpawnEffect(3278, User.Position, PowerUtils.AngleLookAt(User.Position, TargetPosition), WaitSeconds(0.5f));
-            yield return WaitSeconds(0.2f); // wait for swing animation
+            yield return WaitSeconds(0.25f); // wait for swing animation
             if (CanHitMeleeTarget(Target))
             {
-                User.PlayEffectToActor(18663, Target);
+                GeneratePrimaryResource(6f);
+                User.PlayEffect(18662);
                 Knockback(Target, 4f);
                 Damage(Target, 35, 0);
             }

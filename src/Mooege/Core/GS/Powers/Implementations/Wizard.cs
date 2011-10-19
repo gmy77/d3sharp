@@ -31,6 +31,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
+            UsePrimaryResource(60f);
             SpawnEffect(86790, TargetPosition);
             yield return WaitSeconds(1.9f); // wait for meteor to hit
             SpawnEffect(86769, TargetPosition);
@@ -47,7 +48,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Run()
         {
             RegisterChannelingPower(WaitSeconds(0.150f));
-
+            
             User.FacingTranslate(TargetPosition);
 
             // if throttling only update proxy if needed, then exit
@@ -57,6 +58,8 @@ namespace Mooege.Core.GS.Powers.Implementations
                     GetChanneledProxy(0, TargetPosition);
                 yield break;
             }
+
+            UsePrimaryResource(8f);
 
             if (Target == null)
             {
@@ -88,7 +91,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 foreach (Actor actor in targets)
                 {
                     Damage(actor, damage, 0);
-                    damage /= 2f;
+                    damage *= 0.7f;
                 }                
             }
             
@@ -101,6 +104,8 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
+            UsePrimaryResource(10f);
+
             // HACK: made up spell, not real magic missile
             for (int step = 1; step < 10; ++step)
             {
@@ -123,6 +128,8 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
+            UsePrimaryResource(60f);
+
             // HACK: made up demonic meteor spell, not real hydra
             SpawnEffect(185366, TargetPosition);
             yield return WaitSeconds(0.4f);
@@ -135,7 +142,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Disintegrate)]
     public class WizardDisintegrate : PowerImplementation
     {
-        const float BeamLength = 60f;
+        const float BeamLength = 40f;
 
         public override IEnumerable<TickTimer> Run()
         {
@@ -147,6 +154,8 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (!ThrottledCast)
             {
+                UsePrimaryResource(5f);
+
                 foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
                 {
                     if (PowerUtils.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
@@ -160,7 +169,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             // always update effect locations
             // can't make it spawn in the air 52687
-            //Effect pid = GetChanneledEffect(User, 0, 52687, TargetPosition);
+            //GetChanneledEffect(0, 52687, new Vector3D(TargetPosition.X, TargetPosition.Y, TargetPosition.Z+10f));
             Effect pid = GetChanneledProxy(0, TargetPosition);
             if (! UserIsChanneling)
             {
@@ -176,7 +185,10 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            yield return WaitSeconds(0.350f); // wait for wizard to land?
+            UsePrimaryResource(25f);
+            StartCooldown(WaitSeconds(15f));
+
+            yield return WaitSeconds(0.350f); // wait for wizard to land
             User.PlayEffect(19356);
 
             IList<Actor> hits = GetTargetsInRange(User.Position, 20);
@@ -208,6 +220,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (!ThrottledCast)
             {
+                UsePrimaryResource(20f);
                 yield return WaitSeconds(0.9f);
                 // update proxy target location laggy
                 GetChanneledProxy(0, TargetPosition);
@@ -241,6 +254,8 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override IEnumerable<TickTimer> Run()
         {
+            StartCooldown(WaitSeconds(12f));
+
             SpawnEffect(FrostNova_Emitter, User.Position); //center on self
 
             IList<Actor> hits = GetTargetsInRange(User.Position, 18); //FIXME: is the range correct? what units?
@@ -285,6 +300,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         //deals 12-18 DPS for 3 seconds
         public override IEnumerable<TickTimer> Run()
         {
+            UsePrimaryResource(45f);
+
             SpawnEffect(Wizard_Blizzard, TargetPosition);
 
             //do damage for 3 seconds
@@ -323,6 +340,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (!ThrottledCast)
             {
+                UsePrimaryResource(6f);
                 foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
                 {
                     if (PowerUtils.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))

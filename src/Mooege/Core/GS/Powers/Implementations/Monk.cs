@@ -64,14 +64,19 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             User.PlayEffect(effectSNO);
 
+            bool hitAnything = false;
             foreach (Actor actor in GetTargetsInRange(User.Position, reachLength + 10f))
             {
                 if (PowerUtils.PointInBeam(actor.Position, User.Position, TargetPosition, reachThickness))
                 {
+                    hitAnything = true;
                     actor.PlayHitEffect(5, User);
                     Damage(actor, 30f, 0);
                 }
             }
+
+            if (hitAnything)
+                GeneratePrimaryResource(6f);
 
             yield break;
         }
@@ -104,11 +109,17 @@ namespace Mooege.Core.GS.Powers.Implementations
                     User.PlayEffect(143566); // cast
                     User.PlayEffect(96178); // ball of lightning
 
+                    bool hitAnything = false;
                     foreach (Actor actor in GetTargetsInRange(TargetPosition, 7f))
                     {
+                        hitAnything = true;
                         actor.PlayHitEffect(2, User);
                         Damage(actor, 25f, 0);
                     }
+
+                    if (hitAnything)
+                        GeneratePrimaryResource(6f);
+
                     break;
             }
 
@@ -119,6 +130,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             if (CanHitMeleeTarget(Target))
             {
+                GeneratePrimaryResource(6f);
                 Target.PlayHitEffect(2, User);
                 Damage(Target, 25f, 0);
             }
@@ -130,6 +142,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
+            UsePrimaryResource(50f);
+            StartCooldown(WaitSeconds(30f));
+
             Vector3D startpos;
             if (Target == null)
                 startpos = User.Position;
@@ -176,10 +191,12 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             User.PlayEffect(effectSNO);
 
+            bool hitAnything = false;
             if (Message.Field5 != 2)
             {
                 if (CanHitMeleeTarget(Target))
                 {
+                    hitAnything = true;
                     Target.PlayHitEffect(6, User);
                     Damage(Target, 25f, 0);
                 }
@@ -189,10 +206,15 @@ namespace Mooege.Core.GS.Powers.Implementations
                 IList<Actor> hits = GetTargetsInRange(User.Position, 10f);
                 foreach (Actor hit in hits)
                 {
+                    hitAnything = true;
                     hit.PlayHitEffect(6, User);
                     Damage(hit, 25f, 0);
                 }
             }
+
+            if (hitAnything)
+                GeneratePrimaryResource(6f);
+
             yield break;
         }
     }
@@ -222,6 +244,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (CanHitMeleeTarget(Target))
             {
+                GeneratePrimaryResource(6f);
                 Target.PlayHitEffect(0, User);
                 Damage(Target, 25f, 0);
             }
@@ -255,6 +278,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (CanHitMeleeTarget(Target))
             {
+                GeneratePrimaryResource(6f);
                 Target.PlayHitEffect(0, User);
                 Damage(Target, 25f, 0);
             }

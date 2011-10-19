@@ -75,6 +75,9 @@ namespace Mooege.Core.GS.Player
         private int _lastEnvironmentDestroyMonsterKills;
         private int _lastEnvironmentDestroyMonsterKillTick;
 
+        // remember tick for timing resource updates
+        private int _lastResourceUpdateTick;
+
         public Dictionary<uint, IRevealable> RevealedObjects { get; private set; }
 
         // Collection of items that only the player can see. This is only used when items drop from killing an actor
@@ -109,6 +112,8 @@ namespace Mooege.Core.GS.Player
             this._lastEnvironmentDestroyTick = 0;
             this._lastEnvironmentDestroyMonsterKills = 0;
             this._lastEnvironmentDestroyMonsterKillTick = 0;
+
+            this._lastResourceUpdateTick = 0;
 
             // actor values
             this.ActorSNO = this.ClassSNO;
@@ -339,6 +344,8 @@ namespace Mooege.Core.GS.Player
             CheckExpBonus(1);
             // Check if there is an conversation to close in this tick
             CheckOpenConversations();
+            // Update Player Resources
+            UpdateResources();
 
             this.PowerManager.Update();
 
@@ -443,6 +450,85 @@ namespace Mooege.Core.GS.Player
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
         }
 
+        #region Resource Generate/Use
+        public void GeneratePrimaryResource(float amount)
+        {
+            _ModifyResourceAttribute(this.ResourceID, amount);
+        }
+
+        public void UsePrimaryResource(float amount)
+        {
+            _ModifyResourceAttribute(this.ResourceID, -amount);
+        }
+
+        public void GenerateSecondaryResource(float amount)
+        {
+            // always assume dh discipline
+            int disciplineID = this.ResourceID + 1; //0x00000006
+            _ModifyResourceAttribute(disciplineID, amount);
+        }
+
+        public void UseSecondaryResource(float amount)
+        {
+            // always assume dh discipline
+            int disciplineID = this.ResourceID + 1; //0x00000006
+            _ModifyResourceAttribute(disciplineID, -amount);
+        }
+
+        private void _ModifyResourceAttribute(int resourceID, float amount)
+        {
+            if (amount > 0f)
+            {
+                this.Attributes[GameAttribute.Resource_Cur, resourceID] = Math.Min(
+                    this.Attributes[GameAttribute.Resource_Cur, resourceID] + amount,
+                    this.Attributes[GameAttribute.Resource_Max, resourceID]);
+            }
+            else
+            {
+                this.Attributes[GameAttribute.Resource_Cur, resourceID] = Math.Max(
+                    this.Attributes[GameAttribute.Resource_Cur, resourceID] + amount,
+                    0f);
+            }
+            
+            // FIXME: better way to update attribute changes?
+            GameAttributeMap map = new GameAttributeMap();
+            map[GameAttribute.Resource_Cur, resourceID] = this.Attributes[GameAttribute.Resource_Cur, resourceID];
+            map.SendMessage(this.InGameClient, this.DynamicID);
+        }
+
+        public void UpdateResources()
+        {
+            // will crash client when loading if you try to update resources too early
+            if (!InGameClient.TickingEnabled) return;
+
+            // update resources once every tick for now.
+            if (this.InGameClient.Game.Tick - _lastResourceUpdateTick < 6) // assume tick rate is 6
+                return;
+
+            _lastResourceUpdateTick = this.InGameClient.Game.Tick;
+
+            // TODO: setup and use attributes Resource_Regen_Per_Second or Resource_Regen_Percent_Per_Second
+            switch (this.Properties.Class)
+            {
+                case ToonClass.Barbarian:
+                    UsePrimaryResource(0.2f);
+                    break;
+                case ToonClass.DemonHunter:
+                    GeneratePrimaryResource(3f);
+                    GenerateSecondaryResource(0.3f);
+                    break;
+                case ToonClass.Monk:
+                    break;
+                case ToonClass.WitchDoctor:
+                    GeneratePrimaryResource(1f);
+                    break;
+                case ToonClass.Wizard:
+                    GeneratePrimaryResource(2f);
+                    break;
+            }
+        }
+        #endregion
+
         // FIXME: Hardcoded crap
         public override void OnEnter(World world)
         {
@@ -496,23 +582,24 @@ namespace Mooege.Core.GS.Player
         // Message handlers
         private void OnObjectTargeted(GameClient client, TargetMessage message)
         {
-            PowerManager.UsePower(this, message.PowerSNO, message.TargetID, message.Field2.Position, message);
+            if (PowerManager.UsePower(this, message.PowerSNO, message.TargetID, message.Field2.Position, message))
+                return; // consume all target messages that trigger implemented powers
 
-            //Actor actor = this.World.GetActor(message.TargetID);
-            //if (actor != null)
-            //{
-            //    if ((actor.GBHandle.Type == 1) && (actor.Attributes[GameAttribute.TeamID] == 10))
-            //    {
-            //        this._lastMonsterAttackTick = this.InGameClient.Game.Tick;
-            //    }
+            Actor actor = this.World.GetActor(message.TargetID);
+            if (actor != null)
+            {
+                if ((actor.GBHandle.Type == 1) && (actor.Attributes[GameAttribute.TeamID] == 10))
+                {
+                    this._lastMonsterAttackTick = this.InGameClient.Game.Tick;
+                }
 
-            //    actor.OnTargeted(this, message);
-            //    CheckExpBonus(2);
-            //}
-            //else
-            //{
-            //    //Logger.Warn("Player targeted an invalid object (ID = {0})", message.TargetID);
-            //}
+                actor.OnTargeted(this, message);
+                CheckExpBonus(2);
+            }
+            else
+            {
+                //Logger.Warn("Player targeted an invalid object (ID = {0})", message.TargetID);
+            }
         }
 
         private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)

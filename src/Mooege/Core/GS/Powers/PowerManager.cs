@@ -65,7 +65,7 @@ namespace Mooege.Core.GS.Powers
             UpdateWaitingPowers();
         }
 
-        public void UsePower(Actor user, int powerSNO, uint targetId = uint.MaxValue, Vector3D targetPosition = null,
+        public bool UsePower(Actor user, int powerSNO, uint targetId = uint.MaxValue, Vector3D targetPosition = null,
                              TargetMessage message = null)
         {
             Actor target;
@@ -81,7 +81,7 @@ namespace Mooege.Core.GS.Powers
             }
             else
             {
-                return;
+                return false;
             }
 
             if (targetPosition == null)
@@ -92,7 +92,7 @@ namespace Mooege.Core.GS.Powers
                 powerSNO == ((Player.Player)user).SkillSet.HotBarSkills[4].SNOSkill)
             {
                 PowersTestMonster.CreateTestMonsters(user.World, user.Position, 10);
-                return;
+                return true;
             }
 
             // find and run a power implementation
@@ -101,6 +101,7 @@ namespace Mooege.Core.GS.Powers
             {
                 // copy in base params
                 implementation.PowerManager = this;
+                implementation.PowerSNO = powerSNO;
                 implementation.User = user;
                 implementation.Target = target;
                 implementation.TargetPosition = targetPosition;
@@ -127,7 +128,13 @@ namespace Mooege.Core.GS.Powers
                         Implementation = implementation
                     });
                 }
-            }                
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void UpdateWaitingPowers()

@@ -25,6 +25,7 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Common;
+using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -34,6 +35,7 @@ namespace Mooege.Core.GS.Powers
         public static Random Rand = new Random();
         
         public PowerManager PowerManager;
+        public int PowerSNO;
         public Actor User;
         public Actor Target;
         public Vector3D TargetPosition;
@@ -67,6 +69,34 @@ namespace Mooege.Core.GS.Powers
         public TickTimer WaitTicks(int ticks)
         {
             return new TickRelativeTimer(User.World.Game, ticks);
+        }
+
+        public void StartCooldown(TickTimer timeout)
+        {
+            if (User is Player.Player)
+            {
+                // TODO: update User.Attribute instead of creating temp map
+                GameAttributeMap map = new GameAttributeMap();
+                map[GameAttribute.Power_Cooldown_Start, PowerSNO] = User.World.Game.Tick;
+                map[GameAttribute.Power_Cooldown, PowerSNO] = timeout.TimeoutTick;
+                map.SendMessage((User as Player.Player).InGameClient, User.DynamicID);
+            }
+        }
+
+        public void GeneratePrimaryResource(float amount)
+        {
+            if (User is Player.Player)
+            {
+                (User as Player.Player).GeneratePrimaryResource(amount);
+            }
+        }
+
+        public void UsePrimaryResource(float amount)
+        {
+            if (User is Player.Player)
+            {
+                (User as Player.Player).UsePrimaryResource(amount);
+            }
         }
         
         public void RegisterChannelingPower(TickTimer channelCastDelay = null)
