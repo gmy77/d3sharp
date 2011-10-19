@@ -27,7 +27,7 @@ namespace Mooege.Common.MPQ
 {    
     public class MPQPatchChain
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
+        protected static readonly Logger Logger = LogManager.CreateLogger();
         protected readonly MpqFileSystem FileSystem = new MpqFileSystem();
 
         public string BaseMPQFile { get; private set; }
