@@ -201,7 +201,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 Actor targetProxy = GetChanneledProxy(0, TargetPosition);
                 Actor userProxy = GetChanneledProxy(1, User.Position);
-                userProxy.FacingTranslate(TargetPosition);
+                // TODO: fixed casting effect so it rotates along with actor
                 userProxy.PlayEffect(97385);
                 userProxy.PlayEffectToActor(134442, targetProxy);
             }
@@ -215,7 +215,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                 SpawnEffect(97821, TargetPosition);
                 Damage(GetTargetsInRange(TargetPosition, 6f), 20, 0);
             }
-            yield break;
         }
     }
 

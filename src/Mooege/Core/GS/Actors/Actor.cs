@@ -372,6 +372,18 @@ namespace Mooege.Core.GS.Actors
             }, this);
         }
 
+        public void AttachActor(Actor actor)
+        {
+            GameAttributeMap map = new GameAttributeMap();
+            map[GameAttribute.Attached_To_ACD] = unchecked((int)DynamicID);
+            map[GameAttribute.Attachment_Handled_By_Client] = true;
+            map[GameAttribute.Actor_Updates_Attributes_From_Owner] = true;
+            foreach (var msg in map.GetMessageList(actor.DynamicID))
+                actor.World.BroadcastIfRevealed(msg, actor);
+
+            // TODO: track attached actors
+        }
+
         #endregion
 
         public override void Update()

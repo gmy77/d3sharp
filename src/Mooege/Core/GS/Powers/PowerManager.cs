@@ -89,79 +89,64 @@ namespace Mooege.Core.GS.Powers
 
             // HACK: intercept hotbar skill 1 to always spawn test mobs.
             if (user is Player.Player &&
-                powerSNO == ((Player.Player)user).SkillSet.HotBarSkills[4].SNOSkill) 
+                powerSNO == ((Player.Player)user).SkillSet.HotBarSkills[4].SNOSkill)
             {
                 PowersTestMonster.CreateTestMonsters(user.World, user.Position, 10);
+                return;
             }
-            else
+
+            // find and run a power implementation
+            var implementation = PowerLoader.CreateImplementationForPowerSNO(powerSNO);
+            if (implementation != null)
             {
-                // find and run a power implementation
-                var implementation = PowerLoader.CreateImplementationForPowerSNO(powerSNO);
-                if (implementation != null)
+                // copy in base params
+                implementation.PowerManager = this;
+                implementation.User = user;
+                implementation.Target = target;
+                implementation.TargetPosition = targetPosition;
+                implementation.Message = message;
+
+                // process channeled skill params
+                implementation.UserIsChanneling = _isChanneling;
+                implementation.ThrottledCast = false;
+                if (_isChanneling && _channelCastDelay != null)
                 {
-                    // copy in base params
-                    implementation.PowerManager = this;
-                    implementation.User = user;
-                    implementation.Target = target;
-                    implementation.TargetPosition = targetPosition;
-                    implementation.Message = message;
+                    if (_channelCastDelay.TimedOut())
+                        _channelCastDelay = null;
+                    else
+                        implementation.ThrottledCast = true;
+                }
 
-                    // process channeled skill params
-                    implementation.UserIsChanneling = _isChanneling;
-                    implementation.ThrottledCast = false;
-                    if (_isChanneling && _channelCastDelay != null)
+                var powerEnum = implementation.Run().GetEnumerator();
+                // actual power will first run here, if it yielded a timer process it in the waiting list
+                if (powerEnum.MoveNext() && powerEnum.Current != PowerImplementation.StopExecution)
+                {
+                    _waitingPowers.Add(new WaitingPower
                     {
-                        if (_channelCastDelay.TimedOut())
-                            _channelCastDelay = null;
-                        else
-                            implementation.ThrottledCast = true;
-                    }
-
-                    var powerEnum = implementation.Run().GetEnumerator();
-                    // actual power will first run here, if it yielded a value process it in the waiting list
-                    if (powerEnum.MoveNext())
-                    {
-                        AddWaitingPower(_waitingPowers, powerEnum, implementation);
-                    }
+                        PowerEnumerator = powerEnum,
+                        Implementation = implementation
+                    });
                 }
             }                
         }
 
-        private void AddWaitingPower(IList<WaitingPower> list, IEnumerator<TickTimer> powerEnum,
-                                                               PowerImplementation implementation)
-        {
-            if (powerEnum.Current != PowerImplementation.StopExecution)
-            {
-                WaitingPower wait = new WaitingPower();
-                wait.PowerEnumerator = powerEnum;
-                wait.Implementation = implementation;
-
-                list.Add(wait);
-            }
-        }
-
         private void UpdateWaitingPowers()
         {
-            // TODO: redo this to use RemoveAll()
-            List<WaitingPower> newWaitList = new List<WaitingPower>();
-            foreach (WaitingPower wait in _waitingPowers)
+            // process all powers, removing from the list the ones that expire
+            _waitingPowers.RemoveAll((wait) =>
             {
                 if (wait.PowerEnumerator.Current.TimedOut())
                 {
                     if (wait.PowerEnumerator.MoveNext())
-                    {
-                        // re-add with new timeout
-                        AddWaitingPower(newWaitList, wait.PowerEnumerator, wait.Implementation);
-                    }
-                    // else did not request another wait
+                        return wait.PowerEnumerator.Current == PowerImplementation.StopExecution;
+                    else
+                        return true;
                 }
                 else
                 {
-                    // re-add with same timeout
-                    newWaitList.Add(wait);
+                    return false;
                 }
-            }
-            _waitingPowers = newWaitList;
+            });
         }
 
         public void RegisterChannelingPower(TickTimer channelCastDelay = null)
