@@ -98,6 +98,22 @@ namespace Mooege.Core.GS.Powers
                 (User as Player.Player).UsePrimaryResource(amount);
             }
         }
+
+        public void GenerateSecondaryResource(float amount)
+        {
+            if (User is Player.Player)
+            {
+                (User as Player.Player).GenerateSecondaryResource(amount);
+            }
+        }
+
+        public void UseSecondaryResource(float amount)
+        {
+            if (User is Player.Player)
+            {
+                (User as Player.Player).UseSecondaryResource(amount);
+            }
+        }
         
         public void RegisterChannelingPower(TickTimer channelCastDelay = null)
         {
@@ -166,14 +182,14 @@ namespace Mooege.Core.GS.Powers
             return SpawnEffect(187359, position, 0, timeout);
         }
 
-        public Effect GetChanneledEffect(int index, int actorSNO, Vector3D position)
+        public Effect GetChanneledEffect(int index, int actorSNO, Vector3D position, bool snapped = false)
         {
-            return PowerManager.GetChanneledEffect(User, index, actorSNO, position);
+            return PowerManager.GetChanneledEffect(User, index, actorSNO, position, snapped);
         }
 
-        public Effect GetChanneledProxy(int index, Vector3D position)
+        public Effect GetChanneledProxy(int index, Vector3D position, bool snapped = false)
         {
-            return GetChanneledEffect(index, 187359, position);
+            return GetChanneledEffect(index, 187359, position, snapped);
         }
 
         public IList<Actor> GetTargetsInRange(Vector3D center, float range, int maxCount = -1)
@@ -206,7 +222,7 @@ namespace Mooege.Core.GS.Powers
             if (target == null) return;
 
             var move = PowerUtils.ProjectAndTranslate2D(target.Position, User.Position, target.Position, amount);
-            target.MoveTranslate(move);
+            target.MoveNormal(move);
         }
 
         #endregion

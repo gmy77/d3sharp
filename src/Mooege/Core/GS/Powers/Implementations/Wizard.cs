@@ -23,6 +23,7 @@ using System.Text;
 using Mooege.Core.GS.Actors;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Net.GS.Message.Definitions.Effect;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -59,7 +60,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 yield break;
             }
 
-            UsePrimaryResource(8f);
+            UsePrimaryResource(6f);
 
             if (Target == null)
             {
@@ -104,7 +105,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            UsePrimaryResource(10f);
+            UsePrimaryResource(20f);
 
             // HACK: made up spell, not real magic missile
             for (int step = 1; step < 10; ++step)
@@ -154,26 +155,25 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (!ThrottledCast)
             {
-                UsePrimaryResource(5f);
+                UsePrimaryResource(3f);
 
                 foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
                 {
                     if (PowerUtils.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
                     {  
                         actor.PlayHitEffect(32, User);
-                        actor.PlayEffect(18793);
+                        actor.PlayEffectGroup(18793);
                         Damage(actor, 10, 0);
                     }
                 }
             }
 
             // always update effect locations
-            // can't make it spawn in the air 52687
-            //GetChanneledEffect(0, 52687, new Vector3D(TargetPosition.X, TargetPosition.Y, TargetPosition.Z+10f));
-            Effect pid = GetChanneledProxy(0, TargetPosition);
+            TargetPosition.Z += 10f; // put effect a little bit above the ground target
+            Effect pid = GetChanneledEffect(0, 52687, TargetPosition, true);
             if (! UserIsChanneling)
             {
-                User.AddRopeEffect(30888, pid);
+                User.AddComplexEffect(18792, pid);
             }
 
             yield break;
@@ -189,7 +189,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             StartCooldown(WaitSeconds(15f));
 
             yield return WaitSeconds(0.350f); // wait for wizard to land
-            User.PlayEffect(19356);
+            User.PlayEffectGroup(19356);
 
             IList<Actor> hits = GetTargetsInRange(User.Position, 20);
             foreach (Actor actor in hits)
@@ -214,13 +214,13 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Actor targetProxy = GetChanneledProxy(0, TargetPosition);
                 Actor userProxy = GetChanneledProxy(1, User.Position);
                 // TODO: fixed casting effect so it rotates along with actor
-                userProxy.PlayEffect(97385);
-                userProxy.PlayEffectToActor(134442, targetProxy);
+                userProxy.PlayEffectGroup(97385);
+                userProxy.PlayEffectGroup(134442, targetProxy);
             }
 
             if (!ThrottledCast)
             {
-                UsePrimaryResource(20f);
+                UsePrimaryResource(10f);
                 yield return WaitSeconds(0.9f);
                 // update proxy target location laggy
                 GetChanneledProxy(0, TargetPosition);
@@ -340,7 +340,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (!ThrottledCast)
             {
-                UsePrimaryResource(6f);
+                UsePrimaryResource(3.5f);
                 foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
                 {
                     if (PowerUtils.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
@@ -356,12 +356,11 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
 
             // always update effect locations
-            // can't make it spawn in the air 52687
-            //Effect pid = GetChanneledEffect(User, 0, 52687, TargetPosition);
-            Effect pid = GetChanneledProxy(0, TargetPosition);
+            TargetPosition.Z += 10f; // put effect a little bit above the ground target
+            Effect pid = GetChanneledEffect(0, 6535, TargetPosition, true);
             if (!UserIsChanneling)
             {
-                User.AddRopeEffect(30894, pid);
+                User.AddComplexEffect(19327, pid);
             }
 
             yield break;

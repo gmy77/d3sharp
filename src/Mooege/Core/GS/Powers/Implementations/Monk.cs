@@ -62,7 +62,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             TargetPosition = PowerUtils.ProjectAndTranslate2D(TargetPosition, User.Position,
                                                    User.Position, reachLength);
 
-            User.PlayEffect(effectSNO);
+            User.PlayEffectGroup(effectSNO);
 
             bool hitAnything = false;
             foreach (Actor actor in GetTargetsInRange(User.Position, reachLength + 10f))
@@ -91,13 +91,13 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 case 0:
                     yield return WaitSeconds(0.1f);
-                    User.PlayEffect(143570); // cast
-                    User.PlayEffect(96176); // projectile
+                    User.PlayEffectGroup(143570); // cast
+                    User.PlayEffectGroup(96176); // projectile
                     MeleeStageHit();
                     break;
                 case 1:
-                    User.PlayEffect(143561); // cast
-                    User.PlayEffect(96176); // projectile
+                    User.PlayEffectGroup(143561); // cast
+                    User.PlayEffectGroup(96176); // projectile
                     MeleeStageHit();
                     break;
                 case 2:
@@ -106,8 +106,8 @@ namespace Mooege.Core.GS.Powers.Implementations
                     TargetPosition = PowerUtils.ProjectAndTranslate2D(TargetPosition, User.Position,
                                         User.Position, 8f);
 
-                    User.PlayEffect(143566); // cast
-                    User.PlayEffect(96178); // ball of lightning
+                    User.PlayEffectGroup(143566); // cast
+                    User.PlayEffectGroup(96178); // ball of lightning
 
                     bool hitAnything = false;
                     foreach (Actor actor in GetTargetsInRange(TargetPosition, 7f))
@@ -189,7 +189,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     yield break;
             }
 
-            User.PlayEffect(effectSNO);
+            User.PlayEffectGroup(effectSNO);
 
             bool hitAnything = false;
             if (Message.Field5 != 2)
@@ -240,7 +240,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     yield break;
             }
 
-            User.PlayEffect(effectSNO);
+            User.PlayEffectGroup(effectSNO);
 
             if (CanHitMeleeTarget(Target))
             {
@@ -274,7 +274,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     yield break;
             }
 
-            User.PlayEffect(effectSNO);
+            User.PlayEffectGroup(effectSNO);
 
             if (CanHitMeleeTarget(Target))
             {

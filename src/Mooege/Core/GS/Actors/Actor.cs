@@ -285,7 +285,7 @@ namespace Mooege.Core.GS.Actors
 
         #region Movement/Translation
 
-        public void MoveTranslate(Vector3D destination, float speed = 1.0f)
+        public void MoveNormal(Vector3D destination, float speed = 1.0f)
         {
             Position.Set(destination);
 
@@ -297,6 +297,21 @@ namespace Mooege.Core.GS.Actors
                 Angle = 0f, // TODO: convert quaternion rotation to radians
                 Field3 = false,
                 Field4 = speed,
+            }, this);
+        }
+
+        public void MoveSnapped(Vector3D destination)
+        {
+            Position.Set(destination);
+
+            World.BroadcastIfRevealed(new ACDTranslateSnappedMessage
+            {
+                Id = 0x6f,
+                Field0 = (int)this.DynamicID,
+                Field1 = destination,
+                Field2 = 0f, // TODO: convert quaternion rotation to radians
+                Field3 = false,
+                Field4 = 0x900 // ?
             }, this);
         }
 
@@ -321,14 +336,27 @@ namespace Mooege.Core.GS.Actors
 
         #region Effects
 
-        public void PlayEffect(int effectSNO)
+        public void PlayEffectGroup(int effectGroupSNO)
         {
             World.BroadcastIfRevealed(new PlayEffectMessage
             {
                 Id = 0x7a,
                 ActorID = DynamicID,
                 Field1 = 32, // 32 means Field2 is .efg sno it seems
-                Field2 = effectSNO
+                Field2 = effectGroupSNO
+            }, this);
+        }
+
+        public void PlayEffectGroup(int effectGroupSNO, Actor target)
+        {
+            if (target == null) return;
+
+            World.BroadcastIfRevealed(new EffectGroupACDToACDMessage
+            {
+                Id = 0xaa,
+                Field0 = effectGroupSNO,
+                Field1 = (int)DynamicID,
+                Field2 = (int)target.DynamicID
             }, this);
         }
 
@@ -359,19 +387,6 @@ namespace Mooege.Core.GS.Actors
             }, this);
         }
 
-        public void PlayEffectToActor(int effectSNO, Actor target)
-        {
-            if (target == null) return;
-
-            World.BroadcastIfRevealed(new EffectGroupACDToACDMessage
-            {
-                Id = 0xaa,
-                Field0 = effectSNO,
-                Field1 = (int)DynamicID,
-                Field2 = (int)target.DynamicID
-            }, this);
-        }
-
         public void AttachActor(Actor actor)
         {
             GameAttributeMap map = new GameAttributeMap();
@@ -384,6 +399,23 @@ namespace Mooege.Core.GS.Actors
             // TODO: track attached actors
         }
 
+        public void AddComplexEffect(int effectGroupSNO, Actor target)
+        {
+            if (target == null) return;
+
+            // TODO: Might need to track complex effects
+            World.BroadcastIfRevealed(new ComplexEffectAddMessage
+            {
+                Id = 0x81,
+                Field0 = (int)World.NewActorID, // TODO: maybe not use actor ids?
+                Field1 = 1,
+                Field2 = effectGroupSNO,
+                Field3 = (int)this.DynamicID,
+                Field4 = (int)target.DynamicID,
+                Field5 = 0,
+                Field6 = 0
+            }, target);
+        }
         #endregion
 
         public override void Update()

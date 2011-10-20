@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using Mooege.Core.GS.Actors;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -40,13 +41,14 @@ namespace Mooege.Core.GS.Powers
 
             // FIXME: This is hardcoded crap
             this.Field2 = 0x8; // monster=0x8, using effect's id results in not being able to do smooth actor movements
+            //this.Field2 = 0x18; // used some effects, but not needed?
             this.Field3 = 0x0;
-            //this.Field7 = -1; // some effect actors need these set?
-            //this.Field8 = -1;
-            this.Scale = 1.35f; // TODO: should this be 1 for effects?
+            //this.Field7 = -1; // used by some effects, but not needed?
+            this.Field8 = actorSNO;
+            this.Scale = 1f;
             this.Position.Set(position);
             this.GBHandle.Type = -1; this.GBHandle.GBID = -1; // TODO: use proper enum value
-
+            
             Timeout = timeout;
             
             world.Enter(this);

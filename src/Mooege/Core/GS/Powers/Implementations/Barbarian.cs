@@ -34,7 +34,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             if (CanHitMeleeTarget(Target))
             {
                 GeneratePrimaryResource(6f);
-                User.PlayEffect(18662);
+                User.PlayEffectGroup(18662);
                 Knockback(Target, 4f);
                 Damage(Target, 35, 0);
             }

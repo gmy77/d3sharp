@@ -176,10 +176,10 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public Effect GetChanneledEffect(Actor user, int index, int actorSNO, Vector3D position)
+        public Effect GetChanneledEffect(Actor user, int index, int actorSNO, Vector3D position, bool snapped)
         {
             if (!_isChanneling) return null;
-
+            
             if (_channelEffects == null)
                 _channelEffects = new List<Effect>();
 
@@ -189,14 +189,17 @@ namespace Mooege.Core.GS.Powers
                 _channelEffects.Add(new Effect(user.World, actorSNO, position, 0, null));
             }
 
-            _channelEffects[index].MoveTranslate(position, 8f);
+            if (snapped)
+                _channelEffects[index].MoveSnapped(position);
+            else
+                _channelEffects[index].MoveNormal(position, 8f);
 
             return _channelEffects[index];
         }
 
-        public Effect GetChanneledProxy(Actor user, int index, Vector3D position)
+        public Effect GetChanneledProxy(Actor user, int index, Vector3D position, bool snapped)
         {
-            return GetChanneledEffect(user, index, 187359, position);
+            return GetChanneledEffect(user, index, 187359, position, snapped);
         }
     }
 }
