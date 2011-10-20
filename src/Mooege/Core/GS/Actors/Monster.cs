@@ -155,15 +155,17 @@ namespace Mooege.Core.GS.Actors
 
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
-                ActorID = this.DynamicID,
-                Field1 = 0x0,
-                Field2 = 0x2,
+                ActorId = this.DynamicID,
+                Effect = Effect.Hit,
+                OptionalParameter = 0x2,
             }, this);
+
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
-                ActorID = this.DynamicID,
-                Field1 = 0xc,
+                ActorId = this.DynamicID,
+                Effect = Effect.Unknown12,
             }, this);
+
             this.World.BroadcastIfRevealed(new PlayHitEffectMessage()
             {
                 ActorID = this.DynamicID,
@@ -216,14 +218,16 @@ namespace Mooege.Core.GS.Actors
 
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
-                ActorID = this.DynamicID,
-                Field1 = 0xc,
+                ActorId = this.DynamicID,
+                Effect = Effect.Unknown12
             }, this);
+
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
-                ActorID = this.DynamicID,
-                Field1 = 0x37,
+                ActorId = this.DynamicID,
+                Effect = Effect.Burned2
             }, this);
+
             this.World.BroadcastIfRevealed(new PlayHitEffectMessage()
             {
                 ActorID = this.DynamicID,

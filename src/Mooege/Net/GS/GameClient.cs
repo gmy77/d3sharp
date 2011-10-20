@@ -22,7 +22,6 @@ using Mooege.Common;
 using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Player;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Tick;
 using Mooege.Net.MooNet;
 
@@ -75,7 +74,7 @@ namespace Mooege.Net.GS
                     {
                         if (message.Consumer != Consumers.None)
                         {
-                            if (message.Consumer == Consumers.ClientManager)  ClientManager.Instance.Consume(this, message); // Client should be greeted by ClientManager and sent initial game-setup messages.
+                            if (message.Consumer == Consumers.ClientManager) ClientManager.Instance.Consume(this, message); // Client should be greeted by ClientManager and sent initial game-setup messages.
                             else this.Game.Route(this, message); 
                         }
 
@@ -95,7 +94,7 @@ namespace Mooege.Net.GS
             _incomingBuffer.ConsumeData();
         }
 
-        public void SendMessage(GameMessage message, bool flushImmediatly=false)
+        public void SendMessage(GameMessage message, bool flushImmediatly = false)
         {
             lock (this._bufferLock)
             {

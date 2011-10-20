@@ -21,38 +21,47 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
+    /// <summary>
+    /// Warning! Most of this documentation is speculation or just a description of
+    /// what the fields are, not what purpose they actually have. For questions ask me - farmy
+    /// 
+    /// This message is periodically sent to the client for stuff like Players/NPC/Followers or the stash
+    /// I guess that this message is used to keep the client updated about actors not in range for revealing
+    /// (though the server happily sends TrickleMessages about actors currently revealed, so maybe its a general update.
+    /// It also contains information about the levelarea of actors the client would not know otherwise)
+    /// </summary>
     [Message(Opcodes.TrickleMessage)]
     public class TrickleMessage : GameMessage
     {
-        public uint ActorID;
-        public int /* sno */ Field1;
-        public WorldPlace Field2;
-        public int? Field3;
-        public int /* sno */ Field4;
-        public float? Field5;
+        public uint ActorId;
+        public int ActorSNO;
+        public WorldPlace WorldLocation;
+        public int? PlayerIndex;        // only set for players, their lethal decoys and their spawns (companions like snake)
+        public int LevelAreaSNO;        // sno of the level area the actor currently is in
+        public float? Field5;           // ??? Mostly 0.99 < Field5 <= 1 but can have any value between 0 and 1. 0 for proxy actors
         public int Field6;
         public int Field7;
-        public int? Field8;
-        public int? Field9;
-        public int? Field10;
-        public int? Field11;
-        public int? Field12;
-        public float? Field13;
-        public float? Field14;
+        public int? Field8;             // never seen it set
+        public int? MinimapTextureSNO;  // SNO of the icon used to display that actor on the minimap if set
+        public int? Field10;            // could that be a string hash used for the STL in field11? minimap markers appear without text nevertheless
+        public int? Field11;            // Setting this to 0x21380817 makes a yellow exclamation mark appear (used for leah, cumford, imprisoned templar)
+        public int? StringListSNO;      // ALWAYS?? 0x0000F063:Minimap.stl 
+        public float? Field13;          // either 225 or null 
+        public float? Field14;          // never seen != null
 
         public TrickleMessage() : base(Opcodes.TrickleMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            ActorID = buffer.ReadUInt(32);
-            Field1 = buffer.ReadInt(32);
-            Field2 = new WorldPlace();
-            Field2.Parse(buffer);
+            ActorId = buffer.ReadUInt(32);
+            ActorSNO = buffer.ReadInt(32);
+            WorldLocation = new WorldPlace();
+            WorldLocation.Parse(buffer);
             if (buffer.ReadBool())
             {
-                Field3 = buffer.ReadInt(4) + (-1);
+                PlayerIndex = buffer.ReadInt(4) + (-1);
             }
-            Field4 = buffer.ReadInt(32);
+            LevelAreaSNO = buffer.ReadInt(32);
             if (buffer.ReadBool())
             {
                 Field5 = buffer.ReadFloat32();
@@ -65,7 +74,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             }
             if (buffer.ReadBool())
             {
-                Field9 = buffer.ReadInt(32);
+                MinimapTextureSNO = buffer.ReadInt(32);
             }
             if (buffer.ReadBool())
             {
@@ -77,7 +86,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             }
             if (buffer.ReadBool())
             {
-                Field12 = buffer.ReadInt(32);
+                StringListSNO = buffer.ReadInt(32);
             }
             if (buffer.ReadBool())
             {
@@ -91,15 +100,15 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteUInt(32, ActorID);
-            buffer.WriteInt(32, Field1);
-            Field2.Encode(buffer);
-            buffer.WriteBool(Field3.HasValue);
-            if (Field3.HasValue)
+            buffer.WriteUInt(32, ActorId);
+            buffer.WriteInt(32, ActorSNO);
+            WorldLocation.Encode(buffer);
+            buffer.WriteBool(PlayerIndex.HasValue);
+            if (PlayerIndex.HasValue)
             {
-                buffer.WriteInt(4, Field3.Value - (-1));
+                buffer.WriteInt(4, PlayerIndex.Value - (-1));
             }
-            buffer.WriteInt(32, Field4);
+            buffer.WriteInt(32, LevelAreaSNO);
             buffer.WriteBool(Field5.HasValue);
             if (Field5.HasValue)
             {
@@ -112,10 +121,10 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             {
                 buffer.WriteInt(32, Field8.Value);
             }
-            buffer.WriteBool(Field9.HasValue);
-            if (Field9.HasValue)
+            buffer.WriteBool(MinimapTextureSNO.HasValue);
+            if (MinimapTextureSNO.HasValue)
             {
-                buffer.WriteInt(32, Field9.Value);
+                buffer.WriteInt(32, MinimapTextureSNO.Value);
             }
             buffer.WriteBool(Field10.HasValue);
             if (Field10.HasValue)
@@ -127,10 +136,10 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             {
                 buffer.WriteInt(32, Field11.Value);
             }
-            buffer.WriteBool(Field12.HasValue);
-            if (Field12.HasValue)
+            buffer.WriteBool(StringListSNO.HasValue);
+            if (StringListSNO.HasValue)
             {
-                buffer.WriteInt(32, Field12.Value);
+                buffer.WriteInt(32, StringListSNO.Value);
             }
             buffer.WriteBool(Field13.HasValue);
             if (Field13.HasValue)
@@ -150,14 +159,14 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("TrickleMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8"));
-            Field2.AsText(b, pad);
-            if (Field3.HasValue)
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorId.ToString("X8") + " (" + ActorId + ")");
+            b.Append(' ', pad); b.AppendLine("ActorSNO: 0x" + ActorSNO.ToString("X8"));
+            WorldLocation.AsText(b, pad);
+            if (PlayerIndex.HasValue)
             {
-                b.Append(' ', pad); b.AppendLine("Field3.Value: 0x" + Field3.Value.ToString("X8") + " (" + Field3.Value + ")");
+                b.Append(' ', pad); b.AppendLine("PlayerIndex.Value: 0x" + PlayerIndex.Value.ToString("X8") + " (" + PlayerIndex.Value + ")");
             }
-            b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("LevelAreaSNO: 0x" + LevelAreaSNO.ToString("X8"));
             if (Field5.HasValue)
             {
                 b.Append(' ', pad); b.AppendLine("Field5.Value: " + Field5.Value.ToString("G"));
@@ -168,9 +177,9 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             {
                 b.Append(' ', pad); b.AppendLine("Field8.Value: 0x" + Field8.Value.ToString("X8") + " (" + Field8.Value + ")");
             }
-            if (Field9.HasValue)
+            if (MinimapTextureSNO.HasValue)
             {
-                b.Append(' ', pad); b.AppendLine("Field9.Value: 0x" + Field9.Value.ToString("X8") + " (" + Field9.Value + ")");
+                b.Append(' ', pad); b.AppendLine("MinimapTextureSNO.Value: 0x" + MinimapTextureSNO.Value.ToString("X8") + " (" + MinimapTextureSNO.Value + ")");
             }
             if (Field10.HasValue)
             {
@@ -180,9 +189,9 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             {
                 b.Append(' ', pad); b.AppendLine("Field11.Value: 0x" + Field11.Value.ToString("X8") + " (" + Field11.Value + ")");
             }
-            if (Field12.HasValue)
+            if (StringListSNO.HasValue)
             {
-                b.Append(' ', pad); b.AppendLine("Field12.Value: 0x" + Field12.Value.ToString("X8") + " (" + Field12.Value + ")");
+                b.Append(' ', pad); b.AppendLine("StringListSNO.Value: 0x" + StringListSNO.Value.ToString("X8") + " (" + StringListSNO.Value + ")");
             }
             if (Field13.HasValue)
             {
