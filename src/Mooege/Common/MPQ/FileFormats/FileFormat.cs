@@ -16,16 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Core.Common.Storage
+namespace Mooege.Common.MPQ.FileFormats
 {
-    public sealed class Config : Mooege.Common.Config.Config
-    {
-        public string AssetsRoot { get { return this.GetString("AssetsRoot", "."); } set { this.Set("AssetsRoot", value); } }
-        public string Root { get { return this.GetString("Root", "Assets"); } set { this.Set("Root", value); } }
-        public string MPQRoot { get { return this.GetString("MPQRoot", "MPQ"); } set { this.Set("MPQRoot", value); } }
-
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Storage") { }
-    }
+    public class FileFormat
+    { }
 }

@@ -16,16 +16,33 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Core.Common.Storage
-{
-    public sealed class Config : Mooege.Common.Config.Config
-    {
-        public string AssetsRoot { get { return this.GetString("AssetsRoot", "."); } set { this.Set("AssetsRoot", value); } }
-        public string Root { get { return this.GetString("Root", "Assets"); } set { this.Set("Root", value); } }
-        public string MPQRoot { get { return this.GetString("MPQRoot", "MPQ"); } set { this.Set("MPQRoot", value); } }
+using System.IO;
+using CrystalMpq;
+using Mooege.Common.Extensions;
 
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Storage") { }
+namespace Mooege.Common.MPQ.FileFormats
+{
+    [FileFormat(SNOGroup.Actor)]
+    public class Actor: FileFormat
+    {
+        /// <summary>
+        /// SNO for actor.
+        /// </summary>
+        public int ActorSNO;
+
+        /// <summary>
+        /// SNO for actor's animset.
+        /// </summary>
+        public int AnimSetSNO;
+
+        public Actor(MpqFile file)
+        {
+            var stream = file.Open();
+            stream.Seek(16, SeekOrigin.Begin);
+            this.ActorSNO = stream.ReadInt32();
+            stream.Position = 120;
+            this.AnimSetSNO = stream.ReadInt32();
+            stream.Close();
+        }
     }
 }

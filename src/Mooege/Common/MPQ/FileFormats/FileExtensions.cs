@@ -16,16 +16,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Core.Common.Storage
+namespace Mooege.Common.MPQ.FileFormats
 {
-    public sealed class Config : Mooege.Common.Config.Config
+    public static class FileExtensions
     {
-        public string AssetsRoot { get { return this.GetString("AssetsRoot", "."); } set { this.Set("AssetsRoot", value); } }
-        public string Root { get { return this.GetString("Root", "Assets"); } set { this.Set("Root", value); } }
-        public string MPQRoot { get { return this.GetString("MPQRoot", "MPQ"); } set { this.Set("MPQRoot", value); } }
-
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Storage") { }
+        public static string[] Extensions = new[]
+        {
+            "", ".acr", ".adv", ".aib", ".ais", ".ams", ".ani", ".an2",
+            ".ans", ".app", ".hro", ".clt", ".cnv", ".cnl", ".efg", ".enc",
+            "", ".xpl", ".flg", ".fnt", ".gam", ".glo", ".lvl", ".lit",
+            ".mrk", ".mon", ".obs", ".prt", ".phy", ".pow", "", ".qst",
+            ".rop", ".scn", ".scg", ".scr", ".shm", ".shd", ".shk", ".skl",
+            ".snd", ".sbk", ".stl", ".srf", ".tex", ".trl", ".ui", ".wth",
+            ".wrl", ".rcp", "", ".cnd", ".trs", ".acc", ".con", ".tme",
+            ".act", ".mat", ".qsr", ".lor", ".rev", ".phm", ".mus", ".tut",
+            ".bos",
+        };
     }
 }

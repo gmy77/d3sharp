@@ -72,7 +72,7 @@ namespace Mooege.Core.MooNet.Friends
 
             var notificationToInviter = bnet.protocol.friends.InvitationRemovedNotification.CreateBuilder()
                 .SetInvitation(invitation)
-                .SetReason(0) // success?
+                .SetReason((uint)InvitationRemoveReason.Accepted) // success?
                 .SetAddedFriend(inviteeAsFriend).Build();
 
             inviter.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
@@ -80,12 +80,13 @@ namespace Mooege.Core.MooNet.Friends
             
             var notificationToInvitee = bnet.protocol.friends.InvitationRemovedNotification.CreateBuilder()
                 .SetInvitation(invitation)
-                .SetReason(0) // success?
+                .SetReason((uint)InvitationRemoveReason.Accepted) // success?
                 .SetAddedFriend(inviterAsFriend).Build();
 
             invitee.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
                 bnet.protocol.friends.FriendsNotify.CreateStub(invitee.LoggedInClient).NotifyReceivedInvitationRemoved(null, notificationToInvitee,callback => { }));
 
+            Friends.Add(invitee.BnetAccountID.Low, inviterAsFriend);
             Friends.Add(inviter.BnetAccountID.Low, inviteeAsFriend);
             AddFriendshipToDB(inviter,invitee);
 
@@ -102,6 +103,51 @@ namespace Mooege.Core.MooNet.Friends
                 bnet.protocol.friends.FriendsNotify.CreateStub(invitee.LoggedInClient).NotifyFriendAdded(null, friendAddedNotificationToInvitee, callback => { }));
         }
 
+        public static void HandleDecline(MooNetClient client, bnet.protocol.invitation.GenericRequest request)
+        {
+            if (!OnGoingInvitations.ContainsKey(request.InvitationId)) return;
+            var invitation = OnGoingInvitations[request.InvitationId];
+
+            var inviter = AccountManager.GetAccountByPersistentID(invitation.InviterIdentity.AccountId.Low);
+            var invitee = AccountManager.GetAccountByPersistentID(invitation.InviteeIdentity.AccountId.Low);
+
+            var declinedNotification = bnet.protocol.friends.InvitationRemovedNotification.CreateBuilder()
+                .SetInvitation(invitation)
+                .SetReason((uint)InvitationRemoveReason.Declined).Build();
+
+            inviter.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                bnet.protocol.friends.FriendsNotify.CreateStub(inviter.LoggedInClient).NotifyReceivedInvitationRemoved(null, declinedNotification, callback => { }));
+
+            invitee.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                bnet.protocol.friends.FriendsNotify.CreateStub(invitee.LoggedInClient).NotifyReceivedInvitationRemoved(null, declinedNotification, callback => { }));
+        }
+
+        public static void HandleRemove(MooNetClient client, bnet.protocol.friends.GenericFriendRequest request)
+        {
+            var removee = AccountManager.GetAccountByPersistentID(request.TargetId.Low);
+            var remover = client.Account;
+
+            var removeeAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(removee.BnetAccountID).Build();
+            var removerAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(remover.BnetAccountID).Build();
+
+            var removed = Friends.Remove(remover.BnetAccountID.Low, removeeAsFriend);
+            if (!removed) Logger.Warn("No friendship mapping between {0} and {1}", remover.BnetAccountID.Low, removeeAsFriend);
+            removed = Friends.Remove(removee.BnetAccountID.Low, removerAsFriend);
+            if (!removed) Logger.Warn("No friendship mapping between {0} and {1}", removee.BnetAccountID.Low, removerAsFriend);
+            RemoveFriendshipFromDB(remover, removee);
+
+            var notifyRemover = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(removeeAsFriend).Build();
+            client.MakeTargetedRPC(FriendManager.Instance, () =>
+                bnet.protocol.friends.FriendsNotify.CreateStub(client).NotifyFriendRemoved(null, notifyRemover, callback => { }));
+
+            if (removee.IsOnline)
+            {
+                var notifyRemovee = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(removerAsFriend).Build();
+                removee.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                    bnet.protocol.friends.FriendsNotify.CreateStub(removee.LoggedInClient).NotifyFriendRemoved(null, notifyRemovee, callback => { }));
+            }
+        }
+
         private static void AddFriendshipToDB(Account inviter, Account invitee)
         {
             try
@@ -114,6 +160,21 @@ namespace Mooege.Core.MooNet.Friends
             catch (Exception e)
             {
                 Logger.ErrorException(e, "FriendManager.AddFriendshipToDB()");
+            }
+        }
+
+        private static void RemoveFriendshipFromDB(Account remover, Account removee)
+        {
+            try
+            {
+                var query = string.Format("DELETE FROM friends WHERE accountId = {0} AND friendId = {1}; DELETE FROM friends WHERE accountId = {1} AND friendId = {0};", remover.BnetAccountID.Low, removee.BnetAccountID.Low);
+
+                var cmd = new SQLiteCommand(query, DBManager.Connection);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e, "FriendManager.RemoveFriendshipFromDB()");
             }
         }
 
@@ -135,5 +196,11 @@ namespace Mooege.Core.MooNet.Friends
                 Friends.Add((ulong)reader.GetInt64(0), friend);
             }
         }
+    }
+
+    public enum InvitationRemoveReason : uint //possibly more unknown values, such as one for revoked /dustinconrad
+    {
+        Accepted = 0x0,
+        Declined = 0x1
     }
 }
