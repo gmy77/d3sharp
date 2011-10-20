@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -27,22 +28,22 @@ using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Commands
 {
-    [Command("stats")]
-    public class StatsCommand: Command
+    [CommandGroup("stats", "Renders statistics.\nUsage: stats [system].")]
+    public class StatsCommand : CommandGroup
     {
-        public override string Help()
+        [DefaultCommand]
+        public string Stats(string[] @params, MooNetClient invokerClient)
         {
-            return "usage: stats [detailed]";
+            return string.Format("Total Accounts: {0}, Total Toons: {1} Online Players: {2} ",
+                                 AccountManager.TotalAccounts, ToonManager.TotalToons, PlayerManager.OnlinePlayers.Count);
         }
 
-        public override string Invoke(string parameters, MooNetClient invokerClient = null)
+        [Command("system", "Renders system statistics.", Account.UserLevels.Admin)]
+        public string Detailed(string[] @params, MooNetClient invokerClient)
         {
             var output = new StringBuilder();
-            output.AppendFormat("Total Accounts: {0}, Total Toons: {1} Online Players: {2} ", AccountManager.TotalAccounts, ToonManager.TotalToons, PlayerManager.OnlinePlayers.Count);
 
-            if (parameters.ToLower() != "detailed") return output.ToString();
-
-            output.AppendFormat("\nGC Allocated Memory: {0}KB ", GC.GetTotalMemory(true) / 1024);
+            output.AppendFormat("GC Allocated Memory: {0}KB ", GC.GetTotalMemory(true) / 1024);
 
             if (PerformanceCounterCategory.Exists("Processor") && PerformanceCounterCategory.CounterExists("% Processor Time", "Processor"))
             {
@@ -81,77 +82,63 @@ namespace Mooege.Core.MooNet.Commands
         }
     }
 
-    [Command("version")]
-    public class VersionCommand : Command
+    [CommandGroup("uptime", "Renders uptime statistics.")]
+    public class UptimeCommand : CommandGroup
     {
-        public override string Help()
-        {
-            return "usage: version";
-        }
-
-        public override string Invoke(string parameters, MooNetClient invokerClient = null)
-        {
-            return "mooege " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        }
-    }
-
-    [Command("Uptime")]
-    public class UptimeCommand : Command
-    {
-        public override string Help()
-        {
-            return "usage: uptime";
-        }
-
-        public override string Invoke(string parameters, MooNetClient invokerClient = null)
+        [DefaultCommand]
+        public string Uptime(string[] @params, MooNetClient invokerClient)
         {
             var uptime = DateTime.Now - Program.StartupTime;
             return string.Format("Uptime: {0} days, {1} hours, {2} minutes, {3} seconds.", uptime.Days, uptime.Hours, uptime.Minutes, uptime.Seconds);
         }
     }
 
-    [Command("shutdown", true)]
-    public class ShutdownCommand : Command
+    [CommandGroup("version", "Renders server version.")]
+    public class VersionCommand : CommandGroup
     {
-        public override string Help()
+        [DefaultCommand]
+        public string Version(string[] @params, MooNetClient invokerClient)
         {
-            return "usage: shutdown";
-        }
-
-        public override string Invoke(string parameters, MooNetClient invokerClient = null)
-        {
-            Program.Shutdown();
-            return string.Empty;
+            return "mooege " + Assembly.GetExecutingAssembly().GetName().Version;
         }
     }
 
-    [Command("start", true)]
-    public class StartCommand : Command
+    [CommandGroup("motd", "Renders message of the day.")]
+    public class MOTDCommand : CommandGroup
     {
-        public override string Help()
+        [DefaultCommand]
+        public string MOTD(string[] @params, MooNetClient invokerClient)
         {
-            return "usage: start [all|moonet|gs]";
+            return "Message of the day:" + Net.MooNet.Config.Instance.MOTD;
         }
+    }
 
-        public override string Invoke(string parameters, MooNetClient invokerClient = null)
+    [CommandGroup("server", "Allows you to control servers and start/stop them.", Account.UserLevels.Admin)]
+    public class ServerCommand : CommandGroup
+    {
+        [Command("start", "usage: server start [moonet|gs]")]
+        public string Start(string[] @params, MooNetClient invokerClient)
         {
             var startMooNet = false;
             var startGS = false;
             var output = string.Empty;
 
-            switch (parameters)
+            if (@params.Count() > 0)
             {
-                case "all":
-                case "":
-                    startMooNet = true;
-                    startGS = true;
-                    break;
-                case "moonet":
-                    startMooNet = true;
-                    break;
-                case "gs":
-                    startGS = true;
-                    break;
+                switch (@params[0])
+                {
+                    case "moonet":
+                        startMooNet = true;
+                        break;
+                    case "gs":
+                        startGS = true;
+                        break;
+                }
+            }
+            else
+            {
+                startMooNet = true;
+                startGS = true;
             }
 
             if (startMooNet)
@@ -169,35 +156,30 @@ namespace Mooege.Core.MooNet.Commands
 
             return output;
         }
-    }
 
-    [Command("stop", true)]
-    public class StopCommand : Command
-    {
-        public override string Help()
-        {
-            return "usage: stop [all|moonet|gs]";
-        }
-
-        public override string Invoke(string parameters, MooNetClient invokerClient = null)
+        [Command("stop", "usage: server stop [moonet|gs]")]
+        public string Stop(string[] @params, MooNetClient invokerClient)
         {
             var stopMooNet = false;
             var stopGS = false;
             var output = string.Empty;
 
-            switch (parameters)
+            if(@params.Count() > 0)
             {
-                case "all":
-                case "":
-                    stopMooNet = true;
-                    stopGS = true;
-                    break;
-                case "moonet":
-                    stopMooNet = true;
-                    break;
-                case "gs":
-                    stopGS = true;
-                    break;
+                switch (@params[0])
+                {
+                    case "moonet":
+                        stopMooNet = true;
+                        break;
+                    case "gs":
+                        stopGS = true;
+                        break;
+                }
+            }
+            else
+            {
+                stopMooNet = true;
+                stopGS = true;
             }
 
             if (stopMooNet)
@@ -213,6 +195,13 @@ namespace Mooege.Core.MooNet.Commands
             }
 
             return output;
+        }
+
+        [Command("shutdown", "usage: server shutdown")]
+        public string Shutdown(string[] @params, MooNetClient invokerClient)
+        {
+            Program.Shutdown();
+            return string.Empty;
         }
     }
 }

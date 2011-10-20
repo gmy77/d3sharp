@@ -47,11 +47,33 @@ namespace Mooege.Core.Common.Toons
 
         public string Name { get; private set; }
         public int HashCode { get; set; }
+        public uint TimePlayed { get; set; }
+        public uint LoginTime { get; set; }
         public string HashCodeString { get; private set; }
         public ToonClass Class { get; private set; }
         public ToonFlags Flags { get; private set; }
         public byte Level { get; private set; }
-        public D3.Hero.Digest Digest { get; private set; }
+        public D3.Hero.Digest Digest
+        {
+            get
+            {
+                return D3.Hero.Digest.CreateBuilder().SetVersion(891)
+                                .SetHeroId(this.D3EntityID)
+                                .SetHeroName(this.Name)
+                                .SetGbidClass((int)this.ClassID)
+                                .SetPlayerFlags((uint)this.Flags)
+                                .SetLevel(this.Level)
+                                .SetVisualEquipment(this.Equipment)
+                                .SetLastPlayedAct(0)
+                                .SetHighestUnlockedAct(0)
+                                .SetLastPlayedDifficulty(0)
+                                .SetHighestUnlockedDifficulty(0)
+                                .SetLastPlayedQuest(-1)
+                                .SetLastPlayedQuestStep(-1)
+                                .SetTimePlayed(this.TimePlayed)
+                                .Build();
+            }
+        }
         public D3.Hero.VisualEquipment Equipment { get; protected set; }
         public AwayStatus AwayStatus { get; private set; }
 
@@ -72,16 +94,16 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        public Toon(ulong persistentId, string name, int hashCode, byte @class, byte gender, byte level, long accountId) // Toon with given persistent ID
+        public Toon(ulong persistentId, string name, int hashCode, byte @class, byte gender, byte level, long accountId, uint timePlayed) // Toon with given persistent ID
             : base(persistentId)
         {
-            this.SetFields(name, hashCode, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistentID((ulong)accountId));
+            this.SetFields(name, hashCode, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistentID((ulong)accountId),timePlayed);
         }
 
         public Toon(string name, int hashCode, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
             : base(StringHashHelper.HashIdentity(name + "#" + hashCode.ToString("D3")))
         {
-            this.SetFields(name, hashCode, GetClassByID(classId), flags, level, account);
+            this.SetFields(name, hashCode, GetClassByID(classId), flags, level, account, 0);
         }
 
         public int ClassID
@@ -218,7 +240,7 @@ namespace Mooege.Core.Common.Toons
             }
         }
 
-        private void SetFields(string name, int hashCode, ToonClass @class, ToonFlags flags, byte level, Account owner)
+        private void SetFields(string name, int hashCode, ToonClass @class, ToonFlags flags, byte level, Account owner,uint timePlayed)
         {
             this.ToonHandle = new ToonHandleHelper(this.PersistentID);
             this.D3EntityID = this.ToonHandle.ToD3EntityID();
@@ -230,6 +252,7 @@ namespace Mooege.Core.Common.Toons
             this.Flags = flags;
             this.Level = level;
             this.Owner = owner;
+            this.TimePlayed = timePlayed;
 
             var visualItems = new[]
             {                                
@@ -245,21 +268,12 @@ namespace Mooege.Core.Common.Toons
 
             this.Equipment = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
 
-            this.Digest = D3.Hero.Digest.CreateBuilder().SetVersion(891)
-                .SetHeroId(this.D3EntityID)
-                .SetHeroName(this.Name)
-                .SetGbidClass((int)this.ClassID)
-                .SetPlayerFlags((uint)this.Flags)
-                .SetLevel(this.Level)
-                .SetVisualEquipment(this.Equipment)
-                .SetLastPlayedAct(0)
-                .SetHighestUnlockedAct(0)
-                .SetLastPlayedDifficulty(0)
-                .SetHighestUnlockedDifficulty(0)
-                .SetLastPlayedQuest(-1)
-                .SetLastPlayedQuestStep(-1)
-                .SetTimePlayed(0)
-                .Build();
+        }
+
+
+        public void LevelUp()
+        {
+            this.Level++;
         }
 
         private static ToonClass GetClassByID(int classId)
@@ -500,8 +514,8 @@ namespace Mooege.Core.Common.Toons
                 {
                     var query =
                         string.Format(
-                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, accountId={5} WHERE id={6}",
-                            Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID, this.PersistentID);
+                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, accountId={5}, timePlayed={6} WHERE id={7}",
+                            Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID, this.TimePlayed, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -510,8 +524,8 @@ namespace Mooege.Core.Common.Toons
                 {
                     var query =
                         string.Format(
-                            "INSERT INTO toons (id, name, hashCode, class, gender, level, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6})",
-                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID);
+                            "INSERT INTO toons (id, name, hashCode, class, gender, level, timePlayed, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7})",
+                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.TimePlayed, this.Owner.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
