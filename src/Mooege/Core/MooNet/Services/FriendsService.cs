@@ -72,7 +72,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetInviteeName(inviteee.Email) // again we should be instead using invitee's name.
                 .SetInvitationMessage(request.InvitationMessage)
                 .SetCreationTime(DateTime.Now.ToUnixTime())
-                .SetExpirationTime(DateTime.Now.ToUnixTime() + request.ExpirationTime);
+                .SetExpirationTime(86400);
 
             var response = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder()
                 .SetInvitation(invitation.Clone());
@@ -85,7 +85,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void AcceptInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("{0} invited friend invitation.", this.Client.Account);
+            Logger.Trace("{0} accepted friend invitation.", this.Client.Account);
 
             var response = bnet.protocol.NoData.CreateBuilder();
             done(response.Build());
@@ -100,7 +100,12 @@ namespace Mooege.Core.MooNet.Services
 
         public override void DeclineInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("{0} declined friend invitation.", this.Client.Account);
+
+            var response = bnet.protocol.NoData.CreateBuilder();
+            done(response.Build());
+
+            FriendManager.HandleDecline(this.Client, request);
         }
 
         public override void IgnoreInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
@@ -110,7 +115,14 @@ namespace Mooege.Core.MooNet.Services
 
         public override void RemoveFriend(IRpcController controller, bnet.protocol.friends.GenericFriendRequest request, Action<bnet.protocol.friends.GenericFriendResponse> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("{0} removed friend with id {1}.", this.Client.Account, request.TargetId);
+
+            var response = bnet.protocol.friends.GenericFriendResponse.CreateBuilder()
+                .SetTargetFriend(bnet.protocol.friends.Friend.CreateBuilder().SetId(request.TargetId).Build());
+
+            done(response.Build());
+
+            FriendManager.HandleRemove(this.Client, request);
         }
 
         public override void ViewFriends(IRpcController controller, bnet.protocol.friends.ViewFriendsRequest request, Action<bnet.protocol.friends.ViewFriendsResponse> done)
