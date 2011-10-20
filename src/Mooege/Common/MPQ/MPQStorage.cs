@@ -34,7 +34,7 @@ namespace Mooege.Common.MPQ
         static MPQStorage()
         {
             if (!Directory.Exists(MpqRoot)) Logger.Error("MPQ root folder does not exist: {0}", MpqRoot);
-            MPQList = FileHelpers.GetFilesRecursive(MpqRoot, "*.mpq");
+            MPQList = FileHelpers.GetFilesByExtensionRecursive(MpqRoot, ".mpq");
 
             CoreData = new CoreData();
             CoreData.Init();

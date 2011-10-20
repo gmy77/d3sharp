@@ -24,7 +24,7 @@ namespace Mooege.Common.Helpers
 {
     public static class FileHelpers
     {
-        public static List<string> GetFilesRecursive(string directory, string filePattern="*.*")
+        public static List<string> GetFilesByExtensionRecursive(string directory, string fileExtension)
         {
             var files = new List<string>(); // Store results in the file results list.
             var stack = new Stack<string>(); // Store a stack of our directories.
@@ -34,7 +34,11 @@ namespace Mooege.Common.Helpers
             while (stack.Count > 0) // Continue while there are directories to process
             {
                 var topDir = stack.Pop(); // Get top directory
-                files.AddRange(Directory.GetFiles(topDir, filePattern)); // Add files at this directory to the result List.
+                var dirInfo = new DirectoryInfo(topDir);
+
+                files.AddRange((from fileInfo in dirInfo.GetFiles()
+                                where string.Compare(fileInfo.Extension, fileExtension, System.StringComparison.OrdinalIgnoreCase) == 0
+                                select topDir + "/" + fileInfo.Name).ToList());
 
                 foreach (var dir in Directory.GetDirectories(topDir)) // Add all directories at this directory.
                 {
