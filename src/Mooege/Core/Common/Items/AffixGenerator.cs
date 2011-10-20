@@ -38,6 +38,10 @@ namespace Mooege.Core.Common.Items
             if (affixesCount > AffixDefinition.Definitions.Length)
                 affixesCount = AffixDefinition.Definitions.Length;
 
+            // set item level
+            int itemLevel = RandomHelper.Next(1, 61);
+            item.Attributes[GameAttribute.Requirement, 38] = itemLevel;
+
             ItemRandomHelper irh = new ItemRandomHelper(item.Attributes[GameAttribute.Seed]);
             irh.Next(); // 1 random is always skipped
             if(Item.IsArmor(item.ItemType))
@@ -48,19 +52,23 @@ namespace Mooege.Core.Common.Items
                 irh.Next(); // unknown
                 irh.Next(); // unknown
             }
-            IEnumerable<AffixDefinition> selected = AffixDefinition.Definitions.OrderBy(x => RandomHelper.Next()).Take(affixesCount);
-            foreach (var definition in selected)
+            IEnumerable<AffixDefinition[]> selected = AffixDefinition.Definitions.OrderBy(x => RandomHelper.Next()).Take(affixesCount);
+            foreach (var definitions in selected)
             {
-                Logger.Debug("Generating affix " + definition.Name);
-                item.AffixList.Add(new Affix(definition.AffixGbid));
-                foreach (var effect in definition.Effects)
+                var definition = definitions.OrderByDescending(x => x.MinLevel).Where(x => x.MinLevel <= itemLevel).FirstOrDefault();
+                if (definition != null)
                 {
-                    if(effect.EffectValueType == AffixEffectValueType.Int)
+                    Logger.Debug("Generating affix " + definition.Name);
+                    item.AffixList.Add(new Affix(definition.AffixGbid));
+                    foreach (var effect in definition.Effects)
                     {
-                        uint r = irh.Next(effect.MinI, effect.MaxI);
-                        Logger.Debug("Randomized value for attribute " + effect.EffectAttribute + " is " + r);
-                        var attr = (GameAttributeF)typeof(GameAttribute).GetField(effect.EffectAttribute).GetValue(null);
-                        item.Attributes[attr] += r;
+                        if (effect.EffectValueType == AffixEffectValueType.Int)
+                        {
+                            uint r = irh.Next(effect.MinI, effect.MaxI);
+                            Logger.Debug("Randomized value for attribute " + effect.EffectAttribute + " is " + r);
+                            var attr = (GameAttributeF)typeof(GameAttribute).GetField(effect.EffectAttribute).GetValue(null);
+                            item.Attributes[attr] += r;
+                        }
                     }
                 }
             }
@@ -81,16 +89,34 @@ namespace Mooege.Core.Common.Items
 
     class AffixDefinition
     {
-        public static AffixDefinition[] Definitions = new AffixDefinition[] {
-            new AffixDefinition("AttPrec I", AffixType.Prefix).AddEffect("Attack", 1, 6).AddEffect("Precision", 1, 6),
-            new AffixDefinition("AttPrec II", AffixType.Prefix).AddEffect("Attack", 6, 16).AddEffect("Precision", 6, 16),
-
-            new AffixDefinition("Att 1", AffixType.Suffix).AddEffect("Attack", 1, 8),
+        public readonly static AffixDefinition[][] Definitions = new AffixDefinition[][]
+        {
+            new AffixDefinition[]
+            {
+                new AffixDefinition("AttPrec I", AffixType.Prefix, 1).AddEffect("Attack", 1, 6).AddEffect("Precision", 1, 6),
+                new AffixDefinition("AttPrec II", AffixType.Prefix, 30).AddEffect("Attack", 6, 16).AddEffect("Precision", 6, 16),
+            },
+            new AffixDefinition[]
+            {
+                new AffixDefinition("AllStats 1", AffixType.Suffix, 5).AddEffect("Stats_All_Bonus", 1, 8),
+                new AffixDefinition("AllStats 2", AffixType.Suffix, 13).AddEffect("Stats_All_Bonus", 9, 17),
+                new AffixDefinition("AllStats 3", AffixType.Suffix, 20).AddEffect("Stats_All_Bonus", 18, 26),
+                new AffixDefinition("AllStats 4", AffixType.Suffix, 27).AddEffect("Stats_All_Bonus", 27, 35),
+                new AffixDefinition("AllStats 5", AffixType.Suffix, 34).AddEffect("Stats_All_Bonus", 36, 44),
+                new AffixDefinition("AllStats 6", AffixType.Suffix, 41).AddEffect("Stats_All_Bonus", 45, 53),
+                new AffixDefinition("AllStats 7", AffixType.Suffix, 49).AddEffect("Stats_All_Bonus", 54, 62),
+                new AffixDefinition("AllStats 8", AffixType.Suffix, 56).AddEffect("Stats_All_Bonus", 63, 71),
+            },
+            new AffixDefinition[]
+            {
+                new AffixDefinition("Att 1", AffixType.Suffix, 1).AddEffect("Attack", 1, 8),
+            },
         };
 
         public string Name;
         public int AffixGbid;
         public AffixType Type;
+        public int MinLevel;
         public List<AffixEffect> Effects;
 
         public class AffixEffect
@@ -119,11 +145,12 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        public AffixDefinition(string a, AffixType t)
+        public AffixDefinition(string a, AffixType t, int level)
         {
             Name = a;
             AffixGbid = StringHashHelper.HashItemName(Name);
             Type = t;
+            MinLevel = level;
             Effects = new List<AffixEffect>();
         }
 
