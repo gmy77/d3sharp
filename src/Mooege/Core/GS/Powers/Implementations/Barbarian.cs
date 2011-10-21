@@ -22,6 +22,8 @@ using System.Linq;
 using System.Text;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Core.GS.Actors;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -38,6 +40,66 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Knockback(Target, 4f);
                 Damage(Target, 35, 0);
             }
+
+            yield break;
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.LeapAttack)]
+    public class BarbarianLeap : PowerImplementation
+    {
+        public override IEnumerable<TickTimer> Run()
+        {
+            //StartCooldown(WaitSeconds(10f));
+
+            Vector3D delta = new Vector3D(TargetPosition.X - User.Position.X, TargetPosition.Y - User.Position.Y,
+                                          TargetPosition.Z - User.Position.Z);
+            float delta_length = (float)Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y);
+            Vector3D delta_normal = new Vector3D(delta.X / delta_length, delta.Y / delta_length, delta.Z / delta_length);
+            float unitsMovedPerTick = 30f;
+            Vector3D ramp = new Vector3D(delta_normal.X * (delta_length / unitsMovedPerTick),
+                                         delta_normal.Y * (delta_length / unitsMovedPerTick),
+                                         1.48324f); // usual leap height, possibly different when jumping up/down?
+
+            // TODO: Generalize and put this in Actor
+            User.World.BroadcastIfRevealed(new ACDTranslateArcMessage()
+            {
+                Id = 114,
+                Field0 = (int)User.DynamicID,
+                Field1 = User.Position,
+                Field2 = ramp,
+                Field3 = 303110, // used for male barb leap
+                Field4 = 69792, // used for male barb leap
+                Field5 = -1,
+                Field6 = -0.1f, // leap falloff
+                Field7 = Skills.Skills.Barbarian.FuryGenerators.LeapAttack,
+                Field8 = 0
+
+                // AlexxelA's params
+                //Field3 = -1,                           //Unknown
+                //Field4 = 69792,                        //Flyingani tagid ?
+                //Field5 = 69794,                        //Landingani tagid ?
+                //Field6 = -0.03f,                       //Falloff
+                //Field7 = -1,                           //Unknown
+                //Field8 = -1                            //Unknown
+            }, User);
+            User.Position.Set(TargetPosition);
+
+            // wait for leap to hit
+            yield return WaitSeconds(0.65f);
+
+            User.PlayEffectGroup(18688);
+
+            bool hitAnything = false;
+            foreach (Actor actor in GetTargetsInRange(TargetPosition, 8f))
+            {
+                hitAnything = true;
+                actor.PlayHitEffect(0, User);
+                Damage(actor, 55, 0);
+            }
+
+            if (hitAnything)
+                GeneratePrimaryResource(15f);
 
             yield break;
         }
