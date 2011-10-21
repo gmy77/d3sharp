@@ -22,7 +22,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Mooege.Common.Extensions;
 using Mooege.Net.GS.Message;
 
@@ -197,7 +196,8 @@ namespace Mooege.Common
                                     ? "[" + DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff") + "] "
                                     : "";
                 
-                this._logStream.WriteLine(string.Format("{0}[{1}] [{2}]: {3}", timeStamp, level.ToString().PadLeft(5), logger, message));
+                if(!this._disposed)
+                    this._logStream.WriteLine(string.Format("{0}[{1}] [{2}]: {3}", timeStamp, level.ToString().PadLeft(5), logger, message));
             }
         }
 
@@ -209,7 +209,8 @@ namespace Mooege.Common
                     ? "[" + DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff") + "] "
                     : "";
 
-                this._logStream.WriteLine(string.Format("{0}[{1}] [{2}]: {3} - [Exception] {4}", timeStamp, level.ToString().PadLeft(5), logger, message, exception));
+                if (!this._disposed)
+                    this._logStream.WriteLine(string.Format("{0}[{1}] [{2}]: {3} - [Exception] {4}", timeStamp, level.ToString().PadLeft(5), logger, message, exception));
             }
         }
 

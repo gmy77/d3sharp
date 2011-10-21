@@ -20,28 +20,32 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    /// <summary>
+    /// Sent to the client to set the rotation of an actor.
+    /// I have not seen ACDTranslateFacingMessage2 and using it crashes the client. -farmy
+    /// </summary>
     [Message(new[] { Opcodes.ACDTranslateFacingMessage1, Opcodes.ACDTranslateFacingMessage2 })]
     public class ACDTranslateFacingMessage : GameMessage
     {
-        public uint ActorID; // The actor's DynamicID
-        public float /* angle */ Angle;
-        public bool Field2;
+        public uint ActorId;        // The actor's DynamicID
+        public float Angle;         // Angle between actors X axis and world x axis in radians
+        public bool Immediately;    // False == actor smoothly rotates around his z axis
 
         public ACDTranslateFacingMessage() {}
         public ACDTranslateFacingMessage(Opcodes id) : base(id) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            ActorID = buffer.ReadUInt(32);
+            ActorId = buffer.ReadUInt(32);
             Angle = buffer.ReadFloat32();
-            Field2 = buffer.ReadBool();
+            Immediately = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteUInt(32, ActorID);
+            buffer.WriteUInt(32, ActorId);
             buffer.WriteFloat32(Angle);
-            buffer.WriteBool(Field2);
+            buffer.WriteBool(Immediately);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -50,9 +54,9 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDTranslateFacingMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorId.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Angle: " + Angle.ToString("G"));
-            b.Append(' ', pad); b.AppendLine("Field2: " + (Field2 ? "true" : "false"));
+            b.Append(' ', pad); b.AppendLine("Immediately: " + (Immediately ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

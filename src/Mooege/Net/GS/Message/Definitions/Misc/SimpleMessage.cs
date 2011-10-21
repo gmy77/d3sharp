@@ -19,20 +19,19 @@
 using System;
 using System.Text;
 using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Hireling;
 using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     [Message(new[]{
-        Opcodes.SimpleMessage1,Opcodes.SimpleMessage2, Opcodes.SimpleMessage3,Opcodes.SimpleMessage5,Opcodes.SimpleMessage6,Opcodes.SimpleMessage7,Opcodes.SimpleMessage8,
-        Opcodes.SimpleMessage9,Opcodes.SimpleMessage10,Opcodes.SimpleMessage11, Opcodes.SimpleMessage12,Opcodes.SimpleMessage13,Opcodes.SimpleMessage14,Opcodes.SimpleMessage15,
-        Opcodes.SimpleMessage16,Opcodes.SimpleMessage18,Opcodes.SimpleMessage19,Opcodes.SimpleMessage20,Opcodes.SimpleMessage21,Opcodes.SimpleMessage22,
-        Opcodes.SimpleMessage23,Opcodes.SimpleMessage24,Opcodes.SimpleMessage25,Opcodes.SimpleMessage26,Opcodes.SimpleMessage27,Opcodes.SimpleMessage28,Opcodes.SimpleMessage29,
-        Opcodes.SimpleMessage30,Opcodes.SimpleMessage31,Opcodes.SimpleMessage32,Opcodes.SimpleMessage33,Opcodes.SimpleMessage34,Opcodes.SimpleMessage35,Opcodes.SimpleMessage36,
-        Opcodes.SimpleMessage37,Opcodes.SimpleMessage38,Opcodes.SimpleMessage39,Opcodes.SimpleMessage40,Opcodes.SimpleMessage41,Opcodes.SimpleMessage42,Opcodes.SimpleMessage43,
-        Opcodes.SimpleMessage44,Opcodes.SimpleMessage45,Opcodes.SimpleMessage46})]
+        Opcodes.SimpleMessage1, Opcodes.SimpleMessage2, Opcodes.SimpleMessage3, Opcodes.SimpleMessage5, Opcodes.SimpleMessage6, Opcodes.SimpleMessage7, Opcodes.SimpleMessage8,
+        Opcodes.SimpleMessage9, Opcodes.SimpleMessage10, Opcodes.SimpleMessage11, Opcodes.SimpleMessage13, Opcodes.SimpleMessage14, Opcodes.SimpleMessage15, Opcodes.SimpleMessage16, 
+        Opcodes.SimpleMessage18, Opcodes.SimpleMessage19, Opcodes.SimpleMessage20, Opcodes.SimpleMessage21, Opcodes.SimpleMessage22, Opcodes.SimpleMessage23, Opcodes.SimpleMessage24, 
+        Opcodes.SimpleMessage25, Opcodes.SimpleMessage26, Opcodes.SimpleMessage27, Opcodes.SimpleMessage28, Opcodes.SimpleMessage29, Opcodes.SimpleMessage30, Opcodes.SimpleMessage31,
+        Opcodes.SimpleMessage32, Opcodes.SimpleMessage33, Opcodes.SimpleMessage34, Opcodes.SimpleMessage35, Opcodes.SimpleMessage36, Opcodes.SimpleMessage37, Opcodes.SimpleMessage38, 
+        Opcodes.SimpleMessage39, Opcodes.SimpleMessage40, Opcodes.SimpleMessage41, Opcodes.SimpleMessage42, Opcodes.SimpleMessage43, Opcodes.SimpleMessage44, Opcodes.SimpleMessage45, 
+        Opcodes.SimpleMessage46})]
     public class SimpleMessage : GameMessage, ISelfHandler
     {
         public void Handle(GameClient client)
@@ -113,9 +112,9 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         // TODO: Map proper values from the actor..
                         client.SendMessage(new TrickleMessage()
                         {
-                            ActorID = player.DynamicID,
-                            Field1 = client.Player.ClassSNO,
-                            Field2 = new WorldPlace()
+                            ActorId = player.DynamicID,
+                            ActorSNO = client.Player.ClassSNO,
+                            WorldLocation = new WorldPlace()
                             {
                                 Position = new Vector3D()
                                 {
@@ -125,13 +124,13 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                                 },
                                 WorldID = client.Player.World.DynamicID,
                             },
-                            Field3 = 0x00000000,
-                            Field4 = 0x00026186,
+                            PlayerIndex = 0x00000000,
+                            LevelAreaSNO = 0x00026186,
                             Field5 = 1f,
                             Field6 = 0x00000001,
                             Field7 = 0x00000024,
                             Field10 = unchecked((int)0x8DFA5D13),
-                            Field12 = 0x0000F063,
+                            StringListSNO = 0x0000F063,
                         });
 
                         client.SendMessage(new DWordDataMessage()

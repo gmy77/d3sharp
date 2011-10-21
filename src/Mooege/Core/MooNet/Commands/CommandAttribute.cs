@@ -17,19 +17,68 @@
  */
 
 using System;
+using Mooege.Core.MooNet.Accounts;
 
 namespace Mooege.Core.MooNet.Commands
 {
     [AttributeUsage(AttributeTargets.Class)]
+    public class CommandGroupAttribute : Attribute
+    {
+        /// <summary>
+        /// Command group's name.
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// Help text for command group.
+        /// </summary>
+        public string Help { get; private set; }
+
+        /// <summary>
+        /// Minimum user level required to invoke the command.
+        /// </summary>
+        public Account.UserLevels MinUserLevel { get; private set; }
+
+        public CommandGroupAttribute(string name, string help, Account.UserLevels minUserLevel = Account.UserLevels.User)
+        {
+            this.Name = name.ToLower();
+            this.Help = help;
+            this.MinUserLevel = minUserLevel;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Method)]
     public class CommandAttribute : Attribute
     {
-        public string Command { get; private set; }
-        public bool ConsoleOnly { get; private set; } // TODO: we should be instead be checking user priviles here. /raist.
+        /// <summary>
+        /// Command's name.
+        /// </summary>
+        public string Name { get; private set; }
 
-        public CommandAttribute(string command, bool consoleOnly=false)
+        /// <summary>
+        /// Help text for command.
+        /// </summary>
+        public string Help { get; private set; }
+
+        /// <summary>
+        /// Minimum user level required to invoke the command.
+        /// </summary>
+        public Account.UserLevels MinUserLevel { get; private set; }
+
+        public CommandAttribute(string command, string help, Account.UserLevels minUserLevel = Account.UserLevels.User)
         {
-            this.Command = command.ToLower();
-            this.ConsoleOnly = consoleOnly;
+            this.Name = command.ToLower();
+            this.Help = help;
+            this.MinUserLevel = minUserLevel;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class DefaultCommand : CommandAttribute
+    {
+        public DefaultCommand(Account.UserLevels minUserLevel = Account.UserLevels.User)
+            : base("", "", minUserLevel)
+        {
         }
     }
 }

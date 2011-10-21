@@ -21,25 +21,25 @@ using System.Text;
 namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
     /// <summary>
-    /// Sent to the client. No idea what it does.. everything works without it so far. (does not stop playback) - farmy
+    /// Sent to the client. No idea what it does.. everything works without it so far.
     /// </summary>
     [Message(Opcodes.StopConvLineMessage)]
     public class StopConvLineMessage : GameMessage
     {
         public int Field0;  // seems to be a running number across conversationlines. StopConvLine.Field0 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
-        public bool Field1;
+        public bool Interrupt;
 
         public StopConvLineMessage() : base(Opcodes.StopConvLineMessage)  {}
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadBool();
+            Interrupt = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, Field0);
-            buffer.WriteBool(Field1);
+            buffer.WriteBool(Interrupt);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -49,7 +49,7 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: " + (Field1 ? "true" : "false"));
+            b.Append(' ', pad); b.AppendLine("Interrupt: " + (Interrupt ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

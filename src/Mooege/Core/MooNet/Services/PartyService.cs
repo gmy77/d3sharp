@@ -42,6 +42,10 @@ namespace Mooege.Core.MooNet.Services
             channel.SetOwner(Client); // Set the client that requested the creation of channel as the owner
 
             Logger.Trace("CreateChannel() {0} for {1}", channel, Client.CurrentToon);
+
+            // send our MOTD - though this is actually not the right place for it /raist.
+            if (Config.Instance.MOTD.Trim() != string.Empty)
+                this.Client.SendServerWhisper(Config.Instance.MOTD);
         }
 
         public override void JoinChannel(IRpcController controller, bnet.protocol.channel.JoinChannelRequest request, Action<bnet.protocol.channel.JoinChannelResponse> done)

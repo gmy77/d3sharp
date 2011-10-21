@@ -21,6 +21,8 @@ namespace Mooege.Core.Common.Storage
     public sealed class Config : Mooege.Common.Config.Config
     {
         public string AssetsRoot { get { return this.GetString("AssetsRoot", "."); } set { this.Set("AssetsRoot", value); } }
+        public string Root { get { return this.GetString("Root", "Assets"); } set { this.Set("Root", value); } }
+        public string MPQRoot { get { return this.GetString("MPQRoot", "MPQ"); } set { this.Set("MPQRoot", value); } }
 
         private static readonly Config _instance = new Config();
         public static Config Instance { get { return _instance; } }

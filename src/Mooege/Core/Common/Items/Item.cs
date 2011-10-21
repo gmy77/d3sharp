@@ -232,8 +232,8 @@ namespace Mooege.Core.Common.Items
             // Drop effect/sound? TODO find out
             player.InGameClient.SendMessage(new PlayEffectMessage()
             {
-                ActorID = this.DynamicID,
-                Field1 = 0x00000027,
+                ActorId = this.DynamicID,
+                Effect = Effect.SecondaryRessourceEffect
             });
 
             var affixGbis = new int[AffixList.Count];

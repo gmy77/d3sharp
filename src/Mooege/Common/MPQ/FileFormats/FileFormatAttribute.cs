@@ -16,16 +16,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Net.MooNet;
+using System;
 
-namespace Mooege.Core.MooNet.Commands
+namespace Mooege.Common.MPQ.FileFormats
 {
-    /// <summary>
-    /// Interface for commands
-    /// </summary>
-    public class Command
+    [AttributeUsage(AttributeTargets.Class)]
+    public class FileFormatAttribute : Attribute
     {
-        public virtual string Help() { return string.Empty; }
-        public virtual string Invoke(string parameters, MooNetClient invokerClient = null) { return string.Empty; }
+        public SNOGroup Group { get; private set; }
+
+        public FileFormatAttribute(SNOGroup group)
+        {
+            this.Group = group;
+        }
     }
 }

@@ -154,7 +154,7 @@ namespace Mooege.Core.GS.Actors
             {
                 return new ACDInventoryPositionMessage()
                 {
-                    ItemID = this.DynamicID,
+                    ItemId = this.DynamicID,
                     InventoryLocation = this.InventoryLocationMessage,
                     Field2 = 1 // TODO: find out what this is and why it must be 1...is it an enum?
                 };
@@ -274,10 +274,7 @@ namespace Mooege.Core.GS.Actors
             });
 
             // Reveal actor (creates actor and makes it visible to the player)
-            player.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage7)
-            {
-                ActorID = DynamicID
-            });
+            player.InGameClient.SendMessage(new ACDCreateActorMessage(this.DynamicID));
 
             // This is always sent even though it doesn't identify the actor. /komiga
             player.InGameClient.SendMessage(new SNONameDataMessage()
@@ -295,8 +292,7 @@ namespace Mooege.Core.GS.Actors
         public override bool Unreveal(Mooege.Core.GS.Player.Player player)
         {
             if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // not revealed yet
-            // NOTE: This message ID is probably "DestroyActor". ANNDataMessage7 is used for addition/creation
-            player.InGameClient.SendMessage(new ANNDataMessage(Opcodes.ANNDataMessage6) { ActorID = this.DynamicID });
+            player.InGameClient.SendMessage(new ACDDestroyActorMessage(this.DynamicID));
             player.RevealedObjects.Remove(this.DynamicID);
             return true;
         }

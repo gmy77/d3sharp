@@ -42,7 +42,6 @@ namespace Mooege.Core.GS.Map
         public Game.Game Game { get; private set; }
 
         private Dictionary<uint, Scene> Scenes;
-        //private List<Scene> Scenes;
         private readonly ConcurrentDictionary<uint, Actor> _actors;
         private readonly ConcurrentDictionary<uint, Player.Player> _players; // Temporary for fast iteration for now since move/enter/leave handling is currently at the world level instead of the scene level
 
