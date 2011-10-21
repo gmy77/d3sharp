@@ -51,9 +51,9 @@ namespace Mooege.Core.MooNet.Accounts
             return Accounts.ContainsKey(email) ? Accounts[email] : null;
         }
 
-        public static Account CreateAccount(string email, string password)
+        public static Account CreateAccount(string email, string password, Account.UserLevels userLevel = Account.UserLevels.User)
         {
-            var account = new Account(email, password);
+            var account = new Account(email, password, userLevel);
             Accounts.Add(email, account);
             account.SaveToDB();
 
@@ -107,7 +107,9 @@ namespace Mooege.Core.MooNet.Accounts
                 var passwordVerifier = new byte[128];
                 readBytes = reader.GetBytes(3, 0, passwordVerifier, 0, 128);
 
-                var account = new Account(accountId, email, salt, passwordVerifier);
+                var userLevel = (byte) reader.GetByte(4);
+
+                var account = new Account(accountId, email, salt, passwordVerifier, (Account.UserLevels)userLevel);
                 Accounts.Add(email, account);
             }
         }

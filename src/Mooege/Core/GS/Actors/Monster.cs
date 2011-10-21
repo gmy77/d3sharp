@@ -155,15 +155,17 @@ namespace Mooege.Core.GS.Actors
 
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
-                ActorID = this.DynamicID,
-                Field1 = 0x0,
-                Field2 = 0x2,
+                ActorId = this.DynamicID,
+                Effect = Effect.Hit,
+                OptionalParameter = 0x2,
             }, this);
+
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
-                ActorID = this.DynamicID,
-                Field1 = 0xc,
+                ActorId = this.DynamicID,
+                Effect = Effect.Unknown12,
             }, this);
+
             this.World.BroadcastIfRevealed(new PlayHitEffectMessage()
             {
                 ActorID = this.DynamicID,
@@ -216,14 +218,16 @@ namespace Mooege.Core.GS.Actors
 
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
-                ActorID = this.DynamicID,
-                Field1 = 0xc,
+                ActorId = this.DynamicID,
+                Effect = Effect.Unknown12
             }, this);
+
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
-                ActorID = this.DynamicID,
-                Field1 = 0x37,
+                ActorId = this.DynamicID,
+                Effect = Effect.Burned2
             }, this);
+
             this.World.BroadcastIfRevealed(new PlayHitEffectMessage()
             {
                 ActorID = this.DynamicID,
@@ -234,6 +238,9 @@ namespace Mooege.Core.GS.Actors
 
             this.World.SpawnRandomDrop(player, this.Position);
             this.World.SpawnGold(player, this.Position);
+            int rGlobes = RandomHelper.Next(1, 100);
+            if (rGlobes < 20)
+                this.World.SpawnGlobe(player, this.Position);
             this.Destroy();
         }
     }

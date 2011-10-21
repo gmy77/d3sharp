@@ -21,31 +21,34 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    /// <summary>
+    /// Sent to the client to indefinitly translate an actor in a given direction.
+    /// </summary>
     [Message(Opcodes.ACDTranslateFixedMessage)]
     public class ACDTranslateFixedMessage : GameMessage
     {
-        public int Field0;
-        public Vector3D Field1;
+        public int ActorId;
+        public Vector3D Velocity;       // Velocity in game units per game tick
         public int Field2;
-        public int Field3;
+        public int AnimationTag;        // Animation used during movement
         public int /* sno */ Field4;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = new Vector3D();
-            Field1.Parse(buffer);
+            ActorId = buffer.ReadInt(32);
+            Velocity = new Vector3D();
+            Velocity.Parse(buffer);
             Field2 = buffer.ReadInt(24);
-            Field3 = buffer.ReadInt(21) + (-1);
+            AnimationTag = buffer.ReadInt(21) + (-1);
             Field4 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
+            buffer.WriteInt(32, ActorId);
+            Velocity.Encode(buffer);
             buffer.WriteInt(24, Field2);
-            buffer.WriteInt(21, Field3 - (-1));
+            buffer.WriteInt(21, AnimationTag - (-1));
             buffer.WriteInt(32, Field4);
         }
 
@@ -55,10 +58,10 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDTranslateFixedMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
-            Field1.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("ActorId: 0x" + ActorId.ToString("X8"));
+            Velocity.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
-            b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
+            b.Append(' ', pad); b.AppendLine("AnimationTag: 0x" + AnimationTag.ToString("X8") + " (" + AnimationTag + ")");
             b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");

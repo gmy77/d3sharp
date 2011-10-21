@@ -28,12 +28,12 @@ namespace Mooege.Net.GS.Message.Definitions.Actor
     public class NotifyActorMovementMessage : GameMessage
     {
         public int ActorId;
-        public Vector3D Position;
-        public float /* angle */? Angle;
-        public bool? Field3;
-        public float? Field4;
+        public Vector3D Position;           // New position of the Actor
+        public float? Angle;    // Angle between actors X axis and world x axis in radians
+        public bool? Field3;                // maybe immediatly rotating like in TranslateFacing? - farmy
+        public float? Speed;                // Speed of the actor while moving, if moving. In game units / tick
         public int? Field5;
-        public int? Field6;
+        public int? AnimationTag;           // Animation used while moving, if moving
         public int? Field7;
 
         public NotifyActorMovementMessage():base(Opcodes.NotifyActorMovementMessage) { }
@@ -56,7 +56,7 @@ namespace Mooege.Net.GS.Message.Definitions.Actor
             }
             if (buffer.ReadBool())
             {
-                Field4 = buffer.ReadFloat32();
+                Speed = buffer.ReadFloat32();
             }
             if (buffer.ReadBool())
             {
@@ -64,7 +64,7 @@ namespace Mooege.Net.GS.Message.Definitions.Actor
             }
             if (buffer.ReadBool())
             {
-                Field6 = buffer.ReadInt(21) + (-1);
+                AnimationTag = buffer.ReadInt(21) + (-1);
             }
             if (buffer.ReadBool())
             {
@@ -90,20 +90,20 @@ namespace Mooege.Net.GS.Message.Definitions.Actor
             {
                 buffer.WriteBool(Field3.Value);
             }
-            buffer.WriteBool(Field4.HasValue);
-            if (Field4.HasValue)
+            buffer.WriteBool(Speed.HasValue);
+            if (Speed.HasValue)
             {
-                buffer.WriteFloat32(Field4.Value);
+                buffer.WriteFloat32(Speed.Value);
             }
             buffer.WriteBool(Field5.HasValue);
             if (Field5.HasValue)
             {
                 buffer.WriteInt(24, Field5.Value);
             }
-            buffer.WriteBool(Field6.HasValue);
-            if (Field6.HasValue)
+            buffer.WriteBool(AnimationTag.HasValue);
+            if (AnimationTag.HasValue)
             {
-                buffer.WriteInt(21, Field6.Value - (-1));
+                buffer.WriteInt(21, AnimationTag.Value - (-1));
             }
             buffer.WriteBool(Field7.HasValue);
             if (Field7.HasValue)
@@ -115,7 +115,7 @@ namespace Mooege.Net.GS.Message.Definitions.Actor
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("ACDTranslateNormalMessage:");
+            b.AppendLine("NotifyActorMovementMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("ActorId: 0x" + ActorId.ToString("X8"));
@@ -131,17 +131,17 @@ namespace Mooege.Net.GS.Message.Definitions.Actor
             {
                 b.Append(' ', pad); b.AppendLine("Field3.Value: " + (Field3.Value ? "true" : "false"));
             }
-            if (Field4.HasValue)
+            if (Speed.HasValue)
             {
-                b.Append(' ', pad); b.AppendLine("Field4.Value: " + Field4.Value.ToString("G"));
+                b.Append(' ', pad); b.AppendLine("Speed.Value: " + Speed.Value.ToString("G"));
             }
             if (Field5.HasValue)
             {
                 b.Append(' ', pad); b.AppendLine("Field5.Value: 0x" + Field5.Value.ToString("X8") + " (" + Field5.Value + ")");
             }
-            if (Field6.HasValue)
+            if (AnimationTag.HasValue)
             {
-                b.Append(' ', pad); b.AppendLine("Field6.Value: 0x" + Field6.Value.ToString("X8") + " (" + Field6.Value + ")");
+                b.Append(' ', pad); b.AppendLine("AnimationTag.Value: 0x" + AnimationTag.Value.ToString("X8") + " (" + AnimationTag.Value + ")");
             }
             if (Field7.HasValue)
             {

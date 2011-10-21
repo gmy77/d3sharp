@@ -51,6 +51,8 @@ namespace Mooege.Common.Config
                 Parser.Alias.AddAlias("MinimumLevel", Logger.Level.Trace);
                 Parser.Alias.AddAlias("MaximumLevel", Logger.Level.Trace);
             }
+
+            Parser.ExpandKeyValues();
         }
 
         static internal IConfig Section(string section) // Returns the asked config section.

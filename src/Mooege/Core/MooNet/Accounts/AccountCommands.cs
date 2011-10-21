@@ -22,22 +22,55 @@ using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Accounts
 {
-    [Command("AddUser")]
-    public class AddUserCommand : Command
+    [CommandGroup("account", "Provides account managment commands.")]
+    public class AccountCommands: CommandGroup
     {
-        public override string Help()
+        [Command("show","Shows information about given account\nUsage: account show <email>", Account.UserLevels.GM)]
+        public string Show(string[] @params, MooNetClient invokerClient)
         {
-            return "usage: adduser email password";
+            if (@params.Count() < 1)
+                return "Invalid arguments. Type 'help account show' to get help.";
+
+            var email = @params[0];
+            var account = AccountManager.GetAccountByEmail(email);
+
+            if (account == null)
+                return string.Format("No account with email '{0}' exists.", email);
+
+            return string.Format("Email: {0} User Level: {1}", account.Email, account.UserLevel);
         }
 
-        public override string Invoke(string parameters, MooNetClient invokerClient = null)
+        [Command("add", "Allows you to add a new user account.\nUsage: account add <email> <password> [userlevel]", Account.UserLevels.GM)]
+        public string Add(string[] @params, MooNetClient invokerClient)
         {
-            var @params = parameters.Split(' ');
             if (@params.Count() < 2)
-                return "Invalid arguments. Type 'help adduser' to get help.";
+                return "Invalid arguments. Type 'help account add' to get help.";
 
             var email = @params[0];
             var password = @params[1];
+            Account.UserLevels userLevel = Account.UserLevels.User;
+
+            if (@params.Count() == 3)
+            {
+                var level = @params[2].ToLower();
+                switch (level)
+                {
+                    case "owner":
+                        userLevel = Account.UserLevels.Owner;
+                        break;
+                    case "admin":
+                        userLevel = Account.UserLevels.Admin;
+                        break;
+                    case "gm":
+                        userLevel = Account.UserLevels.GM;
+                        break;
+                    case "user":
+                        userLevel = Account.UserLevels.User;
+                        break;
+                    default:
+                        return level + " is not a valid user level.";
+                }
+            }
 
             if (!email.Contains('@'))
                 return string.Format("'{0}' is not a valid email address.", email);
@@ -48,66 +81,96 @@ namespace Mooege.Core.MooNet.Accounts
             if (AccountManager.GetAccountByEmail(email) != null)
                 return string.Format("An account already exists for email address {0}.", email);
 
-            var account = AccountManager.CreateAccount(email, password);
-            return string.Format("Created account {0}.", email);
-        }
-    }
-
-    [Command("DelUser")]
-    public class DelUserCommand : Command
-    {
-        public override string Help()
-        {
-            return "usage: deluser email";
+            var account = AccountManager.CreateAccount(email, password, userLevel);
+            return string.Format("Created new account {0} [user-level: {1}].", account.Email, account.UserLevel);
         }
 
-        public override string Invoke(string parameters, MooNetClient invokerClient = null)
+        [Command("delete", "Allows you to delete an existing account.\nUsage: account delete <email>", Account.UserLevels.GM)]
+        public string Delete(string[] @params, MooNetClient invokerClient)
         {
             // TODO: we should be also deleting account's toons. /raist.
 
-            parameters = parameters.Trim();
+            if(@params.Count()==0)
+                return "Invalid arguments. Type 'help account delete' to get help.";
 
-            if (parameters == string.Empty)
-                return "Invalid arguments. Type 'help deluser' to get help.";
-
-            var account = AccountManager.GetAccountByEmail(parameters);
+            var account = AccountManager.GetAccountByEmail(@params[0]);
 
             if (account == null)
-                return string.Format("No account with email '{0}' exists.", parameters);
+                  return string.Format("No account with email '{0}' exists.", @params);
 
             AccountManager.DeleteAccount(account);
-            return string.Format("Deleted account {0}.", parameters);
-        }
-    }
-
-    [Command("SetPassword")]
-    public class SetPasswordCommand : Command
-    {
-        public override string Help()
-        {
-            return "usage: setpassword email password";
+            return string.Format("Deleted account {0}.", @params);
         }
 
-        public override string Invoke(string parameters, MooNetClient invokerClient = null)
+        [Command("setpassword", "Allows you to set a new password for account\nUsage: account setpassword <email> <password>", Account.UserLevels.GM)]
+        public string SetPassword(string[] @params, MooNetClient invokerClient)
         {
-            var @params = parameters.Split(' ');
-
             if (@params.Count() < 2)
-                return "Invalid arguments. Type 'help setpassword' to get help.";
+              return "Invalid arguments. Type 'help account setpassword' to get help.";
 
             var email = @params[0];
             var password = @params[1];
 
             var account = AccountManager.GetAccountByEmail(email);
 
-            if (account == null)
+             if (account == null)
                 return string.Format("No account with email '{0}' exists.", email);
 
             if (password.Length < 8 || password.Length > 16)
                 return "Password should be a minimum of 8 and a maximum of 16 characters.";
 
             account.UpdatePassword(password);
-            return string.Format("Updated password for user {0}.", email);
+            return string.Format("Updated password for account {0}.", email);
+        }
+
+        [Command("setuserlevel", "Allows you to set a new user level for account\nUsage: account setuserlevel <email> <user level>", Account.UserLevels.GM)]
+        public string SetLevel(string[] @params, MooNetClient invokerClient)
+        {
+            if (@params.Count() < 2)
+                return "Invalid arguments. Type 'help account setuserlevel' to get help.";
+
+            var email = @params[0];
+            var level = @params[1].ToLower();
+            Account.UserLevels userLevel;
+
+            var account = AccountManager.GetAccountByEmail(email);
+
+            if (account == null)
+                return string.Format("No account with email '{0}' exists.", email);
+
+            switch (level)
+            {
+                case "owner":
+                    userLevel = Account.UserLevels.Owner;
+                    break;
+                case "admin":
+                    userLevel = Account.UserLevels.Admin;
+                    break;
+                case "gm":
+                    userLevel = Account.UserLevels.GM;
+                    break;
+                case "user":
+                    userLevel = Account.UserLevels.User;
+                    break;
+                default:
+                    return level + " is not a valid user level.";
+            }
+
+            account.UpdateUserLevel(userLevel);
+            return string.Format("Updated user level for account {0} [user-level: {1}].", email, userLevel);
+        }
+    }
+
+    [CommandGroup("whoami", "Returns information about current logged in account.")]
+    class WhoAmICommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string WhoAmI(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            return string.Format("Email: {0} User Level: {1}", invokerClient.Account.Email, invokerClient.Account.UserLevel);
         }
     }
 }

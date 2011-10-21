@@ -21,18 +21,23 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    /// <summary>
+    /// Sent to the client to move an item into an actors inventory
+    /// </summary>
     [Message(Opcodes.ACDInventoryPositionMessage)]
     public class ACDInventoryPositionMessage : GameMessage
     {
-        public uint ItemID; // Item's DynamicID
-        public InventoryLocationMessageData InventoryLocation;
-        public int Field2;
+        public uint ItemId;                                     // Item's DynamicID
+        public InventoryLocationMessageData InventoryLocation;  // Target inventory
+        public int Field2;                                      // have not seen != 1... need to be 1 or nothing happens - farmy
 
-        public ACDInventoryPositionMessage() : base(Opcodes.ACDInventoryPositionMessage) { }
+        public ACDInventoryPositionMessage() 
+            : base(Opcodes.ACDInventoryPositionMessage) 
+        { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            ItemID = buffer.ReadUInt(32);
+            ItemId = buffer.ReadUInt(32);
             InventoryLocation = new InventoryLocationMessageData();
             InventoryLocation.Parse(buffer);
             Field2 = buffer.ReadInt(32);
@@ -40,7 +45,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteUInt(32, ItemID);
+            buffer.WriteUInt(32, ItemId);
             if (InventoryLocation != null)
             {
                 InventoryLocation.Encode(buffer);
@@ -54,7 +59,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDInventoryPositionMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("ItemID: 0x" + ItemID.ToString("X8") + " (" + ItemID + ")");
+            b.Append(' ', pad); b.AppendLine("ItemId: 0x" + ItemId.ToString("X8") + " (" + ItemId + ")");
             if (InventoryLocation != null)
             {
                 InventoryLocation.AsText(b, pad);

@@ -28,7 +28,6 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -40,6 +39,7 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Combat;
+using Mooege.Core.MooNet.Online;
 using System;
 
 
@@ -352,9 +352,9 @@ namespace Mooege.Core.GS.Player
                                  Position = this.Position,
                                  Angle = message.Angle,
                                  Field3 = false,
-                                 Field4 = message.Field4,
+                                 Speed = message.Speed,
                                  Field5 = message.Field5,
-                                 Field6 = message.Field6
+                                 AnimationTag = message.AnimationTag
                              };
 
             this.World.BroadcastExclusive(msg, this); // TODO: We should be instead notifying currentscene we're in. /raist.
@@ -365,7 +365,7 @@ namespace Mooege.Core.GS.Player
 
         private void CollectGold()
         {
-            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
+            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 5f);
             foreach (var actor in actorList)
             {
                 Item item;
@@ -394,7 +394,7 @@ namespace Mooege.Core.GS.Player
 
         private void CollectHealthGlobe()
         {
-            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 20f);
+            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 5f);
             foreach (Actor actor in actorList)
             {
                 Item item;
@@ -402,29 +402,35 @@ namespace Mooege.Core.GS.Player
                 item = (Item)actor;
                 if (item.ItemType != ItemType.HealthGlobe) continue;
 
-                //This animation isn't the correct for collecting orbs, since i dont know what's the correct, i'll just use this
-                this.InGameClient.SendMessage(new FloatingNumberMessage()
+                //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
+                this.InGameClient.SendMessage(new PlayEffectMessage()
                 {
-
-                    ActorID = this.DynamicID,
-                    Number = item.Attributes[GameAttribute.Health_Globe_Bonus_Health], //for here, we need some customization on health orbs amounts
-                    Type = FloatingNumberMessage.FloatType.Green,
+                    ActorId = this.DynamicID,
+                    Effect = Effect.HealthOrbPickup
                 });
 
-                this.AddHP(item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
+                foreach (var player in PlayerManager.OnlinePlayers)
+                {
+                    if (player.CurrentToon.Name != "Server")
+                    {
+                        player.InGameClient.Player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
+                    }
+                }
 
                 item.Destroy();
 
             }
         }
 
+        public void AddPercentageHP(int percentage)
+        {
+            float quantity = (percentage * this.Attributes[GameAttribute.Hitpoints_Max]) / 100;
+            this.AddHP(quantity);
+        }
+
         public void AddHP(float quantity)
         {
             if (this.Attributes[GameAttribute.Hitpoints_Cur] + quantity >= this.Attributes[GameAttribute.Hitpoints_Max])
-                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
-            else
-                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
-            if (this.Attributes[GameAttribute.Hitpoints_Cur] + quantity > this.Attributes[GameAttribute.Hitpoints_Max])
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
             else
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
@@ -665,24 +671,15 @@ namespace Mooege.Core.GS.Player
 
                 this.InGameClient.SendMessage(new PlayEffectMessage()
                 {
-                    Id = 0x7a,
-                    ActorID = this.DynamicID,
-                    Field1 = 6,
+                    ActorId = this.DynamicID,
+                    Effect = Effect.LevelUp,
                 });
-                /*this.InGameClient.SendMessage(new PlayEffectMessage()
-                {
-                    Id = 0x7a,
-                    ActorID = this.DynamicID,
-                    Field1 = 32,
-                    Field2 = LevelUpEffects[this.Attributes[GameAttribute.Level]],
-                });*/
 
                 this.World.BroadcastGlobal(new PlayEffectMessage()
                 {
-                    Id = 0x7a,
-                    ActorID = this.DynamicID,
-                    Field1 = 32,
-                    Field2 = LevelUpEffects[this.Attributes[GameAttribute.Level]],
+                    ActorId = this.DynamicID,
+                    Effect = Effect.PlayEffectGroup,
+                    OptionalParameter = LevelUpEffects[this.Attributes[GameAttribute.Level]],
                 });
             }
 
@@ -845,10 +842,10 @@ namespace Mooege.Core.GS.Player
                     LineID = lineID,
                     Field4 = 0x00000000,
                     Field5 = -1,
-                    Field6 = this.Properties.VoiceClassID,
+                    TextClass = (Class)this.Properties.VoiceClassID,
                     Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
-                    VoiceClassID = this.Properties.VoiceClassID,
-                    snoSpeakerActor = this._actorSNO,
+                    AudioClass = (Class)this.Properties.VoiceClassID,
+                    SNOSpeakerActor = this._actorSNO,
                     Name = this.Properties.Name,
                     Field11 = 0x00000002,
                     Field12 = -1,
@@ -862,7 +859,7 @@ namespace Mooege.Core.GS.Player
             this.OpenConversations.Add(new OpenConversation(
                 new EndConversationMessage()
                 {
-                    ActorID = this.DynamicID,
+                    ActorId = this.DynamicID,
                     Field0 = 0x0000006E,
                     SNOConversation = snoConversation
                 },

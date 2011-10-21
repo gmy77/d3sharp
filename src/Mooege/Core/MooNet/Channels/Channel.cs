@@ -380,7 +380,7 @@ namespace Mooege.Core.MooNet.Channels
 
         public override string ToString()
         {
-            return String.Format("{{ Channel: [id: {0}] [owner: {1}] }}", this.DynamicId, this.Owner.CurrentToon);
+            return String.Format("{{ Channel: [id: {0}] [owner: {1}] }}", this.DynamicId, this.Owner!=null? this.Owner.CurrentToon.ToString() : "N/A");
         }
     }
 }

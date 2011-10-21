@@ -75,9 +75,9 @@ namespace Mooege.Net.GS.Message
         PlayerActorSetInitialMessage = 57, // len: 	16
         HeroStateMessage = 58, // len: 	16652
         ACDEnterKnownMessage = 59, // len: 	132
-        ANNDataMessage6 = 60, // len: 	12
+        ACDDestroyActorMessage = 60, // len: 	12
         PlayerEnterKnownMessage = 61, // len: 	16
-        ANNDataMessage7 = 62, // len: 	12
+        ACDCreateActorMessage = 62, // len: 	12
         ACDWorldPositionMessage = 63, // len: 	48
         ACDInventoryPositionMessage = 64, // len: 	32
         ACDInventoryUpdateActorSNO = 65, // len: 	16
@@ -149,7 +149,7 @@ namespace Mooege.Net.GS.Message
         ComplexEffectAddMessage = 129, // len: 	36
         FlippyMessage = 130, // len: 	32
         WaypointActivatedMessage = 131, // len: 	20
-        ANNDataMessage14 = 132, // len: 	12
+        OpenWaypointSelectionWindowMessage = 132, // len: 	12
         ANNDataMessage15 = 133, // len: 	12
         ANNDataMessage16 = 134, // len: 	12
         AimTargetMessage = 135, // len: 	36
@@ -207,10 +207,10 @@ namespace Mooege.Net.GS.Message
         PlayConvLineMessage = 186, // len: 	168
         StopConvLineMessage = 187, // len: 	16
         IntDataMessage3 = 188, // len: 	12
-        SimpleMessage12 = 189, // len: 	8
+        RequestCloseConversationWindowMessage = 189, // len: 	8
         EndConversationMessage = 190, // len: 	20
         SNODataMessage2 = 191, // len: 	12
-        SNODataMessage3 = 192, // len: 	12
+        FinishConversationMessage = 192, // len: 	12
         HirelingSwapMessage = 193, // len: 	12
         SimpleMessage13 = 194, // len: 	8
         DeathFadeTimeMessage = 195, // len: 	24
@@ -298,7 +298,7 @@ namespace Mooege.Net.GS.Message
         SimpleMessage36 = 279, // len: 	8
         GameTestingSamplingStartMessage = 280, // len: 	16
         SimpleMessage37 = 281, // len: 	8
-        SNODataMessage5 = 282, // len: 	12
+        TutorialShownMessage = 282, // len: 	12
         RequestBuffCancelMessage = 283, // len: 	16
         SimpleMessage38 = 284, // len: 	8
         PlayerIndexMessage6 = 285, // len: 	12
