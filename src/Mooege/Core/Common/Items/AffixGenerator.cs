@@ -38,29 +38,50 @@ namespace Mooege.Core.Common.Items
             if (affixesCount > AffixDefinition.Definitions.Length)
                 affixesCount = AffixDefinition.Definitions.Length;
 
+            // set item level
+            int itemLevel = RandomHelper.Next(1, 61);
+            item.Attributes[GameAttribute.Requirement, 38] = itemLevel;
+
             ItemRandomHelper irh = new ItemRandomHelper(item.Attributes[GameAttribute.Seed]);
             irh.Next(); // 1 random is always skipped
             if(Item.IsArmor(item.ItemType))
                 irh.Next(); // next value is used but unknown if armor
             irh.ReinitSeed();
-            if(Item.IsWeapon(item.ItemType))
+            if (Item.IsWeapon(item.ItemType) && item.ItemType != ItemType.Orb)
             {
                 irh.Next(); // unknown
                 irh.Next(); // unknown
             }
-            IEnumerable<AffixDefinition> selected = AffixDefinition.Definitions.OrderBy(x => RandomHelper.Next()).Take(affixesCount);
-            foreach (var definition in selected)
+            IEnumerable<AffixDefinition[]> selected = AffixDefinition.Definitions.OrderBy(x => RandomHelper.Next()).Take(affixesCount);
+            foreach (var definitions in selected)
             {
-                Logger.Debug("Generating affix " + definition.Name);
-                item.AffixList.Add(new Affix(definition.AffixGbid));
-                foreach (var effect in definition.Effects)
+                var definition = definitions.OrderByDescending(x => x.MinLevel).Where(x => x.MinLevel <= itemLevel).FirstOrDefault();
+                if (definition != null)
                 {
-                    if(effect.EffectValueType == AffixEffectValueType.Int)
+                    Logger.Debug("Generating affix " + definition.Name + " (aLvl:" + definition.MinLevel + ")");
+                    item.AffixList.Add(new Affix(definition.AffixGbid));
+                    foreach (var effect in definition.Effects)
                     {
-                        uint r = irh.Next(effect.MinI, effect.MaxI);
-                        Logger.Debug("Randomized value for attribute " + effect.EffectAttribute + " is " + r);
-                        var attr = (GameAttributeF)typeof(GameAttribute).GetField(effect.EffectAttribute).GetValue(null);
-                        item.Attributes[attr] += r;
+                        if (effect.EffectValueType == AffixEffectValueType.IntMinMax)
+                        {
+                            uint r = irh.Next(effect.MinI, effect.MaxI);
+                            Logger.Debug("Randomized value for attribute " + effect.EffectAttribute + " is " + r);
+                            var attr = (GameAttributeF)typeof(GameAttribute).GetField(effect.EffectAttribute).GetValue(null);
+                            item.Attributes[attr] += r;
+                        }
+                        else if (effect.EffectValueType == AffixEffectValueType.IntFix)
+                        {
+                            Logger.Debug("Fixed value for attribute " + effect.EffectAttribute + " is " + effect.MinI);
+                            var attr = (GameAttributeF)typeof(GameAttribute).GetField(effect.EffectAttribute).GetValue(null);
+                            item.Attributes[attr] += effect.MinI;
+                        }
+                        else if (effect.EffectValueType == AffixEffectValueType.Percent)
+                        {
+                            uint r = irh.Next((int)effect.MinF, (int)effect.MaxF);
+                            Logger.Debug("Randomized value for attribute " + effect.EffectAttribute + " is " + r);
+                            var attr = (GameAttributeF)typeof(GameAttribute).GetField(effect.EffectAttribute).GetValue(null);
+                            item.Attributes[attr] += (float)r / 100;
+                        }
                     }
                 }
             }
@@ -75,22 +96,20 @@ namespace Mooege.Core.Common.Items
 
     public enum AffixEffectValueType
     {
-        Int,
-        Float
+        IntMinMax,
+        IntFix,
+        Percent,
     }
 
-    class AffixDefinition
+    // TODO: Use affixes associated with item type
+    partial class AffixDefinition
     {
-        public static AffixDefinition[] Definitions = new AffixDefinition[] {
-            new AffixDefinition("AttPrec I", AffixType.Prefix).AddEffect("Attack", 1, 6).AddEffect("Precision", 1, 6),
-            new AffixDefinition("AttPrec II", AffixType.Prefix).AddEffect("Attack", 6, 16).AddEffect("Precision", 6, 16),
 
-            new AffixDefinition("Att 1", AffixType.Suffix).AddEffect("Attack", 1, 8),
-        };
 
         public string Name;
         public int AffixGbid;
         public AffixType Type;
+        public int MinLevel;
         public List<AffixEffect> Effects;
 
         public class AffixEffect
@@ -105,7 +124,7 @@ namespace Mooege.Core.Common.Items
             public AffixEffect(string effectAttr, int min, int max)
             {
                 EffectAttribute = effectAttr;
-                EffectValueType = AffixEffectValueType.Int;
+                EffectValueType = AffixEffectValueType.IntMinMax;
                 MinI = min;
                 MaxI = max;
             }
@@ -113,23 +132,38 @@ namespace Mooege.Core.Common.Items
             public AffixEffect(string effectAttr, float min, float max)
             {
                 EffectAttribute = effectAttr;
-                EffectValueType = AffixEffectValueType.Float;
+                EffectValueType = AffixEffectValueType.Percent;
                 MinF = min;
                 MaxF = max;
             }
+
+            public AffixEffect(string effectAttr, int fix)
+            {
+                EffectAttribute = effectAttr;
+                EffectValueType = AffixEffectValueType.IntFix;
+                MinI = fix;
+                MaxI = fix;
+            }
         }
 
-        public AffixDefinition(string a, AffixType t)
+        public AffixDefinition(string a, AffixType t, int level)
         {
             Name = a;
             AffixGbid = StringHashHelper.HashItemName(Name);
             Type = t;
+            MinLevel = level;
             Effects = new List<AffixEffect>();
         }
 
         public AffixDefinition AddEffect(string effectAttr, int min, int max)
         {
             Effects.Add(new AffixEffect(effectAttr, min, max));
+            return this;
+        }
+
+        public AffixDefinition AddEffect(string effectAttr, int fix)
+        {
+            Effects.Add(new AffixEffect(effectAttr, fix));
             return this;
         }
 
