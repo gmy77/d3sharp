@@ -47,7 +47,7 @@ namespace Mooege.Core.Common.Items
             if(Item.IsArmor(item.ItemType))
                 irh.Next(); // next value is used but unknown if armor
             irh.ReinitSeed();
-            if(Item.IsWeapon(item.ItemType))
+            if (Item.IsWeapon(item.ItemType) && item.ItemType != ItemType.Orb)
             {
                 irh.Next(); // unknown
                 irh.Next(); // unknown
@@ -58,16 +58,29 @@ namespace Mooege.Core.Common.Items
                 var definition = definitions.OrderByDescending(x => x.MinLevel).Where(x => x.MinLevel <= itemLevel).FirstOrDefault();
                 if (definition != null)
                 {
-                    Logger.Debug("Generating affix " + definition.Name);
+                    Logger.Debug("Generating affix " + definition.Name + " (aLvl:" + definition.MinLevel + ")");
                     item.AffixList.Add(new Affix(definition.AffixGbid));
                     foreach (var effect in definition.Effects)
                     {
-                        if (effect.EffectValueType == AffixEffectValueType.Int)
+                        if (effect.EffectValueType == AffixEffectValueType.IntMinMax)
                         {
                             uint r = irh.Next(effect.MinI, effect.MaxI);
                             Logger.Debug("Randomized value for attribute " + effect.EffectAttribute + " is " + r);
                             var attr = (GameAttributeF)typeof(GameAttribute).GetField(effect.EffectAttribute).GetValue(null);
                             item.Attributes[attr] += r;
+                        }
+                        else if (effect.EffectValueType == AffixEffectValueType.IntFix)
+                        {
+                            Logger.Debug("Fixed value for attribute " + effect.EffectAttribute + " is " + effect.MinI);
+                            var attr = (GameAttributeF)typeof(GameAttribute).GetField(effect.EffectAttribute).GetValue(null);
+                            item.Attributes[attr] += effect.MinI;
+                        }
+                        else if (effect.EffectValueType == AffixEffectValueType.Percent)
+                        {
+                            uint r = irh.Next((int)effect.MinF, (int)effect.MaxF);
+                            Logger.Debug("Randomized value for attribute " + effect.EffectAttribute + " is " + r);
+                            var attr = (GameAttributeF)typeof(GameAttribute).GetField(effect.EffectAttribute).GetValue(null);
+                            item.Attributes[attr] += (float)r / 100;
                         }
                     }
                 }
@@ -83,35 +96,15 @@ namespace Mooege.Core.Common.Items
 
     public enum AffixEffectValueType
     {
-        Int,
-        Float
+        IntMinMax,
+        IntFix,
+        Percent,
     }
 
-    class AffixDefinition
+    // TODO: Use affixes associated with item type
+    partial class AffixDefinition
     {
-        public readonly static AffixDefinition[][] Definitions = new AffixDefinition[][]
-        {
-            new AffixDefinition[]
-            {
-                new AffixDefinition("AttPrec I", AffixType.Prefix, 1).AddEffect("Attack", 1, 6).AddEffect("Precision", 1, 6),
-                new AffixDefinition("AttPrec II", AffixType.Prefix, 30).AddEffect("Attack", 6, 16).AddEffect("Precision", 6, 16),
-            },
-            new AffixDefinition[]
-            {
-                new AffixDefinition("AllStats 1", AffixType.Suffix, 5).AddEffect("Stats_All_Bonus", 1, 8),
-                new AffixDefinition("AllStats 2", AffixType.Suffix, 13).AddEffect("Stats_All_Bonus", 9, 17),
-                new AffixDefinition("AllStats 3", AffixType.Suffix, 20).AddEffect("Stats_All_Bonus", 18, 26),
-                new AffixDefinition("AllStats 4", AffixType.Suffix, 27).AddEffect("Stats_All_Bonus", 27, 35),
-                new AffixDefinition("AllStats 5", AffixType.Suffix, 34).AddEffect("Stats_All_Bonus", 36, 44),
-                new AffixDefinition("AllStats 6", AffixType.Suffix, 41).AddEffect("Stats_All_Bonus", 45, 53),
-                new AffixDefinition("AllStats 7", AffixType.Suffix, 49).AddEffect("Stats_All_Bonus", 54, 62),
-                new AffixDefinition("AllStats 8", AffixType.Suffix, 56).AddEffect("Stats_All_Bonus", 63, 71),
-            },
-            new AffixDefinition[]
-            {
-                new AffixDefinition("Att 1", AffixType.Suffix, 1).AddEffect("Attack", 1, 8),
-            },
-        };
+
 
         public string Name;
         public int AffixGbid;
@@ -131,7 +124,7 @@ namespace Mooege.Core.Common.Items
             public AffixEffect(string effectAttr, int min, int max)
             {
                 EffectAttribute = effectAttr;
-                EffectValueType = AffixEffectValueType.Int;
+                EffectValueType = AffixEffectValueType.IntMinMax;
                 MinI = min;
                 MaxI = max;
             }
@@ -139,9 +132,17 @@ namespace Mooege.Core.Common.Items
             public AffixEffect(string effectAttr, float min, float max)
             {
                 EffectAttribute = effectAttr;
-                EffectValueType = AffixEffectValueType.Float;
+                EffectValueType = AffixEffectValueType.Percent;
                 MinF = min;
                 MaxF = max;
+            }
+
+            public AffixEffect(string effectAttr, int fix)
+            {
+                EffectAttribute = effectAttr;
+                EffectValueType = AffixEffectValueType.IntFix;
+                MinI = fix;
+                MaxI = fix;
             }
         }
 
@@ -157,6 +158,12 @@ namespace Mooege.Core.Common.Items
         public AffixDefinition AddEffect(string effectAttr, int min, int max)
         {
             Effects.Add(new AffixEffect(effectAttr, min, max));
+            return this;
+        }
+
+        public AffixDefinition AddEffect(string effectAttr, int fix)
+        {
+            Effects.Add(new AffixEffect(effectAttr, fix));
             return this;
         }
 
