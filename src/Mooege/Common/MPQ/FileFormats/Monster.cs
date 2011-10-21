@@ -27,7 +27,23 @@ namespace Mooege.Common.MPQ.FileFormats
     {
         public int MonsterSNO;
         public int ActorSNO;
-        public int MonsterType; // Unsure - DarkLotus
+
+        public int Race;
+        public int Size;
+        public int type;
+        public string MonsterType // Probably should have an enum of these
+        {
+            get
+            {
+                if (type == 0x00) { return "undead"; } // also 0x00 on items like Power_Proxy_Seeker
+                if (type == 0x01) { return "demon"; }
+                if (type == 0x02) { return "beast"; }
+                if (type == 0x03) { return "humanoid"; }
+                if (type == 0x06) { return "NPC"; }
+                return "unknown";
+
+            }
+        }
         public Levels Level = new Levels();
 
         public Monster(MpqFile file)
@@ -35,15 +51,18 @@ namespace Mooege.Common.MPQ.FileFormats
             var stream = file.Open();
             stream.Seek(16, SeekOrigin.Begin);
             this.MonsterSNO = stream.ReadInt32();
-            stream.Position = 32;
+            stream.Position = 0x20;
             this.ActorSNO = stream.ReadInt32();
-            stream.Position = 48;
-            this.MonsterType = stream.ReadInt32();
-            stream.Position = 80;
+            stream.Position = 0x28;
+            this.type = stream.ReadInt32();
+            this.Race = stream.ReadInt32();
+            this.Size = stream.ReadInt32();
+            stream.Position = 0x54;
             this.Level.Normal = stream.ReadInt32();
             this.Level.Nightmare = stream.ReadInt32();
             this.Level.Hell = stream.ReadInt32();
-            this.Level.Inferno = stream.ReadInt32();            
+            this.Level.Inferno = stream.ReadInt32();
+            // 145floats follow this according to chuanhsing, not sure what their for - DarkLotus
             stream.Close();
         }
 
