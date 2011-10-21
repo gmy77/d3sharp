@@ -31,11 +31,11 @@ namespace Mooege.Common.MPQ.FileFormats
         public int Race;
         public int Size;
         public int type;
-        public string MonsterType // Probably should have an enum of these
+        public string MonsterType // Probably should have an enum of these - DarkLotus
         {
             get
             {
-                if (type == 0x00) { return "undead"; } // also 0x00 on items like Power_Proxy_Seeker
+                if (type == 0x00) { return "undead"; } // also 0x00 on .mon files like Power_Proxy_Seeker - DarkLotus
                 if (type == 0x01) { return "demon"; }
                 if (type == 0x02) { return "beast"; }
                 if (type == 0x03) { return "humanoid"; }
@@ -62,7 +62,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Level.Nightmare = stream.ReadInt32();
             this.Level.Hell = stream.ReadInt32();
             this.Level.Inferno = stream.ReadInt32();
-            // 145floats follow this according to chuanhsing, not sure what their for - DarkLotus
+            // 145floats follow this according to chuanhsing, not sure what they are for - DarkLotus
             stream.Close();
         }
 
