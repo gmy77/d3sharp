@@ -173,7 +173,7 @@ namespace Mooege.Core.GS.Powers
 
         public Effect SpawnEffect(int actorSNO, Vector3D position, Actor point_to_actor, TickTimer timeout = null)
         {
-            float angle = (point_to_actor != null) ? PowerUtils.AngleLookAt(User.Position, point_to_actor.Position) : -1f;
+            float angle = (point_to_actor != null) ? PowerMath.AngleLookAt(User.Position, point_to_actor.Position) : -1f;
             return SpawnEffect(actorSNO, position, angle, timeout);
         }
 
@@ -221,7 +221,7 @@ namespace Mooege.Core.GS.Powers
         {
             if (target == null) return;
 
-            var move = PowerUtils.ProjectAndTranslate2D(target.Position, User.Position, target.Position, amount);
+            var move = PowerMath.ProjectAndTranslate2D(target.Position, User.Position, target.Position, amount);
             target.MoveNormal(move);
         }
 

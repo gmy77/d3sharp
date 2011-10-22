@@ -24,6 +24,7 @@ using Mooege.Core.GS.Actors;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Effect;
+using Mooege.Net.GS.Message.Definitions.Animation;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -34,7 +35,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             UsePrimaryResource(60f);
             SpawnEffect(86790, TargetPosition);
-            yield return WaitSeconds(1.9f); // wait for meteor to hit
+            yield return WaitSeconds(2f); // wait for meteor to hit
             SpawnEffect(86769, TargetPosition);
             SpawnEffect(90364, TargetPosition, -1, WaitSeconds(4f));
 
@@ -150,7 +151,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             RegisterChannelingPower(WaitSeconds(0.1f));
                         
             // project beam end to always be a certain length
-            TargetPosition = PowerUtils.ProjectAndTranslate2D(TargetPosition, User.Position,
+            TargetPosition = PowerMath.ProjectAndTranslate2D(TargetPosition, User.Position,
                                                                User.Position, BeamLength);
 
             if (!ThrottledCast)
@@ -159,7 +160,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                 foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
                 {
-                    if (PowerUtils.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
+                    if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
                     {  
                         actor.PlayHitEffect(32, User);
                         actor.PlayEffectGroup(18793);
@@ -169,8 +170,8 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
 
             // always update effect locations
-            TargetPosition.Z += 10f; // put effect a little bit above the ground target
-            Effect pid = GetChanneledEffect(0, 52687, TargetPosition, true);
+            // spawn target effect a little bit above the ground target
+            Effect pid = GetChanneledEffect(0, 52687, new Vector3D(TargetPosition.X, TargetPosition.Y, TargetPosition.Z + 10f), true);
             if (! UserIsChanneling)
             {
                 User.AddComplexEffect(18792, pid);
@@ -326,7 +327,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.RayOfFrost)]
     public class WizardRayOfFrost : PowerImplementation
     {
-        const float BeamLength = 60f;
+        const float BeamLength = 40f;
 
         public override IEnumerable<TickTimer> Run() //TODO: still WIP
         {
@@ -335,7 +336,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.FacingTranslate(TargetPosition);
 
             // project beam end to always be a certain length
-            TargetPosition = PowerUtils.ProjectAndTranslate2D(TargetPosition, User.Position,
+            TargetPosition = PowerMath.ProjectAndTranslate2D(TargetPosition, User.Position,
                                                                User.Position, BeamLength);
 
             if (!ThrottledCast)
@@ -343,7 +344,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 UsePrimaryResource(3.5f);
                 foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
                 {
-                    if (PowerUtils.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
+                    if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
                     {
                         //hit effects: 8 - disintegrate, 4 - some witch doctor green crap, 2 - electric, 1 - some fire methink, 16-ice particles, 
                         actor.PlayHitEffect(64, User);
@@ -356,14 +357,28 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
 
             // always update effect locations
-            TargetPosition.Z += 10f; // put effect a little bit above the ground target
-            Effect pid = GetChanneledEffect(0, 6535, TargetPosition, true);
+            // spawn target effect a little bit above the ground target
+            Effect pid = GetChanneledEffect(0, 6535, new Vector3D(TargetPosition.X, TargetPosition.Y, TargetPosition.Z + 10f), true);
             if (!UserIsChanneling)
             {
                 User.AddComplexEffect(19327, pid);
             }
 
             yield break;
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Teleport)]
+    public class WizardTeleport : PowerImplementation
+    {
+        public override IEnumerable<TickTimer> Run()
+        {
+            UsePrimaryResource(15f);
+            //StartCooldown(WaitSeconds(16f));
+            SpawnProxy(User.Position).PlayEffectGroup(19352);  // alt cast efg: 170231
+            yield return WaitSeconds(0.3f);
+            User.MoveWorldPosition(TargetPosition);
+            User.PlayEffectGroup(170232);
         }
     }
 }

@@ -285,6 +285,12 @@ namespace Mooege.Core.GS.Actors
 
         #region Movement/Translation
 
+        public void MoveWorldPosition(Vector3D destination)
+        {
+            this.Position.Set(destination);
+            this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
+        }
+
         public void MoveNormal(Vector3D destination, float speed = 1.0f)
         {
             Position.Set(destination);
@@ -315,7 +321,7 @@ namespace Mooege.Core.GS.Actors
             }, this);
         }
 
-        public void FacingTranslate(Vector3D target, bool smoothly = true)
+        public void FacingTranslate(Vector3D target, bool instant = false)
         {
             float radianAngle = (float)Math.Atan2(target.Y - Position.Y, target.X - Position.X);
 
@@ -328,7 +334,7 @@ namespace Mooege.Core.GS.Actors
                 Id = 0x70,
                 ActorID = DynamicID,
                 Angle = radianAngle,
-                Field2 = smoothly // true/false toggles whether to smoothly animate the change or instantly do it
+                Field2 = instant // true/false toggles whether to smoothly animate the change or instantly do it
             }, this);
         }
 

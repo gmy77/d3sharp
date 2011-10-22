@@ -8,7 +8,7 @@ namespace Mooege.Core.GS.Powers
 {
     // Collection of useful functions that operate on things Powers work with.
     // alot of it probably should be factored into the Vector3D, Actor, etc classes.
-    public class PowerUtils
+    public class PowerMath
     {
         // 2d vector class for effects/collisions and such
         // NOTE: not a complete vector class, just adding stuff as needed.
@@ -90,6 +90,13 @@ namespace Mooege.Core.GS.Powers
             return r;
         }
 
+        public static float Distance(Vector3D a, Vector3D b)
+        {
+            return (float)Math.Sqrt(Math.Pow(a.X - b.X, 2) +
+                                    Math.Pow(a.Y - b.Y, 2) +
+                                    Math.Pow(a.Z - b.Z, 2));
+        }
+
         public static float AngleLookAt(Vector3D source, Vector3D target)
         {
             return (float)Math.Atan2(target.Y - source.Y, target.X - source.X);
@@ -151,10 +158,5 @@ namespace Mooege.Core.GS.Powers
         }
 
         #endregion // Math helpers
-
-        #region Actor helpers
-
-
-        #endregion // Actor helpers
     }
 }

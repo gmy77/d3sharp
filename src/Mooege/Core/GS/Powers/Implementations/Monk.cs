@@ -23,6 +23,8 @@ using System.Text;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Actors;
+using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Actor;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -59,7 +61,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
 
             // calculate end of attack reach
-            TargetPosition = PowerUtils.ProjectAndTranslate2D(TargetPosition, User.Position,
+            TargetPosition = PowerMath.ProjectAndTranslate2D(TargetPosition, User.Position,
                                                    User.Position, reachLength);
 
             User.PlayEffectGroup(effectSNO);
@@ -67,7 +69,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             bool hitAnything = false;
             foreach (Actor actor in GetTargetsInRange(User.Position, reachLength + 10f))
             {
-                if (PowerUtils.PointInBeam(actor.Position, User.Position, TargetPosition, reachThickness))
+                if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, reachThickness))
                 {
                     hitAnything = true;
                     actor.PlayHitEffect(5, User);
@@ -103,7 +105,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 case 2:
                     yield return WaitSeconds(0.3f);
                     // put target position a little bit in front of the monk. represents the lightning ball
-                    TargetPosition = PowerUtils.ProjectAndTranslate2D(TargetPosition, User.Position,
+                    TargetPosition = PowerMath.ProjectAndTranslate2D(TargetPosition, User.Position,
                                         User.Position, 8f);
 
                     User.PlayEffectGroup(143566); // cast
