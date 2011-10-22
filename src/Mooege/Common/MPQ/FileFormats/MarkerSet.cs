@@ -20,53 +20,54 @@ using System.IO;
 using CrystalMpq;
 using Mooege.Common.Extensions;
 using System.Text;
+using Mooege.Common.MPQ.DataTypes;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.MarkerSet)]
     public class MarkerSet : FileFormat 
     {
-        public MpqDataTypes.Header Header;
+        public Header Header;
         public int SNO;
         private int unknown0,unknown1;
 
-        MpqDataTypes.SerializeData serMarkers;
-        MpqDataTypes.Marker[] Markers;
-        MpqDataTypes.SerializeData serNoSpawns;
-        MpqDataTypes.AABB aabb;
+        SerializeData serMarkers;
+        Marker[] Markers;
+        SerializeData serNoSpawns;
+        AABB_ aabb;
         int i0;
         string filename;
         int nLabel;
         int nSpecialIndexCount;
-        MpqDataTypes.SerializeData serSpecialIndexList;
+        SerializeData serSpecialIndexList;
 
 
         public MarkerSet(MpqFile file)
         {
             var stream = file.Open();
-            Header = new MpqDataTypes.Header(stream);
+            Header = new Header(stream);
             SNO = stream.ReadInt32();
             unknown0 = stream.ReadInt32();
             unknown1 = stream.ReadInt32();
-            serMarkers = new MpqDataTypes.SerializeData(stream);
+            serMarkers = new SerializeData(stream);
             long x = stream.Position;
-            Markers = new MpqDataTypes.Marker[serMarkers.Size / 208];
+            Markers = new Marker[serMarkers.Size / 208];
             stream.Position = serMarkers.Offset + 16;
             for (int i = 0; i < serMarkers.Size / 208; i++)
             {
-                Markers[i] = new MpqDataTypes.Marker(stream);
+                Markers[i] = new Marker(stream);
             }
             stream.Position = x;
             stream.Position += (15 * 4); // pad 15
-            serNoSpawns = new MpqDataTypes.SerializeData(stream);
+            serNoSpawns = new SerializeData(stream);
             stream.Position += (14 * 4);
-            aabb = new MpqDataTypes.AABB(stream);
+            aabb = new AABB_(stream);
             i0 = stream.ReadInt32();
             byte[] buf = new byte[256];
             stream.Read(buf, 0, 256); filename = Encoding.ASCII.GetString(buf);
             nLabel = stream.ReadInt32();
             nSpecialIndexCount = stream.ReadInt32();
-            serSpecialIndexList = new MpqDataTypes.SerializeData(stream);
+            serSpecialIndexList = new SerializeData(stream);
 
                 stream.Close();
         }

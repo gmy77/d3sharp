@@ -46,11 +46,5 @@ namespace Mooege.Common.Extensions
             int result = stream.Read(buffer, 0, 2);
             return BitConverter.ToInt16(buffer, 0);
         }
-        public static byte Read8bits(this MpqFileStream stream)
-        {
-            var buffer = new byte[1];
-            int result = stream.Read(buffer, 0, 1);
-            return buffer[0];
-        }
     }
 }
