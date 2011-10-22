@@ -302,7 +302,7 @@ namespace Mooege.Core.GS.Actors
                 Position = destination,
                 Angle = 0f, // TODO: convert quaternion rotation to radians
                 Field3 = false,
-                Field4 = speed,
+                Speed = speed,
             }, this);
         }
 
@@ -321,7 +321,7 @@ namespace Mooege.Core.GS.Actors
             }, this);
         }
 
-        public void FacingTranslate(Vector3D target, bool instant = false)
+        public void FacingTranslate(Vector3D target, bool immediately = false)
         {
             float radianAngle = (float)Math.Atan2(target.Y - Position.Y, target.X - Position.X);
 
@@ -332,9 +332,9 @@ namespace Mooege.Core.GS.Actors
             World.BroadcastIfRevealed(new ACDTranslateFacingMessage
             {
                 Id = 0x70,
-                ActorID = DynamicID,
+                ActorId = DynamicID,
                 Angle = radianAngle,
-                Field2 = instant // true/false toggles whether to smoothly animate the change or instantly do it
+                Immediately = immediately
             }, this);
         }
 
@@ -347,9 +347,9 @@ namespace Mooege.Core.GS.Actors
             World.BroadcastIfRevealed(new PlayEffectMessage
             {
                 Id = 0x7a,
-                ActorID = DynamicID,
-                Field1 = 32, // 32 means Field2 is .efg sno it seems
-                Field2 = effectGroupSNO
+                ActorId = DynamicID,
+                Effect = Net.GS.Message.Definitions.Effect.Effect.PlayEffectGroup,
+                OptionalParameter = effectGroupSNO
             }, this);
         }
 

@@ -156,7 +156,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public Effect SpawnEffect(int actorSNO, Vector3D position, float angle = -1f /*random*/, TickTimer timeout = null)
+        public EffectActor SpawnEffect(int actorSNO, Vector3D position, float angle = -1f /*random*/, TickTimer timeout = null)
         {
             if (angle == -1f)
                 angle = (float)(Rand.NextDouble() * (Math.PI * 2));
@@ -168,26 +168,26 @@ namespace Mooege.Core.GS.Powers
                 timeout = _defaultEffectTimeout;
             }
 
-            return new Effect(User.World, actorSNO, position, angle, timeout);
+            return new EffectActor(User.World, actorSNO, position, angle, timeout);
         }
 
-        public Effect SpawnEffect(int actorSNO, Vector3D position, Actor point_to_actor, TickTimer timeout = null)
+        public EffectActor SpawnEffect(int actorSNO, Vector3D position, Actor point_to_actor, TickTimer timeout = null)
         {
             float angle = (point_to_actor != null) ? PowerMath.AngleLookAt(User.Position, point_to_actor.Position) : -1f;
             return SpawnEffect(actorSNO, position, angle, timeout);
         }
 
-        public Effect SpawnProxy(Vector3D position, TickTimer timeout = null)
+        public EffectActor SpawnProxy(Vector3D position, TickTimer timeout = null)
         {
             return SpawnEffect(187359, position, 0, timeout);
         }
 
-        public Effect GetChanneledEffect(int index, int actorSNO, Vector3D position, bool snapped = false)
+        public EffectActor GetChanneledEffect(int index, int actorSNO, Vector3D position, bool snapped = false)
         {
             return PowerManager.GetChanneledEffect(User, index, actorSNO, position, snapped);
         }
 
-        public Effect GetChanneledProxy(int index, Vector3D position, bool snapped = false)
+        public EffectActor GetChanneledProxy(int index, Vector3D position, bool snapped = false)
         {
             return GetChanneledEffect(index, 187359, position, snapped);
         }

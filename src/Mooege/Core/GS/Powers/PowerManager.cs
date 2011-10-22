@@ -46,7 +46,7 @@ namespace Mooege.Core.GS.Powers
 
         private bool _isChanneling = false;
         private TickTimer _channelCastDelay = null;
-        private IList<Effect> _channelEffects = null;
+        private IList<EffectActor> _channelEffects = null;
 
         // list of all waiting to execute powers
         private class WaitingPower
@@ -169,24 +169,24 @@ namespace Mooege.Core.GS.Powers
             _channelCastDelay = null;
             if (_channelEffects != null)
             {
-                foreach (Effect effect in _channelEffects)
+                foreach (EffectActor effect in _channelEffects)
                     effect.Destroy();
 
                 _channelEffects = null;
             }
         }
 
-        public Effect GetChanneledEffect(Actor user, int index, int actorSNO, Vector3D position, bool snapped)
+        public EffectActor GetChanneledEffect(Actor user, int index, int actorSNO, Vector3D position, bool snapped)
         {
             if (!_isChanneling) return null;
             
             if (_channelEffects == null)
-                _channelEffects = new List<Effect>();
+                _channelEffects = new List<EffectActor>();
 
             // ensure effects list is at least big enough for specified index
             while (_channelEffects.Count < index + 1)
             {
-                _channelEffects.Add(new Effect(user.World, actorSNO, position, 0, null));
+                _channelEffects.Add(new EffectActor(user.World, actorSNO, position, 0, null));
             }
 
             if (snapped)
@@ -197,7 +197,7 @@ namespace Mooege.Core.GS.Powers
             return _channelEffects[index];
         }
 
-        public Effect GetChanneledProxy(Actor user, int index, Vector3D position, bool snapped)
+        public EffectActor GetChanneledProxy(Actor user, int index, Vector3D position, bool snapped)
         {
             return GetChanneledEffect(user, index, 187359, position, snapped);
         }

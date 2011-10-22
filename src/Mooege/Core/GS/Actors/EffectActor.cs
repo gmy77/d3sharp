@@ -26,13 +26,13 @@ using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Powers
 {
-    public class Effect : Actor
+    public class EffectActor : Actor
     {
         public TickTimer Timeout;
 
         public override ActorType ActorType { get { return Actors.ActorType.Effect; } }
 
-        public Effect(Map.World world, int actorSNO, Vector3D position, float angle, TickTimer timeout = null)
+        public EffectActor(Map.World world, int actorSNO, Vector3D position, float angle, TickTimer timeout = null)
             : base(world, world.NewActorID)
         {
             this.ActorSNO = actorSNO;

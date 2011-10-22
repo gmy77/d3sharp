@@ -65,12 +65,12 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.World.BroadcastIfRevealed(new ACDTranslateArcMessage()
             {
                 Id = 114,
-                Field0 = (int)User.DynamicID,
-                Field1 = User.Position,
-                Field2 = ramp,
+                ActorId = (int)User.DynamicID,
+                Start = User.Position,
+                Velocity = ramp,
                 Field3 = 303110, // used for male barb leap
-                Field4 = 69792, // used for male barb leap
-                Field5 = -1,
+                FlyingAnimationTagID = 69792, // used for male barb leap
+                LandingAnimationTagID = -1,
                 Field6 = -0.1f, // leap falloff
                 Field7 = Skills.Skills.Barbarian.FuryGenerators.LeapAttack,
                 Field8 = 0

@@ -171,7 +171,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             // always update effect locations
             // spawn target effect a little bit above the ground target
-            Effect pid = GetChanneledEffect(0, 52687, new Vector3D(TargetPosition.X, TargetPosition.Y, TargetPosition.Z + 10f), true);
+            var pid = GetChanneledEffect(0, 52687, new Vector3D(TargetPosition.X, TargetPosition.Y, TargetPosition.Z + 10f), true);
             if (! UserIsChanneling)
             {
                 User.AddComplexEffect(18792, pid);
@@ -358,7 +358,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             // always update effect locations
             // spawn target effect a little bit above the ground target
-            Effect pid = GetChanneledEffect(0, 6535, new Vector3D(TargetPosition.X, TargetPosition.Y, TargetPosition.Z + 10f), true);
+            EffectActor pid = GetChanneledEffect(0, 6535, new Vector3D(TargetPosition.X, TargetPosition.Y, TargetPosition.Z + 10f), true);
             if (!UserIsChanneling)
             {
                 User.AddComplexEffect(19327, pid);
