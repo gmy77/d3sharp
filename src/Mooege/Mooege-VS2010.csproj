@@ -139,6 +139,7 @@
     <Compile Include="Common\Config\ConfigManager.cs" />
     <Compile Include="Core\MooNet\Commands\CommandGroup.cs" />
     <Compile Include="Core\MooNet\Commands\Config.cs" />
+    <Compile Include="Core\MooNet\Commands\DebugCommands.cs" />
     <Compile Include="Core\MooNet\Commands\ServerCommandHandler.cs" />
     <Compile Include="Core\MooNet\Commands\CommandManager.cs" />
     <Compile Include="Core\MooNet\Commands\CommandAttribute.cs" />
@@ -468,30 +469,6 @@
     </None>
     <None Include="..\..\assets\gamedata.db">
       <Link>Assets\gamedata.db</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\assets\MPQ\CoreData.mpq">
-      <Link>Assets\MPQ\CoreData.mpq</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\assets\MPQ\d3-update-base-7170.MPQ">
-      <Link>Assets\MPQ\d3-update-base-7170.MPQ</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\assets\MPQ\d3-update-base-7200.MPQ">
-      <Link>Assets\MPQ\d3-update-base-7200.MPQ</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\assets\MPQ\d3-update-base-7318.MPQ">
-      <Link>Assets\MPQ\d3-update-base-7318.MPQ</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\assets\MPQ\d3-update-base-7338.MPQ">
-      <Link>Assets\MPQ\d3-update-base-7338.MPQ</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\assets\MPQ\d3-update-base-7447.MPQ">
-      <Link>Assets\MPQ\d3-update-base-7447.MPQ</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\MPQ\IMPORTANT">
