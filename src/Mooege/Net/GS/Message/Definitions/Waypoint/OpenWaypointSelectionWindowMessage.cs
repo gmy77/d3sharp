@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,44 +18,38 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Fields
+namespace Mooege.Net.GS.Message.Definitions.Waypoint
 {
-    public class AnimPreplayData
+    /// <summary>
+    /// Sent to the client to open the window that allows him to select his target waypoint
+    /// </summary>
+    [Message(Opcodes.OpenWaypointSelectionWindowMessage)]
+    public class OpenWaypointSelectionWindowMessage : GameMessage
     {
-        public int Field0;
-        public int Field1;   // This seems to constantly increase trough a game - farmy
-        public int Field2;
+        public uint ActorID;            // Actor's DynamicID
 
-        public void Parse(GameBitBuffer buffer)
+        public OpenWaypointSelectionWindowMessage() : base(Opcodes.OpenWaypointSelectionWindowMessage) { }
+
+        public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
-            Field2 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
         }
 
-        public void Encode(GameBitBuffer buffer)
+        public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
-            buffer.WriteInt(32, Field2);
+            buffer.WriteUInt(32, ActorID);
         }
 
-        public void AsText(StringBuilder b, int pad)
+        public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("AnimPreplayData:");
+            b.AppendLine("OpenWaypointSelectionWindowMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad);
-            b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
-            b.Append(' ', pad);
-            b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
 
     }
 }

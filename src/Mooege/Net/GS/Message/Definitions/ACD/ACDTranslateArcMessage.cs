@@ -21,29 +21,36 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
+    /// <summary>
+    /// Sent by the server to translate an actor along an arc
+    /// </summary>
     [Message(Opcodes.ACDTranslateArcMessage)]
     public class ACDTranslateArcMessage : GameMessage
     {
-        public int Field0;
-        public Vector3D Field1;
-        public Vector3D Field2;
+        public int ActorId;                 // DynamicID of the Actor to be moved
+        public Vector3D Start;              // Starting position of the movement
+        public Vector3D Velocity;           // Velocity vector i guess, exact math is unknown - farmy
         public int Field3;
-        public int Field4;
-        public int Field5;
-        public float Field6;
-        public int /* sno */ Field7;
+        public int FlyingAnimationTagID;    // TagID of the flying animation or -1
+        public int LandingAnimationTagID;   // TagID of the landing animation or -1
+        public float Field6;                // some sort of fallof / individual gravity..always < 0...math is unknown - farmy
+        public int /* sno */ Field7;        // its a power sno, like in knockback.pow. but i dont know what its used for -farmy
         public float Field8;
+
+        public ACDTranslateArcMessage() 
+            : base(Opcodes.ACDTranslateArcMessage) 
+        { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = new Vector3D();
-            Field1.Parse(buffer);
-            Field2 = new Vector3D();
-            Field2.Parse(buffer);
+            ActorId = buffer.ReadInt(32);
+            Start = new Vector3D();
+            Start.Parse(buffer);
+            Velocity = new Vector3D();
+            Velocity.Parse(buffer);
             Field3 = buffer.ReadInt(24);
-            Field4 = buffer.ReadInt(21) + (-1);
-            Field5 = buffer.ReadInt(21) + (-1);
+            FlyingAnimationTagID = buffer.ReadInt(21) + (-1);
+            LandingAnimationTagID = buffer.ReadInt(21) + (-1);
             Field6 = buffer.ReadFloat32();
             Field7 = buffer.ReadInt(32);
             Field8 = buffer.ReadFloat32();
@@ -51,12 +58,12 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
-            Field2.Encode(buffer);
+            buffer.WriteInt(32, ActorId);
+            Start.Encode(buffer);
+            Velocity.Encode(buffer);
             buffer.WriteInt(24, Field3);
-            buffer.WriteInt(21, Field4 - (-1));
-            buffer.WriteInt(21, Field5 - (-1));
+            buffer.WriteInt(21, FlyingAnimationTagID - (-1));
+            buffer.WriteInt(21, LandingAnimationTagID - (-1));
             buffer.WriteFloat32(Field6);
             buffer.WriteInt(32, Field7);
             buffer.WriteFloat32(Field8);
@@ -68,12 +75,12 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDTranslateArcMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
-            Field1.AsText(b, pad);
-            Field2.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("ActorId: 0x" + ActorId.ToString("X8"));
+            Start.AsText(b, pad);
+            Velocity.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
-            b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
-            b.Append(' ', pad); b.AppendLine("Field5: 0x" + Field5.ToString("X8") + " (" + Field5 + ")");
+            b.Append(' ', pad); b.AppendLine("FlyingAnimationTagID: 0x" + FlyingAnimationTagID.ToString("X8") + " (" + FlyingAnimationTagID + ")");
+            b.Append(' ', pad); b.AppendLine("LandingAnimationTagID: 0x" + LandingAnimationTagID.ToString("X8") + " (" + LandingAnimationTagID + ")");
             b.Append(' ', pad); b.AppendLine("Field6: " + Field6.ToString("G"));
             b.Append(' ', pad); b.AppendLine("Field7: 0x" + Field7.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Field8: " + Field8.ToString("G"));

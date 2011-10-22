@@ -27,17 +27,14 @@ namespace Mooege.Core.MooNet.Objects
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         private static ulong _nextId=0;
-        private static Dictionary<ulong, RPCObject> Objects;
+        public static readonly Dictionary<ulong, RPCObject> Objects = new Dictionary<ulong, RPCObject>();
 
         static RPCObjectManager()
-        {
-            Objects = new Dictionary<ulong, RPCObject>();
-            Objects[0] = null;
-        }
+        { }
 
         public static void Init(RPCObject obj)
         {
-            if (obj.DynamicId != 0 && Objects.ContainsKey(obj.DynamicId))
+            if (Objects.ContainsKey(obj.DynamicId))
                 throw new Exception("Given object was already initialized");
             ulong id = Next();
             obj.DynamicId = id;

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,47 +18,46 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Conversation
+namespace Mooege.Net.GS.Message.Definitions.ACD
 {
     /// <summary>
-    /// Sent to the client
-    /// TODO What does this message actually do? sending it not changes nothing. - farmy
+    /// Sent to the client after a actor dies or gets out of sight.
+    /// This message removes the actor from the client's world
     /// </summary>
-    [Message(Opcodes.EndConversationMessage)]
-    public class EndConversationMessage : GameMessage
+    [Message(Opcodes.ACDDestroyActorMessage)]
+    public class ACDDestroyActorMessage : GameMessage
     {
-        public int Field0;          // seems to be a running number across conversationlines. StopConvLine.Field0 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
-        public int SNOConversation;
-        public uint ActorId;         // Actor that begun conversation in PlayConvLine
-        public EndConversationMessage() : base(Opcodes.EndConversationMessage) { }
+        public uint ActorId; // Actor's DynamicID
+
+        public ACDDestroyActorMessage(uint actorId)
+            : base(Opcodes.ACDDestroyActorMessage)
+        {
+            this.ActorId = actorId;
+        }
+
+        public ACDDestroyActorMessage()
+            : base(Opcodes.ACDDestroyActorMessage)
+        { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            SNOConversation = buffer.ReadInt(32);
             ActorId = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, SNOConversation);
             buffer.WriteUInt(32, ActorId);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("EndConversationMessage:");
+            b.AppendLine("ACDCreateActor:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("SNOConversation: 0x" + SNOConversation.ToString("X8") + " (" + SNOConversation + ")");
             b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorId.ToString("X8") + " (" + ActorId + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

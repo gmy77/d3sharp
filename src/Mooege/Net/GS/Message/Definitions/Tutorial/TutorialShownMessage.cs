@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,42 +18,51 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Conversation
+namespace Mooege.Net.GS.Message.Definitions.Tutorial
 {
     /// <summary>
-    /// Sent to the client. No idea what it does.. everything works without it so far.
+    /// Sent by the client after it has shown a tutorial
     /// </summary>
-    [Message(Opcodes.StopConvLineMessage)]
-    public class StopConvLineMessage : GameMessage
+    [Message(Opcodes.TutorialShownMessage)]
+    public class TutorialShownMessage : GameMessage, ISelfHandler
     {
-        public int Field0;  // seems to be a running number across conversationlines. StopConvLine.Field0 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
-        public bool Interrupt;
+        public int SNOTutorial;
 
-        public StopConvLineMessage() : base(Opcodes.StopConvLineMessage)  {}
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Interrupt = buffer.ReadBool();
+            SNOTutorial = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteBool(Interrupt);
+            buffer.WriteInt(32, SNOTutorial);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("StopConvLineMessage:");
+            b.AppendLine("TutorialShownMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Interrupt: " + (Interrupt ? "true" : "false"));
+            b.Append(' ', pad); b.AppendLine("SNOTutorial: 0x" + SNOTutorial.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
 
 
+        /// <summary>
+        /// Server only has to save what tutorials are shown, so the player
+        /// does not have to see them over and over...
+        /// </summary>
+        /// <param name="client"></param>
+        public void Handle(GameClient client)
+        {
+            for (int i = 0; i < client.Player.SeenTutorials.Length; i++)
+                if (client.Player.SeenTutorials[i] == -1)
+                {
+                    client.Player.SeenTutorials[i] = SNOTutorial;
+                    break;
+                }
+        }
     }
 }

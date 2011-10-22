@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,49 +16,35 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
     /// <summary>
-    /// Sent to the client
-    /// TODO What does this message actually do? sending it not changes nothing. - farmy
+    /// Sent by the client when the user clicks on "X" in a conversation window
     /// </summary>
-    [Message(Opcodes.EndConversationMessage)]
-    public class EndConversationMessage : GameMessage
+    [Message(Opcodes.RequestCloseConversationWindowMessage)]
+    public class RequestCloseConversationWindowMessage : GameMessage
     {
-        public int Field0;          // seems to be a running number across conversationlines. StopConvLine.Field0 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
-        public int SNOConversation;
-        public uint ActorId;         // Actor that begun conversation in PlayConvLine
-        public EndConversationMessage() : base(Opcodes.EndConversationMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            SNOConversation = buffer.ReadInt(32);
-            ActorId = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, SNOConversation);
-            buffer.WriteUInt(32, ActorId);
+            throw new NotImplementedException();
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("EndConversationMessage:");
+            b.AppendLine("RequestCloseConversationWindowMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("SNOConversation: 0x" + SNOConversation.ToString("X8") + " (" + SNOConversation + ")");
-            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorId.ToString("X8") + " (" + ActorId + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }
