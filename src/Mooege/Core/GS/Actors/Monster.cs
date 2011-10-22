@@ -47,8 +47,9 @@ namespace Mooege.Core.GS.Actors
             this.Field3 = 0x0;
             this.Scale = 1.35f;
             this.Position.Set(position);
-            this.RotationAmount = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);
-            this.RotationAxis.X = 0f; this.RotationAxis.Y = 0f; this.RotationAxis.Z = 1f;
+            float facingAngle = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);
+            this.RotationAmount = (float)Math.Cos(facingAngle / 2f);
+            this.RotationAxis = new Vector3D(0, 0, (float)Math.Sin(facingAngle / 2f));
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
             this.Field7 = 0x00000001;
             this.Field8 = this.ActorSNO;

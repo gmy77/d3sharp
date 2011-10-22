@@ -255,7 +255,7 @@ namespace Mooege.Core.GS.Actors
                 Id = 0x6e,
                 ActorId = (int)DynamicID,
                 Position = destination,
-                Angle = 0f, // TODO: convert quaternion rotation to radians
+                Angle = (float)Math.Acos(this.RotationAmount) * 2f,
                 Field3 = false,
                 Speed = speed,
             }, this);
@@ -270,7 +270,7 @@ namespace Mooege.Core.GS.Actors
                 Id = 0x6f,
                 Field0 = (int)this.DynamicID,
                 Field1 = destination,
-                Field2 = 0f, // TODO: convert quaternion rotation to radians
+                Field2 = (float)Math.Acos(this.RotationAmount) * 2f,
                 Field3 = false,
                 Field4 = 0x900 // ?
             }, this);
