@@ -109,8 +109,10 @@
     <Compile Include="Common\MPQ\FileFormats\FileExtensions.cs" />
     <Compile Include="Common\MPQ\FileFormats\FileFormat.cs" />
     <Compile Include="Common\MPQ\FileFormats\FileFormatAttribute.cs" />
+    <Compile Include="Common\MPQ\FileFormats\MarkerSet.cs" />
     <Compile Include="Common\MPQ\FileFormats\Monster.cs" />
     <Compile Include="Common\MPQ\FileFormats\Scene.cs" />
+    <Compile Include="Common\MPQ\MpqDataTypes.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
