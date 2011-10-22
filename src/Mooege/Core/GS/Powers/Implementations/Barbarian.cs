@@ -61,7 +61,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                                          delta_normal.Y * (delta_length / unitsMovedPerTick),
                                          1.48324f); // usual leap height, possibly different when jumping up/down?
 
-            // TODO: Generalize and put this in Actor
+            // TODO: Generalize this and put it in Actor
             User.World.BroadcastIfRevealed(new ACDTranslateArcMessage()
             {
                 Id = 114,
@@ -74,14 +74,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Field6 = -0.1f, // leap falloff
                 Field7 = Skills.Skills.Barbarian.FuryGenerators.LeapAttack,
                 Field8 = 0
-
-                // AlexxelA's params
-                //Field3 = -1,                           //Unknown
-                //Field4 = 69792,                        //Flyingani tagid ?
-                //Field5 = 69794,                        //Landingani tagid ?
-                //Field6 = -0.03f,                       //Falloff
-                //Field7 = -1,                           //Unknown
-                //Field8 = -1                            //Unknown
             }, User);
             User.Position.Set(TargetPosition);
 

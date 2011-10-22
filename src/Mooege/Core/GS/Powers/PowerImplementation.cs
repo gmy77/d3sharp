@@ -221,7 +221,7 @@ namespace Mooege.Core.GS.Powers
         {
             if (target == null) return;
 
-            var move = PowerMath.ProjectAndTranslate2D(target.Position, User.Position, target.Position, amount);
+            var move = PowerMath.ProjectAndTranslate2D(User.Position, target.Position, target.Position, amount);
             target.MoveNormal(move);
         }
 

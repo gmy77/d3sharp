@@ -151,7 +151,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             RegisterChannelingPower(WaitSeconds(0.1f));
                         
             // project beam end to always be a certain length
-            TargetPosition = PowerMath.ProjectAndTranslate2D(TargetPosition, User.Position,
+            TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
                                                                User.Position, BeamLength);
 
             if (!ThrottledCast)
@@ -336,7 +336,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.FacingTranslate(TargetPosition);
 
             // project beam end to always be a certain length
-            TargetPosition = PowerMath.ProjectAndTranslate2D(TargetPosition, User.Position,
+            TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
                                                                User.Position, BeamLength);
 
             if (!ThrottledCast)

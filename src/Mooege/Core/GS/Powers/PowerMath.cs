@@ -105,7 +105,7 @@ namespace Mooege.Core.GS.Powers
         public static Vector3D ProjectAndTranslate2D(Vector3D a, Vector3D b, Vector3D position, float amount)
         {
             Vector3D r = new Vector3D(position);
-            Vector3D ab_norm = Normalize(new Vector3D(a.X - b.X, a.Y - b.Y, 0/*a.Z - b.Z*/)); // 2D
+            Vector3D ab_norm = Normalize(new Vector3D(b.X - a.X, b.Y - a.Y, 0/*b.Z - a.Z*/)); // 2D
             r.X += ab_norm.X * amount;
             r.Y += ab_norm.Y * amount;
             //r.Z += ab_norm.Z * amount;
