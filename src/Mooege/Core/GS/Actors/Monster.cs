@@ -156,7 +156,7 @@ namespace Mooege.Core.GS.Actors
             player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
             player.UpdateExpBonusData(player.GBHandle.Type, this.GBHandle.Type);
 
-            StopAllBuffs();
+            RemoveAllBuffs();
 
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {

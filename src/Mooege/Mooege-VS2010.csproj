@@ -98,7 +98,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\GS\Actors\Buffs\BooleanPropertyBuff.cs" />
+    <Compile Include="Core\GS\Actors\Buffs\BooleanAttributeBuff.cs" />
     <Compile Include="Core\GS\Actors\Buffs\Buffs.cs" />
     <Compile Include="Core\GS\Actors\Buffs\TimedBuff.cs" />
     <Compile Include="Core\GS\Actors\EffectActor.cs" />

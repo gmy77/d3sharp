@@ -61,10 +61,7 @@ namespace Mooege.Net.GS.Message
             var list = GetMessageList(actorID);
             foreach (var msg in list)
                 client.SendMessage(msg);
-            IsDirty = false;
         }
-
-        public bool IsDirty; //FIXME: bumbasher: id does not work as intended, dunno why
 
         public List<GameMessage> GetMessageList(uint actorID)
         {
@@ -185,7 +182,6 @@ namespace Mooege.Net.GS.Message
                     throw new ArgumentOutOfRangeException("GameAttribute." + attribute.Name.Replace(' ', '_'), "Min: " + GameAttribute.Float16Min  + " Max " + GameAttribute.Float16Max + " Tried to set: " + value.ValueF);
             }
 
-            IsDirty = true;
             _attributeValues[keyid] = value;
         }
 

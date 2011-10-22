@@ -11,47 +11,45 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Core.GS.Powers;
 
 namespace Mooege.Core.GS.Actors.Buffs
 {
     //Mob appears as frozen (animation freezes too), be sure to remove this before playing die animation
-    public class FreezeBuff : BooleanPropertyBuff
+    public class FreezeBuff : BooleanAttributeBuff
     {
-        public FreezeBuff(float duration, Actor target)
-            : base(duration, target, GameAttribute.Frozen, FloatingNumberMessage.FloatType.Frozen)
+        public FreezeBuff(TickTimer timeout)
+            : base(timeout, GameAttribute.Frozen, FloatingNumberMessage.FloatType.Frozen)
         {
         }
     }
 
 
     //appears to be some kind of arcane slow
-    public class SlowBuff : BooleanPropertyBuff
+    public class SlowBuff : BooleanAttributeBuff
     {
-        public SlowBuff(float duration, float amount, Actor target)
-            : base(duration, target, GameAttribute.Slow, null)
+        public SlowBuff(TickTimer timeout)
+            : base(timeout, GameAttribute.Slow, null)
         {
-            Amount = amount;
         }
-
-        public float Amount = 1;
     }
 
 
     //stars floating around monster head as well as stun animation
-    public class StunBuff : BooleanPropertyBuff
+    public class StunBuff : BooleanAttributeBuff
     {
-        public StunBuff(float duration, Actor target)
-            : base(duration, target, GameAttribute.Stunned, null)
+        public StunBuff(TickTimer timeout)
+            : base(timeout, GameAttribute.Stunned, null)
         {
         }
     }
 
 
     //monster appears to be chilled: blue hue
-    public class ChilledBuff : BooleanPropertyBuff
+    public class ChilledBuff : BooleanAttributeBuff
     {
-        public ChilledBuff(float duration, Actor target)
-            : base(duration, target, GameAttribute.Chilled, null)
+        public ChilledBuff(TickTimer timeout)
+            : base(timeout, GameAttribute.Chilled, null)
         {
         }
     }

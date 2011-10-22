@@ -294,7 +294,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            // FIXME: code currently assumes User is Player
+            UsePrimaryResource(10f);
+
+            // FIXME: some of the code currently assumes User is Player
 
             // dashing strike never specifies the target's id so we just search for the closest target
             // ultimately need to know the radius of each target and select the one most covered
@@ -313,7 +315,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             if (Target != null)
             {
                 // put dash destination just beyond target
-                TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, Target.Position, Target.Position, 5f);
+                TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, Target.Position, Target.Position, 7f);
                 attackAnimation = (User as Player.Player).Properties.Gender == 0 ? 69808 : 90432; // select based on gender
             }
             else
@@ -345,7 +347,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             yield return dashTimout;
 
-            _SetupAttributes(false);            
+            _SetupAttributes(false);                                                    
 
             if (Target != null && Target.World != null) // target could've died or left world
             {
@@ -372,6 +374,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             map[GameAttribute.Power_Buff_0_Visual_Effect_None, PowerSNO] = active; // switch on effect				
             map[GameAttribute.Buff_Active, PowerSNO] = active;
             map[GameAttribute.Hidden] = active;
+
             map.SendMessage(((Player.Player)User).InGameClient, User.DynamicID);
         }
     }

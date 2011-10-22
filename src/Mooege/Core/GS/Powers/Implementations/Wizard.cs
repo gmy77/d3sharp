@@ -25,6 +25,7 @@ using Mooege.Net.GS;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Animation;
+using Mooege.Core.GS.Actors.Buffs;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -196,7 +197,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             foreach (Actor actor in hits)
             {
                 Knockback(actor, 5f);
-                actor.AddStunBuff(2000f);
+                actor.AddBuff(new StunBuff(WaitSeconds(2f)));
                 Damage(actor, 20, 0);
             }
             yield break;
@@ -262,7 +263,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             IList<Actor> hits = GetTargetsInRange(User.Position, 18); //FIXME: is the range correct? what units?
             foreach (Actor actor in hits)
             {
-                actor.AddFreezeBuff(4000); //freeze for 4 sec, TODO: use some level to increase duration or something
+                actor.AddBuff(new FreezeBuff(WaitSeconds(4f)));
                 Damage(actor, Rand.Next(2, 4+1), 0); //does 2-4 damage, TODO: use player DPS or something
             }
 
@@ -313,7 +314,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 IList<Actor> hits = GetTargetsInRange(TargetPosition, 18); //FIXME: is the range correct? what units?
                 foreach (Actor actor in hits)
                 {
-                    actor.AddChillBuff(1000); //FIXME: does blizzard slows the monsters?
+                    actor.AddBuff(new ChilledBuff(WaitSeconds(1f)));  //FIXME: does blizzard slows the monsters?
                     Damage(actor, Rand.Next(12, 18+1), 0);
                 }
 

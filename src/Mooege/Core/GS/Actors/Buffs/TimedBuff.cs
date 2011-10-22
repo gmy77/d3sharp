@@ -2,54 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mooege.Core.GS.Powers;
 
 namespace Mooege.Core.GS.Actors.Buffs
 {
     //bumbasher: base for a time expiration buff
-    public class TimedBuff
+    public abstract class TimedBuff
     {
-        //duration in miliseconds
-        public TimedBuff(float duration, Actor target)
+        public TimedBuff(TickTimer timeout)
         {
-            ResetDurationTo(duration);
-            _target = target;
+            Timeout = timeout;
         }
 
-        DateTime _endTime;
-        Actor _target;
-
-        public Actor Target
-        {
-            get { return _target; }
-            set { _target = value; }
-        }
-
-        public void ResetDurationTo(float miliseconds)
-        {
-            _endTime = DateTime.Now.AddMilliseconds(miliseconds);
-        }
-
-        public void IncreaseDuration(float miliseconds)
-        {
-            _endTime.AddMilliseconds(miliseconds);
-        }
-
-        //return true if its over
+        public TickTimer Timeout;
+        public Actor Target;
+        
+        // return true if its over
         public bool Update()
         {
-            if (DateTime.Now >= _endTime)
-            {
+            bool timedout = Timeout.TimedOut();
+            if (timedout)
                 Remove();
-                return true;
-            }
 
-            return false;
+            return timedout;
         }
 
         //apply the effect here
-        public virtual void Apply() { }
+        public abstract void Apply();
 
         //remove the effect here
-        public virtual void Remove() { }
+        public abstract void Remove();
     }
 }

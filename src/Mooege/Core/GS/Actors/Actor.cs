@@ -29,6 +29,7 @@ using Mooege.Core.GS.Actors.Buffs;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using System;
 using Mooege.Net.GS.Message.Definitions.Effect;
+using Mooege.Core.GS.Powers;
 
 // TODO: Need to move all of the remaining ACD fields into Actor (such as the affix list)
 
@@ -205,79 +206,33 @@ namespace Mooege.Core.GS.Actors
 
         #region Buffs and Debuffs
 
-        List<TimedBuff> m_ActiveBuffs = new List<TimedBuff>(); //< list of all active buffs on the actor
-
-        bool ResertBuffDuration<T>(float miliseconds)
+        List<TimedBuff> _activeBuffs = new List<TimedBuff>(); //< list of all active buffs on the actor
+        
+        public void AddBuff(TimedBuff buff)
         {
-            //if there is already a buff T then reset its duration
-            foreach (TimedBuff tb in m_ActiveBuffs)
+            buff.Target = this;
+            // lookup by .net type and update it already exists
+            Type buffType = buff.GetType();
+            int activeIndex = _activeBuffs.FindIndex(b => b.GetType() == buffType);
+            if (activeIndex != -1)
             {
-                if (tb is T)
-                {
-                    tb.ResetDurationTo(miliseconds);
-                    return true;
-                }
+                _activeBuffs[activeIndex] = buff;
             }
-
-            return false;
+            else
+            {
+                _activeBuffs.Add(buff);
+                buff.Apply();
+            }
         }
 
-        //duration in miliseconds
-        public void AddFreezeBuff(float miliseconds)
+        public void UpdateBuffs()
         {
-            if (ResertBuffDuration<FreezeBuff>(miliseconds))
-                return;
-
-            //else, just add a new one
-            AddBuff(new FreezeBuff(miliseconds, this));
+            _activeBuffs.RemoveAll(buff => buff.Update()); // Update() returns true if finished
         }
 
-        public void AddChillBuff(float miliseconds)
+        public void RemoveAllBuffs()
         {
-            if (ResertBuffDuration<ChilledBuff>(miliseconds))
-                return;
-
-            //else, just add a new one
-            AddBuff(new ChilledBuff(miliseconds, this));
-        }
-
-        public void AddStunBuff(float miliseconds)
-        {
-            if (ResertBuffDuration<StunBuff>(miliseconds))
-                return;
-
-            //else, just add a new one
-            AddBuff(new StunBuff(miliseconds, this));
-        }
-
-        public void AddSlowBuff(float miliseconds, float amount)
-        {
-            if (ResertBuffDuration<SlowBuff>(miliseconds))
-                return;
-
-            //else, just add a new one
-            AddBuff(new SlowBuff(miliseconds, amount, this));
-        }
-
-        void AddBuff(TimedBuff buff)
-        {
-            m_ActiveBuffs.Add(buff);
-            buff.Apply();
-        }
-
-        private static bool RemoveAllExpired(TimedBuff tb)
-        {
-            return tb.Update();
-        }
-
-        void UpdateBuffs()
-        {
-            m_ActiveBuffs.RemoveAll(RemoveAllExpired);
-        }
-
-        protected void StopAllBuffs()
-        {
-            foreach (TimedBuff tb in m_ActiveBuffs)
+            foreach (TimedBuff tb in _activeBuffs)
                 tb.Remove();
         }
 
@@ -323,11 +278,11 @@ namespace Mooege.Core.GS.Actors
 
         public void FacingTranslate(Vector3D target, bool immediately = false)
         {
-            float radianAngle = (float)Math.Atan2(target.Y - Position.Y, target.X - Position.X);
+            float radianAngle = PowerMath.AngleLookAt(this.Position, target);
 
             // convert to quaternion and store in instance
-            RotationAmount = (float)Math.Cos(radianAngle / 2f);
-            RotationAxis = new Vector3D(0, 0, (float)Math.Sin(radianAngle / 2f));
+            this.RotationAmount = (float)Math.Cos(radianAngle / 2f);
+            this.RotationAxis = new Vector3D(0, 0, (float)Math.Sin(radianAngle / 2f));
 
             World.BroadcastIfRevealed(new ACDTranslateFacingMessage
             {
@@ -427,46 +382,9 @@ namespace Mooege.Core.GS.Actors
         public override void Update()
         {
             base.Update();
-
             UpdateBuffs();
-
-            //bumbasher: this is strange because it does nto work as intended, just dunno why, for now I'll use hackish setAttribute
-//             if (Attributes.IsDirty)
-//             {
-//                 List<GameMessage> msgs = Attributes.GetMessageList(this.DynamicID);
-//                 
-//                 foreach (Mooege.Core.GS.Player.Player player in this.World.GetPlayersInRange(this.Position, 150f))
-//                 {
-//                     foreach (GameMessage m in msgs)
-//                         player.InGameClient.SendMessage(m);
-//                 }
-// 
-//                 Attributes.IsDirty = false;
-//             }
         }
-
-        //HACK, work for the moment
-        public void setAttribute(GameAttributeB attribute, GameAttributeValue value, int attributeKey = 0)
-        {
-            GameAttributeMap gam = new GameAttributeMap();
-
-            //Update server actor
-            if (attributeKey > 0)
-            {
-                this.Attributes[attribute, attributeKey] = value.Value != 0;
-                gam[attribute, attributeKey] = value.Value != 0;
-            }
-
-            else
-            {
-                this.Attributes[attribute] = value.Value != 0;
-                gam[attribute] = value.Value != 0;
-            }
-
-            foreach (GameMessage msg in Attributes.GetMessageList(this.DynamicID))
-                World.BroadcastIfRevealed(msg, this);
-        }
-
+        
         /// <summary>
         /// Reveals an actor to a player.
         /// </summary>
