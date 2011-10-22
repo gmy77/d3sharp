@@ -32,7 +32,11 @@ namespace Mooege.Common.MPQ.FileFormats
         /// </summary>
         public int ActorSNO;
         public int i0;
-        public int Type;
+        private int type;
+        /// <summary>
+        /// Actor Type
+        /// </summary>
+        public ActorType Type { get { return (ActorType)type; } }
         /// <summary>
         /// SNO for Apperance
         /// </summary>
@@ -67,7 +71,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.ActorSNO = stream.ReadInt32();
             stream.Position += 8; // pad 2;
             this.i0 = stream.ReadInt32();
-            this.Type = stream.ReadInt32();
+            this.type = stream.ReadInt32();
             this.ApperanceSNO = stream.ReadInt32();
             this.snoPhysMesh = stream.ReadInt32();
             this.Cyl = new AxialCylinder(stream);
@@ -101,6 +105,23 @@ namespace Mooege.Common.MPQ.FileFormats
                 this.padInventoryImages[i] = stream.ReadInt32();
             }
             stream.Close();
+        }
+
+        public enum ActorType
+        {
+            Invalid = 0,
+            Monster = 1,
+            Gizmo = 2,
+            ClientEffect = 3,
+            ServerProp = 4,
+            Enviroment = 5,
+            Critter = 6,
+            Player = 7,
+            Item = 8,
+            AxeSymbol = 9,
+            Projectile = 10,
+            CustomBrain = 11
+
         }
         public class WeightedLook
         {

@@ -109,8 +109,10 @@
     <Compile Include="Common\MPQ\FileFormats\FileExtensions.cs" />
     <Compile Include="Common\MPQ\FileFormats\FileFormat.cs" />
     <Compile Include="Common\MPQ\FileFormats\FileFormatAttribute.cs" />
+    <Compile Include="Common\MPQ\FileFormats\MarkerSet.cs" />
     <Compile Include="Common\MPQ\FileFormats\Monster.cs" />
     <Compile Include="Common\MPQ\FileFormats\Scene.cs" />
+    <Compile Include="Common\MPQ\MpqDataTypes.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
@@ -466,6 +468,30 @@
     </None>
     <None Include="..\..\assets\gamedata.db">
       <Link>Assets\gamedata.db</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\MPQ\CoreData.mpq">
+      <Link>Assets\MPQ\CoreData.mpq</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\MPQ\d3-update-base-7170.MPQ">
+      <Link>Assets\MPQ\d3-update-base-7170.MPQ</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\MPQ\d3-update-base-7200.MPQ">
+      <Link>Assets\MPQ\d3-update-base-7200.MPQ</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\MPQ\d3-update-base-7318.MPQ">
+      <Link>Assets\MPQ\d3-update-base-7318.MPQ</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\MPQ\d3-update-base-7338.MPQ">
+      <Link>Assets\MPQ\d3-update-base-7338.MPQ</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\MPQ\d3-update-base-7447.MPQ">
+      <Link>Assets\MPQ\d3-update-base-7447.MPQ</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\MPQ\IMPORTANT">
