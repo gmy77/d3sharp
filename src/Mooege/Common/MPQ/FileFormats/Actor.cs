@@ -21,18 +21,24 @@ using CrystalMpq;
 using Mooege.Common.Extensions;
 using Mooege.Net.GS.Message.Fields;
 using System.Text;
+using Mooege.Common.MPQ.DataTypes;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.Actor)]
     public class Actor: FileFormat
     {
+        public Header Header;
         /// <summary>
         /// SNO for actor.
         /// </summary>
         public int ActorSNO;
-        private int i0;
-        public int Type;
+        public int i0;
+        public int type;
+        /// <summary>
+        /// Actor Type
+        /// </summary>
+        public ActorType Type { get { return (ActorType)type; } }
         /// <summary>
         /// SNO for Apperance
         /// </summary>
@@ -40,7 +46,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int snoPhysMesh;
         public AxialCylinder Cyl;
         public Sphere s;
-        public AABB aabbBounds;
+        public AABB_ aabbBounds;
         private SerializeData serTagMap;
         
         /// <summary>
@@ -55,24 +61,24 @@ namespace Mooege.Common.MPQ.FileFormats
         public WeightedLook[] Looks;
         public int PhysicsSNO;
         public int i2, i3;
-        float f0, f1, f2;
-        private int[] padActorCollisionData;
-        private int[] padInventoryImages;
-        int i4;
+        public float f0, f1, f2;
+        public int[] padActorCollisionData;
+        public int[] padInventoryImages;
+        public int i4;
         // Updated based on BoyC's 010editoer template, looks like some data at the end still isnt parsed - Darklotus
         public Actor(MpqFile file)
         {
             var stream = file.Open();
-            stream.Seek(16, SeekOrigin.Begin);
+            Header = new Header(stream);
             this.ActorSNO = stream.ReadInt32();
             stream.Position += 8; // pad 2;
             this.i0 = stream.ReadInt32();
-            this.Type = stream.ReadInt32();
+            this.type = stream.ReadInt32();
             this.ApperanceSNO = stream.ReadInt32();
             this.snoPhysMesh = stream.ReadInt32();
             this.Cyl = new AxialCylinder(stream);
             this.s = new Sphere(stream);
-            this.aabbBounds = new AABB(stream);
+            this.aabbBounds = new AABB_(stream);
             this.serTagMap = new SerializeData(stream);
             stream.Position += 8; // pad 2
             this.AnimSetSNO = stream.ReadInt32();
@@ -102,74 +108,24 @@ namespace Mooege.Common.MPQ.FileFormats
             }
             stream.Close();
         }
-        public class WeightedLook
-        {
-            string LookLink;
-            int i0;
-            public WeightedLook(MpqFileStream stream)
-            {
-                byte[] buf = new byte[64];                
-                stream.Read(buf, 0, 64); LookLink = Encoding.ASCII.GetString(buf);
-                i0 = stream.ReadInt32();
 
-            }
-        }
-        public class Sphere
+        public enum ActorType
         {
-            public Vector3D Position;
-            public float Radius;
-            public Sphere(MpqFileStream stream)
-            {
-                Position = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-                Radius = stream.ReadFloat();
-            }
-        }
-        public class AxialCylinder
-        {
-            public Vector3D Position;
-            public float ax1;
-            public float ax2;
-            public AxialCylinder(MpqFileStream stream)
-            {
-                this.Position = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-                ax1 = stream.ReadFloat();
-                ax2 = stream.ReadFloat();
-            }
-        }
+            Invalid = 0,
+            Monster = 1,
+            Gizmo = 2,
+            ClientEffect = 3,
+            ServerProp = 4,
+            Enviroment = 5,
+            Critter = 6,
+            Player = 7,
+            Item = 8,
+            AxeSymbol = 9,
+            Projectile = 10,
+            CustomBrain = 11
 
-        public class AABB
-        {
-            public Vector3D Min { get; private set; }
-            public Vector3D Max { get; private set; }
-
-            public AABB(MpqFileStream stream)
-            {
-                this.Min = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-                this.Max = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-            }
         }
-        private class SerializeData
-        {
-            public readonly int Offset;
-            public readonly int Size;
-
-            public SerializeData(MpqFileStream stream)
-            {
-                Offset = stream.ReadInt32();
-                Size = stream.ReadInt32();
-            }
-        }
-
-        public class Vector2D
-        {
-            public readonly int Field0, FIeld1;
-
-            public Vector2D(MpqFileStream stream)
-            {
-                Field0 = stream.ReadInt32();
-                FIeld1 = stream.ReadInt32();
-            }
-        }
+       
 
     }
 }
