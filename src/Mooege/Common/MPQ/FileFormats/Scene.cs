@@ -19,6 +19,7 @@
 using CrystalMpq;
 using Mooege.Common.Extensions;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Common.MPQ.DataTypes;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -33,8 +34,8 @@ namespace Mooege.Common.MPQ.FileFormats
         private int unknown3, unknown4;
         private int i0;
 
-        public AABB aabbBounds;
-        public AABB aabbMarkerSetBounds;
+        public AABB_ aabbBounds;
+        public AABB_ aabbMarkerSetBounds;
         public NavMeshDef NavMesh;
         public int[] MarkerSets;
         public char[] LookLink;
@@ -53,8 +54,8 @@ namespace Mooege.Common.MPQ.FileFormats
             unknown3 = stream.ReadInt32();
             unknown4 = stream.ReadInt32();
             i0 = stream.ReadInt32();
-            aabbBounds = new AABB(stream);
-            aabbMarkerSetBounds = new AABB(stream);
+            aabbBounds = new AABB_(stream);
+            aabbMarkerSetBounds = new AABB_(stream);
 
             //load NavMeshDef
             NavMesh = new NavMeshDef(stream);
@@ -92,17 +93,7 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Close();
         }
 
-        public class AABB
-        {
-            public Vector3D Min { get; private set; }
-            public Vector3D Max { get; private set; }
-
-            public AABB(MpqFileStream stream)
-            {
-                this.Min = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-                this.Max = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-            }
-        }
+       
 
         public class NavMeshSquare
         {
