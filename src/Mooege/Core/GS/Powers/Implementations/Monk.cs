@@ -309,13 +309,11 @@ namespace Mooege.Core.GS.Powers.Implementations
                 }
             }
 
-            float facingAngle;
             int attackAnimation;
             if (Target != null)
             {
                 // put dash destination just beyond target
                 TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, Target.Position, Target.Position, 5f);
-                facingAngle = PowerMath.AngleLookAt(TargetPosition, Target.Position);
                 attackAnimation = (User as Player.Player).Properties.Gender == 0 ? 69808 : 90432; // select based on gender
             }
             else
@@ -323,7 +321,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                 // if no target, dash is limited in range
                 if (PowerMath.Distance(User.Position, TargetPosition) > 15f)
                     TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, User.Position, 15f);
-                facingAngle = PowerMath.AngleLookAt(User.Position, TargetPosition);
                 attackAnimation = -1;
             }
 
@@ -337,7 +334,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 ActorId = (int)User.DynamicID,
                 Position = TargetPosition,
-                Angle = facingAngle,
+                Angle = PowerMath.AngleLookAt(User.Position, TargetPosition),
                 Field3 = true,
                 Speed = PowerMath.Distance(User.Position, TargetPosition) / dashTicks, // speed, distance per tick
                 Field5 = 0x00009206, // ???
@@ -348,10 +345,11 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             yield return dashTimout;
 
-            _SetupAttributes(false);
+            _SetupAttributes(false);            
 
             if (Target != null && Target.World != null) // target could've died or left world
             {
+                User.FacingTranslate(Target.Position, true);
                 Target.PlayHitEffect(2, User);
                 Damage(Target, 64f, 0);
             }
