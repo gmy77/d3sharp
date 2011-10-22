@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Fields
     public class AnimPreplayData
     {
         public int Field0;
-        public int Field1;
+        public int Field1;   // This seems to constantly increase trough a game - farmy
         public int Field2;
 
         public void Parse(GameBitBuffer buffer)

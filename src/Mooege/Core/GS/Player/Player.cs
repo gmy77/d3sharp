@@ -28,7 +28,6 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -366,9 +365,9 @@ namespace Mooege.Core.GS.Player
                                  Position = this.Position,
                                  Angle = message.Angle,
                                  Field3 = false,
-                                 Field4 = message.Field4,
+                                 Speed = message.Speed,
                                  Field5 = message.Field5,
-                                 Field6 = message.Field6
+                                 AnimationTag = message.AnimationTag
                              };
 
             this.World.BroadcastExclusive(msg, this); // TODO: We should be instead notifying currentscene we're in. /raist.
@@ -419,8 +418,8 @@ namespace Mooege.Core.GS.Player
                 //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
                 this.InGameClient.SendMessage(new PlayEffectMessage()
                 {
-                    ActorID = this.DynamicID,
-                    Field1=7
+                    ActorId = this.DynamicID,
+                    Effect = Effect.HealthOrbPickup
                 });
 
                 foreach (var player in PlayerManager.OnlinePlayers)
@@ -767,24 +766,15 @@ namespace Mooege.Core.GS.Player
 
                 this.InGameClient.SendMessage(new PlayEffectMessage()
                 {
-                    Id = 0x7a,
-                    ActorID = this.DynamicID,
-                    Field1 = 6,
+                    ActorId = this.DynamicID,
+                    Effect = Effect.LevelUp,
                 });
-                /*this.InGameClient.SendMessage(new PlayEffectMessage()
-                {
-                    Id = 0x7a,
-                    ActorID = this.DynamicID,
-                    Field1 = 32,
-                    Field2 = LevelUpEffects[this.Attributes[GameAttribute.Level]],
-                });*/
 
                 this.World.BroadcastGlobal(new PlayEffectMessage()
                 {
-                    Id = 0x7a,
-                    ActorID = this.DynamicID,
-                    Field1 = 32,
-                    Field2 = LevelUpEffects[this.Attributes[GameAttribute.Level]],
+                    ActorId = this.DynamicID,
+                    Effect = Effect.PlayEffectGroup,
+                    OptionalParameter = LevelUpEffects[this.Attributes[GameAttribute.Level]],
                 });
             }
 
@@ -947,10 +937,10 @@ namespace Mooege.Core.GS.Player
                     LineID = lineID,
                     Field4 = 0x00000000,
                     Field5 = -1,
-                    Field6 = this.Properties.VoiceClassID,
+                    TextClass = (Class)this.Properties.VoiceClassID,
                     Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
-                    VoiceClassID = this.Properties.VoiceClassID,
-                    snoSpeakerActor = this._actorSNO,
+                    AudioClass = (Class)this.Properties.VoiceClassID,
+                    SNOSpeakerActor = this._actorSNO,
                     Name = this.Properties.Name,
                     Field11 = 0x00000002,
                     Field12 = -1,
@@ -964,7 +954,7 @@ namespace Mooege.Core.GS.Player
             this.OpenConversations.Add(new OpenConversation(
                 new EndConversationMessage()
                 {
-                    ActorID = this.DynamicID,
+                    ActorId = this.DynamicID,
                     Field0 = 0x0000006E,
                     SNOConversation = snoConversation
                 },

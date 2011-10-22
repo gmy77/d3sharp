@@ -54,6 +54,15 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CrystalMpq">
+      <HintPath>..\..\dep\crystalmpq\CrystalMpq.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalMpq.Utility">
+      <HintPath>..\..\dep\crystalmpq\CrystalMpq.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\dep\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp">
     </Reference>
     <Reference Include="System">
@@ -106,12 +115,25 @@
     <Compile Include="Core\GS\Powers\PowersTestMonster.cs" />
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
+    <Compile Include="Common\Extensions\MpqFileStreamExtensions.cs" />
+    <Compile Include="Common\Helpers\FileHelpers.cs" />
+    <Compile Include="Common\MPQ\Asset.cs" />
+    <Compile Include="Common\MPQ\CoreData.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Actor.cs" />
+    <Compile Include="Common\MPQ\FileFormats\AnimSet.cs" />
+    <Compile Include="Common\MPQ\FileFormats\FileExtensions.cs" />
+    <Compile Include="Common\MPQ\FileFormats\FileFormat.cs" />
+    <Compile Include="Common\MPQ\FileFormats\FileFormatAttribute.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Monster.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Scene.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\PotionAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributeCreator.cs" />
+    <Compile Include="Common\MPQ\MPQPatchChain.cs" />
+    <Compile Include="Common\MPQ\MPQStorage.cs" />
     <Compile Include="Core\GS\Game\GameCommands.cs" />
     <Compile Include="Core\GS\Game\GameManager.cs" />
     <Compile Include="Core\GS\Player\Equipment.cs" />
@@ -132,6 +154,7 @@
     <Compile Include="Common\Config\ConfigManager.cs" />
     <Compile Include="Core\MooNet\Commands\CommandGroup.cs" />
     <Compile Include="Core\MooNet\Commands\Config.cs" />
+    <Compile Include="Core\MooNet\Commands\DebugCommands.cs" />
     <Compile Include="Core\MooNet\Commands\ServerCommandHandler.cs" />
     <Compile Include="Core\MooNet\Commands\CommandManager.cs" />
     <Compile Include="Core\MooNet\Commands\CommandAttribute.cs" />
@@ -182,7 +205,11 @@
     <Compile Include="Core\GS\Data\SNO\Set.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\CancelChanneledSkillMessage.cs" />
     <Compile Include="LogConfig.cs" />
+    <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
@@ -195,6 +222,8 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestSellItemMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Tick\GameTickMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Trade\OpenTradeWindow.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Tutorial\TutorialShownMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Waypoint\OpenWaypointSelectionWindowMessage.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.Array.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Net\GS\Message\GameAttributeMap.cs" />
@@ -456,6 +485,10 @@
     </None>
     <None Include="..\..\assets\gamedata.db">
       <Link>Assets\gamedata.db</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\MPQ\IMPORTANT">
+      <Link>Assets\MPQ\IMPORTANT</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.config">
