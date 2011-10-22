@@ -47,7 +47,6 @@ namespace Mooege
             PrintBanner();
             PrintLicense();
             Console.ResetColor();
-
             InitLoggers(); // init logging facility.
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
