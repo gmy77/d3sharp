@@ -88,7 +88,7 @@ namespace Mooege.Core.GS.Player
             {
                 return new VisualItem()
                 {
-                    GbId = 0,
+                    GbId = -1, // 0 causes error logs on the client  - angerwin
                     Field1 = 0,
                     Field2 = 0,
                     Field3 = 0,
