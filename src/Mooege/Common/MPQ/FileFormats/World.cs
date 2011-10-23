@@ -16,101 +16,66 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.IO;
+using System.Collections.Generic;
+using System.Diagnostics;
 using CrystalMpq;
 using Mooege.Common.Extensions;
-using Mooege.Common.MPQ.DataTypes;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.Worlds)]
     public class World : FileFormat
     {
-        public Header Header;
-        public int SNO;
-        SerializeData serDRLGParams;
-        public DRLGParams[] Param;
-        SerializeData serSceneParams;
-        public SceneParams Scene;
-        SerializeData serMarkerSets;
-        public int[] MarkerSets;
+        public Header Header { get; private set; }
+        public DRLGParams DRLGParams = new DRLGParams();
+        public SceneParams SceneParams = new SceneParams();
+        public List<int> MarkerSets = new List<int>();
+        public Environment Environment { get; private set; }
+        public LabelRuleSet LabelRuleSet { get; private set; }        
+        public SceneClusterSet SceneClusterSet { get; private set; }
+        public int[] SNONavMeshFunctions = new int[4];
 
-        public Environment Environment;
-        public LabelRuleSet LabelRuleSet;
-        public int i0;
-        public SceneClusterSet SceneClusterSet5;
-        public int[] arNavMeshFuncs;
-        public float f0;
-        public int i1;
-        public int snoScript;
-        public int i2;
+        public int Int0 { get; private set; }
+        public float Float0;
+        public int Int1;
+        public int SNOScript;
+        public int Int2;
 
         public World(MpqFile file)
         {
             var stream = file.Open();
-            Header = new Header(stream);
-            SNO = stream.ReadInt32();
-            serDRLGParams = new SerializeData(stream);
-            long x = stream.Position;
-            if (serDRLGParams.Size > 0)
-            {
-                Param = new DRLGParams[serDRLGParams.Size / 120];
-                stream.Position = serDRLGParams.Offset + 16;
-                for (int i = 0; i < serDRLGParams.Size/120; i++)
-                {
-                    Param[i] = new DRLGParams(stream);
-                }
-            }
-            stream.Position = x;
-            stream.Position += (5 * 4); // This was 3 ints padding in the struct, was 8 bytes behind though so i changed it - DarkLotus
 
-            serSceneParams = new SerializeData(stream);
-            x = stream.Position;
-            if (serSceneParams.Size > 0)
-            {
-                stream.Position = serSceneParams.Offset + 16;
-                Scene = new SceneParams(stream); ;
-                
+            this.Header = new Header(stream); // the asset header.
 
-            }
-            stream.Position = x;
-            stream.Position += (2 * 4);
-            serMarkerSets = new SerializeData(stream);
-            x = stream.Position;
-            if (serMarkerSets.Size > 0)
-            {
-                MarkerSets = new int[serMarkerSets.Size / 4];
-                stream.Position = serMarkerSets.Offset + 16;
-                for (int i = 0; i < serMarkerSets.Size / 4; i++)
-                {
-                    MarkerSets[i] = stream.ReadInt32();
-                }
-            }
-            stream.Position = x;
+            this.DRLGParams = stream.ReadSerializedData<DRLGParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/120) /raist
 
-            stream.Position += (14 * 4);
+            stream.Position += (3*4);
+            this.SceneParams = stream.ReadSerializedData<SceneParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/24) /raist
 
-            Environment = new DataTypes.Environment(stream);
+            stream.Position += (2*4);
+            this.MarkerSets = stream.ReadSerializedInts();
+
+            stream.Position += (14*4);
+            this.Environment = new Environment(stream);
+
+            LabelRuleSet = new LabelRuleSet(stream);
+            this.Int0 = stream.ReadInt32();
 
             stream.Position += 4;
-            LabelRuleSet = new DataTypes.LabelRuleSet(stream);
-            i0 = stream.ReadInt32();
-            stream.Position += 4;
-            SceneClusterSet5 = new SceneClusterSet(stream);
-            arNavMeshFuncs = new int[4];
-            for (int i = 0; i < arNavMeshFuncs.Length; i++)
+            this.SceneClusterSet = new SceneClusterSet(stream);
+
+            for (int i = 0; i < SNONavMeshFunctions.Length; i++)
             {
-                arNavMeshFuncs[i] = stream.ReadInt32();
+                SNONavMeshFunctions[i] = stream.ReadInt32();
             }
+
             stream.Position += 4;
-            f0 = stream.ReadFloat();
-            i1 = stream.ReadInt32();
-            snoScript = stream.ReadInt32();
-            i2 = stream.ReadInt32();
-         
+            Float0 = stream.ReadFloat();
+            Int1 = stream.ReadInt32();
+            SNOScript = stream.ReadInt32();
+            Int2 = stream.ReadInt32();
+
             stream.Close();
         }
-
-      
     }
 }
