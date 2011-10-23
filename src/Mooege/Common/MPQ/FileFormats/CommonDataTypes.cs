@@ -23,23 +23,6 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
-    public interface ISerializableData
-    {
-        void Read(MpqFileStream stream);
-    }
-
-    public struct SerializableDataPointer
-    {
-        public readonly int Offset;
-        public readonly int Size;
-
-        public SerializableDataPointer(int offset, int size)
-        {
-            this.Offset = offset;
-            this.Size = size;
-        }
-    }
-
     public class Header
     {
         public int DeadBeef;
@@ -125,60 +108,64 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    public class PostFXParams
+    public class TagMap : ISerializableData
     {
-        public float[] Float0;
-        public float[] Float1;
+        public int TagMapSize;
+        public TagMapEntry[] TagMapEntries;
 
-        public PostFXParams(MpqFileStream stream)
+        public void Read(MpqFileStream stream)
         {
-            Float0 = new float[4];
-            for (int i = 0; i < Float0.Length; i++)
+            TagMapSize = stream.ReadInt32();
+            TagMapEntries = new TagMapEntry[TagMapSize];
+
+            for (int i = 0; i < TagMapSize; i++)
             {
-                Float0[i] = stream.ReadInt32();
-            }
-            Float1 = new float[4];
-            for (int i = 0; i < Float1.Length; i++)
-            {
-                Float1[i] = stream.ReadInt32();
+                TagMapEntries[i] = new TagMapEntry(stream);
             }
         }
     }
 
-    //public class Marker
+    public class TagMapEntry
+    {
+        public int Int0;
+        public int Int1;
+        public int Int2;
+        public float Float0;
+
+        public TagMapEntry(MpqFileStream stream)
+        {
+            this.Int0 = stream.ReadInt32();
+            this.Int1 = stream.ReadInt32();
+
+            switch (this.Int0)
+            {
+                case 1:
+                    Float0 = stream.ReadFloat();
+                    break;
+                default:
+                    this.Int2 = stream.ReadInt32();
+                    break;
+            }
+        }
+    }
+
+    //public class PostFXParams // unused for now. /raist.
     //{
-    //    public string Name;
-    //    int i0;
-    //    public PRTransform PRTransform;
-    //    public SNOName SNOName;
-    //    public SerializeData serTagMap;
-    //    // Un sure about these 3 ints, 010template isnt the same as snodata.xml - DarkLotus
-    //    int TagMap;
-    //    int i1,i2;
-    //    SerializeData serMarkerLinks;
-    //    public TagMap TM;
-    //    public Marker(MpqFileStream stream)
+    //    public float[] Float0;
+    //    public float[] Float1;
+
+    //    public PostFXParams(MpqFileStream stream)
     //    {
-    //        byte[] buf = new byte[128];
-    //        stream.Read(buf, 0, 128); Name = Encoding.ASCII.GetString(buf);
-    //        i0 = stream.ReadInt32();
-    //        PRTransform = new PRTransform(stream);
-    //        SNOName = new SNOName(stream);
-    //        serTagMap = new SerializeData(stream);
-    //        TagMap = stream.ReadInt32();
-    //        i1 = stream.ReadInt32();
-    //        i2 = stream.ReadInt32();
-    //        serMarkerLinks = new SerializeData(stream);
-    //        stream.Position += (3 * 4);
-    //        long x = stream.Position;
-
-    //        if (serTagMap.Size > 0)
+    //        Float0 = new float[4];
+    //        for (int i = 0; i < Float0.Length; i++)
     //        {
-    //            stream.Position = serTagMap.Offset + 16;
-    //            TM = new TagMap(stream);
-
+    //            Float0[i] = stream.ReadInt32();
     //        }
-    //        stream.Position = x;
+    //        Float1 = new float[4];
+    //        for (int i = 0; i < Float1.Length; i++)
+    //        {
+    //            Float1[i] = stream.ReadInt32();
+    //        }
     //    }
     //}
 }

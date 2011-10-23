@@ -260,47 +260,6 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    public class TagMap : ISerializableData
-    {
-        public int TagMapSize;
-        public TagMapEntry[] TagMapEntries;
-
-        public void Read(MpqFileStream stream)
-        {
-            TagMapSize = stream.ReadInt32();
-            TagMapEntries = new TagMapEntry[TagMapSize];
-
-            for (int i = 0; i < TagMapSize; i++)
-            {
-                TagMapEntries[i] = new TagMapEntry(stream);
-            }
-        }
-    }
-
-    public class TagMapEntry
-    {
-        public int Int0;
-        public int Int1;
-        public int Int2;
-        public float Float0;
-
-        public TagMapEntry(MpqFileStream stream)
-        {
-            this.Int0 = stream.ReadInt32();
-            this.Int1 = stream.ReadInt32();
-
-            switch (this.Int0)
-            {
-                case 1:
-                    Float0 = stream.ReadFloat();
-                    break;
-                default:
-                    this.Int2 = stream.ReadInt32();
-                    break;
-            }
-        }
-    }
-
     public class CustomTileInfo
     {
         public int Int0;
