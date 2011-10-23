@@ -59,7 +59,7 @@ namespace Mooege.Common.Extensions
             if (pointer.Size <= 0) return items;
 
             var oldPos = stream.Position;
-            stream.Position = pointer.Offset + 16; // offset is relative to actual sno data start, so add that 16 bytes file header to get actual position
+            stream.Position = pointer.Offset + 16; // offset is relative to actual sno data start, so add that 16 bytes file header to get actual position. /raist
 
             for (int i = 0; i < count; i++)
             {
@@ -78,6 +78,21 @@ namespace Mooege.Common.Extensions
             return stream.ReadSerializedData<T>(pointer, count);
         }
 
+        public static T ReadSerializedData<T>(this MpqFileStream stream) where T : ISerializableData, new()
+        {
+            int offset = stream.ReadInt32();
+            int size = stream.ReadInt32();
+
+            var t = new T();
+            if (size <= 0) return t;
+
+            var oldPos = stream.Position;
+            stream.Position = offset + 16; // offset is relative to actual sno data start, so add that 16 bytes file header to get actual position. /raist
+            t.Read(stream);
+            stream.Position = oldPos;
+            return t;
+        }
+
         public static List<int> ReadSerializedInts(this MpqFileStream stream)
         {
             var items = new List<int>(); // read-items if any.
@@ -86,7 +101,7 @@ namespace Mooege.Common.Extensions
             if (size <= 0) return items;
 
             var oldPos = stream.Position;
-            stream.Position = offset + 16; // offset is relative to actual sno data start, so add that 16 bytes file header to get actual position
+            stream.Position = offset + 16; // offset is relative to actual sno data start, so add that 16 bytes file header to get actual position. /raist
 
             while (stream.Position < offset + size + 16)
             {

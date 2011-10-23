@@ -27,8 +27,8 @@ namespace Mooege.Common.MPQ.FileFormats
     public class World : FileFormat
     {
         public Header Header { get; private set; }
-        public List<DRLGParams> DRLGParams = new List<DRLGParams>();
-        public List<SceneParams> SceneParams = new List<SceneParams>();
+        public DRLGParams DRLGParams = new DRLGParams();
+        public SceneParams SceneParams = new SceneParams();
         public List<int> MarkerSets = new List<int>();
         public Environment Environment { get; private set; }
         public LabelRuleSet LabelRuleSet { get; private set; }        
@@ -47,20 +47,10 @@ namespace Mooege.Common.MPQ.FileFormats
 
             this.Header = new Header(stream); // the asset header.
 
-            var drlgParamsPointer = stream.GetSerializedDataPointer();
-            this.DRLGParams = stream.ReadSerializedData<DRLGParams>(drlgParamsPointer, drlgParamsPointer.Size / 120);
+            this.DRLGParams = stream.ReadSerializedData<DRLGParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/120) /raist
 
             stream.Position += (3*4);
-            var sceneParamsPointer = stream.GetSerializedDataPointer();
-            this.SceneParams = stream.ReadSerializedData<SceneParams>(sceneParamsPointer, sceneParamsPointer.Size / 24);
-
-            if (Header.SNOId == 71150)
-            {
-                foreach (var chunk in SceneParams[0].SceneChunks)
-                {
-                    Debug.WriteLine(chunk.SNOName.Name + "=>\t" + chunk.Position.V.X + ":" + chunk.Position.V.Y);
-                }
-            }
+            this.SceneParams = stream.ReadSerializedData<SceneParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/24) /raist
 
             stream.Position += (2*4);
             this.MarkerSets = stream.ReadSerializedInts();

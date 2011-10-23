@@ -601,7 +601,7 @@ namespace Mooege.Common.MPQ
         public int Int1;
         public int SNOScene;
         public int Int2;
-        public List<TagMap> TileTagMap = new List<TagMap>();
+        public TagMap TileTagMap;
         public CustomTileInfo CustomTileInfo;
 
         public void Read(MpqFileStream stream)
@@ -610,7 +610,7 @@ namespace Mooege.Common.MPQ
             Int1 = stream.ReadInt32();
             SNOScene = stream.ReadInt32();
             Int2 = stream.ReadInt32();
-            this.TileTagMap = stream.ReadSerializedData<TagMap>(1);
+            this.TileTagMap = stream.ReadSerializedData<TagMap>();
 
             stream.Position += (2 * 4);
             CustomTileInfo = new CustomTileInfo(stream);            
@@ -621,7 +621,7 @@ namespace Mooege.Common.MPQ
     {
         public string Name;
         public int Int0;
-        public List<TagMap> CommandTagMap = new List<TagMap>();
+        public TagMap CommandTagMap;
 
         public void Read(MpqFileStream stream)
         {
@@ -629,7 +629,7 @@ namespace Mooege.Common.MPQ
             stream.Read(buf, 0, 128);
             Name = Encoding.ASCII.GetString(buf);
             Int0 = stream.ReadInt32();
-            this.CommandTagMap = stream.ReadSerializedData<TagMap>(1);
+            this.CommandTagMap = stream.ReadSerializedData<TagMap>();
             stream.Position += (3 * 4);
         }
     }
@@ -640,7 +640,7 @@ namespace Mooege.Common.MPQ
         public int CommandCount;
         public List<DRLGCommand> DRLGCommands = new List<DRLGCommand>();
         public List<int> ParentIndices = new List<int>();
-        public List<TagMap> DRLGTagMap = new List<TagMap>();
+        public TagMap DRLGTagMap;
 
         public void Read(MpqFileStream stream)
         {
@@ -655,7 +655,7 @@ namespace Mooege.Common.MPQ
             this.ParentIndices = stream.ReadSerializedInts();
 
             stream.Position += (2 * 4);
-            this.DRLGTagMap = stream.ReadSerializedData<TagMap>(1);
+            this.DRLGTagMap = stream.ReadSerializedData<TagMap>();
         }
     }
 }
