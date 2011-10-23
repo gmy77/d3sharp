@@ -181,30 +181,7 @@ namespace Mooege.Common.MPQ.FileFormats
             i0 = stream.ReadInt32();
         }
     }
-    public class LookLink
-    {
-        public char[] Name;
-        public LookLink(MpqFileStream stream)
-        {
-            Name = new char[64];
-            for (int i = 0; i < 64; i++)
-            {
-                Name[i] = (char)stream.ReadByte();
-            }
-        }
-    }
-    public class ConstraintLink
-    {
-        public char[] Name;
-        public ConstraintLink(MpqFileStream stream)
-        {
-            Name = new char[64];
-            for (int i = 0; i < 64; i++)
-            {
-                Name[i] = (char)stream.ReadByte();
-            }
-        }
-    }
+    
     public class TriggerConditions
     {
         // Unsure if these should be ints or floats - DarkLotus
@@ -239,8 +216,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public int i2, i3;
         //pad 12
         public HardPointLink[] HardPointLinks;
-        public LookLink LookLink;
-        public ConstraintLink ConstraintLink;
+        public string LookLink;
+        public string ConstraintLink;
         int i4;
         float f0;
         int i5, i6, i7, i8, i9;
@@ -266,8 +243,13 @@ namespace Mooege.Common.MPQ.FileFormats
             HardPointLinks = new HardPointLink[2];
             HardPointLinks[0] = new HardPointLink(stream);
             HardPointLinks[1] = new HardPointLink(stream);
-            LookLink = new LookLink(stream);
-            ConstraintLink = new ConstraintLink(stream);
+            var buf = new byte[64];
+            stream.Read(buf, 0, 64);
+            this.LookLink = Encoding.ASCII.GetString(buf);
+
+            buf = new byte[64];
+            stream.Read(buf, 0, 64);
+            this.ConstraintLink = Encoding.ASCII.GetString(buf);
             i4 = stream.ReadInt32();
             f0 = stream.ReadFloat();
             i5 = stream.ReadInt32();
