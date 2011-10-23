@@ -44,7 +44,7 @@ namespace Mooege.Common.MPQ.FileFormats
                 //Logger.Trace("No Idle found for actor: " + this.ActorSNO + " Sending Zombies Idle");
                 //Logger.Trace("using string matched ani: " + Animations.Single(ani => ani.name.Contains("idle") == true).AniTagID);
                 //return Animations.Single(ani => ani.name.Contains("idle") == true).AniTagID;
-                return 0x11150;                
+                return 0x11150;
             }
         }
 
@@ -74,7 +74,7 @@ namespace Mooege.Common.MPQ.FileFormats
             for (int i = 0; i < this.NumberOfAnimations; i++)
             {
                 stream.Position += 4;
-                var animation = new AnimationDef {TagID = stream.ReadInt32(), AnimationSNO = stream.ReadInt32()};
+                var animation = new AnimationDef { TagID = stream.ReadInt32(), AnimationSNO = stream.ReadInt32() };
                 this.Animations.Add(animation);
             }
 

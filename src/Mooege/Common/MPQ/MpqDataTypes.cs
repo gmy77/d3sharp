@@ -1,110 +1,172 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * Copyright (C) 2011 mooege project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Collections.Generic;
 using System.Text;
 using CrystalMpq;
 using Mooege.Common.Extensions;
 using Mooege.Net.GS.Message.Fields;
-namespace Mooege.Common.MPQ.DataTypes
+
+namespace Mooege.Common.MPQ
 {
-	public  class SerializeData
-	   {
-		   public readonly int Offset; // format hex? - Darklotus
-		   public readonly int Size;
+    public interface ISerializableData
+    {
+        void Read(MpqFileStream stream);
+    }
 
-		   public SerializeData(MpqFileStream stream)
-		   {
-			   Offset = stream.ReadInt32();
-			   Size = stream.ReadInt32();
-		   }
+    public struct SerializableDataPointer
+    {
+        public readonly int Offset;
+        public readonly int Size;
+
+        public SerializableDataPointer(int offset, int size)
+        {
+            this.Offset = offset;
+            this.Size = size;
+        }
+    }
+
+    public class Header
+    {
+        public int DeadBeef;
+        public int SnoType;
+        public int Unknown1, Unknown2, Unknown3, Unknown4;
+        public int SNOId;
+
+        public Header(MpqFileStream stream)
+        {
+            this.DeadBeef = stream.ReadInt32();
+            this.SnoType = stream.ReadInt32();
+            this.Unknown1 = stream.ReadInt32();
+            this.Unknown2 = stream.ReadInt32();
+            this.SNOId = stream.ReadInt32();
+            this.Unknown3 = stream.ReadInt32();
+            this.Unknown4 = stream.ReadInt32();
+        }
+    }
+
+    public class SceneParams : ISerializableData
+    {
+        public List<SceneChunk> SceneChunks = new List<SceneChunk>();
+        public int ChunkCount { get; private set; }   
+
+        public void Read(MpqFileStream stream)
+        {
+            var pointer = stream.GetSerializedDataPointer();
+            this.ChunkCount = stream.ReadInt32();
+            stream.Position += (3 * 4);
+            this.SceneChunks = stream.ReadSerializedData<SceneChunk>(pointer, this.ChunkCount);
+        }
+    }
+
+    public class TagMapEntry
+    {
+        public int Int0;
+        public int Int1;
+        public int Int2;
+        public float Float0;
+
+        public TagMapEntry(MpqFileStream stream)
+        {
+            this.Int0 = stream.ReadInt32();
+            this.Int1 = stream.ReadInt32();
+
+            switch(this.Int0)
+            {
+                case 1:
+                    Float0 = stream.ReadFloat();
+                    break;
+                default:
+                    this.Int2 = stream.ReadInt32();
+                    break;
+            }
+        }
+    }
+
+    public class TagMap : ISerializableData
+	   {
+		   public int TagMapSize;
+		   public TagMapEntry[] TagMapEntries;
+
+	       public void Read(MpqFileStream stream)
+	       {
+               TagMapSize = stream.ReadInt32();
+               TagMapEntries = new TagMapEntry[TagMapSize];
+
+               for (int i = 0; i < TagMapSize; i++)
+               {
+                   TagMapEntries[i] = new TagMapEntry(stream);
+               }
+	       }
 	   }
 
-	public class Header
-	{
-	   int DeadBeef;
-	   public int SnoType;
-	   int unknown1, unknown2;
-	   public Header(MpqFileStream stream)
-	   {
-		   DeadBeef = stream.ReadInt32();
-		   SnoType  = stream.ReadInt32();
-		   unknown1 = stream.ReadInt32();
-		   unknown2 = stream.ReadInt32();
-	   }
-	}
-	public class TagMapEntry
-	   {
-		   int i0, i1;
-		   float f0;
-		   public TagMapEntry(MpqFileStream stream)
-		   {
-			   i0 = stream.ReadInt32();
-			   i1 = stream.ReadInt32();
-			   f0 = stream.ReadFloat();
-		   }
-	   }
-	   public class TagMap
-	   {
-		   int tagmapsize;
-		   TagMapEntry[] TagMapEntry;
-		   public TagMap(MpqFileStream stream)
-		   {
-			   tagmapsize = stream.ReadInt32();
-			   TagMapEntry = new TagMapEntry[tagmapsize];
-			   for (int i = 0; i < tagmapsize; i++)
-			   {
-				   TagMapEntry[i] = new TagMapEntry(stream);
-			   }
-		   }
-	   }
-	   public class AABB_ // Ambiogous refrence fix me - DarkLotus
+	   public class AABB // Ambiogous refrence fix me - DarkLotus
 	   {
 		   public Vector3D Min { get; private set; }
 		   public Vector3D Max { get; private set; }
 
-		   public AABB_(MpqFileStream stream)
+		   public AABB(MpqFileStream stream)
 		   {
 			   this.Min = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
 			   this.Max = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
 		   }
 	   }
 
-	   public class Marker
-	   {
-		   public string Name;
-		   int i0;
-		   public PRTransform PRTransform;
-		   public SNOName SNOName;
-		   public SerializeData serTagMap;
-		   // Un sure about these 3 ints, 010template isnt the same as snodata.xml - DarkLotus
-		   int TagMap;
-		   int i1,i2;
-		   SerializeData serMarkerLinks;
-		   public TagMap TM;
-		   public Marker(MpqFileStream stream)
-		   {
-			   byte[] buf = new byte[128];
-			   stream.Read(buf, 0, 128); Name = Encoding.ASCII.GetString(buf);
-			   i0 = stream.ReadInt32();
-			   PRTransform = new PRTransform(stream);
-			   SNOName = new SNOName(stream);
-			   serTagMap = new SerializeData(stream);
-			   TagMap = stream.ReadInt32();
-			   i1 = stream.ReadInt32();
-			   i2 = stream.ReadInt32();
-			   serMarkerLinks = new SerializeData(stream);
-			   stream.Position += (3 * 4);
-			   long x = stream.Position;
+       //public class Marker
+       //{
+       //    public string Name;
+       //    int i0;
+       //    public PRTransform PRTransform;
+       //    public SNOName SNOName;
+       //    public SerializeData serTagMap;
+       //    // Un sure about these 3 ints, 010template isnt the same as snodata.xml - DarkLotus
+       //    int TagMap;
+       //    int i1,i2;
+       //    SerializeData serMarkerLinks;
+       //    public TagMap TM;
+       //    public Marker(MpqFileStream stream)
+       //    {
+       //        byte[] buf = new byte[128];
+       //        stream.Read(buf, 0, 128); Name = Encoding.ASCII.GetString(buf);
+       //        i0 = stream.ReadInt32();
+       //        PRTransform = new PRTransform(stream);
+       //        SNOName = new SNOName(stream);
+       //        serTagMap = new SerializeData(stream);
+       //        TagMap = stream.ReadInt32();
+       //        i1 = stream.ReadInt32();
+       //        i2 = stream.ReadInt32();
+       //        serMarkerLinks = new SerializeData(stream);
+       //        stream.Position += (3 * 4);
+       //        long x = stream.Position;
 			   
-			   if (serTagMap.Size > 0)
-			   {
-				   stream.Position = serTagMap.Offset + 16;
-				   TM = new TagMap(stream);
+       //        if (serTagMap.Size > 0)
+       //        {
+       //            stream.Position = serTagMap.Offset + 16;
+       //            TM = new TagMap(stream);
 
-			   }
-			   stream.Position = x;
-		   }
-	   }
+       //        }
+       //        stream.Position = x;
+       //    }
+       //}
+
 	   public class WeightedLook
 	   {
 		   string LookLink;
@@ -162,257 +224,212 @@ namespace Mooege.Common.MPQ.DataTypes
 		}
 	}
 	   public class PRTransform{
-		public Quaternion Quaternion0;
-		public Vector3D Vector3D1;
+		public Quaternion Q;
+		public Vector3D V;
 		public PRTransform(MpqFileStream stream)
 		{
-			Quaternion0 = new Quaternion(stream);
-			Vector3D1 = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
+			Q = new Quaternion(stream);
+			V = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
 		}
 	}
 
 	   public class SNOName
 	   {
-		   public int int0;
-		   public int int1;
+           public SNOGroup SNOGroup { get; private set; }
+           public int SNOId { get; private set; }
+           public string Name { get; private set; }
+
 		   public SNOName(MpqFileStream stream)
 		   {
-			   int0 = stream.ReadInt32();
-			   int1 = stream.ReadInt32();
+			   this.SNOGroup = (SNOGroup)stream.ReadInt32();
+			   this.SNOId = stream.ReadInt32();
+
+               if (!MPQStorage.CoreData.Assets.ContainsKey(this.SNOGroup)) return; // it's here because of the SNOGroup 0, could it be the Act? /raist
+               this.Name = MPQStorage.CoreData.Assets[this.SNOGroup].ContainsKey(this.SNOId) ? MPQStorage.CoreData.Assets[this.SNOGroup][SNOId].Name : ""; // put it here because it seems we miss loading some scenes there /raist.
 		   }
 	   }
-	   public class SubSceneLabel
+	   public class SubSceneLabel : ISerializableData
 	   {
-		   public int GBID;
-		   public int i0;
-		   public SubSceneLabel(MpqFileStream stream)
-		   {
-			   GBID = stream.ReadInt32();
-			   i0 = stream.ReadInt32();
-		   }
+		   public int GBId;
+		   public int I0;
+
+	       public void Read(MpqFileStream stream)
+	       {
+               GBId = stream.ReadInt32();
+               I0 = stream.ReadInt32();
+	       }
 	   }
 
-	   public class SubSceneEntry
+	   public class SubSceneEntry: ISerializableData
 	   {
-		   public int snoScene;
+		   public int SNOScene;
 		   public int Probability;
 		   public int LabelCount;
-		   private SerializeData serLabels;
-		   public SubSceneLabel[] Labels;
-		   public SubSceneEntry(MpqFileStream stream)
-		   {
-			   
-			   snoScene = stream.ReadInt32();
-			   Probability = stream.ReadInt32();
-			   stream.Position += (3 * 4);
-			   LabelCount = stream.ReadInt32();
-			   serLabels = new SerializeData(stream);
-			   long x = stream.Position;
-			   if (serLabels.Size > 0)
-			   {
-				   Labels = new SubSceneLabel[serLabels.Size];
-				   stream.Position = serLabels.Offset + 16;
-				   for (int i = 0; i < serLabels.Size; i++)
-				   {
-					   Labels[i] = new SubSceneLabel(stream);
-				   }
-			   }
-			   stream.Position = x; 
-		   }
+	       public List<SubSceneLabel> Labels = new List<SubSceneLabel>();
+		   
+	       public void Read(MpqFileStream stream)
+	       {
+               this.SNOScene = stream.ReadInt32();
+               this.Probability = stream.ReadInt32();
+               stream.Position += (3 * 4);
+               this.LabelCount = stream.ReadInt32();
+	           this.Labels = stream.ReadSerializedData<SubSceneLabel>(this.LabelCount);
+	       }
 	   }
 
-	public class SubSceneGroup
+	public class SubSceneGroup : ISerializableData
 	{
-		int i0, SubSceneCount;
-		SerializeData serSubScenes;
-		SubSceneEntry[] SubScene;
-		public SubSceneGroup(MpqFileStream stream)
-		{
-			i0 = stream.ReadInt32();
-			SubSceneCount = stream.ReadInt32();
-			stream.Position += (2 * 4);
-			serSubScenes = new SerializeData(stream);
-			long x = stream.Position;
+		public int I0;
+        public int SubSceneCount;
+	    public List<SubSceneEntry> Entries = new List<SubSceneEntry>();
 
-			if (serSubScenes.Size > 0)
-			{
-				SubScene = new SubSceneEntry[serSubScenes.Size];
-				stream.Position = serSubScenes.Offset + 16;
-				for (int i = 0; i < serSubScenes.Size; i++)
-				{
-					SubScene[i] = new SubSceneEntry(stream);
-				}
-			}
-			stream.Position = x;
-		}
+        public SubSceneGroup() { }
+
+        public SubSceneGroup(MpqFileStream stream)
+        {
+            this.Read(stream);
+        }
+
+	    public void Read(MpqFileStream stream)
+	    {
+            this.I0 = stream.ReadInt32();
+            this.SubSceneCount = stream.ReadInt32();
+            stream.Position += (2 * 4);
+            this.Entries = stream.ReadSerializedData<SubSceneEntry>(this.SubSceneCount);
+	    }
 	}
-	public class SceneCluster
+
+	public class SceneCluster : ISerializableData
 	{
 		public string Name;
-		public int ClusterID;
+		public int ClusterId;
 		public int GroupCount;
-		public SerializeData serSubSceneGroups;
-		public SubSceneGroup[] Group;
+	    public List<SubSceneGroup> SubSceneGroups = new List<SubSceneGroup>();
 		public SubSceneGroup Default;
-		public SceneCluster(MpqFileStream stream)
-		{
-			byte[] buf = new byte[128];
-			stream.Read(buf, 0, 128); Name = Encoding.ASCII.GetString(buf);
 
-			ClusterID = stream.ReadInt32();
-			GroupCount = stream.ReadInt32();
-			stream.Position += (2 * 4);
-			serSubSceneGroups = new SerializeData(stream);
+	    public void Read(MpqFileStream stream)
+	    {
+            var buf = new byte[128];
+            stream.Read(buf, 0, 128);
+            this.Name = Encoding.ASCII.GetString(buf);
+            this.ClusterId = stream.ReadInt32();
+            this.GroupCount = stream.ReadInt32();
+            stream.Position += (2 * 4);
+            this.SubSceneGroups = stream.ReadSerializedData<SubSceneGroup>(this.GroupCount);
 
-			long x = stream.Position;
-			if (serSubSceneGroups.Size > 0)
-			{
-				Group = new SubSceneGroup[GroupCount];
-				stream.Position = serSubSceneGroups.Offset + 16;
-				for (int i = 0; i < GroupCount; i++)
-				{
-					Group[i] = new SubSceneGroup(stream);
-				}
-			}
-			stream.Position = x;
-			Default = new SubSceneGroup(stream);
-		}
+            this.Default = new SubSceneGroup(stream);
+	    }
 	}
 	public class SceneClusterSet
 	{
 		public int ClusterCount;
-		public SerializeData serClusters;
-		public SceneCluster[] SceneCluster;
+	    public List<SceneCluster> SceneClusters = new List<SceneCluster>();
+		
 		public SceneClusterSet(MpqFileStream stream)
 		{
-
-			ClusterCount = stream.ReadInt32();
+			this.ClusterCount = stream.ReadInt32();
 			stream.Position += (4 * 3);
-			serClusters = new SerializeData(stream);
-			long x = stream.Position;
-			if (serClusters.Size > 0)
-			{
-				SceneCluster = new SceneCluster[ClusterCount];
-				stream.Position = serClusters.Offset + 16;
-				for (int i = 0; i < ClusterCount; i++)
-				{
-					SceneCluster[i] = new SceneCluster(stream);
-				}
-			}
-			stream.Position = x;
-		}
-	}
-	public class SceneChunk
-	{
-		public SNOName SNOName;
-		public PRTransform Position;
-		public SceneSpecification_ f;
-		public SceneChunk(MpqFileStream stream)
-		{
-			SNOName = new SNOName(stream);
-			Position = new PRTransform(stream);   
-			f = new SceneSpecification_(stream);
+		    this.SceneClusters = stream.ReadSerializedData<SceneCluster>(this.ClusterCount);           
 		}
 	}
 
-	public class SceneSpecification_
+	public class SceneChunk : ISerializableData
+	{
+        public SNOName SNOName { get; private set; }
+        public PRTransform Position { get; private set; }
+        public SceneSpecification SceneSpecification { get; private set; }
+	
+	    public void Read(MpqFileStream stream)
+	    {
+            this.SNOName = new SNOName(stream);
+            this.Position = new PRTransform(stream);
+            this.SceneSpecification = new SceneSpecification(stream);
+	    }
+	}
+
+	public class SceneSpecification
 	{
 		public int CellZ;
-		public Vector2D Vector2D1;
-		public int[] SnoLevelAreas;
-		public int snoPrevWorld;
-		public int int2;
-		public int snoPrevLevelArea;
-		public int snoNextWorld;
-		public int int3;
-		public int snoNextLevelArea;
-		public int snoMusic;
-		public int snoCombatMusic;
-		public int snoAmbient;
-		public int snoReverb;
-		public int snoWeather;
-		public int snoPresetWorld;
-		public int int4;
-		public int int5;
-		public int int6;
-		public int int7;
-		public SceneCachedValues_ tCachedValues;
-		public SceneSpecification_(MpqFileStream stream)
-		{
-			CellZ = stream.ReadInt32();
-			Vector2D1 = new Vector2D(stream);
-			SnoLevelAreas = new int[4];
-			for (int i = 0; i < SnoLevelAreas.Length; i++)
-			{
-				SnoLevelAreas[i] = stream.ReadInt32();
-			}
-			snoPrevWorld = stream.ReadInt32();
-			int2 = stream.ReadInt32();
-			snoPrevLevelArea = stream.ReadInt32();
-			snoNextWorld = stream.ReadInt32();
-			int3 = stream.ReadInt32();
-			snoNextLevelArea = stream.ReadInt32();
-			snoMusic = stream.ReadInt32();
-			snoCombatMusic = stream.ReadInt32();
-			snoAmbient = stream.ReadInt32();
-			snoReverb = stream.ReadInt32();
-			snoWeather = stream.ReadInt32();
-			snoPresetWorld = stream.ReadInt32();
-			int4 = stream.ReadInt32();
-			int5 = stream.ReadInt32();
-			int6 = stream.ReadInt32();
-			int7 = stream.ReadInt32();
-			tCachedValues = new SceneCachedValues_(stream);
-		}
+		public Vector2D V0;
+		public int[] SNOLevelAreas;
+		public int SNOPrevWorld;
+		public int Int1;
+		public int SNOPrevLevelArea;
+		public int SNONextWorld;
+		public int Int3;
+		public int SNONextLevelArea;
+		public int SNOMusic;
+		public int SNOCombatMusic;
+		public int SNOAmbient;
+		public int SNOReverb;
+		public int SNOWeather;
+		public int SNOPresetWorld;
+		public int Int4;
+		public int Int5;
+		public int Int6;
+		public int Int7;
+		public SceneCachedValues SceneCachedValues;
+
+        public SceneSpecification(MpqFileStream stream)
+        {
+            CellZ = stream.ReadInt32();
+            V0 = new Vector2D(stream);
+            SNOLevelAreas = new int[4];
+
+            for (int i = 0; i < SNOLevelAreas.Length; i++)
+            {
+                SNOLevelAreas[i] = stream.ReadInt32();
+            }
+
+            SNOPrevWorld = stream.ReadInt32();
+            Int1 = stream.ReadInt32();
+            SNOPrevLevelArea = stream.ReadInt32();
+            SNONextWorld = stream.ReadInt32();
+            Int3 = stream.ReadInt32();
+            SNONextLevelArea = stream.ReadInt32();
+            SNOMusic = stream.ReadInt32();
+            SNOCombatMusic = stream.ReadInt32();
+            SNOAmbient = stream.ReadInt32();
+            SNOReverb = stream.ReadInt32();
+            SNOWeather = stream.ReadInt32();
+            SNOPresetWorld = stream.ReadInt32();
+            Int4 = stream.ReadInt32();
+            Int5 = stream.ReadInt32();
+            Int6 = stream.ReadInt32();
+
+            stream.Position += (9 * 4);
+
+            Int7 = stream.ReadInt32();
+            SceneCachedValues = new SceneCachedValues(stream);
+        }
 	}
-	public class SceneCachedValues_
+
+	public class SceneCachedValues
 	{
-		public int int0;
-		public int int1;
-		public int int2;
-		public AABB_ AABB3;
-		public AABB_ AABB4;
-		public int[] int5;
-		public int int6;
-		public SceneCachedValues_(MpqFileStream stream)
+		public int Int0;
+		public int Int1;
+		public int Int2;
+		public AABB AABB1;
+		public AABB AABB2;
+		public int[] Int5;
+		public int Int6;
+
+		public SceneCachedValues(MpqFileStream stream)
 		{
-			int0 = stream.ReadInt32();
-			int1 = stream.ReadInt32();
-			int2 = stream.ReadInt32();
-			AABB3 = new AABB_(stream);
-			AABB4 = new AABB_(stream);
-			int5 = new int[4];
-			for (int i = 0; i < int5.Length; i++)
+			Int0 = stream.ReadInt32();
+			Int1 = stream.ReadInt32();
+			Int2 = stream.ReadInt32();
+			AABB1 = new AABB(stream);
+			AABB2 = new AABB(stream);
+			Int5 = new int[4];
+			for (int i = 0; i < Int5.Length; i++)
 			{
-				int5[i] = stream.ReadInt32();
+				Int5[i] = stream.ReadInt32();
 			}
-			int6 = stream.ReadInt32();
+			Int6 = stream.ReadInt32();
 		}
 	}
-	public class SceneParams
-	{
-		public SerializeData serSceneChunks;
-		public int ChunkCount;
-		public SceneChunk[] SceneChunks;
-		
-		public SceneParams(MpqFileStream stream)
-		{
-			serSceneChunks = new SerializeData(stream);
-			ChunkCount = stream.ReadInt32();
-			stream.Position += (3 * 4);
-			long x = stream.Position;
-			if (serSceneChunks.Size > 0)
-			{
-				SceneChunks = new SceneChunk[ChunkCount];
-				stream.Position = serSceneChunks.Offset + 16;
-				for (int i = 0; i < ChunkCount; i++)
-				{
-					SceneChunks[i] = new SceneChunk(stream);
-				}
-			}
-			stream.Position = x;
-		}
-	}
+
 
 
 	public class Environment
@@ -451,6 +468,7 @@ namespace Mooege.Common.MPQ.DataTypes
 			snoIrradianceTexDead = stream.ReadInt32();*/
 		}
 	}
+
 	public class PostFXParams
 	{
 		public float[] float0;
@@ -469,89 +487,77 @@ namespace Mooege.Common.MPQ.DataTypes
 			}
 		}
 	}
-	public class LabelEntry
-	{
-		public int gbidLabel;
-		public int int0;
-		public float float1;
-		public int int2;
-		public int int3;
-		public LabelEntry(MpqFileStream stream)
-		{
-			int0 = stream.ReadInt32();
-			float1 = stream.ReadFloat();
-			int2 = stream.ReadInt32();
-			int3 = stream.ReadInt32();
-		}
-	}
-	public class LabelCondition
+
+    public class LabelEntry : ISerializableData
+    {
+        public int GBIdLabel;
+        public int Int0;
+        public float Float0;
+        public int Int1;
+        public int Int2;
+
+        public void Read(MpqFileStream stream)
+        {
+            this.GBIdLabel = stream.ReadInt32();
+            Int0 = stream.ReadInt32();
+            Float0 = stream.ReadFloat();
+            Int1 = stream.ReadInt32();
+            Int2 = stream.ReadInt32();
+        }
+    }
+
+    public class LabelCondition
 	{
 		public int DT_ENUM0;
-		public int int1;
-		public int[] int2;
+		public int Int0;
+		public int[] Int1;
+
 		public LabelCondition(MpqFileStream stream)
 		{
-			int1 = stream.ReadInt32();
-			int2 = new int[4];
-			for (int i = 0; i < int2.Length; i++)
+			Int0 = stream.ReadInt32();
+			Int1 = new int[4];
+
+			for (int i = 0; i < Int1.Length; i++)
 			{
-				int2[i] = stream.ReadInt32();
+				Int1[i] = stream.ReadInt32();
 			}
 		}
 	}
-	public class LabelRule
+	public class LabelRule : ISerializableData
 	{
 		public string Name;
-		public LabelCondition LabelCondition1;
-		public int i0;
-		public int labelcount;
-		public SerializeData serEntries;
-		public LabelEntry[] LabelEntry;
-		public LabelRule(MpqFileStream stream)
-		{
-			byte[] buf = new byte[128];
-			stream.Read(buf, 0, 128); Name = Encoding.ASCII.GetString(buf);
-			LabelCondition1 = new LabelCondition(stream);
-			i0 = stream.ReadInt32();
-			labelcount = stream.ReadInt32();
-			stream.Position += (2 * 4);
-			serEntries = new SerializeData(stream);
-			long x = stream.Position;
-			if (labelcount > 0)
-			{
-				LabelEntry = new LabelEntry[labelcount];
-				stream.Position = serEntries.Offset + 16;
-				for (int i = 0; i < labelcount; i++)
-				{
-					LabelEntry[i] = new LabelEntry(stream);
-				}
-			}
-			stream.Position = x;
-		}
+		public LabelCondition LabelCondition;
+		public int Int0;
+		public int LabelCount;
+	    public List<LabelEntry> Entries = new List<LabelEntry>();
+
+	    public void Read(MpqFileStream stream)
+	    {
+            var buf = new byte[128];
+            stream.Read(buf, 0, 128); 
+            this.Name = Encoding.ASCII.GetString(buf);
+            LabelCondition = new LabelCondition(stream);
+	        stream.Position += 4;
+            Int0 = stream.ReadInt32();
+            LabelCount = stream.ReadInt32();
+            stream.Position += (2 * 4);
+	        this.Entries = stream.ReadSerializedData<LabelEntry>(this.LabelCount);
+	    }
 	}
+
 	public class LabelRuleSet
 	{
 		public int Rulecount;
-		public SerializeData serRules;
-		public LabelRule[] LabelRule;
+	    public List<LabelRule> LabelRules = new List<LabelRule>();
+
 		public LabelRuleSet(MpqFileStream stream)
 		{
 			Rulecount = stream.ReadInt32();
 			stream.Position += (3 * 4);
-			serRules = new SerializeData(stream);
-			long x = stream.Position;
-			if (Rulecount > 0)
-			{
-				LabelRule = new LabelRule[Rulecount];
-				stream.Position = serRules.Offset + 16;
-				for (int i = 0; i < Rulecount; i++)
-				{
-					LabelRule[i] = new LabelRule(stream);
-				}
-			}
-			stream.Position = x;
+		    this.LabelRules = stream.ReadSerializedData<LabelRule>(this.Rulecount);
 		}
 	}
+
     public class CustomTileCell{
 		public int int0;
 		public int int1;
@@ -571,123 +577,85 @@ namespace Mooege.Common.MPQ.DataTypes
 				int4[i] = stream.ReadInt32(); }
 		}
 	}
-    public class CustomTileInfo{
-		public int int0;
-		public int int1;
-		public int int2;
-		public Vector2D v0;
-		public SerializeData serTiles;
-        public CustomTileInfo(MpqFileStream stream)
-		{
-			int0 = stream.ReadInt32();
-			int1 = stream.ReadInt32();
-			int2 = stream.ReadInt32();
-            v0 = new Vector2D(stream);
-            serTiles = new SerializeData(stream);
-            stream.Position += (3 * 4);
-		}
-	}
 
-    public class TileInfo
+    public class CustomTileInfo
     {
-        public int int0;
-        public int int1;
-        public int SNOScene;
-        public int int2;
-        public SerializeData serTileTagMap;
-        public TagMap TileTagMap;
-        public CustomTileInfo CustomTileInfo3;
-        public TileInfo(MpqFileStream stream)
+        public int Int0;
+        public int Int1;
+        public int Int2;
+        public Vector2D V0;
+        
+        public CustomTileInfo(MpqFileStream stream)
         {
-            int0 = stream.ReadInt32();
-            int1 = stream.ReadInt32();
-            SNOScene = stream.ReadInt32();
-            int2 = stream.ReadInt32();           
-            serTileTagMap = new SerializeData(stream);
-            long x = stream.Position;
-            if (serTileTagMap.Size > 0)
-            {
-                stream.Position = serTileTagMap.Offset + 16;
-                TileTagMap = new TagMap(stream);
-            }
-            stream.Position = x; ;
-            CustomTileInfo3 = new CustomTileInfo(stream);
+            Int0 = stream.ReadInt32();
+            Int1 = stream.ReadInt32();
+            Int2 = stream.ReadInt32();
+            V0 = new Vector2D(stream);
+            stream.Position += (5 * 4);
         }
     }
-    public class DRLGCommand
+
+    public class TileInfo : ISerializableData
+    {
+        public int Int0;
+        public int Int1;
+        public int SNOScene;
+        public int Int2;
+        public List<TagMap> TileTagMap = new List<TagMap>();
+        public CustomTileInfo CustomTileInfo;
+
+        public void Read(MpqFileStream stream)
+        {
+            Int0 = stream.ReadInt32();
+            Int1 = stream.ReadInt32();
+            SNOScene = stream.ReadInt32();
+            Int2 = stream.ReadInt32();
+            this.TileTagMap = stream.ReadSerializedData<TagMap>(1);
+
+            stream.Position += (2 * 4);
+            CustomTileInfo = new CustomTileInfo(stream);            
+        }
+    }
+
+    public class DRLGCommand : ISerializableData
     {
         public string Name;
-        public int int1;
-        public SerializeData serCommandTagMap;
-        public TagMap CommandTagMap;
-        public DRLGCommand(MpqFileStream stream)
+        public int Int0;
+        public List<TagMap> CommandTagMap = new List<TagMap>();
+
+        public void Read(MpqFileStream stream)
         {
-            byte[] buf = new byte[128];
-            stream.Read(buf, 0, 128); Name = Encoding.ASCII.GetString(buf);
-            int1 = stream.ReadInt32();
-            serCommandTagMap = new SerializeData(stream);
-            long x = stream.Position;
-            if (serCommandTagMap.Size > 0)
-            {
-                stream.Position = serCommandTagMap.Offset + 16;
-                CommandTagMap = new TagMap(stream);
-            }
-            stream.Position = x; ;
+            var buf = new byte[128];
+            stream.Read(buf, 0, 128);
+            Name = Encoding.ASCII.GetString(buf);
+            Int0 = stream.ReadInt32();
+            this.CommandTagMap = stream.ReadSerializedData<TagMap>(1);
+            stream.Position += (3 * 4);
         }
     }
-    public class DRLGParams
+
+    public class DRLGParams : ISerializableData
     {
-        public SerializeData serTiles;
-        public TileInfo[] TileInfo;
+        public List<TileInfo> DRLGTiles = new List<TileInfo>();        
         public int CommandCount;
-        public SerializeData serCommands;
-        public DRLGCommand[] Command;
-        public SerializeData serParentIndices;
-        public int[] ParentIndices;
-        public SerializeData serDRLGTagMap;
-        public TagMap DRLGTagMap;
-        public DRLGParams(MpqFileStream stream)
+        public List<DRLGCommand> DRLGCommands = new List<DRLGCommand>();
+        public List<int> ParentIndices = new List<int>();
+        public List<TagMap> DRLGTagMap = new List<TagMap>();
+
+        public void Read(MpqFileStream stream)
         {
-            serTiles = new SerializeData(stream);
-            long x = stream.Position;
-            if (serTiles.Size > 0)
-            {
-                TileInfo = new TileInfo[serTiles.Size / 72];
-                stream.Position = serTiles.Offset + 16;
-                for (int i = 0; i < serTiles.Size/72; i++)
-                {
-                    TileInfo[i] = new TileInfo(stream);
-                }
-            }
-            stream.Position = x;
+            var pointer = stream.GetSerializedDataPointer();
+            this.DRLGTiles = stream.ReadSerializedData<TileInfo>(pointer, pointer.Size/72);
+
             stream.Position += (14 * 4);
-            CommandCount = stream.ReadInt32();
-            serCommands = new SerializeData(stream);
-            if (serCommands.Size > 0)
-            {
-                x = stream.Position;
-                Command = new DRLGCommand[CommandCount];
-                stream.Position = serCommands.Offset + 16;
-                for (int i = 0; i < CommandCount; i++)
-                {
-                    Command[i] = new DRLGCommand(stream);
-                }
-            }
-            stream.Position = x;
+            this.CommandCount = stream.ReadInt32();
+            this.DRLGCommands = stream.ReadSerializedData<DRLGCommand>(this.CommandCount);
+
             stream.Position += (3 * 4);
-            serParentIndices = new SerializeData(stream);
+            this.ParentIndices = stream.ReadSerializedInts();
+
             stream.Position += (2 * 4);
-            ParentIndices = new int[CommandCount];
-            x = stream.Position;
-            stream.Position = serParentIndices.Offset + 16;
-            for (int i = 0; i < CommandCount; i++)
-            {
-                ParentIndices[i] = stream.ReadInt32();
-            }
-            stream.Position = x;
-           
-            serDRLGTagMap = new SerializeData(stream);
-            DRLGTagMap = new TagMap(stream);
+            this.DRLGTagMap = stream.ReadSerializedData<TagMap>(1);
         }
     }
 }
