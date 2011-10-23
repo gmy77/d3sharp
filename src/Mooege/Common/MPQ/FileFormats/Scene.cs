@@ -34,6 +34,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public NavMeshDef NavMesh { get; private set; }
         public List<int> MarkerSets = new List<int>();
         public string LookLink { get; private set; }
+        public MsgTriggeredEvent MsgTriggeredEvent { get; private set; }
         public int Int1;
         public NavZoneDef NavZone { get; private set; }
 
@@ -59,7 +60,9 @@ namespace Mooege.Common.MPQ.FileFormats
             var buf = new byte[64];
             stream.Read(buf, 0, 64);
             this.LookLink = Encoding.ASCII.GetString(buf);
-            var msgTriggeredEvents = stream.GetSerializedDataPointer();
+
+            // Maybe this is a list/array - DarkLotus
+            this.MsgTriggeredEvent = stream.ReadSerializedData<MsgTriggeredEvent>();
             this.Int1 = stream.ReadInt32();
 
             stream.Position += (3 * 4);
@@ -67,7 +70,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
             stream.Close();
         }
-
+        
         public class NavMeshDef
         {
             public int SquaresCountX;

@@ -24,7 +24,7 @@ using System.Text;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
-    //Incomplete - DarkLotus
+    //Untested yet. - DarkLotus
     [FileFormat(SNOGroup.Power)]
     public class Power : FileFormat
     {
