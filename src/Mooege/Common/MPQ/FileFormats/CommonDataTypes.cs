@@ -168,4 +168,155 @@ namespace Mooege.Common.MPQ.FileFormats
     //        }
     //    }
     //}
+
+    // Replace each Look with just a chararay? DarkLotus
+    public class HardPointLink
+    {
+        public string Name;
+        public int i0;
+        public HardPointLink(MpqFileStream stream)
+        {
+            var buf = new byte[64];
+            stream.Read(buf, 0, 64); Name = Encoding.ASCII.GetString(buf);
+            i0 = stream.ReadInt32();
+        }
+    }
+    public class LookLink
+    {
+        public char[] Name;
+        public LookLink(MpqFileStream stream)
+        {
+            Name = new char[64];
+            for (int i = 0; i < 64; i++)
+            {
+                Name[i] = (char)stream.ReadByte();
+            }
+        }
+    }
+    public class ConstraintLink
+    {
+        public char[] Name;
+        public ConstraintLink(MpqFileStream stream)
+        {
+            Name = new char[64];
+            for (int i = 0; i < 64; i++)
+            {
+                Name[i] = (char)stream.ReadByte();
+            }
+        }
+    }
+    public class TriggerConditions
+    {
+        // Unsure if these should be ints or floats - DarkLotus
+        public float float0;
+        public int int1;
+        public int int2;
+        public int int3;
+        public int int4;
+        public int int5;
+        public int int6;
+        public int int7;
+        public int int8;
+        public TriggerConditions(MpqFileStream stream)
+        {
+            float0 = stream.ReadFloat();
+            int1 = stream.ReadInt32();
+            int2 = stream.ReadInt32();
+            int3 = stream.ReadInt32();
+            int4 = stream.ReadInt32();
+            int5 = stream.ReadInt32();
+            int6 = stream.ReadInt32();
+            int7 = stream.ReadInt32();
+            int8 = stream.ReadInt32();
+        }
+    }
+    public class TriggerEvent
+    {
+        public int i0;
+        public TriggerConditions TriggerConditions;
+        public int i1;
+        public SNOName SnoName;
+        public int i2, i3;
+        //pad 12
+        public HardPointLink[] HardPointLinks;
+        public LookLink LookLink;
+        public ConstraintLink ConstraintLink;
+        int i4;
+        float f0;
+        int i5, i6, i7, i8, i9;
+        float f1, f2;
+        int i10, i11;
+        float f3;
+        int i12;
+        float Velocity;
+        int i13; // DT_TIME
+        int RuneType, UseRuneType;
+        public RGBAColor Color1;
+        int i14; // DT_TIME
+        public RGBAColor Color2;
+        int i15; // DT_TIME
+        public TriggerEvent(MpqFileStream stream)
+        {
+            i0 = stream.ReadInt32();
+            TriggerConditions = new TriggerConditions(stream);
+            i1 = stream.ReadInt32();
+            SnoName = new SNOName(stream);
+            i2 = stream.ReadInt32();
+            i3 = stream.ReadInt32();
+            HardPointLinks = new HardPointLink[2];
+            HardPointLinks[0] = new HardPointLink(stream);
+            HardPointLinks[1] = new HardPointLink(stream);
+            LookLink = new LookLink(stream);
+            ConstraintLink = new ConstraintLink(stream);
+            i4 = stream.ReadInt32();
+            f0 = stream.ReadFloat();
+            i5 = stream.ReadInt32();
+            i6 = stream.ReadInt32();
+            i7 = stream.ReadInt32();
+            i8 = stream.ReadInt32();
+            i9 = stream.ReadInt32();
+            f1 = stream.ReadFloat();
+            f2 = stream.ReadFloat();
+            i10 = stream.ReadInt32();
+            i11 = stream.ReadInt32();
+            f3 = stream.ReadFloat();
+            i12 = stream.ReadInt32();
+            Velocity = stream.ReadFloat();
+            i13 = stream.ReadInt32();
+            RuneType = stream.ReadInt32();
+            UseRuneType = stream.ReadInt32();
+            Color1 = new RGBAColor(stream);
+            i14 = stream.ReadInt32();
+            Color2 = new RGBAColor(stream);
+            i15 = stream.ReadInt32();
+
+        }
+    }
+
+    public class MsgTriggeredEvent : ISerializableData
+    {
+        int i0;
+        TriggerEvent TriggerEvent;
+        public void Read(MpqFileStream stream)
+        {
+            i0 = stream.ReadInt32();
+            TriggerEvent = new TriggerEvent(stream);
+        }
+    }
+    public class RGBAColor
+    {
+        public byte byte0;
+        public byte byte1;
+        public byte byte2;
+        public byte byte3;
+        public RGBAColor(MpqFileStream stream)
+        {
+            byte[] buf = new byte[4];
+            stream.Read(buf, 0, 4);
+            byte0 = buf[0];
+            byte1 = buf[1];
+            byte2 = buf[2];
+            byte3 = buf[3];
+        }
+    }
 }
