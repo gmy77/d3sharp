@@ -28,7 +28,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int SNOAltNpc3;
         public int SNOAltNpc4;
         public int I5;
-        public List<ConversationTreeNode> RootTreeNodes;        // made it a list because it says nodeS
+        public List<ConversationTreeNode> RootTreeNodes;
         public string Unknown2;
         public int I6;
         public int SNOBossEncounter;
@@ -68,7 +68,6 @@ namespace Mooege.Common.MPQ.FileFormats
             this.SNOBossEncounter = stream.ReadInt32();
             stream.Close();
         }
-
     }
 
 
@@ -90,6 +89,7 @@ namespace Mooege.Common.MPQ.FileFormats
         QuestEvent = 13
     }
 
+
     public enum Speaker
     {
         None = -1,
@@ -105,59 +105,51 @@ namespace Mooege.Common.MPQ.FileFormats
     }
 
 
-
-public class ConversationTreeNode : ISerializableData
-{
-    public int I0;
-    public int I1;
-    public int I2;
-    public Speaker Speaker1; //enum ??
-    public Speaker Speaker2; //enum ??
-    public int I3;
-    public int I4;
-    public int I5;
-    public ConvLocalDisplayTimes[] ConvLocalDisplayTimes = new ConvLocalDisplayTimes[18];  // 18
-    //byte pad0[8]; // mentioned as string in xml
-    //SerializeData serComment;
-    public int I6;
-    public List<ConversationTreeNode> TrueNodes;
-    public List<ConversationTreeNode> FalseNodes;
-    public List<ConversationTreeNode> ChildNodes;
-
-    public void Read(MpqFileStream stream)
+    public class ConversationTreeNode : ISerializableData
     {
-        I0 = stream.ReadInt32();
-        I1 = stream.ReadInt32();
-        I2 = stream.ReadInt32();
-        Speaker1 = (Speaker)stream.ReadInt32();
-        Speaker2 = (Speaker)stream.ReadInt32();
-        I3 = stream.ReadInt32();
-        I4 = stream.ReadInt32();
-        I5 = stream.ReadInt32();
+        public int I0;
+        public int I1;
+        public int I2;
+        public Speaker Speaker1;
+        public Speaker Speaker2;
+        public int I3;
+        public int I4;
+        public int I5;
+        public ConvLocalDisplayTimes[] ConvLocalDisplayTimes = new ConvLocalDisplayTimes[18];
+        public int I6;
+        public List<ConversationTreeNode> TrueNodes;
+        public List<ConversationTreeNode> FalseNodes;
+        public List<ConversationTreeNode> ChildNodes;
 
-        for (int i = 0; i < ConvLocalDisplayTimes.Length; i++)
-            ConvLocalDisplayTimes[i] = new ConvLocalDisplayTimes(stream);
+        public void Read(MpqFileStream stream)
+        {
+            I0 = stream.ReadInt32();
+            I1 = stream.ReadInt32();
+            I2 = stream.ReadInt32();
+            Speaker1 = (Speaker)stream.ReadInt32();
+            Speaker2 = (Speaker)stream.ReadInt32();
+            I3 = stream.ReadInt32();
+            I4 = stream.ReadInt32();
+            I5 = stream.ReadInt32();
 
-        stream.Position += (2 * 4);
-        stream.Position += (2 * 4); // TODO read comment from stream. this is SerializeData "Comment", points to a byte[]
-        this.I6 = stream.ReadInt32();
-        stream.Position += 4;       // these are unaccounted for...xml offsets just skips ahead
+            for (int i = 0; i < ConvLocalDisplayTimes.Length; i++)
+                ConvLocalDisplayTimes[i] = new ConvLocalDisplayTimes(stream);
 
-        stream.Position += (2 * 4);
-        TrueNodes = stream.ReadAllSerializedData<ConversationTreeNode>();
+            stream.Position += (2 * 4);
+            stream.Position += (2 * 4); // TODO read comment from stream. this is SerializeData "Comment", points to a byte[]
+            this.I6 = stream.ReadInt32();
+            stream.Position += 4;       // these are unaccounted for...xml offsets just skips ahead
 
-        stream.Position += (2 * 4);
-        FalseNodes = stream.ReadAllSerializedData<ConversationTreeNode>();
+            stream.Position += (2 * 4);
+            TrueNodes = stream.ReadAllSerializedData<ConversationTreeNode>();
 
-        stream.Position += (2 * 4);
-        ChildNodes = stream.ReadAllSerializedData<ConversationTreeNode>();
+            stream.Position += (2 * 4);
+            FalseNodes = stream.ReadAllSerializedData<ConversationTreeNode>();
 
-
-       
-
+            stream.Position += (2 * 4);
+            ChildNodes = stream.ReadAllSerializedData<ConversationTreeNode>();
+        }
     }
-}
-
 
     public class ConvLocalDisplayTimes
     {
