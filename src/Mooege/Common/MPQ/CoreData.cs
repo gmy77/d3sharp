@@ -75,7 +75,6 @@ namespace Mooege.Common.MPQ
                 var snoId = stream.ReadInt32();
                 var name = new byte[128];
                 stream.Read(name, 0, 128);
-                
                 var asset = new Asset(group, snoId, name);
                 this.Assets[group].Add(snoId, asset);
             }

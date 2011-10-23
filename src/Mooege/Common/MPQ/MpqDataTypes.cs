@@ -681,7 +681,7 @@ namespace Mooege.Common.MPQ
 			}
 		}
 	}
-    public class MsgTriggeredEvent : ISerializableData
+	public class MsgTriggeredEvent : ISerializableData
 	{
 		int i0;
 		TriggerEvent TriggerEvent;
@@ -691,22 +691,22 @@ namespace Mooege.Common.MPQ
 			TriggerEvent = new TriggerEvent(stream);
 		}
 	}
-    public class RGBAColor
-    {
-        public byte byte0;
-        public byte byte1;
-        public byte byte2;
-        public byte byte3;
-        public RGBAColor(MpqFileStream stream)
-        {
-            byte[] buf = new byte[4];
-            stream.Read(buf,0,4);
-            byte0 = buf[0];
-            byte1 = buf[1];
-            byte2 = buf[2];
-            byte3 = buf[3];
-        }
-    }
+	public class RGBAColor
+	{
+		public byte byte0;
+		public byte byte1;
+		public byte byte2;
+		public byte byte3;
+		public RGBAColor(MpqFileStream stream)
+		{
+			byte[] buf = new byte[4];
+			stream.Read(buf,0,4);
+			byte0 = buf[0];
+			byte1 = buf[1];
+			byte2 = buf[2];
+			byte3 = buf[3];
+		}
+	}
 	public class TriggerEvent
 	{
 		public int i0;
@@ -728,9 +728,9 @@ namespace Mooege.Common.MPQ
 		float Velocity;
 		int i13; // DT_TIME
 		int RuneType, UseRuneType;
-        public RGBAColor Color1;
+		public RGBAColor Color1;
 		int i14; // DT_TIME
-        public RGBAColor Color2;
+		public RGBAColor Color2;
 		int i15; // DT_TIME
 		public TriggerEvent(MpqFileStream stream)
 		{
@@ -762,9 +762,9 @@ namespace Mooege.Common.MPQ
 			i13 = stream.ReadInt32();
 			RuneType = stream.ReadInt32();
 			UseRuneType = stream.ReadInt32();
-            Color1 = new RGBAColor(stream);
+			Color1 = new RGBAColor(stream);
 			i14 = stream.ReadInt32();
-            Color2 = new RGBAColor(stream);
+			Color2 = new RGBAColor(stream);
 			i15 = stream.ReadInt32();
 
 		}
