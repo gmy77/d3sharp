@@ -29,6 +29,7 @@ namespace Mooege.Common.MPQ
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
 
+        public bool Loaded { get; private set; }
         public readonly MpqFileSystem FileSystem = new MpqFileSystem();
         public string BaseMPQFile { get; private set; }
         public string PatchPattern { get; private set; }
@@ -36,6 +37,7 @@ namespace Mooege.Common.MPQ
 
         protected MPQPatchChain(string baseMPQFile, string patchPattern=null)
         {
+            this.Loaded = false;
             var baseFile = MPQStorage.GetMPQFile(baseMPQFile);
             if (baseFile == null)
             {
@@ -48,6 +50,7 @@ namespace Mooege.Common.MPQ
             this.BaseMPQFile = baseFile;
             this.PatchPattern = patchPattern;
             this.ConstructChain();
+            this.Loaded = true;
         }
 
         private void ConstructChain()
