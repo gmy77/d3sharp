@@ -12,6 +12,8 @@ namespace Mooege.Core.Common.Items
 
     /// <summary>
     /// This Class handles the ColorValue of Dye Items
+    /// 
+    /// TODO: need to implement Dye Remover and invisible Dye
     /// </summary>
     public static class DyeColor
     {
