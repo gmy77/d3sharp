@@ -70,19 +70,6 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    // Below this was auto generated from snodata.xml by BoyC
-    public class Quaternion
-    {
-        public float Float0;
-        public Vector3D Vector3D;
-
-        public Quaternion(MpqFileStream stream)
-        {
-            Float0 = stream.ReadFloat();
-            Vector3D = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-        }
-    }
-
     public class PRTransform
     {
         public Quaternion Q;
@@ -92,6 +79,18 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             Q = new Quaternion(stream);
             V = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
+        }
+    }
+
+    public class Quaternion
+    {
+        public float Float0;
+        public Vector3D Vector3D;
+
+        public Quaternion(MpqFileStream stream)
+        {
+            Float0 = stream.ReadFloat();
+            Vector3D = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
         }
     }
 
@@ -126,33 +125,6 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-
-    public class Sphere
-    {
-        public Vector3D Position;
-        public float Radius;
-
-        public Sphere(MpqFileStream stream)
-        {
-            Position = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-            Radius = stream.ReadFloat();
-        }
-    }
-
-    public class AxialCylinder
-    {
-        public Vector3D Position;
-        public float Ax1;
-        public float Ax2;
-
-        public AxialCylinder(MpqFileStream stream)
-        {
-            this.Position = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-            Ax1 = stream.ReadFloat();
-            Ax2 = stream.ReadFloat();
-        }
-    }
-
     public class PostFXParams
     {
         public float[] Float0;
@@ -170,20 +142,6 @@ namespace Mooege.Common.MPQ.FileFormats
             {
                 Float1[i] = stream.ReadInt32();
             }
-        }
-    }
-
-    public class WeightedLook
-    {
-        public string LookLink;
-        public int Int0;
-
-        public WeightedLook(MpqFileStream stream)
-        {
-            var buf = new byte[64];
-            stream.Read(buf, 0, 64);
-            LookLink = Encoding.ASCII.GetString(buf);
-            Int0 = stream.ReadInt32();
         }
     }
 
