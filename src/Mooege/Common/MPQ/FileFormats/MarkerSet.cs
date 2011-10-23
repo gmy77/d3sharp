@@ -16,62 +16,81 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
 using System.IO;
 using CrystalMpq;
 using Mooege.Common.Extensions;
 using System.Text;
-using Mooege.Common.MPQ.DataTypes;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.MarkerSet)]
-    public class MarkerSet : FileFormat 
+    public class MarkerSet : FileFormat
     {
         public Header Header;
-        public int SNO;
-        private int unknown0,unknown1;
-
-        SerializeData serMarkers;
-        Marker[] Markers;
-        SerializeData serNoSpawns;
-        AABB_ aabb;
-        int i0;
-        string filename;
-        int nLabel;
-        int nSpecialIndexCount;
-        SerializeData serSpecialIndexList;
-
+        public List<Marker> Markers = new List<Marker>();
+        public AABB AABB;
+        public int Int0;
+        public string FileName;
+        public int NLabel;
+        public int SpecialIndexCount;
 
         public MarkerSet(MpqFile file)
         {
             var stream = file.Open();
-            Header = new Header(stream);
-            SNO = stream.ReadInt32();
-            unknown0 = stream.ReadInt32();
-            unknown1 = stream.ReadInt32();
-            serMarkers = new SerializeData(stream);
-            long x = stream.Position;
-            Markers = new Marker[serMarkers.Size / 208];
-            stream.Position = serMarkers.Offset + 16;
-            for (int i = 0; i < serMarkers.Size / 208; i++)
-            {
-                Markers[i] = new Marker(stream);
-            }
-            stream.Position = x;
-            stream.Position += (15 * 4); // pad 15
-            serNoSpawns = new SerializeData(stream);
+            this.Header = new Header(stream);
+
+            var pointerMarkers = stream.GetSerializedDataPointer();
+            this.Markers = stream.ReadSerializedData<Marker>(pointerMarkers, pointerMarkers.Size/208);
+
+            stream.Position += (15 * 4);
+            var pointerSpawns = stream.GetSerializedDataPointer();
+            
             stream.Position += (14 * 4);
-            aabb = new AABB_(stream);
-            i0 = stream.ReadInt32();
-            byte[] buf = new byte[256];
-            stream.Read(buf, 0, 256); filename = Encoding.ASCII.GetString(buf);
-            nLabel = stream.ReadInt32();
-            nSpecialIndexCount = stream.ReadInt32();
-            serSpecialIndexList = new SerializeData(stream);
+            this.AABB = new AABB(stream);
+            this.Int0 = stream.ReadInt32();
 
-                stream.Close();
+            var buf = new byte[256];
+            stream.Read(buf, 0, 256);
+            this.FileName = Encoding.ASCII.GetString(buf);
+
+            this.NLabel = stream.ReadInt32();
+            SpecialIndexCount = stream.ReadInt32();
+
+            var pointerSpecialIndexList = stream.GetSerializedDataPointer();
+
+            stream.Close();
         }
+    }
 
-      
+    public class Marker : ISerializableData
+    {
+        public string Name;
+        public int Int0;
+        public PRTransform PRTransform;
+        public SNOName SNOName;
+        public TagMap TagMap;
+        public int IntTagMap;
+        public int Int1, Int2;       
+
+        public void Read(MpqFileStream stream)
+        {
+            var buf = new byte[128];
+            stream.Read(buf, 0, 128);
+            this.Name = Encoding.ASCII.GetString(buf);
+            this.Int0 = stream.ReadInt32();
+            this.PRTransform = new PRTransform(stream);
+            this.SNOName = new SNOName(stream);
+
+            this.TagMap = stream.ReadSerializedData<TagMap>();
+
+            // Un sure about these 3 ints, 010template isnt the same as snodata.xml - DarkLotus
+            this.IntTagMap = stream.ReadInt32();
+            Int1 = stream.ReadInt32();
+            Int2 = stream.ReadInt32();
+
+            var pointerMarkerLinks = stream.GetSerializedDataPointer();
+            stream.Position += (3 * 4);
+        }
     }
 }
