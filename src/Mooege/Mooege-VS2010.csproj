@@ -115,8 +115,9 @@
     <Compile Include="Common\MPQ\FileFormats\Power.cs" />
     <Compile Include="Common\MPQ\FileFormats\Recipe.cs" />
     <Compile Include="Common\MPQ\FileFormats\Scene.cs" />
+    <Compile Include="Common\MPQ\FileFormats\SerializableData.cs" />
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
-    <Compile Include="Common\MPQ\MpqDataTypes.cs" />
+    <Compile Include="Common\MPQ\FileFormats\CommonDataTypes.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />

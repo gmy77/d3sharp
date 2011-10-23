@@ -16,96 +16,141 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
+using System.Text;
 using CrystalMpq;
 using Mooege.Common.Extensions;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Common.MPQ;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.Scene)]
     public class Scene : FileFormat
     {
-        public Header Header;
-        private int i0;
-
-        public AABB aabbBounds;
-        public AABB aabbMarkerSetBounds;
-        public NavMeshDef NavMesh;
-
-        public List<int> Exclusions = new List<int>();
-
-        public List<int> Inclusions = new List<int>();
-
+        public Header Header { get; private set; }
+        public int Int0;
+        public AABB AABBBounds { get; private set; }
+        public AABB AABBMarketSetBounds { get; private set; }
+        public NavMeshDef NavMesh { get; private set; }
         public List<int> MarkerSets = new List<int>();
-        public LookLink LookLink;
-        int i1;
-        public MsgTriggeredEvent MsgTriggeredEvent;
-        public NavZoneDef NavZone;
+        public string LookLink { get; private set; }
+        public int Int1;
+        public NavZoneDef NavZone { get; private set; }
 
         public Scene(MpqFile file)
         {
             var stream = file.Open();
-            Header = new MPQ.Header(stream);
-            i0 = stream.ReadInt32();
-            aabbBounds = new AABB(stream);
-            aabbMarkerSetBounds = new AABB(stream);
+            this.Header = new Header(stream);
 
-            NavMesh = new NavMeshDef(stream);
-            Exclusions = stream.ReadSerializedInts();
-            stream.Position += (14 * 4);
-            Inclusions = stream.ReadSerializedInts();
-            stream.Position += (14 * 4);
-            MarkerSets = stream.ReadSerializedInts();
-            stream.Position += (14 * 4);
-            LookLink = new LookLink(stream);
+            Int0 = stream.ReadInt32();
+            this.AABBBounds = new AABB(stream);
+            this.AABBMarketSetBounds = new AABB(stream);
 
-            // Maybe this is a list/array - DarkLotus
-            MsgTriggeredEvent = stream.ReadSerializedData<MsgTriggeredEvent>();
-            int i1 = stream.ReadInt32();
-            stream.Position += (3*4);
+            this.NavMesh = new NavMeshDef(stream); //load NavMeshDef
+            var exclusions = stream.GetSerializedDataPointer();
 
-            NavZone = new NavZoneDef(stream);
+            stream.Position += (14 * 4);
+            var inclusions = stream.GetSerializedDataPointer();
+
+            stream.Position += (14 * 4);
+            this.MarkerSets = stream.ReadSerializedInts();
+
+            stream.Position += (14 * 4);
+            var buf = new byte[64];
+            stream.Read(buf, 0, 64);
+            this.LookLink = Encoding.ASCII.GetString(buf);
+            var msgTriggeredEvents = stream.GetSerializedDataPointer();
+            this.Int1 = stream.ReadInt32();
+
+            stream.Position += (3 * 4);
+            this.NavZone = new NavZoneDef(stream);
 
             stream.Close();
         }
 
+        public class NavMeshDef
+        {
+            public int SquaresCountX;
+            public int SquaresCountY;
+            public int Int0;
+            public int NavMeshSquareCount;
+            public float Float0;
+            public List<NavMeshSquare> Squares = new List<NavMeshSquare>();
+            public string Filename;
 
+            public NavMeshDef(MpqFileStream stream)
+            {
+                this.SquaresCountX = stream.ReadInt32();
+                this.SquaresCountY = stream.ReadInt32();
+                this.Int0 = stream.ReadInt32();
+                this.NavMeshSquareCount = stream.ReadInt32();
+                this.Float0 = stream.ReadFloat();
+                this.Squares = stream.ReadSerializedData<NavMeshSquare>(this.NavMeshSquareCount);
+
+                stream.Position += (3 * 4);
+                var buf = new byte[256];
+                stream.Read(buf, 0, 256);
+                this.Filename = Encoding.ASCII.GetString(buf);
+            }
+        }
+
+        public class NavZoneDef
+        {
+            public int NavCellCount;
+            public List<NavCell> NavCells = new List<NavCell>();
+            public int NeightbourCount;
+            public List<NavCellLookup> NavCellNeighbours = new List<NavCellLookup>();
+            public float Float0;
+            public float Float1;
+            public int Int2;
+            public readonly Vector2D V0;
+            public List<NavGridSquare> GridSquares = new List<NavGridSquare>();
+            public int Int3;
+            public List<NavCellLookup> CellLookups = new List<NavCellLookup>();
+            public int Int4;
+            public List<NavCellBorderData> BorderData = new List<NavCellBorderData>();
+
+            public NavZoneDef(MpqFileStream stream)
+            {
+                this.NavCellCount = stream.ReadInt32();
+
+                stream.Position += (3 * 4);
+                this.NavCells = stream.ReadSerializedData<NavCell>(this.NavCellCount);
+
+                this.NeightbourCount = stream.ReadInt32();
+                stream.Position += (3 * 4);
+                this.NavCellNeighbours = stream.ReadSerializedData<NavCellLookup>(this.NeightbourCount);
+
+                this.Float0 = stream.ReadFloat();
+                this.Float1 = stream.ReadFloat();
+                this.Int2 = stream.ReadInt32();
+                this.V0 = new Vector2D(stream);
+
+                stream.Position += (3 * 4);
+                var pointerGridSquares = stream.GetSerializedDataPointer();
+                this.GridSquares = stream.ReadSerializedData<NavGridSquare>(pointerGridSquares, pointerGridSquares.Size / 6);
+
+                this.Int3 = stream.ReadInt32();
+                stream.Position += (3 * 4);
+                var pointerCellLookups = stream.GetSerializedDataPointer();
+                this.CellLookups = stream.ReadSerializedData<NavCellLookup>(pointerCellLookups, pointerCellLookups.Size / 4);
+
+                this.Int4 = stream.ReadInt32();
+                stream.Position += (3 * 4);
+                var pointerBorderData = stream.GetSerializedDataPointer();
+                this.BorderData = stream.ReadSerializedData<NavCellBorderData>(pointerBorderData, pointerBorderData.Size / 4);
+            }
+        }
 
         public class NavMeshSquare : ISerializableData
         {
-            private float f0;
+            public float Float0;
             public int Flags;
 
             public void Read(MpqFileStream stream)
             {
-                f0 = stream.ReadFloat();
-                Flags = stream.ReadInt32();
-            }
-        }
-
-        public class NavMeshDef
-        {
-            public readonly int SquaresCountX, SquaresCoountY, i0, NavMeshSquareCount;
-            public float f0;
-            //private SerializeData serNavMeshArraySquares;
-            public List<NavMeshSquare> NavMeshArraySquares = new List<NavMeshSquare>();
-            public string FileName;
-           
-
-            public NavMeshDef(MpqFileStream stream)
-            {
-                SquaresCountX = stream.ReadInt32();
-                SquaresCoountY = stream.ReadInt32();
-                i0 = stream.ReadInt32();
-                NavMeshSquareCount = stream.ReadInt32();
-                f0 = stream.ReadFloat();
-                NavMeshArraySquares = stream.ReadSerializedData<NavMeshSquare>(NavMeshSquareCount);
-                stream.Position += (3*4);
-                byte[] buf = new byte[256];
-                stream.Read(buf, 0, 256); FileName = Encoding.ASCII.GetString(buf);
+                this.Float0 = stream.ReadFloat();
+                this.Flags = stream.ReadInt32();
             }
         }
 
@@ -117,11 +162,11 @@ namespace Mooege.Common.MPQ.FileFormats
 
             public void Read(MpqFileStream stream)
             {
-                Min = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-                Max = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-                Flags = stream.ReadInt16();
-                NeighbourCount = stream.ReadInt16();
-                NeighborsIndex = stream.ReadInt32();
+                this.Min = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
+                this.Max = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
+                this.Flags = stream.ReadInt16();
+                this.NeighbourCount = stream.ReadInt16();
+                this.NeighborsIndex = stream.ReadInt32();
             }
         }
 
@@ -131,88 +176,32 @@ namespace Mooege.Common.MPQ.FileFormats
 
             public void Read(MpqFileStream stream)
             {
-                Flags = stream.ReadInt16();
-                wCell = stream.ReadInt16();
+                this.Flags = stream.ReadInt16();
+                this.wCell = stream.ReadInt16();
             }
         }
 
         public class NavGridSquare : ISerializableData
         {
-            public short Flags, w1, w2;
+            public short Flags, W1, W2;
 
             public void Read(MpqFileStream stream)
             {
                 Flags = stream.ReadInt16();
-                w1 = stream.ReadInt16();
-                w2 = stream.ReadInt16();
+                W1 = stream.ReadInt16();
+                W2 = stream.ReadInt16();
             }
         }
 
         public class NavCellBorderData : ISerializableData
         {
-            public short w0, w1;
+            public short W0, W1;
 
             public void Read(MpqFileStream stream)
             {
-                w0 = stream.ReadInt16();
-                w1 = stream.ReadInt16();
-
+                W0 = stream.ReadInt16();
+                W1 = stream.ReadInt16();
             }
         }
-
-        public class NavZoneDef
-        {
-            private float f0, f1;
-            private int i2, i3, i4;
-
-            public List<NavCell> NavCells = new List<NavCell>();
-            public List<NavCellLookup> NavCellNeighbours = new List<NavCellLookup>();
-            public Vector2D v0;
-            public List<NavGridSquare> GridSquares = new List<NavGridSquare>();
-            public List<NavCellLookup> CellLookups = new List<NavCellLookup>();
-            public List<NavCellBorderData> BorderData = new List<NavCellBorderData>();
-
-            public NavZoneDef(MpqFileStream stream)
-            {             
-                int NavCellCount = stream.ReadInt32();
-                stream.Position += (3*4);
-                NavCells = stream.ReadSerializedData<NavCell>(NavCellCount);
-
-                int NeighbourCount = stream.ReadInt32();
-                stream.Position += (3*4);
-                NavCellNeighbours = stream.ReadSerializedData<NavCellLookup>(NeighbourCount);
-
-                float f0 = stream.ReadFloat();
-                float f1 = stream.ReadFloat();
-                int i2 = stream.ReadInt32();
-                var v0 = new Vector2D(stream);
-                stream.Position += (3*4);
-
-                //Hacky need size - DarkLotus
-                stream.ReadInt32();
-                int size = stream.ReadInt32();
-                stream.Position += -8;
-                GridSquares = stream.ReadSerializedData<NavGridSquare>(size/6);                      
-                int i3 = stream.ReadInt32();
-                stream.Position += (3*4);
-                //Hacky need size - DarkLotus
-                stream.ReadInt32();
-                size = stream.ReadInt32();
-                stream.Position += -8;
-                CellLookups = stream.ReadSerializedData<NavCellLookup>(size/4);
-                
-                int i4 = stream.ReadInt32();
-                stream.Position += (3*4);
-
-                //Hacky need size - DarkLotus
-                stream.ReadInt32();
-                size = stream.ReadInt32();
-                stream.Position += -8;
-                BorderData = stream.ReadSerializedData<NavCellBorderData>(size / 4);
-              
-            }
-        }
-
-
     }
 }

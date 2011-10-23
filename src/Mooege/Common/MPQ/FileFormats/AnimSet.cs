@@ -27,7 +27,7 @@ namespace Mooege.Common.MPQ.FileFormats
     [FileFormat(SNOGroup.AnimSet)]
     public class AnimSet : FileFormat
     {
-        public int AnimSetSNO;
+        public Header Header { get; private set; }
         public int NumberOfAnimations;
         public List<AnimationDef> Animations = new List<AnimationDef>();
 
@@ -67,8 +67,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public AnimSet(MpqFile file)
         {
             var stream = file.Open();
-            stream.Seek(16, SeekOrigin.Begin);
-            this.AnimSetSNO = stream.ReadInt32();
+            this.Header = new Header(stream);
+            
             stream.Position = 352;
             this.NumberOfAnimations = stream.ReadInt32();
             for (int i = 0; i < this.NumberOfAnimations; i++)
