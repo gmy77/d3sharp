@@ -40,7 +40,9 @@ namespace Mooege.Common.MPQ.FileFormats
         public List<int> Inclusions = new List<int>();
 
         public List<int> MarkerSets = new List<int>();
-        public char[] LookLink;
+        public LookLink LookLink;
+        int i1;
+        public MsgTriggeredEvent MsgTriggeredEvent;
         public NavZoneDef NavZone;
 
         public Scene(MpqFile file)
@@ -58,21 +60,13 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += (14 * 4);
             MarkerSets = stream.ReadSerializedInts();
             stream.Position += (14 * 4);
+            LookLink = new LookLink(stream);
 
-            //TODO - parse LookLink /dark
-            LookLink = new char[64];
-            for (int i = 0; i < 64; i++)
-            {
-                LookLink[i] = (char) stream.ReadByte();
-            }
-
-            // Read TriggeredEvents
-            stream.Position += (2 * 4);
-            //var sermsgTriggeredEvents = new SerializeData(stream);
+            // Maybe this is a list/array - DarkLotus
+            MsgTriggeredEvent = stream.ReadSerializedData<MsgTriggeredEvent>();
             int i1 = stream.ReadInt32();
             stream.Position += (3*4);
 
-            //navzonedef
             NavZone = new NavZoneDef(stream);
 
             stream.Close();
