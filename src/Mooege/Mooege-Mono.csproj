@@ -112,6 +112,7 @@
     <Compile Include="Common\MPQ\FileFormats\Monster.cs" />
     <Compile Include="Common\MPQ\FileFormats\Scene.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
+    <Compile Include="Core\Common\Items\Dye.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
