@@ -48,5 +48,13 @@ namespace Mooege.Common.Extensions
             int result = stream.Read(buffer, 0, 2);
             return BitConverter.ToInt16(buffer, 0);
         }
+
+        public static string ReadString(this MpqFileStream stream, int length)
+        {
+            var buf = new byte[length];
+            stream.Read(buf, 0, length);
+            return Encoding.ASCII.GetString(buf);
+        }
+
     }
 }

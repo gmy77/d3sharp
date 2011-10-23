@@ -106,6 +106,8 @@
     <Compile Include="Common\MPQ\CoreData.cs" />
     <Compile Include="Common\MPQ\FileFormats\Actor.cs" />
     <Compile Include="Common\MPQ\FileFormats\AnimSet.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Conversation.cs" />
+    <Compile Include="Common\MPQ\FileFormats\ConversationList.cs" />
     <Compile Include="Common\MPQ\FileFormats\FileExtensions.cs" />
     <Compile Include="Common\MPQ\FileFormats\FileFormat.cs" />
     <Compile Include="Common\MPQ\FileFormats\FileFormatAttribute.cs" />
