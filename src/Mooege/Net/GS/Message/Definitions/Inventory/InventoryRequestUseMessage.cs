@@ -21,28 +21,28 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
-    [Message(Opcodes.InventoryRequestUseMessage)]
+    [Message(Opcodes.InventoryRequestUseMessage, Consumers.Inventory)]
     public class InventoryRequestUseMessage : GameMessage
     {
-        public int Field0;
+        public uint UsedItem;
         public int Field1;
-        public int Field2;
+        public uint UsedOnItem;
         public WorldPlace Field3;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            UsedItem = buffer.ReadUInt(32);
             Field1 = buffer.ReadInt(2) + (-1);
-            Field2 = buffer.ReadInt(32);
+            UsedOnItem = buffer.ReadUInt(32);
             Field3 = new WorldPlace();
             Field3.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteUInt(32, UsedItem);
             buffer.WriteInt(2, Field1 - (-1));
-            buffer.WriteInt(32, Field2);
+            buffer.WriteUInt(32, UsedOnItem);
             Field3.Encode(buffer);
         }
 
@@ -52,9 +52,9 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
             b.AppendLine("InventoryRequestUseMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("UsedItem: 0x" + UsedItem.ToString("X8") + " (" + UsedItem + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.Append(' ', pad); b.AppendLine("UsedOnItem: 0x" + UsedOnItem.ToString("X8") + " (" + UsedOnItem + ")");
             Field3.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
