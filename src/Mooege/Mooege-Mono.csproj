@@ -103,7 +103,7 @@
     <Compile Include="Common\Extensions\MpqFileStreamExtensions.cs" />
     <Compile Include="Common\Helpers\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />
-    <Compile Include="Common\MPQ\CoreData.cs" />
+    <Compile Include="Common\MPQ\Data.cs" />
     <Compile Include="Common\MPQ\FileFormats\Actor.cs" />
     <Compile Include="Common\MPQ\FileFormats\AnimSet.cs" />
     <Compile Include="Common\MPQ\FileFormats\FileExtensions.cs" />
