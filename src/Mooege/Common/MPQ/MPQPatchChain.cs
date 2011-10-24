@@ -45,14 +45,12 @@ namespace Mooege.Common.MPQ
                 var mpqFile = MPQStorage.GetMPQFile(file);
                 if(mpqFile == null)
                 {
-                    Logger.Error("Can not find base-mpq file: {0} for patch chain: {1}.", file, this.GetType().Name);
+                    Logger.Fatal("Cannot find base MPQ file: {0}", file);
                     return;
                 }
                 this.BaseMPQFiles.Add(mpqFile);
             }
-
-            Logger.Info("Reading MPQ patch-chain: {0}", this.GetType().Name);
-            
+                        
             this.PatchPattern = patchPattern;
             this.ConstructChain();
             this.Loaded = true;

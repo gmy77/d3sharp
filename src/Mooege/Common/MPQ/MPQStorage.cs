@@ -33,7 +33,13 @@ namespace Mooege.Common.MPQ
 
         static MPQStorage()
         {
-            if (!Directory.Exists(MpqRoot)) Logger.Error("MPQ root folder does not exist: {0}", MpqRoot);
+            if (!Directory.Exists(MpqRoot))
+            {
+                Logger.Fatal("MPQ root folder does not exist: {0}", MpqRoot);
+                return;
+            }
+
+            Logger.Info("Initializing MPQ storage..");
             MPQList = FileHelpers.GetFilesByExtensionRecursive(MpqRoot, ".mpq");
 
             Data = new Data();
@@ -46,8 +52,6 @@ namespace Mooege.Common.MPQ
         }
 
         public static void Init()
-        {
-            
-        }
+        { }
     }
 }

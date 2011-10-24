@@ -17,10 +17,11 @@
  */
 
 using System.Collections.Generic;
-using System.Text;
 using CrystalMpq;
-using Mooege.Common.Extensions;
+using Gibbed.IO;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Net.GS.Message.Fields;
+using AABB = Mooege.Common.MPQ.FileFormats.Types.AABB;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -43,7 +44,7 @@ namespace Mooege.Common.MPQ.FileFormats
             var stream = file.Open();
             this.Header = new Header(stream);
 
-            Int0 = stream.ReadInt32();
+            Int0 = stream.ReadValueS32();
             this.AABBBounds = new AABB(stream);
             this.AABBMarketSetBounds = new AABB(stream);
 
@@ -57,13 +58,11 @@ namespace Mooege.Common.MPQ.FileFormats
             this.MarkerSets = stream.ReadSerializedInts();
 
             stream.Position += (14 * 4);
-            var buf = new byte[64];
-            stream.Read(buf, 0, 64);
-            this.LookLink = Encoding.ASCII.GetString(buf);
+            this.LookLink = stream.ReadString(64, true);
 
             // Maybe this is a list/array - DarkLotus
-            this.MsgTriggeredEvent = stream.ReadSerializedData<MsgTriggeredEvent>();
-            this.Int1 = stream.ReadInt32();
+            this.MsgTriggeredEvent = stream.ReadSerializedItem<MsgTriggeredEvent>();
+            this.Int1 = stream.ReadValueS32();
 
             stream.Position += (3 * 4);
             this.NavZone = new NavZoneDef(stream);
@@ -83,17 +82,15 @@ namespace Mooege.Common.MPQ.FileFormats
 
             public NavMeshDef(MpqFileStream stream)
             {
-                this.SquaresCountX = stream.ReadInt32();
-                this.SquaresCountY = stream.ReadInt32();
-                this.Int0 = stream.ReadInt32();
-                this.NavMeshSquareCount = stream.ReadInt32();
-                this.Float0 = stream.ReadFloat();
+                this.SquaresCountX = stream.ReadValueS32();
+                this.SquaresCountY = stream.ReadValueS32();
+                this.Int0 = stream.ReadValueS32();
+                this.NavMeshSquareCount = stream.ReadValueS32();
+                this.Float0 = stream.ReadValueF32();
                 this.Squares = stream.ReadSerializedData<NavMeshSquare>(this.NavMeshSquareCount);
 
                 stream.Position += (3 * 4);
-                var buf = new byte[256];
-                stream.Read(buf, 0, 256);
-                this.Filename = Encoding.ASCII.GetString(buf);
+                this.Filename = stream.ReadString(256, true);
             }
         }
 
@@ -115,30 +112,30 @@ namespace Mooege.Common.MPQ.FileFormats
 
             public NavZoneDef(MpqFileStream stream)
             {
-                this.NavCellCount = stream.ReadInt32();
+                this.NavCellCount = stream.ReadValueS32();
 
                 stream.Position += (3 * 4);
                 this.NavCells = stream.ReadSerializedData<NavCell>(this.NavCellCount);
 
-                this.NeightbourCount = stream.ReadInt32();
+                this.NeightbourCount = stream.ReadValueS32();
                 stream.Position += (3 * 4);
                 this.NavCellNeighbours = stream.ReadSerializedData<NavCellLookup>(this.NeightbourCount);
 
-                this.Float0 = stream.ReadFloat();
-                this.Float1 = stream.ReadFloat();
-                this.Int2 = stream.ReadInt32();
+                this.Float0 = stream.ReadValueF32();
+                this.Float1 = stream.ReadValueF32();
+                this.Int2 = stream.ReadValueS32();
                 this.V0 = new Vector2D(stream);
 
                 stream.Position += (3 * 4);
                 var pointerGridSquares = stream.GetSerializedDataPointer();
                 this.GridSquares = stream.ReadSerializedData<NavGridSquare>(pointerGridSquares, pointerGridSquares.Size / 6);
 
-                this.Int3 = stream.ReadInt32();
+                this.Int3 = stream.ReadValueS32();
                 stream.Position += (3 * 4);
                 var pointerCellLookups = stream.GetSerializedDataPointer();
                 this.CellLookups = stream.ReadSerializedData<NavCellLookup>(pointerCellLookups, pointerCellLookups.Size / 4);
 
-                this.Int4 = stream.ReadInt32();
+                this.Int4 = stream.ReadValueS32();
                 stream.Position += (3 * 4);
                 var pointerBorderData = stream.GetSerializedDataPointer();
                 this.BorderData = stream.ReadSerializedData<NavCellBorderData>(pointerBorderData, pointerBorderData.Size / 4);
@@ -152,8 +149,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
             public void Read(MpqFileStream stream)
             {
-                this.Float0 = stream.ReadFloat();
-                this.Flags = stream.ReadInt32();
+                this.Float0 = stream.ReadValueF32();
+                this.Flags = stream.ReadValueS32();
             }
         }
 
@@ -165,11 +162,11 @@ namespace Mooege.Common.MPQ.FileFormats
 
             public void Read(MpqFileStream stream)
             {
-                this.Min = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-                this.Max = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-                this.Flags = stream.ReadInt16();
-                this.NeighbourCount = stream.ReadInt16();
-                this.NeighborsIndex = stream.ReadInt32();
+                this.Min = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
+                this.Max = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
+                this.Flags = stream.ReadValueS16();
+                this.NeighbourCount = stream.ReadValueS16();
+                this.NeighborsIndex = stream.ReadValueS32();
             }
         }
 
@@ -179,8 +176,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
             public void Read(MpqFileStream stream)
             {
-                this.Flags = stream.ReadInt16();
-                this.wCell = stream.ReadInt16();
+                this.Flags = stream.ReadValueS16();
+                this.wCell = stream.ReadValueS16();
             }
         }
 
@@ -190,9 +187,9 @@ namespace Mooege.Common.MPQ.FileFormats
 
             public void Read(MpqFileStream stream)
             {
-                Flags = stream.ReadInt16();
-                W1 = stream.ReadInt16();
-                W2 = stream.ReadInt16();
+                Flags = stream.ReadValueS16();
+                W1 = stream.ReadValueS16();
+                W2 = stream.ReadValueS16();
             }
         }
 
@@ -202,8 +199,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
             public void Read(MpqFileStream stream)
             {
-                W0 = stream.ReadInt16();
-                W1 = stream.ReadInt16();
+                W0 = stream.ReadValueS16();
+                W1 = stream.ReadValueS16();
             }
         }
     }
