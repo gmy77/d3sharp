@@ -39,8 +39,7 @@ namespace Mooege.Common.MPQ.FileFormats
         int i2;
         ScriptFormulaDetails ScriptFormulaDetails;
         int i3;
-         //<Field Name="serCompiledScript" Type="SerializeData" Offset="728" Flags="0" />
-    //<Field Type="DT_VARIABLEARRAY" Offset="720" Flags="32" SubType="DT_BYTE" />
+        List<byte> CompliedScript = new List<byte>();
         int snoQuestMetaData;
 
 
@@ -67,9 +66,12 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Read(buf, 0, 256); chararray2 = Encoding.ASCII.GetString(buf);
             i2 = stream.ReadInt32();
             ScriptFormulaDetails = stream.ReadSerializedData<ScriptFormulaDetails>();
-
-
+            
+            i3 = stream.ReadInt32();
+            
+            var serCompliedScript = stream.GetSerializedDataPointer();
             snoQuestMetaData = stream.ReadInt32();
+
             stream.Close();
         }
     }
@@ -78,8 +80,12 @@ namespace Mooege.Common.MPQ.FileFormats
         TagMap hTagMap;
         TagMap hGeneralTagMap;
         TagMap PVPGeneralTagMap;
-        List<TagMap> ContactTagMap = new List<TagMap>(); // 3
-        List<TagMap> PVPContactTagMap = new List<TagMap>(); // 3
+        TagMap ContactTagMap0;
+        TagMap ContactTagMap1;
+        TagMap ContactTagMap2;
+        TagMap PVPContactTagMap0;
+        TagMap PVPContactTagMap1;
+        TagMap PVPContactTagMap2;
         int i0;
         ActorCollisionFlags ActColFlags1;
         ActorCollisionFlags ActColFlags2;
@@ -87,10 +93,17 @@ namespace Mooege.Common.MPQ.FileFormats
         public PowerDef(MpqFileStream stream)
         {
             hTagMap = stream.ReadSerializedData<TagMap>();
+            stream.Position += (2 * 4);
             hGeneralTagMap = stream.ReadSerializedData<TagMap>();
+            stream.Position += (2 * 4);
             PVPGeneralTagMap = stream.ReadSerializedData<TagMap>();
-            ContactTagMap = stream.ReadSerializedData<TagMap>(3);
-            PVPContactTagMap = stream.ReadSerializedData<TagMap>(3);
+            stream.Position += (2 * 4);
+            ContactTagMap0 = stream.ReadSerializedData<TagMap>();
+            ContactTagMap1 = stream.ReadSerializedData<TagMap>();
+            ContactTagMap2 = stream.ReadSerializedData<TagMap>();
+            PVPContactTagMap0 = stream.ReadSerializedData<TagMap>();
+            PVPContactTagMap1 = stream.ReadSerializedData<TagMap>();
+            PVPContactTagMap2 = stream.ReadSerializedData<TagMap>();
             i0 = stream.ReadInt32();
             ActColFlags1 = new ActorCollisionFlags(stream);
             ActColFlags2 = new ActorCollisionFlags(stream);
@@ -112,29 +125,5 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
     
-    public class ScriptFormulaDetails : ISerializableData
-    {
-        // Maybe should be strings? - Darklotus
-        char[] c0; //256
-        char[] c1; //512
-        int i0, i1;
-        public void Read(MpqFileStream stream)
-        {
-            c0 = new char[256];
-            c1 = new char[512];
-            byte[] buf = new byte[512];
-            stream.Read(buf, 0, 256);
-            for (int i = 0; i < c0.Length; i++)
-            {
-                c0[i] = (char)buf[i];
-            }
-            stream.Read(buf, 0, 512);
-            for (int i = 0; i < c1.Length; i++)
-            {
-                c1[i] = (char)buf[i];
-            }
-            i0 = stream.ReadInt32();
-            i1 = stream.ReadInt32();
-        }
-    }
+    
 }

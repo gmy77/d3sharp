@@ -137,20 +137,31 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class TagMapEntry
     {
-        public int Int0;
+        public int Type;
         public int Int1;
+
+        public ScriptFormulaDetails Details;
         public int Int2;
         public float Float0;
 
         public TagMapEntry(MpqFileStream stream)
         {
-            this.Int0 = stream.ReadInt32();
+            this.Type = stream.ReadInt32();
             this.Int1 = stream.ReadInt32();
 
-            switch (this.Int0)
+            switch (this.Type)
             {
+                case 0:
+                    this.Int2 = stream.ReadInt32();
+                    break;
                 case 1:
                     Float0 = stream.ReadFloat();
+                    break;
+                case 2: // SNO
+                    this.Int2 = stream.ReadInt32();
+                    break;
+                case 4:
+                    this.Details = new ScriptFormulaDetails();Details.Read(stream);
                     break;
                 default:
                     this.Int2 = stream.ReadInt32();
@@ -158,7 +169,30 @@ namespace Mooege.Common.MPQ.FileFormats
             }
         }
     }
-
+    public class ScriptFormulaDetails : ISerializableData
+    {
+        char[] c0; //256
+        char[] c1; //512
+        int i0, i1;
+        public void Read(MpqFileStream stream)
+        {
+            c0 = new char[256];
+            c1 = new char[512];
+            byte[] buf = new byte[512];
+            stream.Read(buf, 0, 256);
+            for (int i = 0; i < c0.Length; i++)
+            {
+                c0[i] = (char)buf[i];
+            }
+            stream.Read(buf, 0, 512);
+            for (int i = 0; i < c1.Length; i++)
+            {
+                c1[i] = (char)buf[i];
+            }
+            i0 = stream.ReadInt32();
+            i1 = stream.ReadInt32();
+        }
+    }
     //public class PostFXParams // unused for now. /raist.
     //{
     //    public float[] Float0;
