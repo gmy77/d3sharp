@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CrystalMpq;
+using Gibbed.IO;
 using Mooege.Common.Extensions;
 
 namespace Mooege.Common.MPQ.FileFormats
@@ -70,7 +71,7 @@ namespace Mooege.Common.MPQ.FileFormats
         /// <returns><see cref="SerializableDataPointer"/></returns>
         public static SerializableDataPointer GetSerializedDataPointer(this MpqFileStream stream)
         {
-            return new SerializableDataPointer(stream.ReadInt32(), stream.ReadInt32());
+            return new SerializableDataPointer(stream.ReadValueS32(), stream.ReadValueS32());
         }
 
         /// <summary>
@@ -148,8 +149,8 @@ namespace Mooege.Common.MPQ.FileFormats
         /// <returns>The read item.</returns>
         public static T ReadSerializedItem<T>(this MpqFileStream stream) where T : ISerializableData, new()
         {
-            int offset = stream.ReadInt32();
-            int size = stream.ReadInt32();
+            int offset = stream.ReadValueS32();
+            int size = stream.ReadValueS32();
 
             var t = new T();
             if (size <= 0) return t;
@@ -169,8 +170,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public static List<int> ReadSerializedInts(this MpqFileStream stream)
         {
             var items = new List<int>(); // read-items if any.
-            int offset = stream.ReadInt32(); // ofset for serialized data.
-            int size = stream.ReadInt32(); // size of serialized data.
+            int offset = stream.ReadValueS32(); // ofset for serialized data.
+            int size = stream.ReadValueS32(); // size of serialized data.
             if (size <= 0) return items;
 
             var oldPos = stream.Position;
@@ -178,7 +179,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
             while (stream.Position < offset + size + 16)
             {
-                items.Add(stream.ReadInt32());
+                items.Add(stream.ReadValueS32());
             }
 
             stream.Position = oldPos;

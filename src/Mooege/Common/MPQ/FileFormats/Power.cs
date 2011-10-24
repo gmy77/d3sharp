@@ -18,8 +18,7 @@
 
 using System.Collections.Generic;
 using CrystalMpq;
-using Mooege.Common.Extensions;
-using System.Text;
+using Gibbed.IO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -46,19 +45,18 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            byte[] buf = new byte[64];
-            stream.Read(buf, 0, 64); chararray1 = Encoding.ASCII.GetString(buf);
+
+            this.chararray1 = stream.ReadString(64, true);
             stream.Position += 4; // pad 1
             //Powerdef = new PowerDef(stream);
-            i0 = stream.ReadInt32();
-            i1 = stream.ReadInt32();
-            buf = new byte[256];
-            stream.Read(buf, 0, 256); chararray2 = Encoding.ASCII.GetString(buf);
-            i2 = stream.ReadInt32();
+            i0 = stream.ReadValueS32();
+            i1 = stream.ReadValueS32();
+
+            this.chararray2 = stream.ReadString(256, true);
+            i2 = stream.ReadValueS32();
             ScriptFormulaDetails = stream.ReadSerializedItem<ScriptFormulaDetails>();
 
-
-            snoQuestMetaData = stream.ReadInt32();
+            snoQuestMetaData = stream.ReadValueS32();
             stream.Close();
         }
     }
@@ -108,10 +106,10 @@ namespace Mooege.Common.MPQ.FileFormats
         int i0, i1, i2, i3;
         public ActorCollisionFlags(MpqFileStream stream)
         {
-            this.i0 = stream.ReadInt32();
-            this.i1 = stream.ReadInt32();
-            this.i2 = stream.ReadInt32();
-            this.i3 = stream.ReadInt32();
+            this.i0 = stream.ReadValueS32();
+            this.i1 = stream.ReadValueS32();
+            this.i2 = stream.ReadValueS32();
+            this.i3 = stream.ReadValueS32();
         }
     }
     public class ScriptFormulaDetails : ISerializableData
@@ -135,8 +133,8 @@ namespace Mooege.Common.MPQ.FileFormats
             {
                 c1[i] = (char)buf[i];
             }
-            i0 = stream.ReadInt32();
-            i1 = stream.ReadInt32();
+            i0 = stream.ReadValueS32();
+            i1 = stream.ReadValueS32();
         }
     }
 }

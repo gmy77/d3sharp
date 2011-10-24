@@ -17,9 +17,8 @@
  */
 
 using System.Collections.Generic;
-using System.IO;
 using CrystalMpq;
-using Mooege.Common.Extensions;
+using Gibbed.IO;
 using System.Text;
 
 namespace Mooege.Common.MPQ.FileFormats
@@ -48,14 +47,12 @@ namespace Mooege.Common.MPQ.FileFormats
             
             stream.Position += (14 * 4);
             this.AABB = new AABB(stream);
-            this.Int0 = stream.ReadInt32();
+            this.Int0 = stream.ReadValueS32();
 
-            var buf = new byte[256];
-            stream.Read(buf, 0, 256);
-            this.FileName = Encoding.ASCII.GetString(buf);
+            this.FileName = stream.ReadString(256, true);
 
-            this.NLabel = stream.ReadInt32();
-            SpecialIndexCount = stream.ReadInt32();
+            this.NLabel = stream.ReadValueS32();
+            SpecialIndexCount = stream.ReadValueS32();
 
             var pointerSpecialIndexList = stream.GetSerializedDataPointer();
 
@@ -75,19 +72,17 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            var buf = new byte[128];
-            stream.Read(buf, 0, 128);
-            this.Name = Encoding.ASCII.GetString(buf);
-            this.Int0 = stream.ReadInt32();
+            this.Name = stream.ReadString(128, true);
+            this.Int0 = stream.ReadValueS32();
             this.PRTransform = new PRTransform(stream);
             this.SNOName = new SNOName(stream);
 
             this.TagMap = stream.ReadSerializedItem<TagMap>();
 
             // Un sure about these 3 ints, 010template isnt the same as snodata.xml - DarkLotus
-            this.IntTagMap = stream.ReadInt32();
-            Int1 = stream.ReadInt32();
-            Int2 = stream.ReadInt32();
+            this.IntTagMap = stream.ReadValueS32();
+            Int1 = stream.ReadValueS32();
+            Int2 = stream.ReadValueS32();
 
             var pointerMarkerLinks = stream.GetSerializedDataPointer();
             stream.Position += (3 * 4);

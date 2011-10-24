@@ -17,8 +17,6 @@
  */
 
 using System;
-using System.Linq;
-using System.Text;
 using Mooege.Common.MPQ.FileFormats;
 
 namespace Mooege.Common.MPQ
@@ -31,13 +29,12 @@ namespace Mooege.Common.MPQ
         public string FileName {get; private set;}
         public FileFormat Data {get; private set;}
 
-        public Asset(SNOGroup group, Int32 snoId, byte[] name)
+        public Asset(SNOGroup group, Int32 snoId, string name)
         {
             this.Data = null;
             this.Group = group;
             this.SNOId = snoId;
-            int count = 0; while (count < 128 && name[count] != 0) count++;
-            this.Name = Encoding.UTF8.GetString(name.Take(count).ToArray());
+            this.Name = name;
             this.FileName = group + "\\" + this.Name + FileExtensions.Extensions[(int)group];
 
             this.Load();

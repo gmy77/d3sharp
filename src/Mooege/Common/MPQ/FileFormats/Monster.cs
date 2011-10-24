@@ -16,9 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.IO;
 using CrystalMpq;
-using Mooege.Common.Extensions;
+using Gibbed.IO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -53,16 +52,16 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Header = new Header(stream);
 
             stream.Position = 0x20;
-            this.ActorSNO = stream.ReadInt32();
+            this.ActorSNO = stream.ReadValueS32();
             stream.Position = 0x28;
-            this.type = stream.ReadInt32();
-            this.Race = stream.ReadInt32();
-            this.Size = stream.ReadInt32();
+            this.type = stream.ReadValueS32();
+            this.Race = stream.ReadValueS32();
+            this.Size = stream.ReadValueS32();
             stream.Position = 0x54;
-            this.Level.Normal = stream.ReadInt32();
-            this.Level.Nightmare = stream.ReadInt32();
-            this.Level.Hell = stream.ReadInt32();
-            this.Level.Inferno = stream.ReadInt32();            
+            this.Level.Normal = stream.ReadValueS32();
+            this.Level.Nightmare = stream.ReadValueS32();
+            this.Level.Hell = stream.ReadValueS32();
+            this.Level.Inferno = stream.ReadValueS32();            
             // 145 floats follow this according to chuanhsing, not sure what they are for - DarkLotus
 
             stream.Close();

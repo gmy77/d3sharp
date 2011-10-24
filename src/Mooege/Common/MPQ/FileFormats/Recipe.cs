@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.IO;
 using CrystalMpq;
-using Mooege.Common.Extensions;
+using Gibbed.IO;
+
 // Appears to work fine, created from snodata.xml - DarkLotus
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -33,7 +33,7 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            this.SNO = stream.ReadInt32();
+            this.SNO = stream.ReadValueS32();
             stream.Position += (2 * 4);
             ItemSpecifierData = new ItemSpecifierData(stream);
             stream.Close();
@@ -48,13 +48,13 @@ namespace Mooege.Common.MPQ.FileFormats
         int i1;
         public ItemSpecifierData(MpqFileStream stream)
         {
-            gbidItem = stream.ReadInt32();
-            i0 = stream.ReadInt32();
+            gbidItem = stream.ReadValueS32();
+            i0 = stream.ReadValueS32();
             for (int i = 0; i > 3; i++)
             {
-                gbidAffixes[i] = stream.ReadInt32();
+                gbidAffixes[i] = stream.ReadValueS32();
             }
-            i1 = stream.ReadInt32();
+            i1 = stream.ReadValueS32();
 
         }
     }
