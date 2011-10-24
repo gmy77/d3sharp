@@ -24,13 +24,13 @@ using Mooege.Common.Extensions;
 
 namespace Mooege.Common.MPQ
 {
-    public class CoreData : MPQPatchChain
+    public class Data : MPQPatchChain
     {        
         public Dictionary<SNOGroup, Dictionary<int, Asset>> Assets = new Dictionary<SNOGroup, Dictionary<int, Asset>>();
         public readonly Dictionary<SNOGroup, Type> AssetFormats = new Dictionary<SNOGroup, Type>();
 
-        public CoreData()
-            : base("CoreData.mpq", "/base/d3-update-base-(?<version>.*?).mpq")
+        public Data()
+            : base(new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
         { }
 
         public void Init()
