@@ -111,17 +111,7 @@ namespace Mooege.Common.MPQ.FileFormats
             BuffFilterPowers = stream.ReadSerializedInts();
         }
     }
-    public class ActorCollisionFlags
-    {
-        int i0, i1, i2, i3;
-        public ActorCollisionFlags(MpqFileStream stream)
-        {
-            this.i0 = stream.ReadInt32();
-            this.i1 = stream.ReadInt32();
-            this.i2 = stream.ReadInt32();
-            this.i3 = stream.ReadInt32();
-        }
-    }
+    
     public class ScriptFormulaDetails : ISerializableData
     {
         // Maybe should be strings? - Darklotus

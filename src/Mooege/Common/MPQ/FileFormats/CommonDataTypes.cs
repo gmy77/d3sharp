@@ -88,7 +88,17 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Max = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
         }
     }
-
+    public class ActorCollisionFlags
+    {
+        int i0, i1, i2, i3;
+        public ActorCollisionFlags(MpqFileStream stream)
+        {
+            this.i0 = stream.ReadInt32();
+            this.i1 = stream.ReadInt32();
+            this.i2 = stream.ReadInt32();
+            this.i3 = stream.ReadInt32();
+        }
+    }
     public class SNOName
     {
         public SNOGroup SNOGroup { get; private set; }

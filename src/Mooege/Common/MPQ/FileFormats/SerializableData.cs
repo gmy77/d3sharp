@@ -48,7 +48,30 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             return new SerializableDataPointer(stream.ReadInt32(), stream.ReadInt32());
         }
+        public static List<T> ReadVariableLengthSerializedData<T>(this MpqFileStream stream) where T : ISerializableData, new()
+        {
+            var pointer = stream.GetSerializedDataPointer();
+            var items = new List<T>(); // read-items if any.            
+            if (pointer.Size <= 0) return items;
 
+            var oldPos = stream.Position;
+            stream.Position = pointer.Offset + 16; // offset is relative to actual sno data start, so add that 16 bytes file header to get actual position. /raist
+
+            //Not sure if this is 100% ok - DarkLotus
+            var temp = new T();
+            temp.Read(stream);
+            var count = stream.Position - pointer.Offset + 16; stream.Position = pointer.Offset + 16;
+
+            for (int i = 0; i < count; i++)
+            {
+                var t = new T();
+                t.Read(stream);
+                items.Add(t);
+            }
+
+            stream.Position = oldPos;
+            return items;
+        }
         public static List<T> ReadSerializedData<T>(this MpqFileStream stream, SerializableDataPointer pointer, int count) where T : ISerializableData, new()
         {
             var items = new List<T>(); // read-items if any.            
