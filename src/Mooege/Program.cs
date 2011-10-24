@@ -20,10 +20,12 @@ using System;
 using System.Reflection;
 using System.Threading;
 using Mooege.Common;
+using Mooege.Common.MPQ;
 using Mooege.Core.Common.Items;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet;
+using Environment = System.Environment;
 
 namespace Mooege
 {
@@ -52,6 +54,8 @@ namespace Mooege
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
             Logger.Info("Item database loaded with a total of {0} item definitions", ItemGenerator.TotalItems);
+
+            MPQStorage.Init();
 
             StartupServers();
         }

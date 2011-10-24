@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CrystalMpq;
+using Mooege.Common.MPQ;
+using Mooege.Common.MPQ.FileFormats;
 
 namespace Mooege.Common.Extensions
 {

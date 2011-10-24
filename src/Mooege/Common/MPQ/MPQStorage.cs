@@ -37,7 +37,7 @@ namespace Mooege.Common.MPQ
             MPQList = FileHelpers.GetFilesByExtensionRecursive(MpqRoot, ".mpq");
 
             CoreData = new CoreData();
-            CoreData.Init();
+            if (CoreData.Loaded) CoreData.Init();
         }
 
         public static string GetMPQFile(string name)

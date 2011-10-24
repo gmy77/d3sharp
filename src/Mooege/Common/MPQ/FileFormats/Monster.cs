@@ -25,6 +25,7 @@ namespace Mooege.Common.MPQ.FileFormats
     [FileFormat(SNOGroup.Monster)]
     public class Monster : FileFormat
     {
+        public Header Header;
         public int MonsterSNO;
         public int ActorSNO;
 
@@ -49,8 +50,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public Monster(MpqFile file)
         {
             var stream = file.Open();
-            stream.Seek(16, SeekOrigin.Begin);
-            this.MonsterSNO = stream.ReadInt32();
+            this.Header = new Header(stream);
+
             stream.Position = 0x20;
             this.ActorSNO = stream.ReadInt32();
             stream.Position = 0x28;
@@ -61,8 +62,9 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Level.Normal = stream.ReadInt32();
             this.Level.Nightmare = stream.ReadInt32();
             this.Level.Hell = stream.ReadInt32();
-            this.Level.Inferno = stream.ReadInt32();
-            // 145floats follow this according to chuanhsing, not sure what they are for - DarkLotus
+            this.Level.Inferno = stream.ReadInt32();            
+            // 145 floats follow this according to chuanhsing, not sure what they are for - DarkLotus
+
             stream.Close();
         }
 

@@ -257,13 +257,6 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Crit_Percent_Cap] = 0x3F400000;
             this.Attributes[GameAttribute.Casting_Speed_Total] = 1f;
             this.Attributes[GameAttribute.Casting_Speed] = 1f;
-            this.Attributes[GameAttribute.Hitpoints_Max_Total] = 76f;
-            this.Attributes[GameAttribute.Hitpoints_Max] = 40f;
-            this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
-            this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality] = 36f;
-            this.Attributes[GameAttribute.Hitpoints_Factor_Vitality] = 4f;
-            this.Attributes[GameAttribute.Hitpoints_Factor_Level] = 4f;
-            this.Attributes[GameAttribute.Hitpoints_Cur] = 76f;
 
             //Basic stats
             this.Attributes[GameAttribute.Level_Cap] = 13;
@@ -271,10 +264,20 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Properties.Level];
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             this.Attributes[GameAttribute.Armor_Total] = 0;
-            this.Attributes[GameAttribute.Attack] = this.Properties.InitialAttack;
-            this.Attributes[GameAttribute.Precision] = this.Properties.InitialPrecision;
-            this.Attributes[GameAttribute.Defense] = this.Properties.InitialDefense;
-            this.Attributes[GameAttribute.Vitality] = this.Properties.InitialVitality;
+            this.Attributes[GameAttribute.Attack] = this.InitialAttack;
+            this.Attributes[GameAttribute.Precision] = this.InitialPrecision;
+            this.Attributes[GameAttribute.Defense] = this.InitialDefense;
+            this.Attributes[GameAttribute.Vitality] = this.InitialVitality;
+
+            //Hitpoints have to be calculated after Vitality
+            this.Attributes[GameAttribute.Hitpoints_Factor_Level] = 4f;
+            this.Attributes[GameAttribute.Hitpoints_Factor_Vitality] = 4f;
+            //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 40f; // For now, this just adds 40 hitpoints to the hitpoints gained from vitality
+            this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality] = this.Attributes[GameAttribute.Vitality] * this.Attributes[GameAttribute.Hitpoints_Factor_Vitality];
+            this.Attributes[GameAttribute.Hitpoints_Max] = GetMaxTotalHitpoints();
+            this.Attributes[GameAttribute.Hitpoints_Max_Total] = GetMaxTotalHitpoints();
+            this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
 
             //Resource
             this.Attributes[GameAttribute.Resource_Cur, this.ResourceID] = 200f;
@@ -674,6 +677,15 @@ namespace Mooege.Core.GS.Player
             };
         }
 
+        // Defines the Max Total hitpoints for the current level
+        // May want to move this into a property if it has to made class-specific
+        // This is still a work in progress on getting the right algorithm for all the classes
+        private float GetMaxTotalHitpoints()
+        {
+            return (this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality]) +
+                    (this.Attributes[GameAttribute.Hitpoints_Total_From_Level]);
+        }
+
         public static int[] LevelBorders = 
         {
             0, 1200, 2250, 4000, 6050, 8500, 11700, 15400, 19500, 24000, /* Level 1-10 */
@@ -716,38 +728,23 @@ namespace Mooege.Core.GS.Player
                 if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
                 else { this.Attributes[GameAttribute.Experience_Next] = 0; }
 
-                // Notes on attribute increment algorithm:
-                // Precision: Barbarian => +1, else => +2
-                // Defense:   Wizard or Demon Hunter => (lvl+1)%2+1, else => +2
-                // Vitality:  Wizard or Demon Hunter => lvl%2+1, Barbarian => +2, else +1
-                // Attack:    All +2
-                // Attack
-                this.Attributes[GameAttribute.Attack] += 2f;
-                // Precision
-                if (this.Properties.Class == ToonClass.Barbarian)
-                {
-                    this.Attributes[GameAttribute.Precision] += 1f;
-                }
-                else
-                {
-                    this.Attributes[GameAttribute.Precision] += 2f;
-                }
-                // Vitality and Defense
-                if ((this.Properties.Class == ToonClass.Wizard) || (this.Properties.Class == ToonClass.DemonHunter))
-                {
-                    this.Attributes[GameAttribute.Vitality] += (this.Attributes[GameAttribute.Level] % 2) + 1f;
-                    this.Attributes[GameAttribute.Defense] += ((this.Attributes[GameAttribute.Level] + 1) % 2) + 1f;
-                }
-                else if (this.Properties.Class == ToonClass.Barbarian)
-                {
-                    this.Attributes[GameAttribute.Vitality] += 2f;
-                    this.Attributes[GameAttribute.Defense] += 2f;
-                }
-                else
-                {
-                    this.Attributes[GameAttribute.Vitality] += 1f;
-                    this.Attributes[GameAttribute.Defense] += 2f;
-                }
+                // 4 main attributes are incremented according to class
+                this.Attributes[GameAttribute.Attack] += this.AttackIncrement;
+                this.Attributes[GameAttribute.Precision] += this.PrecisionIncrement;
+                this.Attributes[GameAttribute.Vitality] += this.VitalityIncrement;
+                this.Attributes[GameAttribute.Defense] += this.DefenseIncrement;
+
+                // Hitpoints from level may actually change. This needs to be verified by someone with the beta.
+                //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = this.Attributes[GameAttribute.Level] * this.Attributes[GameAttribute.Hitpoints_Factor_Level];
+                
+                // For now, hit points are based solely on vitality and initial hitpoints received.
+                // This will have to change when hitpoint bonuses from items are implemented.
+                this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality] = this.Attributes[GameAttribute.Vitality] * this.Attributes[GameAttribute.Hitpoints_Factor_Vitality];
+                this.Attributes[GameAttribute.Hitpoints_Max] = GetMaxTotalHitpoints();
+                this.Attributes[GameAttribute.Hitpoints_Max_Total] = GetMaxTotalHitpoints();
+
+                // On level up, health is set to max
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
 
                 attribs[GameAttribute.Level] = this.Attributes[GameAttribute.Level];
                 attribs[GameAttribute.Defense] = this.Attributes[GameAttribute.Defense];
@@ -755,6 +752,11 @@ namespace Mooege.Core.GS.Player
                 attribs[GameAttribute.Precision] = this.Attributes[GameAttribute.Precision];
                 attribs[GameAttribute.Attack] = this.Attributes[GameAttribute.Attack];
                 attribs[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next];
+                attribs[GameAttribute.Hitpoints_Total_From_Vitality] = this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality];
+                attribs[GameAttribute.Hitpoints_Max_Total] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
+                attribs[GameAttribute.Hitpoints_Max] = this.Attributes[GameAttribute.Hitpoints_Max];
+                attribs[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur];
+
                 attribs.SendMessage(this.InGameClient, this.DynamicID);
 
                 this.InGameClient.SendMessage(new PlayerLevel()
@@ -1090,6 +1092,187 @@ namespace Mooege.Core.GS.Player
                 return 0x00000001;
             }
         }
+
+        #region PlayerAttributeHandling
+        public float InitialAttack // Defines the amount of attack points with which a player starts
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.DemonHunter:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.Monk:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.WitchDoctor:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.Wizard:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                }
+                return 10f + (this.Properties.Level - 1) * 2;
+            }
+        }
+
+        public float InitialPrecision // Defines the amount of precision points with which a player starts
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 9f + (this.Properties.Level - 1);
+                    case ToonClass.DemonHunter:
+                        return 11f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.Monk:
+                        return 11f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.WitchDoctor:
+                        return 9f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.Wizard:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                }
+                return 10f + ((this.Properties.Level - 1) * 2);
+            }
+        }
+
+        public float InitialDefense // Defines the amount of defense points with which a player starts
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 11f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.DemonHunter:
+                        // For DH and Wizard, half the levels (starting with the first) give 2 defense => (Level / 2) * 2
+                        // and half give 1 defense => ((Level - 1) / 2) * 1
+                        // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
+                        return 9f + (((this.Properties.Level / 2) * 2) + ((this.Properties.Level - 1) / 2));
+                    case ToonClass.Monk:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.WitchDoctor:
+                        return 9f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.Wizard:
+                        return 8f + (((this.Properties.Level / 2) * 2) + ((this.Properties.Level - 1) / 2));
+                }
+                return 10f + ((this.Properties.Level - 1) * 2);
+            }
+        }
+
+        public float InitialVitality // Defines the amount of vitality points with which a player starts
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 11f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.DemonHunter:
+                        // For DH and Wizard, half the levels give 2 vit => ((Level - 1) / 2) * 2
+                        // and half (starting with the first) give 1 vit => (Level / 2) * 1
+                        // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
+                        return 9f + ((((this.Properties.Level - 1) / 2) * 2) + (this.Properties.Level / 2));
+                    case ToonClass.Monk:
+                        return 9f + (this.Properties.Level - 1);
+                    case ToonClass.WitchDoctor:
+                        return 10f + (this.Properties.Level - 1);
+                    case ToonClass.Wizard:
+                        return 9f + ((((this.Properties.Level - 1) / 2) * 2) + (this.Properties.Level / 2));
+                }
+                return 10f + ((this.Properties.Level - 1) * 2);
+            }
+        }
+
+        // Notes on attribute increment algorithm:
+        // Precision: Barbarian => +1, else => +2
+        // Defense:   Wizard or Demon Hunter => (lvl+1)%2+1, else => +2
+        // Vitality:  Wizard or Demon Hunter => lvl%2+1, Barbarian => +2, else +1
+        // Attack:    All +2
+        public float AttackIncrement
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 2f;
+                    case ToonClass.DemonHunter:
+                        return 2f;
+                    case ToonClass.Monk:
+                        return 2f;
+                    case ToonClass.WitchDoctor:
+                        return 2f;
+                    case ToonClass.Wizard:
+                        return 2f;
+                }
+                return 2f;
+            }
+        }
+
+        public float VitalityIncrement
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 2f;
+                    case ToonClass.DemonHunter:
+                        return (this.Attributes[GameAttribute.Level] % 2) + 1f;
+                    case ToonClass.Monk:
+                        return 1f;
+                    case ToonClass.WitchDoctor:
+                        return 1f;
+                    case ToonClass.Wizard:
+                        return (this.Attributes[GameAttribute.Level] % 2) + 1f;
+                }
+                return 1f;
+            }
+        }
+
+        public float DefenseIncrement
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 2f;
+                    case ToonClass.DemonHunter:
+                        return ((this.Attributes[GameAttribute.Level] + 1) % 2) + 1f;
+                    case ToonClass.Monk:
+                        return 2f;
+                    case ToonClass.WitchDoctor:
+                        return 2f;
+                    case ToonClass.Wizard:
+                        return ((this.Attributes[GameAttribute.Level] + 1) % 2) + 1f;
+                }
+                return 2f;
+            }
+        }
+
+        public float PrecisionIncrement
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 1f;
+                    case ToonClass.DemonHunter:
+                        return 2f;
+                    case ToonClass.Monk:
+                        return 2f;
+                    case ToonClass.WitchDoctor:
+                        return 2f;
+                    case ToonClass.Wizard:
+                        return 2f;
+                }
+                return 2f;
+            }
+        }
+        #endregion // #region PlayerAttributeHandling
 
         public SkillKeyMapping[] SkillKeyMappings = new SkillKeyMapping[15]
         {
