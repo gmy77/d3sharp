@@ -83,9 +83,11 @@ namespace Mooege.Common.MPQ.FileFormats
         TagMap ContactTagMap0;
         TagMap ContactTagMap1;
         TagMap ContactTagMap2;
+        TagMap ContactTagMap3;
         TagMap PVPContactTagMap0;
         TagMap PVPContactTagMap1;
         TagMap PVPContactTagMap2;
+        TagMap PVPContactTagMap3;
         int i0;
         ActorCollisionFlags ActColFlags1;
         ActorCollisionFlags ActColFlags2;
@@ -101,13 +103,17 @@ namespace Mooege.Common.MPQ.FileFormats
             ContactTagMap0 = stream.ReadSerializedData<TagMap>();
             ContactTagMap1 = stream.ReadSerializedData<TagMap>();
             ContactTagMap2 = stream.ReadSerializedData<TagMap>();
+            ContactTagMap3 = stream.ReadSerializedData<TagMap>();
+            stream.Position += (8 * 4);
             PVPContactTagMap0 = stream.ReadSerializedData<TagMap>();
             PVPContactTagMap1 = stream.ReadSerializedData<TagMap>();
             PVPContactTagMap2 = stream.ReadSerializedData<TagMap>();
+            PVPContactTagMap3 = stream.ReadSerializedData<TagMap>();
+            stream.Position += (8 * 4);
             i0 = stream.ReadInt32();
             ActColFlags1 = new ActorCollisionFlags(stream);
             ActColFlags2 = new ActorCollisionFlags(stream);
-            
+            stream.Position += 4;
             for (int i = 0; i < 4; i++)
             {
                 Buffs.Add(new BuffDef(stream));

@@ -169,8 +169,10 @@ namespace Mooege.Common.MPQ.FileFormats
             }
         }
     }
+    
     public class ScriptFormulaDetails : ISerializableData
     {
+        // Incomplete Broken, Need full implementation of this class - DarkLotus
         char[] c0; //256
         char[] c1; //512
         int i0, i1;
