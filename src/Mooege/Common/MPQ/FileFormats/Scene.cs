@@ -17,10 +17,11 @@
  */
 
 using System.Collections.Generic;
-using System.Text;
 using CrystalMpq;
 using Gibbed.IO;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Net.GS.Message.Fields;
+using AABB = Mooege.Common.MPQ.FileFormats.Types.AABB;
 
 namespace Mooege.Common.MPQ.FileFormats
 {

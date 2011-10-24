@@ -20,7 +20,7 @@ using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Net.GS.Message.Fields;
 
-namespace Mooege.Common.MPQ.FileFormats
+namespace Mooege.Common.MPQ.FileFormats.Types
 {
     public class Header
     {

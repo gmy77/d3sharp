@@ -18,6 +18,7 @@
 
 using CrystalMpq;
 using Gibbed.IO;
+using Mooege.Common.MPQ.FileFormats.Types;
 
 // Appears to work fine, created from snodata.xml - DarkLotus
 namespace Mooege.Common.MPQ.FileFormats

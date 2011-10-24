@@ -19,7 +19,7 @@
 using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
-using System.Text;
+using Mooege.Common.MPQ.FileFormats.Types;
 
 namespace Mooege.Common.MPQ.FileFormats
 {

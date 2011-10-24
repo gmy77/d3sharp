@@ -18,6 +18,7 @@
 
 using CrystalMpq;
 using Gibbed.IO;
+using Mooege.Common.MPQ.FileFormats.Types;
 
 namespace Mooege.Common.MPQ.FileFormats
 {

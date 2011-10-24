@@ -17,7 +17,6 @@
  */
 
 using System;
-using Mooege.Common.MPQ.FileFormats;
 
 namespace Mooege.Common.MPQ
 {

@@ -20,8 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Gibbed.IO;
-using Mooege.Common.MPQ.FileFormats;
-using Mooege.Common.Extensions;
 
 namespace Mooege.Common.MPQ
 {
