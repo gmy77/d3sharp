@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using CrystalMpq;
 using CrystalMpq.Utility;
+using Wintellect.PowerCollections;
 
 namespace Mooege.Common.MPQ
 {    
@@ -31,23 +32,27 @@ namespace Mooege.Common.MPQ
 
         public bool Loaded { get; private set; }
         public readonly MpqFileSystem FileSystem = new MpqFileSystem();
-        public string BaseMPQFile { get; private set; }
+        public List<string> BaseMPQFiles = new List<string>();
         public string PatchPattern { get; private set; }
-        public readonly SortedDictionary<int, string> MPQFileList = new SortedDictionary<int, string>();
+        public readonly OrderedMultiDictionary<int, string> MPQFileList = new OrderedMultiDictionary<int, string>(false);
 
-        protected MPQPatchChain(string baseMPQFile, string patchPattern=null)
+        protected MPQPatchChain(IEnumerable<string> baseFiles, string patchPattern=null)
         {
             this.Loaded = false;
-            var baseFile = MPQStorage.GetMPQFile(baseMPQFile);
-            if (baseFile == null)
+
+            foreach(var file in baseFiles)
             {
-                Logger.Error("Can not find base-mpq file: {0} for patch chain: {1}.", baseMPQFile, this.GetType().Name);
-                return;
+                var mpqFile = MPQStorage.GetMPQFile(file);
+                if(mpqFile == null)
+                {
+                    Logger.Error("Can not find base-mpq file: {0} for patch chain: {1}.", file, this.GetType().Name);
+                    return;
+                }
+                this.BaseMPQFiles.Add(mpqFile);
             }
 
             Logger.Info("Reading MPQ patch-chain: {0}", this.GetType().Name);
-
-            this.BaseMPQFile = baseFile;
+            
             this.PatchPattern = patchPattern;
             this.ConstructChain();
             this.Loaded = true;
@@ -55,7 +60,12 @@ namespace Mooege.Common.MPQ
 
         private void ConstructChain()
         {            
-            MPQFileList.Add(0, this.BaseMPQFile); // add the base file as version 0.
+            // add base mpq files;
+            foreach(var mpqFile in this.BaseMPQFiles)
+            {
+                MPQFileList.Add(0, mpqFile);
+            }
+
             if (PatchPattern == null) return;
 
             /* match the mpq files for the patch chain */
@@ -69,10 +79,13 @@ namespace Mooege.Common.MPQ
                 MPQFileList.Add(Int32.Parse(match.Groups["version"].Value), file);
             }
 
-            /* add mpq's to mpq-file system */
+            /* add mpq's to mpq-file system in reverse-order (highest version first) */
             foreach(var pair in this.MPQFileList.Reverse())
             {
-                this.FileSystem.Archives.Add(new MpqArchive(pair.Value));
+                foreach(var mpq in pair.Value)
+                {
+                    this.FileSystem.Archives.Add(new MpqArchive(mpq));    
+                }
             }
         }
 

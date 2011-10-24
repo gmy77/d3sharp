@@ -29,15 +29,15 @@ namespace Mooege.Common.MPQ
         private readonly static string MpqRoot = Core.Common.Storage.Config.Instance.MPQRoot;
 
         public static readonly List<string> MPQList;
-        public static readonly CoreData CoreData;
+        public static readonly Data Data;
 
         static MPQStorage()
         {
             if (!Directory.Exists(MpqRoot)) Logger.Error("MPQ root folder does not exist: {0}", MpqRoot);
             MPQList = FileHelpers.GetFilesByExtensionRecursive(MpqRoot, ".mpq");
 
-            CoreData = new CoreData();
-            if (CoreData.Loaded) CoreData.Init();
+            Data = new Data();
+            if (Data.Loaded) Data.Init();
         }
 
         public static string GetMPQFile(string name)
