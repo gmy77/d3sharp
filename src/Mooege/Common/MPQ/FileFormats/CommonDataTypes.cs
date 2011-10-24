@@ -100,10 +100,10 @@ namespace Mooege.Common.MPQ.FileFormats
             this.SNOGroup = (SNOGroup) stream.ReadInt32();
             this.SNOId = stream.ReadInt32();
 
-            if (!MPQStorage.CoreData.Assets.ContainsKey(this.SNOGroup))
+            if (!MPQStorage.Data.Assets.ContainsKey(this.SNOGroup))
                 return; // it's here because of the SNOGroup 0, could it be the Act? /raist
-            this.Name = MPQStorage.CoreData.Assets[this.SNOGroup].ContainsKey(this.SNOId)
-                            ? MPQStorage.CoreData.Assets[this.SNOGroup][SNOId].Name
+            this.Name = MPQStorage.Data.Assets[this.SNOGroup].ContainsKey(this.SNOId)
+                            ? MPQStorage.Data.Assets[this.SNOGroup][SNOId].Name
                             : ""; // put it here because it seems we miss loading some scenes there /raist.
         }
     }
