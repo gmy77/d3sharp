@@ -60,7 +60,7 @@ namespace Mooege.Common.MPQ.FileFormats
             //Not sure if this is 100% ok - DarkLotus
             var temp = new T();
             temp.Read(stream);
-            var count = stream.Position - pointer.Offset + 16; stream.Position = pointer.Offset + 16;
+            var count = (pointer.Size / (stream.Position - (pointer.Offset + 16))); stream.Position = pointer.Offset + 16;
 
             for (int i = 0; i < count; i++)
             {

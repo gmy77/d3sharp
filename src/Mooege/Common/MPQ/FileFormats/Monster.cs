@@ -19,12 +19,15 @@
 using System.IO;
 using CrystalMpq;
 using Mooege.Common.Extensions;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.Monster)]
     public class Monster : FileFormat
     {
+        
         public Header Header;
         public int MonsterSNO;
         public int ActorSNO;
@@ -32,26 +35,49 @@ namespace Mooege.Common.MPQ.FileFormats
         public MonsterRace Race;
         public MonsterSize Size;
         public MonsterType Type;
+        public MonsterDef Monsterdef;
         public Resistance Resists;
         int i0, i1;
         public Levels Level = new Levels();
-
-        public int snoLore;
+        public float[] Floats;
+        public float f0, f1;
+        public int snoInventory, snoSecondaryInventory, snoLore;
+        int i3;
+        public HealthDropInfo HealthDropinfo0;
+        public HealthDropInfo HealthDropinfo1;
+        public HealthDropInfo HealthDropinfo2;
         public int snoSkillKit;
-
-
+        public MonsterPowerType PowerType;
+        public SkillDeclaration[] SkillDeclarations;
+        public MonsterSkillDeclaration[] MonsterSkillDeclarations;
+        public int snoTreasureClassFirstKill;
+        public int snoTreasureClass;
+        public int snoTreasureClassRare;
+        public int snoTreasureClassChampion;
+        public int snoTreasureClassChampionLight;
+        public float f2, f3, f4, f5,f6;
+        public int i4, i5, i6;
+        public int[] AIBehavior;
+        public int[] GbidArray0; // 8
+        public int[] snoSummonActor; //6
+        public int[] GbidArray1; // 4
+        public int[] GbidArray2; // 6
+        public int i7, i8, i9;
+        public string Name; // 128
+        public TagMap TagMap;
+        public int i10;
+        MonsterMinionSpawnGroup MonsterMinionSpawngroup;
         public Monster(MpqFile file)
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            this.MonsterSNO = stream.ReadInt32();
-            stream.Position += (3 * 4);
+            stream.Position += (1 * 4);
             this.ActorSNO = stream.ReadInt32();
             stream.Position += 4;
             this.Type = (MonsterType)stream.ReadInt32();
             this.Race = (MonsterRace)stream.ReadInt32();
             this.Size = (MonsterSize)stream.ReadInt32();
-            stream.Position = 0x48;
+            this.Monsterdef = new MonsterDef(stream);
             this.Resists = (Resistance)stream.ReadInt32();
             this.i0 = stream.ReadInt32();
             this.i1 = stream.ReadInt32();
@@ -59,14 +85,169 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Level.Nightmare = stream.ReadInt32();
             this.Level.Hell = stream.ReadInt32();
             this.Level.Inferno = stream.ReadInt32();
-            // 145floats follow this according to chuanhsing, not sure what they are for - DarkLotus
+            Floats = new float[144];
+            for (int i = 0; i < 144; i++)
+            {
+                Floats[i] = stream.ReadFloat();
+            }
 
 
-            stream.Position = 700 + 16;
+            this.i3 = stream.ReadInt32();
+            this.HealthDropinfo0 = new HealthDropInfo(stream);
+            this.HealthDropinfo1 = new HealthDropInfo(stream);
+            this.HealthDropinfo2 = new HealthDropInfo(stream);
             this.snoSkillKit = stream.ReadInt32();
-            stream.Position = 956 + 16;
+            this.SkillDeclarations = new SkillDeclaration[8];
+            for (int i = 0; i < 8; i++)
+            {
+                this.SkillDeclarations[i] = new SkillDeclaration(stream);
+            }
+            this.MonsterSkillDeclarations = new MonsterSkillDeclaration[8];
+            for (int i = 0; i < 8; i++)
+            {
+                this.MonsterSkillDeclarations[i] = new MonsterSkillDeclaration(stream);
+            }
+            this.snoTreasureClassFirstKill = stream.ReadInt32();
+            this.snoTreasureClass = stream.ReadInt32();
+            this.snoTreasureClassRare = stream.ReadInt32();
+            this.snoTreasureClassChampion = stream.ReadInt32();
+            this.snoTreasureClassChampionLight = stream.ReadInt32();
+            // at 916 here
+            this.f2 = stream.ReadFloat();
+            this.f3 = stream.ReadFloat();
+            this.f4 = stream.ReadFloat();
+            this.f5 = stream.ReadFloat();
+            i4 = stream.ReadInt32();
+            f6 = stream.ReadFloat();
+            i5 = stream.ReadInt32();
+            i6 = stream.ReadInt32();
+            //948
+            this.snoInventory = stream.ReadInt32();
+            this.snoSecondaryInventory = stream.ReadInt32();
             this.snoLore = stream.ReadInt32();
+            AIBehavior = new int[6];
+            for (int i = 0; i < 6; i++)
+            {
+                this.AIBehavior[i] = stream.ReadInt32();
+            }
+            GbidArray0 = new int[8];
+            for (int i = 0; i < 8; i++)
+            {
+                this.GbidArray0[i] = stream.ReadInt32();
+            }
+            this.snoSummonActor = new int[6];
+            for (int i = 0; i < 6; i++)
+            {
+                this.snoSummonActor[i] = stream.ReadInt32();
+            }
+            GbidArray1 = new int[4];
+            for (int i = 0; i < 4; i++)
+            {
+                this.GbidArray1[i] = stream.ReadInt32();
+            }
+            GbidArray2 = new int[6];
+            for (int i = 0; i < 6; i++)
+            {
+                this.GbidArray2[i] = stream.ReadInt32();
+            }
+            this.i7 = stream.ReadInt32();
+            this.i8 = stream.ReadInt32();
+            this.i9 = stream.ReadInt32();
+            this.PowerType = (MonsterPowerType)stream.ReadInt32();
+
+            stream.Position += (6*4);
+            TagMap = stream.ReadSerializedData<TagMap>();
+            stream.Position += (2 * 4);
+            i10 = stream.ReadInt32();
+            stream.Position += (3 * 4);
+            MonsterMinionSpawngroup = stream.ReadSerializedData<MonsterMinionSpawnGroup>();
+            byte[] buf = new byte[128];
+            stream.Read(buf, 0, 128); Name = Encoding.ASCII.GetString(buf);            
             stream.Close();
+        }
+
+        public class MonsterMinionSpawnGroup : ISerializableData
+        {
+            public float f0;
+            public int i1;
+            public List<MonsterMinionSpawnItem> SpawnItems = new List<MonsterMinionSpawnItem>();
+            public void Read(MpqFileStream stream)
+            {
+                this.f0 = stream.ReadFloat();
+                this.i1 = stream.ReadInt32();
+                SpawnItems = stream.ReadVariableLengthSerializedData<MonsterMinionSpawnItem>();
+            }
+        }
+
+        public class MonsterMinionSpawnItem : ISerializableData
+        {
+            public int snoSpawn, i0, i1, i2, i3;
+            public void Read(MpqFileStream stream)
+            {
+                this.snoSpawn = stream.ReadInt32();
+                this.i0 = stream.ReadInt32();
+                this.i1 = stream.ReadInt32();
+                this.i2 = stream.ReadInt32();
+                this.i3 = stream.ReadInt32();
+            }
+        }
+        public class MonsterDef
+        {
+            public float f0,f1,f2,f3;
+            public int i0;
+            public MonsterDef(MpqFileStream stream)
+            {
+                f0 = stream.ReadFloat();
+                f1 = stream.ReadFloat();
+                f2 = stream.ReadFloat();
+                f3 = stream.ReadFloat();
+                i0 = stream.ReadInt32();
+            }
+        }
+        public class MonsterSkillDeclaration
+        {
+            public float f0, f1;
+            public int i0;
+            public float f2;
+            public MonsterSkillDeclaration(MpqFileStream stream)
+            {
+                f0 = stream.ReadFloat();
+                f1 = stream.ReadFloat();
+                i0 = stream.ReadInt32();
+                f2 = stream.ReadFloat();
+            }
+        }
+        public class SkillDeclaration
+        {
+            public int snoPower;
+            public int i0;
+            public SkillDeclaration(MpqFileStream stream)
+            {
+                snoPower = stream.ReadInt32();
+                i0 = stream.ReadInt32();
+            }
+        }
+        public enum MonsterPowerType // No idea what this is called - DarkLotus
+        {
+            Mana,
+            Arcanum,
+            Fury,
+            Spirit,
+            Power,
+            Hatred,
+            Discipline
+        }
+        public class HealthDropInfo
+        {
+            public float f0;
+            public int GBID;
+            int i1;
+            public HealthDropInfo(MpqFileStream stream)
+            {
+                this.f0 = stream.ReadFloat();
+                this.GBID = stream.ReadInt32();
+                this.i1 = stream.ReadInt32();
+            }
         }
         public enum Resistance
         {

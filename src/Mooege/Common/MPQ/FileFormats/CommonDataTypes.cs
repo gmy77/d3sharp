@@ -172,7 +172,8 @@ namespace Mooege.Common.MPQ.FileFormats
     
     public class ScriptFormulaDetails : ISerializableData
     {
-        // Incomplete Broken, Need full implementation of this class - DarkLotus
+        // TODO fix me
+        // Issues, name conflict with another struct maybe. - DarkLotus
         char[] c0; //256
         char[] c1; //512
         int i0, i1;
