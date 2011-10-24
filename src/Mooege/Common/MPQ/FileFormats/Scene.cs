@@ -62,7 +62,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.LookLink = Encoding.ASCII.GetString(buf);
 
             // Maybe this is a list/array - DarkLotus
-            this.MsgTriggeredEvent = stream.ReadSerializedData<MsgTriggeredEvent>();
+            this.MsgTriggeredEvent = stream.ReadSerializedItem<MsgTriggeredEvent>();
             this.Int1 = stream.ReadInt32();
 
             stream.Position += (3 * 4);

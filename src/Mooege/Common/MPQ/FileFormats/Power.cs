@@ -55,7 +55,7 @@ namespace Mooege.Common.MPQ.FileFormats
             buf = new byte[256];
             stream.Read(buf, 0, 256); chararray2 = Encoding.ASCII.GetString(buf);
             i2 = stream.ReadInt32();
-            ScriptFormulaDetails = stream.ReadSerializedData<ScriptFormulaDetails>();
+            ScriptFormulaDetails = stream.ReadSerializedItem<ScriptFormulaDetails>();
 
 
             snoQuestMetaData = stream.ReadInt32();

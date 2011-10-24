@@ -47,10 +47,10 @@ namespace Mooege.Common.MPQ.FileFormats
 
             this.Header = new Header(stream);
 
-            this.DRLGParams = stream.ReadSerializedData<DRLGParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/120) /raist
+            this.DRLGParams = stream.ReadSerializedItem<DRLGParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/120) /raist
 
             stream.Position += (3*4);
-            this.SceneParams = stream.ReadSerializedData<SceneParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/24) /raist
+            this.SceneParams = stream.ReadSerializedItem<SceneParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/24) /raist
 
             stream.Position += (2*4);
             this.MarkerSets = stream.ReadSerializedInts();
@@ -217,7 +217,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.ParentIndices = stream.ReadSerializedInts();
 
             stream.Position += (2 * 4);
-            this.DRLGTagMap = stream.ReadSerializedData<TagMap>();
+            this.DRLGTagMap = stream.ReadSerializedItem<TagMap>();
         }
     }
 
@@ -236,7 +236,7 @@ namespace Mooege.Common.MPQ.FileFormats
             Int1 = stream.ReadInt32();
             SNOScene = stream.ReadInt32();
             Int2 = stream.ReadInt32();
-            this.TileTagMap = stream.ReadSerializedData<TagMap>();
+            this.TileTagMap = stream.ReadSerializedItem<TagMap>();
 
             stream.Position += (2 * 4);
             CustomTileInfo = new CustomTileInfo(stream);
@@ -255,7 +255,7 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Read(buf, 0, 128);
             Name = Encoding.ASCII.GetString(buf);
             Int0 = stream.ReadInt32();
-            this.CommandTagMap = stream.ReadSerializedData<TagMap>();
+            this.CommandTagMap = stream.ReadSerializedItem<TagMap>();
             stream.Position += (3 * 4);
         }
     }

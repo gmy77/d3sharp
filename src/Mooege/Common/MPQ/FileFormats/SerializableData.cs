@@ -25,14 +25,30 @@ using Mooege.Common.Extensions;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
+    /// <summary>
+    /// Interface for serializable data structures.
+    /// </summary>
     public interface ISerializableData
     {
+        /// <summary>
+        /// Reads serializable type.
+        /// </summary>
+        /// <param name="stream">The MPQFileStream to read from.</param>
         void Read(MpqFileStream stream);
     }
 
+    /// <summary>
+    /// Serialized data pointer, contains offset and size for serialized data.
+    /// </summary>
     public struct SerializableDataPointer
     {
+        /// <summary>
+        /// The start offset for serialized data.
+        /// </summary>
         public readonly int Offset;
+        /// <summary>
+        /// The size of serialized data.
+        /// </summary>
         public readonly int Size;
 
         public SerializableDataPointer(int offset, int size)
@@ -42,17 +58,46 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
+    /// <summary>
+    /// Provides help function for reading serialized data from MpqFileStreams.
+    /// </summary>
     public static class MpqFileStreamExtensions
     {
+        /// <summary>
+        /// Reads serialized data pointer.
+        /// </summary>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        /// <returns><see cref="SerializableDataPointer"/></returns>
         public static SerializableDataPointer GetSerializedDataPointer(this MpqFileStream stream)
         {
             return new SerializableDataPointer(stream.ReadInt32(), stream.ReadInt32());
         }
 
+        /// <summary>
+        /// Reads a total of n serialized items.
+        /// </summary>
+        /// <typeparam name="T">Item type to read.</typeparam>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        /// <param name="count">Number of items to read from.</param>
+        /// <returns>List of items.</returns>
+        public static List<T> ReadSerializedData<T>(this MpqFileStream stream, int count) where T : ISerializableData, new()
+        {
+            var pointer = stream.GetSerializedDataPointer();
+            return stream.ReadSerializedData<T>(pointer, count);
+        }
+
+        /// <summary>
+        /// Reads a total of n serialized items from given serialized-data pointer.
+        /// </summary>
+        /// <typeparam name="T">Item type to read.</typeparam>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        /// <param name="pointer">The serialized-data pointer to read from.</param>
+        /// <param name="count">Number of items to read from.</param>
+        /// <returns>List of items.</returns>
         public static List<T> ReadSerializedData<T>(this MpqFileStream stream, SerializableDataPointer pointer, int count) where T : ISerializableData, new()
         {
             var items = new List<T>(); // read-items if any.            
-            if (pointer.Size <= 0) return items;
+            if (pointer.Size <= 0 || count == 0) return items;
 
             var oldPos = stream.Position;
             stream.Position = pointer.Offset + 16; // offset is relative to actual sno data start, so add that 16 bytes file header to get actual position. /raist
@@ -68,13 +113,40 @@ namespace Mooege.Common.MPQ.FileFormats
             return items;
         }
 
-        public static List<T> ReadSerializedData<T>(this MpqFileStream stream, int count) where T : ISerializableData, new()
+        /// <summary>
+        /// Reads all available items for given type.
+        /// </summary>
+        /// <typeparam name="T">Item type to read.</typeparam>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        /// <returns>List of items.</returns>
+        public static List<T> ReadSerializedData<T>(this MpqFileStream stream) where T : ISerializableData, new()
         {
             var pointer = stream.GetSerializedDataPointer();
-            return stream.ReadSerializedData<T>(pointer, count);
+
+            var items = new List<T>(); // read-items if any.            
+            if (pointer.Size <= 0) return items;
+
+            var oldPos = stream.Position;
+            stream.Position = pointer.Offset + 16; // offset is relative to actual sno data start, so add that 16 bytes file header to get actual position. /raist
+
+            while (stream.Position < pointer.Offset + pointer.Size + 16)
+            {
+                var t = new T();
+                t.Read(stream);
+                items.Add(t);
+            }
+
+            stream.Position = oldPos;
+            return items;
         }
 
-        public static T ReadSerializedData<T>(this MpqFileStream stream) where T : ISerializableData, new()
+        /// <summary>
+        /// Reads a single serialized item for given type. Warning: Use with caution.
+        /// </summary>
+        /// <typeparam name="T">Item type to read.</typeparam>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        /// <returns>The read item.</returns>
+        public static T ReadSerializedItem<T>(this MpqFileStream stream) where T : ISerializableData, new()
         {
             int offset = stream.ReadInt32();
             int size = stream.ReadInt32();
@@ -89,6 +161,11 @@ namespace Mooege.Common.MPQ.FileFormats
             return t;
         }
 
+        /// <summary>
+        /// Reads all available serialized ints.
+        /// </summary>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        /// <returns>The list of read ints.</returns>
         public static List<int> ReadSerializedInts(this MpqFileStream stream)
         {
             var items = new List<int>(); // read-items if any.

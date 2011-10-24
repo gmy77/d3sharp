@@ -82,7 +82,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.PRTransform = new PRTransform(stream);
             this.SNOName = new SNOName(stream);
 
-            this.TagMap = stream.ReadSerializedData<TagMap>();
+            this.TagMap = stream.ReadSerializedItem<TagMap>();
 
             // Un sure about these 3 ints, 010template isnt the same as snodata.xml - DarkLotus
             this.IntTagMap = stream.ReadInt32();
