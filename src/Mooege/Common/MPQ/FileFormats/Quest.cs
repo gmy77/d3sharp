@@ -19,8 +19,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using CrystalMpq;
-using Mooege.Common.Extensions;
 using System.Text;
+using Gibbed.IO;
+using Mooege.Common.MPQ.FileFormats.Types;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -68,19 +69,19 @@ namespace Mooege.Common.MPQ.FileFormats
             MpqFileStream stream = file.Open();
 
             Header = new Header(stream);
-            QuestType = (QuestType)stream.ReadInt32();
-            I0 = stream.ReadInt32();
-            I1 = stream.ReadInt32();
-            I2 = stream.ReadInt32();
-            I3 = stream.ReadInt32();
-            I4 = stream.ReadInt32();
-            I5 = stream.ReadInt32();
+            QuestType = (QuestType)stream.ReadValueS32();
+            I0 = stream.ReadValueS32();
+            I1 = stream.ReadValueS32();
+            I2 = stream.ReadValueS32();
+            I3 = stream.ReadValueS32();
+            I4 = stream.ReadValueS32();
+            I5 = stream.ReadValueS32();
 
             QuestUnassignedStep = new QuestUnassignedStep(stream);
             stream.Position += 8;
-            QuestSteps = stream.ReadAllSerializedData<QuestStep>();
+            QuestSteps = stream.ReadSerializedData<QuestStep>();
             stream.Position += 8;
-            QuestCompletionSteps = stream.ReadAllSerializedData<QuestCompletionStep>();
+            QuestCompletionSteps = stream.ReadSerializedData<QuestCompletionStep>();
 
             LevelRange1 = new QuestLevelRange(stream);
             LevelRange2 = new QuestLevelRange(stream);
@@ -108,13 +109,13 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public QuestUnassignedStep(MpqFileStream stream)
         {
-            I0 = stream.ReadInt32();
+            I0 = stream.ReadValueS32();
             stream.Position += 4;       // unaccounted in xml
             stream.Position += (2 * 4);
-            StepObjectiveSets = stream.ReadAllSerializedData<QuestStepObjectiveSet>();
+            StepObjectiveSets = stream.ReadSerializedData<QuestStepObjectiveSet>();
 
             stream.Position += (2 * 4);
-            StepFailureConditionsSets = stream.ReadAllSerializedData<QuestStepFailureConditionSet>();
+            StepFailureConditionsSets = stream.ReadSerializedData<QuestStepFailureConditionSet>();
         }
     }
 
@@ -132,11 +133,11 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            I0 = stream.ReadInt32();
+            I0 = stream.ReadValueS32();
 
             stream.Position += 4;
             stream.Position += 8;
-            StepObjectives = stream.ReadAllSerializedData<QuestStepObjective>();
+            StepObjectives = stream.ReadSerializedData<QuestStepObjective>();
         }
     }
 
@@ -171,25 +172,25 @@ namespace Mooege.Common.MPQ.FileFormats
         public int GBID2;
         public string Unknown1;
         public string Unknown2;
-        public int I4;              // min = 0, max = 1
+        public int I4;              // min = 0, max = 1 unless i know what it is im not making it a bool
         public int I5;
         public int GBIDItemToShow;
 
         public void Read(MpqFileStream stream)
         {
-            I0 = stream.ReadInt32();
-            objectiveType = (QuestStepObjectiveType)stream.ReadInt32();
-            I2 = stream.ReadInt32();
-            I3 = stream.ReadInt32();
+            I0 = stream.ReadValueS32();
+            objectiveType = (QuestStepObjectiveType)stream.ReadValueS32();
+            I2 = stream.ReadValueS32();
+            I3 = stream.ReadValueS32();
             SNOName1 = new SNOName(stream);
             SNOName2 = new SNOName(stream);
-            GBID1 = stream.ReadInt32();
-            GBID2 = stream.ReadInt32();
+            GBID1 = stream.ReadValueS32();
+            GBID2 = stream.ReadValueS32();
             Unknown1 = stream.ReadString(256);
             Unknown2 = stream.ReadString(256);
-            I4 = stream.ReadInt32();
-            I5 = stream.ReadInt32();
-            GBIDItemToShow = stream.ReadInt32();
+            I4 = stream.ReadValueS32();
+            I5 = stream.ReadValueS32();
+            GBIDItemToShow = stream.ReadValueS32();
         }
     }
 
@@ -206,7 +207,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 8;
-            QuestStepFailureConditions = stream.ReadAllSerializedData<QuestStepFailureCondition>();
+            QuestStepFailureConditions = stream.ReadSerializedData<QuestStepFailureCondition>();
         }
     }
 
@@ -237,13 +238,13 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            ConditionType = (QuestStepFailureConditionType)stream.ReadInt32();
-            I2 = stream.ReadInt32();
-            I3 = stream.ReadInt32();
+            ConditionType = (QuestStepFailureConditionType)stream.ReadValueS32();
+            I2 = stream.ReadValueS32();
+            I3 = stream.ReadValueS32();
             SNOName1 = new SNOName(stream);
             SNOName2 = new SNOName(stream);
-            GBID1 = stream.ReadInt32();
-            GBID2 = stream.ReadInt32();
+            GBID1 = stream.ReadValueS32();
+            GBID2 = stream.ReadValueS32();
             Unknown1 = stream.ReadString(256);
             Unknown2 = stream.ReadString(256);
         }
@@ -262,8 +263,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public QuestLevelRange(MpqFileStream stream)
         {
-            I0 = stream.ReadInt32();
-            I1 = stream.ReadInt32();
+            I0 = stream.ReadValueS32();
+            I1 = stream.ReadValueS32();
         }
     }
 
@@ -319,44 +320,44 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             Unknown1 = stream.ReadString(64);
-            I0 = stream.ReadInt32();
-            I1 = stream.ReadInt32();
+            I0 = stream.ReadValueS32();
+            I1 = stream.ReadValueS32();
 
             for (int i = 0; i < I2.Length; i++)
-                I2[i] = stream.ReadInt32();
+                I2[i] = stream.ReadValueS32();
 
-            Enum1 = (Enum1)stream.ReadInt32();
+            Enum1 = (Enum1)stream.ReadValueS32();
 
             for (int i = 0; i < SNORewardRecipe.Length; i++)
-                SNORewardRecipe[i] = stream.ReadInt32();
+                SNORewardRecipe[i] = stream.ReadValueS32();
 
-            SNORewardTreasureClass = stream.ReadInt32();
-            I3 = stream.ReadInt32();
-            I4 = stream.ReadInt32();
-            Enum2 = (Enum1)stream.ReadInt32();
+            SNORewardTreasureClass = stream.ReadValueS32();
+            I3 = stream.ReadValueS32();
+            I4 = stream.ReadValueS32();
+            Enum2 = (Enum1)stream.ReadValueS32();
 
             for (int i = 0; i < SNOReplayRewardRecipe.Length; i++)
-                SNOReplayRewardRecipe[i] = stream.ReadInt32();
+                SNOReplayRewardRecipe[i] = stream.ReadValueS32();
 
-            SNOReplayRewardTreasureClass = stream.ReadInt32();
-            I5 = stream.ReadInt32();
-            I6 = stream.ReadInt32();
-            SNOPowerGranted = stream.ReadInt32();
+            SNOReplayRewardTreasureClass = stream.ReadValueS32();
+            I5 = stream.ReadValueS32();
+            I6 = stream.ReadValueS32();
+            SNOPowerGranted = stream.ReadValueS32();
 
             for (int i = 0; i < SNOWaypointLevelAreas.Length; i++)
-                SNOWaypointLevelAreas[i] = stream.ReadInt32();
+                SNOWaypointLevelAreas[i] = stream.ReadValueS32();
 
 
             stream.Position += 4;      // unnacounted for in the xml
 
             stream.Position += 8;
-            StepObjectiveSets = stream.ReadAllSerializedData<QuestStepObjectiveSet>();
+            StepObjectiveSets = stream.ReadSerializedData<QuestStepObjectiveSet>();
 
             stream.Position += 8;
-            StepBonusObjectiveSets = stream.ReadAllSerializedData<QuestStepBonusObjectiveSet>();
+            StepBonusObjectiveSets = stream.ReadSerializedData<QuestStepBonusObjectiveSet>();
 
             stream.Position += 8;
-            StepFailureConditionSet = stream.ReadAllSerializedData<QuestStepFailureConditionSet>();
+            StepFailureConditionSet = stream.ReadSerializedData<QuestStepFailureConditionSet>();
         }
     }
 
@@ -370,7 +371,6 @@ namespace Mooege.Common.MPQ.FileFormats
     //  <Field Type="DT_VARIABLEARRAY" Offset="32" Flags="33" SubType="QuestStepObjective" />
     //  <Field Type="DT_NULL" Offset="48" Flags="0" />
     // </Descriptor>
-
     public class QuestStepBonusObjectiveSet : ISerializableData
     {
         public int[] I0 = new int[4];
@@ -383,15 +383,15 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             for (int i = 0; i < I0.Length; i++)
-                I0[i] = stream.ReadInt32();
+                I0[i] = stream.ReadValueS32();
 
-            I1 = stream.ReadInt32();
-            I2 = stream.ReadInt32();
-            I3 = stream.ReadInt32();
-            I4 = stream.ReadInt32();
+            I1 = stream.ReadValueS32();
+            I2 = stream.ReadValueS32();
+            I3 = stream.ReadValueS32();
+            I4 = stream.ReadValueS32();
 
             stream.Position += 8;
-            StepBonusObjectives = stream.ReadAllSerializedData<QuestStepObjective>();
+            StepBonusObjectives = stream.ReadSerializedData<QuestStepObjective>();
         }
     }
 
@@ -410,8 +410,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             Unknown = stream.ReadString(64);
-            I1 = stream.ReadInt32();
-            I2 = stream.ReadInt32();
+            I1 = stream.ReadValueS32();
+            I2 = stream.ReadValueS32();
         }
     }
 
