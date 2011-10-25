@@ -129,7 +129,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public int Type;
         public int Int1;
 
-        public ScriptFormulaDetails Details;
+        public ScriptFormula ScriptFormula;
         public int Int2;
         public float Float0;
 
@@ -150,7 +150,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
                     this.Int2 = stream.ReadValueS32();
                     break;
                 case 4:
-                    this.Details = new ScriptFormulaDetails(); Details.Read(stream);
+                    this.ScriptFormula = new ScriptFormula(stream);
                     break;
                 default:
                     this.Int2 = stream.ReadValueS32();
@@ -158,9 +158,48 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             }
         }
     }
+    public class ScriptFormula
+    {
+        int i0, i1, i2, i3, i4;
+        int name_size;
+        int i5;
+        int opcode_size;
+        public byte[] OpCodeName { get; private set; }
+        public byte[] OpCodeArray { get; private set; }
+        public ScriptFormula(MpqFileStream stream)
+        {
+            this.i0 = stream.ReadValueS32();
+            this.i1 = stream.ReadValueS32();
+            this.i2 = stream.ReadValueS32();
+            this.i3 = stream.ReadValueS32();
+            this.i4 = stream.ReadValueS32();
+            this.name_size = stream.ReadValueS32();
+            this.i5 = stream.ReadValueS32();
+            this.opcode_size = stream.ReadValueS32();
+            this.OpCodeName = new byte[name_size];
+            stream.Read(OpCodeName, 0, name_size);
+            switch(name_size % 4)
+            {
+                case 0:
+                    break;
+                case 1:
+                    stream.Position += 3;
+                    break;
+                case 2:
+                    stream.Position += 2;
+                    break;
+                case 3:
+                    stream.Position += 1;
+                    break;
+
+            }
+            this.OpCodeArray = new byte[opcode_size];
+            stream.Read(OpCodeArray, 0, opcode_size);
+        }
+    }
+
     public class ScriptFormulaDetails : ISerializableData
     {
-        // Incomplete Broken, Need full implementation of this class - DarkLotus
         public string CharArray1 { get; private set; }
         public string CharArray2 { get; private set; }
         int i0, i1;
