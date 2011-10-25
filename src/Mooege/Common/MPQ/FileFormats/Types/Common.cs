@@ -16,12 +16,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Text;
 using CrystalMpq;
-using Mooege.Common.Extensions;
+using Gibbed.IO;
 using Mooege.Net.GS.Message.Fields;
 
-namespace Mooege.Common.MPQ.FileFormats
+namespace Mooege.Common.MPQ.FileFormats.Types
 {
     public class Header
     {
@@ -32,13 +31,13 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public Header(MpqFileStream stream)
         {
-            this.DeadBeef = stream.ReadInt32();
-            this.SnoType = stream.ReadInt32();
-            this.Unknown1 = stream.ReadInt32();
-            this.Unknown2 = stream.ReadInt32();
-            this.SNOId = stream.ReadInt32();
-            this.Unknown3 = stream.ReadInt32();
-            this.Unknown4 = stream.ReadInt32();
+            this.DeadBeef = stream.ReadValueS32();
+            this.SnoType = stream.ReadValueS32();
+            this.Unknown1 = stream.ReadValueS32();
+            this.Unknown2 = stream.ReadValueS32();
+            this.SNOId = stream.ReadValueS32();
+            this.Unknown3 = stream.ReadValueS32();
+            this.Unknown4 = stream.ReadValueS32();
         }
     }
 
@@ -48,8 +47,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public Vector2D(MpqFileStream stream)
         {
-            Field0 = stream.ReadInt32();
-            FIeld1 = stream.ReadInt32();
+            Field0 = stream.ReadValueS32();
+            FIeld1 = stream.ReadValueS32();
         }
     }
 
@@ -61,7 +60,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public PRTransform(MpqFileStream stream)
         {
             Q = new Quaternion(stream);
-            V = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
+            V = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
         }
     }
 
@@ -72,8 +71,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public Quaternion(MpqFileStream stream)
         {
-            Float0 = stream.ReadFloat();
-            Vector3D = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
+            Float0 = stream.ReadValueF32();
+            Vector3D = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
         }
     }
 
@@ -84,8 +83,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public AABB(MpqFileStream stream)
         {
-            this.Min = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
-            this.Max = new Vector3D(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
+            this.Min = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
+            this.Max = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
         }
     }
 
@@ -97,13 +96,13 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public SNOName(MpqFileStream stream)
         {
-            this.SNOGroup = (SNOGroup) stream.ReadInt32();
-            this.SNOId = stream.ReadInt32();
+            this.SNOGroup = (SNOGroup)stream.ReadValueS32();
+            this.SNOId = stream.ReadValueS32();
 
-            if (!MPQStorage.CoreData.Assets.ContainsKey(this.SNOGroup))
+            if (!MPQStorage.Data.Assets.ContainsKey(this.SNOGroup))
                 return; // it's here because of the SNOGroup 0, could it be the Act? /raist
-            this.Name = MPQStorage.CoreData.Assets[this.SNOGroup].ContainsKey(this.SNOId)
-                            ? MPQStorage.CoreData.Assets[this.SNOGroup][SNOId].Name
+            this.Name = MPQStorage.Data.Assets[this.SNOGroup].ContainsKey(this.SNOId)
+                            ? MPQStorage.Data.Assets[this.SNOGroup][SNOId].Name
                             : ""; // put it here because it seems we miss loading some scenes there /raist.
         }
     }
@@ -115,7 +114,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            TagMapSize = stream.ReadInt32();
+            TagMapSize = stream.ReadValueS32();
             TagMapEntries = new TagMapEntry[TagMapSize];
 
             for (int i = 0; i < TagMapSize; i++)
@@ -134,40 +133,20 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public TagMapEntry(MpqFileStream stream)
         {
-            this.Int0 = stream.ReadInt32();
-            this.Int1 = stream.ReadInt32();
+            this.Int0 = stream.ReadValueS32();
+            this.Int1 = stream.ReadValueS32();
 
             switch (this.Int0)
             {
                 case 1:
-                    Float0 = stream.ReadFloat();
+                    Float0 = stream.ReadValueF32();
                     break;
                 default:
-                    this.Int2 = stream.ReadInt32();
+                    this.Int2 = stream.ReadValueS32();
                     break;
             }
         }
     }
-
-    //public class PostFXParams // unused for now. /raist.
-    //{
-    //    public float[] Float0;
-    //    public float[] Float1;
-
-    //    public PostFXParams(MpqFileStream stream)
-    //    {
-    //        Float0 = new float[4];
-    //        for (int i = 0; i < Float0.Length; i++)
-    //        {
-    //            Float0[i] = stream.ReadInt32();
-    //        }
-    //        Float1 = new float[4];
-    //        for (int i = 0; i < Float1.Length; i++)
-    //        {
-    //            Float1[i] = stream.ReadInt32();
-    //        }
-    //    }
-    //}
 
     // Replace each Look with just a chararay? DarkLotus
     public class HardPointLink
@@ -176,9 +155,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public int i0;
         public HardPointLink(MpqFileStream stream)
         {
-            var buf = new byte[64];
-            stream.Read(buf, 0, 64); Name = Encoding.ASCII.GetString(buf);
-            i0 = stream.ReadInt32();
+            this.Name = stream.ReadString(64, true);
+            i0 = stream.ReadValueS32();
         }
     }
     
@@ -196,17 +174,18 @@ namespace Mooege.Common.MPQ.FileFormats
         public int int8;
         public TriggerConditions(MpqFileStream stream)
         {
-            float0 = stream.ReadFloat();
-            int1 = stream.ReadInt32();
-            int2 = stream.ReadInt32();
-            int3 = stream.ReadInt32();
-            int4 = stream.ReadInt32();
-            int5 = stream.ReadInt32();
-            int6 = stream.ReadInt32();
-            int7 = stream.ReadInt32();
-            int8 = stream.ReadInt32();
+            float0 = stream.ReadValueF32();
+            int1 = stream.ReadValueS32();
+            int2 = stream.ReadValueS32();
+            int3 = stream.ReadValueS32();
+            int4 = stream.ReadValueS32();
+            int5 = stream.ReadValueS32();
+            int6 = stream.ReadValueS32();
+            int7 = stream.ReadValueS32();
+            int8 = stream.ReadValueS32();
         }
     }
+
     public class TriggerEvent
     {
         public int i0;
@@ -234,71 +213,89 @@ namespace Mooege.Common.MPQ.FileFormats
         int i15; // DT_TIME
         public TriggerEvent(MpqFileStream stream)
         {
-            i0 = stream.ReadInt32();
+            i0 = stream.ReadValueS32();
             TriggerConditions = new TriggerConditions(stream);
-            i1 = stream.ReadInt32();
+            i1 = stream.ReadValueS32();
             SnoName = new SNOName(stream);
-            i2 = stream.ReadInt32();
-            i3 = stream.ReadInt32();
+            i2 = stream.ReadValueS32();
+            i3 = stream.ReadValueS32();
             HardPointLinks = new HardPointLink[2];
             HardPointLinks[0] = new HardPointLink(stream);
             HardPointLinks[1] = new HardPointLink(stream);
-            var buf = new byte[64];
-            stream.Read(buf, 0, 64);
-            this.LookLink = Encoding.ASCII.GetString(buf);
-
-            buf = new byte[64];
-            stream.Read(buf, 0, 64);
-            this.ConstraintLink = Encoding.ASCII.GetString(buf);
-            i4 = stream.ReadInt32();
-            f0 = stream.ReadFloat();
-            i5 = stream.ReadInt32();
-            i6 = stream.ReadInt32();
-            i7 = stream.ReadInt32();
-            i8 = stream.ReadInt32();
-            i9 = stream.ReadInt32();
-            f1 = stream.ReadFloat();
-            f2 = stream.ReadFloat();
-            i10 = stream.ReadInt32();
-            i11 = stream.ReadInt32();
-            f3 = stream.ReadFloat();
-            i12 = stream.ReadInt32();
-            Velocity = stream.ReadFloat();
-            i13 = stream.ReadInt32();
-            RuneType = stream.ReadInt32();
-            UseRuneType = stream.ReadInt32();
+            this.LookLink = stream.ReadString(64, true);
+            this.ConstraintLink = stream.ReadString(64, true);
+            i4 = stream.ReadValueS32();
+            f0 = stream.ReadValueF32();
+            i5 = stream.ReadValueS32();
+            i6 = stream.ReadValueS32();
+            i7 = stream.ReadValueS32();
+            i8 = stream.ReadValueS32();
+            i9 = stream.ReadValueS32();
+            f1 = stream.ReadValueF32();
+            f2 = stream.ReadValueF32();
+            i10 = stream.ReadValueS32();
+            i11 = stream.ReadValueS32();
+            f3 = stream.ReadValueF32();
+            i12 = stream.ReadValueS32();
+            Velocity = stream.ReadValueF32();
+            i13 = stream.ReadValueS32();
+            RuneType = stream.ReadValueS32();
+            UseRuneType = stream.ReadValueS32();
             Color1 = new RGBAColor(stream);
-            i14 = stream.ReadInt32();
+            i14 = stream.ReadValueS32();
             Color2 = new RGBAColor(stream);
-            i15 = stream.ReadInt32();
+            i15 = stream.ReadValueS32();
 
         }
     }
 
     public class MsgTriggeredEvent : ISerializableData
     {
-        int i0;
-        TriggerEvent TriggerEvent;
+        public int i0;
+        public TriggerEvent TriggerEvent;
+
         public void Read(MpqFileStream stream)
         {
-            i0 = stream.ReadInt32();
+            i0 = stream.ReadValueS32();
             TriggerEvent = new TriggerEvent(stream);
         }
     }
+
     public class RGBAColor
     {
-        public byte byte0;
-        public byte byte1;
-        public byte byte2;
-        public byte byte3;
+        public byte Red;
+        public byte Green;
+        public byte Blue;
+        public byte Alpha;
+
         public RGBAColor(MpqFileStream stream)
         {
-            byte[] buf = new byte[4];
+            var buf = new byte[4];
             stream.Read(buf, 0, 4);
-            byte0 = buf[0];
-            byte1 = buf[1];
-            byte2 = buf[2];
-            byte3 = buf[3];
+            Red = buf[0];
+            Green = buf[1];
+            Blue = buf[2];
+            Alpha = buf[3];
         }
     }
+
+    //public class PostFXParams // unused for now. /raist.
+    //{
+    //    public float[] Float0;
+    //    public float[] Float1;
+
+    //    public PostFXParams(MpqFileStream stream)
+    //    {
+    //        Float0 = new float[4];
+    //        for (int i = 0; i < Float0.Length; i++)
+    //        {
+    //            Float0[i] = stream.ReadInt32();
+    //        }
+    //        Float1 = new float[4];
+    //        for (int i = 0; i < Float1.Length; i++)
+    //        {
+    //            Float1[i] = stream.ReadInt32();
+    //        }
+    //    }
+    //}
 }

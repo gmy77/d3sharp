@@ -17,9 +17,9 @@
  */
 
 using System.Collections.Generic;
-using System.Text;
 using CrystalMpq;
-using Mooege.Common.Extensions;
+using Gibbed.IO;
+using Mooege.Common.MPQ.FileFormats.Types;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -47,10 +47,10 @@ namespace Mooege.Common.MPQ.FileFormats
 
             this.Header = new Header(stream);
 
-            this.DRLGParams = stream.ReadSerializedData<DRLGParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/120) /raist
+            this.DRLGParams = stream.ReadSerializedItem<DRLGParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/120) /raist
 
             stream.Position += (3*4);
-            this.SceneParams = stream.ReadSerializedData<SceneParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/24) /raist
+            this.SceneParams = stream.ReadSerializedItem<SceneParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/24) /raist
 
             stream.Position += (2*4);
             this.MarkerSets = stream.ReadSerializedInts();
@@ -59,21 +59,21 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Environment = new Environment(stream);
 
             LabelRuleSet = new LabelRuleSet(stream);
-            this.Int0 = stream.ReadInt32();
+            this.Int0 = stream.ReadValueS32();
 
             stream.Position += 4;
             this.SceneClusterSet = new SceneClusterSet(stream);
 
             for (int i = 0; i < SNONavMeshFunctions.Length; i++)
             {
-                SNONavMeshFunctions[i] = stream.ReadInt32();
+                SNONavMeshFunctions[i] = stream.ReadValueS32();
             }
 
             stream.Position += 4;
-            Float0 = stream.ReadFloat();
-            Int1 = stream.ReadInt32();
-            SNOScript = stream.ReadInt32();
-            Int2 = stream.ReadInt32();
+            Float0 = stream.ReadValueF32();
+            Int1 = stream.ReadValueS32();
+            SNOScript = stream.ReadValueS32();
+            Int2 = stream.ReadValueS32();
 
             stream.Close();
         }
@@ -89,7 +89,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             var pointer = stream.GetSerializedDataPointer();
-            this.ChunkCount = stream.ReadInt32();
+            this.ChunkCount = stream.ReadValueS32();
             stream.Position += (3 * 4);
             this.SceneChunks = stream.ReadSerializedData<SceneChunk>(pointer, this.ChunkCount);
         }
@@ -134,34 +134,34 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public SceneSpecification(MpqFileStream stream)
         {
-            CellZ = stream.ReadInt32();
+            CellZ = stream.ReadValueS32();
             V0 = new Vector2D(stream);
             SNOLevelAreas = new int[4];
 
             for (int i = 0; i < SNOLevelAreas.Length; i++)
             {
-                SNOLevelAreas[i] = stream.ReadInt32();
+                SNOLevelAreas[i] = stream.ReadValueS32();
             }
 
-            SNOPrevWorld = stream.ReadInt32();
-            Int1 = stream.ReadInt32();
-            SNOPrevLevelArea = stream.ReadInt32();
-            SNONextWorld = stream.ReadInt32();
-            Int3 = stream.ReadInt32();
-            SNONextLevelArea = stream.ReadInt32();
-            SNOMusic = stream.ReadInt32();
-            SNOCombatMusic = stream.ReadInt32();
-            SNOAmbient = stream.ReadInt32();
-            SNOReverb = stream.ReadInt32();
-            SNOWeather = stream.ReadInt32();
-            SNOPresetWorld = stream.ReadInt32();
-            Int4 = stream.ReadInt32();
-            Int5 = stream.ReadInt32();
-            Int6 = stream.ReadInt32();
+            SNOPrevWorld = stream.ReadValueS32();
+            Int1 = stream.ReadValueS32();
+            SNOPrevLevelArea = stream.ReadValueS32();
+            SNONextWorld = stream.ReadValueS32();
+            Int3 = stream.ReadValueS32();
+            SNONextLevelArea = stream.ReadValueS32();
+            SNOMusic = stream.ReadValueS32();
+            SNOCombatMusic = stream.ReadValueS32();
+            SNOAmbient = stream.ReadValueS32();
+            SNOReverb = stream.ReadValueS32();
+            SNOWeather = stream.ReadValueS32();
+            SNOPresetWorld = stream.ReadValueS32();
+            Int4 = stream.ReadValueS32();
+            Int5 = stream.ReadValueS32();
+            Int6 = stream.ReadValueS32();
 
             stream.Position += (9 * 4);
 
-            Int7 = stream.ReadInt32();
+            Int7 = stream.ReadValueS32();
             SceneCachedValues = new SceneCachedValues(stream);
         }
     }
@@ -178,17 +178,17 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public SceneCachedValues(MpqFileStream stream)
         {
-            Int0 = stream.ReadInt32();
-            Int1 = stream.ReadInt32();
-            Int2 = stream.ReadInt32();
+            Int0 = stream.ReadValueS32();
+            Int1 = stream.ReadValueS32();
+            Int2 = stream.ReadValueS32();
             AABB1 = new AABB(stream);
             AABB2 = new AABB(stream);
             Int5 = new int[4];
             for (int i = 0; i < Int5.Length; i++)
             {
-                Int5[i] = stream.ReadInt32();
+                Int5[i] = stream.ReadValueS32();
             }
-            Int6 = stream.ReadInt32();
+            Int6 = stream.ReadValueS32();
         }
     }
 
@@ -210,14 +210,14 @@ namespace Mooege.Common.MPQ.FileFormats
             this.DRLGTiles = stream.ReadSerializedData<TileInfo>(pointer, pointer.Size / 72);
 
             stream.Position += (14 * 4);
-            this.CommandCount = stream.ReadInt32();
+            this.CommandCount = stream.ReadValueS32();
             this.DRLGCommands = stream.ReadSerializedData<DRLGCommand>(this.CommandCount);
 
             stream.Position += (3 * 4);
             this.ParentIndices = stream.ReadSerializedInts();
 
             stream.Position += (2 * 4);
-            this.DRLGTagMap = stream.ReadSerializedData<TagMap>();
+            this.DRLGTagMap = stream.ReadSerializedItem<TagMap>();
         }
     }
 
@@ -232,11 +232,11 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            Int0 = stream.ReadInt32();
-            Int1 = stream.ReadInt32();
-            SNOScene = stream.ReadInt32();
-            Int2 = stream.ReadInt32();
-            this.TileTagMap = stream.ReadSerializedData<TagMap>();
+            Int0 = stream.ReadValueS32();
+            Int1 = stream.ReadValueS32();
+            SNOScene = stream.ReadValueS32();
+            Int2 = stream.ReadValueS32();
+            this.TileTagMap = stream.ReadSerializedItem<TagMap>();
 
             stream.Position += (2 * 4);
             CustomTileInfo = new CustomTileInfo(stream);
@@ -251,11 +251,9 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            var buf = new byte[128];
-            stream.Read(buf, 0, 128);
-            Name = Encoding.ASCII.GetString(buf);
-            Int0 = stream.ReadInt32();
-            this.CommandTagMap = stream.ReadSerializedData<TagMap>();
+            this.Name = stream.ReadString(128, true);
+            Int0 = stream.ReadValueS32();
+            this.CommandTagMap = stream.ReadSerializedItem<TagMap>();
             stream.Position += (3 * 4);
         }
     }
@@ -269,9 +267,9 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public CustomTileInfo(MpqFileStream stream)
         {
-            Int0 = stream.ReadInt32();
-            Int1 = stream.ReadInt32();
-            Int2 = stream.ReadInt32();
+            Int0 = stream.ReadValueS32();
+            Int1 = stream.ReadValueS32();
+            Int2 = stream.ReadValueS32();
             V0 = new Vector2D(stream);
             stream.Position += (5 * 4);
         }
@@ -312,7 +310,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public SceneClusterSet(MpqFileStream stream)
         {
-            this.ClusterCount = stream.ReadInt32();
+            this.ClusterCount = stream.ReadValueS32();
             stream.Position += (4*3);
             this.SceneClusters = stream.ReadSerializedData<SceneCluster>(this.ClusterCount);
         }
@@ -328,11 +326,9 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            var buf = new byte[128];
-            stream.Read(buf, 0, 128);
-            this.Name = Encoding.ASCII.GetString(buf);
-            this.ClusterId = stream.ReadInt32();
-            this.GroupCount = stream.ReadInt32();
+            this.Name = stream.ReadString(128, true);
+            this.ClusterId = stream.ReadValueS32();
+            this.GroupCount = stream.ReadValueS32();
             stream.Position += (2*4);
             this.SubSceneGroups = stream.ReadSerializedData<SubSceneGroup>(this.GroupCount);
 
@@ -355,8 +351,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            this.I0 = stream.ReadInt32();
-            this.SubSceneCount = stream.ReadInt32();
+            this.I0 = stream.ReadValueS32();
+            this.SubSceneCount = stream.ReadValueS32();
             stream.Position += (2 * 4);
             this.Entries = stream.ReadSerializedData<SubSceneEntry>(this.SubSceneCount);
         }
@@ -371,10 +367,10 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            this.SNOScene = stream.ReadInt32();
-            this.Probability = stream.ReadInt32();
+            this.SNOScene = stream.ReadValueS32();
+            this.Probability = stream.ReadValueS32();
             stream.Position += (3 * 4);
-            this.LabelCount = stream.ReadInt32();
+            this.LabelCount = stream.ReadValueS32();
             this.Labels = stream.ReadSerializedData<SubSceneLabel>(this.LabelCount);
         }
     }
@@ -386,8 +382,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            GBId = stream.ReadInt32();
-            I0 = stream.ReadInt32();
+            GBId = stream.ReadValueS32();
+            I0 = stream.ReadValueS32();
         }
     }
 
@@ -402,7 +398,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public LabelRuleSet(MpqFileStream stream)
         {
-            Rulecount = stream.ReadInt32();
+            Rulecount = stream.ReadValueS32();
             stream.Position += (3 * 4);
             this.LabelRules = stream.ReadSerializedData<LabelRule>(this.Rulecount);
         }
@@ -418,13 +414,11 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            var buf = new byte[128];
-            stream.Read(buf, 0, 128);
-            this.Name = Encoding.ASCII.GetString(buf);
+            this.Name = stream.ReadString(128, true);
             LabelCondition = new LabelCondition(stream);
             stream.Position += 4;
-            Int0 = stream.ReadInt32();
-            LabelCount = stream.ReadInt32();
+            Int0 = stream.ReadValueS32();
+            LabelCount = stream.ReadValueS32();
             stream.Position += (2 * 4);
             this.Entries = stream.ReadSerializedData<LabelEntry>(this.LabelCount);
         }
@@ -440,11 +434,11 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            this.GBIdLabel = stream.ReadInt32();
-            Int0 = stream.ReadInt32();
-            Float0 = stream.ReadFloat();
-            Int1 = stream.ReadInt32();
-            Int2 = stream.ReadInt32();
+            this.GBIdLabel = stream.ReadValueS32();
+            Int0 = stream.ReadValueS32();
+            Float0 = stream.ReadValueF32();
+            Int1 = stream.ReadValueS32();
+            Int2 = stream.ReadValueS32();
         }
     }
 
@@ -456,12 +450,12 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public LabelCondition(MpqFileStream stream)
         {
-            Int0 = stream.ReadInt32();
+            Int0 = stream.ReadValueS32();
             Int1 = new int[4];
 
             for (int i = 0; i < Int1.Length; i++)
             {
-                Int1[i] = stream.ReadInt32();
+                Int1[i] = stream.ReadValueS32();
             }
         }
     }
@@ -480,14 +474,16 @@ namespace Mooege.Common.MPQ.FileFormats
         public int snoWeather;
         public int snoIrradianceTex;
         public int snoIrradianceTexDead;*/
+
         public int[] Env;
         public Environment(MpqFileStream stream)
         {
             Env = new int[46];
             for (int i = 0; i < 46; i++)
             {
-                Env[i] = stream.ReadInt32();
+                Env[i] = stream.ReadValueS32();
             }
+
             /* RGBAColor0 = new RGBAColor(stream);
              PostFXParams1 = new PostFXParams(stream);
              int2 = stream.ReadInt32();
