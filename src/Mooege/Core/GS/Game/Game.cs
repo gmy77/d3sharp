@@ -236,8 +236,8 @@ namespace Mooege.Core.GS.Game
 
             if (world == null) // If it doesn't exist, try to load it
             {
-                world = this._worldGenerator.GenerateWorld(worldSNO);
-                if (world == null) Logger.Warn(String.Format("Failed to generate world (SNO = {0})", worldSNO));
+                world = WorldGenerator2.Generate(this, worldSNO);
+                if (world == null) Logger.Warn("Failed to generate world with sno: {0}", worldSNO);
             }
             return world;
         }

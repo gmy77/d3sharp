@@ -43,12 +43,12 @@ namespace Mooege.Common.MPQ.FileFormats.Types
 
     public class Vector2D
     {
-        public readonly int Field0, FIeld1;
+        public readonly int X, Y;
 
         public Vector2D(MpqFileStream stream)
         {
-            Field0 = stream.ReadValueS32();
-            FIeld1 = stream.ReadValueS32();
+            X = stream.ReadValueS32();
+            Y = stream.ReadValueS32();
         }
     }
 

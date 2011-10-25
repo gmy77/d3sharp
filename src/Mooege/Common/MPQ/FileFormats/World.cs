@@ -98,13 +98,13 @@ namespace Mooege.Common.MPQ.FileFormats
     public class SceneChunk : ISerializableData
     {
         public SNOName SNOName { get; private set; }
-        public PRTransform Position { get; private set; }
+        public PRTransform PRTransform { get; private set; }
         public SceneSpecification SceneSpecification { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             this.SNOName = new SNOName(stream);
-            this.Position = new PRTransform(stream);
+            this.PRTransform = new PRTransform(stream);
             this.SceneSpecification = new SceneSpecification(stream);
         }
     }
@@ -112,7 +112,7 @@ namespace Mooege.Common.MPQ.FileFormats
     public class SceneSpecification
     {
         public int CellZ;
-        public Vector2D V0;
+        public Vector2D Cell;
         public int[] SNOLevelAreas;
         public int SNOPrevWorld;
         public int Int1;
@@ -135,7 +135,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public SceneSpecification(MpqFileStream stream)
         {
             CellZ = stream.ReadValueS32();
-            V0 = new Vector2D(stream);
+            Cell = new Vector2D(stream);
             SNOLevelAreas = new int[4];
 
             for (int i = 0; i < SNOLevelAreas.Length; i++)
