@@ -126,10 +126,9 @@ namespace Mooege.Common.MPQ.FileFormats
             var serVOCastingNotes = stream.GetSerializedDataPointer();
             if (serVOCastingNotes.Size > 0)
             {
-                byte[] buf = new byte[serVOCastingNotes.Size];
                 long x = stream.Position;
                 stream.Position = serVOCastingNotes.Offset + 16;
-                stream.Read(buf, 0, serVOCastingNotes.Size); CastingNotes = Encoding.ASCII.GetString(buf);
+                CastingNotes = stream.ReadString((uint)serVOCastingNotes.Size,true);                
                 stream.Position = x;
             }
 
@@ -139,8 +138,7 @@ namespace Mooege.Common.MPQ.FileFormats
             {
                 long x = stream.Position;
                 stream.Position = serVOCastingNotes.Offset + 16;
-                byte[] buf = new byte[serVORole.Size];
-                stream.Read(buf, 0, serVORole.Size); CastingNotes = Encoding.ASCII.GetString(buf);
+                VoiceOverRole = stream.ReadString((uint)serVORole.Size,true); 
                 stream.Position = x;
             }
             // Updated based on BoyC's 010 template and Moack's work. Think we just about read all data from actor now.- DarkLotus
@@ -214,9 +212,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public WeightedLook(MpqFileStream stream)
         {
-            var buf = new byte[64];
-            stream.Read(buf, 0, 64);
-            LookLink = Encoding.ASCII.GetString(buf);
+            this.LookLink = stream.ReadString(64, true);
             Int0 = stream.ReadValueS32();
         }
     }

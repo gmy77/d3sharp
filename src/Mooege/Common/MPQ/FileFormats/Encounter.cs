@@ -35,7 +35,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Header = new Header(stream);
             this.snoSpawn = stream.ReadValueS32();
             stream.Position += (2 * 4);// pad 2 int
-            Spawnoptions = stream.ReadSerializedData<EncounterSpawnOptions>();
+            this.Spawnoptions = stream.ReadSerializedData<EncounterSpawnOptions>();
             stream.Close();
         }
     }

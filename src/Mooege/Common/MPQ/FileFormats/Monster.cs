@@ -156,13 +156,12 @@ namespace Mooege.Common.MPQ.FileFormats
             this.PowerType = (MonsterPowerType)stream.ReadValueS32();
 
             stream.Position += (6*4);
-            TagMap = stream.ReadSerializedItem<TagMap>();
+            this.TagMap = stream.ReadSerializedItem<TagMap>();
             stream.Position += (2 * 4);
-            i10 = stream.ReadValueS32();
+            this.i10 = stream.ReadValueS32();
             stream.Position += (3 * 4);
-            MonsterMinionSpawngroup = stream.ReadSerializedItem<MonsterMinionSpawnGroup>();
-            byte[] buf = new byte[128];
-            stream.Read(buf, 0, 128); Name = Encoding.ASCII.GetString(buf);            
+            this.MonsterMinionSpawngroup = stream.ReadSerializedItem<MonsterMinionSpawnGroup>();
+            Name = stream.ReadString(128, true);         
             stream.Close();
         }
 

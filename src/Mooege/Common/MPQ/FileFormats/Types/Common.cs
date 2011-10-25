@@ -161,24 +161,13 @@ namespace Mooege.Common.MPQ.FileFormats.Types
     public class ScriptFormulaDetails : ISerializableData
     {
         // Incomplete Broken, Need full implementation of this class - DarkLotus
-        char[] c0; //256
-        char[] c1; //512
+        public string CharArray1 { get; private set; }
+        public string CharArray2 { get; private set; }
         int i0, i1;
         public void Read(MpqFileStream stream)
         {
-            c0 = new char[256];
-            c1 = new char[512];
-            byte[] buf = new byte[512];
-            stream.Read(buf, 0, 256);
-            for (int i = 0; i < c0.Length; i++)
-            {
-                c0[i] = (char)buf[i];
-            }
-            stream.Read(buf, 0, 512);
-            for (int i = 0; i < c1.Length; i++)
-            {
-                c1[i] = (char)buf[i];
-            }
+            CharArray1 = stream.ReadString(256, true);
+            CharArray2 = stream.ReadString(512, true);
             i0 = stream.ReadValueS32();
             i1 = stream.ReadValueS32();
         }

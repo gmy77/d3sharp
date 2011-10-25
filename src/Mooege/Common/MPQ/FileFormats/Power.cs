@@ -42,26 +42,15 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public Power(MpqFile file)
         {
-            MpqFileStream stream = null;
-            try
-            {
-                stream = file.Open();
-            }
-            catch
-            {
-                return;
-            }
-
+            var stream = file.Open();   
             this.Header = new Header(stream);
-            byte[] buf = new byte[64];
-            stream.Read(buf, 0, 64); LuaName = Encoding.ASCII.GetString(buf);
+            LuaName = stream.ReadString(64, true);
             stream.Position += 4; // pad 1
             Powerdef = new PowerDef(stream);
             stream.Position = 440; // Seems like theres a bit of a gap - DarkLotus
             i0 = stream.ReadValueS32();
             i1 = stream.ReadValueS32();
-            buf = new byte[256];
-            stream.Read(buf, 0, 256); chararray2 = Encoding.ASCII.GetString(buf);
+            chararray2 = stream.ReadString(256, true);
             ScriptFormulaCount = stream.ReadValueS32();
             ScriptFormulaDetails = stream.ReadSerializedData<ScriptFormulaDetails>();
             stream.Position += (3 * 4);
@@ -75,7 +64,7 @@ namespace Mooege.Common.MPQ.FileFormats
             {
                 long x = stream.Position;
                 stream.Position = serCompliedScript.Offset + 16;
-                buf = new byte[serCompliedScript.Size];
+                byte[] buf = new byte[serCompliedScript.Size];
                 stream.Read(buf, 0, serCompliedScript.Size);
                 stream.Position = x;
                 CompliedScript.AddRange(buf);

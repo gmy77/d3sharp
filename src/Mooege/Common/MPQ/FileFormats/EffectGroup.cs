@@ -36,13 +36,13 @@ namespace Mooege.Common.MPQ.FileFormats
             var stream = file.Open();
             this.Header = new Header(stream);
             this.i0 = stream.ReadValueS32();
-            EffectItems = stream.ReadSerializedData<EffectItem>();
-            i1 = stream.ReadValueS32();
+            this.EffectItems = stream.ReadSerializedData<EffectItem>();
+            this.i1 = stream.ReadValueS32();
             stream.Position += 4; // pad 1
-            i2 = stream.ReadValueS32();
-            i3 = stream.ReadValueS32();         
-            i4 = stream.ReadValueS32();
-            SnoPower = stream.ReadValueS32();
+            this.i2 = stream.ReadValueS32();
+            this.i3 = stream.ReadValueS32();
+            this.i4 = stream.ReadValueS32();
+            this.SnoPower = stream.ReadValueS32();
             stream.Close();
         }
     }
@@ -54,10 +54,9 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             this.i0 = stream.ReadValueS32();
-            byte[] buf = new byte[64];
             // Maybe this should stay a Char Array instead of a string. - DarkLotus
-            stream.Read(buf, 0, 64); Name = Encoding.ASCII.GetString(buf);
-            TriggeredEvent.Read(stream);
+            this.Name = stream.ReadString(64, true);
+            this.TriggeredEvent.Read(stream);
         }
     }
    
