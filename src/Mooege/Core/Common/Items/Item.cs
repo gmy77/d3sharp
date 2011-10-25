@@ -49,7 +49,7 @@ namespace Mooege.Core.Common.Items
 
         public override ActorType ActorType { get { return ActorType.Item; } }
 
-        public Mooege.Core.GS.Player.Player Owner { get; set; } // Only set when the player has the item in its inventory. /komiga
+        public GS.Player.Player Owner { get; set; } // Only set when the player has the item in its inventory. /komiga
 
         public ItemType ItemType { get; set; }
 
