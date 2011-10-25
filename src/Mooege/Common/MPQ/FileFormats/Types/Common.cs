@@ -164,9 +164,8 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         int name_size;
         int i5;
         int opcode_size;
-        string name;
-        // Might be an array not a string ? - DarkLotus
-        string opcode; // opcode_size;
+        public byte[] OpCodeName { get; private set; }
+        public byte[] OpCodeArray { get; private set; }
         public ScriptFormula(MpqFileStream stream)
         {
             this.i0 = stream.ReadValueS32();
@@ -177,14 +176,30 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             this.name_size = stream.ReadValueS32();
             this.i5 = stream.ReadValueS32();
             this.opcode_size = stream.ReadValueS32();
-            this.name = stream.ReadString((uint)name_size);
-            this.opcode = stream.ReadString((uint)opcode_size);
+            this.OpCodeName = new byte[name_size];
+            stream.Read(OpCodeName, 0, name_size);
+            switch(name_size % 4)
+            {
+                case 0:
+                    break;
+                case 1:
+                    stream.Position += 3;
+                    break;
+                case 2:
+                    stream.Position += 2;
+                    break;
+                case 3:
+                    stream.Position += 1;
+                    break;
+
+            }
+            this.OpCodeArray = new byte[opcode_size];
+            stream.Read(OpCodeArray, 0, opcode_size);
         }
     }
 
     public class ScriptFormulaDetails : ISerializableData
     {
-        // Incomplete Broken, Need full implementation of this class - DarkLotus
         public string CharArray1 { get; private set; }
         public string CharArray2 { get; private set; }
         int i0, i1;
