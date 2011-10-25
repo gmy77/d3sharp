@@ -31,14 +31,16 @@ namespace Mooege.Common.MPQ
         protected static readonly Logger Logger = LogManager.CreateLogger();
 
         public bool Loaded { get; private set; }
-        public readonly MpqFileSystem FileSystem = new MpqFileSystem();
         public List<string> BaseMPQFiles = new List<string>();
         public string PatchPattern { get; private set; }
+        public int RequiredVersion { get; private set; }
         public readonly OrderedMultiDictionary<int, string> MPQFileList = new OrderedMultiDictionary<int, string>(false);
+        public readonly MpqFileSystem FileSystem = new MpqFileSystem();
 
-        protected MPQPatchChain(IEnumerable<string> baseFiles, string patchPattern=null)
+        protected MPQPatchChain(int requiredVersion, IEnumerable<string> baseFiles, string patchPattern=null)
         {
             this.Loaded = false;
+            this.RequiredVersion = requiredVersion;
 
             foreach(var file in baseFiles)
             {
@@ -53,7 +55,14 @@ namespace Mooege.Common.MPQ
                         
             this.PatchPattern = patchPattern;
             this.ConstructChain();
-            this.Loaded = true;
+
+            // check required version.
+            var topMostMPQVersion = this.MPQFileList.Reverse().First().Key;
+            if (topMostMPQVersion == this.RequiredVersion) this.Loaded = true;
+            else
+            {
+                Logger.Fatal("Required patch-chain version {0} is not satified (found version: {1}).", this.RequiredVersion, topMostMPQVersion);
+            }            
         }
 
         private void ConstructChain()
