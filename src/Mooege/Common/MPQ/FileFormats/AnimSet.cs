@@ -17,10 +17,10 @@
  */
 
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using CrystalMpq;
-using Mooege.Common.Extensions;
+using Gibbed.IO;
+using Mooege.Common.MPQ.FileFormats.Types;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -70,11 +70,11 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Header = new Header(stream);
             
             stream.Position = 352;
-            this.NumberOfAnimations = stream.ReadInt32();
+            this.NumberOfAnimations = stream.ReadValueS32();
             for (int i = 0; i < this.NumberOfAnimations; i++)
             {
                 stream.Position += 4;
-                var animation = new AnimationDef { TagID = stream.ReadInt32(), AnimationSNO = stream.ReadInt32() };
+                var animation = new AnimationDef { TagID = stream.ReadValueS32(), AnimationSNO = stream.ReadValueS32() };
                 this.Animations.Add(animation);
             }
 
