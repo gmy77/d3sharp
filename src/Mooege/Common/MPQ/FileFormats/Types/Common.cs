@@ -129,7 +129,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public int Type;
         public int Int1;
 
-        public ScriptFormulaDetails Details;
+        public ScriptFormula ScriptFormula;
         public int Int2;
         public float Float0;
 
@@ -150,7 +150,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
                     this.Int2 = stream.ReadValueS32();
                     break;
                 case 4:
-                    this.Details = new ScriptFormulaDetails(); Details.Read(stream);
+                    this.ScriptFormula = new ScriptFormula(stream);
                     break;
                 default:
                     this.Int2 = stream.ReadValueS32();
@@ -158,6 +158,30 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             }
         }
     }
+    public class ScriptFormula
+    {
+        int i0, i1, i2, i3, i4;
+        int name_size;
+        int i5;
+        int opcode_size;
+        string name;
+        // Might be an array not a string ? - DarkLotus
+        string opcode; // opcode_size;
+        public ScriptFormula(MpqFileStream stream)
+        {
+            this.i0 = stream.ReadValueS32();
+            this.i1 = stream.ReadValueS32();
+            this.i2 = stream.ReadValueS32();
+            this.i3 = stream.ReadValueS32();
+            this.i4 = stream.ReadValueS32();
+            this.name_size = stream.ReadValueS32();
+            this.i5 = stream.ReadValueS32();
+            this.opcode_size = stream.ReadValueS32();
+            this.name = stream.ReadString((uint)name_size);
+            this.opcode = stream.ReadString((uint)opcode_size);
+        }
+    }
+
     public class ScriptFormulaDetails : ISerializableData
     {
         // Incomplete Broken, Need full implementation of this class - DarkLotus
