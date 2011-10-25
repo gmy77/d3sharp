@@ -105,7 +105,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 case 2:
                     yield return WaitSeconds(0.3f);
                     // put target position a little bit in front of the monk. represents the lightning ball
-                    TargetPosition = PowerMath.ProjectAndTranslate2D(TargetPosition, User.Position,
+                    TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
                                         User.Position, 8f);
 
                     User.PlayEffectGroup(143566); // cast
