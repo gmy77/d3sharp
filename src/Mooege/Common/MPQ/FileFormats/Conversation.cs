@@ -128,15 +128,7 @@ namespace Mooege.Common.MPQ.FileFormats
                 ConvLocalDisplayTimes[i] = new ConvLocalDisplayTimes(stream);
 
             stream.Position += (2 * 4);
-
-            long oldPos = stream.Position;
-            SerializableDataPointer commentPointer = stream.GetSerializedDataPointer();
-            byte[] comment = new byte[commentPointer.Size];
-            stream.Position = commentPointer.Offset + 16;
-            stream.Read(comment, 0, commentPointer.Size);
-            Comment = System.Text.Encoding.ASCII.GetString(comment);
-            stream.Position = oldPos + 8; // dont read pointer again
-
+            Comment = stream.ReadSerializedString();
             this.I6 = stream.ReadValueS32();
 
             stream.Position += 4;       // these are unaccounted for...xml offsets just skips ahead
