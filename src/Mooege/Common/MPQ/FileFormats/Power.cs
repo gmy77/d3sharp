@@ -25,22 +25,18 @@ using System.Text;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
-    //Untested yet. - DarkLotus
     [FileFormat(SNOGroup.Power)]
     public class Power : FileFormat
     {
-        public Header Header;
-        string chararray1;
-
-        char[] c0; //64
-        PowerDef Powerdef;
-        int i0, i1;
-        char[] c1;//256
-        string chararray2;
-        int i2;
-        ScriptFormulaDetails ScriptFormulaDetails;
-        int i3;
-        List<byte> CompliedScript = new List<byte>();
+        public Header Header { get; private set; }
+        public string LuaName { get; private set; }
+        public PowerDef Powerdef { get; private set; }
+        public int i0, i1;
+        public string chararray2 { get; private set; }
+        public int ScriptFormulaCount { get; private set; }
+        public List<ScriptFormulaDetails> ScriptFormulaDetails = new List<ScriptFormulaDetails>();
+        public int i3 { get; private set; }
+        public List<byte> CompliedScript = new List<byte>();
         int snoQuestMetaData;
 
 
@@ -58,19 +54,32 @@ namespace Mooege.Common.MPQ.FileFormats
 
             this.Header = new Header(stream);
             byte[] buf = new byte[64];
-            stream.Read(buf, 0, 64); chararray1 = Encoding.ASCII.GetString(buf);
+            stream.Read(buf, 0, 64); LuaName = Encoding.ASCII.GetString(buf);
             stream.Position += 4; // pad 1
             Powerdef = new PowerDef(stream);
+            stream.Position = 440; // Seems like theres a bit of a gap - DarkLotus
             i0 = stream.ReadValueS32();
             i1 = stream.ReadValueS32();
             buf = new byte[256];
             stream.Read(buf, 0, 256); chararray2 = Encoding.ASCII.GetString(buf);
-            i2 = stream.ReadValueS32();
-            ScriptFormulaDetails = stream.ReadSerializedItem<ScriptFormulaDetails>();
+            ScriptFormulaCount = stream.ReadValueS32();
+            ScriptFormulaDetails = stream.ReadSerializedData<ScriptFormulaDetails>();
+            stream.Position += (3 * 4);
             i3 = stream.ReadValueS32();
+            stream.Position += (3 * 4);
 
-            // TODO need parsing of the complied script - DarkLotus
+            // TODO add a class for complied script so it can be deserialized properly. - DarkLotus
+            // none of the .pow appear to have any data here, and stream position appears to be correct, unsure - DarkLotus
             var serCompliedScript = stream.GetSerializedDataPointer();
+            if (serCompliedScript.Size > 0)
+            {
+                long x = stream.Position;
+                stream.Position = serCompliedScript.Offset + 16;
+                buf = new byte[serCompliedScript.Size];
+                stream.Read(buf, 0, serCompliedScript.Size);
+                stream.Position = x;
+                CompliedScript.AddRange(buf);
+            }
             snoQuestMetaData = stream.ReadValueS32();
             stream.Close();
         }

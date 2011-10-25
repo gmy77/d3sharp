@@ -25,10 +25,10 @@ namespace Mooege.Common.MPQ.FileFormats
     [FileFormat(SNOGroup.Adventure)]
     public class Adventure : FileFormat
     {
-        public Header Header;
-        public int snoSymbolActor;
+        public Header Header { get; private set; }
+        public int snoSymbolActor { get; private set; }
         float f0, f1, f2, f3;
-        int snoMarkerSet;
+        public int snoMarkerSet { get; private set; }
         public Adventure(MpqFile file)
         {
             var stream = file.Open();
