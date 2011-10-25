@@ -104,10 +104,12 @@
     <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\Data.cs" />
     <Compile Include="Common\MPQ\FileFormats\Actor.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Adventure.cs" />
     <Compile Include="Common\MPQ\FileFormats\AnimSet.cs" />
     <Compile Include="Common\MPQ\FileExtensions.cs" />
     <Compile Include="Common\MPQ\FileFormat.cs" />
     <Compile Include="Common\MPQ\FileFormatAttribute.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Encounter.cs" />
     <Compile Include="Common\MPQ\FileFormats\Lore.cs" />
     <Compile Include="Common\MPQ\FileFormats\MarkerSet.cs" />
     <Compile Include="Common\MPQ\FileFormats\Monster.cs" />

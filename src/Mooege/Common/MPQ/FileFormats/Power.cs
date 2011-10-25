@@ -67,12 +67,11 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Read(buf, 0, 256); chararray2 = Encoding.ASCII.GetString(buf);
             i2 = stream.ReadValueS32();
             ScriptFormulaDetails = stream.ReadSerializedItem<ScriptFormulaDetails>();
-
             i3 = stream.ReadValueS32();
 
+            // TODO need parsing of the complied script - DarkLotus
             var serCompliedScript = stream.GetSerializedDataPointer();
             snoQuestMetaData = stream.ReadValueS32();
-
             stream.Close();
         }
     }
@@ -120,7 +119,6 @@ namespace Mooege.Common.MPQ.FileFormats
                 Buffs.Add(new BuffDef(stream));
                 stream.Position += (2 * 4);
             }
-            // pad +80?
         }
 
     }

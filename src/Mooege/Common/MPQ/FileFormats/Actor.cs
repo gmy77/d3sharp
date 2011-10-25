@@ -19,8 +19,10 @@
 using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
-using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Net.GS.Message.Fields;
+using AABB = Mooege.Common.MPQ.FileFormats.Types.AABB;
 using System.Text;
+using Mooege.Common.MPQ.FileFormats.Types;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -58,7 +60,7 @@ namespace Mooege.Common.MPQ.FileFormats
         List<MsgTriggeredEvent> arMsgTriggeredEvents = new List<MsgTriggeredEvent>();
 
         public int Int1;
-        public Mooege.Net.GS.Message.Fields.Vector3D V0;
+        public Vector3D V0;
         public WeightedLook[] Looks;
         public int PhysicsSNO;
         public int Int2, Int3;
@@ -96,7 +98,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
             this.Int1 = stream.ReadValueS32();
             stream.Position += (3 * 4);
-            this.V0 = new Mooege.Net.GS.Message.Fields.Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
+            this.V0 = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
 
             this.Looks = new WeightedLook[8];
             for (int i = 0; i < 8; i++)
@@ -141,10 +143,7 @@ namespace Mooege.Common.MPQ.FileFormats
                 stream.Read(buf, 0, serVORole.Size); CastingNotes = Encoding.ASCII.GetString(buf);
                 stream.Position = x;
             }
-
-
             // Updated based on BoyC's 010 template and Moack's work. Think we just about read all data from actor now.- DarkLotus
-
             stream.Close();
         }
 
@@ -184,13 +183,13 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class AxialCylinder
     {
-        public Mooege.Net.GS.Message.Fields.Vector3D Position;
+        public Vector3D Position;
         public float Ax1;
         public float Ax2;
 
         public AxialCylinder(MpqFileStream stream)
         {
-            this.Position = new Mooege.Net.GS.Message.Fields.Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
+            this.Position = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
             Ax1 = stream.ReadValueF32();
             Ax2 = stream.ReadValueF32();
         }
@@ -198,12 +197,12 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class Sphere
     {
-        public Mooege.Net.GS.Message.Fields.Vector3D Position;
+        public Vector3D Position;
         public float Radius;
 
         public Sphere(MpqFileStream stream)
         {
-            Position = new Mooege.Net.GS.Message.Fields.Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
+            Position = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
             Radius = stream.ReadValueF32();
         }
     }
