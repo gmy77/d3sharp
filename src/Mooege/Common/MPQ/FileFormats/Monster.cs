@@ -16,10 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.IO;
-using CrystalMpq;
-using Mooege.Common.Extensions;
 using System.Collections.Generic;
+using CrystalMpq;
+using Gibbed.IO;
+using Mooege.Common.MPQ.FileFormats.Types;
 using System.Text;
 
 namespace Mooege.Common.MPQ.FileFormats
@@ -72,31 +72,31 @@ namespace Mooege.Common.MPQ.FileFormats
             var stream = file.Open();
             this.Header = new Header(stream);
             stream.Position += (1 * 4);
-            this.ActorSNO = stream.ReadInt32();
+            this.ActorSNO = stream.ReadValueS32();
             stream.Position += 4;
-            this.Type = (MonsterType)stream.ReadInt32();
-            this.Race = (MonsterRace)stream.ReadInt32();
-            this.Size = (MonsterSize)stream.ReadInt32();
+            this.Type = (MonsterType)stream.ReadValueS32();
+            this.Race = (MonsterRace)stream.ReadValueS32();
+            this.Size = (MonsterSize)stream.ReadValueS32();
             this.Monsterdef = new MonsterDef(stream);
-            this.Resists = (Resistance)stream.ReadInt32();
-            this.i0 = stream.ReadInt32();
-            this.i1 = stream.ReadInt32();
-            this.Level.Normal = stream.ReadInt32();
-            this.Level.Nightmare = stream.ReadInt32();
-            this.Level.Hell = stream.ReadInt32();
-            this.Level.Inferno = stream.ReadInt32();
+            this.Resists = (Resistance)stream.ReadValueS32();
+            this.i0 = stream.ReadValueS32();
+            this.i1 = stream.ReadValueS32();
+            this.Level.Normal = stream.ReadValueS32();
+            this.Level.Nightmare = stream.ReadValueS32();
+            this.Level.Hell = stream.ReadValueS32();
+            this.Level.Inferno = stream.ReadValueS32();
             Floats = new float[144];
             for (int i = 0; i < 144; i++)
             {
-                Floats[i] = stream.ReadFloat();
+                Floats[i] = stream.ReadValueF32();
             }
 
 
-            this.i3 = stream.ReadInt32();
+            this.i3 = stream.ReadValueS32();
             this.HealthDropinfo0 = new HealthDropInfo(stream);
             this.HealthDropinfo1 = new HealthDropInfo(stream);
             this.HealthDropinfo2 = new HealthDropInfo(stream);
-            this.snoSkillKit = stream.ReadInt32();
+            this.snoSkillKit = stream.ReadValueS32();
             this.SkillDeclarations = new SkillDeclaration[8];
             for (int i = 0; i < 8; i++)
             {
@@ -107,60 +107,60 @@ namespace Mooege.Common.MPQ.FileFormats
             {
                 this.MonsterSkillDeclarations[i] = new MonsterSkillDeclaration(stream);
             }
-            this.snoTreasureClassFirstKill = stream.ReadInt32();
-            this.snoTreasureClass = stream.ReadInt32();
-            this.snoTreasureClassRare = stream.ReadInt32();
-            this.snoTreasureClassChampion = stream.ReadInt32();
-            this.snoTreasureClassChampionLight = stream.ReadInt32();
+            this.snoTreasureClassFirstKill = stream.ReadValueS32();
+            this.snoTreasureClass = stream.ReadValueS32();
+            this.snoTreasureClassRare = stream.ReadValueS32();
+            this.snoTreasureClassChampion = stream.ReadValueS32();
+            this.snoTreasureClassChampionLight = stream.ReadValueS32();
             // at 916 here
-            this.f2 = stream.ReadFloat();
-            this.f3 = stream.ReadFloat();
-            this.f4 = stream.ReadFloat();
-            this.f5 = stream.ReadFloat();
-            i4 = stream.ReadInt32();
-            f6 = stream.ReadFloat();
-            i5 = stream.ReadInt32();
-            i6 = stream.ReadInt32();
+            this.f2 = stream.ReadValueF32();
+            this.f3 = stream.ReadValueF32();
+            this.f4 = stream.ReadValueF32();
+            this.f5 = stream.ReadValueF32();
+            i4 = stream.ReadValueS32();
+            f6 = stream.ReadValueF32();
+            i5 = stream.ReadValueS32();
+            i6 = stream.ReadValueS32();
             //948
-            this.snoInventory = stream.ReadInt32();
-            this.snoSecondaryInventory = stream.ReadInt32();
-            this.snoLore = stream.ReadInt32();
+            this.snoInventory = stream.ReadValueS32();
+            this.snoSecondaryInventory = stream.ReadValueS32();
+            this.snoLore = stream.ReadValueS32();
             AIBehavior = new int[6];
             for (int i = 0; i < 6; i++)
             {
-                this.AIBehavior[i] = stream.ReadInt32();
+                this.AIBehavior[i] = stream.ReadValueS32();
             }
             GbidArray0 = new int[8];
             for (int i = 0; i < 8; i++)
             {
-                this.GbidArray0[i] = stream.ReadInt32();
+                this.GbidArray0[i] = stream.ReadValueS32();
             }
             this.snoSummonActor = new int[6];
             for (int i = 0; i < 6; i++)
             {
-                this.snoSummonActor[i] = stream.ReadInt32();
+                this.snoSummonActor[i] = stream.ReadValueS32();
             }
             GbidArray1 = new int[4];
             for (int i = 0; i < 4; i++)
             {
-                this.GbidArray1[i] = stream.ReadInt32();
+                this.GbidArray1[i] = stream.ReadValueS32();
             }
             GbidArray2 = new int[6];
             for (int i = 0; i < 6; i++)
             {
-                this.GbidArray2[i] = stream.ReadInt32();
+                this.GbidArray2[i] = stream.ReadValueS32();
             }
-            this.i7 = stream.ReadInt32();
-            this.i8 = stream.ReadInt32();
-            this.i9 = stream.ReadInt32();
-            this.PowerType = (MonsterPowerType)stream.ReadInt32();
+            this.i7 = stream.ReadValueS32();
+            this.i8 = stream.ReadValueS32();
+            this.i9 = stream.ReadValueS32();
+            this.PowerType = (MonsterPowerType)stream.ReadValueS32();
 
             stream.Position += (6*4);
-            TagMap = stream.ReadSerializedData<TagMap>();
+            TagMap = stream.ReadSerializedItem<TagMap>();
             stream.Position += (2 * 4);
-            i10 = stream.ReadInt32();
+            i10 = stream.ReadValueS32();
             stream.Position += (3 * 4);
-            MonsterMinionSpawngroup = stream.ReadSerializedData<MonsterMinionSpawnGroup>();
+            MonsterMinionSpawngroup = stream.ReadSerializedItem<MonsterMinionSpawnGroup>();
             byte[] buf = new byte[128];
             stream.Read(buf, 0, 128); Name = Encoding.ASCII.GetString(buf);            
             stream.Close();
@@ -173,9 +173,9 @@ namespace Mooege.Common.MPQ.FileFormats
             public List<MonsterMinionSpawnItem> SpawnItems = new List<MonsterMinionSpawnItem>();
             public void Read(MpqFileStream stream)
             {
-                this.f0 = stream.ReadFloat();
-                this.i1 = stream.ReadInt32();
-                SpawnItems = stream.ReadVariableLengthSerializedData<MonsterMinionSpawnItem>();
+                this.f0 = stream.ReadValueF32();
+                this.i1 = stream.ReadValueS32();
+                SpawnItems = stream.ReadSerializedData<MonsterMinionSpawnItem>();
             }
         }
 
@@ -184,11 +184,11 @@ namespace Mooege.Common.MPQ.FileFormats
             public int snoSpawn, i0, i1, i2, i3;
             public void Read(MpqFileStream stream)
             {
-                this.snoSpawn = stream.ReadInt32();
-                this.i0 = stream.ReadInt32();
-                this.i1 = stream.ReadInt32();
-                this.i2 = stream.ReadInt32();
-                this.i3 = stream.ReadInt32();
+                this.snoSpawn = stream.ReadValueS32();
+                this.i0 = stream.ReadValueS32();
+                this.i1 = stream.ReadValueS32();
+                this.i2 = stream.ReadValueS32();
+                this.i3 = stream.ReadValueS32();
             }
         }
         public class MonsterDef
@@ -197,11 +197,11 @@ namespace Mooege.Common.MPQ.FileFormats
             public int i0;
             public MonsterDef(MpqFileStream stream)
             {
-                f0 = stream.ReadFloat();
-                f1 = stream.ReadFloat();
-                f2 = stream.ReadFloat();
-                f3 = stream.ReadFloat();
-                i0 = stream.ReadInt32();
+                f0 = stream.ReadValueF32();
+                f1 = stream.ReadValueF32();
+                f2 = stream.ReadValueF32();
+                f3 = stream.ReadValueF32();
+                i0 = stream.ReadValueS32();
             }
         }
         public class MonsterSkillDeclaration
@@ -211,10 +211,10 @@ namespace Mooege.Common.MPQ.FileFormats
             public float f2;
             public MonsterSkillDeclaration(MpqFileStream stream)
             {
-                f0 = stream.ReadFloat();
-                f1 = stream.ReadFloat();
-                i0 = stream.ReadInt32();
-                f2 = stream.ReadFloat();
+                f0 = stream.ReadValueF32();
+                f1 = stream.ReadValueF32();
+                i0 = stream.ReadValueS32();
+                f2 = stream.ReadValueF32();
             }
         }
         public class SkillDeclaration
@@ -223,8 +223,8 @@ namespace Mooege.Common.MPQ.FileFormats
             public int i0;
             public SkillDeclaration(MpqFileStream stream)
             {
-                snoPower = stream.ReadInt32();
-                i0 = stream.ReadInt32();
+                snoPower = stream.ReadValueS32();
+                i0 = stream.ReadValueS32();
             }
         }
         public enum MonsterPowerType // No idea what this is called - DarkLotus
@@ -244,9 +244,9 @@ namespace Mooege.Common.MPQ.FileFormats
             int i1;
             public HealthDropInfo(MpqFileStream stream)
             {
-                this.f0 = stream.ReadFloat();
-                this.GBID = stream.ReadInt32();
-                this.i1 = stream.ReadInt32();
+                this.f0 = stream.ReadValueF32();
+                this.GBID = stream.ReadValueS32();
+                this.i1 = stream.ReadValueS32();
             }
         }
         public enum Resistance

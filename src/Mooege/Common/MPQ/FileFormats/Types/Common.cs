@@ -76,7 +76,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         }
     }
 
-    public class AABB // Ambiogous refrence fix me - DarkLotus
+    public class AABB
     {
         public Vector3D Min { get; private set; }
         public Vector3D Max { get; private set; }
@@ -126,20 +126,31 @@ namespace Mooege.Common.MPQ.FileFormats.Types
 
     public class TagMapEntry
     {
-        public int Int0;
+        public int Type;
         public int Int1;
+
+        public ScriptFormulaDetails Details;
         public int Int2;
         public float Float0;
 
         public TagMapEntry(MpqFileStream stream)
         {
-            this.Int0 = stream.ReadValueS32();
+            this.Type = stream.ReadValueS32();
             this.Int1 = stream.ReadValueS32();
 
-            switch (this.Int0)
+            switch (this.Type)
             {
+                case 0:
+                    this.Int2 = stream.ReadValueS32();
+                    break;
                 case 1:
                     Float0 = stream.ReadValueF32();
+                    break;
+                case 2: // SNO
+                    this.Int2 = stream.ReadValueS32();
+                    break;
+                case 4:
+                    this.Details = new ScriptFormulaDetails(); Details.Read(stream);
                     break;
                 default:
                     this.Int2 = stream.ReadValueS32();
@@ -147,7 +158,31 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             }
         }
     }
-
+    public class ScriptFormulaDetails : ISerializableData
+    {
+        // Incomplete Broken, Need full implementation of this class - DarkLotus
+        char[] c0; //256
+        char[] c1; //512
+        int i0, i1;
+        public void Read(MpqFileStream stream)
+        {
+            c0 = new char[256];
+            c1 = new char[512];
+            byte[] buf = new byte[512];
+            stream.Read(buf, 0, 256);
+            for (int i = 0; i < c0.Length; i++)
+            {
+                c0[i] = (char)buf[i];
+            }
+            stream.Read(buf, 0, 512);
+            for (int i = 0; i < c1.Length; i++)
+            {
+                c1[i] = (char)buf[i];
+            }
+            i0 = stream.ReadValueS32();
+            i1 = stream.ReadValueS32();
+        }
+    }
     // Replace each Look with just a chararay? DarkLotus
     public class HardPointLink
     {
