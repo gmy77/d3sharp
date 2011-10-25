@@ -118,15 +118,16 @@ namespace Mooege.Common.MPQ
         /// <returns>List of items.</returns>
         public static List<T> ReadSerializedData<T>(this MpqFileStream stream) where T : ISerializableData, new()
         {
-            var pointer = stream.GetSerializedDataPointer();
+            int offset = stream.ReadValueS32(); // ofset for serialized data.
+            int size = stream.ReadValueS32(); // size of serialized data.
 
             var items = new List<T>(); // read-items if any.            
-            if (pointer.Size <= 0) return items;
+            if (size <= 0) return items;
 
             var oldPos = stream.Position;
-            stream.Position = pointer.Offset + 16; // offset is relative to actual sno data start, so add that 16 bytes file header to get actual position. /raist
+            stream.Position = offset + 16; // offset is relative to actual sno data start, so add that 16 bytes file header to get actual position. /raist
 
-            while (stream.Position < pointer.Offset + pointer.Size + 16)
+            while (stream.Position < offset + size + 16)
             {
                 var t = new T();
                 t.Read(stream);
@@ -145,8 +146,8 @@ namespace Mooege.Common.MPQ
         /// <returns>The read item.</returns>
         public static T ReadSerializedItem<T>(this MpqFileStream stream) where T : ISerializableData, new()
         {
-            int offset = stream.ReadValueS32();
-            int size = stream.ReadValueS32();
+            int offset = stream.ReadValueS32(); // ofset for serialized data.
+            int size = stream.ReadValueS32(); // size of serialized data.
 
             var t = new T();
             if (size <= 0) return t;
@@ -164,10 +165,11 @@ namespace Mooege.Common.MPQ
         /// <param name="stream">The MPQFileStream to read from.</param>
         /// <returns>The list of read ints.</returns>
         public static List<int> ReadSerializedInts(this MpqFileStream stream)
-        {
-            var items = new List<int>(); // read-items if any.
+        {            
             int offset = stream.ReadValueS32(); // ofset for serialized data.
             int size = stream.ReadValueS32(); // size of serialized data.
+
+            var items = new List<int>(); // read-items if any.
             if (size <= 0) return items;
 
             var oldPos = stream.Position;
@@ -180,6 +182,28 @@ namespace Mooege.Common.MPQ
 
             stream.Position = oldPos;
             return items;
+        }
+
+        /// <summary>
+        /// Reads a serialized string.
+        /// </summary>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        /// <returns>Read string.</returns>
+        public static string ReadSerializedString(this MpqFileStream stream)
+        {
+            int offset = stream.ReadValueS32(); // ofset for serialized data.
+            int size = stream.ReadValueS32(); // size of serialized data.
+
+            var @string = string.Empty;
+            if (size <= 0) return @string;
+
+            var oldPos = stream.Position;
+            stream.Position = offset + 16; // offset is relative to actual sno data start, so add that 16 bytes file header to get actual position. /raist
+
+            @string = stream.ReadString((uint) size, true);
+            stream.Position = oldPos;
+
+            return @string;
         }
     }
 }
