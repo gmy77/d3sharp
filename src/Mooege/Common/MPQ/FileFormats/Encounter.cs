@@ -19,38 +19,37 @@
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
+using System.Collections.Generic;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
-    [FileFormat(SNOGroup.Lore)]
-    public class Lore : FileFormat
+    [FileFormat(SNOGroup.Encounter)]
+    public class Encounter : FileFormat
     {
         public Header Header { get; private set; }
-        public int i0 { get; private set; }
-        public LoreCategory Category { get; private set; }
-        public int i1 { get; private set; }
-        public int i2 { get; private set; }
-        public int snoConversation { get; private set; }
-        public int i3 { get; private set; }
-
-        public Lore(MpqFile file)
+        public int snoSpawn { get; private set; }
+        List<EncounterSpawnOptions> Spawnoptions = new List<EncounterSpawnOptions>();
+        public Encounter(MpqFile file)
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            this.i0 = stream.ReadValueS32();
-            this.Category = (LoreCategory)stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.i2 = stream.ReadValueS32();
-            this.snoConversation = stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
+            this.snoSpawn = stream.ReadValueS32();
+            stream.Position += (2 * 4);// pad 2 int
+            this.Spawnoptions = stream.ReadSerializedData<EncounterSpawnOptions>();
             stream.Close();
-        }       
+        }
     }
-    public enum LoreCategory
+
+    public class EncounterSpawnOptions : ISerializableData
     {
-        Quest = 0,
-        World,
-        People,
-        Bestiary,
-    };
+        public int snoSpawn { get; private set; }
+        public int i0 { get; private set; }
+        public int i1 { get; private set; }
+        public void Read(MpqFileStream stream)
+        {
+            this.snoSpawn = stream.ReadValueS32();
+            this.i0 = stream.ReadValueS32();
+            this.i1 = stream.ReadValueS32();
+        }
+    }
 }

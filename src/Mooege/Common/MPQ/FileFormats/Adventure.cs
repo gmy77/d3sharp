@@ -22,35 +22,24 @@ using Mooege.Common.MPQ.FileFormats.Types;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
-    [FileFormat(SNOGroup.Lore)]
-    public class Lore : FileFormat
+    [FileFormat(SNOGroup.Adventure)]
+    public class Adventure : FileFormat
     {
         public Header Header { get; private set; }
-        public int i0 { get; private set; }
-        public LoreCategory Category { get; private set; }
-        public int i1 { get; private set; }
-        public int i2 { get; private set; }
-        public int snoConversation { get; private set; }
-        public int i3 { get; private set; }
-
-        public Lore(MpqFile file)
+        public int snoSymbolActor { get; private set; }
+        float f0, f1, f2, f3;
+        public int snoMarkerSet { get; private set; }
+        public Adventure(MpqFile file)
         {
             var stream = file.Open();
-            this.Header = new Header(stream);
-            this.i0 = stream.ReadValueS32();
-            this.Category = (LoreCategory)stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.i2 = stream.ReadValueS32();
-            this.snoConversation = stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
+            this.Header = new Types.Header(stream);
+            this.snoSymbolActor = stream.ReadValueS32();
+            this.f0 = stream.ReadValueF32();
+            this.f1 = stream.ReadValueF32();
+            this.f2 = stream.ReadValueF32();
+            this.f3 = stream.ReadValueF32();
+            this.snoMarkerSet = stream.ReadValueS32();
             stream.Close();
-        }       
+        }
     }
-    public enum LoreCategory
-    {
-        Quest = 0,
-        World,
-        People,
-        Bestiary,
-    };
 }

@@ -16,12 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using Mooege.Common;
 using Mooege.Core.MooNet.Online;
 
 namespace Mooege.Net.MooNet
 {
     public sealed class MooNetServer : Server
     {
+        private new static readonly Logger Logger = LogManager.CreateLogger(); // hide the Server.Logger so that tiny-logger can show the actual server as log source.
+
         public MooNetServer()
         {
             this.OnConnect += MooNetServer_OnConnect;
