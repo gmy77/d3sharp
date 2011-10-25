@@ -109,6 +109,8 @@
     <Compile Include="Common\MPQ\FileExtensions.cs" />
     <Compile Include="Common\MPQ\FileFormat.cs" />
     <Compile Include="Common\MPQ\FileFormatAttribute.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Conversation.cs" />
+    <Compile Include="Common\MPQ\FileFormats\ConversationList.cs" />
     <Compile Include="Common\MPQ\FileFormats\EffectGroup.cs" />
     <Compile Include="Common\MPQ\FileFormats\Encounter.cs" />
     <Compile Include="Common\MPQ\FileFormats\Lore.cs" />

@@ -70,8 +70,8 @@ namespace Mooege.Common.MPQ.FileFormats
             I1 = stream.ReadValueS32();
             I2 = stream.ReadValueS32();
             GbidItem = stream.ReadValueS32();
-            Noname1 = stream.ReadString(128);
-            Noname2 = stream.ReadString(128);
+            Noname1 = stream.ReadString(128, true);
+            Noname2 = stream.ReadString(128, true);
             SNOQuestCurrent = stream.ReadValueS32();
             I3 = stream.ReadValueS32();
             SNOQuestAssigned = stream.ReadValueS32();
