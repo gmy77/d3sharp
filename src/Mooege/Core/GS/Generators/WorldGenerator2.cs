@@ -61,10 +61,13 @@ namespace Mooege.Core.GS.Generators
 
                 scene.Position = new Net.GS.Message.Fields.Vector3D
                                      {
-                                         X = sceneChunk.PRTransform.V.X -= 540, // i don't know why we need this but otherwise it does not work/raist
-                                         Y = sceneChunk.PRTransform.V.Y += 600, // i don't know why we need this but otherwise it does not work/raist
+                                         X = sceneChunk.PRTransform.V.X -= 240, // i don't know why we need this but otherwise it does not work/raist
+                                         Y = sceneChunk.PRTransform.V.Y -= 480, // i don't know why we need this but otherwise it does not work/raist
                                          Z = sceneChunk.PRTransform.V.Z
                                      };
+
+                //  71150 = X-=540, Y+=600
+                // 109362 = X-=240, Y-=400
                 
                 scene.RotationAmount = 1;
                 scene.RotationAxis.X = 0;
@@ -75,9 +78,11 @@ namespace Mooege.Core.GS.Generators
                 SetSceneSpecification(scene, sceneChunk.SceneSpecification);
             }
 
-            world.StartPosition.X = 3143.750000f;
-            world.StartPosition.Y = 2828.750000f;
-            world.StartPosition.Z = 59.075588f;
+            //  71150 =  X: 3143,75,  Y: 2828,75,  Z: 59,07559
+            // 109362 =   X: 83,75,  Y: 123,75,  Z: 0,2000023
+            world.StartPosition.X = 83.75f;
+            world.StartPosition.Y = 123.75f;
+            world.StartPosition.Z = 0.2000023f;
 
             return world;
         }

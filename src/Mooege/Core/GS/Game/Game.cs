@@ -75,7 +75,7 @@ namespace Mooege.Core.GS.Game
             this._objects = new ConcurrentDictionary<uint, DynamicObject>();
             this._worlds = new ConcurrentDictionary<int, World>();
             this._worldGenerator = new WorldGenerator(this);
-            this.StartWorldSNO = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff
+            this.StartWorldSNO = 109362; // 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff
 
             var loopThread=new Thread(Update) { IsBackground = true };
             loopThread.Start();

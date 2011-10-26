@@ -115,9 +115,9 @@ namespace Mooege.Core.GS.Player
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.CollFlags = 0x00000000;
 
-            this.Position.X = 3143.75f;
-            this.Position.Y = 2828.75f;
-            this.Position.Z = 59.075588f;
+            this.Position.X = this.World.StartPosition.X;
+            this.Position.Y = this.World.StartPosition.Y;
+            this.Position.Z = this.World.StartPosition.Z;
 
             // den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
             // inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
