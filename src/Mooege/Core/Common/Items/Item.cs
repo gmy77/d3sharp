@@ -26,10 +26,6 @@ using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Effect;
-<<<<<<< HEAD
-using Mooege.Common.Helpers;
-=======
->>>>>>> 7934fe4e1416f02401bb465f2f0262c17f4f3620
 using Mooege.Net.GS.Message;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
