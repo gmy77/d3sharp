@@ -104,6 +104,7 @@ namespace Mooege.Core.GS.Powers
                 implementation.PowerSNO = powerSNO;
                 implementation.User = user;
                 implementation.Target = target;
+                implementation.World = user.World;
                 implementation.TargetPosition = targetPosition;
                 implementation.Message = message;
 

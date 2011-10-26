@@ -26,6 +26,7 @@ using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Common;
 using Mooege.Net.GS.Message;
+using Mooege.Core.GS.Map;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -36,6 +37,7 @@ namespace Mooege.Core.GS.Powers
         
         public PowerManager PowerManager;
         public int PowerSNO;
+        public World World;
         public Actor User;
         public Actor Target;
         public Vector3D TargetPosition;

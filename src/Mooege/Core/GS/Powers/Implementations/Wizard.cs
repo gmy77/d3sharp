@@ -53,49 +53,46 @@ namespace Mooege.Core.GS.Powers.Implementations
             RegisterChannelingPower(WaitSeconds(0.5f));
             
             if (ThrottledCast)
-            {
                 yield break;
-            }
 
             User.FacingTranslate(TargetPosition);
 
-            UsePrimaryResource(20f);
+            UsePrimaryResource(10f);
 
             if (Target == null)
             {
-                // no target, just zap the air
+                // no target, just zap the air with miss effect rope
                 User.AddRopeEffect(30913, GetChanneledProxy(0, TargetPosition));
             }
             else
             {
                 IList<Actor> targets = new List<Actor>() { Target };
-                while (targets.Count < 3) // original target + bounce 2 times
-                {
-                    var bounce = GetTargetsInRange(targets.Last().Position, 15f, 3).FirstOrDefault(t => !targets.Contains(t));
-                    if (bounce != null)
-                        targets.Add(bounce);
-                    else
-                        break;
-                }
-
                 Actor ropeSource = User;
-                foreach (Actor actor in targets)
+                float damage = 22f;
+                while (targets.Count < 4) // original target + bounce 2 times
                 {
-                    actor.PlayHitEffect(2, User);
-                    ropeSource.AddRopeEffect(0x78c0, actor);
+                    Target.PlayHitEffect(2, User);
+                    ropeSource.AddRopeEffect(0x78c0, Target);
+                    ropeSource = Target;
 
-                    ropeSource = actor;
-                }
-
-                float damage = 45f;
-                foreach (Actor actor in targets)
-                {
-                    Damage(actor, damage, 0);
+                    Damage(Target, damage, 0);
                     damage *= 0.7f;
-                }                
+
+                    Target = GetTargetsInRange(Target.Position, 15f, 3).FirstOrDefault(t => !targets.Contains(t));
+                    if (Target != null)
+                    {
+                        targets.Add(Target);
+                        yield return WaitSeconds(0.150f);
+                        // end loop if target or ropeSource are no longer in this world after resuming
+                        if (Target.World != World || ropeSource.World != World)
+                            break;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }             
             }
-            
-            yield break;
         }
     }
 
