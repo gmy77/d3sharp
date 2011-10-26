@@ -18,7 +18,8 @@
 
 ﻿using Mooege.Common;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Player;
+﻿using Mooege.Core.GS.Common.Types.Math;
+﻿using Mooege.Core.GS.Player;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.ACD;

@@ -17,25 +17,48 @@
  */
 
 using System.Text;
+using CrystalMpq;
+using Gibbed.IO;
+using Mooege.Net.GS.Message;
 
-namespace Mooege.Net.GS.Message.Fields
+namespace Mooege.Core.GS.Common.Types.Math
 {
     public class Quaternion
     {
-        public float Amount;
-        public Vector3D Axis;
+        public float W;
+        public Vector3D Vector3D;
 
-        public void Parse(GameBitBuffer buffer)
+        public Quaternion() { }
+
+        /// <summary>
+        /// Reads Quaternion from given MPQFileStream.
+        /// </summary>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        public Quaternion(MpqFileStream stream)
         {
-            Amount = buffer.ReadFloat32();
-            Axis = new Vector3D();
-            Axis.Parse(buffer);
+            this.W = stream.ReadValueF32();
+            this.Vector3D = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
         }
 
+        /// <summary>
+        /// Parses Quaternion from given GameBitBuffer.
+        /// </summary>
+        /// <param name="buffer">The GameBitBuffer to parse from.</param>
+        public void Parse(GameBitBuffer buffer)
+        {
+            W = buffer.ReadFloat32();
+            Vector3D = new Vector3D();
+            Vector3D.Parse(buffer);
+        }
+
+        /// <summary>
+        /// Encodes Quaternion to given GameBitBuffer.
+        /// </summary>
+        /// <param name="buffer">The GameBitBuffer to write.</param>
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteFloat32(Amount);
-            Axis.Encode(buffer);
+            buffer.WriteFloat32(W);
+            Vector3D.Encode(buffer);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -45,12 +68,10 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: " + Amount.ToString("G"));
-            Axis.AsText(b, pad);
+            b.AppendLine("W: " + W.ToString("G"));
+            Vector3D.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

@@ -19,6 +19,9 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using Mooege.Core.GS.Common.Types.Collusion;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.Scene;
 using duct;
 using Mooege.Common;
 using Mooege.Core.GS.Game;
@@ -182,43 +185,43 @@ namespace Mooege.Core.GS.Generators
             }
             if (parent != null)
                 parent.Subscenes.Add(scene);
-            scene.SceneSpec = new SceneSpecification
+            scene.Specification = new SceneSpecification
             {
                 CellZ = iden.GetInt(i++).Value,
-                Cell = new IVector2D
+                Cell = new Vector2D
                 {
                     X = iden.GetInt(i++).Value,
                     Y = iden.GetInt(i++).Value
                 },
-                arSnoLevelAreas = new int[4]
+                SNOLevelAreas = new int[4]
                 {
                     iden.GetInt(i++).Value,
                     iden.GetInt(i++).Value,
                     iden.GetInt(i++).Value,
                     iden.GetInt(i++).Value
                 },
-                snoPrevWorld        = iden.GetInt(i++).Value,
-                Field4              = iden.GetInt(i++).Value,
-                snoPrevLevelArea    = iden.GetInt(i++).Value,
-                snoNextWorld        = iden.GetInt(i++).Value,
-                Field7              = iden.GetInt(i++).Value,
-                snoNextLevelArea    = iden.GetInt(i++).Value,
-                snoMusic            = iden.GetInt(i++).Value,
-                snoCombatMusic      = iden.GetInt(i++).Value,
-                snoAmbient          = iden.GetInt(i++).Value,
-                snoReverb           = iden.GetInt(i++).Value,
-                snoWeather          = iden.GetInt(i++).Value,
-                snoPresetWorld      = iden.GetInt(i++).Value,
-                Field15             = iden.GetInt(i++).Value,
-                Field16             = iden.GetInt(i++).Value,
-                Field17             = iden.GetInt(i++).Value,
-                Field18             = iden.GetInt(i++).Value,
-                tCachedValues = new SceneCachedValues
+                SNOPrevWorld        = iden.GetInt(i++).Value,
+                Unknown1              = iden.GetInt(i++).Value,
+                SNOPrevLevelArea    = iden.GetInt(i++).Value,
+                SNONextWorld        = iden.GetInt(i++).Value,
+                Unknown2              = iden.GetInt(i++).Value,
+                SNONextLevelArea    = iden.GetInt(i++).Value,
+                SNOMusic            = iden.GetInt(i++).Value,
+                SNOCombatMusic      = iden.GetInt(i++).Value,
+                SNOAmbient          = iden.GetInt(i++).Value,
+                SNOReverb           = iden.GetInt(i++).Value,
+                SNOWeather          = iden.GetInt(i++).Value,
+                SNOPresetWorld      = iden.GetInt(i++).Value,
+                Unknown3             = iden.GetInt(i++).Value,
+                Unknown4             = iden.GetInt(i++).Value,
+                Unknown5             = iden.GetInt(i++).Value,
+                ClusterID             = iden.GetInt(i++).Value,
+                SceneCachedValues = new SceneCachedValues
                 {
-                    Field0 = iden.GetInt(i++).Value,
-                    Field1 = iden.GetInt(i++).Value,
-                    Field2 = iden.GetInt(i++).Value,
-                    Field3 = new AABB
+                    Unknown1 = iden.GetInt(i++).Value,
+                    Unknown2 = iden.GetInt(i++).Value,
+                    Unknown3 = iden.GetInt(i++).Value,
+                    AABB1 = new AABB
                     {
                         Min = new Vector3D
                         {
@@ -233,7 +236,7 @@ namespace Mooege.Core.GS.Generators
                             Z = iden.GetFloat(i++).Value
                         },
                     },
-                    Field4 = new AABB
+                    AABB2 = new AABB
                     {
                         Min = new Vector3D
                         {
@@ -248,14 +251,14 @@ namespace Mooege.Core.GS.Generators
                             Z = iden.GetFloat(i++).Value
                         },
                     },
-                    Field5 = new int[4]
+                    Unknown4 = new int[4]
                     {
                         iden.GetInt(i++).Value,
                         iden.GetInt(i++).Value,
                         iden.GetInt(i++).Value,
                         iden.GetInt(i++).Value
                     },
-                    Field6 = iden.GetInt(i++).Value
+                    Unknown5 = iden.GetInt(i++).Value
                 },
             };
             scene.RotationAxis.X = iden.GetFloat(i++).Value;

@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common;
 using Mooege.Common.Helpers;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.Common.Items;

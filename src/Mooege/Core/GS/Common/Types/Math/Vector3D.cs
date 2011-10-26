@@ -17,8 +17,11 @@
  */
 
 using System.Text;
+using CrystalMpq;
+using Gibbed.IO;
+using Mooege.Net.GS.Message;
 
-namespace Mooege.Net.GS.Message.Fields
+namespace Mooege.Core.GS.Common.Types.Math
 {
     public class Vector3D
     {
@@ -41,6 +44,53 @@ namespace Mooege.Net.GS.Message.Fields
         public Vector3D(float x, float y, float z)
         {
             Set(x, y, z);
+        }
+
+        /// <summary>
+        /// Reads Vector3D from given MPQFileStream.
+        /// </summary>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        public Vector3D(MpqFileStream stream)
+            : this(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32())
+        {
+        }
+
+        /// <summary>
+        /// Parses Vector3D from given GameBitBuffer.
+        /// </summary>
+        /// <param name="buffer">The GameBitBuffer to parse from.</param>
+        public void Parse(GameBitBuffer buffer)
+        {
+            X = buffer.ReadFloat32();
+            Y = buffer.ReadFloat32();
+            Z = buffer.ReadFloat32();
+        }
+
+        /// <summary>
+        /// Encodes Vector3D to given GameBitBuffer.
+        /// </summary>        
+        /// <param name="buffer">The GameBitBuffer to write.</param>
+        public void Encode(GameBitBuffer buffer)
+        {
+            buffer.WriteFloat32(X);
+            buffer.WriteFloat32(Y);
+            buffer.WriteFloat32(Z);
+        }
+
+        public void AsText(StringBuilder b, int pad)
+        {
+            b.Append(' ', pad);
+            b.AppendLine("Vector3D:");
+            b.Append(' ', pad++);
+            b.AppendLine("{");
+            b.Append(' ', pad);
+            b.AppendLine("X: " + X.ToString("G"));
+            b.Append(' ', pad);
+            b.AppendLine("Y: " + Y.ToString("G"));
+            b.Append(' ', pad);
+            b.AppendLine("Z: " + Z.ToString("G"));
+            b.Append(' ', --pad);
+            b.AppendLine("}");
         }
 
         public void Set(float x, float y, float z)
@@ -121,37 +171,7 @@ namespace Mooege.Net.GS.Message.Fields
         {
             return X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode();
         }
-
-        public void Parse(GameBitBuffer buffer)
-        {
-            X = buffer.ReadFloat32();
-            Y = buffer.ReadFloat32();
-            Z = buffer.ReadFloat32();
-        }
-
-        public void Encode(GameBitBuffer buffer)
-        {
-            buffer.WriteFloat32(X);
-            buffer.WriteFloat32(Y);
-            buffer.WriteFloat32(Z);
-        }
-
-        public void AsText(StringBuilder b, int pad)
-        {
-            b.Append(' ', pad);
-            b.AppendLine("Vector3D:");
-            b.Append(' ', pad++);
-            b.AppendLine("{");
-            b.Append(' ', pad);
-            b.AppendLine("X: " + X.ToString("G"));
-            b.Append(' ', pad);
-            b.AppendLine("Y: " + Y.ToString("G"));
-            b.Append(' ', pad);
-            b.AppendLine("Z: " + Z.ToString("G"));
-            b.Append(' ', --pad);
-            b.AppendLine("}");
-        }
-
+        
         public override string ToString()
         {
             return string.Format("x:{0} y:{1} z:{2}",X, Y,Z);

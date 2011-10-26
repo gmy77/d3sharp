@@ -16,14 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Mooege.Common;
 using Mooege.Common.MPQ;
+using Mooege.Core.GS.Common.Types.Collusion;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.Scene;
 using Mooege.Core.GS.Map;
-using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Core.GS.Generators
 {
@@ -53,19 +54,19 @@ namespace Mooege.Core.GS.Generators
                 clusters[cluster.ClusterId] = cluster;
 
             // Scenes are not aligned to (0, 0) but apparently need to be -farmy
-            float minX = worldData.SceneParams.SceneChunks.Min(x => x.PRTransform.V.X);
-            float minY = worldData.SceneParams.SceneChunks.Min(x => x.PRTransform.V.Y);
+            float minX = worldData.SceneParams.SceneChunks.Min(x => x.PRTransform.Vector3D.X);
+            float minY = worldData.SceneParams.SceneChunks.Min(x => x.PRTransform.Vector3D.Y);
 
             foreach(var sceneChunk in worldData.SceneParams.SceneChunks)
             {
                 var scene = new Scene(world, sceneChunk.SNOName.SNOId, null);
                 scene.MiniMapVisibility = 2;
                 
-                scene.Position = new Net.GS.Message.Fields.Vector3D
+                scene.Position = new Vector3D
                                      {
-                                         X = sceneChunk.PRTransform.V.X - minX,
-                                         Y = sceneChunk.PRTransform.V.Y - minY,
-                                         Z = sceneChunk.PRTransform.V.Z
+                                         X = sceneChunk.PRTransform.Vector3D.X - minX,
+                                         Y = sceneChunk.PRTransform.Vector3D.Y - minY,
+                                         Z = sceneChunk.PRTransform.Vector3D.Z
                                      };
 
                 // rename rotation-amount and axis to Quaternion.
@@ -106,14 +107,14 @@ namespace Mooege.Core.GS.Generators
                                 };
                                 subscene.MiniMapVisibility = 2;
                                 subscene.RotationAmount = 1;
-                                SetSceneSpecification(subscene, sceneChunk.SceneSpecification);
+                                subscene.Specification = sceneChunk.SceneSpecification;
                                 scene.Subscenes.Add(subscene);
                             }
                         }
                     }
                 }
 
-                SetSceneSpecification(scene, sceneChunk.SceneSpecification);
+                scene.Specification = sceneChunk.SceneSpecification;
             }
 
             //  71150 =  X: 3143,75,  Y: 2828,75,  Z: 59,07559
@@ -137,59 +138,10 @@ namespace Mooege.Core.GS.Generators
                 var mpqMarkerSet = MPQStorage.Data.Assets[SNOGroup.MarkerSet][markerSet].Data as Mooege.Common.MPQ.FileFormats.MarkerSet;
                 foreach (var marker in mpqMarkerSet.Markers)
                     if (marker.Int0 == 16)      // TODO Make this an enum value
-                        return marker.PRTransform.V;
+                        return marker.PRTransform.Vector3D;
             }
 
             return null;
-        }
-
-        private static void SetSceneSpecification(Scene scene, Mooege.Common.MPQ.FileFormats.SceneSpecification specification)
-        {
-            scene.SceneSpec = new Net.GS.Message.Fields.SceneSpecification
-                                  {
-                                      CellZ=specification.CellZ,
-                                      Cell = new Net.GS.Message.Fields.IVector2D
-                                                 {
-                                                   X=specification.Cell.X,
-                                                   Y=specification.Cell.Y,
-                                                 },
-                                      arSnoLevelAreas=specification.SNOLevelAreas,
-                                      snoPrevWorld=specification.SNOPrevWorld,
-                                      Field4=specification.Int1,
-                                      snoPrevLevelArea=specification.SNOPrevLevelArea,
-                                      snoNextWorld=specification.SNONextWorld,
-                                      Field7=specification.Int3,
-                                      snoNextLevelArea=specification.SNONextLevelArea,
-                                      snoMusic=specification.SNOMusic,
-                                      snoCombatMusic=specification.SNOCombatMusic,
-                                      snoAmbient=specification.SNOAmbient,
-                                      snoReverb=specification.SNOReverb,
-                                      snoWeather=specification.SNOWeather,
-                                      snoPresetWorld=specification.SNOPresetWorld,
-                                      Field15=specification.Int4,
-                                      Field16=specification.Int5,
-                                      Field17=specification.Int6,
-                                      Field18=specification.ClusterID,
-                                      tCachedValues=new Net.GS.Message.Fields.SceneCachedValues
-                                                        {
-                                                            Field0=specification.SceneCachedValues.Int0,
-                                                            Field1=specification.SceneCachedValues.Int1,
-                                                            Field2=specification.SceneCachedValues.Int2,
-                                                            Field3=new Net.GS.Message.Fields.AABB
-                                                                       {
-                                                                             Min=specification.SceneCachedValues.AABB1.Min,
-                                                                             Max=specification.SceneCachedValues.AABB1.Max
-                                                                       },
-                                                            Field4=new Net.GS.Message.Fields.AABB
-                                                                       {
-                                                                           Min = specification.SceneCachedValues.AABB2.Min,
-                                                                           Max = specification.SceneCachedValues.AABB2.Max
-                                                                       },
-                                                            Field5=specification.SceneCachedValues.Int5,
-                                                            Field6=specification.SceneCachedValues.Int6
-                                                        },
-
-                                  };
         }
     }
 }

@@ -20,6 +20,10 @@ using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.Collusion;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Common.Types.Scene;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -108,90 +112,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.SceneSpecification = new SceneSpecification(stream);
         }
     }
-
-    public class SceneSpecification
-    {
-        public int CellZ;
-        public Vector2D Cell;
-        public int[] SNOLevelAreas;
-        public int SNOPrevWorld;
-        public int Int1;
-        public int SNOPrevLevelArea;
-        public int SNONextWorld;
-        public int Int3;
-        public int SNONextLevelArea;
-        public int SNOMusic;
-        public int SNOCombatMusic;
-        public int SNOAmbient;
-        public int SNOReverb;
-        public int SNOWeather;
-        public int SNOPresetWorld;
-        public int Int4;
-        public int Int5;
-        public int Int6;
-        public int ClusterID;
-        public SceneCachedValues SceneCachedValues;
-
-        public SceneSpecification(MpqFileStream stream)
-        {
-            CellZ = stream.ReadValueS32();
-            Cell = new Vector2D(stream);
-            SNOLevelAreas = new int[4];
-
-            for (int i = 0; i < SNOLevelAreas.Length; i++)
-            {
-                SNOLevelAreas[i] = stream.ReadValueS32();
-            }
-
-            SNOPrevWorld = stream.ReadValueS32();
-            Int1 = stream.ReadValueS32();
-            SNOPrevLevelArea = stream.ReadValueS32();
-            SNONextWorld = stream.ReadValueS32();
-            Int3 = stream.ReadValueS32();
-            SNONextLevelArea = stream.ReadValueS32();
-            SNOMusic = stream.ReadValueS32();
-            SNOCombatMusic = stream.ReadValueS32();
-            SNOAmbient = stream.ReadValueS32();
-            SNOReverb = stream.ReadValueS32();
-            SNOWeather = stream.ReadValueS32();
-            SNOPresetWorld = stream.ReadValueS32();
-            Int4 = stream.ReadValueS32();
-            Int5 = stream.ReadValueS32();
-            Int6 = stream.ReadValueS32();
-
-            stream.Position += (9 * 4);
-
-            ClusterID = stream.ReadValueS32();
-            SceneCachedValues = new SceneCachedValues(stream);
-        }
-    }
-
-    public class SceneCachedValues
-    {
-        public int Int0;
-        public int Int1;
-        public int Int2;
-        public AABB AABB1;
-        public AABB AABB2;
-        public int[] Int5;
-        public int Int6;
-
-        public SceneCachedValues(MpqFileStream stream)
-        {
-            Int0 = stream.ReadValueS32();
-            Int1 = stream.ReadValueS32();
-            Int2 = stream.ReadValueS32();
-            AABB1 = new AABB(stream);
-            AABB2 = new AABB(stream);
-            Int5 = new int[4];
-            for (int i = 0; i < Int5.Length; i++)
-            {
-                Int5[i] = stream.ReadValueS32();
-            }
-            Int6 = stream.ReadValueS32();
-        }
-    }
-
+  
     #endregion
 
     #region drlg-params

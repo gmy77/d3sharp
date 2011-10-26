@@ -17,6 +17,7 @@
  */
 
 using System.Text;
+using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc

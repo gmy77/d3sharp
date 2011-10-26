@@ -17,6 +17,8 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
@@ -100,7 +102,7 @@ namespace Mooege.Core.GS.Actors
             set
             {
                 this._actorSNO = value;
-                this.SNOName.Handle = this.ActorSNO;
+                this.SNOName.SNOId = this.ActorSNO;
             }
         }
 
@@ -134,13 +136,13 @@ namespace Mooege.Core.GS.Actors
 
         public virtual PRTransform Transform
         {
-            get { return new PRTransform { Rotation = new Quaternion { Amount = this.RotationAmount, Axis = this.RotationAxis }, ReferencePoint = this.Position }; }
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
         // Only used in Item; stubbed here to prevent an overrun in some cases. /komiga
         public virtual InventoryLocationMessageData InventoryLocationMessage
         {
-            get { return new InventoryLocationMessageData{ OwnerID = 0, EquipmentSlot = 0, InventoryLocation = new IVector2D() }; }
+            get { return new InventoryLocationMessageData{ OwnerID = 0, EquipmentSlot = 0, InventoryLocation = new Vector2D() }; }
         }
 
         public virtual ACDWorldPositionMessage ACDWorldPositionMessage
@@ -167,7 +169,7 @@ namespace Mooege.Core.GS.Actors
             this.Attributes = new GameAttributeMap();
             this.AffixList = new List<Affix>();
             this.GBHandle = new GBHandle() { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
-            this.SNOName = new SNOName() { Group = 0x00000001, Handle = this.ActorSNO };
+            this.SNOName = new SNOName() { Group =  SNOGroup.Actor, SNOId = this.ActorSNO };
             this.ActorSNO = -1;
             this.CollFlags = 0x00000000;
             this.Scale = 1.0f;

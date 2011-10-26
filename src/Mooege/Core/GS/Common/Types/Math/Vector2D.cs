@@ -17,50 +17,61 @@
  */
 
 using System.Text;
+using CrystalMpq;
+using Gibbed.IO;
+using Mooege.Net.GS.Message;
 
-namespace Mooege.Net.GS.Message.Fields
+namespace Mooege.Core.GS.Common.Types.Math
 {
-    public class RGBAColor
+    public class Vector2D
     {
-        public byte Field0;
-        public byte Field1;
-        public byte Field2;
-        public byte Field3;
+        public int X;
+        public int Y;
 
-        public void Parse(GameBitBuffer buffer)
+        public Vector2D() { }
+
+        /// <summary>
+        /// Reads Vector2D from given MPQFileStream.
+        /// </summary>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        public Vector2D(MpqFileStream stream)
         {
-            Field0 = (byte) buffer.ReadInt(8);
-            Field1 = (byte) buffer.ReadInt(8);
-            Field2 = (byte) buffer.ReadInt(8);
-            Field3 = (byte) buffer.ReadInt(8);
+            X = stream.ReadValueS32();
+            Y = stream.ReadValueS32();
         }
 
+        /// <summary>
+        /// Parses Vector2D from given GameBitBuffer.
+        /// </summary>
+        /// <param name="buffer">The GameBitBuffer to parse from.</param>
+        public void Parse(GameBitBuffer buffer)
+        {
+            X = buffer.ReadInt(32);
+            Y = buffer.ReadInt(32);
+        }
+
+        /// <summary>
+        /// Encodes Vector2D to given GameBitBuffer.
+        /// </summary>        
+        /// <param name="buffer">The GameBitBuffer to write.</param>
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(8, Field0);
-            buffer.WriteInt(8, Field1);
-            buffer.WriteInt(8, Field2);
-            buffer.WriteInt(8, Field3);
+            buffer.WriteInt(32, X);
+            buffer.WriteInt(32, Y);
         }
 
         public void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("RGBAColor:");
+            b.AppendLine("Vector2D:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X2"));
+            b.AppendLine("X: 0x" + X.ToString("X8") + " (" + X + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field1: 0x" + Field1.ToString("X2"));
-            b.Append(' ', pad);
-            b.AppendLine("Field2: 0x" + Field2.ToString("X2"));
-            b.Append(' ', pad);
-            b.AppendLine("Field3: 0x" + Field3.ToString("X2"));
+            b.AppendLine("Y: 0x" + Y.ToString("X8") + " (" + Y + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

@@ -17,6 +17,8 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.Scene;
 using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Objects;
 using Mooege.Net.GS.Message.Fields;
@@ -57,7 +59,7 @@ namespace Mooege.Core.GS.Map
                 return new RevealSceneMessage
                 {
                     WorldID = this.World.DynamicID,
-                    SceneSpec = this.SceneSpec,
+                    SceneSpec = this.Specification,
                     ChunkID = this.DynamicID,
                     Transform = this.Transform,
                     SceneSNO = this.SceneSNO,
@@ -83,7 +85,7 @@ namespace Mooege.Core.GS.Map
             }
         }
 
-        public SceneSpecification SceneSpec;
+        public SceneSpecification Specification;
         public int SceneSNO;
         public Scene Parent;
         public int SceneGroupSNO;
@@ -94,7 +96,7 @@ namespace Mooege.Core.GS.Map
 
         public PRTransform Transform
         {
-            get { return new PRTransform { Rotation = new Quaternion { Amount = this.RotationAmount, Axis = this.RotationAxis }, ReferencePoint = this.Position }; }
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
         public Scene(World world, int sceneSNO, Scene parent)
