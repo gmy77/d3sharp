@@ -158,11 +158,11 @@ namespace Mooege.Common.MPQ.FileFormats
         public string Name; //256
         public int ParentType;
         public int i0;
+        public ItemFlags Flags;
         public eItemType type0;
         public eItemType type1;
         public eItemType type2;
         public eItemType type3;
-        public int Flags;
         public int InheritedAffix0;
         public int InheritedAffix1;
         public int InheritedAffix2;
@@ -175,7 +175,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Name = stream.ReadString(256,true);
             this.ParentType = stream.ReadValueS32();
             this.i0 = stream.ReadValueS32();
-            this.Flags = stream.ReadValueS32();
+            this.Flags = (ItemFlags)stream.ReadValueS32();
             this.type0 = (eItemType)stream.ReadValueS32();
             this.type1 = (eItemType)stream.ReadValueS32();
             this.type2 = (eItemType)stream.ReadValueS32();
@@ -188,6 +188,21 @@ namespace Mooege.Common.MPQ.FileFormats
             for (int i = 0; i < 4; i++)
                 this.array[i] = stream.ReadValueS32();
         }
+    }
+
+    public enum ItemFlags
+    {
+        NotEquipable1 = 0x1,
+        AtLeastMagical = 0x2,
+        Gem = 0x8,
+        NotEquipable2 = 0x40,
+        Socketable = 0x80,
+        Unknown = 0x1000,
+        Barbarian = 0x100,
+        Wizard = 0x200,
+        WitchDoctor = 0x400,
+        DemonHunter = 0x800,
+        Monk = 0x2000,
     }
 
     public enum eItemType
