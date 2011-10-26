@@ -60,7 +60,7 @@ namespace Mooege.Core.GS.Actors
     }
 
     // Base actor
-    public abstract class Actor : WorldObject
+    public /*abstract*/ class Actor : WorldObject
     {
         // Actors can change worlds and have a specific addition/removal scheme
         // We'll just override the setter to handle all of this automagically
@@ -90,7 +90,7 @@ namespace Mooege.Core.GS.Actors
             }
         }
 
-        public abstract ActorType ActorType { get; }
+        public virtual /*abstract*/ ActorType ActorType { get { return Actors.ActorType.Item; } }
 
         public GameAttributeMap Attributes { get; private set; }
         public List<Affix> AffixList { get; set; }
@@ -163,7 +163,7 @@ namespace Mooege.Core.GS.Actors
             }
         }
 
-        protected Actor(World world, uint dynamicID)
+        public Actor(World world, uint dynamicID)
             : base(world, dynamicID)
         {
             this.Attributes = new GameAttributeMap();
