@@ -112,6 +112,7 @@
     <Compile Include="Core\GS\Powers\PowerImplementation.cs" />
     <Compile Include="Core\GS\Powers\PowerLoader.cs" />
     <Compile Include="Core\GS\Powers\PowerManager.cs" />
+    <Compile Include="Core\GS\Powers\PowerProjectile.cs" />
     <Compile Include="Core\GS\Powers\PowersTestMonster.cs" />
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />

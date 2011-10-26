@@ -50,24 +50,21 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            RegisterChannelingPower(WaitSeconds(0.150f));
+            RegisterChannelingPower(WaitSeconds(0.5f));
             
-            User.FacingTranslate(TargetPosition);
-
-            // if throttling only update proxy if needed, then exit
             if (ThrottledCast)
             {
-                if (Target == null)
-                    GetChanneledProxy(0, TargetPosition);
                 yield break;
             }
 
-            UsePrimaryResource(6f);
+            User.FacingTranslate(TargetPosition);
+
+            UsePrimaryResource(20f);
 
             if (Target == null)
             {
                 // no target, just zap the air
-                User.AddRopeEffect(0x78c0, GetChanneledProxy(0, TargetPosition));
+                User.AddRopeEffect(30913, GetChanneledProxy(0, TargetPosition));
             }
             else
             {
@@ -90,7 +87,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     ropeSource = actor;
                 }
 
-                float damage = 12f;
+                float damage = 45f;
                 foreach (Actor actor in targets)
                 {
                     Damage(actor, damage, 0);
@@ -109,20 +106,17 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             UsePrimaryResource(20f);
 
-            // HACK: made up spell, not real magic missile
-            for (int step = 1; step < 10; ++step)
+            User.PlayEffectGroup(19305); // cast effect
+
+            var projectile = new PowerProjectile(User.World, 99567, User.Position, TargetPosition, 1f, 2000, 1f, 3f, 5f, 0f);
+            projectile.OnHit = () =>
             {
-                var spos = new Vector3D();
-                spos.X = User.Position.X + ((TargetPosition.X - User.Position.X) * (step * 0.10f));
-                spos.Y = User.Position.Y + ((TargetPosition.Y - User.Position.Y) * (step * 0.10f));
-                spos.Z = User.Position.Z + ((TargetPosition.Z - User.Position.Z) * (step * 0.10f));
+                SpawnEffect(99572, projectile.getCurrentPosition()); // impact effect
+                projectile.Destroy();
+                Damage(projectile.hittedActor, 20f, 0);
+            };
 
-                SpawnEffect(61419, spos);
-
-                IList<Actor> hits = GetTargetsInRange(spos, 6f);
-                Damage(hits, 60f, 0);
-                yield return WaitSeconds(0.1f);
-            }
+            yield break;
         }
     }
 
