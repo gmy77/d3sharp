@@ -40,7 +40,7 @@ namespace Mooege.Core.Common.Items
 
             // set item level
             int itemLevel = RandomHelper.Next(1, 61);
-            item.Attributes[GameAttribute.Requirement, 38] = itemLevel;
+            // item.Attributes[GameAttribute.Requirement, 38] = itemLevel;
 
             ItemRandomHelper irh = new ItemRandomHelper(item.Attributes[GameAttribute.Seed]);
             irh.Next(); // 1 random is always skipped
