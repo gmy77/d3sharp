@@ -129,7 +129,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int Int4;
         public int Int5;
         public int Int6;
-        public int Int7;
+        public int ClusterID;
         public SceneCachedValues SceneCachedValues;
 
         public SceneSpecification(MpqFileStream stream)
@@ -161,7 +161,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
             stream.Position += (9 * 4);
 
-            Int7 = stream.ReadValueS32();
+            ClusterID = stream.ReadValueS32();
             SceneCachedValues = new SceneCachedValues(stream);
         }
     }
