@@ -275,7 +275,7 @@ namespace Mooege.Common.MPQ.FileFormats
             for (int i = 0; i < 2; i++)
                 this.Color[i] = new RGBAColor(stream);
             this.i0 = stream.ReadValueS32();
-            this.s0 = stream.ReadString(64);
+            this.s0 = stream.ReadString(64,true);
         }
     }
 }

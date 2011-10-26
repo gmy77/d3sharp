@@ -64,8 +64,8 @@ namespace Mooege.Common.MPQ.FileFormats
             var stream = file.Open();
             this.header = new Header(stream);
             this.type = (BalanceType)stream.ReadValueS32();
-            gbi = stream.ReadString(256);
-            xls = stream.ReadString(256);
+            gbi = stream.ReadString(256,true);
+            xls = stream.ReadString(256,true);
             this.i0 = stream.ReadValueS32();
             this.i1 = stream.ReadValueS32();
             this.itemType = stream.ReadSerializedData<ItemTypeTable>(); //536
@@ -172,7 +172,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.ParentType = stream.ReadValueS32();
             this.i0 = stream.ReadValueS32();
             this.Flags = stream.ReadValueS32();
@@ -276,7 +276,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.snoActor = stream.ReadValueS32(); //260
             this.ItemType1 = stream.ReadValueS32(); //264
             this.Flags = stream.ReadValueS32(); //268
@@ -491,9 +491,9 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            this.s0 = stream.ReadString(256);
-            this.s1 = stream.ReadString(256);
-            this.s2 = stream.ReadString(128);
+            this.s0 = stream.ReadString(256,true);
+            this.s1 = stream.ReadString(256,true);
+            this.s2 = stream.ReadString(128,true);
         }
     }
 
@@ -690,7 +690,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.snoMaleActor = stream.ReadValueS32();
             this.snoFemaleActor = stream.ReadValueS32();
             this.snoInventory = stream.ReadValueS32();
@@ -816,7 +816,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.i0 = stream.ReadValueS32();
             this.i1 = stream.ReadValueS32();
             this.i2 = stream.ReadValueS32();
@@ -860,7 +860,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.i0 = stream.ReadValueS32();
         }
     }
@@ -892,7 +892,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.i0 = stream.ReadValueS32(); //260
             this.AffixLevel = stream.ReadValueS32(); //264
             this.SupMask = stream.ReadValueS32(); //268
@@ -1036,7 +1036,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.type = (BalanceType)stream.ReadValueS32();
             this.RelatedAffixOrItemType = stream.ReadValueS32();
             this.affixType = (AffixType2)stream.ReadValueS32();
@@ -1065,7 +1065,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.i0 = stream.ReadValueS32();
             this.i1 = stream.ReadValueS32();
             this.i2 = stream.ReadValueS32();
@@ -1117,9 +1117,9 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.affixType = (AffixType2)stream.ReadValueS32();
-            this.s0 = stream.ReadString(128);
+            this.s0 = stream.ReadString(128,true);
         }
 
     }
@@ -1137,7 +1137,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.Item = stream.ReadValueS32(); //260
             this.ItemType = stream.ReadValueS32(); //264
             stream.Position += 4;
@@ -1147,7 +1147,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.ReqAttribute = new AttributeSpecifier[2];
             for (int i = 0; i < 2; i++)
                 this.ReqAttribute[i] = new AttributeSpecifier(stream);
-            this.s0 = stream.ReadString(1024);
+            this.s0 = stream.ReadString(1024,true);
         }
     }
 
@@ -1167,7 +1167,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.i0 = stream.ReadValueS32(); //260
             this.i1 = stream.ReadValueS32(); //264
             this.i2 = stream.ReadValueS32(); //268
@@ -1206,7 +1206,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.i0 = new int[219];
             for (int i = 0; i < 219; i++)
                 this.i0[i] = stream.ReadValueS32();
@@ -1278,7 +1278,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.f0 = new float[22];
             for (int i = 0; i < 22; i++)
                 this.f0[i] = stream.ReadValueF32();
@@ -1304,7 +1304,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.snoActor = stream.ReadValueS32();
             this.snoProxy = stream.ReadValueS32();
             this.snoInventory = stream.ReadValueS32();
@@ -1333,7 +1333,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.Set = stream.ReadValueS32();
             this.i0 = stream.ReadValueS32();
             stream.Position += 4;
@@ -1373,7 +1373,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.f0 = stream.ReadValueF32();
             this.Time0 = stream.ReadValueS32();
             this.f1 = stream.ReadValueF32();
@@ -1431,7 +1431,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            this.s0 = stream.ReadString(1024);
+            this.s0 = stream.ReadString(1024,true);
             this.f0 = new float[61];
             for (int i = 0; i < 61; i++)
                 this.f0[i] = stream.ReadValueF32();
@@ -1453,7 +1453,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
             this.snoRecipe = stream.ReadValueS32();
             this.Type = (RecipeType)stream.ReadValueS32();
             this.i0 = stream.ReadValueS32();
@@ -1482,7 +1482,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256);
+            this.Name = stream.ReadString(256,true);
         }
     }
 
