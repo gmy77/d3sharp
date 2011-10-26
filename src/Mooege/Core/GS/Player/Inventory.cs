@@ -306,6 +306,7 @@ namespace Mooege.Core.GS.Player
             else if (message is InventorySplitStackMessage) OnInventorySplitStackMessage(message as InventorySplitStackMessage);
             else if (message is InventoryStackTransferMessage) OnInventoryStackTransferMessage(message as InventoryStackTransferMessage);
             else if (message is InventoryDropItemMessage) OnInventoryDropItemMessage(message as InventoryDropItemMessage);
+            else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);                
             else return;
         }
 
@@ -318,6 +319,28 @@ namespace Mooege.Core.GS.Player
             GameAttributeMap attributes = new GameAttributeMap();
             attributes[GameAttribute.ItemStackQuantityLo] = sumGoldItem.Attributes[GameAttribute.ItemStackQuantityLo];
             attributes.SendMessage(_owner.InGameClient, sumGoldItem.DynamicID);
+        }
+
+        private void OnInventoryRequestUseMessage(InventoryRequestUseMessage inventoryRequestUseMessage)
+        {
+            uint targetItemId = inventoryRequestUseMessage.UsedOnItem;
+            uint usedItemId = inventoryRequestUseMessage.UsedItem;
+            int actionId = inventoryRequestUseMessage.Field1; // guess 1 means dyeing. Probably other value for using identify scroll , selling , .... - angerwin
+            Item usedItem = _owner.World.GetItem(usedItemId);
+            Item targetItem = _owner.World.GetItem(targetItemId);
+            if (actionId == 1) 
+            {
+                DyeColor.DyeItem(usedItem, targetItem);
+            }
+            DestroyInventoryItem(usedItem);
+            SendVisualInventory(_owner);
+        }
+
+        public void DestroyInventoryItem(Item item)
+        {
+            _inventoryStash.RemoveItem(item);
+            _equipment.UnequipItem(item);
+            item.Destroy();
         }
     }
 }

@@ -16,18 +16,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
+using CrystalMpq;
+using Gibbed.IO;
+using Mooege.Common.MPQ.FileFormats.Types;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public class FileFormatAttribute : Attribute
+    [FileFormat(SNOGroup.Adventure)]
+    public class Adventure : FileFormat
     {
-        public SNOGroup Group { get; private set; }
-
-        public FileFormatAttribute(SNOGroup group)
+        public Header Header { get; private set; }
+        public int snoSymbolActor { get; private set; }
+        float f0, f1, f2, f3;
+        public int snoMarkerSet { get; private set; }
+        public Adventure(MpqFile file)
         {
-            this.Group = group;
+            var stream = file.Open();
+            this.Header = new Types.Header(stream);
+            this.snoSymbolActor = stream.ReadValueS32();
+            this.f0 = stream.ReadValueF32();
+            this.f1 = stream.ReadValueF32();
+            this.f2 = stream.ReadValueF32();
+            this.f3 = stream.ReadValueF32();
+            this.snoMarkerSet = stream.ReadValueS32();
+            stream.Close();
         }
     }
 }

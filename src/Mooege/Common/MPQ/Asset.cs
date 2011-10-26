@@ -17,9 +17,6 @@
  */
 
 using System;
-using System.Linq;
-using System.Text;
-using Mooege.Common.MPQ.FileFormats;
 
 namespace Mooege.Common.MPQ
 {
@@ -31,24 +28,23 @@ namespace Mooege.Common.MPQ
         public string FileName {get; private set;}
         public FileFormat Data {get; private set;}
 
-        public Asset(SNOGroup group, Int32 snoId, byte[] name)
+        public Asset(SNOGroup group, Int32 snoId, string name)
         {
             this.Data = null;
             this.Group = group;
             this.SNOId = snoId;
-            int count = 0; while (count < 128 && name[count] != 0) count++;
-            this.Name = Encoding.UTF8.GetString(name.Take(count).ToArray());
-            this.FileName = group + "\\" + this.Name + FileFormats.FileExtensions.Extensions[(int)group];                        
+            this.Name = name;
+            this.FileName = group + "\\" + this.Name + FileExtensions.Extensions[(int)group];
 
             this.Load();
         }
 
         private void Load()
         {
-            if (!MPQStorage.CoreData.AssetFormats.ContainsKey(this.Group)) return;
-            var formatType = MPQStorage.CoreData.AssetFormats[this.Group];
+            if (!MPQStorage.Data.AssetFormats.ContainsKey(this.Group)) return;
+            var formatType = MPQStorage.Data.AssetFormats[this.Group];
             
-            var file = MPQStorage.CoreData.FileSystem.FindFile(this.FileName);
+            var file = MPQStorage.Data.FileSystem.FindFile(this.FileName);
             if (file == null || file.Size < 10) return;
 
             this.Data = (FileFormat) Activator.CreateInstance(formatType, new object[] {file});

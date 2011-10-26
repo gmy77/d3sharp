@@ -16,8 +16,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Common.MPQ.FileFormats
+namespace Mooege.Common.MPQ
 {
-    public class FileFormat
-    { }
+    public static class FileExtensions
+    {
+        public static string[] Extensions = new[]
+        {
+            "", ".acr", ".adv", ".aib", ".ais", ".ams", ".ani", ".an2",
+            ".ans", ".app", ".hro", ".clt", ".cnv", ".cnl", ".efg", ".enc",
+            "", ".xpl", ".flg", ".fnt", ".gam", ".glo", ".lvl", ".lit",
+            ".mrk", ".mon", ".obs", ".prt", ".phy", ".pow", "", ".qst",
+            ".rop", ".scn", ".scg", ".scr", ".shm", ".shd", ".shk", ".skl",
+            ".snd", ".sbk", ".stl", ".srf", ".tex", ".trl", ".ui", ".wth",
+            ".wrl", ".rcp", "", ".cnd", ".trs", ".acc", ".con", ".tme",
+            ".act", ".mat", ".qsr", ".lor", ".rev", ".phm", ".mus", ".tut",
+            ".bos",
+        };
+    }
 }

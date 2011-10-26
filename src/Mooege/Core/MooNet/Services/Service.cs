@@ -46,8 +46,8 @@ namespace Mooege.Core.MooNet.Services
     public static class Service
     {
         private static uint _notImplementedServiceCounter = 99;
-        private readonly static Dictionary<Type, ServiceAttribute> ProvidedServices = new Dictionary<Type, ServiceAttribute>();
-        private readonly static Dictionary<Type, IService> Services = new Dictionary<Type, IService>();
+        public readonly static Dictionary<Type, ServiceAttribute> ProvidedServices = new Dictionary<Type, ServiceAttribute>();
+        public readonly static Dictionary<Type, IService> Services = new Dictionary<Type, IService>();
        
         static Service()
         {

@@ -26,7 +26,10 @@ using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Effect;
+<<<<<<< HEAD
 using Mooege.Common.Helpers;
+=======
+>>>>>>> 7934fe4e1416f02401bb465f2f0262c17f4f3620
 using Mooege.Net.GS.Message;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
@@ -52,7 +55,7 @@ namespace Mooege.Core.Common.Items
 
         public override ActorType ActorType { get { return ActorType.Item; } }
 
-        public Mooege.Core.GS.Player.Player Owner { get; set; } // Only set when the player has the item in its inventory. /komiga
+        public GS.Player.Player Owner { get; set; } // Only set when the player has the item in its inventory. /komiga
 
         public ItemType ItemType { get; set; }
 
@@ -125,7 +128,7 @@ namespace Mooege.Core.Common.Items
             return new VisualItem()
             {
                 GbId = this.GBHandle.GBID,
-                Field1 = 0,
+                Field1 = Attributes[GameAttribute.DyeType],
                 Field2 = 0,
                 Field3 = -1
             };
