@@ -239,15 +239,16 @@ namespace Mooege.Common.MPQ.FileFormats
         public int ItemType1;
         public int i0;
         public eItem e0;
-        public int i1;
+        public int ItemLevel;
         public int i2;
         public int i3;
-        public int i4;
+        public int MaxSockets;
         public int i5;
-        public int i6;
+        public int BaseGoldValue;
         public int i7;
-        public int i8;
-        public int i9;
+        public int RequiredLevel;
+        public int DurabilityMin;
+        public int DurabilityDelta;
         public int snoBaseItem;
         public int snoSet;
         public int snoComponentTreasureClass;
@@ -256,12 +257,11 @@ namespace Mooege.Common.MPQ.FileFormats
         public int snoRareNamePrefixStringList;
         public int snoRareNameSuffixStringList;
         public int Flags;
-        public int i10;
-        public float f0;
-        public float f1;
-        public float f2;
+        public float WeaponDamageMin;
+        public float WeaponDamageDelta;
+        public float ArmorValue;
         public float f3;
-        public float f4;
+        public float AttacksPerSecond;
         public int snoSkill0;
         public int i11;
         public int snoSkill1;
@@ -275,18 +275,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public ItemQuality Quality;
         public int[] RecipeToGrant; //len 6
         public int EnhancementToGrant;
-        public int LegendaryAffixFamily1;
-        public int LegendaryAffixFamily2;
-        public int LegendaryAffixFamily3;
-        public int LegendaryAffixFamily4;
-        public int LegendaryAffixFamily5;
-        public int LegendaryAffixFamily6;
-        public int i16;
-        public int i17;
-        public int i18;
-        public int i19;
-        public int i20;
-        public int i21;
+        public int[] LegendaryAffixFamily;
+        public int[] UnknownAffix;
 
         public void Read(MpqFileStream stream)
         {
@@ -296,17 +286,17 @@ namespace Mooege.Common.MPQ.FileFormats
             this.ItemType1 = stream.ReadValueS32(); //264
             this.Flags = stream.ReadValueS32(); //268
             this.i0 = stream.ReadValueS32(); //272
-            this.i1 = stream.ReadValueS32(); //276
+            this.ItemLevel = stream.ReadValueS32(); //276
             this.e0 = (eItem)stream.ReadValueS32(); //280
             this.i2 = stream.ReadValueS32(); //284
             this.i3 = stream.ReadValueS32(); //288
-            this.i4 = stream.ReadValueS32(); //292
+            this.MaxSockets = stream.ReadValueS32(); //292
             this.i5 = stream.ReadValueS32(); //296
-            this.i6 = stream.ReadValueS32(); //300
+            this.BaseGoldValue = stream.ReadValueS32(); //300
             this.i7 = stream.ReadValueS32(); //304
-            this.i8 = stream.ReadValueS32(); //308
-            this.i9 = stream.ReadValueS32(); //312
-            this.i10 = stream.ReadValueS32(); //316
+            this.RequiredLevel = stream.ReadValueS32(); //308
+            this.DurabilityMin = stream.ReadValueS32(); //312
+            this.DurabilityDelta = stream.ReadValueS32(); //316
             this.snoBaseItem = stream.ReadValueS32(); //320
             this.snoSet = stream.ReadValueS32(); //324
             this.snoComponentTreasureClass = stream.ReadValueS32(); //328
@@ -318,13 +308,13 @@ namespace Mooege.Common.MPQ.FileFormats
             for (int i = 0; i < 4; i++)
                 this.i15[i] = stream.ReadValueS32();
             stream.Position += 88;
-            this.f0 = stream.ReadValueF32(); //452
-            this.f1 = stream.ReadValueF32(); //456
+            this.WeaponDamageMin = stream.ReadValueF32(); //452
+            this.WeaponDamageDelta = stream.ReadValueF32(); //456
             stream.Position += 84;
-            this.f2 = stream.ReadValueF32(); //544
+            this.ArmorValue = stream.ReadValueF32(); //544
             this.f3 = stream.ReadValueF32(); //548
             stream.Position += 168;
-            this.f4 = stream.ReadValueF32(); //720
+            this.AttacksPerSecond = stream.ReadValueF32(); //720
             stream.Position += 192;
             this.snoSkill0 = stream.ReadValueS32(); //916
             this.i11 = stream.ReadValueS32(); //920
@@ -343,18 +333,12 @@ namespace Mooege.Common.MPQ.FileFormats
             for (int i = 0; i < 6; i++)
                 this.RecipeToGrant[i] = stream.ReadValueS32();
             this.EnhancementToGrant = stream.ReadValueS32(); //1404
-            this.LegendaryAffixFamily1 = stream.ReadValueS32(); //1408
-            this.LegendaryAffixFamily2 = stream.ReadValueS32(); //1412
-            this.LegendaryAffixFamily3 = stream.ReadValueS32(); //1416
-            this.LegendaryAffixFamily4 = stream.ReadValueS32(); //1420
-            this.LegendaryAffixFamily5 = stream.ReadValueS32(); //1424
-            this.LegendaryAffixFamily6 = stream.ReadValueS32(); //1428
-            this.i16 = stream.ReadValueS32(); //1432
-            this.i17 = stream.ReadValueS32(); //1436
-            this.i18 = stream.ReadValueS32(); //1440
-            this.i19 = stream.ReadValueS32(); //1444
-            this.i20 = stream.ReadValueS32(); //1448
-            this.i21 = stream.ReadValueS32(); //1452
+            this.LegendaryAffixFamily = new int[6];
+            for (int i = 0; i < 6; i++)
+                this.LegendaryAffixFamily[i] = stream.ReadValueS32(); //1408
+            this.UnknownAffix = new int[6];
+            for (int i = 0; i < 6; i++)
+                this.UnknownAffix[i] = stream.ReadValueS32(); //1432
         }
 
         public enum ItemQuality
