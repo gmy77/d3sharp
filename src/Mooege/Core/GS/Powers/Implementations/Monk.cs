@@ -311,19 +311,16 @@ namespace Mooege.Core.GS.Powers.Implementations
                 }
             }
 
-            int attackAnimation;
             if (Target != null)
             {
                 // put dash destination just beyond target
                 TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, Target.Position, Target.Position, 7f);
-                attackAnimation = (User as Player.Player).Properties.Gender == 0 ? 69808 : 90432; // select based on gender
             }
             else
             {
                 // if no target, dash is limited in range
-                if (PowerMath.Distance(User.Position, TargetPosition) > 15f)
-                    TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, User.Position, 15f);
-                attackAnimation = -1;
+                if (PowerMath.Distance(User.Position, TargetPosition) > 13f)
+                    TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, User.Position, 13f);
             }
 
             _SetupAttributes(true);
@@ -340,7 +337,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Field3 = true,
                 Speed = PowerMath.Distance(User.Position, TargetPosition) / dashTicks, // speed, distance per tick
                 Field5 = 0x00009206, // ???
-                AnimationTag = attackAnimation,
+                AnimationTag = (User as Player.Player).Properties.Gender == 0 ? 69808 : 90432, // select based on gender,
                 Field7 = 0x00000006 // ?
             }, User);
             User.Position.Set(TargetPosition);
