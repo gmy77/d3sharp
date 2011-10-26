@@ -17,15 +17,12 @@
  */
 
 using Mooege.Common;
-using Mooege.Core.GS.Game;
-
-// TODO: GameServer should likely have a Game reference since it essentially routes messages to and from the game
 
 namespace Mooege.Net.GS
 {
     public sealed class GameServer : Server
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
+        private new static readonly Logger Logger = LogManager.CreateLogger(); // hide the Server.Logger so that tiny-logger can show the actual server as log source.
 
         public GameServer()
         {

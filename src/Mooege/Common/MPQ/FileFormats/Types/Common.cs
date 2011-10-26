@@ -76,7 +76,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         }
     }
 
-    public class AABB // Ambiogous refrence fix me - DarkLotus
+    public class AABB
     {
         public Vector3D Min { get; private set; }
         public Vector3D Max { get; private set; }
@@ -126,20 +126,31 @@ namespace Mooege.Common.MPQ.FileFormats.Types
 
     public class TagMapEntry
     {
-        public int Int0;
+        public int Type;
         public int Int1;
+
+        public ScriptFormula ScriptFormula;
         public int Int2;
         public float Float0;
 
         public TagMapEntry(MpqFileStream stream)
         {
-            this.Int0 = stream.ReadValueS32();
+            this.Type = stream.ReadValueS32();
             this.Int1 = stream.ReadValueS32();
 
-            switch (this.Int0)
+            switch (this.Type)
             {
+                case 0:
+                    this.Int2 = stream.ReadValueS32();
+                    break;
                 case 1:
                     Float0 = stream.ReadValueF32();
+                    break;
+                case 2: // SNO
+                    this.Int2 = stream.ReadValueS32();
+                    break;
+                case 4:
+                    this.ScriptFormula = new ScriptFormula(stream);
                     break;
                 default:
                     this.Int2 = stream.ReadValueS32();
@@ -147,7 +158,59 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             }
         }
     }
+    public class ScriptFormula
+    {
+        int i0, i1, i2, i3, i4;
+        int name_size;
+        int i5;
+        int opcode_size;
+        public byte[] OpCodeName { get; private set; }
+        public byte[] OpCodeArray { get; private set; }
+        public ScriptFormula(MpqFileStream stream)
+        {
+            this.i0 = stream.ReadValueS32();
+            this.i1 = stream.ReadValueS32();
+            this.i2 = stream.ReadValueS32();
+            this.i3 = stream.ReadValueS32();
+            this.i4 = stream.ReadValueS32();
+            this.name_size = stream.ReadValueS32();
+            this.i5 = stream.ReadValueS32();
+            this.opcode_size = stream.ReadValueS32();
+            this.OpCodeName = new byte[name_size];
+            stream.Read(OpCodeName, 0, name_size);
+            switch(name_size % 4)
+            {
+                case 0:
+                    break;
+                case 1:
+                    stream.Position += 3;
+                    break;
+                case 2:
+                    stream.Position += 2;
+                    break;
+                case 3:
+                    stream.Position += 1;
+                    break;
 
+            }
+            this.OpCodeArray = new byte[opcode_size];
+            stream.Read(OpCodeArray, 0, opcode_size);
+        }
+    }
+
+    public class ScriptFormulaDetails : ISerializableData
+    {
+        public string CharArray1 { get; private set; }
+        public string CharArray2 { get; private set; }
+        int i0, i1;
+        public void Read(MpqFileStream stream)
+        {
+            CharArray1 = stream.ReadString(256, true);
+            CharArray2 = stream.ReadString(512, true);
+            i0 = stream.ReadValueS32();
+            i1 = stream.ReadValueS32();
+        }
+    }
     // Replace each Look with just a chararay? DarkLotus
     public class HardPointLink
     {

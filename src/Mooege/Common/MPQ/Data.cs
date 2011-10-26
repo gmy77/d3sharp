@@ -29,7 +29,7 @@ namespace Mooege.Common.MPQ
         public readonly Dictionary<SNOGroup, Type> AssetFormats = new Dictionary<SNOGroup, Type>();
 
         public Data()
-            : base(new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
+            : base(7447, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
         { }
 
         public void Init()
