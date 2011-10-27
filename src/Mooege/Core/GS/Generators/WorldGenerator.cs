@@ -178,7 +178,7 @@ namespace Mooege.Core.GS.Generators
         {
             int i = 0;
             Scene scene = new Scene(world, iden.GetInt(i++).Value, parent);
-            scene.MiniMapVisibility = 2;
+            scene.MiniMapVisibility = MiniMapVisibility.Revealed;
             if (!SNODatabase.Instance.IsOfGroup(scene.SceneSNO, SNOGroup.Scenes))
             {
                 Logger.Warn("SceneSNO {0} doesn't appear to be a valid SNO ID..", scene.SceneSNO);

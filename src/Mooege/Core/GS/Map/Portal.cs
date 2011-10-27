@@ -98,7 +98,7 @@ namespace Mooege.Core.GS.Map
             Actor f = world.GetActorByTag(this.Tag);
 
             if (world != null)
-                player.TransferTo(world, f.Position + new Vector3D(2, 2, 0.5f));
+                player.TransferTo(world, f.Position);
             else
                 Logger.Warn("Portal's destination world does not exist (WorldSNO = {0})", this.Destination.WorldSNO);
         }

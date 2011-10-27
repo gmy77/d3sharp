@@ -31,17 +31,24 @@ using Mooege.Core.GS.Objects;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Net.GS.Message.Definitions.Scene;
+using Mooege.Core.GS.Markers;
 
 // NOTE: Scenes are typically (always, hopefully) 240x240 in size. Cells are 60x60 with
 //  subscenes able to be positioned relative to their parents
 
 namespace Mooege.Core.GS.Map
 {
+    public enum MiniMapVisibility
+    {
+        Hidden = 0,
+        Revealed = 1,
+        Visited = 2
+    }
+
     public sealed class Scene : WorldObject
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
 
-        public Vector3D StartPosition { get; set; }
+        private static readonly Logger Logger = LogManager.CreateLogger();
 
         public override World World
         {
@@ -102,7 +109,7 @@ namespace Mooege.Core.GS.Map
         public Scene Parent;
         public int SceneGroupSNO;
         public int /* gbid */[] AppliedLabels; // MaxLength = 256
-        public int MiniMapVisibility;
+        public MiniMapVisibility MiniMapVisibility;
 
         // read data from mpqs
         public AABB AABBBounds { get; private set; }
@@ -180,33 +187,38 @@ namespace Mooege.Core.GS.Map
                     foreach (var tag in marker.TagMap.TagMapEntries)
                         tags.Add(tag.Int1, tag);
 
-                    if (marker.SNOName.SNOId == (int)Markers.MarkerTypes.Start_Location_0 || marker.SNOName.SNOId == (int)Markers.MarkerTypes.Start_Location_Team_0)
-                    {
-                        this.StartPosition = marker.PRTransform.Vector3D + this.Position;
-                        continue;
-                    }
+                    //if (marker.SNOName.SNOId == (int)Markers.MarkerTypes.Start_Location_0 || marker.SNOName.SNOId == (int)Markers.MarkerTypes.Start_Location_Team_0)
+                    // {
+                    //    this.StartPosition = marker.PRTransform.Vector3D + this.Position;
+                    //    continue; <-- this prevented startling locations to be loaded, portals need them
+                    //}
 
                     Asset actorAsset = null;
-                    Mooege.Common.MPQ.FileFormats.Actor actorData =null;
+                    Mooege.Common.MPQ.FileFormats.Actor actorData = null;
                     if (!MPQStorage.Data.Assets[SNOGroup.Actor].ContainsKey(marker.SNOName.SNOId)) continue;
 
                     actorAsset = MPQStorage.Data.Assets[SNOGroup.Actor][marker.SNOName.SNOId];
                     actorData = actorAsset.Data as Mooege.Common.MPQ.FileFormats.Actor;
 
-                    if (RandomHelper.Next(100) > 90 || tags.ContainsKey(526850) ||  tags.ContainsKey(526852))
+                    // Since we are not loading all actors, make sure to load portals and portal destination actors
+                    if (RandomHelper.Next(100) > 90 || tags.ContainsKey((int)MarkerTagTypes.DestinationWorld) || tags.ContainsKey((int)MarkerTagTypes.ActorTag))
                     {
                         if (marker.SNOName.Group == SNOGroup.Actor)
                         {
                             Actor newActor = null;
 
-                            if (tags.ContainsKey(526850))
+                            if (tags.ContainsKey((int)MarkerTagTypes.DestinationWorld))
                             {
                                 newActor = new Portal(this.World);
-                                (newActor as Portal).Destination.WorldSNO = tags[526850].Int2;
+                                (newActor as Portal).Destination.WorldSNO = tags[(int)MarkerTagTypes.DestinationWorld].Int2;
 
-                                if (tags.ContainsKey(526853))
-                                    (newActor as Portal).Destination.DestLevelAreaSNO = tags[526853].Int2;
-                                newActor.Tag = tags[526851].Int2;
+                                if (tags.ContainsKey((int)MarkerTagTypes.DestinationLevelArea))
+                                    (newActor as Portal).Destination.DestLevelAreaSNO = tags[(int)MarkerTagTypes.DestinationLevelArea].Int2;
+
+                                if (tags.ContainsKey((int)MarkerTagTypes.DestinationActorTag))
+                                    newActor.Tag = tags[(int)MarkerTagTypes.DestinationActorTag].Int2;
+                                else
+                                    Logger.Warn("Found portal {0} in scene {1} without target location actor", newActor.ActorSNO, this.SceneSNO);
                             }
                             else
                                 newActor = new Actor(this.World, this.World.NewActorID);
@@ -214,11 +226,11 @@ namespace Mooege.Core.GS.Map
                             newActor.ActorSNO = marker.SNOName.SNOId;
                             newActor.Position = marker.PRTransform.Vector3D + this.Position;
 
-                            if (tags.ContainsKey(526852))
-                                newActor.Tag = tags[526852].Int2;
+                            if (tags.ContainsKey((int)MarkerTagTypes.ActorTag))
+                                newActor.Tag = tags[(int)MarkerTagTypes.ActorTag].Int2;
 
-                            if (tags.ContainsKey(524288))
-                                newActor.Scale = tags[524288].Float0;
+                            if (tags.ContainsKey((int)MarkerTagTypes.Scale))
+                                newActor.Scale = tags[(int)MarkerTagTypes.Scale].Float0;
 
                             newActor.RotationAmount = marker.PRTransform.Quaternion.W;
                             newActor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;

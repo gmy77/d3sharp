@@ -66,18 +66,18 @@ namespace Mooege.Core.GS.Generators
             foreach(var sceneChunk in worldData.SceneParams.SceneChunks)
             {
                 var scene = new Scene(world, sceneChunk.SNOName.SNOId, null);
-                scene.MiniMapVisibility = 2;
+                scene.MiniMapVisibility = MiniMapVisibility.Revealed;
                 scene.Position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
                 scene.RotationAmount = sceneChunk.PRTransform.Quaternion.W;
                 scene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
                 scene.SceneGroupSNO = -1;
 
-                // If the scene has a subscene (cluster ID is set), then choose a random subscenes from the cluster
+                // If the scene has a subscene (cluster ID is set), choose a random subscenes from the cluster load it and attach it to parent scene
                 if (sceneChunk.SceneSpecification.ClusterID != -1)
                 {
                     if (!clusters.ContainsKey(sceneChunk.SceneSpecification.ClusterID))
                     {
-                        Logger.Error("Referenced clusterID {0} not found for chunk {1} in world {2}", sceneChunk.SceneSpecification.ClusterID, sceneChunk.SNOName.SNOId, worldSNO);
+                        Logger.Warn("Referenced clusterID {0} not found for chunk {1} in world {2}", sceneChunk.SceneSpecification.ClusterID, sceneChunk.SNOName.SNOId, worldSNO);
                     }
                     else
                     {
@@ -85,7 +85,10 @@ namespace Mooege.Core.GS.Generators
 
                         if (cluster.Default.Entries.Count > 0)
                         {
+                            // TODO Why are entries not always normalized? is that a bug or do these values mean something else... - farmy
+                            // TODO Only default scenes are loaded. No waypoints, random caves or other special tiles
                             var subSceneEntry = RandomHelper.RandomItem<Mooege.Common.MPQ.FileFormats.SubSceneEntry>(cluster.Default.Entries, entry => entry.Probability);
+                            
                             Vector3D pos = FindSubScenePosition(sceneChunk);
 
                             if (pos == null)
@@ -95,10 +98,10 @@ namespace Mooege.Core.GS.Generators
                             else
                             {
                                 Scene subscene = new Scene(world, subSceneEntry.SNOScene, scene);
-
                                 subscene.Position = scene.Position + pos;
-                                subscene.MiniMapVisibility = 2;
-                                subscene.RotationAmount = 1;
+                                subscene.MiniMapVisibility = MiniMapVisibility.Visited;
+                                subscene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
+                                subscene.RotationAmount = sceneChunk.PRTransform.Quaternion.W;
                                 subscene.Specification = sceneChunk.SceneSpecification;
                                 scene.Subscenes.Add(subscene);
                                 subscene.LoadActors();
