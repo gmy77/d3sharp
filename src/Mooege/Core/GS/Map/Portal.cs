@@ -39,6 +39,7 @@ namespace Mooege.Core.GS.Map
 
         public ResolvedPortalDestination Destination { get; private set; }
         public Vector3D TargetPos;
+        public int Tag;
 
         public Portal(World world)
             : base(world, world.NewActorID)
@@ -95,8 +96,10 @@ namespace Mooege.Core.GS.Map
         public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
             World world = this.World.Game.GetWorld(this.Destination.WorldSNO);
+            Actor f = world.GetActorByTag(this.tag);
+
             if (world != null)
-                player.TransferTo(world, this.TargetPos);
+                player.TransferTo(world, f.Position + new Vector3D(2, 2, 0.5f));
             else
                 Logger.Warn("Portal's destination world does not exist (WorldSNO = {0})", this.Destination.WorldSNO);
         }

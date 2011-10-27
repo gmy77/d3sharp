@@ -94,6 +94,7 @@ namespace Mooege.Core.GS.Actors
 
         public GameAttributeMap Attributes { get; private set; }
         public List<Affix> AffixList { get; set; }
+        public int tag;
 
         protected int _actorSNO;
         public int ActorSNO

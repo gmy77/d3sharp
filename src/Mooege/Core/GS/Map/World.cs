@@ -49,7 +49,7 @@ namespace Mooege.Core.GS.Map
         public bool HasPlayersIn { get { return this._players.Count > 0; } }
 
         public int WorldSNO { get; set; }
-        public Vector3D StartPosition { get; private set; }
+        public Vector3D StartPosition { get; set; }
 
         public uint NewSceneID { get { return this.Game.NewSceneID; } }
         public uint NewActorID { get { return this.Game.NewObjectID; } }
@@ -155,7 +155,8 @@ namespace Mooege.Core.GS.Map
             //Logger.Debug("Leave {0}, unreveal to {1} players", actor.DynamicID, this.Players.Count);
             foreach (var player in this._players.Values)
             {
-                actor.Unreveal(player);
+                if(actor != player)
+                    actor.Unreveal(player);
             }
             this.RemoveActor(actor);
         }
@@ -309,6 +310,11 @@ namespace Mooege.Core.GS.Map
             this.Scenes.TryGetValue(dynamicID, out scene);
             return scene;
             //return this.Scenes.Where(scene => scene.DynamicID == dynamicID).FirstOrDefault();
+        }
+
+        public Actor GetActorByTag(int tag)
+        {
+            return (from Actor a in _actors.Values where a.tag == tag select a).First();
         }
 
         public Actor GetActor(uint dynamicID)

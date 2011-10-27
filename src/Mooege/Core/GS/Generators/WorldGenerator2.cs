@@ -29,6 +29,7 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.Common.Items;
+using Mooege.Common.MPQ.FileFormats.Types;
 
 
 namespace Mooege.Core.GS.Generators
@@ -66,20 +67,9 @@ namespace Mooege.Core.GS.Generators
             {
                 var scene = new Scene(world, sceneChunk.SNOName.SNOId, null);
                 scene.MiniMapVisibility = 2;
-                
-                scene.Position = new Vector3D
-                                     {
-                                         X = sceneChunk.PRTransform.Vector3D.X - minX,
-                                         Y = sceneChunk.PRTransform.Vector3D.Y - minY,
-                                         Z = sceneChunk.PRTransform.Vector3D.Z
-                                     };
-
-                // rename rotation-amount and axis to Quaternion.
-                scene.RotationAmount = 1;
-                scene.RotationAxis.X = 0;
-                scene.RotationAxis.Y = 0;
-                scene.RotationAxis.Z = 0;
-
+                scene.Position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
+                scene.RotationAmount = sceneChunk.PRTransform.Quaternion.W;
+                scene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
                 scene.SceneGroupSNO = -1;
 
                 // If the scene has a subscene (cluster ID is set), then choose a random subscenes from the cluster
@@ -106,12 +96,7 @@ namespace Mooege.Core.GS.Generators
                             {
                                 Scene subscene = new Scene(world, subSceneEntry.SNOScene, scene);
 
-                                subscene.Position = new Vector3D()
-                                {
-                                    X = scene.Position.X + pos.X,
-                                    Y = scene.Position.Y + pos.Y,
-                                    Z = scene.Position.Z + pos.Z
-                                };
+                                subscene.Position = scene.Position + pos;
                                 subscene.MiniMapVisibility = 2;
                                 subscene.RotationAmount = 1;
                                 subscene.Specification = sceneChunk.SceneSpecification;
@@ -122,11 +107,8 @@ namespace Mooege.Core.GS.Generators
                     }
                 }
 
-
                 LoadActors(scene);
                 scene.Specification = sceneChunk.SceneSpecification;
-
-                //SetSceneSpecification(scene, sceneChunk.SceneSpecification);
             }
 
             //  71150 =  X: 3143,75,  Y: 2828,75,  Z: 59,07559
@@ -172,19 +154,37 @@ namespace Mooege.Core.GS.Generators
                 var mpqMarkerSet = MPQStorage.Data.Assets[SNOGroup.MarkerSet][markerSet].Data as Mooege.Common.MPQ.FileFormats.MarkerSet;
                 foreach (var marker in mpqMarkerSet.Markers)
                 {
-                    if (RandomHelper.Next(100) > 80)
+                    Dictionary<int, TagMapEntry> tags = new Dictionary<int, TagMapEntry>();
+                    foreach (var tag in marker.TagMap.TagMapEntries)
+                        tags.Add(tag.Int1, tag);
+
+
+                    if (RandomHelper.Next(100) > 90 || tags.ContainsKey(526850) || tags.ContainsKey(526852))
                     {
                         if (marker.SNOName.Group == SNOGroup.Actor)
                         {
-                            Actor newActor = new Actor(scene.World, scene.World.NewActorID);
-                            newActor.ActorSNO = marker.SNOName.SNOId;
-                            newActor.Position = new Vector3D()
+                            Actor newActor = null;
+
+                            if (tags.ContainsKey(526850))
                             {
-                                X = marker.PRTransform.Vector3D.X + scene.Position.X,
-                                Y = marker.PRTransform.Vector3D.Y + scene.Position.Y,
-                                Z = marker.PRTransform.Vector3D.Z + scene.Position.Z,
-                            };
-                                
+                                newActor = new Portal(scene.World);
+                                (newActor as Portal).Destination.WorldSNO = tags[526850].Int2;
+
+                                if (tags.ContainsKey(526853))
+                                    (newActor as Portal).Destination.DestLevelAreaSNO = tags[526853].Int2;
+                                newActor.tag = tags[526851].Int2;
+                            }
+                            else
+                                newActor = new Actor(scene.World, scene.World.NewActorID);
+
+                            newActor.ActorSNO = marker.SNOName.SNOId;
+                            newActor.Position = marker.PRTransform.Vector3D + scene.Position;
+
+                            if (tags.ContainsKey(526852))
+                                newActor.tag = tags[526852].Int2;
+
+                            if (tags.ContainsKey(524288))
+                                newActor.Scale = tags[524288].Float0;
                     
                             newActor.RotationAmount = marker.PRTransform.Quaternion.W;
                             newActor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
@@ -192,72 +192,19 @@ namespace Mooege.Core.GS.Generators
                             newActor.Field2 = 16;
                             newActor.Field7 = 0x00000001;
                             newActor.Field8 = newActor.ActorSNO;
-                            scene.World.Enter(newActor);
+
+                            if(!(newActor is Portal))
+                                scene.World.Enter(newActor);
                         }
                     }
-                    if (marker.SNOName.SNOId == 5502 || marker.SNOName.SNOId == 5503)      // TODO Make this an enum value
-                    {
-                        scene.World.StartPosition.X = marker.PRTransform.Vector3D.X + scene.Position.X;
-                        scene.World.StartPosition.Y = marker.PRTransform.Vector3D.Y + scene.Position.Y;
-                        scene.World.StartPosition.Z = marker.PRTransform.Vector3D.Z + scene.Position.Z;
-                    }
 
+                    if (marker.SNOName.SNOId == 5502 || marker.SNOName.SNOId == 5503)
+                        scene.World.StartPosition = marker.PRTransform.Vector3D + scene.Position;
+
+                    
                 }
 
             }
         }
-
-
-
-        /*
-        private static void SetSceneSpecification(Scene scene, Mooege.Common.MPQ.FileFormats.SceneSpecification specification)
-        {
-            scene.SceneSpec = new Net.GS.Message.Fields.SceneSpecification
-                                  {
-                                      CellZ=specification.CellZ,
-                                      Cell = new Net.GS.Message.Fields.IVector2D
-                                                 {
-                                                   X=specification.Cell.X,
-                                                   Y=specification.Cell.Y,
-                                                 },
-                                      arSnoLevelAreas=specification.SNOLevelAreas,
-                                      snoPrevWorld=specification.SNOPrevWorld,
-                                      Field4=specification.Int1,
-                                      snoPrevLevelArea=specification.SNOPrevLevelArea,
-                                      snoNextWorld=specification.SNONextWorld,
-                                      Field7=specification.Int3,
-                                      snoNextLevelArea=specification.SNONextLevelArea,
-                                      snoMusic=specification.SNOMusic,
-                                      snoCombatMusic=specification.SNOCombatMusic,
-                                      snoAmbient=specification.SNOAmbient,
-                                      snoReverb=specification.SNOReverb,
-                                      snoWeather=specification.SNOWeather,
-                                      snoPresetWorld=specification.SNOPresetWorld,
-                                      Field15=specification.Int4,
-                                      Field16=specification.Int5,
-                                      Field17=specification.Int6,
-                                      Field18=specification.ClusterID,
-                                      tCachedValues=new Net.GS.Message.Fields.SceneCachedValues
-                                                        {
-                                                            Field0=specification.SceneCachedValues.Int0,
-                                                            Field1=specification.SceneCachedValues.Int1,
-                                                            Field2=specification.SceneCachedValues.Int2,
-                                                            Field3=new Net.GS.Message.Fields.AABB
-                                                                       {
-                                                                             Min=specification.SceneCachedValues.AABB1.Min,
-                                                                             Max=specification.SceneCachedValues.AABB1.Max
-                                                                       },
-                                                            Field4=new Net.GS.Message.Fields.AABB
-                                                                       {
-                                                                           Min = specification.SceneCachedValues.AABB2.Min,
-                                                                           Max = specification.SceneCachedValues.AABB2.Max
-                                                                       },
-                                                            Field5=specification.SceneCachedValues.Int5,
-                                                            Field6=specification.SceneCachedValues.Int6
-                                                        },
-
-                                  };
-        }
-         * */
     }
 }

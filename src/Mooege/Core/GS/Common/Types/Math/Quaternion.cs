@@ -36,8 +36,8 @@ namespace Mooege.Core.GS.Common.Types.Math
         /// <param name="stream">The MPQFileStream to read from.</param>
         public Quaternion(MpqFileStream stream)
         {
-            this.W = stream.ReadValueF32();
             this.Vector3D = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
+            this.W = stream.ReadValueF32();
         }
 
         /// <summary>

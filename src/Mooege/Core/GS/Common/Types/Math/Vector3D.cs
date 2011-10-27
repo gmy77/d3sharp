@@ -130,6 +130,16 @@ namespace Mooege.Core.GS.Common.Types.Math
                 && a.Z > b.Z;
         }
 
+        public static Vector3D operator +(Vector3D a, Vector3D b)
+        {
+            return new Vector3D(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
+        }
+
+        public static Vector3D operator -(Vector3D a, Vector3D b)
+        {
+            return new Vector3D(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
+        }
+
         public static bool operator <(Vector3D a, Vector3D b)
         {
             return !(a > b);
