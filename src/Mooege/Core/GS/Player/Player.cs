@@ -116,9 +116,11 @@ namespace Mooege.Core.GS.Player
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.CollFlags = 0x00000000;
 
-            this.Position.X = this.World.StartPosition.X;
-            this.Position.Y = this.World.StartPosition.Y;
-            this.Position.Z = this.World.StartPosition.Z;
+            this.CurrentScene = this.World.StartScene;
+
+            this.Position.X = this.CurrentScene.StartPosition.X;
+            this.Position.Y = this.CurrentScene.StartPosition.Y;
+            this.Position.Z = this.CurrentScene.StartPosition.Z;
 
             // den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
             // inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
@@ -318,6 +320,16 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Backpack_Slots] = 60;
             this.Attributes[GameAttribute.General_Cooldown] = 0;
             #endregion // Attributes
+        }
+
+        public sealed override Vector3D Position
+        {
+            set
+            {
+                var old = new Vector3D(this._position);
+                this._position.Set(value);
+                this.OnMove(old);
+            }
         }
 
         public void Consume(GameClient client, GameMessage message)

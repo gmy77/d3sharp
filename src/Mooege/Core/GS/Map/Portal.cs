@@ -39,7 +39,6 @@ namespace Mooege.Core.GS.Map
 
         public ResolvedPortalDestination Destination { get; private set; }
         public Vector3D TargetPos;
-        public int Tag;
 
         public Portal(World world)
             : base(world, world.NewActorID)
@@ -96,7 +95,7 @@ namespace Mooege.Core.GS.Map
         public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
             World world = this.World.Game.GetWorld(this.Destination.WorldSNO);
-            Actor f = world.GetActorByTag(this.tag);
+            Actor f = world.GetActorByTag(this.Tag);
 
             if (world != null)
                 player.TransferTo(world, f.Position + new Vector3D(2, 2, 0.5f));

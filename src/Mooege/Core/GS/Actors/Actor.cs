@@ -56,7 +56,8 @@ namespace Mooege.Core.GS.Actors
         NPC,
         Monster,
         Item,
-        Portal
+        Portal,
+        Gizmo
     }
 
     // Base actor
@@ -66,20 +67,28 @@ namespace Mooege.Core.GS.Actors
         // We'll just override the setter to handle all of this automagically
         public override World World
         {
+            get { return this._world; }
             set
             {
-                if (this._world != value)
-                {
-                    if (this._world != null)
-                        this._world.Leave(this);
-                    this._world = value;
-                    if (this._world != null)
-                        this._world.Enter(this);
-                }
+                if (this._world == value) return;
+
+                if (this._world != null) // if actor is already in a existing-world
+                    this._world.Leave(this); // make him leave it first.
+
+                this._world = value;
+                if (this._world != null) // if actor got into a new world.
+                    this._world.Enter(this); // let him enter first.
             }
         }
 
-        public sealed override Vector3D Position
+        protected Scene _currentScene;
+        public virtual Scene CurrentScene
+        {
+            get { return this._currentScene; }
+            protected set { this._currentScene = value; }
+        }
+
+        public override Vector3D Position
         {
             set
             {
@@ -94,7 +103,7 @@ namespace Mooege.Core.GS.Actors
 
         public GameAttributeMap Attributes { get; private set; }
         public List<Affix> AffixList { get; set; }
-        public int tag;
+        public int Tag;
 
         protected int _actorSNO;
         public int ActorSNO

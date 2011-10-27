@@ -42,14 +42,13 @@ namespace Mooege.Core.GS.Map
 
         public Game.Game Game { get; private set; }
 
-        private Dictionary<uint, Scene> Scenes;
+        public Dictionary<uint, Scene> Scenes = new Dictionary<uint, Scene>();
         private readonly ConcurrentDictionary<uint, Actor> _actors;
         private readonly ConcurrentDictionary<uint, Player.Player> _players; // Temporary for fast iteration for now since move/enter/leave handling is currently at the world level instead of the scene level
 
         public bool HasPlayersIn { get { return this._players.Count > 0; } }
 
         public int WorldSNO { get; set; }
-        public Vector3D StartPosition { get; set; }
 
         public uint NewSceneID { get { return this.Game.NewSceneID; } }
         public uint NewActorID { get { return this.Game.NewObjectID; } }
@@ -60,15 +59,18 @@ namespace Mooege.Core.GS.Map
         {
             this.Game = game;
             this.Game.StartTracking(this);
-            this.Scenes = new Dictionary<uint, Scene>();
-            //this.Scenes = new List<Scene>();
             this._actors = new ConcurrentDictionary<uint, Actor>();
             this._players = new ConcurrentDictionary<uint, Player.Player>();
 
             // NOTE: WorldSNO must be valid before adding it to the game
             this.WorldSNO = worldSNO;
-            this.StartPosition = new Vector3D();
             this.Game.AddWorld(this);
+        }
+
+        public Scene StartScene
+        {
+            // hackish way that returns the very first scene that has startposition set.
+            get { return (from pair in this.Scenes where pair.Value.StartPosition != null select pair.Value).FirstOrDefault(); }
         }
 
         public override void Update()
@@ -161,6 +163,12 @@ namespace Mooege.Core.GS.Map
             this.RemoveActor(actor);
         }
 
+        public void RevealScenesInProximity(Player.Player player)
+        {
+            // I guess markers should have already this info in - just need to figure which markers. /raist.
+            player.CurrentScene.Reveal(player);
+        }
+
         public bool Reveal(Mooege.Core.GS.Player.Player player)
         {
             if (player.RevealedObjects.ContainsKey(this.DynamicID))
@@ -179,12 +187,13 @@ namespace Mooege.Core.GS.Map
                 WorldSNO = this.WorldSNO,
             });
 
+            this.RevealScenesInProximity(player);
             // Revealing all scenes for now..
-            Logger.Info("Revealing scenes for world {0}", this.DynamicID);
-            foreach (var scene in this.Scenes.Values)
-            {
-                scene.Reveal(player);
-            }
+            //Logger.Info("Revealing scenes for world {0}", this.DynamicID);
+            //foreach (var scene in this.Scenes.Values)
+            //{
+            //    scene.Reveal(player);
+            //}
 
             // Reveal all actors
             // TODO: We need proper location-aware reveal logic for _all_ objects. This can be done on the scene level once that bit is in. /komiga
@@ -314,7 +323,7 @@ namespace Mooege.Core.GS.Map
 
         public Actor GetActorByTag(int tag)
         {
-            return (from Actor a in _actors.Values where a.tag == tag select a).First();
+            return (from Actor a in _actors.Values where a.Tag == tag select a).First();
         }
 
         public Actor GetActor(uint dynamicID)

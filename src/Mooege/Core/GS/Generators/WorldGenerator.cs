@@ -129,9 +129,9 @@ namespace Mooege.Core.GS.Generators
             Identifier iden = _tplStartPos.GetMatchingIdentifier(root);
             if (iden == null)
                 throw new Exception(String.Format("Could not find identifier {0} in script", _tplStartPos.Identity[0]));
-            world.StartPosition.X = iden.GetFloat(0).Value;
-            world.StartPosition.Y = iden.GetFloat(1).Value;
-            world.StartPosition.Z = iden.GetFloat(2).Value;
+            //world.StartPosition.X = iden.GetFloat(0).Value;
+            //world.StartPosition.Y = iden.GetFloat(1).Value;
+            //world.StartPosition.Z = iden.GetFloat(2).Value;
 
             string name = "scenes";
             Node node = root.GetNode(name, false);

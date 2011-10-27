@@ -17,9 +17,7 @@
  */
 
 using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Player;
 using Mooege.Core.GS.Map;
-using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Core.GS.Objects
 {

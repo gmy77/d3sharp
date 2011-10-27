@@ -101,21 +101,15 @@ namespace Mooege.Core.GS.Generators
                                 subscene.RotationAmount = 1;
                                 subscene.Specification = sceneChunk.SceneSpecification;
                                 scene.Subscenes.Add(subscene);
-                                LoadActors(subscene);
+                                subscene.LoadActors();
                             }
                         }
                     }
                 }
 
-                LoadActors(scene);
+                scene.LoadActors();
                 scene.Specification = sceneChunk.SceneSpecification;
             }
-
-            //  71150 =  X: 3143,75,  Y: 2828,75,  Z: 59,07559
-            // 109362 =   X: 83,75,  Y: 123,75,  Z: 0,2000023
-            //world.StartPosition.X = 83.75f;
-            //world.StartPosition.Y = 123.75f;
-            //world.StartPosition.Z = 0.2000023f;
 
             return world;
         }
@@ -136,75 +130,6 @@ namespace Mooege.Core.GS.Generators
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Loads all Actors for a scene chunk. TODO Remove hack that this method returns a vector for starting positions. Better to load all actors and search for the appropriate starting point afterwards
-        /// </summary>
-        /// <param name="sceneChunk"></param>
-        /// <param name="world"></param>
-        /// <returns></returns>
-        private static void LoadActors(Scene scene)
-        {
-            // Load marker sets
-            var mpqScene = MPQStorage.Data.Assets[SNOGroup.Scene][scene.SceneSNO].Data as Mooege.Common.MPQ.FileFormats.Scene;
-
-            foreach (var markerSet in mpqScene.MarkerSets)
-            {
-                var mpqMarkerSet = MPQStorage.Data.Assets[SNOGroup.MarkerSet][markerSet].Data as Mooege.Common.MPQ.FileFormats.MarkerSet;
-                foreach (var marker in mpqMarkerSet.Markers)
-                {
-                    Dictionary<int, TagMapEntry> tags = new Dictionary<int, TagMapEntry>();
-                    foreach (var tag in marker.TagMap.TagMapEntries)
-                        tags.Add(tag.Int1, tag);
-
-
-                    if (RandomHelper.Next(100) > 90 || tags.ContainsKey(526850) || tags.ContainsKey(526852))
-                    {
-                        if (marker.SNOName.Group == SNOGroup.Actor)
-                        {
-                            Actor newActor = null;
-
-                            if (tags.ContainsKey(526850))
-                            {
-                                newActor = new Portal(scene.World);
-                                (newActor as Portal).Destination.WorldSNO = tags[526850].Int2;
-
-                                if (tags.ContainsKey(526853))
-                                    (newActor as Portal).Destination.DestLevelAreaSNO = tags[526853].Int2;
-                                newActor.tag = tags[526851].Int2;
-                            }
-                            else
-                                newActor = new Actor(scene.World, scene.World.NewActorID);
-
-                            newActor.ActorSNO = marker.SNOName.SNOId;
-                            newActor.Position = marker.PRTransform.Vector3D + scene.Position;
-
-                            if (tags.ContainsKey(526852))
-                                newActor.tag = tags[526852].Int2;
-
-                            if (tags.ContainsKey(524288))
-                                newActor.Scale = tags[524288].Float0;
-                    
-                            newActor.RotationAmount = marker.PRTransform.Quaternion.W;
-                            newActor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
-                            newActor.Field3 = 0;
-                            newActor.Field2 = 16;
-                            newActor.Field7 = 0x00000001;
-                            newActor.Field8 = newActor.ActorSNO;
-
-                            if(!(newActor is Portal))
-                                scene.World.Enter(newActor);
-                        }
-                    }
-
-                    if (marker.SNOName.SNOId == 5502 || marker.SNOName.SNOId == 5503)
-                        scene.World.StartPosition = marker.PRTransform.Vector3D + scene.Position;
-
-                    
-                }
-
-            }
         }
     }
 }

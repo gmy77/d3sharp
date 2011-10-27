@@ -86,5 +86,10 @@ namespace Mooege.Core.GS.Common.Types.SNO
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
+
+        public override string ToString()
+        {
+            return string.Format("[{0}] {1} - {2}", this.Group, this.SNOId, this.Name);
+        }
     }
 }

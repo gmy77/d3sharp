@@ -100,5 +100,10 @@ namespace Mooege.Core.GS.Common.Types.Collusion
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
+
+        public override string ToString()
+        {
+            return string.Format("AABB: min:{0} max:{1}", this.Min, this.Max);
+        }
     }
 }
