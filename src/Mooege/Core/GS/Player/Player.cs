@@ -321,16 +321,6 @@ namespace Mooege.Core.GS.Player
             #endregion // Attributes
         }
 
-        public sealed override Vector3D Position
-        {
-            set
-            {
-                var old = new Vector3D(this._position);
-                this._position.Set(value);
-                this.OnMove(old);
-            }
-        }
-
         public void Consume(GameClient client, GameMessage message)
         {
             if (message is AssignActiveSkillMessage) OnAssignActiveSkill(client, (AssignActiveSkillMessage)message);
@@ -465,6 +455,11 @@ namespace Mooege.Core.GS.Player
         public override void OnLeave(World world)
         {
             Logger.Trace("Leaving world!");
+        }
+
+        protected override void OnPositionChange(Vector3D prevPosition)
+        {
+            // check here for current-scene change.
         }
 
         public override bool Reveal(Mooege.Core.GS.Player.Player player)

@@ -129,17 +129,6 @@ namespace Mooege.Core.GS.Map
             // TODO: Unreveal from players that are now outside the actor's range                        
         }
 
-        public void OnActorPositionChange(Actor actor, Vector3D prevPosition)
-        {
-            // Okay we need this here for positioning actors on world (like when item drops)
-            // but we shouldn't be using it for movement of actors (like players) -- they should be instead using NotifyActorMovementMessage /raist.
-
-            if (!actor.HasWorldLocation) return;
-            if (actor is Player.Player) return; // don't send position ACDWorldPositionMessage for players, else it'll breake movement for them.  /raist.
-
-            BroadcastIfRevealed(actor.ACDWorldPositionMessage, actor);            
-        }
-
         // TODO: NewPlayer messages should be broadcasted at the Game level, which means we may have to track players separately from objects in Game
         public void Enter(Actor actor)
         {
@@ -236,7 +225,8 @@ namespace Mooege.Core.GS.Map
 
         public void SpawnMob(Mooege.Core.GS.Player.Player player, int actorSNO, Vector3D position)
         {
-            new Monster(player.World, actorSNO, position);
+            var monster = new Monster(player.World, actorSNO, position);
+            this.Enter(monster);
         }
 
         public void SpawnRandomDrop(Mooege.Core.GS.Player.Player player, Vector3D position)

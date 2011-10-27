@@ -94,8 +94,7 @@ namespace Mooege.Core.GS.Actors
             {
                 var old = new Vector3D(this._position);
                 this._position.Set(value);
-                this.OnMove(old);
-                this.World.OnActorPositionChange(this, old); // TODO: Should notify its scene instead
+                this.OnPositionChange(old);
             }
         }
 
@@ -190,20 +189,23 @@ namespace Mooege.Core.GS.Actors
         // NOTE: When using this, you should *not* set the actor's world. It is done for you
         public void TransferTo(World targetWorld, Vector3D pos)
         {
+            var player = this as Player.Player;
+            if (player == null) return; // return if current actor is not a player. 
+
             this.Position = pos;
             //this.RotationAmount = location.Quaternion.W;
             //this.RotationAxis = location.Quaternion.Vector3D;
 
             this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
             
-            (this as Mooege.Core.GS.Player.Player).InGameClient.SendMessage(new EnterWorldMessage()
+            player.InGameClient.SendMessage(new EnterWorldMessage()
             {
                 EnterPosition = this.Position,
                 WorldID = targetWorld.DynamicID,
                 WorldSNO = targetWorld.WorldSNO,
             });
-            
-            (this as Mooege.Core.GS.Player.Player).InGameClient.SendMessage(new ACDWorldPositionMessage()
+
+            player.InGameClient.SendMessage(new ACDWorldPositionMessage()
             {
                 ActorID = this.DynamicID,
                 WorldLocation = new WorldLocationMessageData()
@@ -228,8 +230,12 @@ namespace Mooege.Core.GS.Actors
         {
         }
 
-        protected virtual void OnMove(Vector3D prevPosition)
+        protected virtual void OnPositionChange(Vector3D prevPosition)
         {
+            if (!this.HasWorldLocation) return;
+
+            // We need this here for positioning actors on world (like when item drops)
+            this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);   
         }
 
         public virtual void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
