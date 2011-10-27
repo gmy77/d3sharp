@@ -191,7 +191,33 @@ namespace Mooege.Core.GS.Actors
         public void TransferTo(World targetWorld, Vector3D pos)
         {
             this.Position = pos;
+            //this.RotationAmount = location.Quaternion.W;
+            //this.RotationAxis = location.Quaternion.Vector3D;
+
             this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
+            
+            (this as Mooege.Core.GS.Player.Player).InGameClient.SendMessage(new EnterWorldMessage()
+            {
+                EnterPosition = this.Position,
+                WorldID = targetWorld.DynamicID,
+                WorldSNO = targetWorld.WorldSNO,
+            });
+            
+            (this as Mooege.Core.GS.Player.Player).InGameClient.SendMessage(new ACDWorldPositionMessage()
+            {
+                ActorID = this.DynamicID,
+                WorldLocation = new WorldLocationMessageData()
+                {
+                    WorldID = targetWorld.DynamicID,
+                    Scale = 1,
+                    Transform = new PRTransform()
+                    {
+                        Quaternion = new Quaternion() { W = 1, Vector3D = new Vector3D(0, 0, 0) },
+                        Vector3D = pos
+                    }
+                }
+
+            });
         }
 
         public virtual void OnEnter(World world)
