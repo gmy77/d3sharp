@@ -66,7 +66,7 @@ namespace Mooege.Core.GS.Generators
             foreach(var sceneChunk in worldData.SceneParams.SceneChunks)
             {
                 var scene = new Scene(world, sceneChunk.SNOName.SNOId, null);
-                scene.MiniMapVisibility = MiniMapVisibility.Revealed;
+                scene.MiniMapVisibility = MiniMapVisibility.Visited;
                 scene.Position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
                 scene.RotationAmount = sceneChunk.PRTransform.Quaternion.W;
                 scene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
