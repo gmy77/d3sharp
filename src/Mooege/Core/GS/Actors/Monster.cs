@@ -18,6 +18,7 @@
 
 using System;
 using Mooege.Common.Helpers;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Tick;
@@ -82,8 +83,6 @@ namespace Mooege.Core.GS.Actors
             this.Attributes[GameAttribute.TeamID] = 10;
             this.Attributes[GameAttribute.Level] = 1;
             this.Attributes[GameAttribute.Experience_Granted] = 125;
-
-            this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
         public override void Update()

@@ -17,20 +17,43 @@
  */
 
 using System.Text;
+using CrystalMpq;
+using Gibbed.IO;
+using Mooege.Net.GS.Message;
 
-namespace Mooege.Net.GS.Message.Fields
+namespace Mooege.Core.GS.Common.Types.Math
 {
-    public class IVector2D
+    public class Vector2D
     {
         public int X;
         public int Y;
 
+        public Vector2D() { }
+
+        /// <summary>
+        /// Reads Vector2D from given MPQFileStream.
+        /// </summary>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        public Vector2D(MpqFileStream stream)
+        {
+            X = stream.ReadValueS32();
+            Y = stream.ReadValueS32();
+        }
+
+        /// <summary>
+        /// Parses Vector2D from given GameBitBuffer.
+        /// </summary>
+        /// <param name="buffer">The GameBitBuffer to parse from.</param>
         public void Parse(GameBitBuffer buffer)
         {
             X = buffer.ReadInt(32);
             Y = buffer.ReadInt(32);
         }
 
+        /// <summary>
+        /// Encodes Vector2D to given GameBitBuffer.
+        /// </summary>        
+        /// <param name="buffer">The GameBitBuffer to write.</param>
         public void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, X);
@@ -40,7 +63,7 @@ namespace Mooege.Net.GS.Message.Fields
         public void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("IVector2D:");
+            b.AppendLine("Vector2D:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
@@ -51,6 +74,9 @@ namespace Mooege.Net.GS.Message.Fields
             b.AppendLine("}");
         }
 
-
+        public override string ToString()
+        {
+            return string.Format("x:{0} y:{1}", X, Y);
+        }
     }
 }

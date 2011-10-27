@@ -18,13 +18,9 @@
 
 ﻿using Mooege.Common;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Player;
-using Mooege.Net.GS;
-using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Net.GS.Message.Definitions.Attribute;
-using Mooege.Net.GS.Message.Definitions.Combat;
-using Mooege.Net.GS.Message.Definitions.Misc;
+﻿using Mooege.Core.GS.Common.Types.Math;
+﻿using Mooege.Net.GS.Message;
+﻿using Mooege.Net.GS.Message.Definitions.Misc;
 ﻿using Mooege.Net.GS.Message.Definitions.World;
 ﻿using Mooege.Net.GS.Message.Fields;
 
@@ -94,8 +90,10 @@ namespace Mooege.Core.GS.Map
         public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
             World world = this.World.Game.GetWorld(this.Destination.WorldSNO);
+            Actor f = world.GetActorByTag(this.Tag);
+
             if (world != null)
-                player.TransferTo(world, this.TargetPos);
+                player.TransferTo(world, f.Position);
             else
                 Logger.Warn("Portal's destination world does not exist (WorldSNO = {0})", this.Destination.WorldSNO);
         }

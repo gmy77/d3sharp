@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common.Helpers;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Data.SNO;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.GS.Message.Fields;

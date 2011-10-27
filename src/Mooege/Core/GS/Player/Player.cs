@@ -22,6 +22,7 @@ using System.Threading;
 using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.Common.Items;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Actors;
@@ -115,9 +116,10 @@ namespace Mooege.Core.GS.Player
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.CollFlags = 0x00000000;
 
-            this.Position.X = 3143.75f;
-            this.Position.Y = 2828.75f;
-            this.Position.Z = 59.075588f;
+            this.CurrentScene = this.World.SpawnableScenes.First();
+            this.Position.X = this.CurrentScene.StartPosition.X;
+            this.Position.Y = this.CurrentScene.StartPosition.Y;
+            this.Position.Z = this.CurrentScene.StartPosition.Z;
 
             // den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
             // inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
@@ -297,8 +299,8 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Movement_Scalar] = 1f;
             this.Attributes[GameAttribute.Walking_Rate_Total] = 0.2797852f;
             this.Attributes[GameAttribute.Walking_Rate] = 0.2797852f;
-            this.Attributes[GameAttribute.Running_Rate_Total] = 0.3598633f;
-            this.Attributes[GameAttribute.Running_Rate] = 0.3598633f;
+            this.Attributes[GameAttribute.Running_Rate_Total] = 1.5f; // 0.3598633f; original value
+            this.Attributes[GameAttribute.Running_Rate] = 1.5f; // 0.3598633f; original value
             this.Attributes[GameAttribute.Sprinting_Rate_Total] = 3.051758E-05f;
             this.Attributes[GameAttribute.Strafing_Rate_Total] = 3.051758E-05f;
 
@@ -328,7 +330,7 @@ namespace Mooege.Core.GS.Player
             else if (message is PlayerMovementMessage) OnPlayerMovement(client, (PlayerMovementMessage)message);
             else return;
 
-            UpdateState();
+            //UpdateState(); - what is that messagespam for? - farmy
         }
 
         public override void Update()
@@ -453,6 +455,11 @@ namespace Mooege.Core.GS.Player
         public override void OnLeave(World world)
         {
             Logger.Trace("Leaving world!");
+        }
+
+        protected override void OnPositionChange(Vector3D prevPosition)
+        {
+            // check here for current-scene change.
         }
 
         public override bool Reveal(Mooege.Core.GS.Player.Player player)

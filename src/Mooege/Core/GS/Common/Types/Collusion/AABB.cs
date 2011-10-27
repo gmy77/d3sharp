@@ -17,13 +17,51 @@
  */
 
 using System.Text;
+using CrystalMpq;
+using Gibbed.IO;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Net.GS.Message;
 
-namespace Mooege.Net.GS.Message.Fields
+namespace Mooege.Core.GS.Common.Types.Collusion
 {
     public class AABB
     {
         public Vector3D Min;
         public Vector3D Max;
+
+        public AABB() { }
+
+        /// <summary>
+        /// Reads AABB from given MPQFileStream.
+        /// </summary>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        public AABB(MpqFileStream stream)
+        {
+            this.Min = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
+            this.Max = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
+        }
+
+        /// <summary>
+        /// Parses AABB from given GameBitBuffer.
+        /// </summary>
+        /// <param name="buffer">The GameBitBuffer to parse from.</param>
+        public void Parse(GameBitBuffer buffer)
+        {
+            Min = new Vector3D();
+            Min.Parse(buffer);
+            Max = new Vector3D();
+            Max.Parse(buffer);
+        }
+
+        /// <summary>
+        /// Encodes AABB to given GameBitBuffer.
+        /// </summary>
+        /// <param name="buffer">The GameBitBuffer to write.</param>
+        public void Encode(GameBitBuffer buffer)
+        {
+            Min.Encode(buffer);
+            Max.Encode(buffer);
+        }
 
         public bool IsWithin(Vector3D v)
         {
@@ -51,20 +89,6 @@ namespace Mooege.Net.GS.Message.Fields
             return true; // Intersects if above fails
         }
 
-        public void Parse(GameBitBuffer buffer)
-        {
-            Min = new Vector3D();
-            Min.Parse(buffer);
-            Max = new Vector3D();
-            Max.Parse(buffer);
-        }
-
-        public void Encode(GameBitBuffer buffer)
-        {
-            Min.Encode(buffer);
-            Max.Encode(buffer);
-        }
-
         public void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
@@ -75,6 +99,11 @@ namespace Mooege.Net.GS.Message.Fields
             Max.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
+        }
+
+        public override string ToString()
+        {
+            return string.Format("AABB: min:{0} max:{1}", this.Min, this.Max);
         }
     }
 }

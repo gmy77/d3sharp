@@ -18,7 +18,8 @@
 
 using CrystalMpq;
 using Gibbed.IO;
-using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.GS.Common.Types.Misc;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats.Types
 {
@@ -38,72 +39,6 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             this.SNOId = stream.ReadValueS32();
             this.Unknown3 = stream.ReadValueS32();
             this.Unknown4 = stream.ReadValueS32();
-        }
-    }
-
-    public class Vector2D
-    {
-        public readonly int Field0, FIeld1;
-
-        public Vector2D(MpqFileStream stream)
-        {
-            Field0 = stream.ReadValueS32();
-            FIeld1 = stream.ReadValueS32();
-        }
-    }
-
-    public class PRTransform
-    {
-        public Quaternion Q;
-        public Vector3D V;
-
-        public PRTransform(MpqFileStream stream)
-        {
-            Q = new Quaternion(stream);
-            V = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
-        }
-    }
-
-    public class Quaternion
-    {
-        public float Float0;
-        public Vector3D Vector3D;
-
-        public Quaternion(MpqFileStream stream)
-        {
-            Float0 = stream.ReadValueF32();
-            Vector3D = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
-        }
-    }
-
-    public class AABB
-    {
-        public Vector3D Min { get; private set; }
-        public Vector3D Max { get; private set; }
-
-        public AABB(MpqFileStream stream)
-        {
-            this.Min = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
-            this.Max = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
-        }
-    }
-
-    public class SNOName
-    {
-        public SNOGroup SNOGroup { get; private set; }
-        public int SNOId { get; private set; }
-        public string Name { get; private set; }
-
-        public SNOName(MpqFileStream stream)
-        {
-            this.SNOGroup = (SNOGroup)stream.ReadValueS32();
-            this.SNOId = stream.ReadValueS32();
-
-            if (!MPQStorage.Data.Assets.ContainsKey(this.SNOGroup))
-                return; // it's here because of the SNOGroup 0, could it be the Act? /raist
-            this.Name = MPQStorage.Data.Assets[this.SNOGroup].ContainsKey(this.SNOId)
-                            ? MPQStorage.Data.Assets[this.SNOGroup][SNOId].Name
-                            : ""; // put it here because it seems we miss loading some scenes there /raist.
         }
     }
 
@@ -321,24 +256,6 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         {
             i0 = stream.ReadValueS32();
             TriggerEvent = new TriggerEvent(stream);
-        }
-    }
-
-    public class RGBAColor
-    {
-        public byte Red;
-        public byte Green;
-        public byte Blue;
-        public byte Alpha;
-
-        public RGBAColor(MpqFileStream stream)
-        {
-            var buf = new byte[4];
-            stream.Read(buf, 0, 4);
-            Red = buf[0];
-            Green = buf[1];
-            Blue = buf[2];
-            Alpha = buf[3];
         }
     }
 
