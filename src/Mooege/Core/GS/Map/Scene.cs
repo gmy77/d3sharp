@@ -47,8 +47,9 @@ namespace Mooege.Core.GS.Map
 
     public sealed class Scene : WorldObject
     {
-
         private static readonly Logger Logger = LogManager.CreateLogger();
+
+        public Vector3D StartPosition { get; set; }
 
         public override World World
         {
@@ -187,12 +188,6 @@ namespace Mooege.Core.GS.Map
                     foreach (var tag in marker.TagMap.TagMapEntries)
                         tags.Add(tag.Int1, tag);
 
-                    //if (marker.SNOName.SNOId == (int)Markers.MarkerTypes.Start_Location_0 || marker.SNOName.SNOId == (int)Markers.MarkerTypes.Start_Location_Team_0)
-                    // {
-                    //    this.StartPosition = marker.PRTransform.Vector3D + this.Position;
-                    //    continue; <-- this prevented startling locations to be loaded, portals need them
-                    //}
-
                     Asset actorAsset = null;
                     Mooege.Common.MPQ.FileFormats.Actor actorData = null;
                     if (!MPQStorage.Data.Assets[SNOGroup.Actor].ContainsKey(marker.SNOName.SNOId)) continue;
@@ -261,6 +256,11 @@ namespace Mooege.Core.GS.Map
                             //this.World.Enter(actor);
                             //------------------------------------------------------------------------------
                         }
+                    }
+
+                    if (marker.SNOName.SNOId == (int)MarkerTypes.Start_Location_0 || marker.SNOName.SNOId == (int)MarkerTypes.Start_Location_Team_0)
+                    {
+                        this.StartPosition = marker.PRTransform.Vector3D + this.Position;
                     }
                 }
             }

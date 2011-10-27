@@ -67,6 +67,17 @@ namespace Mooege.Core.GS.Map
             this.Game.AddWorld(this);
         }
 
+        /// <summary>
+        /// Returns a list of scenes that's player is spawnable.
+        /// </summary>
+        public List<Scene> SpawnableScenes
+        {
+            get
+            {
+                return (from pair in this.Scenes where pair.Value.StartPosition != null select pair.Value).ToList();
+            }
+        }
+
         public override void Update()
         {
             // update actors.

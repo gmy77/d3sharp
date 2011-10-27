@@ -116,21 +116,10 @@ namespace Mooege.Core.GS.Player
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.CollFlags = 0x00000000;
 
-            //this.CurrentScene = this.World.StartScene;
-
-            // TODO Shouldnt player just enter a world like when using a portal? - farmy
-            int tag = 0;
-            switch (world.WorldSNO)
-            {
-                case 71150: tag = 223; break;
-                case 86859: tag = 195; break;
-                default: System.Diagnostics.Debugger.Break(); break;// you have to find an appropriate starting location for each world you want to spawn in
-            }
-            Actor startposition = world.GetActorByTag(tag);
-
-            this.Position.X = startposition.Position.X;
-            this.Position.Y = startposition.Position.Y;
-            this.Position.Z = startposition.Position.Z;
+            this.CurrentScene = this.World.SpawnableScenes.First();
+            this.Position.X = this.CurrentScene.StartPosition.X;
+            this.Position.Y = this.CurrentScene.StartPosition.Y;
+            this.Position.Z = this.CurrentScene.StartPosition.Z;
 
             // den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
             // inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
