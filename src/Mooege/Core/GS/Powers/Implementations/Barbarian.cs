@@ -118,4 +118,59 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield break;
         }
     }
+
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.AncientSpear)]
+    public class BarbarianAncientSpear : PowerImplementation
+    {
+        public override IEnumerable<TickTimer> Run()
+        {
+            //StartCooldown(WaitSeconds(10f));
+
+            var projectile = new PowerProjectile(User.World, 74636, User.Position, TargetPosition, 2f, 500f, 1f, 3f, 5f, 0f);
+
+            User.AddRopeEffect(79402, projectile);
+
+            projectile.OnHit = () =>
+            {
+                GeneratePrimaryResource(20f);
+
+                var inFrontOfUser = PowerMath.ProjectAndTranslate2D(User.Position, projectile.hittedActor.Position,
+                    User.Position, 5f);
+
+                _setupReturnProjectile(projectile.hittedActor.Position);
+
+                // GET OVER HERE
+                projectile.hittedActor.MoveNormal(inFrontOfUser, 2f);
+                projectile.hittedActor.PlayHitEffect(0, User);
+                Damage(projectile.hittedActor, 15f, 0);
+
+                projectile.Destroy();
+            };
+
+            projectile.OnTimeout = () =>
+            {
+                _setupReturnProjectile(projectile.getCurrentPosition());
+            };
+
+            yield break;
+        }
+
+        private void _setupReturnProjectile(Vector3D spawnPosition)
+        {
+            var return_proj = new PowerProjectile(User.World, 79400, spawnPosition,
+                User.Position, 2f, 500f, 1f, 3f, 5f, 0f);
+
+            User.AddRopeEffect(79402, return_proj);
+
+            return_proj.OnUpdate = () =>
+            {
+                if (PowerMath.Distance(return_proj.getCurrentPosition(), User.Position) < 8f)
+                {
+                    return_proj.Destroy();
+                    return false;
+                }
+                return true;
+            };
+        }
+    }
 }

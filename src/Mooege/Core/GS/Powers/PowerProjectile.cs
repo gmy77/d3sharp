@@ -65,6 +65,8 @@ namespace Mooege.Core.GS.Powers
         public float radianAngle;
 
         public Action OnHit;
+        public Func<bool> OnUpdate;
+        public Action OnTimeout;
         public TickTimer Timeout;
 
         public PowerProjectile(World world, int actorSNO, Vector3D position, Vector3D aimPosition, float speed, float timetolive, float scale = 1.35f, float collisionError = 3f, float heightOffset = 0, float distanceOffset = 0, bool handleTranslation = false)
@@ -180,14 +182,23 @@ namespace Mooege.Core.GS.Powers
         {
             base.Update();
 
-            if (detectCollision())
+            bool doHitDetect = true;
+            if (OnUpdate != null)
+                doHitDetect = OnUpdate();
+            
+            if (doHitDetect && detectCollision())
                 if (OnHit != null)
                     OnHit();
 
             if (this.World != null)
             {
                 if (Timeout.TimedOut())
+                {
+                    if (OnTimeout != null)
+                        OnTimeout();
+
                     Destroy();
+                }
             }
         }
     }
