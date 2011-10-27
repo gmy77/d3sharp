@@ -241,7 +241,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public eItem e0;
         public int ItemLevel;
         public int i2;
-        public int i3;
+        public int RandomPropertiesCount;
         public int MaxSockets;
         public int i5;
         public int BaseGoldValue;
@@ -276,7 +276,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int[] RecipeToGrant; //len 6
         public int EnhancementToGrant;
         public int[] LegendaryAffixFamily;
-        public int[] UnknownAffix;
+        public int[] MaxAffixLevel;
 
         public void Read(MpqFileStream stream)
         {
@@ -289,7 +289,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.ItemLevel = stream.ReadValueS32(); //276
             this.e0 = (eItem)stream.ReadValueS32(); //280
             this.i2 = stream.ReadValueS32(); //284
-            this.i3 = stream.ReadValueS32(); //288
+            this.RandomPropertiesCount = stream.ReadValueS32(); //288
             this.MaxSockets = stream.ReadValueS32(); //292
             this.i5 = stream.ReadValueS32(); //296
             this.BaseGoldValue = stream.ReadValueS32(); //300
@@ -336,9 +336,9 @@ namespace Mooege.Common.MPQ.FileFormats
             this.LegendaryAffixFamily = new int[6];
             for (int i = 0; i < 6; i++)
                 this.LegendaryAffixFamily[i] = stream.ReadValueS32(); //1408
-            this.UnknownAffix = new int[6];
+            this.MaxAffixLevel = new int[6];
             for (int i = 0; i < 6; i++)
-                this.UnknownAffix[i] = stream.ReadValueS32(); //1432
+                this.MaxAffixLevel[i] = stream.ReadValueS32(); //1432
         }
 
         public enum ItemQuality
