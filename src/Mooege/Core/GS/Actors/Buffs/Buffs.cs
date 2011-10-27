@@ -53,4 +53,31 @@ namespace Mooege.Core.GS.Actors.Buffs
         {
         }
     }
+
+    // whirlwind effect
+    public class WhirlWindEffectBuff : TimedBuff
+    {
+        public WhirlWindEffectBuff(TickTimer timeout)
+            : base(timeout)
+        {
+        }
+
+        // TODO: broadcast attributes to to all clients
+        
+        public override void Apply()
+        {
+            GameAttributeMap map = new GameAttributeMap();
+            map[GameAttribute.Power_Buff_0_Visual_Effect_None, Skills.Skills.Barbarian.FurySpenders.Whirlwind] = true; // switch on effect
+            map[GameAttribute.Hidden] = true;
+            map.SendMessage(((Player.Player)Target).InGameClient, Target.DynamicID);
+        }
+
+        public override void Remove()
+        {
+            GameAttributeMap map = new GameAttributeMap();
+            map[GameAttribute.Power_Buff_0_Visual_Effect_None, Skills.Skills.Barbarian.FurySpenders.Whirlwind] = false; // switch on effect
+            map[GameAttribute.Hidden] = false;
+            map.SendMessage(((Player.Player)Target).InGameClient, Target.DynamicID);
+        }
+    }
 }

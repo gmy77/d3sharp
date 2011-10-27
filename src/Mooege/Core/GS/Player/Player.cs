@@ -341,6 +341,8 @@ namespace Mooege.Core.GS.Player
 
         public override void Update()
         {
+            base.Update();
+
             // Check the Killstreaks
             CheckExpBonus(0);
             CheckExpBonus(1);

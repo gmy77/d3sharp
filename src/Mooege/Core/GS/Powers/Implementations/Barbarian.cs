@@ -24,6 +24,8 @@ using Mooege.Core.GS.Skills;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Actors;
+using Mooege.Net.GS.Message;
+using Mooege.Core.GS.Actors.Buffs;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -33,10 +35,13 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Run()
         {
             yield return WaitSeconds(0.25f); // wait for swing animation
+
+            User.PlayEffectGroup(18662);
+
             if (CanHitMeleeTarget(Target))
             {
                 GeneratePrimaryResource(6f);
-                User.PlayEffectGroup(18662);
+                
                 Knockback(Target, 4f);
                 Damage(Target, 35, 0);
             }
@@ -92,6 +97,23 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (hitAnything)
                 GeneratePrimaryResource(15f);
+
+            yield break;
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.FurySpenders.Whirlwind)]
+    public class BarbarianWhirlwind : PowerImplementation
+    {
+        public override IEnumerable<TickTimer> Run()
+        {
+            User.AddBuff(new WhirlWindEffectBuff(WaitSeconds(0.250f)));
+
+            foreach (Actor target in GetTargetsInRange(User.Position, 9f))
+            {
+                target.PlayHitEffect(0, User);
+                Damage(target, 10, 0);
+            }
 
             yield break;
         }
