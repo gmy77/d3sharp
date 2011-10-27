@@ -42,6 +42,8 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             IList<Actor> hits = GetTargetsInRange(TargetPosition, 13f);
             Damage(hits, 150f, 0);
+
+            // TODO: ground fire damage?
         }
     }
 
@@ -371,6 +373,39 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield return WaitSeconds(0.3f);
             User.MoveWorldPosition(TargetPosition);
             User.PlayEffectGroup(170232);
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.SpectralBlade)]
+    public class WizardSpectralBlade : PowerImplementation
+    {
+        public override IEnumerable<TickTimer> Run()
+        {
+            UsePrimaryResource(15f);
+
+            User.PlayEffectGroup(188941);
+
+            // calculate hit area of effect, just in front of the user
+            TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, User.Position, 9f);
+
+            for (int n = 0; n < 3; ++n)
+            {
+                foreach (var target in GetTargetsInRange(TargetPosition, 9f))
+                {
+                    target.PlayHitEffect(7, User);
+                    Damage(target, 20f, 0);
+                }
+                yield return WaitSeconds(0.2f);
+            }
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.ShockPulse)]
+    public class WizardSpectralShockPulse : PowerImplementation
+    {
+        public override IEnumerable<TickTimer> Run()
+        {
+            yield break;
         }
     }
 }
