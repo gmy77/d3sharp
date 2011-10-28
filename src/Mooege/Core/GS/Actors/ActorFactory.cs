@@ -19,8 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Mooege.Common;
+using System.Reflection;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
@@ -30,7 +29,12 @@ namespace Mooege.Core.GS.Actors
 {
     public static class ActorFactory
     {
-        static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Dictionary<int, Type> SNOHandlers = new Dictionary<int, Type>();
+
+        static ActorFactory()
+        {
+            LoadHandlers();
+        }
 
         public static Actor Create(int snoId, World world, Vector3D position)
         {
@@ -42,19 +46,41 @@ namespace Mooege.Core.GS.Actors
             var actorData = actorAsset.Data as Mooege.Common.MPQ.FileFormats.Actor;
             if (actorData == null) return null;
 
-            //Logger.Trace("Actor: {0} Type: {1}", actorAsset.Name, actorData.Type);
-            if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Invalid) return null;
-
-            if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Monster)
-                return new Monster(world, snoId, position);
-
-            //if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Enviroment)
-            //    return new Environment(world, snoId, position);
-
-            if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Gizmo)
-                return new Gizmo(world, snoId, position);
+            if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Invalid) 
+                return null;
+            else if (SNOHandlers.ContainsKey(snoId))
+                return (Actor) Activator.CreateInstance(SNOHandlers[snoId], new object[] {world, snoId, position}); // check for handled-actor implementations.
+            else switch (actorData.Type)
+            {
+                case Mooege.Common.MPQ.FileFormats.Actor.ActorType.Monster:
+                    return new Monster(world, snoId, position);
+                case Mooege.Common.MPQ.FileFormats.Actor.ActorType.Gizmo:
+                    return new Gizmo(world, snoId, position);
+            }
 
             return null;
+        }
+
+        public static void LoadHandlers()
+        {
+            SNOHandlers.Clear();
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            {
+                if (!type.IsSubclassOf(typeof (Actor))) continue;
+
+                var attributes = (HandledSNOAttribute[]) type.GetCustomAttributes(typeof (HandledSNOAttribute), true);
+                if (attributes.Length == 0) continue;
+
+                foreach (var sno in attributes.First().SNOIds)
+                {
+                    SNOHandlers.Add(sno, type);
+                }
+            }
+        }
+
+        public static bool HasHandler(int sno)
+        {
+            return SNOHandlers.ContainsKey(sno);
         }
     }
 }

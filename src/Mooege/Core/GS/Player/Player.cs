@@ -22,6 +22,7 @@ using System.Threading;
 using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.Common.Items;
+using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
@@ -31,6 +32,7 @@ using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Definitions.Waypoint;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Hero;
@@ -40,7 +42,6 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Combat;
-using Mooege.Core.MooNet.Online;
 using System;
 
 
@@ -328,9 +329,8 @@ namespace Mooege.Core.GS.Player
             else if (message is PlayerChangeHotbarButtonMessage) OnPlayerChangeHotbarButtonMessage(client, (PlayerChangeHotbarButtonMessage)message);
             else if (message is TargetMessage) OnObjectTargeted(client, (TargetMessage)message);
             else if (message is PlayerMovementMessage) OnPlayerMovement(client, (PlayerMovementMessage)message);
+            else if (message is TryWaypointMessage) OnTryWaypoint(client, (TryWaypointMessage)message);
             else return;
-
-            //UpdateState(); - what is that messagespam for? - farmy
         }
 
         public override void Update()
@@ -512,6 +512,21 @@ namespace Mooege.Core.GS.Player
             }
         }
 
+        private void OnTryWaypoint(GameClient client, TryWaypointMessage tryWaypointMessage)
+        {
+            Logger.Trace(tryWaypointMessage.AsText());
+
+            Vector3D position;
+
+            if (Waypoint.Waypoints.ContainsKey(tryWaypointMessage.Field1))
+                position = Waypoint.Waypoints[tryWaypointMessage.Field1];
+            else
+                return;
+
+            this.Position = position;
+            InGameClient.SendMessage(ACDWorldPositionMessage);
+        }
+
         private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
         {
             this.SkillSet.HotBarSkills[message.BarIndex] = message.ButtonData;
@@ -520,6 +535,7 @@ namespace Mooege.Core.GS.Player
         private void OnAssignPassiveSkill(GameClient client, AssignPassiveSkillMessage message)
         {
             this.SkillSet.PassiveSkills[message.SkillIndex] = message.SNOSkill;
+            this.UpdateHeroState();
         }
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
@@ -532,9 +548,13 @@ namespace Mooege.Core.GS.Player
             }
 
             this.SkillSet.ActiveSkills[message.SkillIndex] = message.SNOSkill;
+            this.UpdateHeroState();
         }
 
-        public void UpdateState()
+        /// <summary>
+        /// Allows you to send a hero state message when you update hero's some property.
+        /// </summary>
+        public void UpdateHeroState()
         {
             this.InGameClient.SendMessage(new HeroStateMessage
             {

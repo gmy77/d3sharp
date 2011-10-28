@@ -16,25 +16,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Map;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Mooege.Core.GS.Actors
 {
-    public class Gizmo : Actor
+    /// <summary>
+    /// Allows implementing actors for given actorSNO's.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public sealed class HandledSNOAttribute : Attribute
     {
-        public override ActorType ActorType { get { return ActorType.Gizmo; } }
+        public List<int> SNOIds { get; private set; }
 
-        public Gizmo(World world, int actorSNO, Vector3D position)
-            : base(world, world.NewActorID)
+        public HandledSNOAttribute(params int[] snoIds)
         {
-            this.ActorSNO = actorSNO;
-            this.Field2 = 16;
-            this.Field3 = 0x0;
-            this.Field7 = 0x00000001;
-            this.Field8 = this.ActorSNO;
-            this.Scale = 1.35f;
-            this.Position.Set(position);
+            this.SNOIds = new List<int>();
+            this.SNOIds.AddRange(snoIds);
         }
     }
 }
