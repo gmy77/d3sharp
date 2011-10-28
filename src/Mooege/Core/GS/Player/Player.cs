@@ -168,9 +168,9 @@ namespace Mooege.Core.GS.Player
             //Resistance
             this.Attributes[GameAttribute.Resistance, 0xDE] = 0.5f;
             this.Attributes[GameAttribute.Resistance, 0x226] = 0.5f;
-            this.Attributes[GameAttribute.Resistance_Total, 0] = 10f; /// im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
-            /// likely the physical school of damage, it probably doesn't actually do anything in this case (or maybe just not for the player's hero) 
-            /// but exists for the sake of parity with weapon damage schools
+            this.Attributes[GameAttribute.Resistance_Total, 0] = 10f; // im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
+            // likely the physical school of damage, it probably doesn't actually do anything in this case (or maybe just not for the player's hero) 
+            // but exists for the sake of parity with weapon damage schools
             this.Attributes[GameAttribute.Resistance_Total, 1] = 10f; //Fire
             this.Attributes[GameAttribute.Resistance_Total, 2] = 10f; //Lightning
             this.Attributes[GameAttribute.Resistance_Total, 3] = 10f; //Cold
@@ -299,8 +299,8 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Movement_Scalar] = 1f;
             this.Attributes[GameAttribute.Walking_Rate_Total] = 0.2797852f;
             this.Attributes[GameAttribute.Walking_Rate] = 0.2797852f;
-            this.Attributes[GameAttribute.Running_Rate_Total] = 1.5f; // 0.3598633f; original value
-            this.Attributes[GameAttribute.Running_Rate] = 1.5f; // 0.3598633f; original value
+            this.Attributes[GameAttribute.Running_Rate_Total] = 0.3598633f;
+            this.Attributes[GameAttribute.Running_Rate] = 0.3598633f;
             this.Attributes[GameAttribute.Sprinting_Rate_Total] = 3.051758E-05f;
             this.Attributes[GameAttribute.Strafing_Rate_Total] = 3.051758E-05f;
 
@@ -407,19 +407,15 @@ namespace Mooege.Core.GS.Player
                 item = (Item)actor;
                 if (item.ItemType != ItemType.HealthGlobe) continue;
 
-                //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
-                this.InGameClient.SendMessage(new PlayEffectMessage()
+                this.InGameClient.SendMessage(new PlayEffectMessage() //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
                 {
                     ActorId = this.DynamicID,
                     Effect = Effect.HealthOrbPickup
                 });
 
-                foreach (var player in PlayerManager.OnlinePlayers)
+                foreach(var pair in this.World.Players) // should be actually checking for players in proximity. /raist
                 {
-                    if (player.CurrentToon.Name != "Server")
-                    {
-                        player.InGameClient.Player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
-                    }
+                    pair.Value.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
                 }
 
                 item.Destroy();

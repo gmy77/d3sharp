@@ -43,10 +43,10 @@ namespace Mooege.Core.GS.Map
         public Game.Game Game { get; private set; }
 
         public Dictionary<uint, Scene> Scenes = new Dictionary<uint, Scene>();
+        public readonly ConcurrentDictionary<uint, Player.Player> Players;
         private readonly ConcurrentDictionary<uint, Actor> _actors;
-        private readonly ConcurrentDictionary<uint, Player.Player> _players; // Temporary for fast iteration for now since move/enter/leave handling is currently at the world level instead of the scene level
 
-        public bool HasPlayersIn { get { return this._players.Count > 0; } }
+        public bool HasPlayersIn { get { return this.Players.Count > 0; } }
 
         public int WorldSNO { get; set; }
 
@@ -60,7 +60,7 @@ namespace Mooege.Core.GS.Map
             this.Game = game;
             this.Game.StartTracking(this);
             this._actors = new ConcurrentDictionary<uint, Actor>();
-            this._players = new ConcurrentDictionary<uint, Player.Player>();
+            this.Players = new ConcurrentDictionary<uint, Player.Player>();
 
             // NOTE: WorldSNO must be valid before adding it to the game
             this.WorldSNO = worldSNO;
@@ -84,12 +84,12 @@ namespace Mooege.Core.GS.Map
             foreach(var pair in this._actors) { pair.Value.Update(); }
 
             // update players.
-            foreach (var pair in this._players) { pair.Value.Update(); }
+            foreach (var pair in this.Players) { pair.Value.Update(); }
         }
 
         public void BroadcastIfRevealed(GameMessage message, Actor actor)
         {
-            foreach (var player in this._players.Values)
+            foreach (var player in this.Players.Values)
             {
                 if (player.RevealedObjects.ContainsKey(actor.DynamicID))
                 {
@@ -100,7 +100,7 @@ namespace Mooege.Core.GS.Map
 
         public void BroadcastGlobal(GameMessage message)
         {
-            foreach (var player in this._players.Values)
+            foreach (var player in this.Players.Values)
             {
                 player.InGameClient.SendMessage(message);
             }
@@ -137,7 +137,7 @@ namespace Mooege.Core.GS.Map
             // Broadcast reveal
             // NOTE: Revealing to all right now since the flow results in actors that have initial positions that are not within the range of the player. /komiga
 
-            var players = this._players.Values; //this.GetPlayersInRange(actor.Position, 480.0f);
+            var players = this.Players.Values; //this.GetPlayersInRange(actor.Position, 480.0f);
             foreach (var player in players)
             {
                 actor.Reveal(player);
@@ -154,7 +154,7 @@ namespace Mooege.Core.GS.Map
             actor.OnLeave(this);
             // Broadcast unreveal
             //Logger.Debug("Leave {0}, unreveal to {1} players", actor.DynamicID, this.Players.Count);
-            foreach (var player in this._players.Values)
+            foreach (var player in this.Players.Values)
             {
                 if(actor != player)
                     actor.Unreveal(player);
@@ -295,7 +295,7 @@ namespace Mooege.Core.GS.Map
             if (obj.DynamicID == 0 || HasPlayer(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", obj.DynamicID));
 
-            this._players.TryAdd(obj.DynamicID, obj);
+            this.Players.TryAdd(obj.DynamicID, obj);
         }
 
         // Removing
@@ -320,11 +320,11 @@ namespace Mooege.Core.GS.Map
 
         private void RemovePlayer(Mooege.Core.GS.Player.Player obj)
         {
-            if (obj.DynamicID == 0 || !this._players.ContainsKey(obj.DynamicID))
+            if (obj.DynamicID == 0 || !this.Players.ContainsKey(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", obj.DynamicID));
 
             Player.Player player;
-            this._players.TryRemove(obj.DynamicID,out player);
+            this.Players.TryRemove(obj.DynamicID,out player);
         }
 
         // Getters
@@ -365,7 +365,7 @@ namespace Mooege.Core.GS.Map
         public Mooege.Core.GS.Player.Player GetPlayer(uint dynamicID)
         {
             Mooege.Core.GS.Player.Player player;
-            this._players.TryGetValue(dynamicID, out player);
+            this.Players.TryGetValue(dynamicID, out player);
             return player;
         }
 
@@ -404,7 +404,7 @@ namespace Mooege.Core.GS.Map
 
         public bool HasPlayer(uint dynamicID)
         {
-            return this._players.ContainsKey(dynamicID);
+            return this.Players.ContainsKey(dynamicID);
         }
 
         public bool HasMonster(uint dynamicID)
@@ -476,7 +476,7 @@ namespace Mooege.Core.GS.Map
         public List<Mooege.Core.GS.Player.Player> GetPlayersInRange(float x, float y, float z, float range)
         {
             var result = new List<Mooege.Core.GS.Player.Player>();
-            foreach (var player in this._players.Values)
+            foreach (var player in this.Players.Values)
             {
                 if (Math.Sqrt(
                         Math.Pow(player.Position.X - x, 2) +

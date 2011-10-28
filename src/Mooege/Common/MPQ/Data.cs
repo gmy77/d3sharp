@@ -99,7 +99,7 @@ namespace Mooege.Common.MPQ
 
             var elapsedTime = DateTime.Now - timerStart;
 
-            Logger.Info("Loaded a total of {0} assets and parsed {1} of them in {2} mins, {3} secs, {4} ms.", assetsCount, this._tasks.Count, elapsedTime.Minutes, elapsedTime.Seconds, elapsedTime.Milliseconds);
+            Logger.Info("Loaded a total of {0} assets and parsed {1} of them in {2:c}.", assetsCount, this._tasks.Count, elapsedTime);
         }
 
         private Asset ProcessAsset(SNOGroup group, Int32 snoId, string name)

@@ -79,8 +79,7 @@ namespace Mooege.Core.GS.Map
 
             if (Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.LevelArea].TryGetValue(this.Destination.DestLevelAreaSNO, out asset))
                 markerName = System.IO.Path.GetFileNameWithoutExtension(asset.FileName);
-            else
-                Logger.Warn("No asset for LevelArea {0}", this.Destination.DestLevelAreaSNO);
+            //else Logger.Warn("No asset for LevelArea {0}", this.Destination.DestLevelAreaSNO);
 
             player.InGameClient.SendMessage(new MapMarkerInfoMessage()
             {

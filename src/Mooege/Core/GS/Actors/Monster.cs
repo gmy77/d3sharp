@@ -118,12 +118,6 @@ namespace Mooege.Core.GS.Actors
                 AnimationSNO = this.AnimationSNO
             });
 
-            player.InGameClient.SendMessage(new EndOfTickMessage()
-            {
-                Field0 = player.InGameClient.Game.Tick,
-                Field1 = player.InGameClient.Game.Tick + 20
-            });
-
             return true;
         }
 

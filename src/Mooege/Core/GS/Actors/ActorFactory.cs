@@ -45,8 +45,8 @@ namespace Mooege.Core.GS.Actors
             //Logger.Trace("Actor: {0} Type: {1}", actorAsset.Name, actorData.Type);
             if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Invalid) return null;
 
-            //if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Monster)
-            //    return new Monster(world, snoId, position);
+            if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Monster)
+                return new Monster(world, snoId, position);
 
             //if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Enviroment)
             //    return new Environment(world, snoId, position);
