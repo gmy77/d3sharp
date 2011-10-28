@@ -19,31 +19,31 @@
 using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
-using Mooege.Common.Extensions;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.LevelArea)]
     public class LevelArea : FileFormat
     {
-        public Header header;
-        public int i0;
-        public int i1;
-        public int snoLevelAreaOverrideForGizmoLocs;
-        public GizmoLocSet LocSet;
-        public int i2;
-        public List<LevelAreaSpawnPopulation> SpawnPopulation;
+        public Header Header { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int SNOLevelAreaOverrideForGizmoLocs { get; private set; }
+        public GizmoLocSet LocSet { get; private set; }
+        public int I2 { get; private set; }
+        public List<LevelAreaSpawnPopulation> SpawnPopulation { get; private set; }
 
         public LevelArea(MpqFile file)
         {
             var stream = file.Open();
-            this.header = new Header(stream);
-            this.i0 = stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.snoLevelAreaOverrideForGizmoLocs = stream.ReadValueS32();
+            this.Header = new Header(stream);
+            this.I0 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
+            this.SNOLevelAreaOverrideForGizmoLocs = stream.ReadValueS32();
             this.LocSet = new GizmoLocSet(stream);
-            this.i2 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
             stream.Position += 12;
             this.SpawnPopulation = stream.ReadSerializedData<LevelAreaSpawnPopulation>();
             stream.Close();
@@ -52,7 +52,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class GizmoLocSet
     {
-        public GizmoLocSpawnType[] SpawnType;
+        public GizmoLocSpawnType[] SpawnType { get; private set; }
 
         public GizmoLocSet(MpqFileStream stream)
         {
@@ -64,51 +64,51 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class GizmoLocSpawnType
     {
-        public List<GizmoLocSpawnEntry> SpawnEntry;
-        public string s0;
-        public string s1;
+        public List<GizmoLocSpawnEntry> SpawnEntry { get; private set; }
+        public string S0 { get; private set; }
+        public string S1 { get; private set; }
 
         public GizmoLocSpawnType(MpqFileStream stream)
         {
             stream.Position += 8;
             this.SpawnEntry = stream.ReadSerializedData<GizmoLocSpawnEntry>();
-            this.s0 = stream.ReadString(80, true);
-            this.s1 = stream.ReadString(256, true);
+            this.S0 = stream.ReadString(80, true);
+            this.S1 = stream.ReadString(256, true);
         }
     }
 
     public class GizmoLocSpawnEntry : ISerializableData
     {
-        public int i0;
-        public int i1;
-        public SNOName snoName;
-        public int i2;
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public SNOName SNOName { get; private set; }
+        public int I2 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.i0 = stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.snoName = new SNOName(stream);
-            this.i2 = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
+            this.SNOName = new SNOName(stream);
+            this.I2 = stream.ReadValueS32();
         }
     }
 
     public class LevelAreaSpawnPopulation : ISerializableData
     {
-        public string s0;
-        public int i0;
-        public int[] i1;
-        public int i2;
-        public List<LevelAreaSpawnGroup> SpawnGroup;
+        public string S0 { get; private set; }
+        public int I0 { get; private set; }
+        public int[] I1 { get; private set; }
+        public int I2 { get; private set; }
+        public List<LevelAreaSpawnGroup> SpawnGroup { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.s0 = stream.ReadString(64, true);
-            this.i0 = stream.ReadValueS32();
-            this.i1 = new int[4];
+            this.S0 = stream.ReadString(64, true);
+            this.I0 = stream.ReadValueS32();
+            this.I1 = new int[4];
             for (int i = 0; i < 4; i++)
-                this.i1[i] = stream.ReadValueS32();
-            this.i2 = stream.ReadValueS32();
+                this.I1[i] = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
             stream.Position += 8;
             this.SpawnGroup = stream.ReadSerializedData<LevelAreaSpawnGroup>();
         }
@@ -116,26 +116,26 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LevelAreaSpawnGroup : ISerializableData
     {
-        public SpawnGroupType GroupType;
-        public float f0;
-        public float f1;
-        public int i0;
-        public int i1;
-        public List<LevelAreaSpawnItem> SpawnItems;
-        public int i2;
-        public int i3;
+        public SpawnGroupType GroupType { get; private set; }
+        public float F0 { get; private set; }
+        public float F1 { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public List<LevelAreaSpawnItem> SpawnItems { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             this.GroupType = (SpawnGroupType)stream.ReadValueS32();
-            this.f0 = stream.ReadValueF32();
-            this.f1 = stream.ReadValueF32();
-            this.i0 = stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
+            this.F0 = stream.ReadValueF32();
+            this.F1 = stream.ReadValueF32();
+            this.I0 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
             stream.Position += 12;
             this.SpawnItems = stream.ReadSerializedData<LevelAreaSpawnItem>();
-            this.i2 = stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
         }
     }
 
@@ -147,21 +147,21 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LevelAreaSpawnItem : ISerializableData
     {
-        public SNOName snoName;
-        public SpawnType spawnType;
-        public int i0;
-        public int i1;
-        public int i2;
-        public int i3;
+        public SNOName SNOName { get; private set; }
+        public SpawnType SpawnType { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.snoName = new SNOName(stream);
-            this.spawnType = (SpawnType)stream.ReadValueS32();
-            this.i0 = stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.i2 = stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
+            this.SNOName = new SNOName(stream);
+            this.SpawnType = (SpawnType)stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
         }
     }
 

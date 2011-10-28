@@ -19,6 +19,7 @@
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.SNO;
 
 // Appears to work fine, created from snodata.xml - DarkLotus
 namespace Mooege.Common.MPQ.FileFormats
@@ -26,9 +27,9 @@ namespace Mooege.Common.MPQ.FileFormats
     [FileFormat(SNOGroup.Recipe)]
     public class Recipe : FileFormat
     {
-        public Header Header;
-        public int SNO;
-        public ItemSpecifierData ItemSpecifierData;
+        public Header Header { get; private set; }
+        public int SNO { get; private set; }
+        public ItemSpecifierData ItemSpecifierData { get; private set; }
 
         public Recipe(MpqFile file)
         {
@@ -43,20 +44,20 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class ItemSpecifierData
     {
-        public int gbidItem;
-        int i0;
-        int[] gbidAffixes = new int[3];
-        int i1;
+        public int ItemGBId { get; private set; }
+        public int I0 { get; private set; }
+        public int[] GBIdAffixes = new int[3];
+        public int I1 { get; private set; }
+
         public ItemSpecifierData(MpqFileStream stream)
         {
-            gbidItem = stream.ReadValueS32();
-            i0 = stream.ReadValueS32();
+            ItemGBId = stream.ReadValueS32();
+            I0 = stream.ReadValueS32();
             for (int i = 0; i > 3; i++)
             {
-                gbidAffixes[i] = stream.ReadValueS32();
+                GBIdAffixes[i] = stream.ReadValueS32();
             }
-            i1 = stream.ReadValueS32();
-
+            I1 = stream.ReadValueS32();
         }
     }
 }

@@ -19,6 +19,7 @@
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -26,23 +27,23 @@ namespace Mooege.Common.MPQ.FileFormats
     public class Lore : FileFormat
     {
         public Header Header { get; private set; }
-        public int i0 { get; private set; }
+        public int I0 { get; private set; }
         public LoreCategory Category { get; private set; }
-        public int i1 { get; private set; }
-        public int i2 { get; private set; }
-        public int snoConversation { get; private set; }
-        public int i3 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int SNOConversation { get; private set; }
+        public int I3 { get; private set; }
 
         public Lore(MpqFile file)
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            this.i0 = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
             this.Category = (LoreCategory)stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.i2 = stream.ReadValueS32();
-            this.snoConversation = stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.SNOConversation = stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
             stream.Close();
         }       
     }

@@ -16,9 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Core.GS.Player;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
-using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Core.GS.Objects
 {

@@ -1,3 +1,0 @@
-
-"Worlds/NewTristram.txt" = 71150
-// "Worlds/Quick.txt" = 71150 // Uncomment this and comment the above one for quick-load testing.

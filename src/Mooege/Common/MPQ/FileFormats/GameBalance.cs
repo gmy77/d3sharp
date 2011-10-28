@@ -16,59 +16,62 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
-using Mooege.Common.Extensions;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
+    // this file should be fixed with our naming-conventions. /raist
+
     [FileFormat(SNOGroup.GameBalance)]
     class GameBalance : FileFormat
     {
-        public Header header;
-        public BalanceType type;
-        public string gbi;
-        public string xls;
-        public int i0;
-        public int i1;
-        public List<ItemTypeTable> itemType; //536
-        public List<ItemTable> Item; //552
-        public List<ExperienceTable> Experience; //568
-        public List<HelpCodesTable> HelpCodes; //584
-        public List<MonsterLevelTable> MonsterLevel; //600
-        public List<AffixTable> Affixes; //616
-        public List<HeroTable> Heros; //632
-        public List<MovementStyleTable> MovementStyles; //648
-        public List<LabelGBIDTable> Labels; //664
-        public List<LootDistTable> LootDistribution; //680
-        public List<RareItemNamesTable> RareItemNames; //696
-        public List<MonsterAffixesTable> MonsterAffixes; //712
-        public List<MonsterNamesTable> RareMonsterNames; //728
-        public List<SocketedEffectTable> SocketedEffects; //744
-        public List<ItemEnhancementTable> ItemEnhancement; //760
-        public List<ItemDropTable> ItemDrop; //776
-        public List<ItemLevelModTable> ItemLevelMod; //792
-        public List<QualityClassTable> QualityClass; //808
-        public List<HirelingTable> Hirelings; //824
-        public List<SetItemBonusTable> SetItemBonus; //840
-        public List<EliteModTable> EliteModifiers; //856
-        public List<ItemTierTable> ItemTiers; //872
-        public List<PowerFormulaTable> PowerFormula; //888
-        public List<RecipeTable> Recipes; //904
-        public List<ScriptedAchievementEventsTable> ScriptedAchievementEvents; //920
+        public Header Header { get; private set; }
+        public BalanceType Type { get; private set; }
+        public string Gbi { get; private set; }
+        public string Xls { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public List<ItemTypeTable> ItemType { get; private set; }
+        public List<ItemTable> Item { get; private set; }
+        public List<ExperienceTable> Experience { get; private set; }
+        public List<HelpCodesTable> HelpCodes { get; private set; }
+        public List<MonsterLevelTable> MonsterLevel { get; private set; }
+        public List<AffixTable> Affixes { get; private set; }
+        public List<HeroTable> Heros { get; private set; }
+        public List<MovementStyleTable> MovementStyles { get; private set; }
+        public List<LabelGBIDTable> Labels { get; private set; }
+        public List<LootDistTable> LootDistribution { get; private set; }
+        public List<RareItemNamesTable> RareItemNames { get; private set; }
+        public List<MonsterAffixesTable> MonsterAffixes { get; private set; }
+        public List<MonsterNamesTable> RareMonsterNames { get; private set; }
+        public List<SocketedEffectTable> SocketedEffects { get; private set; }
+        public List<ItemEnhancementTable> ItemEnhancement { get; private set; }
+        public List<ItemDropTable> ItemDrop { get; private set; }
+        public List<ItemLevelModTable> ItemLevelMod { get; private set; }
+        public List<QualityClassTable> QualityClass { get; private set; }
+        public List<HirelingTable> Hirelings { get; private set; }
+        public List<SetItemBonusTable> SetItemBonus { get; private set; }
+        public List<EliteModTable> EliteModifiers { get; private set; }
+        public List<ItemTierTable> ItemTiers { get; private set; }
+        public List<PowerFormulaTable> PowerFormula { get; private set; }
+        public List<RecipeTable> Recipes { get; private set; }
+        public List<ScriptedAchievementEventsTable> ScriptedAchievementEvents { get; private set; }
 
         public GameBalance(MpqFile file)
         {
             var stream = file.Open();
-            this.header = new Header(stream);
-            this.type = (BalanceType)stream.ReadValueS32();
-            gbi = stream.ReadString(256,true);
-            xls = stream.ReadString(256,true);
-            this.i0 = stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.itemType = stream.ReadSerializedData<ItemTypeTable>(); //536
+            this.Header = new Header(stream);
+            this.Type = (BalanceType)stream.ReadValueS32();
+            Gbi = stream.ReadString(256, true);
+            Xls = stream.ReadString(256, true);
+            this.I0 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
+            this.ItemType = stream.ReadSerializedData<ItemTypeTable>(); //536
             stream.Position += 8;
             this.Item = stream.ReadSerializedData<ItemTable>(); //552
             stream.Position += 8;
@@ -155,41 +158,42 @@ namespace Mooege.Common.MPQ.FileFormats
     public class ItemTypeTable : ISerializableData
     {
         //Total Length: 320
-        public string Name; //256
-        public int ParentType;
-        public int i0;
-        public ItemFlags Flags;
-        public eItemType type0;
-        public eItemType type1;
-        public eItemType type2;
-        public eItemType type3;
-        public int InheritedAffix0;
-        public int InheritedAffix1;
-        public int InheritedAffix2;
-        public int InheritedAffixFamily0;
-        public int[] array; //len 4
+        public string Name { get; private set; }
+        public int ParentType { get; private set; }
+        public int I0 { get; private set; }
+        public ItemFlags Flags { get; private set; }
+        public eItemType Type0 { get; private set; }
+        public eItemType Type1 { get; private set; }
+        public eItemType Type2 { get; private set; }
+        public eItemType Type3 { get; private set; }
+        public int InheritedAffix0 { get; private set; }
+        public int InheritedAffix1 { get; private set; }
+        public int InheritedAffix2 { get; private set; }
+        public int InheritedAffixFamily0 { get; private set; }
+        public int[] Array { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
+            this.Name = stream.ReadString(256, true);
             this.ParentType = stream.ReadValueS32();
-            this.i0 = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
             this.Flags = (ItemFlags)stream.ReadValueS32();
-            this.type0 = (eItemType)stream.ReadValueS32();
-            this.type1 = (eItemType)stream.ReadValueS32();
-            this.type2 = (eItemType)stream.ReadValueS32();
-            this.type3 = (eItemType)stream.ReadValueS32();
+            this.Type0 = (eItemType)stream.ReadValueS32();
+            this.Type1 = (eItemType)stream.ReadValueS32();
+            this.Type2 = (eItemType)stream.ReadValueS32();
+            this.Type3 = (eItemType)stream.ReadValueS32();
             this.InheritedAffix0 = stream.ReadValueS32();
             this.InheritedAffix1 = stream.ReadValueS32();
             this.InheritedAffix2 = stream.ReadValueS32();
             this.InheritedAffixFamily0 = stream.ReadValueS32();
-            this.array = new int[4];
+            this.Array = new int[4];
             for (int i = 0; i < 4; i++)
-                this.array[i] = stream.ReadValueS32();
+                this.Array[i] = stream.ReadValueS32();
         }
     }
 
+    [Flags]
     public enum ItemFlags
     {
         NotEquipable1 = 0x1,
@@ -234,96 +238,96 @@ namespace Mooege.Common.MPQ.FileFormats
     public class ItemTable : ISerializableData
     {
         //Total Length: 1456
-        public string Name;
-        public int snoActor;
-        public int ItemType1;
-        public int i0;
-        public eItem e0;
-        public int ItemLevel;
-        public int i2;
-        public int RandomPropertiesCount;
-        public int MaxSockets;
-        public int i5;
-        public int BaseGoldValue;
-        public int i7;
-        public int RequiredLevel;
-        public int DurabilityMin;
-        public int DurabilityDelta;
-        public int snoBaseItem;
-        public int snoSet;
-        public int snoComponentTreasureClass;
-        public int snoComponentTreasureClassMagic;
-        public int snoComponentTreasureClassRare;
-        public int snoRareNamePrefixStringList;
-        public int snoRareNameSuffixStringList;
-        public int Flags;
-        public float WeaponDamageMin;
-        public float WeaponDamageDelta;
-        public float ArmorValue;
-        public float f3;
-        public float AttacksPerSecond;
-        public int snoSkill0;
-        public int i11;
-        public int snoSkill1;
-        public int i12;
-        public int snoSkill2;
-        public int i13;
-        public int snoSkill3;
-        public int i14;
-        public int[] i15; //len 4
-        public AttributeSpecifier[] Attribute; //Len 16
-        public ItemQuality Quality;
-        public int[] RecipeToGrant; //len 6
-        public int EnhancementToGrant;
-        public int[] LegendaryAffixFamily;
-        public int[] MaxAffixLevel;
+        public string Name { get; private set; }
+        public int SNOActor { get; private set; }
+        public int ItemType1 { get; private set; }
+        public int I0 { get; private set; }
+        public eItem E0 { get; private set; }
+        public int ItemLevel { get; private set; }
+        public int I2 { get; private set; }
+        public int RandomPropertiesCount { get; private set; }
+        public int MaxSockets { get; private set; }
+        public int I5 { get; private set; }
+        public int BaseGoldValue { get; private set; }
+        public int I7 { get; private set; }
+        public int RequiredLevel { get; private set; }
+        public int DurabilityMin { get; private set; }
+        public int DurabilityDelta { get; private set; }
+        public int SNOBaseItem { get; private set; }
+        public int SNOSet { get; private set; }
+        public int SNOComponentTreasureClass { get; private set; }
+        public int SNOComponentTreasureClassMagic { get; private set; }
+        public int SNOComponentTreasureClassRare { get; private set; }
+        public int SNORareNamePrefixStringList { get; private set; }
+        public int SNORareNameSuffixStringList { get; private set; }
+        public int Flags { get; private set; }
+        public float WeaponDamageMin { get; private set; }
+        public float WeaponDamageDelta { get; private set; }
+        public float ArmorValue { get; private set; }
+        public float F3 { get; private set; }
+        public float AttacksPerSecond { get; private set; }
+        public int SNOSkill0 { get; private set; }
+        public int I11 { get; private set; }
+        public int SNOSkill1 { get; private set; }
+        public int I12 { get; private set; }
+        public int SNOSkill2 { get; private set; }
+        public int I13 { get; private set; }
+        public int SNOSkill3 { get; private set; }
+        public int I14 { get; private set; }
+        public int[] I15 { get; private set; }
+        public AttributeSpecifier[] Attribute { get; private set; }
+        public ItemQuality Quality { get; private set; }
+        public int[] RecipeToGrant { get; private set; }
+        public int EnhancementToGrant { get; private set; }
+        public int[] LegendaryAffixFamily { get; private set; }
+        public int[] MaxAffixLevel { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.snoActor = stream.ReadValueS32(); //260
+            this.Name = stream.ReadString(256, true);
+            this.SNOActor = stream.ReadValueS32(); //260
             this.ItemType1 = stream.ReadValueS32(); //264
             this.Flags = stream.ReadValueS32(); //268
-            this.i0 = stream.ReadValueS32(); //272
+            this.I0 = stream.ReadValueS32(); //272
             this.ItemLevel = stream.ReadValueS32(); //276
-            this.e0 = (eItem)stream.ReadValueS32(); //280
-            this.i2 = stream.ReadValueS32(); //284
+            this.E0 = (eItem)stream.ReadValueS32(); //280
+            this.I2 = stream.ReadValueS32(); //284
             this.RandomPropertiesCount = stream.ReadValueS32(); //288
             this.MaxSockets = stream.ReadValueS32(); //292
-            this.i5 = stream.ReadValueS32(); //296
+            this.I5 = stream.ReadValueS32(); //296
             this.BaseGoldValue = stream.ReadValueS32(); //300
-            this.i7 = stream.ReadValueS32(); //304
+            this.I7 = stream.ReadValueS32(); //304
             this.RequiredLevel = stream.ReadValueS32(); //308
             this.DurabilityMin = stream.ReadValueS32(); //312
             this.DurabilityDelta = stream.ReadValueS32(); //316
-            this.snoBaseItem = stream.ReadValueS32(); //320
-            this.snoSet = stream.ReadValueS32(); //324
-            this.snoComponentTreasureClass = stream.ReadValueS32(); //328
-            this.snoComponentTreasureClassMagic = stream.ReadValueS32(); //332
-            this.snoComponentTreasureClassRare = stream.ReadValueS32(); //336
-            this.snoRareNamePrefixStringList = stream.ReadValueS32(); //340
-            this.snoRareNameSuffixStringList = stream.ReadValueS32(); //344
-            this.i15 = new int[4]; //348
+            this.SNOBaseItem = stream.ReadValueS32(); //320
+            this.SNOSet = stream.ReadValueS32(); //324
+            this.SNOComponentTreasureClass = stream.ReadValueS32(); //328
+            this.SNOComponentTreasureClassMagic = stream.ReadValueS32(); //332
+            this.SNOComponentTreasureClassRare = stream.ReadValueS32(); //336
+            this.SNORareNamePrefixStringList = stream.ReadValueS32(); //340
+            this.SNORareNameSuffixStringList = stream.ReadValueS32(); //344
+            this.I15 = new int[4]; //348
             for (int i = 0; i < 4; i++)
-                this.i15[i] = stream.ReadValueS32();
+                this.I15[i] = stream.ReadValueS32();
             stream.Position += 88;
             this.WeaponDamageMin = stream.ReadValueF32(); //452
             this.WeaponDamageDelta = stream.ReadValueF32(); //456
             stream.Position += 84;
             this.ArmorValue = stream.ReadValueF32(); //544
-            this.f3 = stream.ReadValueF32(); //548
+            this.F3 = stream.ReadValueF32(); //548
             stream.Position += 168;
             this.AttacksPerSecond = stream.ReadValueF32(); //720
             stream.Position += 192;
-            this.snoSkill0 = stream.ReadValueS32(); //916
-            this.i11 = stream.ReadValueS32(); //920
-            this.snoSkill1 = stream.ReadValueS32(); //924
-            this.i12 = stream.ReadValueS32(); //928
-            this.snoSkill2 = stream.ReadValueS32(); //932
-            this.i13 = stream.ReadValueS32(); //936
-            this.snoSkill3 = stream.ReadValueS32(); //940
-            this.i14 = stream.ReadValueS32(); //944
+            this.SNOSkill0 = stream.ReadValueS32(); //916
+            this.I11 = stream.ReadValueS32(); //920
+            this.SNOSkill1 = stream.ReadValueS32(); //924
+            this.I12 = stream.ReadValueS32(); //928
+            this.SNOSkill2 = stream.ReadValueS32(); //932
+            this.I13 = stream.ReadValueS32(); //936
+            this.SNOSkill3 = stream.ReadValueS32(); //940
+            this.I14 = stream.ReadValueS32(); //944
             stream.Position += 44;
             this.Attribute = new AttributeSpecifier[16];
             for (int i = 0; i < 16; i++)
@@ -357,6 +361,7 @@ namespace Mooege.Common.MPQ.FileFormats
             Artifact,
         }
 
+        [Flags]
         public enum eItem
         {
             Invalid = -1,
@@ -371,256 +376,256 @@ namespace Mooege.Common.MPQ.FileFormats
     public class ExperienceTable : ISerializableData
     {
         //Total Length: 224
-        public int exp;
-        public int i1;
-        public float f0;
-        public float f1;
-        public int i2;
-        public int i3;
-        public int i4;
-        public int i5;
-        public int i6;
-        public int i7;
-        public int i8;
-        public int i9;
-        public int i10;
-        public int i11;
-        public int i12;
-        public int i13;
-        public int i14;
-        public int i15;
-        public int i16;
-        public float multiplier;
-        public int i17;
-        public int i18;
-        public int i19;
-        public int i20;
-        public int i21;
-        public int i22;
-        public int i23;
-        public int i24;
-        public int i25;
-        public int i26;
-        public int i27;
-        public int i28;
-        public int i29;
-        public int i30;
-        public int i31;
-        public int i32;
-        public int i33;
-        public int i34;
-        public int i35;
-        public int i36;
-        public int i37;
-        public int i38;
-        public int i39;
-        public int i40;
-        public int i41;
-        public int i42;
-        public int i43;
-        public int i44;
-        public int i45;
-        public int i46;
-        public int i47;
+        public int Exp { get; private set; }
+        public int I1 { get; private set; }
+        public float F0 { get; private set; }
+        public float F1 { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
+        public int I4 { get; private set; }
+        public int I5 { get; private set; }
+        public int I6 { get; private set; }
+        public int I7 { get; private set; }
+        public int I8 { get; private set; }
+        public int I9 { get; private set; }
+        public int I10 { get; private set; }
+        public int I11 { get; private set; }
+        public int I12 { get; private set; }
+        public int I13 { get; private set; }
+        public int I14 { get; private set; }
+        public int I15 { get; private set; }
+        public int I16 { get; private set; }
+        public float Multiplier { get; private set; }
+        public int I17 { get; private set; }
+        public int I18 { get; private set; }
+        public int I19 { get; private set; }
+        public int I20 { get; private set; }
+        public int I21 { get; private set; }
+        public int I22 { get; private set; }
+        public int I23 { get; private set; }
+        public int I24 { get; private set; }
+        public int I25 { get; private set; }
+        public int I26 { get; private set; }
+        public int I27 { get; private set; }
+        public int I28 { get; private set; }
+        public int I29 { get; private set; }
+        public int I30 { get; private set; }
+        public int I31 { get; private set; }
+        public int I32 { get; private set; }
+        public int I33 { get; private set; }
+        public int I34 { get; private set; }
+        public int I35 { get; private set; }
+        public int I36 { get; private set; }
+        public int I37 { get; private set; }
+        public int I38 { get; private set; }
+        public int I39 { get; private set; }
+        public int I40 { get; private set; }
+        public int I41 { get; private set; }
+        public int I42 { get; private set; }
+        public int I43 { get; private set; }
+        public int I44 { get; private set; }
+        public int I45 { get; private set; }
+        public int I46 { get; private set; }
+        public int I47 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.exp = stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.f0 = stream.ReadValueF32();
-            this.f1 = stream.ReadValueF32();
-            this.i2 = stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
-            this.i4 = stream.ReadValueS32();
-            this.i5 = stream.ReadValueS32();
-            this.i6 = stream.ReadValueS32();
-            this.i7 = stream.ReadValueS32();
-            this.i8 = stream.ReadValueS32();
-            this.i9 = stream.ReadValueS32();
-            this.i10 = stream.ReadValueS32();
-            this.i11 = stream.ReadValueS32();
-            this.i12 = stream.ReadValueS32();
-            this.i13 = stream.ReadValueS32();
-            this.i14 = stream.ReadValueS32();
-            this.i15 = stream.ReadValueS32();
-            this.i16 = stream.ReadValueS32();
-            this.multiplier = stream.ReadValueF32(); //76
-            this.i16 = stream.ReadValueS32(); //80
-            this.i17 = stream.ReadValueS32(); //84
-            this.i18 = stream.ReadValueS32(); //88
-            this.i19 = stream.ReadValueS32(); //92
-            this.i20 = stream.ReadValueS32(); //96
-            this.i21 = stream.ReadValueS32(); //100
-            this.i22 = stream.ReadValueS32(); //104
-            this.i23 = stream.ReadValueS32(); //108
-            this.i24 = stream.ReadValueS32(); //112
-            this.i25 = stream.ReadValueS32(); //116
-            this.i26 = stream.ReadValueS32(); //120
-            this.i27 = stream.ReadValueS32(); //124
-            this.i28 = stream.ReadValueS32(); //128
-            this.i29 = stream.ReadValueS32(); //132
-            this.i30 = stream.ReadValueS32(); //136
-            this.i31 = stream.ReadValueS32(); //140
-            this.i32 = stream.ReadValueS32(); //144
-            this.i33 = stream.ReadValueS32(); //148
-            this.i34 = stream.ReadValueS32(); //152
-            this.i35 = stream.ReadValueS32(); //156
+            this.Exp = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
+            this.F0 = stream.ReadValueF32();
+            this.F1 = stream.ReadValueF32();
+            this.I2 = stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
+            this.I4 = stream.ReadValueS32();
+            this.I5 = stream.ReadValueS32();
+            this.I6 = stream.ReadValueS32();
+            this.I7 = stream.ReadValueS32();
+            this.I8 = stream.ReadValueS32();
+            this.I9 = stream.ReadValueS32();
+            this.I10 = stream.ReadValueS32();
+            this.I11 = stream.ReadValueS32();
+            this.I12 = stream.ReadValueS32();
+            this.I13 = stream.ReadValueS32();
+            this.I14 = stream.ReadValueS32();
+            this.I15 = stream.ReadValueS32();
+            this.I16 = stream.ReadValueS32();
+            this.Multiplier = stream.ReadValueF32(); //76
+            this.I16 = stream.ReadValueS32(); //80
+            this.I17 = stream.ReadValueS32(); //84
+            this.I18 = stream.ReadValueS32(); //88
+            this.I19 = stream.ReadValueS32(); //92
+            this.I20 = stream.ReadValueS32(); //96
+            this.I21 = stream.ReadValueS32(); //100
+            this.I22 = stream.ReadValueS32(); //104
+            this.I23 = stream.ReadValueS32(); //108
+            this.I24 = stream.ReadValueS32(); //112
+            this.I25 = stream.ReadValueS32(); //116
+            this.I26 = stream.ReadValueS32(); //120
+            this.I27 = stream.ReadValueS32(); //124
+            this.I28 = stream.ReadValueS32(); //128
+            this.I29 = stream.ReadValueS32(); //132
+            this.I30 = stream.ReadValueS32(); //136
+            this.I31 = stream.ReadValueS32(); //140
+            this.I32 = stream.ReadValueS32(); //144
+            this.I33 = stream.ReadValueS32(); //148
+            this.I34 = stream.ReadValueS32(); //152
+            this.I35 = stream.ReadValueS32(); //156
             stream.Position += 16;
-            this.i36 = stream.ReadValueS32(); //176
-            this.i37 = stream.ReadValueS32();
-            this.i38 = stream.ReadValueS32();
-            this.i39 = stream.ReadValueS32();
-            this.i40 = stream.ReadValueS32();
-            this.i41 = stream.ReadValueS32();
-            this.i42 = stream.ReadValueS32();
-            this.i43 = stream.ReadValueS32();
-            this.i44 = stream.ReadValueS32();
-            this.i45 = stream.ReadValueS32();
-            this.i46 = stream.ReadValueS32();
-            this.i47 = stream.ReadValueS32();
+            this.I36 = stream.ReadValueS32(); //176
+            this.I37 = stream.ReadValueS32();
+            this.I38 = stream.ReadValueS32();
+            this.I39 = stream.ReadValueS32();
+            this.I40 = stream.ReadValueS32();
+            this.I41 = stream.ReadValueS32();
+            this.I42 = stream.ReadValueS32();
+            this.I43 = stream.ReadValueS32();
+            this.I44 = stream.ReadValueS32();
+            this.I45 = stream.ReadValueS32();
+            this.I46 = stream.ReadValueS32();
+            this.I47 = stream.ReadValueS32();
         }
     }
 
     public class HelpCodesTable : ISerializableData //unused
     {
         //Total Length: 640
-        public string s0; //0
-        public string s1; //256
-        public string s2; //512
+        public string S0 { get; private set; }
+        public string S1 { get; private set; }
+        public string S2 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.s0 = stream.ReadString(256,true);
-            this.s1 = stream.ReadString(256,true);
-            this.s2 = stream.ReadString(128,true);
+            this.S0 = stream.ReadString(256, true);
+            this.S1 = stream.ReadString(256, true);
+            this.S2 = stream.ReadString(128, true);
         }
     }
 
     public class MonsterLevelTable : ISerializableData
     {
         //Total Length: 0x22C (556)
-        public int i0; //0
-        public float f0; //20
-        public float f1; //32
-        public float f2; //36
-        public float f3; //40
-        public float f4; //48
-        public float f5; //92
-        public float f6; //96
-        public float f7; //100
-        public float f8; //104
-        public float f9; //108
-        public float f10; //112
-        public float f11; //116
-        public float f12; //120
-        public float f13; //124
-        public float f14; //128
-        public float f15; //132
-        public float f16; //136
-        public float f17; //140
-        public float f18; //144
-        public float f19; //148
-        public float f20; //152
-        public float f21; //156
-        public float f22; //160
-        public float f23; //176
-        public float f24; //180
-        public float f25; //184
-        public float f26; //220
-        public float f27; //224
-        public float f28; //232
-        public float f29; //236
-        public float f30; //268
-        public float f31; //272
-        public float f32; //276
-        public float f33; //280
-        public float f34; //284
-        public float f35; //288
-        public float f36; //292
-        public float f37; //296
-        public float f38; //300
-        public float f39; //440
-        public float f40; //444
-        public float f41; //460
-        public float f42; //464
-        public float f43; //468
-        public float f44; //472
-        public float f45; //476
-        public float f46; //484
-        public float f47; //488
-        public float f48; //492
-        public float f49; //496
-        public float f50; //504
-        public float f51; //520
+        public int I0 { get; private set; }
+        public float F0 { get; private set; }
+        public float F1 { get; private set; }
+        public float F2 { get; private set; }
+        public float F3 { get; private set; }
+        public float F4 { get; private set; }
+        public float F5 { get; private set; }
+        public float F6 { get; private set; }
+        public float F7 { get; private set; }
+        public float F8 { get; private set; }
+        public float F9 { get; private set; }
+        public float F10 { get; private set; }
+        public float F11 { get; private set; }
+        public float F12 { get; private set; }
+        public float F13 { get; private set; }
+        public float F14 { get; private set; }
+        public float F15 { get; private set; }
+        public float F16 { get; private set; }
+        public float F17 { get; private set; }
+        public float F18 { get; private set; }
+        public float F19 { get; private set; }
+        public float F20 { get; private set; }
+        public float F21 { get; private set; }
+        public float F22 { get; private set; }
+        public float F23 { get; private set; }
+        public float F24 { get; private set; }
+        public float F25 { get; private set; }
+        public float F26 { get; private set; }
+        public float F27 { get; private set; }
+        public float F28 { get; private set; }
+        public float F29 { get; private set; }
+        public float F30 { get; private set; }
+        public float F31 { get; private set; }
+        public float F32 { get; private set; }
+        public float F33 { get; private set; }
+        public float F34 { get; private set; }
+        public float F35 { get; private set; }
+        public float F36 { get; private set; }
+        public float F37 { get; private set; }
+        public float F38 { get; private set; }
+        public float F39 { get; private set; }
+        public float F40 { get; private set; }
+        public float F41 { get; private set; }
+        public float F42 { get; private set; }
+        public float F43 { get; private set; }
+        public float F44 { get; private set; }
+        public float F45 { get; private set; }
+        public float F46 { get; private set; }
+        public float F47 { get; private set; }
+        public float F48 { get; private set; }
+        public float F49 { get; private set; }
+        public float F50 { get; private set; }
+        public float F51 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.i0 = stream.ReadValueS32(); //0
+            this.I0 = stream.ReadValueS32(); //0
             stream.Position += 16;
-            this.f0 = stream.ReadValueF32(); //20
+            this.F0 = stream.ReadValueF32(); //20
             stream.Position += 8;
-            this.f1 = stream.ReadValueF32(); //32
-            this.f2 = stream.ReadValueF32(); //36
-            this.f3 = stream.ReadValueF32(); //40
+            this.F1 = stream.ReadValueF32(); //32
+            this.F2 = stream.ReadValueF32(); //36
+            this.F3 = stream.ReadValueF32(); //40
             stream.Position += 4;
-            this.f4 = stream.ReadValueF32(); //48
+            this.F4 = stream.ReadValueF32(); //48
             stream.Position += 40;
-            this.f5 = stream.ReadValueF32(); //92
-            this.f6 = stream.ReadValueF32(); //96
-            this.f7 = stream.ReadValueF32(); //100
-            this.f8 = stream.ReadValueF32(); //104
-            this.f9 = stream.ReadValueF32(); //108
-            this.f10 = stream.ReadValueF32(); //112
-            this.f11 = stream.ReadValueF32(); //116
-            this.f12 = stream.ReadValueF32(); //120
-            this.f13 = stream.ReadValueF32(); //124
-            this.f14 = stream.ReadValueF32(); //128
-            this.f15 = stream.ReadValueF32(); //132
-            this.f16 = stream.ReadValueF32(); //136
-            this.f17 = stream.ReadValueF32(); //140
-            this.f18 = stream.ReadValueF32(); //144
-            this.f19 = stream.ReadValueF32(); //148
-            this.f20 = stream.ReadValueF32(); //152
-            this.f21 = stream.ReadValueF32(); //156
-            this.f22 = stream.ReadValueF32(); //160
+            this.F5 = stream.ReadValueF32(); //92
+            this.F6 = stream.ReadValueF32(); //96
+            this.F7 = stream.ReadValueF32(); //100
+            this.F8 = stream.ReadValueF32(); //104
+            this.F9 = stream.ReadValueF32(); //108
+            this.F10 = stream.ReadValueF32(); //112
+            this.F11 = stream.ReadValueF32(); //116
+            this.F12 = stream.ReadValueF32(); //120
+            this.F13 = stream.ReadValueF32(); //124
+            this.F14 = stream.ReadValueF32(); //128
+            this.F15 = stream.ReadValueF32(); //132
+            this.F16 = stream.ReadValueF32(); //136
+            this.F17 = stream.ReadValueF32(); //140
+            this.F18 = stream.ReadValueF32(); //144
+            this.F19 = stream.ReadValueF32(); //148
+            this.F20 = stream.ReadValueF32(); //152
+            this.F21 = stream.ReadValueF32(); //156
+            this.F22 = stream.ReadValueF32(); //160
             stream.Position += 12;
-            this.f23 = stream.ReadValueF32(); //176
-            this.f24 = stream.ReadValueF32(); //180
-            this.f25 = stream.ReadValueF32(); //184
+            this.F23 = stream.ReadValueF32(); //176
+            this.F24 = stream.ReadValueF32(); //180
+            this.F25 = stream.ReadValueF32(); //184
             stream.Position += 32;
-            this.f26 = stream.ReadValueF32(); //220
-            this.f27 = stream.ReadValueF32(); //224
+            this.F26 = stream.ReadValueF32(); //220
+            this.F27 = stream.ReadValueF32(); //224
             stream.Position += 4;
-            this.f28 = stream.ReadValueF32(); //232
-            this.f29 = stream.ReadValueF32(); //236
+            this.F28 = stream.ReadValueF32(); //232
+            this.F29 = stream.ReadValueF32(); //236
             stream.Position += 28;
-            this.f30 = stream.ReadValueF32(); //268
-            this.f31 = stream.ReadValueF32(); //272
-            this.f32 = stream.ReadValueF32(); //276
-            this.f33 = stream.ReadValueF32(); //280
-            this.f34 = stream.ReadValueF32(); //284
-            this.f35 = stream.ReadValueF32(); //288
-            this.f36 = stream.ReadValueF32(); //292
-            this.f37 = stream.ReadValueF32(); //296
-            this.f38 = stream.ReadValueF32(); //300
+            this.F30 = stream.ReadValueF32(); //268
+            this.F31 = stream.ReadValueF32(); //272
+            this.F32 = stream.ReadValueF32(); //276
+            this.F33 = stream.ReadValueF32(); //280
+            this.F34 = stream.ReadValueF32(); //284
+            this.F35 = stream.ReadValueF32(); //288
+            this.F36 = stream.ReadValueF32(); //292
+            this.F37 = stream.ReadValueF32(); //296
+            this.F38 = stream.ReadValueF32(); //300
             stream.Position += 136;
-            this.f39 = stream.ReadValueF32(); //440
-            this.f40 = stream.ReadValueF32(); //444
+            this.F39 = stream.ReadValueF32(); //440
+            this.F40 = stream.ReadValueF32(); //444
             stream.Position += 12;
-            this.f41 = stream.ReadValueF32(); //460
-            this.f42 = stream.ReadValueF32(); //464
-            this.f43 = stream.ReadValueF32(); //468
-            this.f44 = stream.ReadValueF32(); //472
-            this.f45 = stream.ReadValueF32(); //476
+            this.F41 = stream.ReadValueF32(); //460
+            this.F42 = stream.ReadValueF32(); //464
+            this.F43 = stream.ReadValueF32(); //468
+            this.F44 = stream.ReadValueF32(); //472
+            this.F45 = stream.ReadValueF32(); //476
             stream.Position += 4;
-            this.f46 = stream.ReadValueF32(); //484
-            this.f47 = stream.ReadValueF32(); //488
-            this.f48 = stream.ReadValueF32(); //492
-            this.f49 = stream.ReadValueF32(); //496
+            this.F46 = stream.ReadValueF32(); //484
+            this.F47 = stream.ReadValueF32(); //488
+            this.F48 = stream.ReadValueF32(); //492
+            this.F49 = stream.ReadValueF32(); //496
             stream.Position += 4;
-            this.f50 = stream.ReadValueF32(); //504
+            this.F50 = stream.ReadValueF32(); //504
             stream.Position += 12;
-            this.f51 = stream.ReadValueF32(); //520
+            this.F51 = stream.ReadValueF32(); //520
             stream.Position += 32;
         }
     }
@@ -628,140 +633,140 @@ namespace Mooege.Common.MPQ.FileFormats
     public class HeroTable : ISerializableData
     {
         //Total Length: 868
-        public string Name;
-        public int snoMaleActor;
-        public int snoFemaleActor;
-        public int snoInventory;
-        public int i0;
-        public int snoStartingLMBSkill;
-        public int snoStartingRMBSkill;
-        public int snoSKillKit0;
-        public int snoSKillKit1;
-        public int snoSKillKit2;
-        public int snoSKillKit3;
-        public Resource PrimaryResource;
-        public Resource SecondaryResource;
-        public float f0;
-        public int i1;
-        public float f1;
-        public float f2;
-        public float f3;
-        public float f4;
-        public float f5;
-        public float f6;
-        public float f7;
-        public float f8;
-        public float f9;
-        public float f10;
-        public float f11;
-        public float f12;
-        public float f13;
-        public float f14;
-        public float f15;
-        public float f16;
-        public float f17;
-        public float f18;
-        public float f19;
-        public float f20;
-        public float f21;
-        public float f22;
-        public float f23;
-        public float f24;
-        public float f25;
-        public float f26;
-        public float f27;
-        public float f28;
-        public float f29;
-        public float f30;
-        public float f31;
-        public float f32;
-        public float f33;
-        public float f34;
-        public float f35;
-        public float f36;
-        public float f37;
-        public float f38;
-        public float f39;
-        public float f40;
-        public float f41;
-        public float f42;
+        public string Name { get; private set; }
+        public int SNOMaleActor { get; private set; }
+        public int SNOFemaleActor { get; private set; }
+        public int SNOInventory { get; private set; }
+        public int I0 { get; private set; }
+        public int SNOStartingLMBSkill { get; private set; }
+        public int SNOStartingRMBSkill { get; private set; }
+        public int SNOSKillKit0 { get; private set; }
+        public int SNOSKillKit1 { get; private set; }
+        public int SNOSKillKit2 { get; private set; }
+        public int SNOSKillKit3 { get; private set; }
+        public Resource PrimaryResource { get; private set; }
+        public Resource SecondaryResource { get; private set; }
+        public float F0 { get; private set; }
+        public int I1 { get; private set; }
+        public float F1 { get; private set; }
+        public float F2 { get; private set; }
+        public float F3 { get; private set; }
+        public float F4 { get; private set; }
+        public float F5 { get; private set; }
+        public float F6 { get; private set; }
+        public float F7 { get; private set; }
+        public float F8 { get; private set; }
+        public float F9 { get; private set; }
+        public float F10 { get; private set; }
+        public float F11 { get; private set; }
+        public float F12 { get; private set; }
+        public float F13 { get; private set; }
+        public float F14 { get; private set; }
+        public float F15 { get; private set; }
+        public float F16 { get; private set; }
+        public float F17 { get; private set; }
+        public float F18 { get; private set; }
+        public float F19 { get; private set; }
+        public float F20 { get; private set; }
+        public float F21 { get; private set; }
+        public float F22 { get; private set; }
+        public float F23 { get; private set; }
+        public float F24 { get; private set; }
+        public float F25 { get; private set; }
+        public float F26 { get; private set; }
+        public float F27 { get; private set; }
+        public float F28 { get; private set; }
+        public float F29 { get; private set; }
+        public float F30 { get; private set; }
+        public float F31 { get; private set; }
+        public float F32 { get; private set; }
+        public float F33 { get; private set; }
+        public float F34 { get; private set; }
+        public float F35 { get; private set; }
+        public float F36 { get; private set; }
+        public float F37 { get; private set; }
+        public float F38 { get; private set; }
+        public float F39 { get; private set; }
+        public float F40 { get; private set; }
+        public float F41 { get; private set; }
+        public float F42 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.snoMaleActor = stream.ReadValueS32();
-            this.snoFemaleActor = stream.ReadValueS32();
-            this.snoInventory = stream.ReadValueS32();
-            this.i0 = stream.ReadValueS32();
-            this.snoStartingLMBSkill = stream.ReadValueS32();
-            this.snoStartingRMBSkill = stream.ReadValueS32();
-            this.snoSKillKit0 = stream.ReadValueS32();
-            this.snoSKillKit1 = stream.ReadValueS32();
-            this.snoSKillKit2 = stream.ReadValueS32();
-            this.snoSKillKit3 = stream.ReadValueS32();
+            this.Name = stream.ReadString(256, true);
+            this.SNOMaleActor = stream.ReadValueS32();
+            this.SNOFemaleActor = stream.ReadValueS32();
+            this.SNOInventory = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
+            this.SNOStartingLMBSkill = stream.ReadValueS32();
+            this.SNOStartingRMBSkill = stream.ReadValueS32();
+            this.SNOSKillKit0 = stream.ReadValueS32();
+            this.SNOSKillKit1 = stream.ReadValueS32();
+            this.SNOSKillKit2 = stream.ReadValueS32();
+            this.SNOSKillKit3 = stream.ReadValueS32();
             this.PrimaryResource = (Resource)stream.ReadValueS32();
             this.SecondaryResource = (Resource)stream.ReadValueS32();
-            this.f0 = stream.ReadValueF32(); //308
-            this.i1 = stream.ReadValueS32(); //312
+            this.F0 = stream.ReadValueF32(); //308
+            this.I1 = stream.ReadValueS32(); //312
             stream.Position += 16;
-            this.f1 = stream.ReadValueF32(); //332
-            this.f2 = stream.ReadValueF32(); //336
+            this.F1 = stream.ReadValueF32(); //332
+            this.F2 = stream.ReadValueF32(); //336
             stream.Position += 8;
-            this.f3 = stream.ReadValueF32(); //348
-            this.f4 = stream.ReadValueF32(); //352
-            this.f5 = stream.ReadValueF32(); //356
-            this.f6 = stream.ReadValueF32(); //360
+            this.F3 = stream.ReadValueF32(); //348
+            this.F4 = stream.ReadValueF32(); //352
+            this.F5 = stream.ReadValueF32(); //356
+            this.F6 = stream.ReadValueF32(); //360
             stream.Position += 4;
-            this.f7 = stream.ReadValueF32(); //368
-            this.f8 = stream.ReadValueF32(); //372
-            this.f9 = stream.ReadValueF32(); //376
+            this.F7 = stream.ReadValueF32(); //368
+            this.F8 = stream.ReadValueF32(); //372
+            this.F9 = stream.ReadValueF32(); //376
             stream.Position += 24;
-            this.f10 = stream.ReadValueF32(); //404
+            this.F10 = stream.ReadValueF32(); //404
             stream.Position += 72;
-            this.f11 = stream.ReadValueF32(); //480
-            this.f12 = stream.ReadValueF32(); //484
-            this.f13 = stream.ReadValueF32(); //488
+            this.F11 = stream.ReadValueF32(); //480
+            this.F12 = stream.ReadValueF32(); //484
+            this.F13 = stream.ReadValueF32(); //488
             stream.Position += 4;
-            this.f14 = stream.ReadValueF32(); //496
+            this.F14 = stream.ReadValueF32(); //496
             stream.Position += 32;
-            this.f15 = stream.ReadValueF32(); //532
-            this.f16 = stream.ReadValueF32(); //536
+            this.F15 = stream.ReadValueF32(); //532
+            this.F16 = stream.ReadValueF32(); //536
             stream.Position += 4;
-            this.f17 = stream.ReadValueF32(); //544
+            this.F17 = stream.ReadValueF32(); //544
             stream.Position += 32;
-            this.f18 = stream.ReadValueF32(); //580
-            this.f19 = stream.ReadValueF32(); //584
-            this.f20 = stream.ReadValueF32(); //588
-            this.f21 = stream.ReadValueF32(); //592
-            this.f22 = stream.ReadValueF32(); //596
-            this.f23 = stream.ReadValueF32(); //600
+            this.F18 = stream.ReadValueF32(); //580
+            this.F19 = stream.ReadValueF32(); //584
+            this.F20 = stream.ReadValueF32(); //588
+            this.F21 = stream.ReadValueF32(); //592
+            this.F22 = stream.ReadValueF32(); //596
+            this.F23 = stream.ReadValueF32(); //600
             stream.Position += 4;
-            this.f24 = stream.ReadValueF32(); //608
-            this.f25 = stream.ReadValueF32(); //612
+            this.F24 = stream.ReadValueF32(); //608
+            this.F25 = stream.ReadValueF32(); //612
             stream.Position += 60;
-            this.f26 = stream.ReadValueF32(); //676
+            this.F26 = stream.ReadValueF32(); //676
             stream.Position += 8;
-            this.f27 = stream.ReadValueF32(); //688
-            this.f28 = stream.ReadValueF32(); //692
-            this.f29 = stream.ReadValueF32(); //696
-            this.f30 = stream.ReadValueF32(); //700
+            this.F27 = stream.ReadValueF32(); //688
+            this.F28 = stream.ReadValueF32(); //692
+            this.F29 = stream.ReadValueF32(); //696
+            this.F30 = stream.ReadValueF32(); //700
             stream.Position += 12;
-            this.f31 = stream.ReadValueF32(); //716
-            this.f32 = stream.ReadValueF32(); //720
-            this.f33 = stream.ReadValueF32(); //724
+            this.F31 = stream.ReadValueF32(); //716
+            this.F32 = stream.ReadValueF32(); //720
+            this.F33 = stream.ReadValueF32(); //724
             stream.Position += 40;
-            this.f34 = stream.ReadValueF32(); //768
+            this.F34 = stream.ReadValueF32(); //768
             stream.Position += 24;
-            this.f35 = stream.ReadValueF32(); //796
-            this.f36 = stream.ReadValueF32(); //800
-            this.f37 = stream.ReadValueF32(); //804
-            this.f38 = stream.ReadValueF32(); //808
+            this.F35 = stream.ReadValueF32(); //796
+            this.F36 = stream.ReadValueF32(); //800
+            this.F37 = stream.ReadValueF32(); //804
+            this.F38 = stream.ReadValueF32(); //808
             stream.Position += 40;
-            this.f39 = stream.ReadValueF32(); //852
-            this.f40 = stream.ReadValueF32(); //856
-            this.f41 = stream.ReadValueF32(); //860
-            this.f42 = stream.ReadValueF32(); //864
+            this.F39 = stream.ReadValueF32(); //852
+            this.F40 = stream.ReadValueF32(); //856
+            this.F41 = stream.ReadValueF32(); //860
+            this.F42 = stream.ReadValueF32(); //864
         }
 
         public enum Resource : int
@@ -779,145 +784,145 @@ namespace Mooege.Common.MPQ.FileFormats
     public class MovementStyleTable : ISerializableData //0 byte file
     {
         //Total Length: 384
-        public string Name; //0
-        public int i0; //256
-        public int i1;
-        public int i2;
-        public int i3;
-        public int i4;
-        public int i5;
-        public int i6;
-        public int i7;
-        public float f0;
-        public float f1;
-        public float f2;
-        public float f3;
-        public float f4;
-        public float f5;
-        public float f6;
-        public float f7;
-        public float f8;
-        public float f9;
-        public float f10;
-        public float f11;
-        public float f12;
-        public float f13;
-        public float f14;
-        public float f15;
-        public float f16;
-        public float f17;
-        public float f18;
-        public float f19;
-        public float f20;
-        public float f21;
-        public int snoPowerToBreakObjects;
+        public string Name { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
+        public int I4 { get; private set; }
+        public int I5 { get; private set; }
+        public int I6 { get; private set; }
+        public int I7 { get; private set; }
+        public float F0 { get; private set; }
+        public float F1 { get; private set; }
+        public float F2 { get; private set; }
+        public float F3 { get; private set; }
+        public float F4 { get; private set; }
+        public float F5 { get; private set; }
+        public float F6 { get; private set; }
+        public float F7 { get; private set; }
+        public float F8 { get; private set; }
+        public float F9 { get; private set; }
+        public float F10 { get; private set; }
+        public float F11 { get; private set; }
+        public float F12 { get; private set; }
+        public float F13 { get; private set; }
+        public float F14 { get; private set; }
+        public float F15 { get; private set; }
+        public float F16 { get; private set; }
+        public float F17 { get; private set; }
+        public float F18 { get; private set; }
+        public float F19 { get; private set; }
+        public float F20 { get; private set; }
+        public float F21 { get; private set; }
+        public int SNOPowerToBreakObjects { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.i0 = stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.i2 = stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
-            this.i4 = stream.ReadValueS32();
-            this.i5 = stream.ReadValueS32();
-            this.i6 = stream.ReadValueS32();
-            this.i7 = stream.ReadValueS32();
-            this.f0 = stream.ReadValueF32();
-            this.f1 = stream.ReadValueF32();
-            this.f2 = stream.ReadValueF32();
-            this.f3 = stream.ReadValueF32();
-            this.f4 = stream.ReadValueF32();
-            this.f5 = stream.ReadValueF32();
-            this.f6 = stream.ReadValueF32();
-            this.f7 = stream.ReadValueF32();
-            this.f8 = stream.ReadValueF32();
-            this.f9 = stream.ReadValueF32();
-            this.f10 = stream.ReadValueF32();
-            this.f11 = stream.ReadValueF32();
-            this.f12 = stream.ReadValueF32();
-            this.f13 = stream.ReadValueF32();
-            this.f14 = stream.ReadValueF32();
-            this.f15 = stream.ReadValueF32();
-            this.f16 = stream.ReadValueF32();
-            this.f17 = stream.ReadValueF32();
-            this.f18 = stream.ReadValueF32();
-            this.f19 = stream.ReadValueF32();
-            this.f20 = stream.ReadValueF32();
-            this.f21 = stream.ReadValueF32();
-            this.snoPowerToBreakObjects = stream.ReadValueS32();
+            this.Name = stream.ReadString(256, true);
+            this.I0 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
+            this.I4 = stream.ReadValueS32();
+            this.I5 = stream.ReadValueS32();
+            this.I6 = stream.ReadValueS32();
+            this.I7 = stream.ReadValueS32();
+            this.F0 = stream.ReadValueF32();
+            this.F1 = stream.ReadValueF32();
+            this.F2 = stream.ReadValueF32();
+            this.F3 = stream.ReadValueF32();
+            this.F4 = stream.ReadValueF32();
+            this.F5 = stream.ReadValueF32();
+            this.F6 = stream.ReadValueF32();
+            this.F7 = stream.ReadValueF32();
+            this.F8 = stream.ReadValueF32();
+            this.F9 = stream.ReadValueF32();
+            this.F10 = stream.ReadValueF32();
+            this.F11 = stream.ReadValueF32();
+            this.F12 = stream.ReadValueF32();
+            this.F13 = stream.ReadValueF32();
+            this.F14 = stream.ReadValueF32();
+            this.F15 = stream.ReadValueF32();
+            this.F16 = stream.ReadValueF32();
+            this.F17 = stream.ReadValueF32();
+            this.F18 = stream.ReadValueF32();
+            this.F19 = stream.ReadValueF32();
+            this.F20 = stream.ReadValueF32();
+            this.F21 = stream.ReadValueF32();
+            this.SNOPowerToBreakObjects = stream.ReadValueS32();
         }
     }
 
     public class LabelGBIDTable : ISerializableData
     {
         //Total Length: 264
-        public string Name;
-        public int i0;
+        public string Name { get; private set; }
+        public int I0 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.i0 = stream.ReadValueS32();
+            this.Name = stream.ReadString(256, true);
+            this.I0 = stream.ReadValueS32();
         }
     }
 
     public class AffixTable : ISerializableData
     {
         //Total Length: 544
-        public string Name;
-        public int i0;
-        public int AffixLevel;
-        public int SupMask;
-        public int i3;
-        public int i4;
-        public int i5;
-        public AffixType1 affixType1;
-        public int i6;
-        public int snoRareNamePrefixStringList;
-        public int snoRareNameSuffixStringList;
-        public int AffixFamily0;
-        public int AffixFamily1;
-        public int ExclusionCategory;
-        public int[] i7; //len 6
-        public int[] i8; //len 6
-        public int i9;
-        public AffixType2 affixType2;
-        public int AssociatedAffix;
-        public AttributeSpecifier[] attributeSpecifier; //len 4
+        public string Name { get; private set; }
+        public int I0 { get; private set; }
+        public int AffixLevel { get; private set; }
+        public int SupMask { get; private set; }
+        public int I3 { get; private set; }
+        public int I4 { get; private set; }
+        public int I5 { get; private set; }
+        public AffixType1 AffixType1 { get; private set; }
+        public int I6 { get; private set; }
+        public int SNORareNamePrefixStringList { get; private set; }
+        public int SNORareNameSuffixStringList { get; private set; }
+        public int AffixFamily0 { get; private set; }
+        public int AffixFamily1 { get; private set; }
+        public int ExclusionCategory { get; private set; }
+        public int[] I7 { get; private set; }
+        public int[] I8 { get; private set; }
+        public int I9 { get; private set; }
+        public AffixType2 AffixType2 { get; private set; }
+        public int AssociatedAffix { get; private set; }
+        public AttributeSpecifier[] AttributeSpecifier { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.i0 = stream.ReadValueS32(); //260
+            this.Name = stream.ReadString(256, true);
+            this.I0 = stream.ReadValueS32(); //260
             this.AffixLevel = stream.ReadValueS32(); //264
             this.SupMask = stream.ReadValueS32(); //268
-            this.i3 = stream.ReadValueS32(); //272
-            this.i4 = stream.ReadValueS32(); //276
-            this.i5 = stream.ReadValueS32(); //280
-            this.affixType1 = (AffixType1)stream.ReadValueS32(); //284
-            this.i6 = stream.ReadValueS32(); //288
-            this.snoRareNamePrefixStringList = stream.ReadValueS32(); //292
-            this.snoRareNameSuffixStringList = stream.ReadValueS32(); //296
+            this.I3 = stream.ReadValueS32(); //272
+            this.I4 = stream.ReadValueS32(); //276
+            this.I5 = stream.ReadValueS32(); //280
+            this.AffixType1 = (AffixType1)stream.ReadValueS32(); //284
+            this.I6 = stream.ReadValueS32(); //288
+            this.SNORareNamePrefixStringList = stream.ReadValueS32(); //292
+            this.SNORareNameSuffixStringList = stream.ReadValueS32(); //296
             this.AffixFamily0 = stream.ReadValueS32(); //300
             this.AffixFamily1 = stream.ReadValueS32(); //304
             this.ExclusionCategory = stream.ReadValueS32(); //308
-            this.i7 = new int[6]; //312
+            this.I7 = new int[6]; //312
             for (int i = 0; i < 6; i++)
-                this.i7[i] = stream.ReadValueS32();
-            this.i8 = new int[6]; //336
+                this.I7[i] = stream.ReadValueS32();
+            this.I8 = new int[6]; //336
             for (int i = 0; i < 6; i++)
-                this.i8[i] = stream.ReadValueS32();
-            this.i9 = stream.ReadValueS32(); //360
-            this.affixType2 = (AffixType2)stream.ReadValueS32(); //364
+                this.I8[i] = stream.ReadValueS32();
+            this.I9 = stream.ReadValueS32(); //360
+            this.AffixType2 = (AffixType2)stream.ReadValueS32(); //364
             this.AssociatedAffix = stream.ReadValueS32(); //368
             stream.Position += 4;
-            this.attributeSpecifier = new AttributeSpecifier[4]; //376
+            this.AttributeSpecifier = new AttributeSpecifier[4]; //376
             for (int i = 0; i < 4; i++)
-                this.attributeSpecifier[i] = new AttributeSpecifier(stream);
+                this.AttributeSpecifier[i] = new AttributeSpecifier(stream);
             stream.Position += 72;
         }
     }
@@ -956,124 +961,124 @@ namespace Mooege.Common.MPQ.FileFormats
     public class AttributeSpecifier
     {
         //Length: 24
-        public int AttributeId;
-        public int snoParam;
-        public List<int> formula;
+        public int AttributeId { get; private set; }
+        public int SNOParam { get; private set; }
+        public List<int> Formula { get; private set; }
 
         public AttributeSpecifier(MpqFileStream stream)
         {
             this.AttributeId = stream.ReadValueS32();
-            this.snoParam = stream.ReadValueS32();
+            this.SNOParam = stream.ReadValueS32();
             stream.Position += 8;
-            this.formula = stream.ReadSerializedInts();
+            this.Formula = stream.ReadSerializedInts();
         }
     }
 
     public class LootDistTable : ISerializableData //0 byte file
     {
         //Total Length: 92
-        public int i0;
-        public int i1;
-        public int i2;
-        public int i3;
-        public int i4;
-        public int i5;
-        public int i6;
-        public int i7;
-        public int i8;
-        public int i9;
-        public float f0;
-        public float f1;
-        public float f2;
-        public float f3;
-        public float f4;
-        public float f5;
-        public float f6;
-        public float f7;
-        public float f8;
-        public float f9;
-        public float f10;
-        public int i10;
-        public int i11;
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
+        public int I4 { get; private set; }
+        public int I5 { get; private set; }
+        public int I6 { get; private set; }
+        public int I7 { get; private set; }
+        public int I8 { get; private set; }
+        public int I9 { get; private set; }
+        public float F0 { get; private set; }
+        public float F1 { get; private set; }
+        public float F2 { get; private set; }
+        public float F3 { get; private set; }
+        public float F4 { get; private set; }
+        public float F5 { get; private set; }
+        public float F6 { get; private set; }
+        public float F7 { get; private set; }
+        public float F8 { get; private set; }
+        public float F9 { get; private set; }
+        public float F10 { get; private set; }
+        public int I10 { get; private set; }
+        public int I11 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.i0 = stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.i2 = stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
-            this.i4 = stream.ReadValueS32();
-            this.i5 = stream.ReadValueS32();
-            this.i6 = stream.ReadValueS32();
-            this.i7 = stream.ReadValueS32();
-            this.i8 = stream.ReadValueS32();
-            this.i9 = stream.ReadValueS32();
-            this.f0 = stream.ReadValueF32();
-            this.f1 = stream.ReadValueF32();
-            this.f2 = stream.ReadValueF32();
-            this.f3 = stream.ReadValueF32();
-            this.f4 = stream.ReadValueF32();
-            this.f5 = stream.ReadValueF32();
-            this.f6 = stream.ReadValueF32();
-            this.f7 = stream.ReadValueF32();
-            this.f8 = stream.ReadValueF32();
-            this.f9 = stream.ReadValueF32();
-            this.f10 = stream.ReadValueF32();
-            this.i10 = stream.ReadValueS32();
-            this.i11 = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
+            this.I4 = stream.ReadValueS32();
+            this.I5 = stream.ReadValueS32();
+            this.I6 = stream.ReadValueS32();
+            this.I7 = stream.ReadValueS32();
+            this.I8 = stream.ReadValueS32();
+            this.I9 = stream.ReadValueS32();
+            this.F0 = stream.ReadValueF32();
+            this.F1 = stream.ReadValueF32();
+            this.F2 = stream.ReadValueF32();
+            this.F3 = stream.ReadValueF32();
+            this.F4 = stream.ReadValueF32();
+            this.F5 = stream.ReadValueF32();
+            this.F6 = stream.ReadValueF32();
+            this.F7 = stream.ReadValueF32();
+            this.F8 = stream.ReadValueF32();
+            this.F9 = stream.ReadValueF32();
+            this.F10 = stream.ReadValueF32();
+            this.I10 = stream.ReadValueS32();
+            this.I11 = stream.ReadValueS32();
         }
     }
 
     public class RareItemNamesTable : ISerializableData
     {
         //Total Length: 272
-        public string Name;
-        public BalanceType type;
-        public int RelatedAffixOrItemType;
-        public AffixType2 affixType;
+        public string Name { get; private set; }
+        public BalanceType Type { get; private set; }
+        public int RelatedAffixOrItemType { get; private set; }
+        public AffixType2 AffixType { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.type = (BalanceType)stream.ReadValueS32();
+            this.Name = stream.ReadString(256, true);
+            this.Type = (BalanceType)stream.ReadValueS32();
             this.RelatedAffixOrItemType = stream.ReadValueS32();
-            this.affixType = (AffixType2)stream.ReadValueS32();
+            this.AffixType = (AffixType2)stream.ReadValueS32();
         }
     }
 
     public class MonsterAffixesTable : ISerializableData
     {
         //Total Length: 792
-        public string Name;
-        public int i0; //260
-        public int i1; //264
-        public int i2; //268
-        public MonsterAffix monsterAffix;
-        public Resistance resistance;
-        public AffixType2 affixType;
-        public int i3;
-        public int i4;
-        public int i5; //292
-        public AttributeSpecifier[] Attributes; //Len 10
-        public AttributeSpecifier[] MinionAttributes; //Len 10
-        public int snoOn_Spawn_Power_Minion; //780
-        public int snoOn_Spawn_Power_Champion; //784
-        public int snoOn_Spawn_Power_Rare; //788
+        public string Name { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public MonsterAffix MonsterAffix { get; private set; }
+        public Resistance Resistance { get; private set; }
+        public AffixType2 AffixType { get; private set; }
+        public int I3 { get; private set; }
+        public int I4 { get; private set; }
+        public int I5 { get; private set; }
+        public AttributeSpecifier[] Attributes { get; private set; }
+        public AttributeSpecifier[] MinionAttributes { get; private set; }
+        public int SNOOnSpawnPowerMinion { get; private set; }
+        public int SNOOnSpawnPowerChampion { get; private set; }
+        public int SNOOnSpawnPowerRare { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.i0 = stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.i2 = stream.ReadValueS32();
-            this.monsterAffix = (MonsterAffix)stream.ReadValueS32();
-            this.resistance = (Resistance)stream.ReadValueS32();
-            this.affixType = (AffixType2)stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
-            this.i4 = stream.ReadValueS32();
-            this.i5 = stream.ReadValueS32();
+            this.Name = stream.ReadString(256, true);
+            this.I0 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.MonsterAffix = (MonsterAffix)stream.ReadValueS32();
+            this.Resistance = (Resistance)stream.ReadValueS32();
+            this.AffixType = (AffixType2)stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
+            this.I4 = stream.ReadValueS32();
+            this.I5 = stream.ReadValueS32();
             this.Attributes = new AttributeSpecifier[10];
             for (int i = 0; i < 10; i++)
                 this.Attributes[i] = new AttributeSpecifier(stream);
@@ -1081,9 +1086,9 @@ namespace Mooege.Common.MPQ.FileFormats
             for (int i = 0; i < 10; i++)
                 this.MinionAttributes[i] = new AttributeSpecifier(stream);
             stream.Position += 4;
-            this.snoOn_Spawn_Power_Minion = stream.ReadValueS32();
-            this.snoOn_Spawn_Power_Champion = stream.ReadValueS32();
-            this.snoOn_Spawn_Power_Rare = stream.ReadValueS32();
+            this.SNOOnSpawnPowerMinion = stream.ReadValueS32();
+            this.SNOOnSpawnPowerChampion = stream.ReadValueS32();
+            this.SNOOnSpawnPowerRare = stream.ReadValueS32();
         }
     }
 
@@ -1109,16 +1114,16 @@ namespace Mooege.Common.MPQ.FileFormats
     public class MonsterNamesTable : ISerializableData
     {
         //Total Length: 392
-        public string Name;
-        public AffixType2 affixType;
-        public string s0;
+        public string Name { get; private set; }
+        public AffixType2 AffixType { get; private set; }
+        public string S0 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.affixType = (AffixType2)stream.ReadValueS32();
-            this.s0 = stream.ReadString(128,true);
+            this.Name = stream.ReadString(256, true);
+            this.AffixType = (AffixType2)stream.ReadValueS32();
+            this.S0 = stream.ReadString(128, true);
         }
 
     }
@@ -1126,17 +1131,17 @@ namespace Mooege.Common.MPQ.FileFormats
     public class SocketedEffectTable : ISerializableData
     {
         //Total Length: 1416
-        public string Name;
-        public int Item;
-        public int ItemType;
-        public AttributeSpecifier[] Attribute; //Len 3
-        public AttributeSpecifier[] ReqAttribute; //Len 2
-        public string s0;
+        public string Name { get; private set; }
+        public int Item { get; private set; }
+        public int ItemType { get; private set; }
+        public AttributeSpecifier[] Attribute { get; private set; }
+        public AttributeSpecifier[] ReqAttribute { get; private set; }
+        public string S0 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
+            this.Name = stream.ReadString(256, true);
             this.Item = stream.ReadValueS32(); //260
             this.ItemType = stream.ReadValueS32(); //264
             stream.Position += 4;
@@ -1146,36 +1151,35 @@ namespace Mooege.Common.MPQ.FileFormats
             this.ReqAttribute = new AttributeSpecifier[2];
             for (int i = 0; i < 2; i++)
                 this.ReqAttribute[i] = new AttributeSpecifier(stream);
-            this.s0 = stream.ReadString(1024,true);
+            this.S0 = stream.ReadString(1024, true);
         }
     }
 
     public class ItemEnhancementTable : ISerializableData
     {
         //Total Length: 696
-        public string Name;
-        public int i0;
-        public int i1;
-        public int i2;
-        public int i3;
-        public AttributeSpecifier[] Attribute; //len16
-        public int i4;
-        public RecipeIngredient[] Ingredients; //len 3
-
+        public string Name { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
+        public AttributeSpecifier[] Attribute { get; private set; }
+        public int I4 { get; private set; }
+        public RecipeIngredient[] Ingredients { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.i0 = stream.ReadValueS32(); //260
-            this.i1 = stream.ReadValueS32(); //264
-            this.i2 = stream.ReadValueS32(); //268
-            this.i3 = stream.ReadValueS32(); //272
+            this.Name = stream.ReadString(256, true);
+            this.I0 = stream.ReadValueS32(); //260
+            this.I1 = stream.ReadValueS32(); //264
+            this.I2 = stream.ReadValueS32(); //268
+            this.I3 = stream.ReadValueS32(); //272
             stream.Position += 4;
             this.Attribute = new AttributeSpecifier[16]; //280
             for (int i = 0; i < 16; i++)
                 this.Attribute[i] = new AttributeSpecifier(stream);
-            this.i4 = stream.ReadValueS32(); //664
+            this.I4 = stream.ReadValueS32(); //664
             this.Ingredients = new RecipeIngredient[3]; //668
             for (int i = 0; i < 3; i++)
                 this.Ingredients[i] = new RecipeIngredient(stream);
@@ -1185,137 +1189,134 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class RecipeIngredient
     {
-        public int gbidItem;
-        public int i0;
+        public int ItemGBId { get; private set; }
+        public int I0 { get; private set; }
 
         public RecipeIngredient(MpqFileStream stream)
         {
-            this.gbidItem = stream.ReadValueS32();
-            this.i0 = stream.ReadValueS32();
+            this.ItemGBId = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
         }
     }
 
     public class ItemDropTable : ISerializableData //0 byte file
     {
         //Total Length: 1140
-        public string Name;
-        public int[] i0;
-
+        public string Name { get; private set; }
+        public int[] I0 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.i0 = new int[219];
+            this.Name = stream.ReadString(256, true);
+            this.I0 = new int[219];
             for (int i = 0; i < 219; i++)
-                this.i0[i] = stream.ReadValueS32();
+                this.I0[i] = stream.ReadValueS32();
         }
-
     }
 
     public class ItemLevelModTable : ISerializableData //0 byte file
     {
         //Total Length: 92
-        public int i0;
-        public float f0;
-        public float f1;
-        public float f2;
-        public float f3;
-        public float f4;
-        public float f5;
-        public float f6;
-        public float f7;
-        public float f8;
-        public float f9;
-        public float f10;
-        public int i1;
-        public int i2;
-        public int i3;
-        public int i4;
-        public int i5;
-        public int i6;
-        public int i7;
-        public int i8;
-        public int i9;
-        public int i10;
-        public int i11;
+        public int I0 { get; private set; }
+        public float F0 { get; private set; }
+        public float F1 { get; private set; }
+        public float F2 { get; private set; }
+        public float F3 { get; private set; }
+        public float F4 { get; private set; }
+        public float F5 { get; private set; }
+        public float F6 { get; private set; }
+        public float F7 { get; private set; }
+        public float F8 { get; private set; }
+        public float F9 { get; private set; }
+        public float F10 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
+        public int I4 { get; private set; }
+        public int I5 { get; private set; }
+        public int I6 { get; private set; }
+        public int I7 { get; private set; }
+        public int I8 { get; private set; }
+        public int I9 { get; private set; }
+        public int I10 { get; private set; }
+        public int I11 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.i0 = stream.ReadValueS32();
-            this.f0 = stream.ReadValueF32();
-            this.f1 = stream.ReadValueF32();
-            this.f2 = stream.ReadValueF32();
-            this.f3 = stream.ReadValueF32();
-            this.f4 = stream.ReadValueF32();
-            this.f5 = stream.ReadValueF32();
-            this.f6 = stream.ReadValueF32();
-            this.f7 = stream.ReadValueF32();
-            this.f8 = stream.ReadValueF32();
-            this.f9 = stream.ReadValueF32();
-            this.f10 = stream.ReadValueF32();
-            this.i1 = stream.ReadValueS32();
-            this.i2 = stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
-            this.i4 = stream.ReadValueS32();
-            this.i5 = stream.ReadValueS32();
-            this.i6 = stream.ReadValueS32();
-            this.i7 = stream.ReadValueS32();
-            this.i8 = stream.ReadValueS32();
-            this.i9 = stream.ReadValueS32();
-            this.i10 = stream.ReadValueS32();
-            this.i11 = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
+            this.F0 = stream.ReadValueF32();
+            this.F1 = stream.ReadValueF32();
+            this.F2 = stream.ReadValueF32();
+            this.F3 = stream.ReadValueF32();
+            this.F4 = stream.ReadValueF32();
+            this.F5 = stream.ReadValueF32();
+            this.F6 = stream.ReadValueF32();
+            this.F7 = stream.ReadValueF32();
+            this.F8 = stream.ReadValueF32();
+            this.F9 = stream.ReadValueF32();
+            this.F10 = stream.ReadValueF32();
+            this.I1 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
+            this.I4 = stream.ReadValueS32();
+            this.I5 = stream.ReadValueS32();
+            this.I6 = stream.ReadValueS32();
+            this.I7 = stream.ReadValueS32();
+            this.I8 = stream.ReadValueS32();
+            this.I9 = stream.ReadValueS32();
+            this.I10 = stream.ReadValueS32();
+            this.I11 = stream.ReadValueS32();
         }
     }
 
     public class QualityClassTable : ISerializableData //0 byte file
     {
         //Total Length: 352
-        public string Name;
-        public float[] f0;
+        public string Name { get; private set; }
+        public float[] F0 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.f0 = new float[22];
+            this.Name = stream.ReadString(256, true);
+            this.F0 = new float[22];
             for (int i = 0; i < 22; i++)
-                this.f0[i] = stream.ReadValueF32();
+                this.F0[i] = stream.ReadValueF32();
         }
-
     }
 
     public class HirelingTable : ISerializableData
     {
         //Total Length: 824
-        public string Name;
-        public int snoActor;
-        public int snoProxy;
-        public int snoInventory;
-        public float f0;
-        public float f1;
-        public float f2;
-        public float f3;
-        public float f4;
-        public float f5;
-        public float f6;
+        public string Name { get; private set; }
+        public int SNOActor { get; private set; }
+        public int SNOProxy { get; private set; }
+        public int SNOInventory { get; private set; }
+        public float F0 { get; private set; }
+        public float F1 { get; private set; }
+        public float F2 { get; private set; }
+        public float F3 { get; private set; }
+        public float F4 { get; private set; }
+        public float F5 { get; private set; }
+        public float F6 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.snoActor = stream.ReadValueS32();
-            this.snoProxy = stream.ReadValueS32();
-            this.snoInventory = stream.ReadValueS32();
+            this.Name = stream.ReadString(256, true);
+            this.SNOActor = stream.ReadValueS32();
+            this.SNOProxy = stream.ReadValueS32();
+            this.SNOInventory = stream.ReadValueS32();
             stream.Position += 480;
-            this.f0 = stream.ReadValueF32(); //752
-            this.f1 = stream.ReadValueF32(); //756
-            this.f2 = stream.ReadValueF32(); //760
-            this.f3 = stream.ReadValueF32(); //764
+            this.F0 = stream.ReadValueF32(); //752
+            this.F1 = stream.ReadValueF32(); //756
+            this.F2 = stream.ReadValueF32(); //760
+            this.F3 = stream.ReadValueF32(); //764
             stream.Position += 8;
-            this.f4 = stream.ReadValueF32(); //776
-            this.f5 = stream.ReadValueF32(); //780
-            this.f6 = stream.ReadValueF32(); //784
+            this.F4 = stream.ReadValueF32(); //776
+            this.F5 = stream.ReadValueF32(); //780
+            this.F6 = stream.ReadValueF32(); //784
             stream.Position += 36;
         }
 
@@ -1324,17 +1325,17 @@ namespace Mooege.Common.MPQ.FileFormats
     public class SetItemBonusTable : ISerializableData
     {
         //Total Length: 464
-        public string Name;
-        public int i0;
-        public int Set;
-        public AttributeSpecifier[] Attribute;
+        public string Name { get; private set; }
+        public int I0 { get; private set; }
+        public int Set { get; private set; }
+        public AttributeSpecifier[] Attribute { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
+            this.Name = stream.ReadString(256, true);
             this.Set = stream.ReadValueS32();
-            this.i0 = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
             stream.Position += 4;
             Attribute = new AttributeSpecifier[8];
             for (int i = 0; i < 8; i++)
@@ -1346,68 +1347,67 @@ namespace Mooege.Common.MPQ.FileFormats
     public class EliteModTable : ISerializableData //0 byte file
     {
         //Total Length: 344
-        public string Name;
-        public float f0;
-        public int Time0;
-        public float f1;
-        public int Time1;
-        public float f2;
-        public int Time2;
-        public float f3;
-        public int Time3;
-        public float f4;
-        public int Time4;
-        public float f5;
-        public int Time5;
-        public float f6;
-        public int Time6;
-        public float f7;
-        public float f8;
-        public int Time7;
-        public float f9;
-        public float f10;
-        public float f11;
-        public float f12;
+        public string Name { get; private set; }
+        public float F0 { get; private set; }
+        public int Time0 { get; private set; }
+        public float F1 { get; private set; }
+        public int Time1 { get; private set; }
+        public float F2 { get; private set; }
+        public int Time2 { get; private set; }
+        public float F3 { get; private set; }
+        public int Time3 { get; private set; }
+        public float F4 { get; private set; }
+        public int Time4 { get; private set; }
+        public float F5 { get; private set; }
+        public int Time5 { get; private set; }
+        public float F6 { get; private set; }
+        public int Time6 { get; private set; }
+        public float F7 { get; private set; }
+        public float F8 { get; private set; }
+        public int Time7 { get; private set; }
+        public float F9 { get; private set; }
+        public float F10 { get; private set; }
+        public float F11 { get; private set; }
+        public float F12 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.f0 = stream.ReadValueF32();
+            this.Name = stream.ReadString(256, true);
+            this.F0 = stream.ReadValueF32();
             this.Time0 = stream.ReadValueS32();
-            this.f1 = stream.ReadValueF32();
+            this.F1 = stream.ReadValueF32();
             this.Time1 = stream.ReadValueS32();
-            this.f2 = stream.ReadValueF32();
+            this.F2 = stream.ReadValueF32();
             this.Time2 = stream.ReadValueS32();
-            this.f3 = stream.ReadValueF32();
+            this.F3 = stream.ReadValueF32();
             this.Time3 = stream.ReadValueS32();
-            this.f4 = stream.ReadValueF32();
+            this.F4 = stream.ReadValueF32();
             this.Time4 = stream.ReadValueS32();
-            this.f5 = stream.ReadValueF32();
+            this.F5 = stream.ReadValueF32();
             this.Time5 = stream.ReadValueS32();
-            this.f6 = stream.ReadValueF32();
+            this.F6 = stream.ReadValueF32();
             this.Time6 = stream.ReadValueS32();
-            this.f7 = stream.ReadValueF32();
-            this.f8 = stream.ReadValueF32();
+            this.F7 = stream.ReadValueF32();
+            this.F8 = stream.ReadValueF32();
             this.Time7 = stream.ReadValueS32();
-            this.f9 = stream.ReadValueF32();
-            this.f10 = stream.ReadValueF32();
-            this.f11 = stream.ReadValueF32();
-            this.f12 = stream.ReadValueF32();
+            this.F9 = stream.ReadValueF32();
+            this.F10 = stream.ReadValueF32();
+            this.F11 = stream.ReadValueF32();
+            this.F12 = stream.ReadValueF32();
         }
-
     }
 
     public class ItemTierTable : ISerializableData //0 byte file
     {
         //Total Length: 32
-        public int Head;
-        public int Torso;
-        public int Feet;
-        public int Hands;
-        public int Shoulders;
-        public int Bracers;
-        public int Belt;
+        public int Head { get; private set; }
+        public int Torso { get; private set; }
+        public int Feet { get; private set; }
+        public int Hands { get; private set; }
+        public int Shoulders { get; private set; }
+        public int Bracers { get; private set; }
+        public int Belt { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -1419,46 +1419,45 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Bracers = stream.ReadValueS32();
             this.Belt = stream.ReadValueS32();
         }
-
     }
 
     public class PowerFormulaTable : ISerializableData
     {
         //Total Length: 1268
-        public string s0;
-        public float[] f0;
+        public string S0 { get; private set; }
+        public float[] F0 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.s0 = stream.ReadString(1024,true);
-            this.f0 = new float[61];
+            this.S0 = stream.ReadString(1024, true);
+            this.F0 = new float[61];
             for (int i = 0; i < 61; i++)
-                this.f0[i] = stream.ReadValueF32();
+                this.F0[i] = stream.ReadValueF32();
         }
     }
 
     public class RecipeTable : ISerializableData
     {
         //Total Length: 332
-        public string Name;
-        public int snoRecipe;
-        public RecipeType Type;
-        public int i0;
-        public int i1;
-        public int i2;
-        public int i3;
-        public RecipeIngredient[] Ingredients;
+        public string Name { get; private set; }
+        public int SNORecipe { get; private set; }
+        public RecipeType Type { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
+        public RecipeIngredient[] Ingredients { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
-            this.snoRecipe = stream.ReadValueS32();
+            this.Name = stream.ReadString(256, true);
+            this.SNORecipe = stream.ReadValueS32();
             this.Type = (RecipeType)stream.ReadValueS32();
-            this.i0 = stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.i2 = stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
             this.Ingredients = new RecipeIngredient[6];
             for (int i = 0; i < 6; i++)
                 this.Ingredients[i] = new RecipeIngredient(stream);
@@ -1476,12 +1475,12 @@ namespace Mooege.Common.MPQ.FileFormats
     public class ScriptedAchievementEventsTable : ISerializableData //0 byte file
     {
         //Total Length: 260
-        public string Name;
+        public string Name { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
-            this.Name = stream.ReadString(256,true);
+            this.Name = stream.ReadString(256, true);
         }
     }
 

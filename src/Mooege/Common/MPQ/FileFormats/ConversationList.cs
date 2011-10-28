@@ -16,12 +16,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 using CrystalMpq;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Gibbed.IO;
+using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -32,7 +31,7 @@ namespace Mooege.Common.MPQ.FileFormats
     public class ConversationList : FileFormat
     {
         public Header Header;
-        public List<ConversationListEntry> ConversationListEntries;
+        public List<ConversationListEntry> ConversationListEntries { get; private set; }
 
         public ConversationList(MpqFile file)
         {
@@ -43,27 +42,26 @@ namespace Mooege.Common.MPQ.FileFormats
 
             stream.Close();
         }
-
     }
 
     public class ConversationListEntry : ISerializableData
     {
-        public int SNOConv;
-        public int I0;
-        public int I1;
-        public int I2;
-        public int GbidItem;
-        public string Noname1;
-        public string Noname2;
-        public int SNOQuestCurrent;
-        public int I3;
-        public int SNOQuestAssigned;
-        public int SNOQuestActive;
-        public int SNOQuestComplete;
-        public int SNOQuestRange;
-        public int SNOLevelArea;
+        public int SNOConv { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int GbidItem { get; private set; }
+        public string Noname1 { get; private set; }
+        public string Noname2 { get; private set; }
+        public int SNOQuestCurrent { get; private set; }
+        public int I3 { get; private set; }
+        public int SNOQuestAssigned { get; private set; }
+        public int SNOQuestActive { get; private set; }
+        public int SNOQuestComplete { get; private set; }
+        public int SNOQuestRange { get; private set; }
+        public int SNOLevelArea { get; private set; }
 
-        public void Read(CrystalMpq.MpqFileStream stream)
+        public void Read(MpqFileStream stream)
         {
             SNOConv = stream.ReadValueS32();
             I0 = stream.ReadValueS32();
@@ -81,5 +79,4 @@ namespace Mooege.Common.MPQ.FileFormats
             SNOLevelArea = stream.ReadValueS32();
         }
     }
-
 }

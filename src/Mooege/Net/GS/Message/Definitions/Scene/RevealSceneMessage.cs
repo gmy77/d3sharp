@@ -17,6 +17,8 @@
  */
 
 using System.Text;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.Scene;
 using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Scene

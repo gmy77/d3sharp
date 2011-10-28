@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,15 +16,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Core.GS.Data.SNO
-{
-    public sealed class Config: Mooege.Common.Config.Config
-    {       
-        public string SNOList { get { return this.GetString("SNOList", "Assets/SNO/list.txt"); } set { this.Set("SNOList", value); } }
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Mooege.Common.Helpers;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Map;
 
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Data") { }
+namespace Mooege.Core.GS.Actors
+{
+    public class Environment : Actor
+    {
+        public override ActorType ActorType { get { return ActorType.Monster; } }
+
+        public Environment(World world, int actorSNO, Vector3D position)
+            : base(world, world.NewActorID)
+        {
+            this.ActorSNO = actorSNO;
+            this.Field2 = 16;
+            this.Field3 = 0x0;
+            this.Field7 = 0x00000001;
+            this.Field8 = this.ActorSNO;
+            this.Scale = 1.35f;
+            this.Position.Set(position);
+        }
     }
 }
-
