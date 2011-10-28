@@ -17,6 +17,8 @@
  */
 
 using System;
+using CrystalMpq;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ
 {
@@ -35,19 +37,11 @@ namespace Mooege.Common.MPQ
             this.SNOId = snoId;
             this.Name = name;
             this.FileName = group + "\\" + this.Name + FileExtensions.Extensions[(int)group];
-
-            this.Load();
         }
 
-        private void Load()
+        public void RunParser(Type parser, MpqFile file)
         {
-            if (!MPQStorage.Data.AssetFormats.ContainsKey(this.Group)) return;
-            var formatType = MPQStorage.Data.AssetFormats[this.Group];
-            
-            var file = MPQStorage.Data.FileSystem.FindFile(this.FileName);
-            if (file == null || file.Size < 10) return;
-
-            this.Data = (FileFormat) Activator.CreateInstance(formatType, new object[] {file});
+            this.Data = (FileFormat) Activator.CreateInstance(parser, new object[] {file});
         }
     }
 }

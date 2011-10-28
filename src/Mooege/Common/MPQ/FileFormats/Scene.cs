@@ -20,8 +20,9 @@ using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Net.GS.Message.Fields;
-using AABB = Mooege.Common.MPQ.FileFormats.Types.AABB;
+using Mooege.Core.GS.Common.Types.Collusion;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -29,14 +30,14 @@ namespace Mooege.Common.MPQ.FileFormats
     public class Scene : FileFormat
     {
         public Header Header { get; private set; }
-        public int Int0;
+        public int Int0 { get; private set; }
         public AABB AABBBounds { get; private set; }
         public AABB AABBMarketSetBounds { get; private set; }
         public NavMeshDef NavMesh { get; private set; }
         public List<int> MarkerSets = new List<int>();
         public string LookLink { get; private set; }
         public MsgTriggeredEvent MsgTriggeredEvent { get; private set; }
-        public int Int1;
+        public int Int1 { get; private set; }
         public NavZoneDef NavZone { get; private set; }
 
         public Scene(MpqFile file)
@@ -72,13 +73,13 @@ namespace Mooege.Common.MPQ.FileFormats
         
         public class NavMeshDef
         {
-            public int SquaresCountX;
-            public int SquaresCountY;
-            public int Int0;
-            public int NavMeshSquareCount;
-            public float Float0;
+            public int SquaresCountX { get; private set; }
+            public int SquaresCountY { get; private set; }
+            public int Int0 { get; private set; }
+            public int NavMeshSquareCount { get; private set; }
+            public float Float0 { get; private set; }
             public List<NavMeshSquare> Squares = new List<NavMeshSquare>();
-            public string Filename;
+            public string Filename { get; private set; }
 
             public NavMeshDef(MpqFileStream stream)
             {
@@ -96,18 +97,18 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public class NavZoneDef
         {
-            public int NavCellCount;
+            public int NavCellCount { get; private set; }
             public List<NavCell> NavCells = new List<NavCell>();
-            public int NeightbourCount;
+            public int NeightbourCount { get; private set; }
             public List<NavCellLookup> NavCellNeighbours = new List<NavCellLookup>();
-            public float Float0;
-            public float Float1;
-            public int Int2;
-            public readonly Vector2D V0;
+            public float Float0 { get; private set; }
+            public float Float1 { get; private set; }
+            public int Int2 { get; private set; }
+            public Vector2D V0 { get; private set; }
             public List<NavGridSquare> GridSquares = new List<NavGridSquare>();
-            public int Int3;
+            public int Int3 { get; private set; }
             public List<NavCellLookup> CellLookups = new List<NavCellLookup>();
-            public int Int4;
+            public int Int4 { get; private set; }
             public List<NavCellBorderData> BorderData = new List<NavCellBorderData>();
 
             public NavZoneDef(MpqFileStream stream)
@@ -144,8 +145,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public class NavMeshSquare : ISerializableData
         {
-            public float Float0;
-            public int Flags;
+            public float Float0 { get; private set; }
+            public int Flags { get; private set; }
 
             public void Read(MpqFileStream stream)
             {
@@ -156,9 +157,11 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public class NavCell : ISerializableData
         {
-            public Vector3D Min, Max;
-            public short Flags, NeighbourCount;
-            public int NeighborsIndex;
+            public Vector3D Min { get; private set; }
+            public Vector3D Max { get; private set; }
+            public short Flags { get; private set; }
+            public short NeighbourCount { get; private set; }
+            public int NeighborsIndex { get; private set; }
 
             public void Read(MpqFileStream stream)
             {
@@ -172,18 +175,21 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public class NavCellLookup : ISerializableData
         {
-            public short Flags, wCell;
+            public short Flags { get; private set; }
+            public short WCell { get; private set; }
 
             public void Read(MpqFileStream stream)
             {
                 this.Flags = stream.ReadValueS16();
-                this.wCell = stream.ReadValueS16();
+                this.WCell = stream.ReadValueS16();
             }
         }
 
         public class NavGridSquare : ISerializableData
         {
-            public short Flags, W1, W2;
+            public short Flags { get; private set; }
+            public short W1 { get; private set; }
+            public short W2 { get; private set; }
 
             public void Read(MpqFileStream stream)
             {
@@ -195,7 +201,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public class NavCellBorderData : ISerializableData
         {
-            public short W0, W1;
+            public short W0 { get; private set; }
+            public short W1 { get; private set; }
 
             public void Read(MpqFileStream stream)
             {

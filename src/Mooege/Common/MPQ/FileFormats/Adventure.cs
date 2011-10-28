@@ -19,6 +19,7 @@
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -26,19 +27,23 @@ namespace Mooege.Common.MPQ.FileFormats
     public class Adventure : FileFormat
     {
         public Header Header { get; private set; }
-        public int snoSymbolActor { get; private set; }
-        float f0, f1, f2, f3;
-        public int snoMarkerSet { get; private set; }
+        public int SNOSymbolActor { get; private set; }
+        public float F0 { get; private set; }
+        public float F1 { get; private set; }
+        public float F2 { get; private set; }
+        public float F3 { get; private set; }
+        public int SNOMarkerSet { get; private set; }
+
         public Adventure(MpqFile file)
         {
             var stream = file.Open();
-            this.Header = new Types.Header(stream);
-            this.snoSymbolActor = stream.ReadValueS32();
-            this.f0 = stream.ReadValueF32();
-            this.f1 = stream.ReadValueF32();
-            this.f2 = stream.ReadValueF32();
-            this.f3 = stream.ReadValueF32();
-            this.snoMarkerSet = stream.ReadValueS32();
+            this.Header = new Header(stream);
+            this.SNOSymbolActor = stream.ReadValueS32();
+            this.F0 = stream.ReadValueF32();
+            this.F1 = stream.ReadValueF32();
+            this.F2 = stream.ReadValueF32();
+            this.F3 = stream.ReadValueF32();
+            this.SNOMarkerSet = stream.ReadValueS32();
             stream.Close();
         }
     }

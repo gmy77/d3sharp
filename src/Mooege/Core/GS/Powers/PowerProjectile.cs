@@ -30,6 +30,7 @@ using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Core.GS.Actors;
 using System.Collections.Generic;
+using Mooege.Core.GS.Common.Types.Math;
 
 namespace Mooege.Core.GS.Powers
 {

@@ -23,6 +23,7 @@ using System.Text;
 using Mooege.Core.GS.Actors;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message;
+using Mooege.Core.GS.Common.Types.Math;
 
 namespace Mooege.Core.GS.Powers
 {

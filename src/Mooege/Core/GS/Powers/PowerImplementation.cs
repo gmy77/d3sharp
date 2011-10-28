@@ -27,6 +27,7 @@ using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Common;
 using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Common.Types.Math;
 
 namespace Mooege.Core.GS.Powers
 {

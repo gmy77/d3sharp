@@ -23,20 +23,20 @@ namespace Mooege.Net.GS.Message.Fields
     public class ResolvedPortalDestination
     {
         public int /* sno */ WorldSNO;
-        public int Field1; // *Not* the target world's DynamicID; observed as: 0xAC, 0xDF, 0x02, 0x05, 0xDC, 0x08, 0x07, 0x6B, 0x8D, 0xF6, etc.
+        public int StartingPointActorTag;       // in the target world is (should be!) a starting point, that is tagged with this id
         public int /* sno */ DestLevelAreaSNO;
 
         public void Parse(GameBitBuffer buffer)
         {
             WorldSNO = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            StartingPointActorTag = buffer.ReadInt(32);
             DestLevelAreaSNO = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, WorldSNO);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, StartingPointActorTag);
             buffer.WriteInt(32, DestLevelAreaSNO);
         }
 
@@ -49,7 +49,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("WorldSNO: 0x" + WorldSNO.ToString("X8"));
             b.Append(' ', pad);
-            b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.AppendLine("StartingPointActorTag: 0x" + StartingPointActorTag.ToString("X8") + " (" + StartingPointActorTag + ")");
             b.Append(' ', pad);
             b.AppendLine("DestLevelAreaSNO: 0x" + DestLevelAreaSNO.ToString("X8"));
             b.Append(' ', --pad);

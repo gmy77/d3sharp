@@ -19,8 +19,8 @@
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
-using System.Text;
 using System.Collections.Generic;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -28,32 +28,38 @@ namespace Mooege.Common.MPQ.FileFormats
     public class EffectGroup : FileFormat
     {
         public Header Header { get; private set; }
-        public int i0, i1, i2, i3, i4;
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
+        public int I4 { get; private set; }
         public int SnoPower { get; private set; }
-        List<EffectItem> EffectItems = new List<EffectItem>();
+        public List<EffectItem> EffectItems = new List<EffectItem>();
+
         public EffectGroup(MpqFile file)
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            this.i0 = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
             this.EffectItems = stream.ReadSerializedData<EffectItem>();
-            this.i1 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
             stream.Position += 4; // pad 1
-            this.i2 = stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
-            this.i4 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
+            this.I4 = stream.ReadValueS32();
             this.SnoPower = stream.ReadValueS32();
             stream.Close();
         }
     }
     public class EffectItem : ISerializableData
     {
-        public int i0 { get; private set; }
+        public int I0 { get; private set; }
         public string Name { get; private set; } // 64
-        MsgTriggeredEvent TriggeredEvent = new MsgTriggeredEvent();
+        public MsgTriggeredEvent TriggeredEvent = new MsgTriggeredEvent();
+
         public void Read(MpqFileStream stream)
         {
-            this.i0 = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
             // Maybe this should stay a Char Array instead of a string. - DarkLotus
             this.Name = stream.ReadString(64, true);
             this.TriggeredEvent.Read(stream);

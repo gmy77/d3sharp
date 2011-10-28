@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.GS.Common.Types.Math;
 
 namespace Mooege.Core.GS.Powers
 {

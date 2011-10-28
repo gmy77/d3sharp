@@ -21,6 +21,7 @@ using System.Linq;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -28,8 +29,25 @@ namespace Mooege.Common.MPQ.FileFormats
     public class AnimSet : FileFormat
     {
         public Header Header { get; private set; }
-        public int NumberOfAnimations;
+        public int NumberOfAnimations { get; private set; }
         public List<AnimationDef> Animations = new List<AnimationDef>();
+
+        public AnimSet(MpqFile file)
+        {
+            var stream = file.Open();
+            this.Header = new Header(stream);
+
+            stream.Position = 352;
+            this.NumberOfAnimations = stream.ReadValueS32();
+            for (int i = 0; i < this.NumberOfAnimations; i++)
+            {
+                stream.Position += 4;
+                var animation = new AnimationDef { TagID = stream.ReadValueS32(), AnimationSNO = stream.ReadValueS32() };
+                this.Animations.Add(animation);
+            }
+
+            stream.Close();
+        }
 
         public int IdleTAG
         {
@@ -62,23 +80,6 @@ namespace Mooege.Common.MPQ.FileFormats
                 //Logger.Trace("No Walk found for actor: " + this.ActorSNO + " Sending Zombies Walk");
                 return 69728;
             }
-        }
-
-        public AnimSet(MpqFile file)
-        {
-            var stream = file.Open();
-            this.Header = new Header(stream);
-            
-            stream.Position = 352;
-            this.NumberOfAnimations = stream.ReadValueS32();
-            for (int i = 0; i < this.NumberOfAnimations; i++)
-            {
-                stream.Position += 4;
-                var animation = new AnimationDef { TagID = stream.ReadValueS32(), AnimationSNO = stream.ReadValueS32() };
-                this.Animations.Add(animation);
-            }
-
-            stream.Close();
         }
 
         public struct AnimationDef

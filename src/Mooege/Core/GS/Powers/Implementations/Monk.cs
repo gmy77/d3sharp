@@ -25,6 +25,7 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Actors;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
+using Mooege.Core.GS.Common.Types.Math;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {

@@ -17,26 +17,48 @@
  */
 
 using System.Text;
+using CrystalMpq;
+using Mooege.Net.GS.Message;
 
-namespace Mooege.Net.GS.Message.Fields
+namespace Mooege.Core.GS.Common.Types.Math
 {
     public class PRTransform
     {
-        public Quaternion Rotation;
-        public Vector3D ReferencePoint;
+        public Quaternion Quaternion;
+        public Vector3D Vector3D;
 
-        public void Parse(GameBitBuffer buffer)
+        public PRTransform() { }
+
+        /// <summary>
+        /// Reads PRTransform from given MPQFileStream.
+        /// </summary>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        public PRTransform(MpqFileStream stream)
         {
-            Rotation = new Quaternion();
-            Rotation.Parse(buffer);
-            ReferencePoint = new Vector3D();
-            ReferencePoint.Parse(buffer);
+            Quaternion = new Quaternion(stream);
+            Vector3D = new Vector3D(stream);
         }
 
+        /// <summary>
+        /// Reads PRTransform from given GameBitBuffer.
+        /// </summary>
+        /// <param name="buffer">The GameBitBuffer to parse from.</param>
+        public void Parse(GameBitBuffer buffer)
+        {
+            Quaternion = new Quaternion();
+            Quaternion.Parse(buffer);
+            Vector3D = new Vector3D();
+            Vector3D.Parse(buffer);
+        }
+
+        /// <summary>
+        /// Encodes PRTransform to given GameBitBuffer.
+        /// </summary>
+        /// <param name="buffer">The GameBitBuffer to write.</param>
         public void Encode(GameBitBuffer buffer)
         {
-            Rotation.Encode(buffer);
-            ReferencePoint.Encode(buffer);
+            Quaternion.Encode(buffer);
+            Vector3D.Encode(buffer);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -45,12 +67,10 @@ namespace Mooege.Net.GS.Message.Fields
             b.AppendLine("PRTransform:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            Rotation.AsText(b, pad);
-            ReferencePoint.AsText(b, pad);
+            Quaternion.AsText(b, pad);
+            Vector3D.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

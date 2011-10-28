@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.Common.Items.ItemCreation;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -55,7 +56,7 @@ namespace Mooege.Core.Common.Items
 
 
         public int EquipmentSlot { get; private set; }
-        public IVector2D InventoryLocation { get; private set; } // Column, row; NOTE: Call SetInventoryLocation() instead of setting fields on this
+        public Vector2D InventoryLocation { get; private set; } // Column, row; NOTE: Call SetInventoryLocation() instead of setting fields on this
 
         public override bool HasWorldLocation
         {
@@ -97,7 +98,7 @@ namespace Mooege.Core.Common.Items
             this.GBHandle.GBID = gbid;
             this.ItemType = type;
             this.EquipmentSlot = 0;
-            this.InventoryLocation = new IVector2D { X = 0, Y = 0 };
+            this.InventoryLocation = new Vector2D { X = 0, Y = 0 };
 
             this.Field2 = 0x00000000;
             this.Field3 = 0x00000000;

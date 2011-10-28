@@ -67,5 +67,30 @@ namespace Mooege.Common.Helpers
             }*/
             return values[_random.Next(size)];
         }
+
+        /// <summary>
+        /// Picks a random item from a list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="probability">A function that assigns each item a probability. If the probabilities dont sum up to 1, they are normalized</param>
+        /// <returns></returns>
+        public static T RandomItem<T>(IEnumerable<T> list, Func<T, float> probability)
+        {
+            int cumulative = (int)list.Select(x => probability(x)).Sum();
+
+            int randomRoll = RandomHelper.Next(cumulative);
+            float cumulativePercentages = 0;
+
+            foreach (T element in list)
+            {
+                cumulativePercentages += probability(element);
+                if (cumulativePercentages > randomRoll)
+                    return element;
+            }
+
+            return list.First();
+        }
+
     }
 }

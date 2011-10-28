@@ -27,6 +27,7 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Core.GS.Actors.Buffs;
 using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Core.GS.Common.Types.Math;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {

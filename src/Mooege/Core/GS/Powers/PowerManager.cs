@@ -37,6 +37,7 @@ using Mooege.Common;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Definitions.Actor;
+using Mooege.Core.GS.Common.Types.Math;
 
 namespace Mooege.Core.GS.Powers
 {
