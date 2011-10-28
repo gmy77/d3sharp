@@ -84,6 +84,7 @@ namespace Mooege.Common.MPQ
                 if (!match.Groups["version"].Success) continue;
 
                 MPQFileList.Add(Int32.Parse(match.Groups["version"].Value), file);
+                Logger.Info("Adding patch file: {0}", match.Groups[0].Value);
             }
 
             /* add mpq's to mpq-file system in reverse-order (highest version first) */
