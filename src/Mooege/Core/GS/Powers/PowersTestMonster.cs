@@ -44,6 +44,7 @@ namespace Mooege.Core.GS.Powers
         public PowersTestMonster(World world, int actorSNO, Vector3D position)
             : base(world, actorSNO, position)
         {
+            this.World.Enter(this);
         }
 
         public void ReceiveDamage(Actor from, float amount, int type)
