@@ -26,6 +26,7 @@ using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Actors;
 using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Actors.Buffs;
+using Mooege.Net.GS.Message.Definitions.Effect;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -125,7 +126,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Run()
         {
             //StartCooldown(WaitSeconds(10f));
-
+            
             var projectile = new PowerProjectile(User.World, 74636, User.Position, TargetPosition, 2f, 500f, 1f, 3f, 5f, 0f);
 
             User.AddRopeEffect(79402, projectile);
@@ -137,7 +138,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 var inFrontOfUser = PowerMath.ProjectAndTranslate2D(User.Position, projectile.hittedActor.Position,
                     User.Position, 5f);
 
-                _setupReturnProjectile(projectile.hittedActor.Position);
+                _setupReturnProjectile(projectile.hittedActor.Position, 5f);
 
                 // GET OVER HERE
                 projectile.hittedActor.MoveNormal(inFrontOfUser, 2f);
@@ -149,22 +150,22 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             projectile.OnTimeout = () =>
             {
-                _setupReturnProjectile(projectile.getCurrentPosition());
+                _setupReturnProjectile(projectile.getCurrentPosition(), 0f);
             };
 
             yield break;
         }
 
-        private void _setupReturnProjectile(Vector3D spawnPosition)
+        private void _setupReturnProjectile(Vector3D spawnPosition, float heightOffset)
         {
             var return_proj = new PowerProjectile(User.World, 79400, spawnPosition,
-                User.Position, 2f, 500f, 1f, 3f, 5f, 0f);
+                User.Position, 2f, 500f, 1f, 3f, heightOffset, 0f);
 
             User.AddRopeEffect(79402, return_proj);
 
             return_proj.OnUpdate = () =>
             {
-                if (PowerMath.Distance(return_proj.getCurrentPosition(), User.Position) < 8f)
+                if (PowerMath.Distance(return_proj.getCurrentPosition(), User.Position) < 15f) // TODO: make this tick based distance?
                 {
                     return_proj.Destroy();
                     return false;

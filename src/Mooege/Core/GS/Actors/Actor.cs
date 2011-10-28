@@ -333,6 +333,16 @@ namespace Mooege.Core.GS.Actors
             }, this);
         }
 
+        public void PlayEffect(Effect effect, int? param = null)
+        {
+            World.BroadcastIfRevealed(new PlayEffectMessage
+            {
+                ActorId = this.DynamicID,
+                Effect = effect,
+                OptionalParameter = param
+            }, this);
+        }
+
         public void AddRopeEffect(int ropeSNO, Actor target)
         {
             if (target == null) return;

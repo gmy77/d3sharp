@@ -54,7 +54,7 @@ namespace Mooege.Core.GS.Powers
         public Actor hittedActor;
 
         //Actor initial position
-        public Vector3D position;
+        public Vector3D startingPosition;
 
         //Last known posistion of the projectile
         public Vector3D currentPosition;
@@ -69,12 +69,14 @@ namespace Mooege.Core.GS.Powers
         public Action OnTimeout;
         public TickTimer Timeout;
 
-        public PowerProjectile(World world, int actorSNO, Vector3D position, Vector3D aimPosition, float speed, float timetolive, float scale = 1.35f, float collisionError = 3f, float heightOffset = 0, float distanceOffset = 0, bool handleTranslation = false)
+        public PowerProjectile(World world, int actorSNO, Vector3D position, Vector3D aimPosition, float speed,
+                               float timetolive, float scale = 1.35f, float collisionError = 3f,
+                               float heightOffset = 0, float distanceOffset = 0, bool handleTranslation = false)
             : base(world, world.NewActorID)
         {
             this.ActorSNO = actorSNO;
-            this.position = new Vector3D(position);
-            this.position.Z += heightOffset;
+            this.startingPosition = new Vector3D(position);
+            this.startingPosition.Z += heightOffset;
             this.speed = speed;
             this.timetolive = timetolive;
             this.collisionError = collisionError + heightOffset;
@@ -98,7 +100,7 @@ namespace Mooege.Core.GS.Powers
             this.CollFlags = 0x4;
 
             //Calculate Quaternion info
-            this.radianAngle = (float)Math.Atan2(aimPosition.Y - position.Y, aimPosition.X - position.X); // get vector in radians
+            this.radianAngle = PowerMath.AngleLookAt(startingPosition, aimPosition);
 
             //Assign quaternion info
             this.RotationAmount = (float)Math.Cos(this.radianAngle / 2);
@@ -107,14 +109,16 @@ namespace Mooege.Core.GS.Powers
             this.RotationAxis.Z = (float)Math.Sin(this.radianAngle / 2);
 
             //Normalize position / aimPosition Vector
-            float vectorDistance = (float)Math.Sqrt(Math.Pow(aimPosition.X - position.X, 2) + Math.Pow(aimPosition.Y - position.Y, 2));
-            this.velocity = new Vector3D((aimPosition.X - position.X) * (1f / vectorDistance) * this.speed, (aimPosition.Y - position.Y) * (1f / vectorDistance) * this.speed, 0);
+            Vector3D vel_normal = PowerMath.Normalize(new Vector3D(aimPosition.X - startingPosition.X,
+                                                                   aimPosition.Y - startingPosition.Y,
+                                                                   0f));
+            this.velocity = new Vector3D(vel_normal.X * speed, vel_normal.Y * speed, vel_normal.Z * speed);                        
 
             //Adjust projectile distance from player
-            this.position.X += this.velocity.X * distanceOffset;
-            this.position.Y += this.velocity.Y * distanceOffset;
+            this.startingPosition.X += this.velocity.X * distanceOffset;
+            this.startingPosition.Y += this.velocity.Y * distanceOffset;
 
-            this.Position.Set(this.position);
+            this.Position.Set(this.startingPosition);
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
 
             //If the creator dont specify he want to manipulate the projectil itself, launch it
@@ -155,27 +159,9 @@ namespace Mooege.Core.GS.Powers
             float delta_tick = this.World.Game.Tick - this.creationTick;
 
             //Calculate current pos
-            return new Vector3D(this.Position.X + (5f * this.velocity.X * delta_tick / 6f), this.Position.Y + (5f * this.velocity.Y * delta_tick / 6f), this.Position.Z);
-        }
-
-        public override bool Reveal(Mooege.Core.GS.Player.Player player)
-        {
-            if (!base.Reveal(player))
-                return false;
-
-            player.InGameClient.SendMessage(new SetIdleAnimationMessage
-            {
-                ActorID = this.DynamicID,
-                AnimationSNO = 0x0
-            });
-
-            player.InGameClient.SendMessage(new EndOfTickMessage()
-            {
-                Field0 = player.InGameClient.Game.Tick,
-                Field1 = player.InGameClient.Game.Tick + 20
-            });
-
-            return true;
+            return new Vector3D(this.Position.X + (5f * this.velocity.X * (delta_tick / 6f)),
+                                this.Position.Y + (5f * this.velocity.Y * (delta_tick / 6f)),
+                                this.Position.Z + (5f * this.velocity.Z * (delta_tick / 6f)));
         }
 
         public override void Update()
