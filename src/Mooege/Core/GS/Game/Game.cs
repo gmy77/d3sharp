@@ -50,8 +50,6 @@ namespace Mooege.Core.GS.Game
         public int StartWorldSNO { get; private set; }
         public World StartWorld { get { return GetWorld(this.StartWorldSNO); } }
 
-        private readonly WorldGenerator _worldGenerator;
-
         public readonly int UpdateFrequency=100; // updates game every 100ms - still not sure if we should be updating this frequent / raist.
         private int _tickCounter;
         
@@ -74,9 +72,7 @@ namespace Mooege.Core.GS.Game
             this.GameId = gameId;
             this._objects = new ConcurrentDictionary<uint, DynamicObject>();
             this._worlds = new ConcurrentDictionary<int, World>();
-            this._worldGenerator = new WorldGenerator(this);
-            this.StartWorldSNO = 71150; //109362; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff
-            //109362; //
+            this.StartWorldSNO = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff
             var loopThread=new Thread(Update) { IsBackground = true };
             loopThread.Start();
         }
@@ -236,7 +232,7 @@ namespace Mooege.Core.GS.Game
 
             if (world == null) // If it doesn't exist, try to load it
             {
-                world = WorldGenerator2.Generate(this, worldSNO);
+                world = WorldGenerator.Generate(this, worldSNO);
                 if (world == null) Logger.Warn("Failed to generate world with sno: {0}", worldSNO);
             }
             return world;

@@ -91,10 +91,6 @@
     <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\dep\PowerCollections.dll</HintPath>
     </Reference>
-    <Reference Include="ductsharp, Version=1.0.4298.19963, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dep\ductsharp.dll</HintPath>
-    </Reference>
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
@@ -149,7 +145,7 @@
     <Compile Include="Core\GS\Common\Types\SNO\SNOGroup.cs" />
     <Compile Include="Core\GS\Game\GameCommands.cs" />
     <Compile Include="Core\GS\Game\GameManager.cs" />
-    <Compile Include="Core\GS\Generators\WorldGenerator2.cs" />
+    <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
     <Compile Include="Core\GS\Markers\Marker.cs" />
     <Compile Include="Core\GS\Player\Equipment.cs" />
     <Compile Include="Core\GS\Player\Stash.cs" />
@@ -213,9 +209,6 @@
     <Compile Include="Core\Common\Toons\Toon.cs" />
     <Compile Include="Core\Common\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Common\Toons\ToonManager.cs" />
-    <Compile Include="Core\GS\Data\SNO\Config.cs" />
-    <Compile Include="Core\GS\Data\SNO\Database.cs" />
-    <Compile Include="Core\GS\Data\SNO\Set.cs" />
     <Compile Include="LogConfig.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
@@ -483,7 +476,6 @@
     <Compile Include="Core\GS\Objects\IRevealable.cs" />
     <Compile Include="Core\GS\Player\Inventory.cs" />
     <Compile Include="Core\GS\Player\Player.cs" />
-    <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -523,60 +515,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\assets\Maps\worlds.txt">
-      <Link>Assets\Maps\worlds.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\Maps\Worlds\NewTristram.txt">
-      <Link>Assets\Maps\Worlds\NewTristram.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\Maps\Worlds\Quick.txt">
-      <Link>Assets\Maps\Worlds\Quick.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Actors.txt">
-      <Link>Assets\SNO\Actors.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Animations.txt">
-      <Link>Assets\SNO\Animations.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Blacklist.txt">
-      <Link>Assets\SNO\Blacklist.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Conversations.txt">
-      <Link>Assets\SNO\Conversations.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Effects.txt">
-      <Link>Assets\SNO\Effects.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\list.txt">
-      <Link>Assets\SNO\list.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Mobs.txt">
-      <Link>Assets\SNO\Mobs.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\NPCs.txt">
-      <Link>Assets\SNO\NPCs.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Powers.txt">
-      <Link>Assets\SNO\Powers.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Scenes.txt">
-      <Link>Assets\SNO\Scenes.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LibMooNet\LibMooNet.csproj">
