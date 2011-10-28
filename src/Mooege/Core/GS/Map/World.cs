@@ -183,12 +183,6 @@ namespace Mooege.Core.GS.Map
             player.CurrentScene.Reveal(player);
         }
 
-        public void RevealScenesInProximity(Player.Player player)
-        {
-            // I guess markers should have already this info in - just need to figure which markers. /raist.
-            player.CurrentScene.Reveal(player);
-        }
-
         public bool Reveal(Mooege.Core.GS.Player.Player player)
         {
             if (player.RevealedObjects.ContainsKey(this.DynamicID))
