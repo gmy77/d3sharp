@@ -70,6 +70,39 @@ namespace Mooege.Core.GS.Game
         }
     }
 
+    [CommandGroup("Tp", "Transfers the character to another world.")]
+    public class TeleportCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Portal(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            if (@params != null && @params.Count() > 0)
+            {
+                var worldId = 0;
+                Int32.TryParse(@params[0], out worldId);
+
+                if(worldId==0)
+                    return "Invalid arguments. Type 'help tp' to get help.";
+
+                if(!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldId))
+                    return "There exist no world with SNOId: " + worldId;
+
+                var world = invokerClient.InGameClient.Player.World.Game.GetWorld(worldId);
+                invokerClient.InGameClient.Player.TransferTo(world, world.SpawnableScenes.First().StartPosition);
+
+                return string.Format("Teleported to: {0} [id: {1}]", MPQStorage.Data.Assets[SNOGroup.Worlds][worldId].Name, worldId);
+            }
+
+            return "Invalid arguments. Type 'help tp' to get help.";
+        }
+    }
+
     [CommandGroup("lookup", "Searches in sno databases.\nUsage: lookup [actor|npc|mob|power|scene] <pattern>")]
     public class LookupCommand : CommandGroup
     {

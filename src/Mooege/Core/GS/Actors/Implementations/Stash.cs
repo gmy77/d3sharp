@@ -18,23 +18,20 @@
 
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Net.GS.Message.Definitions.Stash;
+using Mooege.Net.GS.Message.Definitions.World;
 
-namespace Mooege.Core.GS.Actors
+namespace Mooege.Core.GS.Actors.Implementations
 {
-    public class Gizmo : Actor
+    [HandledSNO(130400 /* Player_Shared_Stash.acr */)]
+    public sealed class Stash : Gizmo
     {
-        public override ActorType ActorType { get { return ActorType.Gizmo; } }
+        public Stash(World world, int actorSNO, Vector3D position) : base(world, actorSNO, position)
+        { }
 
-        public Gizmo(World world, int actorSNO, Vector3D position)
-            : base(world, world.NewActorID)
+        public override void OnTargeted(Player.Player player, TargetMessage message)
         {
-            this.ActorSNO = actorSNO;
-            this.Field2 = 16;
-            this.Field3 = 0x0;
-            this.Field7 = 0x00000001;
-            this.Field8 = this.ActorSNO;
-            this.Scale = 1.35f;
-            this.Position.Set(position);
+            player.InGameClient.SendMessage(new OpenSharedStashMessage((int)this.DynamicID));
         }
     }
 }
