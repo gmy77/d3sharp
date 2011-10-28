@@ -22,6 +22,7 @@ using Mooege.Common.Helpers;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Collusion;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
@@ -192,10 +193,10 @@ namespace Mooege.Core.GS.Map
                     if (!MPQStorage.Data.Assets[SNOGroup.Actor].ContainsKey(marker.SNOName.SNOId)) continue;
 
                     // Since we are not loading all actors, make sure to load portals and portal destination actors - fix this /raist.
-                    if (RandomHelper.Next(100) > 90 
-                        || ActorFactory.HasHandler(marker.SNOName.SNOId) 
-                        || tags.ContainsKey((int)MarkerTagTypes.DestinationWorld) 
-                        || tags.ContainsKey((int)MarkerTagTypes.ActorTag))
+                    if ( ActorFactory.HasHandler(marker.SNOName.SNOId) 
+                         || tags.ContainsKey((int)MarkerTagTypes.DestinationWorld) 
+                         || tags.ContainsKey((int)MarkerTagTypes.ActorTag))
+                         //|| RandomHelper.Next(100) > 90    
                     {                       
                         Actor newActor = null;
 
@@ -231,6 +232,27 @@ namespace Mooege.Core.GS.Map
                             newActor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
                             System.Diagnostics.Debug.Assert(newActor.ActorSNO != -1);
+
+                            if (newActor is Waypoint) //TODO Do it in waypoint construct once grid is done /fasbat
+                            {
+                                //TODO this is just act 1 ! /fasbat
+                                var actData = (Mooege.Common.MPQ.FileFormats.Act)MPQStorage.Data.Assets[SNOGroup.Act][70015].Data;
+                                var wayPointInfo = actData.WayPointInfo;
+                                for (int i = 0; i < actData.WayPointInfo.Length; i++)
+                                {
+                                    if (wayPointInfo[i].SNOLevelArea == -1)
+                                        continue;
+                                    var levelAreaFile = MPQStorage.Data.Assets[SNOGroup.LevelArea][wayPointInfo[i].SNOLevelArea];
+                                    var levelArea = (Mooege.Common.MPQ.FileFormats.LevelArea)levelAreaFile.Data;
+                                    foreach (var area in Specification.SNOLevelAreas)
+                                    {
+                                        if (wayPointInfo[i].SNOWorld == World.WorldSNO && wayPointInfo[i].SNOLevelArea == area)
+                                        {
+                                            Waypoint.Waypoints[i] = newActor as Waypoint;
+                                        }
+                                    }
+                                }
+                            }
 
                             if (!(newActor is Portal))
                                 this.World.Enter(newActor);

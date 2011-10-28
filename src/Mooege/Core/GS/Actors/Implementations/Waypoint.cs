@@ -21,6 +21,7 @@ using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Animation;
+using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
 
@@ -29,24 +30,18 @@ namespace Mooege.Core.GS.Actors.Implementations
     [HandledSNO(6442 /* Waypoint.acr */, 192164 /* Waypoint_OldTristram.acr */)]
     public sealed class Waypoint : Gizmo
     {
-        public static Dictionary<int, Vector3D> Waypoints = new Dictionary<int, Vector3D>()
-        {
-            { 0, new Vector3D { X = 2981.73f, Y = 2835.009f, Z = 24.66344f } }, // New Tristram
-            { 1, new Vector3D { X = 1976.71f, Y = 2788.136f, Z = 41.22956f } }, // Old Tristram
-            { 2, new Vector3D { X = 1478.028f, Y = 2849.783f, Z = 57.44714f } }, // Cathedral Garden
-            { 6, new Vector3D { X = 2161.802f, Y = 1826.882f, Z = 1.864148f } }, // Cementary of the Forsaken 
-            { 8, new Vector3D { X = 1263.054f, Y = 827.8673f, Z = 63.05397f } }, // Drowned Temple
-            { 11, new Vector3D { X = 2310.5f, Y = 4770f, Z = 1.010971f } } // Highlands Crossing
-        };
+        public static Dictionary<int, Waypoint> Waypoints = new Dictionary<int, Waypoint>();
 
         public Waypoint(World world, int actorSNO, Vector3D position) : base(world, actorSNO, position)
-        { }
+        {
+            this.Attributes[GameAttribute.MinimapActive] = true;
+        }
 
         public override void OnTargeted(Player.Player player, Net.GS.Message.Definitions.World.TargetMessage message)
         {
             var world = player.World;
-
             player.UpdateHeroState();
+
             world.BroadcastIfRevealed(new PlayAnimationMessage()
             {
                 ActorID = this.DynamicID,
@@ -69,5 +64,36 @@ namespace Mooege.Core.GS.Actors.Implementations
                 ActorID = this.DynamicID
             });
         }
+
+         public override bool Reveal(Player.Player player)
+        {
+            if (!base.Reveal(player))
+                return false;
+
+            // Show a minimap icon
+            player.InGameClient.SendMessage(new MapMarkerInfoMessage()
+            {
+                Field0 = (int)World.NewActorID,    // TODO What is the correct id space for mapmarkers? /fasbat
+                Field1 = new WorldPlace()
+                {
+                    Position = this.Position,
+                    WorldID = this._world.DynamicID
+                },
+                Field2 = 0x1FA21,  
+                m_snoStringList = 0xF063,
+
+                Field4 = unchecked((int)0x9799F57B),
+                Field5 = 0,
+                Field6 = 0,
+                Field7 = 0,
+                Field8 = 0,
+                Field9 = true,
+                Field10 = false,
+                Field11 = false,
+                Field12 = 0
+            }); 
+
+            return true;
+        }   
     }
 }

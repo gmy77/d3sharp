@@ -514,12 +514,10 @@ namespace Mooege.Core.GS.Player
 
         private void OnTryWaypoint(GameClient client, TryWaypointMessage tryWaypointMessage)
         {
-            Logger.Trace(tryWaypointMessage.AsText());
-
             Vector3D position;
 
-            if (Waypoint.Waypoints.ContainsKey(tryWaypointMessage.Field1))
-                position = Waypoint.Waypoints[tryWaypointMessage.Field1];
+            if (Waypoint.Waypoints.ContainsKey(tryWaypointMessage.Field1)) // TODO handle other worlds! it's easy! /fasbat
+                position = Waypoint.Waypoints[tryWaypointMessage.Field1].Position;
             else
                 return;
 
