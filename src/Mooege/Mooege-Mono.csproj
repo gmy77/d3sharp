@@ -113,6 +113,8 @@
     <Compile Include="Common\MPQ\FileFormats\ConversationList.cs" />
     <Compile Include="Common\MPQ\FileFormats\EffectGroup.cs" />
     <Compile Include="Common\MPQ\FileFormats\Encounter.cs" />
+    <Compile Include="Common\MPQ\FileFormats\GameBalance.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Globals.cs" />
     <Compile Include="Common\MPQ\FileFormats\Lore.cs" />
     <Compile Include="Common\MPQ\FileFormats\MarkerSet.cs" />
     <Compile Include="Common\MPQ\FileFormats\Monster.cs" />
