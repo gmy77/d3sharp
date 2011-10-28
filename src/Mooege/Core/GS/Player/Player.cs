@@ -683,7 +683,7 @@ namespace Mooege.Core.GS.Player
                 SkilKeyMappings = this.SkillKeyMappings,
 
                 Field2 = 0x00000000,
-                Field3 = 0x00000001,
+                Field3 = 0x7FFFFFFF,
 
                 Field4 = new HirelingSavedData()
                 {

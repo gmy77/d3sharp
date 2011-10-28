@@ -93,7 +93,11 @@ namespace Mooege.Core.GS.Game
                 if(!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldId))
                     return "There exist no world with SNOId: " + worldId;
 
-                var world = invokerClient.InGameClient.Player.World.Game.GetWorld(worldId);
+                var world = invokerClient.InGameClient.Game.GetWorld(worldId);
+                
+                if(world==null)
+                    return "Can't teleport you to world with snoId " + worldId;
+
                 invokerClient.InGameClient.Player.TransferTo(world, world.SpawnableScenes.First().StartPosition);
 
                 return string.Format("Teleported to: {0} [id: {1}]", MPQStorage.Data.Assets[SNOGroup.Worlds][worldId].Name, worldId);
