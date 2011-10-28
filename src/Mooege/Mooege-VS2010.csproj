@@ -110,6 +110,8 @@
     <Compile Include="Common\MPQ\FileExtensions.cs" />
     <Compile Include="Common\MPQ\FileFormat.cs" />
     <Compile Include="Common\MPQ\FileFormatAttribute.cs" />
+    <Compile Include="Common\MPQ\FileFormats\BossEncounter.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Condition.cs" />
     <Compile Include="Common\MPQ\FileFormats\Conversation.cs" />
     <Compile Include="Common\MPQ\FileFormats\ConversationList.cs" />
     <Compile Include="Common\MPQ\FileFormats\EffectGroup.cs" />
@@ -123,10 +125,12 @@
     <Compile Include="Common\MPQ\FileFormats\Observer.cs" />
     <Compile Include="Common\MPQ\FileFormats\Power.cs" />
     <Compile Include="Common\MPQ\FileFormats\Quest.cs" />
+    <Compile Include="Common\MPQ\FileFormats\QuestRange.cs" />
     <Compile Include="Common\MPQ\FileFormats\Recipe.cs" />
     <Compile Include="Common\MPQ\FileFormats\Scene.cs" />
+    <Compile Include="Common\MPQ\FileFormats\SceneGroup.cs" />
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
-    <Compile Include="Common\MPQ\FileFormats\StringList.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
     <Compile Include="Common\MPQ\SerializableData.cs" />
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />

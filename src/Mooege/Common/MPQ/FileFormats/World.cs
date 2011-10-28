@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Collusion;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Common.Types.Scene;
@@ -38,12 +37,11 @@ namespace Mooege.Common.MPQ.FileFormats
         public LabelRuleSet LabelRuleSet { get; private set; }        
         public SceneClusterSet SceneClusterSet { get; private set; }
         public int[] SNONavMeshFunctions = new int[4];
-
         public int Int0 { get; private set; }
-        public float Float0;
-        public int Int1;
-        public int SNOScript;
-        public int Int2;
+        public float Float0 { get; private set; }
+        public int Int1 { get; private set; }
+        public int SNOScript { get; private set; }
+        public int Int2 { get; private set; }
 
         public World(MpqFile file)
         {
@@ -120,10 +118,10 @@ namespace Mooege.Common.MPQ.FileFormats
     public class DRLGParams : ISerializableData
     {
         public List<TileInfo> DRLGTiles = new List<TileInfo>();
-        public int CommandCount;
+        public int CommandCount { get; private set; }
         public List<DRLGCommand> DRLGCommands = new List<DRLGCommand>();
         public List<int> ParentIndices = new List<int>();
-        public TagMap DRLGTagMap;
+        public TagMap DRLGTagMap { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -144,12 +142,12 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class TileInfo : ISerializableData
     {
-        public int Int0;
-        public int Int1;
-        public int SNOScene;
-        public int Int2;
-        public TagMap TileTagMap;
-        public CustomTileInfo CustomTileInfo;
+        public int Int0 { get; private set; }
+        public int Int1 { get; private set; }
+        public int SNOScene { get; private set; }
+        public int Int2 { get; private set; }
+        public TagMap TileTagMap { get; private set; }
+        public CustomTileInfo CustomTileInfo { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -166,9 +164,9 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class DRLGCommand : ISerializableData
     {
-        public string Name;
-        public int Int0;
-        public TagMap CommandTagMap;
+        public string Name { get; private set; }
+        public int Int0 { get; private set; }
+        public TagMap CommandTagMap { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -181,10 +179,10 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class CustomTileInfo
     {
-        public int Int0;
-        public int Int1;
-        public int Int2;
-        public Vector2D V0;
+        public int Int0 { get; private set; }
+        public int Int1 { get; private set; }
+        public int Int2 { get; private set; }
+        public Vector2D V0 { get; private set; }
 
         public CustomTileInfo(MpqFileStream stream)
         {
@@ -226,7 +224,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SceneClusterSet
     {
-        public int ClusterCount;
+        public int ClusterCount { get; private set; }
         public List<SceneCluster> SceneClusters = new List<SceneCluster>();
 
         public SceneClusterSet(MpqFileStream stream)
@@ -239,11 +237,11 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SceneCluster : ISerializableData
     {
-        public string Name;
-        public int ClusterId;
-        public int GroupCount;
+        public string Name { get; private set; }
+        public int ClusterId { get; private set; }
+        public int GroupCount { get; private set; }
         public List<SubSceneGroup> SubSceneGroups = new List<SubSceneGroup>();
-        public SubSceneGroup Default;
+        public SubSceneGroup Default { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -259,8 +257,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SubSceneGroup : ISerializableData
     {
-        public int I0;
-        public int SubSceneCount;
+        public int I0 { get; private set; }
+        public int SubSceneCount { get; private set; }
         public List<SubSceneEntry> Entries = new List<SubSceneEntry>();
 
         public SubSceneGroup() { }
@@ -281,9 +279,9 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SubSceneEntry : ISerializableData
     {
-        public int SNOScene;
-        public int Probability;
-        public int LabelCount;
+        public int SNOScene { get; private set; }
+        public int Probability { get; private set; }
+        public int LabelCount { get; private set; }
         public List<SubSceneLabel> Labels = new List<SubSceneLabel>();
 
         public void Read(MpqFileStream stream)
@@ -298,8 +296,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SubSceneLabel : ISerializableData
     {
-        public int GBId;
-        public int I0;
+        public int GBId { get; private set; }
+        public int I0 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -314,7 +312,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LabelRuleSet
     {
-        public int Rulecount;
+        public int Rulecount { get; private set; }
         public List<LabelRule> LabelRules = new List<LabelRule>();
 
         public LabelRuleSet(MpqFileStream stream)
@@ -327,10 +325,10 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LabelRule : ISerializableData
     {
-        public string Name;
-        public LabelCondition LabelCondition;
-        public int Int0;
-        public int LabelCount;
+        public string Name { get; private set; }
+        public LabelCondition LabelCondition { get; private set; }
+        public int Int0 { get; private set; }
+        public int LabelCount { get; private set; }
         public List<LabelEntry> Entries = new List<LabelEntry>();
 
         public void Read(MpqFileStream stream)
@@ -347,11 +345,11 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LabelEntry : ISerializableData
     {
-        public int GBIdLabel;
-        public int Int0;
-        public float Float0;
-        public int Int1;
-        public int Int2;
+        public int GBIdLabel { get; private set; }
+        public int Int0 { get; private set; }
+        public float Float0 { get; private set; }
+        public int Int1 { get; private set; }
+        public int Int2 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -365,9 +363,9 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LabelCondition
     {
-        public int DT_ENUM0;
-        public int Int0;
-        public int[] Int1;
+        public int DT_ENUM0 { get; private set; }
+        public int Int0 { get; private set; }
+        public int[] Int1 { get; private set; }
 
         public LabelCondition(MpqFileStream stream)
         {
@@ -396,7 +394,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int snoIrradianceTex;
         public int snoIrradianceTexDead;*/
 
-        public int[] Env;
+        public int[] Env { get; private set; }
         public Environment(MpqFileStream stream)
         {
             Env = new int[46];

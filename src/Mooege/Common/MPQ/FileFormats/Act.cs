@@ -19,8 +19,6 @@
 using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
-using Mooege.Core.GS.Common.Types.Collusion;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Common.MPQ.FileFormats.Types;
 
@@ -29,24 +27,29 @@ namespace Mooege.Common.MPQ.FileFormats
     [FileFormat(SNOGroup.Act)]
     public class Act : FileFormat
     {
-        public Header Header;
-        List<ActQuestInfo> ActQuestInfo;
-        WaypointInfo[] WayPointInfo = new WaypointInfo[25];
-        ResolvedPortalDestination ResolvedPortalDestination;
-        ActStartLocOverride[] Field0 = new ActStartLocOverride[6];
+        public Header Header { get; private set; }
+        public List<ActQuestInfo> ActQuestInfo { get; private set; }
+        public WaypointInfo[] WayPointInfo { get; private set; }
+        public ResolvedPortalDestination ResolvedPortalDestination { get; private set; }
+        public ActStartLocOverride[] ActStartLocOverrides { get; private set; }
 
         public Act(MpqFile file)
         {
-            MpqFileStream stream = file.Open();
-            Header = new Header(stream);
+            var stream = file.Open();
+            this.Header = new Header(stream);
 
-            ActQuestInfo = stream.ReadSerializedData<ActQuestInfo>();
+            this.ActQuestInfo = stream.ReadSerializedData<ActQuestInfo>();
             stream.Position += 12;
+
+            this.WayPointInfo = new WaypointInfo[25];
             for (int i = 0; i < WayPointInfo.Length; i++)
-                WayPointInfo[i] = new WaypointInfo(stream);
-            ResolvedPortalDestination = new ResolvedPortalDestination(stream);
-            for (int i = 0; i < Field0.Length; i++)
-                Field0[i] = new ActStartLocOverride(stream);
+                this.WayPointInfo[i] = new WaypointInfo(stream);
+
+            this.ResolvedPortalDestination = new ResolvedPortalDestination(stream);
+
+            this.ActStartLocOverrides = new ActStartLocOverride[6];
+            for (int i = 0; i < ActStartLocOverrides.Length; i++)
+                this.ActStartLocOverrides[i] = new ActStartLocOverride(stream);
 
             stream.Close();
         }
@@ -54,13 +57,13 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class WaypointInfo
     {
-        public int SNOWorld;
-        public int SNOLevelArea;
-        public int I0;
-        public int I1;
-        public int I2;
-        public int SNOQuestRange;
-        public int I3;
+        public int SNOWorld { get; private set; }
+        public int SNOLevelArea { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int SNOQuestRange { get; private set; }
+        public int I3 { get; private set; }
 
         public WaypointInfo(MpqFileStream stream)
         {
@@ -76,8 +79,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class ActStartLocOverride
     {
-        public ResolvedPortalDestination ResolvedPortalDestination;
-        public int SNOQuestRange;
+        public ResolvedPortalDestination ResolvedPortalDestination { get; private set; }
+        public int SNOQuestRange { get; private set; }
 
         public ActStartLocOverride(MpqFileStream stream)
         {
@@ -89,9 +92,9 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class ResolvedPortalDestination
     {
-        public int SNOWorld;
-        public int I0;
-        public int SNODestLevelArea;
+        public int SNOWorld { get; private set; }
+        public int I0 { get; private set; }
+        public int SNODestLevelArea { get; private set; }
 
         public ResolvedPortalDestination(MpqFileStream stream)
         {
@@ -103,12 +106,11 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class ActQuestInfo : ISerializableData
     {
-        public int SNOQuest;
+        public int SNOQuest { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             SNOQuest = stream.ReadValueS32();
         }
     }
-
 }

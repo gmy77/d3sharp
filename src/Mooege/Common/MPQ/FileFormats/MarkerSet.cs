@@ -29,13 +29,13 @@ namespace Mooege.Common.MPQ.FileFormats
     [FileFormat(SNOGroup.MarkerSet)]
     public class MarkerSet : FileFormat
     {
-        public Header Header;
+        public Header Header { get; private set; }
         public List<Marker> Markers = new List<Marker>();
-        public AABB AABB;
-        public int Int0;
-        public string FileName;
-        public int NLabel;
-        public int SpecialIndexCount;
+        public AABB AABB { get; private set; }
+        public int Int0 { get; private set; }
+        public string FileName { get; private set; }
+        public int NLabel { get; private set; }
+        public int SpecialIndexCount { get; private set; }
 
         public MarkerSet(MpqFile file)
         {
@@ -65,13 +65,14 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class Marker : ISerializableData
     {
-        public string Name;
-        public int Int0;
-        public PRTransform PRTransform;
-        public SNOName SNOName;
-        public TagMap TagMap;
-        public int IntTagMap;
-        public int Int1, Int2;       
+        public string Name { get; private set; }
+        public int Int0 { get; private set; }
+        public PRTransform PRTransform { get; private set; }
+        public SNOName SNOName { get; private set; }
+        public TagMap TagMap { get; private set; }
+        public int IntTagMap { get; private set; }
+        public int Int1 { get; private set; }
+        public int Int2 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {

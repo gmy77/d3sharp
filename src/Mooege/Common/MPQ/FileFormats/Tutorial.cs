@@ -23,35 +23,22 @@ using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
-    [FileFormat(SNOGroup.Lore)]
-    public class Lore : FileFormat
+    [FileFormat(SNOGroup.Tutorial)]
+    public class Tutorial : FileFormat
     {
         public Header Header { get; private set; }
         public int I0 { get; private set; }
-        public LoreCategory Category { get; private set; }
         public int I1 { get; private set; }
-        public int I2 { get; private set; }
-        public int SNOConversation { get; private set; }
-        public int I3 { get; private set; }
+        public int Time { get; private set; }
 
-        public Lore(MpqFile file)
+        public Tutorial(MpqFile file)
         {
             var stream = file.Open();
             this.Header = new Header(stream);
             this.I0 = stream.ReadValueS32();
-            this.Category = (LoreCategory)stream.ReadValueS32();
             this.I1 = stream.ReadValueS32();
-            this.I2 = stream.ReadValueS32();
-            this.SNOConversation = stream.ReadValueS32();
-            this.I3 = stream.ReadValueS32();
+            this.Time = stream.ReadValueS32();
             stream.Close();
-        }       
+        }
     }
-    public enum LoreCategory
-    {
-        Quest = 0,
-        World,
-        People,
-        Bestiary,
-    };
 }

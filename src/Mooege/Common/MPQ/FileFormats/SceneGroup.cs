@@ -17,7 +17,6 @@
  */
 
 using System.Collections.Generic;
-using System.Linq;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
@@ -25,46 +24,37 @@ using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
-    [FileFormat(SNOGroup.StringList)]
-    public class StringList : FileFormat
+    [FileFormat(SNOGroup.SceneGroup)]
+    public class SceneGroup : FileFormat
     {
         public Header Header { get; private set; }
-        public List<StringTableEntry> StringTable;
+        public int I0 { get; private set; }
+        public List<SceneGroupItem> Items { get; private set; }
+        public int I1 { get; private set; }
 
-        public StringList(MpqFile file)
+        public SceneGroup(MpqFile file)
         {
-            MpqFileStream stream = file.Open();
-            Header = new Header(stream);
-            stream.Position += 12;
-            StringTable = stream.ReadSerializedData<StringTableEntry>();
+            var stream = file.Open();
+            this.Header = new Header(stream);
+            this.I0 = stream.ReadValueS32();
+            this.Items = stream.ReadSerializedData<SceneGroupItem>();
+            stream.Position += 8;
+            this.I1 = stream.ReadValueS32();
             stream.Close();
         }
     }
 
-    public class StringTableEntry : ISerializableData
+    public class SceneGroupItem : ISerializableData
     {
-        string Label;
-        string Text;
-        string Comment;
-        string Speaker;
-        int I0;
-        int I1;
-        int I2;
+        public int SNOScene { get; private set; }
+        public int I0 { get; private set; }
+        public int LabelGBId { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            stream.Position += 8;
-            Label = stream.ReadSerializedString();
-            stream.Position += 8;
-            Text = stream.ReadSerializedString();
-            stream.Position += 8;
-            Comment = stream.ReadSerializedString();
-            stream.Position += 8;
-            Speaker = stream.ReadSerializedString();
-            I0 = stream.ReadValueS32();
-            I1 = stream.ReadValueS32();
-            I2 = stream.ReadValueS32();
-            stream.Position += 4;
+            this.SNOScene = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
+            this.LabelGBId = stream.ReadValueS32();
         }
     }
 }

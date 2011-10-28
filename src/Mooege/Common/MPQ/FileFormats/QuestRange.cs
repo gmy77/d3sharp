@@ -18,40 +18,34 @@
 
 using CrystalMpq;
 using Gibbed.IO;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
-    [FileFormat(SNOGroup.Lore)]
-    public class Lore : FileFormat
+    [FileFormat(SNOGroup.QuestRange)]
+    public class QuestRange : FileFormat
     {
-        public Header Header { get; private set; }
-        public int I0 { get; private set; }
-        public LoreCategory Category { get; private set; }
-        public int I1 { get; private set; }
-        public int I2 { get; private set; }
-        public int SNOConversation { get; private set; }
-        public int I3 { get; private set; }
+        public QuestTime Time0 { get; private set; }
+        public QuestTime Time1 { get; private set; }
 
-        public Lore(MpqFile file)
+        public QuestRange(MpqFile file)
         {
             var stream = file.Open();
-            this.Header = new Header(stream);
-            this.I0 = stream.ReadValueS32();
-            this.Category = (LoreCategory)stream.ReadValueS32();
-            this.I1 = stream.ReadValueS32();
-            this.I2 = stream.ReadValueS32();
-            this.SNOConversation = stream.ReadValueS32();
-            this.I3 = stream.ReadValueS32();
+            this.Time0 = new QuestTime(stream);
+            this.Time1 = new QuestTime(stream);
             stream.Close();
-        }       
+        }
     }
-    public enum LoreCategory
+
+    public class QuestTime
     {
-        Quest = 0,
-        World,
-        People,
-        Bestiary,
-    };
+        public int SNOQuest { get; private set; }
+        public int I0 { get; private set; }
+
+        public QuestTime(MpqFileStream stream)
+        {
+            this.SNOQuest = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
+        }
+    }
 }
