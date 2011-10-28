@@ -111,12 +111,18 @@ namespace Mooege.Core.GS.Map
         public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
             World world = this.World.Game.GetWorld(this.Destination.WorldSNO);
+            if (world == null)
+            {
+                Logger.Warn("Portal's destination world does not exist (WorldSNO = {0})", this.Destination.WorldSNO);
+                return;
+            }
+
             Actor startingPoint = world.GetActorByTag(this.Destination.StartingPointActorTag);
 
-            if (world != null && startingPoint != null)
+            if (startingPoint != null)
                 player.TransferTo(world, startingPoint.Position);
             else
-                Logger.Warn("Portal's destination world does not exist (WorldSNO = {0}), or portal's tagged starting point does not exist (Tag = {1})", this.Destination.WorldSNO, this.Destination.StartingPointActorTag);
+                Logger.Warn("Portal's tagged starting point does not exist (Tag = {0})", this.Destination.StartingPointActorTag);
         }
     }
 }

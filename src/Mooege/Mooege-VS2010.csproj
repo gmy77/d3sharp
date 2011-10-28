@@ -103,6 +103,7 @@
     <Compile Include="Common\Helpers\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\Data.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Act.cs" />
     <Compile Include="Common\MPQ\FileFormats\Actor.cs" />
     <Compile Include="Common\MPQ\FileFormats\Adventure.cs" />
     <Compile Include="Common\MPQ\FileFormats\AnimSet.cs" />

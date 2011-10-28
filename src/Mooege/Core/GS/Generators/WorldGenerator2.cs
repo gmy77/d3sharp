@@ -20,16 +20,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common;
 using Mooege.Common.MPQ;
-using Mooege.Core.GS.Common.Types.Collusion;
 using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Common.Types.Scene;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Map;
-using Mooege.Net.GS.Message.Fields;
 using Mooege.Common.Helpers;
-using Mooege.Core.GS.Actors;
-using Mooege.Core.Common.Items;
-using Mooege.Common.MPQ.FileFormats.Types;
 
 
 namespace Mooege.Core.GS.Generators
@@ -40,8 +34,6 @@ namespace Mooege.Core.GS.Generators
 
         public static World Generate(Game.Game game, int worldSNO)
         {
-            var world = new World(game, worldSNO);
-
             if(!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldSNO))
             {
                 Logger.Error("Can't find a valid world definition for sno: {0}", worldSNO);
@@ -52,10 +44,15 @@ namespace Mooege.Core.GS.Generators
             var worldData = (Mooege.Common.MPQ.FileFormats.World) worldAsset.Data;
 
             if (worldData.SceneParams.SceneChunks.Count == 0)
+            {
                 Logger.Error("World {0} [{1}] is a dynamic world! Can't generate dynamic worlds yet!", worldAsset.Name, worldAsset.SNOId);
+                return null;
+            }
+
+            var world = new World(game, worldSNO);
 
             // Create a clusterID => Cluster Dictionary
-            Dictionary<int, Mooege.Common.MPQ.FileFormats.SceneCluster> clusters = new Dictionary<int,Mooege.Common.MPQ.FileFormats.SceneCluster>();
+            var clusters = new Dictionary<int,Mooege.Common.MPQ.FileFormats.SceneCluster>();
             foreach (var cluster in worldData.SceneClusterSet.SceneClusters)
                 clusters[cluster.ClusterId] = cluster;
 

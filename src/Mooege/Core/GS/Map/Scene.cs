@@ -195,7 +195,7 @@ namespace Mooege.Core.GS.Map
                     actorAsset = MPQStorage.Data.Assets[SNOGroup.Actor][marker.SNOName.SNOId];
                     actorData = actorAsset.Data as Mooege.Common.MPQ.FileFormats.Actor;
 
-                    // Since we are not loading all actors, make sure to load portals and portal destination actors
+                    // Since we are not loading all actors, make sure to load portals and portal destination actors - fix this /raist.
                     if (RandomHelper.Next(100) > 90 || tags.ContainsKey((int)MarkerTagTypes.DestinationWorld) || tags.ContainsKey((int)MarkerTagTypes.ActorTag))
                     {
                         if (marker.SNOName.Group == SNOGroup.Actor)
@@ -222,26 +222,23 @@ namespace Mooege.Core.GS.Map
                             else
                                 newActor = ActorFactory.Create(marker.SNOName.SNOId, this.World, marker.PRTransform.Vector3D + this.Position);
 
-                            if (newActor == null)
-                                Logger.Warn("No implementation for ActorType of actor {0}", marker.SNOName.SNOId);
-                            else
+                            if (newActor != null)
                             {
-                                if (tags.ContainsKey((int)MarkerTagTypes.ActorTag))
-                                    newActor.Tag = tags[(int)MarkerTagTypes.ActorTag].Int2;
+                                if (tags.ContainsKey((int) MarkerTagTypes.ActorTag))
+                                    newActor.Tag = tags[(int) MarkerTagTypes.ActorTag].Int2;
 
-                                if (tags.ContainsKey((int)MarkerTagTypes.Scale))
-                                    newActor.Scale = tags[(int)MarkerTagTypes.Scale].Float0;
+                                if (tags.ContainsKey((int) MarkerTagTypes.Scale))
+                                    newActor.Scale = tags[(int) MarkerTagTypes.Scale].Float0;
 
                                 newActor.RotationAmount = marker.PRTransform.Quaternion.W;
                                 newActor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
-
-                                //newActor.Field8 = newActor.ActorSNO;
 
                                 System.Diagnostics.Debug.Assert(newActor.ActorSNO != -1);
 
                                 if (!(newActor is Portal))
                                     this.World.Enter(newActor);
                             }
+                            // else Logger.Warn("No implementation for ActorType of actor {0}", marker.SNOName.SNOId);
                         }
                     }
 

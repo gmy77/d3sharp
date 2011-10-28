@@ -42,7 +42,7 @@ namespace Mooege.Core.GS.Actors
             var actorData = actorAsset.Data as Mooege.Common.MPQ.FileFormats.Actor;
             if (actorData == null) return null;
 
-            Logger.Trace("Actor: {0} Type: {1}", actorAsset.Name, actorData.Type);
+            //Logger.Trace("Actor: {0} Type: {1}", actorAsset.Name, actorData.Type);
             if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Invalid) return null;
 
             //if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Monster)
