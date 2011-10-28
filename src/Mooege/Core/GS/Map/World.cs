@@ -142,6 +142,11 @@ namespace Mooege.Core.GS.Map
             {
                 actor.Reveal(player);
             }
+
+            if (actor is Player.Player)
+                foreach (Actor a in _actors.Values)
+                    a.Reveal(actor as Player.Player);
+
         }
 
         public void Leave(Actor actor)
@@ -155,6 +160,21 @@ namespace Mooege.Core.GS.Map
                     actor.Unreveal(player);
             }
             this.RemoveActor(actor);
+
+            
+            if(actor is Player.Player)
+            {
+                List<IRevealable> revealedToPlayer = new List<IRevealable>();
+                foreach (IRevealable revealable in (actor as Player.Player).RevealedObjects.Values)
+                    revealedToPlayer.Add(revealable);
+
+                foreach (IRevealable revealable in revealedToPlayer)
+                    if(revealable is Actor)
+                        if(revealable != actor)
+                            revealable.Unreveal(actor as Player.Player);
+            }
+             
+
         }
 
         public void RevealScenesInProximity(Player.Player player)
@@ -318,7 +338,7 @@ namespace Mooege.Core.GS.Map
 
         public Actor GetActorByTag(int tag)
         {
-            return (from Actor a in _actors.Values where a.Tag == tag select a).First();
+            return (from Actor a in _actors.Values where a.Tag == tag select a).FirstOrDefault();
         }
 
         public Actor GetActor(uint dynamicID)

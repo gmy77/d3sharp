@@ -83,31 +83,37 @@ namespace Mooege.Core.GS.Generators
                     {
                         var cluster = clusters[sceneChunk.SceneSpecification.ClusterID];
 
-                        if (cluster.Default.Entries.Count > 0)
-                        {
-                            // TODO Why are entries not always normalized? is that a bug or do these values mean something else... - farmy
-                            // TODO Only default scenes are loaded. No waypoints, random caves or other special tiles
-                            var subSceneEntry = RandomHelper.RandomItem<Mooege.Common.MPQ.FileFormats.SubSceneEntry>(cluster.Default.Entries, entry => entry.Probability);
-                            
-                            Vector3D pos = FindSubScenePosition(sceneChunk);
-
-                            if (pos == null)
-                            {
-                                Logger.Error("No scene position marker for SubScenes of Scene {0} found", sceneChunk.SNOName.SNOId);
-                            }
+                        // TODO Why are entries not always normalized? is that a bug or do these values mean something else... - farmy
+                        // TODO Only default scenes are loaded. No waypoints, random dungeons or other special tiles
+                        Mooege.Common.MPQ.FileFormats.SubSceneEntry subSceneEntry = null;
+                        if(cluster.Default.Entries.Count > 0)
+                            subSceneEntry = RandomHelper.RandomItem<Mooege.Common.MPQ.FileFormats.SubSceneEntry>(cluster.Default.Entries, entry => entry.Probability);
+                        else
+                            if(cluster.SubSceneGroups.Count > 0)
+                                subSceneEntry = RandomHelper.RandomItem<Mooege.Common.MPQ.FileFormats.SubSceneEntry>(cluster.SubSceneGroups[0].Entries, entry => entry.Probability);
                             else
-                            {
-                                Scene subscene = new Scene(world, subSceneEntry.SNOScene, scene);
-                                subscene.Position = scene.Position + pos;
-                                subscene.MiniMapVisibility = MiniMapVisibility.Visited;
-                                subscene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
-                                subscene.RotationAmount = sceneChunk.PRTransform.Quaternion.W;
-                                subscene.Specification = sceneChunk.SceneSpecification;
-                                scene.Subscenes.Add(subscene);
-                                subscene.LoadActors();
-                            }
+                                Logger.Error("No SubScenes defined for cluster {0} in world {1}", sceneChunk.SceneSpecification.ClusterID, world.DynamicID);
+
+                        // TODO According to BoyC, scenes can have more than one subscene, so better enumerate over all subscenepositions
+                        Vector3D pos = FindSubScenePosition(sceneChunk);
+
+                        if (pos == null)
+                        {
+                            Logger.Error("No scene position marker for SubScenes of Scene {0} found", sceneChunk.SNOName.SNOId);
+                        }
+                        else
+                        {
+                            Scene subscene = new Scene(world, subSceneEntry.SNOScene, scene);
+                            subscene.Position = scene.Position + pos;
+                            subscene.MiniMapVisibility = MiniMapVisibility.Visited;
+                            subscene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
+                            subscene.RotationAmount = sceneChunk.PRTransform.Quaternion.W;
+                            subscene.Specification = sceneChunk.SceneSpecification;
+                            scene.Subscenes.Add(subscene);
+                            subscene.LoadActors();
                         }
                     }
+
                 }
 
                 scene.LoadActors();

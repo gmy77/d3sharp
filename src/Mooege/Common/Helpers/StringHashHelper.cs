@@ -43,5 +43,17 @@ namespace Mooege.Common.Helpers
                 hash = (hash << 5) + hash + input[i];
             return hash;
         }
+
+        /// <summary>
+        /// Hashes a string to an int. This hashing is CASE SENSITIVE
+        /// </summary>
+        public static int HashNormal(string input)
+        {
+            int hash = 0;
+            for (int i = 0; i < input.Length; ++i)
+                hash = (hash << 5) + hash + input[i];
+            return hash;
+        }
+
     }
 }

@@ -202,59 +202,46 @@ namespace Mooege.Core.GS.Map
                         {
                             Actor newActor = null;
 
+                            // This is ugly, because the ActorFactory does not differentiate between Gizmos, so when creating a portal, we have to do it manually
                             if (tags.ContainsKey((int)MarkerTagTypes.DestinationWorld))
                             {
                                 newActor = new Portal(this.World);
+                                newActor.ActorSNO = marker.SNOName.SNOId;
+                                newActor.Field8 = marker.SNOName.SNOId;
+                                newActor.Position = marker.PRTransform.Vector3D + this.Position;
                                 (newActor as Portal).Destination.WorldSNO = tags[(int)MarkerTagTypes.DestinationWorld].Int2;
 
                                 if (tags.ContainsKey((int)MarkerTagTypes.DestinationLevelArea))
                                     (newActor as Portal).Destination.DestLevelAreaSNO = tags[(int)MarkerTagTypes.DestinationLevelArea].Int2;
 
                                 if (tags.ContainsKey((int)MarkerTagTypes.DestinationActorTag))
-                                    newActor.Tag = tags[(int)MarkerTagTypes.DestinationActorTag].Int2;
+                                    (newActor as Portal).Destination.StartingPointActorTag = tags[(int)MarkerTagTypes.DestinationActorTag].Int2;
                                 else
                                     Logger.Warn("Found portal {0} in scene {1} without target location actor", newActor.ActorSNO, this.SceneSNO);
                             }
                             else
-                                newActor = new Actor(this.World, this.World.NewActorID);
+                                newActor = ActorFactory.Create(marker.SNOName.SNOId, this.World, marker.PRTransform.Vector3D + this.Position);
 
-                            newActor.ActorSNO = marker.SNOName.SNOId;
-                            newActor.Position = marker.PRTransform.Vector3D + this.Position;
+                            if (newActor == null)
+                                Logger.Warn("No implementation for ActorType of actor {0}", marker.SNOName.SNOId);
+                            else
+                            {
+                                if (tags.ContainsKey((int)MarkerTagTypes.ActorTag))
+                                    newActor.Tag = tags[(int)MarkerTagTypes.ActorTag].Int2;
 
-                            if (tags.ContainsKey((int)MarkerTagTypes.ActorTag))
-                                newActor.Tag = tags[(int)MarkerTagTypes.ActorTag].Int2;
+                                if (tags.ContainsKey((int)MarkerTagTypes.Scale))
+                                    newActor.Scale = tags[(int)MarkerTagTypes.Scale].Float0;
 
-                            if (tags.ContainsKey((int)MarkerTagTypes.Scale))
-                                newActor.Scale = tags[(int)MarkerTagTypes.Scale].Float0;
+                                newActor.RotationAmount = marker.PRTransform.Quaternion.W;
+                                newActor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
-                            newActor.RotationAmount = marker.PRTransform.Quaternion.W;
-                            newActor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
-                            newActor.Field2 = 16;
-                            newActor.Field3 = 0;
-                            newActor.Field7 = 0x00000001;
-                            newActor.Field8 = newActor.ActorSNO;
+                                //newActor.Field8 = newActor.ActorSNO;
 
-                            if (!(newActor is Portal))
-                                this.World.Enter(newActor);
+                                System.Diagnostics.Debug.Assert(newActor.ActorSNO != -1);
 
-                            // new actor loader
-                            //------------------------------------------------------------------------------
-                            // monter actors crashing for the code below /raist.
-                            //var actor = ActorFactory.Create(marker.SNOName.SNOId, this.World, marker.PRTransform.Vector3D + this.Position);
-                            //if (actor == null) continue;
-
-                            //if (tags.ContainsKey(526852))
-                            //    actor.Tag = tags[526852].Int2;
-
-                            //if (tags.ContainsKey((int)Markers.MarkerTagTypes.Scale))
-                            //    actor.Scale = tags[(int)Markers.MarkerTagTypes.Scale].Float0;
-
-                            //actor.RotationAmount = marker.PRTransform.Quaternion.W;
-                            //actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
-
-                            //if (!(actor is Portal))
-                            //this.World.Enter(actor);
-                            //------------------------------------------------------------------------------
+                                if (!(newActor is Portal))
+                                    this.World.Enter(newActor);
+                            }
                         }
                     }
 

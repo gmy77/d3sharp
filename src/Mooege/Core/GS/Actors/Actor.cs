@@ -211,7 +211,7 @@ namespace Mooege.Core.GS.Actors
                 WorldLocation = new WorldLocationMessageData()
                 {
                     WorldID = targetWorld.DynamicID,
-                    Scale = 1,
+                    Scale = this.Scale,
                     Transform = new PRTransform()
                     {
                         Quaternion = new Quaternion() { W = 1, Vector3D = new Vector3D(0, 0, 0) },
