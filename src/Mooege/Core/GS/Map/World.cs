@@ -292,37 +292,39 @@ namespace Mooege.Core.GS.Map
             this.QuadTree.Insert(actor);
 
             if (actor.ActorType == ActorType.Player) // temp
-                this.AddPlayer((Mooege.Core.GS.Player.Player)actor);
+                this.AddPlayer((Player.Player)actor);
         }
 
-        private void AddPlayer(Mooege.Core.GS.Player.Player obj)
+        private void AddPlayer(Player.Player player)
         {
-            if (obj.DynamicID == 0 || HasPlayer(obj.DynamicID))
-                throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", obj.DynamicID));
+            if (player.DynamicID == 0 || HasPlayer(player.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", player.DynamicID));
 
-            this.Players.TryAdd(obj.DynamicID, obj);
+            this.Players.TryAdd(player.DynamicID, player);
         }
 
         // Removing
-        public void RemoveScene(Scene obj)
+        public void RemoveScene(Scene scene)
         {
-            if (obj.DynamicID == 0 || !HasScene(obj.DynamicID))
-                throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", obj.DynamicID));
-            this.Scenes.Remove(obj.DynamicID);
+            if (scene.DynamicID == 0 || !HasScene(scene.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", scene.DynamicID));
+            this.Scenes.Remove(scene.DynamicID);
+            this.QuadTree.Remove(scene);
         }
 
-        private void RemoveActor(Actor obj)
+        private void RemoveActor(Actor actor)
         {
-            if (obj.DynamicID == 0 || !this._actors.ContainsKey(obj.DynamicID))
-                throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", obj.DynamicID));
-            Actor actor;
-            this._actors.TryRemove(obj.DynamicID, out actor);
+            if (actor.DynamicID == 0 || !this._actors.ContainsKey(actor.DynamicID))
+                throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", actor.DynamicID));
+            Actor removedActor;
+            this._actors.TryRemove(actor.DynamicID, out removedActor);
+            this.QuadTree.Remove(actor);
 
-            if (obj.ActorType == ActorType.Player) // temp
-                this.RemovePlayer((Mooege.Core.GS.Player.Player)obj);
+            if (actor.ActorType == ActorType.Player) // temp
+                this.RemovePlayer((Player.Player)actor);
         }
 
-        private void RemovePlayer(Mooege.Core.GS.Player.Player obj)
+        private void RemovePlayer(Player.Player obj)
         {
             if (obj.DynamicID == 0 || !this.Players.ContainsKey(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", obj.DynamicID));

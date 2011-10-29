@@ -95,18 +95,25 @@ namespace Mooege.Core.GS.Game
 
         public void Route(GameClient client, GameMessage message)
         {
-            switch (message.Consumer)
+            try
             {
-                case Consumers.Game:
-                    this.Consume(client, message);
-                    break;
-                case Consumers.Inventory:
-                    client.Player.Inventory.Consume(client, message);
-                    break;
-                case Consumers.Player:
-                    client.Player.Consume(client, message);
-                    break;
-              }
+                switch (message.Consumer)
+                {
+                    case Consumers.Game:
+                        this.Consume(client, message);
+                        break;
+                    case Consumers.Inventory:
+                        client.Player.Inventory.Consume(client, message);
+                        break;
+                    case Consumers.Player:
+                        client.Player.Consume(client, message);
+                        break;
+                }
+            }
+            catch(Exception e)
+            {
+                Logger.DebugException(e, "Unhandled exception caught:");
+            }
         }
 
         public void Consume(GameClient client, GameMessage message)
