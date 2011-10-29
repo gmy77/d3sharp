@@ -68,6 +68,7 @@ namespace Mooege.Core.GS.Objects
         public sealed override void Destroy()
         {
             World world = this.World;
+            this.World.QuadTree.Remove(this);
             this.World = null; // Will Leave() the world for Actors (see deriving implementation of the setter for this.World)
             world.Game.EndTracking(this);
         }
