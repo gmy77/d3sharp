@@ -103,12 +103,16 @@ namespace Mooege.Core.GS.Generators
 
             foreach (var sceneChunk in worldData.SceneParams.SceneChunks)
             {
-                var scene = new Scene(world, sceneChunk.SNOName.SNOId, null);
-                scene.MiniMapVisibility = MiniMapVisibility.Visited;
-                scene.Position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
-                scene.RotationAmount = sceneChunk.PRTransform.Quaternion.W;
-                scene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
-                scene.SceneGroupSNO = -1;
+                var scene = new Scene(world, sceneChunk.SNOName.SNOId, null)
+                {
+                    Position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0),
+                    MiniMapVisibility = MiniMapVisibility.Visited,                    
+                    RotationAmount = sceneChunk.PRTransform.Quaternion.W,
+                    RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
+                    SceneGroupSNO = -1
+                };
+
+                Logger.Trace("{0}. Grid: {1}:{2} {3}", scene, scene.Position.X/60, scene.Position.Y/60, scene.AABBBounds);
 
                 // If the scene has a subscene (cluster ID is set), choose a random subscenes from the cluster load it and attach it to parent scene /farmy
                 if (sceneChunk.SceneSpecification.ClusterID != -1)
@@ -138,12 +142,14 @@ namespace Mooege.Core.GS.Generators
                         }
                         else
                         {
-                            Scene subscene = new Scene(world, subSceneEntry.SNOScene, scene);
-                            subscene.Position = scene.Position + pos;
-                            subscene.MiniMapVisibility = MiniMapVisibility.Visited;
-                            subscene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
-                            subscene.RotationAmount = sceneChunk.PRTransform.Quaternion.W;
-                            subscene.Specification = sceneChunk.SceneSpecification;
+                            var subscene = new Scene(world, subSceneEntry.SNOScene, scene)
+                            {
+                                Position = scene.Position + pos,
+                                MiniMapVisibility = MiniMapVisibility.Visited,
+                                RotationAmount = sceneChunk.PRTransform.Quaternion.W,
+                                RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
+                                Specification = sceneChunk.SceneSpecification
+                            };
                             scene.Subscenes.Add(subscene);
                             subscene.LoadActors();
                         }

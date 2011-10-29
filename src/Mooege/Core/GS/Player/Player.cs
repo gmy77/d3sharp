@@ -122,6 +122,9 @@ namespace Mooege.Core.GS.Player
             this.Position.Y = this.CurrentScene.StartPosition.Y;
             this.Position.Z = this.CurrentScene.StartPosition.Z;
 
+            Logger.Trace("Current Scene: {0}", this.CurrentScene);
+            Logger.Trace("Current Position: {0}", this.Position);
+
             // den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
             // inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
             // adrias hut: this.Position.X = 1768.750000f; this.Position.Y = 2921.250000f; this.Position.Z = 20.333143f;

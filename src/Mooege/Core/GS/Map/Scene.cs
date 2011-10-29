@@ -294,5 +294,10 @@ namespace Mooege.Core.GS.Map
             player.RevealedObjects.Remove(this.DynamicID);
             return true;
         }
+
+        public override string ToString()
+        {
+            return string.Format("Scene SNOId: {0} Position: {1}", this.SceneSNO, this.Position);
+        }
     }
 }
