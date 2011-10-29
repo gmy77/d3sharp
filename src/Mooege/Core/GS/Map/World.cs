@@ -201,13 +201,13 @@ namespace Mooege.Core.GS.Map
                 WorldSNO = this.WorldSNO,
             });
 
-            //this.RevealScenesInProximity(player);
+            this.RevealScenesInProximity(player);
             // Revealing all scenes for now..
-            Logger.Info("Revealing scenes for world {0}", this.DynamicID);
-            foreach (var scene in this.Scenes.Values)
-            {
-                scene.Reveal(player);
-            }
+            //Logger.Info("Revealing scenes for world {0}", this.DynamicID);
+            //foreach (var scene in this.Scenes.Values)
+            //{
+            //    scene.Reveal(player);
+            //}
 
             // Reveal all actors
             // TODO: We need proper location-aware reveal logic for _all_ objects. This can be done on the scene level once that bit is in. /komiga

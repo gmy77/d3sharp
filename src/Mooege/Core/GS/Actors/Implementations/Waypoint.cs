@@ -40,7 +40,6 @@ namespace Mooege.Core.GS.Actors.Implementations
         public override void OnTargeted(Player.Player player, Net.GS.Message.Definitions.World.TargetMessage message)
         {
             var world = player.World;
-            player.UpdateHeroState();
 
             world.BroadcastIfRevealed(new PlayAnimationMessage()
             {

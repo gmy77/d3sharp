@@ -112,7 +112,7 @@ namespace Mooege.Core.GS.Generators
                     SceneGroupSNO = -1
                 };
 
-                Logger.Trace("{0}. Grid: {1}:{2} {3}", scene, scene.Position.X/60, scene.Position.Y/60, scene.AABBBounds);
+                Logger.Trace("{0}. Grid: {1}:{2} NavZone: V0: {3} F0: {4}", scene, scene.Position.X/60, scene.Position.Y/60, scene.NavZone.V0, scene.NavZone.Float0);
 
                 // If the scene has a subscene (cluster ID is set), choose a random subscenes from the cluster load it and attach it to parent scene /farmy
                 if (sceneChunk.SceneSpecification.ClusterID != -1)

@@ -118,9 +118,9 @@ namespace Mooege.Core.GS.Player
             this.CollFlags = 0x00000000;
 
             this.CurrentScene = this.World.SpawnableScenes.First();
-            this.Position.X = this.CurrentScene.StartPosition.X;
-            this.Position.Y = this.CurrentScene.StartPosition.Y;
-            this.Position.Z = this.CurrentScene.StartPosition.Z;
+            this.Position.X = this.CurrentScene.Position.X+240;
+            this.Position.Y = this.CurrentScene.Position.Y+240;
+            this.Position.Z = this.CurrentScene.Position.Z;
 
             Logger.Trace("Current Scene: {0}", this.CurrentScene);
             Logger.Trace("Current Position: {0}", this.Position);
