@@ -17,6 +17,8 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Objects;
@@ -81,11 +83,9 @@ namespace Mooege.Core.GS.Actors
             }
         }
 
-        protected Scene _currentScene;
         public virtual Scene CurrentScene
         {
-            get { return this._currentScene; }
-            protected set { this._currentScene = value; }
+            get { return this.World.QuadTree.QueryScenes(this.Bounds).FirstOrDefault(); }
         }
 
         public override Vector3D Position
@@ -94,6 +94,7 @@ namespace Mooege.Core.GS.Actors
             {
                 var old = new Vector3D(this._position);
                 this._position.Set(value);
+                this.Bounds = new Rect(this._position.X, this.Position.Y, 1, 1);
                 this.OnPositionChange(old);
             }
         }

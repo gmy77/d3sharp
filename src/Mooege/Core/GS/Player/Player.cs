@@ -31,6 +31,7 @@ using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
+using Mooege.Net.GS.Message.Definitions.Drawing;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Waypoint;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -83,9 +84,12 @@ namespace Mooege.Core.GS.Player
 
         public List<OpenConversation> OpenConversations { get; set; }
 
+        public bool EnteredWorld { get; set; }
+
         public Player(World world, GameClient client, Toon bnetToon)
             : base(world, world.NewPlayerID)
         {
+            this.EnteredWorld = false;
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // make it atomic.
 
@@ -117,13 +121,8 @@ namespace Mooege.Core.GS.Player
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.CollFlags = 0x00000000;
 
-            this.CurrentScene = this.World.SpawnableScenes.First();
-            this.Position.X = this.CurrentScene.Position.X+240;
-            this.Position.Y = this.CurrentScene.Position.Y+240;
-            this.Position.Z = this.CurrentScene.Position.Z;
-
-            Logger.Trace("Current Scene: {0}", this.CurrentScene);
-            Logger.Trace("Current Position: {0}", this.Position);
+            var spawnScene = this.World.SpawnableScenes.First();
+            this.Position = spawnScene.StartPosition;
 
             // den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
             // inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
@@ -303,8 +302,8 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Movement_Scalar] = 1f;
             this.Attributes[GameAttribute.Walking_Rate_Total] = 0.2797852f;
             this.Attributes[GameAttribute.Walking_Rate] = 0.2797852f;
-            this.Attributes[GameAttribute.Running_Rate_Total] = 0.3598633f;
-            this.Attributes[GameAttribute.Running_Rate] = 0.3598633f;
+            this.Attributes[GameAttribute.Running_Rate_Total] = 1.5f; // 0.3598633f;
+            this.Attributes[GameAttribute.Running_Rate] = 1.5f; // 0.3598633f;
             this.Attributes[GameAttribute.Sprinting_Rate_Total] = 3.051758E-05f;
             this.Attributes[GameAttribute.Strafing_Rate_Total] = 3.051758E-05f;
 
@@ -323,6 +322,12 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Backpack_Slots] = 60;
             this.Attributes[GameAttribute.General_Cooldown] = 0;
             #endregion // Attributes
+        }
+
+        protected override void OnPositionChange(Vector3D prevPosition)
+        {
+            if (!this.EnteredWorld) return;
+            this.World.RevealScenesInProximity(this);           
         }
 
         public void Consume(GameClient client, GameMessage message)
@@ -454,11 +459,6 @@ namespace Mooege.Core.GS.Player
         public override void OnLeave(World world)
         {
             Logger.Trace("Leaving world!");
-        }
-
-        protected override void OnPositionChange(Vector3D prevPosition)
-        {
-            // check here for current-scene change.
         }
 
         public override bool Reveal(Mooege.Core.GS.Player.Player player)

@@ -20,8 +20,10 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using Mooege.Common;
 using Mooege.Common.Helpers;
+using Mooege.Core.GS.Common.Types.Collision;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Actors;
@@ -43,6 +45,8 @@ namespace Mooege.Core.GS.Map
         public Game.Game Game { get; private set; }
 
         public Dictionary<uint, Scene> Scenes = new Dictionary<uint, Scene>();
+        public QuadTree QuadTree;
+
         public readonly ConcurrentDictionary<uint, Player.Player> Players;
         private readonly ConcurrentDictionary<uint, Actor> _actors;
 
@@ -64,6 +68,8 @@ namespace Mooege.Core.GS.Map
 
             // NOTE: WorldSNO must be valid before adding it to the game
             this.WorldSNO = worldSNO;
+
+            this.QuadTree = new QuadTree(new Size(60, 60), 0, true);
             this.Game.AddWorld(this);
         }
 
@@ -172,15 +178,18 @@ namespace Mooege.Core.GS.Map
                     if(revealable is Actor)
                         if(revealable != actor)
                             revealable.Unreveal(actor as Player.Player);
-            }
-             
-
+            }            
         }
 
         public void RevealScenesInProximity(Player.Player player)
         {
-            // I guess markers should have already this info in - just need to figure which markers. /raist.
-            player.CurrentScene.Reveal(player);
+            var proximity = new Rect(player.Position.X - 240, player.Position.Y - 240, 480, 480);
+            var scenes = this.QuadTree.QueryScenes(proximity);
+
+            foreach (var scene in scenes)
+            {
+                scene.Reveal(player);
+            }
         }
 
         public bool Reveal(Mooege.Core.GS.Player.Player player)
@@ -202,12 +211,6 @@ namespace Mooege.Core.GS.Map
             });
 
             this.RevealScenesInProximity(player);
-            // Revealing all scenes for now..
-            //Logger.Info("Revealing scenes for world {0}", this.DynamicID);
-            //foreach (var scene in this.Scenes.Values)
-            //{
-            //    scene.Reveal(player);
-            //}
 
             // Reveal all actors
             // TODO: We need proper location-aware reveal logic for _all_ objects. This can be done on the scene level once that bit is in. /komiga
@@ -277,7 +280,7 @@ namespace Mooege.Core.GS.Map
             if (obj.DynamicID == 0 || HasScene(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", obj.DynamicID));
             this.Scenes.Add(obj.DynamicID, obj);
-            //this.Scenes.Add(obj);
+            this.QuadTree.Insert(obj);
         }
 
         private void AddActor(Actor obj)
@@ -304,7 +307,6 @@ namespace Mooege.Core.GS.Map
             if (obj.DynamicID == 0 || !HasScene(obj.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", obj.DynamicID));
             this.Scenes.Remove(obj.DynamicID);
-            //this.Scenes.Remove(obj);
         }
 
         private void RemoveActor(Actor obj)
@@ -362,9 +364,9 @@ namespace Mooege.Core.GS.Map
             return null;
         }
 
-        public Mooege.Core.GS.Player.Player GetPlayer(uint dynamicID)
+        public Player.Player GetPlayer(uint dynamicID)
         {
-            Mooege.Core.GS.Player.Player player;
+            Player.Player player;
             this.Players.TryGetValue(dynamicID, out player);
             return player;
         }

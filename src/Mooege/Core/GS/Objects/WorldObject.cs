@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Windows;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 
@@ -45,6 +46,13 @@ namespace Mooege.Core.GS.Objects
         {
             get { return _position; }
             set { _position = value; }
+        }
+
+        protected Rect _bounds;
+        public Rect Bounds
+        {
+            get { return this._bounds; }
+            set { this._bounds = value; }
         }
 
         protected WorldObject(World world, uint dynamicID)

@@ -19,7 +19,6 @@
 using System.Text;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.Misc;
-using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Drawing
 {
@@ -36,6 +35,10 @@ namespace Mooege.Net.GS.Message.Definitions.Drawing
         public int Field7;
         public RGBAColor Field8;
         public string Field9;
+
+        public DebugDrawPrimMessage()
+            : base(Opcodes.DebugDrawPrimMessage)
+        { }
 
         public override void Parse(GameBitBuffer buffer)
         {

@@ -22,7 +22,7 @@ using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message;
 
-namespace Mooege.Core.GS.Common.Types.Collusion
+namespace Mooege.Core.GS.Common.Types.Collision
 {
     public class AABB
     {

@@ -19,7 +19,7 @@
 using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
-using Mooege.Core.GS.Common.Types.Collusion;
+using Mooege.Core.GS.Common.Types.Collision;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Common.MPQ.FileFormats.Types;

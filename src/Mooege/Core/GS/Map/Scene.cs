@@ -17,19 +17,17 @@
  */
 
 using System.Collections.Generic;
+using System.Windows;
 using Mooege.Common;
-using Mooege.Common.Helpers;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Actors.Implementations;
-using Mooege.Core.GS.Common.Types.Collusion;
+using Mooege.Core.GS.Common.Types.Collision;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Common.Types.Scene;
-using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Objects;
-using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Net.GS.Message.Definitions.Scene;
 using Mooege.Core.GS.Markers;
@@ -59,7 +57,7 @@ namespace Mooege.Core.GS.Map
             {
                 if (this._world != value)
                 {
-                    if (this._world != null)
+                    if (this._world != null) // this is bugged i guess? /raist
                         this._world.AddScene(this);
                     this._world = value;
                     if (this._world != null)
@@ -128,7 +126,7 @@ namespace Mooege.Core.GS.Map
             get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
-        public Scene(World world, int sceneSNO, Scene parent)
+        public Scene(World world, Vector3D position, int sceneSNO, Scene parent)
             : base(world, world.NewSceneID)
         {
             this.Scale = 1.0f;
@@ -139,8 +137,10 @@ namespace Mooege.Core.GS.Map
             this.Parent = parent;
             this.AppliedLabels = new int[0];
 
-            this.World.AddScene(this);
             this.LoadSceneData();
+
+            this.Position = position;
+            this.Bounds = new Rect(this.Position.X, this.Position.Y, this.NavZone.V0.X*this.NavZone.Float0, this.NavZone.V0.Y*this.NavZone.Float0);
         }
 
         private void LoadSceneData()
@@ -154,24 +154,6 @@ namespace Mooege.Core.GS.Map
             this.MarkerSets = data.MarkerSets;
             this.LookLink = data.LookLink;
             this.NavZone = data.NavZone;
-        }
-
-        /// <summary>
-        /// Helper method to print marker-sets for the scene.
-        /// </summary>
-        private void PrintMarkerSets()
-        {
-            foreach (var markerSet in this.MarkerSets)
-            {
-                var markerSetData = MPQStorage.Data.Assets[SNOGroup.MarkerSet][markerSet].Data as Mooege.Common.MPQ.FileFormats.MarkerSet;
-                if (markerSetData == null) return;
-
-                Logger.Trace("MarketSet: {0} [{1}]", markerSetData.Header.SNOId, markerSetData.FileName);
-                foreach (var marker in markerSetData.Markers)
-                {
-                    Logger.Trace(marker.SNOName.ToString());
-                }
-            }
         }
 
         /// Loads all Actors for a scene chunk. TODO Remove hack that this method returns a vector for starting positions. Better to load all actors and search for the appropriate starting point afterwards
@@ -267,17 +249,18 @@ namespace Mooege.Core.GS.Map
             }
         }
 
-        public override bool Reveal(Mooege.Core.GS.Player.Player player)
+        public override bool Reveal(Player.Player player)
         {
             if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
             player.RevealedObjects.Add(this.DynamicID, this);
-            player.InGameClient.SendMessage(this.RevealMessage);
+            player.InGameClient.SendMessage(this.RevealMessage,true);
             player.InGameClient.SendMessage(this.MapRevealMessage,true);
             foreach (var sub in this.Subscenes)
             {
                 sub.Reveal(player);
             }
-                        
+
+            Logger.Trace("Revealing {0}", this);
             return true;
         }
 

@@ -92,6 +92,7 @@
       <HintPath>..\..\dep\PowerCollections.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Core\GS\Actors\HandledSNO.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Stash.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Waypoint.cs" />
+    <Compile Include="Core\GS\Common\Types\Collision\QuadTree.cs" />
     <Compile Include="Core\GS\Common\Types\SNO\SNOGroup.cs" />
     <Compile Include="Core\GS\Game\GameCommands.cs" />
     <Compile Include="Core\GS\Game\GameManager.cs" />
@@ -243,7 +245,7 @@
     <Compile Include="Net\GS\ClientManager.cs" />
     <Compile Include="Net\GS\Config.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignPassiveSkillMessage.cs" />
-    <Compile Include="Core\GS\Common\Types\Collusion\AABB.cs" />
+    <Compile Include="Core\GS\Common\Types\Collision\AABB.cs" />
     <Compile Include="Net\GS\Message\Fields\ActiveEvent.cs" />
     <Compile Include="Net\GS\Message\Fields\AnimPreplayData.cs" />
     <Compile Include="Net\GS\Message\Fields\DPathSinData.cs" />

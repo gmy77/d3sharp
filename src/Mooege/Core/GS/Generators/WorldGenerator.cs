@@ -103,17 +103,16 @@ namespace Mooege.Core.GS.Generators
 
             foreach (var sceneChunk in worldData.SceneParams.SceneChunks)
             {
-                var scene = new Scene(world, sceneChunk.SNOName.SNOId, null)
+                var position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
+                var scene = new Scene(world, position, sceneChunk.SNOName.SNOId, null)
                 {
-                    Position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0),
-                    MiniMapVisibility = MiniMapVisibility.Visited,                    
+                    MiniMapVisibility = MiniMapVisibility.Revealed,                    
                     RotationAmount = sceneChunk.PRTransform.Quaternion.W,
                     RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                     SceneGroupSNO = -1
                 };
-
-                Logger.Trace("{0}. Grid: {1}:{2} NavZone: V0: {3} F0: {4}", scene, scene.Position.X/60, scene.Position.Y/60, scene.NavZone.V0, scene.NavZone.Float0);
-
+                world.AddScene(scene);
+               
                 // If the scene has a subscene (cluster ID is set), choose a random subscenes from the cluster load it and attach it to parent scene /farmy
                 if (sceneChunk.SceneSpecification.ClusterID != -1)
                 {
@@ -142,10 +141,10 @@ namespace Mooege.Core.GS.Generators
                         }
                         else
                         {
-                            var subscene = new Scene(world, subSceneEntry.SNOScene, scene)
+                            var subScenePosition = scene.Position + pos;
+                            var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
                             {
-                                Position = scene.Position + pos,
-                                MiniMapVisibility = MiniMapVisibility.Visited,
+                                MiniMapVisibility = MiniMapVisibility.Revealed,
                                 RotationAmount = sceneChunk.PRTransform.Quaternion.W,
                                 RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                                 Specification = sceneChunk.SceneSpecification

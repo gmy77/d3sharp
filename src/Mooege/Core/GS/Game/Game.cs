@@ -147,6 +147,7 @@ namespace Mooege.Core.GS.Game
 
             joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition
             joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
+            joinedPlayer.EnteredWorld = true;
         }
 
         private void SendNewPlayerMessage(Player.Player target, Player.Player joinedPlayer)
