@@ -155,14 +155,14 @@
     <Compile Include="Core\GS\Actors\Implementations\Waypoint.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Cain.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Vendor.cs" />
-	<Compile Include="Core\GS\Actors\Living.cs" />
-	<Compile Include="Core\GS\Actors\NPC.cs" />
+    <Compile Include="Core\GS\Actors\Living.cs" />
+    <Compile Include="Core\GS\Actors\NPC.cs" />
     <Compile Include="Core\GS\Common\Types\Collision\QuadTree.cs" />
     <Compile Include="Core\GS\Common\Types\SNO\SNOGroup.cs" />
     <Compile Include="Core\GS\Game\GameCommands.cs" />
     <Compile Include="Core\GS\Game\GameManager.cs" />
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
-    <Compile Include="Core\GS\InteractiveNPC.cs" />
+    <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
     <Compile Include="Core\GS\Markers\Marker.cs" />
     <Compile Include="Core\GS\Player\Equipment.cs" />
     <Compile Include="Core\GS\Player\Stash.cs" />
