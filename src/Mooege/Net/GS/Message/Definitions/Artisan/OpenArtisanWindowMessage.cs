@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,43 +16,47 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Mooege.Net.GS.Message.Definitions.Misc;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Artisan
 {
-    [Message(new[] {
-        Opcodes.ANNDataMessage8, Opcodes.ANNDataMessage10, Opcodes.ANNDataMessage11, Opcodes.ANNDataMessage12, Opcodes.ANNDataMessage13, Opcodes.ANNDataMessage15, 
-        Opcodes.ANNDataMessage16, Opcodes.ANNDataMessage17, Opcodes.ANNDataMessage18, Opcodes.ANNDataMessage20, Opcodes.ANNDataMessage21, Opcodes.ANNDataMessage22, Opcodes.ANNDataMessage23, 
-        Opcodes.ANNDataMessage24, Opcodes.ANNDataMessage25, Opcodes.ANNDataMessage26, Opcodes.ANNDataMessage28, Opcodes.ANNDataMessage29, Opcodes.ANNDataMessage30, Opcodes.ANNDataMessage31, 
-        Opcodes.ANNDataMessage32, Opcodes.ANNDataMessage33
-    })]
-    public class ANNDataMessage : GameMessage
+    /// <summary>
+    /// Shows Artisans UI window.
+    /// </summary>
+    [Message(Opcodes.OpenArtisanWindowMessage)]
+    public class OpenArtisanWindowMessage : GameMessage
     {
-        public uint ActorID; // Actor's DynamicID
-
-        public ANNDataMessage(Opcodes id) : base(id) {}
+        public uint ArtisanID;
+        public OpenArtisanWindowMessage(uint artisanID)
+            : base(Opcodes.OpenArtisanWindowMessage)
+        {
+            ArtisanID = artisanID;
+        }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            ActorID = buffer.ReadUInt(32);
+            ArtisanID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteUInt(32, ActorID);
+            buffer.WriteUInt(32, ArtisanID);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("ANNDataMessage:");
+            b.AppendLine("OpenArtisanWindowMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            b.Append(' ', pad); b.AppendLine("ArtisanID: 0x" + ArtisanID.ToString("X8") + " (" + ArtisanID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
 
     }
 }

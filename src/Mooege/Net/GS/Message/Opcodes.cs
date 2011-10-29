@@ -46,7 +46,7 @@ namespace Mooege.Net.GS.Message
         GenericBlobMessage3 = 29, // len: 	
         GenericBlobMessage4 = 30, // len: 	
         GenericBlobMessage5 = 31, // len: 	
-        ANNDataMessage1 = 32, // len: 	12
+        OpenArtisanWindowMessage = 32, // len: 	12 former ANNDataMessage1
         SimpleMessage3 = 33, // len: 	8
         OpenTradeWindow = 34, // len: 	12          former ANNDataMessage2
         RequestBuyItemMessage = 35, // len: 	12, former ANNDataMessage3
