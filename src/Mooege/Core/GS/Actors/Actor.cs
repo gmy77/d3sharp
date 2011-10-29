@@ -197,9 +197,6 @@ namespace Mooege.Core.GS.Actors
             this.SNOName = new SNOName() { Group =  SNOGroup.Actor, SNOId = this.ActorSNO };
             this.ActorSNO = -1;
             this.CollFlags = 0x00000000;
-            this.Scale = 1.0f;
-            this.RotationAmount = 0.0f;
-            this.RotationAxis.Set(0.0f, 0.0f, 1.0f);
 
             this.ReadTags();
         }

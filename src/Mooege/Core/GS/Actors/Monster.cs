@@ -45,8 +45,6 @@ namespace Mooege.Core.GS.Actors
             // FIXME: This is hardcoded crap
             this.Field2 = 0x8;
             this.Field3 = 0x0;
-            this.Scale = 1.35f;
-            this.Position.Set(position);
             this.RotationAmount = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);
             this.RotationAxis.X = 0f; this.RotationAxis.Y = 0f; this.RotationAxis.Z = 1f;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;

@@ -39,7 +39,6 @@ namespace Mooege.Core.GS.Actors
             this.Field3 = 0x0;
             this.Field7 = 0x00000001;
             this.Field8 = this.ActorSNO;
-            this.Scale = 1.35f;
         }
     }
 }
