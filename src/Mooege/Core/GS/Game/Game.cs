@@ -167,6 +167,9 @@ namespace Mooege.Core.GS.Game
             });
 
             target.InGameClient.SendMessage(joinedPlayer.GetPlayerBanner()); // send player banner proto - D3.GameMessage.PlayerBanner
+            target.InGameClient.SendMessage(joinedPlayer.GetBlacksmithData()); // send player artisan proto /fasbat
+            target.InGameClient.SendMessage(joinedPlayer.GetJewelerData());
+            target.InGameClient.SendMessage(joinedPlayer.GetMysticData());
         }
 
 
