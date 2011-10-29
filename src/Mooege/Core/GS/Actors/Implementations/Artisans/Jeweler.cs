@@ -22,9 +22,9 @@ using Mooege.Core.GS.Map;
 namespace Mooege.Core.GS.Actors.Implementations.Artisans
 {
     [HandledSNO(56949 /* PT_Jewler.acr */)]
-    public class Jewler : Artisan
+    public class Jeweler : Artisan
     {
-        public Jewler(World world, int actorSNO, Vector3D position)
+        public Jeweler(World world, int actorSNO, Vector3D position)
             : base(world, actorSNO, position)
         {
         }
