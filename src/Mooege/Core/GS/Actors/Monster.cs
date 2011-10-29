@@ -21,7 +21,6 @@ using Mooege.Common.Helpers;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.Tick;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Animation;
@@ -38,7 +37,7 @@ namespace Mooege.Core.GS.Actors
         public int AnimationSNO { get; set; }
 
         public Monster(World world, int actorSNO, Vector3D position)
-            : base(world, world.NewActorID)
+            : base(world, world.NewActorID, position)
         {
             this.ActorSNO = actorSNO;
             // FIXME: This is hardcoded crap

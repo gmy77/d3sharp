@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Mooege.Common;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Objects;
@@ -54,17 +55,25 @@ namespace Mooege.Core.GS.Actors
     // This should probably be the same as GBHandleType (probably merge them once all actor classes are created)
     public enum ActorType
     {
-        Player,
-        NPC,
-        Monster,
-        Item,
-        Portal,
-        Gizmo
+        Invalid = 0,
+        Monster = 1,
+        Gizmo = 2,
+        ClientEffect = 3,
+        ServerProp = 4,
+        Enviroment = 5,
+        Critter = 6,
+        Player = 7,
+        Item = 8,
+        AxeSymbol = 9,
+        Projectile = 10,
+        CustomBrain = 11
     }
 
     // Base actor
-    public /*abstract*/ class Actor : WorldObject
+    public abstract class Actor : WorldObject
     {
+        private static readonly Logger Logger = LogManager.CreateLogger();
+
         // Actors can change worlds and have a specific addition/removal scheme
         // We'll just override the setter to handle all of this automagically
         public override World World
@@ -85,11 +94,12 @@ namespace Mooege.Core.GS.Actors
 
         public virtual Scene CurrentScene
         {
-            get { return this.World.QuadTree.QueryScenes(this.Bounds).FirstOrDefault(); }
+            get { return this.World.QuadTree.Query<Scene>(this.Bounds).FirstOrDefault(); }
         }
 
         public override Vector3D Position
         {
+            get { return this._position; }
             set
             {
                 var old = new Vector3D(this._position);
@@ -99,7 +109,7 @@ namespace Mooege.Core.GS.Actors
             }
         }
 
-        public virtual /*abstract*/ ActorType ActorType { get { return Actors.ActorType.Item; } }
+        public abstract ActorType ActorType { get; }
 
         public GameAttributeMap Attributes { get; private set; }
         public List<Affix> AffixList { get; set; }
@@ -173,9 +183,10 @@ namespace Mooege.Core.GS.Actors
             }
         }
 
-        public Actor(World world, uint dynamicID)
+        public Actor(World world, uint dynamicID, Vector3D position=null)
             : base(world, dynamicID)
         {
+            if (position != null) this.Position = position;
             this.Attributes = new GameAttributeMap();
             this.AffixList = new List<Affix>();
             this.GBHandle = new GBHandle() { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
@@ -325,6 +336,7 @@ namespace Mooege.Core.GS.Actors
                 Name = this.SNOName
             });
 
+            Logger.Trace("Revealing {0}", this);
             return true;
         }
 
@@ -338,6 +350,11 @@ namespace Mooege.Core.GS.Actors
             player.InGameClient.SendMessage(new ACDDestroyActorMessage(this.DynamicID));
             player.RevealedObjects.Remove(this.DynamicID);
             return true;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Actor: [Type: {0}] [Id:{1}] {2}", this.ActorType, this.SNOName.SNOId, this.SNOName.Name);
         }
     }
 }

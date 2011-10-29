@@ -31,7 +31,6 @@ using Mooege.Core.GS.Skills;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
-using Mooege.Net.GS.Message.Definitions.Drawing;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Waypoint;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -327,7 +326,8 @@ namespace Mooege.Core.GS.Player
         protected override void OnPositionChange(Vector3D prevPosition)
         {
             if (!this.EnteredWorld) return;
-            this.World.RevealScenesInProximity(this);           
+            this.World.RevealScenesInProximity(this);
+            this.World.RevealActorsInProximity(this);
         }
 
         public void Consume(GameClient client, GameMessage message)

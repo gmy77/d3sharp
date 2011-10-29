@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using Mooege.Common;
+using Mooege.Common.Helpers;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors;
@@ -138,9 +139,10 @@ namespace Mooege.Core.GS.Map
             this.AppliedLabels = new int[0];
 
             this.LoadSceneData();
-
             this.Position = position;
             this.Bounds = new Rect(this.Position.X, this.Position.Y, this.NavZone.V0.X*this.NavZone.Float0, this.NavZone.V0.Y*this.NavZone.Float0);
+
+            this.World.AddScene(this);
         }
 
         private void LoadSceneData()
@@ -177,18 +179,15 @@ namespace Mooege.Core.GS.Map
                     // Since we are not loading all actors, make sure to load portals and portal destination actors - fix this /raist.
                     if ( ActorFactory.HasHandler(marker.SNOName.SNOId) 
                          || tags.ContainsKey((int)MarkerTagTypes.DestinationWorld) 
-                         || tags.ContainsKey((int)MarkerTagTypes.ActorTag))
-                         //|| RandomHelper.Next(100) > 90    
+                         || tags.ContainsKey((int)MarkerTagTypes.ActorTag)
+                         || RandomHelper.Next(100) > 0)
                     {                       
                         Actor newActor = null;
 
                         // This is ugly, because the ActorFactory does not differentiate between Gizmos, so when creating a portal, we have to do it manually
                         if (tags.ContainsKey((int)MarkerTagTypes.DestinationWorld))
                         {
-                            newActor = new Portal(this.World);
-                            newActor.ActorSNO = marker.SNOName.SNOId;
-                            newActor.Field8 = marker.SNOName.SNOId;
-                            newActor.Position = marker.PRTransform.Vector3D + this.Position;
+                            newActor = new Portal(this.World, marker.SNOName.SNOId, marker.PRTransform.Vector3D + this.Position);
                             (newActor as Portal).Destination.WorldSNO = tags[(int)MarkerTagTypes.DestinationWorld].Int2;
 
                             if (tags.ContainsKey((int)MarkerTagTypes.DestinationLevelArea))

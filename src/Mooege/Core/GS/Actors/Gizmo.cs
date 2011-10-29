@@ -26,7 +26,7 @@ namespace Mooege.Core.GS.Actors
         public override ActorType ActorType { get { return ActorType.Gizmo; } }
 
         public Gizmo(World world, int actorSNO, Vector3D position)
-            : base(world, world.NewActorID)
+            : base(world, world.NewActorID, position)
         {
             this.ActorSNO = actorSNO;
             this.Field2 = 16;

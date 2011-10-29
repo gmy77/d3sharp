@@ -46,15 +46,15 @@ namespace Mooege.Core.GS.Actors
             var actorData = actorAsset.Data as Mooege.Common.MPQ.FileFormats.Actor;
             if (actorData == null) return null;
 
-            if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Invalid) 
+            if (actorData.Type == ActorType.Invalid) 
                 return null;
             else if (SNOHandlers.ContainsKey(snoId))
                 return (Actor) Activator.CreateInstance(SNOHandlers[snoId], new object[] {world, snoId, position}); // check for handled-actor implementations.
             else switch (actorData.Type)
             {
-                case Mooege.Common.MPQ.FileFormats.Actor.ActorType.Monster:
+                case ActorType.Monster:
                     return new Monster(world, snoId, position);
-                case Mooege.Common.MPQ.FileFormats.Actor.ActorType.Gizmo:
+                case ActorType.Gizmo:
                     return new Gizmo(world, snoId, position);
             }
 

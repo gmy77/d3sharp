@@ -32,17 +32,19 @@ namespace Mooege.Core.GS.Map
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
-        public override ActorType ActorType { get { return ActorType.Portal; } }
+        public override ActorType ActorType { get { return ActorType.Gizmo; } }
 
         public ResolvedPortalDestination Destination { get; private set; }
         //public Vector3D TargetPos;
 
-        public Portal(World world)
-            : base(world, world.NewActorID)
+        public Portal(World world, int actorSNO, Vector3D position)
+            : base(world, world.NewActorID, position)
         {
+            this.ActorSNO = actorSNO;
             this.Destination = new ResolvedPortalDestination();
             this.Destination.WorldSNO = -1;
             this.Destination.DestLevelAreaSNO = -1;
+            this.Field8 = this.ActorSNO;
             //this.TargetPos = new Vector3D();
 
             this.Field2 = 16;

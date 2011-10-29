@@ -100,11 +100,11 @@ namespace Mooege.Core.GS.Common.Types.Collision
             }
         }
 
-        public List<WorldObject> Query(Rect bounds)
+        public List<T> Query<T>(Rect bounds) where T:WorldObject
         {
             lock (syncLock)
             {
-                var results = new List<WorldObject>();
+                var results = new List<T>();
                 if (root != null)
                     Query(bounds, root, results);
                 if (sort)
@@ -113,27 +113,7 @@ namespace Mooege.Core.GS.Common.Types.Collision
             }
         }
 
-        public List<Map.Scene> QueryScenes(Rect bounds)
-        {
-            lock (syncLock)
-            {
-                var objects = new List<WorldObject>();
-                var scenes = new List<Map.Scene>();
-
-                if (root != null)
-                {
-                    Query(bounds, root, objects);
-                    scenes.AddRange(from @object in objects where @object is Map.Scene select @object as Map.Scene);
-                }
-
-                if (sort)
-                    objects.Sort((a, b) => { return objectSortOrder[a].CompareTo(objectSortOrder[b]); });
-
-                return scenes;
-            }
-        }
-
-        private void Query(Rect bounds, QuadNode node, List<WorldObject> results)
+        private void Query<T>(Rect bounds, QuadNode node, List<T> results) where T: WorldObject
         {
             lock (syncLock)
             {
@@ -141,10 +121,12 @@ namespace Mooege.Core.GS.Common.Types.Collision
 
                 if (bounds.IntersectsWith(node.Bounds))
                 {
-                    foreach (WorldObject quadObject in node.Objects)
+                    foreach (var @object in node.Objects)
                     {
-                        if (bounds.IntersectsWith(quadObject.Bounds))
-                            results.Add(quadObject);
+                        if (!(@object is T)) continue;
+
+                        if (bounds.IntersectsWith(@object.Bounds))
+                            results.Add(@object as T);
                     }
 
                     foreach (QuadNode childNode in node.Nodes)
