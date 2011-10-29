@@ -147,7 +147,7 @@
     <Compile Include="Core\GS\Actors\HandledSNO.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Artisan.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Blacksmith.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\Artisans\Jewler.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Jeweler.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Mystic.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Cain.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Vendor.cs" />
