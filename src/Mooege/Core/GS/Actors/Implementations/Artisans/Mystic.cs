@@ -19,10 +19,10 @@
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 
-namespace Mooege.Core.GS.Actors.Implementations.Artisians
+namespace Mooege.Core.GS.Actors.Implementations.Artisans
 {
     [HandledSNO(56948 /* PT_Mystic.acr */)]
-    public class Mystic : Artisian
+    public class Mystic : Artisan
     {
         public Mystic(World world, int actorSNO, Vector3D position)
             : base(world, actorSNO, position)

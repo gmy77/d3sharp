@@ -19,14 +19,14 @@
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.Artisian;
+using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Net.GS.Message.Definitions.World;
 
-namespace Mooege.Core.GS.Actors.Implementations.Artisians
+namespace Mooege.Core.GS.Actors.Implementations.Artisans
 {
-    public class Artisian : InteractiveNPC
+    public class Artisan : InteractiveNPC
     {
-        public Artisian(World world, int actorSNO, Vector3D position)
+        public Artisan(World world, int actorSNO, Vector3D position)
             : base(world, actorSNO, position)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
@@ -34,7 +34,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisians
 
         public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
-            player.InGameClient.SendMessage(new OpenArtisianWindowMessage(this.DynamicID));
+            player.InGameClient.SendMessage(new OpenArtisanWindowMessage(this.DynamicID));
         }
     }
 }

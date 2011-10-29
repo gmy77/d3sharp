@@ -145,10 +145,10 @@
     <Compile Include="Core\GS\Actors\Gizmo.cs" />
     <Compile Include="Core\GS\Actors\Environment.cs" />
     <Compile Include="Core\GS\Actors\HandledSNO.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\Artisians\Artisian.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\Artisians\Blacksmith.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\Artisians\Jewler.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\Artisians\Mystic.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Artisan.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Blacksmith.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Jewler.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Mystic.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Cain.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Vendor.cs" />
     <Compile Include="Core\GS\Actors\Living.cs" />
@@ -227,7 +227,7 @@
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Artisian\OpenArtisianWindowMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\OpenArtisanWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
@@ -340,8 +340,8 @@
     <Compile Include="Net\GS\Message\Definitions\Chat\ChatMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Effect\ComplexEffectAddMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Connection\ConnectionEstablishedMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Artisian\CrafterLevelUpMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Artisian\CraftingResultsMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\CrafterLevelUpMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\CraftingResultsMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Game\CreateBNetGameMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Game\CreateBNetGameResultMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hero\CreateHeroMessage.cs" />
@@ -354,7 +354,7 @@
     <Compile Include="Net\GS\Message\Definitions\Text\DisplayGameTextMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\DWordDataMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Effect\EffectGroupACDToACDMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Artisian\EnchantItemMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\EnchantItemMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Encounter\EncounterInviteStateMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\EndConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Tick\EndOfTickMessage.cs" />

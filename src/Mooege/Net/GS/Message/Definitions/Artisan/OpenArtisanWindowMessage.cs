@@ -22,38 +22,38 @@ using System.Linq;
 using System.Text;
 using Mooege.Net.GS.Message.Definitions.Misc;
 
-namespace Mooege.Net.GS.Message.Definitions.Artisian
+namespace Mooege.Net.GS.Message.Definitions.Artisan
 {
     /// <summary>
-    /// Shows artisians UI window.
+    /// Shows Artisans UI window.
     /// </summary>
-    [Message(Opcodes.OpenArtisianWindow)]
-    public class OpenArtisianWindowMessage : GameMessage
+    [Message(Opcodes.OpenArtisanWindowMessage)]
+    public class OpenArtisanWindowMessage : GameMessage
     {
-        public uint ArtisianID;
-        public OpenArtisianWindowMessage(uint artisianID)
-            : base(Opcodes.OpenArtisianWindow)
+        public uint ArtisanID;
+        public OpenArtisanWindowMessage(uint artisanID)
+            : base(Opcodes.OpenArtisanWindowMessage)
         {
-            ArtisianID = artisianID;
+            ArtisanID = artisanID;
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            ArtisianID = buffer.ReadUInt(32);
+            ArtisanID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteUInt(32, ArtisianID);
+            buffer.WriteUInt(32, ArtisanID);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("OpenArtisianWindowMessage:");
+            b.AppendLine("OpenArtisanWindowMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("ArtisianID: 0x" + ArtisianID.ToString("X8") + " (" + ArtisianID + ")");
+            b.Append(' ', pad); b.AppendLine("ArtisanID: 0x" + ArtisanID.ToString("X8") + " (" + ArtisanID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

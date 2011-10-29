@@ -19,10 +19,10 @@
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 
-namespace Mooege.Core.GS.Actors.Implementations.Artisians
+namespace Mooege.Core.GS.Actors.Implementations.Artisans
 {
     [HandledSNO(56949 /* PT_Jewler.acr */)]
-    public class Jewler : Artisian
+    public class Jewler : Artisan
     {
         public Jewler(World world, int actorSNO, Vector3D position)
             : base(world, actorSNO, position)
