@@ -146,6 +146,7 @@
     <Compile Include="Core\GS\Actors\Gizmo.cs" />
     <Compile Include="Core\GS\Actors\Environment.cs" />
     <Compile Include="Core\GS\Actors\HandledSNO.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\StartPosition.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Stash.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Waypoint.cs" />
     <Compile Include="Core\GS\Common\Types\Collision\QuadTree.cs" />

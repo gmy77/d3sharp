@@ -17,7 +17,9 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Mooege.Common.Helpers;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
@@ -36,8 +38,8 @@ namespace Mooege.Core.GS.Actors
         // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
         public int AnimationSNO { get; set; }
 
-        public Monster(World world, int actorSNO, Vector3D position)
-            : base(world, world.NewActorID, position)
+        public Monster(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
+            : base(world, world.NewActorID, position, tags)
         {
             this.ActorSNO = actorSNO;
             // FIXME: This is hardcoded crap

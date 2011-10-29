@@ -16,30 +16,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Markers;
 
-namespace Mooege.Core.GS.Actors
+namespace Mooege.Core.GS.Actors.Implementations
 {
-    public class Environment : Actor
+    [HandledSNO((int)MarkerTypes.Start_Location_0, (int)MarkerTypes.Start_Location_Team_0)]
+    public class StartPosition : Gizmo
     {
-        public override ActorType ActorType { get { return ActorType.Monster; } }
-
-        public Environment(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, world.NewActorID, position, tags)
+        public StartPosition(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
+            : base(world, actorSNO, position, tags)
         {
-            this.ActorSNO = actorSNO;
-            this.Field2 = 16;
-            this.Field3 = 0x0;
-            this.Field7 = 0x00000001;
-            this.Field8 = this.ActorSNO;
-            this.Scale = 1.35f;
         }
     }
 }

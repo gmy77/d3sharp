@@ -169,81 +169,92 @@ namespace Mooege.Core.GS.Map
                 foreach (var marker in markerSetData.Markers)
                 {
                     // read tags.
-                    var tags = new Dictionary<int, TagMapEntry>();
-                    foreach (var tag in marker.TagMap.TagMapEntries)
-                        tags.Add(tag.Int1, tag);
+                    //var tags = new Dictionary<int, TagMapEntry>();
+                    //foreach (var tag in marker.TagMap.TagMapEntries)
+                    //    tags.Add(tag.Int1, tag);
 
                     if (marker.SNOName.Group != SNOGroup.Actor) continue;
-                    if (!MPQStorage.Data.Assets[SNOGroup.Actor].ContainsKey(marker.SNOName.SNOId)) continue;
 
-                    // Since we are not loading all actors, make sure to load portals and portal destination actors - fix this /raist.
-                    if ( ActorFactory.HasHandler(marker.SNOName.SNOId) 
-                         || tags.ContainsKey((int)MarkerTagTypes.DestinationWorld) 
-                         || tags.ContainsKey((int)MarkerTagTypes.ActorTag)
-                         || RandomHelper.Next(100) > 0)
-                    {                       
-                        Actor newActor = null;
+                    //// Since we are not loading all actors, make sure to load portals and portal destination actors - fix this /raist.
+                    //if ( ActorFactory.HasHandler(marker.SNOName.SNOId) 
+                    //     || tags.ContainsKey((int)MarkerTagTypes.DestinationWorld) 
+                    //     || tags.ContainsKey((int)MarkerTagTypes.ActorTag)
+                    //     || RandomHelper.Next(100) > 0)
+                    //{
+                        var position = marker.PRTransform.Vector3D + this.Position;
+                        Actor newActor = ActorFactory.Create(this.World, marker.SNOName.SNOId, position, marker.TagMap);
+                        if (newActor == null) continue;
 
-                        // This is ugly, because the ActorFactory does not differentiate between Gizmos, so when creating a portal, we have to do it manually
-                        if (tags.ContainsKey((int)MarkerTagTypes.DestinationWorld))
-                        {
-                            newActor = new Portal(this.World, marker.SNOName.SNOId, marker.PRTransform.Vector3D + this.Position);
-                            (newActor as Portal).Destination.WorldSNO = tags[(int)MarkerTagTypes.DestinationWorld].Int2;
+                        newActor.RotationAmount = marker.PRTransform.Quaternion.W;
+                        newActor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
-                            if (tags.ContainsKey((int)MarkerTagTypes.DestinationLevelArea))
-                                (newActor as Portal).Destination.DestLevelAreaSNO = tags[(int)MarkerTagTypes.DestinationLevelArea].Int2;
+                        //// This is ugly, because the ActorFactory does not differentiate between Gizmos, so when creating a portal, we have to do it manually
+                        //if (tags.ContainsKey((int)MarkerTagTypes.DestinationWorld))
+                        //{
+                        //    newActor = new Portal(this.World, marker.SNOName.SNOId, marker.PRTransform.Vector3D + this.Position);
+                        //    (newActor as Portal).Destination.WorldSNO = tags[(int)MarkerTagTypes.DestinationWorld].Int2;
 
-                            if (tags.ContainsKey((int)MarkerTagTypes.DestinationActorTag))
-                                (newActor as Portal).Destination.StartingPointActorTag = tags[(int)MarkerTagTypes.DestinationActorTag].Int2;
-                            else
-                                Logger.Warn("Found portal {0} in scene {1} without target location actor", newActor.ActorSNO, this.SceneSNO);
-                        }
-                        else
-                            newActor = ActorFactory.Create(marker.SNOName.SNOId, this.World, marker.PRTransform.Vector3D + this.Position);
+                        //    if (tags.ContainsKey((int)MarkerTagTypes.DestinationLevelArea))
+                        //        (newActor as Portal).Destination.DestLevelAreaSNO = tags[(int)MarkerTagTypes.DestinationLevelArea].Int2;
 
-                        if (newActor != null)
-                        {
-                            if (tags.ContainsKey((int)MarkerTagTypes.ActorTag))
-                                newActor.Tag = tags[(int)MarkerTagTypes.ActorTag].Int2;
+                        //    if (tags.ContainsKey((int)MarkerTagTypes.DestinationActorTag))
+                        //        (newActor as Portal).Destination.StartingPointActorTag = tags[(int)MarkerTagTypes.DestinationActorTag].Int2;
+                        //    else
+                        //        Logger.Warn("Found portal {0} in scene {1} without target location actor", newActor.ActorSNO, this.SceneSNO);
+                        //}
+                        //else
+                        //    newActor = ActorFactory.Create(marker.SNOName.SNOId, this.World, marker.PRTransform.Vector3D + this.Position);
 
-                            if (tags.ContainsKey((int)MarkerTagTypes.Scale))
-                                newActor.Scale = tags[(int)MarkerTagTypes.Scale].Float0;
+                        //if (newActor != null)
+                        //{
+                        //    if (tags.ContainsKey((int)MarkerTagTypes.ActorTag))
+                        //        newActor.Tag = tags[(int)MarkerTagTypes.ActorTag].Int2;
 
-                            newActor.RotationAmount = marker.PRTransform.Quaternion.W;
-                            newActor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
+                        //    if (tags.ContainsKey((int)MarkerTagTypes.Scale))
+                        //        newActor.Scale = tags[(int)MarkerTagTypes.Scale].Float0;
 
-                            System.Diagnostics.Debug.Assert(newActor.ActorSNO != -1);
+                        //    newActor.RotationAmount = marker.PRTransform.Quaternion.W;
+                        //    newActor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
-                            if (newActor is Waypoint) //TODO Do it in waypoint construct once grid is done /fasbat
+                        //    System.Diagnostics.Debug.Assert(newActor.ActorSNO != -1);
+
+                        //    if (newActor is Waypoint) //TODO Do it in waypoint construct once grid is done /fasbat
+                        //    {
+                        //        //TODO this is just act 1 ! /fasbat
+                        //        var actData = (Mooege.Common.MPQ.FileFormats.Act)MPQStorage.Data.Assets[SNOGroup.Act][70015].Data;
+                        //        var wayPointInfo = actData.WayPointInfo;
+                        //        for (int i = 0; i < actData.WayPointInfo.Length; i++)
+                        //        {
+                        //            if (wayPointInfo[i].SNOLevelArea == -1)
+                        //                continue;
+                        //            var levelAreaFile = MPQStorage.Data.Assets[SNOGroup.LevelArea][wayPointInfo[i].SNOLevelArea];
+                        //            var levelArea = (Mooege.Common.MPQ.FileFormats.LevelArea)levelAreaFile.Data;
+                        //            foreach (var area in Specification.SNOLevelAreas)
+                        //            {
+                        //                if (wayPointInfo[i].SNOWorld == World.WorldSNO && wayPointInfo[i].SNOLevelArea == area)
+                        //                {
+                        //                    Waypoint.Waypoints[i] = newActor as Waypoint;
+                        //                }
+                        //            }
+                        //        }
+                        //    }
+
+
+                            if(newActor is StartPosition)
                             {
-                                //TODO this is just act 1 ! /fasbat
-                                var actData = (Mooege.Common.MPQ.FileFormats.Act)MPQStorage.Data.Assets[SNOGroup.Act][70015].Data;
-                                var wayPointInfo = actData.WayPointInfo;
-                                for (int i = 0; i < actData.WayPointInfo.Length; i++)
-                                {
-                                    if (wayPointInfo[i].SNOLevelArea == -1)
-                                        continue;
-                                    var levelAreaFile = MPQStorage.Data.Assets[SNOGroup.LevelArea][wayPointInfo[i].SNOLevelArea];
-                                    var levelArea = (Mooege.Common.MPQ.FileFormats.LevelArea)levelAreaFile.Data;
-                                    foreach (var area in Specification.SNOLevelAreas)
-                                    {
-                                        if (wayPointInfo[i].SNOWorld == World.WorldSNO && wayPointInfo[i].SNOLevelArea == area)
-                                        {
-                                            Waypoint.Waypoints[i] = newActor as Waypoint;
-                                        }
-                                    }
-                                }
+                                this.StartPosition = newActor.Position;
+                                return;
                             }
 
                             if (!(newActor is Portal))
                                 this.World.Enter(newActor);
-                        }
-                    }
+                        //}
+                    //}
 
-                    if (marker.SNOName.SNOId == (int)MarkerTypes.Start_Location_0 || marker.SNOName.SNOId == (int)MarkerTypes.Start_Location_Team_0)
-                    {
-                        this.StartPosition = marker.PRTransform.Vector3D + this.Position;
-                    }
+                    //if (marker.SNOName.SNOId == (int)MarkerTypes.Start_Location_0 || marker.SNOName.SNOId == (int)MarkerTypes.Start_Location_Team_0)
+                    //{
+                    //    this.StartPosition = marker.PRTransform.Vector3D + this.Position;
+                    //}
                 }
             }
         }
