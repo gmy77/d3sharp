@@ -1289,7 +1289,7 @@ namespace Mooege.Core.GS.Player
         public GenericBlobMessage GetBlacksmithData()
         {
             var blacksmith = D3.ItemCrafting.CrafterData.CreateBuilder()
-                .SetLevel(49)
+                .SetLevel(45)
                 .SetCooldownEnd(0)
                 .Build();
             return new GenericBlobMessage(Opcodes.GenericBlobMessage8) { Data = blacksmith.ToByteArray() };
@@ -1307,7 +1307,7 @@ namespace Mooege.Core.GS.Player
         public GenericBlobMessage GetMysticData()
         {
             var mystic = D3.ItemCrafting.CrafterData.CreateBuilder()
-                .SetLevel(49)
+                .SetLevel(45)
                 .SetCooldownEnd(0)
                 .Build();
             return new GenericBlobMessage(Opcodes.GenericBlobMessage10) { Data = mystic.ToByteArray() };
