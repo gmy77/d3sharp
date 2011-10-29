@@ -132,7 +132,6 @@ namespace Mooege.Core.GS.Actors
         public SNOName SNOName { get; private set; }
 
         public Dictionary<int, TagMapEntry> Tags { get; private set; }
-        public int Tag;
 
         // Some ACD uncertainties
         public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself
@@ -210,12 +209,9 @@ namespace Mooege.Core.GS.Actors
         {
         }
 
-        private void ReadTags()
+        protected virtual void ReadTags()
         {
             if (this.Tags == null) return;
-
-            if (this.Tags.ContainsKey((int)MarkerTagTypes.ActorTag))
-                this.Tag = this.Tags[(int) MarkerTagTypes.ActorTag].Int2;
 
             if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
                 this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
@@ -377,7 +373,7 @@ namespace Mooege.Core.GS.Actors
 
         public override string ToString()
         {
-            return string.Format("Actor: [Type: {0}] [Id:{1}] {2}", this.ActorType, this.SNOName.SNOId, this.SNOName.Name);
+            return string.Format("Actor: [Type: {0}] [Id:{1}] [Position: {2}] {3}", this.ActorType, this.SNOName.SNOId, this.Position, this.SNOName.Name);
         }
     }
 }

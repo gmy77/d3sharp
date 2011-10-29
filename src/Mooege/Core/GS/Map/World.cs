@@ -23,13 +23,13 @@ using System.Linq;
 using System.Windows;
 using Mooege.Common;
 using Mooege.Common.Helpers;
+using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Collision;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.World;
 
 // NOTE: Scenes are actually laid out in cells with Subscenes filling in certain areas under a Scene.
@@ -68,22 +68,20 @@ namespace Mooege.Core.GS.Map
             this.Game.StartTracking(this);
             this._actors = new ConcurrentDictionary<uint, Actor>();
             this.Players = new ConcurrentDictionary<uint, Player.Player>();
-
-            // NOTE: WorldSNO must be valid before adding it to the game
-            this.WorldSNO = worldSNO;
+            this.WorldSNO = worldSNO; // NOTE: WorldSNO must be valid before adding it to the game
 
             this.QuadTree = new QuadTree(new Size(60, 60), 0, false);
             this.Game.AddWorld(this);
         }
 
         /// <summary>
-        /// Returns a list of scenes that's player is spawnable.
+        /// Returns list of available starting points.
         /// </summary>
-        public List<Scene> SpawnableScenes
+        public List<StartingPoint> StartingPoints
         {
             get
             {
-                return (from pair in this.Scenes where pair.Value.StartPosition != null select pair.Value).ToList();
+                return this._actors.Values.OfType<StartingPoint>().Select(actor => actor).ToList();
             }
         }
 
@@ -342,9 +340,14 @@ namespace Mooege.Core.GS.Map
             //return this.Scenes.Where(scene => scene.DynamicID == dynamicID).FirstOrDefault();
         }
 
-        public Actor GetActorByTag(int tag)
+        public StartingPoint GetStartingPointById(int id)
         {
-            return (from Actor a in _actors.Values where a.Tag == tag select a).FirstOrDefault();
+            return _actors.Values.OfType<StartingPoint>().FirstOrDefault(startingPoint => startingPoint.TargetId == id);
+        }
+
+        public Waypoint GetWayPointById(int id)
+        {
+            return _actors.Values.OfType<Waypoint>().FirstOrDefault(waypoint => waypoint.WaypointId == id);
         }
 
         public Actor GetActor(uint dynamicID)

@@ -49,7 +49,7 @@ namespace Mooege.Core.GS.Map
             };
 
             if (tags.ContainsKey((int)MarkerTagTypes.DestinationLevelArea))
-                this.Destination.DestLevelAreaSNO = tags[(int)MarkerTagTypes.DestinationActorTag].Int2;
+                this.Destination.DestLevelAreaSNO = tags[(int)MarkerTagTypes.DestinationLevelArea].Int2;
 
             if (tags.ContainsKey((int)MarkerTagTypes.DestinationActorTag))
                 this.Destination.StartingPointActorTag = tags[(int)MarkerTagTypes.DestinationActorTag].Int2;
@@ -69,8 +69,6 @@ namespace Mooege.Core.GS.Map
             this.Attributes[GameAttribute.Hitpoints_Cur] = 0.0009994507f;
             this.Attributes[GameAttribute.TeamID] = 1;
             this.Attributes[GameAttribute.Level] = 1;
-
-            this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
         public override bool Reveal(Player.Player player)
@@ -118,7 +116,7 @@ namespace Mooege.Core.GS.Map
             return true;
         }
 
-        public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
+        public override void OnTargeted(Player.Player player, TargetMessage message)
         {
             World world = this.World.Game.GetWorld(this.Destination.WorldSNO);
             if (world == null)
@@ -127,7 +125,7 @@ namespace Mooege.Core.GS.Map
                 return;
             }
 
-            Actor startingPoint = world.GetActorByTag(this.Destination.StartingPointActorTag);
+            var startingPoint = world.GetStartingPointById(this.Destination.StartingPointActorTag);
 
             if (startingPoint != null)
                 player.TransferTo(world, startingPoint.Position);

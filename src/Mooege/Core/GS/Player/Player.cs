@@ -120,8 +120,7 @@ namespace Mooege.Core.GS.Player
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.CollFlags = 0x00000000;
 
-            var spawnScene = this.World.SpawnableScenes.First();
-            this.Position = spawnScene.StartPosition;
+            this.Position = this.World.StartingPoints.First().Position;
 
             // den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
             // inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
@@ -517,14 +516,10 @@ namespace Mooege.Core.GS.Player
 
         private void OnTryWaypoint(GameClient client, TryWaypointMessage tryWaypointMessage)
         {
-            Vector3D position;
+            var wayPoint = this.World.GetWayPointById(tryWaypointMessage.Field1);
+            if (wayPoint == null) return;
 
-            if (Waypoint.Waypoints.ContainsKey(tryWaypointMessage.Field1)) // TODO handle other worlds! it's easy! /fasbat
-                position = Waypoint.Waypoints[tryWaypointMessage.Field1].Position;
-            else
-                return;
-
-            this.Position = position;
+            this.Position = wayPoint.Position;
             InGameClient.SendMessage(ACDWorldPositionMessage);
         }
 

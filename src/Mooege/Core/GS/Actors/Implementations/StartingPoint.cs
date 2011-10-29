@@ -25,11 +25,21 @@ using Mooege.Core.GS.Markers;
 namespace Mooege.Core.GS.Actors.Implementations
 {
     [HandledSNO((int)MarkerTypes.Start_Location_0, (int)MarkerTypes.Start_Location_Team_0)]
-    public class StartPosition : Gizmo
+    public class StartingPoint : Gizmo
     {
-        public StartPosition(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
+        public int TargetId { get; private set; }
+
+        public StartingPoint(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
             : base(world, actorSNO, position, tags)
         {
+        }
+
+        protected override void ReadTags()
+        {
+            if (this.Tags == null) return;
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.ActorTag))
+                this.TargetId = this.Tags[(int)MarkerTagTypes.ActorTag].Int2;
         }
     }
 }
