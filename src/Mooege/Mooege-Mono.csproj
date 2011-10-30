@@ -119,6 +119,7 @@
     <Compile Include="Common\MPQ\FileFormats\MarkerSet.cs" />
     <Compile Include="Common\MPQ\FileFormats\Monster.cs" />
     <Compile Include="Common\MPQ\FileFormats\Observer.cs" />
+    <Compile Include="Common\MPQ\FileFormats\PhysMesh.cs" />
     <Compile Include="Common\MPQ\FileFormats\Power.cs" />
     <Compile Include="Common\MPQ\FileFormats\Quest.cs" />
     <Compile Include="Common\MPQ\FileFormats\QuestRange.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Common\MPQ\FileFormats\Scene.cs" />
     <Compile Include="Common\MPQ\FileFormats\SceneGroup.cs" />
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
+    <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
     <Compile Include="Common\MPQ\SerializableData.cs" />
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
@@ -142,6 +144,9 @@
     <Compile Include="Core\GS\Actors\ActorFactory.cs" />
     <Compile Include="Core\GS\Actors\Gizmo.cs" />
     <Compile Include="Core\GS\Actors\Environment.cs" />
+    <Compile Include="Core\GS\Actors\HandledSNO.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Stash.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Waypoint.cs" />
     <Compile Include="Core\GS\Common\Types\SNO\SNOGroup.cs" />
     <Compile Include="Core\GS\Game\GameCommands.cs" />
     <Compile Include="Core\GS\Game\GameManager.cs" />

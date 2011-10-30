@@ -135,6 +135,7 @@
     <Compile Include="Common\MPQ\FileFormats\MarkerSet.cs" />
     <Compile Include="Common\MPQ\FileFormats\Monster.cs" />
     <Compile Include="Common\MPQ\FileFormats\Observer.cs" />
+    <Compile Include="Common\MPQ\FileFormats\PhysMesh.cs" />
     <Compile Include="Common\MPQ\FileFormats\Power.cs" />
     <Compile Include="Common\MPQ\FileFormats\Quest.cs" />
     <Compile Include="Common\MPQ\FileFormats\QuestRange.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Common\MPQ\FileFormats\Scene.cs" />
     <Compile Include="Common\MPQ\FileFormats\SceneGroup.cs" />
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
+    <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
     <Compile Include="Common\MPQ\SerializableData.cs" />
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
@@ -159,12 +161,21 @@
     <Compile Include="Core\GS\Actors\Gizmo.cs" />
     <Compile Include="Core\GS\Actors\Environment.cs" />
     <Compile Include="Core\GS\Actors\HandledSNO.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Artisan.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Blacksmith.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Jeweler.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Mystic.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Cain.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Vendor.cs" />
+    <Compile Include="Core\GS\Actors\Living.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Stash.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Waypoint.cs" />
+    <Compile Include="Core\GS\Actors\NPC.cs" />
     <Compile Include="Core\GS\Common\Types\SNO\SNOGroup.cs" />
     <Compile Include="Core\GS\Game\GameCommands.cs" />
     <Compile Include="Core\GS\Game\GameManager.cs" />
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
+    <Compile Include="Core\GS\InteractiveNPC.cs" />
     <Compile Include="Core\GS\Markers\Marker.cs" />
     <Compile Include="Core\GS\Player\Equipment.cs" />
     <Compile Include="Core\GS\Player\Stash.cs" />
@@ -235,6 +246,7 @@
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\OpenArtisanWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
@@ -347,8 +359,8 @@
     <Compile Include="Net\GS\Message\Definitions\Chat\ChatMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Effect\ComplexEffectAddMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Connection\ConnectionEstablishedMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Crafting\CrafterLevelUpMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Crafting\CraftingResultsMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\CrafterLevelUpMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\CraftingResultsMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Game\CreateBNetGameMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Game\CreateBNetGameResultMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hero\CreateHeroMessage.cs" />
@@ -361,7 +373,7 @@
     <Compile Include="Net\GS\Message\Definitions\Text\DisplayGameTextMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\DWordDataMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Effect\EffectGroupACDToACDMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Enchant\EnchantItemMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\EnchantItemMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Encounter\EncounterInviteStateMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\EndConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Tick\EndOfTickMessage.cs" />

@@ -34,14 +34,14 @@ namespace Mooege.Core.GS.Generators
 
         public static World Generate(Game.Game game, int worldSNO)
         {
-            if(!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldSNO))
+            if (!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldSNO))
             {
                 Logger.Error("Can't find a valid world definition for sno: {0}", worldSNO);
                 return null;
             }
 
             var worldAsset = MPQStorage.Data.Assets[SNOGroup.Worlds][worldSNO];
-            var worldData = (Mooege.Common.MPQ.FileFormats.World) worldAsset.Data;
+            var worldData = (Mooege.Common.MPQ.FileFormats.World)worldAsset.Data;
 
             if (worldData.SceneParams.SceneChunks.Count == 0)
             {
@@ -52,7 +52,7 @@ namespace Mooege.Core.GS.Generators
             var world = new World(game, worldSNO);
 
             // Create a clusterID => Cluster Dictionary
-            var clusters = new Dictionary<int,Mooege.Common.MPQ.FileFormats.SceneCluster>();
+            var clusters = new Dictionary<int, Mooege.Common.MPQ.FileFormats.SceneCluster>();
             foreach (var cluster in worldData.SceneClusterSet.SceneClusters)
                 clusters[cluster.ClusterId] = cluster;
 
@@ -60,7 +60,48 @@ namespace Mooege.Core.GS.Generators
             float minX = worldData.SceneParams.SceneChunks.Min(x => x.PRTransform.Vector3D.X);
             float minY = worldData.SceneParams.SceneChunks.Min(x => x.PRTransform.Vector3D.Y);
 
-            foreach(var sceneChunk in worldData.SceneParams.SceneChunks)
+            // Count all occurences of each cluster /fasbat
+            var clusterCount = new Dictionary<int, int>();
+
+            foreach (var sceneChunk in worldData.SceneParams.SceneChunks)
+            {
+                var cID = sceneChunk.SceneSpecification.ClusterID;
+                if (cID != -1 && clusters.ContainsKey(cID)) // Check for wrong clusters /fasbat
+                {
+                    if (!clusterCount.ContainsKey(cID))
+                        clusterCount[cID] = 0;
+                    clusterCount[cID]++;
+                }
+            }
+
+            // For each cluster generate a list of randomly selected subcenes /fasbat
+            var clusterSelected = new Dictionary<int, List<Mooege.Common.MPQ.FileFormats.SubSceneEntry>>();
+            foreach (var cID in clusterCount.Keys)
+            {
+                var selected = new List<Mooege.Common.MPQ.FileFormats.SubSceneEntry>();
+                clusterSelected[cID] = selected;
+                var count = clusterCount[cID];
+                foreach (var group in clusters[cID].SubSceneGroups) // First select from each subscene group /fasbat
+                {
+                    for (int i = 0; i < group.I0 && count > 0; i++, count--) //TODO Rename I0 to requiredCount? /fasbat
+                    {
+                        var subSceneEntry = RandomHelper.RandomItem(group.Entries, entry => entry.Probability);
+                        selected.Add(subSceneEntry);
+                    }
+
+                    if (count == 0)
+                        break;
+                }
+
+                while (count > 0) // Fill the rest with defaults /fasbat
+                {
+                    var subSceneEntry = RandomHelper.RandomItem(clusters[cID].Default.Entries, entry => entry.Probability);
+                    selected.Add(subSceneEntry);
+                    count--;
+                }
+            }
+
+            foreach (var sceneChunk in worldData.SceneParams.SceneChunks)
             {
                 var scene = new Scene(world, sceneChunk.SNOName.SNOId, null);
                 scene.MiniMapVisibility = MiniMapVisibility.Visited;
@@ -69,7 +110,7 @@ namespace Mooege.Core.GS.Generators
                 scene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
                 scene.SceneGroupSNO = -1;
 
-                // If the scene has a subscene (cluster ID is set), choose a random subscenes from the cluster load it and attach it to parent scene
+                // If the scene has a subscene (cluster ID is set), choose a random subscenes from the cluster load it and attach it to parent scene /farmy
                 if (sceneChunk.SceneSpecification.ClusterID != -1)
                 {
                     if (!clusters.ContainsKey(sceneChunk.SceneSpecification.ClusterID))
@@ -78,21 +119,18 @@ namespace Mooege.Core.GS.Generators
                     }
                     else
                     {
-                        var cluster = clusters[sceneChunk.SceneSpecification.ClusterID];
-
-                        // TODO Why are entries not always normalized? is that a bug or do these values mean something else... - farmy
-                        // TODO Only default scenes are loaded. No waypoints, random dungeons or other special tiles
+                        var entries = clusterSelected[sceneChunk.SceneSpecification.ClusterID]; // Select from our generated list /fasbat
                         Mooege.Common.MPQ.FileFormats.SubSceneEntry subSceneEntry = null;
-                        if(cluster.Default.Entries.Count > 0)
-                            subSceneEntry = RandomHelper.RandomItem<Mooege.Common.MPQ.FileFormats.SubSceneEntry>(cluster.Default.Entries, entry => entry.Probability);
-                        else
-                            if(cluster.SubSceneGroups.Count > 0)
-                                subSceneEntry = RandomHelper.RandomItem<Mooege.Common.MPQ.FileFormats.SubSceneEntry>(cluster.SubSceneGroups[0].Entries, entry => entry.Probability);
-                            else
-                                Logger.Error("No SubScenes defined for cluster {0} in world {1}", sceneChunk.SceneSpecification.ClusterID, world.DynamicID);
 
-                        // TODO According to BoyC, scenes can have more than one subscene, so better enumerate over all subscenepositions
-                        Vector3D pos = FindSubScenePosition(sceneChunk);
+                        if (entries.Count > 0)
+                        {
+                            subSceneEntry = RandomHelper.RandomItem<Mooege.Common.MPQ.FileFormats.SubSceneEntry>(entries, entry => 1); // TODO Just shuffle the list, dont random every time. /fasbat
+                            entries.Remove(subSceneEntry);
+                        }
+                        else
+                            Logger.Error("No SubScenes defined for cluster {0} in world {1}", sceneChunk.SceneSpecification.ClusterID, world.DynamicID);
+
+                        Vector3D pos = FindSubScenePosition(sceneChunk); // TODO According to BoyC, scenes can have more than one subscene, so better enumerate over all subscenepositions /farmy
 
                         if (pos == null)
                         {
@@ -112,9 +150,8 @@ namespace Mooege.Core.GS.Generators
                     }
 
                 }
-
-                scene.LoadActors();
                 scene.Specification = sceneChunk.SceneSpecification;
+                scene.LoadActors();
             }
 
             return world;
@@ -131,7 +168,7 @@ namespace Mooege.Core.GS.Generators
             {
                 var mpqMarkerSet = MPQStorage.Data.Assets[SNOGroup.MarkerSet][markerSet].Data as Mooege.Common.MPQ.FileFormats.MarkerSet;
                 foreach (var marker in mpqMarkerSet.Markers)
-                    if (marker.Int0 == 16)      // TODO Make this an enum value
+                    if (marker.Int0 == 16)      // TODO Make this an enum value /farmy
                         return marker.PRTransform.Vector3D;
             }
 

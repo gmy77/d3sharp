@@ -611,12 +611,10 @@ namespace Mooege.Core.GS.Player
 
         private void OnTryWaypoint(GameClient client, TryWaypointMessage tryWaypointMessage)
         {
-            Logger.Trace(tryWaypointMessage.AsText());
-
             Vector3D position;
 
-            if (Waypoint.Waypoints.ContainsKey(tryWaypointMessage.Field1))
-                position = Waypoint.Waypoints[tryWaypointMessage.Field1];
+            if (Waypoint.Waypoints.ContainsKey(tryWaypointMessage.Field1)) // TODO handle other worlds! it's easy! /fasbat
+                position = Waypoint.Waypoints[tryWaypointMessage.Field1].Position;
             else
                 return;
 
@@ -1383,6 +1381,33 @@ namespace Mooege.Core.GS.Player
                 .Build();
 
             return new GenericBlobMessage(Opcodes.GenericBlobMessage6) {Data = playerBanner.ToByteArray()};
+        }
+
+        public GenericBlobMessage GetBlacksmithData()
+        {
+            var blacksmith = D3.ItemCrafting.CrafterData.CreateBuilder()
+                .SetLevel(45)
+                .SetCooldownEnd(0)
+                .Build();
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage8) { Data = blacksmith.ToByteArray() };
+        }
+
+        public GenericBlobMessage GetJewelerData()
+        {
+            var jeweler = D3.ItemCrafting.CrafterData.CreateBuilder()
+                .SetLevel(9)
+                .SetCooldownEnd(0)
+                .Build();
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage9) { Data = jeweler.ToByteArray() };
+        }
+
+        public GenericBlobMessage GetMysticData()
+        {
+            var mystic = D3.ItemCrafting.CrafterData.CreateBuilder()
+                .SetLevel(45)
+                .SetCooldownEnd(0)
+                .Build();
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage10) { Data = mystic.ToByteArray() };
         }
     }
 }

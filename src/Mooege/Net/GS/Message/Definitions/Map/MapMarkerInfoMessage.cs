@@ -38,6 +38,10 @@ namespace Mooege.Net.GS.Message.Definitions.Map
         public bool Field11;
         public int Field12;
 
+        public MapMarkerInfoMessage()
+            : base(Opcodes.MapMarkerInfoMessage)
+        { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);

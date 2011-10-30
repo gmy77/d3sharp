@@ -46,6 +46,10 @@ namespace Mooege.Core.MooNet.Games
         /// </summary>
         public bnet.protocol.game_master.GameHandle GameHandle { get; private set; }
 
+        public D3.OnlineService.GameCreateParams GameCreateParams { get; private set; }
+
+        public string Version { get; private set; }
+
         public ulong FactoryID { get; private set; }
 
         public ulong RequestId { get; set; }
@@ -61,13 +65,26 @@ namespace Mooege.Core.MooNet.Games
             this.GameHandle = bnet.protocol.game_master.GameHandle.CreateBuilder().SetFactoryId(this.FactoryID).SetGameId(this.BnetEntityId).Build();
         }
 
-        public void StartGame(List<MooNetClient> clients, ulong objectId)
+        public void StartGame(List<MooNetClient> clients, ulong objectId, D3.OnlineService.GameCreateParams gameCreateParams, string version)
         {
+            this.GameCreateParams = gameCreateParams;
+            this.Version = version;
             this.InGame = GS.Game.GameManager.CreateGame((int) this.DynamicId); // create the ingame.
 
             clients.First().MapLocalObjectID(this.DynamicId, objectId); // map remote object-id for party leader.
 
             foreach(var client in clients) // get all clients in game.
+            {
+                this.SendConnectionInfo(client);
+            }
+        }
+
+        public void JoinGame(List<MooNetClient> clients, ulong objectId)
+        {
+            //Seems to work whether the line below is there or not.  Commenting out as it is easier to detect if something is completely missing vs wrong... /dustinconrad
+            //clients.First().MapLocalObjectID(this.DynamicId, objectId);
+
+            foreach (var client in clients) // get all clients in game.
             {
                 this.SendConnectionInfo(client);
             }
