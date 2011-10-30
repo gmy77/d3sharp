@@ -121,10 +121,9 @@ namespace Mooege.Core.Common.Items
             // level requirement
             // Attributes[GameAttribute.Requirement, 38] = definition.RequiredLevel;
 
-            if (definition.Quality != ItemTable.ItemQuality.Invalid)
-                Attributes[GameAttribute.Item_Quality_Level] = (int)definition.Quality;
-            else
+            if (definition.Quality == ItemTable.ItemQuality.Invalid)
                 Attributes[GameAttribute.Item_Quality_Level] = 1;
+
             Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
 
             /*
