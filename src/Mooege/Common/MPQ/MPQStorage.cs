@@ -26,13 +26,14 @@ namespace Mooege.Common.MPQ
     public static class MPQStorage
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        private readonly static string MpqRoot = Core.Common.Storage.Config.Instance.MPQRoot;
+        private readonly static string MpqRoot;
 
         public static readonly List<string> MPQList;
         public static readonly Data Data;
 
         static MPQStorage()
         {
+            MpqRoot = string.Format("{0}/{1}/", FileHelpers.AssemblyRoot, Core.Common.Storage.Config.Instance.MPQRoot);
             if (!Directory.Exists(MpqRoot))
             {
                 Logger.Fatal("MPQ root folder does not exist: {0}", MpqRoot);
