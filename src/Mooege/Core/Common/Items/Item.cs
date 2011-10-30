@@ -94,7 +94,7 @@ namespace Mooege.Core.Common.Items
         public Item(World world, int actorSNO, int gbid, ItemType type)
             : base(world, world.NewActorID)
         {
-            this.ActorSNO = actorSNO;
+            this.SNOId = actorSNO;
             this.GBHandle.Type = (int)GBHandleType.Gizmo;
             this.GBHandle.GBID = gbid;
             this.ItemType = type;

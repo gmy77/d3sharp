@@ -43,7 +43,7 @@ namespace Mooege.Core.GS.Actors.Implementations
         public Portal(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
             : base(world, world.NewActorID, position, tags)
         {
-            this.ActorSNO = actorSNO;
+            this.SNOId = actorSNO;
             this.Destination = new ResolvedPortalDestination
             {
                 WorldSNO = tags[(int)MarkerTagTypes.DestinationWorld].Int2,
@@ -55,9 +55,9 @@ namespace Mooege.Core.GS.Actors.Implementations
             if (tags.ContainsKey((int)MarkerTagTypes.DestinationActorTag))
                 this.Destination.StartingPointActorTag = tags[(int)MarkerTagTypes.DestinationActorTag].Int2;
             else
-                Logger.Warn("Found portal {0}without target location actor", this.ActorSNO);
+                Logger.Warn("Found portal {0}without target location actor", this.SNOId);
 
-            this.Field8 = this.ActorSNO;
+            this.Field8 = this.SNOId;
             this.Field2 = 16;
             this.Field3 = 0;
             this.CollFlags = 0x00000001;

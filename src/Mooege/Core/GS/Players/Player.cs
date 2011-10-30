@@ -132,7 +132,7 @@ namespace Mooege.Core.GS.Players
             this.Position = this.World.StartingPoints.First().Position; // set the player position to current world's very first startpoint. - should be actually set based on act & quest /raist.
 
             // actor values.
-            this.ActorSNO = this.ClassSNO;
+            this.SNOId = this.ClassSNO;
             this.Field2 = 0x00000009;
             this.Field3 = 0x00000000;
             this.Scale = this.ModelScale;
@@ -1264,7 +1264,7 @@ namespace Mooege.Core.GS.Players
                     TextClass = (Class)this.Properties.VoiceClassID,
                     Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
                     AudioClass = (Class)this.Properties.VoiceClassID,
-                    SNOSpeakerActor = this._actorSNO,
+                    SNOSpeakerActor = this.SNOId,
                     Name = this.Properties.Name,
                     Field11 = 0x00000002,
                     Field12 = -1,

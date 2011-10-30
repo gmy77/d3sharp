@@ -92,7 +92,7 @@ namespace Mooege.Core.GS.Map
         /// <summary>
         /// Scene revealing proximity for players.
         /// </summary>
-        private const int SceneProximity = 480;
+        private const int SceneProximity = 240;
 
         /// <summary>
         /// Actors revealing proximity for player.
@@ -636,7 +636,7 @@ namespace Mooege.Core.GS.Map
 
             foreach (var actor in this.Actors.Values)
             {
-                if (actor.ActorSNO == actorSNOId && (Math.Sqrt(Math.Pow(actor.Position.X - x, 2) + Math.Pow(actor.Position.Y - y, 2) + Math.Pow(actor.Position.Z - z, 2)) <= range))
+                if (actor.SNOId == actorSNOId && (Math.Sqrt(Math.Pow(actor.Position.X - x, 2) + Math.Pow(actor.Position.Y - y, 2) + Math.Pow(actor.Position.Z - z, 2)) <= range))
                 {
                     result.Add(actor);
                 }
