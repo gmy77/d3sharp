@@ -24,7 +24,7 @@ using System.Windows;
 using Mooege.Common;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Actors.Implementations;
-using Mooege.Core.GS.Common.Types.Collision;
+using Mooege.Core.GS.Common.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Actors;
@@ -58,7 +58,7 @@ namespace Mooege.Core.GS.Map
         public uint NewActorID { get { return this.Game.NewObjectID; } }
         public uint NewPlayerID { get { return this.Game.NewObjectID; } }
 
-        private const int SceneProximity = 240;
+        private const int SceneProximity = 480;
         private const int ActorProximity = 240;
 
         public World(Game.Game game, int worldSNO)
@@ -70,7 +70,7 @@ namespace Mooege.Core.GS.Map
             this.Players = new ConcurrentDictionary<uint, Player.Player>();
             this.WorldSNO = worldSNO; // NOTE: WorldSNO must be valid before adding it to the game
 
-            this.QuadTree = new QuadTree(new Size(60, 60), 0, false);
+            this.QuadTree = new QuadTree(new Size(60, 60), 0);
             this.Game.AddWorld(this);
         }
 
