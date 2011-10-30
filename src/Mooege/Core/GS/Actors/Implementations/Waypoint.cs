@@ -17,6 +17,7 @@
  */
 
 using System.Collections.Generic;
+using System.Windows;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
@@ -47,22 +48,29 @@ namespace Mooege.Core.GS.Actors.Implementations
             var actData = (Mooege.Common.MPQ.FileFormats.Act)MPQStorage.Data.Assets[SNOGroup.Act][70015].Data;
             var wayPointInfo = actData.WayPointInfo;
 
+            var proximity = new Rect(this.Position.X - 1.0, this.Position.Y - 1.0, 2.0, 2.0);
+            var scenes = this.World.QuadTree.Query<Scene>(proximity);
+            var scene = scenes[0]; // Parent scene /fasbat
+
+            if (scenes.Count == 2) // What if it's a subscene? /fasbat
+            {
+                if (scenes[1].ParentChunkID != 0xFFFFFFFF)
+                    scene = scenes[1];
+            }
+
             for (int i = 0; i < wayPointInfo.Length; i++)
             {
                 if (wayPointInfo[i].SNOLevelArea == -1)
                     continue;
 
-                foreach(var scene in this.World.Scenes.Values)
+                if (scene.Specification == null) continue;
+                foreach (var area in scene.Specification.SNOLevelAreas)
                 {
-                    if (scene.Specification == null) continue;
-                    foreach(var area in scene.Specification.SNOLevelAreas)
-                    {
-                        if (wayPointInfo[i].SNOWorld != this.World.WorldSNO || wayPointInfo[i].SNOLevelArea != area)
-                            continue;
+                    if (wayPointInfo[i].SNOWorld != this.World.WorldSNO || wayPointInfo[i].SNOLevelArea != area)
+                        continue;
 
-                        this.WaypointId = i;
-                        break;
-                    }
+                    this.WaypointId = i;
+                    break;
                 }
             }
         }

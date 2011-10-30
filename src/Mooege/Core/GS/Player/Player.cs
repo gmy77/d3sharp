@@ -525,7 +525,7 @@ namespace Mooege.Core.GS.Player
             if (wayPoint == null) return;
 
             this.Position = wayPoint.Position;
-            InGameClient.SendMessage(ACDWorldPositionMessage);
+            InGameClient.SendMessage(this.ACDWorldPositionMessage);
         }
 
         private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
