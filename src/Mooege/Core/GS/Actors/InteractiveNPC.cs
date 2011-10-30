@@ -16,20 +16,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Players;
+using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.World;
 
-namespace Mooege.Core.GS.Actors.Implementations.Artisans
+namespace Mooege.Core.GS.Actors
 {
-    [HandledSNO(56947 /* PT_Blacksmith.acr */)]
-    public class Blacksmith : Artisan
+    public class InteractiveNPC : NPC
     {
-        public Blacksmith(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
+        public InteractiveNPC(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
             : base(world, actorSNO, position, tags)
         {
+            this.Attributes[GameAttribute.NPC_Has_Interact_Options, 0] = true;
+            this.Attributes[GameAttribute.NPC_Is_Operatable] = true;
+            this.Attributes[GameAttribute.Buff_Visual_Effect, 0x00FFFFF] = true;
         }
-        //TODO add all blacksmith functionality? /fasbat
+
+        public override void OnTargeted(Player player, TargetMessage message)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

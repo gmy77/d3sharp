@@ -26,7 +26,7 @@ using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
 
-namespace Mooege.Core.GS.Game
+namespace Mooege.Core.GS.Games
 {
     [CommandGroup("spawn", "Spawns a mob.\nUsage: spawn [amount] [actorSNO]")]
     public class SpawnCommand : CommandGroup
@@ -63,14 +63,14 @@ namespace Mooege.Core.GS.Game
                                             player.Position.Y + (float) RandomHelper.NextDouble()*20f,
                                             player.Position.Z);
 
-                player.World.SpawnMob(player, actorSNO, position);
+                player.World.SpawnMonster(actorSNO, position);
             }
 
             return string.Format("Spawned {0} mobs with ActorSNO: {1}", amount, actorSNO);
         }
     }
 
-    [CommandGroup("Tp", "Transfers the character to another world.")]
+    [CommandGroup("Tp", "Transfers your character to another world.")]
     public class TeleportCommand : CommandGroup
     {
         [DefaultCommand]
@@ -98,12 +98,30 @@ namespace Mooege.Core.GS.Game
                 if(world==null)
                     return "Can't teleport you to world with snoId " + worldId;
 
-                invokerClient.InGameClient.Player.TransferTo(world, world.SpawnableScenes.First().StartPosition);
-
+                invokerClient.InGameClient.Player.TransferTo(world);
                 return string.Format("Teleported to: {0} [id: {1}]", MPQStorage.Data.Assets[SNOGroup.Worlds][worldId].Name, worldId);
             }
 
             return "Invalid arguments. Type 'help tp' to get help.";
+        }
+    }
+
+    [CommandGroup("Town", "Transfers your character back to town.")]
+    public class TownCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Portal(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            var world = invokerClient.InGameClient.Game.GetWorld(71150);
+
+            invokerClient.InGameClient.Player.TransferTo(world);
+            return string.Format("Teleported back to town.");
         }
     }
 

@@ -22,11 +22,10 @@ using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.Common.Items;
 
-namespace Mooege.Core.GS.Player
+namespace Mooege.Core.GS.Players
 {
 
     public class Inventory : IMessageConsumer
@@ -35,12 +34,12 @@ namespace Mooege.Core.GS.Player
 
         // Access by ID
         public Dictionary<uint, Item> Items { get; private set; } // Not needed atm. Whats the suppose of it?
-        private readonly Mooege.Core.GS.Player.Player _owner; // Used, because most information is not in the item class but Actors managed by the world
+        private readonly Player _owner; // Used, because most information is not in the item class but Actors managed by the world
 
         private Equipment _equipment;
         private Stash _inventoryStash;
 
-        public Inventory(Mooege.Core.GS.Player.Player owner)
+        public Inventory(Player owner)
         {
             this._owner = owner;
             this.Items = new Dictionary<uint, Item>();

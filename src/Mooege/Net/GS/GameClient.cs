@@ -19,8 +19,8 @@
 using System;
 using System.Linq;
 using Mooege.Common;
-using Mooege.Core.GS.Game;
-using Mooege.Core.GS.Player;
+using Mooege.Core.GS.Games;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Tick;
 using Mooege.Net.MooNet;

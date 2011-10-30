@@ -51,6 +51,7 @@ namespace Mooege.Common.MPQ
                     return;
                 }
                 this.BaseMPQFiles.Add(mpqFile);
+                Logger.Trace("Added base-mpq file: {0}", file);
             }
                         
             this.PatchPattern = patchPattern;
@@ -84,7 +85,7 @@ namespace Mooege.Common.MPQ
                 if (!match.Groups["version"].Success) continue;
 
                 MPQFileList.Add(Int32.Parse(match.Groups["version"].Value), file);
-                Logger.Info("Adding patch file: {0}", match.Groups[0].Value);
+                Logger.Trace("Applied patch file: {0}", match.Groups[0].Value);
             }
 
             /* add mpq's to mpq-file system in reverse-order (highest version first) */
