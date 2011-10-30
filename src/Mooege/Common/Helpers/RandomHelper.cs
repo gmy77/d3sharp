@@ -93,9 +93,9 @@ namespace Mooege.Common.Helpers
             return (uint)a;
         }
 
-        public uint Next(int min, int max)
+        public float Next(float min, float max)
         {
-            return (uint)min + Next() % (uint)(max - min + 1);
+            return min + Next() % (uint)(max - min + 1);
         }
     }
 }

@@ -21,6 +21,7 @@ using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.Extensions;
 using Mooege.Common.MPQ.FileFormats.Types;
+using System;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -882,8 +883,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public int AffixFamily1;
         public int ExclusionCategory;
         public int[] i7; //len 6
-        public int[] i8; //len 6
-        public int i9;
+        public int[] ItemGroup; //len 6
+        public QualityMask QualityMask;
         public AffixType2 affixType2;
         public int AssociatedAffix;
         public AttributeSpecifier[] attributeSpecifier; //len 4
@@ -908,10 +909,10 @@ namespace Mooege.Common.MPQ.FileFormats
             this.i7 = new int[6]; //312
             for (int i = 0; i < 6; i++)
                 this.i7[i] = stream.ReadValueS32();
-            this.i8 = new int[6]; //336
+            this.ItemGroup = new int[6]; //336
             for (int i = 0; i < 6; i++)
-                this.i8[i] = stream.ReadValueS32();
-            this.i9 = stream.ReadValueS32(); //360
+                this.ItemGroup[i] = stream.ReadValueS32();
+            this.QualityMask = (QualityMask)stream.ReadValueS32(); //360
             this.affixType2 = (AffixType2)stream.ReadValueS32(); //364
             this.AssociatedAffix = stream.ReadValueS32(); //368
             stream.Position += 4;
@@ -951,6 +952,21 @@ namespace Mooege.Common.MPQ.FileFormats
         Random = 9,
         Enhancement = 10,
         SocketEnhancement = 11,
+    }
+
+    [Flags]
+    public enum QualityMask
+    {
+        Inferior = 0x1,
+        Normal = 0x2,
+        Superior = 0x4,
+        Magic1 = 0x8,
+        Magic2 = 0x10,
+        Magic3 = 0x20,
+        Rare4 = 0x40,
+        Rare5 = 0x80,
+        Rare6 = 0x100,
+        Legendary = 0x200,
     }
 
     public class AttributeSpecifier

@@ -187,6 +187,7 @@ namespace Mooege.Core.Common.Items
                 || itemType == ItemType.Shoulders
                 || itemType == ItemType.Pants
                 || itemType == ItemType.Bracers
+                || itemType == ItemType.ChestArmor
                 );
         }
 
