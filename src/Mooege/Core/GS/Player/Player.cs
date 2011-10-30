@@ -22,6 +22,8 @@ using System.Threading;
 using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.Common.Items;
+using Mooege.Core.GS.Actors.Implementations;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Actors;
@@ -30,6 +32,7 @@ using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Definitions.Waypoint;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Hero;
@@ -39,7 +42,6 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Combat;
-using Mooege.Core.MooNet.Online;
 using System;
 
 
@@ -115,9 +117,10 @@ namespace Mooege.Core.GS.Player
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.CollFlags = 0x00000000;
 
-            this.Position.X = 3143.75f;
-            this.Position.Y = 2828.75f;
-            this.Position.Z = 59.075588f;
+            this.CurrentScene = this.World.SpawnableScenes.First();
+            this.Position.X = this.CurrentScene.StartPosition.X;
+            this.Position.Y = this.CurrentScene.StartPosition.Y;
+            this.Position.Z = this.CurrentScene.StartPosition.Z;
 
             // den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
             // inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
@@ -166,9 +169,9 @@ namespace Mooege.Core.GS.Player
             //Resistance
             this.Attributes[GameAttribute.Resistance, 0xDE] = 0.5f;
             this.Attributes[GameAttribute.Resistance, 0x226] = 0.5f;
-            this.Attributes[GameAttribute.Resistance_Total, 0] = 10f; /// im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
-            /// likely the physical school of damage, it probably doesn't actually do anything in this case (or maybe just not for the player's hero) 
-            /// but exists for the sake of parity with weapon damage schools
+            this.Attributes[GameAttribute.Resistance_Total, 0] = 10f; // im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
+            // likely the physical school of damage, it probably doesn't actually do anything in this case (or maybe just not for the player's hero) 
+            // but exists for the sake of parity with weapon damage schools
             this.Attributes[GameAttribute.Resistance_Total, 1] = 10f; //Fire
             this.Attributes[GameAttribute.Resistance_Total, 2] = 10f; //Lightning
             this.Attributes[GameAttribute.Resistance_Total, 3] = 10f; //Cold
@@ -326,9 +329,8 @@ namespace Mooege.Core.GS.Player
             else if (message is PlayerChangeHotbarButtonMessage) OnPlayerChangeHotbarButtonMessage(client, (PlayerChangeHotbarButtonMessage)message);
             else if (message is TargetMessage) OnObjectTargeted(client, (TargetMessage)message);
             else if (message is PlayerMovementMessage) OnPlayerMovement(client, (PlayerMovementMessage)message);
+            else if (message is TryWaypointMessage) OnTryWaypoint(client, (TryWaypointMessage)message);
             else return;
-
-            UpdateState();
         }
 
         public override void Update()
@@ -405,19 +407,15 @@ namespace Mooege.Core.GS.Player
                 item = (Item)actor;
                 if (item.ItemType != ItemType.HealthGlobe) continue;
 
-                //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
-                this.InGameClient.SendMessage(new PlayEffectMessage()
+                this.InGameClient.SendMessage(new PlayEffectMessage() //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
                 {
                     ActorId = this.DynamicID,
                     Effect = Effect.HealthOrbPickup
                 });
 
-                foreach (var player in PlayerManager.OnlinePlayers)
+                foreach(var pair in this.World.Players) // should be actually checking for players in proximity. /raist
                 {
-                    if (player.CurrentToon.Name != "Server")
-                    {
-                        player.InGameClient.Player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
-                    }
+                    pair.Value.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
                 }
 
                 item.Destroy();
@@ -453,6 +451,11 @@ namespace Mooege.Core.GS.Player
         public override void OnLeave(World world)
         {
             Logger.Trace("Leaving world!");
+        }
+
+        protected override void OnPositionChange(Vector3D prevPosition)
+        {
+            // check here for current-scene change.
         }
 
         public override bool Reveal(Mooege.Core.GS.Player.Player player)
@@ -509,6 +512,19 @@ namespace Mooege.Core.GS.Player
             }
         }
 
+        private void OnTryWaypoint(GameClient client, TryWaypointMessage tryWaypointMessage)
+        {
+            Vector3D position;
+
+            if (Waypoint.Waypoints.ContainsKey(tryWaypointMessage.Field1)) // TODO handle other worlds! it's easy! /fasbat
+                position = Waypoint.Waypoints[tryWaypointMessage.Field1].Position;
+            else
+                return;
+
+            this.Position = position;
+            InGameClient.SendMessage(ACDWorldPositionMessage);
+        }
+
         private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
         {
             this.SkillSet.HotBarSkills[message.BarIndex] = message.ButtonData;
@@ -517,6 +533,7 @@ namespace Mooege.Core.GS.Player
         private void OnAssignPassiveSkill(GameClient client, AssignPassiveSkillMessage message)
         {
             this.SkillSet.PassiveSkills[message.SkillIndex] = message.SNOSkill;
+            this.UpdateHeroState();
         }
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
@@ -529,9 +546,13 @@ namespace Mooege.Core.GS.Player
             }
 
             this.SkillSet.ActiveSkills[message.SkillIndex] = message.SNOSkill;
+            this.UpdateHeroState();
         }
 
-        public void UpdateState()
+        /// <summary>
+        /// Allows you to send a hero state message when you update hero's some property.
+        /// </summary>
+        public void UpdateHeroState()
         {
             this.InGameClient.SendMessage(new HeroStateMessage
             {
@@ -563,7 +584,7 @@ namespace Mooege.Core.GS.Player
                 SkilKeyMappings = this.SkillKeyMappings,
 
                 Field2 = 0x00000000,
-                Field3 = 0x00000001,
+                Field3 = 0x7FFFFFFF,
 
                 Field4 = new HirelingSavedData()
                 {
@@ -1263,6 +1284,33 @@ namespace Mooege.Core.GS.Player
                 .Build();
 
             return new GenericBlobMessage(Opcodes.GenericBlobMessage6) {Data = playerBanner.ToByteArray()};
+        }
+
+        public GenericBlobMessage GetBlacksmithData()
+        {
+            var blacksmith = D3.ItemCrafting.CrafterData.CreateBuilder()
+                .SetLevel(45)
+                .SetCooldownEnd(0)
+                .Build();
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage8) { Data = blacksmith.ToByteArray() };
+        }
+
+        public GenericBlobMessage GetJewelerData()
+        {
+            var jeweler = D3.ItemCrafting.CrafterData.CreateBuilder()
+                .SetLevel(9)
+                .SetCooldownEnd(0)
+                .Build();
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage9) { Data = jeweler.ToByteArray() };
+        }
+
+        public GenericBlobMessage GetMysticData()
+        {
+            var mystic = D3.ItemCrafting.CrafterData.CreateBuilder()
+                .SetLevel(45)
+                .SetCooldownEnd(0)
+                .Build();
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage10) { Data = mystic.ToByteArray() };
         }
     }
 }

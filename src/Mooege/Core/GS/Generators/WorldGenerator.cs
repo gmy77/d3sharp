@@ -16,296 +16,163 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.IO;
 using System.Collections.Generic;
-using duct;
+using System.Linq;
 using Mooege.Common;
-using Mooege.Core.GS.Game;
+using Mooege.Common.MPQ;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Data.SNO;
-using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.Map;
-using Mooege.Net.GS.Message.Definitions.Scene;
+using Mooege.Common.Helpers;
 
-// NOTE: Static-world loader for now until we get actual generation code in. duct# can be tossed once we do.
 
 namespace Mooege.Core.GS.Generators
 {
-    public class WorldGenerator
+    public static class WorldGenerator
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
-        private static readonly Template _tplWorldPath = new Template(null, new[]{VariableType.INTEGER}, false);
-        private static readonly Template _tplWorldSNO = new Template(new[]{"WorldSNO"}, new[]{VariableType.INTEGER}, false);
-        private static readonly Template _tplStartPos = new Template(new[]{"StartPos"}, new[]{VariableType.FLOAT, VariableType.FLOAT, VariableType.FLOAT}, false);
-
-        private static readonly Template _tplSceneUnified = new Template
-        (
-            new[]{"Unified"},
-            new[]
-            {
-                VariableType.INTEGER, // SceneSNO
-                // *SceneSpec*
-                VariableType.INTEGER, // CellZ
-                VariableType.INTEGER, VariableType.INTEGER, // Cell.X, Cell.Y
-                VariableType.INTEGER, VariableType.INTEGER, VariableType.INTEGER, VariableType.INTEGER, // arSnoLevelAreas[0,1,2,3]
-                VariableType.INTEGER, // snoPrevWorld
-                VariableType.INTEGER, // Field4
-                VariableType.INTEGER, // snoPrevLevelArea
-                VariableType.INTEGER, // snoNextWorld
-                VariableType.INTEGER, // Field7
-                VariableType.INTEGER, // snoNextLevelArea
-                VariableType.INTEGER, // snoMusic
-                VariableType.INTEGER, // snoCombatMusic
-                VariableType.INTEGER, // snoAmbient
-                VariableType.INTEGER, // snoReverb
-                VariableType.INTEGER, // snoWeather
-                VariableType.INTEGER, // snoPresetWorld
-                VariableType.INTEGER, // Field15
-                VariableType.INTEGER, // Field16
-                VariableType.INTEGER, // Field17
-                VariableType.INTEGER, // Field18
-                VariableType.INTEGER, // tCachedValues.Field0
-                VariableType.INTEGER, // tCachedValues.Field1
-                VariableType.INTEGER, // tCachedValues.Field2
-                VariableType.FLOAT, VariableType.FLOAT, VariableType.FLOAT, // tCachedValues.Field3.Min.X,Y,Z
-                VariableType.FLOAT, VariableType.FLOAT, VariableType.FLOAT, // tCachedValues.Field3.Max.X,Y,Z
-                VariableType.FLOAT, VariableType.FLOAT, VariableType.FLOAT, // tCachedValues.Field4.Min.X,Y,Z
-                VariableType.FLOAT, VariableType.FLOAT, VariableType.FLOAT, // tCachedValues.Field4.Max.X,Y,Z
-                VariableType.INTEGER, VariableType.INTEGER, VariableType.INTEGER, VariableType.INTEGER, // Field5[0,1,2,3]
-                VariableType.INTEGER, // tCachedValues.Field6
-                VariableType.FLOAT, VariableType.FLOAT, VariableType.FLOAT, // Transform.Rotation.Axis.X,Y,Z
-                VariableType.FLOAT, VariableType.FLOAT, VariableType.FLOAT, // Transform.ReferencePoint.X,Y,Z
-                VariableType.FLOAT,   // Transform.Rotation.Amount
-                VariableType.INTEGER // snoSceneGroup
-            },
-            false
-        );
-
-        private Dictionary<int, string> Paths;
-
-        public Mooege.Core.GS.Game.Game Game { get; private set; }
-
-        public WorldGenerator(Mooege.Core.GS.Game.Game game)
+        public static World Generate(Game.Game game, int worldSNO)
         {
-            this.Game = game;
-            this.Paths = new Dictionary<int, string>();
-            LoadList("Assets/Maps/worlds.txt");
-        }
-
-        public World GenerateWorld(int worldSNO)
-        {
-            if (HasWorldPath(worldSNO))
+            if (!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldSNO))
             {
-                string path = GetWorldPath(worldSNO);
-                try
+                Logger.Error("Can't find a valid world definition for sno: {0}", worldSNO);
+                return null;
+            }
+
+            var worldAsset = MPQStorage.Data.Assets[SNOGroup.Worlds][worldSNO];
+            var worldData = (Mooege.Common.MPQ.FileFormats.World)worldAsset.Data;
+
+            if (worldData.SceneParams.SceneChunks.Count == 0)
+            {
+                Logger.Error("World {0} [{1}] is a dynamic world! Can't generate dynamic worlds yet!", worldAsset.Name, worldAsset.SNOId);
+                return null;
+            }
+
+            var world = new World(game, worldSNO);
+
+            // Create a clusterID => Cluster Dictionary
+            var clusters = new Dictionary<int, Mooege.Common.MPQ.FileFormats.SceneCluster>();
+            foreach (var cluster in worldData.SceneClusterSet.SceneClusters)
+                clusters[cluster.ClusterId] = cluster;
+
+            // Scenes are not aligned to (0, 0) but apparently need to be -farmy
+            float minX = worldData.SceneParams.SceneChunks.Min(x => x.PRTransform.Vector3D.X);
+            float minY = worldData.SceneParams.SceneChunks.Min(x => x.PRTransform.Vector3D.Y);
+
+            // Count all occurences of each cluster /fasbat
+            var clusterCount = new Dictionary<int, int>();
+
+            foreach (var sceneChunk in worldData.SceneParams.SceneChunks)
+            {
+                var cID = sceneChunk.SceneSpecification.ClusterID;
+                if (cID != -1 && clusters.ContainsKey(cID)) // Check for wrong clusters /fasbat
                 {
-                    Node root = ScriptFormatter.LoadFromFile(path);
-                    return LoadNode(root);
-                }
-                catch (Exception e)
-                {
-                    Logger.ErrorException(e, "Failed to load world from {0}", path);
+                    if (!clusterCount.ContainsKey(cID))
+                        clusterCount[cID] = 0;
+                    clusterCount[cID]++;
                 }
             }
-            else
+
+            // For each cluster generate a list of randomly selected subcenes /fasbat
+            var clusterSelected = new Dictionary<int, List<Mooege.Common.MPQ.FileFormats.SubSceneEntry>>();
+            foreach (var cID in clusterCount.Keys)
             {
-                Logger.Error("No file has been mapped for WorldSNO {0}", worldSNO);
+                var selected = new List<Mooege.Common.MPQ.FileFormats.SubSceneEntry>();
+                clusterSelected[cID] = selected;
+                var count = clusterCount[cID];
+                foreach (var group in clusters[cID].SubSceneGroups) // First select from each subscene group /fasbat
+                {
+                    for (int i = 0; i < group.I0 && count > 0; i++, count--) //TODO Rename I0 to requiredCount? /fasbat
+                    {
+                        var subSceneEntry = RandomHelper.RandomItem(group.Entries, entry => entry.Probability);
+                        selected.Add(subSceneEntry);
+                    }
+
+                    if (count == 0)
+                        break;
+                }
+
+                while (count > 0) // Fill the rest with defaults /fasbat
+                {
+                    var subSceneEntry = RandomHelper.RandomItem(clusters[cID].Default.Entries, entry => entry.Probability);
+                    selected.Add(subSceneEntry);
+                    count--;
+                }
             }
-            return null;
-        }
 
-        private World LoadNode(Node root)
-        {
-            IntVariable ivar = (IntVariable)_tplWorldSNO.GetMatchingValue(root);
-            if (ivar == null)
-                throw new Exception(String.Format("Could not find value {0} in script", _tplWorldSNO.Identity[0]));
-            World world = new World(this.Game, ivar.Value);
+            foreach (var sceneChunk in worldData.SceneParams.SceneChunks)
+            {
+                var scene = new Scene(world, sceneChunk.SNOName.SNOId, null);
+                scene.MiniMapVisibility = MiniMapVisibility.Visited;
+                scene.Position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
+                scene.RotationAmount = sceneChunk.PRTransform.Quaternion.W;
+                scene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
+                scene.SceneGroupSNO = -1;
 
-            Identifier iden = _tplStartPos.GetMatchingIdentifier(root);
-            if (iden == null)
-                throw new Exception(String.Format("Could not find identifier {0} in script", _tplStartPos.Identity[0]));
-            world.StartPosition.X = iden.GetFloat(0).Value;
-            world.StartPosition.Y = iden.GetFloat(1).Value;
-            world.StartPosition.Z = iden.GetFloat(2).Value;
+                // If the scene has a subscene (cluster ID is set), choose a random subscenes from the cluster load it and attach it to parent scene /farmy
+                if (sceneChunk.SceneSpecification.ClusterID != -1)
+                {
+                    if (!clusters.ContainsKey(sceneChunk.SceneSpecification.ClusterID))
+                    {
+                        Logger.Warn("Referenced clusterID {0} not found for chunk {1} in world {2}", sceneChunk.SceneSpecification.ClusterID, sceneChunk.SNOName.SNOId, worldSNO);
+                    }
+                    else
+                    {
+                        var entries = clusterSelected[sceneChunk.SceneSpecification.ClusterID]; // Select from our generated list /fasbat
+                        Mooege.Common.MPQ.FileFormats.SubSceneEntry subSceneEntry = null;
 
-            string name = "scenes";
-            Node node = root.GetNode(name, false);
-            if (node == null)
-                throw new Exception(String.Format("Could not find node {0} in script", name));
-            LoadWorldScenes(node, world);
-            world.SortScenes();
+                        if (entries.Count > 0)
+                        {
+                            subSceneEntry = RandomHelper.RandomItem<Mooege.Common.MPQ.FileFormats.SubSceneEntry>(entries, entry => 1); // TODO Just shuffle the list, dont random every time. /fasbat
+                            entries.Remove(subSceneEntry);
+                        }
+                        else
+                            Logger.Error("No SubScenes defined for cluster {0} in world {1}", sceneChunk.SceneSpecification.ClusterID, world.DynamicID);
+
+                        Vector3D pos = FindSubScenePosition(sceneChunk); // TODO According to BoyC, scenes can have more than one subscene, so better enumerate over all subscenepositions /farmy
+
+                        if (pos == null)
+                        {
+                            Logger.Error("No scene position marker for SubScenes of Scene {0} found", sceneChunk.SNOName.SNOId);
+                        }
+                        else
+                        {
+                            Scene subscene = new Scene(world, subSceneEntry.SNOScene, scene);
+                            subscene.Position = scene.Position + pos;
+                            subscene.MiniMapVisibility = MiniMapVisibility.Visited;
+                            subscene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
+                            subscene.RotationAmount = sceneChunk.PRTransform.Quaternion.W;
+                            subscene.Specification = sceneChunk.SceneSpecification;
+                            scene.Subscenes.Add(subscene);
+                            subscene.LoadActors();
+                        }
+                    }
+
+                }
+                scene.Specification = sceneChunk.SceneSpecification;
+                scene.LoadActors();
+            }
+
             return world;
         }
 
-        private void LoadWorldScenes(Node root, World world)
+        /// <summary>
+        /// Loads all markersets of a scene and looks for the one with the subscene position
+        /// </summary>
+        private static Vector3D FindSubScenePosition(Mooege.Common.MPQ.FileFormats.SceneChunk sceneChunk)
         {
-            foreach (Variable v in root)
+            var mpqScene = MPQStorage.Data.Assets[SNOGroup.Scene][sceneChunk.SNOName.SNOId].Data as Mooege.Common.MPQ.FileFormats.Scene;
+
+            foreach (var markerSet in mpqScene.MarkerSets)
             {
-                if (v is Node)
-                {
-                    LoadScene((Node)v, world);
-                }
+                var mpqMarkerSet = MPQStorage.Data.Assets[SNOGroup.MarkerSet][markerSet].Data as Mooege.Common.MPQ.FileFormats.MarkerSet;
+                foreach (var marker in mpqMarkerSet.Markers)
+                    if (marker.Int0 == 16)      // TODO Make this an enum value /farmy
+                        return marker.PRTransform.Vector3D;
             }
-        }
 
-        private void LoadScene(Node root, World world)
-        {
-            Identifier iden = _tplSceneUnified.GetMatchingIdentifier(root);
-            if (iden == null)
-                throw new Exception(String.Format("Could not find identifier {0} in script", _tplSceneUnified.Identity[0]));
-            Scene scene = CreateScene(iden, world, null);
-
-            Node subs = root.GetNode("subs");
-            if (subs != null)
-            {
-                foreach (Variable v in subs)
-                {
-                    iden = v as Identifier;
-                    if (_tplSceneUnified.ValidateIdentifier(iden))
-                        CreateScene(iden, world, scene);
-                    else
-                        Logger.Warn("Unrecognized variable named \"{0}\" in sub-scene node", v.Name);
-                }
-            }
-        }
-
-        private Scene CreateScene(Identifier iden, World world, Scene parent)
-        {
-            int i = 0;
-            Scene scene = new Scene(world, iden.GetInt(i++).Value, parent);
-            scene.MiniMapVisibility = 2;
-            if (!SNODatabase.Instance.IsOfGroup(scene.SceneSNO, SNOGroup.Scenes))
-            {
-                Logger.Warn("SceneSNO {0} doesn't appear to be a valid SNO ID..", scene.SceneSNO);
-            }
-            if (parent != null)
-                parent.Subscenes.Add(scene);
-            scene.SceneSpec = new SceneSpecification
-            {
-                CellZ = iden.GetInt(i++).Value,
-                Cell = new IVector2D
-                {
-                    X = iden.GetInt(i++).Value,
-                    Y = iden.GetInt(i++).Value
-                },
-                arSnoLevelAreas = new int[4]
-                {
-                    iden.GetInt(i++).Value,
-                    iden.GetInt(i++).Value,
-                    iden.GetInt(i++).Value,
-                    iden.GetInt(i++).Value
-                },
-                snoPrevWorld        = iden.GetInt(i++).Value,
-                Field4              = iden.GetInt(i++).Value,
-                snoPrevLevelArea    = iden.GetInt(i++).Value,
-                snoNextWorld        = iden.GetInt(i++).Value,
-                Field7              = iden.GetInt(i++).Value,
-                snoNextLevelArea    = iden.GetInt(i++).Value,
-                snoMusic            = iden.GetInt(i++).Value,
-                snoCombatMusic      = iden.GetInt(i++).Value,
-                snoAmbient          = iden.GetInt(i++).Value,
-                snoReverb           = iden.GetInt(i++).Value,
-                snoWeather          = iden.GetInt(i++).Value,
-                snoPresetWorld      = iden.GetInt(i++).Value,
-                Field15             = iden.GetInt(i++).Value,
-                Field16             = iden.GetInt(i++).Value,
-                Field17             = iden.GetInt(i++).Value,
-                Field18             = iden.GetInt(i++).Value,
-                tCachedValues = new SceneCachedValues
-                {
-                    Field0 = iden.GetInt(i++).Value,
-                    Field1 = iden.GetInt(i++).Value,
-                    Field2 = iden.GetInt(i++).Value,
-                    Field3 = new AABB
-                    {
-                        Min = new Vector3D
-                        {
-                            X = iden.GetFloat(i++).Value,
-                            Y = iden.GetFloat(i++).Value,
-                            Z = iden.GetFloat(i++).Value
-                        },
-                        Max = new Vector3D
-                        {
-                            X = iden.GetFloat(i++).Value,
-                            Y = iden.GetFloat(i++).Value,
-                            Z = iden.GetFloat(i++).Value
-                        },
-                    },
-                    Field4 = new AABB
-                    {
-                        Min = new Vector3D
-                        {
-                            X = iden.GetFloat(i++).Value,
-                            Y = iden.GetFloat(i++).Value,
-                            Z = iden.GetFloat(i++).Value
-                        },
-                        Max = new Vector3D
-                        {
-                            X = iden.GetFloat(i++).Value,
-                            Y = iden.GetFloat(i++).Value,
-                            Z = iden.GetFloat(i++).Value
-                        },
-                    },
-                    Field5 = new int[4]
-                    {
-                        iden.GetInt(i++).Value,
-                        iden.GetInt(i++).Value,
-                        iden.GetInt(i++).Value,
-                        iden.GetInt(i++).Value
-                    },
-                    Field6 = iden.GetInt(i++).Value
-                },
-            };
-            scene.RotationAxis.X = iden.GetFloat(i++).Value;
-            scene.RotationAxis.Y = iden.GetFloat(i++).Value;
-            scene.RotationAxis.Z = iden.GetFloat(i++).Value;
-            scene.RotationAmount = iden.GetFloat(i++).Value;
-            scene.Position.X = iden.GetFloat(i++).Value;
-            scene.Position.Y = iden.GetFloat(i++).Value;
-            scene.Position.Z = iden.GetFloat(i++).Value;
-            scene.SceneGroupSNO = iden.GetInt(i++).Value;
-            //scene.AppliedLabels = new int[0];
-            return scene;
-        }
-
-        private bool HasWorldPath(int worldSNO)
-        {
-            return this.Paths.ContainsKey(worldSNO);
-        }
-
-        private string GetWorldPath(int worldSNO)
-        {
-            return this.Paths[worldSNO];
-        }
-
-        private void LoadList(string listPath)
-        {
-            var owd = Directory.GetCurrentDirectory();
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(listPath));
-            try
-            {
-                Node root = ScriptFormatter.LoadFromFile(Path.GetFileName(listPath));
-                LoadListNode(root);
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException(e, "Failed to load path list from {0}", listPath);
-            }
-            Directory.SetCurrentDirectory(owd);
-        }
-
-        private void LoadListNode(Node root)
-        {
-            foreach (Variable v in root)
-            {
-                IntVariable val = v as IntVariable;
-                if (_tplWorldPath.ValidateValue(val))
-                    this.Paths[val.Value] = Path.Combine(Directory.GetCurrentDirectory(), val.Name);
-                else
-                    Logger.Warn("Unrecognized variable named \"{0}\" in path list", v.Name);
-            }
+            return null;
         }
     }
 }

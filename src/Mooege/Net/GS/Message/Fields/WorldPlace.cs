@@ -17,6 +17,7 @@
  */
 
 using System.Text;
+using Mooege.Core.GS.Common.Types.Math;
 
 namespace Mooege.Net.GS.Message.Fields
 {

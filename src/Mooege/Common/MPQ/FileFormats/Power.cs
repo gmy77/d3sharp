@@ -20,8 +20,7 @@ using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Common.Extensions;
-using System.Text;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -31,14 +30,14 @@ namespace Mooege.Common.MPQ.FileFormats
         public Header Header { get; private set; }
         public string LuaName { get; private set; }
         public PowerDef Powerdef { get; private set; }
-        public int i0, i1;
-        public string chararray2 { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public string Chararray2 { get; private set; }
         public int ScriptFormulaCount { get; private set; }
         public List<ScriptFormulaDetails> ScriptFormulaDetails = new List<ScriptFormulaDetails>();
         public int i3 { get; private set; }
         public List<byte> CompliedScript = new List<byte>();
-        int snoQuestMetaData;
-
+        public int SNOQuestMetaData { get; private set; }
 
         public Power(MpqFile file)
         {
@@ -48,15 +47,16 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += 4; // pad 1
             Powerdef = new PowerDef(stream);
             stream.Position = 440; // Seems like theres a bit of a gap - DarkLotus
-            i0 = stream.ReadValueS32();
-            i1 = stream.ReadValueS32();
-            chararray2 = stream.ReadString(256, true);
+            I0 = stream.ReadValueS32();
+            I1 = stream.ReadValueS32();
+            Chararray2 = stream.ReadString(256, true);
             ScriptFormulaCount = stream.ReadValueS32();
             ScriptFormulaDetails = stream.ReadSerializedData<ScriptFormulaDetails>();
             stream.Position += (3 * 4);
             i3 = stream.ReadValueS32();
             stream.Position += (3 * 4);
 
+            // TODO: please fix this - use our serializable-data readers instead! /raist
             // TODO add a class for complied script so it can be deserialized properly. - DarkLotus
             // none of the .pow appear to have any data here, and stream position appears to be correct, unsure - DarkLotus
             var serCompliedScript = stream.GetSerializedDataPointer();
@@ -64,37 +64,39 @@ namespace Mooege.Common.MPQ.FileFormats
             {
                 long x = stream.Position;
                 stream.Position = serCompliedScript.Offset + 16;
-                byte[] buf = new byte[serCompliedScript.Size];
+                var buf = new byte[serCompliedScript.Size];
                 stream.Read(buf, 0, serCompliedScript.Size);
                 stream.Position = x;
                 CompliedScript.AddRange(buf);
             }
-            snoQuestMetaData = stream.ReadValueS32();
+            SNOQuestMetaData = stream.ReadValueS32();
             stream.Close();
         }
     }
+
     public class PowerDef
     {
-        TagMap hTagMap;
-        TagMap hGeneralTagMap;
-        TagMap PVPGeneralTagMap;
-        TagMap ContactTagMap0;
-        TagMap ContactTagMap1;
-        TagMap ContactTagMap2;
-        TagMap ContactTagMap3;
-        TagMap PVPContactTagMap0;
-        TagMap PVPContactTagMap1;
-        TagMap PVPContactTagMap2;
-        TagMap PVPContactTagMap3;
-        int i0;
-        ActorCollisionFlags ActColFlags1;
-        ActorCollisionFlags ActColFlags2;
-        List<BuffDef> Buffs = new List<BuffDef>(); //4
+        public TagMap TagMap { get; private set; }
+        public TagMap GeneralTagMap { get; private set; }
+        public TagMap PVPGeneralTagMap { get; private set; }
+        public TagMap ContactTagMap0 { get; private set; }
+        public TagMap ContactTagMap1 { get; private set; }
+        public TagMap ContactTagMap2 { get; private set; }
+        public TagMap ContactTagMap3 { get; private set; }
+        public TagMap PVPContactTagMap0 { get; private set; }
+        public TagMap PVPContactTagMap1 { get; private set; }
+        public TagMap PVPContactTagMap2 { get; private set; }
+        public TagMap PVPContactTagMap3 { get; private set; }
+        public int I0 { get; private set; }
+        public ActorCollisionFlags ActColFlags1 { get; private set; }
+        public ActorCollisionFlags ActColFlags2 { get; private set; }
+        public List<BuffDef> Buffs = new List<BuffDef>(); //4
+
         public PowerDef(MpqFileStream stream)
         {
-            hTagMap = stream.ReadSerializedItem<TagMap>();
+            TagMap = stream.ReadSerializedItem<TagMap>();
             stream.Position += (2 * 4);
-            hGeneralTagMap = stream.ReadSerializedItem<TagMap>();
+            GeneralTagMap = stream.ReadSerializedItem<TagMap>();
             stream.Position += (2 * 4);
             PVPGeneralTagMap = stream.ReadSerializedItem<TagMap>();
             stream.Position += (2 * 4);
@@ -108,7 +110,7 @@ namespace Mooege.Common.MPQ.FileFormats
             PVPContactTagMap2 = stream.ReadSerializedItem<TagMap>();
             PVPContactTagMap3 = stream.ReadSerializedItem<TagMap>();
             stream.Position += (8 * 4);
-            i0 = stream.ReadValueS32();
+            I0 = stream.ReadValueS32();
             ActColFlags1 = new ActorCollisionFlags(stream);
             ActColFlags2 = new ActorCollisionFlags(stream);
             stream.Position += 4;
@@ -122,23 +124,27 @@ namespace Mooege.Common.MPQ.FileFormats
     }
     public class ActorCollisionFlags
     {
-        int i0, i1, i2, i3;
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
+
         public ActorCollisionFlags(MpqFileStream stream)
         {
-            this.i0 = stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
-            this.i2 = stream.ReadValueS32();
-            this.i3 = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
         }
     }
+
     public class BuffDef
     {
-        List<int> BuffFilterPowers = new List<int>();
+        public List<int> BuffFilterPowers = new List<int>();
+
         public BuffDef(MpqFileStream stream)
         {
             BuffFilterPowers = stream.ReadSerializedInts();
         }
     }
-
-
 }

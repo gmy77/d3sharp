@@ -18,15 +18,13 @@
 
 ﻿using Mooege.Common;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Player;
-using Mooege.Net.GS;
-using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Net.GS.Message.Definitions.Attribute;
-using Mooege.Net.GS.Message.Definitions.Combat;
-using Mooege.Net.GS.Message.Definitions.Misc;
+﻿using Mooege.Core.GS.Common.Types.Math;
+﻿using Mooege.Net.GS.Message;
+﻿using Mooege.Net.GS.Message.Definitions.Misc;
 ﻿using Mooege.Net.GS.Message.Definitions.World;
 ﻿using Mooege.Net.GS.Message.Fields;
+using Mooege.Net.GS.Message.Definitions.Map;
+using Mooege.Common.Helpers;
 
 namespace Mooege.Core.GS.Map
 {
@@ -37,7 +35,7 @@ namespace Mooege.Core.GS.Map
         public override ActorType ActorType { get { return ActorType.Portal; } }
 
         public ResolvedPortalDestination Destination { get; private set; }
-        public Vector3D TargetPos;
+        //public Vector3D TargetPos;
 
         public Portal(World world)
             : base(world, world.NewActorID)
@@ -45,8 +43,10 @@ namespace Mooege.Core.GS.Map
             this.Destination = new ResolvedPortalDestination();
             this.Destination.WorldSNO = -1;
             this.Destination.DestLevelAreaSNO = -1;
-            this.TargetPos = new Vector3D();
+            //this.TargetPos = new Vector3D();
 
+            this.Field2 = 16;
+            this.Field3 = 0;
             this.CollFlags = 0x00000001;
 
             // FIXME: Hardcoded crap; probably don't need to set most of these. /komiga
@@ -63,41 +63,65 @@ namespace Mooege.Core.GS.Map
 
         public override bool Reveal(Mooege.Core.GS.Player.Player player)
         {
-            if (TargetPos != null)
-                // targetpos!=null in this case is used to detect if the portal has been completely initialized to have a target
-                // if it doesn't have one, it won't be displayed - otherwise the client would crash from this.
+            if (!base.Reveal(player))
+                return false;
+
+            player.InGameClient.SendMessage(new PortalSpecifierMessage()
             {
-                //Logger.Info("Revealing portal {0}", PortalMessage.AsText());
+                ActorID = this.DynamicID,
+                Destination = this.Destination
+            });
 
-                if (!base.Reveal(player))
-                    return false;
 
-                player.InGameClient.SendMessage(new PortalSpecifierMessage()
+            // Show a minimap icon
+            Mooege.Common.MPQ.Asset asset;
+            string markerName = "";
+
+            if (Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.LevelArea].TryGetValue(this.Destination.DestLevelAreaSNO, out asset))
+                markerName = System.IO.Path.GetFileNameWithoutExtension(asset.FileName);
+            //else Logger.Warn("No asset for LevelArea {0}", this.Destination.DestLevelAreaSNO);
+
+            player.InGameClient.SendMessage(new MapMarkerInfoMessage()
+            {
+                Id = (int)Opcodes.MapMarkerInfoMessage,
+                Field0 = (int)World.NewSceneID,    // TODO What is the correct id space for mapmarkers?
+                Field1 = new WorldPlace()
                 {
-                    ActorID = this.DynamicID,
-                    Destination = this.Destination
-                });
+                    Position = this.Position,
+                    WorldID = this._world.DynamicID
+                },
+                Field2 = 0x00018FB0,  /* Marker_DungeonEntrance.tex */          // TODO Dont mark all portals as dungeon entrances... some may be exits too (although d3 does not necesarrily use the correct markers). Also i have found no hacky way to determine whether a portal is entrance or exit - farmy
+                m_snoStringList = 0x0000CB2E, /* LevelAreaNames.stl */          // TODO Dont use hardcoded numbers
 
-                // Probably unnecessary since the transform is ACD data and is set in the EnterKnown. /komiga
-                /*player.InGameClient.SendMessage(new ACDTranslateFacingMessage(Opcodes.ACDTranslateFacingMessage1)
-                {
-                    ActorID = this.DynamicID,
-                    Angle = 0f,
-                    Field2 = false,
-                });*/
+                Field4 = StringHashHelper.HashNormal(markerName),
+                Field5 = 0,
+                Field6 = 0,
+                Field7 = 0,
+                Field8 = 0,
+                Field9 = true,
+                Field10 = false,
+                Field11 = true,
+                Field12 = 0
+            });
 
-                return true;
-            }
-            return false;
+            return true;
         }
 
         public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
             World world = this.World.Game.GetWorld(this.Destination.WorldSNO);
-            if (world != null)
-                player.TransferTo(world, this.TargetPos);
-            else
+            if (world == null)
+            {
                 Logger.Warn("Portal's destination world does not exist (WorldSNO = {0})", this.Destination.WorldSNO);
+                return;
+            }
+
+            Actor startingPoint = world.GetActorByTag(this.Destination.StartingPointActorTag);
+
+            if (startingPoint != null)
+                player.TransferTo(world, startingPoint.Position);
+            else
+                Logger.Warn("Portal's tagged starting point does not exist (Tag = {0})", this.Destination.StartingPointActorTag);
         }
     }
 }

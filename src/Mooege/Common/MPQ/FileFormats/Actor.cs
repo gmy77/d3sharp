@@ -19,9 +19,9 @@
 using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
-using Mooege.Net.GS.Message.Fields;
-using AABB = Mooege.Common.MPQ.FileFormats.Types.AABB;
-using System.Text;
+using Mooege.Core.GS.Common.Types.Collusion;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Common.MPQ.FileFormats.Types;
 
 namespace Mooege.Common.MPQ.FileFormats
@@ -29,49 +29,53 @@ namespace Mooege.Common.MPQ.FileFormats
     [FileFormat(SNOGroup.Actor)]
     public class Actor : FileFormat
     {
-        public Header Header;
-        public int Int0;
+        public Header Header { get; private set; }
+        public int Int0 { get; private set; }
 
         /// <summary>
         /// Actor Type
         /// </summary>
-        public ActorType Type;
+        public ActorType Type { get; private set; }
 
         /// <summary>
         /// SNO for Apperance
         /// </summary>
-        public int ApperanceSNO;
+        public int ApperanceSNO { get; private set; }
 
-        public int PhysMeshSNO;
-        public AxialCylinder Cylinder;
-        public Sphere Sphere;
-        public AABB AABBBounds;
+        public int PhysMeshSNO { get; private set; }
+        public AxialCylinder Cylinder { get; private set; }
+        public Sphere Sphere { get; private set; }
+        public AABB AABBBounds { get; private set; }
+        public TagMap TagMap { get; private set; }
 
-        TagMap hTagMap;
         /// <summary>
         /// SNO for actor's animset.
         /// </summary>
-        public int AnimSetSNO;
+        public int AnimSetSNO { get; private set; }
 
         /// <summary>
         /// MonterSNO if any.
         /// </summary>
-        public int MonsterSNO;
-        List<MsgTriggeredEvent> arMsgTriggeredEvents = new List<MsgTriggeredEvent>();
+        public int MonsterSNO { get; private set; }
+        public List<MsgTriggeredEvent> MsgTriggeredEvents = new List<MsgTriggeredEvent>();
 
-        public int Int1;
-        public Vector3D V0;
-        public WeightedLook[] Looks;
-        public int PhysicsSNO;
-        public int Int2, Int3;
-        public float Float0, Float1, Float2;
-        public ActorCollisionData ActorCollisionData;
-        public int[] InventoryImages;
-        public int Int4;
-        public string CastingNotes;
-        public string VoiceOverRole;
-        public int BitField0;           // 25 bits - better this this would be an uint
-        public int BitField1;           // 25 bits - better this this would be an uint
+        public int Int1 { get; private set; }
+        public Vector3D V0 { get; private set; }
+        public WeightedLook[] Looks { get; private set; }
+        public int PhysicsSNO { get; private set; }
+        public int Int2 { get; private set; }
+        public int Int3 { get; private set; }
+        public float Float0 { get; private set; }
+        public float Float1 { get; private set; }
+        public float Float2 { get; private set; }
+        public ActorCollisionData ActorCollisionData { get; private set; }
+        public int[] InventoryImages { get; private set; }
+        public int Int4 { get; private set; }
+        public string CastingNotes { get; private set; }
+        public string VoiceOverRole { get; private set; }
+        public int BitField0 { get; private set; }           // 25 bits - better this this would be an uint
+        public int BitField1 { get; private set; }           // 25 bits - better this this would be an uint
+
         public Actor(MpqFile file)
         {
             var stream = file.Open();
@@ -85,16 +89,13 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Sphere = new Sphere(stream);
             this.AABBBounds = new AABB(stream);
 
-            this.hTagMap = stream.ReadSerializedItem<TagMap>();
-            //var tagmap = stream.GetSerializedDataPointer(); // we need to read tagmap. /raist.
+            this.TagMap = stream.ReadSerializedItem<TagMap>();
             stream.Position += (2 * 4);
 
             this.AnimSetSNO = stream.ReadValueS32();
             this.MonsterSNO = stream.ReadValueS32();
 
-
-            arMsgTriggeredEvents = stream.ReadSerializedData<MsgTriggeredEvent>();
-            //var msgTriggeredEvents = stream.GetSerializedDataPointer();
+            MsgTriggeredEvents = stream.ReadSerializedData<MsgTriggeredEvent>();
 
             this.Int1 = stream.ReadValueS32();
             stream.Position += (3 * 4);
@@ -163,27 +164,28 @@ namespace Mooege.Common.MPQ.FileFormats
     }
     public class ActorCollisionData
     {
-        ActorCollisionFlags ColFlags;
-        int i0;
-        AxialCylinder Cylinder;
-        AABB aabb;
-        float f0;
+        public ActorCollisionFlags ColFlags { get; private set; }
+        public int I0 { get; private set; }
+        public AxialCylinder Cylinder { get; private set; }
+        public AABB AABB { get; private set; }
+        public float F0 { get; private set; }
+
         public ActorCollisionData(MpqFileStream stream)
         {
             ColFlags = new ActorCollisionFlags(stream);
-            i0 = stream.ReadValueS32();
+            I0 = stream.ReadValueS32();
             Cylinder = new AxialCylinder(stream);
-            aabb = new AABB(stream);
-            f0 = stream.ReadValueF32();
+            AABB = new AABB(stream);
+            F0 = stream.ReadValueF32();
             stream.ReadValueS32();// Testing - DarkLotus
         }
     }
 
     public class AxialCylinder
     {
-        public Vector3D Position;
-        public float Ax1;
-        public float Ax2;
+        public Vector3D Position { get; private set; }
+        public float Ax1 { get; private set; }
+        public float Ax2 { get; private set; }
 
         public AxialCylinder(MpqFileStream stream)
         {
@@ -195,8 +197,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class Sphere
     {
-        public Vector3D Position;
-        public float Radius;
+        public Vector3D Position { get; private set; }
+        public float Radius { get; private set; }
 
         public Sphere(MpqFileStream stream)
         {
@@ -207,8 +209,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class WeightedLook
     {
-        public string LookLink;
-        public int Int0;
+        public string LookLink { get; private set; }
+        public int Int0 { get; private set; }
 
         public WeightedLook(MpqFileStream stream)
         {

@@ -16,41 +16,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using CrystalMpq;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Gibbed.IO;
+using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.Conversation)]
     class Conversation : FileFormat
     {
-        public Header Header;
-        public ConversationTypes ConversationType;
-        public int I0;
-        public int I1;
-        public int SNOQuest;
-        public int I2;
-        public int I3;
-        public int SNOConvPiggyback;
-        public int SNOConvUnlock;
-        public int I4;
-        public string Unknown;
-        public int SNOPrimaryNpc;
-        public int SNOAltNpc1;
-        public int SNOAltNpc2;
-        public int SNOAltNpc3;
-        public int SNOAltNpc4;
-        public int I5;              // not total nodes :-(
-        public List<ConversationTreeNode> RootTreeNodes;
-        public string Unknown2;
-        public int I6;
-        public byte[] CompiledScript;
-        public int SNOBossEncounter;
+        public Header Header { get; private set; }
+        public ConversationTypes ConversationType { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int SNOQuest { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
+        public int SNOConvPiggyback { get; private set; }
+        public int SNOConvUnlock { get; private set; }
+        public int I4 { get; private set; }
+        public string Unknown { get; private set; }
+        public int SNOPrimaryNpc { get; private set; }
+        public int SNOAltNpc1 { get; private set; }
+        public int SNOAltNpc2 { get; private set; }
+        public int SNOAltNpc3 { get; private set; }
+        public int SNOAltNpc4 { get; private set; }
+        public int I5 { get; private set; }              // not total nodes :-(
+        public List<ConversationTreeNode> RootTreeNodes { get; private set; }
+        public string Unknown2 { get; private set; }
+        public int I6 { get; private set; }
+        public byte[] CompiledScript { get; private set; }
+        public int SNOBossEncounter { get; private set; }
 
         public Conversation(MpqFile file)
         {
@@ -98,20 +96,20 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class ConversationTreeNode : ISerializableData
     {
-        public int I0;
-        public int I1;
-        public int I2;              // classid ? 
-        public Speaker Speaker1;
-        public Speaker Speaker2;
-        public int I3;
-        public int I4;
-        public int I5;
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }              // clasid ? 
+        public Speaker Speaker1 { get; private set; }
+        public Speaker Speaker2 { get; private set; }
+        public int I3 { get; private set; }
+        public int I4 { get; private set; }
+        public int I5 { get; private set; }
         public ConvLocalDisplayTimes[] ConvLocalDisplayTimes = new ConvLocalDisplayTimes[18];
-        public string Comment;
-        public int I6;
-        public List<ConversationTreeNode> TrueNodes;
-        public List<ConversationTreeNode> FalseNodes;
-        public List<ConversationTreeNode> ChildNodes;
+        public string Comment { get; private set; }
+        public int I6 { get; private set; }
+        public List<ConversationTreeNode> TrueNodes { get; private set; }
+        public List<ConversationTreeNode> FalseNodes { get; private set; }
+        public List<ConversationTreeNode> ChildNodes { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -188,5 +186,4 @@ namespace Mooege.Common.MPQ.FileFormats
         ScoundrelFollower = 7,
         EnchantressFollower = 8
     }
-
 }

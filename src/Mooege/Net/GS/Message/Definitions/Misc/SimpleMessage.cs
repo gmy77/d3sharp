@@ -18,6 +18,7 @@
 
 using System;
 using System.Text;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Hireling;
 using Mooege.Net.GS.Message.Fields;

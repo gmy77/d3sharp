@@ -20,11 +20,15 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Waypoint
 {
-    [Message(Opcodes.TryWaypointMessage)]
+    [Message(Opcodes.TryWaypointMessage, Consumers.Player)]
     public class TryWaypointMessage : GameMessage
     {
         public int Field0;
         public int Field1;
+
+        public TryWaypointMessage()
+            : base(Opcodes.TryWaypointMessage)
+        { }
 
         public override void Parse(GameBitBuffer buffer)
         {

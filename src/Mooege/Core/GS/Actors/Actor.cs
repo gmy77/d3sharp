@@ -17,6 +17,8 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
@@ -54,44 +56,53 @@ namespace Mooege.Core.GS.Actors
         NPC,
         Monster,
         Item,
-        Portal
+        Portal,
+        Gizmo
     }
 
     // Base actor
-    public abstract class Actor : WorldObject
+    public /*abstract*/ class Actor : WorldObject
     {
         // Actors can change worlds and have a specific addition/removal scheme
         // We'll just override the setter to handle all of this automagically
         public override World World
         {
+            get { return this._world; }
             set
             {
-                if (this._world != value)
-                {
-                    if (this._world != null)
-                        this._world.Leave(this);
-                    this._world = value;
-                    if (this._world != null)
-                        this._world.Enter(this);
-                }
+                if (this._world == value) return;
+
+                if (this._world != null) // if actor is already in a existing-world
+                    this._world.Leave(this); // make him leave it first.
+
+                this._world = value;
+                if (this._world != null) // if actor got into a new world.
+                    this._world.Enter(this); // let him enter first.
             }
         }
 
-        public sealed override Vector3D Position
+        protected Scene _currentScene;
+        public virtual Scene CurrentScene
+        {
+            get { return this._currentScene; }
+            protected set { this._currentScene = value; }
+        }
+
+        public override Vector3D Position
         {
             set
             {
                 var old = new Vector3D(this._position);
                 this._position.Set(value);
-                this.OnMove(old);
-                this.World.OnActorPositionChange(this, old); // TODO: Should notify its scene instead
+                this.OnPositionChange(old);
             }
         }
 
-        public abstract ActorType ActorType { get; }
+        public virtual /*abstract*/ ActorType ActorType { get { return Actors.ActorType.Item; } }
 
         public GameAttributeMap Attributes { get; private set; }
         public List<Affix> AffixList { get; set; }
+        public int Tag;
 
         protected int _actorSNO;
         public int ActorSNO
@@ -100,7 +111,7 @@ namespace Mooege.Core.GS.Actors
             set
             {
                 this._actorSNO = value;
-                this.SNOName.Handle = this.ActorSNO;
+                this.SNOName.SNOId = this.ActorSNO;
             }
         }
 
@@ -134,13 +145,13 @@ namespace Mooege.Core.GS.Actors
 
         public virtual PRTransform Transform
         {
-            get { return new PRTransform { Rotation = new Quaternion { Amount = this.RotationAmount, Axis = this.RotationAxis }, ReferencePoint = this.Position }; }
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
         // Only used in Item; stubbed here to prevent an overrun in some cases. /komiga
         public virtual InventoryLocationMessageData InventoryLocationMessage
         {
-            get { return new InventoryLocationMessageData{ OwnerID = 0, EquipmentSlot = 0, InventoryLocation = new IVector2D() }; }
+            get { return new InventoryLocationMessageData{ OwnerID = 0, EquipmentSlot = 0, InventoryLocation = new Vector2D() }; }
         }
 
         public virtual ACDWorldPositionMessage ACDWorldPositionMessage
@@ -161,13 +172,13 @@ namespace Mooege.Core.GS.Actors
             }
         }
 
-        protected Actor(World world, uint dynamicID)
+        public Actor(World world, uint dynamicID)
             : base(world, dynamicID)
         {
             this.Attributes = new GameAttributeMap();
             this.AffixList = new List<Affix>();
             this.GBHandle = new GBHandle() { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
-            this.SNOName = new SNOName() { Group = 0x00000001, Handle = this.ActorSNO };
+            this.SNOName = new SNOName() { Group =  SNOGroup.Actor, SNOId = this.ActorSNO };
             this.ActorSNO = -1;
             this.CollFlags = 0x00000000;
             this.Scale = 1.0f;
@@ -178,8 +189,37 @@ namespace Mooege.Core.GS.Actors
         // NOTE: When using this, you should *not* set the actor's world. It is done for you
         public void TransferTo(World targetWorld, Vector3D pos)
         {
+            var player = this as Player.Player;
+            if (player == null) return; // return if current actor is not a player. 
+
             this.Position = pos;
+            //this.RotationAmount = location.Quaternion.W;
+            //this.RotationAxis = location.Quaternion.Vector3D;
+
             this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
+            
+            player.InGameClient.SendMessage(new EnterWorldMessage()
+            {
+                EnterPosition = this.Position,
+                WorldID = targetWorld.DynamicID,
+                WorldSNO = targetWorld.WorldSNO,
+            });
+
+            player.InGameClient.SendMessage(new ACDWorldPositionMessage()
+            {
+                ActorID = this.DynamicID,
+                WorldLocation = new WorldLocationMessageData()
+                {
+                    WorldID = targetWorld.DynamicID,
+                    Scale = this.Scale,
+                    Transform = new PRTransform()
+                    {
+                        Quaternion = new Quaternion() { W = 1, Vector3D = new Vector3D(0, 0, 0) },
+                        Vector3D = pos
+                    }
+                }
+
+            });
         }
 
         public virtual void OnEnter(World world)
@@ -190,8 +230,12 @@ namespace Mooege.Core.GS.Actors
         {
         }
 
-        protected virtual void OnMove(Vector3D prevPosition)
+        protected virtual void OnPositionChange(Vector3D prevPosition)
         {
+            if (!this.HasWorldLocation) return;
+
+            // We need this here for positioning actors on world (like when item drops)
+            this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);   
         }
 
         public virtual void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)

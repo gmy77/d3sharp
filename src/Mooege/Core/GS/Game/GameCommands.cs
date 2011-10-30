@@ -20,9 +20,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common.Helpers;
-using Mooege.Core.GS.Data.SNO;
+using Mooege.Common.MPQ;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.MooNet.Commands;
-using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.GS.Game
@@ -69,6 +70,43 @@ namespace Mooege.Core.GS.Game
         }
     }
 
+    [CommandGroup("Tp", "Transfers the character to another world.")]
+    public class TeleportCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Portal(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            if (@params != null && @params.Count() > 0)
+            {
+                var worldId = 0;
+                Int32.TryParse(@params[0], out worldId);
+
+                if(worldId==0)
+                    return "Invalid arguments. Type 'help tp' to get help.";
+
+                if(!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldId))
+                    return "There exist no world with SNOId: " + worldId;
+
+                var world = invokerClient.InGameClient.Game.GetWorld(worldId);
+                
+                if(world==null)
+                    return "Can't teleport you to world with snoId " + worldId;
+
+                invokerClient.InGameClient.Player.TransferTo(world, world.SpawnableScenes.First().StartPosition);
+
+                return string.Format("Teleported to: {0} [id: {1}]", MPQStorage.Data.Assets[SNOGroup.Worlds][worldId].Name, worldId);
+            }
+
+            return "Invalid arguments. Type 'help tp' to get help.";
+        }
+    }
+
     [CommandGroup("lookup", "Searches in sno databases.\nUsage: lookup [actor|npc|mob|power|scene] <pattern>")]
     public class LookupCommand : CommandGroup
     {
@@ -78,115 +116,118 @@ namespace Mooege.Core.GS.Game
             if (@params == null) 
                 return this.Fallback();
 
-            var matches = new List<SNOID>();
+            var matches = new List<Asset>();
 
             if (@params.Count() < 1)
                 return "Invalid arguments. Type 'help lookup actor' to get help.";
 
             var pattern = @params[0].ToLower();
 
-            foreach (var pair in SNODatabase.Instance.Global)
+            foreach (var groupPair in MPQStorage.Data.Assets)
             {
-                if (pair.Value.Name.ToLower().Contains(pattern))
-                    matches.Add(pair.Value);
+                foreach(var pair in groupPair.Value)
+                {
+                    if (pair.Value.Name.ToLower().Contains(pattern))
+                        matches.Add(pair.Value);   
+                }
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? string.Empty : "No match found.", (current, match) => current + string.Format("[{0}] [{1}] {2}\n", match.ID.ToString("D6"), match.Type, match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Matches:\n" : "No matches found.", (current, match) => current + string.Format("[{0}] [{1}] {2}\n", match.SNOId.ToString("D6"), match.Group, match.Name));
         }
 
         [Command("actor", "Allows you to search for an actor.\nUsage: lookup actor <pattern>")]
         public string Actor(string[] @params, MooNetClient invokerClient)
         {
-            var matches = new List<SNOID>();
+            var matches = new List<Asset>();
 
             if (@params.Count() < 1)
                 return "Invalid arguments. Type 'help lookup actor' to get help.";
 
             var pattern = @params[0].ToLower();
 
-            foreach(var pair in SNODatabase.Instance.Grouped[SNOGroup.Actors])
+            foreach (var pair in MPQStorage.Data.Assets[SNOGroup.Actor])
             {
                 if (pair.Value.Name.ToLower().Contains(pattern))
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? string.Empty : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.ID.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Actor Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
 
-        [Command("npc", "Allows you to search for a npc.\nUsage: lookup npc <pattern>")]
-        public string NPC(string[] @params, MooNetClient invokerClient)
+        [Command("monster", "Allows you to search for a monster.\nUsage: lookup monster <pattern>")]
+        public string Monster(string[] @params, MooNetClient invokerClient)
         {
-            var matches = new List<SNOID>();
+            var matches = new List<Asset>();
 
             if (@params.Count() < 1)
-                return "Invalid arguments. Type 'help lookup actor' to get help.";
+                return "Invalid arguments. Type 'help lookup monster' to get help.";
 
             var pattern = @params[0].ToLower();
 
-            foreach (var pair in SNODatabase.Instance.Grouped[SNOGroup.NPCs])
+            foreach (var pair in MPQStorage.Data.Assets[SNOGroup.Monster])
             {
                 if (pair.Value.Name.ToLower().Contains(pattern))
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? string.Empty : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.ID.ToString("D6"), match.Name));
-        }
-
-        [Command("mob", "Allows you to search for a mob.\nUsage: lookup mob <pattern>")]
-        public string MOB(string[] @params, MooNetClient invokerClient)
-        {
-            var matches = new List<SNOID>();
-
-            if (@params.Count() < 1)
-                return "Invalid arguments. Type 'help lookup actor' to get help.";
-
-            var pattern = @params[0].ToLower();
-
-            foreach (var pair in SNODatabase.Instance.Grouped[SNOGroup.Mobs])
-            {
-                if (pair.Value.Name.ToLower().Contains(pattern))
-                    matches.Add(pair.Value);
-            }
-
-            return matches.Aggregate(matches.Count >= 1 ? string.Empty : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.ID.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Monster Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
 
         [Command("power", "Allows you to search for a power.\nUsage: lookup power <pattern>")]
         public string Power(string[] @params, MooNetClient invokerClient)
         {
-            var matches = new List<SNOID>();
+            var matches = new List<Asset>();
 
             if (@params.Count() < 1)
-                return "Invalid arguments. Type 'help lookup actor' to get help.";
+                return "Invalid arguments. Type 'help lookup power' to get help.";
 
             var pattern = @params[0].ToLower();
 
-            foreach (var pair in SNODatabase.Instance.Grouped[SNOGroup.Powers])
+            foreach (var pair in MPQStorage.Data.Assets[SNOGroup.Power])
             {
                 if (pair.Value.Name.ToLower().Contains(pattern))
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? string.Empty : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.ID.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Power Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
+        }
+
+        [Command("world", "Allows you to search for a world.\nUsage: lookup world <pattern>")]
+        public string World(string[] @params, MooNetClient invokerClient)
+        {
+            var matches = new List<Asset>();
+
+            if (@params.Count() < 1)
+                return "Invalid arguments. Type 'help lookup world' to get help.";
+
+            var pattern = @params[0].ToLower();
+
+            foreach (var pair in MPQStorage.Data.Assets[SNOGroup.Worlds])
+            {
+                if (pair.Value.Name.ToLower().Contains(pattern))
+                    matches.Add(pair.Value);
+            }
+
+            return matches.Aggregate(matches.Count >= 1 ? "World Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
 
         [Command("scene", "Allows you to search for a scene.\nUsage: lookup scene <pattern>")]
         public string Scene(string[] @params, MooNetClient invokerClient)
         {
-            var matches = new List<SNOID>();
+            var matches = new List<Asset>();
 
             if (@params.Count() < 1)
-                return "Invalid arguments. Type 'help lookup actor' to get help.";
+                return "Invalid arguments. Type 'help lookup scene' to get help.";
 
             var pattern = @params[0].ToLower();
 
-            foreach (var pair in SNODatabase.Instance.Grouped[SNOGroup.Scenes])
+            foreach (var pair in MPQStorage.Data.Assets[SNOGroup.Monster])
             {
                 if (pair.Value.Name.ToLower().Contains(pattern))
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? string.Empty : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.ID.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Scene Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
     }
 }

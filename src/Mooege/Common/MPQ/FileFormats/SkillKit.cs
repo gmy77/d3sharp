@@ -20,21 +20,21 @@ using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.SkillKit)]
     public class SkillKit : FileFormat
     {
-        public Header header;
-        public List<TraitEntry> TraitEntries;
-        public List<ActiveSkillEntry> ActiveSkillEntries;
+        public Header Header { get; private set; }
+        public List<TraitEntry> TraitEntries { get; private set; }
+        public List<ActiveSkillEntry> ActiveSkillEntries { get; private set; }
 
         public SkillKit(MpqFile file)
         {
             var stream = file.Open();
-            this.header = new Header(stream);
+            this.Header = new Header(stream);
             stream.Position += 12;
             this.TraitEntries = stream.ReadSerializedData<TraitEntry>();
             stream.Position += 8;
@@ -45,13 +45,13 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class TraitEntry : ISerializableData
     {
-        public int snoPower;
-        public int Category;
-        public int ReqLevel;
+        public int SNOPower { get; private set; }
+        public int Category { get; private set; }
+        public int ReqLevel { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.snoPower = stream.ReadValueS32();
+            this.SNOPower = stream.ReadValueS32();
             this.Category = stream.ReadValueS32();
             this.ReqLevel = stream.ReadValueS32();
         }
@@ -59,17 +59,17 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class ActiveSkillEntry : ISerializableData
     {
-        public int snoPower;
-        public ActiveSkillCategory Category;
-        public int ReqLevel;
-        public int i2;
+        public int SNOPower { get; private set; }
+        public ActiveSkillCategory Category { get; private set; }
+        public int ReqLevel { get; private set; }
+        public int I2 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.snoPower = stream.ReadValueS32();
+            this.SNOPower = stream.ReadValueS32();
             this.Category = (ActiveSkillCategory)stream.ReadValueS32();
             this.ReqLevel = stream.ReadValueS32();
-            this.i2 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
 
         }
     }

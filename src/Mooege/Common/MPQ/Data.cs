@@ -17,16 +17,20 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using Gibbed.IO;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ
 {
     public class Data : MPQPatchChain
-    {        
-        public Dictionary<SNOGroup, Dictionary<int, Asset>> Assets = new Dictionary<SNOGroup, Dictionary<int, Asset>>();
-        public readonly Dictionary<SNOGroup, Type> AssetFormats = new Dictionary<SNOGroup, Type>();
+    {
+        public Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>> Assets = new Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>>();
+        public readonly Dictionary<SNOGroup, Type> Parsers = new Dictionary<SNOGroup, Type>();
+        private readonly List<Task> _tasks = new List<Task>();
 
         public Data()
             : base(7447, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
@@ -34,14 +38,15 @@ namespace Mooege.Common.MPQ
 
         public void Init()
         {
-            this.LoadCatalog();
+            this.InitCatalog(); // init asset-group dictionaries and parsers.
+            this.LoadCatalog(); // process the assets.
         }
 
         private void InitCatalog()
         {
             foreach (SNOGroup group in Enum.GetValues(typeof(SNOGroup)))
             {
-                this.Assets.Add(group, new Dictionary<int, Asset>());
+                this.Assets.Add(group, new ConcurrentDictionary<int, Asset>());
             }
 
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
@@ -50,14 +55,12 @@ namespace Mooege.Common.MPQ
                 var attributes = (FileFormatAttribute[])type.GetCustomAttributes(typeof(FileFormatAttribute), true);
                 if (attributes.Length == 0) continue;
 
-                AssetFormats.Add(attributes[0].Group, type);
+                Parsers.Add(attributes[0].Group, type);
             }
         }
 
         private void LoadCatalog()
         {
-            this.InitCatalog();
-
             var tocFile = this.FileSystem.FindFile("toc.dat");
             if (tocFile == null)
             {
@@ -68,86 +71,48 @@ namespace Mooege.Common.MPQ
             var stream = tocFile.Open();
             var assetsCount = stream.ReadValueS32();
 
+            var timerStart = DateTime.Now; 
+
+            // read all assets from the catalog first and process them (ie. find the parser if any available).
             while(stream.Position<stream.Length)
             {
                 var group = (SNOGroup)stream.ReadValueS32();
                 var snoId = stream.ReadValueS32();
                 var name = stream.ReadString(128, true);
-                    
-                var asset = new Asset(group, snoId, name);
-                this.Assets[group].Add(snoId, asset);
+
+                var asset = this.ProcessAsset(group, snoId, name); // process the asset.
+                this.Assets[group].TryAdd(snoId, asset); // add it to our assets dictionary.
             }
 
             stream.Close();
-            
-            Logger.Info("Loaded a total of {0} assets.", assetsCount);
-        }
-    }
 
-    public enum SNOGroup : int
-    {
-        Code = -2,
-        None = -1,
-        Actor = 1,
-        Adventure = 2,
-        AiBehavior = 3,
-        AiState = 4,
-        AmbientSound = 5,
-        Anim = 6,
-        Anim2D = 7,
-        AnimSet = 8,
-        Appearance = 9,
-        Hero = 10,
-        Cloth = 11,
-        Conversation = 12,
-        ConversationList = 13,
-        EffectGroup = 14,
-        Encounter = 15,
-        Explosion = 17,
-        FlagSet = 18,
-        Font = 19,
-        GameBalance = 20,
-        Globals = 21,
-        LevelArea = 22,
-        Light = 23,
-        MarkerSet = 24,
-        Monster = 25,
-        Observer = 26,
-        Particle = 27,
-        Physics = 28,
-        Power = 29,
-        Quest = 31,
-        Rope = 32,
-        Scene = 33,
-        SceneGroup = 34,
-        Script = 35,
-        ShaderMap = 36,
-        Shaders = 37,
-        Shakes = 38,
-        SkillKit = 39,
-        Sound = 40,
-        SoundBank = 41,
-        StringList = 42,
-        Surface = 43,
-        Textures = 44,
-        Trail = 45,
-        UI = 46,
-        Weather = 47,
-        Worlds = 48,
-        Recipe = 49,
-        Condition = 51,
-        TreasureClass = 52,
-        Account = 53,
-        Conductor = 54,
-        TimedEvent = 55,
-        Act = 56,
-        Material = 57,
-        QuestRange = 58,
-        Lore = 59,
-        Reverb = 60,
-        PhysMesh = 61,
-        Music = 62,
-        Tutorial = 63,
-        BossEncounter = 64,
+            // Run the parsers for assets (that have a parser there).
+            foreach (var task in this._tasks)
+            {
+                task.Start();
+            }
+
+            Task.WaitAll(this._tasks.ToArray()); // Wait all tasks to finish.           
+
+            GC.Collect(); // force a garbage collection.
+            GC.WaitForPendingFinalizers();
+
+            var elapsedTime = DateTime.Now - timerStart;
+
+            Logger.Info("Loaded a total of {0} assets and parsed {1} of them in {2:c}.", assetsCount, this._tasks.Count, elapsedTime);
+        }
+
+        private Asset ProcessAsset(SNOGroup group, Int32 snoId, string name)
+        {
+            var asset = new Asset(group, snoId, name); // create the asset.
+            if (!this.Parsers.ContainsKey(asset.Group)) return asset; // if we don't have a proper parser for asset, just give up.
+
+            var parser = this.Parsers[asset.Group]; // get the type the asset's parser.
+            var file = this.FileSystem.FindFile(asset.FileName); // get the asset file.
+            if (file == null || file.Size < 10) return asset; // if it's empty, give up again.
+
+            this._tasks.Add(new Task(() => asset.RunParser(parser, file))); // add it to our task list, so we can parse them concurrently.
+            return asset;
+        }
     }
 }

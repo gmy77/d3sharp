@@ -16,10 +16,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
-using System.Collections.Generic;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -27,13 +28,14 @@ namespace Mooege.Common.MPQ.FileFormats
     public class Encounter : FileFormat
     {
         public Header Header { get; private set; }
-        public int snoSpawn { get; private set; }
-        List<EncounterSpawnOptions> Spawnoptions = new List<EncounterSpawnOptions>();
+        public int SNOSpawn { get; private set; }
+        public List<EncounterSpawnOptions> Spawnoptions = new List<EncounterSpawnOptions>();
+
         public Encounter(MpqFile file)
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            this.snoSpawn = stream.ReadValueS32();
+            this.SNOSpawn = stream.ReadValueS32();
             stream.Position += (2 * 4);// pad 2 int
             this.Spawnoptions = stream.ReadSerializedData<EncounterSpawnOptions>();
             stream.Close();
@@ -42,14 +44,15 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class EncounterSpawnOptions : ISerializableData
     {
-        public int snoSpawn { get; private set; }
-        public int i0 { get; private set; }
-        public int i1 { get; private set; }
+        public int SNOSpawn { get; private set; }
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+
         public void Read(MpqFileStream stream)
         {
-            this.snoSpawn = stream.ReadValueS32();
-            this.i0 = stream.ReadValueS32();
-            this.i1 = stream.ReadValueS32();
+            this.SNOSpawn = stream.ReadValueS32();
+            this.I0 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
         }
     }
 }

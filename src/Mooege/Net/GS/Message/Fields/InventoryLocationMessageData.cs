@@ -17,6 +17,7 @@
  */
 
 using System.Text;
+using Mooege.Core.GS.Common.Types.Math;
 
 namespace Mooege.Net.GS.Message.Fields
 {
@@ -24,13 +25,13 @@ namespace Mooege.Net.GS.Message.Fields
     {
         public uint OwnerID; // Player's DynamicID
         public int EquipmentSlot;
-        public IVector2D InventoryLocation; // Row, column
+        public Vector2D InventoryLocation; // Row, column
 
         public void Parse(GameBitBuffer buffer)
         {
             OwnerID = buffer.ReadUInt(32);
             EquipmentSlot = buffer.ReadInt(5) + (-1);
-            InventoryLocation = new IVector2D();
+            InventoryLocation = new Vector2D();
             InventoryLocation.Parse(buffer);
         }
 

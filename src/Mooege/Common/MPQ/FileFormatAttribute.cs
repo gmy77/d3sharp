@@ -17,6 +17,7 @@
  */
 
 using System;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ
 {

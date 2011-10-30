@@ -91,10 +91,6 @@
     <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\dep\PowerCollections.dll</HintPath>
     </Reference>
-    <Reference Include="ductsharp, Version=1.0.4298.19963, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dep\ductsharp.dll</HintPath>
-    </Reference>
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
@@ -103,25 +99,36 @@
     <Compile Include="Common\Helpers\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\Data.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Act.cs" />
     <Compile Include="Common\MPQ\FileFormats\Actor.cs" />
     <Compile Include="Common\MPQ\FileFormats\Adventure.cs" />
     <Compile Include="Common\MPQ\FileFormats\AnimSet.cs" />
     <Compile Include="Common\MPQ\FileExtensions.cs" />
     <Compile Include="Common\MPQ\FileFormat.cs" />
     <Compile Include="Common\MPQ\FileFormatAttribute.cs" />
+    <Compile Include="Common\MPQ\FileFormats\BossEncounter.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Condition.cs" />
     <Compile Include="Common\MPQ\FileFormats\Conversation.cs" />
     <Compile Include="Common\MPQ\FileFormats\ConversationList.cs" />
     <Compile Include="Common\MPQ\FileFormats\EffectGroup.cs" />
     <Compile Include="Common\MPQ\FileFormats\Encounter.cs" />
     <Compile Include="Common\MPQ\FileFormats\GameBalance.cs" />
     <Compile Include="Common\MPQ\FileFormats\Globals.cs" />
+    <Compile Include="Common\MPQ\FileFormats\LevelArea.cs" />
     <Compile Include="Common\MPQ\FileFormats\Lore.cs" />
     <Compile Include="Common\MPQ\FileFormats\MarkerSet.cs" />
     <Compile Include="Common\MPQ\FileFormats\Monster.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Observer.cs" />
+    <Compile Include="Common\MPQ\FileFormats\PhysMesh.cs" />
     <Compile Include="Common\MPQ\FileFormats\Power.cs" />
     <Compile Include="Common\MPQ\FileFormats\Quest.cs" />
+    <Compile Include="Common\MPQ\FileFormats\QuestRange.cs" />
     <Compile Include="Common\MPQ\FileFormats\Recipe.cs" />
     <Compile Include="Common\MPQ\FileFormats\Scene.cs" />
+    <Compile Include="Common\MPQ\FileFormats\SceneGroup.cs" />
+    <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
+    <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
     <Compile Include="Common\MPQ\SerializableData.cs" />
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
@@ -136,8 +143,17 @@
     <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributeCreator.cs" />
     <Compile Include="Common\MPQ\MPQPatchChain.cs" />
     <Compile Include="Common\MPQ\MPQStorage.cs" />
+    <Compile Include="Core\GS\Actors\ActorFactory.cs" />
+    <Compile Include="Core\GS\Actors\Gizmo.cs" />
+    <Compile Include="Core\GS\Actors\Environment.cs" />
+    <Compile Include="Core\GS\Actors\HandledSNO.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Stash.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Waypoint.cs" />
+    <Compile Include="Core\GS\Common\Types\SNO\SNOGroup.cs" />
     <Compile Include="Core\GS\Game\GameCommands.cs" />
     <Compile Include="Core\GS\Game\GameManager.cs" />
+    <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
+    <Compile Include="Core\GS\Markers\Marker.cs" />
     <Compile Include="Core\GS\Player\Equipment.cs" />
     <Compile Include="Core\GS\Player\Stash.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
@@ -200,9 +216,6 @@
     <Compile Include="Core\Common\Toons\Toon.cs" />
     <Compile Include="Core\Common\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\Common\Toons\ToonManager.cs" />
-    <Compile Include="Core\GS\Data\SNO\Config.cs" />
-    <Compile Include="Core\GS\Data\SNO\Database.cs" />
-    <Compile Include="Core\GS\Data\SNO\Set.cs" />
     <Compile Include="LogConfig.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
@@ -232,7 +245,7 @@
     <Compile Include="Net\GS\ClientManager.cs" />
     <Compile Include="Net\GS\Config.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignPassiveSkillMessage.cs" />
-    <Compile Include="Net\GS\Message\Fields\AABB.cs" />
+    <Compile Include="Core\GS\Common\Types\Collusion\AABB.cs" />
     <Compile Include="Net\GS\Message\Fields\ActiveEvent.cs" />
     <Compile Include="Net\GS\Message\Fields\AnimPreplayData.cs" />
     <Compile Include="Net\GS\Message\Fields\DPathSinData.cs" />
@@ -245,7 +258,7 @@
     <Compile Include="Net\GS\Message\Fields\HotbarButtonData.cs" />
     <Compile Include="Net\GS\Message\Fields\InventoryLocationMessageData.cs" />
     <Compile Include="Net\GS\Message\Fields\InvLoc.cs" />
-    <Compile Include="Net\GS\Message\Fields\IVector2D.cs" />
+    <Compile Include="Core\GS\Common\Types\Math\Vector2D.cs" />
     <Compile Include="Net\GS\Message\Fields\LearnedLore.cs" />
     <Compile Include="Net\GS\Message\Fields\NetAttributeKeyValue.cs" />
     <Compile Include="Net\GS\Message\Fields\NPCInteraction.cs" />
@@ -253,17 +266,17 @@
     <Compile Include="Net\GS\Message\Fields\PlayerQuestRewardHistoryEntry.cs" />
     <Compile Include="Net\GS\Message\Fields\PlayerSavedData.cs" />
     <Compile Include="Net\GS\Message\Fields\PlayLineParams.cs" />
-    <Compile Include="Net\GS\Message\Fields\PRTransform.cs" />
-    <Compile Include="Net\GS\Message\Fields\Quaternion.cs" />
+    <Compile Include="Core\GS\Common\Types\Math\PRTransform.cs" />
+    <Compile Include="Core\GS\Common\Types\Math\Quaternion.cs" />
     <Compile Include="Net\GS\Message\Fields\RareItemName.cs" />
     <Compile Include="Net\GS\Message\Fields\ResolvedPortalDestination.cs" />
-    <Compile Include="Net\GS\Message\Fields\RGBAColor.cs" />
+    <Compile Include="Core\GS\Common\Types\Misc\RGBAColor.cs" />
     <Compile Include="Net\GS\Message\Fields\SavePointData.cs" />
-    <Compile Include="Net\GS\Message\Fields\SceneCachedValues.cs" />
-    <Compile Include="Net\GS\Message\Fields\SceneSpecification.cs" />
+    <Compile Include="Core\GS\Common\Types\Scene\SceneCachedValues.cs" />
+    <Compile Include="Core\GS\Common\Types\Scene\SceneSpecification.cs" />
     <Compile Include="Net\GS\Message\Fields\SkillKeyMapping.cs" />
-    <Compile Include="Net\GS\Message\Fields\SNOName.cs" />
-    <Compile Include="Net\GS\Message\Fields\Vector3D.cs" />
+    <Compile Include="Core\GS\Common\Types\SNO\SNOName.cs" />
+    <Compile Include="Core\GS\Common\Types\Math\Vector3D.cs" />
     <Compile Include="Net\GS\Message\Fields\VisualEquipment.cs" />
     <Compile Include="Net\GS\Message\Fields\VisualItem.cs" />
     <Compile Include="Net\GS\Message\Fields\WorldLocationMessageData.cs" />
@@ -470,7 +483,6 @@
     <Compile Include="Core\GS\Objects\IRevealable.cs" />
     <Compile Include="Core\GS\Player\Inventory.cs" />
     <Compile Include="Core\GS\Player\Player.cs" />
-    <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -510,60 +522,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\assets\Maps\worlds.txt">
-      <Link>Assets\Maps\worlds.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\Maps\Worlds\NewTristram.txt">
-      <Link>Assets\Maps\Worlds\NewTristram.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\Maps\Worlds\Quick.txt">
-      <Link>Assets\Maps\Worlds\Quick.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Actors.txt">
-      <Link>Assets\SNO\Actors.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Animations.txt">
-      <Link>Assets\SNO\Animations.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Blacklist.txt">
-      <Link>Assets\SNO\Blacklist.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Conversations.txt">
-      <Link>Assets\SNO\Conversations.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Effects.txt">
-      <Link>Assets\SNO\Effects.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\list.txt">
-      <Link>Assets\SNO\list.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Mobs.txt">
-      <Link>Assets\SNO\Mobs.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\NPCs.txt">
-      <Link>Assets\SNO\NPCs.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Powers.txt">
-      <Link>Assets\SNO\Powers.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\assets\SNO\Scenes.txt">
-      <Link>Assets\SNO\Scenes.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LibMooNet\LibMooNet.csproj">
