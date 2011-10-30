@@ -17,6 +17,8 @@
  */
 
 
+using System.Collections.Generic;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
@@ -27,8 +29,8 @@ namespace Mooege.Core.GS.Actors.Implementations
     [HandledSNO(3533 /* Ho-ho-horadrim */)]
     public class Cain : InteractiveNPC
     {
-        public Cain(World world, int actorSNO, Vector3D position)
-            : base(world, actorSNO, position)
+        public Cain(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
+            : base(world, actorSNO, position, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
         }

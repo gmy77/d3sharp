@@ -17,7 +17,10 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Common.MPQ;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Animation;
@@ -30,17 +33,43 @@ namespace Mooege.Core.GS.Actors.Implementations
     [HandledSNO(6442 /* Waypoint.acr */, 192164 /* Waypoint_OldTristram.acr */)]
     public sealed class Waypoint : Gizmo
     {
-        public static Dictionary<int, Waypoint> Waypoints = new Dictionary<int, Waypoint>();
+        public int WaypointId { get; private set; }
 
-        public Waypoint(World world, int actorSNO, Vector3D position) : base(world, actorSNO, position)
+        public Waypoint(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
+            : base(world, actorSNO, position, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
+            this.ReadWaypointId();
+        }
+
+        private void ReadWaypointId()
+        {
+            var actData = (Mooege.Common.MPQ.FileFormats.Act)MPQStorage.Data.Assets[SNOGroup.Act][70015].Data;
+            var wayPointInfo = actData.WayPointInfo;
+
+            for (int i = 0; i < wayPointInfo.Length; i++)
+            {
+                if (wayPointInfo[i].SNOLevelArea == -1)
+                    continue;
+
+                foreach(var scene in this.World.Scenes.Values)
+                {
+                    if (scene.Specification == null) continue;
+                    foreach(var area in scene.Specification.SNOLevelAreas)
+                    {
+                        if (wayPointInfo[i].SNOWorld != this.World.WorldSNO || wayPointInfo[i].SNOLevelArea != area)
+                            continue;
+
+                        this.WaypointId = i;
+                        break;
+                    }
+                }
+            }
         }
 
         public override void OnTargeted(Player.Player player, Net.GS.Message.Definitions.World.TargetMessage message)
         {
             var world = player.World;
-            player.UpdateHeroState();
 
             world.BroadcastIfRevealed(new PlayAnimationMessage()
             {
@@ -65,7 +94,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             });
         }
 
-         public override bool Reveal(Player.Player player)
+        public override bool Reveal(Player.Player player)
         {
             if (!base.Reveal(player))
                 return false;
@@ -79,7 +108,7 @@ namespace Mooege.Core.GS.Actors.Implementations
                     Position = this.Position,
                     WorldID = this._world.DynamicID
                 },
-                Field2 = 0x1FA21,  
+                Field2 = 0x1FA21,
                 m_snoStringList = 0xF063,
 
                 Field4 = unchecked((int)0x9799F57B),
@@ -91,9 +120,9 @@ namespace Mooege.Core.GS.Actors.Implementations
                 Field10 = false,
                 Field11 = false,
                 Field12 = 0
-            }); 
+            });
 
             return true;
-        }   
+        }
     }
 }

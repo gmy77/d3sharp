@@ -17,8 +17,13 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using Mooege.Common;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
@@ -52,17 +57,25 @@ namespace Mooege.Core.GS.Actors
     // This should probably be the same as GBHandleType (probably merge them once all actor classes are created)
     public enum ActorType
     {
-        Player,
-        NPC,
-        Monster,
-        Item,
-        Portal,
-        Gizmo
+        Invalid = 0,
+        Monster = 1,
+        Gizmo = 2,
+        ClientEffect = 3,
+        ServerProp = 4,
+        Enviroment = 5,
+        Critter = 6,
+        Player = 7,
+        Item = 8,
+        AxeSymbol = 9,
+        Projectile = 10,
+        CustomBrain = 11
     }
 
     // Base actor
-    public /*abstract*/ class Actor : WorldObject
+    public abstract class Actor : WorldObject
     {
+        private static readonly Logger Logger = LogManager.CreateLogger();
+
         // Actors can change worlds and have a specific addition/removal scheme
         // We'll just override the setter to handle all of this automagically
         public override World World
@@ -81,28 +94,27 @@ namespace Mooege.Core.GS.Actors
             }
         }
 
-        protected Scene _currentScene;
         public virtual Scene CurrentScene
         {
-            get { return this._currentScene; }
-            protected set { this._currentScene = value; }
+            get { return this.World.QuadTree.Query<Scene>(this.Bounds).FirstOrDefault(); }
         }
 
         public override Vector3D Position
         {
+            get { return this._position; }
             set
             {
                 var old = new Vector3D(this._position);
                 this._position.Set(value);
+                this.Bounds = new Rect(this._position.X, this.Position.Y, 1, 1);
                 this.OnPositionChange(old);
             }
         }
 
-        public virtual /*abstract*/ ActorType ActorType { get { return Actors.ActorType.Item; } }
+        public abstract ActorType ActorType { get; }
 
         public GameAttributeMap Attributes { get; private set; }
         public List<Affix> AffixList { get; set; }
-        public int Tag;
 
         protected int _actorSNO;
         public int ActorSNO
@@ -118,6 +130,8 @@ namespace Mooege.Core.GS.Actors
         public int CollFlags { get; set; }
         public GBHandle GBHandle { get; private set; }
         public SNOName SNOName { get; private set; }
+
+        public Dictionary<int, TagMapEntry> Tags { get; private set; }
 
         // Some ACD uncertainties
         public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself
@@ -172,18 +186,32 @@ namespace Mooege.Core.GS.Actors
             }
         }
 
-        public Actor(World world, uint dynamicID)
+        protected Actor(World world, uint dynamicID, Vector3D position, Dictionary<int, TagMapEntry> tags)
             : base(world, dynamicID)
         {
+            if (position != null) this.Position = position;
+            this.Tags = tags;
             this.Attributes = new GameAttributeMap();
             this.AffixList = new List<Affix>();
             this.GBHandle = new GBHandle() { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
             this.SNOName = new SNOName() { Group =  SNOGroup.Actor, SNOId = this.ActorSNO };
             this.ActorSNO = -1;
             this.CollFlags = 0x00000000;
-            this.Scale = 1.0f;
-            this.RotationAmount = 0.0f;
-            this.RotationAxis.Set(0.0f, 0.0f, 1.0f);
+
+            this.ReadTags();
+        }
+
+        protected Actor(World world, uint dynamicId)
+            : this(world, dynamicId, null, null)
+        {
+        }
+
+        protected virtual void ReadTags()
+        {
+            if (this.Tags == null) return;
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
+                this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
         }
 
         // NOTE: When using this, you should *not* set the actor's world. It is done for you
@@ -337,6 +365,11 @@ namespace Mooege.Core.GS.Actors
             player.InGameClient.SendMessage(new ACDDestroyActorMessage(this.DynamicID));
             player.RevealedObjects.Remove(this.DynamicID);
             return true;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Actor: [Type: {0}] [Id:{1}] [Position: {2}] {3}", this.ActorType, this.SNOName.SNOId, this.Position, this.SNOName.Name);
         }
     }
 }

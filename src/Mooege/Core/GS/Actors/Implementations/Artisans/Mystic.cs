@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 
@@ -24,8 +26,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
     [HandledSNO(56948 /* PT_Mystic.acr */)]
     public class Mystic : Artisan
     {
-        public Mystic(World world, int actorSNO, Vector3D position)
-            : base(world, actorSNO, position)
+        public Mystic(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
+            : base(world, actorSNO, position, tags)
         {
         }
     }
