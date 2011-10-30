@@ -128,7 +128,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             var startingPoint = world.GetStartingPointById(this.Destination.StartingPointActorTag);
 
             if (startingPoint != null)
-                player.TransferTo(world, startingPoint.Position);
+                player.TransferTo(world,startingPoint);
             else
                 Logger.Warn("Portal's tagged starting point does not exist (Tag = {0})", this.Destination.StartingPointActorTag);
         }

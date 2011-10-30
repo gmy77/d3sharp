@@ -21,6 +21,7 @@ using System.Linq;
 using System.Windows;
 using Mooege.Common;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Markers;
@@ -215,17 +216,22 @@ namespace Mooege.Core.GS.Actors
         }
 
         // NOTE: When using this, you should *not* set the actor's world. It is done for you
-        public void TransferTo(World targetWorld, Vector3D pos)
+        public void TransferTo(World targetWorld, StartingPoint startingPoint=null)
         {
+            // This is somewhat still buggy, need a careful review. /raist.
+
             var player = this as Player.Player;
             if (player == null) return; // return if current actor is not a player. 
 
-            this.Position = pos;
-            //this.RotationAmount = location.Quaternion.W;
-            //this.RotationAxis = location.Quaternion.Vector3D;
-
             this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
-            
+
+            if (startingPoint == null)
+                startingPoint = targetWorld.StartingPoints.First();
+
+            this.Position = startingPoint.Position;
+            this.RotationAmount = startingPoint.RotationAmount;
+            this.RotationAxis = startingPoint.RotationAxis;
+
             player.InGameClient.SendMessage(new EnterWorldMessage()
             {
                 EnterPosition = this.Position,
@@ -233,21 +239,7 @@ namespace Mooege.Core.GS.Actors
                 WorldSNO = targetWorld.WorldSNO,
             });
 
-            player.InGameClient.SendMessage(new ACDWorldPositionMessage()
-            {
-                ActorID = this.DynamicID,
-                WorldLocation = new WorldLocationMessageData()
-                {
-                    WorldID = targetWorld.DynamicID,
-                    Scale = this.Scale,
-                    Transform = new PRTransform()
-                    {
-                        Quaternion = new Quaternion() { W = 1, Vector3D = new Vector3D(0, 0, 0) },
-                        Vector3D = pos
-                    }
-                }
-
-            });
+            player.InGameClient.SendMessage(this.ACDWorldPositionMessage);
         }
 
         public virtual void OnEnter(World world)
