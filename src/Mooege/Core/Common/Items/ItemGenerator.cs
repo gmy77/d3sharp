@@ -72,10 +72,10 @@ namespace Mooege.Core.Common.Items
         }
 
         // generates a random item.
-        public static Item GenerateRandom(Player player)
+        public static Item GenerateRandom(Actor owner)
         {
             var itemDefinition = GetRandom(ValidDefinitions);
-            return CreateItem(player, itemDefinition);
+            return CreateItem(owner, itemDefinition);
         }
 
         // generates a random item from given type category.
@@ -113,12 +113,12 @@ namespace Mooege.Core.Common.Items
         }
 
         // Creates an item based on supplied definition.
-        public static Item CreateItem(Actor player, ItemDefinition definition)
+        public static Item CreateItem(Actor owner, ItemDefinition definition)
         {
             Logger.Trace("Creating item: {0} [type: {1}, mode: {2}, sno:{3}, gbid {4}]", definition.Name,
                          definition.Type, definition.DifficultyMode, definition.SNOId, definition.GBId);
 
-            var item = new Item(player.World, definition.SNOId, definition.GBId, definition.Type);
+            var item = new Item(owner.World, definition.SNOId, definition.GBId, definition.Type);
 
             var attributeCreators = new AttributeCreatorFactory().Create(definition.Type);
             foreach (IItemAttributeCreator creator in attributeCreators)

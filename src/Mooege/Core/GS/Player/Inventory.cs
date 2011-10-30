@@ -24,6 +24,7 @@ using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Core.GS.Common;
 using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message.Definitions.Stash;
 
@@ -79,6 +80,17 @@ namespace Mooege.Core.GS.Player
              //player.InGameClient.SendMessage(message);
              player.World.BroadcastGlobal(message);
          }
+
+
+        public bool HasInventorySpace(Item item)
+        {
+            return _inventoryGrid.HasFreeSpace(item);
+        }
+
+        public void SpawnItem(Item item)
+        {
+            _inventoryGrid.AddItem(item);
+        }
         
         /// <summary>
         /// Picks an item up after client request

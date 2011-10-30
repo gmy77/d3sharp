@@ -196,7 +196,13 @@ namespace Mooege.Core.Common.Items
             this.InventoryLocation.X = column;
             this.InventoryLocation.Y = row;
             if (this.Owner is GS.Player.Player)
-                (this.Owner as GS.Player.Player).InGameClient.SendMessage(this.ACDInventoryPositionMessage);
+            {
+                var player = (this.Owner as GS.Player.Player);
+                if (!this.Reveal(player)) // What if we add the item straight to inv?
+                {
+                    player.InGameClient.SendMessage(this.ACDInventoryPositionMessage);
+                }
+            }
         }
 
         public void Drop(Mooege.Core.GS.Player.Player owner, Vector3D position)

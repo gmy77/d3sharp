@@ -43,6 +43,7 @@ using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Combat;
 using System;
+using Mooege.Net.GS.Message.Definitions.Trade;
 
 
 // TODO: When the player moves, it will set the Position property which will bounce back to the player again.
@@ -343,8 +344,10 @@ namespace Mooege.Core.GS.Player
             else if (message is TargetMessage) OnObjectTargeted(client, (TargetMessage)message);
             else if (message is PlayerMovementMessage) OnPlayerMovement(client, (PlayerMovementMessage)message);
             else if (message is TryWaypointMessage) OnTryWaypoint(client, (TryWaypointMessage)message);
+            else if (message is RequestBuyItemMessage) OnRequestBuyItem(client, (RequestBuyItemMessage) message);
             else return;
         }
+
 
         public override void Update()
         {
@@ -527,6 +530,15 @@ namespace Mooege.Core.GS.Player
 
             this.Position = wayPoint.Position;
             InGameClient.SendMessage(this.ACDWorldPositionMessage);
+        }
+
+
+        private void OnRequestBuyItem(GameClient client, RequestBuyItemMessage requestBuyItemMessage)
+        {
+            var item = World.GetItem(requestBuyItemMessage.ItemId);
+            if (item == null || item.Owner == null || !(item.Owner is Vendor))
+                return;
+            (item.Owner as Vendor).OnRequestBuyItem(this, item);
         }
 
         private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
