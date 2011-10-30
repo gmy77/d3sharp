@@ -28,11 +28,15 @@ using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message;
+using Mooege.Common.MPQ.FileFormats;
+using Mooege.Common.Helpers;
+using Mooege.Core.Common.Scripting;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
 
 namespace Mooege.Core.Common.Items
 {
+    /*
     public enum ItemType
     {
         Unknown, Helm, Gloves, Boots, Belt, Shoulders, Pants, Bracers, Shield, Quiver, Orb,
@@ -45,8 +49,8 @@ namespace Mooege.Core.Common.Items
         // ThrownWeapon, ThrowingAxe - does not work because there are no snoId in Actors.txt. Do they actually drop in the D3 beta? /angerwin?
         // Diamond, Sapphire - I realised some days ago, that the Item type Diamond and Shappire (maybe not the only one) causes client crash and BAD GBID messages, although they actually have SNO IDs. /angerwin
     }
-
-    public class Item : Actor
+    */
+    public class Item : Mooege.Core.GS.Actors.Actor
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -54,7 +58,10 @@ namespace Mooege.Core.Common.Items
 
         public GS.Player.Player Owner { get; set; } // Only set when the player has the item in its inventory. /komiga
 
-        public ItemType ItemType { get; set; }
+        public ItemTypeTable ItemType { get; set; }
+
+        public ItemRandomHelper RandomGenerator { get; private set; }
+        public int ItemLevel { get; private set; }
 
 
         public int EquipmentSlot { get; private set; }
@@ -92,13 +99,13 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        public Item(World world, int actorSNO, int gbid, ItemType type)
+        public Item(Mooege.Core.GS.Map.World world, ItemTable definition)
             : base(world, world.NewActorID)
         {
-            this.ActorSNO = actorSNO;
+            this.ActorSNO = definition.SNOActor;
             this.GBHandle.Type = (int)GBHandleType.Gizmo;
-            this.GBHandle.GBID = gbid;
-            this.ItemType = type;
+            this.GBHandle.GBID = definition.Hash;
+            this.ItemType = ItemGroup.FromHash(definition.ItemType1);
             this.EquipmentSlot = 0;
             this.InventoryLocation = new Vector2D { X = 0, Y = 0 };
 
@@ -109,14 +116,123 @@ namespace Mooege.Core.Common.Items
             this.Field9 = 0x00000000;
             this.Field10 = 0x00;
 
-            List<IItemAttributeCreator> attributeCreators = new AttributeCreatorFactory().Create(type);
+            this.ItemLevel = definition.ItemLevel;
+
+            // level requirement
+            // Attributes[GameAttribute.Requirement, 38] = definition.RequiredLevel;
+
+            if (definition.Quality != ItemTable.ItemQuality.Invalid)
+                Attributes[GameAttribute.Item_Quality_Level] = (int)definition.Quality;
+            else
+                Attributes[GameAttribute.Item_Quality_Level] = 1;
+            Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
+
+            /*
+            List<IItemAttributeCreator> attributeCreators = new AttributeCreatorFactory().Create(this.ItemType);
             foreach (IItemAttributeCreator creator in attributeCreators)
             {
                 creator.CreateAttributes(this);
             }
+            */
+
+            RandomGenerator = new ItemRandomHelper(Attributes[GameAttribute.Seed]);
+            RandomGenerator.Next();
+            if (Item.IsArmor(this.ItemType))
+                RandomGenerator.Next(); // next value is used but unknown if armor
+            RandomGenerator.ReinitSeed();
+
+            ApplyWeaponSpecificOptions(definition);
+            ApplyArmorSpecificOptions(definition);
+            ApplyDurability(definition);
+            ApplySkills(definition);
+            ApplyAttributeSpecifier(definition);
+
             AffixGenerator.Generate(this, 2);
 
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
+        }
+
+        private void ApplyWeaponSpecificOptions(ItemTable definition)
+        {
+            if (definition.WeaponDamageMin > 0)
+            {
+                Attributes[GameAttribute.Attacks_Per_Second_Item] += definition.AttacksPerSecond;
+                Attributes[GameAttribute.Attacks_Per_Second_Item_Subtotal] += definition.AttacksPerSecond;
+                Attributes[GameAttribute.Attacks_Per_Second_Item_Total] += definition.AttacksPerSecond;
+
+                Attributes[GameAttribute.Damage_Weapon_Min, 0] += definition.WeaponDamageMin;
+                Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] += definition.WeaponDamageMin;
+
+                Attributes[GameAttribute.Damage_Weapon_Delta, 0] += definition.WeaponDamageDelta;
+                Attributes[GameAttribute.Damage_Weapon_Delta_SubTotal, 0] += definition.WeaponDamageDelta;
+                Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] += definition.WeaponDamageDelta;
+
+                Attributes[GameAttribute.Damage_Weapon_Max, 0] += Attributes[GameAttribute.Damage_Weapon_Min, 0] + Attributes[GameAttribute.Damage_Weapon_Delta, 0];
+                Attributes[GameAttribute.Damage_Weapon_Max_Total, 0] += Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] + Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0];
+
+                Attributes[GameAttribute.Damage_Weapon_Min_Total_All] = definition.WeaponDamageMin;
+                Attributes[GameAttribute.Damage_Weapon_Delta_Total_All] = definition.WeaponDamageDelta;
+            }
+        }
+
+        private void ApplyArmorSpecificOptions(ItemTable definition)
+        {
+            if (definition.ArmorValue > 0)
+            {
+                Attributes[GameAttribute.Armor_Item] += definition.ArmorValue;
+                Attributes[GameAttribute.Armor_Item_SubTotal] += definition.ArmorValue;
+                Attributes[GameAttribute.Armor_Item_Total] += definition.ArmorValue;
+            }
+        }
+
+        private void ApplyDurability(ItemTable definition)
+        {
+            if (definition.DurabilityMin > 0)
+            {
+                int durability = definition.DurabilityMin + RandomHelper.Next(definition.DurabilityDelta);
+                Attributes[GameAttribute.Durability_Cur] = durability;
+                Attributes[GameAttribute.Durability_Max] = durability;
+            }
+        }
+
+        private void ApplySkills(ItemTable definition)
+        {
+            if (definition.SNOSkill0 != -1)
+            {
+                Attributes[GameAttribute.Skill, definition.SNOSkill0] = 1;
+            }
+            if (definition.SNOSkill1 != -1)
+            {
+                Attributes[GameAttribute.Skill, definition.SNOSkill1] = 1;
+            }
+            if (definition.SNOSkill2 != -1)
+            {
+                Attributes[GameAttribute.Skill, definition.SNOSkill2] = 1;
+            }
+            if (definition.SNOSkill3 != -1)
+            {
+                Attributes[GameAttribute.Skill, definition.SNOSkill3] = 1;
+            }
+        }
+
+        private void ApplyAttributeSpecifier(ItemTable definition)
+        {
+            foreach (var effect in definition.Attribute)
+            {
+                float result;
+                if (FormulaScript.Evaluate(effect.Formula.ToArray(), this.RandomGenerator, out result))
+                {
+                    var attr = GameAttribute.GameAttributeArray[effect.AttributeId] as GameAttributeF;
+                    if (attr != null)
+                    {
+                        Logger.Debug("Randomized value for attribute " + attr.Name + " is " + result);
+                        if (effect.SNOParam != -1)
+                            Attributes[attr, effect.SNOParam] += result;
+                        else
+                            Attributes[attr] += result;
+                    }
+                }
+            }
         }
 
         // There are 2 VisualItemClasses... any way to use the builder to create a D3 Message?
@@ -131,77 +247,59 @@ namespace Mooege.Core.Common.Items
             };
         }
 
-        public static bool IsPotion(ItemType itemType)
+        #region Is*
+        public static bool IsHealthGlobe(ItemTypeTable itemType)
         {
-            return (itemType == ItemType.Potion);
+            return ItemGroup.IsSubType(itemType, "HealthGlyph");
         }
 
-        public static bool IsAccessory(ItemType itemType)
+        public static bool IsGold(ItemTypeTable itemType)
         {
-            return (itemType == ItemType.Ring || itemType == ItemType.Belt || itemType == ItemType.Amulet);
+            return ItemGroup.IsSubType(itemType, "Gold");
         }
 
-        public static bool IsRuneOrJewel(ItemType itemType)
+        public static bool IsPotion(ItemTypeTable itemType)
         {
-            return (itemType == ItemType.Amethyst || itemType == ItemType.Ruby || itemType == ItemType.Emerald || itemType == ItemType.Topaz || itemType == ItemType.Rune);
+            return ItemGroup.IsSubType(itemType, "Potion");
         }
 
-        public static bool IsJournalOrScroll(ItemType itemType)
+        public static bool IsAccessory(ItemTypeTable itemType)
         {
-            return (itemType == ItemType.Journal || itemType == ItemType.Scroll);
+            return ItemGroup.IsSubType(itemType, "Jewelry");
         }
 
-        public static bool IsDye(ItemType itemType)
+        public static bool IsRuneOrJewel(ItemTypeTable itemType)
         {
-            return (itemType == ItemType.Dye);
+            return ItemGroup.IsSubType(itemType, "Gem") ||
+                ItemGroup.IsSubType(itemType, "SpellRune");
         }
 
-        public static bool IsWeapon(ItemType itemType)
+        public static bool IsJournalOrScroll(ItemTypeTable itemType)
         {
-            return (itemType == ItemType.Axe_1H
-                || itemType == ItemType.Axe_2H
-                || itemType == ItemType.Bow
-                || itemType == ItemType.CombatStaff_2H
-                || itemType == ItemType.Crossbow
-                || itemType == ItemType.Dagger
-                || itemType == ItemType.FistWeapon_1H
-                || itemType == ItemType.Mace_1H
-                || itemType == ItemType.Mace_2H
-                || itemType == ItemType.Orb
-                || itemType == ItemType.Polearm
-                || itemType == ItemType.Spear
-                || itemType == ItemType.Staff
-                || itemType == ItemType.Sword_1H
-                || itemType == ItemType.Sword_2H
-                //|| itemType == ItemType.ThrowingAxe
-                //|| itemType == ItemType.ThrownWeapon
-                || itemType == ItemType.Wand
-                );
+            return ItemGroup.IsSubType(itemType, "Scroll") ||
+                ItemGroup.IsSubType(itemType, "Book");
         }
 
-        public static bool IsArmor(ItemType itemType)
+        public static bool IsDye(ItemTypeTable itemType)
         {
-            return (itemType == ItemType.Helm
-                || itemType == ItemType.Gloves
-                || itemType == ItemType.Boots
-                || itemType == ItemType.Belt
-                || itemType == ItemType.Shoulders
-                || itemType == ItemType.Pants
-                || itemType == ItemType.Bracers
-                || itemType == ItemType.ChestArmor
-                );
+            return ItemGroup.IsSubType(itemType, "Dye");
         }
 
-        public static bool Is2H(ItemType itemType)
+        public static bool IsWeapon(ItemTypeTable itemType)
         {
-            return (itemType == ItemType.Sword_2H
-                || itemType == ItemType.Axe_2H
-                || itemType == ItemType.Mace_2H
-                || itemType == ItemType.CombatStaff_2H
-                || itemType == ItemType.Staff
-                || itemType == ItemType.Polearm);
+            return ItemGroup.IsSubType(itemType, "Weapon");
         }
 
+        public static bool IsArmor(ItemTypeTable itemType)
+        {
+            return ItemGroup.IsSubType(itemType, "Armor");
+        }
+
+        public static bool Is2H(ItemTypeTable itemType)
+        {
+            return ItemGroup.Is2H(itemType);
+        }
+        #endregion
 
         public void SetInventoryLocation(int equipmentSlot, int column, int row)
         {
@@ -256,67 +354,6 @@ namespace Mooege.Core.Common.Items
                 Field1 = 0x00000002,
                 aAffixGBIDs = new int[0],
             });
-
-            /*
-            player.InGameClient.SendMessage(new AffixMessage()
-            {
-                ActorID = DynamicID,
-                Field1 = 0x00000001,
-                aAffixGBIDs = new int[] { StringHashHelper.HashItemName("AttPrec I") },
-
-            });
-
-            player.InGameClient.SendMessage(new AffixMessage()
-            {
-                ActorID = DynamicID,
-                Field1 = 0x00000002,
-                aAffixGBIDs = new int[] { },
-            });
-
-            GameAttributeI attr = (GameAttributeI)typeof(GameAttribute).GetField("Attack", BindingFlags.Static).GetValue(null);
-            Attributes[attr] = 2;
-
-            ItemRandomHelper ir;
-            uint t;
-            string s;
-
-            s = "";
-            ir = new ItemRandomHelper(Attributes[GameAttribute.Seed]);
-            for (int i = 0; i < 0; i++ )
-                t = ir.Next();
-            ir.ReinitSeed();
-            for (int i = 0; i < 10; i++ )
-                s += (ir.Next() % 6 + 1) + ", ";
-            Logger.Debug(s);
-
-            s = "";
-            ir = new ItemRandomHelper(Attributes[GameAttribute.Seed]);
-            for (int i = 0; i < 1; i++)
-                t = ir.Next();
-            ir.ReinitSeed();
-            for (int i = 0; i < 10; i++)
-                s += (ir.Next() % 6 + 1) + ", ";
-            Logger.Debug(s);
-
-            s = "";
-            ir = new ItemRandomHelper(Attributes[GameAttribute.Seed]);
-            for (int i = 0; i < 2; i++)
-                t = ir.Next();
-            ir.ReinitSeed();
-            for (int i = 0; i < 10; i++)
-                s += (ir.Next() % 6 + 1) + ", ";
-            Logger.Debug(s);
-
-            Logger.Debug("========================");
-             */
-
-             //Why updating with the same sno?
-            /*player.InGameClient.SendMessage(new ACDInventoryUpdateActorSNO()
-            {
-                ItemID = this.DynamicID,
-                ItemSNO = this.ActorSNO,
-            });
-             */
 
             return true;
         }

@@ -25,6 +25,7 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.Common.Items;
+using Mooege.Common.MPQ.FileFormats;
 
 namespace Mooege.Core.GS.Player
 {
@@ -76,7 +77,7 @@ namespace Mooege.Core.GS.Player
              //player.InGameClient.SendMessage(message);
              player.World.BroadcastGlobal(message);
          }
-        
+
         /// <summary>
         /// Picks an item up after client request
         /// </summary>
@@ -197,8 +198,8 @@ namespace Mooege.Core.GS.Player
         private bool IsValidEquipmentRequest(Item item, int equipmentSlot)
         {
 
-            ItemType type = item.ItemType;
-                
+            ItemTypeTable type = item.ItemType;
+
             if (equipmentSlot == (int)EquipmentSlotId.Main_Hand)
             {
                 // useful for 1hand + shield switching, this is to avoid shield to be go to main hand
@@ -236,13 +237,13 @@ namespace Mooege.Core.GS.Player
                     }
 
                     _equipment.EquipItem(item, (int)EquipmentSlotId.Main_Hand);
-                    AcceptMoveRequest(item); 
+                    AcceptMoveRequest(item);
 
                     SendVisualInventory(this._owner);
                     // All equipment commands are executed. the original EquipmentRequest is invalid at this moment
                     return false;
                 }
-                             
+
                 if (itemMainHand != null)
                 {
                     if (Item.Is2H(itemMainHand.ItemType))
@@ -269,7 +270,7 @@ namespace Mooege.Core.GS.Player
 
             itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
             itemTo.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
-            
+
 
             // TODO: This needs to change the attribute on the item itself. /komiga
             // Update source
@@ -306,7 +307,7 @@ namespace Mooege.Core.GS.Player
             else if (message is InventorySplitStackMessage) OnInventorySplitStackMessage(message as InventorySplitStackMessage);
             else if (message is InventoryStackTransferMessage) OnInventoryStackTransferMessage(message as InventoryStackTransferMessage);
             else if (message is InventoryDropItemMessage) OnInventoryDropItemMessage(message as InventoryDropItemMessage);
-            else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);                
+            else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
             else return;
         }
 
@@ -328,7 +329,7 @@ namespace Mooege.Core.GS.Player
             int actionId = inventoryRequestUseMessage.Field1; // guess 1 means dyeing. Probably other value for using identify scroll , selling , .... - angerwin
             Item usedItem = _owner.World.GetItem(usedItemId);
             Item targetItem = _owner.World.GetItem(targetItemId);
-            if (actionId == 1) 
+            if (actionId == 1)
             {
                 DyeColor.DyeItem(usedItem, targetItem);
             }

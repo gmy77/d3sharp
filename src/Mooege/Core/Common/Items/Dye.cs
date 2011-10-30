@@ -30,7 +30,7 @@ namespace Mooege.Core.Common.Items
 
     /// <summary>
     /// This Class handles the ColorValue of Dye Items
-    /// 
+    ///
     /// TODO: need to implement Dye Remover and invisible Dye
     /// </summary>
     public static class DyeColor
@@ -41,7 +41,7 @@ namespace Mooege.Core.Common.Items
         private static Dictionary<int, int> DyeColorMap = new Dictionary<int,int>();
 
         static DyeColor()
-        {           
+        {
             DyeColorMap.Add(StringHashHelper.HashItemName("DYE_01"),18);  // Tanner Dye
             DyeColorMap.Add(StringHashHelper.HashItemName("DYE_02"),20);  // Pale Dye
             DyeColorMap.Add(StringHashHelper.HashItemName("DYE_03"),12);  // Winter Dye
@@ -75,17 +75,17 @@ namespace Mooege.Core.Common.Items
                 }
             }
 
-            Logger.Error("Colorvalue couldn't be retrieved for item {0}", dye.DynamicID);                
+            Logger.Error("Colorvalue couldn't be retrieved for item {0}", dye.DynamicID);
             return 0;
         }
 
         public static void DyeItem(Item dye, Item dyeable)
         {
             Debug.Assert(dye != null);
-            Debug.Assert(dye.ItemType == ItemType.Dye);
+            Debug.Assert(Item.IsDye(dye.ItemType));
             Debug.Assert(dyeable != null);
-            
-            dyeable.Attributes[GameAttribute.DyeType] = DyeColor.ColorValue(dye);            
+
+            dyeable.Attributes[GameAttribute.DyeType] = DyeColor.ColorValue(dye);
         }
     }
 }

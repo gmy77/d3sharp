@@ -55,10 +55,10 @@ namespace Mooege.Core.GS.Player
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         public override ActorType ActorType { get { return ActorType.Player; } }
-        
+
         public GameClient InGameClient { get; set; }
 
-        public int PlayerIndex { get; private set; } 
+        public int PlayerIndex { get; private set; }
 
         public Toon Properties { get; private set; }
         public SkillSet SkillSet;
@@ -170,7 +170,7 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Resistance, 0xDE] = 0.5f;
             this.Attributes[GameAttribute.Resistance, 0x226] = 0.5f;
             this.Attributes[GameAttribute.Resistance_Total, 0] = 10f; // im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
-            // likely the physical school of damage, it probably doesn't actually do anything in this case (or maybe just not for the player's hero) 
+            // likely the physical school of damage, it probably doesn't actually do anything in this case (or maybe just not for the player's hero)
             // but exists for the sake of parity with weapon damage schools
             this.Attributes[GameAttribute.Resistance_Total, 1] = 10f; //Fire
             this.Attributes[GameAttribute.Resistance_Total, 2] = 10f; //Lightning
@@ -345,11 +345,11 @@ namespace Mooege.Core.GS.Player
 
         private void OnPlayerMovement(GameClient client, PlayerMovementMessage message)
         {
-            // here we should also be checking the position and see if it's valid. If not we should be resetting player to a good position with ACDWorldPositionMessage 
+            // here we should also be checking the position and see if it's valid. If not we should be resetting player to a good position with ACDWorldPositionMessage
             // so we can have a basic precaution for hacks & exploits /raist.
 
             if (message.Position != null)
-                this.Position = message.Position; 
+                this.Position = message.Position;
 
             var msg = new NotifyActorMovementMessage
                              {
@@ -376,7 +376,7 @@ namespace Mooege.Core.GS.Player
                 Item item;
                 if (! (actor is Item)) continue;
                 item = (Item)actor;
-                if (item.ItemType != ItemType.Gold) continue;
+                if (!Item.IsGold(item.ItemType)) continue;
 
                 this.InGameClient.SendMessage(new FloatingAmountMessage()
                 {
@@ -391,7 +391,7 @@ namespace Mooege.Core.GS.Player
                 });
 
                 this.Inventory.PickUpGold(item.DynamicID);
-              
+
 
                 item.Destroy();
             }
@@ -405,7 +405,7 @@ namespace Mooege.Core.GS.Player
                 Item item;
                 if (!(actor is Item)) continue;
                 item = (Item)actor;
-                if (item.ItemType != ItemType.HealthGlobe) continue;
+                if (!Item.IsHealthGlobe(item.ItemType)) continue;
 
                 this.InGameClient.SendMessage(new PlayEffectMessage() //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
                 {
@@ -478,7 +478,7 @@ namespace Mooege.Core.GS.Player
                 ActorId = this.DynamicID,
             });
 
-            this.Inventory.SendVisualInventory(player); 
+            this.Inventory.SendVisualInventory(player);
 
             if (this == player) // only send this to player itself. Warning: don't remove this check or you'll make the game start crashing! /raist.
             {
@@ -488,7 +488,7 @@ namespace Mooege.Core.GS.Player
                     PlayerIndex = this.PlayerIndex,
                 });
             }
-            
+
             return true;
         }
 
@@ -612,7 +612,7 @@ namespace Mooege.Core.GS.Player
                     (this.Attributes[GameAttribute.Hitpoints_Total_From_Level]);
         }
 
-        public static int[] LevelBorders = 
+        public static int[] LevelBorders =
         {
             0, 1200, 2250, 4000, 6050, 8500, 11700, 15400, 19500, 24000, /* Level 1-10 */
             28900, 34200, 39900, 44100, 45000, 46200, 48300, 50400, 52500, 54600, /* Level 11-20 */
@@ -662,7 +662,7 @@ namespace Mooege.Core.GS.Player
 
                 // Hitpoints from level may actually change. This needs to be verified by someone with the beta.
                 //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = this.Attributes[GameAttribute.Level] * this.Attributes[GameAttribute.Hitpoints_Factor_Level];
-                
+
                 // For now, hit points are based solely on vitality and initial hitpoints received.
                 // This will have to change when hitpoint bonuses from items are implemented.
                 this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality] = this.Attributes[GameAttribute.Vitality] * this.Attributes[GameAttribute.Hitpoints_Factor_Vitality];
