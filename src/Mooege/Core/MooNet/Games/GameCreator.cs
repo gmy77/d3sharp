@@ -81,7 +81,8 @@ namespace Mooege.Core.MooNet.Games
 
         public void JoinGame(List<MooNetClient> clients, ulong objectId)
         {
-            clients.First().MapLocalObjectID(this.DynamicId, objectId); // map remote object-id for party leader, dunno if this is needed in JoinGame... /dustinconrad
+            //Seems to work whether the line below is there or not.  Commenting out as it is easier to detect if something is completely missing vs wrong... /dustinconrad
+            //clients.First().MapLocalObjectID(this.DynamicId, objectId);
 
             foreach (var client in clients) // get all clients in game.
             {
