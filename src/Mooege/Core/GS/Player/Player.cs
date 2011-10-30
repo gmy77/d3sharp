@@ -83,14 +83,16 @@ namespace Mooege.Core.GS.Player
 
         public List<OpenConversation> OpenConversations { get; set; }
 
+        public bool EnteredWorld { get; set; }
+
         public Player(World world, GameClient client, Toon bnetToon)
             : base(world, world.NewPlayerID)
         {
+            this.EnteredWorld = false;
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // make it atomic.
 
             this.Properties = bnetToon;
-            this.Inventory = new Inventory(this);
             this.SkillSet = new SkillSet(this.Properties.Class);
 
             this.RevealedObjects = new Dictionary<uint, IRevealable>();
@@ -117,10 +119,7 @@ namespace Mooege.Core.GS.Player
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.CollFlags = 0x00000000;
 
-            this.CurrentScene = this.World.SpawnableScenes.First();
-            this.Position.X = this.CurrentScene.StartPosition.X;
-            this.Position.Y = this.CurrentScene.StartPosition.Y;
-            this.Position.Z = this.CurrentScene.StartPosition.Z;
+            this.Position = this.World.StartingPoints.First().Position;
 
             // den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
             // inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
@@ -320,6 +319,20 @@ namespace Mooege.Core.GS.Player
             this.Attributes[GameAttribute.Backpack_Slots] = 60;
             this.Attributes[GameAttribute.General_Cooldown] = 0;
             #endregion // Attributes
+
+            this.Inventory = new Inventory(this); // Here because it needs attributes /fasbat
+        }
+
+        public List<T> GetRevealedObjects<T>() where T: class, IRevealable
+        {
+            return this.RevealedObjects.Values.OfType<T>().Select(@object => @object).ToList();
+        }
+
+        protected override void OnPositionChange(Vector3D prevPosition)
+        {
+            if (!this.EnteredWorld) return;
+            this.World.RevealScenesInProximity(this);
+            this.World.RevealActorsInProximity(this);
         }
 
         public void Consume(GameClient client, GameMessage message)
@@ -453,11 +466,6 @@ namespace Mooege.Core.GS.Player
             Logger.Trace("Leaving world!");
         }
 
-        protected override void OnPositionChange(Vector3D prevPosition)
-        {
-            // check here for current-scene change.
-        }
-
         public override bool Reveal(Mooege.Core.GS.Player.Player player)
         {
             if (!base.Reveal(player))
@@ -514,15 +522,11 @@ namespace Mooege.Core.GS.Player
 
         private void OnTryWaypoint(GameClient client, TryWaypointMessage tryWaypointMessage)
         {
-            Vector3D position;
+            var wayPoint = this.World.GetWayPointById(tryWaypointMessage.Field1);
+            if (wayPoint == null) return;
 
-            if (Waypoint.Waypoints.ContainsKey(tryWaypointMessage.Field1)) // TODO handle other worlds! it's easy! /fasbat
-                position = Waypoint.Waypoints[tryWaypointMessage.Field1].Position;
-            else
-                return;
-
-            this.Position = position;
-            InGameClient.SendMessage(ACDWorldPositionMessage);
+            this.Position = wayPoint.Position;
+            InGameClient.SendMessage(this.ACDWorldPositionMessage);
         }
 
         private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
@@ -642,7 +646,6 @@ namespace Mooege.Core.GS.Player
 
         public void UpdateExp(int addedExp)
         {
-            GameAttributeMap attribs = new GameAttributeMap();
 
             this.Attributes[GameAttribute.Experience_Next] -= addedExp;
 
@@ -672,18 +675,7 @@ namespace Mooege.Core.GS.Player
                 // On level up, health is set to max
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
 
-                attribs[GameAttribute.Level] = this.Attributes[GameAttribute.Level];
-                attribs[GameAttribute.Defense] = this.Attributes[GameAttribute.Defense];
-                attribs[GameAttribute.Vitality] = this.Attributes[GameAttribute.Vitality];
-                attribs[GameAttribute.Precision] = this.Attributes[GameAttribute.Precision];
-                attribs[GameAttribute.Attack] = this.Attributes[GameAttribute.Attack];
-                attribs[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next];
-                attribs[GameAttribute.Hitpoints_Total_From_Vitality] = this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality];
-                attribs[GameAttribute.Hitpoints_Max_Total] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
-                attribs[GameAttribute.Hitpoints_Max] = this.Attributes[GameAttribute.Hitpoints_Max];
-                attribs[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur];
-
-                attribs.SendMessage(this.InGameClient, this.DynamicID);
+                this.Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
 
                 this.InGameClient.SendMessage(new PlayerLevel()
                 {
@@ -707,11 +699,12 @@ namespace Mooege.Core.GS.Player
             }
 
             // constant 0 exp at Level_Cap
-            if (this.Attributes[GameAttribute.Experience_Next] < 0) { this.Attributes[GameAttribute.Experience_Next] = 0; }
+            if (this.Attributes[GameAttribute.Experience_Next] < 0) 
+            { 
+                this.Attributes[GameAttribute.Experience_Next] = 0;
 
-            attribs[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next];
-            attribs.SendMessage(this.InGameClient, this.DynamicID);
-
+            }
+            this.Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
         }
 

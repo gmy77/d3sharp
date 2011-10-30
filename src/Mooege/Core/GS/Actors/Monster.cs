@@ -17,11 +17,12 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Mooege.Common.Helpers;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.Tick;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Animation;
@@ -34,8 +35,11 @@ namespace Mooege.Core.GS.Actors
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
-        public Monster(World world, int actorSNO, Vector3D position)
-            : base(world, actorSNO, position)
+        // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
+        public int AnimationSNO { get; set; }
+
+        public Monster(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
+            : base(world, actorSNO, position, tags)
         {
             this.Field2 = 0x8;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
@@ -158,9 +162,9 @@ namespace Mooege.Core.GS.Actors
 
             this.World.SpawnRandomDrop(player, this.Position);
             this.World.SpawnGold(player, this.Position);
-            int rGlobes = RandomHelper.Next(1, 100);
-            if (rGlobes < 20)
+            if (RandomHelper.Next(1, 100) < 20)
                 this.World.SpawnGlobe(player, this.Position);
+
             this.Destroy();
         }
     }

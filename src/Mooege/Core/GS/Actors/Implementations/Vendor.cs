@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
@@ -31,8 +33,9 @@ namespace Mooege.Core.GS.Actors.Implementations
     {
         private List<Item> _vendorInventory;
 
-        public Vendor(World world, int actorSNO, Vector3D position)
-            : base(world, actorSNO, position)
+
+        public Vendor(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
+            : base(world, actorSNO, position, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
             _vendorInventory = new List<Item>();

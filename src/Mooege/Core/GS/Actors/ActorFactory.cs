@@ -21,9 +21,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Mooege.Common.MPQ;
+using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Markers;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -33,37 +36,50 @@ namespace Mooege.Core.GS.Actors
 
         static ActorFactory()
         {
-            LoadHandlers();
+            LoadSNOHandlers();
         }
 
-        public static Actor Create(int snoId, World world, Vector3D position)
+        public static Actor Create(World world, int snoId, Vector3D position, TagMap tagMap)
         {
             if (!MPQStorage.Data.Assets[SNOGroup.Actor].ContainsKey(snoId))
                 return null;
 
-            var actorAsset = MPQStorage.Data.Assets[SNOGroup.Actor][snoId];
-            if(actorAsset==null) return null;
+            var actorAsset = MPQStorage.Data.Assets[SNOGroup.Actor][snoId];            
             var actorData = actorAsset.Data as Mooege.Common.MPQ.FileFormats.Actor;
             if (actorData == null) return null;
 
-            if (actorData.Type == Mooege.Common.MPQ.FileFormats.Actor.ActorType.Invalid) 
+            if (actorData.Type == ActorType.Invalid) 
                 return null;
-            else if (SNOHandlers.ContainsKey(snoId))
-                return (Actor) Activator.CreateInstance(SNOHandlers[snoId], new object[] {world, snoId, position}); // check for handled-actor implementations.
-            else switch (actorData.Type)
+
+            // read tagMapEntries and put them into a dictionary
+            var tags = tagMap.TagMapEntries.ToDictionary(entry => entry.Int1);
+
+            // see if we have an implementation for actor.
+            if (SNOHandlers.ContainsKey(snoId))
+                return (Actor) Activator.CreateInstance(SNOHandlers[snoId], new object[] {world, snoId, position, tags});
+           
+            switch (actorData.Type)
             {
-                case Mooege.Common.MPQ.FileFormats.Actor.ActorType.Monster:
-                    return new Monster(world, snoId, position);
-                case Mooege.Common.MPQ.FileFormats.Actor.ActorType.Gizmo:
-                    return new Gizmo(world, snoId, position);
+                case ActorType.Monster:
+                    return new Monster(world, snoId, position, tags);
+                case ActorType.Gizmo:
+                    return CreateGizmo(world, snoId, position, tags);
+
             }
 
             return null;
         }
 
-        public static void LoadHandlers()
+        private static Actor CreateGizmo(World world, int snoId, Vector3D position, Dictionary<int,TagMapEntry> tags)
         {
-            SNOHandlers.Clear();
+            if (tags.ContainsKey((int)MarkerTagTypes.DestinationWorld))
+                return new Portal(world, snoId, position, tags);
+
+            return new Gizmo(world, snoId, position, tags);
+        }
+
+        public static void LoadSNOHandlers()
+        {
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
                 if (!type.IsSubclassOf(typeof (Actor))) continue;
@@ -76,11 +92,6 @@ namespace Mooege.Core.GS.Actors
                     SNOHandlers.Add(sno, type);
                 }
             }
-        }
-
-        public static bool HasHandler(int sno)
-        {
-            return SNOHandlers.ContainsKey(sno);
         }
     }
 }

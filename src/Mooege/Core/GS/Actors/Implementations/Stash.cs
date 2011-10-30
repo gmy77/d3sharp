@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message.Definitions.Stash;
@@ -26,7 +28,8 @@ namespace Mooege.Core.GS.Actors.Implementations
     [HandledSNO(130400 /* Player_Shared_Stash.acr */)]
     public sealed class Stash : Gizmo
     {
-        public Stash(World world, int actorSNO, Vector3D position) : base(world, actorSNO, position)
+        public Stash(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
+            : base(world, actorSNO, position, tags)
         { }
 
         public override void OnTargeted(Player.Player player, TargetMessage message)
