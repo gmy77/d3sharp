@@ -165,7 +165,7 @@
     <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
     <Compile Include="Core\GS\Markers\Marker.cs" />
     <Compile Include="Core\GS\Player\Equipment.cs" />
-    <Compile Include="Core\GS\Player\Stash.cs" />
+    <Compile Include="Core\GS\Player\InventoryGrid.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
