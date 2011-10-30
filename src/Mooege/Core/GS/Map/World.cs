@@ -249,7 +249,7 @@ namespace Mooege.Core.GS.Map
 
         public void SpawnMob(Mooege.Core.GS.Player.Player player, int actorSNO, Vector3D position)
         {
-            var monster = new Monster(player.World, actorSNO, position, new Dictionary<int,Mooege.Common.MPQ.FileFormats.Types.TagMapEntry>());
+            var monster = new Monster(player.World, actorSNO, position, new Dictionary<int, Mooege.Common.MPQ.FileFormats.Types.TagMapEntry>()) {Scale = 1.35f};
             this.Enter(monster);
         }
 
