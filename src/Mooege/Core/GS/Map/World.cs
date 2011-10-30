@@ -259,7 +259,7 @@ namespace Mooege.Core.GS.Map
 
         public void SpawnGold(Mooege.Core.GS.Player.Player player, Vector3D position)
         {
-            var item = ItemGenerator.CreateGold(player, RandomHelper.Next(1, 3)); // somehow the actual ammount is not shown on ground /raist.
+            var item = ItemGenerator.CreateGold(player, RandomHelper.Next(1000, 3000)); // somehow the actual ammount is not shown on ground /raist.
             item.Drop(null, position);
         }
 

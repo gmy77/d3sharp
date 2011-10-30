@@ -40,6 +40,12 @@ namespace Mooege.Core.GS.Common.Types.Math
             Y = stream.ReadValueS32();
         }
 
+        public Vector2D(int x, int y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
+
         /// <summary>
         /// Parses Vector2D from given GameBitBuffer.
         /// </summary>

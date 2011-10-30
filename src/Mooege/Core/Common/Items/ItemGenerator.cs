@@ -28,6 +28,7 @@ using Mooege.Net.GS;
 using Mooege.Core.Common.Items.ItemCreation;
 using Wintellect.PowerCollections;
 using Mooege.Net.GS.Message;
+using Mooege.Core.GS.Actors;
 
 // FIXME: Most of this stuff should be elsewhere and not explicitly generate items to the player's GroundItems collection / komiga?
 
@@ -79,7 +80,7 @@ namespace Mooege.Core.Common.Items
 
         // generates a random item from given type category.
         // we can also set a difficulty mode parameter here, but it seems current db doesnt have nightmare or hell-mode items with valid snoId's /raist.
-        public static Item GenerateRandom(Player player, ItemType type)
+        public static Item GenerateRandom(Actor player, ItemType type)
         {
             var validDefinitions = ItemDefinitions[type].Where(definition => definition.SNOId != 0).ToList(); // only find item definitions with snoId!=0 for given itemtype.
             var itemDefinition = GetRandom(validDefinitions);
@@ -112,7 +113,7 @@ namespace Mooege.Core.Common.Items
         }
 
         // Creates an item based on supplied definition.
-        public static Item CreateItem(Player player, ItemDefinition definition)
+        public static Item CreateItem(Actor player, ItemDefinition definition)
         {
             Logger.Trace("Creating item: {0} [type: {1}, mode: {2}, sno:{3}, gbid {4}]", definition.Name,
                          definition.Type, definition.DifficultyMode, definition.SNOId, definition.GBId);
