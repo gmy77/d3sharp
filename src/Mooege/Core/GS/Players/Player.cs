@@ -43,11 +43,10 @@ using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Combat;
 using System;
 
-
 // TODO: When the player moves, it will set the Position property which will bounce back to the player again.
 //       That is unnecessary and we should exclude the player from receiving it in that case. /komiga
 
-namespace Mooege.Core.GS.Player
+namespace Mooege.Core.GS.Players
 {
     public class Player : Actor, IMessageConsumer
     {
@@ -464,7 +463,7 @@ namespace Mooege.Core.GS.Player
             Logger.Trace("Leaving world!");
         }
 
-        public override bool Reveal(Mooege.Core.GS.Player.Player player)
+        public override bool Reveal(Player player)
         {
             if (!base.Reveal(player))
                 return false;

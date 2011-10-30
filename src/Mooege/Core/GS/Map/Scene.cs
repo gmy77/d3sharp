@@ -27,6 +27,7 @@ using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Common.Types.Scene;
 using Mooege.Core.GS.Objects;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Net.GS.Message.Definitions.Scene;
 
@@ -174,7 +175,7 @@ namespace Mooege.Core.GS.Map
             }
         }
 
-        public override bool Reveal(Player.Player player)
+        public override bool Reveal(Player player)
         {
             if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
             player.RevealedObjects.Add(this.DynamicID, this);
@@ -188,7 +189,7 @@ namespace Mooege.Core.GS.Map
             return true;
         }
 
-        public override bool Unreveal(Player.Player player)
+        public override bool Unreveal(Player player)
         {
             if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // not revealed yet
             player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID },true);            

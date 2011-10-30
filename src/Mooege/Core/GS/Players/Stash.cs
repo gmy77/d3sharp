@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Mooege.Common;
 using Mooege.Core.Common.Items;
 
-namespace Mooege.Core.GS.Player
+namespace Mooege.Core.GS.Players
 {
 
     /// <summary>
@@ -20,7 +18,7 @@ namespace Mooege.Core.GS.Player
         public int Columns { get { return _backpack.GetLength(1); } }
         private uint[,] _backpack;
       
-        private readonly Mooege.Core.GS.Player.Player _owner; // Used, because most information is not in the item class but Actors managed by the world
+        private readonly Player _owner; // Used, because most information is not in the item class but Actors managed by the world
 
         private struct InventorySize
         {

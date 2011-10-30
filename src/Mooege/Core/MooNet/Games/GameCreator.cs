@@ -19,6 +19,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Google.ProtocolBuffers;
+using Mooege.Core.GS.Games;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
@@ -39,7 +40,7 @@ namespace Mooege.Core.MooNet.Games
         /// </summary>
         public Channel Channel { get; private set; }
 
-        public Core.GS.Game.Game InGame { get; private set; }
+        public Game InGame { get; private set; }
 
         /// <summary>
         /// Game handle.
@@ -69,7 +70,7 @@ namespace Mooege.Core.MooNet.Games
         {
             this.GameCreateParams = gameCreateParams;
             this.Version = version;
-            this.InGame = GS.Game.GameManager.CreateGame((int) this.DynamicId); // create the ingame.
+            this.InGame = GameManager.CreateGame((int) this.DynamicId); // create the ingame.
 
             clients.First().MapLocalObjectID(this.DynamicId, objectId); // map remote object-id for party leader.
 

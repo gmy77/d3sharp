@@ -27,6 +27,7 @@ using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
@@ -220,7 +221,7 @@ namespace Mooege.Core.GS.Actors
         {
             // This is somewhat still buggy, need a careful review. /raist.
 
-            var player = this as Player.Player;
+            var player = this as Player;
             if (player == null) return; // return if current actor is not a player. 
 
             this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
@@ -236,7 +237,7 @@ namespace Mooege.Core.GS.Actors
             {
                 EnterPosition = this.Position,
                 WorldID = targetWorld.DynamicID,
-                WorldSNO = targetWorld.WorldSNO,
+                WorldSNO = targetWorld.SNOId,
             });
 
             player.InGameClient.SendMessage(this.ACDWorldPositionMessage);
@@ -250,6 +251,13 @@ namespace Mooege.Core.GS.Actors
         {
         }
 
+        // TODO: add an actor mover helper function! /raist.
+
+        public void OnActorMove(Actor actor, Vector3D prevPosition)
+        {
+            // TODO: Unreveal from players that are now outside the actor's range. /komiga
+        }
+
         protected virtual void OnPositionChange(Vector3D prevPosition)
         {
             if (!this.HasWorldLocation) return;
@@ -258,7 +266,7 @@ namespace Mooege.Core.GS.Actors
             this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);   
         }
 
-        public virtual void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
+        public virtual void OnTargeted(Player player, TargetMessage message)
         {
         }
 
@@ -266,7 +274,7 @@ namespace Mooege.Core.GS.Actors
         /// Reveals an actor to a player.
         /// </summary>
         /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
-        public override bool Reveal(Mooege.Core.GS.Player.Player player)
+        public override bool Reveal(Player player)
         {
             if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
             player.RevealedObjects.Add(this.DynamicID, this);
@@ -290,7 +298,7 @@ namespace Mooege.Core.GS.Actors
             };
 
             // normaly when we send acdenterknown for players own actor it's set to 0x09. But while sending the acdenterknown for another player's actor we should set it to 0x01. /raist
-            if ((this is Player.Player) && this != player) 
+            if ((this is Player) && this != player) 
                 msg.Field2 = 0x01; 
 
             player.InGameClient.SendMessage(msg);
@@ -351,7 +359,7 @@ namespace Mooege.Core.GS.Actors
         /// Unreveals an actor from a player.
         /// </summary>
         /// <returns>true if the actor was unrevealed or false if the actor wasn't already revealed.</returns>
-        public override bool Unreveal(Mooege.Core.GS.Player.Player player)
+        public override bool Unreveal(Player player)
         {
             if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // not revealed yet
             player.InGameClient.SendMessage(new ACDDestroyActorMessage(this.DynamicID));

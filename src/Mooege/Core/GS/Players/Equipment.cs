@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Core.Common.Items;
+﻿using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message;
 
-namespace Mooege.Core.GS.Player
+namespace Mooege.Core.GS.Players
 {
 
     // these ids are transmitted by the client when equipping an item         
@@ -20,7 +16,7 @@ namespace Mooege.Core.GS.Player
     {
         public int EquipmentSlots { get { return _equipment.GetLength(0); } }
         
-        private readonly Mooege.Core.GS.Player.Player _owner; // Used, because most information is not in the item class but Actors managed by the world
+        private readonly Player _owner; // Used, because most information is not in the item class but Actors managed by the world
         private Item _inventoryGold;
 
         private uint[] _equipment;      // array of equiped items_id  (not item)

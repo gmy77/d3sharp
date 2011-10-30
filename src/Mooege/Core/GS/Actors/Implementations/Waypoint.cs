@@ -23,6 +23,7 @@ using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Map;
@@ -66,7 +67,7 @@ namespace Mooege.Core.GS.Actors.Implementations
                 if (scene.Specification == null) continue;
                 foreach (var area in scene.Specification.SNOLevelAreas)
                 {
-                    if (wayPointInfo[i].SNOWorld != this.World.WorldSNO || wayPointInfo[i].SNOLevelArea != area)
+                    if (wayPointInfo[i].SNOWorld != this.World.SNOId || wayPointInfo[i].SNOLevelArea != area)
                         continue;
 
                     this.WaypointId = i;
@@ -75,7 +76,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             }
         }
 
-        public override void OnTargeted(Player.Player player, Net.GS.Message.Definitions.World.TargetMessage message)
+        public override void OnTargeted(Player player, Net.GS.Message.Definitions.World.TargetMessage message)
         {
             var world = player.World;
 
@@ -102,7 +103,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             });
         }
 
-        public override bool Reveal(Player.Player player)
+        public override bool Reveal(Player player)
         {
             if (!base.Reveal(player))
                 return false;

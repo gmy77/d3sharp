@@ -22,6 +22,7 @@ using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -71,7 +72,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             this.Attributes[GameAttribute.Level] = 1;
         }
 
-        public override bool Reveal(Player.Player player)
+        public override bool Reveal(Player player)
         {
             if (!base.Reveal(player))
                 return false;
@@ -116,7 +117,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             return true;
         }
 
-        public override void OnTargeted(Player.Player player, TargetMessage message)
+        public override void OnTargeted(Player player, TargetMessage message)
         {
             World world = this.World.Game.GetWorld(this.Destination.WorldSNO);
             if (world == null)

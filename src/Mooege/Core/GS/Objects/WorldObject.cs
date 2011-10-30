@@ -19,6 +19,7 @@
 using System.Windows;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Objects
 {
@@ -72,7 +73,7 @@ namespace Mooege.Core.GS.Objects
             world.Game.EndTracking(this);
         }
 
-        public abstract bool Reveal(Mooege.Core.GS.Player.Player player);
-        public abstract bool Unreveal(Mooege.Core.GS.Player.Player player);
+        public abstract bool Reveal(Player player);
+        public abstract bool Unreveal(Player player);
     }
 }

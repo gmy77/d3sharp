@@ -22,6 +22,7 @@ using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
@@ -47,13 +48,13 @@ namespace Mooege.Core.GS.Actors
             this.Attributes[GameAttribute.Experience_Granted] = 125;
         }
 
-        public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
+        public override void OnTargeted(Player player, TargetMessage message)
         {
             this.Die(player);
         }
 
         // FIXME: Hardcoded hell. /komiga
-        public void Die(Mooege.Core.GS.Player.Player player)
+        public void Die(Player player)
         {
             var killAni = new int[]{
                     0x2cd7,
@@ -160,10 +161,10 @@ namespace Mooege.Core.GS.Actors
                 Field3 = false,
             }, this);
 
-            this.World.SpawnRandomDrop(player, this.Position);
+            this.World.SpawnRandomItemDrop(player, this.Position);
             this.World.SpawnGold(player, this.Position);
             if (RandomHelper.Next(1, 100) < 20)
-                this.World.SpawnGlobe(player, this.Position);
+                this.World.SpawnHealthGlobe(player, this.Position);
 
             this.Destroy();
         }

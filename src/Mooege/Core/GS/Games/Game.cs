@@ -24,6 +24,7 @@ using Mooege.Common;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Generators;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Game;
@@ -32,7 +33,7 @@ using Mooege.Net.GS.Message.Fields;
 
 // TODO: Move scene stuff into a Map class (which can also handle the efficiency stuff and object grouping)
 
-namespace Mooege.Core.GS.Game
+namespace Mooege.Core.GS.Games
 {
     public class Game : IMessageConsumer
     {
@@ -40,7 +41,7 @@ namespace Mooege.Core.GS.Game
 
         public int GameId { get; private set; }
 
-        public ConcurrentDictionary<GameClient, Player.Player> Players = new ConcurrentDictionary<GameClient, Player.Player>();
+        public ConcurrentDictionary<GameClient, Player> Players = new ConcurrentDictionary<GameClient, Player>();
 
         public int PlayerIndexCounter = -1;
 
@@ -121,7 +122,7 @@ namespace Mooege.Core.GS.Game
             // for possile future messages consumed by game.
         }
 
-        public void Enter(Player.Player joinedPlayer)
+        public void Enter(Player joinedPlayer)
         {
             this.Players.TryAdd(joinedPlayer.InGameClient, joinedPlayer);
 
@@ -157,7 +158,7 @@ namespace Mooege.Core.GS.Game
             joinedPlayer.EnteredWorld = true;
         }
 
-        private void SendNewPlayerMessage(Player.Player target, Player.Player joinedPlayer)
+        private void SendNewPlayerMessage(Player target, Player joinedPlayer)
         {
             target.InGameClient.SendMessage(new NewPlayerMessage
             {
@@ -222,18 +223,18 @@ namespace Mooege.Core.GS.Game
 
         public void AddWorld(World world)
         {
-            if (world.WorldSNO == -1 || WorldExists(world.WorldSNO))
-                throw new Exception(String.Format("World has an invalid SNO or was already being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.WorldSNO));
-            this._worlds.TryAdd(world.WorldSNO, world);
+            if (world.SNOId == -1 || WorldExists(world.SNOId))
+                throw new Exception(String.Format("World has an invalid SNO or was already being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.SNOId));
+            this._worlds.TryAdd(world.SNOId, world);
         }
 
         public void RemoveWorld(World world)
         {
-            if (world.WorldSNO == -1 || !WorldExists(world.WorldSNO))
-                throw new Exception(String.Format("World has an invalid SNO or was not being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.WorldSNO));
+            if (world.SNOId == -1 || !WorldExists(world.SNOId))
+                throw new Exception(String.Format("World has an invalid SNO or was not being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.SNOId));
 
             World removed;
-            this._worlds.TryRemove(world.WorldSNO, out removed);
+            this._worlds.TryRemove(world.SNOId, out removed);
         }
 
         public World GetWorld(int worldSNO)

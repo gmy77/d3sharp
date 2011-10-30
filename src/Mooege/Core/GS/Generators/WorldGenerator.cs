@@ -22,6 +22,7 @@ using Mooege.Common;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Common.Helpers;
 
@@ -32,7 +33,7 @@ namespace Mooege.Core.GS.Generators
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
-        public static World Generate(Game.Game game, int worldSNO)
+        public static World Generate(Game game, int worldSNO)
         {
             if (!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldSNO))
             {

@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Core.GS.Player;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Objects
 {
@@ -26,12 +26,12 @@ namespace Mooege.Core.GS.Objects
         /// Reveals the object to a player.
         /// </summary>
         /// <returns>true if the object was revealed or false if the object was already revealed.</returns>
-        bool Reveal(Mooege.Core.GS.Player.Player player);
+        bool Reveal(Player player);
 
         /// <summary>
         /// Unreveals the object from a player.
         /// </summary>
         /// <returns>true if the object was unrevealed or false if the object wasn't already revealed.</returns>
-        bool Unreveal(Mooege.Core.GS.Player.Player player);
+        bool Unreveal(Player player);
     }
 }
