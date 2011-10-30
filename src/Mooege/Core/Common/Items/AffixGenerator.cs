@@ -28,6 +28,7 @@ using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.Common.Scripting;
+using Mooege.Common.Extensions;
 
 namespace Mooege.Core.Common.Items
 {
@@ -35,7 +36,7 @@ namespace Mooege.Core.Common.Items
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
 
-        private static Dictionary<int, Dictionary<int, AffixTable>> affixList = new Dictionary<int, Dictionary<int, AffixTable>>();
+        private static List<AffixTable> AffixList = new List<AffixTable>();
 
         static AffixGenerator()
         {
@@ -46,15 +47,10 @@ namespace Mooege.Core.Common.Items
                 {
                     foreach (var affixDef in data.Affixes)
                     {
+                        if (affixDef.AffixFamily0 == -1) continue;
                         if (affixDef.Name.Contains("REQ")) continue; // crashes the client // dark0ne
 
-                        Dictionary<int, AffixTable> list;
-                        if (!affixList.TryGetValue(affixDef.AffixFamily0, out list))
-                        {
-                            list = new Dictionary<int, AffixTable>();
-                            affixList.Add(affixDef.AffixFamily0, list);
-                        }
-                        list.Add(StringHashHelper.HashItemName(affixDef.Name), affixDef);
+                        AffixList.Add(affixDef);
                     }
                 }
             }
@@ -65,21 +61,30 @@ namespace Mooege.Core.Common.Items
             if (!Item.IsWeapon(item.ItemType) && !Item.IsArmor(item.ItemType) && !Item.IsAccessory(item.ItemType))
                 return;
 
-            ItemRandomHelper irh = item.RandomGenerator;
+            var itemTypes = ItemGroup.HierarchyToHashList(item.ItemType);
+            int itemQualityMask = 1 << item.Attributes[GameAttribute.Item_Quality_Level];
 
-            var selected = affixList.OrderBy(x => RandomHelper.Next()).Take(affixesCount);
-            foreach (var definitions in selected)
+            var filteredList = AffixList.Where(a =>
+                a.QualityMask.HasFlag((QualityMask)itemQualityMask) &&
+                itemTypes.ContainsAtLeastOne(a.ItemGroup) &&
+                a.AffixLevel <= item.ItemLevel);
+
+            Dictionary<int, AffixTable> bestDefinitions = new Dictionary<int, AffixTable>();
+            foreach (var affix in filteredList)
+                bestDefinitions[affix.AffixFamily0] = affix;
+
+            var selectedGroups = bestDefinitions.Values.OrderBy(x => RandomHelper.Next()).Take(affixesCount);
+
+            foreach (var def in selectedGroups)
             {
-                var bestDef = definitions.Value.Values.OrderByDescending(x => x.AffixLevel).Where(x => x.AffixLevel <= item.ItemLevel).FirstOrDefault();
-
-                if (bestDef != null)
+                if (def != null)
                 {
-                    Logger.Debug("Generating affix " + bestDef.Name + " (aLvl:" + bestDef.AffixLevel + ")");
-                    item.AffixList.Add(new Affix(StringHashHelper.HashItemName(bestDef.Name)));
-                    foreach (var effect in bestDef.AttributeSpecifier)
+                    Logger.Debug("Generating affix " + def.Name + " (aLvl:" + def.AffixLevel + ")");
+                    item.AffixList.Add(new Affix(def.Hash));
+                    foreach (var effect in def.AttributeSpecifier)
                     {
                         float result;
-                        if (FormulaScript.Evaluate(effect.Formula.ToArray(), irh, out result))
+                        if (FormulaScript.Evaluate(effect.Formula.ToArray(), item.RandomGenerator, out result))
                         {
                             var attr = GameAttribute.GameAttributeArray[effect.AttributeId] as GameAttributeF;
                             if (attr != null)
@@ -95,5 +100,6 @@ namespace Mooege.Core.Common.Items
                 }
             }
         }
+
     }
 }

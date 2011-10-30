@@ -122,7 +122,7 @@ namespace Mooege.Core.Common.Items
             // Attributes[GameAttribute.Requirement, 38] = definition.RequiredLevel;
 
             if (definition.Quality == ItemTable.ItemQuality.Invalid)
-                Attributes[GameAttribute.Item_Quality_Level] = 1;
+                Attributes[GameAttribute.Item_Quality_Level] = RandomHelper.Next(6);
 
             Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
 
@@ -146,7 +146,10 @@ namespace Mooege.Core.Common.Items
             ApplySkills(definition);
             ApplyAttributeSpecifier(definition);
 
-            AffixGenerator.Generate(this, 2);
+            int affixNumber = 1;
+            if (Attributes[GameAttribute.Item_Quality_Level] >= 3)
+                affixNumber = Attributes[GameAttribute.Item_Quality_Level] - 2;
+            AffixGenerator.Generate(this, affixNumber);
 
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
