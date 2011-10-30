@@ -99,6 +99,7 @@ namespace Mooege.Core.Common.Items
             this.ItemType = type;
             this.EquipmentSlot = 0;
             this.InventoryLocation = new Vector2D { X = 0, Y = 0 };
+            this.Scale = 1f;
 
             this.Field2 = 0x00000000;
             this.Field3 = 0x00000000;
