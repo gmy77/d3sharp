@@ -18,18 +18,18 @@
 
 using System.Collections.Generic;
 using Mooege.Common;
-﻿using Mooege.Common.MPQ.FileFormats.Types;
-﻿using Mooege.Core.GS.Actors;
-﻿using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
 using Mooege.Net.GS.Message;
-﻿using Mooege.Net.GS.Message.Definitions.Misc;
-﻿using Mooege.Net.GS.Message.Definitions.World;
-﻿using Mooege.Net.GS.Message.Fields;
+using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Common.Helpers;
 
-namespace Mooege.Core.GS.Map
+namespace Mooege.Core.GS.Actors.Implementations
 {
     public class Portal : Actor
     {

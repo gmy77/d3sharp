@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Windows;
 using Mooege.Common;
@@ -50,14 +51,12 @@ namespace Mooege.Core.GS.Map
             get { return this._world; }
             set
             {
-                if (this._world != value)
-                {
-                    if (this._world != null) // this is bugged i guess? /raist
-                        this._world.AddScene(this);
-                    this._world = value;
-                    if (this._world != null)
-                        this._world.RemoveScene(this);
-                }
+                if (this._world != null)
+                    return;
+
+                this._world = value;
+                if (this._world != null)
+                    this._world.AddScene(this);
             }
         }
 
@@ -114,7 +113,7 @@ namespace Mooege.Core.GS.Map
         public string LookLink { get; private set; }
         public Mooege.Common.MPQ.FileFormats.Scene.NavZoneDef NavZone { get; private set; }
 
-        public readonly List<Scene> Subscenes;
+        public readonly List<Scene> Subscenes = new List<Scene>();
 
         public PRTransform Transform
         {
@@ -126,7 +125,6 @@ namespace Mooege.Core.GS.Map
         {
             this.Scale = 1.0f;
             this.RotationAmount = 0.0f;
-            this.Subscenes = new List<Scene>();
 
             this.SceneSNO = sceneSNO;
             this.Parent = parent;
@@ -187,19 +185,17 @@ namespace Mooege.Core.GS.Map
                 sub.Reveal(player);
             }
 
-            Logger.Trace("Revealing {0}", this);
             return true;
         }
 
-        public override bool Unreveal(Mooege.Core.GS.Player.Player player)
+        public override bool Unreveal(Player.Player player)
         {
             if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // not revealed yet
-            player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID },true);
+            player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID },true);            
             
-            
-            foreach (var sub in this.Subscenes)
+            foreach (var subScene in this.Subscenes)
             {
-                sub.Unreveal(player);
+                subScene.Unreveal(player);
             }
             player.RevealedObjects.Remove(this.DynamicID);
             return true;

@@ -22,6 +22,7 @@ using System.Linq;
 using System.Reflection;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Map;

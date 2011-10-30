@@ -352,7 +352,6 @@ namespace Mooege.Core.GS.Actors
                 Name = this.SNOName
             });
 
-            Logger.Trace("Revealing {0}", this);
             return true;
         }
 

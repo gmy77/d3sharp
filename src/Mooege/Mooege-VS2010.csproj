@@ -193,7 +193,7 @@
     <Compile Include="Common\Helpers\RandomHelper.cs" />
     <Compile Include="Core\Common\Items\Item.cs" />
     <Compile Include="Core\Common\Items\ItemGenerator.cs" />
-    <Compile Include="Core\GS\Map\Portal.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Portal.cs" />
     <Compile Include="Core\GS\Map\Scene.cs" />
     <Compile Include="Core\GS\Map\World.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelInvitationManager.cs" />
