@@ -39,61 +39,135 @@ namespace Mooege.Core.GS.Games
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
+        /// <summary>
+        /// The game id.
+        /// </summary>
         public int GameId { get; private set; }
 
-        public ConcurrentDictionary<GameClient, Player> Players = new ConcurrentDictionary<GameClient, Player>();
+        /// <summary>
+        /// Dictionary that maps gameclient's to players.
+        /// </summary>
+        public ConcurrentDictionary<GameClient, Player> Players { get; private set; }
 
+        /// <summary>
+        /// Dictionary that tracks objects and maps them to dynamicId's.
+        /// </summary>
+        private readonly ConcurrentDictionary<uint, DynamicObject> _objects;
+
+        /// <summary>
+        /// Dictionary that tracks world.
+        /// NOTE: This tracks by WorldSNO rather than by DynamicID; this.Objects _does_ still contain the world since it is a DynamicObject
+        /// </summary>
+        private readonly ConcurrentDictionary<int, World> _worlds;
+
+        /// <summary>
+        /// Starting world's sno id.
+        /// </summary>
+        public int StartingWorldSNOId { get; private set; }
+
+        /// <summary>
+        /// Starting world for the game.
+        /// </summary>
+        public World StartingWorld { get { return GetWorld(this.StartingWorldSNOId); } }
+        
+        /// <summary>
+        /// Player index counter.
+        /// </summary>
         public int PlayerIndexCounter = -1;
 
-        private readonly ConcurrentDictionary<uint, DynamicObject> _objects;
-        private readonly ConcurrentDictionary<int, World> _worlds; // NOTE: This tracks by WorldSNO rather than by DynamicID; this.Objects _does_ still contain the world since it is a DynamicObject
+        /// <summary>
+        /// Update frequency for the game - 100 ms.
+        /// </summary>
+        public readonly int UpdateFrequency=100;
 
-        public int StartWorldSNO { get; private set; }
-        public World StartWorld { get { return GetWorld(this.StartWorldSNO); } }
-
-        public readonly int UpdateFrequency=100; // updates game every 100ms - still not sure if we should be updating this frequent / raist.
+        /// <summary>
+        /// Tick counter.
+        /// </summary>
         private int _tickCounter;
         
+        /// <summary>
+        /// Returns the latest tick count.
+        /// </summary>
         public int Tick
         {
             get { return _tickCounter; }
         }
 
+        /// <summary>
+        /// DynamicId counter for objects.
+        /// </summary>
         private uint _lastObjectID = 0x00000001;
+
+        /// <summary>
+        /// Returns a new dynamicId for objects.
+        /// </summary>
+        public uint NewObjectID { get { return _lastObjectID++; } }
+
+        /// <summary>
+        /// DynamicId counter for scene.
+        /// </summary>
         private uint _lastSceneID  = 0x04000000;
+
+        /// <summary>
+        /// Returns a new dynamicId for scenes.
+        /// </summary>
+        public uint NewSceneID { get { return _lastSceneID++; } }
+
+        /// <summary>
+        /// DynamicId counter for worlds.
+        /// </summary>
         private uint _lastWorldID  = 0x07000000;
 
-        // TODO: Need overrun handling and existence checking
-        public uint NewObjectID { get { return _lastObjectID++; } }
-        public uint NewSceneID { get { return _lastSceneID++; } }
+        /// <summary>
+        /// Returns a new dynamicId for worlds.
+        /// </summary>
         public uint NewWorldID { get { return _lastWorldID++; } }
 
+        /// <summary>
+        /// Creates a new game with given gameId.
+        /// </summary>
+        /// <param name="gameId"></param>
         public Game(int gameId)
         {
             this.GameId = gameId;
+            this.Players = new ConcurrentDictionary<GameClient, Player>();
             this._objects = new ConcurrentDictionary<uint, DynamicObject>();
             this._worlds = new ConcurrentDictionary<int, World>();
-            this.StartWorldSNO = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff
-            var loopThread=new Thread(Update) { IsBackground = true };
+            this.StartingWorldSNOId = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff. /komiga
+            var loopThread = new Thread(Update) {IsBackground = true}; // create the game update thread.
             loopThread.Start();
         }
 
-        public void Update() // the main game-loop.
+        #region update & tick managment
+
+        /// <summary>
+        /// The main game loop.
+        /// </summary>
+        public void Update()
         {
             while (true)
             {
                 Interlocked.Add(ref this._tickCounter, 6); // +6 ticks per 100ms. Verified by setting LogoutTickTimeMessage.Ticks to 600 which eventually renders a 10 sec logout timer on client. /raist
 
-                // only update worlds with active players in it - so mob's brain() in empty worlds doesn't get called and take actions for nothing. /raist.
+                // only update worlds with active players in it - so mob brain()'s in empty worlds doesn't get called and take actions for nothing. /raist.
                 foreach (var pair in this._worlds.Where(pair => pair.Value.HasPlayersIn)) 
                 {
                     pair.Value.Update();
                 }
 
-                Thread.Sleep(UpdateFrequency);
+                Thread.Sleep(UpdateFrequency); // sleep until next tick.
             }
         }
 
+        #endregion
+
+        #region game-message handling & routing
+
+        /// <summary>
+        /// Routers incoming GameMessage to it's proper consumer.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="message"></param>
         public void Route(GameClient client, GameMessage message)
         {
             try
@@ -118,10 +192,16 @@ namespace Mooege.Core.GS.Games
         }
 
         public void Consume(GameClient client, GameMessage message)
-        {
-            // for possile future messages consumed by game.
-        }
+        { } // for possile future messages consumed by game. /raist.
 
+        #endregion
+
+        #region player-handling 
+
+        /// <summary>
+        /// Allows a player to join the game.
+        /// </summary>
+        /// <param name="joinedPlayer">The new player.</param>
         public void Enter(Player joinedPlayer)
         {
             this.Players.TryAdd(joinedPlayer.InGameClient, joinedPlayer);
@@ -153,11 +233,16 @@ namespace Mooege.Core.GS.Games
                             }
             });
 
-            joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition
+            joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition.
             joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
             joinedPlayer.EnteredWorld = true;
         }
 
+        /// <summary>
+        /// Sends NewPlayerMessage to players when a new player joins the game. 
+        /// </summary>
+        /// <param name="target">Target player to send the message.</param>
+        /// <param name="joinedPlayer">The new joined player.</param>
         private void SendNewPlayerMessage(Player target, Player joinedPlayer)
         {
             target.InGameClient.SendMessage(new NewPlayerMessage
@@ -181,8 +266,9 @@ namespace Mooege.Core.GS.Games
             target.InGameClient.SendMessage(joinedPlayer.GetMysticData());
         }
 
+        #endregion
 
-        #region Tracking
+        #region object dynamicId tracking
 
         public void StartTracking(DynamicObject obj)
         {
@@ -217,9 +303,9 @@ namespace Mooege.Core.GS.Games
             return this._objects.ContainsKey(obj.DynamicID);
         }
 
-        #endregion // Tracking
+        #endregion
 
-        #region World collection
+        #region world collection
 
         public void AddWorld(World world)
         {
@@ -255,6 +341,6 @@ namespace Mooege.Core.GS.Games
             return this._worlds.ContainsKey(worldSNO);
         }
 
-        #endregion // World collection
+        #endregion
     }
 }
