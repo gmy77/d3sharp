@@ -92,6 +92,7 @@
       <HintPath>..\..\dep\PowerCollections.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
@@ -145,15 +146,27 @@
     <Compile Include="Core\GS\Actors\Gizmo.cs" />
     <Compile Include="Core\GS\Actors\Environment.cs" />
     <Compile Include="Core\GS\Actors\HandledSNO.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Artisan.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Blacksmith.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Jeweler.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\Mystic.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\StartingPoint.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Stash.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Waypoint.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Cain.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Vendor.cs" />
+    <Compile Include="Core\GS\Actors\Living.cs" />
+    <Compile Include="Core\GS\Actors\NPC.cs" />
+    <Compile Include="Core\GS\Common\Types\QuadNode.cs" />
+    <Compile Include="Core\GS\Common\Types\QuadTree.cs" />
     <Compile Include="Core\GS\Common\Types\SNO\SNOGroup.cs" />
-    <Compile Include="Core\GS\Game\GameCommands.cs" />
-    <Compile Include="Core\GS\Game\GameManager.cs" />
+    <Compile Include="Core\GS\Games\GameCommands.cs" />
+    <Compile Include="Core\GS\Games\GameManager.cs" />
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
+    <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
     <Compile Include="Core\GS\Markers\Marker.cs" />
-    <Compile Include="Core\GS\Player\Equipment.cs" />
-    <Compile Include="Core\GS\Player\Stash.cs" />
+    <Compile Include="Core\GS\Players\Equipment.cs" />
+    <Compile Include="Core\GS\Players\Stash.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
@@ -181,7 +194,7 @@
     <Compile Include="Common\Helpers\RandomHelper.cs" />
     <Compile Include="Core\Common\Items\Item.cs" />
     <Compile Include="Core\Common\Items\ItemGenerator.cs" />
-    <Compile Include="Core\GS\Map\Portal.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Portal.cs" />
     <Compile Include="Core\GS\Map\Scene.cs" />
     <Compile Include="Core\GS\Map\World.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelInvitationManager.cs" />
@@ -218,6 +231,7 @@
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\OpenArtisanWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
@@ -243,7 +257,7 @@
     <Compile Include="Net\GS\ClientManager.cs" />
     <Compile Include="Net\GS\Config.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignPassiveSkillMessage.cs" />
-    <Compile Include="Core\GS\Common\Types\Collusion\AABB.cs" />
+    <Compile Include="Core\GS\Common\Types\Collision\AABB.cs" />
     <Compile Include="Net\GS\Message\Fields\ActiveEvent.cs" />
     <Compile Include="Net\GS\Message\Fields\AnimPreplayData.cs" />
     <Compile Include="Net\GS\Message\Fields\DPathSinData.cs" />
@@ -330,8 +344,8 @@
     <Compile Include="Net\GS\Message\Definitions\Chat\ChatMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Effect\ComplexEffectAddMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Connection\ConnectionEstablishedMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Crafting\CrafterLevelUpMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Crafting\CraftingResultsMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\CrafterLevelUpMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\CraftingResultsMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Game\CreateBNetGameMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Game\CreateBNetGameResultMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hero\CreateHeroMessage.cs" />
@@ -344,7 +358,7 @@
     <Compile Include="Net\GS\Message\Definitions\Text\DisplayGameTextMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\DWordDataMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Effect\EffectGroupACDToACDMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Enchant\EnchantItemMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\EnchantItemMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Encounter\EncounterInviteStateMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\EndConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Tick\EndOfTickMessage.cs" />
@@ -473,14 +487,14 @@
     <Compile Include="Core\MooNet\Objects\RPCObjectManager.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObject.cs" />
     <Compile Include="Core\Common\Storage\Config.cs" />
-    <Compile Include="Core\GS\Game\Game.cs" />
+    <Compile Include="Core\GS\Games\Game.cs" />
     <Compile Include="Core\GS\Actors\Monster.cs" />
     <Compile Include="Core\Common\Storage\GamedataDBManager.cs" />
     <Compile Include="Core\GS\Objects\WorldObject.cs" />
     <Compile Include="Core\GS\Objects\DynamicObject.cs" />
     <Compile Include="Core\GS\Objects\IRevealable.cs" />
-    <Compile Include="Core\GS\Player\Inventory.cs" />
-    <Compile Include="Core\GS\Player\Player.cs" />
+    <Compile Include="Core\GS\Players\Inventory.cs" />
+    <Compile Include="Core\GS\Players\Player.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
