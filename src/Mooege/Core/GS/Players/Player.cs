@@ -43,26 +43,67 @@ using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Combat;
 using System;
 
-// TODO: When the player moves, it will set the Position property which will bounce back to the player again.
-//       That is unnecessary and we should exclude the player from receiving it in that case. /komiga
-
 namespace Mooege.Core.GS.Players
 {
     public class Player : Actor, IMessageConsumer
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        public override ActorType ActorType { get { return ActorType.Player; } }
-        
+        /// <summary>
+        /// The ingame-client for player.
+        /// </summary>
         public GameClient InGameClient { get; set; }
 
-        public int PlayerIndex { get; private set; } 
+        /// <summary>
+        /// The player index.
+        /// </summary>
+        public int PlayerIndex { get; private set; }
 
+        /// <summary>
+        /// The player's toon.
+        /// We need a better name /raist.
+        /// </summary>
         public Toon Properties { get; private set; }
-        public SkillSet SkillSet;
-        public Inventory Inventory;
+
+        /// <summary>
+        /// Skillset for the player (or actually for player's toons class).
+        /// </summary>
+        public SkillSet SkillSet { get; private set; }
+
+        /// <summary>
+        /// The inventory of player's toon.
+        /// </summary>
+        public Inventory Inventory { get; private set; }
+
+        /// <summary>
+        /// ActorType = Player.
+        /// </summary>
+        public override ActorType ActorType { get { return ActorType.Player; } }
+
+        /// <summary>
+        /// Did player enter the world?
+        /// </summary>
+        public bool EnteredWorld { get; set; }
+
+        /// <summary>
+        /// Revealed objects to player.
+        /// </summary>
+        public Dictionary<uint, IRevealable> RevealedObjects { get; private set; }
+
+        // Collection of items that only the player can see. This is only used when items drop from killing an actor
+        // TODO: Might want to just have a field on the item itself to indicate whether it is visible to only one player
+        /// <summary>
+        /// Dropped items for the player
+        /// </summary>
+        public Dictionary<uint, Item> GroundItems { get; private set; }
+
+        /// <summary>
+        /// Open converstations.
+        /// </summary>
+        public List<OpenConversation> OpenConversations { get; set; }
 
         // Used for Exp-Bonuses
+        // Move them to a class or a better position please /raist.
         private int _killstreakTickTime;
         private int _killstreakPlayer;
         private int _killstreakEnvironment;
@@ -72,31 +113,41 @@ namespace Mooege.Core.GS.Players
         private int _lastEnvironmentDestroyTick;
         private int _lastEnvironmentDestroyMonsterKills;
         private int _lastEnvironmentDestroyMonsterKillTick;
-
-        public Dictionary<uint, IRevealable> RevealedObjects { get; private set; }
-
-        // Collection of items that only the player can see. This is only used when items drop from killing an actor
-        // TODO: Might want to just have a field on the item itself to indicate whether it is visible to only one player
-        public Dictionary<uint, Item> GroundItems { get; private set; }
-
-        public List<OpenConversation> OpenConversations { get; set; }
-
-        public bool EnteredWorld { get; set; }
-
+       
+        /// <summary>
+        /// Creates a new player.
+        /// </summary>
+        /// <param name="world">The world player joins initially.</param>
+        /// <param name="client">The gameclient for the player.</param>
+        /// <param name="bnetToon">Toon of the player.</param>
         public Player(World world, GameClient client, Toon bnetToon)
             : base(world, world.NewPlayerID)
         {
             this.EnteredWorld = false;
             this.InGameClient = client;
-            this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // make it atomic.
-
+            this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
             this.Properties = bnetToon;
-            this.Inventory = new Inventory(this);
-            this.SkillSet = new SkillSet(this.Properties.Class);
+            this.GBHandle.Type = (int)GBHandleType.Player;
+            this.GBHandle.GBID = this.Properties.ClassID;
+            this.Position = this.World.StartingPoints.First().Position; // set the player position to current world's very first startpoint. - should be actually set based on act & quest /raist.
+
+            // actor values.
+            this.ActorSNO = this.ClassSNO;
+            this.Field2 = 0x00000009;
+            this.Field3 = 0x00000000;
+            this.Scale = this.ModelScale;
+            this.RotationAmount = 0.05940768f;
+            this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
+            this.CollFlags = 0x00000000;
+            this.Field7 = -1;
+            this.Field8 = -1;
+            this.Field9 = 0x00000000;
+            this.Field10 = 0x0;
 
             this.RevealedObjects = new Dictionary<uint, IRevealable>();
+            this.Inventory = new Inventory(this);
+            this.SkillSet = new SkillSet(this.Properties.Class);
             this.GroundItems = new Dictionary<uint, Item>();
-
             this.OpenConversations = new List<OpenConversation>();
 
             this._killstreakTickTime = 400;
@@ -109,32 +160,8 @@ namespace Mooege.Core.GS.Players
             this._lastEnvironmentDestroyMonsterKills = 0;
             this._lastEnvironmentDestroyMonsterKillTick = 0;
 
-            // actor values
-            this.ActorSNO = this.ClassSNO;
-            this.Field2 = 0x00000009;
-            this.Field3 = 0x00000000;
-            this.Scale = ModelScale;
-            this.RotationAmount = 0.05940768f;
-            this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
-            this.CollFlags = 0x00000000;
-
-            this.Position = this.World.StartingPoints.First().Position;
-
-            // den of evil: this.Position.X = 2526.250000f; this.Position.Y = 2098.750000f; this.Position.Z = -5.381495f;
-            // inn: this.Position.X = 2996.250000f; this.Position.Y = 2793.750000f; this.Position.Z = 24.045330f;
-            // adrias hut: this.Position.X = 1768.750000f; this.Position.Y = 2921.250000f; this.Position.Z = 20.333143f;
-            // cemetery of the forsaken: this.Position.X = 2041.250000f; this.Position.Y = 1778.750000f; this.Position.Z = 0.426203f;
-            // defiled crypt level 2: this.WorldId = 2000289804; this.Position.X = 158.750000f; this.Position.Y = 76.250000f; this.Position.Z = 0.100000f;
-
-            this.GBHandle.Type = (int)GBHandleType.Player;
-            this.GBHandle.GBID = this.Properties.ClassID;
-
-            this.Field7 = -1;
-            this.Field8 = -1;
-            this.Field9 = 0x00000000;
-            this.Field10 = 0x0;
-
             #region Attributes
+
             //Skills
             this.Attributes[GameAttribute.SkillKit] = this.SkillKit;
             this.Attributes[GameAttribute.Skill_Total, 0x7545] = 1; //Axe Operate Gizmo
@@ -279,16 +306,17 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Resource_Effective_Max, this.ResourceID] = 200f;
             this.Attributes[GameAttribute.Resource_Regen_Total, this.ResourceID] = 3.051758E-05f;
             this.Attributes[GameAttribute.Resource_Type_Primary] = this.ResourceID;
+
             //Secondary Resource for the Demon Hunter
             if (this.Properties.Class == ToonClass.DemonHunter)
             {
-                int Discipline = this.ResourceID + 1; //0x00000006
-                this.Attributes[GameAttribute.Resource_Cur, Discipline] = 30f;
-                this.Attributes[GameAttribute.Resource_Max, Discipline] = 30f;
-                this.Attributes[GameAttribute.Resource_Max_Total, Discipline] = 30f;
-                this.Attributes[GameAttribute.Resource_Effective_Max, Discipline] = 30f;
-                this.Attributes[GameAttribute.Resource_Regen_Total, Discipline] = 3.051758E-05f;
-                this.Attributes[GameAttribute.Resource_Type_Secondary] = Discipline;
+                int discipline = this.ResourceID + 1; //0x00000006
+                this.Attributes[GameAttribute.Resource_Cur, discipline] = 30f;
+                this.Attributes[GameAttribute.Resource_Max, discipline] = 30f;
+                this.Attributes[GameAttribute.Resource_Max_Total, discipline] = 30f;
+                this.Attributes[GameAttribute.Resource_Effective_Max, discipline] = 30f;
+                this.Attributes[GameAttribute.Resource_Regen_Total, discipline] = 3.051758E-05f;
+                this.Attributes[GameAttribute.Resource_Type_Secondary] = discipline;
             }
 
             //Movement
@@ -304,9 +332,11 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Strafing_Rate_Total] = 3.051758E-05f;
 
             //Miscellaneous
-            //this.Attributes[GameAttribute.Disabled] = true;
+
+            //this.Attributes[GameAttribute.Disabled] = true; // we should be making use of these ones too /raist.
             //this.Attributes[GameAttribute.Loading] = true;
             //this.Attributes[GameAttribute.Invulnerable] = true;
+
             this.Attributes[GameAttribute.Hidden] = false;
             this.Attributes[GameAttribute.Immobolize] = true;
             this.Attributes[GameAttribute.Untargetable] = true;
@@ -317,21 +347,17 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Shared_Stash_Slots] = 14;
             this.Attributes[GameAttribute.Backpack_Slots] = 60;
             this.Attributes[GameAttribute.General_Cooldown] = 0;
+
             #endregion // Attributes
         }
 
-        public List<T> GetRevealedObjects<T>() where T: class, IRevealable
-        {
-            return this.RevealedObjects.Values.OfType<T>().Select(@object => @object).ToList();
-        }
+        #region game-message handling & consumers
 
-        protected override void OnPositionChange(Vector3D prevPosition)
-        {
-            if (!this.EnteredWorld) return;
-            this.World.RevealScenesInProximity(this);
-            this.World.RevealActorsInProximity(this);
-        }
-
+        /// <summary>
+        /// Consumes the given game-message.
+        /// </summary>
+        /// <param name="client">The client.</param>
+        /// <param name="message">The GameMessage.</param>
         public void Consume(GameClient client, GameMessage message)
         {
             if (message is AssignActiveSkillMessage) OnAssignActiveSkill(client, (AssignActiveSkillMessage)message);
@@ -341,200 +367,6 @@ namespace Mooege.Core.GS.Players
             else if (message is PlayerMovementMessage) OnPlayerMovement(client, (PlayerMovementMessage)message);
             else if (message is TryWaypointMessage) OnTryWaypoint(client, (TryWaypointMessage)message);
             else return;
-        }
-
-        public override void Update()
-        {
-            // Check the Killstreaks
-            CheckExpBonus(0);
-            CheckExpBonus(1);
-            // Check if there is an conversation to close in this tick
-            CheckOpenConversations();
-            this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
-        }
-
-        private void OnPlayerMovement(GameClient client, PlayerMovementMessage message)
-        {
-            // here we should also be checking the position and see if it's valid. If not we should be resetting player to a good position with ACDWorldPositionMessage 
-            // so we can have a basic precaution for hacks & exploits /raist.
-
-            if (message.Position != null)
-                this.Position = message.Position; 
-
-            var msg = new NotifyActorMovementMessage
-                             {
-                                 ActorId = message.ActorId,
-                                 Position = this.Position,
-                                 Angle = message.Angle,
-                                 Field3 = false,
-                                 Speed = message.Speed,
-                                 Field5 = message.Field5,
-                                 AnimationTag = message.AnimationTag
-                             };
-
-            this.World.BroadcastExclusive(msg, this); // TODO: We should be instead notifying currentscene we're in. /raist.
-
-            this.CollectGold();
-            this.CollectHealthGlobe();
-        }
-
-        private void CollectGold()
-        {
-            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 5f);
-            foreach (var actor in actorList)
-            {
-                Item item;
-                if (! (actor is Item)) continue;
-                item = (Item)actor;
-                if (item.ItemType != ItemType.Gold) continue;
-
-                this.InGameClient.SendMessage(new FloatingAmountMessage()
-                {
-                    Place = new WorldPlace()
-                    {
-                        Position = this.Position,
-                        WorldID = this.World.DynamicID,
-                    },
-
-                    Amount = item.Attributes[GameAttribute.Gold],
-                    Type = FloatingAmountMessage.FloatType.Gold,
-                });
-
-                this.Inventory.PickUpGold(item.DynamicID);
-              
-
-                item.Destroy();
-            }
-        }
-
-        private void CollectHealthGlobe()
-        {
-            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 5f);
-            foreach (Actor actor in actorList)
-            {
-                Item item;
-                if (!(actor is Item)) continue;
-                item = (Item)actor;
-                if (item.ItemType != ItemType.HealthGlobe) continue;
-
-                this.InGameClient.SendMessage(new PlayEffectMessage() //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
-                {
-                    ActorId = this.DynamicID,
-                    Effect = Effect.HealthOrbPickup
-                });
-
-                foreach(var pair in this.World.Players) // should be actually checking for players in proximity. /raist
-                {
-                    pair.Value.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
-                }
-
-                item.Destroy();
-
-            }
-        }
-
-        public void AddPercentageHP(int percentage)
-        {
-            float quantity = (percentage * this.Attributes[GameAttribute.Hitpoints_Max]) / 100;
-            this.AddHP(quantity);
-        }
-
-        public void AddHP(float quantity)
-        {
-            if (this.Attributes[GameAttribute.Hitpoints_Cur] + quantity >= this.Attributes[GameAttribute.Hitpoints_Max])
-                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
-            else
-                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
-        }
-
-        // FIXME: Hardcoded crap
-        public override void OnEnter(World world)
-        {
-            this.World.Reveal(this);
-
-            // FIXME: hackedy hack
-            var attribs = new GameAttributeMap();
-            attribs[GameAttribute.Hitpoints_Healed_Target] = 76f;
-            attribs.SendMessage(InGameClient, this.DynamicID);
-        }
-
-        public override void OnLeave(World world)
-        {
-            Logger.Trace("Leaving world!");
-        }
-
-        public override bool Reveal(Player player)
-        {
-            if (!base.Reveal(player))
-                return false;
-
-            if (this == player) // only send this when player's own actor being is revealed. /raist.
-            {
-                player.InGameClient.SendMessage(new PlayerWarpedMessage()
-                                                    {
-                                                        Field0 = 9,
-                                                        Field1 = 0f,
-                                                    });
-            }
-
-            player.InGameClient.SendMessage(new PlayerEnterKnownMessage()
-            {
-                PlayerIndex = this.PlayerIndex,
-                ActorId = this.DynamicID,
-            });
-
-            this.Inventory.SendVisualInventory(player); 
-
-            if (this == player) // only send this to player itself. Warning: don't remove this check or you'll make the game start crashing! /raist.
-            {
-                player.InGameClient.SendMessage(new PlayerActorSetInitialMessage()
-                {
-                    ActorId = this.DynamicID,
-                    PlayerIndex = this.PlayerIndex,
-                });
-            }
-            
-            return true;
-        }
-
-        // Message handlers
-        private void OnObjectTargeted(GameClient client, TargetMessage message)
-        {
-            Actor actor = this.World.GetActor(message.TargetID);
-            if (actor != null)
-            {
-                if ((actor.GBHandle.Type == 1) && (actor.Attributes[GameAttribute.TeamID] == 10))
-                {
-                    this._lastMonsterAttackTick = this.InGameClient.Game.Tick;
-                }
-
-                actor.OnTargeted(this, message);
-                CheckExpBonus(2);
-            }
-            else
-            {
-                //Logger.Warn("Player targeted an invalid object (ID = {0})", message.TargetID);
-            }
-        }
-
-        private void OnTryWaypoint(GameClient client, TryWaypointMessage tryWaypointMessage)
-        {
-            var wayPoint = this.World.GetWayPointById(tryWaypointMessage.Field1);
-            if (wayPoint == null) return;
-
-            this.Position = wayPoint.Position;
-            InGameClient.SendMessage(this.ACDWorldPositionMessage);
-        }
-
-        private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
-        {
-            this.SkillSet.HotBarSkills[message.BarIndex] = message.ButtonData;
-        }
-
-        private void OnAssignPassiveSkill(GameClient client, AssignPassiveSkillMessage message)
-        {
-            this.SkillSet.PassiveSkills[message.SkillIndex] = message.SNOSkill;
-            this.UpdateHeroState();
         }
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
@@ -550,8 +382,149 @@ namespace Mooege.Core.GS.Players
             this.UpdateHeroState();
         }
 
+        private void OnAssignPassiveSkill(GameClient client, AssignPassiveSkillMessage message)
+        {
+            this.SkillSet.PassiveSkills[message.SkillIndex] = message.SNOSkill;
+            this.UpdateHeroState();
+        }
+
+        private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
+        {
+            this.SkillSet.HotBarSkills[message.BarIndex] = message.ButtonData;
+        }
+
+        private void OnObjectTargeted(GameClient client, TargetMessage message)
+        {
+            Actor actor = this.World.GetActor(message.TargetID);
+            if (actor == null) return;
+
+            if ((actor.GBHandle.Type == 1) && (actor.Attributes[GameAttribute.TeamID] == 10))
+            {
+                this._lastMonsterAttackTick = this.InGameClient.Game.Tick;
+            }
+
+            actor.OnTargeted(this, message);
+            CheckExpBonus(2);
+        }
+
+        private void OnPlayerMovement(GameClient client, PlayerMovementMessage message)
+        {
+            // here we should also be checking the position and see if it's valid. If not we should be resetting player to a good position with ACDWorldPositionMessage 
+            // so we can have a basic precaution for hacks & exploits /raist.
+
+            if (message.Position != null)
+                this.Position = message.Position;
+
+            var msg = new NotifyActorMovementMessage
+            {
+                ActorId = message.ActorId,
+                Position = this.Position,
+                Angle = message.Angle,
+                Field3 = false,
+                Speed = message.Speed,
+                Field5 = message.Field5,
+                AnimationTag = message.AnimationTag
+            };
+
+            this.World.BroadcastExclusive(msg, this); // TODO: We should be instead notifying currentscene we're in. /raist.
+
+            this.CollectGold();
+            this.CollectHealthGlobe();
+        }
+
+        private void OnTryWaypoint(GameClient client, TryWaypointMessage tryWaypointMessage)
+        {
+            var wayPoint = this.World.GetWayPointById(tryWaypointMessage.Field1);
+            if (wayPoint == null) return;
+
+            this.Position = wayPoint.Position;
+            InGameClient.SendMessage(this.ACDWorldPositionMessage);
+        }
+
+        #endregion
+
+        #region update-logic
+
+        public override void Update()
+        {
+            // Check the Killstreaks
+            CheckExpBonus(0);
+            CheckExpBonus(1);
+
+            // Check if there is an conversation to close in this tick
+            CheckOpenConversations();
+
+            this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
+        }
+
+        #endregion
+
+        #region enter, leave, reveal handling
+
+        public override void OnEnter(World world)
+        {
+            this.World.Reveal(this);
+
+            // FIXME: hackedy hack
+            var attribs = new GameAttributeMap();
+            attribs[GameAttribute.Hitpoints_Healed_Target] = 76f;
+            attribs.SendMessage(InGameClient, this.DynamicID);
+        }
+
+        public override void OnLeave(World world)
+        { }
+
+        public override bool Reveal(Player player)
+        {
+            if (!base.Reveal(player))
+                return false;
+
+            if (this == player) // only send this when player's own actor being is revealed. /raist.
+            {
+                player.InGameClient.SendMessage(new PlayerWarpedMessage()
+                {
+                    Field0 = 9,
+                    Field1 = 0f,
+                });
+            }
+
+            player.InGameClient.SendMessage(new PlayerEnterKnownMessage()
+            {
+                PlayerIndex = this.PlayerIndex,
+                ActorId = this.DynamicID,
+            });
+
+            this.Inventory.SendVisualInventory(player);
+
+            if (this == player) // only send this to player itself. Warning: don't remove this check or you'll make the game start crashing! /raist.
+            {
+                player.InGameClient.SendMessage(new PlayerActorSetInitialMessage()
+                {
+                    ActorId = this.DynamicID,
+                    PlayerIndex = this.PlayerIndex,
+                });
+            }
+
+            return true;
+        }
+
+        #endregion
+
+        #region proximity based actor & scene revealing
+        
+        protected override void OnPositionChange(Vector3D prevPosition)
+        {
+            if (!this.EnteredWorld) return;
+            this.World.RevealScenesInProximity(this);
+            this.World.RevealActorsInProximity(this);
+        }
+
+        #endregion
+
+        #region hero-state
+
         /// <summary>
-        /// Allows you to send a hero state message when you update hero's some property.
+        /// Allows hero state message to be sent when hero's some property get's updated.
         /// </summary>
         public void UpdateHeroState()
         {
@@ -560,8 +533,6 @@ namespace Mooege.Core.GS.Players
                 State = this.GetStateData()
             });
         }
-
-        // Properties
 
         public HeroStateData GetStateData()
         {
@@ -576,6 +547,192 @@ namespace Mooege.Core.GS.Players
                 tQuestRewardHistory = QuestRewardHistory,
             };
         }
+
+        #endregion
+           
+        #region player attribute handling
+
+        public float InitialAttack // Defines the amount of attack points with which a player starts
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.DemonHunter:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.Monk:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.WitchDoctor:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.Wizard:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                }
+                return 10f + (this.Properties.Level - 1) * 2;
+            }
+        }
+
+        public float InitialPrecision // Defines the amount of precision points with which a player starts
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 9f + (this.Properties.Level - 1);
+                    case ToonClass.DemonHunter:
+                        return 11f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.Monk:
+                        return 11f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.WitchDoctor:
+                        return 9f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.Wizard:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                }
+                return 10f + ((this.Properties.Level - 1) * 2);
+            }
+        }
+
+        public float InitialDefense // Defines the amount of defense points with which a player starts
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 11f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.DemonHunter:
+                        // For DH and Wizard, half the levels (starting with the first) give 2 defense => (Level / 2) * 2
+                        // and half give 1 defense => ((Level - 1) / 2) * 1
+                        // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
+                        return 9f + (((this.Properties.Level / 2) * 2) + ((this.Properties.Level - 1) / 2));
+                    case ToonClass.Monk:
+                        return 10f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.WitchDoctor:
+                        return 9f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.Wizard:
+                        return 8f + (((this.Properties.Level / 2) * 2) + ((this.Properties.Level - 1) / 2));
+                }
+                return 10f + ((this.Properties.Level - 1) * 2);
+            }
+        }
+
+        public float InitialVitality // Defines the amount of vitality points with which a player starts
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 11f + ((this.Properties.Level - 1) * 2);
+                    case ToonClass.DemonHunter:
+                        // For DH and Wizard, half the levels give 2 vit => ((Level - 1) / 2) * 2
+                        // and half (starting with the first) give 1 vit => (Level / 2) * 1
+                        // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
+                        return 9f + ((((this.Properties.Level - 1) / 2) * 2) + (this.Properties.Level / 2));
+                    case ToonClass.Monk:
+                        return 9f + (this.Properties.Level - 1);
+                    case ToonClass.WitchDoctor:
+                        return 10f + (this.Properties.Level - 1);
+                    case ToonClass.Wizard:
+                        return 9f + ((((this.Properties.Level - 1) / 2) * 2) + (this.Properties.Level / 2));
+                }
+                return 10f + ((this.Properties.Level - 1) * 2);
+            }
+        }
+
+        // Notes on attribute increment algorithm:
+        // Precision: Barbarian => +1, else => +2
+        // Defense:   Wizard or Demon Hunter => (lvl+1)%2+1, else => +2
+        // Vitality:  Wizard or Demon Hunter => lvl%2+1, Barbarian => +2, else +1
+        // Attack:    All +2
+        public float AttackIncrement
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 2f;
+                    case ToonClass.DemonHunter:
+                        return 2f;
+                    case ToonClass.Monk:
+                        return 2f;
+                    case ToonClass.WitchDoctor:
+                        return 2f;
+                    case ToonClass.Wizard:
+                        return 2f;
+                }
+                return 2f;
+            }
+        }
+
+        public float VitalityIncrement
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 2f;
+                    case ToonClass.DemonHunter:
+                        return (this.Attributes[GameAttribute.Level] % 2) + 1f;
+                    case ToonClass.Monk:
+                        return 1f;
+                    case ToonClass.WitchDoctor:
+                        return 1f;
+                    case ToonClass.Wizard:
+                        return (this.Attributes[GameAttribute.Level] % 2) + 1f;
+                }
+                return 1f;
+            }
+        }
+
+        public float DefenseIncrement
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 2f;
+                    case ToonClass.DemonHunter:
+                        return ((this.Attributes[GameAttribute.Level] + 1) % 2) + 1f;
+                    case ToonClass.Monk:
+                        return 2f;
+                    case ToonClass.WitchDoctor:
+                        return 2f;
+                    case ToonClass.Wizard:
+                        return ((this.Attributes[GameAttribute.Level] + 1) % 2) + 1f;
+                }
+                return 2f;
+            }
+        }
+
+        public float PrecisionIncrement
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 1f;
+                    case ToonClass.DemonHunter:
+                        return 2f;
+                    case ToonClass.Monk:
+                        return 2f;
+                    case ToonClass.WitchDoctor:
+                        return 2f;
+                    case ToonClass.Wizard:
+                        return 2f;
+                }
+                return 2f;
+            }
+        }
+        #endregion
+
+        #region saved-data
 
         private PlayerSavedData GetSavedData()
         {
@@ -599,16 +756,254 @@ namespace Mooege.Core.GS.Players
                 LearnedLore = this.LearnedLore,
                 snoActiveSkills = this.SkillSet.ActiveSkills,
                 snoTraits = this.SkillSet.PassiveSkills,
-                Field9 = new SavePointData() { snoWorld = -1, Field1 = -1, },
+                Field9 = new SavePointData { snoWorld = -1, Field1 = -1, },
                 m_SeenTutorials = this.SeenTutorials,
             };
         }
 
-        // Defines the Max Total hitpoints for the current level
-        // May want to move this into a property if it has to made class-specific
-        // This is still a work in progress on getting the right algorithm for all the classes
+        public LearnedLore LearnedLore = new LearnedLore()
+        {
+            Field0 = 0x00000000,
+            m_snoLoreLearned = new int[256]
+             {
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
+                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000
+             },
+        };
+
+        public int[] SeenTutorials = new int[64]
+        {
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        };
+
+        public PlayerQuestRewardHistoryEntry[] QuestRewardHistory = new PlayerQuestRewardHistoryEntry[0] { };
+
+        public HirelingInfo[] HirelingInfo = new HirelingInfo[4]
+        {
+            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
+            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
+            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
+            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
+        };
+
+        public SkillKeyMapping[] SkillKeyMappings = new SkillKeyMapping[15]
+        {
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
+        };
+
+        #endregion
+
+        #region cooked messages
+
+        public GenericBlobMessage GetPlayerBanner()
+        {
+            var playerBanner = D3.GameMessage.PlayerBanner.CreateBuilder()
+                .SetPlayerIndex((uint) this.PlayerIndex)
+                .SetBanner(this.Properties.Owner.BannerConfiguration)
+                .Build();
+
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage6) {Data = playerBanner.ToByteArray()};
+        }
+
+        public GenericBlobMessage GetBlacksmithData()
+        {
+            var blacksmith = D3.ItemCrafting.CrafterData.CreateBuilder()
+                .SetLevel(45)
+                .SetCooldownEnd(0)
+                .Build();
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage8) { Data = blacksmith.ToByteArray() };
+        }
+
+        public GenericBlobMessage GetJewelerData()
+        {
+            var jeweler = D3.ItemCrafting.CrafterData.CreateBuilder()
+                .SetLevel(9)
+                .SetCooldownEnd(0)
+                .Build();
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage9) { Data = jeweler.ToByteArray() };
+        }
+
+        public GenericBlobMessage GetMysticData()
+        {
+            var mystic = D3.ItemCrafting.CrafterData.CreateBuilder()
+                .SetLevel(45)
+                .SetCooldownEnd(0)
+                .Build();
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage10) { Data = mystic.ToByteArray() };
+        }
+
+        #endregion
+
+        #region generic properties
+
+        public int ClassSNO
+        {
+            get
+            {
+                if (this.Properties.Gender == 0)
+                {
+                    switch (this.Properties.Class)
+                    {
+                        case ToonClass.Barbarian:
+                            return 0x0CE5;
+                        case ToonClass.DemonHunter:
+                            return 0x0125C7;
+                        case ToonClass.Monk:
+                            return 0x1271;
+                        case ToonClass.WitchDoctor:
+                            return 0x1955;
+                        case ToonClass.Wizard:
+                            return 0x1990;
+                    }
+                }
+                else
+                {
+                    switch (this.Properties.Class)
+                    {
+                        case ToonClass.Barbarian:
+                            return 0x0CD5;
+                        case ToonClass.DemonHunter:
+                            return 0x0123D2;
+                        case ToonClass.Monk:
+                            return 0x126D;
+                        case ToonClass.WitchDoctor:
+                            return 0x1951;
+                        case ToonClass.Wizard:
+                            return 0x197E;
+                    }
+                }
+                return 0x0;
+            }
+        }
+
+        public float ModelScale
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 1.2f;
+                    case ToonClass.DemonHunter:
+                        return 1.35f;
+                    case ToonClass.Monk:
+                        return 1.43f;
+                    case ToonClass.WitchDoctor:
+                        return 1.1f;
+                    case ToonClass.Wizard:
+                        return 1.3f;
+                }
+                return 1.43f;
+            }
+        }
+
+        public int ResourceID
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x00000002;
+                    case ToonClass.DemonHunter:
+                        return 0x00000005;
+                    case ToonClass.Monk:
+                        return 0x00000003;
+                    case ToonClass.WitchDoctor:
+                        return 0x00000000;
+                    case ToonClass.Wizard:
+                        return 0x00000001;
+                }
+                return 0x00000000;
+            }
+        }
+
+        public int SkillKit
+        {
+            get
+            {
+                switch (this.Properties.Class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x00008AF4;
+                    case ToonClass.DemonHunter:
+                        return 0x00008AFC;
+                    case ToonClass.Monk:
+                        return 0x00008AFA;
+                    case ToonClass.WitchDoctor:
+                        return 0x00008AFF;
+                    case ToonClass.Wizard:
+                        return 0x00008B00;
+                }
+                return 0x00000001;
+            }
+        }
+
+        #endregion
+
+        #region queries
+
+        public List<T> GetRevealedObjects<T>() where T : class, IRevealable
+        {
+            return this.RevealedObjects.Values.OfType<T>().Select(@object => @object).ToList();
+        }
+
+        #endregion
+
+        #region experience handling
+
         private float GetMaxTotalHitpoints()
         {
+            // Defines the Max Total hitpoints for the current level
+            // May want to move this into a property if it has to made class-specific
+            // This is still a work in progress on getting the right algorithm for all the classes
+
             return (this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality]) +
                     (this.Attributes[GameAttribute.Hitpoints_Total_From_Level]);
         }
@@ -663,7 +1058,7 @@ namespace Mooege.Core.GS.Players
 
                 // Hitpoints from level may actually change. This needs to be verified by someone with the beta.
                 //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = this.Attributes[GameAttribute.Level] * this.Attributes[GameAttribute.Hitpoints_Factor_Level];
-                
+
                 // For now, hit points are based solely on vitality and initial hitpoints received.
                 // This will have to change when hitpoint bonuses from items are implemented.
                 this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality] = this.Attributes[GameAttribute.Vitality] * this.Attributes[GameAttribute.Hitpoints_Factor_Vitality];
@@ -893,11 +1288,11 @@ namespace Mooege.Core.GS.Players
 
         public void CheckOpenConversations()
         {
-            if(this.OpenConversations.Count > 0)
+            if (this.OpenConversations.Count > 0)
             {
-                foreach(OpenConversation openConversation in this.OpenConversations)
+                foreach (OpenConversation openConversation in this.OpenConversations)
                 {
-                    if(openConversation.endTick == this.InGameClient.Game.Tick)
+                    if (openConversation.endTick == this.InGameClient.Game.Tick)
                     {
                         this.InGameClient.SendMessage(openConversation.endConversationMessage);
                     }
@@ -917,401 +1312,78 @@ namespace Mooege.Core.GS.Players
             }
         }
 
-        public int ClassSNO
+        #endregion
+
+        #region gold, heath-glob collection
+
+        private void CollectGold()
         {
-            get
+            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 5f);
+            foreach (var actor in actorList)
             {
-                if (this.Properties.Gender == 0)
+                Item item;
+                if (!(actor is Item)) continue;
+                item = (Item)actor;
+                if (item.ItemType != ItemType.Gold) continue;
+
+                this.InGameClient.SendMessage(new FloatingAmountMessage()
                 {
-                    switch (this.Properties.Class)
+                    Place = new WorldPlace()
                     {
-                        case ToonClass.Barbarian:
-                            return 0x0CE5;
-                        case ToonClass.DemonHunter:
-                            return 0x0125C7;
-                        case ToonClass.Monk:
-                            return 0x1271;
-                        case ToonClass.WitchDoctor:
-                            return 0x1955;
-                        case ToonClass.Wizard:
-                            return 0x1990;
-                    }
-                }
-                else
-                {
-                    switch (this.Properties.Class)
-                    {
-                        case ToonClass.Barbarian:
-                            return 0x0CD5;
-                        case ToonClass.DemonHunter:
-                            return 0x0123D2;
-                        case ToonClass.Monk:
-                            return 0x126D;
-                        case ToonClass.WitchDoctor:
-                            return 0x1951;
-                        case ToonClass.Wizard:
-                            return 0x197E;
-                    }
-                }
-                return 0x0;
+                        Position = this.Position,
+                        WorldID = this.World.DynamicID,
+                    },
+
+                    Amount = item.Attributes[GameAttribute.Gold],
+                    Type = FloatingAmountMessage.FloatType.Gold,
+                });
+
+                this.Inventory.PickUpGold(item.DynamicID);
+
+
+                item.Destroy();
             }
         }
 
-        public float ModelScale
+        private void CollectHealthGlobe()
         {
-            get
+            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 5f);
+            foreach (Actor actor in actorList)
             {
-                switch (this.Properties.Class)
+                Item item;
+                if (!(actor is Item)) continue;
+                item = (Item)actor;
+                if (item.ItemType != ItemType.HealthGlobe) continue;
+
+                this.InGameClient.SendMessage(new PlayEffectMessage() //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
                 {
-                    case ToonClass.Barbarian:
-                        return 1.2f;
-                    case ToonClass.DemonHunter:
-                        return 1.35f;
-                    case ToonClass.Monk:
-                        return 1.43f;
-                    case ToonClass.WitchDoctor:
-                        return 1.1f;
-                    case ToonClass.Wizard:
-                        return 1.3f;
+                    ActorId = this.DynamicID,
+                    Effect = Effect.HealthOrbPickup
+                });
+
+                foreach (var pair in this.World.Players) // should be actually checking for players in proximity. /raist
+                {
+                    pair.Value.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
                 }
-                return 1.43f;
+
+                item.Destroy();
             }
         }
 
-        public int ResourceID
+        public void AddPercentageHP(int percentage)
         {
-            get
-            {
-                switch (this.Properties.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 0x00000002;
-                    case ToonClass.DemonHunter:
-                        return 0x00000005;
-                    case ToonClass.Monk:
-                        return 0x00000003;
-                    case ToonClass.WitchDoctor:
-                        return 0x00000000;
-                    case ToonClass.Wizard:
-                        return 0x00000001;
-                }
-                return 0x00000000;
-            }
+            float quantity = (percentage * this.Attributes[GameAttribute.Hitpoints_Max]) / 100;
+            this.AddHP(quantity);
         }
 
-        public int SkillKit
+        public void AddHP(float quantity)
         {
-            get
-            {
-                switch (this.Properties.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 0x00008AF4;
-                    case ToonClass.DemonHunter:
-                        return 0x00008AFC;
-                    case ToonClass.Monk:
-                        return 0x00008AFA;
-                    case ToonClass.WitchDoctor:
-                        return 0x00008AFF;
-                    case ToonClass.Wizard:
-                        return 0x00008B00;
-                }
-                return 0x00000001;
-            }
+            if (this.Attributes[GameAttribute.Hitpoints_Cur] + quantity >= this.Attributes[GameAttribute.Hitpoints_Max])
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
+            else
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
         }
 
-        #region PlayerAttributeHandling
-        public float InitialAttack // Defines the amount of attack points with which a player starts
-        {
-            get
-            {
-                switch (this.Properties.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 10f + ((this.Properties.Level - 1) * 2);
-                    case ToonClass.DemonHunter:
-                        return 10f + ((this.Properties.Level - 1) * 2);
-                    case ToonClass.Monk:
-                        return 10f + ((this.Properties.Level - 1) * 2);
-                    case ToonClass.WitchDoctor:
-                        return 10f + ((this.Properties.Level - 1) * 2);
-                    case ToonClass.Wizard:
-                        return 10f + ((this.Properties.Level - 1) * 2);
-                }
-                return 10f + (this.Properties.Level - 1) * 2;
-            }
-        }
-
-        public float InitialPrecision // Defines the amount of precision points with which a player starts
-        {
-            get
-            {
-                switch (this.Properties.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 9f + (this.Properties.Level - 1);
-                    case ToonClass.DemonHunter:
-                        return 11f + ((this.Properties.Level - 1) * 2);
-                    case ToonClass.Monk:
-                        return 11f + ((this.Properties.Level - 1) * 2);
-                    case ToonClass.WitchDoctor:
-                        return 9f + ((this.Properties.Level - 1) * 2);
-                    case ToonClass.Wizard:
-                        return 10f + ((this.Properties.Level - 1) * 2);
-                }
-                return 10f + ((this.Properties.Level - 1) * 2);
-            }
-        }
-
-        public float InitialDefense // Defines the amount of defense points with which a player starts
-        {
-            get
-            {
-                switch (this.Properties.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 11f + ((this.Properties.Level - 1) * 2);
-                    case ToonClass.DemonHunter:
-                        // For DH and Wizard, half the levels (starting with the first) give 2 defense => (Level / 2) * 2
-                        // and half give 1 defense => ((Level - 1) / 2) * 1
-                        // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
-                        return 9f + (((this.Properties.Level / 2) * 2) + ((this.Properties.Level - 1) / 2));
-                    case ToonClass.Monk:
-                        return 10f + ((this.Properties.Level - 1) * 2);
-                    case ToonClass.WitchDoctor:
-                        return 9f + ((this.Properties.Level - 1) * 2);
-                    case ToonClass.Wizard:
-                        return 8f + (((this.Properties.Level / 2) * 2) + ((this.Properties.Level - 1) / 2));
-                }
-                return 10f + ((this.Properties.Level - 1) * 2);
-            }
-        }
-
-        public float InitialVitality // Defines the amount of vitality points with which a player starts
-        {
-            get
-            {
-                switch (this.Properties.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 11f + ((this.Properties.Level - 1) * 2);
-                    case ToonClass.DemonHunter:
-                        // For DH and Wizard, half the levels give 2 vit => ((Level - 1) / 2) * 2
-                        // and half (starting with the first) give 1 vit => (Level / 2) * 1
-                        // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
-                        return 9f + ((((this.Properties.Level - 1) / 2) * 2) + (this.Properties.Level / 2));
-                    case ToonClass.Monk:
-                        return 9f + (this.Properties.Level - 1);
-                    case ToonClass.WitchDoctor:
-                        return 10f + (this.Properties.Level - 1);
-                    case ToonClass.Wizard:
-                        return 9f + ((((this.Properties.Level - 1) / 2) * 2) + (this.Properties.Level / 2));
-                }
-                return 10f + ((this.Properties.Level - 1) * 2);
-            }
-        }
-
-        // Notes on attribute increment algorithm:
-        // Precision: Barbarian => +1, else => +2
-        // Defense:   Wizard or Demon Hunter => (lvl+1)%2+1, else => +2
-        // Vitality:  Wizard or Demon Hunter => lvl%2+1, Barbarian => +2, else +1
-        // Attack:    All +2
-        public float AttackIncrement
-        {
-            get
-            {
-                switch (this.Properties.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 2f;
-                    case ToonClass.DemonHunter:
-                        return 2f;
-                    case ToonClass.Monk:
-                        return 2f;
-                    case ToonClass.WitchDoctor:
-                        return 2f;
-                    case ToonClass.Wizard:
-                        return 2f;
-                }
-                return 2f;
-            }
-        }
-
-        public float VitalityIncrement
-        {
-            get
-            {
-                switch (this.Properties.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 2f;
-                    case ToonClass.DemonHunter:
-                        return (this.Attributes[GameAttribute.Level] % 2) + 1f;
-                    case ToonClass.Monk:
-                        return 1f;
-                    case ToonClass.WitchDoctor:
-                        return 1f;
-                    case ToonClass.Wizard:
-                        return (this.Attributes[GameAttribute.Level] % 2) + 1f;
-                }
-                return 1f;
-            }
-        }
-
-        public float DefenseIncrement
-        {
-            get
-            {
-                switch (this.Properties.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 2f;
-                    case ToonClass.DemonHunter:
-                        return ((this.Attributes[GameAttribute.Level] + 1) % 2) + 1f;
-                    case ToonClass.Monk:
-                        return 2f;
-                    case ToonClass.WitchDoctor:
-                        return 2f;
-                    case ToonClass.Wizard:
-                        return ((this.Attributes[GameAttribute.Level] + 1) % 2) + 1f;
-                }
-                return 2f;
-            }
-        }
-
-        public float PrecisionIncrement
-        {
-            get
-            {
-                switch (this.Properties.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 1f;
-                    case ToonClass.DemonHunter:
-                        return 2f;
-                    case ToonClass.Monk:
-                        return 2f;
-                    case ToonClass.WitchDoctor:
-                        return 2f;
-                    case ToonClass.Wizard:
-                        return 2f;
-                }
-                return 2f;
-            }
-        }
-        #endregion // #region PlayerAttributeHandling
-
-        public SkillKeyMapping[] SkillKeyMappings = new SkillKeyMapping[15]
-        {
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-            new SkillKeyMapping { Power = -1, Field1 = -1, Field2 = 0x00000000, },
-        };
-
-        public LearnedLore LearnedLore = new LearnedLore()
-        {
-            Field0 = 0x00000000,
-            m_snoLoreLearned = new int[256]
-             {
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
-                0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000
-             },
-        };
-
-        public int[] SeenTutorials = new int[64]
-        {
-            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        };
-
-        public PlayerQuestRewardHistoryEntry[] QuestRewardHistory = new PlayerQuestRewardHistoryEntry[0] { };
-
-        public HirelingInfo[] HirelingInfo = new HirelingInfo[4]
-        {
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-        };
-
-        public GenericBlobMessage GetPlayerBanner()
-        {
-            var playerBanner = D3.GameMessage.PlayerBanner.CreateBuilder()
-                .SetPlayerIndex((uint) this.PlayerIndex)
-                .SetBanner(this.Properties.Owner.BannerConfiguration)
-                .Build();
-
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage6) {Data = playerBanner.ToByteArray()};
-        }
-
-        public GenericBlobMessage GetBlacksmithData()
-        {
-            var blacksmith = D3.ItemCrafting.CrafterData.CreateBuilder()
-                .SetLevel(45)
-                .SetCooldownEnd(0)
-                .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage8) { Data = blacksmith.ToByteArray() };
-        }
-
-        public GenericBlobMessage GetJewelerData()
-        {
-            var jeweler = D3.ItemCrafting.CrafterData.CreateBuilder()
-                .SetLevel(9)
-                .SetCooldownEnd(0)
-                .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage9) { Data = jeweler.ToByteArray() };
-        }
-
-        public GenericBlobMessage GetMysticData()
-        {
-            var mystic = D3.ItemCrafting.CrafterData.CreateBuilder()
-                .SetLevel(45)
-                .SetCooldownEnd(0)
-                .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage10) { Data = mystic.ToByteArray() };
-        }
+        #endregion
     }
 }

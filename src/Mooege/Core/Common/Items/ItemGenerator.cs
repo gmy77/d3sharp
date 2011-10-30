@@ -113,8 +113,7 @@ namespace Mooege.Core.Common.Items
         // Creates an item based on supplied definition.
         public static Item CreateItem(Player player, ItemDefinition definition)
         {
-            Logger.Trace("Creating item: {0} [type: {1}, mode: {2}, sno:{3}, gbid {4}]", definition.Name,
-                         definition.Type, definition.DifficultyMode, definition.SNOId, definition.GBId);
+            //Logger.Trace("Creating item: {0} [type: {1}, mode: {2}, sno:{3}, gbid {4}]", definition.Name, definition.Type, definition.DifficultyMode, definition.SNOId, definition.GBId);
 
             var item = new Item(player.World, definition.SNOId, definition.GBId, definition.Type);
 
