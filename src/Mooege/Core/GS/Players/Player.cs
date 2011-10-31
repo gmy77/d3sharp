@@ -1395,7 +1395,7 @@ namespace Mooege.Core.GS.Players
             attributes[GameAttribute.Skill_Total, 0x0002EC66] = 1;
             attributes.SendMessage(InGameClient, DynamicID);
 
-            // add the Attributes it can be serialized
+            // add the Attribute to the PlayerAttributes
             Attributes[GameAttribute.Skill, 0x0002EC66] = 1;
             Attributes[GameAttribute.Skill_Total, 0x0002EC66] = 1;
         }
@@ -1406,7 +1406,7 @@ namespace Mooege.Core.GS.Players
             attributes[GameAttribute.ItemMeltUnlocked] = true;
             attributes.SendMessage(InGameClient, DynamicID);
 
-            // add the Attributes it can be serialized
+            // add the Attribute to the PlayerAttributes
             Attributes[GameAttribute.ItemMeltUnlocked] = true;          
         }
 
@@ -1417,7 +1417,7 @@ namespace Mooege.Core.GS.Players
             attributes[GameAttribute.SalvageUnlocked] = true;
             attributes.SendMessage(InGameClient, DynamicID);
 
-            // add the Attributes it can be serialized
+            // add the Attribute to the PlayerAttributes
             Attributes[GameAttribute.SalvageUnlocked] = true;
         }
 
