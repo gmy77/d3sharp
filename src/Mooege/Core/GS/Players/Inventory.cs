@@ -24,6 +24,8 @@ using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.Common.Items;
+using Mooege.Common.Helpers;
+using Mooege.Net.GS.Message.Definitions.Misc;
 
 namespace Mooege.Core.GS.Players
 {
@@ -85,6 +87,11 @@ namespace Mooege.Core.GS.Players
             System.Diagnostics.Debug.Assert(!_inventoryStash.Contains(item) && !_equipment.IsItemEquipped(item), "Item already in inventory");
             // TODO: Autoequip when equipment slot is empty
 
+            if (PickUpSpecialItem(item))
+            {
+                return true;
+            }
+
             bool success = false;
             if (!_inventoryStash.HasFreeSpace(item))
             {
@@ -106,6 +113,40 @@ namespace Mooege.Core.GS.Players
 
             AcceptMoveRequest(item);
             return success;
+        }
+
+        private bool PickUpSpecialItem(Item item)
+        {
+
+            bool isSpecialItem = false;
+            //Stone of Recall
+            if (item.GBHandle.GBID == -2007738575)
+            {
+                _owner.EnableStoneOfRecall();
+                isSpecialItem = true;
+            }
+            // Cauldron of Jordan
+            else if (item.GBHandle.GBID == -1812121245)
+            {
+                _owner.EnableCouldronOfJordan();
+                isSpecialItem = true;
+            }
+            // Cube of Nephalm
+            else if (item.GBHandle.GBID == -1352920439)
+            {
+                _owner.EnableCubeOfNephalem();
+                isSpecialItem = true;
+            }
+
+            if (isSpecialItem)
+            {
+                if (_owner.GroundItems.ContainsKey(item.DynamicID))
+                    _owner.GroundItems.Remove(item.DynamicID);
+                item.Destroy();
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -305,7 +346,9 @@ namespace Mooege.Core.GS.Players
             else if (message is InventorySplitStackMessage) OnInventorySplitStackMessage(message as InventorySplitStackMessage);
             else if (message is InventoryStackTransferMessage) OnInventoryStackTransferMessage(message as InventoryStackTransferMessage);
             else if (message is InventoryDropItemMessage) OnInventoryDropItemMessage(message as InventoryDropItemMessage);
-            else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);                
+            else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
+            else if (message is RequestUseCauldronOfJordanMessage) OnUseCauldronOfJordanMessage(message as RequestUseCauldronOfJordanMessage);
+            else if (message is RequestUseNephalemCubeMessage) OnUseNephalmCubeMessage(message as RequestUseNephalemCubeMessage);
             else return;
         }
 
@@ -340,6 +383,43 @@ namespace Mooege.Core.GS.Players
             _inventoryStash.RemoveItem(item);
             _equipment.UnequipItem(item);
             item.Destroy();
+        }
+
+        private void OnUseNephalmCubeMessage(RequestUseNephalemCubeMessage requestUseNephalemCubeMessage)
+        {
+            Item salvageItem = _owner.World.GetItem(requestUseNephalemCubeMessage.ActorID);
+            // TODO: hacked crafting material
+            Item crafingItem = ItemGenerator.Cook(_owner, "Crafting_Gem_Dust", 56845, ItemType.Unknown);
+
+            PickUp(crafingItem);
+
+            // TODO: This Message doesn't work. I think i should produce an entry in the chat window like "Salvaging Gloves gave you Common scrap!" - angerwin
+            SalvageResultsMessage message = new SalvageResultsMessage
+            {
+                gbidNewItems = new int[] { crafingItem.GBHandle.GBID },
+                gbidOriginalItem = salvageItem.GBHandle.GBID,
+                Field1 = 0, // Unkown
+                Field2 = 0, // Unkown 
+
+            };
+            _owner.InGameClient.SendMessage(message, true);
+            DestroyInventoryItem(salvageItem);
+
+        }
+
+        private void OnUseCauldronOfJordanMessage(RequestUseCauldronOfJordanMessage requestUseCauldronOfJordanMessage)
+        {
+            Item selledItem = _owner.World.GetItem(requestUseCauldronOfJordanMessage.ActorID);
+            int sellValue = RandomHelper.Next(20, 100); // TODO: get item sell value            
+            Item sumGoldItem = _equipment.AddGoldAmount(sellValue);
+
+            // TODO: instead of destroying item should be moved to merchants inventory for rebuy. 
+            DestroyInventoryItem(selledItem);
+
+            // Update Goldamount in Playerinventory
+            GameAttributeMap attributes = new GameAttributeMap();
+            attributes[GameAttribute.ItemStackQuantityLo] = sumGoldItem.Attributes[GameAttribute.ItemStackQuantityLo];
+            attributes.SendMessage(_owner.InGameClient, sumGoldItem.DynamicID);
         }
     }
 }

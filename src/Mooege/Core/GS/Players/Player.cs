@@ -1385,5 +1385,43 @@ namespace Mooege.Core.GS.Players
         }
 
         #endregion
+
+        #region StoneOfRecall, CubeOfNephalem, CauldonOfJourdan
+
+        internal void EnableStoneOfRecall()
+        {
+            GameAttributeMap attributes = new GameAttributeMap();
+            attributes[GameAttribute.Skill, 0x0002EC66] = 1;
+            attributes[GameAttribute.Skill_Total, 0x0002EC66] = 1;
+            attributes.SendMessage(InGameClient, DynamicID);
+
+            // add the Attributes it can be serialized
+            Attributes[GameAttribute.Skill, 0x0002EC66] = 1;
+            Attributes[GameAttribute.Skill_Total, 0x0002EC66] = 1;
+        }
+
+        internal void EnableCouldronOfJordan()
+        {
+            GameAttributeMap attributes = new GameAttributeMap();
+            attributes[GameAttribute.ItemMeltUnlocked] = true;
+            attributes.SendMessage(InGameClient, DynamicID);
+
+            // add the Attributes it can be serialized
+            Attributes[GameAttribute.ItemMeltUnlocked] = true;          
+        }
+
+        internal void EnableCubeOfNephalem()
+        {
+
+            GameAttributeMap attributes = new GameAttributeMap();
+            attributes[GameAttribute.SalvageUnlocked] = true;
+            attributes.SendMessage(InGameClient, DynamicID);
+
+            // add the Attributes it can be serialized
+            Attributes[GameAttribute.SalvageUnlocked] = true;
+        }
+
+        #endregion
+
     }
 }

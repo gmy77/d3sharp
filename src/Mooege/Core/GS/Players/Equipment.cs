@@ -112,19 +112,21 @@ namespace Mooege.Core.GS.Players
 
         internal Item AddGoldItem(Item collectedItem)
         {
+            return AddGoldAmount(collectedItem.Attributes[GameAttribute.Gold]);            
+        }
+
+        internal Item AddGoldAmount(int amount)
+        {
+
             if (_inventoryGold == null)
             {
-                _inventoryGold = ItemGenerator.CreateGold(_owner, collectedItem.Attributes[GameAttribute.Gold]);
-                _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = collectedItem.Attributes[GameAttribute.Gold];
+                _inventoryGold = ItemGenerator.CreateGold(_owner, 0);                
                 _inventoryGold.Owner = _owner;
                 _inventoryGold.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
                 _inventoryGold.Reveal(_owner);
-            }
-            else
-            {
-                _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += collectedItem.Attributes[GameAttribute.Gold];
-            }
+            }           
 
+            _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += amount;            
             return _inventoryGold;
         }
 

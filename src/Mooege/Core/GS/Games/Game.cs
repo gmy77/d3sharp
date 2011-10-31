@@ -30,6 +30,7 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.Common.Items;
 
 namespace Mooege.Core.GS.Games
 {
@@ -234,6 +235,25 @@ namespace Mooege.Core.GS.Games
             joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition.
             joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
             joinedPlayer.EnteredWorld = true;
+
+            // TODO: These items do not droped randomly. They should be created during MainQuest
+            #region Hacky Main-Quest-Items
+
+            var cauldornOfJordan = ItemGenerator.Cook(joinedPlayer, "StoneOfWealth", 168216, ItemType.Unknown);
+            cauldornOfJordan.Drop(null, joinedPlayer.Position);
+            joinedPlayer.GroundItems[cauldornOfJordan.DynamicID] = cauldornOfJordan;
+
+            var cubeOfNephalm = ItemGenerator.Cook(joinedPlayer, "NephalemCube", 138979, ItemType.Unknown);
+            cubeOfNephalm.Drop(null, joinedPlayer.Position);
+            joinedPlayer.GroundItems[cubeOfNephalm.DynamicID] = cubeOfNephalm;
+
+            var stoneOfRecall = ItemGenerator.Cook(joinedPlayer, "StoneOfRecall", 190617, ItemType.Unknown);
+            stoneOfRecall.Drop(null, joinedPlayer.Position);
+            joinedPlayer.GroundItems[stoneOfRecall.DynamicID] = stoneOfRecall;
+
+            #endregion
+
+
         }
 
         /// <summary>
