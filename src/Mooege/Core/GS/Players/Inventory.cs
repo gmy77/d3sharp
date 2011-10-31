@@ -296,6 +296,12 @@ namespace Mooege.Core.GS.Players
                 _inventoryStash.RemoveItem(item);
             }
             item.Drop(null, _owner.Position);
+            // Unreveal then Reveal the item -- Fixes issue where you can't pickup the item
+            foreach (var player in item.World.GetPlayersInRange(_owner.Position, 80.0f))
+            {
+                item.Unreveal(player);
+                item.Reveal(player);
+            }
             AcceptMoveRequest(item);
         }
 
