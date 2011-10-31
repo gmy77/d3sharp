@@ -34,9 +34,9 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
 
         public void OnAddSocket(Players.Player player, Core.Common.Items.Item item)
         {
-            // Animate Jeweler? Who knows. /fasbat
+            // TODO: Animate Jeweler? Who knows. /fasbat
             item.Attributes[GameAttribute.Sockets] += 1;
-            item.Attributes[GameAttribute.Sockets_Filled] = item.Attributes[GameAttribute.Sockets_Filled];
+            // Why this not work? :/
             item.Attributes.SendChangedMessage(player.InGameClient, item.DynamicID);
         }
     }
