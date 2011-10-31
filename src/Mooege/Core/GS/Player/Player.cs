@@ -44,6 +44,8 @@ using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Combat;
 using System;
 using Mooege.Net.GS.Message.Definitions.Trade;
+using Mooege.Net.GS.Message.Definitions.Artisan;
+using Mooege.Core.GS.Actors.Implementations.Artisans;
 
 
 // TODO: When the player moves, it will set the Position property which will bounce back to the player again.
@@ -344,7 +346,8 @@ namespace Mooege.Core.GS.Player
             else if (message is TargetMessage) OnObjectTargeted(client, (TargetMessage)message);
             else if (message is PlayerMovementMessage) OnPlayerMovement(client, (PlayerMovementMessage)message);
             else if (message is TryWaypointMessage) OnTryWaypoint(client, (TryWaypointMessage)message);
-            else if (message is RequestBuyItemMessage) OnRequestBuyItem(client, (RequestBuyItemMessage) message);
+            else if (message is RequestBuyItemMessage) OnRequestBuyItem(client, (RequestBuyItemMessage)message);
+            else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
             else return;
         }
 
@@ -539,6 +542,19 @@ namespace Mooege.Core.GS.Player
             if (item == null || item.Owner == null || !(item.Owner is Vendor))
                 return;
             (item.Owner as Vendor).OnRequestBuyItem(this, item);
+        }
+
+
+        private void OnRequestAddSocket(GameClient client, RequestAddSocketMessage requestAddSocketMessage)
+        {
+            var item = World.GetItem(requestAddSocketMessage.ItemID);
+            if (item == null || item.Owner != this)
+                return;
+            var jeweler = World.GetInstance<Jeweler>();
+            if (jeweler == null)
+                return;
+
+            jeweler.OnAddSocket(this, item);
         }
 
         private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)

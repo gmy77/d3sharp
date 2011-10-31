@@ -389,6 +389,20 @@ namespace Mooege.Core.GS.Map
             return player;
         }
 
+        public T GetTypedActor<T>(uint dynamicID) where T : Actor
+        {
+            var actor = GetActor(dynamicID);
+            if (actor == null || !(actor is T))
+                return null;
+
+            return actor as T;
+        }
+
+        public T GetInstance<T>() where T: Actor
+        {
+            return Actors.Values.OfType<T>().FirstOrDefault();
+        }
+
         public Item GetItem(uint dynamicID)
         {
             return (Item)GetActor(dynamicID, ActorType.Item);

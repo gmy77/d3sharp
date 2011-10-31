@@ -296,15 +296,11 @@ namespace Mooege.Core.GS.Player
 
             // TODO: This needs to change the attribute on the item itself. /komiga
             // Update source
-            GameAttributeMap attributes = new GameAttributeMap();
-            attributes[GameAttribute.ItemStackQuantityLo] = itemFrom.Attributes[GameAttribute.ItemStackQuantityLo];
-            attributes.SendMessage(_owner.InGameClient, itemFrom.DynamicID);
+            itemFrom.Attributes.SendChangedMessage(_owner.InGameClient, itemFrom.DynamicID);
 
             // TODO: This needs to change the attribute on the item itself. /komiga
             // Update target
-            attributes = new GameAttributeMap();
-            attributes[GameAttribute.ItemStackQuantityLo] = itemTo.Attributes[GameAttribute.ItemStackQuantityLo];
-            attributes.SendMessage(_owner.InGameClient, itemTo.DynamicID);
+            itemTo.Attributes.SendChangedMessage(_owner.InGameClient, itemTo.DynamicID);
         }
 
         private void OnInventoryDropItemMessage(InventoryDropItemMessage msg)
