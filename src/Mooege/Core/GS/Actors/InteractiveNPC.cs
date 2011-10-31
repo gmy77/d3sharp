@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
@@ -27,10 +28,11 @@ using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Core.GS.Actors.Interactions;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.NPC;
+using Mooege.Net.GS;
 
 namespace Mooege.Core.GS.Actors
 {
-    public class InteractiveNPC : NPC
+    public class InteractiveNPC : NPC, IMessageConsumer
     {
         public List<IInteraction> Interactions { get; private set; }
         public List<ConversationInteraction> Conversations { get; private set; }
@@ -48,6 +50,8 @@ namespace Mooege.Core.GS.Actors
 
         public override void OnTargeted(Player player, TargetMessage message)
         {
+            player.SelectedNPC = this;
+
             var count = Interactions.Count + Conversations.Count;
             if (count == 0)
                 return;
@@ -80,6 +84,21 @@ namespace Mooege.Core.GS.Actors
                 ActorId = this.DynamicID,
                 Effect = Net.GS.Message.Definitions.Effect.Effect.Unknown36
             }); 
+        }
+
+        public void Consume(GameClient client, GameMessage message)
+        {
+            if (message is NPCSelectConversationMessage) OnSelectConversation(client.Player, message as NPCSelectConversationMessage);
+            else return;
+        }
+
+        private void OnSelectConversation(Player player, NPCSelectConversationMessage message)
+        {
+            var conversation = Conversations.FirstOrDefault(conv => conv.ConversationSNO == message.ConversationSNO);
+            if (conversation == null) 
+                return;
+
+            conversation.MarkAsRead();
         }
     }
 }

@@ -15,10 +15,12 @@ namespace Mooege.Core.GS.Actors.Interactions
     public class ConversationInteraction : IInteraction
     {
         public int ConversationSNO;
+        private bool read;
 
         public ConversationInteraction(int conversationSNO)
         {
             ConversationSNO = conversationSNO;
+            read = false; // Should read from players saved data /fasbat
         }
 
         public NPCInteraction AsNPCInteraction(InteractiveNPC npc, Player player)
@@ -28,8 +30,13 @@ namespace Mooege.Core.GS.Actors.Interactions
                 Type = NPCInteractionType.Conversation,
                 ConversationSNO = this.ConversationSNO,
                 Field2 = -1,
-                State = NPCInteractionState.New,
+                State = (read ? NPCInteractionState.Used : NPCInteractionState.New),
             };
+        }
+
+        public void MarkAsRead() // Just a hack to show functionality /fasbat
+        {
+            read = true;
         }
     }
 

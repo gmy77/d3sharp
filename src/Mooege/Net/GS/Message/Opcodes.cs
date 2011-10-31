@@ -311,7 +311,7 @@ namespace Mooege.Net.GS.Message
         BroadcastTextMessage = 292, // len: 	520
         SimpleMessage41 = 293, // len: 	8
         SimpleMessage42 = 294, // len: 	8
-        SNODataMessage6 = 295, // len: 	12
+        NPCSelectConversationMessage = 295, // len: 	12 former SNODataMessage6
         ANNDataMessage33 = 296, // len: 	12
         SimpleMessage43 = 297, // len: 	8
         SimpleMessage44 = 298, // len: 	8

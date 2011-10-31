@@ -51,7 +51,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                             Field0 = 0x00000001,
                             Field1 = false,
                             Field2 = -1,
-                            Field3 = 0x00000000,
+                            Field3 = 0x00000007,
                         });
 
                         client.SendMessage(new HirelingInfoUpdateMessage()
