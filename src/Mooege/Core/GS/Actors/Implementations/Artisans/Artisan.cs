@@ -37,7 +37,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
 
         public override void OnTargeted(Player player, TargetMessage message)
         {
-            player.InGameClient.SendMessage(new OpenArtisanWindowMessage { ArtisanID = this.DynamicID });
+            player.InGameClient.SendMessage(new OpenArtisanWindowMessage() { ArtisanID = this.DynamicID });
         }
     }
 }

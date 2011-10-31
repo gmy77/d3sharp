@@ -31,6 +31,9 @@ namespace Mooege.Net.GS.Message.Definitions.Artisan
     public class OpenArtisanWindowMessage : GameMessage
     {
         public uint ArtisanID;
+        public OpenArtisanWindowMessage()
+            : base(Opcodes.OpenArtisanWindowMessage)
+        { }
 
         public override void Parse(GameBitBuffer buffer)
         {
