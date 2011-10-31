@@ -58,12 +58,12 @@ namespace Mooege.Core.GS.Map
         /// <summary>
         /// List of scenes contained in the world.
         /// </summary>
-        public ConcurrentDictionary<uint, Scene> Scenes;
+        private readonly ConcurrentDictionary<uint, Scene> _scenes;
 
         /// <summary>
         /// List of actors contained in the world.
         /// </summary>
-        public readonly ConcurrentDictionary<uint, Actor> Actors;
+        private readonly ConcurrentDictionary<uint, Actor> _actors;
 
         /// <summary>
         /// List of players contained in the world.
@@ -92,19 +92,19 @@ namespace Mooege.Core.GS.Map
         /// <summary>
         /// Scene revealing proximity for players.
         /// </summary>
-        private const int SceneProximity = 120;
+        private const int SceneProximity = 240;
 
         /// <summary>
         /// Actors revealing proximity for player.
         /// </summary>
-        private const int ActorProximity = 120;
+        private const int ActorProximity = 240;
 
         /// <summary>
         /// Returns list of available starting points.
         /// </summary>
         public List<StartingPoint> StartingPoints
         {
-            get { return this.Actors.Values.OfType<StartingPoint>().Select(actor => actor).ToList(); }
+            get { return this._actors.Values.OfType<StartingPoint>().Select(actor => actor).ToList(); }
         }
 
         /// <summary>
@@ -118,8 +118,8 @@ namespace Mooege.Core.GS.Map
             this.Game = game;
             this.SNOId = snoId; // NOTE: WorldSNO must be valid before adding it to the game
             this.Game.StartTracking(this); // start tracking the dynamicId for the world.            
-            this.Scenes = new ConcurrentDictionary<uint, Scene>();
-            this.Actors = new ConcurrentDictionary<uint, Actor>();
+            this._scenes = new ConcurrentDictionary<uint, Scene>();
+            this._actors = new ConcurrentDictionary<uint, Actor>();
             this.Players = new ConcurrentDictionary<uint, Player>();
             this.QuadTree = new QuadTree(new Size(60, 60), 0);
             this.Game.AddWorld(this); 
@@ -130,7 +130,7 @@ namespace Mooege.Core.GS.Map
         public override void Update()
         {
             // TODO: we should be skipping child-scenes, so actors contained doesn't get updated() twice.
-            foreach(var scene in this.Scenes.Values)
+            foreach(var scene in this._scenes.Values)
             {
                 if (!scene.HasPlayers) 
                     continue; // if scene has no players in, just skip the scene.
@@ -181,7 +181,7 @@ namespace Mooege.Core.GS.Map
         /// <param name="actor">The actor.</param>
         public void BroadcastInclusive(GameMessage message, Actor actor)
         {
-            var players = this.GetPlayersInRange(actor.Position, 480.0f);
+            var players=actor.GetPlayersInRange(ActorProximity);
             foreach (var player in players)
             {
                 player.InGameClient.SendMessage(message);
@@ -195,7 +195,7 @@ namespace Mooege.Core.GS.Map
         /// <param name="actor">The actor.</param>
         public void BroadcastExclusive(GameMessage message, Actor actor)
         {
-            var players = this.GetPlayersInRange(actor.Position, 480.0f);
+            var players = actor.GetPlayersInRange(ActorProximity);
             foreach (var player in players.Where(player => player != actor))
             {
                 player.InGameClient.SendMessage(message);
@@ -229,47 +229,12 @@ namespace Mooege.Core.GS.Map
                 WorldSNO = this.SNOId,
             });
 
-            this.RevealScenesInProximity(player); // reveal scenes in players proximity.
-            this.RevealActorsInProximity(player); // reveal actors in players proximity.
+            player.RevealScenesToPlayer(); // reveal scenes in players proximity.
+            player.RevealActorsToPlayer(); // reveal actors in players proximity.
 
             player.RevealedObjects.Add(this.DynamicID, this);
 
             return true;
-        }
-
-        /// <summary>
-        /// Reveals scenes in player's proximity.
-        /// </summary>
-        /// <param name="player">The player</param>
-        public void RevealScenesInProximity(Player player)
-        {
-            var scenes = player.GetScenesInProximity(SceneProximity);
-
-            foreach (var scene in scenes) // reveal scenes in player's proximity.
-            {
-                if (scene.IsRevealedToPlayer(player)) // if the actors is already revealed skip it.
-                    continue; // if the scene is already revealed, skip it.
-
-                scene.Reveal(player);
-            }
-        }
-
-        /// <summary>
-        /// Revals actors in player's proximity.
-        /// </summary>
-        /// <param name="player"></param>
-        public void RevealActorsInProximity(Player player)
-        {
-            var actors = player.GetActorsInProximity(ActorProximity);
-
-            foreach (var actor in actors) // reveal actors in player's proximity.
-            {
-                if (actor.IsRevealedToPlayer(player)) // if the actors is already revealed, skip it.
-                    continue;
-
-                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment || actor.ActorType == ActorType.Critter)
-                    actor.Reveal(player);
-            }
         }
 
         /// <summary>
@@ -301,12 +266,10 @@ namespace Mooege.Core.GS.Map
         /// <param name="actor">The actor entering the world.</param>
         public void Enter(Actor actor)
         {
-            // NOTE: Revealing to all right now since the flow results in actors that have initial positions that are not within the range of the player. /komiga
-
             this.AddActor(actor);
             actor.OnEnter(this);
 
-            var players = this.Players.Values; //this.GetPlayersInRange(actor.Position, 480.0f);
+            var players = actor.GetPlayersInRange();
             foreach (var player in players)
             {
                 actor.Reveal(player);
@@ -362,7 +325,7 @@ namespace Mooege.Core.GS.Map
         public void SpawnRandomItemDrop(Player player, Vector3D position)
         {
             var item = ItemGenerator.GenerateRandom(player);
-
+            
             item.Drop(null, position); // NOTE: The owner field for an item is only set when it is in the owner's inventory. /komiga
             player.GroundItems[item.DynamicID] = item; // FIXME: Hacky. /komiga
         }
@@ -404,7 +367,7 @@ namespace Mooege.Core.GS.Map
             if (scene.DynamicID == 0 || HasScene(scene.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", scene.DynamicID));
 
-            this.Scenes.TryAdd(scene.DynamicID, scene); // add to scenes collection.
+            this._scenes.TryAdd(scene.DynamicID, scene); // add to scenes collection.
             this.QuadTree.Insert(scene); // add it to quad-tree too.
         }
 
@@ -418,7 +381,7 @@ namespace Mooege.Core.GS.Map
                 throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", scene.DynamicID));
 
             Scene remotedScene;
-            this.Scenes.TryRemove(scene.DynamicID, out remotedScene); // remove it from scenes collection.
+            this._scenes.TryRemove(scene.DynamicID, out remotedScene); // remove it from scenes collection.
             this.QuadTree.Remove(scene); // remove from quad-tree too.
         }
 
@@ -430,7 +393,7 @@ namespace Mooege.Core.GS.Map
         public Scene GetScene(uint dynamicID)
         {
             Scene scene;
-            this.Scenes.TryGetValue(dynamicID, out scene);
+            this._scenes.TryGetValue(dynamicID, out scene);
             return scene;
         }
 
@@ -441,7 +404,7 @@ namespace Mooege.Core.GS.Map
         /// <returns><see cref="bool"/></returns>
         public bool HasScene(uint dynamicID)
         {
-            return this.Scenes.ContainsKey(dynamicID);
+            return this._scenes.ContainsKey(dynamicID);
         }
 
         /// <summary>
@@ -453,7 +416,7 @@ namespace Mooege.Core.GS.Map
             if (actor.DynamicID == 0 || HasActor(actor.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", actor.DynamicID));
 
-            this.Actors.TryAdd(actor.DynamicID, actor); // add to actors collection.
+            this._actors.TryAdd(actor.DynamicID, actor); // add to actors collection.
             this.QuadTree.Insert(actor); // add it to quad-tree too.
 
             if (actor.ActorType == ActorType.Player) // if actor is a player, add it to players collection too.
@@ -466,11 +429,11 @@ namespace Mooege.Core.GS.Map
         /// <param name="actor">The actor to remove.</param>
         private void RemoveActor(Actor actor)
         {
-            if (actor.DynamicID == 0 || !this.Actors.ContainsKey(actor.DynamicID))
+            if (actor.DynamicID == 0 || !this._actors.ContainsKey(actor.DynamicID))
                 throw new Exception(String.Format("Object has an invalid ID or was not present (ID = {0})", actor.DynamicID));
             
             Actor removedActor;
-            this.Actors.TryRemove(actor.DynamicID, out removedActor); // remove it from actors collection.
+            this._actors.TryRemove(actor.DynamicID, out removedActor); // remove it from actors collection.
             this.QuadTree.Remove(actor); // remove from quad-tree too.
 
             if (actor.ActorType == ActorType.Player) // if actors is a player, remove it from players collection too.
@@ -485,7 +448,7 @@ namespace Mooege.Core.GS.Map
         public Actor GetActor(uint dynamicID)
         {
             Actor actor;
-            this.Actors.TryGetValue(dynamicID, out actor);
+            this._actors.TryGetValue(dynamicID, out actor);
             return actor;
         }
 
@@ -516,7 +479,7 @@ namespace Mooege.Core.GS.Map
         /// <returns><see cref="bool"/></returns>
         public bool HasActor(uint dynamicID)
         {
-            return this.Actors.ContainsKey(dynamicID);
+            return this._actors.ContainsKey(dynamicID);
         }
 
         /// <summary>
@@ -610,117 +573,6 @@ namespace Mooege.Core.GS.Map
 
         #endregion
 
-        #region range-based queries
-
-        // TODO: replace this stuff with quad-tree based queries /raist.
-
-        /// <summary>
-        /// Returns list of actors in range with given snoId.
-        /// </summary>
-        /// <param name="actorSNOId">The actor SNOId.</param>
-        /// <param name="x">The position's x-coordinate</param>
-        /// <param name="y">The position's y-coordinate</param>
-        /// <param name="z">The position's z-coordinate</param>
-        /// <param name="range">The range.</param>
-        /// <returns>List of actors.</returns>
-        public List<Actor> GetActorsInRange(int actorSNOId, float x, float y, float z, float range)
-        {
-            var result = new List<Actor>();
-
-            foreach (var actor in this.Actors.Values)
-            {
-                if (actor.SNOId == actorSNOId && (Math.Sqrt(Math.Pow(actor.Position.X - x, 2) + Math.Pow(actor.Position.Y - y, 2) + Math.Pow(actor.Position.Z - z, 2)) <= range))
-                {
-                    result.Add(actor);
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Returns list of actors in range with given snoId.
-        /// </summary>
-        /// <param name="actorSNOId">The actor snoId.</param>
-        /// <param name="position">The position.</param>
-        /// <param name="range">The range.</param>
-        /// <returns>List of actors.</returns>
-        public List<Actor> GetActorsInRange(int actorSNOId, Vector3D position, float range)
-        {
-            return GetActorsInRange(actorSNOId, position.X, position.Y, position.Z, range);
-        }
-
-        /// <summary>
-        /// Returns list of actors.
-        /// </summary>
-        /// <param name="x">The position's x-coordinate</param>
-        /// <param name="y">The position's y-coordinate</param>
-        /// <param name="z">The position's z-coordinate</param>
-        /// <param name="range">The range.</param>
-        /// <returns>List of actors.</returns>
-        public List<Actor> GetActorsInRange(float x, float y, float z, float range)
-        {
-            var result = new List<Actor>();
-
-            foreach (var actor in this.Actors.Values)
-            {
-                if (Math.Sqrt(Math.Pow(actor.Position.X - x, 2) + Math.Pow(actor.Position.Y - y, 2) + Math.Pow(actor.Position.Z - z, 2)) <= range)
-                {
-                    result.Add(actor);
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Returns list of actors.
-        /// </summary>
-        /// <param name="position">The position.</param>
-        /// <param name="range">The range.</param>
-        /// <returns>List of actors.</returns>
-        public List<Actor> GetActorsInRange(Vector3D position, float range)
-        {
-            return GetActorsInRange(position.X, position.Y, position.Z, range);
-        }
-
-        /// <summary>
-        /// Returns list of players in range.
-        /// </summary>
-        /// <param name="x">The position's x-coordinate</param>
-        /// <param name="y">The position's y-coordinate</param>
-        /// <param name="z">The position's z-coordinate</param>
-        /// <param name="range">The range.</param>
-        /// <returns>List of players.</returns>
-        public List<Player> GetPlayersInRange(float x, float y, float z, float range)
-        {
-            var result = new List<Player>();
-            foreach (var player in this.Players.Values)
-            {
-                if (Math.Sqrt(
-                        Math.Pow(player.Position.X - x, 2) +
-                        Math.Pow(player.Position.Y - y, 2) +
-                        Math.Pow(player.Position.Z - z, 2)) <= range)
-                {
-                    result.Add(player);
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Returns list of players in range.
-        /// </summary>
-        /// <param name="position">The position.</param>
-        /// <param name="range">The range.</param>
-        /// <returns>List of actors.</returns>
-        public List<Player> GetPlayersInRange(Vector3D position, float range)
-        {
-            return GetPlayersInRange(position.X, position.Y, position.Z, range);
-        }
-
-        #endregion
-
         #region misc-queries
 
         /// <summary>
@@ -730,17 +582,17 @@ namespace Mooege.Core.GS.Map
         /// <returns><see cref="StartingPoint"/></returns>
         public StartingPoint GetStartingPointById(int id)
         {
-            return Actors.Values.OfType<StartingPoint>().FirstOrDefault(startingPoint => startingPoint.TargetId == id);
+            return _actors.Values.OfType<StartingPoint>().FirstOrDefault(startingPoint => startingPoint.TargetId == id);
         }
 
         /// <summary>
         /// Returns WayPoint with given id.
         /// </summary>
         /// <param name="id">The id of the WayPoint</param>
-        /// <returns><see cref="WayPoint"/></returns>
+        /// <returns><see cref="Waypoint"/></returns>
         public Waypoint GetWayPointById(int id)
         {
-            return Actors.Values.OfType<Waypoint>().FirstOrDefault(waypoint => waypoint.WaypointId == id);
+            return _actors.Values.OfType<Waypoint>().FirstOrDefault(waypoint => waypoint.WaypointId == id);
         }
 
         #endregion

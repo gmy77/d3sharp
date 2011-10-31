@@ -88,7 +88,7 @@ namespace Mooege.Core.GS.Players
         /// <summary>
         /// Revealed objects to player.
         /// </summary>
-        public Dictionary<uint, IRevealable> RevealedObjects { get; private set; }
+        public Dictionary<uint, IRevealable> RevealedObjects = new Dictionary<uint, IRevealable>();
 
         // Collection of items that only the player can see. This is only used when items drop from killing an actor
         // TODO: Might want to just have a field on the item itself to indicate whether it is visible to only one player
@@ -144,7 +144,6 @@ namespace Mooege.Core.GS.Players
             this.Field9 = 0x00000000;
             this.Field10 = 0x0;
 
-            this.RevealedObjects = new Dictionary<uint, IRevealable>();
             this.Inventory = new Inventory(this);
             this.SkillSet = new SkillSet(this.Properties.Class);
             this.GroundItems = new Dictionary<uint, Item>();
@@ -461,6 +460,39 @@ namespace Mooege.Core.GS.Players
 
         #region enter, leave, reveal handling
 
+        /// <summary>
+        /// Revals scenes in player's proximity.
+        /// </summary>
+        public void RevealScenesToPlayer()
+        {
+            var scenes = this.GetScenesInRange(SceneRevealProximity);
+
+            foreach (var scene in scenes) // reveal scenes in player's proximity.
+            {
+                if (scene.IsRevealedToPlayer(this)) // if the actors is already revealed skip it.
+                    continue; // if the scene is already revealed, skip it.
+
+                scene.Reveal(this);
+            }
+        }
+
+        /// <summary>
+        /// Reveals actors in player's proximity.
+        /// </summary>
+        public void RevealActorsToPlayer()
+        {
+            var actors = this.GetActorsInRange(ActorRevealProximity);
+
+            foreach (var actor in actors) // reveal actors in player's proximity.
+            {
+                if (actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
+                    continue;
+
+                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment || actor.ActorType == ActorType.Critter)
+                    actor.Reveal(this);
+            }
+        }
+
         public override void OnEnter(World world)
         {
             this.World.Reveal(this);
@@ -515,8 +547,9 @@ namespace Mooege.Core.GS.Players
         protected override void OnPositionChange(Vector3D prevPosition)
         {
             if (!this.EnteredWorld) return;
-            this.World.RevealScenesInProximity(this);
-            this.World.RevealActorsInProximity(this);
+
+            this.RevealScenesToPlayer();
+            this.RevealActorsToPlayer();
         }
 
         #endregion
@@ -1318,12 +1351,10 @@ namespace Mooege.Core.GS.Players
 
         private void CollectGold()
         {
-            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 5f);
-            foreach (var actor in actorList)
+            var items = this.GetItemsInRange(10f);
+
+            foreach(var item in items)
             {
-                Item item;
-                if (!(actor is Item)) continue;
-                item = (Item)actor;
                 if (item.ItemType != ItemType.Gold) continue;
 
                 this.InGameClient.SendMessage(new FloatingAmountMessage()
@@ -1340,19 +1371,16 @@ namespace Mooege.Core.GS.Players
 
                 this.Inventory.PickUpGold(item.DynamicID);
 
-
                 item.Destroy();
             }
         }
 
         private void CollectHealthGlobe()
         {
-            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 5f);
-            foreach (Actor actor in actorList)
+            var items = this.GetItemsInRange(10f);
+
+            foreach (var item in items)
             {
-                Item item;
-                if (!(actor is Item)) continue;
-                item = (Item)actor;
                 if (item.ItemType != ItemType.HealthGlobe) continue;
 
                 this.InGameClient.SendMessage(new PlayEffectMessage() //Remember, for PlayEffectMessage, field1=7 are globes picking animation.

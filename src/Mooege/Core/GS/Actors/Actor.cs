@@ -153,9 +153,19 @@ namespace Mooege.Core.GS.Actors
         }
 
         /// <summary>
-        /// Default query radius value..
+        /// Default query radius value.
         /// </summary>
-        private const int DefaultQueryProximity = 120;
+        protected const int DefaultQueryProximity = 120;
+
+        /// <summary>
+        /// Default scene reveal proximity for players
+        /// </summary>
+        protected const int SceneRevealProximity = 240;
+
+        /// <summary>
+        /// Default actor reveal proximity for players
+        /// </summary>
+        protected const int ActorRevealProximity = 240;
 
         // Some ACD uncertainties /komiga.
         public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself /komiga & /raist.
@@ -206,6 +216,15 @@ namespace Mooege.Core.GS.Actors
 
             if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
                 this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
+        }
+
+        #endregion
+
+        #region world-enter logic
+
+        public void EnterWorld(World world, Vector3D position)
+        {
+            
         }
 
         #endregion
@@ -325,22 +344,27 @@ namespace Mooege.Core.GS.Actors
 
         #region circurlar region queries
 
-        public List<Player> GetPlayersInProximity(float radius = DefaultQueryProximity)
+        public List<Player> GetPlayersInRange(float radius = DefaultQueryProximity)
         {
             return this.GetObjectsInRange<Player>(radius);
         }
 
-        public List<Actor> GetActorsInProximity(float radius = DefaultQueryProximity)
+        public List<Actor> GetActorsInRange(float radius = DefaultQueryProximity)
         {
             return this.GetObjectsInRange<Actor>(radius);
         }
 
-        public List<T> GetActorsInProximity<T>(float radius = DefaultQueryProximity) where T : Actor
+        public List<Item> GetItemsInRange(float radius = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRange<Item>(radius);
+        }
+
+        public List<T> GetActorsInRange<T>(float radius = DefaultQueryProximity) where T : Actor
         {
             return this.GetObjectsInRange<T>(radius);
         }
 
-        public List<Scene> GetScenesInProximity(float radius = DefaultQueryProximity)
+        public List<Scene> GetScenesInRange(float radius = DefaultQueryProximity)
         {
             return this.GetObjectsInRange<Scene>(radius);
         }
@@ -368,6 +392,11 @@ namespace Mooege.Core.GS.Actors
         public List<Actor> GetActorsInRegion(int lenght = DefaultQueryProximity)
         {
             return this.GetObjectsInRegion<Actor>(lenght);
+        }
+
+        public List<Item> GetItemsInRegion(int lenght = DefaultQueryProximity)
+        {
+            return this.GetActorsInRegion<Item>(lenght);
         }
 
         public List<T> GetActorsInRegion<T>(int lenght = DefaultQueryProximity) where T : Actor
@@ -442,8 +471,6 @@ namespace Mooege.Core.GS.Actors
             var player = this as Player;
             if (player == null) return; // return if current actor is not a player. 
 
-            this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
-
             if (startingPoint == null)
                 startingPoint = targetWorld.StartingPoints.First();
 
@@ -451,14 +478,17 @@ namespace Mooege.Core.GS.Actors
             this.RotationAmount = startingPoint.RotationAmount;
             this.RotationAxis = startingPoint.RotationAxis;
 
-            player.InGameClient.SendMessage(new EnterWorldMessage()
-            {
-                EnterPosition = this.Position,
-                WorldID = targetWorld.DynamicID,
-                WorldSNO = targetWorld.SNOId,
-            });
+            this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
 
-            player.InGameClient.SendMessage(this.ACDWorldPositionMessage);
+
+            //player.InGameClient.SendMessage(new EnterWorldMessage()
+            //{
+            //    EnterPosition = this.Position,
+            //    WorldID = targetWorld.DynamicID,
+            //    WorldSNO = targetWorld.SNOId,
+            //});
+
+            //player.InGameClient.SendMessage(this.ACDWorldPositionMessage);
         }
 
         #endregion
