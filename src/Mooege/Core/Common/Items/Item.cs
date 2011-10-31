@@ -224,7 +224,7 @@ namespace Mooege.Core.Common.Items
                 float result;
                 if (FormulaScript.Evaluate(effect.Formula.ToArray(), this.RandomGenerator, out result))
                 {
-                    var attr = GameAttribute.GameAttributeArray[effect.AttributeId] as GameAttributeF;
+                    var attr = GameAttribute.Attributes[effect.AttributeId] as GameAttributeF;
                     if (attr != null)
                     {
                         Logger.Debug("Randomized value for attribute " + attr.Name + " is " + result);
@@ -295,6 +295,11 @@ namespace Mooege.Core.Common.Items
         public static bool IsArmor(ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Armor");
+        }
+
+        public static bool IsOffhand(ItemTypeTable itemType)
+        {
+            return ItemGroup.IsSubType(itemType, "Offhand");
         }
 
         public static bool Is2H(ItemTypeTable itemType)

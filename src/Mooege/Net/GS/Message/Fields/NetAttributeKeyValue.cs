@@ -56,6 +56,9 @@ namespace Mooege.Net.GS.Message.Fields
                 case GameAttributeEncoding.Float16Or32:
                     Float = buffer.ReadBool() ? buffer.ReadFloat16() : buffer.ReadFloat32();
                     break;
+                case GameAttributeEncoding.Float32:
+                    Float = buffer.ReadFloat32();
+                    break;
                 default:
                     throw new Exception("bad voodoo");
             }
@@ -95,6 +98,9 @@ namespace Mooege.Net.GS.Message.Fields
                         buffer.WriteBool(true);
                         buffer.WriteFloat16(Float);
                     }
+                    break;
+                case GameAttributeEncoding.Float32:
+                    buffer.WriteFloat32(Float);
                     break;
                 default:
                     throw new Exception("bad voodoo");

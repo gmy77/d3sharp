@@ -86,7 +86,7 @@ namespace Mooege.Core.Common.Items
                         float result;
                         if (FormulaScript.Evaluate(effect.Formula.ToArray(), item.RandomGenerator, out result))
                         {
-                            var attr = GameAttribute.GameAttributeArray[effect.AttributeId] as GameAttributeF;
+                            var attr = GameAttribute.Attributes[effect.AttributeId] as GameAttributeF;
                             if (attr != null)
                             {
                                 Logger.Debug("Randomized value for attribute " + attr.Name + " is " + result);

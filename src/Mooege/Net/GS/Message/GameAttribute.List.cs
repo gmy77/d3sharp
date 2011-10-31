@@ -30,14 +30,14 @@ namespace Mooege.Net.GS.Message
         public static readonly GameAttributeF Precision_Reduction_Percent = new GameAttributeF(22, 0f, -1, 1, 0, "", "", "Precision_Reduction_Percent", GameAttributeEncoding.Float16, 9, 0f, 0f, 16);
         public static readonly GameAttributeF Vitality_Reduction_Percent = new GameAttributeF(23, 0f, -1, 1, 0, "", "", "Vitality_Reduction_Percent", GameAttributeEncoding.Float16, 9, 0f, 0f, 16);
         public static readonly GameAttributeF Defense_Reduction_Percent = new GameAttributeF(24, 0f, -1, 1, 0, "", "", "Defense_Reduction_Percent", GameAttributeEncoding.Float16, 9, 0f, 0f, 16);
-        public static readonly GameAttributeF Armor = new GameAttributeF(25, 0, -1, 0, 0, "", "", "Armor", GameAttributeEncoding.Float16Or32, 9, 0, 0, 32);
-        public static readonly GameAttributeF Armor_Bonus_Percent = new GameAttributeF(26, 0, -1, 0, 0, "", "", "Armor_Bonus_Percent", GameAttributeEncoding.Float16Or32, 9, 0, 0, 32);
-        public static readonly GameAttributeF Armor_Item = new GameAttributeF(27, 0, -1, 0, 0, "", "0", "Armor_Item", GameAttributeEncoding.Float16Or32, 9, 0, 0, 32);
-        public static readonly GameAttributeF Armor_Bonus_Item = new GameAttributeF(28, 0, -1, 0, 0, "", "", "Armor_Bonus_Item", GameAttributeEncoding.Float16Or32, 9, 0, 0, 32);
-        public static readonly GameAttributeF Armor_Item_Percent = new GameAttributeF(29, 0, -1, 0, 0, "", "0", "Armor_Item_Percent", GameAttributeEncoding.Float16Or32, 9, 0, 0, 32);
-        public static readonly GameAttributeF Armor_Item_SubTotal = new GameAttributeF(30, 0, -1, 0, 0, "FLOOR((Armor_Item + Armor_Bonus_Item) * (Armor_Item_Percent + 1))", "", "Armor_Item_SubTotal", GameAttributeEncoding.Float16Or32, 9, 0, 0, 32);
-        public static readonly GameAttributeF Armor_Item_Total = new GameAttributeF(31, 0, -1, 0, 0, "(Armor_Item > 0)?(Max(Armor_Item_SubTotal, 1)):Armor_Item_SubTotal", "", "Armor_Item_Total", GameAttributeEncoding.Float16Or32, 9, 0, 0, 32);
-        public static readonly GameAttributeF Armor_Total = new GameAttributeF(32, 0, -1, 0, 0, "", "FLOOR((Armor + Armor_Item_Total) * (Armor_Bonus_Percent + 1))", "Armor_Total", GameAttributeEncoding.Float16Or32, 9, 0, 0, 32);
+        public static readonly GameAttributeF Armor = new GameAttributeF(25, 0, -1, 0, 0, "", "", "Armor", GameAttributeEncoding.Float32, 9, 0, 0, 32);
+        public static readonly GameAttributeF Armor_Bonus_Percent = new GameAttributeF(26, 0, -1, 0, 0, "", "", "Armor_Bonus_Percent", GameAttributeEncoding.Float32, 9, 0, 0, 32);
+        public static readonly GameAttributeF Armor_Item = new GameAttributeF(27, 0, -1, 0, 0, "", "0", "Armor_Item", GameAttributeEncoding.Float32, 9, 0, 0, 32);
+        public static readonly GameAttributeF Armor_Bonus_Item = new GameAttributeF(28, 0, -1, 0, 0, "", "", "Armor_Bonus_Item", GameAttributeEncoding.Float32, 9, 0, 0, 32);
+        public static readonly GameAttributeF Armor_Item_Percent = new GameAttributeF(29, 0, -1, 0, 0, "", "0", "Armor_Item_Percent", GameAttributeEncoding.Float32, 9, 0, 0, 32);
+        public static readonly GameAttributeF Armor_Item_SubTotal = new GameAttributeF(30, 0, -1, 0, 0, "FLOOR((Armor_Item + Armor_Bonus_Item) * (Armor_Item_Percent + 1))", "", "Armor_Item_SubTotal", GameAttributeEncoding.Float32, 9, 0, 0, 32);
+        public static readonly GameAttributeF Armor_Item_Total = new GameAttributeF(31, 0, -1, 0, 0, "(Armor_Item > 0)?(Max(Armor_Item_SubTotal, 1)):Armor_Item_SubTotal", "", "Armor_Item_Total", GameAttributeEncoding.Float32, 9, 0, 0, 32);
+        public static readonly GameAttributeF Armor_Total = new GameAttributeF(32, 0, -1, 0, 0, "", "FLOOR((Armor + Armor_Item_Total) * (Armor_Bonus_Percent + 1))", "Armor_Total", GameAttributeEncoding.Float32, 9, 0, 0, 32);
         public static readonly GameAttributeI Experience_Granted = new GameAttributeI(33, 0, -1, 0, 1, "", "", "Experience_Granted", GameAttributeEncoding.Int, 1, 0, 0, 32);
         public static readonly GameAttributeI Experience_Next = new GameAttributeI(34, 0, -1, 0, 1, "", "", "Experience_Next", GameAttributeEncoding.Int, 1, 0, 0, 32);
         public static readonly GameAttributeI Gold_Granted = new GameAttributeI(35, 0, -1, 0, 1, "", "", "Gold_Granted", GameAttributeEncoding.Int, 9, 0, 0, 32);
@@ -715,7 +715,7 @@ namespace Mooege.Net.GS.Message
         public static readonly GameAttributeI Taunt_Target_ACD = new GameAttributeI(707, -1, -1, 1, 1, "", "", "Taunt_Target_ACD", GameAttributeEncoding.Int, 0, 0, 0, 32);
         public static readonly GameAttributeF UI_Only_Percent_Damage_Increase = new GameAttributeF(708, 0f, -1, 0, 0, "", "", "UI_Only_Percent_Damage_Increase", GameAttributeEncoding.Float16, 1, 0f, 0f, 16);
 
-        public static readonly GameAttribute[] GameAttributeArray = new GameAttribute[] {
+        public static readonly GameAttribute[] Attributes = new GameAttribute[] {
             Axe_Bad_Data,
             Attribute_Timer,
             Attribute_Pool,

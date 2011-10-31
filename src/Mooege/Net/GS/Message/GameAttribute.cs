@@ -26,6 +26,7 @@ namespace Mooege.Net.GS.Message
         //FloatMinMax,
         Float16,
         Float16Or32,
+        Float32,
     }
 
     [StructLayout(LayoutKind.Explicit)]
