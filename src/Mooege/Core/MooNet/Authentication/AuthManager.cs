@@ -61,9 +61,6 @@ namespace Mooege.Core.MooNet.Authentication
                 return;
             }
 
-            if (client.Account.LoggedInClient != null)
-                client.Account.LoggedInClient.Connection.Disconnect();
-
             var srp6a = new SRP6a(account); // create srp6 handler to process the authentication.
             OngoingAuthentications.Add(client, srp6a);
 
@@ -101,6 +98,8 @@ namespace Mooege.Core.MooNet.Authentication
                     bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => { }));
 
                 client.Account = AccountManager.GetAccountByEmail(srp6.Account.Email);
+                if (client.Account.LoggedInClient != null)
+                    client.Account.LoggedInClient.Connection.Disconnect();
                 client.Account.LoggedInClient = client;
             }
             else // authentication failed because of invalid credentals.
