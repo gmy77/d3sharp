@@ -544,7 +544,6 @@ namespace Mooege.Core.GS.Map
             return Actors.Values.OfType<T>().FirstOrDefault();
         }
 
-        public Item GetItem(uint dynamicID)
 
         /// <summary>
         /// Adds given player to world.

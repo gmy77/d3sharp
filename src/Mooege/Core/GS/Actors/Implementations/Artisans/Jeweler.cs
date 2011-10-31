@@ -32,7 +32,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
         {
         }
 
-        public void OnAddSocket(Player.Player player, Core.Common.Items.Item item)
+        public void OnAddSocket(Players.Player player, Core.Common.Items.Item item)
         {
             // Animate Jeweler? Who knows. /fasbat
             item.Attributes[GameAttribute.Sockets] += 1;
