@@ -25,6 +25,7 @@ using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
+using System.Text;
 
 namespace Mooege.Core.GS.Game
 {
@@ -105,6 +106,58 @@ namespace Mooege.Core.GS.Game
 
             return "Invalid arguments. Type 'help tp' to get help.";
         }
+    }
+
+
+    [CommandGroup("quest", "Retrieves information about quest states and manipulates quest progress.\n Usage: quest [triggers | trigger eventType eventValue")]
+    public class QuestCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Quest(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            //invokerClient.InGameClient.Game.questManager.Notify((Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType)Int32.Parse(@params[0]), Int32.Parse(@params[1]));
+            return "";
+        }
+
+        [Command("trigger", "Triggers a single quest objective")]
+        public string Trigger(string[] @params, MooNetClient invokerClient)
+        {
+            if (@params == null)
+                return this.Fallback();
+
+            if (@params.Count() < 1)
+                return "Invalid arguments. Type 'help lookup actor' to get help.";
+
+            invokerClient.InGameClient.Game.questManager.Notify((Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType)Int32.Parse(@params[0]), Int32.Parse(@params[1]));
+            return "Triggered";
+        }
+
+        [Command("triggers", "Shows information about all current quest triggers")]
+        public string Triggers(string[] @params, MooNetClient invokerClient)
+        {
+            StringBuilder returnValue = new StringBuilder();
+
+            foreach (var quest in invokerClient.InGameClient.Game.questManager)
+            {
+                //returnValue.AppendLine(quest.SNOName.ToString());
+                foreach (var objectiveSet in quest.CurrentStep.ObjectivesSets)
+                {
+                    //returnValue.Append("  ");
+                    //returnValue.Append(objectiveSet.FollowUpStepID);
+                    foreach (var objective in objectiveSet.Objectives)
+                        returnValue.AppendLine(String.Format("{2}, {4} - {0} ({3}), {1}", objective.ObjectiveType, objective.ObjectiveValue, quest.SNOName.ToString(), (int)objective.ObjectiveType, objectiveSet.FollowUpStepID));
+                }
+            }
+
+            return returnValue.ToString();
+        }
+
     }
 
     [CommandGroup("lookup", "Searches in sno databases.\nUsage: lookup [actor|npc|mob|power|scene] <pattern>")]

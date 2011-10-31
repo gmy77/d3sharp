@@ -29,6 +29,7 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.GS.Player;
 
 // TODO: Move scene stuff into a Map class (which can also handle the efficiency stuff and object grouping)
 
@@ -49,6 +50,7 @@ namespace Mooege.Core.GS.Game
 
         public int StartWorldSNO { get; private set; }
         public World StartWorld { get { return GetWorld(this.StartWorldSNO); } }
+        public QuestManager questManager = null;
 
         public readonly int UpdateFrequency=100; // updates game every 100ms - still not sure if we should be updating this frequent / raist.
         private int _tickCounter;
@@ -74,6 +76,7 @@ namespace Mooege.Core.GS.Game
             this._worlds = new ConcurrentDictionary<int, World>();
             this.StartWorldSNO = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff
             var loopThread=new Thread(Update) { IsBackground = true };
+            questManager = new QuestManager(this);
             loopThread.Start();
         }
 
