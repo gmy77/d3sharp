@@ -117,6 +117,7 @@ namespace Mooege.Core.Common.Items
                 if (itemDefinition.Name.ToLower().Contains("pvp")) continue;
                 if (itemDefinition.Name.ToLower().Contains("unique")) continue;
                 if (itemDefinition.Name.ToLower().Contains("crafted")) continue;
+                if (itemDefinition.Name.ToLower().Contains("debug")) continue;
 
                 if (itemDefinition.SNOActor == -1) continue;
 
