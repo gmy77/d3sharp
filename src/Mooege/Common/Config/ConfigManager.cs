@@ -17,6 +17,7 @@
  */
 
 using System;
+using Mooege.Common.Helpers;
 using Nini.Config;
 
 namespace Mooege.Common.Config
@@ -25,13 +26,14 @@ namespace Mooege.Common.Config
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         private static readonly IniConfigSource Parser; // the ini parser.
-        private const string ConfigFile = "config.ini"; // the config file's location.
+        private static readonly string ConfigFile;
         private static bool _fileExists = false; // does the ini file exists?
 
         static ConfigurationManager()
         {
             try
             {
+                ConfigFile = string.Format("{0}/{1}", FileHelpers.AssemblyRoot, "config.ini"); // the config file's location.
                 Parser = new IniConfigSource(ConfigFile); // see if the file exists by trying to parse it.
                 _fileExists = true;
             }

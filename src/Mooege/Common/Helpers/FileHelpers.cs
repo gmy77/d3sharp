@@ -19,11 +19,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace Mooege.Common.Helpers
 {
     public static class FileHelpers
     {
+        public static string AssemblyRoot
+        {
+            get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
+        }
+
         public static List<string> GetFilesByExtensionRecursive(string directory, string fileExtension)
         {
             var files = new List<string>(); // Store results in the file results list.

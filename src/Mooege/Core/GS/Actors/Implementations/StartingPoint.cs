@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,16 +20,26 @@ using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Markers;
 
-namespace Mooege.Core.GS.Actors.Implementations.Artisans
+namespace Mooege.Core.GS.Actors.Implementations
 {
-    [HandledSNO(56947 /* PT_Blacksmith.acr */)]
-    public class Blacksmith : Artisan
+    [HandledSNO((int)MarkerTypes.Start_Location_0, (int)MarkerTypes.Start_Location_Team_0)]
+    public class StartingPoint : Gizmo
     {
-        public Blacksmith(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
+        public int TargetId { get; private set; }
+
+        public StartingPoint(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
             : base(world, actorSNO, position, tags)
         {
         }
-        //TODO add all blacksmith functionality? /fasbat
+
+        protected override void ReadTags()
+        {
+            if (this.Tags == null) return;
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.ActorTag))
+                this.TargetId = this.Tags[(int)MarkerTagTypes.ActorTag].Int2;
+        }
     }
 }

@@ -23,8 +23,7 @@ using Mooege.Common;
 using Mooege.Common.Helpers;
 using System.Collections.Generic;
 using Mooege.Core.Common.Storage;
-using Mooege.Core.GS.Player;
-using Mooege.Net.GS;
+using Mooege.Core.GS.Players;
 using Mooege.Core.Common.Items.ItemCreation;
 using Wintellect.PowerCollections;
 using Mooege.Net.GS.Message;
@@ -130,8 +129,7 @@ namespace Mooege.Core.Common.Items
         // Creates an item based on supplied definition.
         public static Item CreateItem(Player player, ItemTable definition)
         {
-            Logger.Trace("Creating item: {0} [sno:{1}, gbid {2}]", definition.Name,
-                         definition.SNOActor, StringHashHelper.HashItemName(definition.Name));
+            // Logger.Trace("Creating item: {0} [sno:{1}, gbid {2}]", definition.Name, definition.SNOActor, StringHashHelper.HashItemName(definition.Name));
 
             var item = new Item(player.World, definition);
 

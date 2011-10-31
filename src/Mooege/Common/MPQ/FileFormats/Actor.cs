@@ -19,7 +19,8 @@
 using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
-using Mooege.Core.GS.Common.Types.Collusion;
+using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Common.Types.Collision;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Common.MPQ.FileFormats.Types;
@@ -144,22 +145,6 @@ namespace Mooege.Common.MPQ.FileFormats
             }
             // Updated based on BoyC's 010 template and Moack's work. Think we just about read all data from actor now.- DarkLotus
             stream.Close();
-        }
-
-        public enum ActorType
-        {
-            Invalid = 0,
-            Monster = 1,
-            Gizmo = 2,
-            ClientEffect = 3,
-            ServerProp = 4,
-            Enviroment = 5,
-            Critter = 6,
-            Player = 7,
-            Item = 8,
-            AxeSymbol = 9,
-            Projectile = 10,
-            CustomBrain = 11
         }
     }
     public class ActorCollisionData

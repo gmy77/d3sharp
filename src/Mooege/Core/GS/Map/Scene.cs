@@ -17,135 +17,146 @@
  */
 
 using System.Collections.Generic;
+using System.Windows;
 using Mooege.Common;
-using Mooege.Common.Helpers;
 using Mooege.Common.MPQ;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Actors.Implementations;
-using Mooege.Core.GS.Common.Types.Collusion;
+using Mooege.Core.GS.Common.Types.Collision;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Common.Types.Scene;
-using Mooege.Core.GS.Game;
 using Mooege.Core.GS.Objects;
-using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Net.GS.Message.Definitions.Scene;
-using Mooege.Core.GS.Markers;
-
-// NOTE: Scenes are typically (always, hopefully) 240x240 in size. Cells are 60x60 with
-//  subscenes able to be positioned relative to their parents
 
 namespace Mooege.Core.GS.Map
 {
-    public enum MiniMapVisibility
-    {
-        Hidden = 0,
-        Revealed = 1,
-        Visited = 2
-    }
 
     public sealed class Scene : WorldObject
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        public Vector3D StartPosition { get; set; }
+        /// <summary>
+        /// SNOId of the scene.
+        /// </summary>
+        public int SNOId { get; private set; }
 
-        public override World World
-        {
-            get { return this._world; }
-            set
-            {
-                if (this._world != value)
-                {
-                    if (this._world != null)
-                        this._world.AddScene(this);
-                    this._world = value;
-                    if (this._world != null)
-                        this._world.RemoveScene(this);
-                }
-            }
-        }
+        /// <summary>
+        /// Scene group's SNOId.
+        /// Not sure on usage /raist.
+        /// </summary>
+        public int SceneGroupSNO { get; set; }
 
+        /// <summary>
+        /// Subscenes.
+        /// </summary>
+        public List<Scene> Subscenes { get; private set; }
+
+        /// <summary>
+        /// Parent scene if any.
+        /// </summary>
+        public Scene Parent;
+
+        /// <summary>
+        /// Parent scene's chunk id.
+        /// </summary>
         public uint ParentChunkID
         {
             get { return (this.Parent != null) ? this.Parent.DynamicID : 0xFFFFFFFF; }
         }
 
-        public RevealSceneMessage RevealMessage
+        /// <summary>
+        /// Visibility in MiniMap.
+        /// </summary>
+        public SceneMiniMapVisibility MiniMapVisibility { get; set; }
+
+        /// <summary>
+        /// Scene Specification.
+        /// </summary>
+        public SceneSpecification Specification { get; set; }
+
+        /// <summary>
+        /// Applied labels.
+        /// Not sure on usage /raist.
+        /// </summary>
+        public int[] AppliedLabels;
+        
+        /// <summary>
+        /// Scenes world.
+        /// </summary>
+        public override World World
         {
-            get
-            {
-                return new RevealSceneMessage
-                {
-                    WorldID = this.World.DynamicID,
-                    SceneSpec = this.Specification,
-                    ChunkID = this.DynamicID,
-                    Transform = this.Transform,
-                    SceneSNO = this.SceneSNO,
-                    ParentChunkID = this.ParentChunkID,
-                    SceneGroupSNO = this.SceneGroupSNO,
-                    arAppliedLabels = this.AppliedLabels
-                };
-            }
+            get { return this._world; }
         }
 
-        public MapRevealSceneMessage MapRevealMessage
-        {
-            get
-            {
-                return new MapRevealSceneMessage
-                {
-                    ChunkID = this.DynamicID,
-                    SceneSNO = this.SceneSNO,
-                    Transform = this.Transform,
-                    WorldID = this.World.DynamicID,
-                    MiniMapVisibility = this.MiniMapVisibility
-                };
-            }
-        }
-
-        public SceneSpecification Specification;
-        public int SceneSNO;
-        public Scene Parent;
-        public int SceneGroupSNO;
-        public int /* gbid */[] AppliedLabels; // MaxLength = 256
-        public MiniMapVisibility MiniMapVisibility;
-
-        // read data from mpqs
-        public AABB AABBBounds { get; private set; }
-        public AABB AABBMarketSetBounds { get; private set; }
-        public Mooege.Common.MPQ.FileFormats.Scene.NavMeshDef NavMesh { get; private set; }
-        public List<int> MarkerSets = new List<int>();
-        public string LookLink { get; private set; }
-        public Mooege.Common.MPQ.FileFormats.Scene.NavZoneDef NavZone { get; private set; }
-
-        public readonly List<Scene> Subscenes;
-
+        /// <summary>
+        /// PRTransform for the scene.
+        /// </summary>
         public PRTransform Transform
         {
             get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
-        public Scene(World world, int sceneSNO, Scene parent)
+        /// <summary>
+        /// AABB bounds for the scene.
+        /// </summary>
+        public AABB AABBBounds { get; private set; }
+
+        /// <summary>
+        /// AABB bounds for MarketSet.
+        /// </summary>
+        public AABB AABBMarketSetBounds { get; private set; }
+
+        /// <summary>
+        /// NavMesh for the scene.
+        /// </summary>
+        public Mooege.Common.MPQ.FileFormats.Scene.NavMeshDef NavMesh { get; private set; }
+
+        /// <summary>
+        /// Markersets for the scene.
+        /// </summary>
+        public List<int> MarkerSets { get; private set; }
+
+        /// <summary>
+        /// LookLink - not sure on the usage /raist.
+        /// </summary>
+        public string LookLink { get; private set; }
+
+        /// <summary>
+        /// NavZone for the scene.
+        /// </summary>
+        public Mooege.Common.MPQ.FileFormats.Scene.NavZoneDef NavZone { get; private set; }
+
+        /// <summary>
+        /// Creates a new scene and adds it to given world.
+        /// </summary>
+        /// <param name="world">The parent world.</param>
+        /// <param name="position">The position.</param>
+        /// <param name="snoId">SNOId for the scene.</param>
+        /// <param name="parent">The parent scene if any.</param>
+        public Scene(World world, Vector3D position, int snoId, Scene parent)
             : base(world, world.NewSceneID)
         {
-            this.Scale = 1.0f;
-            this.RotationAmount = 0.0f;
-            this.Subscenes = new List<Scene>();
-
-            this.SceneSNO = sceneSNO;
+            this.SNOId = snoId;
             this.Parent = parent;
+            this.Subscenes = new List<Scene>();
+            this.Scale = 1.0f;                   
             this.AppliedLabels = new int[0];
-
-            this.World.AddScene(this);
-            this.LoadSceneData();
+            this.LoadSceneData(); // load data from mpqs.
+            this.Position = position;
+            this.Bounds = new Rect(this.Position.X, this.Position.Y, this.NavZone.V0.X * this.NavZone.Float0, this.NavZone.V0.Y * this.NavZone.Float0); // the scene bounds.
+            this.World.AddScene(this); // add scene to the world.
         }
 
+        #region mpq-data 
+
+        /// <summary>
+        /// Loads scene data from mpqs.
+        /// </summary>
         private void LoadSceneData()
         {
-            var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SceneSNO].Data as Mooege.Common.MPQ.FileFormats.Scene;
+            var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SNOId].Data as Mooege.Common.MPQ.FileFormats.Scene;
             if (data == null) return;
 
             this.AABBBounds = data.AABBBounds;
@@ -156,27 +167,17 @@ namespace Mooege.Core.GS.Map
             this.NavZone = data.NavZone;
         }
 
+        #endregion
+
+        #region actor-loading
+
         /// <summary>
-        /// Helper method to print marker-sets for the scene.
+        /// Loads all actors for the scene.        
         /// </summary>
-        private void PrintMarkerSets()
-        {
-            foreach (var markerSet in this.MarkerSets)
-            {
-                var markerSetData = MPQStorage.Data.Assets[SNOGroup.MarkerSet][markerSet].Data as Mooege.Common.MPQ.FileFormats.MarkerSet;
-                if (markerSetData == null) return;
-
-                Logger.Trace("MarketSet: {0} [{1}]", markerSetData.Header.SNOId, markerSetData.FileName);
-                foreach (var marker in markerSetData.Markers)
-                {
-                    Logger.Trace(marker.SNOName.ToString());
-                }
-            }
-        }
-
-        /// Loads all Actors for a scene chunk. TODO Remove hack that this method returns a vector for starting positions. Better to load all actors and search for the appropriate starting point afterwards
         public void LoadActors()
         {
+            // TODO: We should be instead loading actors but let them get revealed based on quest/triggers/player proximity. /raist.
+
             foreach (var markerSet in this.MarkerSets)
             {
                 var markerSetData = MPQStorage.Data.Assets[SNOGroup.MarkerSet][markerSet].Data as Mooege.Common.MPQ.FileFormats.MarkerSet;
@@ -184,115 +185,132 @@ namespace Mooege.Core.GS.Map
 
                 foreach (var marker in markerSetData.Markers)
                 {
-                    // read tags.
-                    var tags = new Dictionary<int, TagMapEntry>();
-                    foreach (var tag in marker.TagMap.TagMapEntries)
-                        tags.Add(tag.Int1, tag);
+                    if (marker.SNOName.Group != SNOGroup.Actor) continue; // skip non-actor markers.
 
-                    if (marker.SNOName.Group != SNOGroup.Actor) continue;
-                    if (!MPQStorage.Data.Assets[SNOGroup.Actor].ContainsKey(marker.SNOName.SNOId)) continue;
+                    var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
+                    var actor = ActorFactory.Create(this.World, marker.SNOName.SNOId, position, marker.TagMap); // try to create it.
+                    if (actor == null) continue;
 
-                    // Since we are not loading all actors, make sure to load portals and portal destination actors - fix this /raist.
-                    if ( ActorFactory.HasHandler(marker.SNOName.SNOId) 
-                         || tags.ContainsKey((int)MarkerTagTypes.DestinationWorld) 
-                         || tags.ContainsKey((int)MarkerTagTypes.ActorTag))
-                         //|| RandomHelper.Next(100) > 90    
-                    {                       
-                        Actor newActor = null;
+                    actor.RotationAmount = marker.PRTransform.Quaternion.W;
+                    actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
-                        // This is ugly, because the ActorFactory does not differentiate between Gizmos, so when creating a portal, we have to do it manually
-                        if (tags.ContainsKey((int)MarkerTagTypes.DestinationWorld))
-                        {
-                            newActor = new Portal(this.World);
-                            newActor.ActorSNO = marker.SNOName.SNOId;
-                            newActor.Field8 = marker.SNOName.SNOId;
-                            newActor.Position = marker.PRTransform.Vector3D + this.Position;
-                            (newActor as Portal).Destination.WorldSNO = tags[(int)MarkerTagTypes.DestinationWorld].Int2;
-
-                            if (tags.ContainsKey((int)MarkerTagTypes.DestinationLevelArea))
-                                (newActor as Portal).Destination.DestLevelAreaSNO = tags[(int)MarkerTagTypes.DestinationLevelArea].Int2;
-
-                            if (tags.ContainsKey((int)MarkerTagTypes.DestinationActorTag))
-                                (newActor as Portal).Destination.StartingPointActorTag = tags[(int)MarkerTagTypes.DestinationActorTag].Int2;
-                            else
-                                Logger.Warn("Found portal {0} in scene {1} without target location actor", newActor.ActorSNO, this.SceneSNO);
-                        }
-                        else
-                            newActor = ActorFactory.Create(marker.SNOName.SNOId, this.World, marker.PRTransform.Vector3D + this.Position);
-
-                        if (newActor != null)
-                        {
-                            if (tags.ContainsKey((int)MarkerTagTypes.ActorTag))
-                                newActor.Tag = tags[(int)MarkerTagTypes.ActorTag].Int2;
-
-                            if (tags.ContainsKey((int)MarkerTagTypes.Scale))
-                                newActor.Scale = tags[(int)MarkerTagTypes.Scale].Float0;
-
-                            newActor.RotationAmount = marker.PRTransform.Quaternion.W;
-                            newActor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
-
-                            System.Diagnostics.Debug.Assert(newActor.ActorSNO != -1);
-
-                            if (newActor is Waypoint) //TODO Do it in waypoint construct once grid is done /fasbat
-                            {
-                                //TODO this is just act 1 ! /fasbat
-                                var actData = (Mooege.Common.MPQ.FileFormats.Act)MPQStorage.Data.Assets[SNOGroup.Act][70015].Data;
-                                var wayPointInfo = actData.WayPointInfo;
-                                for (int i = 0; i < actData.WayPointInfo.Length; i++)
-                                {
-                                    if (wayPointInfo[i].SNOLevelArea == -1)
-                                        continue;
-                                    var levelAreaFile = MPQStorage.Data.Assets[SNOGroup.LevelArea][wayPointInfo[i].SNOLevelArea];
-                                    var levelArea = (Mooege.Common.MPQ.FileFormats.LevelArea)levelAreaFile.Data;
-                                    foreach (var area in Specification.SNOLevelAreas)
-                                    {
-                                        if (wayPointInfo[i].SNOWorld == World.WorldSNO && wayPointInfo[i].SNOLevelArea == area)
-                                        {
-                                            Waypoint.Waypoints[i] = newActor as Waypoint;
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (!(newActor is Portal))
-                                this.World.Enter(newActor);
-                        }
-                    }
-
-                    if (marker.SNOName.SNOId == (int)MarkerTypes.Start_Location_0 || marker.SNOName.SNOId == (int)MarkerTypes.Start_Location_Team_0)
-                    {
-                        this.StartPosition = marker.PRTransform.Vector3D + this.Position;
-                    }
+                    this.World.Enter(actor); // this call probably reveals actor to all players in the world, fix it. /raist.
                 }
             }
         }
 
-        public override bool Reveal(Mooege.Core.GS.Player.Player player)
+        #endregion
+
+        #region scene revealing & unrevealing 
+
+        /// <summary>
+        /// Reveal the scene to given player.
+        /// </summary>
+        /// <param name="player">Player to reveal scene.</param>
+        /// <returns></returns>
+        public override bool Reveal(Player player)
         {
-            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
-            player.RevealedObjects.Add(this.DynamicID, this);
-            player.InGameClient.SendMessage(this.RevealMessage);
-            player.InGameClient.SendMessage(this.MapRevealMessage,true);
-            foreach (var sub in this.Subscenes)
+            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // return if already revealed.
+
+            player.InGameClient.SendMessage(this.RevealMessage,true); // reveal the scene itself.
+            player.InGameClient.SendMessage(this.MapRevealMessage,true); // reveal the scene in minimap.
+
+            foreach (var sub in this.Subscenes) // reveal subscenes too.
             {
                 sub.Reveal(player);
             }
-                        
+
+            player.RevealedObjects.Add(this.DynamicID, this);
             return true;
         }
 
-        public override bool Unreveal(Mooege.Core.GS.Player.Player player)
+        /// <summary>
+        /// Unreveals the scene to given player.
+        /// </summary>
+        /// <param name="player">Player to unreveal scene.</param>
+        /// <returns></returns>
+        public override bool Unreveal(Player player)
         {
-            if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // not revealed yet
-            player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID },true);
+            if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // if it's not revealed already, just return.
+
+            player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID },true); // send the unreveal message.
             
-            
-            foreach (var sub in this.Subscenes)
+            foreach (var subScene in this.Subscenes) // unreveal subscenes too.
             {
-                sub.Unreveal(player);
+                subScene.Unreveal(player);
             }
+
             player.RevealedObjects.Remove(this.DynamicID);
             return true;
         }
+
+        #endregion
+
+        #region scene-related messages
+
+        /// <summary>
+        /// Returns a RevealSceneMessage.
+        /// </summary>
+        public RevealSceneMessage RevealMessage
+        {
+            get
+            {
+                return new RevealSceneMessage
+                {
+                    WorldID = this.World.DynamicID,
+                    SceneSpec = this.Specification,
+                    ChunkID = this.DynamicID,
+                    Transform = this.Transform,
+                    SceneSNO = this.SNOId,
+                    ParentChunkID = this.ParentChunkID,
+                    SceneGroupSNO = this.SceneGroupSNO,
+                    arAppliedLabels = this.AppliedLabels
+                };
+            }
+        }
+
+        /// <summary>
+        /// Returns a MapRevealSceneMessage.
+        /// </summary>
+        public MapRevealSceneMessage MapRevealMessage
+        {
+            get
+            {
+                return new MapRevealSceneMessage
+                {
+                    ChunkID = this.DynamicID,
+                    SceneSNO = this.SNOId,
+                    Transform = this.Transform,
+                    WorldID = this.World.DynamicID,
+                    MiniMapVisibility = this.MiniMapVisibility
+                };
+            }
+        }
+
+        #endregion
+
+        public override string ToString()
+        {
+            return string.Format("Scene SNOId: {0} Position: {1}", this.SNOId, this.Position);
+        }
+    }
+
+    /// <summary>
+    /// Minimap visibility of the scene on map.
+    /// </summary>
+    public enum SceneMiniMapVisibility
+    {
+        /// <summary>
+        /// Hidden.
+        /// </summary>
+        Hidden = 0,
+        /// <summary>
+        /// Revealed to player.
+        /// </summary>
+        Revealed = 1,
+        /// <summary>
+        /// Player already visited the scene.
+        /// </summary>
+        Visited = 2
     }
 }

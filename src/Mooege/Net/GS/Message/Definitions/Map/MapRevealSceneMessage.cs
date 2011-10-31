@@ -30,7 +30,7 @@ namespace Mooege.Net.GS.Message.Definitions.Map
         public int /* sno */ SceneSNO;
         public PRTransform Transform;
         public uint WorldID;
-        public MiniMapVisibility MiniMapVisibility;
+        public SceneMiniMapVisibility MiniMapVisibility;
 
         public MapRevealSceneMessage() : base(Opcodes.MapRevealSceneMessage) {}
 
@@ -41,7 +41,7 @@ namespace Mooege.Net.GS.Message.Definitions.Map
             Transform = new PRTransform();
             Transform.Parse(buffer);
             WorldID = buffer.ReadUInt(32);
-            MiniMapVisibility = (MiniMapVisibility)buffer.ReadInt(3);
+            MiniMapVisibility = (SceneMiniMapVisibility)buffer.ReadInt(3);
         }
 
         public override void Encode(GameBitBuffer buffer)
