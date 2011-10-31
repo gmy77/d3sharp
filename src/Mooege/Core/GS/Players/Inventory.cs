@@ -99,6 +99,11 @@ namespace Mooege.Core.GS.Players
             {
                 _inventoryStash.AddItem(item);
 
+                // Hide my picked up item from other players
+                foreach (var player in item.World.GetPlayersInRange(_owner.Position, 80.0f))
+                    if (player != _owner)
+                        item.Unreveal(player);
+
                 if (_owner.GroundItems.ContainsKey(item.DynamicID))
                     _owner.GroundItems.Remove(item.DynamicID);
                 success = true;
