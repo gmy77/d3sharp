@@ -169,6 +169,55 @@ namespace Mooege.Core.GS.Map
 
         #endregion
 
+        #region update & tick logic
+
+        public override void Update()
+        {
+            if (!this.HasPlayers) // don't update actors if we have no players in scene.
+                return;
+            
+            foreach(var actor in this.Actors)
+            {
+                actor.Update();
+            }
+            
+            foreach(var player in this.Players)
+            {
+                player.Update();
+            }
+        }
+
+        #endregion
+
+        #region range-queries
+
+        public List<Player> Players
+        {
+            get { return this.GetObjects<Player>(); }
+        }
+
+        public bool HasPlayers
+        {
+            get { return this.Players.Count > 0; }
+        }
+
+        public List<Actor> Actors
+        {
+            get { return this.GetObjects<Actor>(); }
+        }
+
+        public bool HasActors
+        {
+            get { return this.Actors.Count > 0; }
+        }
+
+        public List<T> GetObjects<T>() where T : WorldObject
+        {
+            return this.World.QuadTree.Query<T>(this.Bounds);
+        }
+
+        #endregion
+
         #region actor-loading
 
         /// <summary>

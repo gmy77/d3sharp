@@ -129,11 +129,14 @@ namespace Mooege.Core.GS.Map
 
         public override void Update()
         {
-            // update actors.
-            foreach (var pair in this.Actors) { pair.Value.Update(); }
+            // TODO: we should be skipping child-scenes, so actors contained doesn't get updated() twice.
+            foreach(var scene in this.Scenes.Values)
+            {
+                if (!scene.HasPlayers) 
+                    continue; // if scene has no players in, just skip the scene.
 
-            // update players.
-            foreach (var pair in this.Players) { pair.Value.Update(); }
+                scene.Update();
+            }
         }
 
         #endregion
