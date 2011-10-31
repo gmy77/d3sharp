@@ -6,7 +6,7 @@ using Mooege.Common;
 using Mooege.Core.Common.Items;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Objects;
-using Mooege.Core.GS.Player;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Common
 {
@@ -200,7 +200,7 @@ namespace Mooege.Core.GS.Common
             return null;
         }
 
-        public bool Reveal(Player.Player player)
+        public bool Reveal(Player player)
         {
             if (_owner == null || _owner.World == null)
                 return false;
@@ -221,7 +221,7 @@ namespace Mooege.Core.GS.Common
             return true;
         }
 
-        public bool Unreveal(Player.Player player)
+        public bool Unreveal(Player player)
         {
             if (_owner == null || _owner.World == null)
                 return false;

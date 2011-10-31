@@ -196,9 +196,9 @@ namespace Mooege.Core.Common.Items
             this.EquipmentSlot = equipmentSlot;
             this.InventoryLocation.X = column;
             this.InventoryLocation.Y = row;
-            if (this.Owner is GS.Player.Player)
+            if (this.Owner is GS.Players.Player)
             {
-                var player = (this.Owner as GS.Player.Player);
+                var player = (this.Owner as GS.Players.Player);
                 if (!this.Reveal(player)) // What if we add the item straight to inv?
                 {
                     player.InGameClient.SendMessage(this.ACDInventoryPositionMessage);

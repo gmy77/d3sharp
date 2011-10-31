@@ -43,6 +43,7 @@ using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Combat;
 using System;
 using Mooege.Net.GS.Message.Definitions.Trade;
+using Mooege.Core.GS.Actors.Implementations;
 
 namespace Mooege.Core.GS.Players
 {
@@ -352,9 +353,6 @@ namespace Mooege.Core.GS.Players
             this.Inventory = new Inventory(this); // Here because it needs attributes /fasbat
         }
 
-            #endregion // Attributes
-        }
-
         #region game-message handling & consumers
 
         /// <summary>
@@ -447,6 +445,14 @@ namespace Mooege.Core.GS.Players
             InGameClient.SendMessage(this.ACDWorldPositionMessage);
         }
 
+        private void OnRequestBuyItem(GameClient client, RequestBuyItemMessage requestBuyItemMessage)
+        {
+            var item = World.GetItem(requestBuyItemMessage.ItemId);
+            if (item == null || item.Owner == null || !(item.Owner is Vendor))
+                return;
+            (item.Owner as Vendor).OnRequestBuyItem(this, item);
+        }
+
         #endregion
 
         #region update-logic
@@ -525,19 +531,7 @@ namespace Mooege.Core.GS.Players
             this.World.RevealActorsInProximity(this);
         }
 
-
-        private void OnRequestBuyItem(GameClient client, RequestBuyItemMessage requestBuyItemMessage)
-        {
-            var item = World.GetItem(requestBuyItemMessage.ItemId);
-            if (item == null || item.Owner == null || !(item.Owner is Vendor))
-                return;
-            (item.Owner as Vendor).OnRequestBuyItem(this, item);
-        }
-
-        private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
-        {
-            this.SkillSet.HotBarSkills[message.BarIndex] = message.ButtonData;
-        }
+        #endregion
 
         #region hero-state
 

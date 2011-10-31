@@ -26,7 +26,7 @@ using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Core.GS.Common;
 using Mooege.Core.Common.Items;
-using Mooege.Core.GS.Player;
+using Mooege.Core.GS.Players;
 using Mooege.Core.Common.Items.ItemCreation;
 
 namespace Mooege.Core.GS.Actors.Implementations
@@ -79,13 +79,13 @@ namespace Mooege.Core.GS.Actors.Implementations
 
             foreach (var item in items)
             {
-                item.Field3 = 1; // Holy shit, what is this, forged in gods... 
+                item.Field3 = 1; // this is needed for inv items, should be handled in actor /fasbat
                 _vendorGrid.AddItem(item);
             }
 
         }
 
-        public override bool Reveal(Player.Player player)
+        public override bool Reveal(Players.Player player)
         {
             if (!base.Reveal(player))
                 return false;
@@ -94,7 +94,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             return true;
         }
 
-        public override bool Unreveal(Player.Player player)
+        public override bool Unreveal(Players.Player player)
         {
             if (!base.Reveal(player))
                 return false;
@@ -109,7 +109,7 @@ namespace Mooege.Core.GS.Actors.Implementations
         }
 
 
-        public virtual void OnRequestBuyItem(Mooege.Core.GS.Player.Player player, Item item)
+        public virtual void OnRequestBuyItem(Players.Player player, Item item)
         {
             // TODO: Check gold here
 
@@ -120,7 +120,7 @@ namespace Mooege.Core.GS.Actors.Implementations
 
             // TODO: Remove the gold
 
-            var newItem = new Item(this.World, item.ActorSNO, item.GBHandle.GBID, item.ItemType);
+            var newItem = new Item(this.World, item.SNOId, item.GBHandle.GBID, item.ItemType);
             var attributeCreators = new AttributeCreatorFactory().Create(item.ItemType);
             foreach (IItemAttributeCreator creator in attributeCreators)
             {
