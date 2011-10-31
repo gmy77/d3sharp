@@ -204,6 +204,16 @@ namespace Mooege.Core.GS.Map
         #region scene revealing & unrevealing 
 
         /// <summary>
+        /// Returns true if the actor is revealed to player.
+        /// </summary>
+        /// <param name="player">The player.</param>
+        /// <returns><see cref="bool"/></returns>
+        public bool IsRevealedToPlayer(Player player)
+        {
+            return player.RevealedObjects.ContainsKey(this.DynamicID);
+        }
+
+        /// <summary>
         /// Reveal the scene to given player.
         /// </summary>
         /// <param name="player">Player to reveal scene.</param>

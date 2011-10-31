@@ -326,8 +326,8 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Movement_Scalar] = 1f;
             this.Attributes[GameAttribute.Walking_Rate_Total] = 0.2797852f;
             this.Attributes[GameAttribute.Walking_Rate] = 0.2797852f;
-            this.Attributes[GameAttribute.Running_Rate_Total] = 0.3598633f;
-            this.Attributes[GameAttribute.Running_Rate] = 0.3598633f;
+            this.Attributes[GameAttribute.Running_Rate_Total] = 1.5f; //0.3598633f;
+            this.Attributes[GameAttribute.Running_Rate] = 1.5f; // 0.3598633f;
             this.Attributes[GameAttribute.Sprinting_Rate_Total] = 3.051758E-05f;
             this.Attributes[GameAttribute.Strafing_Rate_Total] = 3.051758E-05f;
 

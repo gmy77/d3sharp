@@ -16,12 +16,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+// based on: http://csharpquadtree.codeplex.com/SourceControl/changeset/view/27798#506270
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using Mooege.Core.GS.Objects;
 
-namespace Mooege.Core.GS.Common.Types
+namespace Mooege.Core.GS.Common.Types.QuadTrees
 {
     public class QuadNode
     {

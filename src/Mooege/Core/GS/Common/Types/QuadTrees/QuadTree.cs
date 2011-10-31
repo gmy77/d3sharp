@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Windows;
 using Mooege.Core.GS.Objects;
 
-namespace Mooege.Core.GS.Common.Types
+namespace Mooege.Core.GS.Common.Types.QuadTrees
 {
     public class QuadTree
     {
@@ -46,6 +46,7 @@ namespace Mooege.Core.GS.Common.Types
         /// Lookup dictionary mapping object's to nodes.
         /// </summary>
         private readonly Dictionary<WorldObject, QuadNode> _objectToNodeLookup = new Dictionary<WorldObject, QuadNode>();
+        //TODO: Make it use concurrent-dictionary instead.
 
         /// <summary>
         /// Lock.
@@ -111,6 +112,17 @@ namespace Mooege.Core.GS.Common.Types
             }
         }
 
+        public List<T> Query<T>(Circle proximity) where T:WorldObject
+        {
+            lock (_syncLock)
+            {
+                var results = new List<T>();
+                if (this.RootNode != null)
+                    this.Query(proximity, RootNode, results);
+                return results;
+            }
+        }
+
         /// <summary>
         /// Queries given bounds for node for object type T.
         /// </summary>
@@ -136,6 +148,28 @@ namespace Mooege.Core.GS.Common.Types
                 foreach (QuadNode childNode in node.Nodes) // query child-nodes too.
                 {
                     this.Query(bounds, childNode, results);
+                }
+            }
+        }
+
+        private void Query<T>(Circle proximity, QuadNode node, List<T> results) where T:WorldObject
+        {
+            lock (_syncLock)
+            {
+                if (node == null) return;
+                if (!proximity.Intersects(node.Bounds)) return; // if given proximity circle does not intersect with given node return.
+
+                foreach (var @object in node.Objects) // loop through objects contained in node.
+                {
+                    if (!(@object is T)) continue; // if object is not in given type, skip it.
+
+                    if (proximity.Intersects(@object.Bounds)) // if object's bounds intersects our given proximity circle, add it to results list.
+                        results.Add(@object as T);
+                }
+
+                foreach (QuadNode childNode in node.Nodes) // query child-nodes too.
+                {
+                    this.Query(proximity, childNode, results);
                 }
             }
         }

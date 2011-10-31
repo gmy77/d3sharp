@@ -24,8 +24,8 @@ using System.Windows;
 using Mooege.Common;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Actors.Implementations;
-using Mooege.Core.GS.Common.Types;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.QuadTrees;
 using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Actors;
@@ -92,12 +92,12 @@ namespace Mooege.Core.GS.Map
         /// <summary>
         /// Scene revealing proximity for players.
         /// </summary>
-        private const int SceneProximity = 240;
+        private const int SceneProximity = 120;
 
         /// <summary>
         /// Actors revealing proximity for player.
         /// </summary>
-        private const int ActorProximity = 240;
+        private const int ActorProximity = 120;
 
         /// <summary>
         /// Returns list of available starting points.
@@ -240,20 +240,15 @@ namespace Mooege.Core.GS.Map
         /// <param name="player">The player</param>
         public void RevealScenesInProximity(Player player)
         {
-            var proximity = new Rect(player.Position.X - SceneProximity / 2, player.Position.Y - SceneProximity / 2, SceneProximity, SceneProximity);
-            var scenesInProximity = this.QuadTree.Query<Scene>(proximity);
+            var scenes = player.GetScenesInProximity(SceneProximity);
 
-            foreach (var scene in scenesInProximity) // reveal scenes in player's proximity.
+            foreach (var scene in scenes) // reveal scenes in player's proximity.
             {
+                if (scene.IsRevealedToPlayer(player)) // if the actors is already revealed skip it.
+                    continue; // if the scene is already revealed, skip it.
+
                 scene.Reveal(player);
             }
-
-            // var alreadyRevealedScenes = player.GetRevealedObjects<Scene>(); - disabled for time being /raist
-            //foreach(var scene in alreadyRevealedScenes) // unreveal scenes that are not in player's proximity.
-            //{
-            //    if (!scenesInProximity.Contains(scene))
-            //        scene.Unreveal(player);
-            //}
         }
 
         /// <summary>
@@ -262,21 +257,16 @@ namespace Mooege.Core.GS.Map
         /// <param name="player"></param>
         public void RevealActorsInProximity(Player player)
         {
-            var proximity = new Rect(player.Position.X - ActorProximity / 2, player.Position.Y - ActorProximity / 2, ActorProximity, ActorProximity);
-            var actorsInProximity = this.QuadTree.Query<Actor>(proximity);
+            var actors = player.GetActorsInProximity(ActorProximity);
 
-            foreach (var actor in actorsInProximity) // reveal actors in player's proximity.
+            foreach (var actor in actors) // reveal actors in player's proximity.
             {
+                if (actor.IsRevealedToPlayer(player)) // if the actors is already revealed, skip it.
+                    continue;
+
                 if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player || actor.ActorType == ActorType.Monster)
                     actor.Reveal(player);
             }
-
-            // var alreadyRevealedActors = player.GetRevealedObjects<Actor>(); - disabled for time being - crashing on monster kills /raist.
-            //foreach (var actor in alreadyRevealedActors) // unreveal actors that are not in player's proximity.
-            //{
-            //    if (!actorsInProximity.Contains(actor))
-            //        actor.Unreveal(player);
-            //}
         }
 
         /// <summary>

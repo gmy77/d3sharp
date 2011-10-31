@@ -23,6 +23,7 @@ using Mooege.Common;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.QuadTrees;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
@@ -151,6 +152,11 @@ namespace Mooege.Core.GS.Actors
             get { return true; }
         }
 
+        /// <summary>
+        /// Default query radius value..
+        /// </summary>
+        private const int DefaultQueryProximity = 120;
+
         // Some ACD uncertainties /komiga.
         public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself /komiga & /raist.
         public int Field3 = 0x00000001; // TODO: What dis? <-- I guess its just 0 for WorldItem and 1 for InventoryItem // Farmy
@@ -205,6 +211,16 @@ namespace Mooege.Core.GS.Actors
         #endregion
 
         #region reveal & unreveal handling
+
+        /// <summary>
+        /// Returns true if the actor is revealed to player.
+        /// </summary>
+        /// <param name="player">The player.</param>
+        /// <returns><see cref="bool"/></returns>
+        public bool IsRevealedToPlayer(Player player)
+        {
+            return player.RevealedObjects.ContainsKey(this.DynamicID);
+        }
 
         /// <summary>
         /// Reveals an actor to a player.
@@ -302,6 +318,80 @@ namespace Mooege.Core.GS.Actors
             player.RevealedObjects.Remove(this.DynamicID);
             return true;
         }
+
+        #endregion
+
+        #region proximity-based query helpers
+
+        #region circurlar region queries
+
+        public List<Player> GetPlayersInProximity(float radius = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRange<Player>(radius);
+        }
+
+        public List<Actor> GetActorsInProximity(float radius = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRange<Actor>(radius);
+        }
+
+        public List<T> GetActorsInProximity<T>(float radius = DefaultQueryProximity) where T : Actor
+        {
+            return this.GetObjectsInRange<T>(radius);
+        }
+
+        public List<Scene> GetScenesInProximity(float radius = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRange<Scene>(radius);
+        }
+
+        public List<WorldObject> GetObjectsInRange(float radius = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRange<WorldObject>(radius);
+        }
+
+        public List<T> GetObjectsInRange<T>(float radius=DefaultQueryProximity) where T : WorldObject
+        {
+            var proximityCircle = new Circle(this.Position.X, this.Position.Y, radius);
+            return this.World.QuadTree.Query<T>(proximityCircle);
+        }
+
+        #endregion
+
+        #region rectangluar region queries
+
+        public List<Player> GetPlayersInRegion(int lenght = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRegion<Player>(lenght);
+        }
+
+        public List<Actor> GetActorsInRegion(int lenght = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRegion<Actor>(lenght);
+        }
+
+        public List<T> GetActorsInRegion<T>(int lenght = DefaultQueryProximity) where T : Actor
+        {
+            return this.GetObjectsInRegion<T>(lenght);
+        }
+
+        public List<Scene> GetScenesInRegion(int lenght = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRegion<Scene>(lenght);
+        }
+
+        public List<WorldObject> GetObjectsInRegion(int lenght = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRegion<WorldObject>(lenght);
+        }
+
+        public List<T> GetObjectsInRegion<T>(int lenght = DefaultQueryProximity) where T : WorldObject
+        {
+            var proximityRectangle = new Rect(this.Position.X - lenght / 2, this.Position.Y - lenght / 2, lenght, lenght);
+            return this.World.QuadTree.Query<T>(proximityRectangle);
+        }
+
+        #endregion
 
         #endregion
 
