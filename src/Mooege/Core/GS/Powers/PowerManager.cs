@@ -38,6 +38,7 @@ using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -89,8 +90,8 @@ namespace Mooege.Core.GS.Powers
                 targetPosition = new Vector3D(0, 0, 0);
 
             // HACK: intercept hotbar skill 1 to always spawn test mobs.
-            if (user is Player.Player &&
-                powerSNO == ((Player.Player)user).SkillSet.HotBarSkills[4].SNOSkill)
+            if (user is Player &&
+                powerSNO == ((Player)user).SkillSet.HotBarSkills[4].SNOSkill)
             {
                 PowersTestMonster.CreateTestMonsters(user.World, user.Position, 10);
                 return true;

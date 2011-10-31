@@ -22,6 +22,7 @@ using Mooege.Common;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Common.Helpers;
 
@@ -32,7 +33,7 @@ namespace Mooege.Core.GS.Generators
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
-        public static World Generate(Game.Game game, int worldSNO)
+        public static World Generate(Game game, int worldSNO)
         {
             if (!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldSNO))
             {
@@ -103,13 +104,15 @@ namespace Mooege.Core.GS.Generators
 
             foreach (var sceneChunk in worldData.SceneParams.SceneChunks)
             {
-                var scene = new Scene(world, sceneChunk.SNOName.SNOId, null);
-                scene.MiniMapVisibility = MiniMapVisibility.Visited;
-                scene.Position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
-                scene.RotationAmount = sceneChunk.PRTransform.Quaternion.W;
-                scene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
-                scene.SceneGroupSNO = -1;
-
+                var position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
+                var scene = new Scene(world, position, sceneChunk.SNOName.SNOId, null)
+                {
+                    MiniMapVisibility = SceneMiniMapVisibility.Revealed,                    
+                    RotationAmount = sceneChunk.PRTransform.Quaternion.W,
+                    RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
+                    SceneGroupSNO = -1
+                };
+               
                 // If the scene has a subscene (cluster ID is set), choose a random subscenes from the cluster load it and attach it to parent scene /farmy
                 if (sceneChunk.SceneSpecification.ClusterID != -1)
                 {
@@ -138,12 +141,14 @@ namespace Mooege.Core.GS.Generators
                         }
                         else
                         {
-                            Scene subscene = new Scene(world, subSceneEntry.SNOScene, scene);
-                            subscene.Position = scene.Position + pos;
-                            subscene.MiniMapVisibility = MiniMapVisibility.Visited;
-                            subscene.RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D;
-                            subscene.RotationAmount = sceneChunk.PRTransform.Quaternion.W;
-                            subscene.Specification = sceneChunk.SceneSpecification;
+                            var subScenePosition = scene.Position + pos;
+                            var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
+                            {
+                                MiniMapVisibility = SceneMiniMapVisibility.Revealed,
+                                RotationAmount = sceneChunk.PRTransform.Quaternion.W,
+                                RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
+                                Specification = sceneChunk.SceneSpecification
+                            };
                             scene.Subscenes.Add(subscene);
                             subscene.LoadActors();
                         }

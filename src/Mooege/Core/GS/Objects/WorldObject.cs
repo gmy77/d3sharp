@@ -16,8 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Windows;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Objects
 {
@@ -30,8 +32,21 @@ namespace Mooege.Core.GS.Objects
             set { this._world = value; }
         }
 
+        protected Vector3D _position;
+        public virtual Vector3D Position
+        {
+            get { return _position; }
+            set { _position = value; }
+        }
+
+        protected Rect _bounds;
+        public Rect Bounds
+        {
+            get { return this._bounds; }
+            set { this._bounds = value; }
+        }
+
         public float Scale { get; set; }
-        public float RotationAmount { get; set; }
 
         protected Vector3D _rotationAxis;
         public Vector3D RotationAxis
@@ -40,22 +55,19 @@ namespace Mooege.Core.GS.Objects
             set { this._rotationAxis = value; }
         }
 
-        protected Vector3D _position;
-        public virtual Vector3D Position
-        {
-            get { return _position; }
-            set { _position = value; }
-        }
+        public float RotationAmount { get; set; }
 
         protected WorldObject(World world, uint dynamicID)
             : base(dynamicID)
         {
-            // Specifically avoid calling the potentially overridden setter for this.World
-            this._world = world;
+            this._world = world; // Specifically avoid calling the potentially overridden setter for this.World /komiga.
             this._world.Game.StartTracking(this);
             this._rotationAxis = new Vector3D();
             this._position = new Vector3D();
         }
+
+        public abstract bool Reveal(Player player);
+        public abstract bool Unreveal(Player player);
 
         public sealed override void Destroy()
         {
@@ -63,8 +75,5 @@ namespace Mooege.Core.GS.Objects
             this.World = null; // Will Leave() the world for Actors (see deriving implementation of the setter for this.World)
             world.Game.EndTracking(this);
         }
-
-        public abstract bool Reveal(Mooege.Core.GS.Player.Player player);
-        public abstract bool Unreveal(Mooege.Core.GS.Player.Player player);
     }
 }

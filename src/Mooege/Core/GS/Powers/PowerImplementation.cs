@@ -28,6 +28,7 @@ using Mooege.Common;
 using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -76,45 +77,45 @@ namespace Mooege.Core.GS.Powers
 
         public void StartCooldown(TickTimer timeout)
         {
-            if (User is Player.Player)
+            if (User is Player)
             {
                 // TODO: update User.Attribute instead of creating temp map
                 GameAttributeMap map = new GameAttributeMap();
                 map[GameAttribute.Power_Cooldown_Start, PowerSNO] = User.World.Game.Tick;
                 map[GameAttribute.Power_Cooldown, PowerSNO] = timeout.TimeoutTick;
-                map.SendMessage((User as Player.Player).InGameClient, User.DynamicID);
+                map.SendMessage((User as Player).InGameClient, User.DynamicID);
             }
         }
 
         public void GeneratePrimaryResource(float amount)
         {
-            if (User is Player.Player)
+            if (User is Player)
             {
-                (User as Player.Player).GeneratePrimaryResource(amount);
+                (User as Player).GeneratePrimaryResource(amount);
             }
         }
 
         public void UsePrimaryResource(float amount)
         {
-            if (User is Player.Player)
+            if (User is Player)
             {
-                (User as Player.Player).UsePrimaryResource(amount);
+                (User as Player).UsePrimaryResource(amount);
             }
         }
 
         public void GenerateSecondaryResource(float amount)
         {
-            if (User is Player.Player)
+            if (User is Player)
             {
-                (User as Player.Player).GenerateSecondaryResource(amount);
+                (User as Player).GenerateSecondaryResource(amount);
             }
         }
 
         public void UseSecondaryResource(float amount)
         {
-            if (User is Player.Player)
+            if (User is Player)
             {
-                (User as Player.Player).UseSecondaryResource(amount);
+                (User as Player).UseSecondaryResource(amount);
             }
         }
         
@@ -145,9 +146,9 @@ namespace Mooege.Core.GS.Powers
             {
                 ((PowersTestMonster)target).ReceiveDamage(User, amount, type);
             }
-            else if (target is Monster && User is Player.Player)
+            else if (target is Monster && User is Player)
             {
-                ((Monster)target).Die((Player.Player)User);
+                ((Monster)target).Die((Player)User);
             }
         }
 

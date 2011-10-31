@@ -12,6 +12,7 @@ using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Core.GS.Powers;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Actors.Buffs
 {
@@ -68,14 +69,14 @@ namespace Mooege.Core.GS.Actors.Buffs
         {
             GameAttributeMap map = new GameAttributeMap();
             map[GameAttribute.Power_Buff_0_Visual_Effect_None, Skills.Skills.Barbarian.FurySpenders.Whirlwind] = true; // switch on effect
-            map.SendMessage(((Player.Player)Target).InGameClient, Target.DynamicID);
+            map.SendMessage(((Player)Target).InGameClient, Target.DynamicID);
         }
 
         public override void Remove()
         {
             GameAttributeMap map = new GameAttributeMap();
             map[GameAttribute.Power_Buff_0_Visual_Effect_None, Skills.Skills.Barbarian.FurySpenders.Whirlwind] = false; // switch on effect
-            map.SendMessage(((Player.Player)Target).InGameClient, Target.DynamicID);
+            map.SendMessage(((Player)Target).InGameClient, Target.DynamicID);
         }
     }
 }

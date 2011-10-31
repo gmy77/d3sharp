@@ -17,10 +17,17 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using Mooege.Common;
+using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
@@ -33,44 +40,63 @@ using System;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Core.GS.Powers;
 
-// TODO: Need to move all of the remaining ACD fields into Actor (such as the affix list)
-
 namespace Mooege.Core.GS.Actors
 {
-    // This is used for GBHandle.Type; uncertain if used elsewhere
-    public enum GBHandleType : int
+    public abstract class Actor : WorldObject
     {
-        Invalid = 0,
-        Monster = 1,
-        Gizmo = 2,
-        ClientEffect = 3,
-        ServerProp = 4,
-        Environment = 5,
-        Critter = 6,
-        Player = 7,
-        Item = 8,
-        AxeSymbol = 9,
-        Projectile = 10,
-        CustomBrain = 11
-    }
+        private static readonly Logger Logger = LogManager.CreateLogger();
 
-    // This should probably be the same as GBHandleType (probably merge them once all actor classes are created)
-    public enum ActorType
-    {
-        Player,
-        NPC,
-        Monster,
-        Item,
-        Portal,
-        Effect,
-        Gizmo
-    }
+        /// <summary>
+        /// SNO Id of the actor.
+        /// </summary>
+        private int _snoId;
+        public int SNOId
+        {
+            get { return _snoId; }
+            set
+            {
+                this._snoId = value;
+                this.SNOName.SNOId = this.SNOId;
+            }
+        }
 
-    // Base actor
-    public /*abstract*/ class Actor : WorldObject
-    {
-        // Actors can change worlds and have a specific addition/removal scheme
-        // We'll just override the setter to handle all of this automagically
+        /// <summary>
+        /// SNOName - we can handle this better /raist.
+        /// </summary>
+        public SNOName SNOName { get; private set; }
+
+        /// <summary>
+        /// The actor type.
+        /// </summary>
+        public abstract ActorType ActorType { get; }
+
+        /// <summary>
+        /// Position of the actor.
+        /// </summary>
+        public override Vector3D Position
+        {
+            get { return this._position; }
+            set
+            {
+                var old = new Vector3D(this._position);
+                this._position.Set(value);
+                this.Bounds = new Rect(this._position.X, this.Position.Y, 1, 1); // calculate the bounds.
+                this.OnPositionChange(old); // let deriving class take any actions.
+            }
+        }
+
+        /// <summary>
+        /// PRTransform for the actor.
+        /// </summary>
+        public virtual PRTransform Transform
+        {
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
+        }
+
+        /// <summary>
+        /// The current world of actor.
+        /// Also allows changing worlds. - we should be instead using function for changing worlds /raist.
+        /// </summary>
         public override World World
         {
             get { return this._world; }
@@ -87,166 +113,103 @@ namespace Mooege.Core.GS.Actors
             }
         }
 
-        protected Scene _currentScene;
+        /// <summary>
+        /// Current scene for the actor.
+        /// TODO: I guess this should be only returning master-scenes but not childs. /raist.
+        /// </summary>
         public virtual Scene CurrentScene
         {
-            get { return this._currentScene; }
-            protected set { this._currentScene = value; }
+            get { return this.World.QuadTree.Query<Scene>(this.Bounds).FirstOrDefault(); }
         }
 
-        public override Vector3D Position
-        {
-            set
-            {
-                var old = new Vector3D(this._position);
-                this._position.Set(value);
-                this.OnPositionChange(old);
-            }
-        }
+        /// <summary>
+        /// Tags read from MPQ's for the actor.
+        /// </summary>
+        public Dictionary<int, TagMapEntry> Tags { get; private set; }
 
-        public virtual /*abstract*/ ActorType ActorType { get { return Actors.ActorType.Item; } }
-
+        /// <summary>
+        /// Attribute map.
+        /// </summary>
         public GameAttributeMap Attributes { get; private set; }
+
+        /// <summary>
+        /// Affix list.
+        /// </summary>
         public List<Affix> AffixList { get; set; }
-        public int Tag;
 
-        protected int _actorSNO;
-        public int ActorSNO
-        {
-            get { return _actorSNO; }
-            set
-            {
-                this._actorSNO = value;
-                this.SNOName.SNOId = this.ActorSNO;
-            }
-        }
-
-        public int CollFlags { get; set; }
+        /// <summary>
+        /// GBHandle.
+        /// </summary>
         public GBHandle GBHandle { get; private set; }
-        public SNOName SNOName { get; private set; }
 
-        // Some ACD uncertainties
-        public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself
-        public int Field3 = 0x00000001; // TODO: What dis? <-- I guess its just 0 for WorldItem and 1 for InventoryItem // Farmy
-        public int Field7 = -1;
-        public int Field8 = -1; // Animation set SNO?
-        public int Field9; // SNOName.Group?
-        public byte Field10 = 0x00;
-        public int? /* sno */ Field11 = null;
-        public int? Field12 = null;
-        public int? Field13 = null;
+        /// <summary>
+        /// Collision flags.
+        /// </summary>
+        public int CollFlags { get; set; }
 
-        public virtual WorldLocationMessageData WorldLocationMessage
-        {
-            get
-            {
-                return new WorldLocationMessageData { Scale = this.Scale, Transform = this.Transform, WorldID = this.World.DynamicID };
-            }
-        }
-
+        /// <summary>
+        /// Returns true if actor has world location.
+        /// TODO: I belive this belongs to WorldObject.cs /raist.
+        /// </summary>
         public virtual bool HasWorldLocation
         {
             get { return true; }
         }
 
-        public virtual PRTransform Transform
-        {
-            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
-        }
+        // Some ACD uncertainties /komiga.
+        public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself /komiga & /raist.
+        public int Field3 = 0x00000001; // TODO: What dis? <-- I guess its just 0 for WorldItem and 1 for InventoryItem // Farmy
+        public int Field7 = -1;
+        public int Field8 = -1; // Animation set SNO?
+        public int Field9; // SNOName.Group?
+        public byte Field10 = 0x00;
+        public int? Field11 = null;
+        public int? Field12 = null;
+        public int? Field13 = null;
 
-        // Only used in Item; stubbed here to prevent an overrun in some cases. /komiga
-        public virtual InventoryLocationMessageData InventoryLocationMessage
-        {
-            get { return new InventoryLocationMessageData{ OwnerID = 0, EquipmentSlot = 0, InventoryLocation = new Vector2D() }; }
-        }
-
-        public virtual ACDWorldPositionMessage ACDWorldPositionMessage
-        {
-            get { return new ACDWorldPositionMessage { ActorID = this.DynamicID, WorldLocation = this.WorldLocationMessage }; }
-        }
-
-        public virtual ACDInventoryPositionMessage ACDInventoryPositionMessage
-        {
-            get
-            {
-                return new ACDInventoryPositionMessage()
-                {
-                    ItemId = this.DynamicID,
-                    InventoryLocation = this.InventoryLocationMessage,
-                    Field2 = 1 // TODO: find out what this is and why it must be 1...is it an enum?
-                };
-            }
-        }
-
-        public Actor(World world, uint dynamicID)
+        /// <summary>
+        /// Creates a new actor.
+        /// </summary>
+        /// <param name="world">The world the item initially belongs to.</param>
+        /// <param name="dynamicID">DynamicId of the actor.</param>
+        /// <param name="position">The initial position of the actor.</param>
+        /// <param name="tags">TagMapEntry dictionary read for the actor from MPQ's..</param>           
+        protected Actor(World world, uint dynamicID, Vector3D position, Dictionary<int, TagMapEntry> tags)
             : base(world, dynamicID)
         {
+            if (position != null) 
+                this.Position = position;
+
             this.Attributes = new GameAttributeMap();
             this.AffixList = new List<Affix>();
-            this.GBHandle = new GBHandle() { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
-            this.SNOName = new SNOName() { Group =  SNOGroup.Actor, SNOId = this.ActorSNO };
-            this.ActorSNO = -1;
+            this.GBHandle = new GBHandle { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
+            this.SNOName = new SNOName { Group =  SNOGroup.Actor, SNOId = this.SNOId };
             this.CollFlags = 0x00000000;
-            this.Scale = 1.0f;
-            this.RotationAmount = 0.0f;
-            this.RotationAxis.Set(0.0f, 0.0f, 1.0f);
+
+            this.Tags = tags;
+            this.ReadTags();
         }
 
-        // NOTE: When using this, you should *not* set the actor's world. It is done for you
-        public void TransferTo(World targetWorld, Vector3D pos)
+        protected Actor(World world, uint dynamicId)
+            : this(world, dynamicId, null, null)
+        { }
+
+        #region tag-readers
+
+        /// <summary>
+        /// Reads known tags from TagMapEntry and set the proper values.
+        /// </summary>
+        protected virtual void ReadTags()
         {
-            var player = this as Player.Player;
-            if (player == null) return; // return if current actor is not a player. 
+            if (this.Tags == null) return;
 
-            this.Position = pos;
-            //this.RotationAmount = location.Quaternion.W;
-            //this.RotationAxis = location.Quaternion.Vector3D;
-
-            this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
-            
-            player.InGameClient.SendMessage(new EnterWorldMessage()
-            {
-                EnterPosition = this.Position,
-                WorldID = targetWorld.DynamicID,
-                WorldSNO = targetWorld.WorldSNO,
-            });
-
-            player.InGameClient.SendMessage(new ACDWorldPositionMessage()
-            {
-                ActorID = this.DynamicID,
-                WorldLocation = new WorldLocationMessageData()
-                {
-                    WorldID = targetWorld.DynamicID,
-                    Scale = this.Scale,
-                    Transform = new PRTransform()
-                    {
-                        Quaternion = new Quaternion() { W = 1, Vector3D = new Vector3D(0, 0, 0) },
-                        Vector3D = pos
-                    }
-                }
-
-            });
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
+                this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
         }
 
-        public virtual void OnEnter(World world)
-        {
-        }
+        #endregion
 
-        public virtual void OnLeave(World world)
-        {
-        }
-
-        protected virtual void OnPositionChange(Vector3D prevPosition)
-        {
-            if (!this.HasWorldLocation) return;
-
-            // We need this here for positioning actors on world (like when item drops)
-            this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);   
-        }
-
-        public virtual void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
-        {
-        }
+        #region reveal & unreveal handling
 
         #region Buffs and Debuffs
 
@@ -443,7 +406,7 @@ namespace Mooege.Core.GS.Actors
         /// Reveals an actor to a player.
         /// </summary>
         /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
-        public override bool Reveal(Mooege.Core.GS.Player.Player player)
+        public override bool Reveal(Player player)
         {
             if (player.RevealedObjects.ContainsKey(this.DynamicID)) 
                 return false; // already revealed
@@ -452,7 +415,7 @@ namespace Mooege.Core.GS.Actors
             var msg = new ACDEnterKnownMessage
             {
                 ActorID = this.DynamicID,
-                ActorSNO = this.ActorSNO,
+                ActorSNO = this.SNOId,
                 Field2 = Field2,
                 Field3 = Field3, // this.hasWorldLocation ? 0 : 1;
                 WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
@@ -467,9 +430,9 @@ namespace Mooege.Core.GS.Actors
                 Field13 = Field13,
             };
 
-            // normally when we send ACDEnterKnown for players own actor it's set to 0x09. But while sending the ACDEnterKnown for another player's actor we should set it to 0x01. /raist
-            if ((this is Player.Player) && this != player) 
-                msg.Field2 = 0x01; 
+            // normaly when we send acdenterknown for players own actor it's set to 0x09. But while sending the acdenterknown for another player's actor we should set it to 0x01. /raist
+            if ((this is Player) && this != player)
+                msg.Field2 = 0x01;
 
             player.InGameClient.SendMessage(msg);
 
@@ -481,14 +444,14 @@ namespace Mooege.Core.GS.Actors
                 affixGbis[i] = AffixList[i].AffixGbid;
             }
 
-            player.InGameClient.SendMessage(new AffixMessage()
+            player.InGameClient.SendMessage(new AffixMessage
             {
                 ActorID = DynamicID,
                 Field1 = 0x00000001,
                 aAffixGBIDs = affixGbis,
             });
 
-            player.InGameClient.SendMessage(new AffixMessage()
+            player.InGameClient.SendMessage(new AffixMessage
             {
                 ActorID = DynamicID,
                 Field1 = 0x00000002,
@@ -496,7 +459,7 @@ namespace Mooege.Core.GS.Actors
             });
 
             // Collision Flags
-            player.InGameClient.SendMessage(new ACDCollFlagsMessage()
+            player.InGameClient.SendMessage(new ACDCollFlagsMessage
             {
                 ActorID = DynamicID,
                 CollFlags = this.CollFlags
@@ -506,7 +469,7 @@ namespace Mooege.Core.GS.Actors
             Attributes.SendMessage(player.InGameClient, DynamicID);
 
             // Actor group
-            player.InGameClient.SendMessage(new ACDGroupMessage()
+            player.InGameClient.SendMessage(new ACDGroupMessage
             {
                 ActorID = DynamicID,
                 Field1 = -1,
@@ -517,8 +480,8 @@ namespace Mooege.Core.GS.Actors
             player.InGameClient.SendMessage(new ACDCreateActorMessage(this.DynamicID));
 
             // This is always sent even though it doesn't identify the actor. /komiga
-            player.InGameClient.SendMessage(new SNONameDataMessage()
-            {
+            player.InGameClient.SendMessage(new SNONameDataMessage
+                                                {
                 Name = this.SNOName
             });
 
@@ -529,12 +492,157 @@ namespace Mooege.Core.GS.Actors
         /// Unreveals an actor from a player.
         /// </summary>
         /// <returns>true if the actor was unrevealed or false if the actor wasn't already revealed.</returns>
-        public override bool Unreveal(Mooege.Core.GS.Player.Player player)
+        public override bool Unreveal(Player player)
         {
             if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // not revealed yet
             player.InGameClient.SendMessage(new ACDDestroyActorMessage(this.DynamicID));
             player.RevealedObjects.Remove(this.DynamicID);
             return true;
         }
+
+        #endregion
+
+        #region events
+
+        protected virtual void OnPositionChange(Vector3D prevPosition)
+        {
+            if (!this.HasWorldLocation) return;
+
+            this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this); // We need this here for positioning actors on world (like when item drops) /raist.
+        }
+
+        public virtual void OnEnter(World world)
+        {
+
+        }
+
+        public virtual void OnLeave(World world)
+        {
+
+        }
+
+        // TODO: add an actor mover helper function! /raist.
+        public void OnActorMove(Actor actor, Vector3D prevPosition)
+        {
+            // TODO: Unreveal from players that are now outside the actor's range. /komiga
+        }
+
+        public virtual void OnTargeted(Player player, TargetMessage message)
+        {
+
+        }
+
+        #endregion
+
+        #region helper functions
+
+        /// <summary>
+        /// Transfers actor to a target world.
+        /// NOTE: When using this, you should *not* set the actor's world. It is done for you.
+        /// </summary>
+        /// <param name="targetWorld">Target world to transfer actor to.</param>
+        /// <param name="startingPoint">StartingPoint to transfer actor.</param>
+        public void TransferTo(World targetWorld, StartingPoint startingPoint=null)
+        {
+            // This is somewhat still buggy, need a careful review. /raist.
+
+            var player = this as Player;
+            if (player == null) return; // return if current actor is not a player. 
+
+            this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
+
+            if (startingPoint == null)
+                startingPoint = targetWorld.StartingPoints.First();
+
+            this.Position = startingPoint.Position;
+            this.RotationAmount = startingPoint.RotationAmount;
+            this.RotationAxis = startingPoint.RotationAxis;
+
+            player.InGameClient.SendMessage(new EnterWorldMessage()
+            {
+                EnterPosition = this.Position,
+                WorldID = targetWorld.DynamicID,
+                WorldSNO = targetWorld.SNOId,
+            });
+
+            player.InGameClient.SendMessage(this.ACDWorldPositionMessage);
+        }
+
+        #endregion
+
+        #region cooked messages
+
+        public virtual InventoryLocationMessageData InventoryLocationMessage
+        {
+            // Only used in Item; stubbed here to prevent an overrun in some cases. /komiga
+            get { return new InventoryLocationMessageData { OwnerID = 0, EquipmentSlot = 0, InventoryLocation = new Vector2D() }; }
+        }
+
+        public virtual ACDWorldPositionMessage ACDWorldPositionMessage
+        {
+            get { return new ACDWorldPositionMessage { ActorID = this.DynamicID, WorldLocation = this.WorldLocationMessage }; }
+        }
+
+        public virtual ACDInventoryPositionMessage ACDInventoryPositionMessage
+        {
+            get
+            {
+                return new ACDInventoryPositionMessage()
+                {
+                    ItemId = this.DynamicID,
+                    InventoryLocation = this.InventoryLocationMessage,
+                    Field2 = 1 // TODO: find out what this is and why it must be 1...is it an enum?
+                };
+            }
+        }
+
+        public virtual WorldLocationMessageData WorldLocationMessage
+        {
+            get
+            {
+                return new WorldLocationMessageData { Scale = this.Scale, Transform = this.Transform, WorldID = this.World.DynamicID };
+            }
+        }
+
+        #endregion
+
+        public override string ToString()
+        {
+            return string.Format("Actor: [Type: {0}] [Id:{1}] [Position: {2}] {3}", this.ActorType, this.SNOName.SNOId, this.Position, this.SNOName.Name);
+        }
+    }
+
+    // This is used for GBHandle.Type; uncertain if used elsewhere
+    public enum GBHandleType : int
+    {
+        Invalid = 0,
+        Monster = 1,
+        Gizmo = 2,
+        ClientEffect = 3,
+        ServerProp = 4,
+        Environment = 5,
+        Critter = 6,
+        Player = 7,
+        Item = 8,
+        AxeSymbol = 9,
+        Projectile = 10,
+        CustomBrain = 11
+    }
+
+    // This should probably be the same as GBHandleType (probably merge them once all actor classes are created)
+    public enum ActorType
+    {
+        Invalid = 0,
+        Monster = 1,
+        Gizmo = 2,
+        ClientEffect = 3,
+        ServerProp = 4,
+        Enviroment = 5,
+        Critter = 6,
+        Player = 7,
+        Item = 8,
+        AxeSymbol = 9,
+        Projectile = 10,
+        CustomBrain = 11
     }
 }

@@ -26,6 +26,7 @@ using Mooege.Core.GS.Actors;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -338,7 +339,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Field3 = true,
                 Speed = PowerMath.Distance(User.Position, TargetPosition) / dashTicks, // speed, distance per tick
                 Field5 = 0x00009206, // ???
-                AnimationTag = (User as Player.Player).Properties.Gender == 0 ? 69808 : 90432, // select based on gender,
+                AnimationTag = (User as Player).Properties.Gender == 0 ? 69808 : 90432, // select based on gender,
                 Field7 = 0x00000006 // ?
             }, User);
             User.Position.Set(TargetPosition);
@@ -373,7 +374,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             map[GameAttribute.Buff_Active, PowerSNO] = active;
             map[GameAttribute.Hidden] = active;
 
-            map.SendMessage(((Player.Player)User).InGameClient, User.DynamicID);
+            map.SendMessage(((Player)User).InGameClient, User.DynamicID);
         }
     }
 }

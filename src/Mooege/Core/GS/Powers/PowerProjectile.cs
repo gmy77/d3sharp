@@ -37,7 +37,7 @@ namespace Mooege.Core.GS.Powers
     public class PowerProjectile : Actor
     {
         //Define actor type
-        public override ActorType ActorType { get { return ActorType.Effect; } }
+        public override ActorType ActorType { get { return ActorType.Monster; } }
 
         //Gametick value at projectile creation
         public float creationTick;
@@ -75,7 +75,7 @@ namespace Mooege.Core.GS.Powers
                                float heightOffset = 0, float distanceOffset = 0, bool handleTranslation = false)
             : base(world, world.NewActorID)
         {
-            this.ActorSNO = actorSNO;
+            this.SNOId = actorSNO;
             this.startingPosition = new Vector3D(position);
             this.startingPosition.Z += heightOffset;
             this.speed = speed;
@@ -93,7 +93,7 @@ namespace Mooege.Core.GS.Powers
             this.Scale = 1f;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
             this.Field7 = 0x00000001;
-            this.Field8 = this.ActorSNO;
+            this.Field8 = this.SNOId;
             this.Field10 = 0x1;
             this.Field11 = 0x1;
             this.Field12 = 0x1;

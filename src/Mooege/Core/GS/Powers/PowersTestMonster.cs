@@ -32,6 +32,7 @@ using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -42,8 +43,9 @@ namespace Mooege.Core.GS.Powers
         public bool IsDead;
 
         public PowersTestMonster(World world, int actorSNO, Vector3D position)
-            : base(world, actorSNO, position)
+            : base(world, actorSNO, position, new Dictionary<int, Mooege.Common.MPQ.FileFormats.Types.TagMapEntry>())
         {
+            this.Scale = 1.35f;
             this.World.Enter(this);
         }
 
@@ -53,7 +55,7 @@ namespace Mooege.Core.GS.Powers
             if (!IsDead && HP <= 0.0f)
             {
                 IsDead = true;
-                Die((Player.Player)from);
+                Die((Player)from);
             }
         }
 

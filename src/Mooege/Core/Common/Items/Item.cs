@@ -22,6 +22,7 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.Common.Items.ItemCreation;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Effect;
@@ -50,7 +51,7 @@ namespace Mooege.Core.Common.Items
 
         public override ActorType ActorType { get { return ActorType.Item; } }
 
-        public GS.Player.Player Owner { get; set; } // Only set when the player has the item in its inventory. /komiga
+        public Player Owner { get; set; } // Only set when the player has the item in its inventory. /komiga
 
         public ItemType ItemType { get; set; }
 
@@ -93,12 +94,15 @@ namespace Mooege.Core.Common.Items
         public Item(World world, int actorSNO, int gbid, ItemType type)
             : base(world, world.NewActorID)
         {
-            this.ActorSNO = actorSNO;
+            this.SNOId = actorSNO;
             this.GBHandle.Type = (int)GBHandleType.Gizmo;
             this.GBHandle.GBID = gbid;
             this.ItemType = type;
             this.EquipmentSlot = 0;
             this.InventoryLocation = new Vector2D { X = 0, Y = 0 };
+            this.Scale = 1.0f;
+            this.RotationAmount = 0.0f;
+            this.RotationAxis.Set(0.0f, 0.0f, 1.0f);
 
             this.Field2 = 0x00000000;
             this.Field3 = 0x00000000;
@@ -196,20 +200,20 @@ namespace Mooege.Core.Common.Items
                 this.Owner.InGameClient.SendMessage(this.ACDInventoryPositionMessage);
         }
 
-        public void Drop(Mooege.Core.GS.Player.Player owner, Vector3D position)
+        public void Drop(Player owner, Vector3D position)
         {
             this.Owner = owner;
             this.Position = position;
             // TODO: Notify the world so that players get the state change
         }
 
-        public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
+        public override void OnTargeted(Player player, TargetMessage message)
         {
             //Logger.Trace("OnTargeted");
             player.Inventory.PickUp(this);
         }
 
-        public override bool Reveal(Mooege.Core.GS.Player.Player player)
+        public override bool Reveal(Player player)
         {
             if (!base.Reveal(player))
                 return false;

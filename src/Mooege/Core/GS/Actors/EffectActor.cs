@@ -31,12 +31,12 @@ namespace Mooege.Core.GS.Powers
     {
         public TickTimer Timeout;
 
-        public override ActorType ActorType { get { return Actors.ActorType.Effect; } }
+        public override ActorType ActorType { get { return Actors.ActorType.ClientEffect; } }
 
         public EffectActor(Map.World world, int actorSNO, Vector3D position, float angle, TickTimer timeout = null)
             : base(world, world.NewActorID)
         {
-            this.ActorSNO = actorSNO;
+            this.SNOId = actorSNO;
             RotationAmount = (float)Math.Cos(angle / 2f);
             RotationAxis = new Vector3D(0, 0, (float)Math.Sin(angle / 2f));
 
