@@ -29,7 +29,7 @@ namespace Mooege.Core.GS.Actors
 {
     public class Environment : Actor
     {
-        public override ActorType ActorType { get { return ActorType.Monster; } }
+        public override ActorType ActorType { get { return ActorType.Enviroment; } }
 
         public Environment(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
             : base(world, world.NewActorID, position, tags)

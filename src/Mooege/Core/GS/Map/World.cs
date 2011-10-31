@@ -267,7 +267,7 @@ namespace Mooege.Core.GS.Map
                 if (actor.IsRevealedToPlayer(player)) // if the actors is already revealed, skip it.
                     continue;
 
-                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player || actor.ActorType == ActorType.Monster)
+                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment || actor.ActorType == ActorType.Critter)
                     actor.Reveal(player);
             }
         }
