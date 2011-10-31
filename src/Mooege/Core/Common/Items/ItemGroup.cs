@@ -114,7 +114,7 @@ namespace Mooege.Core.Common.Items
 
         public static bool Is2H(ItemTypeTable type)
         {
-            return (type.Array[0] | 0x400) == 0x400;
+            return (type.Array[0] & 0x400) != 0;
         }
     }
 }

@@ -113,7 +113,7 @@ namespace Mooege.Core.GS.Players
         private int _lastEnvironmentDestroyTick;
         private int _lastEnvironmentDestroyMonsterKills;
         private int _lastEnvironmentDestroyMonsterKillTick;
-       
+
         /// <summary>
         /// Creates a new player.
         /// </summary>
@@ -511,7 +511,7 @@ namespace Mooege.Core.GS.Players
         #endregion
 
         #region proximity based actor & scene revealing
-        
+
         protected override void OnPositionChange(Vector3D prevPosition)
         {
             if (!this.EnteredWorld) return;
@@ -549,7 +549,7 @@ namespace Mooege.Core.GS.Players
         }
 
         #endregion
-           
+
         #region player attribute handling
 
         public float InitialAttack // Defines the amount of attack points with which a player starts
@@ -1008,7 +1008,7 @@ namespace Mooege.Core.GS.Players
                     (this.Attributes[GameAttribute.Hitpoints_Total_From_Level]);
         }
 
-        public static int[] LevelBorders = 
+        public static int[] LevelBorders =
         {
             0, 1200, 2250, 4000, 6050, 8500, 11700, 15400, 19500, 24000, /* Level 1-10 */
             28900, 34200, 39900, 44100, 45000, 46200, 48300, 50400, 52500, 54600, /* Level 11-20 */
@@ -1324,7 +1324,7 @@ namespace Mooege.Core.GS.Players
                 Item item;
                 if (!(actor is Item)) continue;
                 item = (Item)actor;
-                if (item.ItemType != ItemType.Gold) continue;
+                if (!Item.IsGold(item.ItemType)) continue;
 
                 this.InGameClient.SendMessage(new FloatingAmountMessage()
                 {
@@ -1353,7 +1353,7 @@ namespace Mooege.Core.GS.Players
                 Item item;
                 if (!(actor is Item)) continue;
                 item = (Item)actor;
-                if (item.ItemType != ItemType.HealthGlobe) continue;
+                if (!Item.IsHealthGlobe(item.ItemType)) continue;
 
                 this.InGameClient.SendMessage(new PlayEffectMessage() //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
                 {
