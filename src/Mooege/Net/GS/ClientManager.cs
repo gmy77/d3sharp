@@ -16,11 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.Common.Toons;
-using Mooege.Core.GS.Game;
-using Mooege.Core.GS.Player;
+using Mooege.Core.GS.Games;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Act;
 using Mooege.Net.GS.Message.Definitions.Connection;
@@ -87,7 +86,7 @@ namespace Mooege.Net.GS
                 client.BnetClient = toon.Owner.LoggedInClient;
                 client.BnetClient.InGameClient = client;
 
-                client.Player = new Player(game.StartWorld, client, toon);
+                client.Player = new Player(game.StartingWorld, client, toon);
                 Logger.Info("Player {0}[PlayerIndex: {1}] connected.", client.Player.Properties.Name, client.Player.PlayerIndex);
 
                 client.SendMessage(new VersionsMessage(message.SNOPackHash));

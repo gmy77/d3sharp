@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.Stash;
 using Mooege.Net.GS.Message.Definitions.World;
 
@@ -32,7 +33,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             : base(world, actorSNO, position, tags)
         { }
 
-        public override void OnTargeted(Player.Player player, TargetMessage message)
+        public override void OnTargeted(Player player, TargetMessage message)
         {
             player.InGameClient.SendMessage(new OpenSharedStashMessage((int)this.DynamicID));
         }

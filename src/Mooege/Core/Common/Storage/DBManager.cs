@@ -19,6 +19,7 @@
 using System;
 using System.Data.SQLite;
 using Mooege.Common;
+using Mooege.Common.Helpers;
 
 namespace Mooege.Core.Common.Storage
 {
@@ -37,7 +38,7 @@ namespace Mooege.Core.Common.Storage
         {
             try
             {
-                Connection = new SQLiteConnection(String.Format("Data Source={0}/account.db", Config.Instance.Root));
+                Connection = new SQLiteConnection(String.Format("Data Source={0}/{1}/account.db", FileHelpers.AssemblyRoot, Config.Instance.Root));
                 Connection.Open();
             }
             catch (Exception e)

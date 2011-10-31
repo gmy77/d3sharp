@@ -157,15 +157,16 @@
     <Compile Include="Core\GS\Actors\Implementations\Vendor.cs" />
     <Compile Include="Core\GS\Actors\Living.cs" />
     <Compile Include="Core\GS\Actors\NPC.cs" />
-    <Compile Include="Core\GS\Common\Types\Collision\QuadTree.cs" />
+    <Compile Include="Core\GS\Common\Types\QuadNode.cs" />
+    <Compile Include="Core\GS\Common\Types\QuadTree.cs" />
     <Compile Include="Core\GS\Common\Types\SNO\SNOGroup.cs" />
-    <Compile Include="Core\GS\Game\GameCommands.cs" />
-    <Compile Include="Core\GS\Game\GameManager.cs" />
+    <Compile Include="Core\GS\Games\GameCommands.cs" />
+    <Compile Include="Core\GS\Games\GameManager.cs" />
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
     <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
     <Compile Include="Core\GS\Markers\Marker.cs" />
-    <Compile Include="Core\GS\Player\Equipment.cs" />
     <Compile Include="Core\GS\Common\InventoryGrid.cs" />
+    <Compile Include="Core\GS\Players\Equipment.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
@@ -486,14 +487,14 @@
     <Compile Include="Core\MooNet\Objects\RPCObjectManager.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObject.cs" />
     <Compile Include="Core\Common\Storage\Config.cs" />
-    <Compile Include="Core\GS\Game\Game.cs" />
+    <Compile Include="Core\GS\Games\Game.cs" />
     <Compile Include="Core\GS\Actors\Monster.cs" />
     <Compile Include="Core\Common\Storage\GamedataDBManager.cs" />
     <Compile Include="Core\GS\Objects\WorldObject.cs" />
     <Compile Include="Core\GS\Objects\DynamicObject.cs" />
     <Compile Include="Core\GS\Objects\IRevealable.cs" />
-    <Compile Include="Core\GS\Player\Inventory.cs" />
-    <Compile Include="Core\GS\Player\Player.cs" />
+    <Compile Include="Core\GS\Players\Inventory.cs" />
+    <Compile Include="Core\GS\Players\Player.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -26,7 +26,7 @@ using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
 
-namespace Mooege.Core.GS.Game
+namespace Mooege.Core.GS.Games
 {
     [CommandGroup("spawn", "Spawns a mob.\nUsage: spawn [amount] [actorSNO]")]
     public class SpawnCommand : CommandGroup
@@ -63,7 +63,7 @@ namespace Mooege.Core.GS.Game
                                             player.Position.Y + (float) RandomHelper.NextDouble()*20f,
                                             player.Position.Z);
 
-                player.World.SpawnMob(player, actorSNO, position);
+                player.World.SpawnMonster(actorSNO, position);
             }
 
             return string.Format("Spawned {0} mobs with ActorSNO: {1}", amount, actorSNO);

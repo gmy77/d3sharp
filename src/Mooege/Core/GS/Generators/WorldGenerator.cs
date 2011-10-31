@@ -22,6 +22,7 @@ using Mooege.Common;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Common.Helpers;
 
@@ -32,7 +33,7 @@ namespace Mooege.Core.GS.Generators
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
-        public static World Generate(Game.Game game, int worldSNO)
+        public static World Generate(Game game, int worldSNO)
         {
             if (!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldSNO))
             {
@@ -106,7 +107,7 @@ namespace Mooege.Core.GS.Generators
                 var position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
                 var scene = new Scene(world, position, sceneChunk.SNOName.SNOId, null)
                 {
-                    MiniMapVisibility = MiniMapVisibility.Revealed,                    
+                    MiniMapVisibility = SceneMiniMapVisibility.Revealed,                    
                     RotationAmount = sceneChunk.PRTransform.Quaternion.W,
                     RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                     SceneGroupSNO = -1
@@ -143,7 +144,7 @@ namespace Mooege.Core.GS.Generators
                             var subScenePosition = scene.Position + pos;
                             var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
                             {
-                                MiniMapVisibility = MiniMapVisibility.Revealed,
+                                MiniMapVisibility = SceneMiniMapVisibility.Revealed,
                                 RotationAmount = sceneChunk.PRTransform.Quaternion.W,
                                 RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                                 Specification = sceneChunk.SceneSpecification

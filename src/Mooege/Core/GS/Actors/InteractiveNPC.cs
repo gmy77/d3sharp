@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
 
@@ -36,7 +37,7 @@ namespace Mooege.Core.GS.Actors
             this.Attributes[GameAttribute.Buff_Visual_Effect, 0x00FFFFF] = true;
         }
 
-        public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
+        public override void OnTargeted(Player player, TargetMessage message)
         {
             throw new NotImplementedException();
         }
