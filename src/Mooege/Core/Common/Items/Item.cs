@@ -37,8 +37,8 @@ namespace Mooege.Core.Common.Items
         Axe_1H, Axe_2H, CombatStaff_2H, Staff, Dagger, Mace_1H, Mace_2H, Sword_1H,
         Sword_2H, Crossbow, Bow, Spear, Polearm, Wand, Ring, FistWeapon_1H, ThrownWeapon, ThrowingAxe, ChestArmor, 
         HealthPotion, Gold, HealthGlobe, Dye, Elixir, Charm, Scroll, SpellRune, Rune, 
-        Amethyst, Emarald, Ruby, Emerald, Topaz, Skull, Backpack, Potion, Amulet, Scepter, Rod, Journal        
-
+        Amethyst, Emarald, Ruby, Emerald, Topaz, Skull, Backpack, Potion, Amulet, Scepter, Rod, Journal,        
+        //CraftingReagent
         // Not working at the moment:
         // ThrownWeapon, ThrowingAxe - does not work because there are no snoId in Actors.txt. Do they actually drop in the D3 beta? /angerwin?
         // Diamond, Sapphire - I realised some days ago, that the Item type Diamond and Shappire (maybe not the only one) causes client crash and BAD GBID messages, although they actually have SNO IDs. /angerwin
@@ -50,7 +50,7 @@ namespace Mooege.Core.Common.Items
 
         public override ActorType ActorType { get { return ActorType.Item; } }
 
-        public GS.Player.Player Owner { get; set; } // Only set when the player has the item in its inventory. /komiga
+        public Actor Owner { get; set; } // Only set when the _actor_ has the item in its inventory. /fasbat
 
         public ItemType ItemType { get; set; }
 
@@ -195,8 +195,14 @@ namespace Mooege.Core.Common.Items
             this.EquipmentSlot = equipmentSlot;
             this.InventoryLocation.X = column;
             this.InventoryLocation.Y = row;
-            if (this.Owner != null)
-                this.Owner.InGameClient.SendMessage(this.ACDInventoryPositionMessage);
+            if (this.Owner is GS.Player.Player)
+            {
+                var player = (this.Owner as GS.Player.Player);
+                if (!this.Reveal(player)) // What if we add the item straight to inv?
+                {
+                    player.InGameClient.SendMessage(this.ACDInventoryPositionMessage);
+                }
+            }
         }
 
         public void Drop(Mooege.Core.GS.Player.Player owner, Vector3D position)

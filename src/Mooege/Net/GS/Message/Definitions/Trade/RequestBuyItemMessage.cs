@@ -18,40 +18,40 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Trade
 {
     /// <summary>
-    /// Sent by the client, when the player sells an item to a vendor via trade window (not when using cauldron of jordan)
+    /// Sent by the client, when the player buys an item from a vendor
     /// </summary>
-    [Message(Opcodes.RequestSellItemMessage)]
-    public class RequestSellItemMessage : GameMessage
+    [Message(Opcodes.RequestBuyItemMessage, Consumers.Player)] // Maybe consumers.Vendor? /fasbat
+    public class RequestBuyItemMessage : GameMessage
     {
-        public int ItemId;
+        public uint ItemId;
 
-        public RequestSellItemMessage() { }
-        public RequestSellItemMessage(int itemID)
-            : base(Opcodes.RequestSellItemMessage)
+        public RequestBuyItemMessage() { }
+        public RequestBuyItemMessage(uint itemID)
+            : base(Opcodes.RequestBuyItemMessage)
         {
             ItemId = itemID;
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            ItemId = buffer.ReadInt(32);
+            ItemId = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, ItemId);
+            buffer.WriteUInt(32, ItemId);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("SellItemMessage:");
+            b.AppendLine("RequestBuyItemMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("ItemId: 0x" + ItemId.ToString("X8") + " (" + ItemId + ")");
+            b.Append(' ', pad); b.AppendLine("ItemActorId: 0x" + ItemId.ToString("X8") + " (" + ItemId + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

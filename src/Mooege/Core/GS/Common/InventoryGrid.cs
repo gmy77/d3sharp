@@ -4,15 +4,18 @@ using System.Linq;
 using System.Text;
 using Mooege.Common;
 using Mooege.Core.Common.Items;
+using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Objects;
+using Mooege.Core.GS.Player;
 
-namespace Mooege.Core.GS.Player
+namespace Mooege.Core.GS.Common
 {
 
     /// <summary>
     /// This class handels the gridlayout of an stash. Possible usecases are the inventory backpack, shared stash, traders stash,...
     /// Stash is organized by adding an item to EVERY slot it fills
     /// </summary>
-    public class InventoryGrid
+    public class InventoryGrid : IRevealable
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -21,7 +24,7 @@ namespace Mooege.Core.GS.Player
         public int Columns { get { return _backpack.GetLength(1); } }
         private uint[,] _backpack;
       
-        private readonly Mooege.Core.GS.Player.Player _owner; // Used, because most information is not in the item class but Actors managed by the world
+        private readonly Actor _owner; // Used, because most information is not in the item class but Actors managed by the world
 
         private struct InventorySize
         {
@@ -35,7 +38,7 @@ namespace Mooege.Core.GS.Player
             public int Column;
         }
 
-        public InventoryGrid(Player owner, int rows, int columns, int slot = 0)
+        public InventoryGrid(Actor owner, int rows, int columns, int slot = 0)
         {
             this._backpack = new uint[rows, columns];
             this._owner = owner;
@@ -55,7 +58,7 @@ namespace Mooege.Core.GS.Player
         {
             if (Item.IsPotion(item.ItemType) || Item.IsAccessory(item.ItemType)
                 || Item.IsRuneOrJewel(item.ItemType) || Item.IsDye(item.ItemType)
-                || Item.IsJournalOrScroll(item.ItemType))
+                || Item.IsJournalOrScroll(item.ItemType) || EquipmentSlot == (int) EquipmentSlotId.Vendor)
             {
                 return new InventorySize() { Width = 1, Height = 1 };
             }
@@ -195,6 +198,46 @@ namespace Mooege.Core.GS.Player
                     if (CollectOverlappingItems(item, r, c) == 0)
                         return new InventorySlot() { Row = r, Column = c };
             return null;
+        }
+
+        public bool Reveal(Player.Player player)
+        {
+            if (_owner == null || _owner.World == null)
+                return false;
+
+            for (int r = 0; r < Rows; r++)
+            {
+                for (int c = 0; c < Columns; c++)
+                {
+                    if (_backpack[r, c] != 0)
+                    {
+                        var item = _owner.World.GetItem(_backpack[r, c]);
+                        if (item != null)
+                            item.Reveal(player);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool Unreveal(Player.Player player)
+        {
+            if (_owner == null || _owner.World == null)
+                return false;
+
+            for (int r = 0; r < Rows; r++)
+            {
+                for (int c = 0; c < Columns; c++)
+                {
+                    if (_backpack[r, c] != 0)
+                    {
+                        _owner.World.Actors[_backpack[r, c]].Unreveal(player);
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }

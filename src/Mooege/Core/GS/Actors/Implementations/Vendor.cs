@@ -23,21 +23,109 @@ using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Core.GS.Common;
+using Mooege.Core.Common.Items;
+using Mooege.Core.GS.Player;
+using Mooege.Core.Common.Items.ItemCreation;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
     [HandledSNO(178396 /* Fence_In_Town_01? */)] //TODO this is just a test, do it properly for all vendors?
     public class Vendor : InteractiveNPC
     {
+        private InventoryGrid _vendorGrid;
+
         public Vendor(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
             : base(world, actorSNO, position, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
+            _vendorGrid = new InventoryGrid(this, 1, 20, (int) EquipmentSlotId.Vendor);
+            PopulateItems();
+        }
+
+
+        // TODO: Proper item loading from droplist?
+        protected virtual List<Item> GetVendorItems()
+        {
+            var list = new List<Item>();
+
+            /*var def = new ItemDefinition(189846, "Crafting_Tier_01A", null);
+            list.Add(ItemGenerator.CreateItem(this, def));
+            def = new ItemDefinition(189846, "Crafting_Tier_01B", null);
+            list.Add(ItemGenerator.CreateItem(this, def));
+            def = new ItemDefinition(189846, "Crafting_Tier_01C", null);
+            list.Add(ItemGenerator.CreateItem(this, def));
+            def = new ItemDefinition(189846, "Crafting_Tier_01D", null);
+            list.Add(ItemGenerator.CreateItem(this, def)); */
+
+            list.Add(ItemGenerator.GenerateRandom(this));
+            list.Add(ItemGenerator.GenerateRandom(this));
+            list.Add(ItemGenerator.GenerateRandom(this));
+            list.Add(ItemGenerator.GenerateRandom(this));
+            list.Add(ItemGenerator.GenerateRandom(this));
+            list.Add(ItemGenerator.GenerateRandom(this));
+
+            return list;
+        }
+
+        private void PopulateItems()
+        {
+            var items = GetVendorItems();
+            if (items.Count > _vendorGrid.Columns)
+            {
+                _vendorGrid.ResizeGrid(1, items.Count);
+            }
+
+            foreach (var item in items)
+            {
+                item.Field3 = 1; // Holy shit, what is this, forged in gods... 
+                _vendorGrid.AddItem(item);
+            }
+
+        }
+
+        public override bool Reveal(Player.Player player)
+        {
+            if (!base.Reveal(player))
+                return false;
+
+            _vendorGrid.Reveal(player);
+            return true;
+        }
+
+        public override bool Unreveal(Player.Player player)
+        {
+            if (!base.Reveal(player))
+                return false;
+
+            _vendorGrid.Unreveal(player);
+            return true;
         }
 
         public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
         {
             player.InGameClient.SendMessage(new OpenTradeWindowMessage((int)this.DynamicID));
+        }
+
+
+        public virtual void OnRequestBuyItem(Mooege.Core.GS.Player.Player player, Item item)
+        {
+            // TODO: Check gold here
+
+            if (!player.Inventory.HasInventorySpace(item))
+            {
+                return;
+            }
+
+            // TODO: Remove the gold
+
+            var newItem = new Item(this.World, item.ActorSNO, item.GBHandle.GBID, item.ItemType);
+            var attributeCreators = new AttributeCreatorFactory().Create(item.ItemType);
+            foreach (IItemAttributeCreator creator in attributeCreators)
+            {
+                creator.CreateAttributes(item);
+            }
+            player.Inventory.PickUp(newItem); // TODO: Dont use pickup? ;)
         }
     }
 }
