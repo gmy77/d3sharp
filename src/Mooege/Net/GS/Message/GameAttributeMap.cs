@@ -87,6 +87,11 @@ namespace Mooege.Net.GS.Message
             _changedAttributes.Clear();
         }
 
+        public void ClearChanged()
+        {
+            _changedAttributes.Clear();
+        }
+
         public List<GameMessage> GetMessageList(uint actorID)
         {
             var messageList = new List<GameMessage>();

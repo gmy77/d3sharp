@@ -526,6 +526,7 @@ namespace Mooege.Core.GS.Map
             return this.Actors.ContainsKey(dynamicID);
         }
 
+
         /// <summary>
         /// Returns true if the world has an actor with given dynamicId and type.
         /// </summary>
@@ -537,6 +538,13 @@ namespace Mooege.Core.GS.Map
             var actor = GetActor(dynamicID, matchType);
             return actor != null;
         }
+
+        public T GetInstance<T>() where T: Actor
+        {
+            return Actors.Values.OfType<T>().FirstOrDefault();
+        }
+
+        public Item GetItem(uint dynamicID)
 
         /// <summary>
         /// Adds given player to world.

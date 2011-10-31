@@ -147,9 +147,7 @@ namespace Mooege.Core.Common.Items
             var item = Cook(player, "Gold1", 0x00000178, ItemType.Gold);
             item.Attributes[GameAttribute.Gold] = amount;
 
-            var attributeMap = new GameAttributeMap();
-            attributeMap[GameAttribute.Gold] = amount;
-            attributeMap.SendMessage(player.InGameClient, item.DynamicID);
+            item.Attributes.SendChangedMessage(player.InGameClient, item.DynamicID);
             return item;
         }
 
