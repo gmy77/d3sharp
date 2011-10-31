@@ -49,6 +49,8 @@ namespace Mooege.Core.Common.Items
                     {
                         if (affixDef.AffixFamily0 == -1) continue;
                         if (affixDef.Name.Contains("REQ")) continue; // crashes the client // dark0ne
+                        if (affixDef.Name.Contains("Sockets")) continue; // crashes the client // dark0ne
+                        if (affixDef.Name.Contains("Will")) continue; // not in game // dark0ne
 
                         AffixList.Add(affixDef);
                     }
@@ -58,7 +60,10 @@ namespace Mooege.Core.Common.Items
 
         public static void Generate(Item item, int affixesCount)
         {
-            if (!Item.IsWeapon(item.ItemType) && !Item.IsArmor(item.ItemType) && !Item.IsAccessory(item.ItemType))
+            if (!Item.IsWeapon(item.ItemType) &&
+                !Item.IsArmor(item.ItemType) &&
+                !Item.IsOffhand(item.ItemType) &&
+                !Item.IsAccessory(item.ItemType))
                 return;
 
             var itemTypes = ItemGroup.HierarchyToHashList(item.ItemType);
@@ -83,17 +88,29 @@ namespace Mooege.Core.Common.Items
                     item.AffixList.Add(new Affix(def.Hash));
                     foreach (var effect in def.AttributeSpecifier)
                     {
-                        float result;
-                        if (FormulaScript.Evaluate(effect.Formula.ToArray(), item.RandomGenerator, out result))
+                        if (effect.AttributeId > 0)
                         {
-                            var attr = GameAttribute.Attributes[effect.AttributeId] as GameAttributeF;
-                            if (attr != null)
+                            float result;
+                            if (FormulaScript.Evaluate(effect.Formula.ToArray(), item.RandomGenerator, out result))
                             {
-                                Logger.Debug("Randomized value for attribute " + attr.Name + " is " + result);
-                                if (effect.SNOParam != -1)
-                                    item.Attributes[attr, effect.SNOParam] += result;
-                                else
-                                    item.Attributes[attr] += result;
+                                Logger.Debug("Randomized value for attribute " + GameAttribute.Attributes[effect.AttributeId].Name + " is " + result);
+
+                                if (GameAttribute.Attributes[effect.AttributeId] is GameAttributeF)
+                                {
+                                    var attr = GameAttribute.Attributes[effect.AttributeId] as GameAttributeF;
+                                    if (effect.SNOParam != -1)
+                                        item.Attributes[attr, effect.SNOParam] += result;
+                                    else
+                                        item.Attributes[attr] += result;
+                                }
+                                else if (GameAttribute.Attributes[effect.AttributeId] is GameAttributeI)
+                                {
+                                    var attr = GameAttribute.Attributes[effect.AttributeId] as GameAttributeI;
+                                    if (effect.SNOParam != -1)
+                                        item.Attributes[attr, effect.SNOParam] += (int)result;
+                                    else
+                                        item.Attributes[attr] += (int)result;
+                                }
                             }
                         }
                     }

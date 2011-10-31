@@ -121,8 +121,11 @@ namespace Mooege.Core.Common.Items
             // level requirement
             // Attributes[GameAttribute.Requirement, 38] = definition.RequiredLevel;
 
-            if (definition.Quality == ItemTable.ItemQuality.Invalid)
+            Attributes[GameAttribute.Item_Quality_Level] = 1;
+            if (Item.IsArmor(this.ItemType) || Item.IsWeapon(this.ItemType)|| Item.IsOffhand(this.ItemType))
                 Attributes[GameAttribute.Item_Quality_Level] = RandomHelper.Next(6);
+            if(this.ItemType.Flags.HasFlag(ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
+                Attributes[GameAttribute.Item_Quality_Level] = 3;
 
             Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
 
@@ -224,14 +227,23 @@ namespace Mooege.Core.Common.Items
                 float result;
                 if (FormulaScript.Evaluate(effect.Formula.ToArray(), this.RandomGenerator, out result))
                 {
-                    var attr = GameAttribute.Attributes[effect.AttributeId] as GameAttributeF;
-                    if (attr != null)
+                    Logger.Debug("Randomized value for attribute " + GameAttribute.Attributes[effect.AttributeId].Name + " is " + result);
+
+                    if (GameAttribute.Attributes[effect.AttributeId] is GameAttributeF)
                     {
-                        Logger.Debug("Randomized value for attribute " + attr.Name + " is " + result);
+                        var attr = GameAttribute.Attributes[effect.AttributeId] as GameAttributeF;
                         if (effect.SNOParam != -1)
                             Attributes[attr, effect.SNOParam] += result;
                         else
                             Attributes[attr] += result;
+                    }
+                    else if (GameAttribute.Attributes[effect.AttributeId] is GameAttributeI)
+                    {
+                        var attr = GameAttribute.Attributes[effect.AttributeId] as GameAttributeI;
+                        if (effect.SNOParam != -1)
+                            Attributes[attr, effect.SNOParam] += (int)result;
+                        else
+                            Attributes[attr] += (int)result;
                     }
                 }
             }

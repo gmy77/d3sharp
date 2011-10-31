@@ -41,6 +41,7 @@ namespace Mooege.Core.Common.Items
         public static readonly Logger Logger = LogManager.CreateLogger();
 
         private static readonly Dictionary<int, ItemTable> Items = new Dictionary<int, ItemTable>();
+        private static readonly HashSet<int> AllowedItemTypes = new HashSet<int>();
 
         public static int TotalItems
         {
@@ -50,6 +51,7 @@ namespace Mooege.Core.Common.Items
         static ItemGenerator()
         {
             LoadItems();
+            SetAllowedTypes();
         }
 
         private static void LoadItems()
@@ -59,12 +61,28 @@ namespace Mooege.Core.Common.Items
                 GameBalance data = asset.Data as GameBalance;
                 if (data != null && data.Type == BalanceType.Items)
                 {
-                    foreach (var itemdef in data.Item)
+                    foreach (var itemDefinition in data.Item)
                     {
-                        Items.Add(itemdef.Hash, itemdef);
+                        Items.Add(itemDefinition.Hash, itemDefinition);
                     }
                 }
             }
+        }
+
+        private static void SetAllowedTypes()
+        {
+            foreach (int hash in ItemGroup.SubTypesToHashList("Weapon"))
+                AllowedItemTypes.Add(hash);
+            foreach (int hash in ItemGroup.SubTypesToHashList("Armor"))
+                AllowedItemTypes.Add(hash);
+            foreach (int hash in ItemGroup.SubTypesToHashList("Offhand"))
+                AllowedItemTypes.Add(hash);
+            foreach (int hash in ItemGroup.SubTypesToHashList("Jewelry"))
+                AllowedItemTypes.Add(hash);
+            foreach (int hash in ItemGroup.SubTypesToHashList("Utility"))
+                AllowedItemTypes.Add(hash);
+            foreach (int hash in ItemGroup.SubTypesToHashList("CraftingPlan"))
+                AllowedItemTypes.Add(hash);
         }
 
         // generates a random item.
@@ -91,6 +109,8 @@ namespace Mooege.Core.Common.Items
             while (!found)
             {
                 itemDefinition = pool[RandomHelper.Next(0, pool.Count() - 1)];
+
+                if (!AllowedItemTypes.Contains(itemDefinition.ItemType1)) continue;
 
                 // ignore gold and healthglobe, they should drop only when expect, not randomly
                 if (itemDefinition.Name.ToLower().Contains("gold")) continue;

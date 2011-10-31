@@ -55,6 +55,23 @@ namespace Mooege.Core.Common.Items
             return result;
         }
 
+        public static List<int> SubTypesToHashList(string name)
+        {
+            List<int> result = new List<int>();
+            ItemTypeTable rootType = FromString(name);
+            if (rootType != null)
+            {
+                result.Add(rootType.Hash);
+                for (int i = 0; i < result.Count; ++i)
+                {
+                    foreach (var type in ItemTypes.Values)
+                        if (type.ParentType == result[i])
+                            result.Add(type.Hash);
+                }
+            }
+            return result;
+        }
+
         public static ItemTypeTable FromString(string name)
         {
             int hash = StringHashHelper.HashItemName(name);
@@ -73,8 +90,15 @@ namespace Mooege.Core.Common.Items
 
         public static bool IsSubType(ItemTypeTable type, string rootTypeName)
         {
-            int rootTypeHash = StringHashHelper.HashItemName(rootTypeName);
-            if(type.Hash == rootTypeHash)
+            return IsSubType(type, StringHashHelper.HashItemName(rootTypeName));
+        }
+
+        public static bool IsSubType(ItemTypeTable type, int rootTypeHash)
+        {
+            if (type == null)
+                return false;
+
+            if (type.Hash == rootTypeHash)
                 return true;
             var curType = type;
             while (curType.ParentType != -1)
