@@ -19,8 +19,6 @@
 using System;
 using System.Collections.Generic;
 using Mooege.Net.GS.Message.Definitions.Attribute;
-using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Actors;
 
 namespace Mooege.Net.GS.Message
 {
@@ -181,7 +179,6 @@ namespace Mooege.Net.GS.Message
                 if (value.ValueF < GameAttribute.Float16Min || value.ValueF > GameAttribute.Float16Max)
                     throw new ArgumentOutOfRangeException("GameAttribute." + attribute.Name.Replace(' ', '_'), "Min: " + GameAttribute.Float16Min  + " Max " + GameAttribute.Float16Max + " Tried to set: " + value.ValueF);
             }
-
             _attributeValues[keyid] = value;
         }
 

@@ -18,16 +18,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Core.GS.Skills;
-using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Actors;
-using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Actors.Buffs;
-using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Net.GS.Message.Definitions.ACD;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {

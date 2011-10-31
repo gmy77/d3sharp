@@ -18,27 +18,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Net.GS.Message.Fields;
-using Mooege.Core.GS.Actors;
-using Mooege.Net.GS;
-using Mooege.Net.GS.Message.Definitions.Combat;
-using Mooege.Core.GS.Skills;
-using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Common.Helpers;
-using Mooege.Net.GS.Message.Definitions.Animation;
-using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.Effect;
-using Mooege.Net.GS.Message.Definitions.Attribute;
-using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Common;
-using Mooege.Core.GS.Map;
-using Mooege.Net.GS.Message.Definitions.World;
-using Mooege.Net.GS.Message.Definitions.Actor;
+using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
+using Mooege.Net.GS.Message.Definitions.World;
 
 namespace Mooege.Core.GS.Powers
 {

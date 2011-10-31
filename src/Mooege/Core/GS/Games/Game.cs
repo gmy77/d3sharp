@@ -30,7 +30,6 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Core.GS.Powers;
 
 namespace Mooege.Core.GS.Games
 {

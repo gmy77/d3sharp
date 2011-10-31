@@ -16,22 +16,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Net.GS.Message.Fields;
-using Mooege.Core.GS.Actors;
-using Mooege.Net.GS;
 using Mooege.Common.Helpers;
-using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Net.GS.Message.Definitions.Attribute;
-using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.Animation;
-using Mooege.Net.GS.Message.Definitions.Effect;
-using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Powers
