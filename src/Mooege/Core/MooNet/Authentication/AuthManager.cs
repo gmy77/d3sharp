@@ -43,6 +43,8 @@ namespace Mooege.Core.MooNet.Authentication
         private static void BypassAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
             client.Account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email, request.Email);
+            if (client.Account.LoggedInClient != null)
+                client.Account.LoggedInClient.Connection.Disconnect();
             client.Account.LoggedInClient = client;
 
             client.AuthenticationCompleteSignal.Set(); // signal about completion of authentication processes so we can return the response for AuthenticationService:LogonRequest.
@@ -58,6 +60,9 @@ namespace Mooege.Core.MooNet.Authentication
                 client.AuthenticationCompleteSignal.Set();
                 return;
             }
+
+            if (client.Account.LoggedInClient != null)
+                client.Account.LoggedInClient.Connection.Disconnect();
 
             var srp6a = new SRP6a(account); // create srp6 handler to process the authentication.
             OngoingAuthentications.Add(client, srp6a);
