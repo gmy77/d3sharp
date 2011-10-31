@@ -30,12 +30,6 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
     {
         public int SNOConversation;
 
-        public FinishConversationMessage(int snoConversation)
-            : base(Opcodes.FinishConversationMessage)
-        {
-            this.SNOConversation = snoConversation;
-        }
-
         public override void Parse(GameBitBuffer buffer)
         {
             SNOConversation = buffer.ReadInt(32);
