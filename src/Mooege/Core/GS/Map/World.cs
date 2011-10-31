@@ -384,9 +384,13 @@ namespace Mooege.Core.GS.Map
         /// <param name="position">The position for drop.</param>
         public void SpawnGold(Player player, Vector3D position)
         {
-            // TODO: Gold should be spawned for all players in range. /raist.
-            var item = ItemGenerator.CreateGold(player, RandomHelper.Next(1, 3)); // somehow the actual ammount is not shown on ground /raist.
+            // Gold amount is now visible to all players
+            var item = ItemGenerator.CreateGold(player, RandomHelper.Next(1, 3));
             item.Drop(null, position);
+            var attributeMap = new GameAttributeMap();
+            attributeMap[GameAttribute.Gold] = item.Attributes[GameAttribute.Gold];
+            foreach (var i in attributeMap.GetMessageList(item.DynamicID))
+                item.World.BroadcastExclusive(i, player);
         }
 
         /// <summary>
