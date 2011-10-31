@@ -75,9 +75,6 @@ namespace Mooege.Core.GS.Actors
                     0x2cd9
             };
 
-            player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
-            player.UpdateExpBonusData(player.GBHandle.Type, this.GBHandle.Type);
-
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
                 ActorId = this.DynamicID,
@@ -161,7 +158,14 @@ namespace Mooege.Core.GS.Actors
                 Field3 = false,
             }, this);
 
-            this.World.SpawnRandomItemDrop(player, this.Position);
+            // Spawn Random item and give exp for each player in range
+            foreach (var plr in this.World.GetPlayersInRange(this.Position, 80.0f))
+            {
+                plr.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
+                plr.UpdateExpBonusData(plr.GBHandle.Type, this.GBHandle.Type);
+                this.World.SpawnRandomItemDrop(plr, this.Position);
+            }
+
             this.World.SpawnGold(player, this.Position);
             if (RandomHelper.Next(1, 100) < 20)
                 this.World.SpawnHealthGlobe(player, this.Position);
