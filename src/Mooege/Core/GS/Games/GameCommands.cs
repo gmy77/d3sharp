@@ -120,7 +120,11 @@ namespace Mooege.Core.GS.Games
 
             var world = invokerClient.InGameClient.Game.GetWorld(71150);
 
-            invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
+            if (world != invokerClient.InGameClient.Player.World)
+                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
+            else
+                invokerClient.InGameClient.Player.Teleport(world.StartingPoints.First().Position);
+
             return string.Format("Teleported back to town.");
         }
     }
