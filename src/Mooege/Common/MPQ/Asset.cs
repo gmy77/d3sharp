@@ -17,6 +17,8 @@
  */
 
 using System;
+using System.Globalization;
+using System.Threading;
 using CrystalMpq;
 using Mooege.Core.GS.Common.Types.SNO;
 
@@ -41,6 +43,7 @@ namespace Mooege.Common.MPQ
 
         public void RunParser(Type parser, MpqFile file)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture so that we don't hit pitfalls in non en/US systems with different number formats.
             this.Data = (FileFormat) Activator.CreateInstance(parser, new object[] {file});
         }
     }

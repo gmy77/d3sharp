@@ -24,7 +24,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     public class AffixMessage : GameMessage
     {
         public uint ActorID; // Actor's DynamicID
-        public int Field1;
+        public int Field1; // 1 == Identified Affixes, 2 == Unidentified Affixes
         // MaxLength = 32
         public int /* gbid */[] aAffixGBIDs;
 
