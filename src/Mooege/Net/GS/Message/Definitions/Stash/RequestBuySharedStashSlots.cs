@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Definitions.Stash
     /// <summary>
     ///  Sent by the client, when the player clicks on the button to expand the size of his shared stash
     /// </summary>
-    [Message(Opcodes.RequestBuySharedStashSlotsMessage)]
+    [Message(Opcodes.RequestBuySharedStashSlotsMessage, Consumers.Inventory)]
     public class RequestBuySharedStashSlotsMessage : GameMessage
     {
         public bool Field0;

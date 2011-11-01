@@ -282,7 +282,7 @@ namespace Mooege.Net.GS.Message
         ANNDataMessage29 = 263, // len: 	12
         SimpleMessage31 = 264, // len: 	8
         SimpleMessage32 = 265, // len: 	8
-        ANNDataMessage30 = 266, // len: 	12
+        RequestAddSocketMessage = 266, // len: 	12 former ANNDataMessage30
         SimpleMessage33 = 267, // len: 	8
         IntDataMessage6 = 268, // len: 	12
         DebugDrawPrimMessage = 269, // len: 	188
