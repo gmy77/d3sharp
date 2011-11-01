@@ -169,6 +169,17 @@ namespace Mooege.Core.GS.Actors
             : this(world, null)
         { }
 
+        public void EnterWorld(Vector3D position)
+        {
+            if (this.Spawned)
+                return;
+
+            this.Position = position;
+
+            if (this.World != null) // if actor got into a new world.
+                this.World.Enter(this); // let him enter first.
+        }
+
         public void ChangeWorld(World world, Vector3D position)
         {
             if (this.World == world)
@@ -194,16 +205,15 @@ namespace Mooege.Core.GS.Actors
             this.ChangeWorld(world, startingPoint.Position);            
         }
 
-        public void EnterWorld(Vector3D position)
+        public void Teleport(Vector3D position)
         {
-            if (this.Spawned)
-                return;
-
             this.Position = position;
-
-            if (this.World != null) // if actor got into a new world.
-                this.World.Enter(this); // let him enter first.
+            this.OnTeleport();
+            this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
         }
+
+        public virtual void OnTeleport()
+        { }
 
         #region tag-readers
 

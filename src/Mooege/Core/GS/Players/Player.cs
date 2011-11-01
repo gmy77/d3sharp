@@ -439,8 +439,7 @@ namespace Mooege.Core.GS.Players
             var wayPoint = this.World.GetWayPointById(tryWaypointMessage.Field1);
             if (wayPoint == null) return;
 
-            this.Position = wayPoint.Position;
-            InGameClient.SendMessage(this.ACDWorldPositionMessage);
+            this.Teleport(wayPoint.Position);
         }
 
         private void OnRequestBuyItem(GameClient client, RequestBuyItemMessage requestBuyItemMessage)
@@ -520,6 +519,12 @@ namespace Mooege.Core.GS.Players
         {
             this.World.Reveal(this);
 
+            this.RevealScenesToPlayer(); // reveal scenes in players proximity.
+            this.RevealActorsToPlayer(); // reveal actors in players proximity.
+        }
+
+        public override void OnTeleport()
+        {
             this.RevealScenesToPlayer(); // reveal scenes in players proximity.
             this.RevealActorsToPlayer(); // reveal actors in players proximity.
         }

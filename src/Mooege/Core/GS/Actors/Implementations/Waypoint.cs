@@ -40,6 +40,10 @@ namespace Mooege.Core.GS.Actors.Implementations
             : base(world, actorSNO, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
+        }
+
+        public override void OnEnter(World world)
+        {
             this.ReadWaypointId();
         }
 
