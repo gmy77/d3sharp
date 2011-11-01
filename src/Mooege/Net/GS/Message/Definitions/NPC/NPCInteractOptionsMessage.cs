@@ -24,25 +24,30 @@ namespace Mooege.Net.GS.Message.Definitions.NPC
     [Message(Opcodes.NPCInteractOptionsMessage)]
     public class NPCInteractOptionsMessage : GameMessage
     {
-        public int Field0;
+        public int ActorID;
         // MaxLength = 20
         public NPCInteraction[] tNPCInteraction;
-        public int Field2;
+        public NPCInteractOptionsType Type;
+
+        public NPCInteractOptionsMessage()
+            : base(Opcodes.NPCInteractOptionsMessage)
+        {
+        }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            ActorID = buffer.ReadInt(32);
             tNPCInteraction = new NPCInteraction[buffer.ReadInt(5)];
             for (int i = 0; i < tNPCInteraction.Length; i++) { tNPCInteraction[i] = new NPCInteraction(); tNPCInteraction[i].Parse(buffer); }
-            Field2 = buffer.ReadInt(2);
+            Type = (NPCInteractOptionsType) buffer.ReadInt(2);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, ActorID);
             buffer.WriteInt(5, tNPCInteraction.Length);
             for (int i = 0; i < tNPCInteraction.Length; i++) { tNPCInteraction[i].Encode(buffer); }
-            buffer.WriteInt(2, Field2);
+            buffer.WriteInt(2, (int)Type);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -51,16 +56,23 @@ namespace Mooege.Net.GS.Message.Definitions.NPC
             b.AppendLine("NPCInteractOptionsMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', pad); b.AppendLine("tNPCInteraction:");
             b.Append(' ', pad); b.AppendLine("{");
             for (int i = 0; i < tNPCInteraction.Length; i++) { tNPCInteraction[i].AsText(b, pad + 1); b.AppendLine(); }
             b.Append(' ', pad); b.AppendLine("}"); b.AppendLine();
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.Append(' ', pad); b.AppendLine("Type: 0x" + ((int)Type).ToString("X8") + " (" + Type + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
 
 
+    }
+
+    public enum NPCInteractOptionsType
+    {
+        Normal = 0,
+        Conversation = 1,
+        Unknown2 = 2, // Works like normal? /fasbat
     }
 }
