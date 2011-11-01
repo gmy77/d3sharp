@@ -106,6 +106,12 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public List<OpenConversation> OpenConversations { get; set; }
 
+
+        /// <summary>
+        /// NPC currently interaced with
+        /// </summary>
+        public InteractiveNPC SelectedNPC { get; set; }
+
         // Used for Exp-Bonuses
         // Move them to a class or a better position please /raist.
         private int _killstreakTickTime;
@@ -152,6 +158,7 @@ namespace Mooege.Core.GS.Players
             this.SkillSet = new SkillSet(this.Properties.Class);
             this.GroundItems = new Dictionary<uint, Item>();
             this.OpenConversations = new List<OpenConversation>();
+            this.SelectedNPC = null;
 
             this._killstreakTickTime = 400;
             this._killstreakPlayer = 0;
@@ -329,7 +336,7 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Movement_Scalar] = 1f;
             this.Attributes[GameAttribute.Walking_Rate_Total] = 0.2797852f;
             this.Attributes[GameAttribute.Walking_Rate] = 0.2797852f;
-            this.Attributes[GameAttribute.Running_Rate_Total] = 0.3598633f;
+            this.Attributes[GameAttribute.Running_Rate_Total] = 1.3598633f;
             this.Attributes[GameAttribute.Running_Rate] = 0.3598633f;
             this.Attributes[GameAttribute.Sprinting_Rate_Total] = 3.051758E-05f;
             this.Attributes[GameAttribute.Strafing_Rate_Total] = 3.051758E-05f;
@@ -339,6 +346,8 @@ namespace Mooege.Core.GS.Players
             //this.Attributes[GameAttribute.Disabled] = true; // we should be making use of these ones too /raist.
             //this.Attributes[GameAttribute.Loading] = true;
             //this.Attributes[GameAttribute.Invulnerable] = true;
+
+            this.Attributes[GameAttribute.Hireling_Class] = 1; // Templar selected /fasbat
 
             this.Attributes[GameAttribute.Hidden] = false;
             this.Attributes[GameAttribute.Immobolize] = true;
@@ -774,8 +783,8 @@ namespace Mooege.Core.GS.Players
                 Field4 = new HirelingSavedData()
                 {
                     HirelingInfos = this.HirelingInfo,
-                    Field1 = 0x00000000,
-                    Field2 = 0x00000000,
+                    Field1 = 0x00000001,
+                    Field2 = 0x00000002,
                 },
 
                 Field5 = 0x00000000,
@@ -839,8 +848,8 @@ namespace Mooege.Core.GS.Players
 
         public HirelingInfo[] HirelingInfo = new HirelingInfo[4]
         {
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
+            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x0000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
+            new HirelingInfo { Field0 = 0x00000001, Field1 = -1, Field2 = 0x00000007, Field3 = 0x00003C19, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
             new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
             new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
         };
