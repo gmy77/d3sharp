@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Windows;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
@@ -32,19 +33,23 @@ namespace Mooege.Core.GS.Objects
             set { this._world = value; }
         }
 
+        public event EventHandler PositionChanged;
+
         protected Vector3D _position;
         public virtual Vector3D Position
         {
             get { return _position; }
-            set { _position = value; }
+            set { 
+                _position = value;
+                this.Bounds = new Rect(this.Position.X, this.Position.Y, this.Size.Width, this.Size.Height);
+                var handler = PositionChanged;
+                if (handler != null) handler(this, EventArgs.Empty);
+            }
         }
 
-        protected Rect _bounds;
-        public Rect Bounds
-        {
-            get { return this._bounds; }
-            set { this._bounds = value; }
-        }
+        public Size Size { get; protected set; }
+
+        public Rect Bounds { get; private set; }
 
         public float Scale { get; set; }
 

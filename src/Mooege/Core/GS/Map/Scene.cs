@@ -141,14 +141,14 @@ namespace Mooege.Core.GS.Map
             this.SNOId = snoId;
             this.World = world;
             this.World.Game.StartTracking(this);
-
             this.Parent = parent;
             this.Subscenes = new List<Scene>();
             this.Scale = 1.0f;                   
             this.AppliedLabels = new int[0];
             this.LoadSceneData(); // load data from mpqs.
+
+            this.Size = new Size(this.NavZone.V0.X*this.NavZone.Float0, this.NavZone.V0.Y*this.NavZone.Float0);
             this.Position = position;
-            this.Bounds = new Rect(this.Position.X, this.Position.Y, this.NavZone.V0.X * this.NavZone.Float0, this.NavZone.V0.Y * this.NavZone.Float0); // the scene bounds.
             this.World.AddScene(this); // add scene to the world.
         }
 

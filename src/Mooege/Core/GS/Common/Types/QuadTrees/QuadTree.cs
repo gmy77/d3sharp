@@ -291,6 +291,7 @@ namespace Mooege.Core.GS.Common.Types.QuadTrees
                 QuadNode node = _objectToNodeLookup[@object];
                 node.ContainedObjects.Remove(@object);
                 _objectToNodeLookup.Remove(@object);
+                @object.PositionChanged -= ObjectPositionChanged;
             }
         }
 
@@ -304,7 +305,25 @@ namespace Mooege.Core.GS.Common.Types.QuadTrees
             lock (_syncLock)
             {
                 node.ContainedObjects.Add(@object);
-                _objectToNodeLookup.Add(@object, node);                
+                _objectToNodeLookup.Add(@object, node);
+                @object.PositionChanged += ObjectPositionChanged;
+            }
+        }
+
+        private void ObjectPositionChanged(object sender, EventArgs e)
+        {
+            lock (_syncLock)
+            {
+                var @object = sender as WorldObject;
+                if (@object == null) return;
+
+                QuadNode node = this._objectToNodeLookup[@object];
+                if (node.Bounds.Contains(@object.Bounds) && !node.HasChildNodes()) return;
+
+                this.RemoveObjectFromNode(@object);
+                Insert(@object);
+                if (node.Parent != null)
+                    CheckChildNodes(node.Parent);
             }
         }
 

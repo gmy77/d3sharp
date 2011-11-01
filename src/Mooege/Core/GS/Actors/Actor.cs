@@ -155,6 +155,7 @@ namespace Mooege.Core.GS.Actors
             : base(game.NewObjectID)
         {
             game.StartTracking(this);
+            this.Size = new Size(1, 1);
             this.Attributes = new GameAttributeMap();
             this.AffixList = new List<Affix>();
             this.GBHandle = new GBHandle { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
@@ -172,7 +173,6 @@ namespace Mooege.Core.GS.Actors
         public void EnterWorld(World world, Vector3D position)
         {
             this.Position = position;
-            this.Bounds = new Rect(this._position.X, this.Position.Y, 1, 1); // calculate the bounds.
 
             if (this._world == world) return;
 
@@ -182,8 +182,6 @@ namespace Mooege.Core.GS.Actors
             this._world = world;
             if (this._world != null) // if actor got into a new world.
                 this._world.Enter(this); // let him enter first.
-
-            this.World.QuadTree.Insert(this); // add it to quad-tree too.
         }
 
         public virtual void OnSpawn()

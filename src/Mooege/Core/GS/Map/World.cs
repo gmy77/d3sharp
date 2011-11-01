@@ -266,9 +266,13 @@ namespace Mooege.Core.GS.Map
             this.AddActor(actor);
             actor.OnEnter(this);
 
-            var players = this.Players.Values; // Fix this: var players = actor.GetPlayersInRange();
+            // reveal actor to player's in-range.
+            var players = actor.GetPlayersInRange();
             foreach (var player in players)
             {
+                if (player == actor)
+                    continue; // don't re-reveal him to itself, if the entering actor is player himself.
+
                 actor.Reveal(player);
             }
         }
@@ -414,6 +418,7 @@ namespace Mooege.Core.GS.Map
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", actor.DynamicID));
 
             this._actors.TryAdd(actor.DynamicID, actor); // add to actors collection.
+            this.QuadTree.Insert(actor); // add it to quad-tree too.
 
             if (actor.ActorType == ActorType.Player) // if actor is a player, add it to players collection too.
                 this.AddPlayer((Player)actor);
