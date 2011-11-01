@@ -29,6 +29,7 @@ using Mooege.Core.GS.Actors.Interactions;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.NPC;
 using Mooege.Net.GS;
+using Mooege.Net.GS.Message.Definitions.Hireling;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -89,7 +90,13 @@ namespace Mooege.Core.GS.Actors
         public void Consume(GameClient client, GameMessage message)
         {
             if (message is NPCSelectConversationMessage) OnSelectConversation(client.Player, message as NPCSelectConversationMessage);
+            if (message is HirelingHireMessage) OnHire(client.Player);
             else return;
+        }
+
+        public virtual void OnHire(Player player)
+        {
+            throw new NotImplementedException();
         }
 
         private void OnSelectConversation(Player player, NPCSelectConversationMessage message)

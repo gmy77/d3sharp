@@ -849,7 +849,7 @@ namespace Mooege.Core.GS.Players
         public HirelingInfo[] HirelingInfo = new HirelingInfo[4]
         {
             new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x0000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000001, Field1 = -1, Field2 = 0x00000007, Field3 = 0x000020EE, Field4 = false, Field5 = 0x6D3, Field6 = -1, Field7 = -1, Field8 = -1, },
+            new HirelingInfo { Field0 = 0x00000001, Field1 = -1, Field2 = 0x00000007, Field3 = 0x00003C19, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
             new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
             new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
         };

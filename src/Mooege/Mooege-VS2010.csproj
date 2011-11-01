@@ -240,6 +240,7 @@
     <Compile Include="Net\GS\Message\Definitions\Artisan\RequestAddSocketMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingHire.cs" />
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCSelectConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
