@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Actors.Implementations.Artisans
 {
@@ -29,6 +30,14 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
         public Jeweler(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
             : base(world, actorSNO, position, tags)
         {
+        }
+
+        public void OnAddSocket(Players.Player player, Core.Common.Items.Item item)
+        {
+            // TODO: Animate Jeweler? Who knows. /fasbat
+            item.Attributes[GameAttribute.Sockets] += 1;
+            // Why this not work? :/
+            item.Attributes.SendChangedMessage(player.InGameClient, item.DynamicID);
         }
     }
 }
