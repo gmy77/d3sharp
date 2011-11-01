@@ -25,9 +25,9 @@ using Mooege.Core.GS.Skills;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(0x00007780/*Skills.Skills.BasicAttack*/)]
-    public class Melee : PowerImplementation
+    public class Melee : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             if (CanHitMeleeTarget(Target))
             {

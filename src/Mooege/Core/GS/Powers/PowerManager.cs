@@ -23,6 +23,8 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Common.Helpers;
+using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -30,20 +32,23 @@ namespace Mooege.Core.GS.Powers
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
+        private Actor _user;
+
         private bool _isChanneling = false;
         private TickTimer _channelCastDelay = null;
-        private IList<EffectActor> _channelEffects = null;
+        private IList<ClientEffect> _channelEffects = null;
 
         // list of all waiting to execute powers
         private class WaitingPower
         {
             public IEnumerator<TickTimer> PowerEnumerator;
-            public PowerImplementation Implementation;
+            public ContinuableEffect Implementation;
         }
         private List<WaitingPower> _waitingPowers = new List<WaitingPower>();
         
-        public PowerManager()
+        public PowerManager(Actor user)
         {
+            _user = user;
         }
 
         public void Update()
@@ -51,7 +56,7 @@ namespace Mooege.Core.GS.Powers
             UpdateWaitingPowers();
         }
 
-        public bool UsePower(Actor user, int powerSNO, uint targetId = uint.MaxValue, Vector3D targetPosition = null,
+        public bool UsePower(int powerSNO, uint targetId = uint.MaxValue, Vector3D targetPosition = null,
                              TargetMessage message = null)
         {
             Actor target;
@@ -60,9 +65,9 @@ namespace Mooege.Core.GS.Powers
             {
                 target = null;
             }
-            else if (user.World.GetActor(targetId) != null)
+            else if (_user.World.GetActor(targetId) != null)
             {
-                target = user.World.GetActor(targetId);
+                target = _user.World.GetActor(targetId);
                 targetPosition = target.Position;
             }
             else
@@ -73,13 +78,56 @@ namespace Mooege.Core.GS.Powers
             if (targetPosition == null)
                 targetPosition = new Vector3D(0, 0, 0);
 
+            #region Monster spawn HACK
             // HACK: intercept hotbar skill 1 to always spawn test mobs.
-            if (user is Player &&
-                powerSNO == ((Player)user).SkillSet.HotBarSkills[4].SNOSkill)
+            if (_user is Player && powerSNO == (_user as Player).SkillSet.HotBarSkills[4].SNOSkill)
             {
-                PowersTestMonster.CreateTestMonsters(user.World, user.Position, 10);
+                // number of monsters to spawn
+                int spawn_count = 10;
+
+                // list of actorSNO values to pick from when spawning
+                int[] actorSNO_values = { 4282, 3893, 6652, 5428, 5346, 6024, 5393, 5433, 5467 };
+
+                for (int n = 0; n < spawn_count; ++n)
+                {
+                    Vector3D position;
+
+                    if (targetPosition.X == 0f)
+                    {
+                        position = new Vector3D(_user.Position);
+                        if ((n % 2) == 0)
+                        {
+                            position.X += (float)(RandomHelper.NextDouble() * 20);
+                            position.Y += (float)(RandomHelper.NextDouble() * 20);
+                        }
+                        else
+                        {
+                            position.X -= (float)(RandomHelper.NextDouble() * 20);
+                            position.Y -= (float)(RandomHelper.NextDouble() * 20);
+                        }
+                    }
+                    else
+                    {
+                        position = new Vector3D(targetPosition);
+                        position.X += (float)(RandomHelper.NextDouble() - 0.5) * 20;
+                        position.Y += (float)(RandomHelper.NextDouble() - 0.5) * 20;
+                        position.Z = _user.Position.Z;
+                    }
+
+                    int actorSNO = actorSNO_values[RandomHelper.Next(actorSNO_values.Length - 1)];
+
+                    Monster mon = new Monster(_user.World, actorSNO, position, null);
+                    mon.Scale = 1.35f;
+                    mon.Attributes[GameAttribute.Hitpoints_Max_Total] = 50f;
+                    mon.Attributes[GameAttribute.Hitpoints_Max] = 50f;
+                    mon.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 0f;
+                    mon.Attributes[GameAttribute.Hitpoints_Cur] = 50f;
+                    _user.World.Enter(mon);
+                }
+
                 return true;
             }
+            #endregion
 
             // find and run a power implementation
             var implementation = PowerLoader.CreateImplementationForPowerSNO(powerSNO);
@@ -88,9 +136,9 @@ namespace Mooege.Core.GS.Powers
                 // copy in base params
                 implementation.PowerManager = this;
                 implementation.PowerSNO = powerSNO;
-                implementation.User = user;
+                implementation.User = _user;
                 implementation.Target = target;
-                implementation.World = user.World;
+                implementation.World = _user.World;
                 implementation.TargetPosition = targetPosition;
                 implementation.Message = message;
 
@@ -105,9 +153,9 @@ namespace Mooege.Core.GS.Powers
                         implementation.ThrottledCast = true;
                 }
 
-                var powerEnum = implementation.Run().GetEnumerator();
+                var powerEnum = implementation.Continue().GetEnumerator();
                 // actual power will first run here, if it yielded a timer process it in the waiting list
-                if (powerEnum.MoveNext() && powerEnum.Current != PowerImplementation.StopExecution)
+                if (powerEnum.MoveNext() && powerEnum.Current != ContinuableEffect.StopExecution)
                 {
                     _waitingPowers.Add(new WaitingPower
                     {
@@ -132,7 +180,7 @@ namespace Mooege.Core.GS.Powers
                 if (wait.PowerEnumerator.Current.TimedOut())
                 {
                     if (wait.PowerEnumerator.MoveNext())
-                        return wait.PowerEnumerator.Current == PowerImplementation.StopExecution;
+                        return wait.PowerEnumerator.Current == ContinuableEffect.StopExecution;
                     else
                         return true;
                 }
@@ -156,24 +204,24 @@ namespace Mooege.Core.GS.Powers
             _channelCastDelay = null;
             if (_channelEffects != null)
             {
-                foreach (EffectActor effect in _channelEffects)
+                foreach (ClientEffect effect in _channelEffects)
                     effect.Destroy();
 
                 _channelEffects = null;
             }
         }
 
-        public EffectActor GetChanneledEffect(Actor user, int index, int actorSNO, Vector3D position, bool snapped)
+        public ClientEffect GetChanneledEffect(Actor user, int index, int actorSNO, Vector3D position, bool snapped)
         {
             if (!_isChanneling) return null;
             
             if (_channelEffects == null)
-                _channelEffects = new List<EffectActor>();
+                _channelEffects = new List<ClientEffect>();
 
             // ensure effects list is at least big enough for specified index
             while (_channelEffects.Count < index + 1)
             {
-                _channelEffects.Add(new EffectActor(user.World, actorSNO, position, 0, null));
+                _channelEffects.Add(new ClientEffect(user.World, actorSNO, position, 0, null));
             }
 
             if (snapped)
@@ -184,7 +232,7 @@ namespace Mooege.Core.GS.Powers
             return _channelEffects[index];
         }
 
-        public EffectActor GetChanneledProxy(Actor user, int index, Vector3D position, bool snapped)
+        public ClientEffect GetChanneledProxy(Actor user, int index, Vector3D position, bool snapped)
         {
             return GetChanneledEffect(user, index, 187359, position, snapped);
         }

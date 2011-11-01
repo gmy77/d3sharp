@@ -31,9 +31,9 @@ using Mooege.Core.GS.Players;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.DeadlyReach)]
-    public class MonkDeadlyReach : PowerImplementation
+    public class MonkDeadlyReach : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             int effectSNO;
             float reachLength;
@@ -87,9 +87,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.FistsOfThunder)]
-    public class MonkFistsOfThunder : PowerImplementation
+    public class MonkFistsOfThunder : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             switch (Message.Field5)
             {
@@ -142,9 +142,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.SevenSidedStrike)]
-    public class MonkSevenSidedStrike : PowerImplementation
+    public class MonkSevenSidedStrike : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             UsePrimaryResource(50f);
             StartCooldown(WaitSeconds(30f));
@@ -173,9 +173,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.CripplingWave)]
-    public class MonkCripplingWave : PowerImplementation
+    public class MonkCripplingWave : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             int effectSNO;
             switch (Message.Field5)
@@ -224,9 +224,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.ExplodingPalm)]
-    public class MonkExplodingPalm : PowerImplementation
+    public class MonkExplodingPalm : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             int effectSNO;
             switch (Message.Field5)
@@ -258,9 +258,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.SweepingWind)]
-    public class MonkSweepingWind : PowerImplementation
+    public class MonkSweepingWind : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             int effectSNO;
             switch (Message.Field5)
@@ -292,9 +292,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.DashingStrike)]
-    public class MonkDashingStrike : PowerImplementation
+    public class MonkDashingStrike : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             UsePrimaryResource(10f);
 

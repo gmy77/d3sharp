@@ -26,9 +26,9 @@ using Mooege.Core.GS.Common.Types.Math;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Meteor)]
-    public class WizardMeteor : PowerImplementation
+    public class WizardMeteor : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             UsePrimaryResource(60f);
             SpawnEffect(86790, TargetPosition);
@@ -44,9 +44,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.Electrocute)]
-    public class WizardElectrocute : PowerImplementation
+    public class WizardElectrocute : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             RegisterChannelingPower(WaitSeconds(0.5f));
             
@@ -66,23 +66,24 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 IList<Actor> targets = new List<Actor>() { Target };
                 Actor ropeSource = User;
+                Actor curTarget = Target;
                 float damage = 22f;
                 while (targets.Count < 4) // original target + bounce 2 times
                 {
-                    Target.PlayHitEffect(2, User);
-                    ropeSource.AddRopeEffect(0x78c0, Target);
-                    ropeSource = Target;
+                    curTarget.PlayHitEffect(2, User);
+                    ropeSource.AddRopeEffect(0x78c0, curTarget);
+                    ropeSource = curTarget;
 
-                    Damage(Target, damage, 0);
+                    Damage(curTarget, damage, 0);
                     damage *= 0.7f;
 
-                    Target = GetTargetsInRange(Target.Position, 15f, 3).FirstOrDefault(t => !targets.Contains(t));
-                    if (Target != null)
+                    curTarget = GetTargetsInRange(curTarget.Position, 15f, 3).FirstOrDefault(t => !targets.Contains(t));
+                    if (curTarget != null)
                     {
-                        targets.Add(Target);
+                        targets.Add(curTarget);
                         yield return WaitSeconds(0.150f);
                         // end loop if target or ropeSource are no longer in this world after resuming
-                        if (Target.World != World || ropeSource.World != World)
+                        if (curTarget.World != World || ropeSource.World != World)
                             break;
                     }
                     else
@@ -95,9 +96,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.MagicMissile)]
-    public class WizardMagicMissile : PowerImplementation
+    public class WizardMagicMissile : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             UsePrimaryResource(20f);
 
@@ -116,9 +117,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Hydra)]
-    public class WizardHydra : PowerImplementation
+    public class WizardHydra : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             UsePrimaryResource(60f);
 
@@ -132,11 +133,11 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Disintegrate)]
-    public class WizardDisintegrate : PowerImplementation
+    public class WizardDisintegrate : ContinuableEffect
     {
         const float BeamLength = 40f;
 
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             RegisterChannelingPower(WaitSeconds(0.1f));
                         
@@ -172,9 +173,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.WaveOfForce)]
-    public class WizardWaveOfForce : PowerImplementation
+    public class WizardWaveOfForce : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             UsePrimaryResource(25f);
             StartCooldown(WaitSeconds(15f));
@@ -194,9 +195,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneTorrent)]
-    public class WizardArcaneTorrent : PowerImplementation
+    public class WizardArcaneTorrent : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             RegisterChannelingPower(WaitSeconds(0.2f));
 
@@ -224,7 +225,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
     //bumbasher
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.FrostNova)]
-    public class WizardFrostNova : PowerImplementation
+    public class WizardFrostNova : ContinuableEffect
     {
         public const int FrostNova_Emitter = 4402; //plain frost nova effect
         public const int FrostNova_Emitter_alabaster_unfreeze = 0x2e27a;
@@ -243,7 +244,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             FrostNova_Minor_Emitter
         };
 
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             StartCooldown(WaitSeconds(12f));
 
@@ -261,7 +262,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
-    public class WizardBlizzard : PowerImplementation
+    public class WizardBlizzard : ContinuableEffect
     {
         public const int Wizard_Blizzard = 0x1977;
         public const int Wizard_Blizzard_addFreeze = 0x2d53f;
@@ -289,7 +290,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         };
 
         //deals 12-18 DPS for 3 seconds
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             UsePrimaryResource(45f);
 
@@ -315,11 +316,11 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.RayOfFrost)]
-    public class WizardRayOfFrost : PowerImplementation
+    public class WizardRayOfFrost : ContinuableEffect
     {
         const float BeamLength = 40f;
 
-        public override IEnumerable<TickTimer> Run() //TODO: still WIP
+        public override IEnumerable<TickTimer> Continue() //TODO: still WIP
         {
             RegisterChannelingPower(WaitSeconds(0.1f));
 
@@ -348,7 +349,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             // always update effect locations
             // spawn target effect a little bit above the ground target
-            EffectActor pid = GetChanneledEffect(0, 6535, new Vector3D(TargetPosition.X, TargetPosition.Y, TargetPosition.Z + 10f), true);
+            ClientEffect pid = GetChanneledEffect(0, 6535, new Vector3D(TargetPosition.X, TargetPosition.Y, TargetPosition.Z + 10f), true);
             if (!UserIsChanneling)
             {
                 User.AddComplexEffect(19327, pid);
@@ -359,9 +360,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Teleport)]
-    public class WizardTeleport : PowerImplementation
+    public class WizardTeleport : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             UsePrimaryResource(15f);
             //StartCooldown(WaitSeconds(16f));
@@ -373,9 +374,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.SpectralBlade)]
-    public class WizardSpectralBlade : PowerImplementation
+    public class WizardSpectralBlade : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             UsePrimaryResource(15f);
 
@@ -397,9 +398,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.ShockPulse)]
-    public class WizardSpectralShockPulse : PowerImplementation
+    public class WizardSpectralShockPulse : ContinuableEffect
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Continue()
         {
             yield break;
         }

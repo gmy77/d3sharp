@@ -31,7 +31,7 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
 
         public void Handle(GameClient client)
         {
-            client.Player.PowerManager.UsePower(client.Player, PowerSNO);
+            client.Player.PowerManager.UsePower(PowerSNO);
         }
 
         public override void Parse(GameBitBuffer buffer)

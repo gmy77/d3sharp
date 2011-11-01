@@ -29,7 +29,7 @@ using Mooege.Net.GS.Message.Definitions.World;
 
 namespace Mooege.Core.GS.Powers
 {
-    public abstract class PowerImplementation
+    public abstract class ContinuableEffect
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
         public static Random Rand = new Random();
@@ -46,7 +46,7 @@ namespace Mooege.Core.GS.Powers
 
         // Called to start executing a power
         // Yields timers that signify when to continue execution.
-        public abstract IEnumerable<TickTimer> Run();
+        public abstract IEnumerable<TickTimer> Continue();
 
         // token instance that can be yielded by Run() to indicate the power manager should stop
         // running a power implementation.
@@ -64,12 +64,12 @@ namespace Mooege.Core.GS.Powers
 
         public TickTimer WaitSeconds(float seconds)
         {
-            return new TickSecondsTimer(User.World.Game, seconds);
+            return new TickSecondsTimer(World.Game, seconds);
         }
 
         public TickTimer WaitTicks(int ticks)
         {
-            return new TickRelativeTimer(User.World.Game, ticks);
+            return new TickRelativeTimer(World.Game, ticks);
         }
 
         public void StartCooldown(TickTimer timeout)
@@ -78,7 +78,7 @@ namespace Mooege.Core.GS.Powers
             {
                 // TODO: update User.Attribute instead of creating temp map
                 GameAttributeMap map = new GameAttributeMap();
-                map[GameAttribute.Power_Cooldown_Start, PowerSNO] = User.World.Game.Tick;
+                map[GameAttribute.Power_Cooldown_Start, PowerSNO] = World.Game.Tick;
                 map[GameAttribute.Power_Cooldown, PowerSNO] = timeout.TimeoutTick;
                 map.SendMessage((User as Player).InGameClient, User.DynamicID);
             }
@@ -123,14 +123,9 @@ namespace Mooege.Core.GS.Powers
 
         public void Damage(Actor target, float amount, int type)
         {
-            if (target == null) return;
-            if (target.World == null)
-            {
-                // WTF is world null sometimes for? Probably race condition due to lack of GS locks
-                return;
-            }
+            if (target == null || target.World == null) return;
 
-            target.World.BroadcastIfRevealed(new FloatingNumberMessage
+            World.BroadcastIfRevealed(new FloatingNumberMessage
             {
                 Id = 0xd0,
                 ActorID = target.DynamicID,
@@ -138,15 +133,16 @@ namespace Mooege.Core.GS.Powers
                 Type = FloatingNumberMessage.FloatType.White//type,
             }, target);
 
-            // TODO: handling more damagable types
-            if (target is PowersTestMonster)
-            {
-                ((PowersTestMonster)target).ReceiveDamage(User, amount, type);
-            }
-            else if (target is Monster && User is Player)
-            {
-                ((Monster)target).Die((Player)User);
-            }
+            // Update hp, kill if Monster and 0hp
+            float new_hp = Math.Max(target.Attributes[GameAttribute.Hitpoints_Cur] - amount, 0f);
+            target.Attributes[GameAttribute.Hitpoints_Cur] = new_hp;
+            GameAttributeMap map = new GameAttributeMap();
+            map[GameAttribute.Hitpoints_Cur] = new_hp;
+            foreach (var msg in map.GetMessageList(target.DynamicID))
+                World.BroadcastIfRevealed(msg, target);
+
+            if (new_hp == 0f && target is Monster && User is Player)
+                (target as Monster).Die(User as Player);
         }
 
         public void Damage(IList<Actor> target_list, float amount, int type)
@@ -157,38 +153,38 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public EffectActor SpawnEffect(int actorSNO, Vector3D position, float angle = -1f /*random*/, TickTimer timeout = null)
+        public ClientEffect SpawnEffect(int actorSNO, Vector3D position, float angle = -1f /*random*/, TickTimer timeout = null)
         {
             if (angle == -1f)
                 angle = (float)(Rand.NextDouble() * (Math.PI * 2));
             if (timeout == null)
             {
                 if (_defaultEffectTimeout == null)
-                    _defaultEffectTimeout = new TickSecondsTimer(User.World.Game, 2f); // default timeout of 2 seconds for now
+                    _defaultEffectTimeout = new TickSecondsTimer(World.Game, 2f); // default timeout of 2 seconds for now
 
                 timeout = _defaultEffectTimeout;
             }
 
-            return new EffectActor(User.World, actorSNO, position, angle, timeout);
+            return new ClientEffect(World, actorSNO, position, angle, timeout);
         }
 
-        public EffectActor SpawnEffect(int actorSNO, Vector3D position, Actor point_to_actor, TickTimer timeout = null)
+        public ClientEffect SpawnEffect(int actorSNO, Vector3D position, Actor point_to_actor, TickTimer timeout = null)
         {
             float angle = (point_to_actor != null) ? PowerMath.AngleLookAt(User.Position, point_to_actor.Position) : -1f;
             return SpawnEffect(actorSNO, position, angle, timeout);
         }
 
-        public EffectActor SpawnProxy(Vector3D position, TickTimer timeout = null)
+        public ClientEffect SpawnProxy(Vector3D position, TickTimer timeout = null)
         {
             return SpawnEffect(187359, position, 0, timeout);
         }
 
-        public EffectActor GetChanneledEffect(int index, int actorSNO, Vector3D position, bool snapped = false)
+        public ClientEffect GetChanneledEffect(int index, int actorSNO, Vector3D position, bool snapped = false)
         {
             return PowerManager.GetChanneledEffect(User, index, actorSNO, position, snapped);
         }
 
-        public EffectActor GetChanneledProxy(int index, Vector3D position, bool snapped = false)
+        public ClientEffect GetChanneledProxy(int index, Vector3D position, bool snapped = false)
         {
             return GetChanneledEffect(index, 187359, position, snapped);
         }
@@ -196,12 +192,12 @@ namespace Mooege.Core.GS.Powers
         public IList<Actor> GetTargetsInRange(Vector3D center, float range, int maxCount = -1)
         {
             List<Actor> hits = new List<Actor>();
-            foreach (Actor actor in User.World.GetActorsInRange(center, range))
+            foreach (Actor actor in World.GetActorsInRange(center, range))
             {
                 if (hits.Count == maxCount)
                     break;
 
-                if (actor is PowersTestMonster || actor is Monster)
+                if (actor is Monster)
                     hits.Add(actor);
             }
 

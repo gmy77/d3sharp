@@ -98,7 +98,7 @@
     <Compile Include="Core\GS\Actors\Buffs\BooleanAttributeBuff.cs" />
     <Compile Include="Core\GS\Actors\Buffs\Buffs.cs" />
     <Compile Include="Core\GS\Actors\Buffs\TimedBuff.cs" />
-    <Compile Include="Core\GS\Actors\EffectActor.cs" />
+    <Compile Include="Core\GS\Actors\ClientEffect.cs" />
     <Compile Include="Core\GS\Powers\Implementations\Barbarian.cs" />
     <Compile Include="Core\GS\Powers\Implementations\DemonHunter.cs" />
     <Compile Include="Core\GS\Powers\Implementations\Melee.cs" />
@@ -106,11 +106,10 @@
     <Compile Include="Core\GS\Powers\Implementations\WitchDoctor.cs" />
     <Compile Include="Core\GS\Powers\Implementations\Wizard.cs" />
     <Compile Include="Core\GS\Powers\ImplementsPowerSNO.cs" />
-    <Compile Include="Core\GS\Powers\PowerImplementation.cs" />
+    <Compile Include="Core\GS\Powers\ContinuableEffect.cs" />
     <Compile Include="Core\GS\Powers\PowerLoader.cs" />
     <Compile Include="Core\GS\Powers\PowerManager.cs" />
     <Compile Include="Core\GS\Powers\PowerProjectile.cs" />
-    <Compile Include="Core\GS\Powers\PowersTestMonster.cs" />
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Common\Helpers\FileHelpers.cs" />

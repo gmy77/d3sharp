@@ -17,23 +17,18 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Core.GS.Actors;
-using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Powers;
 
-namespace Mooege.Core.GS.Powers
+namespace Mooege.Core.GS.Actors
 {
-    public class EffectActor : Actor
+    public class ClientEffect : Actor
     {
         public TickTimer Timeout;
 
         public override ActorType ActorType { get { return Actors.ActorType.ClientEffect; } }
 
-        public EffectActor(Map.World world, int actorSNO, Vector3D position, float angle, TickTimer timeout = null)
+        public ClientEffect(Map.World world, int actorSNO, Vector3D position, float angle, TickTimer timeout = null)
             : base(world, world.NewActorID)
         {
             this.SNOId = actorSNO;
@@ -41,7 +36,7 @@ namespace Mooege.Core.GS.Powers
             RotationAxis = new Vector3D(0, 0, (float)Math.Sin(angle / 2f));
 
             // FIXME: This is hardcoded crap
-            this.Field2 = 0x8; // monster=0x8, using effect's id results in not being able to do smooth actor movements
+            this.Field2 = 0x8; // monster=0x8, using client effect's id results in not being able to do smooth actor movements
             //this.Field2 = 0x18; // used some effects, but not needed?
             this.Field3 = 0x0;
             //this.Field7 = -1; // used by some effects, but not needed?

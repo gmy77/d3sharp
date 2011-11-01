@@ -103,11 +103,6 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public List<OpenConversation> OpenConversations { get; set; }
 
-        /// <summary>
-        /// PowerManager for player.
-        /// </summary>
-        public PowerManager PowerManager;
-
         // Used for Exp-Bonuses
         // Move them to a class or a better position please /raist.
         private int _killstreakTickTime;
@@ -158,7 +153,6 @@ namespace Mooege.Core.GS.Players
             this.SkillSet = new SkillSet(this.Properties.Class);
             this.GroundItems = new Dictionary<uint, Item>();
             this.OpenConversations = new List<OpenConversation>();
-            this.PowerManager = new PowerManager();
 
             this._killstreakTickTime = 400;
             this._killstreakPlayer = 0;
@@ -407,7 +401,7 @@ namespace Mooege.Core.GS.Players
 
         private void OnObjectTargeted(GameClient client, TargetMessage message)
         {
-            if (this.PowerManager.UsePower(this, message.PowerSNO, message.TargetID, message.Field2.Position, message))
+            if (this.PowerManager.UsePower(message.PowerSNO, message.TargetID, message.Field2.Position, message))
                 return;
 
             Actor actor = this.World.GetActor(message.TargetID);
@@ -472,8 +466,6 @@ namespace Mooege.Core.GS.Players
             CheckOpenConversations();
 
             _UpdateResources();
-
-            this.PowerManager.Update();
 
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }

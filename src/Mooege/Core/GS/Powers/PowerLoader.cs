@@ -31,11 +31,11 @@ namespace Mooege.Core.GS.Powers
 
         private static Dictionary<int, Type> _implementations = new Dictionary<int, Type>();
 
-        public static PowerImplementation CreateImplementationForPowerSNO(int powerSNO)
+        public static ContinuableEffect CreateImplementationForPowerSNO(int powerSNO)
         {
             if (_implementations.ContainsKey(powerSNO))
             {
-                return (PowerImplementation)Activator.CreateInstance(_implementations[powerSNO]);
+                return (ContinuableEffect)Activator.CreateInstance(_implementations[powerSNO]);
             }
             else
             {
@@ -49,7 +49,7 @@ namespace Mooege.Core.GS.Powers
             // Find all subclasses of PowerImplementation and index them by the PowerSNO they are attributed with.
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                if (type.IsSubclassOf(typeof(PowerImplementation)))
+                if (type.IsSubclassOf(typeof(ContinuableEffect)))
                 {
                     var attributes = (ImplementsPowerSNO[])type.GetCustomAttributes(typeof(ImplementsPowerSNO), true);
                     foreach (var powerAttribute in attributes)

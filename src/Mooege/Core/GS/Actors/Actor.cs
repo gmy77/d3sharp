@@ -47,6 +47,11 @@ namespace Mooege.Core.GS.Actors
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         /// <summary>
+        /// PowerManager for actor.
+        /// </summary>
+        public PowerManager PowerManager;
+
+        /// <summary>
         /// SNO Id of the actor.
         /// </summary>
         private int _snoId;
@@ -188,6 +193,8 @@ namespace Mooege.Core.GS.Actors
 
             this.Tags = tags;
             this.ReadTags();
+
+            this.PowerManager = new PowerManager(this);
         }
 
         protected Actor(World world, uint dynamicId)
@@ -399,7 +406,9 @@ namespace Mooege.Core.GS.Actors
         public override void Update()
         {
             base.Update();
-            UpdateBuffs();
+            //UpdateBuffs();
+
+            this.PowerManager.Update();
         }
         
         /// <summary>
