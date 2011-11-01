@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     [Message(new[] {
         Opcodes.ANNDataMessage8, Opcodes.ANNDataMessage10, Opcodes.ANNDataMessage11, Opcodes.ANNDataMessage12, Opcodes.ANNDataMessage13, Opcodes.ANNDataMessage15, 
         Opcodes.ANNDataMessage16, Opcodes.ANNDataMessage17, Opcodes.ANNDataMessage18, Opcodes.ANNDataMessage20, Opcodes.ANNDataMessage21, Opcodes.ANNDataMessage22, Opcodes.ANNDataMessage23, 
-        Opcodes.ANNDataMessage24, Opcodes.ANNDataMessage25, Opcodes.ANNDataMessage26, Opcodes.ANNDataMessage28, Opcodes.ANNDataMessage29, Opcodes.ANNDataMessage30, Opcodes.ANNDataMessage31, 
+        Opcodes.ANNDataMessage24, Opcodes.ANNDataMessage25, Opcodes.ANNDataMessage26, Opcodes.ANNDataMessage28, Opcodes.ANNDataMessage29, Opcodes.ANNDataMessage31, 
         Opcodes.ANNDataMessage32, Opcodes.ANNDataMessage33
     })]
     public class ANNDataMessage : GameMessage

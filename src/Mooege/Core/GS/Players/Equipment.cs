@@ -9,7 +9,8 @@ namespace Mooege.Core.GS.Players
     public enum EquipmentSlotId
     {
         Helm = 1, Chest = 2, Off_Hand = 3, Main_Hand = 4, Hands = 5, Belt = 6, Feet = 7,
-        Shoulders = 8, Legs = 9, Bracers = 10, Ring_right = 11, Ring_left = 12, Amulett = 13
+        Shoulders = 8, Legs = 9, Bracers = 10, Ring_right = 11, Ring_left = 12, Amulett = 13,
+        Stash = 17, Vendor = 20 // To do: Should this be here? Its not really an eq. slot /fasbat
     }
 
     class Equipment
@@ -112,7 +113,7 @@ namespace Mooege.Core.GS.Players
 
         internal Item AddGoldItem(Item collectedItem)
         {
-            return AddGoldAmount(collectedItem.Attributes[GameAttribute.Gold]);            
+            return AddGoldAmount(collectedItem.Attributes[GameAttribute.Gold]);
         }
 
         internal Item AddGoldAmount(int amount)
@@ -120,13 +121,18 @@ namespace Mooege.Core.GS.Players
 
             if (_inventoryGold == null)
             {
-                _inventoryGold = ItemGenerator.CreateGold(_owner, 0);                
+                _inventoryGold = ItemGenerator.CreateGold(_owner, 0);
                 _inventoryGold.Owner = _owner;
                 _inventoryGold.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
                 _inventoryGold.Reveal(_owner);
-            }           
+            }
+            else
+            {
+                _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += collectedItem.Attributes[GameAttribute.Gold];
+                _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID);
+            }
 
-            _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += amount;            
+            _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += amount;
             return _inventoryGold;
         }
 
