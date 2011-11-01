@@ -134,6 +134,8 @@
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
+    <Compile Include="Core\Common\Items\AffixGenerator.cs" />
+    <Compile Include="Core\Common\Items\AffixDefinition.List.cs" />
     <Compile Include="Core\Common\Items\Dye.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />

@@ -14,6 +14,7 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,7 +27,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
+    <Compile Include="Common\Extensions\ListExtensions.cs" />
     <Compile Include="Common\Helpers\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\Data.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
+    <Compile Include="Core\Common\Items\AffixGenerator.cs" />
     <Compile Include="Core\Common\Items\Dye.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
@@ -142,6 +144,8 @@
     <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributeCreator.cs" />
     <Compile Include="Common\MPQ\MPQPatchChain.cs" />
     <Compile Include="Common\MPQ\MPQStorage.cs" />
+    <Compile Include="Core\Common\Items\ItemGroup.cs" />
+    <Compile Include="Core\Common\Scripting\FormulaScript.cs" />
     <Compile Include="Core\GS\Actors\ActorFactory.cs" />
     <Compile Include="Core\GS\Actors\Gizmo.cs" />
     <Compile Include="Core\GS\Actors\Environment.cs" />
