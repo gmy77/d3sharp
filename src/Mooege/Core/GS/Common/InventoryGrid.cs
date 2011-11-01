@@ -23,7 +23,7 @@ namespace Mooege.Core.GS.Common
         public int Rows { get { return _backpack.GetLength(0); } }
         public int Columns { get { return _backpack.GetLength(1); } }
         private uint[,] _backpack;
-      
+
         private readonly Actor _owner; // Used, because most information is not in the item class but Actors managed by the world
 
         private struct InventorySize
@@ -56,6 +56,8 @@ namespace Mooege.Core.GS.Common
         // Do all items need a rectangual space in diablo 3?
         private InventorySize GetItemInventorySize(Item item)
         {
+            if(EquipmentSlot == (int) EquipmentSlotId.Vendor)
+                return new InventorySize() { Width = 1, Height = 1 };
             if (Item.IsWeapon(item.ItemType) || Item.IsArmor(item.ItemType) || Item.IsOffhand(item.ItemType))
             {
                 return new InventorySize() { Width = 1, Height = 2 };
