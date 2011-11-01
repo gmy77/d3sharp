@@ -269,7 +269,7 @@ namespace Mooege.Core.GS.Map
             this.AddActor(actor);
             actor.OnEnter(this);
 
-            var players = actor.GetPlayersInRange();
+            var players = this.Players.Values; // Fix this: var players = actor.GetPlayersInRange();
             foreach (var player in players)
             {
                 actor.Reveal(player);

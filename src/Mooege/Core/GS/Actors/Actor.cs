@@ -471,6 +471,8 @@ namespace Mooege.Core.GS.Actors
             var player = this as Player;
             if (player == null) return; // return if current actor is not a player. 
 
+            this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
+
             if (startingPoint == null)
                 startingPoint = targetWorld.StartingPoints.First();
 
@@ -478,17 +480,14 @@ namespace Mooege.Core.GS.Actors
             this.RotationAmount = startingPoint.RotationAmount;
             this.RotationAxis = startingPoint.RotationAxis;
 
-            this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
+            player.InGameClient.SendMessage(new EnterWorldMessage()
+            {
+                EnterPosition = this.Position,
+                WorldID = targetWorld.DynamicID,
+                WorldSNO = targetWorld.SNOId,
+            });
 
-
-            //player.InGameClient.SendMessage(new EnterWorldMessage()
-            //{
-            //    EnterPosition = this.Position,
-            //    WorldID = targetWorld.DynamicID,
-            //    WorldSNO = targetWorld.SNOId,
-            //});
-
-            //player.InGameClient.SendMessage(this.ACDWorldPositionMessage);
+            player.InGameClient.SendMessage(this.ACDWorldPositionMessage);
         }
 
         #endregion
