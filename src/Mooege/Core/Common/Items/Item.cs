@@ -101,8 +101,8 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        public Item(Mooege.Core.GS.Map.World world, ItemTable definition)
-            : base(world, world.NewActorID)
+        public Item(GS.Map.World world, ItemTable definition)
+            : base(world)
         {
             this.ItemDefinition = definition;
 
@@ -160,8 +160,6 @@ namespace Mooege.Core.Common.Items
             if (Attributes[GameAttribute.Item_Quality_Level] >= 3)
                 affixNumber = Attributes[GameAttribute.Item_Quality_Level] - 2;
             AffixGenerator.Generate(this, affixNumber);
-
-            this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
         private void ApplyWeaponSpecificOptions(ItemTable definition)

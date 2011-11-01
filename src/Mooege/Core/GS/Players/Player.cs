@@ -1353,7 +1353,7 @@ namespace Mooege.Core.GS.Players
 
             foreach(var item in items)
             {
-                if (item.ItemType != ItemType.Gold) continue;
+                if (!Item.IsGold(item.ItemType)) continue;
 
                 this.InGameClient.SendMessage(new FloatingAmountMessage()
                 {
@@ -1379,7 +1379,7 @@ namespace Mooege.Core.GS.Players
 
             foreach (var item in items)
             {
-                if (item.ItemType != ItemType.HealthGlobe) continue;
+                if (!Item.IsHealthGlobe(item.ItemType)) continue;
 
                 this.InGameClient.SendMessage(new PlayEffectMessage() //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
                 {
