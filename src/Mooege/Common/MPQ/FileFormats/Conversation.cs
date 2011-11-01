@@ -21,12 +21,14 @@ using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
+using System.Text;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.Conversation)]
     class Conversation : FileFormat
     {
+        static System.IO.StreamWriter dump = new System.IO.StreamWriter(System.IO.File.OpenWrite("F:\\conversations.txt"));
         public Header Header { get; private set; }
         public ConversationTypes ConversationType { get; private set; }
         public int I0 { get; private set; }
@@ -90,6 +92,37 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Read(CompiledScript, 0, compiledScriptPointer.Size);
 
             stream.Close();
+            /*
+            dump.Write(AsText(file.Name));
+            dump.WriteLine();
+            dump.WriteLine();
+            dump.WriteLine();
+            dump.WriteLine();
+            */
+        }
+
+        public string AsText(string filename)
+        {
+            StringBuilder s = new StringBuilder();
+
+            s.AppendLine(Header.SNOId + ":" + filename);
+            s.AppendLine("ConversationType:" + ConversationType);
+            s.Append("I0:" + I0 + "   ");
+            s.Append("I1:" + I1 + "   ");
+            s.Append("I2:" + I2 + "   ");
+            s.Append("I3:" + I3 + "   ");
+            s.Append("I4:" + I4 + "   ");
+            s.Append("I5:" + I5 + "   ");
+            s.AppendLine("I6:" + I6);
+
+            s.AppendLine("SNOQuest:" + SNOQuest);    
+            s.AppendLine("SNOConvPiggyBack:" + SNOConvPiggyback);
+            s.AppendLine("SNOConvUnlock:" + SNOConvUnlock);    
+
+
+            foreach (var node in RootTreeNodes)
+                node.AsText(s, 0);
+            return s.ToString();
         }
     }
 
@@ -98,10 +131,10 @@ namespace Mooege.Common.MPQ.FileFormats
     {
         public int I0 { get; private set; }
         public int I1 { get; private set; }
-        public int I2 { get; private set; }              // clasid ? 
+        public int LineID { get; private set; }              // clasid ? 
         public Speaker Speaker1 { get; private set; }
         public Speaker Speaker2 { get; private set; }
-        public int I3 { get; private set; }
+        public int AnimationTag { get; private set; }
         public int I4 { get; private set; }
         public int I5 { get; private set; }
         public ConvLocalDisplayTimes[] ConvLocalDisplayTimes = new ConvLocalDisplayTimes[18];
@@ -115,10 +148,10 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             I0 = stream.ReadValueS32();
             I1 = stream.ReadValueS32();
-            I2 = stream.ReadValueS32();
+            LineID = stream.ReadValueS32();
             Speaker1 = (Speaker)stream.ReadValueS32();
             Speaker2 = (Speaker)stream.ReadValueS32();
-            I3 = stream.ReadValueS32();
+            AnimationTag = stream.ReadValueS32();
             I4 = stream.ReadValueS32();
             I5 = stream.ReadValueS32();
 
@@ -140,6 +173,50 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += (2 * 4);
             ChildNodes = stream.ReadSerializedData<ConversationTreeNode>();
         }
+
+        public void AsText(StringBuilder s, int pad)
+        {
+            s.Append(' ', pad); 
+            s.Append("I0:" + I0 + "   ");
+            s.Append("I1:" + I1 + "   ");
+            s.Append("LineID:" + LineID + "   ");
+            s.Append("AnimationTag:" + AnimationTag + "   ");
+            s.Append("I4:" + I4 + "   ");
+            s.Append("I5:" + I5 + "   ");
+            s.AppendLine("I6:" + I6);
+            s.Append(' ', pad); s.AppendLine("Speaker1:" + Speaker1);
+            s.Append(' ', pad); s.AppendLine("Speaker2:" + Speaker2);
+            s.Append(' ', pad); s.AppendLine("Comment:" + Comment);
+
+            for (int i = 0; i < ConvLocalDisplayTimes.Length; i++)
+                ConvLocalDisplayTimes[i].AsText(s, pad);
+
+            if (TrueNodes.Count > 0)
+            {
+                s.Append(' ', pad); s.AppendLine("TrueNodes:");
+                s.Append(' ', pad); s.AppendLine("{");
+                foreach (var node in TrueNodes)
+                    node.AsText(s, pad + 3);
+                s.Append(' ', pad); s.AppendLine("}");
+            }
+            if (FalseNodes.Count > 0)
+            {
+                s.Append(' ', pad); s.AppendLine("FalseNodes:");
+                s.Append(' ', pad); s.AppendLine("{");
+                foreach (var node in FalseNodes)
+                    node.AsText(s, pad + 3);
+                s.Append(' ', pad); s.AppendLine("}");
+            }
+            if (ChildNodes.Count > 0)
+            {
+                s.Append(' ', pad); s.AppendLine("ChildNodes:");
+                s.Append(' ', pad); s.AppendLine("{");
+                foreach (var node in ChildNodes)
+                    node.AsText(s, pad + 3);
+                s.Append(' ', pad); s.AppendLine("}");
+            }
+        }
+
     }
 
     public class ConvLocalDisplayTimes
@@ -150,6 +227,14 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             for (int i = 0; i < I0.Length; i++)
                 I0[i] = stream.ReadValueS32();
+        }
+
+        public void AsText(StringBuilder s, int pad)
+        {
+            s.Append(' ', pad);
+            for (int i = 0; i < I0.Length; i++)
+                s.Append(I0[i] + "  ");
+            s.AppendLine();
         }
     }
 

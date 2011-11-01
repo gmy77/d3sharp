@@ -213,8 +213,10 @@ namespace Mooege.Core.GS.Actors
                     questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
                 else
                     Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", _snoId, snoQuestRange);
-
             }
+
+
+
         }
 
         #endregion

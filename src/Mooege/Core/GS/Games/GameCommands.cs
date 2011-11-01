@@ -108,6 +108,25 @@ namespace Mooege.Core.GS.Games
     }
 
 
+
+    [CommandGroup("conversation", "Starts a conversation. \n Usage: conversation snoConversation")]
+    public class ConversationCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Conversation(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            invokerClient.InGameClient.Player.Conversations.StartConversation(Int32.Parse(@params[0]));
+            return "";
+        }
+    }
+
+
     [CommandGroup("quest", "Retrieves information about quest states and manipulates quest progress.\n Usage: quest [triggers | trigger eventType eventValue")]
     public class QuestCommand : CommandGroup
     {

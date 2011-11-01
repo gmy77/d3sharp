@@ -185,6 +185,9 @@ namespace Mooege.Core.GS.Games
                     case Consumers.Player:
                         client.Player.Consume(client, message);
                         break;
+                    case Consumers.Conversations:
+                        client.Player.Conversations.Consume(client, message);
+                        break;
                 }
             }
             catch(Exception e)

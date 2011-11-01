@@ -90,17 +90,15 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public Dictionary<uint, IRevealable> RevealedObjects { get; private set; }
 
+        public ConversationManager Conversations { get; private set; }
+
+
         // Collection of items that only the player can see. This is only used when items drop from killing an actor
         // TODO: Might want to just have a field on the item itself to indicate whether it is visible to only one player
         /// <summary>
         /// Dropped items for the player
         /// </summary>
         public Dictionary<uint, Item> GroundItems { get; private set; }
-
-        /// <summary>
-        /// Open converstations.
-        /// </summary>
-        public List<OpenConversation> OpenConversations { get; set; }
 
         // Used for Exp-Bonuses
         // Move them to a class or a better position please /raist.
@@ -148,7 +146,7 @@ namespace Mooege.Core.GS.Players
             this.Inventory = new Inventory(this);
             this.SkillSet = new SkillSet(this.Properties.Class);
             this.GroundItems = new Dictionary<uint, Item>();
-            this.OpenConversations = new List<OpenConversation>();
+            this.Conversations = new ConversationManager(this);
 
             this._killstreakTickTime = 400;
             this._killstreakPlayer = 0;
@@ -452,7 +450,7 @@ namespace Mooege.Core.GS.Players
             CheckExpBonus(1);
 
             // Check if there is an conversation to close in this tick
-            CheckOpenConversations();
+            Conversations.Update(this._world.Game.Tick);
 
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
@@ -1238,77 +1236,9 @@ namespace Mooege.Core.GS.Players
                 });
 
                 this.UpdateExp(expBonus);
-                PlayHeroConversation(0x0002A73F, RandomHelper.Next(0, 8));
-            }
-        }
 
-        public void PlayHeroConversation(int snoConversation, int lineID)
-        {
-            this.InGameClient.SendMessage(new PlayConvLineMessage()
-            {
-                Id = 0xba,
-                ActorID = this.DynamicID,
-                Field1 = new uint[9]
-                    {
-                        this.DynamicID, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
-                    },
-
-                Params = new PlayLineParams()
-                {
-                    SNOConversation = snoConversation,
-                    Field1 = 0x00000001,
-                    Field2 = false,
-                    LineID = lineID,
-                    Field4 = 0x00000000,
-                    Field5 = -1,
-                    TextClass = (Class)this.Properties.VoiceClassID,
-                    Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
-                    AudioClass = (Class)this.Properties.VoiceClassID,
-                    SNOSpeakerActor = this.SNOId,
-                    Name = this.Properties.Name,
-                    Field11 = 0x00000002,
-                    Field12 = -1,
-                    Field13 = 0x00000069,
-                    Field14 = 0x0000006E,
-                    Field15 = 0x00000032
-                },
-                Field3 = 0x00000069,
-            });
-
-            this.OpenConversations.Add(new OpenConversation(
-                new EndConversationMessage()
-                {
-                    ActorId = this.DynamicID,
-                    Field0 = 0x0000006E,
-                    SNOConversation = snoConversation
-                },
-                this.InGameClient.Game.Tick + 400
-            ));
-        }
-
-        public void CheckOpenConversations()
-        {
-            if (this.OpenConversations.Count > 0)
-            {
-                foreach (OpenConversation openConversation in this.OpenConversations)
-                {
-                    if (openConversation.endTick == this.InGameClient.Game.Tick)
-                    {
-                        this.InGameClient.SendMessage(openConversation.endConversationMessage);
-                    }
-                }
-            }
-        }
-
-        public struct OpenConversation
-        {
-            public EndConversationMessage endConversationMessage;
-            public int endTick;
-
-            public OpenConversation(EndConversationMessage endConversationMessage, int endTick)
-            {
-                this.endConversationMessage = endConversationMessage;
-                this.endTick = endTick;
+                Conversations.StartConversation(0x0002A73F);
+                //PlayHeroConversation(0x0002A73F, RandomHelper.Next(0, 8));
             }
         }
 

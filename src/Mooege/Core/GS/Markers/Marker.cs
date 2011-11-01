@@ -35,5 +35,7 @@ namespace Mooege.Core.GS.Markers
         DestinationActorTag  = 526851,
         ActorTag             = 526852,  // maybe find another name
         DestinationLevelArea = 526853,
+
+        TriggeredConversation = 528128
     }
 }

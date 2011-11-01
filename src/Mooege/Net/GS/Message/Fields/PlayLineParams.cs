@@ -52,7 +52,7 @@ namespace Mooege.Net.GS.Message.Fields
         public int SNOSpeakerActor; // Picture of this actor is used on the text (if any)
         public string Name;         // Name of the actor if Field4 is set to 0 ("Hero speaking")
         public int Field11;
-        public int Field12;
+        public int AnimationTag;
         public int Field13;
         public int Field14;         // seems to be a running number across conversationlines. StopConvLine.Field0 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
         public int Field15;
@@ -71,7 +71,7 @@ namespace Mooege.Net.GS.Message.Fields
             SNOSpeakerActor = buffer.ReadInt(32);
             Name = buffer.ReadCharArray(49);
             Field11 = buffer.ReadInt(32);
-            Field12 = buffer.ReadInt(32);
+            AnimationTag = buffer.ReadInt(32);
             Field13 = buffer.ReadInt(32);
             Field14 = buffer.ReadInt(32);
             Field15 = buffer.ReadInt(32);
@@ -91,7 +91,7 @@ namespace Mooege.Net.GS.Message.Fields
             buffer.WriteInt(32, SNOSpeakerActor);
             buffer.WriteCharArray(49, Name);
             buffer.WriteInt(32, Field11);
-            buffer.WriteInt(32, Field12);
+            buffer.WriteInt(32, AnimationTag);
             buffer.WriteInt(32, Field13);
             buffer.WriteInt(32, Field14);
             buffer.WriteInt(32, Field15);
@@ -128,7 +128,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("Field11: 0x" + Field11.ToString("X8") + " (" + Field11 + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field12: 0x" + Field12.ToString("X8") + " (" + Field12 + ")");
+            b.AppendLine("AnimationTag: 0x" + AnimationTag.ToString("X8") + " (" + AnimationTag + ")");
             b.Append(' ', pad);
             b.AppendLine("Field13: 0x" + Field13.ToString("X8") + " (" + Field13 + ")");
             b.Append(' ', pad);
