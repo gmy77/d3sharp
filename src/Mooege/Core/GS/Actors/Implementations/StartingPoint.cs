@@ -18,8 +18,6 @@
 
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
 
@@ -30,8 +28,8 @@ namespace Mooege.Core.GS.Actors.Implementations
     {
         public int TargetId { get; private set; }
 
-        public StartingPoint(Game game, int actorSNO, Dictionary<int, TagMapEntry> tags)
-            : base(game, actorSNO, tags)
+        public StartingPoint(World world, int actorSNO, Dictionary<int, TagMapEntry> tags)
+            : base(world, actorSNO, tags)
         {
         }
 

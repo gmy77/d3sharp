@@ -18,8 +18,6 @@
 
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
@@ -36,8 +34,8 @@ namespace Mooege.Core.GS.Actors.Implementations
     {
         private InventoryGrid _vendorGrid;
 
-        public Vendor(Game game, int snoId, Dictionary<int, TagMapEntry> tags)
-            : base(game, snoId, tags)
+        public Vendor(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
             _vendorGrid = new InventoryGrid(this, 1, 20, (int) EquipmentSlotId.Vendor);
@@ -120,7 +118,7 @@ namespace Mooege.Core.GS.Actors.Implementations
 
             // TODO: Remove the gold
 
-            var newItem = new Item(this.World.Game, item.SNOId, item.GBHandle.GBID, item.ItemType);
+            var newItem = new Item(this.World, item.SNOId, item.GBHandle.GBID, item.ItemType);
             var attributeCreators = new AttributeCreatorFactory().Create(item.ItemType);
             foreach (IItemAttributeCreator creator in attributeCreators)
             {

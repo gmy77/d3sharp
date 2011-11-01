@@ -25,7 +25,6 @@ using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.QuadTrees;
 using Mooege.Core.GS.Common.Types.SNO;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
@@ -118,6 +117,8 @@ namespace Mooege.Core.GS.Actors
             get { return true; }
         }
 
+        public bool Spawned { get; private set; }
+
         /// <summary>
         /// Default query radius value.
         /// </summary>
@@ -148,13 +149,11 @@ namespace Mooege.Core.GS.Actors
         /// Creates a new actor.
         /// </summary>
         /// <param name="world">The world the item initially belongs to.</param>
-        /// <param name="dynamicID">DynamicId of the actor.</param>
-        /// <param name="position">The initial position of the actor.</param>
         /// <param name="tags">TagMapEntry dictionary read for the actor from MPQ's..</param>           
-        protected Actor(Game game, Dictionary<int, TagMapEntry> tags)
-            : base(game.NewObjectID)
+        protected Actor(World world, Dictionary<int, TagMapEntry> tags)
+            : base(world, world.Game.NewObjectID)
         {
-            game.StartTracking(this);
+            this.Spawned = false;
             this.Size = new Size(1, 1);
             this.Attributes = new GameAttributeMap();
             this.AffixList = new List<Affix>();
@@ -166,27 +165,44 @@ namespace Mooege.Core.GS.Actors
             this.ReadTags();
         }
 
-        protected Actor(Game game)
-            : this(game, null)
+        protected Actor(World world)
+            : this(world, null)
         { }
 
-        public void EnterWorld(World world, Vector3D position)
+        public void ChangeWorld(World world, Vector3D position)
         {
+            if (this.World == world)
+                return;
+
             this.Position = position;
 
-            if (this._world == world) return;
+            if (this.World != null) // if actor is already in a existing-world
+                this.World.Leave(this); // make him leave it first.
 
-            if (this._world != null) // if actor is already in a existing-world
-                this._world.Leave(this); // make him leave it first.
+            this.World = world;
+            if (this.World != null) // if actor got into a new world.
+                this.World.Enter(this); // let him enter first.
 
-            this._world = world;
-            if (this._world != null) // if actor got into a new world.
-                this._world.Enter(this); // let him enter first.
+            world.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
         }
 
-        public virtual void OnSpawn()
+        public void ChangeWorld(World world, StartingPoint startingPoint)
         {
-            
+            this.RotationAxis = startingPoint.RotationAxis;
+            this.RotationAmount = startingPoint.RotationAmount;
+
+            this.ChangeWorld(world, startingPoint.Position);            
+        }
+
+        public void EnterWorld(Vector3D position)
+        {
+            if (this.Spawned)
+                return;
+
+            this.Position = position;
+
+            if (this.World != null) // if actor got into a new world.
+                this.World.Enter(this); // let him enter first.
         }
 
         #region tag-readers

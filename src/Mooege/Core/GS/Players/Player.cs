@@ -23,7 +23,6 @@ using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.Common.Items;
 using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Actors;
@@ -117,11 +116,11 @@ namespace Mooege.Core.GS.Players
         /// <summary>
         /// Creates a new player.
         /// </summary>
-        /// <param name="game">The game player joins.</param>
+        /// <param name="world">The initial world player joins in.</param>
         /// <param name="client">The gameclient for the player.</param>
         /// <param name="bnetToon">Toon of the player.</param>
-        public Player(Game game, GameClient client, Toon bnetToon)
-            : base(game)
+        public Player(World world, GameClient client, Toon bnetToon)
+            : base(world)
         {
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
@@ -523,11 +522,6 @@ namespace Mooege.Core.GS.Players
 
             this.RevealScenesToPlayer(); // reveal scenes in players proximity.
             this.RevealActorsToPlayer(); // reveal actors in players proximity.
-
-            // FIXME: hackedy hack
-            //var attribs = new GameAttributeMap();
-            //attribs[GameAttribute.Hitpoints_Healed_Target] = 76f;
-            //attribs.SendMessage(InGameClient, this.DynamicID);
         }
 
         public override void OnLeave(World world)

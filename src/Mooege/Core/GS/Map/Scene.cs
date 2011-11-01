@@ -80,15 +80,7 @@ namespace Mooege.Core.GS.Map
         /// Applied labels.
         /// Not sure on usage /raist.
         /// </summary>
-        public int[] AppliedLabels;
-        
-        /// <summary>
-        /// Scenes world.
-        /// </summary>
-        public override World World
-        {
-            get { return this._world; }
-        }
+        public int[] AppliedLabels;       
 
         /// <summary>
         /// PRTransform for the scene.
@@ -136,11 +128,10 @@ namespace Mooege.Core.GS.Map
         /// <param name="snoId">SNOId for the scene.</param>
         /// <param name="parent">The parent scene if any.</param>
         public Scene(World world, Vector3D position, int snoId, Scene parent)
-            : base(world.NewSceneID)
+            : base(world, world.NewSceneID)
         {
             this.SNOId = snoId;
             this.World = world;
-            this.World.Game.StartTracking(this);
             this.Parent = parent;
             this.Subscenes = new List<Scene>();
             this.Scale = 1.0f;                   
@@ -246,7 +237,7 @@ namespace Mooege.Core.GS.Map
                     actor.RotationAmount = marker.PRTransform.Quaternion.W;
                     actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
-                    actor.EnterWorld(this.World, position);
+                    actor.EnterWorld(position);
                 }
             }
         }

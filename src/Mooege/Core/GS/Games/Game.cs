@@ -232,9 +232,7 @@ namespace Mooege.Core.GS.Games
                             }
             });
 
-            joinedPlayer.EnterWorld(this.StartingWorld, new Vector3D(2970.14941f, 2860.754f, 23.9453125f));
-            //joinedPlayer.EnterWorld(this.StartingWorld, this.StartingWorld.StartingPoints.First().Position));
-
+            joinedPlayer.EnterWorld(this.StartingWorld.StartingPoints.First().Position);
             joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
         }
 

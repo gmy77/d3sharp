@@ -16,14 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 
 namespace Mooege.Core.GS.Actors
@@ -32,8 +26,8 @@ namespace Mooege.Core.GS.Actors
     {
         public override ActorType ActorType { get { return ActorType.Enviroment; } }
 
-        public Environment(Game game, int actorSNO, Dictionary<int, TagMapEntry> tags)
-            : base(game, tags)
+        public Environment(World world, int actorSNO, Dictionary<int, TagMapEntry> tags)
+            : base(world, tags)
         {
             this.SNOId = actorSNO;
             this.Field2 = 16;

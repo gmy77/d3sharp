@@ -18,8 +18,6 @@
 
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
@@ -30,8 +28,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
 {
     public class Artisan : InteractiveNPC
     {
-        public Artisan(Game game, int snoId, Dictionary<int, TagMapEntry> tags)
-            : base(game, snoId, tags)
+        public Artisan(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
         }

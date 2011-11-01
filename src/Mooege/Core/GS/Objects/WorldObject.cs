@@ -26,17 +26,10 @@ namespace Mooege.Core.GS.Objects
 {
     public abstract class WorldObject : DynamicObject, IRevealable
     {
-        protected World _world;
-        public virtual World World
-        {
-            get { return this._world; }
-            set { this._world = value; }
-        }
+        public World World { get; protected set; }
 
-        public event EventHandler PositionChanged;
-
-        protected Vector3D _position;
-        public virtual Vector3D Position
+        private Vector3D _position;
+        public Vector3D Position
         {
             get { return _position; }
             set { 
@@ -47,25 +40,24 @@ namespace Mooege.Core.GS.Objects
             }
         }
 
+        public event EventHandler PositionChanged;
+
         public Size Size { get; protected set; }
 
         public Rect Bounds { get; private set; }
 
         public float Scale { get; set; }
 
-        protected Vector3D _rotationAxis;
-        public Vector3D RotationAxis
-        {
-            get { return _rotationAxis; }
-            set { this._rotationAxis = value; }
-        }
+        public Vector3D RotationAxis { get; set; }
 
         public float RotationAmount { get; set; }
 
-        protected WorldObject(uint dynamicID)
+        protected WorldObject(World world, uint dynamicID)
             : base(dynamicID)
         {
-            this._rotationAxis = new Vector3D();
+            this.World = world;
+            this.World.Game.StartTracking(this);
+            this.RotationAxis = new Vector3D();
             this._position = new Vector3D();
         }
 

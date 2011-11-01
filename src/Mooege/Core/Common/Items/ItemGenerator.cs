@@ -116,7 +116,7 @@ namespace Mooege.Core.Common.Items
         {
             //Logger.Trace("Creating item: {0} [type: {1}, mode: {2}, sno:{3}, gbid {4}]", definition.Name, definition.Type, definition.DifficultyMode, definition.SNOId, definition.GBId);
 
-            var item = new Item(owner.World.Game, definition.SNOId, definition.GBId, definition.Type);
+            var item = new Item(owner.World, definition.SNOId, definition.GBId, definition.Type);
 
             var attributeCreators = new AttributeCreatorFactory().Create(definition.Type);
             foreach (IItemAttributeCreator creator in attributeCreators)
@@ -130,7 +130,7 @@ namespace Mooege.Core.Common.Items
         // Allows cooking a custom item.
         public static Item Cook(Player player, string name, int snoId, ItemType type)
         {
-            var item = new Item(player.World.Game, snoId, StringHashHelper.HashItemName(name), type);
+            var item = new Item(player.World, snoId, StringHashHelper.HashItemName(name), type);
             //player.GroundItems[item.DynamicID] = item;
 
             var attributeCreators = new AttributeCreatorFactory().Create(type);

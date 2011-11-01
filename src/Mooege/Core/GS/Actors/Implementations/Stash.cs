@@ -18,8 +18,6 @@
 
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.Stash;
@@ -30,8 +28,8 @@ namespace Mooege.Core.GS.Actors.Implementations
     [HandledSNO(130400 /* Player_Shared_Stash.acr */)]
     public sealed class Stash : Gizmo
     {
-        public Stash(Game game, int actorSNO, Dictionary<int, TagMapEntry> tags)
-            : base(game, actorSNO, tags)
+        public Stash(World world, int actorSNO, Dictionary<int, TagMapEntry> tags)
+            : base(world, actorSNO, tags)
         { }
 
         public override void OnTargeted(Player player, TargetMessage message)

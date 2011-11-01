@@ -16,12 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
@@ -40,8 +37,8 @@ namespace Mooege.Core.GS.Actors
         // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
         public int AnimationSNO { get; set; }
 
-        public Monster(Game game, int snoId, Dictionary<int, TagMapEntry> tags)
-            : base(game, snoId, tags)
+        public Monster(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Field2 = 0x8;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;

@@ -23,7 +23,6 @@ using System.Reflection;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors.Implementations;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
@@ -61,7 +60,7 @@ namespace Mooege.Core.GS.Actors
             switch (actorData.Type)
             {
                 case ActorType.Monster:
-                    return new Monster(world.Game, snoId, tags);
+                    return new Monster(world, snoId, tags);
                 case ActorType.Gizmo:
                     return CreateGizmo(world, snoId, tags);
 
@@ -73,9 +72,9 @@ namespace Mooege.Core.GS.Actors
         private static Actor CreateGizmo(World world, int snoId, Dictionary<int,TagMapEntry> tags)
         {
             if (tags.ContainsKey((int)MarkerTagTypes.DestinationWorld))
-                return new Portal(world.Game, snoId, tags);
+                return new Portal(world, snoId, tags);
 
-            return new Gizmo(world.Game, snoId, tags);
+            return new Gizmo(world, snoId, tags);
         }
 
         public static void LoadSNOHandlers()

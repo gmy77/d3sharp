@@ -18,8 +18,6 @@
 
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
 
@@ -29,8 +27,8 @@ namespace Mooege.Core.GS.Actors
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
-        public NPC(Game game, int snoId, Dictionary<int, TagMapEntry> tags)
-            : base(game, snoId, tags)
+        public NPC(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Field2 = 0x9;
             this.Field7 = 1;

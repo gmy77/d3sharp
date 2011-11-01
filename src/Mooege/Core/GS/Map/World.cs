@@ -245,11 +245,7 @@ namespace Mooege.Core.GS.Map
                 return false;
             
             player.InGameClient.SendMessage(new WorldDeletedMessage() { WorldID = DynamicID });
-
-            // TODO: Unreveal all objects in the world? I think the client will do this on its own when it gets a WorldDeletedMessage /komiga
-            //foreach (var obj in player.RevealedObjects.Values)
-            //    if (obj.DynamicID == this.DynamicID) obj.Unreveal(player);
-
+            player.RevealedObjects.Remove(this.DynamicID);            
             return true;
         }
 
@@ -270,8 +266,8 @@ namespace Mooege.Core.GS.Map
             var players = actor.GetPlayersInRange();
             foreach (var player in players)
             {
-                if (player == actor)
-                    continue; // don't re-reveal him to itself, if the entering actor is player himself.
+                //if (player == actor)
+                //    continue; // don't re-reveal him to itself, if the entering actor is player himself.
 
                 actor.Reveal(player);
             }
@@ -293,14 +289,11 @@ namespace Mooege.Core.GS.Map
 
             this.RemoveActor(actor);
 
-            if (!(actor is Player)) return;
-
-            // if the leaving actors is a player, unreveal the actors revealed to him contained in the world.
-            var revealedToPlayer = (actor as Player).RevealedObjects.Values.ToList(); // list of revealed actors.
-            foreach (IRevealable revealable in revealedToPlayer)
-                if (revealable is Actor)
-                    if (revealable != actor)
-                        revealable.Unreveal(actor as Player);
+            if (!(actor is Player)) return; // if the leaving actors is a player, unreveal the actors revealed to him contained in the world.
+            var revealedObjects = (actor as Player).RevealedObjects.Values.ToList(); // list of revealed actors.
+            foreach (IRevealable @object in revealedObjects)
+                //if(actor != @object)
+                    @object.Unreveal(actor as Player);
         }
 
         #endregion
@@ -314,8 +307,8 @@ namespace Mooege.Core.GS.Map
         /// <param name="position">The position to spawn it.</param>
         public void SpawnMonster(int monsterSNOId, Vector3D position)
         {
-            var monster = new Monster(this.Game, monsterSNOId, new Dictionary<int, Mooege.Common.MPQ.FileFormats.Types.TagMapEntry>()) { Scale = 1.35f };
-            monster.EnterWorld(this, position);
+            var monster = new Monster(this, monsterSNOId, new Dictionary<int, Mooege.Common.MPQ.FileFormats.Types.TagMapEntry>()) { Scale = 1.35f };
+            monster.EnterWorld(position);
         }
 
         /// <summary>

@@ -19,8 +19,6 @@
 using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Players;
@@ -31,7 +29,7 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Common.Helpers;
 
-namespace Mooege.Core.GS.Actors.Implementations
+namespace Mooege.Core.GS.Actors
 {
     public class Portal : Actor
     {
@@ -41,8 +39,8 @@ namespace Mooege.Core.GS.Actors.Implementations
 
         public ResolvedPortalDestination Destination { get; private set; }
 
-        public Portal(Game game, int actorSNO, Dictionary<int, TagMapEntry> tags)
-            : base(game, tags)
+        public Portal(World world, int actorSNO, Dictionary<int, TagMapEntry> tags)
+            : base(world, tags)
         {
             this.SNOId = actorSNO;
             this.Destination = new ResolvedPortalDestination
@@ -99,7 +97,7 @@ namespace Mooege.Core.GS.Actors.Implementations
                 Field1 = new WorldPlace()
                 {
                     Position = this.Position,
-                    WorldID = this._world.DynamicID
+                    WorldID = this.World.DynamicID
                 },
                 Field2 = 0x00018FB0,  /* Marker_DungeonEntrance.tex */          // TODO Dont mark all portals as dungeon entrances... some may be exits too (although d3 does not necesarrily use the correct markers). Also i have found no hacky way to determine whether a portal is entrance or exit - farmy
                 m_snoStringList = 0x0000CB2E, /* LevelAreaNames.stl */          // TODO Dont use hardcoded numbers
@@ -120,7 +118,8 @@ namespace Mooege.Core.GS.Actors.Implementations
 
         public override void OnTargeted(Player player, TargetMessage message)
         {
-            World world = this.World.Game.GetWorld(this.Destination.WorldSNO);
+            var world = this.World.Game.GetWorld(this.Destination.WorldSNO);
+
             if (world == null)
             {
                 Logger.Warn("Portal's destination world does not exist (WorldSNO = {0})", this.Destination.WorldSNO);
@@ -130,7 +129,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             var startingPoint = world.GetStartingPointById(this.Destination.StartingPointActorTag);
 
             if (startingPoint != null)
-                player.TransferTo(world,startingPoint);
+                player.ChangeWorld(world, startingPoint);
             else
                 Logger.Warn("Portal's tagged starting point does not exist (Tag = {0})", this.Destination.StartingPointActorTag);
         }

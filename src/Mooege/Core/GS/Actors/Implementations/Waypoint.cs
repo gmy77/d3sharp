@@ -20,9 +20,7 @@ using System.Collections.Generic;
 using System.Windows;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
@@ -38,8 +36,8 @@ namespace Mooege.Core.GS.Actors.Implementations
     {
         public int WaypointId { get; private set; }
 
-        public Waypoint(Game game, int actorSNO, Dictionary<int, TagMapEntry> tags)
-            : base(game, actorSNO, tags)
+        public Waypoint(World world, int actorSNO, Dictionary<int, TagMapEntry> tags)
+            : base(world, actorSNO, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
             this.ReadWaypointId();
@@ -118,7 +116,7 @@ namespace Mooege.Core.GS.Actors.Implementations
                 Field1 = new WorldPlace()
                 {
                     Position = this.Position,
-                    WorldID = this._world.DynamicID
+                    WorldID = this.World.DynamicID
                 },
                 Field2 = 0x1FA21,
                 m_snoStringList = 0xF063,

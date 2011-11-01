@@ -18,8 +18,6 @@
 
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 
 namespace Mooege.Core.GS.Actors.Implementations.Artisans
@@ -27,8 +25,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
     [HandledSNO(56948 /* PT_Mystic.acr */)]
     public class Mystic : Artisan
     {
-        public Mystic(Game game, int snoId, Dictionary<int, TagMapEntry> tags)
-            : base(game, snoId, tags)
+        public Mystic(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
         }
     }

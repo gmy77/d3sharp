@@ -20,8 +20,6 @@ using System;
 using System.Collections.Generic;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
@@ -37,8 +35,8 @@ namespace Mooege.Core.GS.Actors
         // TODO: not only Living have animations, put this in Actor? /fasbat
         public int AnimationSNO { get; set; }
 
-        public Living(Game game, int snoId, Dictionary<int, TagMapEntry> tags)
-            : base(game, tags )
+        public Living(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, tags )
         {
             this.SNOId = snoId;
             // FIXME: This is hardcoded crap
