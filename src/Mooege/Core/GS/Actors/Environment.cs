@@ -23,6 +23,7 @@ using System.Text;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 
 namespace Mooege.Core.GS.Actors
@@ -31,8 +32,8 @@ namespace Mooege.Core.GS.Actors
     {
         public override ActorType ActorType { get { return ActorType.Enviroment; } }
 
-        public Environment(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, world.NewActorID, position, tags)
+        public Environment(Game game, int actorSNO, Dictionary<int, TagMapEntry> tags)
+            : base(game, tags)
         {
             this.SNOId = actorSNO;
             this.Field2 = 16;

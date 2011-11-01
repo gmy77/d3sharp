@@ -229,9 +229,6 @@ namespace Mooege.Core.GS.Map
                 WorldSNO = this.SNOId,
             });
 
-            player.RevealScenesToPlayer(); // reveal scenes in players proximity.
-            player.RevealActorsToPlayer(); // reveal actors in players proximity.
-
             player.RevealedObjects.Add(this.DynamicID, this);
 
             return true;
@@ -313,8 +310,8 @@ namespace Mooege.Core.GS.Map
         /// <param name="position">The position to spawn it.</param>
         public void SpawnMonster(int monsterSNOId, Vector3D position)
         {
-            var monster = new Monster(this, monsterSNOId, position, new Dictionary<int, Mooege.Common.MPQ.FileFormats.Types.TagMapEntry>()) { Scale = 1.35f };
-            this.Enter(monster);
+            var monster = new Monster(this.Game, monsterSNOId, new Dictionary<int, Mooege.Common.MPQ.FileFormats.Types.TagMapEntry>()) { Scale = 1.35f };
+            monster.EnterWorld(this, position);
         }
 
         /// <summary>
@@ -417,7 +414,6 @@ namespace Mooege.Core.GS.Map
                 throw new Exception(String.Format("Object has an invalid ID or was already present (ID = {0})", actor.DynamicID));
 
             this._actors.TryAdd(actor.DynamicID, actor); // add to actors collection.
-            this.QuadTree.Insert(actor); // add it to quad-tree too.
 
             if (actor.ActorType == ActorType.Player) // if actor is a player, add it to players collection too.
                 this.AddPlayer((Player)actor);
@@ -497,7 +493,7 @@ namespace Mooege.Core.GS.Map
 
         public T GetInstance<T>() where T: Actor
         {
-            return Actors.Values.OfType<T>().FirstOrDefault();
+            return this._actors.Values.OfType<T>().FirstOrDefault();
         }
 
 

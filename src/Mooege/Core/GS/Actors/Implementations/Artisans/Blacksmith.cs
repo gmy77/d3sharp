@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 
 namespace Mooege.Core.GS.Actors.Implementations.Artisans
@@ -26,8 +27,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
     [HandledSNO(56947 /* PT_Blacksmith.acr */)]
     public class Blacksmith : Artisan
     {
-        public Blacksmith(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public Blacksmith(Game game, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(game, snoId, tags)
         {
         }
         //TODO add all blacksmith functionality? /fasbat

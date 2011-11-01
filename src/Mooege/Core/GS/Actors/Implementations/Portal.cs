@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Players;
@@ -40,8 +41,8 @@ namespace Mooege.Core.GS.Actors.Implementations
 
         public ResolvedPortalDestination Destination { get; private set; }
 
-        public Portal(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, world.NewActorID, position, tags)
+        public Portal(Game game, int actorSNO, Dictionary<int, TagMapEntry> tags)
+            : base(game, tags)
         {
             this.SNOId = actorSNO;
             this.Destination = new ResolvedPortalDestination

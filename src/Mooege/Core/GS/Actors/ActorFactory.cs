@@ -39,7 +39,7 @@ namespace Mooege.Core.GS.Actors
             LoadSNOHandlers();
         }
 
-        public static Actor Create(World world, int snoId, Vector3D position, TagMap tagMap)
+        public static Actor Create(World world, int snoId, TagMap tagMap)
         {
             if (!MPQStorage.Data.Assets[SNOGroup.Actor].ContainsKey(snoId))
                 return null;
@@ -56,26 +56,26 @@ namespace Mooege.Core.GS.Actors
 
             // see if we have an implementation for actor.
             if (SNOHandlers.ContainsKey(snoId))
-                return (Actor) Activator.CreateInstance(SNOHandlers[snoId], new object[] {world, snoId, position, tags});
+                return (Actor) Activator.CreateInstance(SNOHandlers[snoId], new object[] {world, snoId, tags});
            
             switch (actorData.Type)
             {
                 case ActorType.Monster:
-                    return new Monster(world, snoId, position, tags);
+                    return new Monster(world.Game, snoId, tags);
                 case ActorType.Gizmo:
-                    return CreateGizmo(world, snoId, position, tags);
+                    return CreateGizmo(world, snoId, tags);
 
             }
 
             return null;
         }
 
-        private static Actor CreateGizmo(World world, int snoId, Vector3D position, Dictionary<int,TagMapEntry> tags)
+        private static Actor CreateGizmo(World world, int snoId, Dictionary<int,TagMapEntry> tags)
         {
             if (tags.ContainsKey((int)MarkerTagTypes.DestinationWorld))
-                return new Portal(world, snoId, position, tags);
+                return new Portal(world.Game, snoId, tags);
 
-            return new Gizmo(world, snoId, position, tags);
+            return new Gizmo(world.Game, snoId, tags);
         }
 
         public static void LoadSNOHandlers()

@@ -136,9 +136,12 @@ namespace Mooege.Core.GS.Map
         /// <param name="snoId">SNOId for the scene.</param>
         /// <param name="parent">The parent scene if any.</param>
         public Scene(World world, Vector3D position, int snoId, Scene parent)
-            : base(world, world.NewSceneID)
+            : base(world.NewSceneID)
         {
             this.SNOId = snoId;
+            this.World = world;
+            this.World.Game.StartTracking(this);
+
             this.Parent = parent;
             this.Subscenes = new List<Scene>();
             this.Scale = 1.0f;                   
@@ -235,15 +238,15 @@ namespace Mooege.Core.GS.Map
                 foreach (var marker in markerSetData.Markers)
                 {
                     if (marker.SNOName.Group != SNOGroup.Actor) continue; // skip non-actor markers.
-
-                    var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
-                    var actor = ActorFactory.Create(this.World, marker.SNOName.SNOId, position, marker.TagMap); // try to create it.
+                    
+                    var actor = ActorFactory.Create(this.World, marker.SNOName.SNOId, marker.TagMap); // try to create it.
                     if (actor == null) continue;
 
+                    var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
                     actor.RotationAmount = marker.PRTransform.Quaternion.W;
                     actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
-                    this.World.Enter(actor); // this call probably reveals actor to all players in the world, fix it. /raist.
+                    actor.EnterWorld(this.World, position);
                 }
             }
         }

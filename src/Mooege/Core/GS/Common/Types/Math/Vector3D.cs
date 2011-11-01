@@ -36,9 +36,11 @@ namespace Mooege.Core.GS.Common.Types.Math
             this.Z = 0;
         }
 
-        public Vector3D(Vector3D vec)
+        public Vector3D(Vector3D vector)
         {
-            Set(vec);
+            this.X = vector.X;
+            this.Y = vector.Y;
+            this.Z = vector.Z;
         }
 
         public Vector3D(float x, float y, float z)
@@ -98,15 +100,6 @@ namespace Mooege.Core.GS.Common.Types.Math
             this.X = x;
             this.Y = y;
             this.Z = z;
-        }
-
-        public void Set(Vector3D vec)
-        {
-            if (vec == null)
-                return;
-            this.X = vec.X;
-            this.Y = vec.Y;
-            this.Z = vec.Z;
         }
 
         public static bool operator ==(Vector3D a, Vector3D b)

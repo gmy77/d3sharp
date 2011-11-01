@@ -150,13 +150,13 @@ namespace Mooege.Core.GS.Generators
                                 Specification = sceneChunk.SceneSpecification
                             };
                             scene.Subscenes.Add(subscene);
-                            subscene.LoadActors();
+                            //subscene.LoadActors();
                         }
                     }
 
                 }
                 scene.Specification = sceneChunk.SceneSpecification;
-                scene.LoadActors();
+                //scene.LoadActors();
             }
 
             return world;

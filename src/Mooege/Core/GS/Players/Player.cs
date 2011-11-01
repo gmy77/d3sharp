@@ -23,6 +23,7 @@ using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.Common.Items;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Actors;
@@ -85,11 +86,6 @@ namespace Mooege.Core.GS.Players
         public override ActorType ActorType { get { return ActorType.Player; } }
 
         /// <summary>
-        /// Did player enter the world?
-        /// </summary>
-        public bool EnteredWorld { get; set; }
-
-        /// <summary>
         /// Revealed objects to player.
         /// </summary>
         public Dictionary<uint, IRevealable> RevealedObjects = new Dictionary<uint, IRevealable>();
@@ -121,19 +117,17 @@ namespace Mooege.Core.GS.Players
         /// <summary>
         /// Creates a new player.
         /// </summary>
-        /// <param name="world">The world player joins initially.</param>
+        /// <param name="game">The game player joins.</param>
         /// <param name="client">The gameclient for the player.</param>
         /// <param name="bnetToon">Toon of the player.</param>
-        public Player(World world, GameClient client, Toon bnetToon)
-            : base(world, world.NewPlayerID)
+        public Player(Game game, GameClient client, Toon bnetToon)
+            : base(game)
         {
-            this.EnteredWorld = false;
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
             this.Properties = bnetToon;
             this.GBHandle.Type = (int)GBHandleType.Player;
             this.GBHandle.GBID = this.Properties.ClassID;
-            this.Position = this.World.StartingPoints.First().Position; // set the player position to current world's very first startpoint. - should be actually set based on act & quest /raist.
 
             // actor values.
             this.SNOId = this.ClassSNO;
@@ -432,6 +426,9 @@ namespace Mooege.Core.GS.Players
                 AnimationTag = message.AnimationTag
             };
 
+            this.RevealScenesToPlayer();
+            this.RevealActorsToPlayer();
+
             this.World.BroadcastExclusive(msg, this); // TODO: We should be instead notifying currentscene we're in. /raist.
 
             this.CollectGold();
@@ -524,10 +521,13 @@ namespace Mooege.Core.GS.Players
         {
             this.World.Reveal(this);
 
+            this.RevealScenesToPlayer(); // reveal scenes in players proximity.
+            this.RevealActorsToPlayer(); // reveal actors in players proximity.
+
             // FIXME: hackedy hack
-            var attribs = new GameAttributeMap();
-            attribs[GameAttribute.Hitpoints_Healed_Target] = 76f;
-            attribs.SendMessage(InGameClient, this.DynamicID);
+            //var attribs = new GameAttributeMap();
+            //attribs[GameAttribute.Hitpoints_Healed_Target] = 76f;
+            //attribs.SendMessage(InGameClient, this.DynamicID);
         }
 
         public override void OnLeave(World world)
@@ -565,18 +565,6 @@ namespace Mooege.Core.GS.Players
             }
 
             return true;
-        }
-
-        #endregion
-
-        #region proximity based actor & scene revealing
-        
-        protected override void OnPositionChange(Vector3D prevPosition)
-        {
-            if (!this.EnteredWorld) return;
-
-            this.RevealScenesToPlayer();
-            this.RevealActorsToPlayer();
         }
 
         #endregion

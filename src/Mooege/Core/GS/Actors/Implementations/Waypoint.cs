@@ -22,6 +22,7 @@ using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
@@ -37,8 +38,8 @@ namespace Mooege.Core.GS.Actors.Implementations
     {
         public int WaypointId { get; private set; }
 
-        public Waypoint(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public Waypoint(Game game, int actorSNO, Dictionary<int, TagMapEntry> tags)
+            : base(game, actorSNO, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
             this.ReadWaypointId();
@@ -51,6 +52,8 @@ namespace Mooege.Core.GS.Actors.Implementations
 
             var proximity = new Rect(this.Position.X - 1.0, this.Position.Y - 1.0, 2.0, 2.0);
             var scenes = this.World.QuadTree.Query<Scene>(proximity);
+            if (scenes.Count == 0) return; // TODO: fixme! /raist
+
             var scene = scenes[0]; // Parent scene /fasbat
 
             if (scenes.Count == 2) // What if it's a subscene? /fasbat

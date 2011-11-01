@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Core.Common.Items.ItemCreation;
 using Mooege.Core.GS.Players;
@@ -91,8 +92,8 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        public Item(World world, int actorSNO, int gbid, ItemType type)
-            : base(world, world.NewActorID)
+        public Item(Game game, int actorSNO, int gbid, ItemType type)
+            : base(game)
         {
             this.SNOId = actorSNO;
             this.GBHandle.Type = (int)GBHandleType.Gizmo;
@@ -209,8 +210,7 @@ namespace Mooege.Core.Common.Items
         public void Drop(Player owner, Vector3D position)
         {
             this.Owner = owner;
-            this.Position = position;
-            // TODO: Notify the world so that players get the state change
+            this.EnterWorld(this.World, position);
         }
 
         public override void OnTargeted(Player player, TargetMessage message)

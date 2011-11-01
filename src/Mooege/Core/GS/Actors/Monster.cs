@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
@@ -39,8 +40,8 @@ namespace Mooege.Core.GS.Actors
         // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
         public int AnimationSNO { get; set; }
 
-        public Monster(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public Monster(Game game, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(game, snoId, tags)
         {
             this.Field2 = 0x8;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;

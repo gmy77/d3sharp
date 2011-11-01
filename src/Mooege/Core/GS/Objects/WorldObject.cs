@@ -57,11 +57,9 @@ namespace Mooege.Core.GS.Objects
 
         public float RotationAmount { get; set; }
 
-        protected WorldObject(World world, uint dynamicID)
+        protected WorldObject(uint dynamicID)
             : base(dynamicID)
         {
-            this._world = world; // Specifically avoid calling the potentially overridden setter for this.World /komiga.
-            this._world.Game.StartTracking(this);
             this._rotationAxis = new Vector3D();
             this._position = new Vector3D();
         }
@@ -72,7 +70,7 @@ namespace Mooege.Core.GS.Objects
         public sealed override void Destroy()
         {
             World world = this.World;
-            this.World = null; // Will Leave() the world for Actors (see deriving implementation of the setter for this.World)
+            //this.World = null; // Will Leave() the world for Actors (see deriving implementation of the setter for this.World)
             world.Game.EndTracking(this);
         }
     }
