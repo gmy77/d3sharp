@@ -263,14 +263,10 @@ namespace Mooege.Core.GS.Map
             actor.OnEnter(this);
 
             // reveal actor to player's in-range.
-            var players = actor.GetPlayersInRange();
-            foreach (var player in players)
+            foreach(var player in  actor.GetPlayersInRange())
             {
-                //if (player == actor)
-                //    continue; // don't re-reveal him to itself, if the entering actor is player himself.
-
                 actor.Reveal(player);
-            }
+            }            
         }
 
         /// <summary>
@@ -291,8 +287,7 @@ namespace Mooege.Core.GS.Map
 
             if (!(actor is Player)) return; // if the leaving actors is a player, unreveal the actors revealed to him contained in the world.
             var revealedObjects = (actor as Player).RevealedObjects.Values.ToList(); // list of revealed actors.
-            foreach (IRevealable @object in revealedObjects)
-                //if(actor != @object)
+            foreach (var @object in revealedObjects)
                     @object.Unreveal(actor as Player);
         }
 

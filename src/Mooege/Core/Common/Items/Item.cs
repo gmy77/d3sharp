@@ -116,8 +116,6 @@ namespace Mooege.Core.Common.Items
             {
                 creator.CreateAttributes(this);
             }
-
-            this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
         // There are 2 VisualItemClasses... any way to use the builder to create a D3 Message?

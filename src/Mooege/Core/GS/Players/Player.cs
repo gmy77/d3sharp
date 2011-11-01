@@ -1349,7 +1349,7 @@ namespace Mooege.Core.GS.Players
 
         private void CollectGold()
         {
-            var items = this.GetItemsInRange(10f);
+            var items = this.GetItemsInRange(25f);
 
             foreach(var item in items)
             {
@@ -1357,7 +1357,7 @@ namespace Mooege.Core.GS.Players
 
                 this.InGameClient.SendMessage(new FloatingAmountMessage()
                 {
-                    Place = new WorldPlace()
+                    Place = new WorldPlace
                     {
                         Position = this.Position,
                         WorldID = this.World.DynamicID,
@@ -1375,7 +1375,7 @@ namespace Mooege.Core.GS.Players
 
         private void CollectHealthGlobe()
         {
-            var items = this.GetItemsInRange(10f);
+            var items = this.GetItemsInRange(25f);
 
             foreach (var item in items)
             {

@@ -18,6 +18,7 @@
 
 using System;
 using System.Windows;
+using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
@@ -66,9 +67,11 @@ namespace Mooege.Core.GS.Objects
 
         public sealed override void Destroy()
         {
-            World world = this.World;
-            //this.World = null; // Will Leave() the world for Actors (see deriving implementation of the setter for this.World)
-            world.Game.EndTracking(this);
+            if (this is Actor)
+                this.World.Leave(this as Actor);
+
+            this.World.Game.EndTracking(this);
+            this.World = null;
         }
     }
 }

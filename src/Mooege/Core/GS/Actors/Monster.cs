@@ -160,7 +160,7 @@ namespace Mooege.Core.GS.Actors
             }, this);
 
             this.World.SpawnRandomItemDrop(player, this.Position);
-            this.World.SpawnGold(player, this.Position);
+            //this.World.SpawnGold(player, this.Position);
             if (RandomHelper.Next(1, 100) < 20)
                 this.World.SpawnHealthGlobe(player, this.Position);
 
