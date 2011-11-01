@@ -27,6 +27,9 @@ namespace Mooege.Core.GS.Markers
     public enum MarkerTagTypes : int
     {
         Scale                = 524288,
+
+        QuestRange           = 524544,
+
         // Used for portal destination resolution
         DestinationWorld     = 526850,
         DestinationActorTag  = 526851,

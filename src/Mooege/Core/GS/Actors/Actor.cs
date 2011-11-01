@@ -143,6 +143,11 @@ namespace Mooege.Core.GS.Actors
         public int CollFlags { get; set; }
 
         /// <summary>
+        /// The QuestRange specifies the visibility of an actor, depending on quest progress
+        /// </summary>
+        private Mooege.Common.MPQ.FileFormats.QuestRange questRange;
+
+        /// <summary>
         /// Returns true if actor has world location.
         /// TODO: I belive this belongs to WorldObject.cs /raist.
         /// </summary>
@@ -200,6 +205,16 @@ namespace Mooege.Core.GS.Actors
 
             if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
                 this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.QuestRange))
+            {
+                int snoQuestRange = Tags[(int)MarkerTagTypes.QuestRange].Int2;
+                if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange].ContainsKey(snoQuestRange))
+                    questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
+                else
+                    Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", _snoId, snoQuestRange);
+
+            }
         }
 
         #endregion
@@ -212,6 +227,10 @@ namespace Mooege.Core.GS.Actors
         /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
         public override bool Reveal(Player player)
         {
+            if (questRange != null)
+                if (_world.Game.Quests.IsInQuestRange(questRange) == false)
+                    return false;   // TODO may i return false? comment suggests i may only return false if it was already revealed ... -farmy
+
             if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
             player.RevealedObjects.Add(this.DynamicID, this);
 

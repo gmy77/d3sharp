@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mooege.Common.MPQ;
-using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message.Definitions.Quest;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Games;
+using Mooege.Common;
 
-namespace Mooege.Core.GS.Games
+namespace Mooege.Core.GS.Players
 {
     public interface QuestProgressHandler
     {
@@ -27,7 +28,7 @@ namespace Mooege.Core.GS.Games
             public class QuestObjective
             {
                 private Mooege.Common.MPQ.FileFormats.QuestStepObjective _objective;
-                public int Counter { get; private set;}
+                public int Counter { get; private set; }
                 protected QuestStep questStep;
                 public int ID { get; private set; }
                 public bool Done { get { return (_objective.CounterTarget == 0 && Counter > 0) || Counter == _objective.CounterTarget; } }
@@ -46,7 +47,7 @@ namespace Mooege.Core.GS.Games
 
                 public void Notify(Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType type, int value)
                 {
-                    if(type != _objective.ObjectiveType && (int) type != -1) return;
+                    if (type != _objective.ObjectiveType && (int)type != -1) return;
                     switch (type)
                     {
                         case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.EnterWorld:
@@ -62,11 +63,11 @@ namespace Mooege.Core.GS.Games
                                 questStep.UpdateCounter(this);
                             }
                             break;
-                        case (Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType)(- 1):
+                        case (Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType)(-1):
                             Counter++;
                             questStep.UpdateCounter(this);
                             break;
-                    }       
+                    }
                 }
             }
 
@@ -80,6 +81,7 @@ namespace Mooege.Core.GS.Games
             private List<List<QuestObjective>> bonusObjectives = new List<List<QuestObjective>>();
             private Mooege.Common.MPQ.FileFormats.QuestStep _questStep = null;
             private Quest _quest = null;
+            public int QuestStepID { get { return _questStep.ID; } }
 
             private void UpdateCounter(QuestObjective objective)
             {
@@ -116,7 +118,7 @@ namespace Mooege.Core.GS.Games
                     });
                 c = 0;
 
-                if(assetQuestStep.StepBonusObjectiveSets != null)
+                if (assetQuestStep.StepBonusObjectiveSets != null)
                     foreach (var objectiveSet in assetQuestStep.StepBonusObjectiveSets)
                         bonusObjectives.Add(new List<QuestObjective>(from objective in objectiveSet.StepBonusObjectives select new QuestObjective(objective, this, c++)));
             }
@@ -127,10 +129,10 @@ namespace Mooege.Core.GS.Games
 
 
         private Mooege.Common.MPQ.FileFormats.Quest asset = null;
-        //public int SNOId { get; set; }
         public SNOName SNOName { get; set; }
         private Game game { get; set; }
         public QuestStep CurrentStep { get; set; }
+        private List<int> completedSteps = new List<int>();           // this list has to be saved if quest progress should be saved. It is required to keep track of questranges
 
         public Quest(Game game, int SNOQuest, int step = -1)
         {
@@ -142,7 +144,10 @@ namespace Mooege.Core.GS.Games
                 CurrentStep = new QuestStep(asset.QuestUnassignedStep, this);
         }
 
-
+        public bool HasStepCompleted(int stepID)
+        {
+            return completedSteps.Contains(stepID);
+        }
 
         public void StepCompleted(int FollowUpStepID)
         {
@@ -156,13 +161,13 @@ namespace Mooege.Core.GS.Games
                     Field3 = true,
                     Failed = false
                 });
-
+            completedSteps.Add(CurrentStep.QuestStepID);
             CurrentStep = (from step in asset.QuestSteps where step.ID == FollowUpStepID select new QuestStep(step, this)).FirstOrDefault();
         }
 
         public void Notify(Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType type, int value)
         {
-            if(CurrentStep != null)
+            if (CurrentStep != null)
                 foreach (var objectiveSet in CurrentStep.ObjectivesSets)
                     foreach (var objective in objectiveSet.Objectives)
                         objective.Notify(type, value);
@@ -170,9 +175,10 @@ namespace Mooege.Core.GS.Games
     }
 
 
-    public class QuestManager: QuestProgressHandler, IEnumerable<Quest>
+    public class QuestManager : QuestProgressHandler, IEnumerable<Quest>
     {
-        private Dictionary<int,Quest> quests = new Dictionary<int,Quest>();
+        private Dictionary<int, Quest> quests = new Dictionary<int, Quest>();
+        private static Logger logger = new Logger("Quests");
 
         public Quest this[int snoQuest]
         {
@@ -198,9 +204,48 @@ namespace Mooege.Core.GS.Games
             return quests.Values.GetEnumerator();
         }
 
+
+        public bool IsInQuestRange(Mooege.Common.MPQ.FileFormats.QuestRange range)
+        {
+            /* I assume, -1 for start sno means no starting condition and -1 for end sno means no ending of range
+             * The field for the step id is sometimes set to negative values (maybe there are negative step id, -1 is maybe the unassignedstep)
+             * but also set when no questID is -1. I have no idea what that means. - farmy */
+
+            bool started = false;
+            bool ended = false;
+
+            if (range.Time0.SNOQuest == -1 || range.Time0.I0 == -1)
+                started = true;
+            else
+            {
+                if (quests.ContainsKey(range.Time0.SNOQuest))
+                {
+                    if (quests[range.Time0.SNOQuest].HasStepCompleted(range.Time0.I0))
+                        started = true;
+                }
+                else
+                    logger.Warn("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.Time0.SNOQuest);
+            }
+
+            if (range.Time1.SNOQuest == -1)
+                ended = false;
+            else
+            {
+                if (quests.ContainsKey(range.Time1.SNOQuest))
+                {
+                    if (quests[range.Time1.SNOQuest].HasStepCompleted(range.Time1.I0))
+                        ended = true;
+                }
+                else
+                    logger.Warn("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.Time1.SNOQuest);
+            }
+
+            return started && !ended;
+        }
+
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return null;
+            throw new NotImplementedException();
         }
     }
 }
