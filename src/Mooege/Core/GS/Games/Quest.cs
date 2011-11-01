@@ -7,7 +7,7 @@ using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message.Definitions.Quest;
 using Mooege.Core.GS.Common.Types.SNO;
 
-namespace Mooege.Core.GS.Player
+namespace Mooege.Core.GS.Games
 {
     public interface QuestProgressHandler
     {
@@ -129,10 +129,10 @@ namespace Mooege.Core.GS.Player
         private Mooege.Common.MPQ.FileFormats.Quest asset = null;
         //public int SNOId { get; set; }
         public SNOName SNOName { get; set; }
-        private Game.Game game { get; set; }
+        private Game game { get; set; }
         public QuestStep CurrentStep { get; set; }
 
-        public Quest(Game.Game game, int SNOQuest, int step = -1)
+        public Quest(Game game, int SNOQuest, int step = -1)
         {
             this.game = game;
             //SNOId = SNOQuest;
@@ -179,7 +179,7 @@ namespace Mooege.Core.GS.Player
             get { return quests[snoQuest]; }
         }
 
-        public QuestManager(Game.Game game)
+        public QuestManager(Game game)
         {
             var asset = MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Quest];
             foreach (var quest in asset.Keys)

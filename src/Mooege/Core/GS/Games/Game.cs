@@ -30,7 +30,7 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Core.GS.Player;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Games
 {
@@ -122,6 +122,8 @@ namespace Mooege.Core.GS.Games
         /// </summary>
         public uint NewWorldID { get { return _lastWorldID++; } }
 
+        public QuestManager Quests { get; private set; }
+
         /// <summary>
         /// Creates a new game with given gameId.
         /// </summary>
@@ -134,6 +136,7 @@ namespace Mooege.Core.GS.Games
             this._worlds = new ConcurrentDictionary<int, World>();
             this.StartingWorldSNOId = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff. /komiga
             var loopThread = new Thread(Update) {IsBackground = true}; // create the game update thread.
+            this.Quests = new QuestManager(this);
             loopThread.Start();
         }
 
