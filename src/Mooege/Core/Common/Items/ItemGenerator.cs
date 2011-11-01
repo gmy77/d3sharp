@@ -30,6 +30,7 @@ using Mooege.Net.GS.Message;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Actors;
 
 // FIXME: Most of this stuff should be elsewhere and not explicitly generate items to the player's GroundItems collection / komiga?
 
@@ -85,15 +86,15 @@ namespace Mooege.Core.Common.Items
         }
 
         // generates a random item.
-        public static Item GenerateRandom(Player player)
+        public static Item GenerateRandom(Mooege.Core.GS.Actors.Actor owner)
         {
             var itemDefinition = GetRandom(Items.Values.ToList());
-            return CreateItem(player, itemDefinition);
+            return CreateItem(owner, itemDefinition);
         }
 
         // generates a random item from given type category.
         // we can also set a difficulty mode parameter here, but it seems current db doesnt have nightmare or hell-mode items with valid snoId's /raist.
-        public static Item GenerateRandom(Player player, ItemTypeTable type)
+        public static Item GenerateRandom(Mooege.Core.GS.Actors.Actor player, ItemTypeTable type)
         {
             // TODO
             var itemDefinition = GetRandom(Items.Values.ToList());
@@ -128,11 +129,11 @@ namespace Mooege.Core.Common.Items
         }
 
         // Creates an item based on supplied definition.
-        public static Item CreateItem(Player player, ItemTable definition)
+        public static Item CreateItem(Mooege.Core.GS.Actors.Actor owner, ItemTable definition)
         {
             // Logger.Trace("Creating item: {0} [sno:{1}, gbid {2}]", definition.Name, definition.SNOActor, StringHashHelper.HashItemName(definition.Name));
 
-            var item = new Item(player.World, definition);
+            var item = new Item(owner.World, definition);
 
             return item;
         }
@@ -153,9 +154,7 @@ namespace Mooege.Core.Common.Items
             var item = Cook(player, "Gold1");
             item.Attributes[GameAttribute.Gold] = amount;
 
-            var attributeMap = new GameAttributeMap();
-            attributeMap[GameAttribute.Gold] = amount;
-            attributeMap.SendMessage(player.InGameClient, item.DynamicID);
+            item.Attributes.SendChangedMessage(player.InGameClient, item.DynamicID);
             return item;
         }
 

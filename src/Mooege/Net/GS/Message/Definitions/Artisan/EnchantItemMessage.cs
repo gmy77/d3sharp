@@ -18,7 +18,7 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Enchant
+namespace Mooege.Net.GS.Message.Definitions.Artisan
 {
     [Message(Opcodes.EnchantItemMessage)]
     public class EnchantItemMessage : GameMessage

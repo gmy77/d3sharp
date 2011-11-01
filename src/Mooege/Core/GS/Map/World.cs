@@ -381,8 +381,8 @@ namespace Mooege.Core.GS.Map
         /// <param name="position">The position for drop.</param>
         public void SpawnGold(Player player, Vector3D position)
         {
+            var item = ItemGenerator.CreateGold(player, RandomHelper.Next(1000, 3000)); // somehow the actual ammount is not shown on ground /raist.
             // TODO: Gold should be spawned for all players in range. /raist.
-            var item = ItemGenerator.CreateGold(player, RandomHelper.Next(1, 3)); // somehow the actual ammount is not shown on ground /raist.
             item.Drop(null, position);
         }
 
@@ -526,6 +526,7 @@ namespace Mooege.Core.GS.Map
             return this.Actors.ContainsKey(dynamicID);
         }
 
+
         /// <summary>
         /// Returns true if the world has an actor with given dynamicId and type.
         /// </summary>
@@ -537,6 +538,12 @@ namespace Mooege.Core.GS.Map
             var actor = GetActor(dynamicID, matchType);
             return actor != null;
         }
+
+        public T GetInstance<T>() where T: Actor
+        {
+            return Actors.Values.OfType<T>().FirstOrDefault();
+        }
+
 
         /// <summary>
         /// Adds given player to world.
