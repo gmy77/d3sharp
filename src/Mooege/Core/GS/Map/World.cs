@@ -243,8 +243,8 @@ namespace Mooege.Core.GS.Map
         {
             if (!player.RevealedObjects.ContainsKey(this.DynamicID))
                 return false;
-            
-            player.InGameClient.SendMessage(new WorldDeletedMessage() { WorldID = DynamicID });
+
+            // player.InGameClient.SendMessage(new WorldDeletedMessage() { WorldID = DynamicID });/ / don't delete the old world or beta-client will be crashing! /raist.
             player.RevealedObjects.Remove(this.DynamicID);            
             return true;
         }
@@ -288,7 +288,8 @@ namespace Mooege.Core.GS.Map
             if (!(actor is Player)) return; // if the leaving actors is a player, unreveal the actors revealed to him contained in the world.
             var revealedObjects = (actor as Player).RevealedObjects.Values.ToList(); // list of revealed actors.
             foreach (var @object in revealedObjects)
-                    @object.Unreveal(actor as Player);
+                    if(@object!=actor) // do not unreveal the player itself.
+                        @object.Unreveal(actor as Player);
         }
 
         #endregion

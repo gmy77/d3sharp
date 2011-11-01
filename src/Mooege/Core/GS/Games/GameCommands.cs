@@ -98,7 +98,7 @@ namespace Mooege.Core.GS.Games
                 if(world==null)
                     return "Can't teleport you to world with snoId " + worldId;
 
-                invokerClient.InGameClient.Player.TransferTo(world);
+                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
                 return string.Format("Teleported to: {0} [id: {1}]", MPQStorage.Data.Assets[SNOGroup.Worlds][worldId].Name, worldId);
             }
 
@@ -120,7 +120,7 @@ namespace Mooege.Core.GS.Games
 
             var world = invokerClient.InGameClient.Game.GetWorld(71150);
 
-            invokerClient.InGameClient.Player.TransferTo(world);
+            invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
             return string.Format("Teleported back to town.");
         }
     }

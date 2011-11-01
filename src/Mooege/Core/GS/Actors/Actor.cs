@@ -456,33 +456,6 @@ namespace Mooege.Core.GS.Actors
 
         #endregion
 
-        #region helper functions
-
-        /// <summary>
-        /// Transfers actor to a target world.
-        /// NOTE: When using this, you should *not* set the actor's world. It is done for you.
-        /// </summary>
-        /// <param name="targetWorld">Target world to transfer actor to.</param>
-        /// <param name="startingPoint">StartingPoint to transfer actor.</param>
-        public void TransferTo(World targetWorld, StartingPoint startingPoint=null)
-        {
-            // This is somewhat still buggy, need a careful review. /raist.
-
-            var player = this as Player;
-            if (player == null) return; // return if current actor is not a player. 
-
-            //this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
-
-            if (startingPoint == null)
-                startingPoint = targetWorld.StartingPoints.First();
-
-            this.Position = startingPoint.Position;
-            this.RotationAmount = startingPoint.RotationAmount;
-            this.RotationAxis = startingPoint.RotationAxis;
-        }
-
-        #endregion
-
         #region cooked messages
 
         public virtual InventoryLocationMessageData InventoryLocationMessage
