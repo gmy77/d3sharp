@@ -494,7 +494,6 @@
     <Compile Include="Core\Common\Storage\Config.cs" />
     <Compile Include="Core\GS\Games\Game.cs" />
     <Compile Include="Core\GS\Actors\Monster.cs" />
-    <Compile Include="Core\Common\Storage\GamedataDBManager.cs" />
     <Compile Include="Core\GS\Objects\WorldObject.cs" />
     <Compile Include="Core\GS\Objects\DynamicObject.cs" />
     <Compile Include="Core\GS\Objects\IRevealable.cs" />
@@ -509,10 +508,6 @@
     </None>
     <None Include="..\..\assets\config.ini">
       <Link>config.ini</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\assets\gamedata.db">
-      <Link>Assets\gamedata.db</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\MPQ\IMPORTANT">
