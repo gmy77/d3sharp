@@ -27,7 +27,7 @@ using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
 using System.Text;
 
-namespace Mooege.Core.GS.Game
+namespace Mooege.Core.GS.Games
 {
     [CommandGroup("spawn", "Spawns a mob.\nUsage: spawn [amount] [actorSNO]")]
     public class SpawnCommand : CommandGroup
@@ -64,14 +64,14 @@ namespace Mooege.Core.GS.Game
                                             player.Position.Y + (float) RandomHelper.NextDouble()*20f,
                                             player.Position.Z);
 
-                player.World.SpawnMob(player, actorSNO, position);
+                player.World.SpawnMonster(actorSNO, position);
             }
 
             return string.Format("Spawned {0} mobs with ActorSNO: {1}", amount, actorSNO);
         }
     }
 
-    [CommandGroup("Tp", "Transfers the character to another world.")]
+    [CommandGroup("Tp", "Transfers your character to another world.")]
     public class TeleportCommand : CommandGroup
     {
         [DefaultCommand]
@@ -99,8 +99,7 @@ namespace Mooege.Core.GS.Game
                 if(world==null)
                     return "Can't teleport you to world with snoId " + worldId;
 
-                invokerClient.InGameClient.Player.TransferTo(world, world.SpawnableScenes.First().StartPosition);
-
+                invokerClient.InGameClient.Player.TransferTo(world);
                 return string.Format("Teleported to: {0} [id: {1}]", MPQStorage.Data.Assets[SNOGroup.Worlds][worldId].Name, worldId);
             }
 
@@ -108,12 +107,11 @@ namespace Mooege.Core.GS.Game
         }
     }
 
-
-    [CommandGroup("quest", "Retrieves information about quest states and manipulates quest progress.\n Usage: quest [triggers | trigger eventType eventValue")]
-    public class QuestCommand : CommandGroup
+    [CommandGroup("Town", "Transfers your character back to town.")]
+    public class TownCommand : CommandGroup
     {
         [DefaultCommand]
-        public string Quest(string[] @params, MooNetClient invokerClient)
+        public string Portal(string[] @params, MooNetClient invokerClient)
         {
             if (invokerClient == null)
                 return "You can not invoke this command from console.";
@@ -121,43 +119,11 @@ namespace Mooege.Core.GS.Game
             if (invokerClient.InGameClient == null)
                 return "You can only invoke this command while ingame.";
 
-            //invokerClient.InGameClient.Game.questManager.Notify((Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType)Int32.Parse(@params[0]), Int32.Parse(@params[1]));
-            return "";
+            var world = invokerClient.InGameClient.Game.GetWorld(71150);
+
+            invokerClient.InGameClient.Player.TransferTo(world);
+            return string.Format("Teleported back to town.");
         }
-
-        [Command("trigger", "Triggers a single quest objective")]
-        public string Trigger(string[] @params, MooNetClient invokerClient)
-        {
-            if (@params == null)
-                return this.Fallback();
-
-            if (@params.Count() < 1)
-                return "Invalid arguments. Type 'help lookup actor' to get help.";
-
-            invokerClient.InGameClient.Game.questManager.Notify((Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType)Int32.Parse(@params[0]), Int32.Parse(@params[1]));
-            return "Triggered";
-        }
-
-        [Command("triggers", "Shows information about all current quest triggers")]
-        public string Triggers(string[] @params, MooNetClient invokerClient)
-        {
-            StringBuilder returnValue = new StringBuilder();
-
-            foreach (var quest in invokerClient.InGameClient.Game.questManager)
-            {
-                //returnValue.AppendLine(quest.SNOName.ToString());
-                foreach (var objectiveSet in quest.CurrentStep.ObjectivesSets)
-                {
-                    //returnValue.Append("  ");
-                    //returnValue.Append(objectiveSet.FollowUpStepID);
-                    foreach (var objective in objectiveSet.Objectives)
-                        returnValue.AppendLine(String.Format("{2}, {4} - {0} ({3}), {1}", objective.ObjectiveType, objective.ObjectiveValue, quest.SNOName.ToString(), (int)objective.ObjectiveType, objectiveSet.FollowUpStepID));
-                }
-            }
-
-            return returnValue.ToString();
-        }
-
     }
 
     [CommandGroup("lookup", "Searches in sno databases.\nUsage: lookup [actor|npc|mob|power|scene] <pattern>")]

@@ -19,7 +19,7 @@
 using System.Text;
 using CrystalMpq;
 using Gibbed.IO;
-using Mooege.Core.GS.Common.Types.Collusion;
+using Mooege.Core.GS.Common.Types.Collision;
 using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Common.Types.Scene

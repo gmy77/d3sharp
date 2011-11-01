@@ -16,8 +16,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -27,13 +30,13 @@ namespace Mooege.Core.GS.Actors.Implementations
     [HandledSNO(178396 /* Fence_In_Town_01? */)] //TODO this is just a test, do it properly for all vendors?
     public class Vendor : InteractiveNPC
     {
-        public Vendor(World world, int actorSNO, Vector3D position)
-            : base(world, actorSNO, position)
+        public Vendor(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
+            : base(world, actorSNO, position, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
         }
 
-        public override void OnTargeted(Mooege.Core.GS.Player.Player player, TargetMessage message)
+        public override void OnTargeted(Player player, TargetMessage message)
         {
             player.InGameClient.SendMessage(new OpenTradeWindowMessage((int)this.DynamicID));
         }

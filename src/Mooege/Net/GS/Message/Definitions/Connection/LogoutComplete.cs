@@ -17,6 +17,7 @@
  */
 
 using System.Text;
+using Mooege.Core.GS.Games;
 using Mooege.Net.GS.Message.Definitions.Game;
 
 namespace Mooege.Net.GS.Message.Definitions.Connection
@@ -33,7 +34,7 @@ namespace Mooege.Net.GS.Message.Definitions.Connection
                     PlayerIndex = client.Player.PlayerIndex,
                 });
 
-                Core.GS.Game.GameManager.RemovePlayerFromGame(client);
+                GameManager.RemovePlayerFromGame(client);
             }
         }
 

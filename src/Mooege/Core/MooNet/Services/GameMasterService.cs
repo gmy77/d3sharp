@@ -134,7 +134,11 @@ namespace Mooege.Core.MooNet.Services
 
         public override void GetGameStats(IRpcController controller, GetGameStatsRequest request, Action<GetGameStatsResponse> done)
         {
-            throw new NotImplementedException();
+            var response = GetGameStatsResponse.CreateBuilder()
+                .AddStatsBucket(GameCreatorManager.GetGameStats(request).Build())
+                .Build();
+
+            done(response);
         }
     }
 }
