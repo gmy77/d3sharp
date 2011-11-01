@@ -126,13 +126,8 @@ namespace Mooege.Core.GS.Players
                 _inventoryGold.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
                 _inventoryGold.Reveal(_owner);
             }
-            else
-            {
-                _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += collectedItem.Attributes[GameAttribute.Gold];
-                _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID);
-            }
-
             _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += amount;
+            _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID);
             return _inventoryGold;
         }
 
