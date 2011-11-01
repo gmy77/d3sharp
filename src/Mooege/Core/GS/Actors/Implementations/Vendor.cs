@@ -118,12 +118,9 @@ namespace Mooege.Core.GS.Actors.Implementations
 
             // TODO: Remove the gold
 
-            var newItem = new Item(this.World, item.SNOId, item.GBHandle.GBID, item.ItemType);
-            var attributeCreators = new AttributeCreatorFactory().Create(item.ItemType);
-            foreach (IItemAttributeCreator creator in attributeCreators)
-            {
-                creator.CreateAttributes(item);
-            }
+            // TODO: new item would randomize new stats, should better copy item as it // dark0ne
+            var newItem = new Item(this.World, item.ItemDefinition);
+
             player.Inventory.PickUp(newItem); // TODO: Dont use pickup? ;)
         }
     }

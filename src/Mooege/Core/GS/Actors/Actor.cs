@@ -269,6 +269,7 @@ namespace Mooege.Core.GS.Actors
 
             player.InGameClient.SendMessage(msg);
 
+            /*
             // Affixes of the actor, two messages with 1 and 2,i guess prefix and suffix so it does not
             // make sense to send the same list twice. server does not do this
             var affixGbis = new int[AffixList.Count];
@@ -290,6 +291,7 @@ namespace Mooege.Core.GS.Actors
                 Field1 = 0x00000002,
                 aAffixGBIDs = affixGbis,
             });
+             */
 
             // Collision Flags
             player.InGameClient.SendMessage(new ACDCollFlagsMessage

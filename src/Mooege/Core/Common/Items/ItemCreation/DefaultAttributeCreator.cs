@@ -18,6 +18,7 @@
 
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message;
+using Mooege.Common.Helpers;
 
 namespace Mooege.Core.Common.Items.ItemCreation
 {
@@ -26,7 +27,7 @@ namespace Mooege.Core.Common.Items.ItemCreation
         public void CreateAttributes(Item item)
         {
             item.Attributes[GameAttribute.Item_Quality_Level] = 1;
-            item.Attributes[GameAttribute.Seed] = unchecked((int)2286800181);
+            item.Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
         }
     }
 }
