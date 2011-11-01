@@ -25,6 +25,7 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common;
 using Mooege.Core.Common.Items;
+using Mooege.Common.MPQ.FileFormats;
 using Mooege.Net.GS.Message.Definitions.Stash;
 
 namespace Mooege.Core.GS.Players
@@ -219,8 +220,8 @@ namespace Mooege.Core.GS.Players
         private bool IsValidEquipmentRequest(Item item, int equipmentSlot)
         {
 
-            ItemType type = item.ItemType;
-                
+            ItemTypeTable type = item.ItemType;
+
             if (equipmentSlot == (int)EquipmentSlotId.Main_Hand)
             {
                 // useful for 1hand + shield switching, this is to avoid shield to be go to main hand
@@ -258,13 +259,13 @@ namespace Mooege.Core.GS.Players
                     }
 
                     _equipment.EquipItem(item, (int)EquipmentSlotId.Main_Hand);
-                    AcceptMoveRequest(item); 
+                    AcceptMoveRequest(item);
 
                     SendVisualInventory(this._owner);
                     // All equipment commands are executed. the original EquipmentRequest is invalid at this moment
                     return false;
                 }
-                             
+
                 if (itemMainHand != null)
                 {
                     if (Item.Is2H(itemMainHand.ItemType))
@@ -291,7 +292,7 @@ namespace Mooege.Core.GS.Players
 
             itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
             itemTo.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
-            
+
 
             // TODO: This needs to change the attribute on the item itself. /komiga
             // Update source
@@ -351,7 +352,7 @@ namespace Mooege.Core.GS.Players
             int actionId = inventoryRequestUseMessage.Field1; // guess 1 means dyeing. Probably other value for using identify scroll , selling , .... - angerwin
             Item usedItem = _owner.World.GetItem(usedItemId);
             Item targetItem = _owner.World.GetItem(targetItemId);
-            if (actionId == 1) 
+            if (actionId == 1)
             {
                 DyeColor.DyeItem(usedItem, targetItem);
             }

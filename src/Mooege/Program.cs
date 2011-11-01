@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Globalization;
 using System.Reflection;
 using System.Threading;
 using Mooege.Common;
@@ -44,6 +45,8 @@ namespace Mooege
         {
             // Watch for unhandled exceptions
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
+
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create.
 
             Console.ForegroundColor = ConsoleColor.Yellow;
             PrintBanner();
@@ -149,7 +152,7 @@ namespace Mooege
             if (MooNetServer != null) return false;
 
             MooNetServer = new MooNetServer();
-            MooNetServerThread = new Thread(MooNetServer.Run) {IsBackground = true};
+            MooNetServerThread = new Thread(MooNetServer.Run) {IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture};
             MooNetServerThread.Start();
             return true;
         }
@@ -170,7 +173,7 @@ namespace Mooege
             if (GameServer != null) return false;
 
             GameServer = new GameServer();
-            GameServerThread = new Thread(GameServer.Run) {IsBackground = true};
+            GameServerThread = new Thread(GameServer.Run) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture };
             GameServerThread.Start();
             return true;
         }
