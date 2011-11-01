@@ -25,6 +25,8 @@ using Mooege.Net.GS.Message;
 using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Core.GS.Actors.Interactions;
+using Mooege.Net.GS.Message.Definitions.Inventory;
+using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 {
@@ -48,8 +50,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             this.Unreveal(player);
             var tmp = new Templar(this.World, hirelingSNO, this.Position, this.Tags);
 
-            //tmp.GBHandle.Type = 4;
-            //tmp.GBHandle.GBID = StringHashHelper.HashItemName("Templar");
+            tmp.GBHandle.Type = 4;
+            tmp.GBHandle.GBID = StringHashHelper.HashItemName("Templar");
             tmp.Field9 = 5;
             tmp.Field7 = 1;
             tmp.Attributes[GameAttribute.Pet_Creator] = player.PlayerIndex;
@@ -59,7 +61,74 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             tmp.RotationAmount = this.RotationAmount;
             tmp.RotationAxis = this.RotationAxis;
             tmp.World.Enter(tmp);
-            tmp.Reveal(player);
+
+            player.InGameClient.SendMessage(new VisualInventoryMessage()
+            {
+                ActorID = tmp.DynamicID,
+                EquipmentList = new VisualEquipment()
+                {
+                    Equipment = new VisualItem[]
+                    {
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = unchecked((int)0xF9F6170B),
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = -1,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = 0x6C3B0389,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = -1,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                    }
+                }
+            });
+
             player.Attributes[GameAttribute.Hireling_Class] = tmp.Attributes[GameAttribute.Hireling_Class];
             player.Attributes.SendChangedMessage(player.InGameClient, player.DynamicID);
 
@@ -70,8 +139,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             });
 
             this.Destroy();
-            player.SelectedNPC = null;
-            
+            player.SelectedNPC = null;            
         }
     }
 }

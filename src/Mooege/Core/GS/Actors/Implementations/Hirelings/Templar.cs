@@ -79,13 +79,61 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             this.Attributes[GameAttribute.Movement_Scalar_Subtotal] = 1;
             this.Attributes[GameAttribute.Strafing_Rate_Total] = 0.1799316f;
 
-            this.Attributes[GameAttribute.Experience_Next] = 0x002000;
+            this.Attributes[GameAttribute.Sprinting_Rate_Total] = 0.3598633f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total_MainHand, 0] = 6;
+            this.Attributes[GameAttribute.Running_Rate_Total] = 0.3598633f;
+            this.Attributes[GameAttribute.Walking_Rate_Total] = 0.3598633f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_MainHand, 0] = 2;
+            this.Attributes[GameAttribute.Strafing_Rate] = 0.1799316f;
+            this.Attributes[GameAttribute.Damage_Delta_Total, 0] = 2;
+            this.Attributes[GameAttribute.Sprinting_Rate] = 0.3598633f;
+            this.Attributes[GameAttribute.Damage_Min, 0] = 0.8115234f;
+            this.Attributes[GameAttribute.Running_Rate] = 0.3598633f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 0] = 6;
+            this.Attributes[GameAttribute.Walking_Rate] = 0.3598633f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 0] = 2;
+            this.Attributes[GameAttribute.Damage_Min_Total, 0] = 6.808594f;
+            this.Attributes[GameAttribute.Movement_Scalar] = 1;
+
+            this.Attributes[GameAttribute.Damage_Min_Subtotal, 0] = 6.808594f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 2;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_SubTotal, 0] = 2;
+            this.Attributes[GameAttribute.Damage_Weapon_Max, 0] = 8;
+            this.Attributes[GameAttribute.Damage_Weapon_Max_Total, 0] = 8;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] = 2;
+            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 6;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] = 6;
+            this.Attributes[GameAttribute.Resource_Type_Primary] = 0;
+            this.Attributes[GameAttribute.Callout_Cooldown, 0x000FFFFF] = 0x00000797;
+            //
+            this.Attributes[GameAttribute.Hitpoints_Max_Total] = 308.25f;
+            this.Attributes[GameAttribute.Hitpoints_Max] = 216.25f;
+            //
+
+            this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality] = 92;
+            //
+            this.Attributes[GameAttribute.Hitpoints_Factor_Vitality] = 4;
+            //
+            //
+            this.Attributes[GameAttribute.Hitpoints_Cur] = 308.25f;
+            //
+            //
+            //
+            this.Attributes[GameAttribute.Experience_Next] = 0x003C19;
+            this.Attributes[GameAttribute.Experience_Granted] = 0x28;
+            this.Attributes[GameAttribute.Armor_Total] = 0x40E00000;
+            this.Attributes[GameAttribute.Armor_Item_Total] = 0x40E00000;
+            this.Attributes[GameAttribute.Armor_Item_SubTotal] = 0x40E00000;
+
             this.Attributes[GameAttribute.Armor_Item] = 0;
             this.Attributes[GameAttribute.Defense] = 23;
             this.Attributes[GameAttribute.Vitality] = 23;
             this.Attributes[GameAttribute.Precision] = 23;
             this.Attributes[GameAttribute.Attack] = 23;
+            this.Attributes[GameAttribute.General_Cooldown] = 0;
             this.Attributes[GameAttribute.Level] = 7;
+            this.Attributes[GameAttribute.Level_Cap] = 60;
         }
     }
 }
