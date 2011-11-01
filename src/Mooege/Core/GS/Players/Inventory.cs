@@ -23,7 +23,9 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Core.GS.Common;
 using Mooege.Core.Common.Items;
+using Mooege.Net.GS.Message.Definitions.Stash;
 
 namespace Mooege.Core.GS.Players
 {
@@ -37,24 +39,26 @@ namespace Mooege.Core.GS.Players
         private readonly Player _owner; // Used, because most information is not in the item class but Actors managed by the world
 
         private Equipment _equipment;
-        private Stash _inventoryStash;
+        private InventoryGrid _inventoryGrid;
+        private InventoryGrid _stashGrid;
 
         public Inventory(Player owner)
         {
             this._owner = owner;
             this.Items = new Dictionary<uint, Item>();
             this._equipment = new Equipment(owner);
-            this._inventoryStash = new Stash(owner, 6, 10);
+            this._inventoryGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Backpack_Slots]/10, 10);
+            this._stashGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Shared_Stash_Slots]/7, 7, (int) EquipmentSlotId.Stash);
         }
 
         private void AcceptMoveRequest(Item item)
         {
-            /*_owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
+           /* _owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
             {
-                ItemID = item.DynamicID,
+                ItemId = item.DynamicID,
                 InventoryLocation = item.InventoryLocationMessage,
                 Field2 = 1 // what does this do?  // 0 - source item not disappearing from inventory, 1 - Moving, any other possibilities? its an int32
-            });*/
+            }); */
         }
 
 
@@ -75,6 +79,17 @@ namespace Mooege.Core.GS.Players
              //player.InGameClient.SendMessage(message);
              player.World.BroadcastGlobal(message);
          }
+
+
+        public bool HasInventorySpace(Item item)
+        {
+            return _inventoryGrid.HasFreeSpace(item);
+        }
+
+        public void SpawnItem(Item item)
+        {
+            _inventoryGrid.AddItem(item);
+        }
         
         /// <summary>
         /// Picks an item up after client request
@@ -82,11 +97,11 @@ namespace Mooege.Core.GS.Players
         /// <returns>true if the item was picked up, or false if the player could not pick up the item.</returns>
         public bool PickUp(Item item)
         {
-            System.Diagnostics.Debug.Assert(!_inventoryStash.Contains(item) && !_equipment.IsItemEquipped(item), "Item already in inventory");
+            System.Diagnostics.Debug.Assert(!_inventoryGrid.Contains(item) && !_equipment.IsItemEquipped(item), "Item already in inventory");
             // TODO: Autoequip when equipment slot is empty
 
             bool success = false;
-            if (!_inventoryStash.HasFreeSpace(item))
+            if (!_inventoryGrid.HasFreeSpace(item))
             {
                 // Inventory full
                 _owner.InGameClient.SendMessage(new ACDPickupFailedMessage()
@@ -97,7 +112,7 @@ namespace Mooege.Core.GS.Players
             }
             else
             {
-                _inventoryStash.AddItem(item);
+                _inventoryGrid.AddItem(item);
 
                 if (_owner.GroundItems.ContainsKey(item.DynamicID))
                     _owner.GroundItems.Remove(item.DynamicID);
@@ -115,13 +130,17 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void HandleInventoryRequestMoveMessage(InventoryRequestMoveMessage request)
         {
+            // TODO Normal inventory movement does not require setting of inv loc msg! Just Tick. /fasbat
             Item item = _owner.World.GetItem(request.ItemID);
             // Request to equip item from backpack
-            if (request.Location.EquipmentSlot != 0)
+            if (request.Location.EquipmentSlot != 0 && request.Location.EquipmentSlot != (int) EquipmentSlotId.Stash)
             {
-                System.Diagnostics.Debug.Assert(_inventoryStash.Contains(request.ItemID) || _equipment.IsItemEquipped(request.ItemID), "Request to equip unknown item");
+                var sourceGrid = (item.InvLoc.EquipmentSlot == 0 ? _inventoryGrid :
+                    item.InvLoc.EquipmentSlot == (int)EquipmentSlotId.Stash ? _stashGrid : null);
+                System.Diagnostics.Debug.Assert(sourceGrid.Contains(request.ItemID) || _equipment.IsItemEquipped(request.ItemID), "Request to equip unknown item");
 
                 int targetEquipSlot = request.Location.EquipmentSlot;
+
                 if (IsValidEquipmentRequest(item, targetEquipSlot))
                 {
                     Item oldEquipItem = _equipment.GetEquipment(targetEquipSlot);
@@ -130,8 +149,8 @@ namespace Mooege.Core.GS.Players
                     if (oldEquipItem == null)
                     {
                         // determine if item is in backpack or switching item from position with target originally empty
-                        if (_inventoryStash.Contains(item))
-                            _inventoryStash.RemoveItem(item);
+                        if (sourceGrid != null)
+                            sourceGrid.RemoveItem(item);
                         else
                             _equipment.UnequipItem(item);
 
@@ -155,9 +174,9 @@ namespace Mooege.Core.GS.Players
                         else
                         {
                             // equip item and place other item in the backpack
-                            _inventoryStash.RemoveItem(item);
+                            sourceGrid.RemoveItem(item);
                             _equipment.EquipItem(item, targetEquipSlot);
-                            _inventoryStash.AddItem(oldEquipItem);
+                            sourceGrid.AddItem(oldEquipItem);
                         }
                         AcceptMoveRequest(item);
                         AcceptMoveRequest(oldEquipItem);
@@ -170,7 +189,9 @@ namespace Mooege.Core.GS.Players
             // Request to move an item (from backpack or equipmentslot)
             else
             {
-                if (_inventoryStash.FreeSpace(item, request.Location.Row, request.Location.Column))
+                var destGrid = (request.Location.EquipmentSlot == 0 ? _inventoryGrid : _stashGrid);
+
+                if (destGrid.FreeSpace(item, request.Location.Row, request.Location.Column))
                 {
                     if (_equipment.IsItemEquipped(item))
                     {
@@ -179,10 +200,12 @@ namespace Mooege.Core.GS.Players
                     }
                     else
                     {
-                        _inventoryStash.RemoveItem(item);
+                        var sourceGrid = (item.InvLoc.EquipmentSlot == 0 ? _inventoryGrid : _stashGrid);
+                        sourceGrid.RemoveItem(item);
                     }
-                    _inventoryStash.AddItem(item, request.Location.Row, request.Location.Column);
-                    AcceptMoveRequest(item);
+                    destGrid.AddItem(item, request.Location.Row, request.Location.Column);
+                    if (item.InvLoc.EquipmentSlot != request.Location.EquipmentSlot) 
+                        AcceptMoveRequest(item);
                 }
             }
         }
@@ -210,7 +233,7 @@ namespace Mooege.Core.GS.Players
                     if (itemOffHand != null)
                     {
                         _equipment.UnequipItem(itemOffHand);
-                        if (!_inventoryStash.AddItem(itemOffHand))
+                        if (!_inventoryGrid.AddItem(itemOffHand))
                         {
                             _equipment.EquipItem(itemOffHand, (int)EquipmentSlotId.Off_Hand);
                             return false;
@@ -225,12 +248,12 @@ namespace Mooege.Core.GS.Players
                 if (Item.Is2H(type))
                 {
                     //remove object first to make room for possible unequiped item
-                    _inventoryStash.RemoveItem(item);
+                    _inventoryGrid.RemoveItem(item);
 
                     if(itemMainHand != null)
                     {
                         _equipment.UnequipItem(itemMainHand);
-                        _inventoryStash.AddItem(itemMainHand);
+                        _inventoryGrid.AddItem(itemMainHand);
                         AcceptMoveRequest(itemMainHand);
                     }
 
@@ -272,15 +295,11 @@ namespace Mooege.Core.GS.Players
 
             // TODO: This needs to change the attribute on the item itself. /komiga
             // Update source
-            GameAttributeMap attributes = new GameAttributeMap();
-            attributes[GameAttribute.ItemStackQuantityLo] = itemFrom.Attributes[GameAttribute.ItemStackQuantityLo];
-            attributes.SendMessage(_owner.InGameClient, itemFrom.DynamicID);
+            itemFrom.Attributes.SendChangedMessage(_owner.InGameClient, itemFrom.DynamicID);
 
             // TODO: This needs to change the attribute on the item itself. /komiga
             // Update target
-            attributes = new GameAttributeMap();
-            attributes[GameAttribute.ItemStackQuantityLo] = itemTo.Attributes[GameAttribute.ItemStackQuantityLo];
-            attributes.SendMessage(_owner.InGameClient, itemTo.DynamicID);
+            itemTo.Attributes.SendChangedMessage(_owner.InGameClient, itemTo.DynamicID);
         }
 
         private void OnInventoryDropItemMessage(InventoryDropItemMessage msg)
@@ -293,7 +312,7 @@ namespace Mooege.Core.GS.Players
             }
             else
             {
-                _inventoryStash.RemoveItem(item);
+                _inventoryGrid.RemoveItem(item);
             }
             item.Drop(null, _owner.Position);
             AcceptMoveRequest(item);
@@ -305,8 +324,17 @@ namespace Mooege.Core.GS.Players
             else if (message is InventorySplitStackMessage) OnInventorySplitStackMessage(message as InventorySplitStackMessage);
             else if (message is InventoryStackTransferMessage) OnInventoryStackTransferMessage(message as InventoryStackTransferMessage);
             else if (message is InventoryDropItemMessage) OnInventoryDropItemMessage(message as InventoryDropItemMessage);
-            else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);                
+            else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
+            else if (message is RequestBuySharedStashSlotsMessage) OnBuySharedStashSlots(message as RequestBuySharedStashSlotsMessage);
             else return;
+        }
+
+        private void OnBuySharedStashSlots(RequestBuySharedStashSlotsMessage requestBuySharedStashSlotsMessage)
+        {
+            // TODO: Take that money away ;)
+            _owner.Attributes[GameAttribute.Shared_Stash_Slots] += 14;
+            _owner.Attributes.SendChangedMessage(_owner.InGameClient, _owner.DynamicID);
+            _stashGrid.ResizeGrid(_owner.Attributes[GameAttribute.Shared_Stash_Slots] / 7, 7);
         }
 
         // TODO: The inventory's gold item should not be created here. /komiga
@@ -314,10 +342,6 @@ namespace Mooege.Core.GS.Players
         {
             Item collectedItem = _owner.World.GetItem(itemID);
             Item sumGoldItem = _equipment.AddGoldItem(collectedItem);
-
-            GameAttributeMap attributes = new GameAttributeMap();
-            attributes[GameAttribute.ItemStackQuantityLo] = sumGoldItem.Attributes[GameAttribute.ItemStackQuantityLo];
-            attributes.SendMessage(_owner.InGameClient, sumGoldItem.DynamicID);
         }
 
         private void OnInventoryRequestUseMessage(InventoryRequestUseMessage inventoryRequestUseMessage)
@@ -337,7 +361,7 @@ namespace Mooege.Core.GS.Players
 
         public void DestroyInventoryItem(Item item)
         {
-            _inventoryStash.RemoveItem(item);
+            _inventoryGrid.RemoveItem(item);
             _equipment.UnequipItem(item);
             item.Destroy();
         }
