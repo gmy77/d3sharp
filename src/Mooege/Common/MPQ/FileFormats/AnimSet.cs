@@ -103,6 +103,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int GetRandomDeath()
         {
             int ani = -1;
+            if (!TagExists(AnimationTags.DeathDefault)) { return -1; }
             while (ani == -1)
             {
                 Array values = Enum.GetValues(typeof(DeathTags));
