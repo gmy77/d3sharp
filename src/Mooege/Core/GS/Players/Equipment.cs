@@ -127,7 +127,7 @@ namespace Mooege.Core.GS.Players
                 _inventoryGold.Reveal(_owner);
             }
             _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += amount;
-            //_inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID);
+            //_inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID); // causes: !!!ERROR!!! Setting attribute for unknown ACD [ANN:1253] [Attribute:ItemStackQuantityLo-1048575:  8669] and client crash /raist.
 
             return _inventoryGold;
         }
