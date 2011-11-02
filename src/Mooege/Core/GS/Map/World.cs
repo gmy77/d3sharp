@@ -609,5 +609,10 @@ namespace Mooege.Core.GS.Map
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return string.Format("[World] SNOId: {0} DynamicId: {1}", this.SNOId, this.DynamicID);
+        }
     }
 }

@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -479,7 +478,7 @@ namespace Mooege.Core.GS.Actors
 
         public override string ToString()
         {
-            return string.Format("Actor: [Type: {0}] [Id:{1}] [Position: {2}] {3}", this.ActorType, this.SNOName.SNOId, this.Position, this.SNOName.Name);
+            return string.Format("[Actor] [Type: {0}] SNOId:{1} DynamicId: {2} Position: {3} Name: {4}", this.ActorType, this.SNOId, this.DynamicID, this.Position, this.SNOName.Name);
         }
     }
 

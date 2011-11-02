@@ -70,7 +70,7 @@ namespace Mooege.Core.GS.Games
         }
     }
 
-    [CommandGroup("Tp", "Transfers your character to another world.")]
+    [CommandGroup("tp", "Transfers your character to another world.")]
     public class TeleportCommand : CommandGroup
     {
         [DefaultCommand]
@@ -106,7 +106,7 @@ namespace Mooege.Core.GS.Games
         }
     }
 
-    [CommandGroup("Town", "Transfers your character back to town.")]
+    [CommandGroup("town", "Transfers your character back to town.")]
     public class TownCommand : CommandGroup
     {
         [DefaultCommand]

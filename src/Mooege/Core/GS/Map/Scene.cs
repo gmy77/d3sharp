@@ -344,7 +344,7 @@ namespace Mooege.Core.GS.Map
 
         public override string ToString()
         {
-            return string.Format("Scene SNOId: {0} Position: {1}", this.SNOId, this.Position);
+            return string.Format("[Scene] SNOId: {0} DynamicId: {1} Position: {2}", this.SNOId, this.DynamicID, this.Position);
         }
     }
 

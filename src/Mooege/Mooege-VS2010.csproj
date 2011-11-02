@@ -167,6 +167,7 @@
     <Compile Include="Core\GS\Common\Types\SNO\SNOGroup.cs" />
     <Compile Include="Core\GS\Common\Types\Math\Vector2F.cs" />
     <Compile Include="Core\GS\Games\GameCommands.cs" />
+    <Compile Include="Core\GS\Games\GameDebugCommands.cs" />
     <Compile Include="Core\GS\Games\GameManager.cs" />
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
     <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
