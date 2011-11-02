@@ -11,6 +11,7 @@
          ClientManager,
          Game,
          Inventory,
-         Player
+         Player,
+         SelectedNPC
      }
  }
