@@ -30,7 +30,11 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
         public Templar(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
             : base(world, actorSNO, position, tags)
         {
-            hirelingSNO = 0x0000CDD5;
+            //enable this for some spectacular crashes /fasbat
+            //hirelingSNO = 0x0000CDD5;  
+            this.Attributes[GameAttribute.Hireling_Class] = 1;
+
+            #region test attribs
 
             this.Attributes[GameAttribute.Buff_Active, 0x20c51] = true;
             this.Attributes[GameAttribute.SkillKit] = 0x8AFB;
@@ -38,7 +42,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             this.Attributes[GameAttribute.Skill, 0x76B7] = 1;
             this.Attributes[GameAttribute.Skill_Total, 0x7780] = 1;
             this.Attributes[GameAttribute.Skill, 0x7780] = 1;
-            this.Attributes[GameAttribute.Hireling_Class] = 1;
+            //
 
             this.Attributes[GameAttribute.Get_Hit_Damage] = 20;
             this.Attributes[GameAttribute.Get_Hit_Recovery] = 3.051758E-05f;
@@ -134,6 +138,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             this.Attributes[GameAttribute.General_Cooldown] = 0;
             this.Attributes[GameAttribute.Level] = 7;
             this.Attributes[GameAttribute.Level_Cap] = 60;
+
+            #endregion
         }
     }
 }

@@ -47,6 +47,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             if (hirelingSNO == -1)
                 return;
 
+            //this doesn't fully work, and is for now disabled. /fasbat
+
             this.Unreveal(player);
             var tmp = new Templar(this.World, hirelingSNO, this.Position, this.Tags);
 

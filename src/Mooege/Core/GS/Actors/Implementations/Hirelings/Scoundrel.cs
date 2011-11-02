@@ -30,7 +30,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
         public Scoundrel(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
             : base(world, actorSNO, position, tags)
         {
-            hirelingSNO = 52694;
+            //enable this for some spectacular crashes /fasbat
+            //hirelingSNO = 52694;
             Attributes[GameAttribute.Hireling_Class] = 2;
         }
     }
