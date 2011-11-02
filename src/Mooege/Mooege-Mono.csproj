@@ -9,6 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Mooege</RootNamespace>
     <AssemblyName>Mooege</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -62,27 +63,36 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\dep\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
+    <Reference Include="Microsoft.CSharp">
+    </Reference>
+    <Reference Include="System">
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data">
+    </Reference>
+    <Reference Include="Gibbed.IO, Version=1.0.4289.8017, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dep\Gibbed.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.ProtocolBuffers, Version=2.3.0.277, Culture=neutral, PublicKeyToken=17b3b1f090c3ea48">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dep\Google.ProtocolBuffers.dll</HintPath>
+    </Reference>
+    <Reference Include="Nini, Version=1.1.0.0, Culture=neutral, PublicKeyToken=691faec150a7fa7b">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dep\Nini.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite, Version=1.0.74.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dep\sqlite\sqlite-managed\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\dep\PowerCollections.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Gibbed.IO">
-      <HintPath>..\..\dep\Gibbed.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.ProtocolBuffers">
-      <HintPath>..\..\dep\Google.ProtocolBuffers.dll</HintPath>
-    </Reference>
-    <Reference Include="Nini">
-      <HintPath>..\..\dep\Nini.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\..\dep\sqlite\sqlite-managed\System.Data.SQLite.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
@@ -536,3 +546,4 @@
   </ItemGroup>
   <ItemGroup />
 </Project>
+
