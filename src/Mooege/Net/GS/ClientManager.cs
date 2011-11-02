@@ -100,7 +100,7 @@ namespace Mooege.Net.GS
 
                 client.SendMessage(new GameSetupMessage // should be the current tick for the game /raist.
                 {
-                    Field0 = game.Tick,
+                    Field0 = game.TickCounter,
                 });
 
                 client.SendMessage(new SavePointInfoMessage

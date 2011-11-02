@@ -164,19 +164,14 @@ namespace Mooege.Core.GS.Map
 
         #region update & tick logic
 
-        public override void Update()
+        public override void Update(int tickCounter)
         {
             if (!this.HasPlayers) // don't update actors if we have no players in scene.
                 return;
             
             foreach(var actor in this.Actors)
             {
-                actor.Update();
-            }
-            
-            foreach(var player in this.Players)
-            {
-                player.Update();
+                actor.Update(tickCounter);
             }
         }
 
