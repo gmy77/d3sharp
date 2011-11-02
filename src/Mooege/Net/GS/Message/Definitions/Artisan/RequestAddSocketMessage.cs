@@ -23,10 +23,10 @@ namespace Mooege.Net.GS.Message.Definitions.Artisan
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("OpenArtisanWindowMessage:");
+            b.AppendLine("RequestAddSocketMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("ArtisanID: 0x" + ItemID.ToString("X8") + " (" + ItemID + ")");
+            b.Append(' ', pad); b.AppendLine("ItemID: 0x" + ItemID.ToString("X8") + " (" + ItemID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
