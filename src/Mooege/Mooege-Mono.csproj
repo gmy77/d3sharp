@@ -161,10 +161,13 @@
     <Compile Include="Core\GS\Actors\Implementations\Vendor.cs" />
     <Compile Include="Core\GS\Actors\Living.cs" />
     <Compile Include="Core\GS\Actors\NPC.cs" />
-    <Compile Include="Core\GS\Common\Types\QuadNode.cs" />
-    <Compile Include="Core\GS\Common\Types\QuadTree.cs" />
+    <Compile Include="Core\GS\Common\Types\Misc\Circle.cs" />
+    <Compile Include="Core\GS\Common\Types\QuadTrees\QuadNode.cs" />
+    <Compile Include="Core\GS\Common\Types\QuadTrees\QuadTree.cs" />
     <Compile Include="Core\GS\Common\Types\SNO\SNOGroup.cs" />
+    <Compile Include="Core\GS\Common\Types\Math\Vector2F.cs" />
     <Compile Include="Core\GS\Games\GameCommands.cs" />
+    <Compile Include="Core\GS\Games\GameDebugCommands.cs" />
     <Compile Include="Core\GS\Games\GameManager.cs" />
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
     <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
@@ -198,7 +201,7 @@
     <Compile Include="Common\Helpers\RandomHelper.cs" />
     <Compile Include="Core\Common\Items\Item.cs" />
     <Compile Include="Core\Common\Items\ItemGenerator.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\Portal.cs" />
+    <Compile Include="Core\GS\Actors\Portal.cs" />
     <Compile Include="Core\GS\Map\Scene.cs" />
     <Compile Include="Core\GS\Map\World.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelInvitationManager.cs" />

@@ -47,22 +47,22 @@ namespace Mooege.Common.MPQ
                 var mpqFile = MPQStorage.GetMPQFile(file);
                 if(mpqFile == null)
                 {
-                    Logger.Fatal("Cannot find base MPQ file: {0}", file);
+                    Logger.Error("Cannot find base MPQ file: {0}.", file);
                     return;
                 }
                 this.BaseMPQFiles.Add(mpqFile);
-                Logger.Trace("Added base-mpq file: {0}", file);
+                Logger.Trace("Added base-mpq file: {0}.", file);
             }
                         
             this.PatchPattern = patchPattern;
             this.ConstructChain();
 
-            // check required version.
-            var topMostMPQVersion = this.MPQFileList.Reverse().First().Key;
-            if (topMostMPQVersion == this.RequiredVersion) this.Loaded = true;
+            var topMostMPQVersion = this.MPQFileList.Reverse().First().Key; // check required version.
+            if (topMostMPQVersion == this.RequiredVersion) 
+                this.Loaded = true;
             else
             {
-                Logger.Fatal("Required patch-chain version {0} is not satified (found version: {1}).", this.RequiredVersion, topMostMPQVersion);
+                Logger.Error("Required patch-chain version {0} is not satified (found version: {1}).", this.RequiredVersion, topMostMPQVersion);
             }            
         }
 
@@ -85,7 +85,7 @@ namespace Mooege.Common.MPQ
                 if (!match.Groups["version"].Success) continue;
 
                 MPQFileList.Add(Int32.Parse(match.Groups["version"].Value), file);
-                Logger.Trace("Applied patch file: {0}", match.Groups[0].Value);
+                Logger.Trace("Applied patch file: {0}.", match.Groups[0].Value);
             }
 
             /* add mpq's to mpq-file system in reverse-order (highest version first) */
