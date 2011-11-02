@@ -26,7 +26,7 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
     [Message(Opcodes.EffectGroupACDToACDMessage)]
     public class EffectGroupACDToACDMessage : GameMessage
     {
-        public int? /* sno */ EffectID; // the effect to play
+        public int? /* sno */ EffectSNOId; // the effect to play
         public uint ActorID; // where the effect starts
         public uint TargetID; // where the effect will travel to
 		
@@ -34,14 +34,14 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
 
         public override void Parse(GameBitBuffer buffer)
         {
-            EffectID = buffer.ReadInt(32);
+            EffectSNOId = buffer.ReadInt(32);
             ActorID = buffer.ReadUInt(32);
             TargetID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, EffectID.Value);
+            buffer.WriteInt(32, EffectSNOId.Value);
             buffer.WriteUInt(32, ActorID);
             buffer.WriteUInt(32, TargetID);
         }
@@ -52,7 +52,7 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
             b.AppendLine("EffectGroupACDToACDMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + EffectID.Value.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + EffectSNOId.Value.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + TargetID.ToString("X8") + " (" + TargetID + ")");
             b.Append(' ', --pad);
