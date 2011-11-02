@@ -469,7 +469,7 @@ namespace Mooege.Core.GS.Players
             this.ExpBonusData.Check(1);
 
             // Check if there is an conversation to close in this tick
-            Conversations.Update(this._world.Game.Tick);
+            Conversations.Update(this.World.Game.TickCounter);
 
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
@@ -1171,7 +1171,7 @@ namespace Mooege.Core.GS.Players
                     SNOSpeakerActor = this.SNOId,
                     Name = this.Properties.Name,
                     Field11 = 0x00000002,
-                    Field12 = -1,
+                    AnimationTag = -1,
                     Field13 = 0x00000069,
                     Field14 = 0x0000006E,
                     Field15 = 0x00000032

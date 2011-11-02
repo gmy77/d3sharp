@@ -240,7 +240,7 @@ namespace Mooege.Core.GS.Actors
         public override bool Reveal(Player player)
         {
             if (questRange != null)
-                if (_world.Game.Quests.IsInQuestRange(questRange) == false)
+                if (World.Game.Quests.IsInQuestRange(questRange) == false)
                     return false;   // TODO may i return false? comment suggests i may only return false if it was already revealed ... -farmy
 
             if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
@@ -491,7 +491,7 @@ namespace Mooege.Core.GS.Actors
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange].ContainsKey(snoQuestRange))
                     questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
                 else
-                    Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", _snoId, snoQuestRange);
+                    Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
             }
 
             if(this.Tags.ContainsKey((int)MarkerTagTypes.TriggeredConversation))

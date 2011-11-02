@@ -113,7 +113,7 @@ namespace Mooege.Core.GS.Players
             // get duration depending on language, class and gender
             int duration = node.First().ConvLocalDisplayTimes.ElementAt((int)manager.ClientLanguage).I0[player.Properties.VoiceClassID * 2 + (player.Properties.Gender == 0 ? 0 : 1)];
 
-            if (startTick + duration < player.World.Game.Tick)
+            if (startTick + duration < player.World.Game.TickCounter)
                 PlayNextLine(false);
         }
 
@@ -143,7 +143,10 @@ namespace Mooege.Core.GS.Players
                 ActorId = player.DynamicID
             });
 
-            player.InGameClient.SendMessage(new FinishConversationMessage(asset.Header.SNOId));
+            player.InGameClient.SendMessage(new FinishConversationMessage
+            {
+                SNOConversation = asset.Header.SNOId
+            });
 
             if (ConversationEnded != null)
                 ConversationEnded(this, null);
@@ -170,7 +173,7 @@ namespace Mooege.Core.GS.Players
         {
             int fooID = manager.GetNextFooID();
             currentUniqueLineID = manager.GetNextUniqueLineID();
-            startTick = player.World.Game.Tick;
+            startTick = player.World.Game.TickCounter;
 
             player.InGameClient.SendMessage(new PlayConvLineMessage()
             {
