@@ -16,9 +16,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
@@ -35,7 +37,7 @@ namespace Mooege.Core.GS.Actors
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
         // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
-        public int AnimationSNO { get; set; }
+        //public int AnimationSNO { get; set; }
 
         public Monster(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
@@ -54,7 +56,7 @@ namespace Mooege.Core.GS.Actors
         // FIXME: Hardcoded hell. /komiga
         public void Die(Player player)
         {
-            var killAni = new int[]{
+            /*var killAni = new int[]{
                     0x2cd7,
                     0x2cd4,
                     0x01b378,
@@ -71,8 +73,7 @@ namespace Mooege.Core.GS.Actors
                     0x2cd8,
                     0x2cda,
                     0x2cd9
-            };
-
+            };*/
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
                 ActorId = this.DynamicID,
@@ -116,7 +117,7 @@ namespace Mooege.Core.GS.Actors
                     new PlayAnimationMessageSpec()
                     {
                         Field0 = 0x2,
-                        Field1 = killAni[RandomHelper.Next(killAni.Length)],
+                        Field1 = Animset.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
                         Field2 = 0x0,
                         Field3 = 1f
                     }
@@ -136,31 +137,11 @@ namespace Mooege.Core.GS.Actors
             foreach (var msg in attribs.GetMessageList(this.DynamicID))
                 this.World.BroadcastIfRevealed(msg, this);
 
-            this.World.BroadcastIfRevealed(new PlayEffectMessage()
-            {
-                ActorId = this.DynamicID,
-                Effect = Effect.Unknown12
-            }, this);
-
-            this.World.BroadcastIfRevealed(new PlayEffectMessage()
-            {
-                ActorId = this.DynamicID,
-                Effect = Effect.Burned2
-            }, this);
-
-            this.World.BroadcastIfRevealed(new PlayHitEffectMessage()
-            {
-                ActorID = this.DynamicID,
-                HitDealer = player.DynamicID,
-                Field2 = 0x2,
-                Field3 = false,
-            }, this);
-
             // Spawn Random item and give exp for each player in range
             foreach (var plr in this.GetPlayersInRange())
             {
                 plr.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
-                plr.UpdateExpBonusData(plr.GBHandle.Type, this.GBHandle.Type);
+                plr.ExpBonusData.Update(plr.GBHandle.Type, this.GBHandle.Type);
                 this.World.SpawnRandomItemDrop(plr, this.Position);
             }
 
