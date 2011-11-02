@@ -157,7 +157,7 @@ namespace Mooege.Core.GS.Actors
             }, this);
 
             // Spawn Random item and give exp for each player in range
-            foreach (var plr in this.World.GetPlayersInRange(this.Position, 80.0f))
+            foreach (var plr in this.GetPlayersInRange())
             {
                 plr.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
                 plr.UpdateExpBonusData(plr.GBHandle.Type, this.GBHandle.Type);

@@ -301,7 +301,7 @@ namespace Mooege.Core.GS.Map
             var item = ItemGenerator.GenerateRandom(player);
             
             item.Drop(null, position); // NOTE: The owner field for an item is only set when it is in the owner's inventory. /komiga
-            foreach (var plr in item.World.GetPlayersInRange(item.Position, 80.0f))
+            foreach (var plr in item.GetPlayersInRange())
                 if (plr != player)
                     item.Unreveal(plr);
             player.GroundItems[item.DynamicID] = item; // FIXME: Hacky. /komiga

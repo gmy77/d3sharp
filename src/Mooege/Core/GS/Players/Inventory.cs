@@ -116,7 +116,7 @@ namespace Mooege.Core.GS.Players
                 _inventoryGrid.AddItem(item);
 
                 // Hide my picked up item from other players
-                foreach (var player in item.World.GetPlayersInRange(_owner.Position, 80.0f))
+                foreach (var player in item.GetPlayersInRange())
                     if (player != _owner)
                         item.Unreveal(player);
 
@@ -322,7 +322,7 @@ namespace Mooege.Core.GS.Players
             }
             item.Drop(null, _owner.Position);
             // Unreveal then Reveal the item -- Fixes issue where you can't pickup the item
-            foreach (var player in item.World.GetPlayersInRange(_owner.Position, 80.0f))
+            foreach (var player in item.GetPlayersInRange())
             {
                 item.Unreveal(player);
                 item.Reveal(player);
