@@ -18,6 +18,9 @@
 
 namespace Mooege.Core.GS.Objects
 {
+    /// <summary>
+    /// A dynamic object that can have a dynamicId
+    /// </summary>
     public abstract class DynamicObject
     {
         /// <summary>
