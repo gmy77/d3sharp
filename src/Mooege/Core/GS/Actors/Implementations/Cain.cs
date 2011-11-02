@@ -22,6 +22,7 @@ using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Definitions.NPC;
 using Mooege.Net.GS.Message.Fields;
@@ -120,7 +121,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             });
           
             // TODO: this has no effect, why is it sent?
-            player.InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Effect.PlayEffectMessage()
+            player.InGameClient.SendMessage(new PlayEffectMessage()
             {
                 ActorId = this.DynamicID,
                 Effect = Net.GS.Message.Definitions.Effect.Effect.Unknown36

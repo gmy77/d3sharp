@@ -17,10 +17,11 @@
  */
 
 using System.Windows;
+using Mooege.Core.GS.Common.Types.Math;
 
 // based on: http://www.krissteele.net/blogdetails.aspx?id=251
 
-namespace Mooege.Core.GS.Common.Types.QuadTrees
+namespace Mooege.Core.GS.Common.Types.Misc
 {
     public struct Circle
     {

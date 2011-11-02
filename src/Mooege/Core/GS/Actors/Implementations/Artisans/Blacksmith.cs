@@ -28,7 +28,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
         public Blacksmith(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
         {
-        }
-        //TODO add all blacksmith functionality? /fasbat
+            // TODO add all blacksmith functionality? /fasbat
+        }        
     }
 }

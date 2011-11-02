@@ -36,9 +36,8 @@ namespace Mooege.Core.GS.Actors
         public int AnimationSNO { get; set; }
 
         public Living(World world, int snoId, Dictionary<int, TagMapEntry> tags)
-            : base(world, tags )
+            : base(world, snoId, tags )
         {
-            this.SNOId = snoId;
             // FIXME: This is hardcoded crap
             this.Field3 = 0x0;
             this.RotationAmount = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);

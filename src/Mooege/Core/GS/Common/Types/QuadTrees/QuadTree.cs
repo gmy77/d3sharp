@@ -22,6 +22,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Windows;
+using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Objects;
 
 namespace Mooege.Core.GS.Common.Types.QuadTrees

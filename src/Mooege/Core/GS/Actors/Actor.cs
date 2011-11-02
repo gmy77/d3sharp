@@ -23,7 +23,7 @@ using Mooege.Common;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Common.Types.QuadTrees;
+using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
@@ -149,10 +149,12 @@ namespace Mooege.Core.GS.Actors
         /// Creates a new actor.
         /// </summary>
         /// <param name="world">The world the item initially belongs to.</param>
+        /// <param name="snoId">SNOId of the actor.</param>
         /// <param name="tags">TagMapEntry dictionary read for the actor from MPQ's..</param>           
-        protected Actor(World world, Dictionary<int, TagMapEntry> tags)
+        protected Actor(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, world.Game.NewObjectID)
         {
+            this.SNOId = snoId;
             this.Spawned = false;
             this.Size = new Size(1, 1);
             this.Attributes = new GameAttributeMap();
@@ -165,8 +167,12 @@ namespace Mooege.Core.GS.Actors
             this.ReadTags();
         }
 
+        protected Actor(World world, int snoId)
+            : this(world, snoId, null)
+        { }
+
         protected Actor(World world)
-            : this(world, null)
+            : this(world, -1, null)
         { }
 
         public void EnterWorld(Vector3D position)

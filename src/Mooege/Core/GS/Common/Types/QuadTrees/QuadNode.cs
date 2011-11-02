@@ -19,9 +19,7 @@
 // based on: http://csharpquadtree.codeplex.com/SourceControl/changeset/view/27798#506270
 
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using Mooege.Core.GS.Objects;
 

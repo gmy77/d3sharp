@@ -102,11 +102,10 @@ namespace Mooege.Core.Common.Items
         }
 
         public Item(GS.Map.World world, ItemTable definition)
-            : base(world)
+            : base(world, definition.SNOActor)
         {
             this.ItemDefinition = definition;
 
-            this.SNOId = definition.SNOActor;
             this.GBHandle.Type = (int)GBHandleType.Gizmo;
             this.GBHandle.GBID = definition.Hash;
             this.ItemType = ItemGroup.FromHash(definition.ItemType1);
@@ -232,7 +231,7 @@ namespace Mooege.Core.Common.Items
                 float result;
                 if (FormulaScript.Evaluate(effect.Formula.ToArray(), this.RandomGenerator, out result))
                 {
-                    Logger.Debug("Randomized value for attribute " + GameAttribute.Attributes[effect.AttributeId].Name + " is " + result);
+                    //Logger.Debug("Randomized value for attribute " + GameAttribute.Attributes[effect.AttributeId].Name + " is " + result);
 
                     if (GameAttribute.Attributes[effect.AttributeId] is GameAttributeF)
                     {

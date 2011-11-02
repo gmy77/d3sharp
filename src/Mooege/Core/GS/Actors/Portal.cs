@@ -39,10 +39,9 @@ namespace Mooege.Core.GS.Actors
 
         public ResolvedPortalDestination Destination { get; private set; }
 
-        public Portal(World world, int actorSNO, Dictionary<int, TagMapEntry> tags)
-            : base(world, tags)
+        public Portal(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
-            this.SNOId = actorSNO;
             this.Destination = new ResolvedPortalDestination
             {
                 WorldSNO = tags[(int)MarkerTagTypes.DestinationWorld].Int2,

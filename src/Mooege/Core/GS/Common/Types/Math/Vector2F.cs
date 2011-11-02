@@ -19,7 +19,7 @@
 using System;
 using System.Globalization;
 
-namespace Mooege.Core.GS.Common.Types.QuadTrees
+namespace Mooege.Core.GS.Common.Types.Math
 {
     public struct Vector2F : IEquatable<Vector2F>
     {

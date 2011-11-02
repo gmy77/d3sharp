@@ -46,23 +46,15 @@ namespace Mooege.Core.GS.Actors.Implementations
         // TODO: Proper item loading from droplist?
         protected virtual List<Item> GetVendorItems()
         {
-            var list = new List<Item>();
-
-            /*var def = new ItemDefinition(189846, "Crafting_Tier_01A", null);
-            list.Add(ItemGenerator.CreateItem(this, def));
-            def = new ItemDefinition(189846, "Crafting_Tier_01B", null);
-            list.Add(ItemGenerator.CreateItem(this, def));
-            def = new ItemDefinition(189846, "Crafting_Tier_01C", null);
-            list.Add(ItemGenerator.CreateItem(this, def));
-            def = new ItemDefinition(189846, "Crafting_Tier_01D", null);
-            list.Add(ItemGenerator.CreateItem(this, def)); */
-
-            list.Add(ItemGenerator.GenerateRandom(this));
-            list.Add(ItemGenerator.GenerateRandom(this));
-            list.Add(ItemGenerator.GenerateRandom(this));
-            list.Add(ItemGenerator.GenerateRandom(this));
-            list.Add(ItemGenerator.GenerateRandom(this));
-            list.Add(ItemGenerator.GenerateRandom(this));
+            var list = new List<Item>
+            {
+                ItemGenerator.GenerateRandom(this),
+                ItemGenerator.GenerateRandom(this),
+                ItemGenerator.GenerateRandom(this),
+                ItemGenerator.GenerateRandom(this),
+                ItemGenerator.GenerateRandom(this),
+                ItemGenerator.GenerateRandom(this)
+            };
 
             return list;
         }
@@ -83,7 +75,7 @@ namespace Mooege.Core.GS.Actors.Implementations
 
         }
 
-        public override bool Reveal(Players.Player player)
+        public override bool Reveal(Player player)
         {
             if (!base.Reveal(player))
                 return false;
@@ -92,7 +84,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             return true;
         }
 
-        public override bool Unreveal(Players.Player player)
+        public override bool Unreveal(Player player)
         {
             if (!base.Reveal(player))
                 return false;
@@ -117,7 +109,6 @@ namespace Mooege.Core.GS.Actors.Implementations
             }
 
             // TODO: Remove the gold
-
             // TODO: new item would randomize new stats, should better copy item as it // dark0ne
             var newItem = new Item(this.World, item.ItemDefinition);
 

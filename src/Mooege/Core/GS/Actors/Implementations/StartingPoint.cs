@@ -28,8 +28,8 @@ namespace Mooege.Core.GS.Actors.Implementations
     {
         public int TargetId { get; private set; }
 
-        public StartingPoint(World world, int actorSNO, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, tags)
+        public StartingPoint(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
         }
 

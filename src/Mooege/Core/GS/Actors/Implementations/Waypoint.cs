@@ -36,8 +36,8 @@ namespace Mooege.Core.GS.Actors.Implementations
     {
         public int WaypointId { get; private set; }
 
-        public Waypoint(World world, int actorSNO, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, tags)
+        public Waypoint(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
         }
