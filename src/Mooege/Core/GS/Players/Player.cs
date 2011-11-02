@@ -110,19 +110,7 @@ namespace Mooege.Core.GS.Players
         /// NPC currently interaced with
         /// </summary>
         public InteractiveNPC SelectedNPC { get; set; }
-
-        // Used for Exp-Bonuses
-        // Move them to a class or a better position please /raist.
-        private int _killstreakTickTime;
-        private int _killstreakPlayer;
-        private int _killstreakEnvironment;
-        private int _lastMonsterKillTick;
-        private int _lastMonsterAttackTick;
-        private int _lastMonsterAttackKills;
-        private int _lastEnvironmentDestroyTick;
-        private int _lastEnvironmentDestroyMonsterKills;
-        private int _lastEnvironmentDestroyMonsterKillTick;
-       
+     
         /// <summary>
         /// Creates a new player.
         /// </summary>
