@@ -23,6 +23,7 @@ using Mooege.Common;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
@@ -44,19 +45,10 @@ namespace Mooege.Core.GS.Actors
         /// <summary>
         /// SNO Id of the actor.
         /// </summary>
-        private int _snoId;
-        public int SNOId
-        {
-            get { return _snoId; }
-            set
-            {
-                this._snoId = value;
-                this.SNOName.SNOId = this.SNOId;
-            }
-        }
+        public int SNOId { get; protected set; }
 
         /// <summary>
-        /// SNOName - we can handle this better /raist.
+        /// SNOName - TODO: we can handle this better /raist.
         /// </summary>
         public SNOName SNOName { get; private set; }
 
@@ -66,19 +58,22 @@ namespace Mooege.Core.GS.Actors
         public abstract ActorType ActorType { get; }
 
         /// <summary>
-        /// Position of the actor.
+        /// Current scene for the actor.
         /// </summary>
-        public override Vector3D Position
+        public virtual Scene CurrentScene
         {
-            get { return this._position; }
-            set
-            {
-                var old = new Vector3D(this._position);
-                this._position.Set(value);
-                this.Bounds = new Rect(this._position.X, this.Position.Y, 1, 1); // calculate the bounds.
-                this.OnPositionChange(old); // let deriving class take any actions.
-            }
+            get { return this.World.QuadTree.Query<Scene>(this.Bounds).FirstOrDefault(); }
         }
+
+        /// <summary>
+        /// Returns true if actor is already spawned in the world.
+        /// </summary>
+        public bool Spawned { get; private set; }
+
+        /// <summary>
+        /// Default query radius value.
+        /// </summary>
+        protected const int DefaultQueryProximity = 240;
 
         /// <summary>
         /// PRTransform for the actor.
@@ -86,35 +81,6 @@ namespace Mooege.Core.GS.Actors
         public virtual PRTransform Transform
         {
             get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
-        }
-
-        /// <summary>
-        /// The current world of actor.
-        /// Also allows changing worlds. - we should be instead using function for changing worlds /raist.
-        /// </summary>
-        public override World World
-        {
-            get { return this._world; }
-            set
-            {
-                if (this._world == value) return;
-
-                if (this._world != null) // if actor is already in a existing-world
-                    this._world.Leave(this); // make him leave it first.
-
-                this._world = value;
-                if (this._world != null) // if actor got into a new world.
-                    this._world.Enter(this); // let him enter first.
-            }
-        }
-
-        /// <summary>
-        /// Current scene for the actor.
-        /// TODO: I guess this should be only returning master-scenes but not childs. /raist.
-        /// </summary>
-        public virtual Scene CurrentScene
-        {
-            get { return this.World.QuadTree.Query<Scene>(this.Bounds).FirstOrDefault(); }
         }
 
         /// <summary>
@@ -143,8 +109,7 @@ namespace Mooege.Core.GS.Actors
         public int CollFlags { get; set; }
 
         /// <summary>
-        /// Returns true if actor has world location.
-        /// TODO: I belive this belongs to WorldObject.cs /raist.
+        /// Returns true if actor has world location. TODO: I belive this belongs to WorldObject.cs /raist.
         /// </summary>
         public virtual bool HasWorldLocation
         {
@@ -165,46 +130,100 @@ namespace Mooege.Core.GS.Actors
         /// <summary>
         /// Creates a new actor.
         /// </summary>
-        /// <param name="world">The world the item initially belongs to.</param>
-        /// <param name="dynamicID">DynamicId of the actor.</param>
-        /// <param name="position">The initial position of the actor.</param>
+        /// <param name="world">The world that initially belongs to.</param>
+        /// <param name="snoId">SNOId of the actor.</param>
         /// <param name="tags">TagMapEntry dictionary read for the actor from MPQ's..</param>           
-        protected Actor(World world, uint dynamicID, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, dynamicID)
+        protected Actor(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, world.NewActorID)
         {
-            if (position != null) 
-                this.Position = position;
-
+            this.SNOId = snoId;
+            this.SNOName = new SNOName { Group = SNOGroup.Actor, SNOId = this.SNOId };
+            this.Spawned = false;
+            this.Size = new Size(1, 1);
             this.Attributes = new GameAttributeMap();
             this.AffixList = new List<Affix>();
             this.GBHandle = new GBHandle { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
-            this.SNOName = new SNOName { Group =  SNOGroup.Actor, SNOId = this.SNOId };
             this.CollFlags = 0x00000000;
 
             this.Tags = tags;
             this.ReadTags();
         }
 
-        protected Actor(World world, uint dynamicId)
-            : this(world, dynamicId, null, null)
+        /// <summary>
+        /// Creates a new actor.
+        /// </summary>
+        /// <param name="world">The world that initially belongs to.</param>
+        /// <param name="snoId">SNOId of the actor.</param>
+        protected Actor(World world, int snoId)
+            : this(world, snoId, null)
         { }
 
-        #region tag-readers
-
         /// <summary>
-        /// Reads known tags from TagMapEntry and set the proper values.
+        /// Creates a new world.
         /// </summary>
-        protected virtual void ReadTags()
-        {
-            if (this.Tags == null) return;
+        /// <param name="world">The world that initially belongs to.</param>
+        protected Actor(World world)
+            : this(world, -1, null)
+        { }
 
-            if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
-                this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
+        #region enter-world, change-world, teleport helpers
+
+        public void EnterWorld(Vector3D position)
+        {
+            if (this.Spawned)
+                return;
+
+            this.Position = position;
+
+            if (this.World != null) // if actor got into a new world.
+                this.World.Enter(this); // let him enter first.
+        }
+
+        public void ChangeWorld(World world, Vector3D position)
+        {
+            if (this.World == world)
+                return;
+
+            this.Position = position;
+
+            if (this.World != null) // if actor is already in a existing-world
+                this.World.Leave(this); // make him leave it first.
+
+            this.World = world;
+            if (this.World != null) // if actor got into a new world.
+                this.World.Enter(this); // let him enter first.
+
+            world.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
+        }
+
+        public void ChangeWorld(World world, StartingPoint startingPoint)
+        {
+            this.RotationAxis = startingPoint.RotationAxis;
+            this.RotationAmount = startingPoint.RotationAmount;
+
+            this.ChangeWorld(world, startingPoint.Position);
+        }
+
+        public void Teleport(Vector3D position)
+        {
+            this.Position = position;
+            this.OnTeleport();
+            this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
         }
 
         #endregion
 
         #region reveal & unreveal handling
+
+        /// <summary>
+        /// Returns true if the actor is revealed to player.
+        /// </summary>
+        /// <param name="player">The player.</param>
+        /// <returns><see cref="bool"/></returns>
+        public bool IsRevealedToPlayer(Player player)
+        {
+            return player.RevealedObjects.ContainsKey(this.DynamicID);
+        }
 
         /// <summary>
         /// Reveals an actor to a player.
@@ -238,30 +257,6 @@ namespace Mooege.Core.GS.Actors
                 msg.Field2 = 0x01;
 
             player.InGameClient.SendMessage(msg);
-
-            /*
-            // Affixes of the actor, two messages with 1 and 2,i guess prefix and suffix so it does not
-            // make sense to send the same list twice. server does not do this
-            var affixGbis = new int[AffixList.Count];
-            for (int i = 0; i < AffixList.Count; i++)
-            {
-                affixGbis[i] = AffixList[i].AffixGbid;
-            }
-
-            player.InGameClient.SendMessage(new AffixMessage
-            {
-                ActorID = DynamicID,
-                Field1 = 0x00000001,
-                aAffixGBIDs = affixGbis,
-            });
-
-            player.InGameClient.SendMessage(new AffixMessage
-            {
-                ActorID = DynamicID,
-                Field1 = 0x00000002,
-                aAffixGBIDs = affixGbis,
-            });
-             */
 
             // Collision Flags
             player.InGameClient.SendMessage(new ACDCollFlagsMessage
@@ -307,14 +302,101 @@ namespace Mooege.Core.GS.Actors
 
         #endregion
 
-        #region events
+        #region proximity-based query helpers
 
-        protected virtual void OnPositionChange(Vector3D prevPosition)
+        #region circurlar region queries
+
+        public List<Player> GetPlayersInRange(float radius = DefaultQueryProximity)
         {
-            if (!this.HasWorldLocation) return;
-
-            this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this); // We need this here for positioning actors on world (like when item drops) /raist.
+            return this.GetObjectsInRange<Player>(radius);
         }
+
+        public List<Item> GetItemsInRange(float radius = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRange<Item>(radius);
+        }
+
+        public List<Monster> GetMonstersInRange(float radius = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRange<Monster>(radius);
+        }
+
+        public List<Actor> GetActorsInRange(float radius = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRange<Actor>(radius);
+        }
+
+        public List<T> GetActorsInRange<T>(float radius = DefaultQueryProximity) where T : Actor
+        {
+            return this.GetObjectsInRange<T>(radius);
+        }
+
+        public List<Scene> GetScenesInRange(float radius = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRange<Scene>(radius);
+        }
+
+        public List<WorldObject> GetObjectsInRange(float radius = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRange<WorldObject>(radius);
+        }
+
+        public List<T> GetObjectsInRange<T>(float radius=DefaultQueryProximity) where T : WorldObject
+        {
+            var proximityCircle = new Circle(this.Position.X, this.Position.Y, radius);
+            return this.World.QuadTree.Query<T>(proximityCircle);
+        }
+
+        #endregion
+
+        #region rectangluar region queries
+
+        public List<Player> GetPlayersInRegion(int lenght = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRegion<Player>(lenght);
+        }
+
+        public List<Item> GetItemsInRegion(int lenght = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRegion<Item>(lenght);
+        }
+
+        public List<Monster> GetMonstersInRegion(int lenght = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRegion<Monster>(lenght);
+        }
+
+        public List<Actor> GetActorsInRegion(int lenght = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRegion<Actor>(lenght);
+        }
+
+        public List<T> GetActorsInRegion<T>(int lenght = DefaultQueryProximity) where T : Actor
+        {
+            return this.GetObjectsInRegion<T>(lenght);
+        }
+
+        public List<Scene> GetScenesInRegion(int lenght = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRegion<Scene>(lenght);
+        }
+
+        public List<WorldObject> GetObjectsInRegion(int lenght = DefaultQueryProximity)
+        {
+            return this.GetObjectsInRegion<WorldObject>(lenght);
+        }
+
+        public List<T> GetObjectsInRegion<T>(int lenght = DefaultQueryProximity) where T : WorldObject
+        {
+            var proximityRectangle = new Rect(this.Position.X - lenght / 2, this.Position.Y - lenght / 2, lenght, lenght);
+            return this.World.QuadTree.Query<T>(proximityRectangle);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region events
 
         public virtual void OnEnter(World world)
         {
@@ -326,7 +408,6 @@ namespace Mooege.Core.GS.Actors
 
         }
 
-        // TODO: add an actor mover helper function! /raist.
         public void OnActorMove(Actor actor, Vector3D prevPosition)
         {
             // TODO: Unreveal from players that are now outside the actor's range. /komiga
@@ -337,40 +418,9 @@ namespace Mooege.Core.GS.Actors
 
         }
 
-        #endregion
-
-        #region helper functions
-
-        /// <summary>
-        /// Transfers actor to a target world.
-        /// NOTE: When using this, you should *not* set the actor's world. It is done for you.
-        /// </summary>
-        /// <param name="targetWorld">Target world to transfer actor to.</param>
-        /// <param name="startingPoint">StartingPoint to transfer actor.</param>
-        public void TransferTo(World targetWorld, StartingPoint startingPoint=null)
+        public virtual void OnTeleport()
         {
-            // This is somewhat still buggy, need a careful review. /raist.
-
-            var player = this as Player;
-            if (player == null) return; // return if current actor is not a player. 
-
-            this.World = targetWorld; // Will Leave() from its current world and then Enter() to the target world
-
-            if (startingPoint == null)
-                startingPoint = targetWorld.StartingPoints.First();
-
-            this.Position = startingPoint.Position;
-            this.RotationAmount = startingPoint.RotationAmount;
-            this.RotationAxis = startingPoint.RotationAxis;
-
-            player.InGameClient.SendMessage(new EnterWorldMessage()
-            {
-                EnterPosition = this.Position,
-                WorldID = targetWorld.DynamicID,
-                WorldSNO = targetWorld.SNOId,
-            });
-
-            player.InGameClient.SendMessage(this.ACDWorldPositionMessage);
+            
         }
 
         #endregion
@@ -411,9 +461,24 @@ namespace Mooege.Core.GS.Actors
 
         #endregion
 
+        #region tag-readers
+
+        /// <summary>
+        /// Reads known tags from TagMapEntry and set the proper values.
+        /// </summary>
+        protected virtual void ReadTags()
+        {
+            if (this.Tags == null) return;
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
+                this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
+        }
+
+        #endregion
+
         public override string ToString()
         {
-            return string.Format("Actor: [Type: {0}] [Id:{1}] [Position: {2}] {3}", this.ActorType, this.SNOName.SNOId, this.Position, this.SNOName.Name);
+            return string.Format("[Actor] [Type: {0}] SNOId:{1} DynamicId: {2} Position: {3} Name: {4}", this.ActorType, this.SNOId, this.DynamicID, this.Position, this.SNOName.Name);
         }
     }
 

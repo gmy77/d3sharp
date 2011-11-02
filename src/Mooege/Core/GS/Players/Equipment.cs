@@ -111,8 +111,10 @@ namespace Mooege.Core.GS.Players
                     };
         }
 
-        internal Item AddGoldItem(Item collectedItem)
+        public Item AddGoldItem(Item collectedItem)
         {
+            // the logic is flawed, we shouldn't be creating new gold when it's collected! /raist.
+
             if (_inventoryGold == null)
             {
                 _inventoryGold = ItemGenerator.CreateGold(_owner, collectedItem.Attributes[GameAttribute.Gold]);
@@ -124,7 +126,7 @@ namespace Mooege.Core.GS.Players
             else
             {
                 _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += collectedItem.Attributes[GameAttribute.Gold];
-                _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID);
+                //_inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID); // causes: !!!ERROR!!! Setting attribute for unknown ACD [ANN:1253] [Attribute:ItemStackQuantityLo-1048575:	8669] and client crash /raist.
             }
 
             return _inventoryGold;

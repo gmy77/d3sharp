@@ -232,7 +232,7 @@ namespace Mooege.Core.GS.Common
                 {
                     if (_backpack[r, c] != 0)
                     {
-                        _owner.World.Actors[_backpack[r, c]].Unreveal(player);
+                        //_owner.World.Actors[_backpack[r, c]].Unreveal(player); // TODO: Fixme /raist
                     }
                 }
             }

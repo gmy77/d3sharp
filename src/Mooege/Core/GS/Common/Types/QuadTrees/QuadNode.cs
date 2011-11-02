@@ -16,12 +16,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
+// based on: http://csharpquadtree.codeplex.com/SourceControl/changeset/view/27798#506270
+
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Windows;
 using Mooege.Core.GS.Objects;
 
-namespace Mooege.Core.GS.Common.Types
+namespace Mooege.Core.GS.Common.Types.QuadTrees
 {
     public class QuadNode
     {
@@ -88,12 +90,7 @@ namespace Mooege.Core.GS.Common.Types
         /// <summary>
         /// List of contained objects.
         /// </summary>
-        public List<WorldObject> ContainedObjects = new List<WorldObject>();
-
-        /// <summary>
-        /// Read only list of contained objects.
-        /// </summary>
-        public ReadOnlyCollection<WorldObject> Objects;
+        public ConcurrentDictionary<uint, WorldObject> ContainedObjects = new ConcurrentDictionary<uint,WorldObject>();
 
         /// <summary>
         /// The bounds for node.
@@ -108,7 +105,6 @@ namespace Mooege.Core.GS.Common.Types
         {
             Bounds = bounds;
             Nodes = new ReadOnlyCollection<QuadNode>(_nodes);
-            Objects = new ReadOnlyCollection<WorldObject>(ContainedObjects);
         }
 
         /// <summary>

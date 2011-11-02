@@ -22,6 +22,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Mooege.Common;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Generators;
 using Mooege.Core.GS.Map;
@@ -232,9 +233,8 @@ namespace Mooege.Core.GS.Games
                             }
             });
 
-            joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition.
+            joinedPlayer.EnterWorld(this.StartingWorld.StartingPoints.First().Position);
             joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
-            joinedPlayer.EnteredWorld = true;
         }
 
         /// <summary>

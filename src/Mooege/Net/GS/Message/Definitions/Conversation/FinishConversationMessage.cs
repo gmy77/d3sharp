@@ -29,12 +29,9 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
     public class FinishConversationMessage : GameMessage
     {
         public int SNOConversation;
-
-        public FinishConversationMessage(int snoConversation)
+        public FinishConversationMessage()
             : base(Opcodes.FinishConversationMessage)
-        {
-            this.SNOConversation = snoConversation;
-        }
+        { }
 
         public override void Parse(GameBitBuffer buffer)
         {

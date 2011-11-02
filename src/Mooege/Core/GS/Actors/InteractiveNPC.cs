@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
@@ -29,8 +28,8 @@ namespace Mooege.Core.GS.Actors
 {
     public class InteractiveNPC : NPC
     {
-        public InteractiveNPC(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public InteractiveNPC(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.NPC_Has_Interact_Options, 0] = true;
             this.Attributes[GameAttribute.NPC_Is_Operatable] = true;
