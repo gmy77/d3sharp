@@ -34,8 +34,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
     {
         protected int hirelingSNO = -1;
 
-        public Hireling(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public Hireling(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.TeamID] = 2;
             Interactions.Add(new HireInteraction());
@@ -50,8 +50,9 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             //this doesn't fully work, and is for now disabled. /fasbat
 
             this.Unreveal(player);
-            var tmp = new Templar(this.World, hirelingSNO, this.Position, this.Tags);
+            var tmp = new Templar(this.World, hirelingSNO, this.Tags);
 
+            tmp.Position = this.Position;
             tmp.GBHandle.Type = 4;
             tmp.GBHandle.GBID = StringHashHelper.HashItemName("Templar");
             tmp.Field9 = 5;

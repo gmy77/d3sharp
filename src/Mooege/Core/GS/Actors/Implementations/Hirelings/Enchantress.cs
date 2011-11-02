@@ -26,8 +26,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
     [HandledSNO(4062 /* Enchantress.acr */)]
     public class Enchantress : Hireling
     {
-        public Enchantress(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public Enchantress(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
         }
     }

@@ -27,8 +27,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
     [HandledSNO(4644 /* Scoundrel.acr */)]
     public class Scoundrel : Hireling
     {
-        public Scoundrel(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public Scoundrel(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             //enable this for some spectacular crashes /fasbat
             //hirelingSNO = 52694;

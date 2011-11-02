@@ -27,8 +27,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
     [HandledSNO(4538 /* Templar.acr */)]
     public class Templar : Hireling
     {
-        public Templar(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public Templar(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             //enable this for some spectacular crashes /fasbat
             //hirelingSNO = 0x0000CDD5;  
