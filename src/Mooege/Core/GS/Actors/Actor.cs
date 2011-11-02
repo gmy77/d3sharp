@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -45,16 +46,7 @@ namespace Mooege.Core.GS.Actors
         /// <summary>
         /// SNO Id of the actor.
         /// </summary>
-        private int _snoId;
-        public int SNOId
-        {
-            get { return _snoId; }
-            set
-            {
-                this._snoId = value;
-                this.SNOName.SNOId = this.SNOId;
-            }
-        }
+        public int SNOId { get; protected set; }
 
         /// <summary>
         /// SNOName - we can handle this better /raist.
@@ -155,12 +147,12 @@ namespace Mooege.Core.GS.Actors
             : base(world, world.Game.NewObjectID)
         {
             this.SNOId = snoId;
+            this.SNOName = new SNOName { Group = SNOGroup.Actor, SNOId = this.SNOId };
             this.Spawned = false;
             this.Size = new Size(1, 1);
             this.Attributes = new GameAttributeMap();
             this.AffixList = new List<Affix>();
             this.GBHandle = new GBHandle { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
-            this.SNOName = new SNOName { Group =  SNOGroup.Actor, SNOId = this.SNOId };
             this.CollFlags = 0x00000000;
 
             this.Tags = tags;
