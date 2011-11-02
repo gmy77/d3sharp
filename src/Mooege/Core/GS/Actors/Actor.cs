@@ -167,6 +167,8 @@ namespace Mooege.Core.GS.Actors
         public int? Field12 = null;
         public int? Field13 = null;
 
+        private int snoTriggeredConversation = -1;
+
         /// <summary>
         /// Creates a new actor.
         /// </summary>
@@ -215,6 +217,8 @@ namespace Mooege.Core.GS.Actors
                     Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", _snoId, snoQuestRange);
             }
 
+            if(this.Tags.ContainsKey((int)MarkerTagTypes.TriggeredConversation))
+                snoTriggeredConversation = Tags[(int)MarkerTagTypes.TriggeredConversation].Int2;
 
 
         }

@@ -85,17 +85,19 @@ namespace Mooege.Core.GS.Players
 
             private void UpdateCounter(QuestObjective objective)
             {
-                foreach (var player in _quest.game.Players.Values)
-                    player.InGameClient.SendMessage(new QuestCounterMessage()
-                    {
-                        snoQuest = _quest.SNOName.SNOId,
-                        snoLevelArea = -1,
-                        StepID = _questStep.ID,
-                        TaskIndex = objective.ID,
-                        Counter = objective.Counter,
-                        Checked = objective.Done ? 1 : 0,
-                    });
-
+                if (_questStep is Mooege.Common.MPQ.FileFormats.QuestUnassignedStep == false)
+                {
+                    foreach (var player in _quest.game.Players.Values)
+                        player.InGameClient.SendMessage(new QuestCounterMessage()
+                        {
+                            snoQuest = _quest.SNOName.SNOId,
+                            snoLevelArea = -1,
+                            StepID = _questStep.ID,
+                            TaskIndex = objective.ID,
+                            Counter = objective.Counter,
+                            Checked = objective.Done ? 1 : 0,
+                        });
+                }
 
                 var completedObjectiveList = from objectiveSet in ObjectivesSets
                                              where (from o in objectiveSet.Objectives select o.Done).Aggregate((r, o) => r && o)
@@ -146,12 +148,16 @@ namespace Mooege.Core.GS.Players
 
         public bool HasStepCompleted(int stepID)
         {
-            return completedSteps.Contains(stepID);
+            return completedSteps.Contains(stepID) || CurrentStep.ObjectivesSets.Select(x => x.FollowUpStepID).Contains(stepID) ;
+        }
+
+        public void Advance()
+        {
+            StepCompleted(CurrentStep.ObjectivesSets[0].FollowUpStepID);
         }
 
         public void StepCompleted(int FollowUpStepID)
         {
-
             foreach (var player in game.Players.Values)
                 player.InGameClient.SendMessage(new QuestUpdateMessage()
                 {
@@ -191,6 +197,11 @@ namespace Mooege.Core.GS.Players
             foreach (var quest in asset.Keys)
                 quests.Add(quest, new Quest(game, quest, -1));
 
+        }
+
+        public void Advance(int snoQuest)
+        {
+            quests[snoQuest].Advance();
         }
 
         public void Notify(Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType type, int value)

@@ -146,7 +146,7 @@ namespace Mooege.Core.GS.Players
             this.Inventory = new Inventory(this);
             this.SkillSet = new SkillSet(this.Properties.Class);
             this.GroundItems = new Dictionary<uint, Item>();
-            this.Conversations = new ConversationManager(this);
+            this.Conversations = new ConversationManager(this, this.World.Game.Quests);
 
             this._killstreakTickTime = 400;
             this._killstreakPlayer = 0;

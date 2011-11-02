@@ -143,6 +143,19 @@ namespace Mooege.Core.GS.Games
             return "";
         }
 
+        [Command("advance", "Advances a quest by a single step")]
+        public string Advance(string[] @params, MooNetClient invokerClient)
+        {
+            if (@params == null)
+                return this.Fallback();
+
+            if (@params.Count() != 1)
+                return "Invalid arguments. Type 'help lookup advance' to get help.";
+
+            invokerClient.InGameClient.Game.Quests.Advance(Int32.Parse(@params[0]));
+            return "";
+        }
+
         [Command("trigger", "Triggers a single quest objective")]
         public string Trigger(string[] @params, MooNetClient invokerClient)
         {

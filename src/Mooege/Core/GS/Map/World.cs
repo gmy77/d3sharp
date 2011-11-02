@@ -496,12 +496,6 @@ namespace Mooege.Core.GS.Map
             return actor;
         }
 
-        public List<Actor> GetActorBySNO(int sno)
-        {
-            return (from a in this.Actors.Values where a.SNOId == sno select a).ToList();
-        }
-
-
         /// <summary>
         /// Returns the actor with given dynamicId.
         /// </summary>
