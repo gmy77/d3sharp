@@ -16,9 +16,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Tick
@@ -33,7 +30,7 @@ namespace Mooege.Net.GS.Message.Definitions.Tick
         public GameTickMessage(int tick)
             : base(Opcodes.GameTickMessage)
         {
-            this.Tick = tick;   
+            this.Tick = tick;
         }
 
         public override void Parse(GameBitBuffer buffer)
