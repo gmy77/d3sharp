@@ -95,6 +95,10 @@ namespace Mooege.Core.GS.Actors
                         AnimationSNO = this.Animset.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Idle)
                     });
                 }
+                else
+                {
+                    int i = 0;
+                }
                
             }
             return true;
