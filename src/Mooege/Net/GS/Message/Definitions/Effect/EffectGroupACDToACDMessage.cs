@@ -52,9 +52,9 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
             b.AppendLine("EffectGroupACDToACDMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + EffectSNOId.Value.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + TargetID.ToString("X8") + " (" + TargetID + ")");
+            b.Append(' ', pad); b.AppendLine("EffectSNOId: 0x" + EffectSNOId.Value.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            b.Append(' ', pad); b.AppendLine("TargetID: 0x" + TargetID.ToString("X8") + " (" + TargetID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

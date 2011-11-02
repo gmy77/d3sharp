@@ -18,7 +18,7 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Player
 {
 	/// <summary>
     /// Sent from the client when a buff is right clicked to be cancelled
@@ -47,7 +47,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("RequestBuffCancelMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + PowerSNOId.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("PowerSNOId: 0x" + PowerSNOId.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
