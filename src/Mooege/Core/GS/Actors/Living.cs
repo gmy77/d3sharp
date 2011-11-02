@@ -38,20 +38,17 @@ namespace Mooege.Core.GS.Actors
         private int snoAnimSet;
         private int snoMonster;
         public Mooege.Common.MPQ.FileFormats.AnimSet Animset = null;
-        
-        public Living(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, world.NewActorID, position, tags )
+
+        public Living(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
-            this.SNOId = actorSNO;
-            var actor = (Mooege.Common.MPQ.FileFormats.Actor)Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Actor][actorSNO].Data;
+            this.SNOId = snoId;
+            var actor = (Mooege.Common.MPQ.FileFormats.Actor)Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Actor][snoId].Data;
             this.snoMonster = actor.MonsterSNO;
             if (actor.AnimSetSNO != -1)
             {
                 this.Animset = (Mooege.Common.MPQ.FileFormats.AnimSet)Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.AnimSet][actor.AnimSetSNO].Data;
             }
-            
-            
-            //var monster = (Mooege.Common.MPQ.FileFormats.Monster)Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Monster][actor.MonsterSNO].Data;
             // FIXME: This is hardcoded crap
             this.Field3 = 0x0;
             this.RotationAmount = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);

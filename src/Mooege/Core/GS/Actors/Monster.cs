@@ -39,8 +39,8 @@ namespace Mooege.Core.GS.Actors
         // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
         //public int AnimationSNO { get; set; }
 
-        public Monster(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public Monster(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Field2 = 0x8;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
@@ -108,7 +108,7 @@ namespace Mooege.Core.GS.Actors
             }, this);
 
             player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
-            player.UpdateExpBonusData(player.GBHandle.Type, this.GBHandle.Type);
+            player.ExpBonusData.Update(player.GBHandle.Type, this.GBHandle.Type);
 
             this.World.BroadcastIfRevealed(new PlayAnimationMessage()
             {
