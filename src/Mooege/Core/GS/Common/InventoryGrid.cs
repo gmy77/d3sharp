@@ -23,7 +23,7 @@ namespace Mooege.Core.GS.Common
         public int Rows { get { return _backpack.GetLength(0); } }
         public int Columns { get { return _backpack.GetLength(1); } }
         private uint[,] _backpack;
-      
+
         private readonly Actor _owner; // Used, because most information is not in the item class but Actors managed by the world
 
         private struct InventorySize
@@ -56,15 +56,15 @@ namespace Mooege.Core.GS.Common
         // Do all items need a rectangual space in diablo 3?
         private InventorySize GetItemInventorySize(Item item)
         {
-            if (Item.IsPotion(item.ItemType) || Item.IsAccessory(item.ItemType)
-                || Item.IsRuneOrJewel(item.ItemType) || Item.IsDye(item.ItemType)
-                || Item.IsJournalOrScroll(item.ItemType) || EquipmentSlot == (int) EquipmentSlotId.Vendor)
-            {
+            if(EquipmentSlot == (int) EquipmentSlotId.Vendor)
                 return new InventorySize() { Width = 1, Height = 1 };
+            if (Item.IsWeapon(item.ItemType) || Item.IsArmor(item.ItemType) || Item.IsOffhand(item.ItemType))
+            {
+                return new InventorySize() { Width = 1, Height = 2 };
             }
+            return new InventorySize() { Width = 1, Height = 1 };
 
-            return new InventorySize() { Width = 1, Height = 2 };
-        }        
+        }
 
         public bool FreeSpace(Item item, int row, int column)
         {
@@ -146,7 +146,7 @@ namespace Mooege.Core.GS.Common
         }
 
         /// <summary>
-        /// Adds an Item at a free spot to the backpack 
+        /// Adds an Item at a free spot to the backpack
         /// </summary>
         /// <param name="item"></param>
         public bool AddItem(Item item)
@@ -232,7 +232,7 @@ namespace Mooege.Core.GS.Common
                 {
                     if (_backpack[r, c] != 0)
                     {
-                        _owner.World.Actors[_backpack[r, c]].Unreveal(player);
+                        //_owner.World.Actors[_backpack[r, c]].Unreveal(player); // TODO: Fixme /raist
                     }
                 }
             }

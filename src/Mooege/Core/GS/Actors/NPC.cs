@@ -18,7 +18,6 @@
 
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
 
@@ -28,12 +27,12 @@ namespace Mooege.Core.GS.Actors
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
-        public NPC(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public NPC(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Field2 = 0x9;
             this.Field7 = 1;
-            this.Field8 = actorSNO; //TODO check if this is not true for every actor / living? /fasbat
+            this.Field8 = snoId; //TODO check if this is not true for every actor / living? /fasbat
             this.Attributes[GameAttribute.TeamID] = 1;
             this.Attributes[GameAttribute.Is_NPC] = true;
         }

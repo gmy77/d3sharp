@@ -16,64 +16,103 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Windows;
+using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Objects
 {
+    /// <summary>
+    /// An object that can be placed in world.
+    /// </summary>
     public abstract class WorldObject : DynamicObject, IRevealable
     {
-        protected World _world;
-        public virtual World World
-        {
-            get { return this._world; }
-            set { this._world = value; }
-        }
+        /// <summary>
+        /// The world object belongs to.
+        /// </summary>
+        public World World { get; protected set; }
 
-        protected Vector3D _position;
-        public virtual Vector3D Position
+        private Vector3D _position;
+
+        /// <summary>
+        /// The position of the object.
+        /// </summary>
+        public Vector3D Position
         {
             get { return _position; }
-            set { _position = value; }
+            set { 
+                _position = value;
+                this.Bounds = new Rect(this.Position.X, this.Position.Y, this.Size.Width, this.Size.Height);
+                var handler = PositionChanged;
+                if (handler != null) handler(this, EventArgs.Empty);
+            }
         }
 
-        protected Rect _bounds;
-        public Rect Bounds
-        {
-            get { return this._bounds; }
-            set { this._bounds = value; }
-        }
+        /// <summary>
+        /// Event handler for position-change.
+        /// </summary>
+        public event EventHandler PositionChanged;
 
+        /// <summary>
+        /// Size of the object.
+        /// </summary>
+        public Size Size { get; protected set; }
+
+        /// <summary>
+        /// Automatically calculated bounds for object used by QuadTree.
+        /// </summary>
+        public Rect Bounds { get; private set; }
+
+        /// <summary>
+        /// Scale of the object.
+        /// </summary>
         public float Scale { get; set; }
 
-        protected Vector3D _rotationAxis;
-        public Vector3D RotationAxis
-        {
-            get { return _rotationAxis; }
-            set { this._rotationAxis = value; }
-        }
+        public Vector3D RotationAxis { get; set; }
 
         public float RotationAmount { get; set; }
 
+        /// <summary>
+        /// Creates a new world object.
+        /// </summary>
+        /// <param name="world">The world object belongs to.</param>
+        /// <param name="dynamicID">The dynamicId of the object.</param>
         protected WorldObject(World world, uint dynamicID)
             : base(dynamicID)
         {
-            this._world = world; // Specifically avoid calling the potentially overridden setter for this.World /komiga.
-            this._world.Game.StartTracking(this);
-            this._rotationAxis = new Vector3D();
+            this.World = world;
+            this.World.Game.StartTracking(this); // track the object.
+            this.RotationAxis = new Vector3D();
             this._position = new Vector3D();
         }
 
+        /// <summary>
+        /// Reveals the object to given player.
+        /// </summary>
+        /// <param name="player">The player to reveal the object.</param>
+        /// <returns>true if the object was revealed or false if the object was already revealed.</returns>
         public abstract bool Reveal(Player player);
+
+        /// <summary>
+        /// Unreveals the object to given plaer.
+        /// </summary>
+        /// <param name="player">The player to unreveal the object.</param>
+        /// <returns>true if the object was unrevealed or false if the object wasn't already revealed.</returns>
         public abstract bool Unreveal(Player player);
 
+        /// <summary>
+        /// Makes the object leave the world and then destroys it.
+        /// </summary>
         public sealed override void Destroy()
         {
-            World world = this.World;
-            this.World = null; // Will Leave() the world for Actors (see deriving implementation of the setter for this.World)
-            world.Game.EndTracking(this);
+            if (this is Actor)
+                this.World.Leave(this as Actor);
+
+            this.World.Game.EndTracking(this);
+            this.World = null;
         }
     }
 }

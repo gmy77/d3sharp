@@ -20,8 +20,10 @@ using System;
 using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
+using Mooege.Common.Extensions;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Common.Helpers;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -158,6 +160,7 @@ namespace Mooege.Common.MPQ.FileFormats
     public class ItemTypeTable : ISerializableData
     {
         //Total Length: 320
+        public int Hash { get; private set; }
         public string Name { get; private set; }
         public int ParentType { get; private set; }
         public int I0 { get; private set; }
@@ -176,6 +179,7 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             stream.Position += 4;
             this.Name = stream.ReadString(256, true);
+            this.Hash = StringHashHelper.HashItemName(this.Name);
             this.ParentType = stream.ReadValueS32();
             this.I0 = stream.ReadValueS32();
             this.Flags = (ItemFlags)stream.ReadValueS32();
@@ -238,6 +242,7 @@ namespace Mooege.Common.MPQ.FileFormats
     public class ItemTable : ISerializableData
     {
         //Total Length: 1456
+        public int Hash { get; private set; }
         public string Name { get; private set; }
         public int SNOActor { get; private set; }
         public int ItemType1 { get; private set; }
@@ -286,6 +291,7 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             stream.Position += 4;
             this.Name = stream.ReadString(256, true);
+            this.Hash = StringHashHelper.HashItemName(this.Name);
             this.SNOActor = stream.ReadValueS32(); //260
             this.ItemType1 = stream.ReadValueS32(); //264
             this.Flags = stream.ReadValueS32(); //268
@@ -872,6 +878,7 @@ namespace Mooege.Common.MPQ.FileFormats
     public class AffixTable : ISerializableData
     {
         //Total Length: 544
+        public int Hash { get; private set; }
         public string Name { get; private set; }
         public int I0 { get; private set; }
         public int AffixLevel { get; private set; }
@@ -887,8 +894,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public int AffixFamily1 { get; private set; }
         public int ExclusionCategory { get; private set; }
         public int[] I7 { get; private set; }
-        public int[] I8 { get; private set; }
-        public int I9 { get; private set; }
+        public int[] ItemGroup { get; private set; }
+        public QualityMask QualityMask { get; private set; }
         public AffixType2 AffixType2 { get; private set; }
         public int AssociatedAffix { get; private set; }
         public AttributeSpecifier[] AttributeSpecifier { get; private set; }
@@ -897,6 +904,7 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             stream.Position += 4;
             this.Name = stream.ReadString(256, true);
+            this.Hash = StringHashHelper.HashItemName(this.Name);
             this.I0 = stream.ReadValueS32(); //260
             this.AffixLevel = stream.ReadValueS32(); //264
             this.SupMask = stream.ReadValueS32(); //268
@@ -913,10 +921,10 @@ namespace Mooege.Common.MPQ.FileFormats
             this.I7 = new int[6]; //312
             for (int i = 0; i < 6; i++)
                 this.I7[i] = stream.ReadValueS32();
-            this.I8 = new int[6]; //336
+            this.ItemGroup = new int[6]; //336
             for (int i = 0; i < 6; i++)
-                this.I8[i] = stream.ReadValueS32();
-            this.I9 = stream.ReadValueS32(); //360
+                this.ItemGroup[i] = stream.ReadValueS32();
+            this.QualityMask = (QualityMask)stream.ReadValueS32(); //360
             this.AffixType2 = (AffixType2)stream.ReadValueS32(); //364
             this.AssociatedAffix = stream.ReadValueS32(); //368
             stream.Position += 4;
@@ -956,6 +964,21 @@ namespace Mooege.Common.MPQ.FileFormats
         Random = 9,
         Enhancement = 10,
         SocketEnhancement = 11,
+    }
+
+    [Flags]
+    public enum QualityMask
+    {
+        Inferior = 0x1,
+        Normal = 0x2,
+        Superior = 0x4,
+        Magic1 = 0x8,
+        Magic2 = 0x10,
+        Magic3 = 0x20,
+        Rare4 = 0x40,
+        Rare5 = 0x80,
+        Rare6 = 0x100,
+        Legendary = 0x200,
     }
 
     public class AttributeSpecifier

@@ -27,6 +27,9 @@ using Mooege.Core.GS.Players;
 using Mooege.Core.Common.Items.ItemCreation;
 using Wintellect.PowerCollections;
 using Mooege.Net.GS.Message;
+using Mooege.Common.MPQ.FileFormats;
+using Mooege.Common.MPQ;
+using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Actors;
 
 // FIXME: Most of this stuff should be elsewhere and not explicitly generate items to the player's GroundItems collection / komiga?
@@ -37,73 +40,87 @@ namespace Mooege.Core.Common.Items
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
 
-        // All item definitions from db.
-        private static readonly MultiDictionary<ItemType, ItemDefinition> ItemDefinitions =
-            new MultiDictionary<ItemType, ItemDefinition>(true);
-
-        // List of all valid item definitions (which has snoId!=0).
-        private static readonly List<ItemDefinition> ValidDefinitions;
+        private static readonly Dictionary<int, ItemTable> Items = new Dictionary<int, ItemTable>();
+        private static readonly HashSet<int> AllowedItemTypes = new HashSet<int>();
 
         public static int TotalItems
         {
-            get { return ItemDefinitions.Keys.ToList().Sum(key => ItemDefinitions[key].Count); }
+            get { return Items.Count; }
         }
 
         static ItemGenerator()
         {
             LoadItems();
-            ValidDefinitions = ItemDefinitions.Values.Where(definition => definition.SNOId != 0).ToList();
+            SetAllowedTypes();
         }
 
         private static void LoadItems()
         {
-            const string query = "SELECT snoId, itemname, itemdescription from items";
-            var cmd = new SQLiteCommand(query, GameDataDBManager.Connection);
-            var reader = cmd.ExecuteReader();
-
-            if (!reader.HasRows) return;
-
-            while (reader.Read())
+            foreach (var asset in MPQStorage.Data.Assets[SNOGroup.GameBalance].Values)
             {
-                var itemDefinition = new ItemDefinition(reader.GetInt32(0), reader.GetString(1),reader.IsDBNull(2) ? string.Empty : reader.GetString(2));
-                ItemDefinitions.Add(itemDefinition.Type, itemDefinition);
-            }            
+                GameBalance data = asset.Data as GameBalance;
+                if (data != null && data.Type == BalanceType.Items)
+                {
+                    foreach (var itemDefinition in data.Item)
+                    {
+                        Items.Add(itemDefinition.Hash, itemDefinition);
+                    }
+                }
+            }
+        }
+
+        private static void SetAllowedTypes()
+        {
+            foreach (int hash in ItemGroup.SubTypesToHashList("Weapon"))
+                AllowedItemTypes.Add(hash);
+            foreach (int hash in ItemGroup.SubTypesToHashList("Armor"))
+                AllowedItemTypes.Add(hash);
+            foreach (int hash in ItemGroup.SubTypesToHashList("Offhand"))
+                AllowedItemTypes.Add(hash);
+            foreach (int hash in ItemGroup.SubTypesToHashList("Jewelry"))
+                AllowedItemTypes.Add(hash);
+            foreach (int hash in ItemGroup.SubTypesToHashList("Utility"))
+                AllowedItemTypes.Add(hash);
+            foreach (int hash in ItemGroup.SubTypesToHashList("CraftingPlan"))
+                AllowedItemTypes.Add(hash);
         }
 
         // generates a random item.
-        public static Item GenerateRandom(Actor owner)
+        public static Item GenerateRandom(Mooege.Core.GS.Actors.Actor owner)
         {
-            var itemDefinition = GetRandom(ValidDefinitions);
+            var itemDefinition = GetRandom(Items.Values.ToList());
             return CreateItem(owner, itemDefinition);
         }
 
         // generates a random item from given type category.
         // we can also set a difficulty mode parameter here, but it seems current db doesnt have nightmare or hell-mode items with valid snoId's /raist.
-        public static Item GenerateRandom(Actor player, ItemType type)
+        public static Item GenerateRandom(Mooege.Core.GS.Actors.Actor player, ItemTypeTable type)
         {
-            var validDefinitions = ItemDefinitions[type].Where(definition => definition.SNOId != 0).ToList(); // only find item definitions with snoId!=0 for given itemtype.
-            var itemDefinition = GetRandom(validDefinitions);
-
+            // TODO
+            var itemDefinition = GetRandom(Items.Values.ToList());
             return CreateItem(player, itemDefinition);
         }
 
-        private static ItemDefinition GetRandom(List<ItemDefinition> pool)
+        private static ItemTable GetRandom(List<ItemTable> pool)
         {
             var found = false;
-            ItemDefinition itemDefinition = null;
+            ItemTable itemDefinition = null;
 
             while (!found)
             {
                 itemDefinition = pool[RandomHelper.Next(0, pool.Count() - 1)];
 
+                if (!AllowedItemTypes.Contains(itemDefinition.ItemType1)) continue;
+
                 // ignore gold and healthglobe, they should drop only when expect, not randomly
-                if (itemDefinition.Type == ItemType.Gold) continue;
-                if (itemDefinition.Type == ItemType.HealthGlobe) continue;
-                // ignore items that mostly produce bad gbid's which crashes client on pickup eventually. 
-                if (itemDefinition.Type == ItemType.Unknown) continue;
+                if (itemDefinition.Name.ToLower().Contains("gold")) continue;
+                if (itemDefinition.Name.ToLower().Contains("healthglobe")) continue;
                 if (itemDefinition.Name.ToLower().Contains("pvp")) continue;
                 if (itemDefinition.Name.ToLower().Contains("unique")) continue;
                 if (itemDefinition.Name.ToLower().Contains("crafted")) continue;
+                if (itemDefinition.Name.ToLower().Contains("debug")) continue;
+
+                if (itemDefinition.SNOActor == -1) continue;
 
                 found = true;
             }
@@ -112,104 +129,45 @@ namespace Mooege.Core.Common.Items
         }
 
         // Creates an item based on supplied definition.
-        public static Item CreateItem(Actor owner, ItemDefinition definition)
+        public static Item CreateItem(Mooege.Core.GS.Actors.Actor owner, ItemTable definition)
         {
-            //Logger.Trace("Creating item: {0} [type: {1}, mode: {2}, sno:{3}, gbid {4}]", definition.Name, definition.Type, definition.DifficultyMode, definition.SNOId, definition.GBId);
+            // Logger.Trace("Creating item: {0} [sno:{1}, gbid {2}]", definition.Name, definition.SNOActor, StringHashHelper.HashItemName(definition.Name));
 
-            var item = new Item(owner.World, definition.SNOId, definition.GBId, definition.Type);
-
-            var attributeCreators = new AttributeCreatorFactory().Create(definition.Type);
-            foreach (IItemAttributeCreator creator in attributeCreators)
-            {
-                creator.CreateAttributes(item);
-            }
+            var item = new Item(owner.World, definition);
 
             return item;
         }
 
         // Allows cooking a custom item.
-        public static Item Cook(Player player, string name, int snoId, ItemType type)
+        public static Item Cook(Player player, string name)
         {
-            var item = new Item(player.World, snoId, StringHashHelper.HashItemName(name), type);
+            int hash = StringHashHelper.HashItemName(name);
+            ItemTable definition = Items[hash];
+            var item = new Item(player.World, definition);
             //player.GroundItems[item.DynamicID] = item;
-
-            var attributeCreators = new AttributeCreatorFactory().Create(type);
-            foreach (IItemAttributeCreator creator in attributeCreators)
-            {
-                creator.CreateAttributes(item);
-            }
 
             return item;
         }
 
         public static Item CreateGold(Player player, int amount)
         {
-            var item = Cook(player, "Gold1", 0x00000178, ItemType.Gold);
+            var item = Cook(player, "Gold1");
             item.Attributes[GameAttribute.Gold] = amount;
 
-            item.Attributes.SendChangedMessage(player.InGameClient, item.DynamicID);
             return item;
         }
 
         public static Item CreateGlobe(Player player, int amount)
         {
-            int snoid;
-
             if (amount > 10)
                 amount = 10 + ((amount - 10) * 5);
 
-            if (amount < 50)
-                snoid = 4267;
-            else
-                snoid = 85798;
-
-            var item = Cook(player, "HealthGlobe" + amount, snoid, ItemType.HealthGlobe);
+            var item = Cook(player, "HealthGlobe" + amount);
             item.Attributes[GameAttribute.Health_Globe_Bonus_Health] = amount;
 
             return item;
         }
     }
 
-    public class ItemDefinition
-    {
-        public ItemType Type { get; private set; }
-        public int SNOId { get; private set; }
-        public int GBId { get; private set; } // not sure on if this should be actually uint /raist
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public ItemDifficultyMode DifficultyMode { get; private set; }
-
-        public ItemDefinition(int snoId, string name, string description)
-        {
-            this.SNOId = snoId;
-            this.Name = name;
-            this.GBId = StringHashHelper.HashItemName(name); // FIXME: Our item name hasher seems to be problematic, for some items even with valid snoId's, bad gbId's are hashed which crashes client on pickup. /raist.
-            this.Description = description;
-            this.Type = this.GetTypeFromName(name);
-            this.DifficultyMode = this.GetDifficultyModeFromName(name);
-        }
-
-        private ItemType GetTypeFromName(string name)
-        {
-            return Enum.GetValues(typeof(ItemType)).Cast<object>().Where(type => name.Contains(type.ToString())).Cast<ItemType>().FirstOrDefault();
-        }
-
-        private ItemDifficultyMode GetDifficultyModeFromName(string name)
-        {
-            if (name.IndexOf('_') == -1) return ItemDifficultyMode.Normal;
-
-            int modeIndex;
-            return Int32.TryParse(name.Substring(name.IndexOf('_') + 1, 1), out modeIndex)
-                       ? (ItemDifficultyMode)modeIndex
-                       : ItemDifficultyMode.Normal;
-        }
-    }
-
-    public enum ItemDifficultyMode
-    {
-        Normal,
-        Nightmare,
-        Hell
-    }
 }
 
