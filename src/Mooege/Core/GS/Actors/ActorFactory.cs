@@ -50,7 +50,7 @@ namespace Mooege.Core.GS.Actors
                 return null;
 
             // read tagMapEntries and put them into a dictionary
-            var tags = tagMap.TagMapEntries.ToDictionary(entry => entry.Int1);
+            var tags = tagMap.TagMapEntries.ToDictionary(entry => entry.TagID);
 
             // see if we have an implementation for actor.
             if (SNOHandlers.ContainsKey(snoId))

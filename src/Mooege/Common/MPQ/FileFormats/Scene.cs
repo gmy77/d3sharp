@@ -40,6 +40,9 @@ namespace Mooege.Common.MPQ.FileFormats
         public int Int1 { get; private set; }
         public NavZoneDef NavZone { get; private set; }
 
+        public List<int> Inclusions = new List<int>();
+        public List<int> Exclusions = new List<int>();
+
         public Scene(MpqFile file)
         {
             var stream = file.Open();
@@ -50,10 +53,12 @@ namespace Mooege.Common.MPQ.FileFormats
             this.AABBMarketSetBounds = new AABB(stream);
 
             this.NavMesh = new NavMeshDef(stream); //load NavMeshDef
-            var exclusions = stream.GetSerializedDataPointer();
+            this.Exclusions = stream.ReadSerializedInts();
+            //var exclusions = stream.GetSerializedDataPointer();
 
             stream.Position += (14 * 4);
-            var inclusions = stream.GetSerializedDataPointer();
+            this.Inclusions = stream.ReadSerializedInts();
+            //var inclusions = stream.GetSerializedDataPointer();
 
             stream.Position += (14 * 4);
             this.MarkerSets = stream.ReadSerializedInts();
