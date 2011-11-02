@@ -22,7 +22,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Mooege.Common;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Generators;
 using Mooege.Core.GS.Map;
@@ -81,6 +80,11 @@ namespace Mooege.Core.GS.Games
         public readonly int UpdateFrequency=100;
 
         /// <summary>
+        /// Incremented tick value on each Game.Update().
+        /// </summary>
+        public readonly int TickRate = 6;
+
+        /// <summary>
         /// Tick counter.
         /// </summary>
         private int _tickCounter;
@@ -88,7 +92,7 @@ namespace Mooege.Core.GS.Games
         /// <summary>
         /// Returns the latest tick count.
         /// </summary>
-        public int Tick
+        public int TickCounter
         {
             get { return _tickCounter; }
         }
@@ -147,15 +151,15 @@ namespace Mooege.Core.GS.Games
         {
             while (true)
             {
-                Interlocked.Add(ref this._tickCounter, 6); // +6 ticks per 100ms. Verified by setting LogoutTickTimeMessage.Ticks to 600 which eventually renders a 10 sec logout timer on client. /raist
+                Interlocked.Add(ref this._tickCounter, this.TickRate); // +6 ticks per 100ms. Verified by setting LogoutTickTimeMessage.Ticks to 600 which eventually renders a 10 sec logout timer on client. /raist
 
                 // only update worlds with active players in it - so mob brain()'s in empty worlds doesn't get called and take actions for nothing. /raist.
                 foreach (var pair in this._worlds.Where(pair => pair.Value.HasPlayersIn)) 
                 {
-                    pair.Value.Update();
+                    pair.Value.Update(this._tickCounter);
                 }
 
-                Thread.Sleep(UpdateFrequency); // sleep until next tick.
+                Thread.Sleep(this.UpdateFrequency); // sleep until next tick.
             }
         }
 

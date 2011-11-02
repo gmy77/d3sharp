@@ -83,7 +83,7 @@ namespace Mooege.Core.GS.Players
                 if (defeatedActorType == 1) // Monster
                 {
                     // Massacre
-                    if (this._lastMonsterKillTick + this._killstreakTickTime > this._player.InGameClient.Game.Tick)
+                    if (this._lastMonsterKillTick + this._killstreakTickTime > this._player.InGameClient.Game.TickCounter)
                     {
                         this._killstreakPlayer++;
                     }
@@ -93,7 +93,7 @@ namespace Mooege.Core.GS.Players
                     }
 
                     // MightyBlow
-                    if (Math.Abs(this._lastMonsterAttackTick - this._player.InGameClient.Game.Tick) <= 20)
+                    if (Math.Abs(this._lastMonsterAttackTick - this._player.InGameClient.Game.TickCounter) <= 20)
                     {
                         this._lastMonsterAttackKills++;
                     }
@@ -102,12 +102,12 @@ namespace Mooege.Core.GS.Players
                         this._lastMonsterAttackKills = 1;
                     }
 
-                    this._lastMonsterKillTick = this._player.InGameClient.Game.Tick;
+                    this._lastMonsterKillTick = this._player.InGameClient.Game.TickCounter;
                 }
                 else if (defeatedActorType == 5) // Environment
                 {
                     // Destruction
-                    if (this._lastEnvironmentDestroyTick + this._killstreakTickTime > this._player.InGameClient.Game.Tick)
+                    if (this._lastEnvironmentDestroyTick + this._killstreakTickTime > this._player.InGameClient.Game.TickCounter)
                     {
                         this._killstreakEnvironment++;
                     }
@@ -116,13 +116,13 @@ namespace Mooege.Core.GS.Players
                         this._killstreakEnvironment = 1;
                     }
 
-                    this._lastEnvironmentDestroyTick = this._player.InGameClient.Game.Tick;
+                    this._lastEnvironmentDestroyTick = this._player.InGameClient.Game.TickCounter;
                 }
             }
             else if (attackerActorType == 5) // Environment
             {
                 // Pulverized
-                if (Math.Abs(this._lastEnvironmentDestroyMonsterKillTick - this._player.InGameClient.Game.Tick) <= 20)
+                if (Math.Abs(this._lastEnvironmentDestroyMonsterKillTick - this._player.InGameClient.Game.TickCounter) <= 20)
                 {
                     this._lastEnvironmentDestroyMonsterKills++;
                 }
@@ -131,7 +131,7 @@ namespace Mooege.Core.GS.Players
                     this._lastEnvironmentDestroyMonsterKills = 1;
                 }
 
-                this._lastEnvironmentDestroyMonsterKillTick = this._player.InGameClient.Game.Tick;
+                this._lastEnvironmentDestroyMonsterKillTick = this._player.InGameClient.Game.TickCounter;
             }
         }
 
@@ -144,7 +144,7 @@ namespace Mooege.Core.GS.Players
             {
                 case 0: // Massacre
                     {
-                        if ((this._killstreakPlayer > 5) && (this._lastMonsterKillTick + this._killstreakTickTime <= this._player.InGameClient.Game.Tick))
+                        if ((this._killstreakPlayer > 5) && (this._lastMonsterKillTick + this._killstreakTickTime <= this._player.InGameClient.Game.TickCounter))
                         {
                             defeated = this._killstreakPlayer;
                             expBonus = (this._killstreakPlayer - 5) * 10;
@@ -155,7 +155,7 @@ namespace Mooege.Core.GS.Players
                     }
                 case 1: // Destruction
                     {
-                        if ((this._killstreakEnvironment > 5) && (this._lastEnvironmentDestroyTick + this._killstreakTickTime <= this._player.InGameClient.Game.Tick))
+                        if ((this._killstreakEnvironment > 5) && (this._lastEnvironmentDestroyTick + this._killstreakTickTime <= this._player.InGameClient.Game.TickCounter))
                         {
                             defeated = this._killstreakEnvironment;
                             expBonus = (this._killstreakEnvironment - 5) * 5;

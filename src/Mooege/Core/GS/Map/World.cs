@@ -111,7 +111,7 @@ namespace Mooege.Core.GS.Map
 
         #region update & tick logic
 
-        public override void Update()
+        public override void Update(int tickCounter)
         {
             // TODO: we should be skipping child-scenes, so actors contained doesn't get updated() twice.
             foreach(var scene in this._scenes.Values)
@@ -119,7 +119,7 @@ namespace Mooege.Core.GS.Map
                 if (!scene.HasPlayers) 
                     continue; // if scene has no players in, just skip the scene.
 
-                scene.Update();
+                scene.Update(tickCounter);
             }
         }
 
