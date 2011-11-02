@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Mooege.Common;
 using Mooege.Core.Common.Items;
+using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Objects;
+using Mooege.Core.GS.Players;
 
-namespace Mooege.Core.GS.Players
+namespace Mooege.Core.GS.Common
 {
 
     /// <summary>
     /// This class handels the gridlayout of an stash. Possible usecases are the inventory backpack, shared stash, traders stash,...
     /// Stash is organized by adding an item to EVERY slot it fills
     /// </summary>
-    public class Stash
+    public class InventoryGrid : IRevealable
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
+        public int EquipmentSlot { get; private set; }
         public int Rows { get { return _backpack.GetLength(0); } }
         public int Columns { get { return _backpack.GetLength(1); } }
         private uint[,] _backpack;
-      
-        private readonly Player _owner; // Used, because most information is not in the item class but Actors managed by the world
+
+        private readonly Actor _owner; // Used, because most information is not in the item class but Actors managed by the world
 
         private struct InventorySize
         {
@@ -32,25 +38,33 @@ namespace Mooege.Core.GS.Players
             public int Column;
         }
 
-        public Stash(Player owner, int rows, int columns)
+        public InventoryGrid(Actor owner, int rows, int columns, int slot = 0)
         {
             this._backpack = new uint[rows, columns];
             this._owner = owner;
+            this.EquipmentSlot = slot;
+        }
+
+        public void ResizeGrid(int rows, int columns)
+        {
+            var newBackpack = new uint[rows, columns];
+            Array.Copy(_backpack, newBackpack, _backpack.Length);
+            _backpack = newBackpack;
         }
 
         // This should be in the database#
         // Do all items need a rectangual space in diablo 3?
         private InventorySize GetItemInventorySize(Item item)
         {
-            if (Item.IsPotion(item.ItemType) || Item.IsAccessory(item.ItemType)
-                || Item.IsRuneOrJewel(item.ItemType) || Item.IsDye(item.ItemType)
-                || Item.IsJournalOrScroll(item.ItemType))
-            {
+            if(EquipmentSlot == (int) EquipmentSlotId.Vendor)
                 return new InventorySize() { Width = 1, Height = 1 };
+            if (Item.IsWeapon(item.ItemType) || Item.IsArmor(item.ItemType) || Item.IsOffhand(item.ItemType))
+            {
+                return new InventorySize() { Width = 1, Height = 2 };
             }
+            return new InventorySize() { Width = 1, Height = 1 };
 
-            return new InventorySize() { Width = 1, Height = 2 };
-        }        
+        }
 
         public bool FreeSpace(Item item, int row, int column)
         {
@@ -128,11 +142,11 @@ namespace Mooege.Core.GS.Players
                 }
 
             item.Owner = _owner;
-            item.SetInventoryLocation(0, column, row);
+            item.SetInventoryLocation(EquipmentSlot, column, row);
         }
 
         /// <summary>
-        /// Adds an Item at a free spot to the backpack 
+        /// Adds an Item at a free spot to the backpack
         /// </summary>
         /// <param name="item"></param>
         public bool AddItem(Item item)
@@ -184,6 +198,46 @@ namespace Mooege.Core.GS.Players
                     if (CollectOverlappingItems(item, r, c) == 0)
                         return new InventorySlot() { Row = r, Column = c };
             return null;
+        }
+
+        public bool Reveal(Player player)
+        {
+            if (_owner == null || _owner.World == null)
+                return false;
+
+            for (int r = 0; r < Rows; r++)
+            {
+                for (int c = 0; c < Columns; c++)
+                {
+                    if (_backpack[r, c] != 0)
+                    {
+                        var item = _owner.World.GetItem(_backpack[r, c]);
+                        if (item != null)
+                            item.Reveal(player);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool Unreveal(Player player)
+        {
+            if (_owner == null || _owner.World == null)
+                return false;
+
+            for (int r = 0; r < Rows; r++)
+            {
+                for (int c = 0; c < Columns; c++)
+                {
+                    if (_backpack[r, c] != 0)
+                    {
+                        //_owner.World.Actors[_backpack[r, c]].Unreveal(player); // TODO: Fixme /raist
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }

@@ -18,7 +18,6 @@
 
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 
 namespace Mooege.Core.GS.Actors
@@ -27,10 +26,9 @@ namespace Mooege.Core.GS.Actors
     {
         public override ActorType ActorType { get { return ActorType.Gizmo; } }
 
-        public Gizmo(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, world.NewActorID, position, tags)
+        public Gizmo(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
-            this.SNOId = actorSNO;
             this.Field2 = 16;
             this.Field3 = 0x0;
             this.Field7 = 0x00000001;

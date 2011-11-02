@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Globalization;
 using System.Threading;
 using Mooege.Common;
 using Mooege.Core.MooNet.Authentication;
@@ -60,7 +61,7 @@ namespace Mooege.Core.MooNet.Services
 
                 PlayerManager.PlayerConnected(this.Client);
 
-            }) {IsBackground = true};
+            }) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture }; ;
 
             authenticationThread.Start();
         }

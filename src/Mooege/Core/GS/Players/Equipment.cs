@@ -9,7 +9,8 @@ namespace Mooege.Core.GS.Players
     public enum EquipmentSlotId
     {
         Helm = 1, Chest = 2, Off_Hand = 3, Main_Hand = 4, Hands = 5, Belt = 6, Feet = 7,
-        Shoulders = 8, Legs = 9, Bracers = 10, Ring_right = 11, Ring_left = 12, Amulett = 13
+        Shoulders = 8, Legs = 9, Bracers = 10, Ring_right = 11, Ring_left = 12, Amulett = 13,
+        Stash = 17, Vendor = 20 // To do: Should this be here? Its not really an eq. slot /fasbat
     }
 
     class Equipment
@@ -110,8 +111,10 @@ namespace Mooege.Core.GS.Players
                     };
         }
 
-        internal Item AddGoldItem(Item collectedItem)
+        public Item AddGoldItem(Item collectedItem)
         {
+            // the logic is flawed, we shouldn't be creating new gold when it's collected! /raist.
+
             if (_inventoryGold == null)
             {
                 _inventoryGold = ItemGenerator.CreateGold(_owner, collectedItem.Attributes[GameAttribute.Gold]);
@@ -123,6 +126,7 @@ namespace Mooege.Core.GS.Players
             else
             {
                 _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += collectedItem.Attributes[GameAttribute.Gold];
+                //_inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID); // causes: !!!ERROR!!! Setting attribute for unknown ACD [ANN:1253] [Attribute:ItemStackQuantityLo-1048575:	8669] and client crash /raist.
             }
 
             return _inventoryGold;

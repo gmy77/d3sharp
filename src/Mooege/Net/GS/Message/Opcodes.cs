@@ -282,7 +282,7 @@ namespace Mooege.Net.GS.Message
         ANNDataMessage29 = 263, // len: 	12
         SimpleMessage31 = 264, // len: 	8
         SimpleMessage32 = 265, // len: 	8
-        ANNDataMessage30 = 266, // len: 	12
+        RequestAddSocketMessage = 266, // len: 	12 former ANNDataMessage30
         SimpleMessage33 = 267, // len: 	8
         IntDataMessage6 = 268, // len: 	12
         DebugDrawPrimMessage = 269, // len: 	188
@@ -311,10 +311,10 @@ namespace Mooege.Net.GS.Message
         BroadcastTextMessage = 292, // len: 	520
         SimpleMessage41 = 293, // len: 	8
         SimpleMessage42 = 294, // len: 	8
-        SNODataMessage6 = 295, // len: 	12
+        NPCSelectConversationMessage = 295, // len: 	12 former SNODataMessage6
         ANNDataMessage33 = 296, // len: 	12
         SimpleMessage43 = 297, // len: 	8
-        SimpleMessage44 = 298, // len: 	8
+        HirelingHireMessage = 298, // len: 	8
         SimpleMessage45 = 299, // len: 	8
         SNODataMessage7 = 300, // len:  12
         SimpleMessage46 = 301, // len: 	8

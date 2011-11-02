@@ -12,6 +12,7 @@
          Game,
          Inventory,
          Conversations,
-         Player
+         Player,
+         SelectedNPC
      }
  }

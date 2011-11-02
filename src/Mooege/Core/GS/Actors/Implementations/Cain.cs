@@ -16,29 +16,37 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Net.GS.Message.Definitions.NPC;
+using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.GS.Actors.Interactions;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
     [HandledSNO(3533 /* Ho-ho-horadrim */)]
     public class Cain : InteractiveNPC
     {
-        public Cain(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public Cain(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
+            Conversations.Add(new ConversationInteraction(72416));
+            Conversations.Add(new ConversationInteraction(198588));
+            Conversations.Add(new ConversationInteraction(73171));
+            Interactions.Add(new IdentifyAllInteraction());
         }
 
-        public override void OnTargeted(Player player, TargetMessage message)
+        public override bool Reveal(Player player)
         {
-            World.SpawnRandomItemDrop(player, player.Position);
+            if (!base.Reveal(player))
+                return false;
+
+            return true;
         }
     }
 }

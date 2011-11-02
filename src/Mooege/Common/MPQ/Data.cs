@@ -65,7 +65,7 @@ namespace Mooege.Common.MPQ
             var tocFile = this.FileSystem.FindFile("toc.dat");
             if (tocFile == null)
             {
-                Logger.Warn("Couldn't load CoreData catalog: toc.dat");
+                Logger.Error("Couldn't load CoreData catalog: toc.dat.");
                 return;
             }
             

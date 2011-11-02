@@ -22,25 +22,25 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class NPCInteraction
     {
-        public int Field0;
-        public int Field1;
+        public NPCInteractionType Type;
+        public int ConversationSNO;
         public int Field2;
-        public int Field3;
+        public NPCInteractionState State;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(4);
-            Field1 = buffer.ReadInt(32);
+            Type = (NPCInteractionType) buffer.ReadInt(4);
+            ConversationSNO = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(32);
-            Field3 = buffer.ReadInt(2);
+            State = (NPCInteractionState) buffer.ReadInt(2);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(4, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(4, (int) Type);
+            buffer.WriteInt(32, ConversationSNO);
             buffer.WriteInt(32, Field2);
-            buffer.WriteInt(2, Field3);
+            buffer.WriteInt(2, (int) State);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -50,17 +50,38 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.AppendLine("Type: 0x" + ((int)Type).ToString("X8") + " (" + Type + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.AppendLine("ConversationSNO: 0x" + ConversationSNO.ToString("X8") + " (" + ConversationSNO + ")");
             b.Append(' ', pad);
             b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
+            b.AppendLine("State: 0x" + ((int)State).ToString("X8") + " (" + State + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
 
 
+    }
+
+    public enum NPCInteractionType
+    {
+        Unknown0 = 0,
+        Unknown1 = 1,
+        Conversation2 = 2,  // Same as conversation, but not seen in logs? /fasbat
+        Conversation = 3,
+        Unknown4 = 4,
+        Craft = 5,
+        IdentifyAll = 6,
+        Hire = 7,
+        Inventory = 8
+    }
+
+    public enum NPCInteractionState
+    {
+        Unknown0 = 0, // Same as disabled, but should it be used? /fasbat
+        New = 1,
+        Disabled = 2,
+        Used = 3
     }
 }

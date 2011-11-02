@@ -71,7 +71,7 @@ namespace Mooege.Core.GS.Games
         }
     }
 
-    [CommandGroup("Tp", "Transfers your character to another world.")]
+    [CommandGroup("tp", "Transfers your character to another world.")]
     public class TeleportCommand : CommandGroup
     {
         [DefaultCommand]
@@ -99,15 +99,13 @@ namespace Mooege.Core.GS.Games
                 if(world==null)
                     return "Can't teleport you to world with snoId " + worldId;
 
-                invokerClient.InGameClient.Player.TransferTo(world);
+                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
                 return string.Format("Teleported to: {0} [id: {1}]", MPQStorage.Data.Assets[SNOGroup.Worlds][worldId].Name, worldId);
             }
 
             return "Invalid arguments. Type 'help tp' to get help.";
         }
     }
-
-
 
     [CommandGroup("conversation", "Starts a conversation. \n Usage: conversation snoConversation")]
     public class ConversationCommand : CommandGroup
@@ -191,7 +189,8 @@ namespace Mooege.Core.GS.Games
 
     }
 
-    [CommandGroup("Town", "Transfers your character back to town.")]
+
+    [CommandGroup("town", "Transfers your character back to town.")]
     public class TownCommand : CommandGroup
     {
         [DefaultCommand]
@@ -205,7 +204,11 @@ namespace Mooege.Core.GS.Games
 
             var world = invokerClient.InGameClient.Game.GetWorld(71150);
 
-            invokerClient.InGameClient.Player.TransferTo(world);
+            if (world != invokerClient.InGameClient.Player.World)
+                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
+            else
+                invokerClient.InGameClient.Player.Teleport(world.StartingPoints.First().Position);
+
             return string.Format("Teleported back to town.");
         }
     }

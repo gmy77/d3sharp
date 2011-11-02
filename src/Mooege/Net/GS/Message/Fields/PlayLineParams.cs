@@ -30,7 +30,7 @@ namespace Mooege.Net.GS.Message.Fields
     {
         None = -1,
         DemonHunter = 0,
-        Barbarbarian = 1,
+        Barbarian = 1,
         Wizard = 2,
         WitchDoctor = 3,
         Monk = 4
