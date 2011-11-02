@@ -49,7 +49,7 @@ namespace Mooege.Core.GS.Actors
         public int SNOId { get; protected set; }
 
         /// <summary>
-        /// SNOName - we can handle this better /raist.
+        /// SNOName - TODO: we can handle this better /raist.
         /// </summary>
         public SNOName SNOName { get; private set; }
 
@@ -59,20 +59,29 @@ namespace Mooege.Core.GS.Actors
         public abstract ActorType ActorType { get; }
 
         /// <summary>
+        /// Current scene for the actor.
+        /// </summary>
+        public virtual Scene CurrentScene
+        {
+            get { return this.World.QuadTree.Query<Scene>(this.Bounds).FirstOrDefault(); }
+        }
+
+        /// <summary>
+        /// Returns true if actor is already spawned in the world.
+        /// </summary>
+        public bool Spawned { get; private set; }
+
+        /// <summary>
+        /// Default query radius value.
+        /// </summary>
+        protected const int DefaultQueryProximity = 240;
+
+        /// <summary>
         /// PRTransform for the actor.
         /// </summary>
         public virtual PRTransform Transform
         {
             get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
-        }
-
-        /// <summary>
-        /// Current scene for the actor.
-        /// TODO: I guess this should be only returning master-scenes but not childs. /raist.
-        /// </summary>
-        public virtual Scene CurrentScene
-        {
-            get { return this.World.QuadTree.Query<Scene>(this.Bounds).FirstOrDefault(); }
         }
 
         /// <summary>
@@ -101,30 +110,12 @@ namespace Mooege.Core.GS.Actors
         public int CollFlags { get; set; }
 
         /// <summary>
-        /// Returns true if actor has world location.
-        /// TODO: I belive this belongs to WorldObject.cs /raist.
+        /// Returns true if actor has world location. TODO: I belive this belongs to WorldObject.cs /raist.
         /// </summary>
         public virtual bool HasWorldLocation
         {
             get { return true; }
         }
-
-        public bool Spawned { get; private set; }
-
-        /// <summary>
-        /// Default query radius value.
-        /// </summary>
-        protected const int DefaultQueryProximity = 120;
-
-        /// <summary>
-        /// Default scene reveal proximity for players
-        /// </summary>
-        protected const int SceneRevealProximity = 240;
-
-        /// <summary>
-        /// Default actor reveal proximity for players
-        /// </summary>
-        protected const int ActorRevealProximity = 240;
 
         // Some ACD uncertainties /komiga.
         public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself /komiga & /raist.
@@ -140,7 +131,7 @@ namespace Mooege.Core.GS.Actors
         /// <summary>
         /// Creates a new actor.
         /// </summary>
-        /// <param name="world">The world the item initially belongs to.</param>
+        /// <param name="world">The world that initially belongs to.</param>
         /// <param name="snoId">SNOId of the actor.</param>
         /// <param name="tags">TagMapEntry dictionary read for the actor from MPQ's..</param>           
         protected Actor(World world, int snoId, Dictionary<int, TagMapEntry> tags)
@@ -159,13 +150,24 @@ namespace Mooege.Core.GS.Actors
             this.ReadTags();
         }
 
+        /// <summary>
+        /// Creates a new actor.
+        /// </summary>
+        /// <param name="world">The world that initially belongs to.</param>
+        /// <param name="snoId">SNOId of the actor.</param>
         protected Actor(World world, int snoId)
             : this(world, snoId, null)
         { }
 
+        /// <summary>
+        /// Creates a new world.
+        /// </summary>
+        /// <param name="world">The world that initially belongs to.</param>
         protected Actor(World world)
             : this(world, -1, null)
         { }
+
+        #region enter-world, change-world, teleport helpers
 
         public void EnterWorld(Vector3D position)
         {
@@ -200,7 +202,7 @@ namespace Mooege.Core.GS.Actors
             this.RotationAxis = startingPoint.RotationAxis;
             this.RotationAmount = startingPoint.RotationAmount;
 
-            this.ChangeWorld(world, startingPoint.Position);            
+            this.ChangeWorld(world, startingPoint.Position);
         }
 
         public void Teleport(Vector3D position)
@@ -209,26 +211,6 @@ namespace Mooege.Core.GS.Actors
             this.OnTeleport();
             this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
         }
-
-        public virtual void OnTeleport()
-        { }
-
-        #region tag-readers
-
-        /// <summary>
-        /// Reads known tags from TagMapEntry and set the proper values.
-        /// </summary>
-        protected virtual void ReadTags()
-        {
-            if (this.Tags == null) return;
-
-            if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
-                this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
-        }
-
-        #endregion
-
-        #region world-enter logic
 
         #endregion
 
@@ -276,30 +258,6 @@ namespace Mooege.Core.GS.Actors
                 msg.Field2 = 0x01;
 
             player.InGameClient.SendMessage(msg);
-
-            /*
-            // Affixes of the actor, two messages with 1 and 2,i guess prefix and suffix so it does not
-            // make sense to send the same list twice. server does not do this
-            var affixGbis = new int[AffixList.Count];
-            for (int i = 0; i < AffixList.Count; i++)
-            {
-                affixGbis[i] = AffixList[i].AffixGbid;
-            }
-
-            player.InGameClient.SendMessage(new AffixMessage
-            {
-                ActorID = DynamicID,
-                Field1 = 0x00000001,
-                aAffixGBIDs = affixGbis,
-            });
-
-            player.InGameClient.SendMessage(new AffixMessage
-            {
-                ActorID = DynamicID,
-                Field1 = 0x00000002,
-                aAffixGBIDs = affixGbis,
-            });
-             */
 
             // Collision Flags
             player.InGameClient.SendMessage(new ACDCollFlagsMessage
@@ -451,7 +409,6 @@ namespace Mooege.Core.GS.Actors
 
         }
 
-        // TODO: add an actor mover helper function! /raist.
         public void OnActorMove(Actor actor, Vector3D prevPosition)
         {
             // TODO: Unreveal from players that are now outside the actor's range. /komiga
@@ -460,6 +417,11 @@ namespace Mooege.Core.GS.Actors
         public virtual void OnTargeted(Player player, TargetMessage message)
         {
 
+        }
+
+        public virtual void OnTeleport()
+        {
+            
         }
 
         #endregion
@@ -496,6 +458,21 @@ namespace Mooege.Core.GS.Actors
             {
                 return new WorldLocationMessageData { Scale = this.Scale, Transform = this.Transform, WorldID = this.World.DynamicID };
             }
+        }
+
+        #endregion
+
+        #region tag-readers
+
+        /// <summary>
+        /// Reads known tags from TagMapEntry and set the proper values.
+        /// </summary>
+        protected virtual void ReadTags()
+        {
+            if (this.Tags == null) return;
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
+                this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
         }
 
         #endregion

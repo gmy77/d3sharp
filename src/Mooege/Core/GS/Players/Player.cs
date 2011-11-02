@@ -394,7 +394,7 @@ namespace Mooege.Core.GS.Players
 
         private void OnObjectTargeted(GameClient client, TargetMessage message)
         {
-            Actor actor = this.World.GetActor(message.TargetID);
+            Actor actor = this.World.GetActorByDynamicId(message.TargetID);
             if (actor == null) return;
 
             if ((actor.GBHandle.Type == 1) && (actor.Attributes[GameAttribute.TeamID] == 10))
@@ -455,7 +455,7 @@ namespace Mooege.Core.GS.Players
             var item = World.GetItem(requestAddSocketMessage.ItemID);
             if (item == null || item.Owner != this)
                 return;
-            var jeweler = World.GetInstance<Jeweler>();
+            var jeweler = World.GetActorInstance<Jeweler>();
             if (jeweler == null)
                 return;
 
@@ -487,7 +487,7 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void RevealScenesToPlayer()
         {
-            var scenes = this.GetScenesInRange(SceneRevealProximity);
+            var scenes = this.GetScenesInRange();
 
             foreach (var scene in scenes) // reveal scenes in player's proximity.
             {
@@ -503,7 +503,7 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void RevealActorsToPlayer()
         {
-            var actors = this.GetActorsInRange(ActorRevealProximity);
+            var actors = this.GetActorsInRange();
 
             foreach (var actor in actors) // reveal actors in player's proximity.
             {

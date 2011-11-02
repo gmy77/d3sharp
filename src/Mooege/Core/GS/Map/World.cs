@@ -430,12 +430,13 @@ namespace Mooege.Core.GS.Map
                 this.RemovePlayer((Player)actor);
         }
 
+        // TODO: We should be instead using actor queries. /raist.
         /// <summary>
         /// Returns the actor with given dynamicId.
         /// </summary>
         /// <param name="dynamicID">The dynamicId of the actor.</param>
         /// <returns></returns>
-        public Actor GetActor(uint dynamicID)
+        public Actor GetActorByDynamicId(uint dynamicID)
         {
             Actor actor;
             this._actors.TryGetValue(dynamicID, out actor);
@@ -448,9 +449,9 @@ namespace Mooege.Core.GS.Map
         /// <param name="dynamicID">The dynamicId of the actor.</param>
         /// <param name="matchType">The actor-type.</param>
         /// <returns></returns>
-        public Actor GetActor(uint dynamicID, ActorType matchType)
+        public Actor GetActorByDynamicId(uint dynamicID, ActorType matchType)
         {
-            var actor = GetActor(dynamicID);
+            var actor = this.GetActorByDynamicId(dynamicID);
             if (actor != null)
             {
                 if (actor.ActorType == matchType)
@@ -472,7 +473,6 @@ namespace Mooege.Core.GS.Map
             return this._actors.ContainsKey(dynamicID);
         }
 
-
         /// <summary>
         /// Returns true if the world has an actor with given dynamicId and type.
         /// </summary>
@@ -481,15 +481,19 @@ namespace Mooege.Core.GS.Map
         /// <returns></returns>
         public bool HasActor(uint dynamicID, ActorType matchType)
         {
-            var actor = GetActor(dynamicID, matchType);
+            var actor = this.GetActorByDynamicId(dynamicID, matchType);
             return actor != null;
         }
 
-        public T GetInstance<T>() where T: Actor
+        /// <summary>
+        /// Returns actor instance with given type.
+        /// </summary>
+        /// <typeparam name="T">Type of the actor.</typeparam>
+        /// <returns>Actor</returns>
+        public T GetActorInstance<T>() where T: Actor
         {
             return this._actors.Values.OfType<T>().FirstOrDefault();
         }
-
 
         /// <summary>
         /// Adds given player to world.
@@ -545,7 +549,7 @@ namespace Mooege.Core.GS.Map
         /// <returns></returns>
         public Item GetItem(uint dynamicID)
         {
-            return (Item)GetActor(dynamicID, ActorType.Item);
+            return (Item)GetActorByDynamicId(dynamicID, ActorType.Item);
         }
 
         /// <summary>
