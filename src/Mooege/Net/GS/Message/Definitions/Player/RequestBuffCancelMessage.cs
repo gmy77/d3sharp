@@ -20,21 +20,24 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    [Message(Opcodes.RequestBuffCancelMessage)]
+	/// <summary>
+    /// Sent from the client when a buff is right clicked to be cancelled
+    /// </summary>
+    [Message(Opcodes.RequestBuffCancelMessage, Consumers.Player)]
     public class RequestBuffCancelMessage : GameMessage
     {
-        public int /* sno */ Field0;
-        public int Field1;
+        public int /* sno */ PowerSNO; // SNO of the power that activated the buff to be canceled
+        public int Field1; // Might be ActorID, might be number of stacks to clear off?
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            PowerSNO = buffer.ReadInt(32);
             Field1 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, PowerSNO);
             buffer.WriteInt(32, Field1);
         }
 
@@ -44,7 +47,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("RequestBuffCancelMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + PowerSNO.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
