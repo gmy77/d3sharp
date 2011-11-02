@@ -28,7 +28,7 @@ namespace Mooege.Core.GS.Powers
     public class PowerProjectile : Actor
     {
         //Define actor type
-        public override ActorType ActorType { get { return ActorType.Monster; } }
+        public override ActorType ActorType { get { return ActorType.Projectile; } }
 
         //Gametick value at projectile creation
         public float creationTick;
