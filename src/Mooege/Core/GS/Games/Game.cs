@@ -183,6 +183,11 @@ namespace Mooege.Core.GS.Games
                     case Consumers.Player:
                         client.Player.Consume(client, message);
                         break;
+                    case Consumers.SelectedNPC:
+                        if (client.Player.SelectedNPC != null)
+                            client.Player.SelectedNPC.Consume(client, message);
+                        break;
+
                 }
             }
             catch(Exception e)
