@@ -75,7 +75,6 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         public bool HasPlayersIn { get { return this.Players.Count > 0; } }
 
-
         /// <summary>
         /// Returns a new dynamicId for scenes.
         /// </summary>
@@ -83,21 +82,6 @@ namespace Mooege.Core.GS.Map
 
         // Returns a new dynamicId for actors.
         public uint NewActorID { get { return this.Game.NewObjectID; } }
-
-        /// <summary>
-        /// Returns a new dynamicId for players.
-        /// </summary>
-        public uint NewPlayerID { get { return this.Game.NewObjectID; } }
-
-        /// <summary>
-        /// Scene revealing proximity for players.
-        /// </summary>
-        private const int SceneProximity = 240;
-
-        /// <summary>
-        /// Actors revealing proximity for player.
-        /// </summary>
-        private const int ActorProximity = 240;
 
         /// <summary>
         /// Returns list of available starting points.
@@ -181,7 +165,7 @@ namespace Mooege.Core.GS.Map
         /// <param name="actor">The actor.</param>
         public void BroadcastInclusive(GameMessage message, Actor actor)
         {
-            var players=actor.GetPlayersInRange(ActorProximity);
+            var players=actor.GetPlayersInRange();
             foreach (var player in players)
             {
                 player.InGameClient.SendMessage(message);
@@ -195,7 +179,7 @@ namespace Mooege.Core.GS.Map
         /// <param name="actor">The actor.</param>
         public void BroadcastExclusive(GameMessage message, Actor actor)
         {
-            var players = actor.GetPlayersInRange(ActorProximity);
+            var players = actor.GetPlayersInRange();
             foreach (var player in players.Where(player => player != actor))
             {
                 player.InGameClient.SendMessage(message);

@@ -134,7 +134,7 @@ namespace Mooege.Core.GS.Actors
         /// <param name="snoId">SNOId of the actor.</param>
         /// <param name="tags">TagMapEntry dictionary read for the actor from MPQ's..</param>           
         protected Actor(World world, int snoId, Dictionary<int, TagMapEntry> tags)
-            : base(world, world.Game.NewObjectID)
+            : base(world, world.NewActorID)
         {
             this.SNOId = snoId;
             this.SNOName = new SNOName { Group = SNOGroup.Actor, SNOId = this.SNOId };

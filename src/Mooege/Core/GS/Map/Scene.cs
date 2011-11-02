@@ -131,7 +131,6 @@ namespace Mooege.Core.GS.Map
             : base(world, world.NewSceneID)
         {
             this.SNOId = snoId;
-            this.World = world;
             this.Parent = parent;
             this.Subscenes = new List<Scene>();
             this.Scale = 1.0f;                   
