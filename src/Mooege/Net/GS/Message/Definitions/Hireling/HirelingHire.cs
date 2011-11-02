@@ -3,34 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Artisan
+namespace Mooege.Net.GS.Message.Definitions.Hireling
 {
-    [Message(Opcodes.RequestAddSocketMessage, Consumers.Player)]
-    public class RequestAddSocketMessage : GameMessage
+    [Message(Opcodes.HirelingHireMessage, Consumers.SelectedNPC)]
+    public class HirelingHireMessage : GameMessage
     {
-        public uint ItemID;
+        public HirelingHireMessage()
+            : base(Opcodes.HirelingHireMessage)
+        {
+        }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            ItemID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteUInt(32, ItemID);
+            throw new NotImplementedException();
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("RequestAddSocketMessage:");
+            b.AppendLine("HirelingHireMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("ItemID: 0x" + ItemID.ToString("X8") + " (" + ItemID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
     }
-
 }
