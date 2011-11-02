@@ -25,6 +25,7 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common;
 using Mooege.Core.Common.Items;
+using Mooege.Common.MPQ.FileFormats;
 using Mooege.Net.GS.Message.Definitions.Stash;
 using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Misc;
@@ -102,11 +103,6 @@ namespace Mooege.Core.GS.Players
             System.Diagnostics.Debug.Assert(!_inventoryGrid.Contains(item) && !_equipment.IsItemEquipped(item), "Item already in inventory");
             // TODO: Autoequip when equipment slot is empty
 
-            if (PickUpSpecialItem(item))
-            {
-                return true;
-            }
-
             bool success = false;
             if (!_inventoryGrid.HasFreeSpace(item))
             {
@@ -128,40 +124,6 @@ namespace Mooege.Core.GS.Players
 
             AcceptMoveRequest(item);
             return success;
-        }
-
-        private bool PickUpSpecialItem(Item item)
-        {
-
-            bool isSpecialItem = false;
-            //Stone of Recall
-            if (item.GBHandle.GBID == -2007738575)
-            {
-                _owner.EnableStoneOfRecall();
-                isSpecialItem = true;
-            }
-            // Cauldron of Jordan
-            else if (item.GBHandle.GBID == -1812121245)
-            {
-                _owner.EnableCouldronOfJordan();
-                isSpecialItem = true;
-            }
-            // Cube of Nephalm
-            else if (item.GBHandle.GBID == -1352920439)
-            {
-                _owner.EnableCubeOfNephalem();
-                isSpecialItem = true;
-            }
-
-            if (isSpecialItem)
-            {
-                if (_owner.GroundItems.ContainsKey(item.DynamicID))
-                    _owner.GroundItems.Remove(item.DynamicID);
-                item.Destroy();
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -260,8 +222,8 @@ namespace Mooege.Core.GS.Players
         private bool IsValidEquipmentRequest(Item item, int equipmentSlot)
         {
 
-            ItemType type = item.ItemType;
-                
+            ItemTypeTable type = item.ItemType;
+
             if (equipmentSlot == (int)EquipmentSlotId.Main_Hand)
             {
                 // useful for 1hand + shield switching, this is to avoid shield to be go to main hand
@@ -299,13 +261,13 @@ namespace Mooege.Core.GS.Players
                     }
 
                     _equipment.EquipItem(item, (int)EquipmentSlotId.Main_Hand);
-                    AcceptMoveRequest(item); 
+                    AcceptMoveRequest(item);
 
                     SendVisualInventory(this._owner);
                     // All equipment commands are executed. the original EquipmentRequest is invalid at this moment
                     return false;
                 }
-                             
+
                 if (itemMainHand != null)
                 {
                     if (Item.Is2H(itemMainHand.ItemType))
@@ -332,7 +294,7 @@ namespace Mooege.Core.GS.Players
 
             itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
             itemTo.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
-            
+
 
             // TODO: This needs to change the attribute on the item itself. /komiga
             // Update source
@@ -395,7 +357,7 @@ namespace Mooege.Core.GS.Players
             int actionId = inventoryRequestUseMessage.Field1; // guess 1 means dyeing. Probably other value for using identify scroll , selling , .... - angerwin
             Item usedItem = _owner.World.GetItem(usedItemId);
             Item targetItem = _owner.World.GetItem(targetItemId);
-            if (actionId == 1) 
+            if (actionId == 1)
             {
                 DyeColor.DyeItem(usedItem, targetItem);
             }
@@ -413,10 +375,10 @@ namespace Mooege.Core.GS.Players
         private void OnUseNephalmCubeMessage(RequestUseNephalemCubeMessage requestUseNephalemCubeMessage)
         {
             Item salvageItem = _owner.World.GetItem(requestUseNephalemCubeMessage.ActorID);
+            DestroyInventoryItem(salvageItem);
             // TODO: hacked crafting material
-            Item crafingItem = ItemGenerator.Cook(_owner, "Crafting_Gem_Dust", 56845, ItemType.Unknown);
-
-            PickUp(crafingItem);
+            Item crafingItem = CreateInventoryItem("Crafting_Gem_Dust");
+            PickUp(crafingItem);            
 
             // TODO: This Message doesn't work. I think i should produce an entry in the chat window like "Salvaging Gloves gave you Common scrap!" - angerwin
             SalvageResultsMessage message = new SalvageResultsMessage
@@ -427,24 +389,26 @@ namespace Mooege.Core.GS.Players
                 Field2 = 0, // Unkown 
 
             };
-            _owner.InGameClient.SendMessage(message, true);
-            DestroyInventoryItem(salvageItem);
-
+            _owner.InGameClient.SendMessage(message, true);            
         }
 
         private void OnUseCauldronOfJordanMessage(RequestUseCauldronOfJordanMessage requestUseCauldronOfJordanMessage)
         {
             Item selledItem = _owner.World.GetItem(requestUseCauldronOfJordanMessage.ActorID);
-            int sellValue = RandomHelper.Next(20, 100); // TODO: get item sell value
+            int sellValue = selledItem.ItemDefinition.BaseGoldValue; // TODO: get item sell value
             Item sumGoldItem = _equipment.AddGoldAmount(sellValue);
 
-            // TODO: instead of destroying item should be moved to merchants inventory for rebuy. 
-            DestroyInventoryItem(selledItem);
+            // TODO: instead of destroying item, it should be moved to merchants inventory for rebuy. 
+            DestroyInventoryItem(selledItem);            
+        }
 
-            // Update Goldamount in Playerinventory
-            GameAttributeMap attributes = new GameAttributeMap();
-            attributes[GameAttribute.ItemStackQuantityLo] = sumGoldItem.Attributes[GameAttribute.ItemStackQuantityLo];
-            attributes.SendMessage(_owner.InGameClient, sumGoldItem.DynamicID);
+        private Item CreateInventoryItem(string itemName)
+        {
+            Item item = ItemGenerator.Cook(_owner, itemName);
+            item.Owner = _owner;
+            _owner.World.Enter(item); // this does not reveal an Item to the Player because item has no Position
+            item.Reveal(_owner);
+            return item;
         }
     }
 }

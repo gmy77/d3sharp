@@ -37,10 +37,10 @@ namespace Mooege.Core.GS.Actors
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
         // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
-        public int AnimationSNO { get; set; }
+        //public int AnimationSNO { get; set; }
 
-        public Monster(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public Monster(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Field2 = 0x8;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
@@ -56,7 +56,7 @@ namespace Mooege.Core.GS.Actors
         // FIXME: Hardcoded hell. /komiga
         public void Die(Player player)
         {
-            var killAni = new int[]{
+            /*var killAni = new int[]{
                     0x2cd7,
                     0x2cd4,
                     0x01b378,
@@ -73,11 +73,7 @@ namespace Mooege.Core.GS.Actors
                     0x2cd8,
                     0x2cda,
                     0x2cd9
-            };
-
-            player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
-            player.UpdateExpBonusData(player.GBHandle.Type, this.GBHandle.Type);
-
+            };*/
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
                 ActorId = this.DynamicID,
@@ -111,6 +107,9 @@ namespace Mooege.Core.GS.Actors
                 ActorID = this.DynamicID
             }, this);
 
+            player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
+            player.ExpBonusData.Update(player.GBHandle.Type, this.GBHandle.Type);
+
             this.World.BroadcastIfRevealed(new PlayAnimationMessage()
             {
                 ActorID = this.DynamicID,
@@ -121,7 +120,7 @@ namespace Mooege.Core.GS.Actors
                     new PlayAnimationMessageSpec()
                     {
                         Field0 = 0x2,
-                        Field1 = killAni[RandomHelper.Next(killAni.Length)],
+                        Field1 = Animset.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
                         Field2 = 0x0,
                         Field3 = 1f
                     }
@@ -140,26 +139,6 @@ namespace Mooege.Core.GS.Actors
 
             foreach (var msg in attribs.GetMessageList(this.DynamicID))
                 this.World.BroadcastIfRevealed(msg, this);
-
-            this.World.BroadcastIfRevealed(new PlayEffectMessage()
-            {
-                ActorId = this.DynamicID,
-                Effect = Effect.Unknown12
-            }, this);
-
-            this.World.BroadcastIfRevealed(new PlayEffectMessage()
-            {
-                ActorId = this.DynamicID,
-                Effect = Effect.Burned2
-            }, this);
-
-            this.World.BroadcastIfRevealed(new PlayHitEffectMessage()
-            {
-                ActorID = this.DynamicID,
-                HitDealer = player.DynamicID,
-                Field2 = 0x2,
-                Field3 = false,
-            }, this);
 
             this.World.SpawnRandomItemDrop(player, this.Position);
             this.World.SpawnGold(player, this.Position);

@@ -34,12 +34,21 @@ namespace Mooege.Core.GS.Actors
 
         // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
         // TODO: not only Living have animations, put this in Actor? /fasbat
-        public int AnimationSNO { get; set; }
+        //public int AnimationSNO { get; set; }
+        private int snoAnimSet;
+        private int snoMonster;
+        public Mooege.Common.MPQ.FileFormats.AnimSet Animset = null;
 
-        public Living(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, world.NewActorID, position, tags )
+        public Living(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
-            this.SNOId = actorSNO;
+            this.SNOId = snoId;
+            var actor = (Mooege.Common.MPQ.FileFormats.Actor)Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Actor][snoId].Data;
+            this.snoMonster = actor.MonsterSNO;
+            if (actor.AnimSetSNO != -1)
+            {
+                this.Animset = (Mooege.Common.MPQ.FileFormats.AnimSet)Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.AnimSet][actor.AnimSetSNO].Data;
+            }
             // FIXME: This is hardcoded crap
             this.Field3 = 0x0;
             this.RotationAmount = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);
@@ -51,7 +60,7 @@ namespace Mooege.Core.GS.Actors
             this.Field11 = 0x0;
             this.Field12 = 0x0;
             this.Field13 = 0x0;
-            this.AnimationSNO = 0x11150;
+            //this.AnimationSNO = 0x11150;
             this.CollFlags = 1;
 
             this.Attributes[GameAttribute.Hitpoints_Max_Total] = 4.546875f;
@@ -76,13 +85,18 @@ namespace Mooege.Core.GS.Actors
         {
             if (!base.Reveal(player))
                 return false;
-
-            player.InGameClient.SendMessage(new SetIdleAnimationMessage
+            if (Animset != null)
             {
-                ActorID = this.DynamicID,
-                AnimationSNO = this.AnimationSNO
-            });
-
+                if (this.Animset.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Idle) != -1)
+                {
+                    player.InGameClient.SendMessage(new SetIdleAnimationMessage
+                    {
+                        ActorID = this.DynamicID,
+                        AnimationSNO = this.Animset.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Idle)
+                    });
+                }
+               
+            }
             return true;
         }
     }

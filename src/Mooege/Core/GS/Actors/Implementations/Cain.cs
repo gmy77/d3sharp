@@ -16,13 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Definitions.NPC;
 using Mooege.Net.GS.Message.Fields;
@@ -32,8 +31,8 @@ namespace Mooege.Core.GS.Actors.Implementations
     [HandledSNO(3533 /* Ho-ho-horadrim */)]
     public class Cain : InteractiveNPC
     {
-        public Cain(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public Cain(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
         }
@@ -121,7 +120,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             });
           
             // TODO: this has no effect, why is it sent?
-            player.InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Effect.PlayEffectMessage()
+            player.InGameClient.SendMessage(new PlayEffectMessage()
             {
                 ActorId = this.DynamicID,
                 Effect = Net.GS.Message.Definitions.Effect.Effect.Unknown36

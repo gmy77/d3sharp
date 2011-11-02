@@ -28,14 +28,17 @@ namespace Mooege.Common.MPQ
         private static readonly Logger Logger = LogManager.CreateLogger();
         private readonly static string MpqRoot = Core.Common.Storage.Config.Instance.MPQRoot;
 
-        public static readonly List<string> MPQList;
-        public static readonly Data Data;
+        public static List<string> MPQList { get; private set; }
+        public static Data Data { get; private set; }
+        public static bool Initialized { get; private set; }
 
         static MPQStorage()
         {
+            Initialized = false;
+
             if (!Directory.Exists(MpqRoot))
             {
-                Logger.Fatal("MPQ root folder does not exist: {0}", MpqRoot);
+                Logger.Error("MPQ root folder does not exist: {0}.", MpqRoot);
                 return;
             }
 
@@ -43,15 +46,16 @@ namespace Mooege.Common.MPQ
             MPQList = FileHelpers.GetFilesByExtensionRecursive(MpqRoot, ".mpq");
 
             Data = new Data();
-            if (Data.Loaded) Data.Init();
+            if (Data.Loaded)
+            {
+                Data.Init();
+                Initialized = true;
+            }
         }
 
         public static string GetMPQFile(string name)
         {
             return MPQList.FirstOrDefault(file => file.Contains(name));
         }
-
-        public static void Init()
-        { }
     }
 }

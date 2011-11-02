@@ -20,6 +20,9 @@ using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Objects
 {
+    /// <summary>
+    /// Interface for revealable in-game objects.
+    /// </summary>
     public interface IRevealable
     {
         /// <summary>

@@ -111,14 +111,14 @@ namespace Mooege.Core.GS.Players
                     };
         }
 
-        internal Item AddGoldItem(Item collectedItem)
+        public Item AddGoldItem(Item collectedItem)
         {
             return AddGoldAmount(collectedItem.Attributes[GameAttribute.Gold]);
         }
 
         internal Item AddGoldAmount(int amount)
         {
-
+            // the logic is flawed, we shouldn't be creating new gold when it's collected! /raist.
             if (_inventoryGold == null)
             {
                 _inventoryGold = ItemGenerator.CreateGold(_owner, 0);
@@ -127,7 +127,8 @@ namespace Mooege.Core.GS.Players
                 _inventoryGold.Reveal(_owner);
             }
             _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += amount;
-            _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID);
+            //_inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID);
+
             return _inventoryGold;
         }
 

@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Globalization;
 using System.Reflection;
 using System.Threading;
 using Mooege.Common;
@@ -45,6 +46,8 @@ namespace Mooege
             // Watch for unhandled exceptions
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
 
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create.
+
             Console.ForegroundColor = ConsoleColor.Yellow;
             PrintBanner();
             PrintLicense();
@@ -53,10 +56,15 @@ namespace Mooege
             InitLoggers(); // init logging facility.
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
-            Logger.Info("Item database loaded with a total of {0} item definitions", ItemGenerator.TotalItems);
 
-            MPQStorage.Init();
+            if (!MPQStorage.Initialized)
+            {
+                Logger.Fatal("Cannot run servers as MPQStorage failed initialization.");
+                Console.ReadLine();
+                return;
+            }
 
+            Logger.Info("Item database loaded with a total of {0} item definitions.", ItemGenerator.TotalItems);
             StartupServers();
         }
 
@@ -149,7 +157,7 @@ namespace Mooege
             if (MooNetServer != null) return false;
 
             MooNetServer = new MooNetServer();
-            MooNetServerThread = new Thread(MooNetServer.Run) {IsBackground = true};
+            MooNetServerThread = new Thread(MooNetServer.Run) {IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture};
             MooNetServerThread.Start();
             return true;
         }
@@ -170,7 +178,7 @@ namespace Mooege
             if (GameServer != null) return false;
 
             GameServer = new GameServer();
-            GameServerThread = new Thread(GameServer.Run) {IsBackground = true};
+            GameServerThread = new Thread(GameServer.Run) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture };
             GameServerThread.Start();
             return true;
         }

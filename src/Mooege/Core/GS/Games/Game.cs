@@ -18,9 +18,11 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Mooege.Common;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Generators;
 using Mooege.Core.GS.Map;
@@ -31,6 +33,7 @@ using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.Common.Items;
+using Mooege.Core.GS.Actors.Implementations.Items;
 
 namespace Mooege.Core.GS.Games
 {
@@ -133,7 +136,7 @@ namespace Mooege.Core.GS.Games
             this._objects = new ConcurrentDictionary<uint, DynamicObject>();
             this._worlds = new ConcurrentDictionary<int, World>();
             this.StartingWorldSNOId = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff. /komiga
-            var loopThread = new Thread(Update) {IsBackground = true}; // create the game update thread.
+            var loopThread = new Thread(Update) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture }; ; // create the game update thread.
             loopThread.Start();
         }
 
@@ -232,25 +235,22 @@ namespace Mooege.Core.GS.Games
                             }
             });
 
-            joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition.
+            joinedPlayer.EnterWorld(this.StartingWorld.StartingPoints.First().Position);
             joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
-            joinedPlayer.EnteredWorld = true;
 
             // TODO: These items do not droped randomly. They should be created during MainQuest
-            #region Hacky Main-Quest-Items
-
-            var cauldornOfJordan = ItemGenerator.Cook(joinedPlayer, "StoneOfWealth", 168216, ItemType.Unknown);
+            #region Hacky Main-Quest-Items       
+            var cauldornOfJordan = new CauldronOfJordan(joinedPlayer.World);
             cauldornOfJordan.Drop(null, joinedPlayer.Position);
             joinedPlayer.GroundItems[cauldornOfJordan.DynamicID] = cauldornOfJordan;
 
-            var cubeOfNephalm = ItemGenerator.Cook(joinedPlayer, "NephalemCube", 138979, ItemType.Unknown);
+            var cubeOfNephalm = new NephalemCube(joinedPlayer.World);
             cubeOfNephalm.Drop(null, joinedPlayer.Position);
             joinedPlayer.GroundItems[cubeOfNephalm.DynamicID] = cubeOfNephalm;
 
-            var stoneOfRecall = ItemGenerator.Cook(joinedPlayer, "StoneOfRecall", 190617, ItemType.Unknown);
+            var stoneOfRecall = new StoneOfRecall(joinedPlayer.World);
             stoneOfRecall.Drop(null, joinedPlayer.Position);
             joinedPlayer.GroundItems[stoneOfRecall.DynamicID] = stoneOfRecall;
-
             #endregion
 
 
