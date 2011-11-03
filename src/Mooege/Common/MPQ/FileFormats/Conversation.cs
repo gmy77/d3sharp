@@ -182,7 +182,7 @@ namespace Mooege.Common.MPQ.FileFormats
             s.Append("LineID:" + LineID + "   ");
             s.Append("AnimationTag:" + AnimationTag + "   ");
             s.Append("I4:" + I4 + "   ");
-            s.Append("I5:" + ClassFilter + "   ");
+            s.Append("ClassFilter:" + ClassFilter + "   ");
             s.AppendLine("I6:" + I6);
             s.Append(' ', pad); s.AppendLine("Speaker1:" + Speaker1);
             s.Append(' ', pad); s.AppendLine("Speaker2:" + Speaker2);
@@ -222,19 +222,19 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class ConvLocalDisplayTimes
     {
-        public int[] I0 = new int[10];
+        public int[] Languages = new int[10];
 
         public ConvLocalDisplayTimes(CrystalMpq.MpqFileStream stream)
         {
-            for (int i = 0; i < I0.Length; i++)
-                I0[i] = stream.ReadValueS32();
+            for (int i = 0; i < Languages.Length; i++)
+                Languages[i] = stream.ReadValueS32();
         }
 
         public void AsText(StringBuilder s, int pad)
         {
             s.Append(' ', pad);
-            for (int i = 0; i < I0.Length; i++)
-                s.Append(I0[i] + "  ");
+            for (int i = 0; i < Languages.Length; i++)
+                s.Append(Languages[i] + "  ");
             s.AppendLine();
         }
     }

@@ -105,11 +105,6 @@ namespace Mooege.Core.GS.Players
         public ExpBonusData ExpBonusData { get; private set; }
 
         /// <summary>
-        /// Open converstations.
-        /// </summary>
-        public List<OpenConversation> OpenConversations { get; set; }
-
-        /// <summary>
         /// NPC currently interaced with
         /// </summary>
         public InteractiveNPC SelectedNPC { get; set; }
@@ -146,7 +141,6 @@ namespace Mooege.Core.GS.Players
             this.GroundItems = new Dictionary<uint, Item>();
             this.Conversations = new ConversationManager(this, this.World.Game.Quests);
             this.ExpBonusData = new ExpBonusData(this);
-            this.OpenConversations = new List<OpenConversation>();
             this.SelectedNPC = null;
 
             #region Attributes
@@ -1144,76 +1138,6 @@ namespace Mooege.Core.GS.Players
             }
             this.Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
-        }
-
-        public void PlayHeroConversation(int snoConversation, int lineID)
-        {
-            this.InGameClient.SendMessage(new PlayConvLineMessage()
-            {
-                Id = 0xba,
-                ActorID = this.DynamicID,
-                Field1 = new uint[9]
-                    {
-                        this.DynamicID, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
-                    },
-
-                Params = new PlayLineParams()
-                {
-                    SNOConversation = snoConversation,
-                    Field1 = 0x00000001,
-                    Field2 = false,
-                    LineID = lineID,
-                    Field4 = 0x00000000,
-                    Field5 = -1,
-                    TextClass = (Class)this.Properties.VoiceClassID,
-                    Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
-                    AudioClass = (Class)this.Properties.VoiceClassID,
-                    SNOSpeakerActor = this.SNOId,
-                    Name = this.Properties.Name,
-                    Field11 = 0x00000002,
-                    AnimationTag = -1,
-                    Field13 = 0x00000069,
-                    Field14 = 0x0000006E,
-                    Field15 = 0x00000032
-                },
-                Field3 = 0x00000069,
-            });
-
-            this.OpenConversations.Add(new OpenConversation(
-                new EndConversationMessage()
-                {
-                    ActorId = this.DynamicID,
-                    Field0 = 0x0000006E,
-                    SNOConversation = snoConversation
-                },
-                this.InGameClient.Game.TickCounter + 200
-            ));
-        }
-
-        public void CheckOpenConversations()
-        {
-            if (this.OpenConversations.Count > 0)
-            {
-                foreach (OpenConversation openConversation in this.OpenConversations)
-                {
-                    if (openConversation.endTick <= this.InGameClient.Game.TickCounter)
-                    {
-                        this.InGameClient.SendMessage(openConversation.endConversationMessage);
-                    }
-                }
-            }
-        }
-
-        public struct OpenConversation
-        {
-            public EndConversationMessage endConversationMessage;
-            public int endTick;
-
-            public OpenConversation(EndConversationMessage endConversationMessage, int endTick)
-            {
-                this.endConversationMessage = endConversationMessage;
-                this.endTick = endTick;
-            }
         }
 
         #endregion

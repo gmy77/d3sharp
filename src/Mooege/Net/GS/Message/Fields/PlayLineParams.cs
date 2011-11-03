@@ -44,7 +44,7 @@ namespace Mooege.Net.GS.Message.Fields
         public int LineID;          // the ID of the line within the conversation
                                     // Participant to speak out? must mach what the lineID is expecting... eg. LineID == 6 expects 2 while LineID == 5 expects 1 (in a specific dialogue)
                                     // Set to 0 for a conversation line said by the player - farmy
-        public int Field4;      
+        public int Speaker;         // this could be the same as in Conversation-mpq filetype
         public int Field5;          // have not seen != -1
         public Class TextClass;     // Class enum used to pick a class specific text. Or -1 for npc text
         public VoiceGender Gender;  // Used if Field4 set to 0, (Use hero's gender) audio
@@ -63,7 +63,7 @@ namespace Mooege.Net.GS.Message.Fields
             Field1 = buffer.ReadInt(32);
             Field2 = buffer.ReadBool();
             LineID = buffer.ReadInt(32);
-            Field4 = buffer.ReadInt(32);
+            Speaker = buffer.ReadInt(32);
             Field5 = buffer.ReadInt(32);
             TextClass = (Class)buffer.ReadInt(32);
             Gender = (VoiceGender)buffer.ReadInt(32);
@@ -83,7 +83,7 @@ namespace Mooege.Net.GS.Message.Fields
             buffer.WriteInt(32, Field1);
             buffer.WriteBool(Field2);
             buffer.WriteInt(32, LineID);
-            buffer.WriteInt(32, Field4);
+            buffer.WriteInt(32, Speaker);
             buffer.WriteInt(32, Field5);
             buffer.WriteInt(32, (int)TextClass);
             buffer.WriteInt(32, (int)Gender);
@@ -112,7 +112,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("LineID: 0x" + LineID.ToString("X8") + " (" + LineID + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
+            b.AppendLine("Speaker: 0x" + Speaker.ToString("X8") + " (" + Speaker + ")");
             b.Append(' ', pad);
             b.AppendLine("Field5: 0x" + Field5.ToString("X8") + " (" + Field5 + ")");
             b.Append(' ', pad);

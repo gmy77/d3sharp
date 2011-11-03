@@ -1,4 +1,22 @@
-﻿using System;
+﻿/*
+ * Copyright (C) 2011 mooege project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +28,18 @@ using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common;
 using Mooege.Common.Helpers;
 
+/*
+ * a few notes to the poor guy who wants to improve the conversation system:
+ * From my understanding, a conversation consists of a sequence of lines in RootTreeNodes
+ * Each line has its own tree with different node types (I0 / first field in ConversationTreeNode)
+ * 
+ * - A node type 3 indicates this node has the lineID (for the client), the speaker enum, and an animation tag.
+ * - Each node of type 3 has nodes of type 5, thats hold information on how long the audio goes (for starting the next line)
+ *   depending on class and gender of the player, even if that part is not actually spoken by the player actor but another.
+ *   If the speaker of it parent node is the player, then there may be as many as five nodes (on for each class) with only
+ *   the ConvLocalDisplayTime for that class but sometimes, there is not a node for each class but a "for all" node with all information combined
+ * - A node type of 4 indicated, that it children are alternatives. So i pick a random one
+ */
 namespace Mooege.Core.GS.Players
 {
     /// <summary>
@@ -24,17 +54,17 @@ namespace Mooege.Core.GS.Players
         public int SNOId { get { return asset.Header.SNOId; } }
 
         private Mooege.Common.MPQ.FileFormats.Conversation asset;
-        private int LineIndex = 0;
+        private int LineIndex = 0;              // index within the RootTreeNodes, conversation progress
         private Player player;
         private ConversationManager manager;
-        private int currentUniqueLineID;
+        private int currentUniqueLineID;        // id used to identify the current line clientside
         private int startTick = 0;              // start tick of the current line. used to determine, when to start the next line
         private int duration = 0;
 
-        // This returns the dynamicID of other conversation partners. The client uses the sno of a known actor to
-        // find its sound and text ressources. It also uses its position to identify where you can hear the conversation.
+        // This returns the dynamicID of other conversation partners. The client uses its position to identify where you can hear the conversation.
         // This implementation relies on there beeing exactly one actor with a given sno in the world!!
         // TODO Find a better way to get the dynamicID of actors or verify that this implementation is sound.
+        // TODO add actor identification for Followers
         private Mooege.Core.GS.Actors.Actor GetSpeaker(ConversationTreeNode node)
         {
             switch (node.Speaker1)
@@ -164,8 +194,9 @@ namespace Mooege.Core.GS.Players
             ConversationTreeNode selectedNode = null;
             if (asset.RootTreeNodes[LineIndex].I0 == 6)
             {
+                // dont know what to do with them yet, this just ignores them -farmy
                 duration = 0;
-                return; // dont know what to do with them yet -farmy
+                return;
             }
 
             if (asset.RootTreeNodes[LineIndex].I0 == 4)
@@ -180,22 +211,21 @@ namespace Mooege.Core.GS.Players
                 node = from a in selectedNode.ChildNodes where a.ClassFilter == -1 select a;
 
             // get duration depending on language, class and gender
-            duration = node.First().ConvLocalDisplayTimes.ElementAt((int)manager.ClientLanguage).I0[player.Properties.VoiceClassID * 2 + (player.Properties.Gender == 0 ? 0 : 1)];
+            duration = node.First().ConvLocalDisplayTimes.ElementAt((int)manager.ClientLanguage).Languages[player.Properties.VoiceClassID * 2 + (player.Properties.Gender == 0 ? 0 : 1)];
 
 
             int fooID = manager.GetNextFooID();
             currentUniqueLineID = manager.GetNextUniqueLineID();
             startTick = player.World.Game.TickCounter;
 
-
-
+            // TODO Actor id should be CurrentSpeaker.DynamicID not PrimaryNPC.ActorID. This is a workaround because no audio is playing otherwise
             player.InGameClient.SendMessage(new PlayConvLineMessage()
             {
-                ActorID = GetActorBySNO(asset.SNOPrimaryNpc).DynamicID, //CurrentSpeaker.DynamicID, // 
+                ActorID = GetActorBySNO(asset.SNOPrimaryNpc).DynamicID, //CurrentSpeaker.DynamicID
                 Field1 = new uint[9]
                         {
                             player.DynamicID, asset.SNOPrimaryNpc != -1 ? GetActorBySNO(asset.SNOPrimaryNpc).DynamicID : 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
-                        }, // default for now since the client doesnt care - farmy
+                        },
 
                 Params = new PlayLineParams()
                 {
@@ -203,7 +233,7 @@ namespace Mooege.Core.GS.Players
                     Field1 = 0x00000000,
                     Field2 = false,
                     LineID = selectedNode.LineID,
-                    Field4 = (int)selectedNode.Speaker1,
+                    Speaker = (int)selectedNode.Speaker1,
                     Field5 = -1,
                     TextClass = selectedNode.Speaker1 == Speaker.Player ? (Class)player.Properties.VoiceClassID : Class.None,
                     Gender = (player.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
@@ -214,7 +244,7 @@ namespace Mooege.Core.GS.Players
                     AnimationTag = selectedNode.AnimationTag,
                     Field13 = fooID,
                     Field14 = currentUniqueLineID,
-                    Field15 = 0x00000032        // dont know, 0x32 for level up
+                    Field15 = 0x00000000        // dont know, 0x32 for level up
                 },
                 Field3 = fooID,
             }, true);
@@ -227,6 +257,7 @@ namespace Mooege.Core.GS.Players
     /// </summary>
     public class ConversationManager
     {
+        Logger logger = new Logger("ConversationManager");
         internal enum Language { Invalid, Global, enUS, enGB, enSG, esES, esMX, frFR, itIT, deDE, koKR, ptBR, ruRU, zhCN, zTW, trTR, plPL, ptPT }
 
         private Player player;
@@ -236,6 +267,9 @@ namespace Mooege.Core.GS.Players
 
         internal Language ClientLanguage { get { return Language.enUS; } }
 
+        // Sorry :-) ConvPlayLine Messages uses this, but i dont even know if it is really a id.
+        // From the looks of it, they maybe had PlayLineParams separated from the message or could sent more than one PlayLineParams
+        // and maybe used this to tag PlayLineParams and tell the client which of the params to use? - farmy
         internal int GetNextFooID()
         {
             return linesPlayedTotal * 20 + 1;
@@ -258,6 +292,12 @@ namespace Mooege.Core.GS.Players
         /// <param name="snoConversation">SnoID of the conversation</param>
         public void StartConversation(int snoConversation)
         {
+            if (!Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Conversation].ContainsKey(snoConversation))
+            {
+                logger.Warn("Conversation not found: {0}", snoConversation);
+                return;
+            }
+
             Conversation newConversation = new Conversation(snoConversation, player, this);
             newConversation.Start();
             newConversation.ConversationEnded += new EventHandler(ConversationEnded);
@@ -317,6 +357,5 @@ namespace Mooege.Core.GS.Players
                         conversation.Interrupt();
             }
         }
-
     }
 }
