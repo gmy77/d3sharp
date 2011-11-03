@@ -40,7 +40,8 @@ namespace Mooege.Core.GS.Objects
         /// <summary>
         /// Tells object to update itself and notify it's childs.
         /// </summary>
-        public virtual void Update() { }
+        /// <param name="tickCounter">The Game.TickCounter value when the function gets called.</param>
+        public virtual void Update(int tickCounter) { }
 
         /// <summary>
         /// Destroy the object. This should remove any references to the object throughout GS.

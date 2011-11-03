@@ -71,7 +71,7 @@ namespace Mooege.Core.GS.Actors
             this.Attributes[GameAttribute.Level] = 1;
         }
 
-        public override void Update()
+        public override void Update(int tickCounter)
         {
             this.Brain(); // let him think. /raist 
         }

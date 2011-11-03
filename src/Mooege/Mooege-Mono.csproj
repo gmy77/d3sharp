@@ -154,11 +154,16 @@
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Blacksmith.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Jeweler.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Mystic.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Hirelings\Enchantress.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Hirelings\Hireling.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Hirelings\Scoundrel.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Hirelings\Templar.cs" />
     <Compile Include="Core\GS\Actors\Implementations\StartingPoint.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Stash.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Waypoint.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Cain.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Vendor.cs" />
+    <Compile Include="Core\GS\Actors\Interactions\Interactions.cs" />
     <Compile Include="Core\GS\Actors\Living.cs" />
     <Compile Include="Core\GS\Actors\NPC.cs" />
     <Compile Include="Core\GS\Common\Types\Misc\Circle.cs" />
@@ -173,6 +178,7 @@
     <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
     <Compile Include="Core\GS\Markers\Marker.cs" />
     <Compile Include="Core\GS\Common\InventoryGrid.cs" />
+    <Compile Include="Core\GS\Players\ExpBonusData.cs" />
     <Compile Include="Core\GS\Players\Equipment.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
@@ -242,6 +248,8 @@
     <Compile Include="Net\GS\Message\Definitions\Artisan\RequestAddSocketMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingHire.cs" />
+    <Compile Include="Net\GS\Message\Definitions\NPC\NPCSelectConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
@@ -256,7 +264,6 @@
     <Compile Include="Net\GS\Message\Definitions\Trade\OpenTradeWindow.cs" />
     <Compile Include="Net\GS\Message\Definitions\Tutorial\TutorialShownMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Waypoint\OpenWaypointSelectionWindowMessage.cs" />
-    <Compile Include="Net\GS\Message\GameAttribute.Array.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Net\GS\Message\GameAttributeMap.cs" />
     <Compile Include="Net\MooNet\MooNetClient.cs" />
