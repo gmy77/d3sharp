@@ -16,7 +16,6 @@ namespace Mooege.Core.Common.Items.Implementations
     [HandledType("Dye")]
     public class Dye : Item
     {
-        public static readonly Logger Logger = LogManager.CreateLogger();
         private static Dictionary<int, int> DyeColorMap = new Dictionary<int,int>();
 
         public Dye(World world, Mooege.Common.MPQ.FileFormats.ItemTable definition)

@@ -89,7 +89,13 @@ namespace Mooege.Core.GS.Actors
         {
             if (message is NPCSelectConversationMessage) OnSelectConversation(client.Player, message as NPCSelectConversationMessage);
             if (message is HirelingHireMessage) OnHire(client.Player);
+            if (message is HirelingInventoryMessage) OnInventory(client.Player);
             else return;
+        }
+
+        public virtual void OnInventory(Player player)
+        {
+            throw new NotImplementedException();
         }
 
         public virtual void OnHire(Player player)

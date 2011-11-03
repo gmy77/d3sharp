@@ -312,10 +312,10 @@ namespace Mooege.Net.GS.Message
         SimpleMessage41 = 293, // len: 	8
         SimpleMessage42 = 294, // len: 	8
         NPCSelectConversationMessage = 295, // len: 	12 former SNODataMessage6
-        ANNDataMessage33 = 296, // len: 	12
+        HirelingDismissMessage = 296, // len: 	12 former ANNDataMessage33
         SimpleMessage43 = 297, // len: 	8
         HirelingHireMessage = 298, // len: 	8
-        SimpleMessage45 = 299, // len: 	8
+        HirelingInventoryMessage = 299, // len: 	8 former SimpleMessage45
         SNODataMessage7 = 300, // len:  12
         SimpleMessage46 = 301, // len: 	8
     }
