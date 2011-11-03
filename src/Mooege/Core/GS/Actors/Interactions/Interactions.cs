@@ -92,7 +92,7 @@ namespace Mooege.Core.GS.Actors.Interactions
                 Type = NPCInteractionType.Inventory,
                 ConversationSNO = -1,
                 Field2 = -1,
-                State = (npc as Hireling).HasHireling ? NPCInteractionState.New : NPCInteractionState.Disabled
+                State = (npc as Hireling).HasProxy ? NPCInteractionState.New : NPCInteractionState.Disabled
             };
         }
     }

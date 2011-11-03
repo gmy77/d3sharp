@@ -917,8 +917,8 @@ namespace Mooege.Core.GS.Players
         {
             new HirelingInfo { HirelingIndex = 0x00000000, Field1 = -1, Level = 0x00000000, Field3 = 0x0000, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
             new HirelingInfo { HirelingIndex = 0x00000001, Field1 = -1, Level = 20, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = 0x000006D3, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
-            new HirelingInfo { HirelingIndex = 0x00000002, Field1 = -1, Level = 20, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
-            new HirelingInfo { HirelingIndex = 0x00000000, Field1 = -1, Level = 0x00000000, Field3 = 0x00000000, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000002, Field1 = -1, Level = 25, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000003, Field1 = -1, Level = 30, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
         };
 
         public SkillKeyMapping[] SkillKeyMappings = new SkillKeyMapping[15]
