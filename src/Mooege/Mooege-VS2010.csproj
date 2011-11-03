@@ -451,7 +451,6 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\RareItemNameMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RareMonsterNamesMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RemoveRagdollMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\RequestBuffCancelMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Game\RequestJoinBNetGameMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\ReturnPointInfoMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Scene\RevealSceneMessage.cs" />
@@ -516,6 +515,7 @@
     <Compile Include="Core\GS\Objects\IRevealable.cs" />
     <Compile Include="Core\GS\Players\Inventory.cs" />
     <Compile Include="Core\GS\Players\Player.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Player\RequestBuffCancelMessage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
