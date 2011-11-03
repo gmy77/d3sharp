@@ -136,7 +136,11 @@
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\AffixGenerator.cs" />
-    <Compile Include="Core\Common\Items\Dye.cs" />
+    <Compile Include="Core\Common\Items\HandledItem.cs" />
+    <Compile Include="Core\Common\Items\HandledType.cs" />
+    <Compile Include="Core\Common\Items\Implementations\Dye.cs" />
+    <Compile Include="Core\Common\Items\Implementations\HealthPotion.cs" />
+    <Compile Include="Core\Common\Items\Implementations\Potion.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />

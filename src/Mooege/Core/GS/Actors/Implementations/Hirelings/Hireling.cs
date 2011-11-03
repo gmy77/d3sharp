@@ -27,12 +27,18 @@ using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Core.GS.Actors.Interactions;
 using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Net.GS.Message.Definitions.Hireling;
 
 namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 {
     public class Hireling : InteractiveNPC
     {
         protected int hirelingSNO = -1;
+        protected int proxySNO = -1;
+
+        private Hireling proxyActor = null;
+
+        protected Player _owner = null;
 
         public Hireling(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
@@ -42,16 +48,29 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             Interactions.Add(new InventoryInteraction());
         }
 
+        public override void OnTargeted(Player player, TargetMessage message)
+        {
+            base.OnTargeted(player, message);
+
+          /*  if (proxyActor != null)
+                return;
+
+            if (this.SNOId != proxySNO && this.SNOId != hirelingSNO)
+            {
+                proxyActor = new Templar(World, proxySNO, this.Tags);
+                proxyActor.EnterWorld(this.Position);
+            } */
+        }
+
         public override void OnHire(Player player)
         {
             if (hirelingSNO == -1)
                 return;
 
             //this doesn't fully work, and is for now disabled. /fasbat
-
             this.Unreveal(player);
             var tmp = new Templar(this.World, hirelingSNO, this.Tags);
-
+            tmp._owner = player;
             tmp.Position = this.Position;
             tmp.GBHandle.Type = 4;
             tmp.GBHandle.GBID = StringHashHelper.HashItemName("Templar");
@@ -63,11 +82,50 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 
             tmp.RotationAmount = this.RotationAmount;
             tmp.RotationAxis = this.RotationAxis;
+
+            player.InGameClient.SendMessage(new HirelingInfoUpdateMessage()
+            {
+                Field0 = 1,
+                Field1 = false,
+                Field2 = -1,
+                Field3 = 10,
+            });
+
             tmp.World.Enter(tmp);
+
+            player.InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Player.PetMessage()
+            {
+                Field0 = 0,
+                Field1 = 0,
+                PetId = tmp.DynamicID,
+                Field3 = (tmp.SNOId == proxySNO ? 22 : 0),
+            });
+
+            this.Destroy();
+            player.SelectedNPC = null;            
+        }
+
+        public override void OnEnter(World world)
+        {
+            base.OnEnter(world);
+
+            if (_owner == null)
+                return;
+
+            if (this.SNOId != hirelingSNO || this.SNOId != proxySNO)
+                return;
+
+
+        }
+
+        public override bool Reveal(Player player)
+        {
+            if(!base.Reveal(player))
+                return false;
 
             player.InGameClient.SendMessage(new VisualInventoryMessage()
             {
-                ActorID = tmp.DynamicID,
+                ActorID = this.DynamicID,
                 EquipmentList = new VisualEquipment()
                 {
                     Equipment = new VisualItem[]
@@ -132,17 +190,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
                 }
             });
 
-            player.Attributes[GameAttribute.Hireling_Class] = tmp.Attributes[GameAttribute.Hireling_Class];
-            player.Attributes.SendChangedMessage(player.InGameClient, player.DynamicID);
-
-            player.InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Player.PetMessage()
-            {
-                Id = (int)Opcodes.PetMessage,
-                Field2 = (int)tmp.DynamicID,
-            });
-
-            this.Destroy();
-            player.SelectedNPC = null;            
+            return true;
         }
     }
 }

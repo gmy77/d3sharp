@@ -351,6 +351,11 @@ namespace Mooege.Core.Common.Items
             player.Inventory.PickUp(this);
         }
 
+        public virtual void OnRequestUse(Player player, Item target, int actionId, WorldPlace worldPlace)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override bool Reveal(Player player)
         {
             if (!base.Reveal(player))
