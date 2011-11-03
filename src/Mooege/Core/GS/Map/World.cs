@@ -37,7 +37,7 @@ using Mooege.Net.GS.Message.Definitions.World;
 
 namespace Mooege.Core.GS.Map
 {
-    public sealed class World : DynamicObject, IRevealable
+    public sealed class World : DynamicObject, IRevealable, IUpdateable
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -112,15 +112,25 @@ namespace Mooege.Core.GS.Map
 
         #region update & tick logic
 
-        public override void Update(int tickCounter)
+        public void Update(int tickCounter)
         {
-            // TODO: we should be skipping child-scenes, so actors contained doesn't get updated() twice.
-            foreach(var scene in this._scenes.Values)
+            foreach(var player in this.Players.Values) // get players in the world.
             {
-                if (!scene.HasPlayers) 
-                    continue; // if scene has no players in, just skip the scene.
+                foreach(var sceneInRange in player.GetScenesInRegion()) // get scenes in the range for the player.
+                {
+                    var scene = sceneInRange;
+                    if (scene.Parent != null) 
+                        scene = scene.Parent; // we only want to update master-scenes.
 
-                scene.Update(tickCounter);
+                    if (!scene.HasPlayers) // if there are no players in the scene - just skip it.
+                        continue;
+
+                    // As master-scenes Update() can be triggered by child-scenes too, check if it's Update() is already called within the current Game.Update(). /raist.
+                    if (scene.LastUpdateTick >= tickCounter)
+                        continue;
+
+                    scene.Update(tickCounter); // run the update logic for the scene.
+                }
             }
         }
 

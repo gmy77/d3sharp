@@ -30,9 +30,5 @@ namespace Mooege.Core.GS.Actors.Implementations
         {
             this.Brain = new AI.Brain(this);
         }
-
-        public override void OnTargeted(Players.Player player, Net.GS.Message.Definitions.World.TargetMessage message)
-        {            
-        }
     }
 }

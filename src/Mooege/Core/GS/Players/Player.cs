@@ -48,7 +48,7 @@ using Mooege.Net.GS.Message.Definitions.Hireling;
 
 namespace Mooege.Core.GS.Players
 {
-    public class Player : Actor, IMessageConsumer
+    public class Player : Actor, IMessageConsumer, IUpdateable
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -517,7 +517,7 @@ namespace Mooege.Core.GS.Players
 
         #region update-logic
 
-        public override void Update(int tickCounter)
+        public void Update(int tickCounter)
         {
             // Check the Killstreaks
             this.ExpBonusData.Check(0);

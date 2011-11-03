@@ -22,6 +22,7 @@ using Mooege.Common;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Actors.Helpers;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Ticker.Helpers;
 
 namespace Mooege.Core.GS.AI
 {
@@ -38,12 +39,30 @@ namespace Mooege.Core.GS.AI
             this.Body = body;
         }
 
+        public TickTimer timer;
+       
         public virtual void Think(int tickCounter)
         {
+            Logger.Info(tickCounter.ToString());
+
+            if(timer==null)
+            {
+                timer = TickTimer.WaitSeconds(this.Body.World.Game, 1, Test);
+            }
+
             var players = this.Body.GetPlayersInRange();
             if (players.Count == 0) return;
 
             this.Chase(players.First());
+
+            if (timer != null)
+                timer.Update(tickCounter);
+        }
+
+        public void Test(int tickCount)
+        {
+            Logger.Warn("Triggered!" + tickCount);
+            timer = TickTimer.WaitSeconds(this.Body.World.Game, 1, Test);
         }
 
         public void Chase(Actor actor)
@@ -53,8 +72,6 @@ namespace Mooege.Core.GS.AI
 
             this.Target = actor;
             this.Heading = this.Target.Position;
-
-            Logger.Trace("Chasing " + actor);
 
             this.Move(this.Target);
         }
