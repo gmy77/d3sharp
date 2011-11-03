@@ -312,7 +312,7 @@ namespace Mooege.Core.Common.Toons
                     }
                     else if (field.Key.Group == 4 && field.Key.Field == 3)
                     {
-                        //don't know what to do with this yet, looks to be the ToonFlags of the party leader/inviter /dustinconrad
+                        //Looks to be the ToonFlags of the party leader/inviter when it is an int, OR the message set in an open to friends game when it is a string /dustinconrad
                     }
                     else
                     {

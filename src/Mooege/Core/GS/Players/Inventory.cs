@@ -363,12 +363,8 @@ namespace Mooege.Core.GS.Players
             int actionId = inventoryRequestUseMessage.Field1; // guess 1 means dyeing. Probably other value for using identify scroll , selling , .... - angerwin
             Item usedItem = _owner.World.GetItem(usedItemId);
             Item targetItem = _owner.World.GetItem(targetItemId);
-            if (actionId == 1)
-            {
-                DyeColor.DyeItem(usedItem, targetItem);
-            }
-            DestroyInventoryItem(usedItem);
-            SendVisualInventory(_owner);
+
+            usedItem.OnRequestUse(_owner, targetItem, actionId, inventoryRequestUseMessage.Location);
         }
 
         public void DestroyInventoryItem(Item item)
