@@ -44,34 +44,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                     {
                         // What the dickens is this stuff
                         #region hardcoded1
-                        #region HirelingInfo
-                        client.SendMessage(new HirelingInfoUpdateMessage()
-                        {
-                            Id = 0x009D,
-                            Field0 = 0x00000001,
-                            Field1 = false,
-                            Field2 = -1,
-                            Field3 = 0x00000007,
-                        });
-
-                        client.SendMessage(new HirelingInfoUpdateMessage()
-                        {
-                            Id = 0x009D,
-                            Field0 = 0x00000002,
-                            Field1 = false,
-                            Field2 = -1,
-                            Field3 = 0x00000000,
-                        });
-
-                        client.SendMessage(new HirelingInfoUpdateMessage()
-                        {
-                            Id = 0x009D,
-                            Field0 = 0x00000003,
-                            Field1 = false,
-                            Field2 = -1,
-                            Field3 = 0x00000000,
-                        });
-                        #endregion
                         #region Player Attribute Values
 
                         GameAttributeMap attributes = new GameAttributeMap();
