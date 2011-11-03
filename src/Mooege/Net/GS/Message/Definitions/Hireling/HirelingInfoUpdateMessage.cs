@@ -28,6 +28,11 @@ namespace Mooege.Net.GS.Message.Definitions.Hireling
         public int Field2;
         public int Field3;
 
+        public HirelingInfoUpdateMessage()
+            : base(Opcodes.HirelingInfoUpdateMessage)
+        {
+        }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(2);

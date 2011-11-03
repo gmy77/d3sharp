@@ -123,21 +123,21 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SuggestInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SuggestInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
-            // TODO: does not seem to work /raist.
-
-            var suggester = this.Client.CurrentToon;
-            var suggestee = ToonManager.GetToonByLowID(request.ApprovalId.Low);
+            var suggester = ToonManager.GetToonByLowID(request.TargetId.Low); //wants invite
+            var suggestee = ToonManager.GetToonByLowID(request.ApprovalId.Low); //approves invite
             if(suggestee==null) return;
 
             Logger.Debug("{0} suggested {1} to invite him.", suggester, suggestee);
+            var respone = bnet.protocol.NoData.CreateBuilder();
+            done(respone.Build());
 
-            // notify suggestee about it.
+            // Even though it makes no sense, the suggester is used for all fields in the caps and is what works with the client. /dustinconrad
             var suggestion = bnet.protocol.invitation.Suggestion.CreateBuilder()
                 .SetChannelId(request.ChannelId)
                 .SetSuggesterId(suggester.BnetEntityID)
                 .SetSuggesterName(suggester.Name)
-                .SetSuggesteeId(suggestee.BnetEntityID)
-                .SetSuggesteeName(suggestee.Name)
+                .SetSuggesteeId(suggester.BnetEntityID)
+                .SetSuggesteeName(suggester.Name)
                 .Build();
 
             var notification = bnet.protocol.channel_invitation.SuggestionAddedNotification.CreateBuilder().SetSuggestion(suggestion);

@@ -136,7 +136,11 @@
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\AffixGenerator.cs" />
-    <Compile Include="Core\Common\Items\Dye.cs" />
+    <Compile Include="Core\Common\Items\HandledItem.cs" />
+    <Compile Include="Core\Common\Items\HandledType.cs" />
+    <Compile Include="Core\Common\Items\Implementations\Dye.cs" />
+    <Compile Include="Core\Common\Items\Implementations\HealthPotion.cs" />
+    <Compile Include="Core\Common\Items\Implementations\Potion.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
@@ -444,7 +448,6 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\RareItemNameMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RareMonsterNamesMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RemoveRagdollMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\RequestBuffCancelMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Game\RequestJoinBNetGameMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\ReturnPointInfoMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Scene\RevealSceneMessage.cs" />
@@ -509,6 +512,7 @@
     <Compile Include="Core\GS\Objects\IRevealable.cs" />
     <Compile Include="Core\GS\Players\Inventory.cs" />
     <Compile Include="Core\GS\Players\Player.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Player\RequestBuffCancelMessage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

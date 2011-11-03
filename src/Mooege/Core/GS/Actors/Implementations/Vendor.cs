@@ -86,7 +86,7 @@ namespace Mooege.Core.GS.Actors.Implementations
 
         public override bool Unreveal(Player player)
         {
-            if (!base.Reveal(player))
+            if (!base.Unreveal(player))
                 return false;
 
             _vendorGrid.Unreveal(player);
