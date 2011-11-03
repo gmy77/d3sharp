@@ -68,7 +68,7 @@ namespace Mooege.Core.GS.Actors
             this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 0f;
             this.Attributes[GameAttribute.Hitpoints_Cur] = 4.546875f;
 
-            //this.Attributes[GameAttribute.Level] = 1;
+            this.Attributes[GameAttribute.Level] = 1;
         }
 
         public override void Update(int tickCounter)

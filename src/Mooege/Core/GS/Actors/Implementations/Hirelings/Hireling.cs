@@ -43,7 +43,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 
         private World originalWorld = null;
         private PRTransform originalPRT = null;
-        private Hireling proxyActor = null;
 
         protected Player owner = null;
 
@@ -70,16 +69,17 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             
 
             // TODO: fix this hardcoded crap
-            this.Attributes[GameAttribute.Buff_Visual_Effect, 0x000FFFFF] = true;
+            if (!IsProxy)
+                this.Attributes[GameAttribute.Buff_Visual_Effect, 0x000FFFFF] = true;
             this.Attributes[GameAttribute.Hitpoints_Max_Total] = 308.25f;
             this.Attributes[GameAttribute.Hitpoints_Max] = 216.25f;
             this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
             this.Attributes[GameAttribute.Hitpoints_Cur] = 308.25f;
+            
 
             if (!IsHireling && !IsProxy) // original doesn't need more attribs
             {
-                Field12 = 0xDBD3;
-                Field13 = 0x2B;
+                this.Attributes[GameAttribute.Level] = info.Level;
                 return;
             }
 
@@ -112,26 +112,17 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             this.Attributes[GameAttribute.SkillKit] = skillKit;
 
             #region hardcoded attribs :/
-            this.Attributes[GameAttribute.Buff_Active, 0x20c51] = true;
-            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x000075C1] = 1;
-            this.Attributes[GameAttribute.Buff_Active, 0x000075C1] = true;
+
             this.Attributes[GameAttribute.Get_Hit_Damage] = 20;
             this.Attributes[GameAttribute.Get_Hit_Recovery] = 3.051758E-05f;
             this.Attributes[GameAttribute.Get_Hit_Max] = 3.051758E-05f;
             this.Attributes[GameAttribute.Dodge_Rating_Total] = 3.051758E-05f;
-            this.Attributes[GameAttribute.Callout_Cooldown, 0x1618a] = 743;
-            this.Attributes[GameAttribute.Callout_Cooldown, 0x01CAB6] = 743;
             this.Attributes[GameAttribute.Block_Amount_Item_Delta] = 4;
-            this.Attributes[GameAttribute.Buff_Visual_Effect, 0x000FFFFF] = true;
             this.Attributes[GameAttribute.Block_Amount_Item_Min] = 6;
-            this.Attributes[GameAttribute.Buff_Icon_End_Tick0, 0x00020C51] = 0x00000A75;
-            this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x00020C51] = 0x00000375;
-            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x00020C51] = 3;
             this.Attributes[GameAttribute.Block_Amount_Total_Min] = 6;
             this.Attributes[GameAttribute.Block_Chance_Item_Total] = 0.1099854f;
             this.Attributes[GameAttribute.Block_Chance_Item] = 3.051758E-05f;
             this.Attributes[GameAttribute.Block_Chance_Total] = 0.1099854f;
-            this.Attributes[GameAttribute.Conversation_Icon, 0] = 0;
             this.Attributes[GameAttribute.Resource_Cur, 0] = 0x3f800000;
             this.Attributes[GameAttribute.Resource_Max, 0] = 1;
             this.Attributes[GameAttribute.Resource_Max_Total, 0] = 0x3F800000;
@@ -179,7 +170,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 6;
             this.Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] = 6;
             this.Attributes[GameAttribute.Resource_Type_Primary] = 0;
-            this.Attributes[GameAttribute.Callout_Cooldown, 0x000FFFFF] = 0x00000797;
             this.Attributes[GameAttribute.Hitpoints_Max_Total] = 308.25f;
             this.Attributes[GameAttribute.Hitpoints_Max] = 216.25f;
             this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
@@ -199,6 +189,20 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             this.Attributes[GameAttribute.General_Cooldown] = 0;
             this.Attributes[GameAttribute.Level_Cap] = 60;
 
+            if (IsProxy)
+                return;
+
+            this.Attributes[GameAttribute.Callout_Cooldown, 0x000FFFFF] = 0x00000797;
+            this.Attributes[GameAttribute.Buff_Active, 0x20c51] = true;
+            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x000075C1] = 1;
+            this.Attributes[GameAttribute.Buff_Active, 0x000075C1] = true;
+            this.Attributes[GameAttribute.Conversation_Icon, 0] = 0;
+            this.Attributes[GameAttribute.Buff_Icon_End_Tick0, 0x00020C51] = 0x00000A75;
+            this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x00020C51] = 0x00000375;
+            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x00020C51] = 3;
+            this.Attributes[GameAttribute.Buff_Visual_Effect, 0x000FFFFF] = true;
+            this.Attributes[GameAttribute.Callout_Cooldown, 0x1618a] = 743;
+            this.Attributes[GameAttribute.Callout_Cooldown, 0x01CAB6] = 743;
             #endregion
 
         }
@@ -224,9 +228,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             hireling.GBHandle.Type = 4;
             hireling.GBHandle.GBID = hirelingGBID;
 
-            hireling.Field9 = 5;
-            hireling.Field7 = 1; 
-
             hireling.Attributes[GameAttribute.Pet_Creator] = player.PlayerIndex;
             hireling.Attributes[GameAttribute.Pet_Type] = 0;
             hireling.Attributes[GameAttribute.Pet_Owner] = player.PlayerIndex;
@@ -240,13 +241,54 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             player.SelectedNPC = null;            
         }
 
+        public override void OnInventory(Player player)
+        {
+            if (proxySNO == -1)
+                return;
+
+            if (IsHireling || IsProxy)
+                return;
+
+            if (player.ActiveHireling != null && 
+                player.ActiveHireling.Attributes[GameAttribute.Hireling_Class] == this.Attributes[GameAttribute.Hireling_Class])
+                return;
+
+            if (player.ActiveHirelingProxy != null &&
+                player.ActiveHirelingProxy.Attributes[GameAttribute.Hireling_Class] == this.Attributes[GameAttribute.Hireling_Class])
+                return;
+            var hireling = CreateHireling(this.World, proxySNO, this.Tags);
+            hireling.SetUpAttributes(player);
+            hireling.originalWorld = this.World;
+            hireling.originalPRT = this.Transform;
+            hireling.GBHandle.Type = 4;
+            hireling.GBHandle.GBID = hirelingGBID;
+            hireling.CollFlags = 0;
+            hireling.Attributes[GameAttribute.Is_NPC] = false;
+            hireling.Attributes[GameAttribute.NPC_Is_Operatable] = false;
+            hireling.Attributes[GameAttribute.NPC_Has_Interact_Options, 0] = false;
+            hireling.Attributes[GameAttribute.Buff_Visual_Effect, 0x00FFFFF] = false;
+            hireling.Attributes[GameAttribute.Pet_Creator] = player.PlayerIndex;
+            hireling.Attributes[GameAttribute.Pet_Type] = 22;
+            hireling.Attributes[GameAttribute.Pet_Owner] = player.PlayerIndex;
+
+            hireling.RotationAmount = this.RotationAmount;
+            hireling.RotationAxis = this.RotationAxis;
+
+            hireling.EnterWorld(this.Position);
+            player.ActiveHirelingProxy = hireling;            
+        }
+
         public void Dismiss(Player player)
         {
-            var original = CreateHireling(originalWorld, mainSNO, this.Tags);
-            original.SetUpAttributes(player);
-            original.RotationAmount = this.originalPRT.Quaternion.W;
-            original.RotationAxis = this.originalPRT.Quaternion.Vector3D;
-            original.EnterWorld(this.originalPRT.Vector3D);          
+            this.Unreveal(player);
+            if (this.IsHireling)
+            {
+                var original = CreateHireling(originalWorld, mainSNO, this.Tags);
+                original.SetUpAttributes(player);
+                original.RotationAmount = this.originalPRT.Quaternion.W;
+                original.RotationAxis = this.originalPRT.Quaternion.Vector3D;
+                original.EnterWorld(this.originalPRT.Vector3D);
+            }
             this.Destroy();
         }
 
@@ -254,9 +296,82 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
         {
             if (owner == null)
                 SetUpAttributes(player);
+            else if (IsProxy && owner != player)
+                return false;
 
             if(!base.Reveal(player))
                 return false;
+
+            if (IsProxy)
+            {
+                player.InGameClient.SendMessage(new VisualInventoryMessage()
+                {
+                    ActorID = this.DynamicID,
+                    EquipmentList = new VisualEquipment()
+                    {
+                        Equipment = new VisualItem[]
+                    {
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                        new VisualItem()
+                        {
+                            GbId = -1,
+                            Field1 = 0,
+                            Field2 = 0,
+                            Field3 = 0,
+                        },
+                    }
+                    }
+                });
+                return true;
+            }
 
             player.InGameClient.SendMessage(new VisualInventoryMessage()
             {

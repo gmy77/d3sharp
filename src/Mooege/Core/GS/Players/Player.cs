@@ -46,6 +46,7 @@ using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
 using Mooege.Core.GS.Actors.Implementations.Hirelings;
+using Mooege.Net.GS.Message.Definitions.Hireling;
 
 namespace Mooege.Core.GS.Players
 {
@@ -135,6 +136,35 @@ namespace Mooege.Core.GS.Players
                         Field1 = 0,
                         PetId = value.DynamicID,
                         Field3 = 0,
+                    });
+                }
+            }
+        }
+
+        private Hireling _activeHirelingProxy = null;
+        public Hireling ActiveHirelingProxy
+        {
+            get { return _activeHirelingProxy; }
+            set
+            {
+                if (value == _activeHirelingProxy)
+                    return;
+
+                if (_activeHirelingProxy != null)
+                {
+                    _activeHirelingProxy.Dismiss(this);
+                }
+
+                _activeHirelingProxy = value;
+
+                if (value != null)
+                {
+                    InGameClient.SendMessage(new PetMessage()
+                    {
+                        Field0 = 0,
+                        Field1 = 0,
+                        PetId = value.DynamicID,
+                        Field3 = 22,
                     });
                 }
             }
@@ -382,9 +412,9 @@ namespace Mooege.Core.GS.Players
             else if (message is TryWaypointMessage) OnTryWaypoint(client, (TryWaypointMessage)message);
             else if (message is RequestBuyItemMessage) OnRequestBuyItem(client, (RequestBuyItemMessage)message);
             else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
+            else if (message is HirelingDismissMessage) OnHirelingDismiss();
             else return;
         }
-
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
         {
@@ -478,6 +508,11 @@ namespace Mooege.Core.GS.Players
                 return;
 
             jeweler.OnAddSocket(this, item);
+        }
+
+        private void OnHirelingDismiss()
+        {
+            ActiveHireling = null;
         }
 
         #endregion
