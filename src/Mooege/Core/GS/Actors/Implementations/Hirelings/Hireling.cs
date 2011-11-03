@@ -42,7 +42,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 
 
         private World originalWorld = null;
-        private Vector3D originalPosition = null;
+        private PRTransform originalPRT = null;
         private Hireling proxyActor = null;
 
         protected Player owner = null;
@@ -67,7 +67,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 
             var info = player.HirelingInfo[this.Attributes[GameAttribute.Hireling_Class]];
 
-            this.Attributes[GameAttribute.Level] = info.Level;
+            
 
             // TODO: fix this hardcoded crap
             this.Attributes[GameAttribute.Buff_Visual_Effect, 0x000FFFFF] = true;
@@ -82,6 +82,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
                 Field13 = 0x2B;
                 return;
             }
+
+            this.Attributes[GameAttribute.Level] = info.Level;
 
             if (info.Skill1SNOId != -1)
             {
@@ -218,7 +220,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             var hireling = CreateHireling(this.World, hirelingSNO, this.Tags);
             hireling.SetUpAttributes(player);
             hireling.originalWorld = this.World;
-            hireling.originalPosition = this.Position;
+            hireling.originalPRT = this.Transform;
             hireling.GBHandle.Type = 4;
             hireling.GBHandle.GBID = hirelingGBID;
 
@@ -242,7 +244,9 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
         {
             var original = CreateHireling(originalWorld, mainSNO, this.Tags);
             original.SetUpAttributes(player);
-            original.EnterWorld(originalPosition);          
+            original.RotationAmount = this.originalPRT.Quaternion.W;
+            original.RotationAxis = this.originalPRT.Quaternion.Vector3D;
+            original.EnterWorld(this.originalPRT.Vector3D);          
             this.Destroy();
         }
 
