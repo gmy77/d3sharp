@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -27,14 +28,15 @@ using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
-using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
+using Mooege.Core.GS.Map;
+using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Core.Common.Items;
+using Mooege.Net.GS.Message.Definitions.World;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -116,6 +118,17 @@ namespace Mooege.Core.GS.Actors
             get { return true; }
         }
 
+        protected Mooege.Common.MPQ.FileFormats.Actor ActorData { get; private set; }
+
+        /// <summary>
+        /// The animation set for actor.
+        /// </summary>
+        public Mooege.Common.MPQ.FileFormats.AnimSet AnimationSet { get; private set; }
+
+        // TODO: read them from MPQ data's instead /raist.
+        public float WalkSpeed = 0.2797852f;
+        public float RunSpeed = 0.3598633f;
+
         // Some ACD uncertainties /komiga.
         public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself /komiga & /raist.
         public int Field3 = 0x00000001; // TODO: What dis? <-- I guess its just 0 for WorldItem and 1 for InventoryItem // Farmy
@@ -145,6 +158,10 @@ namespace Mooege.Core.GS.Actors
             this.GBHandle = new GBHandle { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
             this.CollFlags = 0x00000000;
 
+            this.ActorData = (Mooege.Common.MPQ.FileFormats.Actor) Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.Actor][snoId].Data;
+            if (this.ActorData.AnimSetSNO != -1) 
+                this.AnimationSet = (Mooege.Common.MPQ.FileFormats.AnimSet) Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.AnimSet][this.ActorData.AnimSetSNO].Data;
+
             this.Tags = tags;
             this.ReadTags();
         }
@@ -156,14 +173,6 @@ namespace Mooege.Core.GS.Actors
         /// <param name="snoId">SNOId of the actor.</param>
         protected Actor(World world, int snoId)
             : this(world, snoId, null)
-        { }
-
-        /// <summary>
-        /// Creates a new world.
-        /// </summary>
-        /// <param name="world">The world that initially belongs to.</param>
-        protected Actor(World world)
-            : this(world, -1, null)
         { }
 
         #region enter-world, change-world, teleport helpers
@@ -413,7 +422,7 @@ namespace Mooege.Core.GS.Actors
             // TODO: Unreveal from players that are now outside the actor's range. /komiga
         }
 
-        public virtual void OnTargeted(Player player, TargetMessage message)
+        public virtual void OnTargeted(Player player, Mooege.Net.GS.Message.Definitions.World.TargetMessage message)
         {
 
         }
@@ -472,6 +481,26 @@ namespace Mooege.Core.GS.Actors
 
             if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
                 this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
+        }
+
+        #endregion
+
+        #region movement
+
+        public void Move(Vector3D point, float facingAngle)
+        {
+            var movementMessage = new NotifyActorMovementMessage
+            {
+                ActorId = (int)this.DynamicID,
+                Position = point,
+                Angle = facingAngle,
+                Field3 = false,
+                Speed = this.WalkSpeed,
+                Field5 = 0,
+                AnimationTag = this.AnimationSet == null ? 0 : this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk)
+            };
+
+            this.World.BroadcastIfRevealed(movementMessage, this);
         }
 
         #endregion

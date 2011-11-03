@@ -23,6 +23,7 @@ using System.Linq;
 using System.Windows;
 using Mooege.Common;
 using Mooege.Common.Helpers;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.QuadTrees;
@@ -287,7 +288,8 @@ namespace Mooege.Core.GS.Map
         /// <param name="position">The position to spawn it.</param>
         public void SpawnMonster(int monsterSNOId, Vector3D position)
         {
-            var monster = new Monster(this, monsterSNOId, new Dictionary<int, Mooege.Common.MPQ.FileFormats.Types.TagMapEntry>()) { Scale = 1.35f };
+            var monster = ActorFactory.Create(this, monsterSNOId, new TagMap());
+            monster.Scale = 1.35f;
             monster.EnterWorld(position);
         }
 

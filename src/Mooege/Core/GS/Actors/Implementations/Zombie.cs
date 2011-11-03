@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,31 +19,20 @@
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Players;
-using Mooege.Net.GS.Message;
-using Mooege.Core.GS.Actors.Interactions;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
-    [HandledSNO(3533 /* Ho-ho-horadrim */)]
-    public class Cain : InteractiveNPC
+    [HandledSNO(6652)]
+    public class Zombie : Monster
     {
-        public Cain(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Zombie(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
         {
-            this.Attributes[GameAttribute.MinimapActive] = true;
-            Conversations.Add(new ConversationInteraction(72416));
-            Conversations.Add(new ConversationInteraction(198588));
-            Conversations.Add(new ConversationInteraction(73171));
-            Interactions.Add(new IdentifyAllInteraction());
+            this.Brain = new AI.Brain(this);
         }
 
-        public override bool Reveal(Player player)
-        {
-            if (!base.Reveal(player))
-                return false;
-
-            return true;
+        public override void OnTargeted(Players.Player player, Net.GS.Message.Definitions.World.TargetMessage message)
+        {            
         }
     }
 }

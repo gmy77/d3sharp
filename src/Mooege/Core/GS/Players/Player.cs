@@ -39,8 +39,6 @@ using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Conversation;
-using Mooege.Common.Helpers;
-using System;
 using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Net.GS.Message.Definitions.Artisan;
@@ -117,7 +115,7 @@ namespace Mooege.Core.GS.Players
         /// <param name="client">The gameclient for the player.</param>
         /// <param name="bnetToon">Toon of the player.</param>
         public Player(World world, GameClient client, Toon bnetToon)
-            : base(world)
+            : base(world, GetClassSNOId(bnetToon.Gender, bnetToon.Class))
         {
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
@@ -922,6 +920,43 @@ namespace Mooege.Core.GS.Players
         #endregion
 
         #region generic properties
+
+        public static int GetClassSNOId(int gender, ToonClass @class)
+        {
+            if(gender==0) // male
+            {
+                switch(@class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x0CE5;
+                    case ToonClass.DemonHunter:
+                        return 0x0125C7;
+                    case ToonClass.Monk:
+                        return 0x1271;
+                    case ToonClass.WitchDoctor:
+                        return 0x1955;
+                    case ToonClass.Wizard:
+                        return 0x1990;
+                }
+            }
+            else // female
+            {
+                switch (@class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x0CD5;
+                    case ToonClass.DemonHunter:
+                        return 0x0123D2;
+                    case ToonClass.Monk:
+                        return 0x126D;
+                    case ToonClass.WitchDoctor:
+                        return 0x1951;
+                    case ToonClass.Wizard:
+                        return 0x197E;
+                }
+            }
+            return 0x0;
+        }
 
         public int ClassSNO
         {

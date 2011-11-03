@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
@@ -32,23 +31,19 @@ namespace Mooege.Core.GS.Actors
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
-        // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
-        // TODO: not only Living have animations, put this in Actor? /fasbat
-        //public int AnimationSNO { get; set; }
-        private int snoAnimSet;
-        private int snoMonster;
-        public Mooege.Common.MPQ.FileFormats.AnimSet Animset = null;
+        public int SNOMonsterId { get; private set; }
+
+        /// <summary>
+        /// The brain for 
+        /// </summary>
+        public AI.Brain Brain { get; protected set; }
 
         public Living(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
         {
             this.SNOId = snoId;
-            var actor = (Mooege.Common.MPQ.FileFormats.Actor)Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Actor][snoId].Data;
-            this.snoMonster = actor.MonsterSNO;
-            if (actor.AnimSetSNO != -1)
-            {
-                this.Animset = (Mooege.Common.MPQ.FileFormats.AnimSet)Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.AnimSet][actor.AnimSetSNO].Data;
-            }
+            this.SNOMonsterId = this.ActorData.MonsterSNO;
+
             // FIXME: This is hardcoded crap
             this.Field3 = 0x0;
             this.RotationAmount = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);
@@ -60,7 +55,6 @@ namespace Mooege.Core.GS.Actors
             this.Field11 = 0x0;
             this.Field12 = 0x0;
             this.Field13 = 0x0;
-            //this.AnimationSNO = 0x11150;
             this.CollFlags = 1;
 
             this.Attributes[GameAttribute.Hitpoints_Max_Total] = 4.546875f;
@@ -73,26 +67,24 @@ namespace Mooege.Core.GS.Actors
 
         public override void Update(int tickCounter)
         {
-            this.Brain(); // let him think. /raist 
-        }
+            if (this.Brain == null) 
+                return;
 
-        public virtual void Brain()
-        {
-            // intellectual activities goes here ;) /raist
+            this.Brain.Think(tickCounter);
         }
 
         public override bool Reveal(Player player)
         {
             if (!base.Reveal(player))
                 return false;
-            if (Animset != null)
+            if (AnimationSet != null)
             {
-                if (this.Animset.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Idle) != -1)
+                if (this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Idle) != -1)
                 {
                     player.InGameClient.SendMessage(new SetIdleAnimationMessage
                     {
                         ActorID = this.DynamicID,
-                        AnimationSNO = this.Animset.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Idle)
+                        AnimationSNO = this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Idle)
                     });
                 }
                

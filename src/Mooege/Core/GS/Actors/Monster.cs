@@ -16,11 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
@@ -35,9 +33,6 @@ namespace Mooege.Core.GS.Actors
     public class Monster : Living
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
-
-        // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
-        //public int AnimationSNO { get; set; }
 
         public Monster(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
@@ -120,7 +115,7 @@ namespace Mooege.Core.GS.Actors
                     new PlayAnimationMessageSpec()
                     {
                         Field0 = 0x2,
-                        Field1 = Animset.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
+                        Field1 = AnimationSet.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
                         Field2 = 0x0,
                         Field3 = 1f
                     }
