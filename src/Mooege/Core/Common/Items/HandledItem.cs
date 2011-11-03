@@ -22,7 +22,7 @@ using System.Collections.Generic;
 namespace Mooege.Core.Common.Items
 {
     /// <summary>
-    /// Allows implementing items for given types.
+    /// Allows implementing items for given named items.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public sealed class HandledItemAttribute : Attribute
