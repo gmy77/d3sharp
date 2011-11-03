@@ -56,10 +56,15 @@ namespace Mooege
             InitLoggers(); // init logging facility.
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
-            Logger.Info("Item database loaded with a total of {0} item definitions", ItemGenerator.TotalItems);
 
-            MPQStorage.Init();
+            if (!MPQStorage.Initialized)
+            {
+                Logger.Fatal("Cannot run servers as MPQStorage failed initialization.");
+                Console.ReadLine();
+                return;
+            }
 
+            Logger.Info("Item database loaded with a total of {0} item definitions.", ItemGenerator.TotalItems);
             StartupServers();
         }
 

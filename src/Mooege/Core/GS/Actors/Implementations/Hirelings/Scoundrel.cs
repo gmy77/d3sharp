@@ -18,25 +18,21 @@
 
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.Artisan;
-using Mooege.Net.GS.Message.Definitions.World;
 
-namespace Mooege.Core.GS.Actors.Implementations.Artisans
+namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 {
-    public class Artisan : InteractiveNPC
+    [HandledSNO(4644 /* Scoundrel.acr */)]
+    public class Scoundrel : Hireling
     {
-        public Artisan(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Scoundrel(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
         {
-            this.Attributes[GameAttribute.MinimapActive] = true;
-        }
-
-        public override void OnTargeted(Player player, TargetMessage message)
-        {
-            player.InGameClient.SendMessage(new OpenArtisanWindowMessage() { ArtisanID = this.DynamicID });
+            //enable this for some spectacular crashes /fasbat
+            //hirelingSNO = 52694;
+            Attributes[GameAttribute.Hireling_Class] = 2;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Mooege.Net.GS.Message.Definitions.NPC
     [Message(Opcodes.NPCInteractOptionsMessage)]
     public class NPCInteractOptionsMessage : GameMessage
     {
-        public int ActorID;
+        public uint ActorID;
         // MaxLength = 20
         public NPCInteraction[] tNPCInteraction;
         public NPCInteractOptionsType Type;
@@ -36,7 +36,7 @@ namespace Mooege.Net.GS.Message.Definitions.NPC
 
         public override void Parse(GameBitBuffer buffer)
         {
-            ActorID = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
             tNPCInteraction = new NPCInteraction[buffer.ReadInt(5)];
             for (int i = 0; i < tNPCInteraction.Length; i++) { tNPCInteraction[i] = new NPCInteraction(); tNPCInteraction[i].Parse(buffer); }
             Type = (NPCInteractOptionsType) buffer.ReadInt(2);
@@ -44,7 +44,7 @@ namespace Mooege.Net.GS.Message.Definitions.NPC
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, ActorID);
+            buffer.WriteUInt(32, ActorID);
             buffer.WriteInt(5, tNPCInteraction.Length);
             for (int i = 0; i < tNPCInteraction.Length; i++) { tNPCInteraction[i].Encode(buffer); }
             buffer.WriteInt(2, (int)Type);

@@ -65,7 +65,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
     public class TagMapEntry
     {
         public int Type { get; private set; }
-        public int Int1 { get; private set; }
+        public int TagID { get; private set; }
         public ScriptFormula ScriptFormula { get; private set; }
         public int Int2 { get; private set; }
         public float Float0 { get; private set; }
@@ -73,7 +73,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public TagMapEntry(MpqFileStream stream)
         {
             this.Type = stream.ReadValueS32();
-            this.Int1 = stream.ReadValueS32();
+            this.TagID = stream.ReadValueS32();
 
             switch (this.Type)
             {
