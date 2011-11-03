@@ -8,6 +8,7 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common;
+using Mooege.Common.Helpers;
 
 namespace Mooege.Core.GS.Players
 {
@@ -28,30 +29,28 @@ namespace Mooege.Core.GS.Players
         private ConversationManager manager;
         private int currentUniqueLineID;
         private int startTick = 0;              // start tick of the current line. used to determine, when to start the next line
+        private int duration = 0;
 
         // This returns the dynamicID of other conversation partners. The client uses the sno of a known actor to
         // find its sound and text ressources. It also uses its position to identify where you can hear the conversation.
         // This implementation relies on there beeing exactly one actor with a given sno in the world!!
         // TODO Find a better way to get the dynamicID of actors or verify that this implementation is sound.
-        private Mooege.Core.GS.Actors.Actor CurrentSpeaker
+        private Mooege.Core.GS.Actors.Actor GetSpeaker(ConversationTreeNode node)
         {
-            get
+            switch (node.Speaker1)
             {
-                switch(asset.RootTreeNodes[LineIndex].Speaker1)
-                {
-                    case Speaker.AltNPC1: return GetActorBySNO(asset.SNOAltNpc1);
-                    case Speaker.AltNPC2: return GetActorBySNO(asset.SNOAltNpc2);
-                    case Speaker.AltNPC3: return GetActorBySNO(asset.SNOAltNpc3);
-                    case Speaker.AltNPC4: return GetActorBySNO(asset.SNOAltNpc4);
-                    case Speaker.Player: return player;
-                    case Speaker.PrimaryNPC: return GetActorBySNO(asset.SNOPrimaryNpc);
-                    case Speaker.EnchantressFollower: return null;
-                    case Speaker.ScoundrelFollower: return null;
-                    case Speaker.TemplarFollower: return null;
-                    case Speaker.None: return null;
-                }
-                return null;
+                case Speaker.AltNPC1: return GetActorBySNO(asset.SNOAltNpc1);
+                case Speaker.AltNPC2: return GetActorBySNO(asset.SNOAltNpc2);
+                case Speaker.AltNPC3: return GetActorBySNO(asset.SNOAltNpc3);
+                case Speaker.AltNPC4: return GetActorBySNO(asset.SNOAltNpc4);
+                case Speaker.Player: return player;
+                case Speaker.PrimaryNPC: return GetActorBySNO(asset.SNOPrimaryNpc);
+                case Speaker.EnchantressFollower: return null;
+                case Speaker.ScoundrelFollower: return null;
+                case Speaker.TemplarFollower: return null;
+                case Speaker.None: return null;
             }
+            return null;
         }
 
         private Mooege.Core.GS.Actors.Actor GetActorBySNO(int sno)
@@ -103,15 +102,6 @@ namespace Mooege.Core.GS.Players
         {
 
             // TODO rotate the actor to face the player or he may not hear the dialog
-
-            // Find a childnode with a matching class id, that one holds information about how long the speaker talks
-            // Of there is no matching childnode, there must be one with -1 which only combines all class specific into one
-            var node = from a in asset.RootTreeNodes[LineIndex].ChildNodes where a.I5 == player.Properties.VoiceClassID select a;
-            if (node.Count() == 0)
-                node = from a in asset.RootTreeNodes[LineIndex].ChildNodes where a.I5 == -1 select a;
-
-            // get duration depending on language, class and gender
-            int duration = node.First().ConvLocalDisplayTimes.ElementAt((int)manager.ClientLanguage).I0[player.Properties.VoiceClassID * 2 + (player.Properties.Gender == 0 ? 0 : 1)];
 
             if (startTick + duration < player.World.Game.TickCounter)
                 PlayNextLine(false);
@@ -171,13 +161,37 @@ namespace Mooege.Core.GS.Players
         /// <param name="LineIndex">index of the line withing the rootnodes</param>
         private void PlayLine(int LineIndex)
         {
+            ConversationTreeNode selectedNode = null;
+            if (asset.RootTreeNodes[LineIndex].I0 == 6)
+            {
+                duration = 0;
+                return; // dont know what to do with them yet -farmy
+            }
+
+            if (asset.RootTreeNodes[LineIndex].I0 == 4)
+                selectedNode = asset.RootTreeNodes[LineIndex].ChildNodes[RandomHelper.Next(asset.RootTreeNodes[LineIndex].ChildNodes.Count)];
+            else
+                selectedNode = asset.RootTreeNodes[LineIndex];
+
+            // Find a childnode with a matching class id, that one holds information about how long the speaker talks
+            // If there is no matching childnode, there must be one with -1 which only combines all class specific into one
+            var node = from a in selectedNode.ChildNodes where a.ClassFilter == player.Properties.VoiceClassID select a;
+            if (node.Count() == 0)
+                node = from a in selectedNode.ChildNodes where a.ClassFilter == -1 select a;
+
+            // get duration depending on language, class and gender
+            duration = node.First().ConvLocalDisplayTimes.ElementAt((int)manager.ClientLanguage).I0[player.Properties.VoiceClassID * 2 + (player.Properties.Gender == 0 ? 0 : 1)];
+
+
             int fooID = manager.GetNextFooID();
             currentUniqueLineID = manager.GetNextUniqueLineID();
             startTick = player.World.Game.TickCounter;
 
+
+
             player.InGameClient.SendMessage(new PlayConvLineMessage()
             {
-                ActorID = GetActorBySNO(asset.SNOPrimaryNpc).DynamicID, //CurrentSpeaker.DynamicID,
+                ActorID = GetActorBySNO(asset.SNOPrimaryNpc).DynamicID, //CurrentSpeaker.DynamicID, // 
                 Field1 = new uint[9]
                         {
                             player.DynamicID, asset.SNOPrimaryNpc != -1 ? GetActorBySNO(asset.SNOPrimaryNpc).DynamicID : 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
@@ -186,24 +200,24 @@ namespace Mooege.Core.GS.Players
                 Params = new PlayLineParams()
                 {
                     SNOConversation = asset.Header.SNOId,
-                    Field1 = 0x00000000, // dont know... -farmy
-                    Field2 = false,      // dont know either... -farmy
-                    LineID = asset.RootTreeNodes[LineIndex].LineID,
-                    Field4 = (int)asset.RootTreeNodes[LineIndex].Speaker1,
-                    Field5 = -1,        // dont know either... -farmy
-                    TextClass = asset.RootTreeNodes[LineIndex].Speaker1 == Speaker.Player ? (Class)player.Properties.VoiceClassID : Class.None,
+                    Field1 = 0x00000000,
+                    Field2 = false,
+                    LineID = selectedNode.LineID,
+                    Field4 = (int)selectedNode.Speaker1,
+                    Field5 = -1,
+                    TextClass = selectedNode.Speaker1 == Speaker.Player ? (Class)player.Properties.VoiceClassID : Class.None,
                     Gender = (player.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
                     AudioClass = (Class)player.Properties.VoiceClassID,
-                    SNOSpeakerActor = CurrentSpeaker.SNOId,
+                    SNOSpeakerActor = GetSpeaker(selectedNode).SNOId,
                     Name = player.Properties.Name,
-                    Field11 = 0x00000000,  // is this field I1? and if...what does it do?? 2 for level up
-                    AnimationTag = asset.RootTreeNodes[LineIndex].AnimationTag,
+                    Field11 = 0x00000000,  // is this field I1? and if...what does it do?? 2 for level up -farmy
+                    AnimationTag = selectedNode.AnimationTag,
                     Field13 = fooID,
                     Field14 = currentUniqueLineID,
                     Field15 = 0x00000032        // dont know, 0x32 for level up
                 },
                 Field3 = fooID,
-            },true);
+            }, true);
         }
     }
 
@@ -247,7 +261,11 @@ namespace Mooege.Core.GS.Players
             Conversation newConversation = new Conversation(snoConversation, player, this);
             newConversation.Start();
             newConversation.ConversationEnded += new EventHandler(ConversationEnded);
-            openConversations.Add(snoConversation, newConversation);
+
+            lock (openConversations)
+            {
+                openConversations.Add(snoConversation, newConversation);
+            }
         }
 
         /// <summary>
@@ -257,10 +275,14 @@ namespace Mooege.Core.GS.Players
         {
             Conversation conversation = sender as Conversation;
             quests.Notify(QuestStepObjectiveType.HadConversation, conversation.SNOId);
-            openConversations.Remove(conversation.SNOId);
+
+            lock (openConversations)
+            {
+                openConversations.Remove(conversation.SNOId);
+            }
+
             if (conversation.ConvPiggyBack != -1)
                 StartConversation(conversation.ConvPiggyBack);
-
         }
 
         /// <summary>
@@ -269,8 +291,13 @@ namespace Mooege.Core.GS.Players
         /// <param name="gameTick"></param>
         public void Update(int gameTick)
         {
+            List<Conversation> clonedList;
+
             // update from a cloned list, so you can remove conversations in their ConversationEnded event
-            List<Conversation> clonedList = (from c in openConversations select c.Value).ToList();
+            lock (openConversations)
+            {
+                clonedList = (from c in openConversations select c.Value).ToList();
+            }
 
             foreach (var conversation in clonedList)
                 conversation.Update();
@@ -283,9 +310,12 @@ namespace Mooege.Core.GS.Players
         /// <param name="message"></param>
         public void Consume(GameClient client, GameMessage message)
         {
-            if(message is RequestCloseConversationWindowMessage)
-                foreach(var conversation in openConversations.Values)
-                    conversation.Interrupt();  
+            lock (openConversations)
+            {
+                if (message is RequestCloseConversationWindowMessage)
+                    foreach (var conversation in openConversations.Values)
+                        conversation.Interrupt();
+            }
         }
 
     }

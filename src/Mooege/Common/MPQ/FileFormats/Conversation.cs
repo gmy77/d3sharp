@@ -31,7 +31,7 @@ namespace Mooege.Common.MPQ.FileFormats
         static System.IO.StreamWriter dump = new System.IO.StreamWriter(System.IO.File.OpenWrite("F:\\conversations.txt"));
         public Header Header { get; private set; }
         public ConversationTypes ConversationType { get; private set; }
-        public int I0 { get; private set; }
+        public int I0 { get; private set; }            // looks like the conversation icon, its 1 for important quest conversations, 0 otherwise
         public int I1 { get; private set; }
         public int SNOQuest { get; private set; }
         public int I2 { get; private set; }
@@ -92,13 +92,13 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Read(CompiledScript, 0, compiledScriptPointer.Size);
 
             stream.Close();
-            /*
+            
             dump.Write(AsText(file.Name));
             dump.WriteLine();
             dump.WriteLine();
             dump.WriteLine();
             dump.WriteLine();
-            */
+            
         }
 
         public string AsText(string filename)
@@ -117,8 +117,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
             s.AppendLine("SNOQuest:" + SNOQuest);    
             s.AppendLine("SNOConvPiggyBack:" + SNOConvPiggyback);
-            s.AppendLine("SNOConvUnlock:" + SNOConvUnlock);    
-
+            s.AppendLine("SNOConvUnlock:" + SNOConvUnlock);
+            s.AppendLine("CompiledScript:" + (CompiledScript.Length != 0).ToString());
 
             foreach (var node in RootTreeNodes)
                 node.AsText(s, 0);
@@ -136,7 +136,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public Speaker Speaker2 { get; private set; }
         public int AnimationTag { get; private set; }
         public int I4 { get; private set; }
-        public int I5 { get; private set; }
+        public int ClassFilter { get; private set; }        // only used on nodes with i0 == 5, selects the displaylocalconvline
         public ConvLocalDisplayTimes[] ConvLocalDisplayTimes = new ConvLocalDisplayTimes[18];
         public string Comment { get; private set; }
         public int I6 { get; private set; }
@@ -153,7 +153,7 @@ namespace Mooege.Common.MPQ.FileFormats
             Speaker2 = (Speaker)stream.ReadValueS32();
             AnimationTag = stream.ReadValueS32();
             I4 = stream.ReadValueS32();
-            I5 = stream.ReadValueS32();
+            ClassFilter = stream.ReadValueS32();
 
             for (int i = 0; i < ConvLocalDisplayTimes.Length; i++)
                 ConvLocalDisplayTimes[i] = new ConvLocalDisplayTimes(stream);
@@ -182,14 +182,15 @@ namespace Mooege.Common.MPQ.FileFormats
             s.Append("LineID:" + LineID + "   ");
             s.Append("AnimationTag:" + AnimationTag + "   ");
             s.Append("I4:" + I4 + "   ");
-            s.Append("I5:" + I5 + "   ");
+            s.Append("I5:" + ClassFilter + "   ");
             s.AppendLine("I6:" + I6);
             s.Append(' ', pad); s.AppendLine("Speaker1:" + Speaker1);
             s.Append(' ', pad); s.AppendLine("Speaker2:" + Speaker2);
             s.Append(' ', pad); s.AppendLine("Comment:" + Comment);
 
-            for (int i = 0; i < ConvLocalDisplayTimes.Length; i++)
-                ConvLocalDisplayTimes[i].AsText(s, pad);
+            s.Append(' ', pad); s.AppendLine("ConvLocalDisplayTimes: not shown");
+            //for (int i = 0; i < ConvLocalDisplayTimes.Length; i++)
+            //    ConvLocalDisplayTimes[i].AsText(s, pad);
 
             if (TrueNodes.Count > 0)
             {

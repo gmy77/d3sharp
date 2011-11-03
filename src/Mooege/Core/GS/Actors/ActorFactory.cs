@@ -59,7 +59,10 @@ namespace Mooege.Core.GS.Actors
             switch (actorData.Type)
             {
                 case ActorType.Monster:
-                    return new Monster(world, snoId, tags);
+                    if(tags.ContainsKey((int)MarkerTagTypes.ConversationList))
+                        return new InteractiveNPC(world, snoId, tags);
+                    else
+                        return new Monster(world, snoId, tags);
                 case ActorType.Gizmo:
                     return CreateGizmo(world, snoId, tags);
 

@@ -30,6 +30,8 @@ namespace Mooege.Core.GS.Markers
 
         QuestRange           = 524544,
 
+        ConversationList     = 526080,
+
         // Used for portal destination resolution
         DestinationWorld     = 526850,
         DestinationActorTag  = 526851,

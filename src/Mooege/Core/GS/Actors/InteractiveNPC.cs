@@ -47,6 +47,40 @@ namespace Mooege.Core.GS.Actors
             Conversations = new List<ConversationInteraction>();
         }
 
+        public override void Update(int tickCounter)
+        {
+            if (tickCounter < 500) return;
+            base.Update(tickCounter);
+
+            if (conversationList != null)
+            {
+                Conversations = new List<ConversationInteraction>();
+                foreach (var entry in conversationList.ConversationListEntries)
+                {
+                //   if (Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.QuestRange].ContainsKey(entry.SNOQuestRange))
+                //        if (World.Game.Quests.IsInQuestRange(Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.QuestRange][entry.SNOQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange))
+                          
+                    
+                    Conversations.Add(new ConversationInteraction(entry.SNOConv));
+                    if(Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Conversation].ContainsKey(entry.SNOConv))
+                            if ((Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Conversation][entry.SNOConv].Data as Mooege.Common.MPQ.FileFormats.Conversation).I0 == 1)
+                            {
+                                Attributes[GameAttribute.Conversation_Icon, 0] = 1;
+                                //Attributes[GameAttribute.Buff_Visual_Effect, 0x000FFFFF] = true;
+                                foreach (var message in Attributes.GetChangedMessageList(this.DynamicID))
+                                    World.BroadcastIfRevealed(message, this);
+                                //World.BroadcastIfRevealed(new Mooege.Net.GS.Message.Definitions.Misc.ANNDataMessage(Opcodes.ANNDataMessage10) { Id = 0x6d, ActorID = this.DynamicID }, this);
+                                Attributes.ClearChanged();
+                            }
+
+                //    if (World.Game.Quests.IsInQuestRange(entry.SNOQuestCurrent, entry.I3))
+                //        Conversations.Add(new ConversationInteraction(entry.SNOConv));
+                }
+            }
+
+
+        }
+
         public override void OnTargeted(Player player, TargetMessage message)
         {
             player.SelectedNPC = this;
@@ -103,6 +137,7 @@ namespace Mooege.Core.GS.Actors
             if (conversation == null) 
                 return;
 
+            player.Conversations.StartConversation(conversation.ConversationSNO);
             conversation.MarkAsRead();
         }
     }

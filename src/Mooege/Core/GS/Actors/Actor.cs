@@ -113,6 +113,8 @@ namespace Mooege.Core.GS.Actors
         /// </summary>
         private Mooege.Common.MPQ.FileFormats.QuestRange questRange;
 
+        protected Mooege.Common.MPQ.FileFormats.ConversationList conversationList;
+
         /// <summary>
         /// Returns true if actor has world location.
         /// TODO: I belive this belongs to WorldObject.cs /raist.
@@ -239,9 +241,9 @@ namespace Mooege.Core.GS.Actors
         /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
         public override bool Reveal(Player player)
         {
-            if (questRange != null)
-                if (World.Game.Quests.IsInQuestRange(questRange) == false)
-                    return false;   // TODO may i return false? comment suggests i may only return false if it was already revealed ... -farmy
+            //if (questRange != null)
+                //if (World.Game.Quests.IsInQuestRange(questRange) == false)
+                    //return false;   // TODO may i return false? comment suggests i may only return false if it was already revealed ... -farmy
 
             if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
             player.RevealedObjects.Add(this.DynamicID, this);
@@ -493,6 +495,16 @@ namespace Mooege.Core.GS.Actors
                 else
                     Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
             }
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.ConversationList))
+            {
+                int snoConversationList = Tags[(int)MarkerTagTypes.ConversationList].Int2;
+                if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList].ContainsKey(snoConversationList))
+                    conversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
+                else
+                    Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", SNOId, snoConversationList);
+            }
+
 
             if(this.Tags.ContainsKey((int)MarkerTagTypes.TriggeredConversation))
                 snoTriggeredConversation = Tags[(int)MarkerTagTypes.TriggeredConversation].Int2;

@@ -146,9 +146,10 @@ namespace Mooege.Core.GS.Players
                 CurrentStep = new QuestStep(asset.QuestUnassignedStep, this);
         }
 
+        // 
         public bool HasStepCompleted(int stepID)
         {
-            return completedSteps.Contains(stepID) || CurrentStep.ObjectivesSets.Select(x => x.FollowUpStepID).Contains(stepID) ;
+            return completedSteps.Contains(stepID) || CurrentStep.QuestStepID == stepID || CurrentStep.ObjectivesSets.Select(x => x.FollowUpStepID).Contains(stepID);
         }
 
         public void Advance()
@@ -213,6 +214,16 @@ namespace Mooege.Core.GS.Players
         public IEnumerator<Quest> GetEnumerator()
         {
             return quests.Values.GetEnumerator();
+        }
+
+
+        public bool IsInQuestRange(int snoQuest, int Step)
+        {
+            if (quests.ContainsKey(snoQuest))
+                if (quests[snoQuest].CurrentStep.QuestStepID == Step || Step == -1)
+                    return true;
+
+            return false;
         }
 
 
