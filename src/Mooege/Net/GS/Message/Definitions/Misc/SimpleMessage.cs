@@ -73,11 +73,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                             CollFlags = 0x00000008,
                         });
 
-                        client.SendMessage(new DWordDataMessage()
-                        {
-                            Id = 0x0089,
-                            Field0 = 0x000000C1,
-                        });
                         #endregion
                         
                         #region hardcoded2
@@ -106,11 +101,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                             StringListSNO = 0x0000F063,
                         });
 
-                        client.SendMessage(new DWordDataMessage()
-                        {
-                            Id = 0x0089,
-                            Field0 = 0x000000D1,
-                        });
                         #endregion
                         
                     }

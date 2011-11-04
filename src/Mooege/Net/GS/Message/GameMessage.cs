@@ -91,7 +91,7 @@ namespace Mooege.Net.GS.Message
             this.Id = (int)opcode;
         }
 
-        public int Id { get; set; }
+        public int Id { get; private set; }
         public Consumers Consumer { get; set; }
 
         public abstract void Parse(GameBitBuffer buffer);
