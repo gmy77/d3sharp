@@ -1,4 +1,22 @@
-﻿using System;
+﻿/*
+ * Copyright (C) 2011 mooege project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +26,7 @@ using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Games;
 using Mooege.Common;
 
-namespace Mooege.Core.GS.Players
+namespace Mooege.Core.GS.Games
 {
     public interface QuestProgressHandler
     {
@@ -20,34 +38,37 @@ namespace Mooege.Core.GS.Players
         /// <summary>
         /// Keeps track of a single quest step
         /// </summary>
-        public class QuestStep
+        public class QuestStep : QuestProgressHandler
         {
             /// <summary>
             /// Keeps track of a single quest step objective
             /// </summary>
-            public class QuestObjective
+            public class QuestObjective : QuestProgressHandler
             {
-                private Mooege.Common.MPQ.FileFormats.QuestStepObjective _objective;
                 public int Counter { get; private set; }
-                protected QuestStep questStep;
+                public bool Done { get { return (objective.CounterTarget == 0 && Counter > 0) || Counter == objective.CounterTarget; } }
                 public int ID { get; private set; }
-                public bool Done { get { return (_objective.CounterTarget == 0 && Counter > 0) || Counter == _objective.CounterTarget; } }
 
-                // these are only needed to view show information in console
-                public Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType ObjectiveType { get { return _objective.ObjectiveType; } }
-                public int ObjectiveValue { get { return _objective.SNOName1.SNOId; } }
+                // these are only needed to show information in console
+                public Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType ObjectiveType { get { return objective.ObjectiveType; } }
+                public int ObjectiveValue { get { return objective.SNOName1.SNOId; } }
 
+                private Mooege.Common.MPQ.FileFormats.QuestStepObjective objective;
+                private QuestStep questStep;
 
                 public QuestObjective(Mooege.Common.MPQ.FileFormats.QuestStepObjective objective, QuestStep questStep, int id)
                 {
                     ID = id;
-                    _objective = objective;
+                    this.objective = objective;
                     this.questStep = questStep;
                 }
 
+                /// <summary>
+                /// Notifies the objective, that an event occured. The objective checks if that event matches the event it waits for
+                /// </summary>
                 public void Notify(Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType type, int value)
                 {
-                    if (type != _objective.ObjectiveType && (int)type != -1) return;
+                    if (type != objective.ObjectiveType) return;
                     switch (type)
                     {
                         case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.EnterWorld:
@@ -57,29 +78,37 @@ namespace Mooege.Core.GS.Players
                         case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.CompleteQuest:
                         case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.HadConversation:
                         case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.EnterLevelArea:
-                            if (value == _objective.SNOName1.SNOId)
+                            if (value == objective.SNOName1.SNOId)
                             {
                                 Counter++;
                                 questStep.UpdateCounter(this);
                             }
                             break;
-                        case (Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType)(-1):
-                            Counter++;
-                            questStep.UpdateCounter(this);
-                            break;
+
+                        case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.EnterTrigger:
+                        case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.EventReceived:
+                        case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.GameFlagSet:
+                        case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.KillGroup:
+                        case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.PlayerFlagSet:
+                        case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.PossessItem:
+                        case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.TimedEventExpired:
+                            throw new NotImplementedException();
                     }
                 }
             }
 
-            internal struct ObjectiveSet
+            // this is only public for GameCommand / Debug
+            public struct ObjectiveSet
             {
                 public List<QuestObjective> Objectives;
                 public int FollowUpStepID;
             }
 
-            internal List<ObjectiveSet> ObjectivesSets = new List<ObjectiveSet>();
+
+
+            public List<ObjectiveSet> ObjectivesSets = new List<ObjectiveSet>(); // this is only public for GameCommand / Debug
             private List<List<QuestObjective>> bonusObjectives = new List<List<QuestObjective>>();
-            private Mooege.Common.MPQ.FileFormats.QuestStep _questStep = null;
+            private Mooege.Common.MPQ.FileFormats.IQuestStep _questStep = null;
             private Quest _quest = null;
             public int QuestStepID { get { return _questStep.ID; } }
 
@@ -106,7 +135,16 @@ namespace Mooege.Core.GS.Players
                     _quest.StepCompleted(completedObjectiveList.First());
             }
 
-            public QuestStep(Mooege.Common.MPQ.FileFormats.QuestStep assetQuestStep, Quest quest)
+            /// <summary>
+            /// Debug method, completes a given objective set
+            /// </summary>
+            /// <param name="index"></param>
+            public void CompleteObjectiveSet(int index)
+            {
+                _quest.StepCompleted(_questStep.StepObjectiveSets[index].FollowUpStepID);
+            }
+
+            public QuestStep(Mooege.Common.MPQ.FileFormats.IQuestStep assetQuestStep, Quest quest)
             {
                 _questStep = assetQuestStep;
                 _quest = quest;
@@ -120,12 +158,22 @@ namespace Mooege.Core.GS.Players
                     });
                 c = 0;
 
-                if (assetQuestStep.StepBonusObjectiveSets != null)
-                    foreach (var objectiveSet in assetQuestStep.StepBonusObjectiveSets)
-                        bonusObjectives.Add(new List<QuestObjective>(from objective in objectiveSet.StepBonusObjectives select new QuestObjective(objective, this, c++)));
+                if (assetQuestStep is Mooege.Common.MPQ.FileFormats.QuestStep)
+                {
+                    var step = assetQuestStep as Mooege.Common.MPQ.FileFormats.QuestStep;
+
+                    if (step.StepBonusObjectiveSets != null)
+                        foreach (var objectiveSet in step.StepBonusObjectiveSets)
+                            bonusObjectives.Add(new List<QuestObjective>(from objective in objectiveSet.StepBonusObjectives select new QuestObjective(objective, this, c++)));
+                }
             }
 
-
+            public void Notify(Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType type, int value)
+            {
+                foreach (var objectiveSet in ObjectivesSets)
+                    foreach (var objective in objectiveSet.Objectives)
+                        objective.Notify(type, value);
+            }
         }
 
 
@@ -136,14 +184,13 @@ namespace Mooege.Core.GS.Players
         public QuestStep CurrentStep { get; set; }
         private List<int> completedSteps = new List<int>();           // this list has to be saved if quest progress should be saved. It is required to keep track of questranges
 
-        public Quest(Game game, int SNOQuest, int step = -1)
+        public Quest(Game game, int SNOQuest)
         {
             this.game = game;
             //SNOId = SNOQuest;
             SNOName = new SNOName() { SNOId = SNOQuest, Group = SNOGroup.Quest };
             asset = MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Quest][SNOQuest].Data as Mooege.Common.MPQ.FileFormats.Quest;
-            if (step == -1)
-                CurrentStep = new QuestStep(asset.QuestUnassignedStep, this);
+            CurrentStep = new QuestStep(asset.QuestUnassignedStep, this);
         }
 
         // 
@@ -154,7 +201,7 @@ namespace Mooege.Core.GS.Players
 
         public void Advance()
         {
-            StepCompleted(CurrentStep.ObjectivesSets[0].FollowUpStepID);
+            CurrentStep.CompleteObjectiveSet(0);
         }
 
         public void StepCompleted(int FollowUpStepID)
@@ -175,99 +222,8 @@ namespace Mooege.Core.GS.Players
         public void Notify(Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType type, int value)
         {
             if (CurrentStep != null)
-                foreach (var objectiveSet in CurrentStep.ObjectivesSets)
-                    foreach (var objective in objectiveSet.Objectives)
-                        objective.Notify(type, value);
+                CurrentStep.Notify(type, value);
         }
     }
 
-
-    public class QuestManager : QuestProgressHandler, IEnumerable<Quest>
-    {
-        private Dictionary<int, Quest> quests = new Dictionary<int, Quest>();
-        private static Logger logger = new Logger("Quests");
-
-        public Quest this[int snoQuest]
-        {
-            get { return quests[snoQuest]; }
-        }
-
-        public QuestManager(Game game)
-        {
-            var asset = MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Quest];
-            foreach (var quest in asset.Keys)
-                quests.Add(quest, new Quest(game, quest, -1));
-
-        }
-
-        public void Advance(int snoQuest)
-        {
-            quests[snoQuest].Advance();
-        }
-
-        public void Notify(Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType type, int value)
-        {
-            foreach (var quest in quests.Values)
-                (quest as QuestProgressHandler).Notify(type, value);
-        }
-
-        public IEnumerator<Quest> GetEnumerator()
-        {
-            return quests.Values.GetEnumerator();
-        }
-
-
-        public bool HasCurrentQuest(int snoQuest, int Step)
-        {
-            if (quests.ContainsKey(snoQuest))
-                if (quests[snoQuest].CurrentStep.QuestStepID == Step || Step == -1)
-                    return true;
-
-            return false;
-        }
-
-
-        public bool IsInQuestRange(Mooege.Common.MPQ.FileFormats.QuestRange range)
-        {
-            /* I assume, -1 for start sno means no starting condition and -1 for end sno means no ending of range
-             * The field for the step id is sometimes set to negative values (maybe there are negative step id, -1 is maybe the unassignedstep)
-             * but also set when no questID is -1. I have no idea what that means. - farmy */
-
-            bool started = false;
-            bool ended = false;
-
-            if (range.Time0.SNOQuest == -1 || range.Time0.I0 == -1)
-                started = true;
-            else
-            {
-                if (quests.ContainsKey(range.Time0.SNOQuest))
-                {
-                    if (quests[range.Time0.SNOQuest].HasStepCompleted(range.Time0.I0) || quests[range.Time0.SNOQuest].CurrentStep.QuestStepID == range.Time0.I0) // rumford conversation needs current step
-                        started = true;
-                }
-                else
-                    logger.Warn("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.Time0.SNOQuest);
-            }
-
-            if (range.Time1.SNOQuest == -1 || range.Time1.I0 < 0)
-                ended = false;
-            else
-            {
-                if (quests.ContainsKey(range.Time1.SNOQuest))
-                {
-                    if (quests[range.Time1.SNOQuest].HasStepCompleted(range.Time1.I0))
-                        ended = true;
-                }
-                else
-                    logger.Warn("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.Time1.SNOQuest);
-            }
-
-            return started && !ended;
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

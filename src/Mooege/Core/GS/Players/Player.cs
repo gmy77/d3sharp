@@ -404,6 +404,10 @@ namespace Mooege.Core.GS.Players
             if (message.Position != null)
                 this.Position = message.Position;
 
+            if (message.Angle != null)
+                this.RotationAmount = message.Angle.Value;
+
+
             var msg = new NotifyActorMovementMessage
             {
                 ActorId = message.ActorId,

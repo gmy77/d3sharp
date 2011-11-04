@@ -119,13 +119,24 @@ namespace Mooege.Core.GS.Games
             if (invokerClient.InGameClient == null)
                 return "You can only invoke this command while ingame.";
 
-            invokerClient.InGameClient.Player.Conversations.StartConversation(Int32.Parse(@params[0]));
-            return "";
+            if (@params.Count() != 1)
+                return "Invalid arguments. Type 'help conversation' to get help.";
+
+            try
+            {
+                var conversation = MPQStorage.Data.Assets[SNOGroup.Conversation][Int32.Parse(@params[0])];
+                invokerClient.InGameClient.Player.Conversations.StartConversation(Int32.Parse(@params[0]));
+                return String.Format("Started conversation {0}", conversation.FileName);
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
         }
     }
 
 
-    [CommandGroup("quest", "Retrieves information about quest states and manipulates quest progress.\n Usage: quest [triggers | trigger eventType eventValue")]
+    [CommandGroup("quest", "Retrieves information about quest states and manipulates quest progress.\n Usage: quest [triggers | trigger eventType eventValue | advance snoQuest]")]
     public class QuestCommand : CommandGroup
     {
         [DefaultCommand]
@@ -137,11 +148,10 @@ namespace Mooege.Core.GS.Games
             if (invokerClient.InGameClient == null)
                 return "You can only invoke this command while ingame.";
 
-            //invokerClient.InGameClient.Game.questManager.Notify((Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType)Int32.Parse(@params[0]), Int32.Parse(@params[1]));
-            return "";
+             return "";
         }
 
-        [Command("advance", "Advances a quest by a single step")]
+        [Command("advance", "Advances a quest by a single step\n Usage advance snoQuest")]
         public string Advance(string[] @params, MooNetClient invokerClient)
         {
             if (@params == null)
@@ -150,39 +160,40 @@ namespace Mooege.Core.GS.Games
             if (@params.Count() != 1)
                 return "Invalid arguments. Type 'help lookup advance' to get help.";
 
-            invokerClient.InGameClient.Game.Quests.Advance(Int32.Parse(@params[0]));
-            return "";
+            try
+            {
+                var quest = MPQStorage.Data.Assets[SNOGroup.Quest][Int32.Parse(@params[0])];
+                invokerClient.InGameClient.Game.Quests.Advance(Int32.Parse(@params[0]));
+                return String.Format("Advancing quest {0}", quest.FileName);
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
         }
 
-        [Command("trigger", "Triggers a single quest objective")]
+        [Command("trigger", "Triggers a single quest objective\n Usage trigger type value")]
         public string Trigger(string[] @params, MooNetClient invokerClient)
         {
             if (@params == null)
                 return this.Fallback();
 
-            if (@params.Count() < 1)
-                return "Invalid arguments. Type 'help lookup actor' to get help.";
+            if (@params.Count() < 2)
+                return "Invalid arguments. Type 'help lookup trigger' to get help.";
 
             invokerClient.InGameClient.Game.Quests.Notify((Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType)Int32.Parse(@params[0]), Int32.Parse(@params[1]));
             return "Triggered";
         }
 
-        [Command("triggers", "Shows information about all current quest triggers")]
+        [Command("triggers", "lists all current quest triggers")]
         public string Triggers(string[] @params, MooNetClient invokerClient)
         {
             StringBuilder returnValue = new StringBuilder();
 
             foreach (var quest in invokerClient.InGameClient.Game.Quests)
-            {
-                //returnValue.AppendLine(quest.SNOName.ToString());
                 foreach (var objectiveSet in quest.CurrentStep.ObjectivesSets)
-                {
-                    //returnValue.Append("  ");
-                    //returnValue.Append(objectiveSet.FollowUpStepID);
                     foreach (var objective in objectiveSet.Objectives)
-                        returnValue.AppendLine(String.Format("{2}, {4} - {0} ({3}), {1}", objective.ObjectiveType, objective.ObjectiveValue, quest.SNOName.ToString(), (int)objective.ObjectiveType, objectiveSet.FollowUpStepID));
-                }
-            }
+                        returnValue.AppendLine(String.Format("{0}, {1} ({2}) - {3}", quest.SNOName.ToString(), objective.ObjectiveType, (int)objective.ObjectiveType, objective.ObjectiveValue));
 
             return returnValue.ToString();
         }

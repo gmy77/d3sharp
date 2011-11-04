@@ -27,6 +27,9 @@ using Mooege.Net.GS;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common;
 using Mooege.Common.Helpers;
+using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Games;
 
 /*
  * a few notes to the poor guy who wants to improve the conversation system:
@@ -40,12 +43,28 @@ using Mooege.Common.Helpers;
  *   the ConvLocalDisplayTime for that class but sometimes, there is not a node for each class but a "for all" node with all information combined
  * - A node type of 4 indicates that it children are alternatives. So i pick a random one
  * 
+ * NodeType4          1. Line, pick a random child
+ *   NodeType3        1. Line, 1. alternative. LineID and AnimationTag
+ *     NodeType5 3    1. Line, 1. alternative, duration for some class
+ *     NodeType5 4    1. Line, 1. alternative, duration for another class
+ *     NodeType5 -1   1. Line, 1. alternative, duration for all classes (may not always be there, renders other node5 useless/redundant)
+ *   NodeType3        1. Line, 2. alternative, LineID and AnimationTag
+ *     NodeType5      1. Line, 2. alternative, duration for all classes (may not always be there, renders other node5 useless/redundant)
+ * NodeType3          2. Line, LineID and AnimationTag
+ *   NodeType5        2. Line, duration (-1, npc speaking, not dependant on player class choice
+ * 
+ * There is at least also a NodeType6 but if have no clue what it does
+ * 
+ * ConvLocalDisplayTimes is an array with another array for every supported language
+ * The second array holds information for the audio duration of different speakers in game ticks
+ * [BarbarianMale, BarbarianFemale, DemonHunterMale, ...]
+ * 
  * good luck :-) - farmy
  */
 namespace Mooege.Core.GS.Players
 {
     /// <summary>
-    /// Manages a single conversation.
+    /// Wraps a conversation asset and manages the whole conversation
     /// </summary>
     class Conversation
     {
@@ -61,15 +80,29 @@ namespace Mooege.Core.GS.Players
         private ConversationManager manager;
         private int currentUniqueLineID;        // id used to identify the current line clientside
         private int startTick = 0;              // start tick of the current line. used to determine, when to start the next line
-        private int duration = 0;
+        private ConversationTreeNode currentLineNode = null;
+
+        // Find a childnode with a matching class id, that one holds information about how long the speaker talks
+        // If there is no matching childnode, there must be one with -1 which only combines all class specific into one
+        private int duration
+        {
+            get
+            {
+                var node = from a in currentLineNode.ChildNodes where a.ClassFilter == player.Properties.VoiceClassID select a;
+                if (node.Count() == 0)
+                    node = from a in currentLineNode.ChildNodes where a.ClassFilter == -1 select a;
+
+                return node.First().ConvLocalDisplayTimes.ElementAt((int)manager.ClientLanguage).Languages[player.Properties.VoiceClassID * 2 + (player.Properties.Gender == 0 ? 0 : 1)];
+            }
+        }
 
         // This returns the dynamicID of other conversation partners. The client uses its position to identify where you can hear the conversation.
         // This implementation relies on there beeing exactly one actor with a given sno in the world!!
         // TODO Find a better way to get the dynamicID of actors or verify that this implementation is sound.
         // TODO add actor identification for Followers
-        private Mooege.Core.GS.Actors.Actor GetSpeaker(ConversationTreeNode node)
+        private Mooege.Core.GS.Actors.Actor GetSpeaker(Speaker speaker)
         {
-            switch (node.Speaker1)
+            switch (speaker)
             {
                 case Speaker.AltNPC1: return GetActorBySNO(asset.SNOAltNpc1);
                 case Speaker.AltNPC2: return GetActorBySNO(asset.SNOAltNpc2);
@@ -132,11 +165,35 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void Update(int tickCounter)
         {
-
-            // TODO rotate the actor to face the player or he may not hear the dialog
-
-            if (startTick + duration < tickCounter)
+            if (startTick > 0 && currentLineNode == null)
                 PlayNextLine(false);
+            else
+            {
+
+                // rotate the primary speaker to face the secondary speaker
+                if (currentLineNode.Speaker1 != Speaker.Player && currentLineNode.Speaker2 != Speaker.None)
+                {
+                    Mooege.Core.GS.Actors.Actor speaker1 = GetSpeaker(currentLineNode.Speaker1);
+                    Mooege.Core.GS.Actors.Actor speaker2 = GetSpeaker(currentLineNode.Speaker2);
+                    
+                    Vector3D translation = speaker2.Position - speaker1.Position;
+                    Vector2F flatTranslation = new Vector2F(translation.X, translation.Y);
+
+                    speaker1.RotationAmount = flatTranslation.Rotation();
+
+                    player.World.BroadcastIfRevealed(new ACDTranslateFacingMessage
+                    {
+                        Id = (int)Opcodes.ACDTranslateFacingMessage1,
+                        ActorId = speaker1.DynamicID,
+                        Angle = speaker1.RotationAmount,
+                        Immediately = false
+                    }, speaker1);
+                }
+
+                // start the next line if the playback has finished
+                if (startTick + duration < tickCounter)
+                    PlayNextLine(false);
+            }
         }
 
         /// <summary>
@@ -193,34 +250,22 @@ namespace Mooege.Core.GS.Players
         /// <param name="LineIndex">index of the line withing the rootnodes</param>
         private void PlayLine(int LineIndex)
         {
-            ConversationTreeNode selectedNode = null;
             if (asset.RootTreeNodes[LineIndex].I0 == 6)
             {
                 // dont know what to do with them yet, this just ignores them -farmy
-                duration = 0;
+                currentLineNode = null;
                 return;
             }
 
             if (asset.RootTreeNodes[LineIndex].I0 == 4)
-                selectedNode = asset.RootTreeNodes[LineIndex].ChildNodes[RandomHelper.Next(asset.RootTreeNodes[LineIndex].ChildNodes.Count)];
+                currentLineNode = asset.RootTreeNodes[LineIndex].ChildNodes[RandomHelper.Next(asset.RootTreeNodes[LineIndex].ChildNodes.Count)];
             else
-                selectedNode = asset.RootTreeNodes[LineIndex];
+                currentLineNode = asset.RootTreeNodes[LineIndex];
 
-            // Find a childnode with a matching class id, that one holds information about how long the speaker talks
-            // If there is no matching childnode, there must be one with -1 which only combines all class specific into one
-            var node = from a in selectedNode.ChildNodes where a.ClassFilter == player.Properties.VoiceClassID select a;
-            if (node.Count() == 0)
-                node = from a in selectedNode.ChildNodes where a.ClassFilter == -1 select a;
-
-            // get duration depending on language, class and gender
-            duration = node.First().ConvLocalDisplayTimes.ElementAt((int)manager.ClientLanguage).Languages[player.Properties.VoiceClassID * 2 + (player.Properties.Gender == 0 ? 0 : 1)];
-
-
-            int fooID = manager.GetNextFooID();
             currentUniqueLineID = manager.GetNextUniqueLineID();
             startTick = player.World.Game.TickCounter;
 
-            // TODO Actor id should be CurrentSpeaker.DynamicID not PrimaryNPC.ActorID. This is a workaround because no audio is playing otherwise
+            // TODO Actor id should be CurrentSpeaker.DynamicID not PrimaryNPC.ActorID. This is a workaround because no audio for the player is playing otherwise
             player.InGameClient.SendMessage(new PlayConvLineMessage()
             {
                 ActorID = GetActorBySNO(asset.SNOPrimaryNpc).DynamicID, //CurrentSpeaker.DynamicID
@@ -234,21 +279,21 @@ namespace Mooege.Core.GS.Players
                     SNOConversation = asset.Header.SNOId,
                     Field1 = 0x00000000,
                     Field2 = false,
-                    LineID = selectedNode.LineID,
-                    Speaker = (int)selectedNode.Speaker1,
+                    LineID = currentLineNode.LineID,
+                    Speaker = (int)currentLineNode.Speaker1,
                     Field5 = -1,
-                    TextClass = selectedNode.Speaker1 == Speaker.Player ? (Class)player.Properties.VoiceClassID : Class.None,
+                    TextClass = currentLineNode.Speaker1 == Speaker.Player ? (Class)player.Properties.VoiceClassID : Class.None,
                     Gender = (player.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
                     AudioClass = (Class)player.Properties.VoiceClassID,
-                    SNOSpeakerActor = GetSpeaker(selectedNode).SNOId,
+                    SNOSpeakerActor = GetSpeaker(currentLineNode.Speaker1).SNOId,
                     Name = player.Properties.Name,
                     Field11 = 0x00000000,  // is this field I1? and if...what does it do?? 2 for level up -farmy
-                    AnimationTag = selectedNode.AnimationTag,
-                    Field13 = fooID,
+                    AnimationTag = currentLineNode.AnimationTag,
+                    Duration = duration,
                     Field14 = currentUniqueLineID,
                     Field15 = 0x00000000        // dont know, 0x32 for level up
                 },
-                Field3 = fooID,
+                Duration = duration,
             }, true);
         }
     }
@@ -268,14 +313,6 @@ namespace Mooege.Core.GS.Players
         private QuestProgressHandler quests;
 
         internal Language ClientLanguage { get { return Language.enUS; } }
-
-        // Sorry :-) ConvPlayLine Messages uses this, but i dont even know if it is really an id.
-        // From the looks of it, they maybe had PlayLineParams separated from the message or could sent more than one PlayLineParams
-        // and maybe used this to tag PlayLineParams and tell the client which of the params to use? - farmy
-        internal int GetNextFooID()
-        {
-            return linesPlayedTotal * 20 + 1;
-        }
 
         internal int GetNextUniqueLineID()
         {

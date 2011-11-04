@@ -174,6 +174,7 @@
     <Compile Include="Core\GS\Games\GameCommands.cs" />
     <Compile Include="Core\GS\Games\GameDebugCommands.cs" />
     <Compile Include="Core\GS\Games\GameManager.cs" />
+    <Compile Include="Core\GS\Games\QuestManager.cs" />
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
     <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
     <Compile Include="Core\GS\Markers\Marker.cs" />
