@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Mooege.Common;
@@ -79,6 +80,11 @@ namespace Mooege.Core.GS.Games
         public readonly int UpdateFrequency=100;
 
         /// <summary>
+        /// Incremented tick value on each Game.Update().
+        /// </summary>
+        public readonly int TickRate = 6;
+
+        /// <summary>
         /// Tick counter.
         /// </summary>
         private int _tickCounter;
@@ -86,7 +92,7 @@ namespace Mooege.Core.GS.Games
         /// <summary>
         /// Returns the latest tick count.
         /// </summary>
-        public int Tick
+        public int TickCounter
         {
             get { return _tickCounter; }
         }
@@ -132,7 +138,7 @@ namespace Mooege.Core.GS.Games
             this._objects = new ConcurrentDictionary<uint, DynamicObject>();
             this._worlds = new ConcurrentDictionary<int, World>();
             this.StartingWorldSNOId = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff. /komiga
-            var loopThread = new Thread(Update) {IsBackground = true}; // create the game update thread.
+            var loopThread = new Thread(Update) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture }; ; // create the game update thread.
             loopThread.Start();
         }
 
@@ -145,15 +151,15 @@ namespace Mooege.Core.GS.Games
         {
             while (true)
             {
-                Interlocked.Add(ref this._tickCounter, 6); // +6 ticks per 100ms. Verified by setting LogoutTickTimeMessage.Ticks to 600 which eventually renders a 10 sec logout timer on client. /raist
+                Interlocked.Add(ref this._tickCounter, this.TickRate); // +6 ticks per 100ms. Verified by setting LogoutTickTimeMessage.Ticks to 600 which eventually renders a 10 sec logout timer on client. /raist
 
                 // only update worlds with active players in it - so mob brain()'s in empty worlds doesn't get called and take actions for nothing. /raist.
                 foreach (var pair in this._worlds.Where(pair => pair.Value.HasPlayersIn)) 
                 {
-                    pair.Value.Update();
+                    pair.Value.Update(this._tickCounter);
                 }
 
-                Thread.Sleep(UpdateFrequency); // sleep until next tick.
+                Thread.Sleep(this.UpdateFrequency); // sleep until next tick.
             }
         }
 
@@ -181,6 +187,11 @@ namespace Mooege.Core.GS.Games
                     case Consumers.Player:
                         client.Player.Consume(client, message);
                         break;
+                    case Consumers.SelectedNPC:
+                        if (client.Player.SelectedNPC != null)
+                            client.Player.SelectedNPC.Consume(client, message);
+                        break;
+
                 }
             }
             catch(Exception e)
@@ -231,9 +242,8 @@ namespace Mooege.Core.GS.Games
                             }
             });
 
-            joinedPlayer.World.Enter(joinedPlayer); // Enter only once all fields have been initialized to prevent a run condition.
+            joinedPlayer.EnterWorld(this.StartingWorld.StartingPoints.First().Position);
             joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
-            joinedPlayer.EnteredWorld = true;
         }
 
         /// <summary>
@@ -251,7 +261,7 @@ namespace Mooege.Core.GS.Games
                 Field3 = 0x00000002, //party frame class
                 Field4 = target!=joinedPlayer? 0x2 : 0x4, //party frame level /boyc - may mean something different /raist.
                 snoActorPortrait = joinedPlayer.ClassSNO, //party frame portrait
-                Field6 = 0x0000000A,
+                Field6 = joinedPlayer.Properties.Level,
                 StateData = joinedPlayer.GetStateData(),
                 Field8 = this.Players.Count != 1, //announce party join
                 Field9 = 0x00000001,

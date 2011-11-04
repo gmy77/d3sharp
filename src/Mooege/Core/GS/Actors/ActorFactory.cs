@@ -22,8 +22,6 @@ using System.Linq;
 using System.Reflection;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Actors.Implementations;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
@@ -39,7 +37,7 @@ namespace Mooege.Core.GS.Actors
             LoadSNOHandlers();
         }
 
-        public static Actor Create(World world, int snoId, Vector3D position, TagMap tagMap)
+        public static Actor Create(World world, int snoId, TagMap tagMap)
         {
             if (!MPQStorage.Data.Assets[SNOGroup.Actor].ContainsKey(snoId))
                 return null;
@@ -52,30 +50,30 @@ namespace Mooege.Core.GS.Actors
                 return null;
 
             // read tagMapEntries and put them into a dictionary
-            var tags = tagMap.TagMapEntries.ToDictionary(entry => entry.Int1);
+            var tags = tagMap.TagMapEntries.ToDictionary(entry => entry.TagID);
 
             // see if we have an implementation for actor.
             if (SNOHandlers.ContainsKey(snoId))
-                return (Actor) Activator.CreateInstance(SNOHandlers[snoId], new object[] {world, snoId, position, tags});
+                return (Actor) Activator.CreateInstance(SNOHandlers[snoId], new object[] {world, snoId, tags});
            
             switch (actorData.Type)
             {
                 case ActorType.Monster:
-                    return new Monster(world, snoId, position, tags);
+                    return new Monster(world, snoId, tags);
                 case ActorType.Gizmo:
-                    return CreateGizmo(world, snoId, position, tags);
+                    return CreateGizmo(world, snoId, tags);
 
             }
 
             return null;
         }
 
-        private static Actor CreateGizmo(World world, int snoId, Vector3D position, Dictionary<int,TagMapEntry> tags)
+        private static Actor CreateGizmo(World world, int snoId, Dictionary<int,TagMapEntry> tags)
         {
             if (tags.ContainsKey((int)MarkerTagTypes.DestinationWorld))
-                return new Portal(world, snoId, position, tags);
+                return new Portal(world, snoId, tags);
 
-            return new Gizmo(world, snoId, position, tags);
+            return new Gizmo(world, snoId, tags);
         }
 
         public static void LoadSNOHandlers()

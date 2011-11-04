@@ -101,12 +101,11 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        public Item(Mooege.Core.GS.Map.World world, ItemTable definition)
-            : base(world, world.NewActorID)
+        public Item(GS.Map.World world, ItemTable definition)
+            : base(world, definition.SNOActor)
         {
             this.ItemDefinition = definition;
 
-            this.SNOId = definition.SNOActor;
             this.GBHandle.Type = (int)GBHandleType.Gizmo;
             this.GBHandle.GBID = definition.Hash;
             this.ItemType = ItemGroup.FromHash(definition.ItemType1);
@@ -160,8 +159,6 @@ namespace Mooege.Core.Common.Items
             if (Attributes[GameAttribute.Item_Quality_Level] >= 3)
                 affixNumber = Attributes[GameAttribute.Item_Quality_Level] - 2;
             AffixGenerator.Generate(this, affixNumber);
-
-            this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
         }
 
         private void ApplyWeaponSpecificOptions(ItemTable definition)
@@ -234,7 +231,7 @@ namespace Mooege.Core.Common.Items
                 float result;
                 if (FormulaScript.Evaluate(effect.Formula.ToArray(), this.RandomGenerator, out result))
                 {
-                    Logger.Debug("Randomized value for attribute " + GameAttribute.Attributes[effect.AttributeId].Name + " is " + result);
+                    //Logger.Debug("Randomized value for attribute " + GameAttribute.Attributes[effect.AttributeId].Name + " is " + result);
 
                     if (GameAttribute.Attributes[effect.AttributeId] is GameAttributeF)
                     {
@@ -345,14 +342,18 @@ namespace Mooege.Core.Common.Items
         public void Drop(Player owner, Vector3D position)
         {
             this.Owner = owner;
-            this.Position = position;
-            // TODO: Notify the world so that players get the state change
+            this.EnterWorld(position);
         }
 
         public override void OnTargeted(Player player, TargetMessage message)
         {
             //Logger.Trace("OnTargeted");
             player.Inventory.PickUp(this);
+        }
+
+        public virtual void OnRequestUse(Player player, Item target, int actionId, WorldPlace worldPlace)
+        {
+            throw new System.NotImplementedException();
         }
 
         public override bool Reveal(Player player)

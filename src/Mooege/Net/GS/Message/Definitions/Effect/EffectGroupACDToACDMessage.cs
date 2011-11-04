@@ -20,25 +20,30 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Effect
 {
+	/// <summary>
+    /// Sent to the client to play a special effect from an actor to another actor
+    /// </summary>
     [Message(Opcodes.EffectGroupACDToACDMessage)]
     public class EffectGroupACDToACDMessage : GameMessage
     {
-        public int /* sno */ Field0;
-        public int Field1;
-        public int Field2;
+        public int? /* sno */ EffectSNOId; // the effect to play
+        public uint ActorID; // where the effect starts
+        public uint TargetID; // where the effect will travel to
+		
+		public EffectGroupACDToACDMessage() : base(Opcodes.EffectGroupACDToACDMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
-            Field2 = buffer.ReadInt(32);
+            EffectSNOId = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
+            TargetID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
-            buffer.WriteInt(32, Field2);
+            buffer.WriteInt(32, EffectSNOId.Value);
+            buffer.WriteUInt(32, ActorID);
+            buffer.WriteUInt(32, TargetID);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -47,9 +52,9 @@ namespace Mooege.Net.GS.Message.Definitions.Effect
             b.AppendLine("EffectGroupACDToACDMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.Append(' ', pad); b.AppendLine("EffectSNOId: 0x" + EffectSNOId.Value.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            b.Append(' ', pad); b.AppendLine("TargetID: 0x" + TargetID.ToString("X8") + " (" + TargetID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

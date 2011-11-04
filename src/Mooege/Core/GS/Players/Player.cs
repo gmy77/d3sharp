@@ -40,12 +40,13 @@ using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Common.Helpers;
-using Mooege.Net.GS.Message.Definitions.Combat;
 using System;
 using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
+using Mooege.Core.GS.Actors.Implementations.Hirelings;
+using Mooege.Net.GS.Message.Definitions.Hireling;
 
 namespace Mooege.Core.GS.Players
 {
@@ -85,14 +86,9 @@ namespace Mooege.Core.GS.Players
         public override ActorType ActorType { get { return ActorType.Player; } }
 
         /// <summary>
-        /// Did player enter the world?
-        /// </summary>
-        public bool EnteredWorld { get; set; }
-
-        /// <summary>
         /// Revealed objects to player.
         /// </summary>
-        public Dictionary<uint, IRevealable> RevealedObjects { get; private set; }
+        public Dictionary<uint, IRevealable> RevealedObjects = new Dictionary<uint, IRevealable>();
 
         // Collection of items that only the player can see. This is only used when items drop from killing an actor
         // TODO: Might want to just have a field on the item itself to indicate whether it is visible to only one player
@@ -102,38 +98,92 @@ namespace Mooege.Core.GS.Players
         public Dictionary<uint, Item> GroundItems { get; private set; }
 
         /// <summary>
+        /// Everything connected to ExpBonuses.
+        /// </summary>
+        public ExpBonusData ExpBonusData { get; private set; }
+
+        /// <summary>
         /// Open converstations.
         /// </summary>
         public List<OpenConversation> OpenConversations { get; set; }
 
-        // Used for Exp-Bonuses
-        // Move them to a class or a better position please /raist.
-        private int _killstreakTickTime;
-        private int _killstreakPlayer;
-        private int _killstreakEnvironment;
-        private int _lastMonsterKillTick;
-        private int _lastMonsterAttackTick;
-        private int _lastMonsterAttackKills;
-        private int _lastEnvironmentDestroyTick;
-        private int _lastEnvironmentDestroyMonsterKills;
-        private int _lastEnvironmentDestroyMonsterKillTick;
+        /// <summary>
+        /// NPC currently interaced with
+        /// </summary>
+        public InteractiveNPC SelectedNPC { get; set; }
+
+        private Hireling _activeHireling = null;
+        public Hireling ActiveHireling
+        {
+            get { return _activeHireling; }
+            set
+            {
+                if (value == _activeHireling)
+                    return;
+
+                if (_activeHireling != null)
+                {
+                    _activeHireling.Dismiss(this);
+                }
+
+                _activeHireling = value;
+
+                if (value != null)
+                {
+                    InGameClient.SendMessage(new PetMessage()
+                    {
+                        Field0 = 0,
+                        Field1 = 0,
+                        PetId = value.DynamicID,
+                        Field3 = 0,
+                    });
+                }
+            }
+        }
+
+        private Hireling _activeHirelingProxy = null;
+        public Hireling ActiveHirelingProxy
+        {
+            get { return _activeHirelingProxy; }
+            set
+            {
+                if (value == _activeHirelingProxy)
+                    return;
+
+                if (_activeHirelingProxy != null)
+                {
+                    _activeHirelingProxy.Dismiss(this);
+                }
+
+                _activeHirelingProxy = value;
+
+                if (value != null)
+                {
+                    InGameClient.SendMessage(new PetMessage()
+                    {
+                        Field0 = 0,
+                        Field1 = 0,
+                        PetId = value.DynamicID,
+                        Field3 = 22,
+                    });
+                }
+            }
+        }
 
         /// <summary>
         /// Creates a new player.
         /// </summary>
-        /// <param name="world">The world player joins initially.</param>
+        /// <param name="world">The initial world player joins in.</param>
         /// <param name="client">The gameclient for the player.</param>
         /// <param name="bnetToon">Toon of the player.</param>
         public Player(World world, GameClient client, Toon bnetToon)
-            : base(world, world.NewPlayerID)
+            : base(world)
         {
-            this.EnteredWorld = false;
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
             this.Properties = bnetToon;
             this.GBHandle.Type = (int)GBHandleType.Player;
             this.GBHandle.GBID = this.Properties.ClassID;
-            this.Position = this.World.StartingPoints.First().Position; // set the player position to current world's very first startpoint. - should be actually set based on act & quest /raist.
 
             // actor values.
             this.SNOId = this.ClassSNO;
@@ -148,20 +198,11 @@ namespace Mooege.Core.GS.Players
             this.Field9 = 0x00000000;
             this.Field10 = 0x0;
 
-            this.RevealedObjects = new Dictionary<uint, IRevealable>();
             this.SkillSet = new SkillSet(this.Properties.Class);
             this.GroundItems = new Dictionary<uint, Item>();
+            this.ExpBonusData = new ExpBonusData(this);
             this.OpenConversations = new List<OpenConversation>();
-
-            this._killstreakTickTime = 400;
-            this._killstreakPlayer = 0;
-            this._killstreakEnvironment = 0;
-            this._lastMonsterKillTick = 0;
-            this._lastMonsterAttackTick = 0;
-            this._lastMonsterAttackKills = 0;
-            this._lastEnvironmentDestroyTick = 0;
-            this._lastEnvironmentDestroyMonsterKills = 0;
-            this._lastEnvironmentDestroyMonsterKillTick = 0;
+            this.SelectedNPC = null;
 
             #region Attributes
 
@@ -339,7 +380,6 @@ namespace Mooege.Core.GS.Players
             //this.Attributes[GameAttribute.Disabled] = true; // we should be making use of these ones too /raist.
             //this.Attributes[GameAttribute.Loading] = true;
             //this.Attributes[GameAttribute.Invulnerable] = true;
-
             this.Attributes[GameAttribute.Hidden] = false;
             this.Attributes[GameAttribute.Immobolize] = true;
             this.Attributes[GameAttribute.Untargetable] = true;
@@ -372,9 +412,9 @@ namespace Mooege.Core.GS.Players
             else if (message is TryWaypointMessage) OnTryWaypoint(client, (TryWaypointMessage)message);
             else if (message is RequestBuyItemMessage) OnRequestBuyItem(client, (RequestBuyItemMessage)message);
             else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
+            else if (message is HirelingDismissMessage) OnHirelingDismiss();
             else return;
         }
-
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
         {
@@ -402,16 +442,16 @@ namespace Mooege.Core.GS.Players
 
         private void OnObjectTargeted(GameClient client, TargetMessage message)
         {
-            Actor actor = this.World.GetActor(message.TargetID);
+            Actor actor = this.World.GetActorByDynamicId(message.TargetID);
             if (actor == null) return;
 
             if ((actor.GBHandle.Type == 1) && (actor.Attributes[GameAttribute.TeamID] == 10))
             {
-                this._lastMonsterAttackTick = this.InGameClient.Game.Tick;
+                this.ExpBonusData.MonsterAttacked(this.InGameClient.Game.TickCounter);
             }
 
             actor.OnTargeted(this, message);
-            CheckExpBonus(2);
+            this.ExpBonusData.Check(2);
         }
 
         private void OnPlayerMovement(GameClient client, PlayerMovementMessage message)
@@ -433,6 +473,9 @@ namespace Mooege.Core.GS.Players
                 AnimationTag = message.AnimationTag
             };
 
+            this.RevealScenesToPlayer();
+            this.RevealActorsToPlayer();
+
             this.World.BroadcastExclusive(msg, this); // TODO: We should be instead notifying currentscene we're in. /raist.
 
             this.CollectGold();
@@ -444,8 +487,7 @@ namespace Mooege.Core.GS.Players
             var wayPoint = this.World.GetWayPointById(tryWaypointMessage.Field1);
             if (wayPoint == null) return;
 
-            this.Position = wayPoint.Position;
-            InGameClient.SendMessage(this.ACDWorldPositionMessage);
+            this.Teleport(wayPoint.Position);
         }
 
         private void OnRequestBuyItem(GameClient client, RequestBuyItemMessage requestBuyItemMessage)
@@ -461,22 +503,27 @@ namespace Mooege.Core.GS.Players
             var item = World.GetItem(requestAddSocketMessage.ItemID);
             if (item == null || item.Owner != this)
                 return;
-            var jeweler = World.GetInstance<Jeweler>();
+            var jeweler = World.GetActorInstance<Jeweler>();
             if (jeweler == null)
                 return;
 
             jeweler.OnAddSocket(this, item);
         }
 
+        private void OnHirelingDismiss()
+        {
+            ActiveHireling = null;
+        }
+
         #endregion
 
         #region update-logic
 
-        public override void Update()
+        public override void Update(int tickCounter)
         {
             // Check the Killstreaks
-            CheckExpBonus(0);
-            CheckExpBonus(1);
+            this.ExpBonusData.Check(0);
+            this.ExpBonusData.Check(1);
 
             // Check if there is an conversation to close in this tick
             CheckOpenConversations();
@@ -488,14 +535,54 @@ namespace Mooege.Core.GS.Players
 
         #region enter, leave, reveal handling
 
+        /// <summary>
+        /// Revals scenes in player's proximity.
+        /// </summary>
+        public void RevealScenesToPlayer()
+        {
+            var scenes = this.GetScenesInRegion();
+
+            foreach (var scene in scenes) // reveal scenes in player's proximity.
+            {
+                if (scene.IsRevealedToPlayer(this)) // if the actors is already revealed skip it.
+                    continue; // if the scene is already revealed, skip it.
+
+                if (scene.Parent != null) // if it's a subscene, always make sure it's parent get reveals first and then it reveals his childs.
+                    scene.Parent.Reveal(this); 
+                else 
+                    scene.Reveal(this);
+            }
+        }
+
+        /// <summary>
+        /// Reveals actors in player's proximity.
+        /// </summary>
+        public void RevealActorsToPlayer()
+        {
+            var actors = this.GetActorsInRange();
+
+            foreach (var actor in actors) // reveal actors in player's proximity.
+            {
+                if (actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
+                    continue;
+
+                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment || actor.ActorType == ActorType.Critter)
+                    actor.Reveal(this);
+            }
+        }
+
         public override void OnEnter(World world)
         {
             this.World.Reveal(this);
 
-            // FIXME: hackedy hack
-            var attribs = new GameAttributeMap();
-            attribs[GameAttribute.Hitpoints_Healed_Target] = 76f;
-            attribs.SendMessage(InGameClient, this.DynamicID);
+            this.RevealScenesToPlayer(); // reveal scenes in players proximity.
+            this.RevealActorsToPlayer(); // reveal actors in players proximity.
+        }
+
+        public override void OnTeleport()
+        {
+            this.RevealScenesToPlayer(); // reveal scenes in players proximity.
+            this.RevealActorsToPlayer(); // reveal actors in players proximity.
         }
 
         public override void OnLeave(World world)
@@ -533,17 +620,6 @@ namespace Mooege.Core.GS.Players
             }
 
             return true;
-        }
-
-        #endregion
-
-        #region proximity based actor & scene revealing
-
-        protected override void OnPositionChange(Vector3D prevPosition)
-        {
-            if (!this.EnteredWorld) return;
-            this.World.RevealScenesInProximity(this);
-            this.World.RevealActorsInProximity(this);
         }
 
         #endregion
@@ -775,10 +851,10 @@ namespace Mooege.Core.GS.Players
                 {
                     HirelingInfos = this.HirelingInfo,
                     Field1 = 0x00000000,
-                    Field2 = 0x00000000,
+                    Field2 = 0x00000002,
                 },
 
-                Field5 = 0x00000000,
+                Field5 = 0x00006A770,
 
                 LearnedLore = this.LearnedLore,
                 snoActiveSkills = this.SkillSet.ActiveSkills,
@@ -839,10 +915,10 @@ namespace Mooege.Core.GS.Players
 
         public HirelingInfo[] HirelingInfo = new HirelingInfo[4]
         {
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000000, Field1 = -1, Level = 0x00000000, Field3 = 0x0000, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000001, Field1 = -1, Level = 20, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = 0x000006D3, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000002, Field1 = -1, Level = 25, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000003, Field1 = -1, Level = 30, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
         };
 
         public SkillKeyMapping[] SkillKeyMappings = new SkillKeyMapping[15]
@@ -1127,137 +1203,6 @@ namespace Mooege.Core.GS.Players
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
         }
 
-        public void UpdateExpBonusData(int attackerActorType, int defeatedActorType)
-        {
-            if (attackerActorType == 7) // Player
-            {
-                if (defeatedActorType == 1) // Monster
-                {
-                    // Massacre
-                    if (this._lastMonsterKillTick + this._killstreakTickTime > this.InGameClient.Game.Tick)
-                    {
-                        this._killstreakPlayer++;
-                    }
-                    else
-                    {
-                        this._killstreakPlayer = 1;
-                    }
-
-                    // MightyBlow
-                    if (Math.Abs(this._lastMonsterAttackTick - this.InGameClient.Game.Tick) <= 20)
-                    {
-                        this._lastMonsterAttackKills++;
-                    }
-                    else
-                    {
-                        this._lastMonsterAttackKills = 1;
-                    }
-
-                    this._lastMonsterKillTick = this.InGameClient.Game.Tick;
-                }
-                else if (defeatedActorType == 5) // Environment
-                {
-                    // Destruction
-                    if (this._lastEnvironmentDestroyTick + this._killstreakTickTime > this.InGameClient.Game.Tick)
-                    {
-                        this._killstreakEnvironment++;
-                    }
-                    else
-                    {
-                        this._killstreakEnvironment = 1;
-                    }
-
-                    this._lastEnvironmentDestroyTick = this.InGameClient.Game.Tick;
-                }
-            }
-            else if (attackerActorType == 5) // Environment
-            {
-                // Pulverized
-                if (Math.Abs(this._lastEnvironmentDestroyMonsterKillTick - this.InGameClient.Game.Tick) <= 20)
-                {
-                    this._lastEnvironmentDestroyMonsterKills++;
-                }
-                else
-                {
-                    this._lastEnvironmentDestroyMonsterKills = 1;
-                }
-
-                this._lastEnvironmentDestroyMonsterKillTick = this.InGameClient.Game.Tick;
-            }
-        }
-
-        public void CheckExpBonus(byte BonusType)
-        {
-            int defeated = 0;
-            int expBonus = 0;
-
-            switch (BonusType)
-            {
-                case 0: // Massacre
-                    {
-                        if ((this._killstreakPlayer > 5) && (this._lastMonsterKillTick + this._killstreakTickTime <= this.InGameClient.Game.Tick))
-                        {
-                            defeated = this._killstreakPlayer;
-                            expBonus = (this._killstreakPlayer - 5) * 10;
-
-                            this._killstreakPlayer = 0;
-                        }
-                        break;
-                    }
-                case 1: // Destruction
-                    {
-                        if ((this._killstreakEnvironment > 5) && (this._lastEnvironmentDestroyTick + this._killstreakTickTime <= this.InGameClient.Game.Tick))
-                        {
-                            defeated = this._killstreakEnvironment;
-                            expBonus = (this._killstreakEnvironment - 5) * 5;
-
-                            this._killstreakEnvironment = 0;
-                        }
-                        break;
-                    }
-                case 2: // Mighty Blow
-                    {
-                        if (this._lastMonsterAttackKills > 5)
-                        {
-                            defeated = this._lastMonsterAttackKills;
-                            expBonus = (this._lastMonsterAttackKills - 5) * 5;
-                        }
-                        this._lastMonsterAttackKills = 0;
-                        break;
-                    }
-                case 3: // Pulverized
-                    {
-                        if (this._lastEnvironmentDestroyMonsterKills > 3)
-                        {
-                            defeated = this._lastEnvironmentDestroyMonsterKills;
-                            expBonus = (this._lastEnvironmentDestroyMonsterKills - 3) * 10;
-                        }
-                        this._lastEnvironmentDestroyMonsterKills = 0;
-                        break;
-                    }
-                default:
-                    {
-                        Logger.Warn("Invalid Exp-Bonus-Type was checked.");
-                        return;
-                    }
-            }
-
-            if (expBonus > 0)
-            {
-                this.InGameClient.SendMessage(new KillCounterUpdateMessage()
-                {
-                    Id = 0xcd,
-                    Field0 = BonusType,
-                    Field1 = defeated,
-                    Field2 = expBonus,
-                    Field3 = false,
-                });
-
-                this.UpdateExp(expBonus);
-                PlayHeroConversation(0x0002A73F, RandomHelper.Next(0, 8));
-            }
-        }
-
         public void PlayHeroConversation(int snoConversation, int lineID)
         {
             this.InGameClient.SendMessage(new PlayConvLineMessage()
@@ -1298,7 +1243,7 @@ namespace Mooege.Core.GS.Players
                     Field0 = 0x0000006E,
                     SNOConversation = snoConversation
                 },
-                this.InGameClient.Game.Tick + 400
+                this.InGameClient.Game.TickCounter + 200
             ));
         }
 
@@ -1308,7 +1253,7 @@ namespace Mooege.Core.GS.Players
             {
                 foreach (OpenConversation openConversation in this.OpenConversations)
                 {
-                    if (openConversation.endTick == this.InGameClient.Game.Tick)
+                    if (openConversation.endTick <= this.InGameClient.Game.TickCounter)
                     {
                         this.InGameClient.SendMessage(openConversation.endConversationMessage);
                     }
@@ -1334,17 +1279,15 @@ namespace Mooege.Core.GS.Players
 
         private void CollectGold()
         {
-            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 5f);
-            foreach (var actor in actorList)
+            var items = this.GetItemsInRange(25f);
+
+            foreach(var item in items)
             {
-                Item item;
-                if (!(actor is Item)) continue;
-                item = (Item)actor;
                 if (!Item.IsGold(item.ItemType)) continue;
 
                 this.InGameClient.SendMessage(new FloatingAmountMessage()
                 {
-                    Place = new WorldPlace()
+                    Place = new WorldPlace
                     {
                         Position = this.Position,
                         WorldID = this.World.DynamicID,
@@ -1356,19 +1299,16 @@ namespace Mooege.Core.GS.Players
 
                 this.Inventory.PickUpGold(item.DynamicID);
 
-
                 item.Destroy();
             }
         }
 
         private void CollectHealthGlobe()
         {
-            var actorList = this.World.GetActorsInRange(this.Position.X, this.Position.Y, this.Position.Z, 5f);
-            foreach (Actor actor in actorList)
+            var items = this.GetItemsInRange(25f);
+
+            foreach (var item in items)
             {
-                Item item;
-                if (!(actor is Item)) continue;
-                item = (Item)actor;
                 if (!Item.IsHealthGlobe(item.ItemType)) continue;
 
                 this.InGameClient.SendMessage(new PlayEffectMessage() //Remember, for PlayEffectMessage, field1=7 are globes picking animation.

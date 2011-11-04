@@ -84,7 +84,7 @@ namespace Mooege.Core.Common.Items
             {
                 if (def != null)
                 {
-                    Logger.Debug("Generating affix " + def.Name + " (aLvl:" + def.AffixLevel + ")");
+                    //Logger.Debug("Generating affix " + def.Name + " (aLvl:" + def.AffixLevel + ")");
                     item.AffixList.Add(new Affix(def.Hash));
                     foreach (var effect in def.AttributeSpecifier)
                     {
@@ -93,7 +93,7 @@ namespace Mooege.Core.Common.Items
                             float result;
                             if (FormulaScript.Evaluate(effect.Formula.ToArray(), item.RandomGenerator, out result))
                             {
-                                Logger.Debug("Randomized value for attribute " + GameAttribute.Attributes[effect.AttributeId].Name + " is " + result);
+                                //Logger.Debug("Randomized value for attribute " + GameAttribute.Attributes[effect.AttributeId].Name + " is " + result);
 
                                 if (GameAttribute.Attributes[effect.AttributeId] is GameAttributeF)
                                 {

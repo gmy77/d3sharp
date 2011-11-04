@@ -110,7 +110,7 @@ namespace Mooege.Net.GS
             {
                 if (_outgoingBuffer.Length <= 32) return;
 
-                if (this.TickingEnabled) this.SendMessage(new GameTickMessage(this.Game.Tick)); // send the tick.
+                if (this.TickingEnabled) this.SendMessage(new GameTickMessage(this.Game.TickCounter)); // send the tick.
                 this.FlushOutgoingBuffer();
             }
         }

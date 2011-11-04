@@ -146,15 +146,16 @@ namespace Mooege.Core.MooNet.Accounts
             this.BnetAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.PersistentID).Build();
             this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(this.PersistentID).Build();
             this.BannerConfiguration = D3.Account.BannerConfiguration.CreateBuilder()
-                .SetBackgroundColorIndex(20)
-                .SetBannerIndex(8)
-                .SetPattern(4)
-                .SetPatternColorIndex(11)
-                .SetPlacementIndex(11)
+                .SetBannerShape(1)
+                .SetSigilMain(0)
                 .SetSigilAccent(4)
-                .SetSigilMain(3)
-                .SetSigilColorIndex(7)
+                .SetPatternColor(11)
+                .SetBackgroundColor(20)
+                .SetSigilColor(7)
+                .SetSigilPlacement(1)
+                .SetPattern(4)
                 .SetUseSigilVariant(true)
+                .SetEpicBanner(0)
                 .Build();
         }
 

@@ -51,7 +51,7 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void SendInvitation(IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.invitation.SendInvitationResponse> done)
+        public override void SendInvitation(IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
             var extensionBytes = request.UnknownFields.FieldDictionary[103].LengthDelimitedList[0].ToByteArray();
@@ -74,9 +74,11 @@ namespace Mooege.Core.MooNet.Services
                 .SetCreationTime(DateTime.Now.ToUnixTime())
                 .SetExpirationTime(86400);
 
-            var response = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder()
-                .SetInvitation(invitation.Clone());
+            // Response is bnet.protocol.NoData as of 7728. /raist.
+            //var response = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder()
+            //    .SetInvitation(invitation.Clone());
 
+            var response = bnet.protocol.NoData.CreateBuilder();
             done(response.Build());
 
             // notify the invitee on invitation.
@@ -130,7 +132,7 @@ namespace Mooege.Core.MooNet.Services
             throw new NotImplementedException();
         }
 
-        public override void UpdateFriendState(IRpcController controller, bnet.protocol.friends.UpdateFriendStateRequest request, Action<bnet.protocol.friends.UpdateFriendStateResponse> done)
+        public override void UpdateFriendState(IRpcController controller, bnet.protocol.friends.UpdateFriendStateRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }

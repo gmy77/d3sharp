@@ -25,6 +25,7 @@ using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
+using Mooege.Core.Common.Items;
 
 namespace Mooege.Core.GS.Games
 {
@@ -70,7 +71,95 @@ namespace Mooege.Core.GS.Games
         }
     }
 
-    [CommandGroup("Tp", "Transfers your character to another world.")]
+    [CommandGroup("item", "Spawns an item (with a name or type).\nUsage: item [type <type>|<name>] [amount]")]
+    public class ItemCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Spawn(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            var player = invokerClient.InGameClient.Player;
+            var name = "Dye_02";
+            var amount = 1;
+
+
+            if (@params == null)
+                return this.Fallback();
+
+            name = @params[0];
+
+            if (!ItemGenerator.IsValidItem(name))
+                return "You need to specify a valid item name!";
+
+
+            if (@params.Count() == 1 || !Int32.TryParse(@params[1], out amount))
+                amount = 1;
+
+            if (amount > 100) amount = 100;
+
+            for (int i = 0; i < amount; i++)
+            {
+                var position = new Vector3D(player.Position.X + (float)RandomHelper.NextDouble() * 20f,
+                                            player.Position.Y + (float)RandomHelper.NextDouble() * 20f,
+                                            player.Position.Z);
+
+                var item = ItemGenerator.Cook(player, name);
+                item.EnterWorld(position);
+            }
+
+            return string.Format("Spawned {0} items with name: {1}", amount, name);
+
+        }
+
+        [Command("type", "Spawns random items of a given type.\nUsage: item type <type> [amount]")]
+        public string Type(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            var player = invokerClient.InGameClient.Player;
+            var name = "Dye";
+            var amount = 1;
+
+
+            if (@params == null)
+                return "You need to specify a item type!";
+
+            name = @params[0];
+
+            var type = ItemGroup.FromString(name);
+
+            if (type == null)
+                return "The type given is not a valid item type.";
+
+            if (@params.Count() == 1 || !Int32.TryParse(@params[1], out amount))
+                amount = 1;
+
+            if (amount > 100) amount = 100;
+
+            for (int i = 0; i < amount; i++)
+            {
+                var position = new Vector3D(player.Position.X + (float)RandomHelper.NextDouble() * 20f,
+                                            player.Position.Y + (float)RandomHelper.NextDouble() * 20f,
+                                            player.Position.Z);
+
+                var item = ItemGenerator.GenerateRandom(player, type);
+                item.EnterWorld(position);
+            }
+
+            return string.Format("Spawned {0} items with type: {1}", amount, name);
+        }
+    }
+
+    [CommandGroup("tp", "Transfers your character to another world.")]
     public class TeleportCommand : CommandGroup
     {
         [DefaultCommand]
@@ -98,7 +187,7 @@ namespace Mooege.Core.GS.Games
                 if(world==null)
                     return "Can't teleport you to world with snoId " + worldId;
 
-                invokerClient.InGameClient.Player.TransferTo(world);
+                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
                 return string.Format("Teleported to: {0} [id: {1}]", MPQStorage.Data.Assets[SNOGroup.Worlds][worldId].Name, worldId);
             }
 
@@ -106,7 +195,7 @@ namespace Mooege.Core.GS.Games
         }
     }
 
-    [CommandGroup("Town", "Transfers your character back to town.")]
+    [CommandGroup("town", "Transfers your character back to town.")]
     public class TownCommand : CommandGroup
     {
         [DefaultCommand]
@@ -120,7 +209,11 @@ namespace Mooege.Core.GS.Games
 
             var world = invokerClient.InGameClient.Game.GetWorld(71150);
 
-            invokerClient.InGameClient.Player.TransferTo(world);
+            if (world != invokerClient.InGameClient.Player.World)
+                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
+            else
+                invokerClient.InGameClient.Player.Teleport(world.StartingPoints.First().Position);
+
             return string.Format("Teleported back to town.");
         }
     }
