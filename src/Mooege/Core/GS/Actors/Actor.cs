@@ -241,9 +241,9 @@ namespace Mooege.Core.GS.Actors
         /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
         public override bool Reveal(Player player)
         {
-            //if (questRange != null)
-                //if (World.Game.Quests.IsInQuestRange(questRange) == false)
-                    //return false;   // TODO may i return false? comment suggests i may only return false if it was already revealed ... -farmy
+            if (questRange != null)
+                if (World.Game.Quests.IsInQuestRange(questRange) == false)
+                    return false;   // TODO may i return false? comment suggests i may only return false if it was already revealed ... -farmy
 
             if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
             player.RevealedObjects.Add(this.DynamicID, this);

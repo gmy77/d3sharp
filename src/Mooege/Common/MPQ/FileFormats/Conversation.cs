@@ -93,11 +93,11 @@ namespace Mooege.Common.MPQ.FileFormats
 
             stream.Close();
             
-            dump.Write(AsText(file.Name));
-            dump.WriteLine();
-            dump.WriteLine();
-            dump.WriteLine();
-            dump.WriteLine();
+            //dump.Write(AsText(file.Name));
+            //dump.WriteLine();
+            //dump.WriteLine();
+            //dump.WriteLine();
+            //dump.WriteLine();
             
         }
 

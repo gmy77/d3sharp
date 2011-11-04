@@ -38,7 +38,9 @@ using Mooege.Common.Helpers;
  *   depending on class and gender of the player, even if that part is not actually spoken by the player actor but another.
  *   If the speaker of it parent node is the player, then there may be as many as five nodes (on for each class) with only
  *   the ConvLocalDisplayTime for that class but sometimes, there is not a node for each class but a "for all" node with all information combined
- * - A node type of 4 indicated, that it children are alternatives. So i pick a random one
+ * - A node type of 4 indicates that it children are alternatives. So i pick a random one
+ * 
+ * good luck :-) - farmy
  */
 namespace Mooege.Core.GS.Players
 {
@@ -126,14 +128,14 @@ namespace Mooege.Core.GS.Players
         }
 
         /// <summary>
-        /// Periodically call this method to make sure, conversation progresses depending on game ticks
+        /// Periodically call this method to make sure conversation progresses
         /// </summary>
-        public void Update()
+        public void Update(int tickCounter)
         {
 
             // TODO rotate the actor to face the player or he may not hear the dialog
 
-            if (startTick + duration < player.World.Game.TickCounter)
+            if (startTick + duration < tickCounter)
                 PlayNextLine(false);
         }
 
@@ -267,7 +269,7 @@ namespace Mooege.Core.GS.Players
 
         internal Language ClientLanguage { get { return Language.enUS; } }
 
-        // Sorry :-) ConvPlayLine Messages uses this, but i dont even know if it is really a id.
+        // Sorry :-) ConvPlayLine Messages uses this, but i dont even know if it is really an id.
         // From the looks of it, they maybe had PlayLineParams separated from the message or could sent more than one PlayLineParams
         // and maybe used this to tag PlayLineParams and tell the client which of the params to use? - farmy
         internal int GetNextFooID()
@@ -298,13 +300,17 @@ namespace Mooege.Core.GS.Players
                 return;
             }
 
-            Conversation newConversation = new Conversation(snoConversation, player, this);
-            newConversation.Start();
-            newConversation.ConversationEnded += new EventHandler(ConversationEnded);
-
-            lock (openConversations)
+            if (!openConversations.ContainsKey(snoConversation))
             {
-                openConversations.Add(snoConversation, newConversation);
+                Conversation newConversation = new Conversation(snoConversation, player, this);
+                newConversation.Start();
+                newConversation.ConversationEnded += new EventHandler(ConversationEnded);
+
+                lock (openConversations)
+                {
+                    openConversations.Add(snoConversation, newConversation);
+
+                }
             }
         }
 
@@ -329,7 +335,7 @@ namespace Mooege.Core.GS.Players
         /// Update all open conversations
         /// </summary>
         /// <param name="gameTick"></param>
-        public void Update(int gameTick)
+        public void Update(int tickCounter)
         {
             List<Conversation> clonedList;
 
@@ -340,7 +346,7 @@ namespace Mooege.Core.GS.Players
             }
 
             foreach (var conversation in clonedList)
-                conversation.Update();
+                conversation.Update(tickCounter);
         }
 
         /// <summary>
@@ -353,8 +359,17 @@ namespace Mooege.Core.GS.Players
             lock (openConversations)
             {
                 if (message is RequestCloseConversationWindowMessage)
-                    foreach (var conversation in openConversations.Values)
+                {
+                    List<Conversation> clonedList;
+
+                    lock (openConversations)
+                    {
+                        clonedList = (from c in openConversations select c.Value).ToList();
+                    }
+
+                    foreach (var conversation in clonedList)
                         conversation.Interrupt();
+                }
             }
         }
     }

@@ -70,6 +70,13 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public int Int2 { get; private set; }
         public float Float0 { get; private set; }
 
+        public TagMapEntry(int tag, int value, int type)
+        {
+            Type = type;
+            TagID = tag;
+            Int2 = value;
+        }
+
         public TagMapEntry(MpqFileStream stream)
         {
             this.Type = stream.ReadValueS32();

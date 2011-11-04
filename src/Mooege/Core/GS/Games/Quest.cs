@@ -149,7 +149,7 @@ namespace Mooege.Core.GS.Players
         // 
         public bool HasStepCompleted(int stepID)
         {
-            return completedSteps.Contains(stepID) || CurrentStep.QuestStepID == stepID || CurrentStep.ObjectivesSets.Select(x => x.FollowUpStepID).Contains(stepID);
+            return completedSteps.Contains(stepID); // || CurrentStep.ObjectivesSets.Select(x => x.FollowUpStepID).Contains(stepID);
         }
 
         public void Advance()
@@ -217,7 +217,7 @@ namespace Mooege.Core.GS.Players
         }
 
 
-        public bool IsInQuestRange(int snoQuest, int Step)
+        public bool HasCurrentQuest(int snoQuest, int Step)
         {
             if (quests.ContainsKey(snoQuest))
                 if (quests[snoQuest].CurrentStep.QuestStepID == Step || Step == -1)
@@ -242,14 +242,14 @@ namespace Mooege.Core.GS.Players
             {
                 if (quests.ContainsKey(range.Time0.SNOQuest))
                 {
-                    if (quests[range.Time0.SNOQuest].HasStepCompleted(range.Time0.I0))
+                    if (quests[range.Time0.SNOQuest].HasStepCompleted(range.Time0.I0) || quests[range.Time0.SNOQuest].CurrentStep.QuestStepID == range.Time0.I0) // rumford conversation needs current step
                         started = true;
                 }
                 else
                     logger.Warn("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.Time0.SNOQuest);
             }
 
-            if (range.Time1.SNOQuest == -1)
+            if (range.Time1.SNOQuest == -1 || range.Time1.I0 < 0)
                 ended = false;
             else
             {
