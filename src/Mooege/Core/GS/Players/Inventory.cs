@@ -139,7 +139,6 @@ namespace Mooege.Core.GS.Players
                 var sourceGrid = (item.InvLoc.EquipmentSlot == 0 ? _inventoryGrid :
                     item.InvLoc.EquipmentSlot == (int)EquipmentSlotId.Stash ? _stashGrid : null);
 
-
                 System.Diagnostics.Debug.Assert((sourceGrid != null && sourceGrid.Contains(request.ItemID)) || _equipment.IsItemEquipped(request.ItemID), "Request to equip unknown item");
 
                 int targetEquipSlot = request.Location.EquipmentSlot;

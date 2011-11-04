@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
-    [Message(Opcodes.UsePowerMessage, Consumers.Player)]
-    public class UsePowerMessage : GameMessage
+    [Message(Opcodes.RequestUsePowerMessage, Consumers.Player)]
+    public class RequestUsePowerMessage : GameMessage
     {
         public int PowerSNOId;
 
@@ -23,7 +23,7 @@ namespace Mooege.Net.GS.Message.Definitions.Player
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("UsePowerMessage:");
+            b.AppendLine("RequestUsePowerMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("PowerSNOId: 0x" + PowerSNOId.ToString("X8") + " (" + PowerSNOId + ")");
