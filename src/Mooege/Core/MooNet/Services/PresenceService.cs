@@ -16,11 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
+using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Net.MooNet;
+using bnet.protocol;
+using bnet.protocol.presence;
 
 // TODO: Need to do some more testing and inspection to make sure that
 // responding before performing the action requested is proper
@@ -153,6 +157,16 @@ namespace Mooege.Core.MooNet.Services
             }
 
             done(builder.Build());
-        }               
+        }
+
+        public override void Ownership(IRpcController controller, OwnershipRequest request, Action<NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Heal(IRpcController controller, UpdateRequest request, Action<NoData> done)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
