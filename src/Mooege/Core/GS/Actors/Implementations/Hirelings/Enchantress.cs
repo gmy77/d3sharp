@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Common.Helpers;
 
 namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 {
@@ -29,6 +30,17 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
         public Enchantress(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
         {
+            mainSNO = 4062;
+            hirelingSNO = -1;
+            proxySNO = 192942;
+            skillKit = 87094;
+            hirelingGBID = StringHashHelper.HashItemName("Enchantress");
+            Attributes[Mooege.Net.GS.Message.GameAttribute.Hireling_Class] = 3;
+        }
+
+        public override Hireling CreateHireling(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        {
+            return new Enchantress(world, snoId, tags);
         }
     }
 }

@@ -45,6 +45,8 @@ using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
+using Mooege.Core.GS.Actors.Implementations.Hirelings;
+using Mooege.Net.GS.Message.Definitions.Hireling;
 
 namespace Mooege.Core.GS.Players
 {
@@ -109,7 +111,65 @@ namespace Mooege.Core.GS.Players
         /// NPC currently interaced with
         /// </summary>
         public InteractiveNPC SelectedNPC { get; set; }
-     
+
+        private Hireling _activeHireling = null;
+        public Hireling ActiveHireling
+        {
+            get { return _activeHireling; }
+            set
+            {
+                if (value == _activeHireling)
+                    return;
+
+                if (_activeHireling != null)
+                {
+                    _activeHireling.Dismiss(this);
+                }
+
+                _activeHireling = value;
+
+                if (value != null)
+                {
+                    InGameClient.SendMessage(new PetMessage()
+                    {
+                        Field0 = 0,
+                        Field1 = 0,
+                        PetId = value.DynamicID,
+                        Field3 = 0,
+                    });
+                }
+            }
+        }
+
+        private Hireling _activeHirelingProxy = null;
+        public Hireling ActiveHirelingProxy
+        {
+            get { return _activeHirelingProxy; }
+            set
+            {
+                if (value == _activeHirelingProxy)
+                    return;
+
+                if (_activeHirelingProxy != null)
+                {
+                    _activeHirelingProxy.Dismiss(this);
+                }
+
+                _activeHirelingProxy = value;
+
+                if (value != null)
+                {
+                    InGameClient.SendMessage(new PetMessage()
+                    {
+                        Field0 = 0,
+                        Field1 = 0,
+                        PetId = value.DynamicID,
+                        Field3 = 22,
+                    });
+                }
+            }
+        }
+
         /// <summary>
         /// Creates a new player.
         /// </summary>
@@ -320,9 +380,6 @@ namespace Mooege.Core.GS.Players
             //this.Attributes[GameAttribute.Disabled] = true; // we should be making use of these ones too /raist.
             //this.Attributes[GameAttribute.Loading] = true;
             //this.Attributes[GameAttribute.Invulnerable] = true;
-
-            this.Attributes[GameAttribute.Hireling_Class] = 1; // Templar selected /fasbat
-
             this.Attributes[GameAttribute.Hidden] = false;
             this.Attributes[GameAttribute.Immobolize] = true;
             this.Attributes[GameAttribute.Untargetable] = true;
@@ -355,9 +412,9 @@ namespace Mooege.Core.GS.Players
             else if (message is TryWaypointMessage) OnTryWaypoint(client, (TryWaypointMessage)message);
             else if (message is RequestBuyItemMessage) OnRequestBuyItem(client, (RequestBuyItemMessage)message);
             else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
+            else if (message is HirelingDismissMessage) OnHirelingDismiss();
             else return;
         }
-
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
         {
@@ -451,6 +508,11 @@ namespace Mooege.Core.GS.Players
                 return;
 
             jeweler.OnAddSocket(this, item);
+        }
+
+        private void OnHirelingDismiss()
+        {
+            ActiveHireling = null;
         }
 
         #endregion
@@ -853,10 +915,10 @@ namespace Mooege.Core.GS.Players
 
         public HirelingInfo[] HirelingInfo = new HirelingInfo[4]
         {
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x0000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000001, Field1 = -1, Field2 = 0x00000007, Field3 = 0x00003C19, Field4 = false, Field5 = 0x000006D3, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000000, Field1 = -1, Level = 0x00000000, Field3 = 0x0000, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000001, Field1 = -1, Level = 20, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = 0x000006D3, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000002, Field1 = -1, Level = 25, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000003, Field1 = -1, Level = 30, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
         };
 
         public SkillKeyMapping[] SkillKeyMappings = new SkillKeyMapping[15]
