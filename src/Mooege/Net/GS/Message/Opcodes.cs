@@ -97,7 +97,7 @@ namespace Mooege.Net.GS.Message
         ProjectileStickMessage = 79, // len: 	28
         TargetMessage = 80, // len: 	60
         SecondaryAnimationPowerMessage = 81, // len: 	28
-        SNODataMessage1 = 82, // len: 	12
+        RequestUsePowerMessage = 82, // len: 	12 former SNODataMessage1
         DWordDataMessage2 = 83, // len: 	12
         DWordDataMessage3 = 84, // len: 	12
         DWordDataMessage4 = 85, // len: 	12

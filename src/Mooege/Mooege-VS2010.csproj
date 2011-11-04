@@ -260,6 +260,7 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Player\RequestUsePowerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignSkillMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Stash\OpenSharedStashMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBusyMessage.cs" />
