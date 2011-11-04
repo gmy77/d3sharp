@@ -20,22 +20,25 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Hireling
 {
-    [Message(Opcodes.HirelingRequestLearnSkillMessage)]
+	/// <summary>
+    /// Sent to the client when a skill is requested to be learnt for a follower
+    /// </summary>
+    [Message(Opcodes.HirelingRequestLearnSkillMessage, Consumers.SelectedNPC)]
     public class HirelingRequestLearnSkillMessage : GameMessage
     {
-        public int Field0;
-        public int /* sno */ Field1;
+        public uint ActorID; 
+        public int /* sno */ PowerSNOId;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
+            PowerSNOId = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteUInt(32, ActorID);
+            buffer.WriteInt(32, PowerSNOId);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -44,8 +47,8 @@ namespace Mooege.Net.GS.Message.Definitions.Hireling
             b.AppendLine("HirelingRequestLearnSkillMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            b.Append(' ', pad); b.AppendLine("PowerSNOId: 0x" + PowerSNOId.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
