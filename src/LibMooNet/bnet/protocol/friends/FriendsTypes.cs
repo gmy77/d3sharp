@@ -15,7 +15,7 @@ namespace bnet.protocol.friends {
   
     #region Extension registration
     public static void RegisterAllExtensions(pb::ExtensionRegistry registry) {
-      registry.Add(global::bnet.protocol.friends.FriendInvitation.Friendnvitation);
+      registry.Add(global::bnet.protocol.friends.FriendInvitation.FriendInvitationProp);
     }
     #endregion
     #region Static variables
@@ -47,19 +47,19 @@ namespace bnet.protocol.friends {
         internal__static_bnet_protocol_friends_Friend__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_friends_Friend__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.Friend, global::bnet.protocol.friends.Friend.Builder>(internal__static_bnet_protocol_friends_Friend__Descriptor,
-                new string[] { "İd", "Attribute", });
+                new string[] { "Id", "Attribute", });
         internal__static_bnet_protocol_friends_FriendInvitation__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_friends_FriendInvitation__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.FriendInvitation, global::bnet.protocol.friends.FriendInvitation.Builder>(internal__static_bnet_protocol_friends_FriendInvitation__Descriptor,
                 new string[] { "FirstReceived", });
-        global::bnet.protocol.friends.FriendInvitation.Friendnvitation = pb::GeneratedSingleExtension<global::bnet.protocol.friends.FriendInvitation>.CreateInstance(global::bnet.protocol.friends.FriendInvitation.Descriptor.Extensions[0]);
+        global::bnet.protocol.friends.FriendInvitation.FriendInvitationProp = pb::GeneratedSingleExtension<global::bnet.protocol.friends.FriendInvitation>.CreateInstance(global::bnet.protocol.friends.FriendInvitation.Descriptor.Extensions[0]);
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
           new pbd::FileDescriptor[] {
           global::bnet.protocol.attribute.Proto.Attribute.Descriptor, 
           global::bnet.protocol.Entity.Descriptor, 
-          global::bnet.protocol.invitation.İnvitation.Descriptor, 
+          global::bnet.protocol.invitation.Proto.Invitation.Descriptor, 
           }, assigner);
     }
     #endregion
@@ -94,13 +94,13 @@ namespace bnet.protocol.friends {
       get { return global::bnet.protocol.friends.FriendsTypes.internal__static_bnet_protocol_friends_Friend__FieldAccessorTable; }
     }
     
-    public const int İdFieldNumber = 1;
-    private bool hasİd;
+    public const int IdFieldNumber = 1;
+    private bool hasId;
     private global::bnet.protocol.EntityId id_;
-    public bool Hasİd {
-      get { return hasİd; }
+    public bool HasId {
+      get { return hasId; }
     }
-    public global::bnet.protocol.EntityId İd {
+    public global::bnet.protocol.EntityId Id {
       get { return id_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
@@ -118,8 +118,8 @@ namespace bnet.protocol.friends {
     
     public override bool IsInitialized {
       get {
-        if (!hasİd) return false;
-        if (!İd.IsInitialized) return false;
+        if (!hasId) return false;
+        if (!Id.IsInitialized) return false;
         foreach (global::bnet.protocol.attribute.Attribute element in AttributeList) {
           if (!element.IsInitialized) return false;
         }
@@ -130,8 +130,8 @@ namespace bnet.protocol.friends {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _friendFieldNames;
-      if (hasİd) {
-        output.WriteMessage(1, field_names[1], İd);
+      if (hasId) {
+        output.WriteMessage(1, field_names[1], Id);
       }
       if (attribute_.Count > 0) {
         output.WriteMessageArray(2, field_names[0], attribute_);
@@ -146,8 +146,8 @@ namespace bnet.protocol.friends {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, İd);
+        if (hasId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, Id);
         }
         foreach (global::bnet.protocol.attribute.Attribute element in AttributeList) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, element);
@@ -279,8 +279,8 @@ namespace bnet.protocol.friends {
       public override Builder MergeFrom(Friend other) {
         if (other == global::bnet.protocol.friends.Friend.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.Hasİd) {
-          Mergeİd(other.İd);
+        if (other.HasId) {
+          MergeId(other.Id);
         }
         if (other.attribute_.Count != 0) {
           result.attribute_.Add(other.attribute_);
@@ -330,11 +330,11 @@ namespace bnet.protocol.friends {
             }
             case 10: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasİd) {
-                subBuilder.MergeFrom(İd);
+              if (result.hasId) {
+                subBuilder.MergeFrom(Id);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              İd = subBuilder.BuildPartial();
+              Id = subBuilder.BuildPartial();
               break;
             }
             case 18: {
@@ -351,42 +351,42 @@ namespace bnet.protocol.friends {
       }
       
       
-      public bool Hasİd {
-       get { return result.hasİd; }
+      public bool HasId {
+       get { return result.hasId; }
       }
-      public global::bnet.protocol.EntityId İd {
-        get { return result.İd; }
-        set { Setİd(value); }
+      public global::bnet.protocol.EntityId Id {
+        get { return result.Id; }
+        set { SetId(value); }
       }
-      public Builder Setİd(global::bnet.protocol.EntityId value) {
+      public Builder SetId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = value;
         return this;
       }
-      public Builder Setİd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = builderForValue.Build();
         return this;
       }
-      public Builder Mergeİd(global::bnet.protocol.EntityId value) {
+      public Builder MergeId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasİd &&
+        if (result.hasId &&
             result.id_ != global::bnet.protocol.EntityId.DefaultInstance) {
             result.id_ = global::bnet.protocol.EntityId.CreateBuilder(result.id_).MergeFrom(value).BuildPartial();
         } else {
           result.id_ = value;
         }
-        result.hasİd = true;
+        result.hasId = true;
         return this;
       }
-      public Builder Clearİd() {
+      public Builder ClearId() {
         PrepareBuilder();
-        result.hasİd = false;
+        result.hasId = false;
         result.id_ = null;
         return this;
       }
@@ -468,8 +468,8 @@ namespace bnet.protocol.friends {
       get { return global::bnet.protocol.friends.FriendsTypes.internal__static_bnet_protocol_friends_FriendInvitation__FieldAccessorTable; }
     }
     
-    public const int FriendnvitationFieldNumber = 103;
-    public static pb::GeneratedExtensionBase<global::bnet.protocol.friends.FriendInvitation> Friendnvitation;
+    public const int FriendInvitationFieldNumber = 103;
+    public static pb::GeneratedExtensionBase<global::bnet.protocol.friends.FriendInvitation> FriendInvitationProp;
     public const int FirstReceivedFieldNumber = 1;
     private bool hasFirstReceived;
     private bool firstReceived_;

@@ -41,11 +41,11 @@ namespace D3.Quests {
         internal__static_D3_Quests_QuestReward__Descriptor = Descriptor.MessageTypes[0];
         internal__static_D3_Quests_QuestReward__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Quests.QuestReward, global::D3.Quests.QuestReward.Builder>(internal__static_D3_Quests_QuestReward__Descriptor,
-                new string[] { "XpGranted", "GoldGranted", "İtem", });
+                new string[] { "XpGranted", "GoldGranted", "Item", });
         internal__static_D3_Quests_QuestStepComplete__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_Quests_QuestStepComplete__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Quests.QuestStepComplete, global::D3.Quests.QuestStepComplete.Builder>(internal__static_D3_Quests_QuestStepComplete__Descriptor,
-                new string[] { "İsQuestComplete", "Reward", });
+                new string[] { "IsQuestComplete", "Reward", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -105,20 +105,20 @@ namespace D3.Quests {
       get { return goldGranted_; }
     }
     
-    public const int İtemFieldNumber = 3;
-    private bool hasİtem;
+    public const int ItemFieldNumber = 3;
+    private bool hasItem;
     private global::D3.Items.Generator item_;
-    public bool Hasİtem {
-      get { return hasİtem; }
+    public bool HasItem {
+      get { return hasItem; }
     }
-    public global::D3.Items.Generator İtem {
+    public global::D3.Items.Generator Item {
       get { return item_ ?? global::D3.Items.Generator.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (Hasİtem) {
-          if (!İtem.IsInitialized) return false;
+        if (HasItem) {
+          if (!Item.IsInitialized) return false;
         }
         return true;
       }
@@ -133,8 +133,8 @@ namespace D3.Quests {
       if (hasGoldGranted) {
         output.WriteInt32(2, field_names[0], GoldGranted);
       }
-      if (hasİtem) {
-        output.WriteMessage(3, field_names[1], İtem);
+      if (hasItem) {
+        output.WriteMessage(3, field_names[1], Item);
       }
       UnknownFields.WriteTo(output);
     }
@@ -152,8 +152,8 @@ namespace D3.Quests {
         if (hasGoldGranted) {
           size += pb::CodedOutputStream.ComputeInt32Size(2, GoldGranted);
         }
-        if (hasİtem) {
-          size += pb::CodedOutputStream.ComputeMessageSize(3, İtem);
+        if (hasItem) {
+          size += pb::CodedOutputStream.ComputeMessageSize(3, Item);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -287,8 +287,8 @@ namespace D3.Quests {
         if (other.HasGoldGranted) {
           GoldGranted = other.GoldGranted;
         }
-        if (other.Hasİtem) {
-          Mergeİtem(other.İtem);
+        if (other.HasItem) {
+          MergeItem(other.Item);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -343,11 +343,11 @@ namespace D3.Quests {
             }
             case 26: {
               global::D3.Items.Generator.Builder subBuilder = global::D3.Items.Generator.CreateBuilder();
-              if (result.hasİtem) {
-                subBuilder.MergeFrom(İtem);
+              if (result.hasItem) {
+                subBuilder.MergeFrom(Item);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              İtem = subBuilder.BuildPartial();
+              Item = subBuilder.BuildPartial();
               break;
             }
           }
@@ -400,42 +400,42 @@ namespace D3.Quests {
         return this;
       }
       
-      public bool Hasİtem {
-       get { return result.hasİtem; }
+      public bool HasItem {
+       get { return result.hasItem; }
       }
-      public global::D3.Items.Generator İtem {
-        get { return result.İtem; }
-        set { Setİtem(value); }
+      public global::D3.Items.Generator Item {
+        get { return result.Item; }
+        set { SetItem(value); }
       }
-      public Builder Setİtem(global::D3.Items.Generator value) {
+      public Builder SetItem(global::D3.Items.Generator value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİtem = true;
+        result.hasItem = true;
         result.item_ = value;
         return this;
       }
-      public Builder Setİtem(global::D3.Items.Generator.Builder builderForValue) {
+      public Builder SetItem(global::D3.Items.Generator.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasİtem = true;
+        result.hasItem = true;
         result.item_ = builderForValue.Build();
         return this;
       }
-      public Builder Mergeİtem(global::D3.Items.Generator value) {
+      public Builder MergeItem(global::D3.Items.Generator value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasİtem &&
+        if (result.hasItem &&
             result.item_ != global::D3.Items.Generator.DefaultInstance) {
             result.item_ = global::D3.Items.Generator.CreateBuilder(result.item_).MergeFrom(value).BuildPartial();
         } else {
           result.item_ = value;
         }
-        result.hasİtem = true;
+        result.hasItem = true;
         return this;
       }
-      public Builder Clearİtem() {
+      public Builder ClearItem() {
         PrepareBuilder();
-        result.hasİtem = false;
+        result.hasItem = false;
         result.item_ = null;
         return this;
       }
@@ -473,13 +473,13 @@ namespace D3.Quests {
       get { return global::D3.Quests.Quest.internal__static_D3_Quests_QuestStepComplete__FieldAccessorTable; }
     }
     
-    public const int İsQuestCompleteFieldNumber = 1;
-    private bool hasİsQuestComplete;
+    public const int IsQuestCompleteFieldNumber = 1;
+    private bool hasIsQuestComplete;
     private bool isQuestComplete_;
-    public bool HasİsQuestComplete {
-      get { return hasİsQuestComplete; }
+    public bool HasIsQuestComplete {
+      get { return hasIsQuestComplete; }
     }
-    public bool İsQuestComplete {
+    public bool IsQuestComplete {
       get { return isQuestComplete_; }
     }
     
@@ -495,7 +495,7 @@ namespace D3.Quests {
     
     public override bool IsInitialized {
       get {
-        if (!hasİsQuestComplete) return false;
+        if (!hasIsQuestComplete) return false;
         if (HasReward) {
           if (!Reward.IsInitialized) return false;
         }
@@ -506,8 +506,8 @@ namespace D3.Quests {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _questStepCompleteFieldNames;
-      if (hasİsQuestComplete) {
-        output.WriteBool(1, field_names[0], İsQuestComplete);
+      if (hasIsQuestComplete) {
+        output.WriteBool(1, field_names[0], IsQuestComplete);
       }
       if (hasReward) {
         output.WriteMessage(2, field_names[1], Reward);
@@ -522,8 +522,8 @@ namespace D3.Quests {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİsQuestComplete) {
-          size += pb::CodedOutputStream.ComputeBoolSize(1, İsQuestComplete);
+        if (hasIsQuestComplete) {
+          size += pb::CodedOutputStream.ComputeBoolSize(1, IsQuestComplete);
         }
         if (hasReward) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, Reward);
@@ -654,8 +654,8 @@ namespace D3.Quests {
       public override Builder MergeFrom(QuestStepComplete other) {
         if (other == global::D3.Quests.QuestStepComplete.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasİsQuestComplete) {
-          İsQuestComplete = other.İsQuestComplete;
+        if (other.HasIsQuestComplete) {
+          IsQuestComplete = other.IsQuestComplete;
         }
         if (other.HasReward) {
           MergeReward(other.Reward);
@@ -704,7 +704,7 @@ namespace D3.Quests {
               break;
             }
             case 8: {
-              result.hasİsQuestComplete = input.ReadBool(ref result.isQuestComplete_);
+              result.hasIsQuestComplete = input.ReadBool(ref result.isQuestComplete_);
               break;
             }
             case 18: {
@@ -726,22 +726,22 @@ namespace D3.Quests {
       }
       
       
-      public bool HasİsQuestComplete {
-        get { return result.hasİsQuestComplete; }
+      public bool HasIsQuestComplete {
+        get { return result.hasIsQuestComplete; }
       }
-      public bool İsQuestComplete {
-        get { return result.İsQuestComplete; }
-        set { SetİsQuestComplete(value); }
+      public bool IsQuestComplete {
+        get { return result.IsQuestComplete; }
+        set { SetIsQuestComplete(value); }
       }
-      public Builder SetİsQuestComplete(bool value) {
+      public Builder SetIsQuestComplete(bool value) {
         PrepareBuilder();
-        result.hasİsQuestComplete = true;
+        result.hasIsQuestComplete = true;
         result.isQuestComplete_ = value;
         return this;
       }
-      public Builder ClearİsQuestComplete() {
+      public Builder ClearIsQuestComplete() {
         PrepareBuilder();
-        result.hasİsQuestComplete = false;
+        result.hasIsQuestComplete = false;
         result.isQuestComplete_ = false;
         return this;
       }

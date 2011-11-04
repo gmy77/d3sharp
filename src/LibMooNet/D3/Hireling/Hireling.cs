@@ -64,8 +64,8 @@ namespace D3.Hireling {
   public sealed partial class Info : pb::GeneratedMessage<Info, Info.Builder> {
     private Info() { }
     private static readonly Info defaultInstance = new Info().MakeReadOnly();
-    private static readonly string[] _ınfoFieldNames = new string[] { "attribute_experience_next", "dead", "gbid_name", "hireling_class", "level", "power_key_params" };
-    private static readonly uint[] _ınfoFieldTags = new uint[] { 32, 96, 21, 8, 24, 88 };
+    private static readonly string[] _infoFieldNames = new string[] { "attribute_experience_next", "dead", "gbid_name", "hireling_class", "level", "power_key_params" };
+    private static readonly uint[] _infoFieldTags = new uint[] { 32, 96, 21, 8, 24, 88 };
     public static Info DefaultInstance {
       get { return defaultInstance; }
     }
@@ -161,7 +161,7 @@ namespace D3.Hireling {
     
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
-      string[] field_names = _ınfoFieldNames;
+      string[] field_names = _infoFieldNames;
       if (hasHirelingClass) {
         output.WriteSInt32(1, field_names[3], HirelingClass);
       }
@@ -373,9 +373,9 @@ namespace D3.Hireling {
         string field_name;
         while (input.ReadTag(out tag, out field_name)) {
           if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_ınfoFieldNames, field_name, global::System.StringComparer.Ordinal);
+            int field_ordinal = global::System.Array.BinarySearch(_infoFieldNames, field_name, global::System.StringComparer.Ordinal);
             if(field_ordinal >= 0)
-              tag = _ınfoFieldTags[field_ordinal];
+              tag = _infoFieldTags[field_ordinal];
             else {
               if (unknownFields == null) {
                 unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);

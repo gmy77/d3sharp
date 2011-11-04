@@ -50,15 +50,15 @@ namespace bnet.protocol.exchange_risk {
         internal__static_bnet_protocol_exchange_risk_ReportAuthorizeRiskVerdictRequest__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_exchange_risk_ReportAuthorizeRiskVerdictRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_risk.ReportAuthorizeRiskVerdictRequest, global::bnet.protocol.exchange_risk.ReportAuthorizeRiskVerdictRequest.Builder>(internal__static_bnet_protocol_exchange_risk_ReportAuthorizeRiskVerdictRequest__Descriptor,
-                new string[] { "Partitiond", "Authd", "Result", "Verdict", });
+                new string[] { "PartitionId", "AuthId", "Result", "Verdict", });
         internal__static_bnet_protocol_exchange_risk_ReportSettleRiskVerdictRequest__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_exchange_risk_ReportSettleRiskVerdictRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_risk.ReportSettleRiskVerdictRequest, global::bnet.protocol.exchange_risk.ReportSettleRiskVerdictRequest.Builder>(internal__static_bnet_protocol_exchange_risk_ReportSettleRiskVerdictRequest__Descriptor,
-                new string[] { "Partitiond", "Settled", "Result", "Verdict", });
+                new string[] { "PartitionId", "SettleId", "Result", "Verdict", });
         internal__static_bnet_protocol_exchange_risk_DelaySettleRiskVerdictRequest__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_exchange_risk_DelaySettleRiskVerdictRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_risk.DelaySettleRiskVerdictRequest, global::bnet.protocol.exchange_risk.DelaySettleRiskVerdictRequest.Builder>(internal__static_bnet_protocol_exchange_risk_DelaySettleRiskVerdictRequest__Descriptor,
-                new string[] { "Partitiond", "Settled", });
+                new string[] { "PartitionId", "SettleId", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -98,24 +98,24 @@ namespace bnet.protocol.exchange_risk {
       get { return global::bnet.protocol.exchange_risk.ExchangeRisk.internal__static_bnet_protocol_exchange_risk_ReportAuthorizeRiskVerdictRequest__FieldAccessorTable; }
     }
     
-    public const int PartitiondFieldNumber = 1;
-    private bool hasPartitiond;
-    private global::bnet.protocol.exchange.PartitionId partitiond_;
-    public bool HasPartitiond {
-      get { return hasPartitiond; }
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
     }
-    public global::bnet.protocol.exchange.PartitionId Partitiond {
-      get { return partitiond_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
     }
     
-    public const int AuthdFieldNumber = 2;
-    private bool hasAuthd;
-    private ulong authd_;
-    public bool HasAuthd {
-      get { return hasAuthd; }
+    public const int AuthIdFieldNumber = 2;
+    private bool hasAuthId;
+    private ulong authId_;
+    public bool HasAuthId {
+      get { return hasAuthId; }
     }
-    public ulong Authd {
-      get { return authd_; }
+    public ulong AuthId {
+      get { return authId_; }
     }
     
     public const int ResultFieldNumber = 3;
@@ -140,10 +140,10 @@ namespace bnet.protocol.exchange_risk {
     
     public override bool IsInitialized {
       get {
-        if (!hasPartitiond) return false;
-        if (!hasAuthd) return false;
+        if (!hasPartitionId) return false;
+        if (!hasAuthId) return false;
         if (!hasResult) return false;
-        if (!Partitiond.IsInitialized) return false;
+        if (!PartitionId.IsInitialized) return false;
         return true;
       }
     }
@@ -151,11 +151,11 @@ namespace bnet.protocol.exchange_risk {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _reportAuthorizeRiskVerdictRequestFieldNames;
-      if (hasPartitiond) {
-        output.WriteMessage(1, field_names[1], Partitiond);
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[1], PartitionId);
       }
-      if (hasAuthd) {
-        output.WriteUInt64(2, field_names[0], Authd);
+      if (hasAuthId) {
+        output.WriteUInt64(2, field_names[0], AuthId);
       }
       if (hasResult) {
         output.WriteUInt64(3, field_names[2], Result);
@@ -173,11 +173,11 @@ namespace bnet.protocol.exchange_risk {
         if (size != -1) return size;
         
         size = 0;
-        if (hasPartitiond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Partitiond);
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
         }
-        if (hasAuthd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, Authd);
+        if (hasAuthId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, AuthId);
         }
         if (hasResult) {
           size += pb::CodedOutputStream.ComputeUInt64Size(3, Result);
@@ -311,11 +311,11 @@ namespace bnet.protocol.exchange_risk {
       public override Builder MergeFrom(ReportAuthorizeRiskVerdictRequest other) {
         if (other == global::bnet.protocol.exchange_risk.ReportAuthorizeRiskVerdictRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasPartitiond) {
-          MergePartitiond(other.Partitiond);
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
         }
-        if (other.HasAuthd) {
-          Authd = other.Authd;
+        if (other.HasAuthId) {
+          AuthId = other.AuthId;
         }
         if (other.HasResult) {
           Result = other.Result;
@@ -368,15 +368,15 @@ namespace bnet.protocol.exchange_risk {
             }
             case 10: {
               global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
-              if (result.hasPartitiond) {
-                subBuilder.MergeFrom(Partitiond);
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Partitiond = subBuilder.BuildPartial();
+              PartitionId = subBuilder.BuildPartial();
               break;
             }
             case 16: {
-              result.hasAuthd = input.ReadUInt64(ref result.authd_);
+              result.hasAuthId = input.ReadUInt64(ref result.authId_);
               break;
             }
             case 24: {
@@ -397,63 +397,63 @@ namespace bnet.protocol.exchange_risk {
       }
       
       
-      public bool HasPartitiond {
-       get { return result.hasPartitiond; }
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
       }
-      public global::bnet.protocol.exchange.PartitionId Partitiond {
-        get { return result.Partitiond; }
-        set { SetPartitiond(value); }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = value;
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
         return this;
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = builderForValue.Build();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergePartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasPartitiond &&
-            result.partitiond_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
-            result.partitiond_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitiond_).MergeFrom(value).BuildPartial();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
         } else {
-          result.partitiond_ = value;
+          result.partitionId_ = value;
         }
-        result.hasPartitiond = true;
+        result.hasPartitionId = true;
         return this;
       }
-      public Builder ClearPartitiond() {
+      public Builder ClearPartitionId() {
         PrepareBuilder();
-        result.hasPartitiond = false;
-        result.partitiond_ = null;
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
         return this;
       }
       
-      public bool HasAuthd {
-        get { return result.hasAuthd; }
+      public bool HasAuthId {
+        get { return result.hasAuthId; }
       }
-      public ulong Authd {
-        get { return result.Authd; }
-        set { SetAuthd(value); }
+      public ulong AuthId {
+        get { return result.AuthId; }
+        set { SetAuthId(value); }
       }
-      public Builder SetAuthd(ulong value) {
+      public Builder SetAuthId(ulong value) {
         PrepareBuilder();
-        result.hasAuthd = true;
-        result.authd_ = value;
+        result.hasAuthId = true;
+        result.authId_ = value;
         return this;
       }
-      public Builder ClearAuthd() {
+      public Builder ClearAuthId() {
         PrepareBuilder();
-        result.hasAuthd = false;
-        result.authd_ = 0UL;
+        result.hasAuthId = false;
+        result.authId_ = 0UL;
         return this;
       }
       
@@ -530,24 +530,24 @@ namespace bnet.protocol.exchange_risk {
       get { return global::bnet.protocol.exchange_risk.ExchangeRisk.internal__static_bnet_protocol_exchange_risk_ReportSettleRiskVerdictRequest__FieldAccessorTable; }
     }
     
-    public const int PartitiondFieldNumber = 1;
-    private bool hasPartitiond;
-    private global::bnet.protocol.exchange.PartitionId partitiond_;
-    public bool HasPartitiond {
-      get { return hasPartitiond; }
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
     }
-    public global::bnet.protocol.exchange.PartitionId Partitiond {
-      get { return partitiond_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
     }
     
-    public const int SettledFieldNumber = 2;
-    private bool hasSettled;
-    private ulong settled_;
-    public bool HasSettled {
-      get { return hasSettled; }
+    public const int SettleIdFieldNumber = 2;
+    private bool hasSettleId;
+    private ulong settleId_;
+    public bool HasSettleId {
+      get { return hasSettleId; }
     }
-    public ulong Settled {
-      get { return settled_; }
+    public ulong SettleId {
+      get { return settleId_; }
     }
     
     public const int ResultFieldNumber = 3;
@@ -572,10 +572,10 @@ namespace bnet.protocol.exchange_risk {
     
     public override bool IsInitialized {
       get {
-        if (!hasPartitiond) return false;
-        if (!hasSettled) return false;
+        if (!hasPartitionId) return false;
+        if (!hasSettleId) return false;
         if (!hasResult) return false;
-        if (!Partitiond.IsInitialized) return false;
+        if (!PartitionId.IsInitialized) return false;
         return true;
       }
     }
@@ -583,11 +583,11 @@ namespace bnet.protocol.exchange_risk {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _reportSettleRiskVerdictRequestFieldNames;
-      if (hasPartitiond) {
-        output.WriteMessage(1, field_names[0], Partitiond);
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[0], PartitionId);
       }
-      if (hasSettled) {
-        output.WriteUInt64(2, field_names[2], Settled);
+      if (hasSettleId) {
+        output.WriteUInt64(2, field_names[2], SettleId);
       }
       if (hasResult) {
         output.WriteUInt64(3, field_names[1], Result);
@@ -605,11 +605,11 @@ namespace bnet.protocol.exchange_risk {
         if (size != -1) return size;
         
         size = 0;
-        if (hasPartitiond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Partitiond);
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
         }
-        if (hasSettled) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, Settled);
+        if (hasSettleId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, SettleId);
         }
         if (hasResult) {
           size += pb::CodedOutputStream.ComputeUInt64Size(3, Result);
@@ -743,11 +743,11 @@ namespace bnet.protocol.exchange_risk {
       public override Builder MergeFrom(ReportSettleRiskVerdictRequest other) {
         if (other == global::bnet.protocol.exchange_risk.ReportSettleRiskVerdictRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasPartitiond) {
-          MergePartitiond(other.Partitiond);
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
         }
-        if (other.HasSettled) {
-          Settled = other.Settled;
+        if (other.HasSettleId) {
+          SettleId = other.SettleId;
         }
         if (other.HasResult) {
           Result = other.Result;
@@ -800,15 +800,15 @@ namespace bnet.protocol.exchange_risk {
             }
             case 10: {
               global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
-              if (result.hasPartitiond) {
-                subBuilder.MergeFrom(Partitiond);
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Partitiond = subBuilder.BuildPartial();
+              PartitionId = subBuilder.BuildPartial();
               break;
             }
             case 16: {
-              result.hasSettled = input.ReadUInt64(ref result.settled_);
+              result.hasSettleId = input.ReadUInt64(ref result.settleId_);
               break;
             }
             case 24: {
@@ -829,63 +829,63 @@ namespace bnet.protocol.exchange_risk {
       }
       
       
-      public bool HasPartitiond {
-       get { return result.hasPartitiond; }
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
       }
-      public global::bnet.protocol.exchange.PartitionId Partitiond {
-        get { return result.Partitiond; }
-        set { SetPartitiond(value); }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = value;
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
         return this;
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = builderForValue.Build();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergePartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasPartitiond &&
-            result.partitiond_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
-            result.partitiond_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitiond_).MergeFrom(value).BuildPartial();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
         } else {
-          result.partitiond_ = value;
+          result.partitionId_ = value;
         }
-        result.hasPartitiond = true;
+        result.hasPartitionId = true;
         return this;
       }
-      public Builder ClearPartitiond() {
+      public Builder ClearPartitionId() {
         PrepareBuilder();
-        result.hasPartitiond = false;
-        result.partitiond_ = null;
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
         return this;
       }
       
-      public bool HasSettled {
-        get { return result.hasSettled; }
+      public bool HasSettleId {
+        get { return result.hasSettleId; }
       }
-      public ulong Settled {
-        get { return result.Settled; }
-        set { SetSettled(value); }
+      public ulong SettleId {
+        get { return result.SettleId; }
+        set { SetSettleId(value); }
       }
-      public Builder SetSettled(ulong value) {
+      public Builder SetSettleId(ulong value) {
         PrepareBuilder();
-        result.hasSettled = true;
-        result.settled_ = value;
+        result.hasSettleId = true;
+        result.settleId_ = value;
         return this;
       }
-      public Builder ClearSettled() {
+      public Builder ClearSettleId() {
         PrepareBuilder();
-        result.hasSettled = false;
-        result.settled_ = 0UL;
+        result.hasSettleId = false;
+        result.settleId_ = 0UL;
         return this;
       }
       
@@ -962,31 +962,31 @@ namespace bnet.protocol.exchange_risk {
       get { return global::bnet.protocol.exchange_risk.ExchangeRisk.internal__static_bnet_protocol_exchange_risk_DelaySettleRiskVerdictRequest__FieldAccessorTable; }
     }
     
-    public const int PartitiondFieldNumber = 1;
-    private bool hasPartitiond;
-    private global::bnet.protocol.exchange.PartitionId partitiond_;
-    public bool HasPartitiond {
-      get { return hasPartitiond; }
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
     }
-    public global::bnet.protocol.exchange.PartitionId Partitiond {
-      get { return partitiond_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
     }
     
-    public const int SettledFieldNumber = 2;
-    private bool hasSettled;
-    private ulong settled_;
-    public bool HasSettled {
-      get { return hasSettled; }
+    public const int SettleIdFieldNumber = 2;
+    private bool hasSettleId;
+    private ulong settleId_;
+    public bool HasSettleId {
+      get { return hasSettleId; }
     }
-    public ulong Settled {
-      get { return settled_; }
+    public ulong SettleId {
+      get { return settleId_; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasPartitiond) return false;
-        if (!hasSettled) return false;
-        if (!Partitiond.IsInitialized) return false;
+        if (!hasPartitionId) return false;
+        if (!hasSettleId) return false;
+        if (!PartitionId.IsInitialized) return false;
         return true;
       }
     }
@@ -994,11 +994,11 @@ namespace bnet.protocol.exchange_risk {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _delaySettleRiskVerdictRequestFieldNames;
-      if (hasPartitiond) {
-        output.WriteMessage(1, field_names[0], Partitiond);
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[0], PartitionId);
       }
-      if (hasSettled) {
-        output.WriteUInt64(2, field_names[1], Settled);
+      if (hasSettleId) {
+        output.WriteUInt64(2, field_names[1], SettleId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1010,11 +1010,11 @@ namespace bnet.protocol.exchange_risk {
         if (size != -1) return size;
         
         size = 0;
-        if (hasPartitiond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Partitiond);
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
         }
-        if (hasSettled) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, Settled);
+        if (hasSettleId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, SettleId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1142,11 +1142,11 @@ namespace bnet.protocol.exchange_risk {
       public override Builder MergeFrom(DelaySettleRiskVerdictRequest other) {
         if (other == global::bnet.protocol.exchange_risk.DelaySettleRiskVerdictRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasPartitiond) {
-          MergePartitiond(other.Partitiond);
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
         }
-        if (other.HasSettled) {
-          Settled = other.Settled;
+        if (other.HasSettleId) {
+          SettleId = other.SettleId;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1193,15 +1193,15 @@ namespace bnet.protocol.exchange_risk {
             }
             case 10: {
               global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
-              if (result.hasPartitiond) {
-                subBuilder.MergeFrom(Partitiond);
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Partitiond = subBuilder.BuildPartial();
+              PartitionId = subBuilder.BuildPartial();
               break;
             }
             case 16: {
-              result.hasSettled = input.ReadUInt64(ref result.settled_);
+              result.hasSettleId = input.ReadUInt64(ref result.settleId_);
               break;
             }
           }
@@ -1214,63 +1214,63 @@ namespace bnet.protocol.exchange_risk {
       }
       
       
-      public bool HasPartitiond {
-       get { return result.hasPartitiond; }
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
       }
-      public global::bnet.protocol.exchange.PartitionId Partitiond {
-        get { return result.Partitiond; }
-        set { SetPartitiond(value); }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = value;
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
         return this;
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = builderForValue.Build();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergePartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasPartitiond &&
-            result.partitiond_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
-            result.partitiond_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitiond_).MergeFrom(value).BuildPartial();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
         } else {
-          result.partitiond_ = value;
+          result.partitionId_ = value;
         }
-        result.hasPartitiond = true;
+        result.hasPartitionId = true;
         return this;
       }
-      public Builder ClearPartitiond() {
+      public Builder ClearPartitionId() {
         PrepareBuilder();
-        result.hasPartitiond = false;
-        result.partitiond_ = null;
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
         return this;
       }
       
-      public bool HasSettled {
-        get { return result.hasSettled; }
+      public bool HasSettleId {
+        get { return result.hasSettleId; }
       }
-      public ulong Settled {
-        get { return result.Settled; }
-        set { SetSettled(value); }
+      public ulong SettleId {
+        get { return result.SettleId; }
+        set { SetSettleId(value); }
       }
-      public Builder SetSettled(ulong value) {
+      public Builder SetSettleId(ulong value) {
         PrepareBuilder();
-        result.hasSettled = true;
-        result.settled_ = value;
+        result.hasSettleId = true;
+        result.settleId_ = value;
         return this;
       }
-      public Builder ClearSettled() {
+      public Builder ClearSettleId() {
         PrepareBuilder();
-        result.hasSettled = false;
-        result.settled_ = 0UL;
+        result.hasSettleId = false;
+        result.settleId_ = 0UL;
         return this;
       }
     }

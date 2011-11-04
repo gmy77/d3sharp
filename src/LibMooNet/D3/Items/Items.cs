@@ -84,39 +84,39 @@ namespace D3.Items {
         internal__static_D3_Items_RareItemName__Descriptor = Descriptor.MessageTypes[0];
         internal__static_D3_Items_RareItemName__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.RareItemName, global::D3.Items.RareItemName.Builder>(internal__static_D3_Items_RareItemName__Descriptor,
-                new string[] { "İtemNamesPrefix", "SnoAffixStringList", "AffixStringListndex", "İtemStringListndex", });
+                new string[] { "ItemNameIsPrefix", "SnoAffixStringList", "AffixStringListIndex", "ItemStringListIndex", });
         internal__static_D3_Items_Generator__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_Items_Generator__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.Generator, global::D3.Items.Generator.Builder>(internal__static_D3_Items_Generator__Descriptor,
-                new string[] { "Seed", "GbHandle", "BaseAffixes", "RaretemName", "EnchantAffix", "SocketAffix", "Flags", "Durability", "StackSize", "DyeType", "İtemQualityLevel", "İtemBindingLevel", "MaxDurability", "Contents", "AttunedSkill", });
+                new string[] { "Seed", "GbHandle", "BaseAffixes", "RareItemName", "EnchantAffix", "SocketAffix", "Flags", "Durability", "StackSize", "DyeType", "ItemQualityLevel", "ItemBindingLevel", "MaxDurability", "Contents", "AttunedSkill", });
         internal__static_D3_Items_EmbeddedGenerator__Descriptor = Descriptor.MessageTypes[2];
         internal__static_D3_Items_EmbeddedGenerator__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.EmbeddedGenerator, global::D3.Items.EmbeddedGenerator.Builder>(internal__static_D3_Items_EmbeddedGenerator__Descriptor,
-                new string[] { "İd", "Generator", });
+                new string[] { "Id", "Generator", });
         internal__static_D3_Items_SavedItem__Descriptor = Descriptor.MessageTypes[3];
         internal__static_D3_Items_SavedItem__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.SavedItem, global::D3.Items.SavedItem.Builder>(internal__static_D3_Items_SavedItem__Descriptor,
-                new string[] { "İd", "OwnerEntityd", "Socketd", "HirelingClass", "İtemSlot", "Squarendex", "UsedSocketCount", "Generator", });
+                new string[] { "Id", "OwnerEntityId", "SocketId", "HirelingClass", "ItemSlot", "SquareIndex", "UsedSocketCount", "Generator", });
         internal__static_D3_Items_AuctionAccountInfo__Descriptor = Descriptor.MessageTypes[4];
         internal__static_D3_Items_AuctionAccountInfo__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.AuctionAccountInfo, global::D3.Items.AuctionAccountInfo.Builder>(internal__static_D3_Items_AuctionAccountInfo__Descriptor,
-                new string[] { "Accountd", "Escrowd", });
+                new string[] { "AccountId", "EscrowId", });
         internal__static_D3_Items_AuctionItem__Descriptor = Descriptor.MessageTypes[5];
         internal__static_D3_Items_AuctionItem__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.AuctionItem, global::D3.Items.AuctionItem.Builder>(internal__static_D3_Items_AuctionItem__Descriptor,
-                new string[] { "İd", "Generator", });
+                new string[] { "Id", "Generator", });
         internal__static_D3_Items_AuctionInfo__Descriptor = Descriptor.MessageTypes[6];
         internal__static_D3_Items_AuctionInfo__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.AuctionInfo, global::D3.Items.AuctionInfo.Builder>(internal__static_D3_Items_AuctionInfo__Descriptor,
-                new string[] { "İd", "Owner", });
+                new string[] { "Id", "Owner", });
         internal__static_D3_Items_ItemList__Descriptor = Descriptor.MessageTypes[7];
         internal__static_D3_Items_ItemList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.ItemList, global::D3.Items.ItemList.Builder>(internal__static_D3_Items_ItemList__Descriptor,
-                new string[] { "İtems", });
+                new string[] { "Items", });
         internal__static_D3_Items_Ownership__Descriptor = Descriptor.MessageTypes[8];
         internal__static_D3_Items_Ownership__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.Ownership, global::D3.Items.Ownership.Builder>(internal__static_D3_Items_Ownership__Descriptor,
-                new string[] { "OwnerEntityd", "DeleteTime", "Escrowd", });
+                new string[] { "OwnerEntityId", "DeleteTime", "EscrowId", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -157,14 +157,14 @@ namespace D3.Items {
       get { return global::D3.Items.Items.internal__static_D3_Items_RareItemName__FieldAccessorTable; }
     }
     
-    public const int İtemNamesPrefixFieldNumber = 1;
-    private bool hasİtemNamesPrefix;
-    private bool itemNamesPrefix_;
-    public bool HasİtemNamesPrefix {
-      get { return hasİtemNamesPrefix; }
+    public const int ItemNameIsPrefixFieldNumber = 1;
+    private bool hasItemNameIsPrefix;
+    private bool itemNameIsPrefix_;
+    public bool HasItemNameIsPrefix {
+      get { return hasItemNameIsPrefix; }
     }
-    public bool İtemNamesPrefix {
-      get { return itemNamesPrefix_; }
+    public bool ItemNameIsPrefix {
+      get { return itemNameIsPrefix_; }
     }
     
     public const int SnoAffixStringListFieldNumber = 2;
@@ -177,32 +177,32 @@ namespace D3.Items {
       get { return snoAffixStringList_; }
     }
     
-    public const int AffixStringListndexFieldNumber = 3;
-    private bool hasAffixStringListndex;
-    private int affixStringListndex_ = -1;
-    public bool HasAffixStringListndex {
-      get { return hasAffixStringListndex; }
+    public const int AffixStringListIndexFieldNumber = 3;
+    private bool hasAffixStringListIndex;
+    private int affixStringListIndex_ = -1;
+    public bool HasAffixStringListIndex {
+      get { return hasAffixStringListIndex; }
     }
-    public int AffixStringListndex {
-      get { return affixStringListndex_; }
+    public int AffixStringListIndex {
+      get { return affixStringListIndex_; }
     }
     
-    public const int İtemStringListndexFieldNumber = 4;
-    private bool hasİtemStringListndex;
-    private int itemStringListndex_ = -1;
-    public bool HasİtemStringListndex {
-      get { return hasİtemStringListndex; }
+    public const int ItemStringListIndexFieldNumber = 4;
+    private bool hasItemStringListIndex;
+    private int itemStringListIndex_ = -1;
+    public bool HasItemStringListIndex {
+      get { return hasItemStringListIndex; }
     }
-    public int İtemStringListndex {
-      get { return itemStringListndex_; }
+    public int ItemStringListIndex {
+      get { return itemStringListIndex_; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasİtemNamesPrefix) return false;
+        if (!hasItemNameIsPrefix) return false;
         if (!hasSnoAffixStringList) return false;
-        if (!hasAffixStringListndex) return false;
-        if (!hasİtemStringListndex) return false;
+        if (!hasAffixStringListIndex) return false;
+        if (!hasItemStringListIndex) return false;
         return true;
       }
     }
@@ -210,17 +210,17 @@ namespace D3.Items {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _rareItemNameFieldNames;
-      if (hasİtemNamesPrefix) {
-        output.WriteBool(1, field_names[1], İtemNamesPrefix);
+      if (hasItemNameIsPrefix) {
+        output.WriteBool(1, field_names[1], ItemNameIsPrefix);
       }
       if (hasSnoAffixStringList) {
         output.WriteSFixed32(2, field_names[3], SnoAffixStringList);
       }
-      if (hasAffixStringListndex) {
-        output.WriteSInt32(3, field_names[0], AffixStringListndex);
+      if (hasAffixStringListIndex) {
+        output.WriteSInt32(3, field_names[0], AffixStringListIndex);
       }
-      if (hasİtemStringListndex) {
-        output.WriteSInt32(4, field_names[2], İtemStringListndex);
+      if (hasItemStringListIndex) {
+        output.WriteSInt32(4, field_names[2], ItemStringListIndex);
       }
       UnknownFields.WriteTo(output);
     }
@@ -232,17 +232,17 @@ namespace D3.Items {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİtemNamesPrefix) {
-          size += pb::CodedOutputStream.ComputeBoolSize(1, İtemNamesPrefix);
+        if (hasItemNameIsPrefix) {
+          size += pb::CodedOutputStream.ComputeBoolSize(1, ItemNameIsPrefix);
         }
         if (hasSnoAffixStringList) {
           size += pb::CodedOutputStream.ComputeSFixed32Size(2, SnoAffixStringList);
         }
-        if (hasAffixStringListndex) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(3, AffixStringListndex);
+        if (hasAffixStringListIndex) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(3, AffixStringListIndex);
         }
-        if (hasİtemStringListndex) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(4, İtemStringListndex);
+        if (hasItemStringListIndex) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(4, ItemStringListIndex);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -370,17 +370,17 @@ namespace D3.Items {
       public override Builder MergeFrom(RareItemName other) {
         if (other == global::D3.Items.RareItemName.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasİtemNamesPrefix) {
-          İtemNamesPrefix = other.İtemNamesPrefix;
+        if (other.HasItemNameIsPrefix) {
+          ItemNameIsPrefix = other.ItemNameIsPrefix;
         }
         if (other.HasSnoAffixStringList) {
           SnoAffixStringList = other.SnoAffixStringList;
         }
-        if (other.HasAffixStringListndex) {
-          AffixStringListndex = other.AffixStringListndex;
+        if (other.HasAffixStringListIndex) {
+          AffixStringListIndex = other.AffixStringListIndex;
         }
-        if (other.HasİtemStringListndex) {
-          İtemStringListndex = other.İtemStringListndex;
+        if (other.HasItemStringListIndex) {
+          ItemStringListIndex = other.ItemStringListIndex;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -426,7 +426,7 @@ namespace D3.Items {
               break;
             }
             case 8: {
-              result.hasİtemNamesPrefix = input.ReadBool(ref result.itemNamesPrefix_);
+              result.hasItemNameIsPrefix = input.ReadBool(ref result.itemNameIsPrefix_);
               break;
             }
             case 21: {
@@ -434,11 +434,11 @@ namespace D3.Items {
               break;
             }
             case 24: {
-              result.hasAffixStringListndex = input.ReadSInt32(ref result.affixStringListndex_);
+              result.hasAffixStringListIndex = input.ReadSInt32(ref result.affixStringListIndex_);
               break;
             }
             case 32: {
-              result.hasİtemStringListndex = input.ReadSInt32(ref result.itemStringListndex_);
+              result.hasItemStringListIndex = input.ReadSInt32(ref result.itemStringListIndex_);
               break;
             }
           }
@@ -451,23 +451,23 @@ namespace D3.Items {
       }
       
       
-      public bool HasİtemNamesPrefix {
-        get { return result.hasİtemNamesPrefix; }
+      public bool HasItemNameIsPrefix {
+        get { return result.hasItemNameIsPrefix; }
       }
-      public bool İtemNamesPrefix {
-        get { return result.İtemNamesPrefix; }
-        set { SetİtemNamesPrefix(value); }
+      public bool ItemNameIsPrefix {
+        get { return result.ItemNameIsPrefix; }
+        set { SetItemNameIsPrefix(value); }
       }
-      public Builder SetİtemNamesPrefix(bool value) {
+      public Builder SetItemNameIsPrefix(bool value) {
         PrepareBuilder();
-        result.hasİtemNamesPrefix = true;
-        result.itemNamesPrefix_ = value;
+        result.hasItemNameIsPrefix = true;
+        result.itemNameIsPrefix_ = value;
         return this;
       }
-      public Builder ClearİtemNamesPrefix() {
+      public Builder ClearItemNameIsPrefix() {
         PrepareBuilder();
-        result.hasİtemNamesPrefix = false;
-        result.itemNamesPrefix_ = false;
+        result.hasItemNameIsPrefix = false;
+        result.itemNameIsPrefix_ = false;
         return this;
       }
       
@@ -491,43 +491,43 @@ namespace D3.Items {
         return this;
       }
       
-      public bool HasAffixStringListndex {
-        get { return result.hasAffixStringListndex; }
+      public bool HasAffixStringListIndex {
+        get { return result.hasAffixStringListIndex; }
       }
-      public int AffixStringListndex {
-        get { return result.AffixStringListndex; }
-        set { SetAffixStringListndex(value); }
+      public int AffixStringListIndex {
+        get { return result.AffixStringListIndex; }
+        set { SetAffixStringListIndex(value); }
       }
-      public Builder SetAffixStringListndex(int value) {
+      public Builder SetAffixStringListIndex(int value) {
         PrepareBuilder();
-        result.hasAffixStringListndex = true;
-        result.affixStringListndex_ = value;
+        result.hasAffixStringListIndex = true;
+        result.affixStringListIndex_ = value;
         return this;
       }
-      public Builder ClearAffixStringListndex() {
+      public Builder ClearAffixStringListIndex() {
         PrepareBuilder();
-        result.hasAffixStringListndex = false;
-        result.affixStringListndex_ = -1;
+        result.hasAffixStringListIndex = false;
+        result.affixStringListIndex_ = -1;
         return this;
       }
       
-      public bool HasİtemStringListndex {
-        get { return result.hasİtemStringListndex; }
+      public bool HasItemStringListIndex {
+        get { return result.hasItemStringListIndex; }
       }
-      public int İtemStringListndex {
-        get { return result.İtemStringListndex; }
-        set { SetİtemStringListndex(value); }
+      public int ItemStringListIndex {
+        get { return result.ItemStringListIndex; }
+        set { SetItemStringListIndex(value); }
       }
-      public Builder SetİtemStringListndex(int value) {
+      public Builder SetItemStringListIndex(int value) {
         PrepareBuilder();
-        result.hasİtemStringListndex = true;
-        result.itemStringListndex_ = value;
+        result.hasItemStringListIndex = true;
+        result.itemStringListIndex_ = value;
         return this;
       }
-      public Builder ClearİtemStringListndex() {
+      public Builder ClearItemStringListIndex() {
         PrepareBuilder();
-        result.hasİtemStringListndex = false;
-        result.itemStringListndex_ = -1;
+        result.hasItemStringListIndex = false;
+        result.itemStringListIndex_ = -1;
         return this;
       }
     }
@@ -596,14 +596,14 @@ namespace D3.Items {
       return baseAffixes_[index];
     }
     
-    public const int RaretemNameFieldNumber = 4;
-    private bool hasRaretemName;
-    private global::D3.Items.RareItemName raretemName_;
-    public bool HasRaretemName {
-      get { return hasRaretemName; }
+    public const int RareItemNameFieldNumber = 4;
+    private bool hasRareItemName;
+    private global::D3.Items.RareItemName rareItemName_;
+    public bool HasRareItemName {
+      get { return hasRareItemName; }
     }
-    public global::D3.Items.RareItemName RaretemName {
-      get { return raretemName_ ?? global::D3.Items.RareItemName.DefaultInstance; }
+    public global::D3.Items.RareItemName RareItemName {
+      get { return rareItemName_ ?? global::D3.Items.RareItemName.DefaultInstance; }
     }
     
     public const int EnchantAffixFieldNumber = 5;
@@ -666,23 +666,23 @@ namespace D3.Items {
       get { return dyeType_; }
     }
     
-    public const int İtemQualityLevelFieldNumber = 11;
-    private bool hasİtemQualityLevel;
+    public const int ItemQualityLevelFieldNumber = 11;
+    private bool hasItemQualityLevel;
     private int itemQualityLevel_;
-    public bool HasİtemQualityLevel {
-      get { return hasİtemQualityLevel; }
+    public bool HasItemQualityLevel {
+      get { return hasItemQualityLevel; }
     }
-    public int İtemQualityLevel {
+    public int ItemQualityLevel {
       get { return itemQualityLevel_; }
     }
     
-    public const int İtemBindingLevelFieldNumber = 12;
-    private bool hasİtemBindingLevel;
+    public const int ItemBindingLevelFieldNumber = 12;
+    private bool hasItemBindingLevel;
     private int itemBindingLevel_;
-    public bool HasİtemBindingLevel {
-      get { return hasİtemBindingLevel; }
+    public bool HasItemBindingLevel {
+      get { return hasItemBindingLevel; }
     }
-    public int İtemBindingLevel {
+    public int ItemBindingLevel {
       get { return itemBindingLevel_; }
     }
     
@@ -722,18 +722,18 @@ namespace D3.Items {
       get {
         if (!hasSeed) return false;
         if (!hasGbHandle) return false;
-        if (!hasRaretemName) return false;
+        if (!hasRareItemName) return false;
         if (!hasEnchantAffix) return false;
         if (!hasSocketAffix) return false;
         if (!hasFlags) return false;
         if (!hasDurability) return false;
         if (!hasStackSize) return false;
         if (!hasDyeType) return false;
-        if (!hasİtemQualityLevel) return false;
-        if (!hasİtemBindingLevel) return false;
+        if (!hasItemQualityLevel) return false;
+        if (!hasItemBindingLevel) return false;
         if (!hasMaxDurability) return false;
         if (!GbHandle.IsInitialized) return false;
-        if (!RaretemName.IsInitialized) return false;
+        if (!RareItemName.IsInitialized) return false;
         foreach (global::D3.Items.EmbeddedGenerator element in ContentsList) {
           if (!element.IsInitialized) return false;
         }
@@ -753,8 +753,8 @@ namespace D3.Items {
       if (baseAffixes_.Count > 0) {
         output.WriteSFixed32Array(3, field_names[1], baseAffixes_);
       }
-      if (hasRaretemName) {
-        output.WriteMessage(4, field_names[11], RaretemName);
+      if (hasRareItemName) {
+        output.WriteMessage(4, field_names[11], RareItemName);
       }
       if (hasEnchantAffix) {
         output.WriteSFixed32(5, field_names[5], EnchantAffix);
@@ -774,11 +774,11 @@ namespace D3.Items {
       if (hasDyeType) {
         output.WriteUInt32(10, field_names[4], DyeType);
       }
-      if (hasİtemQualityLevel) {
-        output.WriteSInt32(11, field_names[9], İtemQualityLevel);
+      if (hasItemQualityLevel) {
+        output.WriteSInt32(11, field_names[9], ItemQualityLevel);
       }
-      if (hasİtemBindingLevel) {
-        output.WriteSInt32(12, field_names[8], İtemBindingLevel);
+      if (hasItemBindingLevel) {
+        output.WriteSInt32(12, field_names[8], ItemBindingLevel);
       }
       if (hasMaxDurability) {
         output.WriteUInt32(13, field_names[10], MaxDurability);
@@ -811,8 +811,8 @@ namespace D3.Items {
           size += dataSize;
           size += 1 * baseAffixes_.Count;
         }
-        if (hasRaretemName) {
-          size += pb::CodedOutputStream.ComputeMessageSize(4, RaretemName);
+        if (hasRareItemName) {
+          size += pb::CodedOutputStream.ComputeMessageSize(4, RareItemName);
         }
         if (hasEnchantAffix) {
           size += pb::CodedOutputStream.ComputeSFixed32Size(5, EnchantAffix);
@@ -832,11 +832,11 @@ namespace D3.Items {
         if (hasDyeType) {
           size += pb::CodedOutputStream.ComputeUInt32Size(10, DyeType);
         }
-        if (hasİtemQualityLevel) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(11, İtemQualityLevel);
+        if (hasItemQualityLevel) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(11, ItemQualityLevel);
         }
-        if (hasİtemBindingLevel) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(12, İtemBindingLevel);
+        if (hasItemBindingLevel) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(12, ItemBindingLevel);
         }
         if (hasMaxDurability) {
           size += pb::CodedOutputStream.ComputeUInt32Size(13, MaxDurability);
@@ -984,8 +984,8 @@ namespace D3.Items {
         if (other.baseAffixes_.Count != 0) {
           result.baseAffixes_.Add(other.baseAffixes_);
         }
-        if (other.HasRaretemName) {
-          MergeRaretemName(other.RaretemName);
+        if (other.HasRareItemName) {
+          MergeRareItemName(other.RareItemName);
         }
         if (other.HasEnchantAffix) {
           EnchantAffix = other.EnchantAffix;
@@ -1005,11 +1005,11 @@ namespace D3.Items {
         if (other.HasDyeType) {
           DyeType = other.DyeType;
         }
-        if (other.HasİtemQualityLevel) {
-          İtemQualityLevel = other.İtemQualityLevel;
+        if (other.HasItemQualityLevel) {
+          ItemQualityLevel = other.ItemQualityLevel;
         }
-        if (other.HasİtemBindingLevel) {
-          İtemBindingLevel = other.İtemBindingLevel;
+        if (other.HasItemBindingLevel) {
+          ItemBindingLevel = other.ItemBindingLevel;
         }
         if (other.HasMaxDurability) {
           MaxDurability = other.MaxDurability;
@@ -1083,11 +1083,11 @@ namespace D3.Items {
             }
             case 34: {
               global::D3.Items.RareItemName.Builder subBuilder = global::D3.Items.RareItemName.CreateBuilder();
-              if (result.hasRaretemName) {
-                subBuilder.MergeFrom(RaretemName);
+              if (result.hasRareItemName) {
+                subBuilder.MergeFrom(RareItemName);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              RaretemName = subBuilder.BuildPartial();
+              RareItemName = subBuilder.BuildPartial();
               break;
             }
             case 45: {
@@ -1115,11 +1115,11 @@ namespace D3.Items {
               break;
             }
             case 88: {
-              result.hasİtemQualityLevel = input.ReadSInt32(ref result.itemQualityLevel_);
+              result.hasItemQualityLevel = input.ReadSInt32(ref result.itemQualityLevel_);
               break;
             }
             case 96: {
-              result.hasİtemBindingLevel = input.ReadSInt32(ref result.itemBindingLevel_);
+              result.hasItemBindingLevel = input.ReadSInt32(ref result.itemBindingLevel_);
               break;
             }
             case 104: {
@@ -1234,43 +1234,43 @@ namespace D3.Items {
         return this;
       }
       
-      public bool HasRaretemName {
-       get { return result.hasRaretemName; }
+      public bool HasRareItemName {
+       get { return result.hasRareItemName; }
       }
-      public global::D3.Items.RareItemName RaretemName {
-        get { return result.RaretemName; }
-        set { SetRaretemName(value); }
+      public global::D3.Items.RareItemName RareItemName {
+        get { return result.RareItemName; }
+        set { SetRareItemName(value); }
       }
-      public Builder SetRaretemName(global::D3.Items.RareItemName value) {
+      public Builder SetRareItemName(global::D3.Items.RareItemName value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasRaretemName = true;
-        result.raretemName_ = value;
+        result.hasRareItemName = true;
+        result.rareItemName_ = value;
         return this;
       }
-      public Builder SetRaretemName(global::D3.Items.RareItemName.Builder builderForValue) {
+      public Builder SetRareItemName(global::D3.Items.RareItemName.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasRaretemName = true;
-        result.raretemName_ = builderForValue.Build();
+        result.hasRareItemName = true;
+        result.rareItemName_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeRaretemName(global::D3.Items.RareItemName value) {
+      public Builder MergeRareItemName(global::D3.Items.RareItemName value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasRaretemName &&
-            result.raretemName_ != global::D3.Items.RareItemName.DefaultInstance) {
-            result.raretemName_ = global::D3.Items.RareItemName.CreateBuilder(result.raretemName_).MergeFrom(value).BuildPartial();
+        if (result.hasRareItemName &&
+            result.rareItemName_ != global::D3.Items.RareItemName.DefaultInstance) {
+            result.rareItemName_ = global::D3.Items.RareItemName.CreateBuilder(result.rareItemName_).MergeFrom(value).BuildPartial();
         } else {
-          result.raretemName_ = value;
+          result.rareItemName_ = value;
         }
-        result.hasRaretemName = true;
+        result.hasRareItemName = true;
         return this;
       }
-      public Builder ClearRaretemName() {
+      public Builder ClearRareItemName() {
         PrepareBuilder();
-        result.hasRaretemName = false;
-        result.raretemName_ = null;
+        result.hasRareItemName = false;
+        result.rareItemName_ = null;
         return this;
       }
       
@@ -1394,42 +1394,42 @@ namespace D3.Items {
         return this;
       }
       
-      public bool HasİtemQualityLevel {
-        get { return result.hasİtemQualityLevel; }
+      public bool HasItemQualityLevel {
+        get { return result.hasItemQualityLevel; }
       }
-      public int İtemQualityLevel {
-        get { return result.İtemQualityLevel; }
-        set { SetİtemQualityLevel(value); }
+      public int ItemQualityLevel {
+        get { return result.ItemQualityLevel; }
+        set { SetItemQualityLevel(value); }
       }
-      public Builder SetİtemQualityLevel(int value) {
+      public Builder SetItemQualityLevel(int value) {
         PrepareBuilder();
-        result.hasİtemQualityLevel = true;
+        result.hasItemQualityLevel = true;
         result.itemQualityLevel_ = value;
         return this;
       }
-      public Builder ClearİtemQualityLevel() {
+      public Builder ClearItemQualityLevel() {
         PrepareBuilder();
-        result.hasİtemQualityLevel = false;
+        result.hasItemQualityLevel = false;
         result.itemQualityLevel_ = 0;
         return this;
       }
       
-      public bool HasİtemBindingLevel {
-        get { return result.hasİtemBindingLevel; }
+      public bool HasItemBindingLevel {
+        get { return result.hasItemBindingLevel; }
       }
-      public int İtemBindingLevel {
-        get { return result.İtemBindingLevel; }
-        set { SetİtemBindingLevel(value); }
+      public int ItemBindingLevel {
+        get { return result.ItemBindingLevel; }
+        set { SetItemBindingLevel(value); }
       }
-      public Builder SetİtemBindingLevel(int value) {
+      public Builder SetItemBindingLevel(int value) {
         PrepareBuilder();
-        result.hasİtemBindingLevel = true;
+        result.hasItemBindingLevel = true;
         result.itemBindingLevel_ = value;
         return this;
       }
-      public Builder ClearİtemBindingLevel() {
+      public Builder ClearItemBindingLevel() {
         PrepareBuilder();
-        result.hasİtemBindingLevel = false;
+        result.hasItemBindingLevel = false;
         result.itemBindingLevel_ = 0;
         return this;
       }
@@ -1551,13 +1551,13 @@ namespace D3.Items {
       get { return global::D3.Items.Items.internal__static_D3_Items_EmbeddedGenerator__FieldAccessorTable; }
     }
     
-    public const int İdFieldNumber = 1;
-    private bool hasİd;
+    public const int IdFieldNumber = 1;
+    private bool hasId;
     private global::D3.OnlineService.ItemId id_;
-    public bool Hasİd {
-      get { return hasİd; }
+    public bool HasId {
+      get { return hasId; }
     }
-    public global::D3.OnlineService.ItemId İd {
+    public global::D3.OnlineService.ItemId Id {
       get { return id_ ?? global::D3.OnlineService.ItemId.DefaultInstance; }
     }
     
@@ -1573,9 +1573,9 @@ namespace D3.Items {
     
     public override bool IsInitialized {
       get {
-        if (!hasİd) return false;
+        if (!hasId) return false;
         if (!hasGenerator) return false;
-        if (!İd.IsInitialized) return false;
+        if (!Id.IsInitialized) return false;
         if (!Generator.IsInitialized) return false;
         return true;
       }
@@ -1584,8 +1584,8 @@ namespace D3.Items {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _embeddedGeneratorFieldNames;
-      if (hasİd) {
-        output.WriteMessage(1, field_names[1], İd);
+      if (hasId) {
+        output.WriteMessage(1, field_names[1], Id);
       }
       if (hasGenerator) {
         output.WriteMessage(2, field_names[0], Generator);
@@ -1600,8 +1600,8 @@ namespace D3.Items {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, İd);
+        if (hasId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, Id);
         }
         if (hasGenerator) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, Generator);
@@ -1732,8 +1732,8 @@ namespace D3.Items {
       public override Builder MergeFrom(EmbeddedGenerator other) {
         if (other == global::D3.Items.EmbeddedGenerator.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.Hasİd) {
-          Mergeİd(other.İd);
+        if (other.HasId) {
+          MergeId(other.Id);
         }
         if (other.HasGenerator) {
           MergeGenerator(other.Generator);
@@ -1783,11 +1783,11 @@ namespace D3.Items {
             }
             case 10: {
               global::D3.OnlineService.ItemId.Builder subBuilder = global::D3.OnlineService.ItemId.CreateBuilder();
-              if (result.hasİd) {
-                subBuilder.MergeFrom(İd);
+              if (result.hasId) {
+                subBuilder.MergeFrom(Id);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              İd = subBuilder.BuildPartial();
+              Id = subBuilder.BuildPartial();
               break;
             }
             case 18: {
@@ -1809,42 +1809,42 @@ namespace D3.Items {
       }
       
       
-      public bool Hasİd {
-       get { return result.hasİd; }
+      public bool HasId {
+       get { return result.hasId; }
       }
-      public global::D3.OnlineService.ItemId İd {
-        get { return result.İd; }
-        set { Setİd(value); }
+      public global::D3.OnlineService.ItemId Id {
+        get { return result.Id; }
+        set { SetId(value); }
       }
-      public Builder Setİd(global::D3.OnlineService.ItemId value) {
+      public Builder SetId(global::D3.OnlineService.ItemId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = value;
         return this;
       }
-      public Builder Setİd(global::D3.OnlineService.ItemId.Builder builderForValue) {
+      public Builder SetId(global::D3.OnlineService.ItemId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = builderForValue.Build();
         return this;
       }
-      public Builder Mergeİd(global::D3.OnlineService.ItemId value) {
+      public Builder MergeId(global::D3.OnlineService.ItemId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasİd &&
+        if (result.hasId &&
             result.id_ != global::D3.OnlineService.ItemId.DefaultInstance) {
             result.id_ = global::D3.OnlineService.ItemId.CreateBuilder(result.id_).MergeFrom(value).BuildPartial();
         } else {
           result.id_ = value;
         }
-        result.hasİd = true;
+        result.hasId = true;
         return this;
       }
-      public Builder Clearİd() {
+      public Builder ClearId() {
         PrepareBuilder();
-        result.hasİd = false;
+        result.hasId = false;
         result.id_ = null;
         return this;
       }
@@ -1922,34 +1922,34 @@ namespace D3.Items {
       get { return global::D3.Items.Items.internal__static_D3_Items_SavedItem__FieldAccessorTable; }
     }
     
-    public const int İdFieldNumber = 1;
-    private bool hasİd;
+    public const int IdFieldNumber = 1;
+    private bool hasId;
     private global::D3.OnlineService.ItemId id_;
-    public bool Hasİd {
-      get { return hasİd; }
+    public bool HasId {
+      get { return hasId; }
     }
-    public global::D3.OnlineService.ItemId İd {
+    public global::D3.OnlineService.ItemId Id {
       get { return id_ ?? global::D3.OnlineService.ItemId.DefaultInstance; }
     }
     
-    public const int OwnerEntitydFieldNumber = 2;
-    private bool hasOwnerEntityd;
-    private global::D3.OnlineService.EntityId ownerEntityd_;
-    public bool HasOwnerEntityd {
-      get { return hasOwnerEntityd; }
+    public const int OwnerEntityIdFieldNumber = 2;
+    private bool hasOwnerEntityId;
+    private global::D3.OnlineService.EntityId ownerEntityId_;
+    public bool HasOwnerEntityId {
+      get { return hasOwnerEntityId; }
     }
-    public global::D3.OnlineService.EntityId OwnerEntityd {
-      get { return ownerEntityd_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId OwnerEntityId {
+      get { return ownerEntityId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
-    public const int SocketdFieldNumber = 3;
-    private bool hasSocketd;
-    private global::D3.OnlineService.ItemId socketd_;
-    public bool HasSocketd {
-      get { return hasSocketd; }
+    public const int SocketIdFieldNumber = 3;
+    private bool hasSocketId;
+    private global::D3.OnlineService.ItemId socketId_;
+    public bool HasSocketId {
+      get { return hasSocketId; }
     }
-    public global::D3.OnlineService.ItemId Socketd {
-      get { return socketd_ ?? global::D3.OnlineService.ItemId.DefaultInstance; }
+    public global::D3.OnlineService.ItemId SocketId {
+      get { return socketId_ ?? global::D3.OnlineService.ItemId.DefaultInstance; }
     }
     
     public const int HirelingClassFieldNumber = 4;
@@ -1962,24 +1962,24 @@ namespace D3.Items {
       get { return hirelingClass_; }
     }
     
-    public const int İtemSlotFieldNumber = 5;
-    private bool hasİtemSlot;
+    public const int ItemSlotFieldNumber = 5;
+    private bool hasItemSlot;
     private int itemSlot_;
-    public bool HasİtemSlot {
-      get { return hasİtemSlot; }
+    public bool HasItemSlot {
+      get { return hasItemSlot; }
     }
-    public int İtemSlot {
+    public int ItemSlot {
       get { return itemSlot_; }
     }
     
-    public const int SquarendexFieldNumber = 6;
-    private bool hasSquarendex;
-    private int squarendex_;
-    public bool HasSquarendex {
-      get { return hasSquarendex; }
+    public const int SquareIndexFieldNumber = 6;
+    private bool hasSquareIndex;
+    private int squareIndex_;
+    public bool HasSquareIndex {
+      get { return hasSquareIndex; }
     }
-    public int Squarendex {
-      get { return squarendex_; }
+    public int SquareIndex {
+      get { return squareIndex_; }
     }
     
     public const int UsedSocketCountFieldNumber = 7;
@@ -2004,17 +2004,17 @@ namespace D3.Items {
     
     public override bool IsInitialized {
       get {
-        if (!hasİd) return false;
+        if (!hasId) return false;
         if (!hasHirelingClass) return false;
-        if (!hasİtemSlot) return false;
-        if (!hasSquarendex) return false;
+        if (!hasItemSlot) return false;
+        if (!hasSquareIndex) return false;
         if (!hasUsedSocketCount) return false;
-        if (!İd.IsInitialized) return false;
-        if (HasOwnerEntityd) {
-          if (!OwnerEntityd.IsInitialized) return false;
+        if (!Id.IsInitialized) return false;
+        if (HasOwnerEntityId) {
+          if (!OwnerEntityId.IsInitialized) return false;
         }
-        if (HasSocketd) {
-          if (!Socketd.IsInitialized) return false;
+        if (HasSocketId) {
+          if (!SocketId.IsInitialized) return false;
         }
         if (HasGenerator) {
           if (!Generator.IsInitialized) return false;
@@ -2026,23 +2026,23 @@ namespace D3.Items {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _savedItemFieldNames;
-      if (hasİd) {
-        output.WriteMessage(1, field_names[2], İd);
+      if (hasId) {
+        output.WriteMessage(1, field_names[2], Id);
       }
-      if (hasOwnerEntityd) {
-        output.WriteMessage(2, field_names[4], OwnerEntityd);
+      if (hasOwnerEntityId) {
+        output.WriteMessage(2, field_names[4], OwnerEntityId);
       }
-      if (hasSocketd) {
-        output.WriteMessage(3, field_names[5], Socketd);
+      if (hasSocketId) {
+        output.WriteMessage(3, field_names[5], SocketId);
       }
       if (hasHirelingClass) {
         output.WriteSInt32(4, field_names[1], HirelingClass);
       }
-      if (hasİtemSlot) {
-        output.WriteSInt32(5, field_names[3], İtemSlot);
+      if (hasItemSlot) {
+        output.WriteSInt32(5, field_names[3], ItemSlot);
       }
-      if (hasSquarendex) {
-        output.WriteSInt32(6, field_names[6], Squarendex);
+      if (hasSquareIndex) {
+        output.WriteSInt32(6, field_names[6], SquareIndex);
       }
       if (hasUsedSocketCount) {
         output.WriteUInt32(7, field_names[7], UsedSocketCount);
@@ -2060,23 +2060,23 @@ namespace D3.Items {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, İd);
+        if (hasId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, Id);
         }
-        if (hasOwnerEntityd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, OwnerEntityd);
+        if (hasOwnerEntityId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, OwnerEntityId);
         }
-        if (hasSocketd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(3, Socketd);
+        if (hasSocketId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(3, SocketId);
         }
         if (hasHirelingClass) {
           size += pb::CodedOutputStream.ComputeSInt32Size(4, HirelingClass);
         }
-        if (hasİtemSlot) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(5, İtemSlot);
+        if (hasItemSlot) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(5, ItemSlot);
         }
-        if (hasSquarendex) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(6, Squarendex);
+        if (hasSquareIndex) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(6, SquareIndex);
         }
         if (hasUsedSocketCount) {
           size += pb::CodedOutputStream.ComputeUInt32Size(7, UsedSocketCount);
@@ -2210,23 +2210,23 @@ namespace D3.Items {
       public override Builder MergeFrom(SavedItem other) {
         if (other == global::D3.Items.SavedItem.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.Hasİd) {
-          Mergeİd(other.İd);
+        if (other.HasId) {
+          MergeId(other.Id);
         }
-        if (other.HasOwnerEntityd) {
-          MergeOwnerEntityd(other.OwnerEntityd);
+        if (other.HasOwnerEntityId) {
+          MergeOwnerEntityId(other.OwnerEntityId);
         }
-        if (other.HasSocketd) {
-          MergeSocketd(other.Socketd);
+        if (other.HasSocketId) {
+          MergeSocketId(other.SocketId);
         }
         if (other.HasHirelingClass) {
           HirelingClass = other.HirelingClass;
         }
-        if (other.HasİtemSlot) {
-          İtemSlot = other.İtemSlot;
+        if (other.HasItemSlot) {
+          ItemSlot = other.ItemSlot;
         }
-        if (other.HasSquarendex) {
-          Squarendex = other.Squarendex;
+        if (other.HasSquareIndex) {
+          SquareIndex = other.SquareIndex;
         }
         if (other.HasUsedSocketCount) {
           UsedSocketCount = other.UsedSocketCount;
@@ -2279,29 +2279,29 @@ namespace D3.Items {
             }
             case 10: {
               global::D3.OnlineService.ItemId.Builder subBuilder = global::D3.OnlineService.ItemId.CreateBuilder();
-              if (result.hasİd) {
-                subBuilder.MergeFrom(İd);
+              if (result.hasId) {
+                subBuilder.MergeFrom(Id);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              İd = subBuilder.BuildPartial();
+              Id = subBuilder.BuildPartial();
               break;
             }
             case 18: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasOwnerEntityd) {
-                subBuilder.MergeFrom(OwnerEntityd);
+              if (result.hasOwnerEntityId) {
+                subBuilder.MergeFrom(OwnerEntityId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              OwnerEntityd = subBuilder.BuildPartial();
+              OwnerEntityId = subBuilder.BuildPartial();
               break;
             }
             case 26: {
               global::D3.OnlineService.ItemId.Builder subBuilder = global::D3.OnlineService.ItemId.CreateBuilder();
-              if (result.hasSocketd) {
-                subBuilder.MergeFrom(Socketd);
+              if (result.hasSocketId) {
+                subBuilder.MergeFrom(SocketId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Socketd = subBuilder.BuildPartial();
+              SocketId = subBuilder.BuildPartial();
               break;
             }
             case 32: {
@@ -2309,11 +2309,11 @@ namespace D3.Items {
               break;
             }
             case 40: {
-              result.hasİtemSlot = input.ReadSInt32(ref result.itemSlot_);
+              result.hasItemSlot = input.ReadSInt32(ref result.itemSlot_);
               break;
             }
             case 48: {
-              result.hasSquarendex = input.ReadSInt32(ref result.squarendex_);
+              result.hasSquareIndex = input.ReadSInt32(ref result.squareIndex_);
               break;
             }
             case 56: {
@@ -2339,123 +2339,123 @@ namespace D3.Items {
       }
       
       
-      public bool Hasİd {
-       get { return result.hasİd; }
+      public bool HasId {
+       get { return result.hasId; }
       }
-      public global::D3.OnlineService.ItemId İd {
-        get { return result.İd; }
-        set { Setİd(value); }
+      public global::D3.OnlineService.ItemId Id {
+        get { return result.Id; }
+        set { SetId(value); }
       }
-      public Builder Setİd(global::D3.OnlineService.ItemId value) {
+      public Builder SetId(global::D3.OnlineService.ItemId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = value;
         return this;
       }
-      public Builder Setİd(global::D3.OnlineService.ItemId.Builder builderForValue) {
+      public Builder SetId(global::D3.OnlineService.ItemId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = builderForValue.Build();
         return this;
       }
-      public Builder Mergeİd(global::D3.OnlineService.ItemId value) {
+      public Builder MergeId(global::D3.OnlineService.ItemId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasİd &&
+        if (result.hasId &&
             result.id_ != global::D3.OnlineService.ItemId.DefaultInstance) {
             result.id_ = global::D3.OnlineService.ItemId.CreateBuilder(result.id_).MergeFrom(value).BuildPartial();
         } else {
           result.id_ = value;
         }
-        result.hasİd = true;
+        result.hasId = true;
         return this;
       }
-      public Builder Clearİd() {
+      public Builder ClearId() {
         PrepareBuilder();
-        result.hasİd = false;
+        result.hasId = false;
         result.id_ = null;
         return this;
       }
       
-      public bool HasOwnerEntityd {
-       get { return result.hasOwnerEntityd; }
+      public bool HasOwnerEntityId {
+       get { return result.hasOwnerEntityId; }
       }
-      public global::D3.OnlineService.EntityId OwnerEntityd {
-        get { return result.OwnerEntityd; }
-        set { SetOwnerEntityd(value); }
+      public global::D3.OnlineService.EntityId OwnerEntityId {
+        get { return result.OwnerEntityId; }
+        set { SetOwnerEntityId(value); }
       }
-      public Builder SetOwnerEntityd(global::D3.OnlineService.EntityId value) {
+      public Builder SetOwnerEntityId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasOwnerEntityd = true;
-        result.ownerEntityd_ = value;
+        result.hasOwnerEntityId = true;
+        result.ownerEntityId_ = value;
         return this;
       }
-      public Builder SetOwnerEntityd(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetOwnerEntityId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasOwnerEntityd = true;
-        result.ownerEntityd_ = builderForValue.Build();
+        result.hasOwnerEntityId = true;
+        result.ownerEntityId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeOwnerEntityd(global::D3.OnlineService.EntityId value) {
+      public Builder MergeOwnerEntityId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasOwnerEntityd &&
-            result.ownerEntityd_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.ownerEntityd_ = global::D3.OnlineService.EntityId.CreateBuilder(result.ownerEntityd_).MergeFrom(value).BuildPartial();
+        if (result.hasOwnerEntityId &&
+            result.ownerEntityId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.ownerEntityId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.ownerEntityId_).MergeFrom(value).BuildPartial();
         } else {
-          result.ownerEntityd_ = value;
+          result.ownerEntityId_ = value;
         }
-        result.hasOwnerEntityd = true;
+        result.hasOwnerEntityId = true;
         return this;
       }
-      public Builder ClearOwnerEntityd() {
+      public Builder ClearOwnerEntityId() {
         PrepareBuilder();
-        result.hasOwnerEntityd = false;
-        result.ownerEntityd_ = null;
+        result.hasOwnerEntityId = false;
+        result.ownerEntityId_ = null;
         return this;
       }
       
-      public bool HasSocketd {
-       get { return result.hasSocketd; }
+      public bool HasSocketId {
+       get { return result.hasSocketId; }
       }
-      public global::D3.OnlineService.ItemId Socketd {
-        get { return result.Socketd; }
-        set { SetSocketd(value); }
+      public global::D3.OnlineService.ItemId SocketId {
+        get { return result.SocketId; }
+        set { SetSocketId(value); }
       }
-      public Builder SetSocketd(global::D3.OnlineService.ItemId value) {
+      public Builder SetSocketId(global::D3.OnlineService.ItemId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasSocketd = true;
-        result.socketd_ = value;
+        result.hasSocketId = true;
+        result.socketId_ = value;
         return this;
       }
-      public Builder SetSocketd(global::D3.OnlineService.ItemId.Builder builderForValue) {
+      public Builder SetSocketId(global::D3.OnlineService.ItemId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasSocketd = true;
-        result.socketd_ = builderForValue.Build();
+        result.hasSocketId = true;
+        result.socketId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeSocketd(global::D3.OnlineService.ItemId value) {
+      public Builder MergeSocketId(global::D3.OnlineService.ItemId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasSocketd &&
-            result.socketd_ != global::D3.OnlineService.ItemId.DefaultInstance) {
-            result.socketd_ = global::D3.OnlineService.ItemId.CreateBuilder(result.socketd_).MergeFrom(value).BuildPartial();
+        if (result.hasSocketId &&
+            result.socketId_ != global::D3.OnlineService.ItemId.DefaultInstance) {
+            result.socketId_ = global::D3.OnlineService.ItemId.CreateBuilder(result.socketId_).MergeFrom(value).BuildPartial();
         } else {
-          result.socketd_ = value;
+          result.socketId_ = value;
         }
-        result.hasSocketd = true;
+        result.hasSocketId = true;
         return this;
       }
-      public Builder ClearSocketd() {
+      public Builder ClearSocketId() {
         PrepareBuilder();
-        result.hasSocketd = false;
-        result.socketd_ = null;
+        result.hasSocketId = false;
+        result.socketId_ = null;
         return this;
       }
       
@@ -2479,43 +2479,43 @@ namespace D3.Items {
         return this;
       }
       
-      public bool HasİtemSlot {
-        get { return result.hasİtemSlot; }
+      public bool HasItemSlot {
+        get { return result.hasItemSlot; }
       }
-      public int İtemSlot {
-        get { return result.İtemSlot; }
-        set { SetİtemSlot(value); }
+      public int ItemSlot {
+        get { return result.ItemSlot; }
+        set { SetItemSlot(value); }
       }
-      public Builder SetİtemSlot(int value) {
+      public Builder SetItemSlot(int value) {
         PrepareBuilder();
-        result.hasİtemSlot = true;
+        result.hasItemSlot = true;
         result.itemSlot_ = value;
         return this;
       }
-      public Builder ClearİtemSlot() {
+      public Builder ClearItemSlot() {
         PrepareBuilder();
-        result.hasİtemSlot = false;
+        result.hasItemSlot = false;
         result.itemSlot_ = 0;
         return this;
       }
       
-      public bool HasSquarendex {
-        get { return result.hasSquarendex; }
+      public bool HasSquareIndex {
+        get { return result.hasSquareIndex; }
       }
-      public int Squarendex {
-        get { return result.Squarendex; }
-        set { SetSquarendex(value); }
+      public int SquareIndex {
+        get { return result.SquareIndex; }
+        set { SetSquareIndex(value); }
       }
-      public Builder SetSquarendex(int value) {
+      public Builder SetSquareIndex(int value) {
         PrepareBuilder();
-        result.hasSquarendex = true;
-        result.squarendex_ = value;
+        result.hasSquareIndex = true;
+        result.squareIndex_ = value;
         return this;
       }
-      public Builder ClearSquarendex() {
+      public Builder ClearSquareIndex() {
         PrepareBuilder();
-        result.hasSquarendex = false;
-        result.squarendex_ = 0;
+        result.hasSquareIndex = false;
+        result.squareIndex_ = 0;
         return this;
       }
       
@@ -2612,32 +2612,32 @@ namespace D3.Items {
       get { return global::D3.Items.Items.internal__static_D3_Items_AuctionAccountInfo__FieldAccessorTable; }
     }
     
-    public const int AccountdFieldNumber = 1;
-    private bool hasAccountd;
-    private global::D3.OnlineService.EntityId accountd_;
-    public bool HasAccountd {
-      get { return hasAccountd; }
+    public const int AccountIdFieldNumber = 1;
+    private bool hasAccountId;
+    private global::D3.OnlineService.EntityId accountId_;
+    public bool HasAccountId {
+      get { return hasAccountId; }
     }
-    public global::D3.OnlineService.EntityId Accountd {
-      get { return accountd_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId AccountId {
+      get { return accountId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
-    public const int EscrowdFieldNumber = 2;
-    private bool hasEscrowd;
-    private global::D3.OnlineService.EntityId escrowd_;
-    public bool HasEscrowd {
-      get { return hasEscrowd; }
+    public const int EscrowIdFieldNumber = 2;
+    private bool hasEscrowId;
+    private global::D3.OnlineService.EntityId escrowId_;
+    public bool HasEscrowId {
+      get { return hasEscrowId; }
     }
-    public global::D3.OnlineService.EntityId Escrowd {
-      get { return escrowd_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId EscrowId {
+      get { return escrowId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasAccountd) return false;
-        if (!hasEscrowd) return false;
-        if (!Accountd.IsInitialized) return false;
-        if (!Escrowd.IsInitialized) return false;
+        if (!hasAccountId) return false;
+        if (!hasEscrowId) return false;
+        if (!AccountId.IsInitialized) return false;
+        if (!EscrowId.IsInitialized) return false;
         return true;
       }
     }
@@ -2645,11 +2645,11 @@ namespace D3.Items {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _auctionAccountInfoFieldNames;
-      if (hasAccountd) {
-        output.WriteMessage(1, field_names[0], Accountd);
+      if (hasAccountId) {
+        output.WriteMessage(1, field_names[0], AccountId);
       }
-      if (hasEscrowd) {
-        output.WriteMessage(2, field_names[1], Escrowd);
+      if (hasEscrowId) {
+        output.WriteMessage(2, field_names[1], EscrowId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2661,11 +2661,11 @@ namespace D3.Items {
         if (size != -1) return size;
         
         size = 0;
-        if (hasAccountd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Accountd);
+        if (hasAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AccountId);
         }
-        if (hasEscrowd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Escrowd);
+        if (hasEscrowId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, EscrowId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2793,11 +2793,11 @@ namespace D3.Items {
       public override Builder MergeFrom(AuctionAccountInfo other) {
         if (other == global::D3.Items.AuctionAccountInfo.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasAccountd) {
-          MergeAccountd(other.Accountd);
+        if (other.HasAccountId) {
+          MergeAccountId(other.AccountId);
         }
-        if (other.HasEscrowd) {
-          MergeEscrowd(other.Escrowd);
+        if (other.HasEscrowId) {
+          MergeEscrowId(other.EscrowId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -2844,20 +2844,20 @@ namespace D3.Items {
             }
             case 10: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasAccountd) {
-                subBuilder.MergeFrom(Accountd);
+              if (result.hasAccountId) {
+                subBuilder.MergeFrom(AccountId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Accountd = subBuilder.BuildPartial();
+              AccountId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasEscrowd) {
-                subBuilder.MergeFrom(Escrowd);
+              if (result.hasEscrowId) {
+                subBuilder.MergeFrom(EscrowId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Escrowd = subBuilder.BuildPartial();
+              EscrowId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -2870,83 +2870,83 @@ namespace D3.Items {
       }
       
       
-      public bool HasAccountd {
-       get { return result.hasAccountd; }
+      public bool HasAccountId {
+       get { return result.hasAccountId; }
       }
-      public global::D3.OnlineService.EntityId Accountd {
-        get { return result.Accountd; }
-        set { SetAccountd(value); }
+      public global::D3.OnlineService.EntityId AccountId {
+        get { return result.AccountId; }
+        set { SetAccountId(value); }
       }
-      public Builder SetAccountd(global::D3.OnlineService.EntityId value) {
+      public Builder SetAccountId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAccountd = true;
-        result.accountd_ = value;
+        result.hasAccountId = true;
+        result.accountId_ = value;
         return this;
       }
-      public Builder SetAccountd(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetAccountId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAccountd = true;
-        result.accountd_ = builderForValue.Build();
+        result.hasAccountId = true;
+        result.accountId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAccountd(global::D3.OnlineService.EntityId value) {
+      public Builder MergeAccountId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAccountd &&
-            result.accountd_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.accountd_ = global::D3.OnlineService.EntityId.CreateBuilder(result.accountd_).MergeFrom(value).BuildPartial();
+        if (result.hasAccountId &&
+            result.accountId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.accountId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.accountId_).MergeFrom(value).BuildPartial();
         } else {
-          result.accountd_ = value;
+          result.accountId_ = value;
         }
-        result.hasAccountd = true;
+        result.hasAccountId = true;
         return this;
       }
-      public Builder ClearAccountd() {
+      public Builder ClearAccountId() {
         PrepareBuilder();
-        result.hasAccountd = false;
-        result.accountd_ = null;
+        result.hasAccountId = false;
+        result.accountId_ = null;
         return this;
       }
       
-      public bool HasEscrowd {
-       get { return result.hasEscrowd; }
+      public bool HasEscrowId {
+       get { return result.hasEscrowId; }
       }
-      public global::D3.OnlineService.EntityId Escrowd {
-        get { return result.Escrowd; }
-        set { SetEscrowd(value); }
+      public global::D3.OnlineService.EntityId EscrowId {
+        get { return result.EscrowId; }
+        set { SetEscrowId(value); }
       }
-      public Builder SetEscrowd(global::D3.OnlineService.EntityId value) {
+      public Builder SetEscrowId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasEscrowd = true;
-        result.escrowd_ = value;
+        result.hasEscrowId = true;
+        result.escrowId_ = value;
         return this;
       }
-      public Builder SetEscrowd(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetEscrowId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasEscrowd = true;
-        result.escrowd_ = builderForValue.Build();
+        result.hasEscrowId = true;
+        result.escrowId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeEscrowd(global::D3.OnlineService.EntityId value) {
+      public Builder MergeEscrowId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasEscrowd &&
-            result.escrowd_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.escrowd_ = global::D3.OnlineService.EntityId.CreateBuilder(result.escrowd_).MergeFrom(value).BuildPartial();
+        if (result.hasEscrowId &&
+            result.escrowId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.escrowId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.escrowId_).MergeFrom(value).BuildPartial();
         } else {
-          result.escrowd_ = value;
+          result.escrowId_ = value;
         }
-        result.hasEscrowd = true;
+        result.hasEscrowId = true;
         return this;
       }
-      public Builder ClearEscrowd() {
+      public Builder ClearEscrowId() {
         PrepareBuilder();
-        result.hasEscrowd = false;
-        result.escrowd_ = null;
+        result.hasEscrowId = false;
+        result.escrowId_ = null;
         return this;
       }
     }
@@ -2983,13 +2983,13 @@ namespace D3.Items {
       get { return global::D3.Items.Items.internal__static_D3_Items_AuctionItem__FieldAccessorTable; }
     }
     
-    public const int İdFieldNumber = 1;
-    private bool hasİd;
+    public const int IdFieldNumber = 1;
+    private bool hasId;
     private global::D3.OnlineService.ItemId id_;
-    public bool Hasİd {
-      get { return hasİd; }
+    public bool HasId {
+      get { return hasId; }
     }
-    public global::D3.OnlineService.ItemId İd {
+    public global::D3.OnlineService.ItemId Id {
       get { return id_ ?? global::D3.OnlineService.ItemId.DefaultInstance; }
     }
     
@@ -3005,9 +3005,9 @@ namespace D3.Items {
     
     public override bool IsInitialized {
       get {
-        if (!hasİd) return false;
+        if (!hasId) return false;
         if (!hasGenerator) return false;
-        if (!İd.IsInitialized) return false;
+        if (!Id.IsInitialized) return false;
         if (!Generator.IsInitialized) return false;
         return true;
       }
@@ -3016,8 +3016,8 @@ namespace D3.Items {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _auctionItemFieldNames;
-      if (hasİd) {
-        output.WriteMessage(1, field_names[1], İd);
+      if (hasId) {
+        output.WriteMessage(1, field_names[1], Id);
       }
       if (hasGenerator) {
         output.WriteMessage(2, field_names[0], Generator);
@@ -3032,8 +3032,8 @@ namespace D3.Items {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, İd);
+        if (hasId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, Id);
         }
         if (hasGenerator) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, Generator);
@@ -3164,8 +3164,8 @@ namespace D3.Items {
       public override Builder MergeFrom(AuctionItem other) {
         if (other == global::D3.Items.AuctionItem.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.Hasİd) {
-          Mergeİd(other.İd);
+        if (other.HasId) {
+          MergeId(other.Id);
         }
         if (other.HasGenerator) {
           MergeGenerator(other.Generator);
@@ -3215,11 +3215,11 @@ namespace D3.Items {
             }
             case 10: {
               global::D3.OnlineService.ItemId.Builder subBuilder = global::D3.OnlineService.ItemId.CreateBuilder();
-              if (result.hasİd) {
-                subBuilder.MergeFrom(İd);
+              if (result.hasId) {
+                subBuilder.MergeFrom(Id);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              İd = subBuilder.BuildPartial();
+              Id = subBuilder.BuildPartial();
               break;
             }
             case 18: {
@@ -3241,42 +3241,42 @@ namespace D3.Items {
       }
       
       
-      public bool Hasİd {
-       get { return result.hasİd; }
+      public bool HasId {
+       get { return result.hasId; }
       }
-      public global::D3.OnlineService.ItemId İd {
-        get { return result.İd; }
-        set { Setİd(value); }
+      public global::D3.OnlineService.ItemId Id {
+        get { return result.Id; }
+        set { SetId(value); }
       }
-      public Builder Setİd(global::D3.OnlineService.ItemId value) {
+      public Builder SetId(global::D3.OnlineService.ItemId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = value;
         return this;
       }
-      public Builder Setİd(global::D3.OnlineService.ItemId.Builder builderForValue) {
+      public Builder SetId(global::D3.OnlineService.ItemId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = builderForValue.Build();
         return this;
       }
-      public Builder Mergeİd(global::D3.OnlineService.ItemId value) {
+      public Builder MergeId(global::D3.OnlineService.ItemId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasİd &&
+        if (result.hasId &&
             result.id_ != global::D3.OnlineService.ItemId.DefaultInstance) {
             result.id_ = global::D3.OnlineService.ItemId.CreateBuilder(result.id_).MergeFrom(value).BuildPartial();
         } else {
           result.id_ = value;
         }
-        result.hasİd = true;
+        result.hasId = true;
         return this;
       }
-      public Builder Clearİd() {
+      public Builder ClearId() {
         PrepareBuilder();
-        result.hasİd = false;
+        result.hasId = false;
         result.id_ = null;
         return this;
       }
@@ -3354,13 +3354,13 @@ namespace D3.Items {
       get { return global::D3.Items.Items.internal__static_D3_Items_AuctionInfo__FieldAccessorTable; }
     }
     
-    public const int İdFieldNumber = 1;
-    private bool hasİd;
+    public const int IdFieldNumber = 1;
+    private bool hasId;
     private global::D3.OnlineService.ItemId id_;
-    public bool Hasİd {
-      get { return hasİd; }
+    public bool HasId {
+      get { return hasId; }
     }
-    public global::D3.OnlineService.ItemId İd {
+    public global::D3.OnlineService.ItemId Id {
       get { return id_ ?? global::D3.OnlineService.ItemId.DefaultInstance; }
     }
     
@@ -3376,8 +3376,8 @@ namespace D3.Items {
     
     public override bool IsInitialized {
       get {
-        if (!hasİd) return false;
-        if (!İd.IsInitialized) return false;
+        if (!hasId) return false;
+        if (!Id.IsInitialized) return false;
         if (HasOwner) {
           if (!Owner.IsInitialized) return false;
         }
@@ -3388,8 +3388,8 @@ namespace D3.Items {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _auctionInfoFieldNames;
-      if (hasİd) {
-        output.WriteMessage(1, field_names[0], İd);
+      if (hasId) {
+        output.WriteMessage(1, field_names[0], Id);
       }
       if (hasOwner) {
         output.WriteMessage(2, field_names[1], Owner);
@@ -3404,8 +3404,8 @@ namespace D3.Items {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, İd);
+        if (hasId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, Id);
         }
         if (hasOwner) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, Owner);
@@ -3536,8 +3536,8 @@ namespace D3.Items {
       public override Builder MergeFrom(AuctionInfo other) {
         if (other == global::D3.Items.AuctionInfo.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.Hasİd) {
-          Mergeİd(other.İd);
+        if (other.HasId) {
+          MergeId(other.Id);
         }
         if (other.HasOwner) {
           MergeOwner(other.Owner);
@@ -3587,11 +3587,11 @@ namespace D3.Items {
             }
             case 10: {
               global::D3.OnlineService.ItemId.Builder subBuilder = global::D3.OnlineService.ItemId.CreateBuilder();
-              if (result.hasİd) {
-                subBuilder.MergeFrom(İd);
+              if (result.hasId) {
+                subBuilder.MergeFrom(Id);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              İd = subBuilder.BuildPartial();
+              Id = subBuilder.BuildPartial();
               break;
             }
             case 18: {
@@ -3613,42 +3613,42 @@ namespace D3.Items {
       }
       
       
-      public bool Hasİd {
-       get { return result.hasİd; }
+      public bool HasId {
+       get { return result.hasId; }
       }
-      public global::D3.OnlineService.ItemId İd {
-        get { return result.İd; }
-        set { Setİd(value); }
+      public global::D3.OnlineService.ItemId Id {
+        get { return result.Id; }
+        set { SetId(value); }
       }
-      public Builder Setİd(global::D3.OnlineService.ItemId value) {
+      public Builder SetId(global::D3.OnlineService.ItemId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = value;
         return this;
       }
-      public Builder Setİd(global::D3.OnlineService.ItemId.Builder builderForValue) {
+      public Builder SetId(global::D3.OnlineService.ItemId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = builderForValue.Build();
         return this;
       }
-      public Builder Mergeİd(global::D3.OnlineService.ItemId value) {
+      public Builder MergeId(global::D3.OnlineService.ItemId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasİd &&
+        if (result.hasId &&
             result.id_ != global::D3.OnlineService.ItemId.DefaultInstance) {
             result.id_ = global::D3.OnlineService.ItemId.CreateBuilder(result.id_).MergeFrom(value).BuildPartial();
         } else {
           result.id_ = value;
         }
-        result.hasİd = true;
+        result.hasId = true;
         return this;
       }
-      public Builder Clearİd() {
+      public Builder ClearId() {
         PrepareBuilder();
-        result.hasİd = false;
+        result.hasId = false;
         result.id_ = null;
         return this;
       }
@@ -3704,8 +3704,8 @@ namespace D3.Items {
   public sealed partial class ItemList : pb::GeneratedMessage<ItemList, ItemList.Builder> {
     private ItemList() { }
     private static readonly ItemList defaultInstance = new ItemList().MakeReadOnly();
-    private static readonly string[] _ıtemListFieldNames = new string[] { "items" };
-    private static readonly uint[] _ıtemListFieldTags = new uint[] { 10 };
+    private static readonly string[] _itemListFieldNames = new string[] { "items" };
+    private static readonly uint[] _itemListFieldTags = new uint[] { 10 };
     public static ItemList DefaultInstance {
       get { return defaultInstance; }
     }
@@ -3726,21 +3726,21 @@ namespace D3.Items {
       get { return global::D3.Items.Items.internal__static_D3_Items_ItemList__FieldAccessorTable; }
     }
     
-    public const int İtemsFieldNumber = 1;
+    public const int ItemsFieldNumber = 1;
     private pbc::PopsicleList<global::D3.Items.SavedItem> items_ = new pbc::PopsicleList<global::D3.Items.SavedItem>();
-    public scg::IList<global::D3.Items.SavedItem> İtemsList {
+    public scg::IList<global::D3.Items.SavedItem> ItemsList {
       get { return items_; }
     }
-    public int İtemsCount {
+    public int ItemsCount {
       get { return items_.Count; }
     }
-    public global::D3.Items.SavedItem Getİtems(int index) {
+    public global::D3.Items.SavedItem GetItems(int index) {
       return items_[index];
     }
     
     public override bool IsInitialized {
       get {
-        foreach (global::D3.Items.SavedItem element in İtemsList) {
+        foreach (global::D3.Items.SavedItem element in ItemsList) {
           if (!element.IsInitialized) return false;
         }
         return true;
@@ -3749,7 +3749,7 @@ namespace D3.Items {
     
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
-      string[] field_names = _ıtemListFieldNames;
+      string[] field_names = _itemListFieldNames;
       if (items_.Count > 0) {
         output.WriteMessageArray(1, field_names[0], items_);
       }
@@ -3763,7 +3763,7 @@ namespace D3.Items {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::D3.Items.SavedItem element in İtemsList) {
+        foreach (global::D3.Items.SavedItem element in ItemsList) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
         }
         size += UnknownFields.SerializedSize;
@@ -3911,9 +3911,9 @@ namespace D3.Items {
         string field_name;
         while (input.ReadTag(out tag, out field_name)) {
           if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_ıtemListFieldNames, field_name, global::System.StringComparer.Ordinal);
+            int field_ordinal = global::System.Array.BinarySearch(_itemListFieldNames, field_name, global::System.StringComparer.Ordinal);
             if(field_ordinal >= 0)
-              tag = _ıtemListFieldTags[field_ordinal];
+              tag = _itemListFieldTags[field_ordinal];
             else {
               if (unknownFields == null) {
                 unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
@@ -3953,45 +3953,45 @@ namespace D3.Items {
       }
       
       
-      public pbc::IPopsicleList<global::D3.Items.SavedItem> İtemsList {
+      public pbc::IPopsicleList<global::D3.Items.SavedItem> ItemsList {
         get { return PrepareBuilder().items_; }
       }
-      public int İtemsCount {
-        get { return result.İtemsCount; }
+      public int ItemsCount {
+        get { return result.ItemsCount; }
       }
-      public global::D3.Items.SavedItem Getİtems(int index) {
-        return result.Getİtems(index);
+      public global::D3.Items.SavedItem GetItems(int index) {
+        return result.GetItems(index);
       }
-      public Builder Setİtems(int index, global::D3.Items.SavedItem value) {
+      public Builder SetItems(int index, global::D3.Items.SavedItem value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
         result.items_[index] = value;
         return this;
       }
-      public Builder Setİtems(int index, global::D3.Items.SavedItem.Builder builderForValue) {
+      public Builder SetItems(int index, global::D3.Items.SavedItem.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
         result.items_[index] = builderForValue.Build();
         return this;
       }
-      public Builder Addİtems(global::D3.Items.SavedItem value) {
+      public Builder AddItems(global::D3.Items.SavedItem value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
         result.items_.Add(value);
         return this;
       }
-      public Builder Addİtems(global::D3.Items.SavedItem.Builder builderForValue) {
+      public Builder AddItems(global::D3.Items.SavedItem.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
         result.items_.Add(builderForValue.Build());
         return this;
       }
-      public Builder AddRangeİtems(scg::IEnumerable<global::D3.Items.SavedItem> values) {
+      public Builder AddRangeItems(scg::IEnumerable<global::D3.Items.SavedItem> values) {
         PrepareBuilder();
         result.items_.Add(values);
         return this;
       }
-      public Builder Clearİtems() {
+      public Builder ClearItems() {
         PrepareBuilder();
         result.items_.Clear();
         return this;
@@ -4030,14 +4030,14 @@ namespace D3.Items {
       get { return global::D3.Items.Items.internal__static_D3_Items_Ownership__FieldAccessorTable; }
     }
     
-    public const int OwnerEntitydFieldNumber = 1;
-    private bool hasOwnerEntityd;
-    private global::D3.OnlineService.EntityId ownerEntityd_;
-    public bool HasOwnerEntityd {
-      get { return hasOwnerEntityd; }
+    public const int OwnerEntityIdFieldNumber = 1;
+    private bool hasOwnerEntityId;
+    private global::D3.OnlineService.EntityId ownerEntityId_;
+    public bool HasOwnerEntityId {
+      get { return hasOwnerEntityId; }
     }
-    public global::D3.OnlineService.EntityId OwnerEntityd {
-      get { return ownerEntityd_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId OwnerEntityId {
+      get { return ownerEntityId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
     public const int DeleteTimeFieldNumber = 2;
@@ -4050,22 +4050,22 @@ namespace D3.Items {
       get { return deleteTime_; }
     }
     
-    public const int EscrowdFieldNumber = 3;
-    private bool hasEscrowd;
-    private global::D3.OnlineService.EntityId escrowd_;
-    public bool HasEscrowd {
-      get { return hasEscrowd; }
+    public const int EscrowIdFieldNumber = 3;
+    private bool hasEscrowId;
+    private global::D3.OnlineService.EntityId escrowId_;
+    public bool HasEscrowId {
+      get { return hasEscrowId; }
     }
-    public global::D3.OnlineService.EntityId Escrowd {
-      get { return escrowd_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId EscrowId {
+      get { return escrowId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasOwnerEntityd) return false;
-        if (!OwnerEntityd.IsInitialized) return false;
-        if (HasEscrowd) {
-          if (!Escrowd.IsInitialized) return false;
+        if (!hasOwnerEntityId) return false;
+        if (!OwnerEntityId.IsInitialized) return false;
+        if (HasEscrowId) {
+          if (!EscrowId.IsInitialized) return false;
         }
         return true;
       }
@@ -4074,14 +4074,14 @@ namespace D3.Items {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _ownershipFieldNames;
-      if (hasOwnerEntityd) {
-        output.WriteMessage(1, field_names[2], OwnerEntityd);
+      if (hasOwnerEntityId) {
+        output.WriteMessage(1, field_names[2], OwnerEntityId);
       }
       if (hasDeleteTime) {
         output.WriteSInt64(2, field_names[0], DeleteTime);
       }
-      if (hasEscrowd) {
-        output.WriteMessage(3, field_names[1], Escrowd);
+      if (hasEscrowId) {
+        output.WriteMessage(3, field_names[1], EscrowId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -4093,14 +4093,14 @@ namespace D3.Items {
         if (size != -1) return size;
         
         size = 0;
-        if (hasOwnerEntityd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, OwnerEntityd);
+        if (hasOwnerEntityId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, OwnerEntityId);
         }
         if (hasDeleteTime) {
           size += pb::CodedOutputStream.ComputeSInt64Size(2, DeleteTime);
         }
-        if (hasEscrowd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(3, Escrowd);
+        if (hasEscrowId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(3, EscrowId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -4228,14 +4228,14 @@ namespace D3.Items {
       public override Builder MergeFrom(Ownership other) {
         if (other == global::D3.Items.Ownership.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasOwnerEntityd) {
-          MergeOwnerEntityd(other.OwnerEntityd);
+        if (other.HasOwnerEntityId) {
+          MergeOwnerEntityId(other.OwnerEntityId);
         }
         if (other.HasDeleteTime) {
           DeleteTime = other.DeleteTime;
         }
-        if (other.HasEscrowd) {
-          MergeEscrowd(other.Escrowd);
+        if (other.HasEscrowId) {
+          MergeEscrowId(other.EscrowId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -4282,11 +4282,11 @@ namespace D3.Items {
             }
             case 10: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasOwnerEntityd) {
-                subBuilder.MergeFrom(OwnerEntityd);
+              if (result.hasOwnerEntityId) {
+                subBuilder.MergeFrom(OwnerEntityId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              OwnerEntityd = subBuilder.BuildPartial();
+              OwnerEntityId = subBuilder.BuildPartial();
               break;
             }
             case 16: {
@@ -4295,11 +4295,11 @@ namespace D3.Items {
             }
             case 26: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasEscrowd) {
-                subBuilder.MergeFrom(Escrowd);
+              if (result.hasEscrowId) {
+                subBuilder.MergeFrom(EscrowId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Escrowd = subBuilder.BuildPartial();
+              EscrowId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -4312,43 +4312,43 @@ namespace D3.Items {
       }
       
       
-      public bool HasOwnerEntityd {
-       get { return result.hasOwnerEntityd; }
+      public bool HasOwnerEntityId {
+       get { return result.hasOwnerEntityId; }
       }
-      public global::D3.OnlineService.EntityId OwnerEntityd {
-        get { return result.OwnerEntityd; }
-        set { SetOwnerEntityd(value); }
+      public global::D3.OnlineService.EntityId OwnerEntityId {
+        get { return result.OwnerEntityId; }
+        set { SetOwnerEntityId(value); }
       }
-      public Builder SetOwnerEntityd(global::D3.OnlineService.EntityId value) {
+      public Builder SetOwnerEntityId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasOwnerEntityd = true;
-        result.ownerEntityd_ = value;
+        result.hasOwnerEntityId = true;
+        result.ownerEntityId_ = value;
         return this;
       }
-      public Builder SetOwnerEntityd(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetOwnerEntityId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasOwnerEntityd = true;
-        result.ownerEntityd_ = builderForValue.Build();
+        result.hasOwnerEntityId = true;
+        result.ownerEntityId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeOwnerEntityd(global::D3.OnlineService.EntityId value) {
+      public Builder MergeOwnerEntityId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasOwnerEntityd &&
-            result.ownerEntityd_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.ownerEntityd_ = global::D3.OnlineService.EntityId.CreateBuilder(result.ownerEntityd_).MergeFrom(value).BuildPartial();
+        if (result.hasOwnerEntityId &&
+            result.ownerEntityId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.ownerEntityId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.ownerEntityId_).MergeFrom(value).BuildPartial();
         } else {
-          result.ownerEntityd_ = value;
+          result.ownerEntityId_ = value;
         }
-        result.hasOwnerEntityd = true;
+        result.hasOwnerEntityId = true;
         return this;
       }
-      public Builder ClearOwnerEntityd() {
+      public Builder ClearOwnerEntityId() {
         PrepareBuilder();
-        result.hasOwnerEntityd = false;
-        result.ownerEntityd_ = null;
+        result.hasOwnerEntityId = false;
+        result.ownerEntityId_ = null;
         return this;
       }
       
@@ -4372,43 +4372,43 @@ namespace D3.Items {
         return this;
       }
       
-      public bool HasEscrowd {
-       get { return result.hasEscrowd; }
+      public bool HasEscrowId {
+       get { return result.hasEscrowId; }
       }
-      public global::D3.OnlineService.EntityId Escrowd {
-        get { return result.Escrowd; }
-        set { SetEscrowd(value); }
+      public global::D3.OnlineService.EntityId EscrowId {
+        get { return result.EscrowId; }
+        set { SetEscrowId(value); }
       }
-      public Builder SetEscrowd(global::D3.OnlineService.EntityId value) {
+      public Builder SetEscrowId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasEscrowd = true;
-        result.escrowd_ = value;
+        result.hasEscrowId = true;
+        result.escrowId_ = value;
         return this;
       }
-      public Builder SetEscrowd(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetEscrowId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasEscrowd = true;
-        result.escrowd_ = builderForValue.Build();
+        result.hasEscrowId = true;
+        result.escrowId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeEscrowd(global::D3.OnlineService.EntityId value) {
+      public Builder MergeEscrowId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasEscrowd &&
-            result.escrowd_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.escrowd_ = global::D3.OnlineService.EntityId.CreateBuilder(result.escrowd_).MergeFrom(value).BuildPartial();
+        if (result.hasEscrowId &&
+            result.escrowId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.escrowId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.escrowId_).MergeFrom(value).BuildPartial();
         } else {
-          result.escrowd_ = value;
+          result.escrowId_ = value;
         }
-        result.hasEscrowd = true;
+        result.hasEscrowId = true;
         return this;
       }
-      public Builder ClearEscrowd() {
+      public Builder ClearEscrowId() {
         PrepareBuilder();
-        result.hasEscrowd = false;
-        result.escrowd_ = null;
+        result.hasEscrowId = false;
+        result.escrowId_ = null;
         return this;
       }
     }

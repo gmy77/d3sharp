@@ -51,7 +51,7 @@ namespace bnet.protocol.search {
         internal__static_bnet_protocol_search_Statistic__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_search_Statistic__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.search.Statistic, global::bnet.protocol.search.Statistic.Builder>(internal__static_bnet_protocol_search_Statistic__Descriptor,
-                new string[] { "İd", "Value", });
+                new string[] { "Id", "Value", });
         internal__static_bnet_protocol_search_Filter__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_search_Filter__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.search.Filter, global::bnet.protocol.search.Filter.Builder>(internal__static_bnet_protocol_search_Filter__Descriptor,
@@ -59,7 +59,7 @@ namespace bnet.protocol.search {
         internal__static_bnet_protocol_search_Object__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_search_Object__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.search.Object, global::bnet.protocol.search.Object.Builder>(internal__static_bnet_protocol_search_Object__Descriptor,
-                new string[] { "İd", "Data", "Statistics", });
+                new string[] { "Id", "Data", "Statistics", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -98,13 +98,13 @@ namespace bnet.protocol.search {
       get { return global::bnet.protocol.search.SearchTypes.internal__static_bnet_protocol_search_Statistic__FieldAccessorTable; }
     }
     
-    public const int İdFieldNumber = 1;
-    private bool hasİd;
+    public const int IdFieldNumber = 1;
+    private bool hasId;
     private ulong id_;
-    public bool Hasİd {
-      get { return hasİd; }
+    public bool HasId {
+      get { return hasId; }
     }
-    public ulong İd {
+    public ulong Id {
       get { return id_; }
     }
     
@@ -128,8 +128,8 @@ namespace bnet.protocol.search {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _statisticFieldNames;
-      if (hasİd) {
-        output.WriteUInt64(1, field_names[0], İd);
+      if (hasId) {
+        output.WriteUInt64(1, field_names[0], Id);
       }
       if (hasValue) {
         output.WriteInt32(2, field_names[1], Value);
@@ -144,8 +144,8 @@ namespace bnet.protocol.search {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(1, İd);
+        if (hasId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(1, Id);
         }
         if (hasValue) {
           size += pb::CodedOutputStream.ComputeInt32Size(2, Value);
@@ -276,8 +276,8 @@ namespace bnet.protocol.search {
       public override Builder MergeFrom(Statistic other) {
         if (other == global::bnet.protocol.search.Statistic.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.Hasİd) {
-          İd = other.İd;
+        if (other.HasId) {
+          Id = other.Id;
         }
         if (other.HasValue) {
           Value = other.Value;
@@ -326,7 +326,7 @@ namespace bnet.protocol.search {
               break;
             }
             case 8: {
-              result.hasİd = input.ReadUInt64(ref result.id_);
+              result.hasId = input.ReadUInt64(ref result.id_);
               break;
             }
             case 16: {
@@ -343,22 +343,22 @@ namespace bnet.protocol.search {
       }
       
       
-      public bool Hasİd {
-        get { return result.hasİd; }
+      public bool HasId {
+        get { return result.hasId; }
       }
-      public ulong İd {
-        get { return result.İd; }
-        set { Setİd(value); }
+      public ulong Id {
+        get { return result.Id; }
+        set { SetId(value); }
       }
-      public Builder Setİd(ulong value) {
+      public Builder SetId(ulong value) {
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = value;
         return this;
       }
-      public Builder Clearİd() {
+      public Builder ClearId() {
         PrepareBuilder();
-        result.hasİd = false;
+        result.hasId = false;
         result.id_ = 0UL;
         return this;
       }
@@ -845,13 +845,13 @@ namespace bnet.protocol.search {
       get { return global::bnet.protocol.search.SearchTypes.internal__static_bnet_protocol_search_Object__FieldAccessorTable; }
     }
     
-    public const int İdFieldNumber = 1;
-    private bool hasİd;
+    public const int IdFieldNumber = 1;
+    private bool hasId;
     private pb::ByteString id_ = pb::ByteString.Empty;
-    public bool Hasİd {
-      get { return hasİd; }
+    public bool HasId {
+      get { return hasId; }
     }
-    public pb::ByteString İd {
+    public pb::ByteString Id {
       get { return id_; }
     }
     
@@ -879,7 +879,7 @@ namespace bnet.protocol.search {
     
     public override bool IsInitialized {
       get {
-        if (!hasİd) return false;
+        if (!hasId) return false;
         foreach (global::bnet.protocol.search.Statistic element in StatisticsList) {
           if (!element.IsInitialized) return false;
         }
@@ -890,8 +890,8 @@ namespace bnet.protocol.search {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _objectFieldNames;
-      if (hasİd) {
-        output.WriteBytes(1, field_names[1], İd);
+      if (hasId) {
+        output.WriteBytes(1, field_names[1], Id);
       }
       if (hasData) {
         output.WriteBytes(2, field_names[0], Data);
@@ -909,8 +909,8 @@ namespace bnet.protocol.search {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİd) {
-          size += pb::CodedOutputStream.ComputeBytesSize(1, İd);
+        if (hasId) {
+          size += pb::CodedOutputStream.ComputeBytesSize(1, Id);
         }
         if (hasData) {
           size += pb::CodedOutputStream.ComputeBytesSize(2, Data);
@@ -1045,8 +1045,8 @@ namespace bnet.protocol.search {
       public override Builder MergeFrom(Object other) {
         if (other == global::bnet.protocol.search.Object.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.Hasİd) {
-          İd = other.İd;
+        if (other.HasId) {
+          Id = other.Id;
         }
         if (other.HasData) {
           Data = other.Data;
@@ -1098,7 +1098,7 @@ namespace bnet.protocol.search {
               break;
             }
             case 10: {
-              result.hasİd = input.ReadBytes(ref result.id_);
+              result.hasId = input.ReadBytes(ref result.id_);
               break;
             }
             case 18: {
@@ -1119,23 +1119,23 @@ namespace bnet.protocol.search {
       }
       
       
-      public bool Hasİd {
-        get { return result.hasİd; }
+      public bool HasId {
+        get { return result.hasId; }
       }
-      public pb::ByteString İd {
-        get { return result.İd; }
-        set { Setİd(value); }
+      public pb::ByteString Id {
+        get { return result.Id; }
+        set { SetId(value); }
       }
-      public Builder Setİd(pb::ByteString value) {
+      public Builder SetId(pb::ByteString value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = value;
         return this;
       }
-      public Builder Clearİd() {
+      public Builder ClearId() {
         PrepareBuilder();
-        result.hasİd = false;
+        result.hasId = false;
         result.id_ = pb::ByteString.Empty;
         return this;
       }

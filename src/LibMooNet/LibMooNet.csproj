@@ -36,9 +36,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Compile Include="bnet\protocol\channel_invitation\ChannelInvitation.cs" />
+    <Compile Include="bnet\protocol\channel_invitation\ChannelInvitationTypes.cs" />
     <Compile Include="bnet\protocol\ContentHandle.cs" />
     <Compile Include="bnet\protocol\Descriptor.cs" />
     <Compile Include="bnet\protocol\Entity.cs" />
+    <Compile Include="bnet\protocol\exchange\ExchangeSvc.cs" />
     <Compile Include="bnet\protocol\invitation\Invitation.cs" />
     <Compile Include="bnet\protocol\Resource.cs" />
     <Compile Include="bnet\protocol\Rpc.cs" />
@@ -48,8 +51,6 @@
     <Compile Include="bnet\protocol\channel\Channel.cs" />
     <Compile Include="bnet\protocol\channel\ChannelOwner.cs" />
     <Compile Include="bnet\protocol\channel\ChannelTypes.cs" />
-    <Compile Include="bnet\protocol\channel_invitation\Channelnvitation.cs" />
-    <Compile Include="bnet\protocol\channel_invitation\ChannelnvitationTypes.cs" />
     <Compile Include="bnet\protocol\chat\ChatTypes.cs" />
     <Compile Include="bnet\protocol\config\ProcessConfig.cs" />
     <Compile Include="bnet\protocol\connection\Connection.cs" />

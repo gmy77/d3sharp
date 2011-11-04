@@ -41,7 +41,7 @@ namespace bnet.protocol.chat {
         internal__static_bnet_protocol_chat_ChannelState__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_chat_ChannelState__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.chat.ChannelState, global::bnet.protocol.chat.ChannelState.Builder>(internal__static_bnet_protocol_chat_ChannelState__Descriptor,
-                new string[] { "İdentity", "Program", "Locale", });
+                new string[] { "Identity", "Program", "Locale", });
         global::bnet.protocol.chat.ChannelState.Chat = pb::GeneratedSingleExtension<global::bnet.protocol.chat.ChannelState>.CreateInstance(global::bnet.protocol.chat.ChannelState.Descriptor.Extensions[0]);
         return null;
       };
@@ -84,13 +84,13 @@ namespace bnet.protocol.chat {
     
     public const int ChatFieldNumber = 100;
     public static pb::GeneratedExtensionBase<global::bnet.protocol.chat.ChannelState> Chat;
-    public const int İdentityFieldNumber = 1;
-    private bool hasİdentity;
+    public const int IdentityFieldNumber = 1;
+    private bool hasIdentity;
     private string identity_ = "";
-    public bool Hasİdentity {
-      get { return hasİdentity; }
+    public bool HasIdentity {
+      get { return hasIdentity; }
     }
-    public string İdentity {
+    public string Identity {
       get { return identity_; }
     }
     
@@ -123,8 +123,8 @@ namespace bnet.protocol.chat {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _channelStateFieldNames;
-      if (hasİdentity) {
-        output.WriteString(1, field_names[0], İdentity);
+      if (hasIdentity) {
+        output.WriteString(1, field_names[0], Identity);
       }
       if (hasProgram) {
         output.WriteFixed32(2, field_names[2], Program);
@@ -142,8 +142,8 @@ namespace bnet.protocol.chat {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİdentity) {
-          size += pb::CodedOutputStream.ComputeStringSize(1, İdentity);
+        if (hasIdentity) {
+          size += pb::CodedOutputStream.ComputeStringSize(1, Identity);
         }
         if (hasProgram) {
           size += pb::CodedOutputStream.ComputeFixed32Size(2, Program);
@@ -277,8 +277,8 @@ namespace bnet.protocol.chat {
       public override Builder MergeFrom(ChannelState other) {
         if (other == global::bnet.protocol.chat.ChannelState.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.Hasİdentity) {
-          İdentity = other.İdentity;
+        if (other.HasIdentity) {
+          Identity = other.Identity;
         }
         if (other.HasProgram) {
           Program = other.Program;
@@ -330,7 +330,7 @@ namespace bnet.protocol.chat {
               break;
             }
             case 10: {
-              result.hasİdentity = input.ReadString(ref result.identity_);
+              result.hasIdentity = input.ReadString(ref result.identity_);
               break;
             }
             case 21: {
@@ -351,23 +351,23 @@ namespace bnet.protocol.chat {
       }
       
       
-      public bool Hasİdentity {
-        get { return result.hasİdentity; }
+      public bool HasIdentity {
+        get { return result.hasIdentity; }
       }
-      public string İdentity {
-        get { return result.İdentity; }
-        set { Setİdentity(value); }
+      public string Identity {
+        get { return result.Identity; }
+        set { SetIdentity(value); }
       }
-      public Builder Setİdentity(string value) {
+      public Builder SetIdentity(string value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİdentity = true;
+        result.hasIdentity = true;
         result.identity_ = value;
         return this;
       }
-      public Builder Clearİdentity() {
+      public Builder ClearIdentity() {
         PrepareBuilder();
-        result.hasİdentity = false;
+        result.hasIdentity = false;
         result.identity_ = "";
         return this;
       }

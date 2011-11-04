@@ -65,7 +65,7 @@ namespace bnet.protocol.server_pool {
         internal__static_bnet_protocol_server_pool_ServerInfo__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_server_pool_ServerInfo__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.server_pool.ServerInfo, global::bnet.protocol.server_pool.ServerInfo.Builder>(internal__static_bnet_protocol_server_pool_ServerInfo__Descriptor,
-                new string[] { "Host", "Replace", "State", "Attribute", "Programd", });
+                new string[] { "Host", "Replace", "State", "Attribute", "ProgramId", });
         internal__static_bnet_protocol_server_pool_PoolStateRequest__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_server_pool_PoolStateRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.server_pool.PoolStateRequest, global::bnet.protocol.server_pool.PoolStateRequest.Builder>(internal__static_bnet_protocol_server_pool_PoolStateRequest__Descriptor,
@@ -73,7 +73,7 @@ namespace bnet.protocol.server_pool {
         internal__static_bnet_protocol_server_pool_PoolStateResponse__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_server_pool_PoolStateResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.server_pool.PoolStateResponse, global::bnet.protocol.server_pool.PoolStateResponse.Builder>(internal__static_bnet_protocol_server_pool_PoolStateResponse__Descriptor,
-                new string[] { "İnfo", });
+                new string[] { "Info", });
         pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
         RegisterAllExtensions(registry);
         global::bnet.protocol.attribute.Proto.Attribute.RegisterAllExtensions(registry);
@@ -751,14 +751,14 @@ namespace bnet.protocol.server_pool {
       return attribute_[index];
     }
     
-    public const int ProgramdFieldNumber = 5;
-    private bool hasProgramd;
-    private uint programd_;
-    public bool HasProgramd {
-      get { return hasProgramd; }
+    public const int ProgramIdFieldNumber = 5;
+    private bool hasProgramId;
+    private uint programId_;
+    public bool HasProgramId {
+      get { return hasProgramId; }
     }
-    public uint Programd {
-      get { return programd_; }
+    public uint ProgramId {
+      get { return programId_; }
     }
     
     public override bool IsInitialized {
@@ -787,8 +787,8 @@ namespace bnet.protocol.server_pool {
       if (attribute_.Count > 0) {
         output.WriteMessageArray(4, field_names[0], attribute_);
       }
-      if (hasProgramd) {
-        output.WriteFixed32(5, field_names[2], Programd);
+      if (hasProgramId) {
+        output.WriteFixed32(5, field_names[2], ProgramId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -812,8 +812,8 @@ namespace bnet.protocol.server_pool {
         foreach (global::bnet.protocol.attribute.Attribute element in AttributeList) {
           size += pb::CodedOutputStream.ComputeMessageSize(4, element);
         }
-        if (hasProgramd) {
-          size += pb::CodedOutputStream.ComputeFixed32Size(5, Programd);
+        if (hasProgramId) {
+          size += pb::CodedOutputStream.ComputeFixed32Size(5, ProgramId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -954,8 +954,8 @@ namespace bnet.protocol.server_pool {
         if (other.attribute_.Count != 0) {
           result.attribute_.Add(other.attribute_);
         }
-        if (other.HasProgramd) {
-          Programd = other.Programd;
+        if (other.HasProgramId) {
+          ProgramId = other.ProgramId;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1027,7 +1027,7 @@ namespace bnet.protocol.server_pool {
               break;
             }
             case 45: {
-              result.hasProgramd = input.ReadFixed32(ref result.programd_);
+              result.hasProgramId = input.ReadFixed32(ref result.programId_);
               break;
             }
           }
@@ -1184,23 +1184,23 @@ namespace bnet.protocol.server_pool {
         return this;
       }
       
-      public bool HasProgramd {
-        get { return result.hasProgramd; }
+      public bool HasProgramId {
+        get { return result.hasProgramId; }
       }
-      public uint Programd {
-        get { return result.Programd; }
-        set { SetProgramd(value); }
+      public uint ProgramId {
+        get { return result.ProgramId; }
+        set { SetProgramId(value); }
       }
-      public Builder SetProgramd(uint value) {
+      public Builder SetProgramId(uint value) {
         PrepareBuilder();
-        result.hasProgramd = true;
-        result.programd_ = value;
+        result.hasProgramId = true;
+        result.programId_ = value;
         return this;
       }
-      public Builder ClearProgramd() {
+      public Builder ClearProgramId() {
         PrepareBuilder();
-        result.hasProgramd = false;
-        result.programd_ = 0;
+        result.hasProgramId = false;
+        result.programId_ = 0;
         return this;
       }
     }
@@ -1468,21 +1468,21 @@ namespace bnet.protocol.server_pool {
       get { return global::bnet.protocol.server_pool.ServerPool.internal__static_bnet_protocol_server_pool_PoolStateResponse__FieldAccessorTable; }
     }
     
-    public const int İnfoFieldNumber = 1;
+    public const int InfoFieldNumber = 1;
     private pbc::PopsicleList<global::bnet.protocol.server_pool.ServerInfo> info_ = new pbc::PopsicleList<global::bnet.protocol.server_pool.ServerInfo>();
-    public scg::IList<global::bnet.protocol.server_pool.ServerInfo> İnfoList {
+    public scg::IList<global::bnet.protocol.server_pool.ServerInfo> InfoList {
       get { return info_; }
     }
-    public int İnfoCount {
+    public int InfoCount {
       get { return info_.Count; }
     }
-    public global::bnet.protocol.server_pool.ServerInfo Getİnfo(int index) {
+    public global::bnet.protocol.server_pool.ServerInfo GetInfo(int index) {
       return info_[index];
     }
     
     public override bool IsInitialized {
       get {
-        foreach (global::bnet.protocol.server_pool.ServerInfo element in İnfoList) {
+        foreach (global::bnet.protocol.server_pool.ServerInfo element in InfoList) {
           if (!element.IsInitialized) return false;
         }
         return true;
@@ -1505,7 +1505,7 @@ namespace bnet.protocol.server_pool {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::bnet.protocol.server_pool.ServerInfo element in İnfoList) {
+        foreach (global::bnet.protocol.server_pool.ServerInfo element in InfoList) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
         }
         size += UnknownFields.SerializedSize;
@@ -1695,45 +1695,45 @@ namespace bnet.protocol.server_pool {
       }
       
       
-      public pbc::IPopsicleList<global::bnet.protocol.server_pool.ServerInfo> İnfoList {
+      public pbc::IPopsicleList<global::bnet.protocol.server_pool.ServerInfo> InfoList {
         get { return PrepareBuilder().info_; }
       }
-      public int İnfoCount {
-        get { return result.İnfoCount; }
+      public int InfoCount {
+        get { return result.InfoCount; }
       }
-      public global::bnet.protocol.server_pool.ServerInfo Getİnfo(int index) {
-        return result.Getİnfo(index);
+      public global::bnet.protocol.server_pool.ServerInfo GetInfo(int index) {
+        return result.GetInfo(index);
       }
-      public Builder Setİnfo(int index, global::bnet.protocol.server_pool.ServerInfo value) {
+      public Builder SetInfo(int index, global::bnet.protocol.server_pool.ServerInfo value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
         result.info_[index] = value;
         return this;
       }
-      public Builder Setİnfo(int index, global::bnet.protocol.server_pool.ServerInfo.Builder builderForValue) {
+      public Builder SetInfo(int index, global::bnet.protocol.server_pool.ServerInfo.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
         result.info_[index] = builderForValue.Build();
         return this;
       }
-      public Builder Addİnfo(global::bnet.protocol.server_pool.ServerInfo value) {
+      public Builder AddInfo(global::bnet.protocol.server_pool.ServerInfo value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
         result.info_.Add(value);
         return this;
       }
-      public Builder Addİnfo(global::bnet.protocol.server_pool.ServerInfo.Builder builderForValue) {
+      public Builder AddInfo(global::bnet.protocol.server_pool.ServerInfo.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
         result.info_.Add(builderForValue.Build());
         return this;
       }
-      public Builder AddRangeİnfo(scg::IEnumerable<global::bnet.protocol.server_pool.ServerInfo> values) {
+      public Builder AddRangeInfo(scg::IEnumerable<global::bnet.protocol.server_pool.ServerInfo> values) {
         PrepareBuilder();
         result.info_.Add(values);
         return this;
       }
-      public Builder Clearİnfo() {
+      public Builder ClearInfo() {
         PrepareBuilder();
         result.info_.Clear();
         return this;

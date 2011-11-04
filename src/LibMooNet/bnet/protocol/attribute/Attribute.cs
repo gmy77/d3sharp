@@ -54,7 +54,7 @@ namespace bnet.protocol.attribute {
           internal__static_bnet_protocol_attribute_Variant__Descriptor = Descriptor.MessageTypes[0];
           internal__static_bnet_protocol_attribute_Variant__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.attribute.Variant, global::bnet.protocol.attribute.Variant.Builder>(internal__static_bnet_protocol_attribute_Variant__Descriptor,
-                  new string[] { "BoolValue", "İntValue", "FloatValue", "StringValue", "BlobValue", "MessageValue", "FourccValue", "UintValue", "EntityidValue", });
+                  new string[] { "BoolValue", "IntValue", "FloatValue", "StringValue", "BlobValue", "MessageValue", "FourccValue", "UintValue", "EntityidValue", });
           internal__static_bnet_protocol_attribute_Attribute__Descriptor = Descriptor.MessageTypes[1];
           internal__static_bnet_protocol_attribute_Attribute__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.attribute.Attribute, global::bnet.protocol.attribute.Attribute.Builder>(internal__static_bnet_protocol_attribute_Attribute__Descriptor,
@@ -113,13 +113,13 @@ namespace bnet.protocol.attribute {
       get { return boolValue_; }
     }
     
-    public const int İntValueFieldNumber = 3;
-    private bool hasİntValue;
+    public const int IntValueFieldNumber = 3;
+    private bool hasIntValue;
     private long intValue_;
-    public bool HasİntValue {
-      get { return hasİntValue; }
+    public bool HasIntValue {
+      get { return hasIntValue; }
     }
-    public long İntValue {
+    public long IntValue {
       get { return intValue_; }
     }
     
@@ -208,8 +208,8 @@ namespace bnet.protocol.attribute {
       if (hasBoolValue) {
         output.WriteBool(2, field_names[1], BoolValue);
       }
-      if (hasİntValue) {
-        output.WriteInt64(3, field_names[5], İntValue);
+      if (hasIntValue) {
+        output.WriteInt64(3, field_names[5], IntValue);
       }
       if (hasFloatValue) {
         output.WriteDouble(4, field_names[3], FloatValue);
@@ -245,8 +245,8 @@ namespace bnet.protocol.attribute {
         if (hasBoolValue) {
           size += pb::CodedOutputStream.ComputeBoolSize(2, BoolValue);
         }
-        if (hasİntValue) {
-          size += pb::CodedOutputStream.ComputeInt64Size(3, İntValue);
+        if (hasIntValue) {
+          size += pb::CodedOutputStream.ComputeInt64Size(3, IntValue);
         }
         if (hasFloatValue) {
           size += pb::CodedOutputStream.ComputeDoubleSize(4, FloatValue);
@@ -398,8 +398,8 @@ namespace bnet.protocol.attribute {
         if (other.HasBoolValue) {
           BoolValue = other.BoolValue;
         }
-        if (other.HasİntValue) {
-          İntValue = other.İntValue;
+        if (other.HasIntValue) {
+          IntValue = other.IntValue;
         }
         if (other.HasFloatValue) {
           FloatValue = other.FloatValue;
@@ -470,7 +470,7 @@ namespace bnet.protocol.attribute {
               break;
             }
             case 24: {
-              result.hasİntValue = input.ReadInt64(ref result.intValue_);
+              result.hasIntValue = input.ReadInt64(ref result.intValue_);
               break;
             }
             case 33: {
@@ -536,22 +536,22 @@ namespace bnet.protocol.attribute {
         return this;
       }
       
-      public bool HasİntValue {
-        get { return result.hasİntValue; }
+      public bool HasIntValue {
+        get { return result.hasIntValue; }
       }
-      public long İntValue {
-        get { return result.İntValue; }
-        set { SetİntValue(value); }
+      public long IntValue {
+        get { return result.IntValue; }
+        set { SetIntValue(value); }
       }
-      public Builder SetİntValue(long value) {
+      public Builder SetIntValue(long value) {
         PrepareBuilder();
-        result.hasİntValue = true;
+        result.hasIntValue = true;
         result.intValue_ = value;
         return this;
       }
-      public Builder ClearİntValue() {
+      public Builder ClearIntValue() {
         PrepareBuilder();
-        result.hasİntValue = false;
+        result.hasIntValue = false;
         result.intValue_ = 0L;
         return this;
       }

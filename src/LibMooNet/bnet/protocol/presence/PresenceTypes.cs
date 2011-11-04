@@ -59,7 +59,7 @@ namespace bnet.protocol.presence {
         internal__static_bnet_protocol_presence_FieldKey__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_presence_FieldKey__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.FieldKey, global::bnet.protocol.presence.FieldKey.Builder>(internal__static_bnet_protocol_presence_FieldKey__Descriptor,
-                new string[] { "Program", "Group", "Field", "İndex", });
+                new string[] { "Program", "Group", "Field", "Index", });
         internal__static_bnet_protocol_presence_Field__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_presence_Field__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.Field, global::bnet.protocol.presence.Field.Builder>(internal__static_bnet_protocol_presence_Field__Descriptor,
@@ -71,7 +71,7 @@ namespace bnet.protocol.presence {
         internal__static_bnet_protocol_presence_ChannelState__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_presence_ChannelState__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.ChannelState, global::bnet.protocol.presence.ChannelState.Builder>(internal__static_bnet_protocol_presence_ChannelState__Descriptor,
-                new string[] { "Entityd", "FieldOperation", "Healing", });
+                new string[] { "EntityId", "FieldOperation", "Healing", });
         global::bnet.protocol.presence.ChannelState.Presence = pb::GeneratedSingleExtension<global::bnet.protocol.presence.ChannelState>.CreateInstance(global::bnet.protocol.presence.ChannelState.Descriptor.Extensions[0]);
         return null;
       };
@@ -144,13 +144,13 @@ namespace bnet.protocol.presence {
       get { return field_; }
     }
     
-    public const int İndexFieldNumber = 4;
-    private bool hasİndex;
+    public const int IndexFieldNumber = 4;
+    private bool hasIndex;
     private ulong index_;
-    public bool Hasİndex {
-      get { return hasİndex; }
+    public bool HasIndex {
+      get { return hasIndex; }
     }
-    public ulong İndex {
+    public ulong Index {
       get { return index_; }
     }
     
@@ -175,8 +175,8 @@ namespace bnet.protocol.presence {
       if (hasField) {
         output.WriteUInt32(3, field_names[0], Field);
       }
-      if (hasİndex) {
-        output.WriteUInt64(4, field_names[2], İndex);
+      if (hasIndex) {
+        output.WriteUInt64(4, field_names[2], Index);
       }
       UnknownFields.WriteTo(output);
     }
@@ -197,8 +197,8 @@ namespace bnet.protocol.presence {
         if (hasField) {
           size += pb::CodedOutputStream.ComputeUInt32Size(3, Field);
         }
-        if (hasİndex) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(4, İndex);
+        if (hasIndex) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(4, Index);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -335,8 +335,8 @@ namespace bnet.protocol.presence {
         if (other.HasField) {
           Field = other.Field;
         }
-        if (other.Hasİndex) {
-          İndex = other.İndex;
+        if (other.HasIndex) {
+          Index = other.Index;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -394,7 +394,7 @@ namespace bnet.protocol.presence {
               break;
             }
             case 32: {
-              result.hasİndex = input.ReadUInt64(ref result.index_);
+              result.hasIndex = input.ReadUInt64(ref result.index_);
               break;
             }
           }
@@ -467,22 +467,22 @@ namespace bnet.protocol.presence {
         return this;
       }
       
-      public bool Hasİndex {
-        get { return result.hasİndex; }
+      public bool HasIndex {
+        get { return result.hasIndex; }
       }
-      public ulong İndex {
-        get { return result.İndex; }
-        set { Setİndex(value); }
+      public ulong Index {
+        get { return result.Index; }
+        set { SetIndex(value); }
       }
-      public Builder Setİndex(ulong value) {
+      public Builder SetIndex(ulong value) {
         PrepareBuilder();
-        result.hasİndex = true;
+        result.hasIndex = true;
         result.index_ = value;
         return this;
       }
-      public Builder Clearİndex() {
+      public Builder ClearIndex() {
         PrepareBuilder();
-        result.hasİndex = false;
+        result.hasIndex = false;
         result.index_ = 0UL;
         return this;
       }
@@ -1260,14 +1260,14 @@ namespace bnet.protocol.presence {
     
     public const int PresenceFieldNumber = 101;
     public static pb::GeneratedExtensionBase<global::bnet.protocol.presence.ChannelState> Presence;
-    public const int EntitydFieldNumber = 1;
-    private bool hasEntityd;
-    private global::bnet.protocol.EntityId entityd_;
-    public bool HasEntityd {
-      get { return hasEntityd; }
+    public const int EntityIdFieldNumber = 1;
+    private bool hasEntityId;
+    private global::bnet.protocol.EntityId entityId_;
+    public bool HasEntityId {
+      get { return hasEntityId; }
     }
-    public global::bnet.protocol.EntityId Entityd {
-      get { return entityd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId EntityId {
+      get { return entityId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public const int FieldOperationFieldNumber = 2;
@@ -1294,8 +1294,8 @@ namespace bnet.protocol.presence {
     
     public override bool IsInitialized {
       get {
-        if (HasEntityd) {
-          if (!Entityd.IsInitialized) return false;
+        if (HasEntityId) {
+          if (!EntityId.IsInitialized) return false;
         }
         foreach (global::bnet.protocol.presence.FieldOperation element in FieldOperationList) {
           if (!element.IsInitialized) return false;
@@ -1307,8 +1307,8 @@ namespace bnet.protocol.presence {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _channelStateFieldNames;
-      if (hasEntityd) {
-        output.WriteMessage(1, field_names[0], Entityd);
+      if (hasEntityId) {
+        output.WriteMessage(1, field_names[0], EntityId);
       }
       if (fieldOperation_.Count > 0) {
         output.WriteMessageArray(2, field_names[1], fieldOperation_);
@@ -1326,8 +1326,8 @@ namespace bnet.protocol.presence {
         if (size != -1) return size;
         
         size = 0;
-        if (hasEntityd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Entityd);
+        if (hasEntityId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, EntityId);
         }
         foreach (global::bnet.protocol.presence.FieldOperation element in FieldOperationList) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, element);
@@ -1462,8 +1462,8 @@ namespace bnet.protocol.presence {
       public override Builder MergeFrom(ChannelState other) {
         if (other == global::bnet.protocol.presence.ChannelState.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasEntityd) {
-          MergeEntityd(other.Entityd);
+        if (other.HasEntityId) {
+          MergeEntityId(other.EntityId);
         }
         if (other.fieldOperation_.Count != 0) {
           result.fieldOperation_.Add(other.fieldOperation_);
@@ -1516,11 +1516,11 @@ namespace bnet.protocol.presence {
             }
             case 10: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasEntityd) {
-                subBuilder.MergeFrom(Entityd);
+              if (result.hasEntityId) {
+                subBuilder.MergeFrom(EntityId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Entityd = subBuilder.BuildPartial();
+              EntityId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
@@ -1541,43 +1541,43 @@ namespace bnet.protocol.presence {
       }
       
       
-      public bool HasEntityd {
-       get { return result.hasEntityd; }
+      public bool HasEntityId {
+       get { return result.hasEntityId; }
       }
-      public global::bnet.protocol.EntityId Entityd {
-        get { return result.Entityd; }
-        set { SetEntityd(value); }
+      public global::bnet.protocol.EntityId EntityId {
+        get { return result.EntityId; }
+        set { SetEntityId(value); }
       }
-      public Builder SetEntityd(global::bnet.protocol.EntityId value) {
+      public Builder SetEntityId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasEntityd = true;
-        result.entityd_ = value;
+        result.hasEntityId = true;
+        result.entityId_ = value;
         return this;
       }
-      public Builder SetEntityd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetEntityId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasEntityd = true;
-        result.entityd_ = builderForValue.Build();
+        result.hasEntityId = true;
+        result.entityId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeEntityd(global::bnet.protocol.EntityId value) {
+      public Builder MergeEntityId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasEntityd &&
-            result.entityd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.entityd_ = global::bnet.protocol.EntityId.CreateBuilder(result.entityd_).MergeFrom(value).BuildPartial();
+        if (result.hasEntityId &&
+            result.entityId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.entityId_ = global::bnet.protocol.EntityId.CreateBuilder(result.entityId_).MergeFrom(value).BuildPartial();
         } else {
-          result.entityd_ = value;
+          result.entityId_ = value;
         }
-        result.hasEntityd = true;
+        result.hasEntityId = true;
         return this;
       }
-      public Builder ClearEntityd() {
+      public Builder ClearEntityId() {
         PrepareBuilder();
-        result.hasEntityd = false;
-        result.entityd_ = null;
+        result.hasEntityId = false;
+        result.entityId_ = null;
         return this;
       }
       

@@ -64,19 +64,19 @@ namespace D3.OnlineService {
         internal__static_D3_OnlineService_EntityId__Descriptor = Descriptor.MessageTypes[0];
         internal__static_D3_OnlineService_EntityId__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.OnlineService.EntityId, global::D3.OnlineService.EntityId.Builder>(internal__static_D3_OnlineService_EntityId__Descriptor,
-                new string[] { "İdHigh", "İdLow", });
+                new string[] { "IdHigh", "IdLow", });
         internal__static_D3_OnlineService_GameId__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_OnlineService_GameId__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.OnlineService.GameId, global::D3.OnlineService.GameId.Builder>(internal__static_D3_OnlineService_GameId__Descriptor,
-                new string[] { "Factory", "İdHigh", "İdLow", });
+                new string[] { "Factory", "IdHigh", "IdLow", });
         internal__static_D3_OnlineService_ItemId__Descriptor = Descriptor.MessageTypes[2];
         internal__static_D3_OnlineService_ItemId__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.OnlineService.ItemId, global::D3.OnlineService.ItemId.Builder>(internal__static_D3_OnlineService_ItemId__Descriptor,
-                new string[] { "İdHigh", "İdLow", });
+                new string[] { "IdHigh", "IdLow", });
         internal__static_D3_OnlineService_CoopCreateParams__Descriptor = Descriptor.MessageTypes[3];
         internal__static_D3_OnlineService_CoopCreateParams__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.OnlineService.CoopCreateParams, global::D3.OnlineService.CoopCreateParams.Builder>(internal__static_D3_OnlineService_CoopCreateParams__Descriptor,
-                new string[] { "DifficultyLevel", "Act", "SnoQuest", "QuestStepd", "ResumeFromSaveHerod", "OpenToFriends", "OpenToFriendsMessage", });
+                new string[] { "DifficultyLevel", "Act", "SnoQuest", "QuestStepId", "ResumeFromSaveHeroId", "OpenToFriends", "OpenToFriendsMessage", });
         internal__static_D3_OnlineService_PvPCreateParams__Descriptor = Descriptor.MessageTypes[4];
         internal__static_D3_OnlineService_PvPCreateParams__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.OnlineService.PvPCreateParams, global::D3.OnlineService.PvPCreateParams.Builder>(internal__static_D3_OnlineService_PvPCreateParams__Descriptor,
@@ -84,11 +84,11 @@ namespace D3.OnlineService {
         internal__static_D3_OnlineService_GameCreateParams__Descriptor = Descriptor.MessageTypes[5];
         internal__static_D3_OnlineService_GameCreateParams__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.OnlineService.GameCreateParams, global::D3.OnlineService.GameCreateParams.Builder>(internal__static_D3_OnlineService_GameCreateParams__Descriptor,
-                new string[] { "GameType", "CreationFlags", "Coop", "Pvp", "Name", "İsPrivate", });
+                new string[] { "GameType", "CreationFlags", "Coop", "Pvp", "Name", "IsPrivate", });
         internal__static_D3_OnlineService_HeroCreateParams__Descriptor = Descriptor.MessageTypes[6];
         internal__static_D3_OnlineService_HeroCreateParams__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.OnlineService.HeroCreateParams, global::D3.OnlineService.HeroCreateParams.Builder>(internal__static_D3_OnlineService_HeroCreateParams__Descriptor,
-                new string[] { "GbidClass", "İsHardcore", "İsFemale", });
+                new string[] { "GbidClass", "IsHardcore", "IsFemale", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -127,30 +127,30 @@ namespace D3.OnlineService {
       get { return global::D3.OnlineService.OnlineService.internal__static_D3_OnlineService_EntityId__FieldAccessorTable; }
     }
     
-    public const int İdHighFieldNumber = 1;
-    private bool hasİdHigh;
+    public const int IdHighFieldNumber = 1;
+    private bool hasIdHigh;
     private ulong idHigh_;
-    public bool HasİdHigh {
-      get { return hasİdHigh; }
+    public bool HasIdHigh {
+      get { return hasIdHigh; }
     }
-    public ulong İdHigh {
+    public ulong IdHigh {
       get { return idHigh_; }
     }
     
-    public const int İdLowFieldNumber = 2;
-    private bool hasİdLow;
+    public const int IdLowFieldNumber = 2;
+    private bool hasIdLow;
     private ulong idLow_;
-    public bool HasİdLow {
-      get { return hasİdLow; }
+    public bool HasIdLow {
+      get { return hasIdLow; }
     }
-    public ulong İdLow {
+    public ulong IdLow {
       get { return idLow_; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasİdHigh) return false;
-        if (!hasİdLow) return false;
+        if (!hasIdHigh) return false;
+        if (!hasIdLow) return false;
         return true;
       }
     }
@@ -158,11 +158,11 @@ namespace D3.OnlineService {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _entityIdFieldNames;
-      if (hasİdHigh) {
-        output.WriteUInt64(1, field_names[0], İdHigh);
+      if (hasIdHigh) {
+        output.WriteUInt64(1, field_names[0], IdHigh);
       }
-      if (hasİdLow) {
-        output.WriteUInt64(2, field_names[1], İdLow);
+      if (hasIdLow) {
+        output.WriteUInt64(2, field_names[1], IdLow);
       }
       UnknownFields.WriteTo(output);
     }
@@ -174,11 +174,11 @@ namespace D3.OnlineService {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİdHigh) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(1, İdHigh);
+        if (hasIdHigh) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(1, IdHigh);
         }
-        if (hasİdLow) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, İdLow);
+        if (hasIdLow) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, IdLow);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -306,11 +306,11 @@ namespace D3.OnlineService {
       public override Builder MergeFrom(EntityId other) {
         if (other == global::D3.OnlineService.EntityId.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasİdHigh) {
-          İdHigh = other.İdHigh;
+        if (other.HasIdHigh) {
+          IdHigh = other.IdHigh;
         }
-        if (other.HasİdLow) {
-          İdLow = other.İdLow;
+        if (other.HasIdLow) {
+          IdLow = other.IdLow;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -356,11 +356,11 @@ namespace D3.OnlineService {
               break;
             }
             case 8: {
-              result.hasİdHigh = input.ReadUInt64(ref result.idHigh_);
+              result.hasIdHigh = input.ReadUInt64(ref result.idHigh_);
               break;
             }
             case 16: {
-              result.hasİdLow = input.ReadUInt64(ref result.idLow_);
+              result.hasIdLow = input.ReadUInt64(ref result.idLow_);
               break;
             }
           }
@@ -373,42 +373,42 @@ namespace D3.OnlineService {
       }
       
       
-      public bool HasİdHigh {
-        get { return result.hasİdHigh; }
+      public bool HasIdHigh {
+        get { return result.hasIdHigh; }
       }
-      public ulong İdHigh {
-        get { return result.İdHigh; }
-        set { SetİdHigh(value); }
+      public ulong IdHigh {
+        get { return result.IdHigh; }
+        set { SetIdHigh(value); }
       }
-      public Builder SetİdHigh(ulong value) {
+      public Builder SetIdHigh(ulong value) {
         PrepareBuilder();
-        result.hasİdHigh = true;
+        result.hasIdHigh = true;
         result.idHigh_ = value;
         return this;
       }
-      public Builder ClearİdHigh() {
+      public Builder ClearIdHigh() {
         PrepareBuilder();
-        result.hasİdHigh = false;
+        result.hasIdHigh = false;
         result.idHigh_ = 0UL;
         return this;
       }
       
-      public bool HasİdLow {
-        get { return result.hasİdLow; }
+      public bool HasIdLow {
+        get { return result.hasIdLow; }
       }
-      public ulong İdLow {
-        get { return result.İdLow; }
-        set { SetİdLow(value); }
+      public ulong IdLow {
+        get { return result.IdLow; }
+        set { SetIdLow(value); }
       }
-      public Builder SetİdLow(ulong value) {
+      public Builder SetIdLow(ulong value) {
         PrepareBuilder();
-        result.hasİdLow = true;
+        result.hasIdLow = true;
         result.idLow_ = value;
         return this;
       }
-      public Builder ClearİdLow() {
+      public Builder ClearIdLow() {
         PrepareBuilder();
-        result.hasİdLow = false;
+        result.hasIdLow = false;
         result.idLow_ = 0UL;
         return this;
       }
@@ -456,31 +456,31 @@ namespace D3.OnlineService {
       get { return factory_; }
     }
     
-    public const int İdHighFieldNumber = 2;
-    private bool hasİdHigh;
+    public const int IdHighFieldNumber = 2;
+    private bool hasIdHigh;
     private ulong idHigh_;
-    public bool HasİdHigh {
-      get { return hasİdHigh; }
+    public bool HasIdHigh {
+      get { return hasIdHigh; }
     }
-    public ulong İdHigh {
+    public ulong IdHigh {
       get { return idHigh_; }
     }
     
-    public const int İdLowFieldNumber = 3;
-    private bool hasİdLow;
+    public const int IdLowFieldNumber = 3;
+    private bool hasIdLow;
     private ulong idLow_;
-    public bool HasİdLow {
-      get { return hasİdLow; }
+    public bool HasIdLow {
+      get { return hasIdLow; }
     }
-    public ulong İdLow {
+    public ulong IdLow {
       get { return idLow_; }
     }
     
     public override bool IsInitialized {
       get {
         if (!hasFactory) return false;
-        if (!hasİdHigh) return false;
-        if (!hasİdLow) return false;
+        if (!hasIdHigh) return false;
+        if (!hasIdLow) return false;
         return true;
       }
     }
@@ -491,11 +491,11 @@ namespace D3.OnlineService {
       if (hasFactory) {
         output.WriteUInt64(1, field_names[0], Factory);
       }
-      if (hasİdHigh) {
-        output.WriteUInt64(2, field_names[1], İdHigh);
+      if (hasIdHigh) {
+        output.WriteUInt64(2, field_names[1], IdHigh);
       }
-      if (hasİdLow) {
-        output.WriteUInt64(3, field_names[2], İdLow);
+      if (hasIdLow) {
+        output.WriteUInt64(3, field_names[2], IdLow);
       }
       UnknownFields.WriteTo(output);
     }
@@ -510,11 +510,11 @@ namespace D3.OnlineService {
         if (hasFactory) {
           size += pb::CodedOutputStream.ComputeUInt64Size(1, Factory);
         }
-        if (hasİdHigh) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, İdHigh);
+        if (hasIdHigh) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, IdHigh);
         }
-        if (hasİdLow) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(3, İdLow);
+        if (hasIdLow) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(3, IdLow);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -645,11 +645,11 @@ namespace D3.OnlineService {
         if (other.HasFactory) {
           Factory = other.Factory;
         }
-        if (other.HasİdHigh) {
-          İdHigh = other.İdHigh;
+        if (other.HasIdHigh) {
+          IdHigh = other.IdHigh;
         }
-        if (other.HasİdLow) {
-          İdLow = other.İdLow;
+        if (other.HasIdLow) {
+          IdLow = other.IdLow;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -699,11 +699,11 @@ namespace D3.OnlineService {
               break;
             }
             case 16: {
-              result.hasİdHigh = input.ReadUInt64(ref result.idHigh_);
+              result.hasIdHigh = input.ReadUInt64(ref result.idHigh_);
               break;
             }
             case 24: {
-              result.hasİdLow = input.ReadUInt64(ref result.idLow_);
+              result.hasIdLow = input.ReadUInt64(ref result.idLow_);
               break;
             }
           }
@@ -736,42 +736,42 @@ namespace D3.OnlineService {
         return this;
       }
       
-      public bool HasİdHigh {
-        get { return result.hasİdHigh; }
+      public bool HasIdHigh {
+        get { return result.hasIdHigh; }
       }
-      public ulong İdHigh {
-        get { return result.İdHigh; }
-        set { SetİdHigh(value); }
+      public ulong IdHigh {
+        get { return result.IdHigh; }
+        set { SetIdHigh(value); }
       }
-      public Builder SetİdHigh(ulong value) {
+      public Builder SetIdHigh(ulong value) {
         PrepareBuilder();
-        result.hasİdHigh = true;
+        result.hasIdHigh = true;
         result.idHigh_ = value;
         return this;
       }
-      public Builder ClearİdHigh() {
+      public Builder ClearIdHigh() {
         PrepareBuilder();
-        result.hasİdHigh = false;
+        result.hasIdHigh = false;
         result.idHigh_ = 0UL;
         return this;
       }
       
-      public bool HasİdLow {
-        get { return result.hasİdLow; }
+      public bool HasIdLow {
+        get { return result.hasIdLow; }
       }
-      public ulong İdLow {
-        get { return result.İdLow; }
-        set { SetİdLow(value); }
+      public ulong IdLow {
+        get { return result.IdLow; }
+        set { SetIdLow(value); }
       }
-      public Builder SetİdLow(ulong value) {
+      public Builder SetIdLow(ulong value) {
         PrepareBuilder();
-        result.hasİdLow = true;
+        result.hasIdLow = true;
         result.idLow_ = value;
         return this;
       }
-      public Builder ClearİdLow() {
+      public Builder ClearIdLow() {
         PrepareBuilder();
-        result.hasİdLow = false;
+        result.hasIdLow = false;
         result.idLow_ = 0UL;
         return this;
       }
@@ -787,8 +787,8 @@ namespace D3.OnlineService {
   public sealed partial class ItemId : pb::GeneratedMessage<ItemId, ItemId.Builder> {
     private ItemId() { }
     private static readonly ItemId defaultInstance = new ItemId().MakeReadOnly();
-    private static readonly string[] _ıtemIdFieldNames = new string[] { "id_high", "id_low" };
-    private static readonly uint[] _ıtemIdFieldTags = new uint[] { 8, 16 };
+    private static readonly string[] _itemIdFieldNames = new string[] { "id_high", "id_low" };
+    private static readonly uint[] _itemIdFieldTags = new uint[] { 8, 16 };
     public static ItemId DefaultInstance {
       get { return defaultInstance; }
     }
@@ -809,42 +809,42 @@ namespace D3.OnlineService {
       get { return global::D3.OnlineService.OnlineService.internal__static_D3_OnlineService_ItemId__FieldAccessorTable; }
     }
     
-    public const int İdHighFieldNumber = 1;
-    private bool hasİdHigh;
+    public const int IdHighFieldNumber = 1;
+    private bool hasIdHigh;
     private ulong idHigh_;
-    public bool HasİdHigh {
-      get { return hasİdHigh; }
+    public bool HasIdHigh {
+      get { return hasIdHigh; }
     }
-    public ulong İdHigh {
+    public ulong IdHigh {
       get { return idHigh_; }
     }
     
-    public const int İdLowFieldNumber = 2;
-    private bool hasİdLow;
+    public const int IdLowFieldNumber = 2;
+    private bool hasIdLow;
     private ulong idLow_;
-    public bool HasİdLow {
-      get { return hasİdLow; }
+    public bool HasIdLow {
+      get { return hasIdLow; }
     }
-    public ulong İdLow {
+    public ulong IdLow {
       get { return idLow_; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasİdHigh) return false;
-        if (!hasİdLow) return false;
+        if (!hasIdHigh) return false;
+        if (!hasIdLow) return false;
         return true;
       }
     }
     
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
-      string[] field_names = _ıtemIdFieldNames;
-      if (hasİdHigh) {
-        output.WriteUInt64(1, field_names[0], İdHigh);
+      string[] field_names = _itemIdFieldNames;
+      if (hasIdHigh) {
+        output.WriteUInt64(1, field_names[0], IdHigh);
       }
-      if (hasİdLow) {
-        output.WriteUInt64(2, field_names[1], İdLow);
+      if (hasIdLow) {
+        output.WriteUInt64(2, field_names[1], IdLow);
       }
       UnknownFields.WriteTo(output);
     }
@@ -856,11 +856,11 @@ namespace D3.OnlineService {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİdHigh) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(1, İdHigh);
+        if (hasIdHigh) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(1, IdHigh);
         }
-        if (hasİdLow) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, İdLow);
+        if (hasIdLow) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, IdLow);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -988,11 +988,11 @@ namespace D3.OnlineService {
       public override Builder MergeFrom(ItemId other) {
         if (other == global::D3.OnlineService.ItemId.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasİdHigh) {
-          İdHigh = other.İdHigh;
+        if (other.HasIdHigh) {
+          IdHigh = other.IdHigh;
         }
-        if (other.HasİdLow) {
-          İdLow = other.İdLow;
+        if (other.HasIdLow) {
+          IdLow = other.IdLow;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1009,9 +1009,9 @@ namespace D3.OnlineService {
         string field_name;
         while (input.ReadTag(out tag, out field_name)) {
           if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_ıtemIdFieldNames, field_name, global::System.StringComparer.Ordinal);
+            int field_ordinal = global::System.Array.BinarySearch(_itemIdFieldNames, field_name, global::System.StringComparer.Ordinal);
             if(field_ordinal >= 0)
-              tag = _ıtemIdFieldTags[field_ordinal];
+              tag = _itemIdFieldTags[field_ordinal];
             else {
               if (unknownFields == null) {
                 unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
@@ -1038,11 +1038,11 @@ namespace D3.OnlineService {
               break;
             }
             case 8: {
-              result.hasİdHigh = input.ReadUInt64(ref result.idHigh_);
+              result.hasIdHigh = input.ReadUInt64(ref result.idHigh_);
               break;
             }
             case 16: {
-              result.hasİdLow = input.ReadUInt64(ref result.idLow_);
+              result.hasIdLow = input.ReadUInt64(ref result.idLow_);
               break;
             }
           }
@@ -1055,42 +1055,42 @@ namespace D3.OnlineService {
       }
       
       
-      public bool HasİdHigh {
-        get { return result.hasİdHigh; }
+      public bool HasIdHigh {
+        get { return result.hasIdHigh; }
       }
-      public ulong İdHigh {
-        get { return result.İdHigh; }
-        set { SetİdHigh(value); }
+      public ulong IdHigh {
+        get { return result.IdHigh; }
+        set { SetIdHigh(value); }
       }
-      public Builder SetİdHigh(ulong value) {
+      public Builder SetIdHigh(ulong value) {
         PrepareBuilder();
-        result.hasİdHigh = true;
+        result.hasIdHigh = true;
         result.idHigh_ = value;
         return this;
       }
-      public Builder ClearİdHigh() {
+      public Builder ClearIdHigh() {
         PrepareBuilder();
-        result.hasİdHigh = false;
+        result.hasIdHigh = false;
         result.idHigh_ = 0UL;
         return this;
       }
       
-      public bool HasİdLow {
-        get { return result.hasİdLow; }
+      public bool HasIdLow {
+        get { return result.hasIdLow; }
       }
-      public ulong İdLow {
-        get { return result.İdLow; }
-        set { SetİdLow(value); }
+      public ulong IdLow {
+        get { return result.IdLow; }
+        set { SetIdLow(value); }
       }
-      public Builder SetİdLow(ulong value) {
+      public Builder SetIdLow(ulong value) {
         PrepareBuilder();
-        result.hasİdLow = true;
+        result.hasIdLow = true;
         result.idLow_ = value;
         return this;
       }
-      public Builder ClearİdLow() {
+      public Builder ClearIdLow() {
         PrepareBuilder();
-        result.hasİdLow = false;
+        result.hasIdLow = false;
         result.idLow_ = 0UL;
         return this;
       }
@@ -1158,24 +1158,24 @@ namespace D3.OnlineService {
       get { return snoQuest_; }
     }
     
-    public const int QuestStepdFieldNumber = 4;
-    private bool hasQuestStepd;
-    private int questStepd_ = -1;
-    public bool HasQuestStepd {
-      get { return hasQuestStepd; }
+    public const int QuestStepIdFieldNumber = 4;
+    private bool hasQuestStepId;
+    private int questStepId_ = -1;
+    public bool HasQuestStepId {
+      get { return hasQuestStepId; }
     }
-    public int QuestStepd {
-      get { return questStepd_; }
+    public int QuestStepId {
+      get { return questStepId_; }
     }
     
-    public const int ResumeFromSaveHerodFieldNumber = 5;
-    private bool hasResumeFromSaveHerod;
-    private global::D3.OnlineService.EntityId resumeFromSaveHerod_;
-    public bool HasResumeFromSaveHerod {
-      get { return hasResumeFromSaveHerod; }
+    public const int ResumeFromSaveHeroIdFieldNumber = 5;
+    private bool hasResumeFromSaveHeroId;
+    private global::D3.OnlineService.EntityId resumeFromSaveHeroId_;
+    public bool HasResumeFromSaveHeroId {
+      get { return hasResumeFromSaveHeroId; }
     }
-    public global::D3.OnlineService.EntityId ResumeFromSaveHerod {
-      get { return resumeFromSaveHerod_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId ResumeFromSaveHeroId {
+      get { return resumeFromSaveHeroId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
     public const int OpenToFriendsFieldNumber = 6;
@@ -1203,10 +1203,10 @@ namespace D3.OnlineService {
         if (!hasDifficultyLevel) return false;
         if (!hasAct) return false;
         if (!hasSnoQuest) return false;
-        if (!hasQuestStepd) return false;
+        if (!hasQuestStepId) return false;
         if (!hasOpenToFriends) return false;
-        if (HasResumeFromSaveHerod) {
-          if (!ResumeFromSaveHerod.IsInitialized) return false;
+        if (HasResumeFromSaveHeroId) {
+          if (!ResumeFromSaveHeroId.IsInitialized) return false;
         }
         return true;
       }
@@ -1224,11 +1224,11 @@ namespace D3.OnlineService {
       if (hasSnoQuest) {
         output.WriteSFixed32(3, field_names[6], SnoQuest);
       }
-      if (hasQuestStepd) {
-        output.WriteInt32(4, field_names[4], QuestStepd);
+      if (hasQuestStepId) {
+        output.WriteInt32(4, field_names[4], QuestStepId);
       }
-      if (hasResumeFromSaveHerod) {
-        output.WriteMessage(5, field_names[5], ResumeFromSaveHerod);
+      if (hasResumeFromSaveHeroId) {
+        output.WriteMessage(5, field_names[5], ResumeFromSaveHeroId);
       }
       if (hasOpenToFriends) {
         output.WriteBool(6, field_names[2], OpenToFriends);
@@ -1255,11 +1255,11 @@ namespace D3.OnlineService {
         if (hasSnoQuest) {
           size += pb::CodedOutputStream.ComputeSFixed32Size(3, SnoQuest);
         }
-        if (hasQuestStepd) {
-          size += pb::CodedOutputStream.ComputeInt32Size(4, QuestStepd);
+        if (hasQuestStepId) {
+          size += pb::CodedOutputStream.ComputeInt32Size(4, QuestStepId);
         }
-        if (hasResumeFromSaveHerod) {
-          size += pb::CodedOutputStream.ComputeMessageSize(5, ResumeFromSaveHerod);
+        if (hasResumeFromSaveHeroId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(5, ResumeFromSaveHeroId);
         }
         if (hasOpenToFriends) {
           size += pb::CodedOutputStream.ComputeBoolSize(6, OpenToFriends);
@@ -1402,11 +1402,11 @@ namespace D3.OnlineService {
         if (other.HasSnoQuest) {
           SnoQuest = other.SnoQuest;
         }
-        if (other.HasQuestStepd) {
-          QuestStepd = other.QuestStepd;
+        if (other.HasQuestStepId) {
+          QuestStepId = other.QuestStepId;
         }
-        if (other.HasResumeFromSaveHerod) {
-          MergeResumeFromSaveHerod(other.ResumeFromSaveHerod);
+        if (other.HasResumeFromSaveHeroId) {
+          MergeResumeFromSaveHeroId(other.ResumeFromSaveHeroId);
         }
         if (other.HasOpenToFriends) {
           OpenToFriends = other.OpenToFriends;
@@ -1470,16 +1470,16 @@ namespace D3.OnlineService {
               break;
             }
             case 32: {
-              result.hasQuestStepd = input.ReadInt32(ref result.questStepd_);
+              result.hasQuestStepId = input.ReadInt32(ref result.questStepId_);
               break;
             }
             case 42: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasResumeFromSaveHerod) {
-                subBuilder.MergeFrom(ResumeFromSaveHerod);
+              if (result.hasResumeFromSaveHeroId) {
+                subBuilder.MergeFrom(ResumeFromSaveHeroId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              ResumeFromSaveHerod = subBuilder.BuildPartial();
+              ResumeFromSaveHeroId = subBuilder.BuildPartial();
               break;
             }
             case 48: {
@@ -1560,63 +1560,63 @@ namespace D3.OnlineService {
         return this;
       }
       
-      public bool HasQuestStepd {
-        get { return result.hasQuestStepd; }
+      public bool HasQuestStepId {
+        get { return result.hasQuestStepId; }
       }
-      public int QuestStepd {
-        get { return result.QuestStepd; }
-        set { SetQuestStepd(value); }
+      public int QuestStepId {
+        get { return result.QuestStepId; }
+        set { SetQuestStepId(value); }
       }
-      public Builder SetQuestStepd(int value) {
+      public Builder SetQuestStepId(int value) {
         PrepareBuilder();
-        result.hasQuestStepd = true;
-        result.questStepd_ = value;
+        result.hasQuestStepId = true;
+        result.questStepId_ = value;
         return this;
       }
-      public Builder ClearQuestStepd() {
+      public Builder ClearQuestStepId() {
         PrepareBuilder();
-        result.hasQuestStepd = false;
-        result.questStepd_ = -1;
+        result.hasQuestStepId = false;
+        result.questStepId_ = -1;
         return this;
       }
       
-      public bool HasResumeFromSaveHerod {
-       get { return result.hasResumeFromSaveHerod; }
+      public bool HasResumeFromSaveHeroId {
+       get { return result.hasResumeFromSaveHeroId; }
       }
-      public global::D3.OnlineService.EntityId ResumeFromSaveHerod {
-        get { return result.ResumeFromSaveHerod; }
-        set { SetResumeFromSaveHerod(value); }
+      public global::D3.OnlineService.EntityId ResumeFromSaveHeroId {
+        get { return result.ResumeFromSaveHeroId; }
+        set { SetResumeFromSaveHeroId(value); }
       }
-      public Builder SetResumeFromSaveHerod(global::D3.OnlineService.EntityId value) {
+      public Builder SetResumeFromSaveHeroId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasResumeFromSaveHerod = true;
-        result.resumeFromSaveHerod_ = value;
+        result.hasResumeFromSaveHeroId = true;
+        result.resumeFromSaveHeroId_ = value;
         return this;
       }
-      public Builder SetResumeFromSaveHerod(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetResumeFromSaveHeroId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasResumeFromSaveHerod = true;
-        result.resumeFromSaveHerod_ = builderForValue.Build();
+        result.hasResumeFromSaveHeroId = true;
+        result.resumeFromSaveHeroId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeResumeFromSaveHerod(global::D3.OnlineService.EntityId value) {
+      public Builder MergeResumeFromSaveHeroId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasResumeFromSaveHerod &&
-            result.resumeFromSaveHerod_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.resumeFromSaveHerod_ = global::D3.OnlineService.EntityId.CreateBuilder(result.resumeFromSaveHerod_).MergeFrom(value).BuildPartial();
+        if (result.hasResumeFromSaveHeroId &&
+            result.resumeFromSaveHeroId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.resumeFromSaveHeroId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.resumeFromSaveHeroId_).MergeFrom(value).BuildPartial();
         } else {
-          result.resumeFromSaveHerod_ = value;
+          result.resumeFromSaveHeroId_ = value;
         }
-        result.hasResumeFromSaveHerod = true;
+        result.hasResumeFromSaveHeroId = true;
         return this;
       }
-      public Builder ClearResumeFromSaveHerod() {
+      public Builder ClearResumeFromSaveHeroId() {
         PrepareBuilder();
-        result.hasResumeFromSaveHerod = false;
-        result.resumeFromSaveHerod_ = null;
+        result.hasResumeFromSaveHeroId = false;
+        result.resumeFromSaveHeroId_ = null;
         return this;
       }
       
@@ -2019,13 +2019,13 @@ namespace D3.OnlineService {
       get { return name_; }
     }
     
-    public const int İsPrivateFieldNumber = 6;
-    private bool hasİsPrivate;
+    public const int IsPrivateFieldNumber = 6;
+    private bool hasIsPrivate;
     private bool isPrivate_ = true;
-    public bool HasİsPrivate {
-      get { return hasİsPrivate; }
+    public bool HasIsPrivate {
+      get { return hasIsPrivate; }
     }
-    public bool İsPrivate {
+    public bool IsPrivate {
       get { return isPrivate_; }
     }
     
@@ -2033,7 +2033,7 @@ namespace D3.OnlineService {
       get {
         if (!hasGameType) return false;
         if (!hasCreationFlags) return false;
-        if (!hasİsPrivate) return false;
+        if (!hasIsPrivate) return false;
         if (HasCoop) {
           if (!Coop.IsInitialized) return false;
         }
@@ -2062,8 +2062,8 @@ namespace D3.OnlineService {
       if (hasName) {
         output.WriteString(5, field_names[4], Name);
       }
-      if (hasİsPrivate) {
-        output.WriteBool(6, field_names[3], İsPrivate);
+      if (hasIsPrivate) {
+        output.WriteBool(6, field_names[3], IsPrivate);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2090,8 +2090,8 @@ namespace D3.OnlineService {
         if (hasName) {
           size += pb::CodedOutputStream.ComputeStringSize(5, Name);
         }
-        if (hasİsPrivate) {
-          size += pb::CodedOutputStream.ComputeBoolSize(6, İsPrivate);
+        if (hasIsPrivate) {
+          size += pb::CodedOutputStream.ComputeBoolSize(6, IsPrivate);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2234,8 +2234,8 @@ namespace D3.OnlineService {
         if (other.HasName) {
           Name = other.Name;
         }
-        if (other.HasİsPrivate) {
-          İsPrivate = other.İsPrivate;
+        if (other.HasIsPrivate) {
+          IsPrivate = other.IsPrivate;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -2311,7 +2311,7 @@ namespace D3.OnlineService {
               break;
             }
             case 48: {
-              result.hasİsPrivate = input.ReadBool(ref result.isPrivate_);
+              result.hasIsPrivate = input.ReadBool(ref result.isPrivate_);
               break;
             }
           }
@@ -2465,22 +2465,22 @@ namespace D3.OnlineService {
         return this;
       }
       
-      public bool HasİsPrivate {
-        get { return result.hasİsPrivate; }
+      public bool HasIsPrivate {
+        get { return result.hasIsPrivate; }
       }
-      public bool İsPrivate {
-        get { return result.İsPrivate; }
-        set { SetİsPrivate(value); }
+      public bool IsPrivate {
+        get { return result.IsPrivate; }
+        set { SetIsPrivate(value); }
       }
-      public Builder SetİsPrivate(bool value) {
+      public Builder SetIsPrivate(bool value) {
         PrepareBuilder();
-        result.hasİsPrivate = true;
+        result.hasIsPrivate = true;
         result.isPrivate_ = value;
         return this;
       }
-      public Builder ClearİsPrivate() {
+      public Builder ClearIsPrivate() {
         PrepareBuilder();
-        result.hasİsPrivate = false;
+        result.hasIsPrivate = false;
         result.isPrivate_ = true;
         return this;
       }
@@ -2528,31 +2528,31 @@ namespace D3.OnlineService {
       get { return gbidClass_; }
     }
     
-    public const int İsHardcoreFieldNumber = 2;
-    private bool hasİsHardcore;
+    public const int IsHardcoreFieldNumber = 2;
+    private bool hasIsHardcore;
     private bool isHardcore_;
-    public bool HasİsHardcore {
-      get { return hasİsHardcore; }
+    public bool HasIsHardcore {
+      get { return hasIsHardcore; }
     }
-    public bool İsHardcore {
+    public bool IsHardcore {
       get { return isHardcore_; }
     }
     
-    public const int İsFemaleFieldNumber = 3;
-    private bool hasİsFemale;
+    public const int IsFemaleFieldNumber = 3;
+    private bool hasIsFemale;
     private bool isFemale_;
-    public bool HasİsFemale {
-      get { return hasİsFemale; }
+    public bool HasIsFemale {
+      get { return hasIsFemale; }
     }
-    public bool İsFemale {
+    public bool IsFemale {
       get { return isFemale_; }
     }
     
     public override bool IsInitialized {
       get {
         if (!hasGbidClass) return false;
-        if (!hasİsHardcore) return false;
-        if (!hasİsFemale) return false;
+        if (!hasIsHardcore) return false;
+        if (!hasIsFemale) return false;
         return true;
       }
     }
@@ -2563,11 +2563,11 @@ namespace D3.OnlineService {
       if (hasGbidClass) {
         output.WriteSFixed32(1, field_names[0], GbidClass);
       }
-      if (hasİsHardcore) {
-        output.WriteBool(2, field_names[2], İsHardcore);
+      if (hasIsHardcore) {
+        output.WriteBool(2, field_names[2], IsHardcore);
       }
-      if (hasİsFemale) {
-        output.WriteBool(3, field_names[1], İsFemale);
+      if (hasIsFemale) {
+        output.WriteBool(3, field_names[1], IsFemale);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2582,11 +2582,11 @@ namespace D3.OnlineService {
         if (hasGbidClass) {
           size += pb::CodedOutputStream.ComputeSFixed32Size(1, GbidClass);
         }
-        if (hasİsHardcore) {
-          size += pb::CodedOutputStream.ComputeBoolSize(2, İsHardcore);
+        if (hasIsHardcore) {
+          size += pb::CodedOutputStream.ComputeBoolSize(2, IsHardcore);
         }
-        if (hasİsFemale) {
-          size += pb::CodedOutputStream.ComputeBoolSize(3, İsFemale);
+        if (hasIsFemale) {
+          size += pb::CodedOutputStream.ComputeBoolSize(3, IsFemale);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2717,11 +2717,11 @@ namespace D3.OnlineService {
         if (other.HasGbidClass) {
           GbidClass = other.GbidClass;
         }
-        if (other.HasİsHardcore) {
-          İsHardcore = other.İsHardcore;
+        if (other.HasIsHardcore) {
+          IsHardcore = other.IsHardcore;
         }
-        if (other.HasİsFemale) {
-          İsFemale = other.İsFemale;
+        if (other.HasIsFemale) {
+          IsFemale = other.IsFemale;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -2771,11 +2771,11 @@ namespace D3.OnlineService {
               break;
             }
             case 16: {
-              result.hasİsHardcore = input.ReadBool(ref result.isHardcore_);
+              result.hasIsHardcore = input.ReadBool(ref result.isHardcore_);
               break;
             }
             case 24: {
-              result.hasİsFemale = input.ReadBool(ref result.isFemale_);
+              result.hasIsFemale = input.ReadBool(ref result.isFemale_);
               break;
             }
           }
@@ -2808,42 +2808,42 @@ namespace D3.OnlineService {
         return this;
       }
       
-      public bool HasİsHardcore {
-        get { return result.hasİsHardcore; }
+      public bool HasIsHardcore {
+        get { return result.hasIsHardcore; }
       }
-      public bool İsHardcore {
-        get { return result.İsHardcore; }
-        set { SetİsHardcore(value); }
+      public bool IsHardcore {
+        get { return result.IsHardcore; }
+        set { SetIsHardcore(value); }
       }
-      public Builder SetİsHardcore(bool value) {
+      public Builder SetIsHardcore(bool value) {
         PrepareBuilder();
-        result.hasİsHardcore = true;
+        result.hasIsHardcore = true;
         result.isHardcore_ = value;
         return this;
       }
-      public Builder ClearİsHardcore() {
+      public Builder ClearIsHardcore() {
         PrepareBuilder();
-        result.hasİsHardcore = false;
+        result.hasIsHardcore = false;
         result.isHardcore_ = false;
         return this;
       }
       
-      public bool HasİsFemale {
-        get { return result.hasİsFemale; }
+      public bool HasIsFemale {
+        get { return result.hasIsFemale; }
       }
-      public bool İsFemale {
-        get { return result.İsFemale; }
-        set { SetİsFemale(value); }
+      public bool IsFemale {
+        get { return result.IsFemale; }
+        set { SetIsFemale(value); }
       }
-      public Builder SetİsFemale(bool value) {
+      public Builder SetIsFemale(bool value) {
         PrepareBuilder();
-        result.hasİsFemale = true;
+        result.hasIsFemale = true;
         result.isFemale_ = value;
         return this;
       }
-      public Builder ClearİsFemale() {
+      public Builder ClearIsFemale() {
         PrepareBuilder();
-        result.hasİsFemale = false;
+        result.hasIsFemale = false;
         result.isFemale_ = false;
         return this;
       }

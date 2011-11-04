@@ -77,23 +77,23 @@ namespace bnet.protocol.exchange_object_provider {
         internal__static_bnet_protocol_exchange_object_provider_ReportAuthorizeRequest__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_exchange_object_provider_ReportAuthorizeRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_object_provider.ReportAuthorizeRequest, global::bnet.protocol.exchange_object_provider.ReportAuthorizeRequest.Builder>(internal__static_bnet_protocol_exchange_object_provider_ReportAuthorizeRequest__Descriptor,
-                new string[] { "Partitiond", "Token", "Result", "AuthHandle", "DeferDelivery", "BnetAccountd", });
+                new string[] { "PartitionId", "Token", "Result", "AuthHandle", "DeferDelivery", "BnetAccountId", });
         internal__static_bnet_protocol_exchange_object_provider_ReportSettleRequest__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_exchange_object_provider_ReportSettleRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_object_provider.ReportSettleRequest, global::bnet.protocol.exchange_object_provider.ReportSettleRequest.Builder>(internal__static_bnet_protocol_exchange_object_provider_ReportSettleRequest__Descriptor,
-                new string[] { "Partitiond", "Token", "Result", "NotificationExtranfo", });
+                new string[] { "PartitionId", "Token", "Result", "NotificationExtraInfo", });
         internal__static_bnet_protocol_exchange_object_provider_ReportCancelRequest__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_exchange_object_provider_ReportCancelRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_object_provider.ReportCancelRequest, global::bnet.protocol.exchange_object_provider.ReportCancelRequest.Builder>(internal__static_bnet_protocol_exchange_object_provider_ReportCancelRequest__Descriptor,
-                new string[] { "Partitiond", "Token", "Result", "NotificationExtranfo", });
+                new string[] { "PartitionId", "Token", "Result", "NotificationExtraInfo", });
         internal__static_bnet_protocol_exchange_object_provider_GetPaymentMethodsRequest__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_exchange_object_provider_GetPaymentMethodsRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_object_provider.GetPaymentMethodsRequest, global::bnet.protocol.exchange_object_provider.GetPaymentMethodsRequest.Builder>(internal__static_bnet_protocol_exchange_object_provider_GetPaymentMethodsRequest__Descriptor,
-                new string[] { "BnetAccount", "GameAccount", "Toon", "Currency", "CashnOutMask", "RefreshPaymentMethodCache", "RefreshEBalanceCache", });
+                new string[] { "BnetAccount", "GameAccount", "Toon", "Currency", "CashInOutMask", "RefreshPaymentMethodCache", "RefreshEBalanceCache", });
         internal__static_bnet_protocol_exchange_object_provider_PaymentMethod__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_exchange_object_provider_PaymentMethod__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_object_provider.PaymentMethod, global::bnet.protocol.exchange_object_provider.PaymentMethod.Builder>(internal__static_bnet_protocol_exchange_object_provider_PaymentMethod__Descriptor,
-                new string[] { "Account", "Description", "Amount", "CashnOutMask", "Countryd", "State", "City", "PostalCode", });
+                new string[] { "Account", "Description", "Amount", "CashInOutMask", "CountryId", "State", "City", "PostalCode", });
         internal__static_bnet_protocol_exchange_object_provider_GetPaymentMethodsResponse__Descriptor = Descriptor.MessageTypes[5];
         internal__static_bnet_protocol_exchange_object_provider_GetPaymentMethodsResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_object_provider.GetPaymentMethodsResponse, global::bnet.protocol.exchange_object_provider.GetPaymentMethodsResponse.Builder>(internal__static_bnet_protocol_exchange_object_provider_GetPaymentMethodsResponse__Descriptor,
@@ -138,14 +138,14 @@ namespace bnet.protocol.exchange_object_provider {
       get { return global::bnet.protocol.exchange_object_provider.ExchangeObjectProvider.internal__static_bnet_protocol_exchange_object_provider_ReportAuthorizeRequest__FieldAccessorTable; }
     }
     
-    public const int PartitiondFieldNumber = 1;
-    private bool hasPartitiond;
-    private global::bnet.protocol.exchange.PartitionId partitiond_;
-    public bool HasPartitiond {
-      get { return hasPartitiond; }
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
     }
-    public global::bnet.protocol.exchange.PartitionId Partitiond {
-      get { return partitiond_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
     }
     
     public const int TokenFieldNumber = 2;
@@ -188,28 +188,28 @@ namespace bnet.protocol.exchange_object_provider {
       get { return deferDelivery_; }
     }
     
-    public const int BnetAccountdFieldNumber = 6;
-    private bool hasBnetAccountd;
-    private global::bnet.protocol.EntityId bnetAccountd_;
-    public bool HasBnetAccountd {
-      get { return hasBnetAccountd; }
+    public const int BnetAccountIdFieldNumber = 6;
+    private bool hasBnetAccountId;
+    private global::bnet.protocol.EntityId bnetAccountId_;
+    public bool HasBnetAccountId {
+      get { return hasBnetAccountId; }
     }
-    public global::bnet.protocol.EntityId BnetAccountd {
-      get { return bnetAccountd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId BnetAccountId {
+      get { return bnetAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasPartitiond) return false;
+        if (!hasPartitionId) return false;
         if (!hasToken) return false;
         if (!hasResult) return false;
-        if (!hasBnetAccountd) return false;
-        if (!Partitiond.IsInitialized) return false;
+        if (!hasBnetAccountId) return false;
+        if (!PartitionId.IsInitialized) return false;
         if (!Token.IsInitialized) return false;
         if (HasAuthHandle) {
           if (!AuthHandle.IsInitialized) return false;
         }
-        if (!BnetAccountd.IsInitialized) return false;
+        if (!BnetAccountId.IsInitialized) return false;
         return true;
       }
     }
@@ -217,8 +217,8 @@ namespace bnet.protocol.exchange_object_provider {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _reportAuthorizeRequestFieldNames;
-      if (hasPartitiond) {
-        output.WriteMessage(1, field_names[3], Partitiond);
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[3], PartitionId);
       }
       if (hasToken) {
         output.WriteMessage(2, field_names[5], Token);
@@ -232,8 +232,8 @@ namespace bnet.protocol.exchange_object_provider {
       if (hasDeferDelivery) {
         output.WriteBool(5, field_names[2], DeferDelivery);
       }
-      if (hasBnetAccountd) {
-        output.WriteMessage(6, field_names[1], BnetAccountd);
+      if (hasBnetAccountId) {
+        output.WriteMessage(6, field_names[1], BnetAccountId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -245,8 +245,8 @@ namespace bnet.protocol.exchange_object_provider {
         if (size != -1) return size;
         
         size = 0;
-        if (hasPartitiond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Partitiond);
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
         }
         if (hasToken) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, Token);
@@ -260,8 +260,8 @@ namespace bnet.protocol.exchange_object_provider {
         if (hasDeferDelivery) {
           size += pb::CodedOutputStream.ComputeBoolSize(5, DeferDelivery);
         }
-        if (hasBnetAccountd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(6, BnetAccountd);
+        if (hasBnetAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(6, BnetAccountId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -389,8 +389,8 @@ namespace bnet.protocol.exchange_object_provider {
       public override Builder MergeFrom(ReportAuthorizeRequest other) {
         if (other == global::bnet.protocol.exchange_object_provider.ReportAuthorizeRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasPartitiond) {
-          MergePartitiond(other.Partitiond);
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
         }
         if (other.HasToken) {
           MergeToken(other.Token);
@@ -404,8 +404,8 @@ namespace bnet.protocol.exchange_object_provider {
         if (other.HasDeferDelivery) {
           DeferDelivery = other.DeferDelivery;
         }
-        if (other.HasBnetAccountd) {
-          MergeBnetAccountd(other.BnetAccountd);
+        if (other.HasBnetAccountId) {
+          MergeBnetAccountId(other.BnetAccountId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -452,11 +452,11 @@ namespace bnet.protocol.exchange_object_provider {
             }
             case 10: {
               global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
-              if (result.hasPartitiond) {
-                subBuilder.MergeFrom(Partitiond);
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Partitiond = subBuilder.BuildPartial();
+              PartitionId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
@@ -487,11 +487,11 @@ namespace bnet.protocol.exchange_object_provider {
             }
             case 50: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasBnetAccountd) {
-                subBuilder.MergeFrom(BnetAccountd);
+              if (result.hasBnetAccountId) {
+                subBuilder.MergeFrom(BnetAccountId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              BnetAccountd = subBuilder.BuildPartial();
+              BnetAccountId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -504,43 +504,43 @@ namespace bnet.protocol.exchange_object_provider {
       }
       
       
-      public bool HasPartitiond {
-       get { return result.hasPartitiond; }
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
       }
-      public global::bnet.protocol.exchange.PartitionId Partitiond {
-        get { return result.Partitiond; }
-        set { SetPartitiond(value); }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = value;
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
         return this;
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = builderForValue.Build();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergePartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasPartitiond &&
-            result.partitiond_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
-            result.partitiond_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitiond_).MergeFrom(value).BuildPartial();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
         } else {
-          result.partitiond_ = value;
+          result.partitionId_ = value;
         }
-        result.hasPartitiond = true;
+        result.hasPartitionId = true;
         return this;
       }
-      public Builder ClearPartitiond() {
+      public Builder ClearPartitionId() {
         PrepareBuilder();
-        result.hasPartitiond = false;
-        result.partitiond_ = null;
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
         return this;
       }
       
@@ -664,43 +664,43 @@ namespace bnet.protocol.exchange_object_provider {
         return this;
       }
       
-      public bool HasBnetAccountd {
-       get { return result.hasBnetAccountd; }
+      public bool HasBnetAccountId {
+       get { return result.hasBnetAccountId; }
       }
-      public global::bnet.protocol.EntityId BnetAccountd {
-        get { return result.BnetAccountd; }
-        set { SetBnetAccountd(value); }
+      public global::bnet.protocol.EntityId BnetAccountId {
+        get { return result.BnetAccountId; }
+        set { SetBnetAccountId(value); }
       }
-      public Builder SetBnetAccountd(global::bnet.protocol.EntityId value) {
+      public Builder SetBnetAccountId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasBnetAccountd = true;
-        result.bnetAccountd_ = value;
+        result.hasBnetAccountId = true;
+        result.bnetAccountId_ = value;
         return this;
       }
-      public Builder SetBnetAccountd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetBnetAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasBnetAccountd = true;
-        result.bnetAccountd_ = builderForValue.Build();
+        result.hasBnetAccountId = true;
+        result.bnetAccountId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeBnetAccountd(global::bnet.protocol.EntityId value) {
+      public Builder MergeBnetAccountId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasBnetAccountd &&
-            result.bnetAccountd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.bnetAccountd_ = global::bnet.protocol.EntityId.CreateBuilder(result.bnetAccountd_).MergeFrom(value).BuildPartial();
+        if (result.hasBnetAccountId &&
+            result.bnetAccountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.bnetAccountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.bnetAccountId_).MergeFrom(value).BuildPartial();
         } else {
-          result.bnetAccountd_ = value;
+          result.bnetAccountId_ = value;
         }
-        result.hasBnetAccountd = true;
+        result.hasBnetAccountId = true;
         return this;
       }
-      public Builder ClearBnetAccountd() {
+      public Builder ClearBnetAccountId() {
         PrepareBuilder();
-        result.hasBnetAccountd = false;
-        result.bnetAccountd_ = null;
+        result.hasBnetAccountId = false;
+        result.bnetAccountId_ = null;
         return this;
       }
     }
@@ -737,14 +737,14 @@ namespace bnet.protocol.exchange_object_provider {
       get { return global::bnet.protocol.exchange_object_provider.ExchangeObjectProvider.internal__static_bnet_protocol_exchange_object_provider_ReportSettleRequest__FieldAccessorTable; }
     }
     
-    public const int PartitiondFieldNumber = 1;
-    private bool hasPartitiond;
-    private global::bnet.protocol.exchange.PartitionId partitiond_;
-    public bool HasPartitiond {
-      get { return hasPartitiond; }
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
     }
-    public global::bnet.protocol.exchange.PartitionId Partitiond {
-      get { return partitiond_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
     }
     
     public const int TokenFieldNumber = 2;
@@ -767,25 +767,25 @@ namespace bnet.protocol.exchange_object_provider {
       get { return result_; }
     }
     
-    public const int NotificationExtranfoFieldNumber = 4;
-    private bool hasNotificationExtranfo;
-    private global::bnet.protocol.exchange.BlobFrom notificationExtranfo_;
-    public bool HasNotificationExtranfo {
-      get { return hasNotificationExtranfo; }
+    public const int NotificationExtraInfoFieldNumber = 4;
+    private bool hasNotificationExtraInfo;
+    private global::bnet.protocol.exchange.BlobFrom notificationExtraInfo_;
+    public bool HasNotificationExtraInfo {
+      get { return hasNotificationExtraInfo; }
     }
-    public global::bnet.protocol.exchange.BlobFrom NotificationExtranfo {
-      get { return notificationExtranfo_ ?? global::bnet.protocol.exchange.BlobFrom.DefaultInstance; }
+    public global::bnet.protocol.exchange.BlobFrom NotificationExtraInfo {
+      get { return notificationExtraInfo_ ?? global::bnet.protocol.exchange.BlobFrom.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasPartitiond) return false;
+        if (!hasPartitionId) return false;
         if (!hasToken) return false;
         if (!hasResult) return false;
-        if (!Partitiond.IsInitialized) return false;
+        if (!PartitionId.IsInitialized) return false;
         if (!Token.IsInitialized) return false;
-        if (HasNotificationExtranfo) {
-          if (!NotificationExtranfo.IsInitialized) return false;
+        if (HasNotificationExtraInfo) {
+          if (!NotificationExtraInfo.IsInitialized) return false;
         }
         return true;
       }
@@ -794,8 +794,8 @@ namespace bnet.protocol.exchange_object_provider {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _reportSettleRequestFieldNames;
-      if (hasPartitiond) {
-        output.WriteMessage(1, field_names[1], Partitiond);
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[1], PartitionId);
       }
       if (hasToken) {
         output.WriteMessage(2, field_names[3], Token);
@@ -803,8 +803,8 @@ namespace bnet.protocol.exchange_object_provider {
       if (hasResult) {
         output.WriteUInt64(3, field_names[2], Result);
       }
-      if (hasNotificationExtranfo) {
-        output.WriteMessage(4, field_names[0], NotificationExtranfo);
+      if (hasNotificationExtraInfo) {
+        output.WriteMessage(4, field_names[0], NotificationExtraInfo);
       }
       UnknownFields.WriteTo(output);
     }
@@ -816,8 +816,8 @@ namespace bnet.protocol.exchange_object_provider {
         if (size != -1) return size;
         
         size = 0;
-        if (hasPartitiond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Partitiond);
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
         }
         if (hasToken) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, Token);
@@ -825,8 +825,8 @@ namespace bnet.protocol.exchange_object_provider {
         if (hasResult) {
           size += pb::CodedOutputStream.ComputeUInt64Size(3, Result);
         }
-        if (hasNotificationExtranfo) {
-          size += pb::CodedOutputStream.ComputeMessageSize(4, NotificationExtranfo);
+        if (hasNotificationExtraInfo) {
+          size += pb::CodedOutputStream.ComputeMessageSize(4, NotificationExtraInfo);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -954,8 +954,8 @@ namespace bnet.protocol.exchange_object_provider {
       public override Builder MergeFrom(ReportSettleRequest other) {
         if (other == global::bnet.protocol.exchange_object_provider.ReportSettleRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasPartitiond) {
-          MergePartitiond(other.Partitiond);
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
         }
         if (other.HasToken) {
           MergeToken(other.Token);
@@ -963,8 +963,8 @@ namespace bnet.protocol.exchange_object_provider {
         if (other.HasResult) {
           Result = other.Result;
         }
-        if (other.HasNotificationExtranfo) {
-          MergeNotificationExtranfo(other.NotificationExtranfo);
+        if (other.HasNotificationExtraInfo) {
+          MergeNotificationExtraInfo(other.NotificationExtraInfo);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1011,11 +1011,11 @@ namespace bnet.protocol.exchange_object_provider {
             }
             case 10: {
               global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
-              if (result.hasPartitiond) {
-                subBuilder.MergeFrom(Partitiond);
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Partitiond = subBuilder.BuildPartial();
+              PartitionId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
@@ -1033,11 +1033,11 @@ namespace bnet.protocol.exchange_object_provider {
             }
             case 34: {
               global::bnet.protocol.exchange.BlobFrom.Builder subBuilder = global::bnet.protocol.exchange.BlobFrom.CreateBuilder();
-              if (result.hasNotificationExtranfo) {
-                subBuilder.MergeFrom(NotificationExtranfo);
+              if (result.hasNotificationExtraInfo) {
+                subBuilder.MergeFrom(NotificationExtraInfo);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              NotificationExtranfo = subBuilder.BuildPartial();
+              NotificationExtraInfo = subBuilder.BuildPartial();
               break;
             }
           }
@@ -1050,43 +1050,43 @@ namespace bnet.protocol.exchange_object_provider {
       }
       
       
-      public bool HasPartitiond {
-       get { return result.hasPartitiond; }
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
       }
-      public global::bnet.protocol.exchange.PartitionId Partitiond {
-        get { return result.Partitiond; }
-        set { SetPartitiond(value); }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = value;
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
         return this;
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = builderForValue.Build();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergePartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasPartitiond &&
-            result.partitiond_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
-            result.partitiond_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitiond_).MergeFrom(value).BuildPartial();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
         } else {
-          result.partitiond_ = value;
+          result.partitionId_ = value;
         }
-        result.hasPartitiond = true;
+        result.hasPartitionId = true;
         return this;
       }
-      public Builder ClearPartitiond() {
+      public Builder ClearPartitionId() {
         PrepareBuilder();
-        result.hasPartitiond = false;
-        result.partitiond_ = null;
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
         return this;
       }
       
@@ -1150,43 +1150,43 @@ namespace bnet.protocol.exchange_object_provider {
         return this;
       }
       
-      public bool HasNotificationExtranfo {
-       get { return result.hasNotificationExtranfo; }
+      public bool HasNotificationExtraInfo {
+       get { return result.hasNotificationExtraInfo; }
       }
-      public global::bnet.protocol.exchange.BlobFrom NotificationExtranfo {
-        get { return result.NotificationExtranfo; }
-        set { SetNotificationExtranfo(value); }
+      public global::bnet.protocol.exchange.BlobFrom NotificationExtraInfo {
+        get { return result.NotificationExtraInfo; }
+        set { SetNotificationExtraInfo(value); }
       }
-      public Builder SetNotificationExtranfo(global::bnet.protocol.exchange.BlobFrom value) {
+      public Builder SetNotificationExtraInfo(global::bnet.protocol.exchange.BlobFrom value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasNotificationExtranfo = true;
-        result.notificationExtranfo_ = value;
+        result.hasNotificationExtraInfo = true;
+        result.notificationExtraInfo_ = value;
         return this;
       }
-      public Builder SetNotificationExtranfo(global::bnet.protocol.exchange.BlobFrom.Builder builderForValue) {
+      public Builder SetNotificationExtraInfo(global::bnet.protocol.exchange.BlobFrom.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasNotificationExtranfo = true;
-        result.notificationExtranfo_ = builderForValue.Build();
+        result.hasNotificationExtraInfo = true;
+        result.notificationExtraInfo_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeNotificationExtranfo(global::bnet.protocol.exchange.BlobFrom value) {
+      public Builder MergeNotificationExtraInfo(global::bnet.protocol.exchange.BlobFrom value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasNotificationExtranfo &&
-            result.notificationExtranfo_ != global::bnet.protocol.exchange.BlobFrom.DefaultInstance) {
-            result.notificationExtranfo_ = global::bnet.protocol.exchange.BlobFrom.CreateBuilder(result.notificationExtranfo_).MergeFrom(value).BuildPartial();
+        if (result.hasNotificationExtraInfo &&
+            result.notificationExtraInfo_ != global::bnet.protocol.exchange.BlobFrom.DefaultInstance) {
+            result.notificationExtraInfo_ = global::bnet.protocol.exchange.BlobFrom.CreateBuilder(result.notificationExtraInfo_).MergeFrom(value).BuildPartial();
         } else {
-          result.notificationExtranfo_ = value;
+          result.notificationExtraInfo_ = value;
         }
-        result.hasNotificationExtranfo = true;
+        result.hasNotificationExtraInfo = true;
         return this;
       }
-      public Builder ClearNotificationExtranfo() {
+      public Builder ClearNotificationExtraInfo() {
         PrepareBuilder();
-        result.hasNotificationExtranfo = false;
-        result.notificationExtranfo_ = null;
+        result.hasNotificationExtraInfo = false;
+        result.notificationExtraInfo_ = null;
         return this;
       }
     }
@@ -1223,14 +1223,14 @@ namespace bnet.protocol.exchange_object_provider {
       get { return global::bnet.protocol.exchange_object_provider.ExchangeObjectProvider.internal__static_bnet_protocol_exchange_object_provider_ReportCancelRequest__FieldAccessorTable; }
     }
     
-    public const int PartitiondFieldNumber = 1;
-    private bool hasPartitiond;
-    private global::bnet.protocol.exchange.PartitionId partitiond_;
-    public bool HasPartitiond {
-      get { return hasPartitiond; }
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
     }
-    public global::bnet.protocol.exchange.PartitionId Partitiond {
-      get { return partitiond_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
     }
     
     public const int TokenFieldNumber = 2;
@@ -1253,25 +1253,25 @@ namespace bnet.protocol.exchange_object_provider {
       get { return result_; }
     }
     
-    public const int NotificationExtranfoFieldNumber = 4;
-    private bool hasNotificationExtranfo;
-    private global::bnet.protocol.exchange.BlobFrom notificationExtranfo_;
-    public bool HasNotificationExtranfo {
-      get { return hasNotificationExtranfo; }
+    public const int NotificationExtraInfoFieldNumber = 4;
+    private bool hasNotificationExtraInfo;
+    private global::bnet.protocol.exchange.BlobFrom notificationExtraInfo_;
+    public bool HasNotificationExtraInfo {
+      get { return hasNotificationExtraInfo; }
     }
-    public global::bnet.protocol.exchange.BlobFrom NotificationExtranfo {
-      get { return notificationExtranfo_ ?? global::bnet.protocol.exchange.BlobFrom.DefaultInstance; }
+    public global::bnet.protocol.exchange.BlobFrom NotificationExtraInfo {
+      get { return notificationExtraInfo_ ?? global::bnet.protocol.exchange.BlobFrom.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasPartitiond) return false;
+        if (!hasPartitionId) return false;
         if (!hasToken) return false;
         if (!hasResult) return false;
-        if (!Partitiond.IsInitialized) return false;
+        if (!PartitionId.IsInitialized) return false;
         if (!Token.IsInitialized) return false;
-        if (HasNotificationExtranfo) {
-          if (!NotificationExtranfo.IsInitialized) return false;
+        if (HasNotificationExtraInfo) {
+          if (!NotificationExtraInfo.IsInitialized) return false;
         }
         return true;
       }
@@ -1280,8 +1280,8 @@ namespace bnet.protocol.exchange_object_provider {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _reportCancelRequestFieldNames;
-      if (hasPartitiond) {
-        output.WriteMessage(1, field_names[1], Partitiond);
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[1], PartitionId);
       }
       if (hasToken) {
         output.WriteMessage(2, field_names[3], Token);
@@ -1289,8 +1289,8 @@ namespace bnet.protocol.exchange_object_provider {
       if (hasResult) {
         output.WriteUInt64(3, field_names[2], Result);
       }
-      if (hasNotificationExtranfo) {
-        output.WriteMessage(4, field_names[0], NotificationExtranfo);
+      if (hasNotificationExtraInfo) {
+        output.WriteMessage(4, field_names[0], NotificationExtraInfo);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1302,8 +1302,8 @@ namespace bnet.protocol.exchange_object_provider {
         if (size != -1) return size;
         
         size = 0;
-        if (hasPartitiond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Partitiond);
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
         }
         if (hasToken) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, Token);
@@ -1311,8 +1311,8 @@ namespace bnet.protocol.exchange_object_provider {
         if (hasResult) {
           size += pb::CodedOutputStream.ComputeUInt64Size(3, Result);
         }
-        if (hasNotificationExtranfo) {
-          size += pb::CodedOutputStream.ComputeMessageSize(4, NotificationExtranfo);
+        if (hasNotificationExtraInfo) {
+          size += pb::CodedOutputStream.ComputeMessageSize(4, NotificationExtraInfo);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1440,8 +1440,8 @@ namespace bnet.protocol.exchange_object_provider {
       public override Builder MergeFrom(ReportCancelRequest other) {
         if (other == global::bnet.protocol.exchange_object_provider.ReportCancelRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasPartitiond) {
-          MergePartitiond(other.Partitiond);
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
         }
         if (other.HasToken) {
           MergeToken(other.Token);
@@ -1449,8 +1449,8 @@ namespace bnet.protocol.exchange_object_provider {
         if (other.HasResult) {
           Result = other.Result;
         }
-        if (other.HasNotificationExtranfo) {
-          MergeNotificationExtranfo(other.NotificationExtranfo);
+        if (other.HasNotificationExtraInfo) {
+          MergeNotificationExtraInfo(other.NotificationExtraInfo);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1497,11 +1497,11 @@ namespace bnet.protocol.exchange_object_provider {
             }
             case 10: {
               global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
-              if (result.hasPartitiond) {
-                subBuilder.MergeFrom(Partitiond);
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Partitiond = subBuilder.BuildPartial();
+              PartitionId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
@@ -1519,11 +1519,11 @@ namespace bnet.protocol.exchange_object_provider {
             }
             case 34: {
               global::bnet.protocol.exchange.BlobFrom.Builder subBuilder = global::bnet.protocol.exchange.BlobFrom.CreateBuilder();
-              if (result.hasNotificationExtranfo) {
-                subBuilder.MergeFrom(NotificationExtranfo);
+              if (result.hasNotificationExtraInfo) {
+                subBuilder.MergeFrom(NotificationExtraInfo);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              NotificationExtranfo = subBuilder.BuildPartial();
+              NotificationExtraInfo = subBuilder.BuildPartial();
               break;
             }
           }
@@ -1536,43 +1536,43 @@ namespace bnet.protocol.exchange_object_provider {
       }
       
       
-      public bool HasPartitiond {
-       get { return result.hasPartitiond; }
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
       }
-      public global::bnet.protocol.exchange.PartitionId Partitiond {
-        get { return result.Partitiond; }
-        set { SetPartitiond(value); }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = value;
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
         return this;
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = builderForValue.Build();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergePartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasPartitiond &&
-            result.partitiond_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
-            result.partitiond_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitiond_).MergeFrom(value).BuildPartial();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
         } else {
-          result.partitiond_ = value;
+          result.partitionId_ = value;
         }
-        result.hasPartitiond = true;
+        result.hasPartitionId = true;
         return this;
       }
-      public Builder ClearPartitiond() {
+      public Builder ClearPartitionId() {
         PrepareBuilder();
-        result.hasPartitiond = false;
-        result.partitiond_ = null;
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
         return this;
       }
       
@@ -1636,43 +1636,43 @@ namespace bnet.protocol.exchange_object_provider {
         return this;
       }
       
-      public bool HasNotificationExtranfo {
-       get { return result.hasNotificationExtranfo; }
+      public bool HasNotificationExtraInfo {
+       get { return result.hasNotificationExtraInfo; }
       }
-      public global::bnet.protocol.exchange.BlobFrom NotificationExtranfo {
-        get { return result.NotificationExtranfo; }
-        set { SetNotificationExtranfo(value); }
+      public global::bnet.protocol.exchange.BlobFrom NotificationExtraInfo {
+        get { return result.NotificationExtraInfo; }
+        set { SetNotificationExtraInfo(value); }
       }
-      public Builder SetNotificationExtranfo(global::bnet.protocol.exchange.BlobFrom value) {
+      public Builder SetNotificationExtraInfo(global::bnet.protocol.exchange.BlobFrom value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasNotificationExtranfo = true;
-        result.notificationExtranfo_ = value;
+        result.hasNotificationExtraInfo = true;
+        result.notificationExtraInfo_ = value;
         return this;
       }
-      public Builder SetNotificationExtranfo(global::bnet.protocol.exchange.BlobFrom.Builder builderForValue) {
+      public Builder SetNotificationExtraInfo(global::bnet.protocol.exchange.BlobFrom.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasNotificationExtranfo = true;
-        result.notificationExtranfo_ = builderForValue.Build();
+        result.hasNotificationExtraInfo = true;
+        result.notificationExtraInfo_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeNotificationExtranfo(global::bnet.protocol.exchange.BlobFrom value) {
+      public Builder MergeNotificationExtraInfo(global::bnet.protocol.exchange.BlobFrom value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasNotificationExtranfo &&
-            result.notificationExtranfo_ != global::bnet.protocol.exchange.BlobFrom.DefaultInstance) {
-            result.notificationExtranfo_ = global::bnet.protocol.exchange.BlobFrom.CreateBuilder(result.notificationExtranfo_).MergeFrom(value).BuildPartial();
+        if (result.hasNotificationExtraInfo &&
+            result.notificationExtraInfo_ != global::bnet.protocol.exchange.BlobFrom.DefaultInstance) {
+            result.notificationExtraInfo_ = global::bnet.protocol.exchange.BlobFrom.CreateBuilder(result.notificationExtraInfo_).MergeFrom(value).BuildPartial();
         } else {
-          result.notificationExtranfo_ = value;
+          result.notificationExtraInfo_ = value;
         }
-        result.hasNotificationExtranfo = true;
+        result.hasNotificationExtraInfo = true;
         return this;
       }
-      public Builder ClearNotificationExtranfo() {
+      public Builder ClearNotificationExtraInfo() {
         PrepareBuilder();
-        result.hasNotificationExtranfo = false;
-        result.notificationExtranfo_ = null;
+        result.hasNotificationExtraInfo = false;
+        result.notificationExtraInfo_ = null;
         return this;
       }
     }
@@ -1749,14 +1749,14 @@ namespace bnet.protocol.exchange_object_provider {
       get { return currency_; }
     }
     
-    public const int CashnOutMaskFieldNumber = 5;
-    private bool hasCashnOutMask;
-    private uint cashnOutMask_;
-    public bool HasCashnOutMask {
-      get { return hasCashnOutMask; }
+    public const int CashInOutMaskFieldNumber = 5;
+    private bool hasCashInOutMask;
+    private uint cashInOutMask_;
+    public bool HasCashInOutMask {
+      get { return hasCashInOutMask; }
     }
-    public uint CashnOutMask {
-      get { return cashnOutMask_; }
+    public uint CashInOutMask {
+      get { return cashInOutMask_; }
     }
     
     public const int RefreshPaymentMethodCacheFieldNumber = 6;
@@ -1782,7 +1782,7 @@ namespace bnet.protocol.exchange_object_provider {
     public override bool IsInitialized {
       get {
         if (!hasCurrency) return false;
-        if (!hasCashnOutMask) return false;
+        if (!hasCashInOutMask) return false;
         if (HasBnetAccount) {
           if (!BnetAccount.IsInitialized) return false;
         }
@@ -1811,8 +1811,8 @@ namespace bnet.protocol.exchange_object_provider {
       if (hasCurrency) {
         output.WriteString(4, field_names[2], Currency);
       }
-      if (hasCashnOutMask) {
-        output.WriteUInt32(5, field_names[1], CashnOutMask);
+      if (hasCashInOutMask) {
+        output.WriteUInt32(5, field_names[1], CashInOutMask);
       }
       if (hasRefreshPaymentMethodCache) {
         output.WriteBool(6, field_names[5], RefreshPaymentMethodCache);
@@ -1842,8 +1842,8 @@ namespace bnet.protocol.exchange_object_provider {
         if (hasCurrency) {
           size += pb::CodedOutputStream.ComputeStringSize(4, Currency);
         }
-        if (hasCashnOutMask) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(5, CashnOutMask);
+        if (hasCashInOutMask) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(5, CashInOutMask);
         }
         if (hasRefreshPaymentMethodCache) {
           size += pb::CodedOutputStream.ComputeBoolSize(6, RefreshPaymentMethodCache);
@@ -1989,8 +1989,8 @@ namespace bnet.protocol.exchange_object_provider {
         if (other.HasCurrency) {
           Currency = other.Currency;
         }
-        if (other.HasCashnOutMask) {
-          CashnOutMask = other.CashnOutMask;
+        if (other.HasCashInOutMask) {
+          CashInOutMask = other.CashInOutMask;
         }
         if (other.HasRefreshPaymentMethodCache) {
           RefreshPaymentMethodCache = other.RefreshPaymentMethodCache;
@@ -2073,7 +2073,7 @@ namespace bnet.protocol.exchange_object_provider {
               break;
             }
             case 40: {
-              result.hasCashnOutMask = input.ReadUInt32(ref result.cashnOutMask_);
+              result.hasCashInOutMask = input.ReadUInt32(ref result.cashInOutMask_);
               break;
             }
             case 48: {
@@ -2235,23 +2235,23 @@ namespace bnet.protocol.exchange_object_provider {
         return this;
       }
       
-      public bool HasCashnOutMask {
-        get { return result.hasCashnOutMask; }
+      public bool HasCashInOutMask {
+        get { return result.hasCashInOutMask; }
       }
-      public uint CashnOutMask {
-        get { return result.CashnOutMask; }
-        set { SetCashnOutMask(value); }
+      public uint CashInOutMask {
+        get { return result.CashInOutMask; }
+        set { SetCashInOutMask(value); }
       }
-      public Builder SetCashnOutMask(uint value) {
+      public Builder SetCashInOutMask(uint value) {
         PrepareBuilder();
-        result.hasCashnOutMask = true;
-        result.cashnOutMask_ = value;
+        result.hasCashInOutMask = true;
+        result.cashInOutMask_ = value;
         return this;
       }
-      public Builder ClearCashnOutMask() {
+      public Builder ClearCashInOutMask() {
         PrepareBuilder();
-        result.hasCashnOutMask = false;
-        result.cashnOutMask_ = 0;
+        result.hasCashInOutMask = false;
+        result.cashInOutMask_ = 0;
         return this;
       }
       
@@ -2358,24 +2358,24 @@ namespace bnet.protocol.exchange_object_provider {
       get { return amount_; }
     }
     
-    public const int CashnOutMaskFieldNumber = 4;
-    private bool hasCashnOutMask;
-    private uint cashnOutMask_ = 3;
-    public bool HasCashnOutMask {
-      get { return hasCashnOutMask; }
+    public const int CashInOutMaskFieldNumber = 4;
+    private bool hasCashInOutMask;
+    private uint cashInOutMask_ = 3;
+    public bool HasCashInOutMask {
+      get { return hasCashInOutMask; }
     }
-    public uint CashnOutMask {
-      get { return cashnOutMask_; }
+    public uint CashInOutMask {
+      get { return cashInOutMask_; }
     }
     
-    public const int CountrydFieldNumber = 5;
-    private bool hasCountryd;
-    private uint countryd_;
-    public bool HasCountryd {
-      get { return hasCountryd; }
+    public const int CountryIdFieldNumber = 5;
+    private bool hasCountryId;
+    private uint countryId_;
+    public bool HasCountryId {
+      get { return hasCountryId; }
     }
-    public uint Countryd {
-      get { return countryd_; }
+    public uint CountryId {
+      get { return countryId_; }
     }
     
     public const int StateFieldNumber = 6;
@@ -2429,11 +2429,11 @@ namespace bnet.protocol.exchange_object_provider {
       if (hasAmount) {
         output.WriteUInt64(3, field_names[1], Amount);
       }
-      if (hasCashnOutMask) {
-        output.WriteUInt32(4, field_names[2], CashnOutMask);
+      if (hasCashInOutMask) {
+        output.WriteUInt32(4, field_names[2], CashInOutMask);
       }
-      if (hasCountryd) {
-        output.WriteUInt32(5, field_names[4], Countryd);
+      if (hasCountryId) {
+        output.WriteUInt32(5, field_names[4], CountryId);
       }
       if (hasState) {
         output.WriteString(6, field_names[7], State);
@@ -2463,11 +2463,11 @@ namespace bnet.protocol.exchange_object_provider {
         if (hasAmount) {
           size += pb::CodedOutputStream.ComputeUInt64Size(3, Amount);
         }
-        if (hasCashnOutMask) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(4, CashnOutMask);
+        if (hasCashInOutMask) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(4, CashInOutMask);
         }
-        if (hasCountryd) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(5, Countryd);
+        if (hasCountryId) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(5, CountryId);
         }
         if (hasState) {
           size += pb::CodedOutputStream.ComputeStringSize(6, State);
@@ -2613,11 +2613,11 @@ namespace bnet.protocol.exchange_object_provider {
         if (other.HasAmount) {
           Amount = other.Amount;
         }
-        if (other.HasCashnOutMask) {
-          CashnOutMask = other.CashnOutMask;
+        if (other.HasCashInOutMask) {
+          CashInOutMask = other.CashInOutMask;
         }
-        if (other.HasCountryd) {
-          Countryd = other.Countryd;
+        if (other.HasCountryId) {
+          CountryId = other.CountryId;
         }
         if (other.HasState) {
           State = other.State;
@@ -2689,11 +2689,11 @@ namespace bnet.protocol.exchange_object_provider {
               break;
             }
             case 32: {
-              result.hasCashnOutMask = input.ReadUInt32(ref result.cashnOutMask_);
+              result.hasCashInOutMask = input.ReadUInt32(ref result.cashInOutMask_);
               break;
             }
             case 40: {
-              result.hasCountryd = input.ReadUInt32(ref result.countryd_);
+              result.hasCountryId = input.ReadUInt32(ref result.countryId_);
               break;
             }
             case 50: {
@@ -2799,43 +2799,43 @@ namespace bnet.protocol.exchange_object_provider {
         return this;
       }
       
-      public bool HasCashnOutMask {
-        get { return result.hasCashnOutMask; }
+      public bool HasCashInOutMask {
+        get { return result.hasCashInOutMask; }
       }
-      public uint CashnOutMask {
-        get { return result.CashnOutMask; }
-        set { SetCashnOutMask(value); }
+      public uint CashInOutMask {
+        get { return result.CashInOutMask; }
+        set { SetCashInOutMask(value); }
       }
-      public Builder SetCashnOutMask(uint value) {
+      public Builder SetCashInOutMask(uint value) {
         PrepareBuilder();
-        result.hasCashnOutMask = true;
-        result.cashnOutMask_ = value;
+        result.hasCashInOutMask = true;
+        result.cashInOutMask_ = value;
         return this;
       }
-      public Builder ClearCashnOutMask() {
+      public Builder ClearCashInOutMask() {
         PrepareBuilder();
-        result.hasCashnOutMask = false;
-        result.cashnOutMask_ = 3;
+        result.hasCashInOutMask = false;
+        result.cashInOutMask_ = 3;
         return this;
       }
       
-      public bool HasCountryd {
-        get { return result.hasCountryd; }
+      public bool HasCountryId {
+        get { return result.hasCountryId; }
       }
-      public uint Countryd {
-        get { return result.Countryd; }
-        set { SetCountryd(value); }
+      public uint CountryId {
+        get { return result.CountryId; }
+        set { SetCountryId(value); }
       }
-      public Builder SetCountryd(uint value) {
+      public Builder SetCountryId(uint value) {
         PrepareBuilder();
-        result.hasCountryd = true;
-        result.countryd_ = value;
+        result.hasCountryId = true;
+        result.countryId_ = value;
         return this;
       }
-      public Builder ClearCountryd() {
+      public Builder ClearCountryId() {
         PrepareBuilder();
-        result.hasCountryd = false;
-        result.countryd_ = 0;
+        result.hasCountryId = false;
+        result.countryId_ = 0;
         return this;
       }
       

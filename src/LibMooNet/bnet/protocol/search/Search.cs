@@ -69,7 +69,7 @@ namespace bnet.protocol.search {
         internal__static_bnet_protocol_search_FindMatchesRequest__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_search_FindMatchesRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.search.FindMatchesRequest, global::bnet.protocol.search.FindMatchesRequest.Builder>(internal__static_bnet_protocol_search_FindMatchesRequest__Descriptor,
-                new string[] { "Universe", "Filters", "Startingndex", "Count", });
+                new string[] { "Universe", "Filters", "StartingIndex", "Count", });
         internal__static_bnet_protocol_search_FindMatchesResponse__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_search_FindMatchesResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.search.FindMatchesResponse, global::bnet.protocol.search.FindMatchesResponse.Builder>(internal__static_bnet_protocol_search_FindMatchesResponse__Descriptor,
@@ -81,7 +81,7 @@ namespace bnet.protocol.search {
         internal__static_bnet_protocol_search_RemoveObjectsRequest__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_search_RemoveObjectsRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.search.RemoveObjectsRequest, global::bnet.protocol.search.RemoveObjectsRequest.Builder>(internal__static_bnet_protocol_search_RemoveObjectsRequest__Descriptor,
-                new string[] { "Startd", "Endd", });
+                new string[] { "StartId", "EndId", });
         internal__static_bnet_protocol_search_SearchConfig__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_search_SearchConfig__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.search.SearchConfig, global::bnet.protocol.search.SearchConfig.Builder>(internal__static_bnet_protocol_search_SearchConfig__Descriptor,
@@ -160,14 +160,14 @@ namespace bnet.protocol.search {
       return filters_[index];
     }
     
-    public const int StartingndexFieldNumber = 3;
-    private bool hasStartingndex;
-    private uint startingndex_;
-    public bool HasStartingndex {
-      get { return hasStartingndex; }
+    public const int StartingIndexFieldNumber = 3;
+    private bool hasStartingIndex;
+    private uint startingIndex_;
+    public bool HasStartingIndex {
+      get { return hasStartingIndex; }
     }
-    public uint Startingndex {
-      get { return startingndex_; }
+    public uint StartingIndex {
+      get { return startingIndex_; }
     }
     
     public const int CountFieldNumber = 4;
@@ -199,8 +199,8 @@ namespace bnet.protocol.search {
       if (filters_.Count > 0) {
         output.WriteMessageArray(2, field_names[1], filters_);
       }
-      if (hasStartingndex) {
-        output.WriteUInt32(3, field_names[2], Startingndex);
+      if (hasStartingIndex) {
+        output.WriteUInt32(3, field_names[2], StartingIndex);
       }
       if (hasCount) {
         output.WriteUInt32(4, field_names[0], Count);
@@ -221,8 +221,8 @@ namespace bnet.protocol.search {
         foreach (global::bnet.protocol.search.Filter element in FiltersList) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, element);
         }
-        if (hasStartingndex) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(3, Startingndex);
+        if (hasStartingIndex) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(3, StartingIndex);
         }
         if (hasCount) {
           size += pb::CodedOutputStream.ComputeUInt32Size(4, Count);
@@ -360,8 +360,8 @@ namespace bnet.protocol.search {
         if (other.filters_.Count != 0) {
           result.filters_.Add(other.filters_);
         }
-        if (other.HasStartingndex) {
-          Startingndex = other.Startingndex;
+        if (other.HasStartingIndex) {
+          StartingIndex = other.StartingIndex;
         }
         if (other.HasCount) {
           Count = other.Count;
@@ -418,7 +418,7 @@ namespace bnet.protocol.search {
               break;
             }
             case 24: {
-              result.hasStartingndex = input.ReadUInt32(ref result.startingndex_);
+              result.hasStartingIndex = input.ReadUInt32(ref result.startingIndex_);
               break;
             }
             case 32: {
@@ -500,23 +500,23 @@ namespace bnet.protocol.search {
         return this;
       }
       
-      public bool HasStartingndex {
-        get { return result.hasStartingndex; }
+      public bool HasStartingIndex {
+        get { return result.hasStartingIndex; }
       }
-      public uint Startingndex {
-        get { return result.Startingndex; }
-        set { SetStartingndex(value); }
+      public uint StartingIndex {
+        get { return result.StartingIndex; }
+        set { SetStartingIndex(value); }
       }
-      public Builder SetStartingndex(uint value) {
+      public Builder SetStartingIndex(uint value) {
         PrepareBuilder();
-        result.hasStartingndex = true;
-        result.startingndex_ = value;
+        result.hasStartingIndex = true;
+        result.startingIndex_ = value;
         return this;
       }
-      public Builder ClearStartingndex() {
+      public Builder ClearStartingIndex() {
         PrepareBuilder();
-        result.hasStartingndex = false;
-        result.startingndex_ = 0;
+        result.hasStartingIndex = false;
+        result.startingIndex_ = 0;
         return this;
       }
       
@@ -1225,30 +1225,30 @@ namespace bnet.protocol.search {
       get { return global::bnet.protocol.search.Search.internal__static_bnet_protocol_search_RemoveObjectsRequest__FieldAccessorTable; }
     }
     
-    public const int StartdFieldNumber = 1;
-    private bool hasStartd;
-    private pb::ByteString startd_ = pb::ByteString.Empty;
-    public bool HasStartd {
-      get { return hasStartd; }
+    public const int StartIdFieldNumber = 1;
+    private bool hasStartId;
+    private pb::ByteString startId_ = pb::ByteString.Empty;
+    public bool HasStartId {
+      get { return hasStartId; }
     }
-    public pb::ByteString Startd {
-      get { return startd_; }
+    public pb::ByteString StartId {
+      get { return startId_; }
     }
     
-    public const int EnddFieldNumber = 2;
-    private bool hasEndd;
-    private pb::ByteString endd_ = pb::ByteString.Empty;
-    public bool HasEndd {
-      get { return hasEndd; }
+    public const int EndIdFieldNumber = 2;
+    private bool hasEndId;
+    private pb::ByteString endId_ = pb::ByteString.Empty;
+    public bool HasEndId {
+      get { return hasEndId; }
     }
-    public pb::ByteString Endd {
-      get { return endd_; }
+    public pb::ByteString EndId {
+      get { return endId_; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasStartd) return false;
-        if (!hasEndd) return false;
+        if (!hasStartId) return false;
+        if (!hasEndId) return false;
         return true;
       }
     }
@@ -1256,11 +1256,11 @@ namespace bnet.protocol.search {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _removeObjectsRequestFieldNames;
-      if (hasStartd) {
-        output.WriteBytes(1, field_names[1], Startd);
+      if (hasStartId) {
+        output.WriteBytes(1, field_names[1], StartId);
       }
-      if (hasEndd) {
-        output.WriteBytes(2, field_names[0], Endd);
+      if (hasEndId) {
+        output.WriteBytes(2, field_names[0], EndId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1272,11 +1272,11 @@ namespace bnet.protocol.search {
         if (size != -1) return size;
         
         size = 0;
-        if (hasStartd) {
-          size += pb::CodedOutputStream.ComputeBytesSize(1, Startd);
+        if (hasStartId) {
+          size += pb::CodedOutputStream.ComputeBytesSize(1, StartId);
         }
-        if (hasEndd) {
-          size += pb::CodedOutputStream.ComputeBytesSize(2, Endd);
+        if (hasEndId) {
+          size += pb::CodedOutputStream.ComputeBytesSize(2, EndId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1404,11 +1404,11 @@ namespace bnet.protocol.search {
       public override Builder MergeFrom(RemoveObjectsRequest other) {
         if (other == global::bnet.protocol.search.RemoveObjectsRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasStartd) {
-          Startd = other.Startd;
+        if (other.HasStartId) {
+          StartId = other.StartId;
         }
-        if (other.HasEndd) {
-          Endd = other.Endd;
+        if (other.HasEndId) {
+          EndId = other.EndId;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1454,11 +1454,11 @@ namespace bnet.protocol.search {
               break;
             }
             case 10: {
-              result.hasStartd = input.ReadBytes(ref result.startd_);
+              result.hasStartId = input.ReadBytes(ref result.startId_);
               break;
             }
             case 18: {
-              result.hasEndd = input.ReadBytes(ref result.endd_);
+              result.hasEndId = input.ReadBytes(ref result.endId_);
               break;
             }
           }
@@ -1471,45 +1471,45 @@ namespace bnet.protocol.search {
       }
       
       
-      public bool HasStartd {
-        get { return result.hasStartd; }
+      public bool HasStartId {
+        get { return result.hasStartId; }
       }
-      public pb::ByteString Startd {
-        get { return result.Startd; }
-        set { SetStartd(value); }
+      public pb::ByteString StartId {
+        get { return result.StartId; }
+        set { SetStartId(value); }
       }
-      public Builder SetStartd(pb::ByteString value) {
+      public Builder SetStartId(pb::ByteString value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasStartd = true;
-        result.startd_ = value;
+        result.hasStartId = true;
+        result.startId_ = value;
         return this;
       }
-      public Builder ClearStartd() {
+      public Builder ClearStartId() {
         PrepareBuilder();
-        result.hasStartd = false;
-        result.startd_ = pb::ByteString.Empty;
+        result.hasStartId = false;
+        result.startId_ = pb::ByteString.Empty;
         return this;
       }
       
-      public bool HasEndd {
-        get { return result.hasEndd; }
+      public bool HasEndId {
+        get { return result.hasEndId; }
       }
-      public pb::ByteString Endd {
-        get { return result.Endd; }
-        set { SetEndd(value); }
+      public pb::ByteString EndId {
+        get { return result.EndId; }
+        set { SetEndId(value); }
       }
-      public Builder SetEndd(pb::ByteString value) {
+      public Builder SetEndId(pb::ByteString value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasEndd = true;
-        result.endd_ = value;
+        result.hasEndId = true;
+        result.endId_ = value;
         return this;
       }
-      public Builder ClearEndd() {
+      public Builder ClearEndId() {
         PrepareBuilder();
-        result.hasEndd = false;
-        result.endd_ = pb::ByteString.Empty;
+        result.hasEndId = false;
+        result.endId_ = pb::ByteString.Empty;
         return this;
       }
     }

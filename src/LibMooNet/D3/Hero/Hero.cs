@@ -126,11 +126,11 @@ namespace D3.Hero {
         internal__static_D3_Hero_VisualItem__Descriptor = Descriptor.MessageTypes[0];
         internal__static_D3_Hero_VisualItem__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.VisualItem, global::D3.Hero.VisualItem.Builder>(internal__static_D3_Hero_VisualItem__Descriptor,
-                new string[] { "Gbid", "DyeType", "İtemEffectType", "EffectLevel", });
+                new string[] { "Gbid", "DyeType", "ItemEffectType", "EffectLevel", });
         internal__static_D3_Hero_VisualEquipment__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_Hero_VisualEquipment__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.VisualEquipment, global::D3.Hero.VisualEquipment.Builder>(internal__static_D3_Hero_VisualEquipment__Descriptor,
-                new string[] { "Visualtem", });
+                new string[] { "VisualItem", });
         internal__static_D3_Hero_QuestHistoryEntry__Descriptor = Descriptor.MessageTypes[2];
         internal__static_D3_Hero_QuestHistoryEntry__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.QuestHistoryEntry, global::D3.Hero.QuestHistoryEntry.Builder>(internal__static_D3_Hero_QuestHistoryEntry__Descriptor,
@@ -142,15 +142,15 @@ namespace D3.Hero {
         internal__static_D3_Hero_Digest__Descriptor = Descriptor.MessageTypes[4];
         internal__static_D3_Hero_Digest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.Digest, global::D3.Hero.Digest.Builder>(internal__static_D3_Hero_Digest__Descriptor,
-                new string[] { "Version", "Herod", "HeroName", "GbidClass", "Level", "PlayerFlags", "VisualEquipment", "QuestHistory", "LastPlayedAct", "HighestUnlockedAct", "LastPlayedDifficulty", "HighestUnlockedDifficulty", "LastPlayedQuest", "LastPlayedQuestStep", "TimePlayed", });
+                new string[] { "Version", "HeroId", "HeroName", "GbidClass", "Level", "PlayerFlags", "VisualEquipment", "QuestHistory", "LastPlayedAct", "HighestUnlockedAct", "LastPlayedDifficulty", "HighestUnlockedDifficulty", "LastPlayedQuest", "LastPlayedQuestStep", "TimePlayed", });
         internal__static_D3_Hero_HotbarButtonData__Descriptor = Descriptor.MessageTypes[5];
         internal__static_D3_Hero_HotbarButtonData__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.HotbarButtonData, global::D3.Hero.HotbarButtonData.Builder>(internal__static_D3_Hero_HotbarButtonData__Descriptor,
-                new string[] { "SnoPower", "Gbidtem", });
+                new string[] { "SnoPower", "GbidItem", });
         internal__static_D3_Hero_SkillKeyMapping__Descriptor = Descriptor.MessageTypes[6];
         internal__static_D3_Hero_SkillKeyMapping__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SkillKeyMapping, global::D3.Hero.SkillKeyMapping.Builder>(internal__static_D3_Hero_SkillKeyMapping__Descriptor,
-                new string[] { "SnoPower", "İdHotkey", "SkillButton", });
+                new string[] { "SnoPower", "IdHotkey", "SkillButton", });
         internal__static_D3_Hero_SavedQuest__Descriptor = Descriptor.MessageTypes[7];
         internal__static_D3_Hero_SavedQuest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedQuest, global::D3.Hero.SavedQuest.Builder>(internal__static_D3_Hero_SavedQuest__Descriptor,
@@ -178,7 +178,7 @@ namespace D3.Hero {
         internal__static_D3_Hero_SavedDefinition__Descriptor = Descriptor.MessageTypes[13];
         internal__static_D3_Hero_SavedDefinition__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedDefinition, global::D3.Hero.SavedDefinition.Builder>(internal__static_D3_Hero_SavedDefinition__Descriptor,
-                new string[] { "Version", "Digest", "SavedAttributes", "SavedData", "SavedQuest", "İtems", "QuestRewardHistory", });
+                new string[] { "Version", "Digest", "SavedAttributes", "SavedData", "SavedQuest", "Items", "QuestRewardHistory", });
         internal__static_D3_Hero_NameSequence__Descriptor = Descriptor.MessageTypes[14];
         internal__static_D3_Hero_NameSequence__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.NameSequence, global::D3.Hero.NameSequence.Builder>(internal__static_D3_Hero_NameSequence__Descriptor,
@@ -194,7 +194,7 @@ namespace D3.Hero {
         internal__static_D3_Hero_HeroList__Descriptor = Descriptor.MessageTypes[17];
         internal__static_D3_Hero_HeroList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.HeroList, global::D3.Hero.HeroList.Builder>(internal__static_D3_Hero_HeroList__Descriptor,
-                new string[] { "Herods", });
+                new string[] { "HeroIds", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -257,13 +257,13 @@ namespace D3.Hero {
       get { return dyeType_; }
     }
     
-    public const int İtemEffectTypeFieldNumber = 3;
-    private bool hasİtemEffectType;
+    public const int ItemEffectTypeFieldNumber = 3;
+    private bool hasItemEffectType;
     private int itemEffectType_;
-    public bool HasİtemEffectType {
-      get { return hasİtemEffectType; }
+    public bool HasItemEffectType {
+      get { return hasItemEffectType; }
     }
-    public int İtemEffectType {
+    public int ItemEffectType {
       get { return itemEffectType_; }
     }
     
@@ -292,8 +292,8 @@ namespace D3.Hero {
       if (hasDyeType) {
         output.WriteSInt32(2, field_names[0], DyeType);
       }
-      if (hasİtemEffectType) {
-        output.WriteSInt32(3, field_names[3], İtemEffectType);
+      if (hasItemEffectType) {
+        output.WriteSInt32(3, field_names[3], ItemEffectType);
       }
       if (hasEffectLevel) {
         output.WriteSInt32(4, field_names[1], EffectLevel);
@@ -314,8 +314,8 @@ namespace D3.Hero {
         if (hasDyeType) {
           size += pb::CodedOutputStream.ComputeSInt32Size(2, DyeType);
         }
-        if (hasİtemEffectType) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(3, İtemEffectType);
+        if (hasItemEffectType) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(3, ItemEffectType);
         }
         if (hasEffectLevel) {
           size += pb::CodedOutputStream.ComputeSInt32Size(4, EffectLevel);
@@ -452,8 +452,8 @@ namespace D3.Hero {
         if (other.HasDyeType) {
           DyeType = other.DyeType;
         }
-        if (other.HasİtemEffectType) {
-          İtemEffectType = other.İtemEffectType;
+        if (other.HasItemEffectType) {
+          ItemEffectType = other.ItemEffectType;
         }
         if (other.HasEffectLevel) {
           EffectLevel = other.EffectLevel;
@@ -510,7 +510,7 @@ namespace D3.Hero {
               break;
             }
             case 24: {
-              result.hasİtemEffectType = input.ReadSInt32(ref result.itemEffectType_);
+              result.hasItemEffectType = input.ReadSInt32(ref result.itemEffectType_);
               break;
             }
             case 32: {
@@ -567,22 +567,22 @@ namespace D3.Hero {
         return this;
       }
       
-      public bool HasİtemEffectType {
-        get { return result.hasİtemEffectType; }
+      public bool HasItemEffectType {
+        get { return result.hasItemEffectType; }
       }
-      public int İtemEffectType {
-        get { return result.İtemEffectType; }
-        set { SetİtemEffectType(value); }
+      public int ItemEffectType {
+        get { return result.ItemEffectType; }
+        set { SetItemEffectType(value); }
       }
-      public Builder SetİtemEffectType(int value) {
+      public Builder SetItemEffectType(int value) {
         PrepareBuilder();
-        result.hasİtemEffectType = true;
+        result.hasItemEffectType = true;
         result.itemEffectType_ = value;
         return this;
       }
-      public Builder ClearİtemEffectType() {
+      public Builder ClearItemEffectType() {
         PrepareBuilder();
-        result.hasİtemEffectType = false;
+        result.hasItemEffectType = false;
         result.itemEffectType_ = 0;
         return this;
       }
@@ -640,16 +640,16 @@ namespace D3.Hero {
       get { return global::D3.Hero.Hero.internal__static_D3_Hero_VisualEquipment__FieldAccessorTable; }
     }
     
-    public const int VisualtemFieldNumber = 1;
-    private pbc::PopsicleList<global::D3.Hero.VisualItem> visualtem_ = new pbc::PopsicleList<global::D3.Hero.VisualItem>();
-    public scg::IList<global::D3.Hero.VisualItem> VisualtemList {
-      get { return visualtem_; }
+    public const int VisualItemFieldNumber = 1;
+    private pbc::PopsicleList<global::D3.Hero.VisualItem> visualItem_ = new pbc::PopsicleList<global::D3.Hero.VisualItem>();
+    public scg::IList<global::D3.Hero.VisualItem> VisualItemList {
+      get { return visualItem_; }
     }
-    public int VisualtemCount {
-      get { return visualtem_.Count; }
+    public int VisualItemCount {
+      get { return visualItem_.Count; }
     }
-    public global::D3.Hero.VisualItem GetVisualtem(int index) {
-      return visualtem_[index];
+    public global::D3.Hero.VisualItem GetVisualItem(int index) {
+      return visualItem_[index];
     }
     
     public override bool IsInitialized {
@@ -661,8 +661,8 @@ namespace D3.Hero {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _visualEquipmentFieldNames;
-      if (visualtem_.Count > 0) {
-        output.WriteMessageArray(1, field_names[0], visualtem_);
+      if (visualItem_.Count > 0) {
+        output.WriteMessageArray(1, field_names[0], visualItem_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -674,7 +674,7 @@ namespace D3.Hero {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::D3.Hero.VisualItem element in VisualtemList) {
+        foreach (global::D3.Hero.VisualItem element in VisualItemList) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
         }
         size += UnknownFields.SerializedSize;
@@ -714,7 +714,7 @@ namespace D3.Hero {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private VisualEquipment MakeReadOnly() {
-      visualtem_.MakeReadOnly();
+      visualItem_.MakeReadOnly();
       return this;
     }
     
@@ -804,8 +804,8 @@ namespace D3.Hero {
       public override Builder MergeFrom(VisualEquipment other) {
         if (other == global::D3.Hero.VisualEquipment.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.visualtem_.Count != 0) {
-          result.visualtem_.Add(other.visualtem_);
+        if (other.visualItem_.Count != 0) {
+          result.visualItem_.Add(other.visualItem_);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -851,7 +851,7 @@ namespace D3.Hero {
               break;
             }
             case 10: {
-              input.ReadMessageArray(tag, field_name, result.visualtem_, global::D3.Hero.VisualItem.DefaultInstance, extensionRegistry);
+              input.ReadMessageArray(tag, field_name, result.visualItem_, global::D3.Hero.VisualItem.DefaultInstance, extensionRegistry);
               break;
             }
           }
@@ -864,47 +864,47 @@ namespace D3.Hero {
       }
       
       
-      public pbc::IPopsicleList<global::D3.Hero.VisualItem> VisualtemList {
-        get { return PrepareBuilder().visualtem_; }
+      public pbc::IPopsicleList<global::D3.Hero.VisualItem> VisualItemList {
+        get { return PrepareBuilder().visualItem_; }
       }
-      public int VisualtemCount {
-        get { return result.VisualtemCount; }
+      public int VisualItemCount {
+        get { return result.VisualItemCount; }
       }
-      public global::D3.Hero.VisualItem GetVisualtem(int index) {
-        return result.GetVisualtem(index);
+      public global::D3.Hero.VisualItem GetVisualItem(int index) {
+        return result.GetVisualItem(index);
       }
-      public Builder SetVisualtem(int index, global::D3.Hero.VisualItem value) {
+      public Builder SetVisualItem(int index, global::D3.Hero.VisualItem value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.visualtem_[index] = value;
+        result.visualItem_[index] = value;
         return this;
       }
-      public Builder SetVisualtem(int index, global::D3.Hero.VisualItem.Builder builderForValue) {
+      public Builder SetVisualItem(int index, global::D3.Hero.VisualItem.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.visualtem_[index] = builderForValue.Build();
+        result.visualItem_[index] = builderForValue.Build();
         return this;
       }
-      public Builder AddVisualtem(global::D3.Hero.VisualItem value) {
+      public Builder AddVisualItem(global::D3.Hero.VisualItem value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.visualtem_.Add(value);
+        result.visualItem_.Add(value);
         return this;
       }
-      public Builder AddVisualtem(global::D3.Hero.VisualItem.Builder builderForValue) {
+      public Builder AddVisualItem(global::D3.Hero.VisualItem.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.visualtem_.Add(builderForValue.Build());
+        result.visualItem_.Add(builderForValue.Build());
         return this;
       }
-      public Builder AddRangeVisualtem(scg::IEnumerable<global::D3.Hero.VisualItem> values) {
+      public Builder AddRangeVisualItem(scg::IEnumerable<global::D3.Hero.VisualItem> values) {
         PrepareBuilder();
-        result.visualtem_.Add(values);
+        result.visualItem_.Add(values);
         return this;
       }
-      public Builder ClearVisualtem() {
+      public Builder ClearVisualItem() {
         PrepareBuilder();
-        result.visualtem_.Clear();
+        result.visualItem_.Clear();
         return this;
       }
     }
@@ -1633,14 +1633,14 @@ namespace D3.Hero {
       get { return version_; }
     }
     
-    public const int HerodFieldNumber = 2;
-    private bool hasHerod;
-    private global::D3.OnlineService.EntityId herod_;
-    public bool HasHerod {
-      get { return hasHerod; }
+    public const int HeroIdFieldNumber = 2;
+    private bool hasHeroId;
+    private global::D3.OnlineService.EntityId heroId_;
+    public bool HasHeroId {
+      get { return hasHeroId; }
     }
-    public global::D3.OnlineService.EntityId Herod {
-      get { return herod_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId HeroId {
+      get { return heroId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
     public const int HeroNameFieldNumber = 3;
@@ -1778,7 +1778,7 @@ namespace D3.Hero {
     public override bool IsInitialized {
       get {
         if (!hasVersion) return false;
-        if (!hasHerod) return false;
+        if (!hasHeroId) return false;
         if (!hasGbidClass) return false;
         if (!hasLevel) return false;
         if (!hasPlayerFlags) return false;
@@ -1790,7 +1790,7 @@ namespace D3.Hero {
         if (!hasLastPlayedQuest) return false;
         if (!hasLastPlayedQuestStep) return false;
         if (!hasTimePlayed) return false;
-        if (!Herod.IsInitialized) return false;
+        if (!HeroId.IsInitialized) return false;
         foreach (global::D3.Hero.QuestHistoryEntry element in QuestHistoryList) {
           if (!element.IsInitialized) return false;
         }
@@ -1804,8 +1804,8 @@ namespace D3.Hero {
       if (hasVersion) {
         output.WriteUInt32(1, field_names[13], Version);
       }
-      if (hasHerod) {
-        output.WriteMessage(2, field_names[1], Herod);
+      if (hasHeroId) {
+        output.WriteMessage(2, field_names[1], HeroId);
       }
       if (hasHeroName) {
         output.WriteString(3, field_names[2], HeroName);
@@ -1859,8 +1859,8 @@ namespace D3.Hero {
         if (hasVersion) {
           size += pb::CodedOutputStream.ComputeUInt32Size(1, Version);
         }
-        if (hasHerod) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Herod);
+        if (hasHeroId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, HeroId);
         }
         if (hasHeroName) {
           size += pb::CodedOutputStream.ComputeStringSize(3, HeroName);
@@ -2031,8 +2031,8 @@ namespace D3.Hero {
         if (other.HasVersion) {
           Version = other.Version;
         }
-        if (other.HasHerod) {
-          MergeHerod(other.Herod);
+        if (other.HasHeroId) {
+          MergeHeroId(other.HeroId);
         }
         if (other.HasHeroName) {
           HeroName = other.HeroName;
@@ -2122,11 +2122,11 @@ namespace D3.Hero {
             }
             case 18: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasHerod) {
-                subBuilder.MergeFrom(Herod);
+              if (result.hasHeroId) {
+                subBuilder.MergeFrom(HeroId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Herod = subBuilder.BuildPartial();
+              HeroId = subBuilder.BuildPartial();
               break;
             }
             case 26: {
@@ -2216,43 +2216,43 @@ namespace D3.Hero {
         return this;
       }
       
-      public bool HasHerod {
-       get { return result.hasHerod; }
+      public bool HasHeroId {
+       get { return result.hasHeroId; }
       }
-      public global::D3.OnlineService.EntityId Herod {
-        get { return result.Herod; }
-        set { SetHerod(value); }
+      public global::D3.OnlineService.EntityId HeroId {
+        get { return result.HeroId; }
+        set { SetHeroId(value); }
       }
-      public Builder SetHerod(global::D3.OnlineService.EntityId value) {
+      public Builder SetHeroId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasHerod = true;
-        result.herod_ = value;
+        result.hasHeroId = true;
+        result.heroId_ = value;
         return this;
       }
-      public Builder SetHerod(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetHeroId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasHerod = true;
-        result.herod_ = builderForValue.Build();
+        result.hasHeroId = true;
+        result.heroId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeHerod(global::D3.OnlineService.EntityId value) {
+      public Builder MergeHeroId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasHerod &&
-            result.herod_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.herod_ = global::D3.OnlineService.EntityId.CreateBuilder(result.herod_).MergeFrom(value).BuildPartial();
+        if (result.hasHeroId &&
+            result.heroId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.heroId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.heroId_).MergeFrom(value).BuildPartial();
         } else {
-          result.herod_ = value;
+          result.heroId_ = value;
         }
-        result.hasHerod = true;
+        result.hasHeroId = true;
         return this;
       }
-      public Builder ClearHerod() {
+      public Builder ClearHeroId() {
         PrepareBuilder();
-        result.hasHerod = false;
-        result.herod_ = null;
+        result.hasHeroId = false;
+        result.heroId_ = null;
         return this;
       }
       
@@ -2604,20 +2604,20 @@ namespace D3.Hero {
       get { return snoPower_; }
     }
     
-    public const int GbidtemFieldNumber = 2;
-    private bool hasGbidtem;
-    private int gbidtem_ = -1;
-    public bool HasGbidtem {
-      get { return hasGbidtem; }
+    public const int GbidItemFieldNumber = 2;
+    private bool hasGbidItem;
+    private int gbidItem_ = -1;
+    public bool HasGbidItem {
+      get { return hasGbidItem; }
     }
-    public int Gbidtem {
-      get { return gbidtem_; }
+    public int GbidItem {
+      get { return gbidItem_; }
     }
     
     public override bool IsInitialized {
       get {
         if (!hasSnoPower) return false;
-        if (!hasGbidtem) return false;
+        if (!hasGbidItem) return false;
         return true;
       }
     }
@@ -2628,8 +2628,8 @@ namespace D3.Hero {
       if (hasSnoPower) {
         output.WriteSFixed32(1, field_names[1], SnoPower);
       }
-      if (hasGbidtem) {
-        output.WriteSFixed32(2, field_names[0], Gbidtem);
+      if (hasGbidItem) {
+        output.WriteSFixed32(2, field_names[0], GbidItem);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2644,8 +2644,8 @@ namespace D3.Hero {
         if (hasSnoPower) {
           size += pb::CodedOutputStream.ComputeSFixed32Size(1, SnoPower);
         }
-        if (hasGbidtem) {
-          size += pb::CodedOutputStream.ComputeSFixed32Size(2, Gbidtem);
+        if (hasGbidItem) {
+          size += pb::CodedOutputStream.ComputeSFixed32Size(2, GbidItem);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2776,8 +2776,8 @@ namespace D3.Hero {
         if (other.HasSnoPower) {
           SnoPower = other.SnoPower;
         }
-        if (other.HasGbidtem) {
-          Gbidtem = other.Gbidtem;
+        if (other.HasGbidItem) {
+          GbidItem = other.GbidItem;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -2827,7 +2827,7 @@ namespace D3.Hero {
               break;
             }
             case 21: {
-              result.hasGbidtem = input.ReadSFixed32(ref result.gbidtem_);
+              result.hasGbidItem = input.ReadSFixed32(ref result.gbidItem_);
               break;
             }
           }
@@ -2860,23 +2860,23 @@ namespace D3.Hero {
         return this;
       }
       
-      public bool HasGbidtem {
-        get { return result.hasGbidtem; }
+      public bool HasGbidItem {
+        get { return result.hasGbidItem; }
       }
-      public int Gbidtem {
-        get { return result.Gbidtem; }
-        set { SetGbidtem(value); }
+      public int GbidItem {
+        get { return result.GbidItem; }
+        set { SetGbidItem(value); }
       }
-      public Builder SetGbidtem(int value) {
+      public Builder SetGbidItem(int value) {
         PrepareBuilder();
-        result.hasGbidtem = true;
-        result.gbidtem_ = value;
+        result.hasGbidItem = true;
+        result.gbidItem_ = value;
         return this;
       }
-      public Builder ClearGbidtem() {
+      public Builder ClearGbidItem() {
         PrepareBuilder();
-        result.hasGbidtem = false;
-        result.gbidtem_ = -1;
+        result.hasGbidItem = false;
+        result.gbidItem_ = -1;
         return this;
       }
     }
@@ -2923,13 +2923,13 @@ namespace D3.Hero {
       get { return snoPower_; }
     }
     
-    public const int İdHotkeyFieldNumber = 2;
-    private bool hasİdHotkey;
+    public const int IdHotkeyFieldNumber = 2;
+    private bool hasIdHotkey;
     private int idHotkey_ = -1;
-    public bool HasİdHotkey {
-      get { return hasİdHotkey; }
+    public bool HasIdHotkey {
+      get { return hasIdHotkey; }
     }
-    public int İdHotkey {
+    public int IdHotkey {
       get { return idHotkey_; }
     }
     
@@ -2946,7 +2946,7 @@ namespace D3.Hero {
     public override bool IsInitialized {
       get {
         if (!hasSnoPower) return false;
-        if (!hasİdHotkey) return false;
+        if (!hasIdHotkey) return false;
         if (!hasSkillButton) return false;
         return true;
       }
@@ -2958,8 +2958,8 @@ namespace D3.Hero {
       if (hasSnoPower) {
         output.WriteSFixed32(1, field_names[2], SnoPower);
       }
-      if (hasİdHotkey) {
-        output.WriteSInt32(2, field_names[0], İdHotkey);
+      if (hasIdHotkey) {
+        output.WriteSInt32(2, field_names[0], IdHotkey);
       }
       if (hasSkillButton) {
         output.WriteSInt32(3, field_names[1], SkillButton);
@@ -2977,8 +2977,8 @@ namespace D3.Hero {
         if (hasSnoPower) {
           size += pb::CodedOutputStream.ComputeSFixed32Size(1, SnoPower);
         }
-        if (hasİdHotkey) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(2, İdHotkey);
+        if (hasIdHotkey) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(2, IdHotkey);
         }
         if (hasSkillButton) {
           size += pb::CodedOutputStream.ComputeSInt32Size(3, SkillButton);
@@ -3112,8 +3112,8 @@ namespace D3.Hero {
         if (other.HasSnoPower) {
           SnoPower = other.SnoPower;
         }
-        if (other.HasİdHotkey) {
-          İdHotkey = other.İdHotkey;
+        if (other.HasIdHotkey) {
+          IdHotkey = other.IdHotkey;
         }
         if (other.HasSkillButton) {
           SkillButton = other.SkillButton;
@@ -3166,7 +3166,7 @@ namespace D3.Hero {
               break;
             }
             case 16: {
-              result.hasİdHotkey = input.ReadSInt32(ref result.idHotkey_);
+              result.hasIdHotkey = input.ReadSInt32(ref result.idHotkey_);
               break;
             }
             case 24: {
@@ -3203,22 +3203,22 @@ namespace D3.Hero {
         return this;
       }
       
-      public bool HasİdHotkey {
-        get { return result.hasİdHotkey; }
+      public bool HasIdHotkey {
+        get { return result.hasIdHotkey; }
       }
-      public int İdHotkey {
-        get { return result.İdHotkey; }
-        set { SetİdHotkey(value); }
+      public int IdHotkey {
+        get { return result.IdHotkey; }
+        set { SetIdHotkey(value); }
       }
-      public Builder SetİdHotkey(int value) {
+      public Builder SetIdHotkey(int value) {
         PrepareBuilder();
-        result.hasİdHotkey = true;
+        result.hasIdHotkey = true;
         result.idHotkey_ = value;
         return this;
       }
-      public Builder ClearİdHotkey() {
+      public Builder ClearIdHotkey() {
         PrepareBuilder();
-        result.hasİdHotkey = false;
+        result.hasIdHotkey = false;
         result.idHotkey_ = -1;
         return this;
       }
@@ -6099,13 +6099,13 @@ namespace D3.Hero {
       return savedQuest_[index];
     }
     
-    public const int İtemsFieldNumber = 6;
-    private bool hasİtems;
+    public const int ItemsFieldNumber = 6;
+    private bool hasItems;
     private global::D3.Items.ItemList items_;
-    public bool Hasİtems {
-      get { return hasİtems; }
+    public bool HasItems {
+      get { return hasItems; }
     }
-    public global::D3.Items.ItemList İtems {
+    public global::D3.Items.ItemList Items {
       get { return items_ ?? global::D3.Items.ItemList.DefaultInstance; }
     }
     
@@ -6135,8 +6135,8 @@ namespace D3.Hero {
         foreach (global::D3.Hero.SavedQuest element in SavedQuestList) {
           if (!element.IsInitialized) return false;
         }
-        if (Hasİtems) {
-          if (!İtems.IsInitialized) return false;
+        if (HasItems) {
+          if (!Items.IsInitialized) return false;
         }
         foreach (global::D3.Hero.QuestRewardHistoryEntry element in QuestRewardHistoryList) {
           if (!element.IsInitialized) return false;
@@ -6163,8 +6163,8 @@ namespace D3.Hero {
       if (savedQuest_.Count > 0) {
         output.WriteMessageArray(5, field_names[5], savedQuest_);
       }
-      if (hasİtems) {
-        output.WriteMessage(6, field_names[1], İtems);
+      if (hasItems) {
+        output.WriteMessage(6, field_names[1], Items);
       }
       if (questRewardHistory_.Count > 0) {
         output.WriteMessageArray(7, field_names[2], questRewardHistory_);
@@ -6194,8 +6194,8 @@ namespace D3.Hero {
         foreach (global::D3.Hero.SavedQuest element in SavedQuestList) {
           size += pb::CodedOutputStream.ComputeMessageSize(5, element);
         }
-        if (hasİtems) {
-          size += pb::CodedOutputStream.ComputeMessageSize(6, İtems);
+        if (hasItems) {
+          size += pb::CodedOutputStream.ComputeMessageSize(6, Items);
         }
         foreach (global::D3.Hero.QuestRewardHistoryEntry element in QuestRewardHistoryList) {
           size += pb::CodedOutputStream.ComputeMessageSize(7, element);
@@ -6343,8 +6343,8 @@ namespace D3.Hero {
         if (other.savedQuest_.Count != 0) {
           result.savedQuest_.Add(other.savedQuest_);
         }
-        if (other.Hasİtems) {
-          Mergeİtems(other.İtems);
+        if (other.HasItems) {
+          MergeItems(other.Items);
         }
         if (other.questRewardHistory_.Count != 0) {
           result.questRewardHistory_.Add(other.questRewardHistory_);
@@ -6429,11 +6429,11 @@ namespace D3.Hero {
             }
             case 50: {
               global::D3.Items.ItemList.Builder subBuilder = global::D3.Items.ItemList.CreateBuilder();
-              if (result.hasİtems) {
-                subBuilder.MergeFrom(İtems);
+              if (result.hasItems) {
+                subBuilder.MergeFrom(Items);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              İtems = subBuilder.BuildPartial();
+              Items = subBuilder.BuildPartial();
               break;
             }
             case 58: {
@@ -6634,42 +6634,42 @@ namespace D3.Hero {
         return this;
       }
       
-      public bool Hasİtems {
-       get { return result.hasİtems; }
+      public bool HasItems {
+       get { return result.hasItems; }
       }
-      public global::D3.Items.ItemList İtems {
-        get { return result.İtems; }
-        set { Setİtems(value); }
+      public global::D3.Items.ItemList Items {
+        get { return result.Items; }
+        set { SetItems(value); }
       }
-      public Builder Setİtems(global::D3.Items.ItemList value) {
+      public Builder SetItems(global::D3.Items.ItemList value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİtems = true;
+        result.hasItems = true;
         result.items_ = value;
         return this;
       }
-      public Builder Setİtems(global::D3.Items.ItemList.Builder builderForValue) {
+      public Builder SetItems(global::D3.Items.ItemList.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasİtems = true;
+        result.hasItems = true;
         result.items_ = builderForValue.Build();
         return this;
       }
-      public Builder Mergeİtems(global::D3.Items.ItemList value) {
+      public Builder MergeItems(global::D3.Items.ItemList value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasİtems &&
+        if (result.hasItems &&
             result.items_ != global::D3.Items.ItemList.DefaultInstance) {
             result.items_ = global::D3.Items.ItemList.CreateBuilder(result.items_).MergeFrom(value).BuildPartial();
         } else {
           result.items_ = value;
         }
-        result.hasİtems = true;
+        result.hasItems = true;
         return this;
       }
-      public Builder Clearİtems() {
+      public Builder ClearItems() {
         PrepareBuilder();
-        result.hasİtems = false;
+        result.hasItems = false;
         result.items_ = null;
         return this;
       }
@@ -7834,21 +7834,21 @@ namespace D3.Hero {
       get { return global::D3.Hero.Hero.internal__static_D3_Hero_HeroList__FieldAccessorTable; }
     }
     
-    public const int HerodsFieldNumber = 1;
-    private pbc::PopsicleList<global::D3.OnlineService.EntityId> herods_ = new pbc::PopsicleList<global::D3.OnlineService.EntityId>();
-    public scg::IList<global::D3.OnlineService.EntityId> HerodsList {
-      get { return herods_; }
+    public const int HeroIdsFieldNumber = 1;
+    private pbc::PopsicleList<global::D3.OnlineService.EntityId> heroIds_ = new pbc::PopsicleList<global::D3.OnlineService.EntityId>();
+    public scg::IList<global::D3.OnlineService.EntityId> HeroIdsList {
+      get { return heroIds_; }
     }
-    public int HerodsCount {
-      get { return herods_.Count; }
+    public int HeroIdsCount {
+      get { return heroIds_.Count; }
     }
-    public global::D3.OnlineService.EntityId GetHerods(int index) {
-      return herods_[index];
+    public global::D3.OnlineService.EntityId GetHeroIds(int index) {
+      return heroIds_[index];
     }
     
     public override bool IsInitialized {
       get {
-        foreach (global::D3.OnlineService.EntityId element in HerodsList) {
+        foreach (global::D3.OnlineService.EntityId element in HeroIdsList) {
           if (!element.IsInitialized) return false;
         }
         return true;
@@ -7858,8 +7858,8 @@ namespace D3.Hero {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _heroListFieldNames;
-      if (herods_.Count > 0) {
-        output.WriteMessageArray(1, field_names[0], herods_);
+      if (heroIds_.Count > 0) {
+        output.WriteMessageArray(1, field_names[0], heroIds_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -7871,7 +7871,7 @@ namespace D3.Hero {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::D3.OnlineService.EntityId element in HerodsList) {
+        foreach (global::D3.OnlineService.EntityId element in HeroIdsList) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
         }
         size += UnknownFields.SerializedSize;
@@ -7911,7 +7911,7 @@ namespace D3.Hero {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private HeroList MakeReadOnly() {
-      herods_.MakeReadOnly();
+      heroIds_.MakeReadOnly();
       return this;
     }
     
@@ -8001,8 +8001,8 @@ namespace D3.Hero {
       public override Builder MergeFrom(HeroList other) {
         if (other == global::D3.Hero.HeroList.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.herods_.Count != 0) {
-          result.herods_.Add(other.herods_);
+        if (other.heroIds_.Count != 0) {
+          result.heroIds_.Add(other.heroIds_);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -8048,7 +8048,7 @@ namespace D3.Hero {
               break;
             }
             case 10: {
-              input.ReadMessageArray(tag, field_name, result.herods_, global::D3.OnlineService.EntityId.DefaultInstance, extensionRegistry);
+              input.ReadMessageArray(tag, field_name, result.heroIds_, global::D3.OnlineService.EntityId.DefaultInstance, extensionRegistry);
               break;
             }
           }
@@ -8061,47 +8061,47 @@ namespace D3.Hero {
       }
       
       
-      public pbc::IPopsicleList<global::D3.OnlineService.EntityId> HerodsList {
-        get { return PrepareBuilder().herods_; }
+      public pbc::IPopsicleList<global::D3.OnlineService.EntityId> HeroIdsList {
+        get { return PrepareBuilder().heroIds_; }
       }
-      public int HerodsCount {
-        get { return result.HerodsCount; }
+      public int HeroIdsCount {
+        get { return result.HeroIdsCount; }
       }
-      public global::D3.OnlineService.EntityId GetHerods(int index) {
-        return result.GetHerods(index);
+      public global::D3.OnlineService.EntityId GetHeroIds(int index) {
+        return result.GetHeroIds(index);
       }
-      public Builder SetHerods(int index, global::D3.OnlineService.EntityId value) {
+      public Builder SetHeroIds(int index, global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.herods_[index] = value;
+        result.heroIds_[index] = value;
         return this;
       }
-      public Builder SetHerods(int index, global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetHeroIds(int index, global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.herods_[index] = builderForValue.Build();
+        result.heroIds_[index] = builderForValue.Build();
         return this;
       }
-      public Builder AddHerods(global::D3.OnlineService.EntityId value) {
+      public Builder AddHeroIds(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.herods_.Add(value);
+        result.heroIds_.Add(value);
         return this;
       }
-      public Builder AddHerods(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder AddHeroIds(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.herods_.Add(builderForValue.Build());
+        result.heroIds_.Add(builderForValue.Build());
         return this;
       }
-      public Builder AddRangeHerods(scg::IEnumerable<global::D3.OnlineService.EntityId> values) {
+      public Builder AddRangeHeroIds(scg::IEnumerable<global::D3.OnlineService.EntityId> values) {
         PrepareBuilder();
-        result.herods_.Add(values);
+        result.heroIds_.Add(values);
         return this;
       }
-      public Builder ClearHerods() {
+      public Builder ClearHeroIds() {
         PrepareBuilder();
-        result.herods_.Clear();
+        result.heroIds_.Clear();
         return this;
       }
     }

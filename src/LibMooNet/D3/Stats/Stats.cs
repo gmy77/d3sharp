@@ -40,7 +40,7 @@ namespace D3.Stats {
         internal__static_D3_Stats_StatCategory__Descriptor = Descriptor.MessageTypes[0];
         internal__static_D3_Stats_StatCategory__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Stats.StatCategory, global::D3.Stats.StatCategory.Builder>(internal__static_D3_Stats_StatCategory__Descriptor,
-                new string[] { "Statd", "Data1", "Data2", "Total", });
+                new string[] { "StatId", "Data1", "Data2", "Total", });
         internal__static_D3_Stats_StatList__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_Stats_StatList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Stats.StatList, global::D3.Stats.StatList.Builder>(internal__static_D3_Stats_StatList__Descriptor,
@@ -83,14 +83,14 @@ namespace D3.Stats {
       get { return global::D3.Stats.Stats.internal__static_D3_Stats_StatCategory__FieldAccessorTable; }
     }
     
-    public const int StatdFieldNumber = 1;
-    private bool hasStatd;
-    private uint statd_;
-    public bool HasStatd {
-      get { return hasStatd; }
+    public const int StatIdFieldNumber = 1;
+    private bool hasStatId;
+    private uint statId_;
+    public bool HasStatId {
+      get { return hasStatId; }
     }
-    public uint Statd {
-      get { return statd_; }
+    public uint StatId {
+      get { return statId_; }
     }
     
     public const int Data1FieldNumber = 2;
@@ -125,7 +125,7 @@ namespace D3.Stats {
     
     public override bool IsInitialized {
       get {
-        if (!hasStatd) return false;
+        if (!hasStatId) return false;
         if (!hasData1) return false;
         if (!hasTotal) return false;
         return true;
@@ -135,8 +135,8 @@ namespace D3.Stats {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _statCategoryFieldNames;
-      if (hasStatd) {
-        output.WriteUInt32(1, field_names[2], Statd);
+      if (hasStatId) {
+        output.WriteUInt32(1, field_names[2], StatId);
       }
       if (hasData1) {
         output.WriteUInt32(2, field_names[0], Data1);
@@ -157,8 +157,8 @@ namespace D3.Stats {
         if (size != -1) return size;
         
         size = 0;
-        if (hasStatd) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(1, Statd);
+        if (hasStatId) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, StatId);
         }
         if (hasData1) {
           size += pb::CodedOutputStream.ComputeUInt32Size(2, Data1);
@@ -295,8 +295,8 @@ namespace D3.Stats {
       public override Builder MergeFrom(StatCategory other) {
         if (other == global::D3.Stats.StatCategory.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasStatd) {
-          Statd = other.Statd;
+        if (other.HasStatId) {
+          StatId = other.StatId;
         }
         if (other.HasData1) {
           Data1 = other.Data1;
@@ -351,7 +351,7 @@ namespace D3.Stats {
               break;
             }
             case 8: {
-              result.hasStatd = input.ReadUInt32(ref result.statd_);
+              result.hasStatId = input.ReadUInt32(ref result.statId_);
               break;
             }
             case 16: {
@@ -376,23 +376,23 @@ namespace D3.Stats {
       }
       
       
-      public bool HasStatd {
-        get { return result.hasStatd; }
+      public bool HasStatId {
+        get { return result.hasStatId; }
       }
-      public uint Statd {
-        get { return result.Statd; }
-        set { SetStatd(value); }
+      public uint StatId {
+        get { return result.StatId; }
+        set { SetStatId(value); }
       }
-      public Builder SetStatd(uint value) {
+      public Builder SetStatId(uint value) {
         PrepareBuilder();
-        result.hasStatd = true;
-        result.statd_ = value;
+        result.hasStatId = true;
+        result.statId_ = value;
         return this;
       }
-      public Builder ClearStatd() {
+      public Builder ClearStatId() {
         PrepareBuilder();
-        result.hasStatd = false;
-        result.statd_ = 0;
+        result.hasStatId = false;
+        result.statId_ = 0;
         return this;
       }
       

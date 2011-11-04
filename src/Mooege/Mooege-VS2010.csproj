@@ -223,7 +223,6 @@
     <Compile Include="Core\MooNet\Services\ChannelInvitationService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelOwnerService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelService.cs" />
-    <Compile Include="Core\MooNet\Services\ChatService.cs" />
     <Compile Include="Core\MooNet\Services\ExchangeService.cs" />
     <Compile Include="Core\MooNet\Services\FollowersService.cs" />
     <Compile Include="Core\MooNet\Services\FriendsService.cs" />
@@ -231,7 +230,6 @@
     <Compile Include="Core\MooNet\Services\GameUtilitiesService.cs" />
     <Compile Include="Core\MooNet\Services\IServerService.cs" />
     <Compile Include="Core\MooNet\Services\NotificationService.cs" />
-    <Compile Include="Core\MooNet\Services\PartyService.cs" />
     <Compile Include="Core\MooNet\Services\PresenceService.cs" />
     <Compile Include="Core\MooNet\Services\SearchService.cs" />
     <Compile Include="Core\MooNet\Services\Service.cs" />

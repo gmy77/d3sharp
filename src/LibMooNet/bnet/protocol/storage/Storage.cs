@@ -163,23 +163,23 @@ namespace bnet.protocol.storage {
         internal__static_bnet_protocol_storage_Command__Descriptor = Descriptor.MessageTypes[5];
         internal__static_bnet_protocol_storage_Command__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.storage.Command, global::bnet.protocol.storage.Command.Builder>(internal__static_bnet_protocol_storage_Command__Descriptor,
-                new string[] { "Op", "Data", "Fields", "MinVersion", "MaxVersion", "Predicate", "Limit", "Condition", "Message", "NoData", "Usingndex", "İnputVersion", });
+                new string[] { "Op", "Data", "Fields", "MinVersion", "MaxVersion", "Predicate", "Limit", "Condition", "Message", "NoData", "UsingIndex", "InputVersion", });
         internal__static_bnet_protocol_storage_Operation__Descriptor = Descriptor.MessageTypes[6];
         internal__static_bnet_protocol_storage_Operation__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.storage.Operation, global::bnet.protocol.storage.Operation.Builder>(internal__static_bnet_protocol_storage_Operation__Descriptor,
-                new string[] { "Tabled", "Columnd", "Rowd", "RowKey", "Version", "Rops", "MutateVersion", "Privilege", });
+                new string[] { "TableId", "ColumnId", "RowId", "RowKey", "Version", "Rops", "MutateVersion", "Privilege", });
         internal__static_bnet_protocol_storage_Cell__Descriptor = Descriptor.MessageTypes[7];
         internal__static_bnet_protocol_storage_Cell__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.storage.Cell, global::bnet.protocol.storage.Cell.Builder>(internal__static_bnet_protocol_storage_Cell__Descriptor,
-                new string[] { "Columnd", "Rowd", "RowKey", "Version", "Data", });
+                new string[] { "ColumnId", "RowId", "RowKey", "Version", "Data", });
         internal__static_bnet_protocol_storage_OperationResult__Descriptor = Descriptor.MessageTypes[8];
         internal__static_bnet_protocol_storage_OperationResult__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.storage.OperationResult, global::bnet.protocol.storage.OperationResult.Builder>(internal__static_bnet_protocol_storage_OperationResult__Descriptor,
-                new string[] { "ErrorCode", "Tabled", "Data", });
+                new string[] { "ErrorCode", "TableId", "Data", });
         internal__static_bnet_protocol_storage_OpenTableRequest__Descriptor = Descriptor.MessageTypes[9];
         internal__static_bnet_protocol_storage_OpenTableRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.storage.OpenTableRequest, global::bnet.protocol.storage.OpenTableRequest.Builder>(internal__static_bnet_protocol_storage_OpenTableRequest__Descriptor,
-                new string[] { "Schema", "Privilege", "Tabled", "Agentd", "ProcessName", });
+                new string[] { "Schema", "Privilege", "TableId", "AgentId", "ProcessName", });
         internal__static_bnet_protocol_storage_OpenTableResponse__Descriptor = Descriptor.MessageTypes[10];
         internal__static_bnet_protocol_storage_OpenTableResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.storage.OpenTableResponse, global::bnet.protocol.storage.OpenTableResponse.Builder>(internal__static_bnet_protocol_storage_OpenTableResponse__Descriptor,
@@ -187,7 +187,7 @@ namespace bnet.protocol.storage {
         internal__static_bnet_protocol_storage_OpenColumnRequest__Descriptor = Descriptor.MessageTypes[11];
         internal__static_bnet_protocol_storage_OpenColumnRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.storage.OpenColumnRequest, global::bnet.protocol.storage.OpenColumnRequest.Builder>(internal__static_bnet_protocol_storage_OpenColumnRequest__Descriptor,
-                new string[] { "Schema", "Privilege", "Tabled", "Columnd", "ProtoType", "Agentd", "ProcessName", });
+                new string[] { "Schema", "Privilege", "TableId", "ColumnId", "ProtoType", "AgentId", "ProcessName", });
         internal__static_bnet_protocol_storage_OpenColumnResponse__Descriptor = Descriptor.MessageTypes[12];
         internal__static_bnet_protocol_storage_OpenColumnResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.storage.OpenColumnResponse, global::bnet.protocol.storage.OpenColumnResponse.Builder>(internal__static_bnet_protocol_storage_OpenColumnResponse__Descriptor,
@@ -195,7 +195,7 @@ namespace bnet.protocol.storage {
         internal__static_bnet_protocol_storage_ExecuteRequest__Descriptor = Descriptor.MessageTypes[13];
         internal__static_bnet_protocol_storage_ExecuteRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.storage.ExecuteRequest, global::bnet.protocol.storage.ExecuteRequest.Builder>(internal__static_bnet_protocol_storage_ExecuteRequest__Descriptor,
-                new string[] { "Schema", "Privilege", "ReadOnly", "WantsRowKey", "WantsColumnName", "MaxDataSize", "Operations", "Timeout", "Agentd", "QueryName", "ProcessName", });
+                new string[] { "Schema", "Privilege", "ReadOnly", "WantsRowKey", "WantsColumnName", "MaxDataSize", "Operations", "Timeout", "AgentId", "QueryName", "ProcessName", });
         internal__static_bnet_protocol_storage_ExecuteResponse__Descriptor = Descriptor.MessageTypes[14];
         internal__static_bnet_protocol_storage_ExecuteResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.storage.ExecuteResponse, global::bnet.protocol.storage.ExecuteResponse.Builder>(internal__static_bnet_protocol_storage_ExecuteResponse__Descriptor,
@@ -2259,23 +2259,23 @@ namespace bnet.protocol.storage {
       get { return noData_; }
     }
     
-    public const int UsingndexFieldNumber = 13;
-    private bool hasUsingndex;
-    private string usingndex_ = "";
-    public bool HasUsingndex {
-      get { return hasUsingndex; }
+    public const int UsingIndexFieldNumber = 13;
+    private bool hasUsingIndex;
+    private string usingIndex_ = "";
+    public bool HasUsingIndex {
+      get { return hasUsingIndex; }
     }
-    public string Usingndex {
-      get { return usingndex_; }
+    public string UsingIndex {
+      get { return usingIndex_; }
     }
     
-    public const int İnputVersionFieldNumber = 14;
-    private bool hasİnputVersion;
+    public const int InputVersionFieldNumber = 14;
+    private bool hasInputVersion;
     private ulong inputVersion_;
-    public bool HasİnputVersion {
-      get { return hasİnputVersion; }
+    public bool HasInputVersion {
+      get { return hasInputVersion; }
     }
-    public ulong İnputVersion {
+    public ulong InputVersion {
       get { return inputVersion_; }
     }
     
@@ -2322,11 +2322,11 @@ namespace bnet.protocol.storage {
       if (hasNoData) {
         output.WriteBool(12, field_names[8], NoData);
       }
-      if (hasUsingndex) {
-        output.WriteString(13, field_names[11], Usingndex);
+      if (hasUsingIndex) {
+        output.WriteString(13, field_names[11], UsingIndex);
       }
-      if (hasİnputVersion) {
-        output.WriteFixed64(14, field_names[3], İnputVersion);
+      if (hasInputVersion) {
+        output.WriteFixed64(14, field_names[3], InputVersion);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2368,11 +2368,11 @@ namespace bnet.protocol.storage {
         if (hasNoData) {
           size += pb::CodedOutputStream.ComputeBoolSize(12, NoData);
         }
-        if (hasUsingndex) {
-          size += pb::CodedOutputStream.ComputeStringSize(13, Usingndex);
+        if (hasUsingIndex) {
+          size += pb::CodedOutputStream.ComputeStringSize(13, UsingIndex);
         }
-        if (hasİnputVersion) {
-          size += pb::CodedOutputStream.ComputeFixed64Size(14, İnputVersion);
+        if (hasInputVersion) {
+          size += pb::CodedOutputStream.ComputeFixed64Size(14, InputVersion);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2532,11 +2532,11 @@ namespace bnet.protocol.storage {
         if (other.HasNoData) {
           NoData = other.NoData;
         }
-        if (other.HasUsingndex) {
-          Usingndex = other.Usingndex;
+        if (other.HasUsingIndex) {
+          UsingIndex = other.UsingIndex;
         }
-        if (other.HasİnputVersion) {
-          İnputVersion = other.İnputVersion;
+        if (other.HasInputVersion) {
+          InputVersion = other.InputVersion;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -2638,11 +2638,11 @@ namespace bnet.protocol.storage {
               break;
             }
             case 106: {
-              result.hasUsingndex = input.ReadString(ref result.usingndex_);
+              result.hasUsingIndex = input.ReadString(ref result.usingIndex_);
               break;
             }
             case 113: {
-              result.hasİnputVersion = input.ReadFixed64(ref result.inputVersion_);
+              result.hasInputVersion = input.ReadFixed64(ref result.inputVersion_);
               break;
             }
           }
@@ -2905,43 +2905,43 @@ namespace bnet.protocol.storage {
         return this;
       }
       
-      public bool HasUsingndex {
-        get { return result.hasUsingndex; }
+      public bool HasUsingIndex {
+        get { return result.hasUsingIndex; }
       }
-      public string Usingndex {
-        get { return result.Usingndex; }
-        set { SetUsingndex(value); }
+      public string UsingIndex {
+        get { return result.UsingIndex; }
+        set { SetUsingIndex(value); }
       }
-      public Builder SetUsingndex(string value) {
+      public Builder SetUsingIndex(string value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasUsingndex = true;
-        result.usingndex_ = value;
+        result.hasUsingIndex = true;
+        result.usingIndex_ = value;
         return this;
       }
-      public Builder ClearUsingndex() {
+      public Builder ClearUsingIndex() {
         PrepareBuilder();
-        result.hasUsingndex = false;
-        result.usingndex_ = "";
+        result.hasUsingIndex = false;
+        result.usingIndex_ = "";
         return this;
       }
       
-      public bool HasİnputVersion {
-        get { return result.hasİnputVersion; }
+      public bool HasInputVersion {
+        get { return result.hasInputVersion; }
       }
-      public ulong İnputVersion {
-        get { return result.İnputVersion; }
-        set { SetİnputVersion(value); }
+      public ulong InputVersion {
+        get { return result.InputVersion; }
+        set { SetInputVersion(value); }
       }
-      public Builder SetİnputVersion(ulong value) {
+      public Builder SetInputVersion(ulong value) {
         PrepareBuilder();
-        result.hasİnputVersion = true;
+        result.hasInputVersion = true;
         result.inputVersion_ = value;
         return this;
       }
-      public Builder ClearİnputVersion() {
+      public Builder ClearInputVersion() {
         PrepareBuilder();
-        result.hasİnputVersion = false;
+        result.hasInputVersion = false;
         result.inputVersion_ = 0;
         return this;
       }
@@ -2979,34 +2979,34 @@ namespace bnet.protocol.storage {
       get { return global::bnet.protocol.storage.Storage.internal__static_bnet_protocol_storage_Operation__FieldAccessorTable; }
     }
     
-    public const int TabledFieldNumber = 1;
-    private bool hasTabled;
-    private global::bnet.protocol.storage.TableId tabled_;
-    public bool HasTabled {
-      get { return hasTabled; }
+    public const int TableIdFieldNumber = 1;
+    private bool hasTableId;
+    private global::bnet.protocol.storage.TableId tableId_;
+    public bool HasTableId {
+      get { return hasTableId; }
     }
-    public global::bnet.protocol.storage.TableId Tabled {
-      get { return tabled_ ?? global::bnet.protocol.storage.TableId.DefaultInstance; }
-    }
-    
-    public const int ColumndFieldNumber = 2;
-    private bool hasColumnd;
-    private global::bnet.protocol.storage.ColumnId columnd_;
-    public bool HasColumnd {
-      get { return hasColumnd; }
-    }
-    public global::bnet.protocol.storage.ColumnId Columnd {
-      get { return columnd_ ?? global::bnet.protocol.storage.ColumnId.DefaultInstance; }
+    public global::bnet.protocol.storage.TableId TableId {
+      get { return tableId_ ?? global::bnet.protocol.storage.TableId.DefaultInstance; }
     }
     
-    public const int RowdFieldNumber = 3;
-    private bool hasRowd;
-    private global::bnet.protocol.storage.RowId rowd_;
-    public bool HasRowd {
-      get { return hasRowd; }
+    public const int ColumnIdFieldNumber = 2;
+    private bool hasColumnId;
+    private global::bnet.protocol.storage.ColumnId columnId_;
+    public bool HasColumnId {
+      get { return hasColumnId; }
     }
-    public global::bnet.protocol.storage.RowId Rowd {
-      get { return rowd_ ?? global::bnet.protocol.storage.RowId.DefaultInstance; }
+    public global::bnet.protocol.storage.ColumnId ColumnId {
+      get { return columnId_ ?? global::bnet.protocol.storage.ColumnId.DefaultInstance; }
+    }
+    
+    public const int RowIdFieldNumber = 3;
+    private bool hasRowId;
+    private global::bnet.protocol.storage.RowId rowId_;
+    public bool HasRowId {
+      get { return hasRowId; }
+    }
+    public global::bnet.protocol.storage.RowId RowId {
+      get { return rowId_ ?? global::bnet.protocol.storage.RowId.DefaultInstance; }
     }
     
     public const int RowKeyFieldNumber = 4;
@@ -3063,13 +3063,13 @@ namespace bnet.protocol.storage {
     
     public override bool IsInitialized {
       get {
-        if (!hasTabled) return false;
-        if (!Tabled.IsInitialized) return false;
-        if (HasColumnd) {
-          if (!Columnd.IsInitialized) return false;
+        if (!hasTableId) return false;
+        if (!TableId.IsInitialized) return false;
+        if (HasColumnId) {
+          if (!ColumnId.IsInitialized) return false;
         }
-        if (HasRowd) {
-          if (!Rowd.IsInitialized) return false;
+        if (HasRowId) {
+          if (!RowId.IsInitialized) return false;
         }
         foreach (global::bnet.protocol.storage.Command element in RopsList) {
           if (!element.IsInitialized) return false;
@@ -3081,14 +3081,14 @@ namespace bnet.protocol.storage {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _operationFieldNames;
-      if (hasTabled) {
-        output.WriteMessage(1, field_names[6], Tabled);
+      if (hasTableId) {
+        output.WriteMessage(1, field_names[6], TableId);
       }
-      if (hasColumnd) {
-        output.WriteMessage(2, field_names[0], Columnd);
+      if (hasColumnId) {
+        output.WriteMessage(2, field_names[0], ColumnId);
       }
-      if (hasRowd) {
-        output.WriteMessage(3, field_names[4], Rowd);
+      if (hasRowId) {
+        output.WriteMessage(3, field_names[4], RowId);
       }
       if (hasRowKey) {
         output.WriteBytes(4, field_names[5], RowKey);
@@ -3115,14 +3115,14 @@ namespace bnet.protocol.storage {
         if (size != -1) return size;
         
         size = 0;
-        if (hasTabled) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Tabled);
+        if (hasTableId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, TableId);
         }
-        if (hasColumnd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Columnd);
+        if (hasColumnId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, ColumnId);
         }
-        if (hasRowd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(3, Rowd);
+        if (hasRowId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(3, RowId);
         }
         if (hasRowKey) {
           size += pb::CodedOutputStream.ComputeBytesSize(4, RowKey);
@@ -3266,14 +3266,14 @@ namespace bnet.protocol.storage {
       public override Builder MergeFrom(Operation other) {
         if (other == global::bnet.protocol.storage.Operation.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasTabled) {
-          MergeTabled(other.Tabled);
+        if (other.HasTableId) {
+          MergeTableId(other.TableId);
         }
-        if (other.HasColumnd) {
-          MergeColumnd(other.Columnd);
+        if (other.HasColumnId) {
+          MergeColumnId(other.ColumnId);
         }
-        if (other.HasRowd) {
-          MergeRowd(other.Rowd);
+        if (other.HasRowId) {
+          MergeRowId(other.RowId);
         }
         if (other.HasRowKey) {
           RowKey = other.RowKey;
@@ -3335,29 +3335,29 @@ namespace bnet.protocol.storage {
             }
             case 10: {
               global::bnet.protocol.storage.TableId.Builder subBuilder = global::bnet.protocol.storage.TableId.CreateBuilder();
-              if (result.hasTabled) {
-                subBuilder.MergeFrom(Tabled);
+              if (result.hasTableId) {
+                subBuilder.MergeFrom(TableId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Tabled = subBuilder.BuildPartial();
+              TableId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
               global::bnet.protocol.storage.ColumnId.Builder subBuilder = global::bnet.protocol.storage.ColumnId.CreateBuilder();
-              if (result.hasColumnd) {
-                subBuilder.MergeFrom(Columnd);
+              if (result.hasColumnId) {
+                subBuilder.MergeFrom(ColumnId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Columnd = subBuilder.BuildPartial();
+              ColumnId = subBuilder.BuildPartial();
               break;
             }
             case 26: {
               global::bnet.protocol.storage.RowId.Builder subBuilder = global::bnet.protocol.storage.RowId.CreateBuilder();
-              if (result.hasRowd) {
-                subBuilder.MergeFrom(Rowd);
+              if (result.hasRowId) {
+                subBuilder.MergeFrom(RowId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Rowd = subBuilder.BuildPartial();
+              RowId = subBuilder.BuildPartial();
               break;
             }
             case 34: {
@@ -3395,123 +3395,123 @@ namespace bnet.protocol.storage {
       }
       
       
-      public bool HasTabled {
-       get { return result.hasTabled; }
+      public bool HasTableId {
+       get { return result.hasTableId; }
       }
-      public global::bnet.protocol.storage.TableId Tabled {
-        get { return result.Tabled; }
-        set { SetTabled(value); }
+      public global::bnet.protocol.storage.TableId TableId {
+        get { return result.TableId; }
+        set { SetTableId(value); }
       }
-      public Builder SetTabled(global::bnet.protocol.storage.TableId value) {
+      public Builder SetTableId(global::bnet.protocol.storage.TableId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasTabled = true;
-        result.tabled_ = value;
+        result.hasTableId = true;
+        result.tableId_ = value;
         return this;
       }
-      public Builder SetTabled(global::bnet.protocol.storage.TableId.Builder builderForValue) {
+      public Builder SetTableId(global::bnet.protocol.storage.TableId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasTabled = true;
-        result.tabled_ = builderForValue.Build();
+        result.hasTableId = true;
+        result.tableId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeTabled(global::bnet.protocol.storage.TableId value) {
+      public Builder MergeTableId(global::bnet.protocol.storage.TableId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasTabled &&
-            result.tabled_ != global::bnet.protocol.storage.TableId.DefaultInstance) {
-            result.tabled_ = global::bnet.protocol.storage.TableId.CreateBuilder(result.tabled_).MergeFrom(value).BuildPartial();
+        if (result.hasTableId &&
+            result.tableId_ != global::bnet.protocol.storage.TableId.DefaultInstance) {
+            result.tableId_ = global::bnet.protocol.storage.TableId.CreateBuilder(result.tableId_).MergeFrom(value).BuildPartial();
         } else {
-          result.tabled_ = value;
+          result.tableId_ = value;
         }
-        result.hasTabled = true;
+        result.hasTableId = true;
         return this;
       }
-      public Builder ClearTabled() {
+      public Builder ClearTableId() {
         PrepareBuilder();
-        result.hasTabled = false;
-        result.tabled_ = null;
+        result.hasTableId = false;
+        result.tableId_ = null;
         return this;
       }
       
-      public bool HasColumnd {
-       get { return result.hasColumnd; }
+      public bool HasColumnId {
+       get { return result.hasColumnId; }
       }
-      public global::bnet.protocol.storage.ColumnId Columnd {
-        get { return result.Columnd; }
-        set { SetColumnd(value); }
+      public global::bnet.protocol.storage.ColumnId ColumnId {
+        get { return result.ColumnId; }
+        set { SetColumnId(value); }
       }
-      public Builder SetColumnd(global::bnet.protocol.storage.ColumnId value) {
+      public Builder SetColumnId(global::bnet.protocol.storage.ColumnId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasColumnd = true;
-        result.columnd_ = value;
+        result.hasColumnId = true;
+        result.columnId_ = value;
         return this;
       }
-      public Builder SetColumnd(global::bnet.protocol.storage.ColumnId.Builder builderForValue) {
+      public Builder SetColumnId(global::bnet.protocol.storage.ColumnId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasColumnd = true;
-        result.columnd_ = builderForValue.Build();
+        result.hasColumnId = true;
+        result.columnId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeColumnd(global::bnet.protocol.storage.ColumnId value) {
+      public Builder MergeColumnId(global::bnet.protocol.storage.ColumnId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasColumnd &&
-            result.columnd_ != global::bnet.protocol.storage.ColumnId.DefaultInstance) {
-            result.columnd_ = global::bnet.protocol.storage.ColumnId.CreateBuilder(result.columnd_).MergeFrom(value).BuildPartial();
+        if (result.hasColumnId &&
+            result.columnId_ != global::bnet.protocol.storage.ColumnId.DefaultInstance) {
+            result.columnId_ = global::bnet.protocol.storage.ColumnId.CreateBuilder(result.columnId_).MergeFrom(value).BuildPartial();
         } else {
-          result.columnd_ = value;
+          result.columnId_ = value;
         }
-        result.hasColumnd = true;
+        result.hasColumnId = true;
         return this;
       }
-      public Builder ClearColumnd() {
+      public Builder ClearColumnId() {
         PrepareBuilder();
-        result.hasColumnd = false;
-        result.columnd_ = null;
+        result.hasColumnId = false;
+        result.columnId_ = null;
         return this;
       }
       
-      public bool HasRowd {
-       get { return result.hasRowd; }
+      public bool HasRowId {
+       get { return result.hasRowId; }
       }
-      public global::bnet.protocol.storage.RowId Rowd {
-        get { return result.Rowd; }
-        set { SetRowd(value); }
+      public global::bnet.protocol.storage.RowId RowId {
+        get { return result.RowId; }
+        set { SetRowId(value); }
       }
-      public Builder SetRowd(global::bnet.protocol.storage.RowId value) {
+      public Builder SetRowId(global::bnet.protocol.storage.RowId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasRowd = true;
-        result.rowd_ = value;
+        result.hasRowId = true;
+        result.rowId_ = value;
         return this;
       }
-      public Builder SetRowd(global::bnet.protocol.storage.RowId.Builder builderForValue) {
+      public Builder SetRowId(global::bnet.protocol.storage.RowId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasRowd = true;
-        result.rowd_ = builderForValue.Build();
+        result.hasRowId = true;
+        result.rowId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeRowd(global::bnet.protocol.storage.RowId value) {
+      public Builder MergeRowId(global::bnet.protocol.storage.RowId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasRowd &&
-            result.rowd_ != global::bnet.protocol.storage.RowId.DefaultInstance) {
-            result.rowd_ = global::bnet.protocol.storage.RowId.CreateBuilder(result.rowd_).MergeFrom(value).BuildPartial();
+        if (result.hasRowId &&
+            result.rowId_ != global::bnet.protocol.storage.RowId.DefaultInstance) {
+            result.rowId_ = global::bnet.protocol.storage.RowId.CreateBuilder(result.rowId_).MergeFrom(value).BuildPartial();
         } else {
-          result.rowd_ = value;
+          result.rowId_ = value;
         }
-        result.hasRowd = true;
+        result.hasRowId = true;
         return this;
       }
-      public Builder ClearRowd() {
+      public Builder ClearRowId() {
         PrepareBuilder();
-        result.hasRowd = false;
-        result.rowd_ = null;
+        result.hasRowId = false;
+        result.rowId_ = null;
         return this;
       }
       
@@ -3693,24 +3693,24 @@ namespace bnet.protocol.storage {
       get { return global::bnet.protocol.storage.Storage.internal__static_bnet_protocol_storage_Cell__FieldAccessorTable; }
     }
     
-    public const int ColumndFieldNumber = 1;
-    private bool hasColumnd;
-    private global::bnet.protocol.storage.ColumnId columnd_;
-    public bool HasColumnd {
-      get { return hasColumnd; }
+    public const int ColumnIdFieldNumber = 1;
+    private bool hasColumnId;
+    private global::bnet.protocol.storage.ColumnId columnId_;
+    public bool HasColumnId {
+      get { return hasColumnId; }
     }
-    public global::bnet.protocol.storage.ColumnId Columnd {
-      get { return columnd_ ?? global::bnet.protocol.storage.ColumnId.DefaultInstance; }
+    public global::bnet.protocol.storage.ColumnId ColumnId {
+      get { return columnId_ ?? global::bnet.protocol.storage.ColumnId.DefaultInstance; }
     }
     
-    public const int RowdFieldNumber = 2;
-    private bool hasRowd;
-    private global::bnet.protocol.storage.RowId rowd_;
-    public bool HasRowd {
-      get { return hasRowd; }
+    public const int RowIdFieldNumber = 2;
+    private bool hasRowId;
+    private global::bnet.protocol.storage.RowId rowId_;
+    public bool HasRowId {
+      get { return hasRowId; }
     }
-    public global::bnet.protocol.storage.RowId Rowd {
-      get { return rowd_ ?? global::bnet.protocol.storage.RowId.DefaultInstance; }
+    public global::bnet.protocol.storage.RowId RowId {
+      get { return rowId_ ?? global::bnet.protocol.storage.RowId.DefaultInstance; }
     }
     
     public const int RowKeyFieldNumber = 3;
@@ -3745,10 +3745,10 @@ namespace bnet.protocol.storage {
     
     public override bool IsInitialized {
       get {
-        if (!hasColumnd) return false;
-        if (!hasRowd) return false;
-        if (!Columnd.IsInitialized) return false;
-        if (!Rowd.IsInitialized) return false;
+        if (!hasColumnId) return false;
+        if (!hasRowId) return false;
+        if (!ColumnId.IsInitialized) return false;
+        if (!RowId.IsInitialized) return false;
         return true;
       }
     }
@@ -3756,11 +3756,11 @@ namespace bnet.protocol.storage {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _cellFieldNames;
-      if (hasColumnd) {
-        output.WriteMessage(1, field_names[0], Columnd);
+      if (hasColumnId) {
+        output.WriteMessage(1, field_names[0], ColumnId);
       }
-      if (hasRowd) {
-        output.WriteMessage(2, field_names[2], Rowd);
+      if (hasRowId) {
+        output.WriteMessage(2, field_names[2], RowId);
       }
       if (hasRowKey) {
         output.WriteBytes(3, field_names[3], RowKey);
@@ -3781,11 +3781,11 @@ namespace bnet.protocol.storage {
         if (size != -1) return size;
         
         size = 0;
-        if (hasColumnd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Columnd);
+        if (hasColumnId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, ColumnId);
         }
-        if (hasRowd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Rowd);
+        if (hasRowId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, RowId);
         }
         if (hasRowKey) {
           size += pb::CodedOutputStream.ComputeBytesSize(3, RowKey);
@@ -3922,11 +3922,11 @@ namespace bnet.protocol.storage {
       public override Builder MergeFrom(Cell other) {
         if (other == global::bnet.protocol.storage.Cell.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasColumnd) {
-          MergeColumnd(other.Columnd);
+        if (other.HasColumnId) {
+          MergeColumnId(other.ColumnId);
         }
-        if (other.HasRowd) {
-          MergeRowd(other.Rowd);
+        if (other.HasRowId) {
+          MergeRowId(other.RowId);
         }
         if (other.HasRowKey) {
           RowKey = other.RowKey;
@@ -3982,20 +3982,20 @@ namespace bnet.protocol.storage {
             }
             case 10: {
               global::bnet.protocol.storage.ColumnId.Builder subBuilder = global::bnet.protocol.storage.ColumnId.CreateBuilder();
-              if (result.hasColumnd) {
-                subBuilder.MergeFrom(Columnd);
+              if (result.hasColumnId) {
+                subBuilder.MergeFrom(ColumnId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Columnd = subBuilder.BuildPartial();
+              ColumnId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
               global::bnet.protocol.storage.RowId.Builder subBuilder = global::bnet.protocol.storage.RowId.CreateBuilder();
-              if (result.hasRowd) {
-                subBuilder.MergeFrom(Rowd);
+              if (result.hasRowId) {
+                subBuilder.MergeFrom(RowId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Rowd = subBuilder.BuildPartial();
+              RowId = subBuilder.BuildPartial();
               break;
             }
             case 26: {
@@ -4020,83 +4020,83 @@ namespace bnet.protocol.storage {
       }
       
       
-      public bool HasColumnd {
-       get { return result.hasColumnd; }
+      public bool HasColumnId {
+       get { return result.hasColumnId; }
       }
-      public global::bnet.protocol.storage.ColumnId Columnd {
-        get { return result.Columnd; }
-        set { SetColumnd(value); }
+      public global::bnet.protocol.storage.ColumnId ColumnId {
+        get { return result.ColumnId; }
+        set { SetColumnId(value); }
       }
-      public Builder SetColumnd(global::bnet.protocol.storage.ColumnId value) {
+      public Builder SetColumnId(global::bnet.protocol.storage.ColumnId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasColumnd = true;
-        result.columnd_ = value;
+        result.hasColumnId = true;
+        result.columnId_ = value;
         return this;
       }
-      public Builder SetColumnd(global::bnet.protocol.storage.ColumnId.Builder builderForValue) {
+      public Builder SetColumnId(global::bnet.protocol.storage.ColumnId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasColumnd = true;
-        result.columnd_ = builderForValue.Build();
+        result.hasColumnId = true;
+        result.columnId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeColumnd(global::bnet.protocol.storage.ColumnId value) {
+      public Builder MergeColumnId(global::bnet.protocol.storage.ColumnId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasColumnd &&
-            result.columnd_ != global::bnet.protocol.storage.ColumnId.DefaultInstance) {
-            result.columnd_ = global::bnet.protocol.storage.ColumnId.CreateBuilder(result.columnd_).MergeFrom(value).BuildPartial();
+        if (result.hasColumnId &&
+            result.columnId_ != global::bnet.protocol.storage.ColumnId.DefaultInstance) {
+            result.columnId_ = global::bnet.protocol.storage.ColumnId.CreateBuilder(result.columnId_).MergeFrom(value).BuildPartial();
         } else {
-          result.columnd_ = value;
+          result.columnId_ = value;
         }
-        result.hasColumnd = true;
+        result.hasColumnId = true;
         return this;
       }
-      public Builder ClearColumnd() {
+      public Builder ClearColumnId() {
         PrepareBuilder();
-        result.hasColumnd = false;
-        result.columnd_ = null;
+        result.hasColumnId = false;
+        result.columnId_ = null;
         return this;
       }
       
-      public bool HasRowd {
-       get { return result.hasRowd; }
+      public bool HasRowId {
+       get { return result.hasRowId; }
       }
-      public global::bnet.protocol.storage.RowId Rowd {
-        get { return result.Rowd; }
-        set { SetRowd(value); }
+      public global::bnet.protocol.storage.RowId RowId {
+        get { return result.RowId; }
+        set { SetRowId(value); }
       }
-      public Builder SetRowd(global::bnet.protocol.storage.RowId value) {
+      public Builder SetRowId(global::bnet.protocol.storage.RowId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasRowd = true;
-        result.rowd_ = value;
+        result.hasRowId = true;
+        result.rowId_ = value;
         return this;
       }
-      public Builder SetRowd(global::bnet.protocol.storage.RowId.Builder builderForValue) {
+      public Builder SetRowId(global::bnet.protocol.storage.RowId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasRowd = true;
-        result.rowd_ = builderForValue.Build();
+        result.hasRowId = true;
+        result.rowId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeRowd(global::bnet.protocol.storage.RowId value) {
+      public Builder MergeRowId(global::bnet.protocol.storage.RowId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasRowd &&
-            result.rowd_ != global::bnet.protocol.storage.RowId.DefaultInstance) {
-            result.rowd_ = global::bnet.protocol.storage.RowId.CreateBuilder(result.rowd_).MergeFrom(value).BuildPartial();
+        if (result.hasRowId &&
+            result.rowId_ != global::bnet.protocol.storage.RowId.DefaultInstance) {
+            result.rowId_ = global::bnet.protocol.storage.RowId.CreateBuilder(result.rowId_).MergeFrom(value).BuildPartial();
         } else {
-          result.rowd_ = value;
+          result.rowId_ = value;
         }
-        result.hasRowd = true;
+        result.hasRowId = true;
         return this;
       }
-      public Builder ClearRowd() {
+      public Builder ClearRowId() {
         PrepareBuilder();
-        result.hasRowd = false;
-        result.rowd_ = null;
+        result.hasRowId = false;
+        result.rowId_ = null;
         return this;
       }
       
@@ -4205,14 +4205,14 @@ namespace bnet.protocol.storage {
       get { return errorCode_; }
     }
     
-    public const int TabledFieldNumber = 2;
-    private bool hasTabled;
-    private global::bnet.protocol.storage.TableId tabled_;
-    public bool HasTabled {
-      get { return hasTabled; }
+    public const int TableIdFieldNumber = 2;
+    private bool hasTableId;
+    private global::bnet.protocol.storage.TableId tableId_;
+    public bool HasTableId {
+      get { return hasTableId; }
     }
-    public global::bnet.protocol.storage.TableId Tabled {
-      get { return tabled_ ?? global::bnet.protocol.storage.TableId.DefaultInstance; }
+    public global::bnet.protocol.storage.TableId TableId {
+      get { return tableId_ ?? global::bnet.protocol.storage.TableId.DefaultInstance; }
     }
     
     public const int DataFieldNumber = 3;
@@ -4229,8 +4229,8 @@ namespace bnet.protocol.storage {
     
     public override bool IsInitialized {
       get {
-        if (!hasTabled) return false;
-        if (!Tabled.IsInitialized) return false;
+        if (!hasTableId) return false;
+        if (!TableId.IsInitialized) return false;
         foreach (global::bnet.protocol.storage.Cell element in DataList) {
           if (!element.IsInitialized) return false;
         }
@@ -4244,8 +4244,8 @@ namespace bnet.protocol.storage {
       if (hasErrorCode) {
         output.WriteUInt32(1, field_names[1], ErrorCode);
       }
-      if (hasTabled) {
-        output.WriteMessage(2, field_names[2], Tabled);
+      if (hasTableId) {
+        output.WriteMessage(2, field_names[2], TableId);
       }
       if (data_.Count > 0) {
         output.WriteMessageArray(3, field_names[0], data_);
@@ -4263,8 +4263,8 @@ namespace bnet.protocol.storage {
         if (hasErrorCode) {
           size += pb::CodedOutputStream.ComputeUInt32Size(1, ErrorCode);
         }
-        if (hasTabled) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Tabled);
+        if (hasTableId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, TableId);
         }
         foreach (global::bnet.protocol.storage.Cell element in DataList) {
           size += pb::CodedOutputStream.ComputeMessageSize(3, element);
@@ -4399,8 +4399,8 @@ namespace bnet.protocol.storage {
         if (other.HasErrorCode) {
           ErrorCode = other.ErrorCode;
         }
-        if (other.HasTabled) {
-          MergeTabled(other.Tabled);
+        if (other.HasTableId) {
+          MergeTableId(other.TableId);
         }
         if (other.data_.Count != 0) {
           result.data_.Add(other.data_);
@@ -4454,11 +4454,11 @@ namespace bnet.protocol.storage {
             }
             case 18: {
               global::bnet.protocol.storage.TableId.Builder subBuilder = global::bnet.protocol.storage.TableId.CreateBuilder();
-              if (result.hasTabled) {
-                subBuilder.MergeFrom(Tabled);
+              if (result.hasTableId) {
+                subBuilder.MergeFrom(TableId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Tabled = subBuilder.BuildPartial();
+              TableId = subBuilder.BuildPartial();
               break;
             }
             case 26: {
@@ -4495,43 +4495,43 @@ namespace bnet.protocol.storage {
         return this;
       }
       
-      public bool HasTabled {
-       get { return result.hasTabled; }
+      public bool HasTableId {
+       get { return result.hasTableId; }
       }
-      public global::bnet.protocol.storage.TableId Tabled {
-        get { return result.Tabled; }
-        set { SetTabled(value); }
+      public global::bnet.protocol.storage.TableId TableId {
+        get { return result.TableId; }
+        set { SetTableId(value); }
       }
-      public Builder SetTabled(global::bnet.protocol.storage.TableId value) {
+      public Builder SetTableId(global::bnet.protocol.storage.TableId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasTabled = true;
-        result.tabled_ = value;
+        result.hasTableId = true;
+        result.tableId_ = value;
         return this;
       }
-      public Builder SetTabled(global::bnet.protocol.storage.TableId.Builder builderForValue) {
+      public Builder SetTableId(global::bnet.protocol.storage.TableId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasTabled = true;
-        result.tabled_ = builderForValue.Build();
+        result.hasTableId = true;
+        result.tableId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeTabled(global::bnet.protocol.storage.TableId value) {
+      public Builder MergeTableId(global::bnet.protocol.storage.TableId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasTabled &&
-            result.tabled_ != global::bnet.protocol.storage.TableId.DefaultInstance) {
-            result.tabled_ = global::bnet.protocol.storage.TableId.CreateBuilder(result.tabled_).MergeFrom(value).BuildPartial();
+        if (result.hasTableId &&
+            result.tableId_ != global::bnet.protocol.storage.TableId.DefaultInstance) {
+            result.tableId_ = global::bnet.protocol.storage.TableId.CreateBuilder(result.tableId_).MergeFrom(value).BuildPartial();
         } else {
-          result.tabled_ = value;
+          result.tableId_ = value;
         }
-        result.hasTabled = true;
+        result.hasTableId = true;
         return this;
       }
-      public Builder ClearTabled() {
+      public Builder ClearTableId() {
         PrepareBuilder();
-        result.hasTabled = false;
-        result.tabled_ = null;
+        result.hasTableId = false;
+        result.tableId_ = null;
         return this;
       }
       
@@ -4632,24 +4632,24 @@ namespace bnet.protocol.storage {
       get { return privilege_ ?? global::bnet.protocol.storage.Privilege.DefaultInstance; }
     }
     
-    public const int TabledFieldNumber = 3;
-    private bool hasTabled;
-    private global::bnet.protocol.storage.TableId tabled_;
-    public bool HasTabled {
-      get { return hasTabled; }
+    public const int TableIdFieldNumber = 3;
+    private bool hasTableId;
+    private global::bnet.protocol.storage.TableId tableId_;
+    public bool HasTableId {
+      get { return hasTableId; }
     }
-    public global::bnet.protocol.storage.TableId Tabled {
-      get { return tabled_ ?? global::bnet.protocol.storage.TableId.DefaultInstance; }
+    public global::bnet.protocol.storage.TableId TableId {
+      get { return tableId_ ?? global::bnet.protocol.storage.TableId.DefaultInstance; }
     }
     
-    public const int AgentdFieldNumber = 4;
-    private bool hasAgentd;
-    private global::bnet.protocol.EntityId agentd_;
-    public bool HasAgentd {
-      get { return hasAgentd; }
+    public const int AgentIdFieldNumber = 4;
+    private bool hasAgentId;
+    private global::bnet.protocol.EntityId agentId_;
+    public bool HasAgentId {
+      get { return hasAgentId; }
     }
-    public global::bnet.protocol.EntityId Agentd {
-      get { return agentd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId AgentId {
+      get { return agentId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public const int ProcessNameFieldNumber = 5;
@@ -4664,10 +4664,10 @@ namespace bnet.protocol.storage {
     
     public override bool IsInitialized {
       get {
-        if (!hasTabled) return false;
-        if (!Tabled.IsInitialized) return false;
-        if (HasAgentd) {
-          if (!Agentd.IsInitialized) return false;
+        if (!hasTableId) return false;
+        if (!TableId.IsInitialized) return false;
+        if (HasAgentId) {
+          if (!AgentId.IsInitialized) return false;
         }
         return true;
       }
@@ -4682,11 +4682,11 @@ namespace bnet.protocol.storage {
       if (hasPrivilege) {
         output.WriteMessage(2, field_names[1], Privilege);
       }
-      if (hasTabled) {
-        output.WriteMessage(3, field_names[4], Tabled);
+      if (hasTableId) {
+        output.WriteMessage(3, field_names[4], TableId);
       }
-      if (hasAgentd) {
-        output.WriteMessage(4, field_names[0], Agentd);
+      if (hasAgentId) {
+        output.WriteMessage(4, field_names[0], AgentId);
       }
       if (hasProcessName) {
         output.WriteString(5, field_names[2], ProcessName);
@@ -4707,11 +4707,11 @@ namespace bnet.protocol.storage {
         if (hasPrivilege) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, Privilege);
         }
-        if (hasTabled) {
-          size += pb::CodedOutputStream.ComputeMessageSize(3, Tabled);
+        if (hasTableId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(3, TableId);
         }
-        if (hasAgentd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(4, Agentd);
+        if (hasAgentId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(4, AgentId);
         }
         if (hasProcessName) {
           size += pb::CodedOutputStream.ComputeStringSize(5, ProcessName);
@@ -4848,11 +4848,11 @@ namespace bnet.protocol.storage {
         if (other.HasPrivilege) {
           MergePrivilege(other.Privilege);
         }
-        if (other.HasTabled) {
-          MergeTabled(other.Tabled);
+        if (other.HasTableId) {
+          MergeTableId(other.TableId);
         }
-        if (other.HasAgentd) {
-          MergeAgentd(other.Agentd);
+        if (other.HasAgentId) {
+          MergeAgentId(other.AgentId);
         }
         if (other.HasProcessName) {
           ProcessName = other.ProcessName;
@@ -4915,20 +4915,20 @@ namespace bnet.protocol.storage {
             }
             case 26: {
               global::bnet.protocol.storage.TableId.Builder subBuilder = global::bnet.protocol.storage.TableId.CreateBuilder();
-              if (result.hasTabled) {
-                subBuilder.MergeFrom(Tabled);
+              if (result.hasTableId) {
+                subBuilder.MergeFrom(TableId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Tabled = subBuilder.BuildPartial();
+              TableId = subBuilder.BuildPartial();
               break;
             }
             case 34: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasAgentd) {
-                subBuilder.MergeFrom(Agentd);
+              if (result.hasAgentId) {
+                subBuilder.MergeFrom(AgentId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Agentd = subBuilder.BuildPartial();
+              AgentId = subBuilder.BuildPartial();
               break;
             }
             case 42: {
@@ -5006,83 +5006,83 @@ namespace bnet.protocol.storage {
         return this;
       }
       
-      public bool HasTabled {
-       get { return result.hasTabled; }
+      public bool HasTableId {
+       get { return result.hasTableId; }
       }
-      public global::bnet.protocol.storage.TableId Tabled {
-        get { return result.Tabled; }
-        set { SetTabled(value); }
+      public global::bnet.protocol.storage.TableId TableId {
+        get { return result.TableId; }
+        set { SetTableId(value); }
       }
-      public Builder SetTabled(global::bnet.protocol.storage.TableId value) {
+      public Builder SetTableId(global::bnet.protocol.storage.TableId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasTabled = true;
-        result.tabled_ = value;
+        result.hasTableId = true;
+        result.tableId_ = value;
         return this;
       }
-      public Builder SetTabled(global::bnet.protocol.storage.TableId.Builder builderForValue) {
+      public Builder SetTableId(global::bnet.protocol.storage.TableId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasTabled = true;
-        result.tabled_ = builderForValue.Build();
+        result.hasTableId = true;
+        result.tableId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeTabled(global::bnet.protocol.storage.TableId value) {
+      public Builder MergeTableId(global::bnet.protocol.storage.TableId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasTabled &&
-            result.tabled_ != global::bnet.protocol.storage.TableId.DefaultInstance) {
-            result.tabled_ = global::bnet.protocol.storage.TableId.CreateBuilder(result.tabled_).MergeFrom(value).BuildPartial();
+        if (result.hasTableId &&
+            result.tableId_ != global::bnet.protocol.storage.TableId.DefaultInstance) {
+            result.tableId_ = global::bnet.protocol.storage.TableId.CreateBuilder(result.tableId_).MergeFrom(value).BuildPartial();
         } else {
-          result.tabled_ = value;
+          result.tableId_ = value;
         }
-        result.hasTabled = true;
+        result.hasTableId = true;
         return this;
       }
-      public Builder ClearTabled() {
+      public Builder ClearTableId() {
         PrepareBuilder();
-        result.hasTabled = false;
-        result.tabled_ = null;
+        result.hasTableId = false;
+        result.tableId_ = null;
         return this;
       }
       
-      public bool HasAgentd {
-       get { return result.hasAgentd; }
+      public bool HasAgentId {
+       get { return result.hasAgentId; }
       }
-      public global::bnet.protocol.EntityId Agentd {
-        get { return result.Agentd; }
-        set { SetAgentd(value); }
+      public global::bnet.protocol.EntityId AgentId {
+        get { return result.AgentId; }
+        set { SetAgentId(value); }
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId value) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = value;
+        result.hasAgentId = true;
+        result.agentId_ = value;
         return this;
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = builderForValue.Build();
+        result.hasAgentId = true;
+        result.agentId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAgentd(global::bnet.protocol.EntityId value) {
+      public Builder MergeAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAgentd &&
-            result.agentd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.agentd_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentd_).MergeFrom(value).BuildPartial();
+        if (result.hasAgentId &&
+            result.agentId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.agentId_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentId_).MergeFrom(value).BuildPartial();
         } else {
-          result.agentd_ = value;
+          result.agentId_ = value;
         }
-        result.hasAgentd = true;
+        result.hasAgentId = true;
         return this;
       }
-      public Builder ClearAgentd() {
+      public Builder ClearAgentId() {
         PrepareBuilder();
-        result.hasAgentd = false;
-        result.agentd_ = null;
+        result.hasAgentId = false;
+        result.agentId_ = null;
         return this;
       }
       
@@ -5391,24 +5391,24 @@ namespace bnet.protocol.storage {
       get { return privilege_ ?? global::bnet.protocol.storage.Privilege.DefaultInstance; }
     }
     
-    public const int TabledFieldNumber = 4;
-    private bool hasTabled;
-    private global::bnet.protocol.storage.TableId tabled_;
-    public bool HasTabled {
-      get { return hasTabled; }
+    public const int TableIdFieldNumber = 4;
+    private bool hasTableId;
+    private global::bnet.protocol.storage.TableId tableId_;
+    public bool HasTableId {
+      get { return hasTableId; }
     }
-    public global::bnet.protocol.storage.TableId Tabled {
-      get { return tabled_ ?? global::bnet.protocol.storage.TableId.DefaultInstance; }
+    public global::bnet.protocol.storage.TableId TableId {
+      get { return tableId_ ?? global::bnet.protocol.storage.TableId.DefaultInstance; }
     }
     
-    public const int ColumndFieldNumber = 5;
-    private bool hasColumnd;
-    private global::bnet.protocol.storage.ColumnId columnd_;
-    public bool HasColumnd {
-      get { return hasColumnd; }
+    public const int ColumnIdFieldNumber = 5;
+    private bool hasColumnId;
+    private global::bnet.protocol.storage.ColumnId columnId_;
+    public bool HasColumnId {
+      get { return hasColumnId; }
     }
-    public global::bnet.protocol.storage.ColumnId Columnd {
-      get { return columnd_ ?? global::bnet.protocol.storage.ColumnId.DefaultInstance; }
+    public global::bnet.protocol.storage.ColumnId ColumnId {
+      get { return columnId_ ?? global::bnet.protocol.storage.ColumnId.DefaultInstance; }
     }
     
     public const int ProtoTypeFieldNumber = 6;
@@ -5421,14 +5421,14 @@ namespace bnet.protocol.storage {
       get { return protoType_; }
     }
     
-    public const int AgentdFieldNumber = 7;
-    private bool hasAgentd;
-    private global::bnet.protocol.EntityId agentd_;
-    public bool HasAgentd {
-      get { return hasAgentd; }
+    public const int AgentIdFieldNumber = 7;
+    private bool hasAgentId;
+    private global::bnet.protocol.EntityId agentId_;
+    public bool HasAgentId {
+      get { return hasAgentId; }
     }
-    public global::bnet.protocol.EntityId Agentd {
-      get { return agentd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId AgentId {
+      get { return agentId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public const int ProcessNameFieldNumber = 8;
@@ -5443,12 +5443,12 @@ namespace bnet.protocol.storage {
     
     public override bool IsInitialized {
       get {
-        if (!hasTabled) return false;
-        if (!hasColumnd) return false;
-        if (!Tabled.IsInitialized) return false;
-        if (!Columnd.IsInitialized) return false;
-        if (HasAgentd) {
-          if (!Agentd.IsInitialized) return false;
+        if (!hasTableId) return false;
+        if (!hasColumnId) return false;
+        if (!TableId.IsInitialized) return false;
+        if (!ColumnId.IsInitialized) return false;
+        if (HasAgentId) {
+          if (!AgentId.IsInitialized) return false;
         }
         return true;
       }
@@ -5463,17 +5463,17 @@ namespace bnet.protocol.storage {
       if (hasPrivilege) {
         output.WriteMessage(2, field_names[2], Privilege);
       }
-      if (hasTabled) {
-        output.WriteMessage(4, field_names[6], Tabled);
+      if (hasTableId) {
+        output.WriteMessage(4, field_names[6], TableId);
       }
-      if (hasColumnd) {
-        output.WriteMessage(5, field_names[1], Columnd);
+      if (hasColumnId) {
+        output.WriteMessage(5, field_names[1], ColumnId);
       }
       if (hasProtoType) {
         output.WriteString(6, field_names[4], ProtoType);
       }
-      if (hasAgentd) {
-        output.WriteMessage(7, field_names[0], Agentd);
+      if (hasAgentId) {
+        output.WriteMessage(7, field_names[0], AgentId);
       }
       if (hasProcessName) {
         output.WriteString(8, field_names[3], ProcessName);
@@ -5494,17 +5494,17 @@ namespace bnet.protocol.storage {
         if (hasPrivilege) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, Privilege);
         }
-        if (hasTabled) {
-          size += pb::CodedOutputStream.ComputeMessageSize(4, Tabled);
+        if (hasTableId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(4, TableId);
         }
-        if (hasColumnd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(5, Columnd);
+        if (hasColumnId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(5, ColumnId);
         }
         if (hasProtoType) {
           size += pb::CodedOutputStream.ComputeStringSize(6, ProtoType);
         }
-        if (hasAgentd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(7, Agentd);
+        if (hasAgentId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(7, AgentId);
         }
         if (hasProcessName) {
           size += pb::CodedOutputStream.ComputeStringSize(8, ProcessName);
@@ -5641,17 +5641,17 @@ namespace bnet.protocol.storage {
         if (other.HasPrivilege) {
           MergePrivilege(other.Privilege);
         }
-        if (other.HasTabled) {
-          MergeTabled(other.Tabled);
+        if (other.HasTableId) {
+          MergeTableId(other.TableId);
         }
-        if (other.HasColumnd) {
-          MergeColumnd(other.Columnd);
+        if (other.HasColumnId) {
+          MergeColumnId(other.ColumnId);
         }
         if (other.HasProtoType) {
           ProtoType = other.ProtoType;
         }
-        if (other.HasAgentd) {
-          MergeAgentd(other.Agentd);
+        if (other.HasAgentId) {
+          MergeAgentId(other.AgentId);
         }
         if (other.HasProcessName) {
           ProcessName = other.ProcessName;
@@ -5714,20 +5714,20 @@ namespace bnet.protocol.storage {
             }
             case 34: {
               global::bnet.protocol.storage.TableId.Builder subBuilder = global::bnet.protocol.storage.TableId.CreateBuilder();
-              if (result.hasTabled) {
-                subBuilder.MergeFrom(Tabled);
+              if (result.hasTableId) {
+                subBuilder.MergeFrom(TableId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Tabled = subBuilder.BuildPartial();
+              TableId = subBuilder.BuildPartial();
               break;
             }
             case 42: {
               global::bnet.protocol.storage.ColumnId.Builder subBuilder = global::bnet.protocol.storage.ColumnId.CreateBuilder();
-              if (result.hasColumnd) {
-                subBuilder.MergeFrom(Columnd);
+              if (result.hasColumnId) {
+                subBuilder.MergeFrom(ColumnId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Columnd = subBuilder.BuildPartial();
+              ColumnId = subBuilder.BuildPartial();
               break;
             }
             case 50: {
@@ -5736,11 +5736,11 @@ namespace bnet.protocol.storage {
             }
             case 58: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasAgentd) {
-                subBuilder.MergeFrom(Agentd);
+              if (result.hasAgentId) {
+                subBuilder.MergeFrom(AgentId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Agentd = subBuilder.BuildPartial();
+              AgentId = subBuilder.BuildPartial();
               break;
             }
             case 66: {
@@ -5818,83 +5818,83 @@ namespace bnet.protocol.storage {
         return this;
       }
       
-      public bool HasTabled {
-       get { return result.hasTabled; }
+      public bool HasTableId {
+       get { return result.hasTableId; }
       }
-      public global::bnet.protocol.storage.TableId Tabled {
-        get { return result.Tabled; }
-        set { SetTabled(value); }
+      public global::bnet.protocol.storage.TableId TableId {
+        get { return result.TableId; }
+        set { SetTableId(value); }
       }
-      public Builder SetTabled(global::bnet.protocol.storage.TableId value) {
+      public Builder SetTableId(global::bnet.protocol.storage.TableId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasTabled = true;
-        result.tabled_ = value;
+        result.hasTableId = true;
+        result.tableId_ = value;
         return this;
       }
-      public Builder SetTabled(global::bnet.protocol.storage.TableId.Builder builderForValue) {
+      public Builder SetTableId(global::bnet.protocol.storage.TableId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasTabled = true;
-        result.tabled_ = builderForValue.Build();
+        result.hasTableId = true;
+        result.tableId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeTabled(global::bnet.protocol.storage.TableId value) {
+      public Builder MergeTableId(global::bnet.protocol.storage.TableId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasTabled &&
-            result.tabled_ != global::bnet.protocol.storage.TableId.DefaultInstance) {
-            result.tabled_ = global::bnet.protocol.storage.TableId.CreateBuilder(result.tabled_).MergeFrom(value).BuildPartial();
+        if (result.hasTableId &&
+            result.tableId_ != global::bnet.protocol.storage.TableId.DefaultInstance) {
+            result.tableId_ = global::bnet.protocol.storage.TableId.CreateBuilder(result.tableId_).MergeFrom(value).BuildPartial();
         } else {
-          result.tabled_ = value;
+          result.tableId_ = value;
         }
-        result.hasTabled = true;
+        result.hasTableId = true;
         return this;
       }
-      public Builder ClearTabled() {
+      public Builder ClearTableId() {
         PrepareBuilder();
-        result.hasTabled = false;
-        result.tabled_ = null;
+        result.hasTableId = false;
+        result.tableId_ = null;
         return this;
       }
       
-      public bool HasColumnd {
-       get { return result.hasColumnd; }
+      public bool HasColumnId {
+       get { return result.hasColumnId; }
       }
-      public global::bnet.protocol.storage.ColumnId Columnd {
-        get { return result.Columnd; }
-        set { SetColumnd(value); }
+      public global::bnet.protocol.storage.ColumnId ColumnId {
+        get { return result.ColumnId; }
+        set { SetColumnId(value); }
       }
-      public Builder SetColumnd(global::bnet.protocol.storage.ColumnId value) {
+      public Builder SetColumnId(global::bnet.protocol.storage.ColumnId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasColumnd = true;
-        result.columnd_ = value;
+        result.hasColumnId = true;
+        result.columnId_ = value;
         return this;
       }
-      public Builder SetColumnd(global::bnet.protocol.storage.ColumnId.Builder builderForValue) {
+      public Builder SetColumnId(global::bnet.protocol.storage.ColumnId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasColumnd = true;
-        result.columnd_ = builderForValue.Build();
+        result.hasColumnId = true;
+        result.columnId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeColumnd(global::bnet.protocol.storage.ColumnId value) {
+      public Builder MergeColumnId(global::bnet.protocol.storage.ColumnId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasColumnd &&
-            result.columnd_ != global::bnet.protocol.storage.ColumnId.DefaultInstance) {
-            result.columnd_ = global::bnet.protocol.storage.ColumnId.CreateBuilder(result.columnd_).MergeFrom(value).BuildPartial();
+        if (result.hasColumnId &&
+            result.columnId_ != global::bnet.protocol.storage.ColumnId.DefaultInstance) {
+            result.columnId_ = global::bnet.protocol.storage.ColumnId.CreateBuilder(result.columnId_).MergeFrom(value).BuildPartial();
         } else {
-          result.columnd_ = value;
+          result.columnId_ = value;
         }
-        result.hasColumnd = true;
+        result.hasColumnId = true;
         return this;
       }
-      public Builder ClearColumnd() {
+      public Builder ClearColumnId() {
         PrepareBuilder();
-        result.hasColumnd = false;
-        result.columnd_ = null;
+        result.hasColumnId = false;
+        result.columnId_ = null;
         return this;
       }
       
@@ -5919,43 +5919,43 @@ namespace bnet.protocol.storage {
         return this;
       }
       
-      public bool HasAgentd {
-       get { return result.hasAgentd; }
+      public bool HasAgentId {
+       get { return result.hasAgentId; }
       }
-      public global::bnet.protocol.EntityId Agentd {
-        get { return result.Agentd; }
-        set { SetAgentd(value); }
+      public global::bnet.protocol.EntityId AgentId {
+        get { return result.AgentId; }
+        set { SetAgentId(value); }
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId value) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = value;
+        result.hasAgentId = true;
+        result.agentId_ = value;
         return this;
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = builderForValue.Build();
+        result.hasAgentId = true;
+        result.agentId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAgentd(global::bnet.protocol.EntityId value) {
+      public Builder MergeAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAgentd &&
-            result.agentd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.agentd_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentd_).MergeFrom(value).BuildPartial();
+        if (result.hasAgentId &&
+            result.agentId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.agentId_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentId_).MergeFrom(value).BuildPartial();
         } else {
-          result.agentd_ = value;
+          result.agentId_ = value;
         }
-        result.hasAgentd = true;
+        result.hasAgentId = true;
         return this;
       }
-      public Builder ClearAgentd() {
+      public Builder ClearAgentId() {
         PrepareBuilder();
-        result.hasAgentd = false;
-        result.agentd_ = null;
+        result.hasAgentId = false;
+        result.agentId_ = null;
         return this;
       }
       
@@ -6369,14 +6369,14 @@ namespace bnet.protocol.storage {
       get { return timeout_; }
     }
     
-    public const int AgentdFieldNumber = 9;
-    private bool hasAgentd;
-    private global::bnet.protocol.EntityId agentd_;
-    public bool HasAgentd {
-      get { return hasAgentd; }
+    public const int AgentIdFieldNumber = 9;
+    private bool hasAgentId;
+    private global::bnet.protocol.EntityId agentId_;
+    public bool HasAgentId {
+      get { return hasAgentId; }
     }
-    public global::bnet.protocol.EntityId Agentd {
-      get { return agentd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId AgentId {
+      get { return agentId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public const int QueryNameFieldNumber = 10;
@@ -6404,8 +6404,8 @@ namespace bnet.protocol.storage {
         foreach (global::bnet.protocol.storage.Operation element in OperationsList) {
           if (!element.IsInitialized) return false;
         }
-        if (HasAgentd) {
-          if (!Agentd.IsInitialized) return false;
+        if (HasAgentId) {
+          if (!AgentId.IsInitialized) return false;
         }
         return true;
       }
@@ -6435,8 +6435,8 @@ namespace bnet.protocol.storage {
       if (operations_.Count > 0) {
         output.WriteMessageArray(7, field_names[2], operations_);
       }
-      if (hasAgentd) {
-        output.WriteMessage(9, field_names[0], Agentd);
+      if (hasAgentId) {
+        output.WriteMessage(9, field_names[0], AgentId);
       }
       if (hasQueryName) {
         output.WriteString(10, field_names[5], QueryName);
@@ -6481,8 +6481,8 @@ namespace bnet.protocol.storage {
         if (hasTimeout) {
           size += pb::CodedOutputStream.ComputeUInt32Size(12, Timeout);
         }
-        if (hasAgentd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(9, Agentd);
+        if (hasAgentId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(9, AgentId);
         }
         if (hasQueryName) {
           size += pb::CodedOutputStream.ComputeStringSize(10, QueryName);
@@ -6641,8 +6641,8 @@ namespace bnet.protocol.storage {
         if (other.HasTimeout) {
           Timeout = other.Timeout;
         }
-        if (other.HasAgentd) {
-          MergeAgentd(other.Agentd);
+        if (other.HasAgentId) {
+          MergeAgentId(other.AgentId);
         }
         if (other.HasQueryName) {
           QueryName = other.QueryName;
@@ -6728,11 +6728,11 @@ namespace bnet.protocol.storage {
             }
             case 74: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasAgentd) {
-                subBuilder.MergeFrom(Agentd);
+              if (result.hasAgentId) {
+                subBuilder.MergeFrom(AgentId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Agentd = subBuilder.BuildPartial();
+              AgentId = subBuilder.BuildPartial();
               break;
             }
             case 82: {
@@ -6962,43 +6962,43 @@ namespace bnet.protocol.storage {
         return this;
       }
       
-      public bool HasAgentd {
-       get { return result.hasAgentd; }
+      public bool HasAgentId {
+       get { return result.hasAgentId; }
       }
-      public global::bnet.protocol.EntityId Agentd {
-        get { return result.Agentd; }
-        set { SetAgentd(value); }
+      public global::bnet.protocol.EntityId AgentId {
+        get { return result.AgentId; }
+        set { SetAgentId(value); }
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId value) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = value;
+        result.hasAgentId = true;
+        result.agentId_ = value;
         return this;
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = builderForValue.Build();
+        result.hasAgentId = true;
+        result.agentId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAgentd(global::bnet.protocol.EntityId value) {
+      public Builder MergeAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAgentd &&
-            result.agentd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.agentd_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentd_).MergeFrom(value).BuildPartial();
+        if (result.hasAgentId &&
+            result.agentId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.agentId_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentId_).MergeFrom(value).BuildPartial();
         } else {
-          result.agentd_ = value;
+          result.agentId_ = value;
         }
-        result.hasAgentd = true;
+        result.hasAgentId = true;
         return this;
       }
-      public Builder ClearAgentd() {
+      public Builder ClearAgentId() {
         PrepareBuilder();
-        result.hasAgentd = false;
-        result.agentd_ = null;
+        result.hasAgentId = false;
+        result.agentId_ = null;
         return this;
       }
       

@@ -11,7 +11,7 @@ namespace bnet.protocol.channel_invitation {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public static partial class Channelnvitation {
+  public static partial class ChannelInvitation {
   
     #region Extension registration
     public static void RegisterAllExtensions(pb::ExtensionRegistry registry) {
@@ -47,7 +47,7 @@ namespace bnet.protocol.channel_invitation {
     }
     private static pbd::FileDescriptor descriptor;
     
-    static Channelnvitation() {
+    static ChannelInvitation() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           "Cj5zZXJ2aWNlL2NoYW5uZWxfaW52aXRhdGlvbi9kZWZpbml0aW9uL2NoYW5u" + 
           "ZWxfaW52aXRhdGlvbi5wcm90bxIgYm5ldC5wcm90b2NvbC5jaGFubmVsX2lu" + 
@@ -118,31 +118,31 @@ namespace bnet.protocol.channel_invitation {
         internal__static_bnet_protocol_channel_invitation_AcceptInvitationRequest__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_channel_invitation_AcceptInvitationRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.AcceptInvitationRequest, global::bnet.protocol.channel_invitation.AcceptInvitationRequest.Builder>(internal__static_bnet_protocol_channel_invitation_AcceptInvitationRequest__Descriptor,
-                new string[] { "Agentd", "İnvitationd", "Objectd", });
+                new string[] { "AgentId", "InvitationId", "ObjectId", });
         internal__static_bnet_protocol_channel_invitation_AcceptInvitationResponse__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_channel_invitation_AcceptInvitationResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.AcceptInvitationResponse, global::bnet.protocol.channel_invitation.AcceptInvitationResponse.Builder>(internal__static_bnet_protocol_channel_invitation_AcceptInvitationResponse__Descriptor,
-                new string[] { "Objectd", });
+                new string[] { "ObjectId", });
         internal__static_bnet_protocol_channel_invitation_SubscribeRequest__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_channel_invitation_SubscribeRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.SubscribeRequest, global::bnet.protocol.channel_invitation.SubscribeRequest.Builder>(internal__static_bnet_protocol_channel_invitation_SubscribeRequest__Descriptor,
-                new string[] { "Agentd", "Objectd", });
+                new string[] { "AgentId", "ObjectId", });
         internal__static_bnet_protocol_channel_invitation_SubscribeResponse__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_channel_invitation_SubscribeResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.SubscribeResponse, global::bnet.protocol.channel_invitation.SubscribeResponse.Builder>(internal__static_bnet_protocol_channel_invitation_SubscribeResponse__Descriptor,
-                new string[] { "Collection", "Receivednvitation", });
+                new string[] { "Collection", "ReceivedInvitation", });
         internal__static_bnet_protocol_channel_invitation_UnsubscribeRequest__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_channel_invitation_UnsubscribeRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.UnsubscribeRequest, global::bnet.protocol.channel_invitation.UnsubscribeRequest.Builder>(internal__static_bnet_protocol_channel_invitation_UnsubscribeRequest__Descriptor,
-                new string[] { "Agentd", });
+                new string[] { "AgentId", });
         internal__static_bnet_protocol_channel_invitation_SuggestInvitationRequest__Descriptor = Descriptor.MessageTypes[5];
         internal__static_bnet_protocol_channel_invitation_SuggestInvitationRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.SuggestInvitationRequest, global::bnet.protocol.channel_invitation.SuggestInvitationRequest.Builder>(internal__static_bnet_protocol_channel_invitation_SuggestInvitationRequest__Descriptor,
-                new string[] { "Agentd", "Channeld", "Targetd", "Approvald", });
+                new string[] { "AgentId", "ChannelId", "TargetId", "ApprovalId", });
         internal__static_bnet_protocol_channel_invitation_RevokeInvitationRequest__Descriptor = Descriptor.MessageTypes[6];
         internal__static_bnet_protocol_channel_invitation_RevokeInvitationRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.RevokeInvitationRequest, global::bnet.protocol.channel_invitation.RevokeInvitationRequest.Builder>(internal__static_bnet_protocol_channel_invitation_RevokeInvitationRequest__Descriptor,
-                new string[] { "Agentd", "Targetd", "İnvitationd", "Channeld", });
+                new string[] { "AgentId", "TargetId", "InvitationId", "ChannelId", });
         internal__static_bnet_protocol_channel_invitation_HasRoomForInvitationRequest__Descriptor = Descriptor.MessageTypes[7];
         internal__static_bnet_protocol_channel_invitation_HasRoomForInvitationRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.HasRoomForInvitationRequest, global::bnet.protocol.channel_invitation.HasRoomForInvitationRequest.Builder>(internal__static_bnet_protocol_channel_invitation_HasRoomForInvitationRequest__Descriptor,
@@ -150,11 +150,11 @@ namespace bnet.protocol.channel_invitation {
         internal__static_bnet_protocol_channel_invitation_InvitationAddedNotification__Descriptor = Descriptor.MessageTypes[8];
         internal__static_bnet_protocol_channel_invitation_InvitationAddedNotification__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.InvitationAddedNotification, global::bnet.protocol.channel_invitation.InvitationAddedNotification.Builder>(internal__static_bnet_protocol_channel_invitation_InvitationAddedNotification__Descriptor,
-                new string[] { "İnvitation", });
+                new string[] { "Invitation", });
         internal__static_bnet_protocol_channel_invitation_InvitationRemovedNotification__Descriptor = Descriptor.MessageTypes[9];
         internal__static_bnet_protocol_channel_invitation_InvitationRemovedNotification__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.InvitationRemovedNotification, global::bnet.protocol.channel_invitation.InvitationRemovedNotification.Builder>(internal__static_bnet_protocol_channel_invitation_InvitationRemovedNotification__Descriptor,
-                new string[] { "İnvitation", "Reason", });
+                new string[] { "Invitation", "Reason", });
         internal__static_bnet_protocol_channel_invitation_SuggestionAddedNotification__Descriptor = Descriptor.MessageTypes[10];
         internal__static_bnet_protocol_channel_invitation_SuggestionAddedNotification__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.SuggestionAddedNotification, global::bnet.protocol.channel_invitation.SuggestionAddedNotification.Builder>(internal__static_bnet_protocol_channel_invitation_SuggestionAddedNotification__Descriptor,
@@ -162,19 +162,19 @@ namespace bnet.protocol.channel_invitation {
         pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
         RegisterAllExtensions(registry);
         global::bnet.protocol.Entity.RegisterAllExtensions(registry);
-        global::bnet.protocol.invitation.İnvitation.RegisterAllExtensions(registry);
+        global::bnet.protocol.invitation.Proto.Invitation.RegisterAllExtensions(registry);
         global::bnet.protocol.Rpc.RegisterAllExtensions(registry);
         global::bnet.protocol.channel.Proto.Channel.RegisterAllExtensions(registry);
-        global::bnet.protocol.channel_invitation.ChannelnvitationTypes.RegisterAllExtensions(registry);
+        global::bnet.protocol.channel_invitation.ChannelInvitationTypes.RegisterAllExtensions(registry);
         return registry;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
           new pbd::FileDescriptor[] {
           global::bnet.protocol.Entity.Descriptor, 
-          global::bnet.protocol.invitation.İnvitation.Descriptor, 
+          global::bnet.protocol.invitation.Proto.Invitation.Descriptor, 
           global::bnet.protocol.Rpc.Descriptor, 
           global::bnet.protocol.channel.Proto.Channel.Descriptor, 
-          global::bnet.protocol.channel_invitation.ChannelnvitationTypes.Descriptor, 
+          global::bnet.protocol.channel_invitation.ChannelInvitationTypes.Descriptor, 
           }, assigner);
     }
     #endregion
@@ -202,49 +202,49 @@ namespace bnet.protocol.channel_invitation {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_AcceptInvitationRequest__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_AcceptInvitationRequest__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<AcceptInvitationRequest, AcceptInvitationRequest.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_AcceptInvitationRequest__FieldAccessorTable; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_AcceptInvitationRequest__FieldAccessorTable; }
     }
     
-    public const int AgentdFieldNumber = 1;
-    private bool hasAgentd;
-    private global::bnet.protocol.EntityId agentd_;
-    public bool HasAgentd {
-      get { return hasAgentd; }
+    public const int AgentIdFieldNumber = 1;
+    private bool hasAgentId;
+    private global::bnet.protocol.EntityId agentId_;
+    public bool HasAgentId {
+      get { return hasAgentId; }
     }
-    public global::bnet.protocol.EntityId Agentd {
-      get { return agentd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
-    }
-    
-    public const int İnvitationdFieldNumber = 2;
-    private bool hasİnvitationd;
-    private ulong invitationd_;
-    public bool Hasİnvitationd {
-      get { return hasİnvitationd; }
-    }
-    public ulong İnvitationd {
-      get { return invitationd_; }
+    public global::bnet.protocol.EntityId AgentId {
+      get { return agentId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
-    public const int ObjectdFieldNumber = 3;
-    private bool hasObjectd;
-    private ulong objectd_;
-    public bool HasObjectd {
-      get { return hasObjectd; }
+    public const int InvitationIdFieldNumber = 2;
+    private bool hasInvitationId;
+    private ulong invitationId_;
+    public bool HasInvitationId {
+      get { return hasInvitationId; }
     }
-    public ulong Objectd {
-      get { return objectd_; }
+    public ulong InvitationId {
+      get { return invitationId_; }
+    }
+    
+    public const int ObjectIdFieldNumber = 3;
+    private bool hasObjectId;
+    private ulong objectId_;
+    public bool HasObjectId {
+      get { return hasObjectId; }
+    }
+    public ulong ObjectId {
+      get { return objectId_; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasİnvitationd) return false;
-        if (!hasObjectd) return false;
-        if (HasAgentd) {
-          if (!Agentd.IsInitialized) return false;
+        if (!hasInvitationId) return false;
+        if (!hasObjectId) return false;
+        if (HasAgentId) {
+          if (!AgentId.IsInitialized) return false;
         }
         return true;
       }
@@ -253,14 +253,14 @@ namespace bnet.protocol.channel_invitation {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _acceptInvitationRequestFieldNames;
-      if (hasAgentd) {
-        output.WriteMessage(1, field_names[0], Agentd);
+      if (hasAgentId) {
+        output.WriteMessage(1, field_names[0], AgentId);
       }
-      if (hasİnvitationd) {
-        output.WriteFixed64(2, field_names[1], İnvitationd);
+      if (hasInvitationId) {
+        output.WriteFixed64(2, field_names[1], InvitationId);
       }
-      if (hasObjectd) {
-        output.WriteUInt64(3, field_names[2], Objectd);
+      if (hasObjectId) {
+        output.WriteUInt64(3, field_names[2], ObjectId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -272,14 +272,14 @@ namespace bnet.protocol.channel_invitation {
         if (size != -1) return size;
         
         size = 0;
-        if (hasAgentd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Agentd);
+        if (hasAgentId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AgentId);
         }
-        if (hasİnvitationd) {
-          size += pb::CodedOutputStream.ComputeFixed64Size(2, İnvitationd);
+        if (hasInvitationId) {
+          size += pb::CodedOutputStream.ComputeFixed64Size(2, InvitationId);
         }
-        if (hasObjectd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(3, Objectd);
+        if (hasObjectId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(3, ObjectId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -407,14 +407,14 @@ namespace bnet.protocol.channel_invitation {
       public override Builder MergeFrom(AcceptInvitationRequest other) {
         if (other == global::bnet.protocol.channel_invitation.AcceptInvitationRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasAgentd) {
-          MergeAgentd(other.Agentd);
+        if (other.HasAgentId) {
+          MergeAgentId(other.AgentId);
         }
-        if (other.Hasİnvitationd) {
-          İnvitationd = other.İnvitationd;
+        if (other.HasInvitationId) {
+          InvitationId = other.InvitationId;
         }
-        if (other.HasObjectd) {
-          Objectd = other.Objectd;
+        if (other.HasObjectId) {
+          ObjectId = other.ObjectId;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -461,19 +461,19 @@ namespace bnet.protocol.channel_invitation {
             }
             case 10: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasAgentd) {
-                subBuilder.MergeFrom(Agentd);
+              if (result.hasAgentId) {
+                subBuilder.MergeFrom(AgentId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Agentd = subBuilder.BuildPartial();
+              AgentId = subBuilder.BuildPartial();
               break;
             }
             case 17: {
-              result.hasİnvitationd = input.ReadFixed64(ref result.invitationd_);
+              result.hasInvitationId = input.ReadFixed64(ref result.invitationId_);
               break;
             }
             case 24: {
-              result.hasObjectd = input.ReadUInt64(ref result.objectd_);
+              result.hasObjectId = input.ReadUInt64(ref result.objectId_);
               break;
             }
           }
@@ -486,88 +486,88 @@ namespace bnet.protocol.channel_invitation {
       }
       
       
-      public bool HasAgentd {
-       get { return result.hasAgentd; }
+      public bool HasAgentId {
+       get { return result.hasAgentId; }
       }
-      public global::bnet.protocol.EntityId Agentd {
-        get { return result.Agentd; }
-        set { SetAgentd(value); }
+      public global::bnet.protocol.EntityId AgentId {
+        get { return result.AgentId; }
+        set { SetAgentId(value); }
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId value) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = value;
+        result.hasAgentId = true;
+        result.agentId_ = value;
         return this;
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = builderForValue.Build();
+        result.hasAgentId = true;
+        result.agentId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAgentd(global::bnet.protocol.EntityId value) {
+      public Builder MergeAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAgentd &&
-            result.agentd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.agentd_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentd_).MergeFrom(value).BuildPartial();
+        if (result.hasAgentId &&
+            result.agentId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.agentId_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentId_).MergeFrom(value).BuildPartial();
         } else {
-          result.agentd_ = value;
+          result.agentId_ = value;
         }
-        result.hasAgentd = true;
+        result.hasAgentId = true;
         return this;
       }
-      public Builder ClearAgentd() {
+      public Builder ClearAgentId() {
         PrepareBuilder();
-        result.hasAgentd = false;
-        result.agentd_ = null;
-        return this;
-      }
-      
-      public bool Hasİnvitationd {
-        get { return result.hasİnvitationd; }
-      }
-      public ulong İnvitationd {
-        get { return result.İnvitationd; }
-        set { Setİnvitationd(value); }
-      }
-      public Builder Setİnvitationd(ulong value) {
-        PrepareBuilder();
-        result.hasİnvitationd = true;
-        result.invitationd_ = value;
-        return this;
-      }
-      public Builder Clearİnvitationd() {
-        PrepareBuilder();
-        result.hasİnvitationd = false;
-        result.invitationd_ = 0;
+        result.hasAgentId = false;
+        result.agentId_ = null;
         return this;
       }
       
-      public bool HasObjectd {
-        get { return result.hasObjectd; }
+      public bool HasInvitationId {
+        get { return result.hasInvitationId; }
       }
-      public ulong Objectd {
-        get { return result.Objectd; }
-        set { SetObjectd(value); }
+      public ulong InvitationId {
+        get { return result.InvitationId; }
+        set { SetInvitationId(value); }
       }
-      public Builder SetObjectd(ulong value) {
+      public Builder SetInvitationId(ulong value) {
         PrepareBuilder();
-        result.hasObjectd = true;
-        result.objectd_ = value;
+        result.hasInvitationId = true;
+        result.invitationId_ = value;
         return this;
       }
-      public Builder ClearObjectd() {
+      public Builder ClearInvitationId() {
         PrepareBuilder();
-        result.hasObjectd = false;
-        result.objectd_ = 0UL;
+        result.hasInvitationId = false;
+        result.invitationId_ = 0;
+        return this;
+      }
+      
+      public bool HasObjectId {
+        get { return result.hasObjectId; }
+      }
+      public ulong ObjectId {
+        get { return result.ObjectId; }
+        set { SetObjectId(value); }
+      }
+      public Builder SetObjectId(ulong value) {
+        PrepareBuilder();
+        result.hasObjectId = true;
+        result.objectId_ = value;
+        return this;
+      }
+      public Builder ClearObjectId() {
+        PrepareBuilder();
+        result.hasObjectId = false;
+        result.objectId_ = 0UL;
         return this;
       }
     }
     static AcceptInvitationRequest() {
-      object.ReferenceEquals(global::bnet.protocol.channel_invitation.Channelnvitation.Descriptor, null);
+      object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor, null);
     }
   }
   
@@ -592,26 +592,26 @@ namespace bnet.protocol.channel_invitation {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_AcceptInvitationResponse__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_AcceptInvitationResponse__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<AcceptInvitationResponse, AcceptInvitationResponse.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_AcceptInvitationResponse__FieldAccessorTable; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_AcceptInvitationResponse__FieldAccessorTable; }
     }
     
-    public const int ObjectdFieldNumber = 1;
-    private bool hasObjectd;
-    private ulong objectd_;
-    public bool HasObjectd {
-      get { return hasObjectd; }
+    public const int ObjectIdFieldNumber = 1;
+    private bool hasObjectId;
+    private ulong objectId_;
+    public bool HasObjectId {
+      get { return hasObjectId; }
     }
-    public ulong Objectd {
-      get { return objectd_; }
+    public ulong ObjectId {
+      get { return objectId_; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasObjectd) return false;
+        if (!hasObjectId) return false;
         return true;
       }
     }
@@ -619,8 +619,8 @@ namespace bnet.protocol.channel_invitation {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _acceptInvitationResponseFieldNames;
-      if (hasObjectd) {
-        output.WriteUInt64(1, field_names[0], Objectd);
+      if (hasObjectId) {
+        output.WriteUInt64(1, field_names[0], ObjectId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -632,8 +632,8 @@ namespace bnet.protocol.channel_invitation {
         if (size != -1) return size;
         
         size = 0;
-        if (hasObjectd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(1, Objectd);
+        if (hasObjectId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(1, ObjectId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -761,8 +761,8 @@ namespace bnet.protocol.channel_invitation {
       public override Builder MergeFrom(AcceptInvitationResponse other) {
         if (other == global::bnet.protocol.channel_invitation.AcceptInvitationResponse.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasObjectd) {
-          Objectd = other.Objectd;
+        if (other.HasObjectId) {
+          ObjectId = other.ObjectId;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -808,7 +808,7 @@ namespace bnet.protocol.channel_invitation {
               break;
             }
             case 8: {
-              result.hasObjectd = input.ReadUInt64(ref result.objectd_);
+              result.hasObjectId = input.ReadUInt64(ref result.objectId_);
               break;
             }
           }
@@ -821,28 +821,28 @@ namespace bnet.protocol.channel_invitation {
       }
       
       
-      public bool HasObjectd {
-        get { return result.hasObjectd; }
+      public bool HasObjectId {
+        get { return result.hasObjectId; }
       }
-      public ulong Objectd {
-        get { return result.Objectd; }
-        set { SetObjectd(value); }
+      public ulong ObjectId {
+        get { return result.ObjectId; }
+        set { SetObjectId(value); }
       }
-      public Builder SetObjectd(ulong value) {
+      public Builder SetObjectId(ulong value) {
         PrepareBuilder();
-        result.hasObjectd = true;
-        result.objectd_ = value;
+        result.hasObjectId = true;
+        result.objectId_ = value;
         return this;
       }
-      public Builder ClearObjectd() {
+      public Builder ClearObjectId() {
         PrepareBuilder();
-        result.hasObjectd = false;
-        result.objectd_ = 0UL;
+        result.hasObjectId = false;
+        result.objectId_ = 0UL;
         return this;
       }
     }
     static AcceptInvitationResponse() {
-      object.ReferenceEquals(global::bnet.protocol.channel_invitation.Channelnvitation.Descriptor, null);
+      object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor, null);
     }
   }
   
@@ -867,38 +867,38 @@ namespace bnet.protocol.channel_invitation {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_SubscribeRequest__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_SubscribeRequest__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<SubscribeRequest, SubscribeRequest.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_SubscribeRequest__FieldAccessorTable; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_SubscribeRequest__FieldAccessorTable; }
     }
     
-    public const int AgentdFieldNumber = 1;
-    private bool hasAgentd;
-    private global::bnet.protocol.EntityId agentd_;
-    public bool HasAgentd {
-      get { return hasAgentd; }
+    public const int AgentIdFieldNumber = 1;
+    private bool hasAgentId;
+    private global::bnet.protocol.EntityId agentId_;
+    public bool HasAgentId {
+      get { return hasAgentId; }
     }
-    public global::bnet.protocol.EntityId Agentd {
-      get { return agentd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId AgentId {
+      get { return agentId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
-    public const int ObjectdFieldNumber = 2;
-    private bool hasObjectd;
-    private ulong objectd_;
-    public bool HasObjectd {
-      get { return hasObjectd; }
+    public const int ObjectIdFieldNumber = 2;
+    private bool hasObjectId;
+    private ulong objectId_;
+    public bool HasObjectId {
+      get { return hasObjectId; }
     }
-    public ulong Objectd {
-      get { return objectd_; }
+    public ulong ObjectId {
+      get { return objectId_; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasObjectd) return false;
-        if (HasAgentd) {
-          if (!Agentd.IsInitialized) return false;
+        if (!hasObjectId) return false;
+        if (HasAgentId) {
+          if (!AgentId.IsInitialized) return false;
         }
         return true;
       }
@@ -907,11 +907,11 @@ namespace bnet.protocol.channel_invitation {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _subscribeRequestFieldNames;
-      if (hasAgentd) {
-        output.WriteMessage(1, field_names[0], Agentd);
+      if (hasAgentId) {
+        output.WriteMessage(1, field_names[0], AgentId);
       }
-      if (hasObjectd) {
-        output.WriteUInt64(2, field_names[1], Objectd);
+      if (hasObjectId) {
+        output.WriteUInt64(2, field_names[1], ObjectId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -923,11 +923,11 @@ namespace bnet.protocol.channel_invitation {
         if (size != -1) return size;
         
         size = 0;
-        if (hasAgentd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Agentd);
+        if (hasAgentId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AgentId);
         }
-        if (hasObjectd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, Objectd);
+        if (hasObjectId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, ObjectId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1055,11 +1055,11 @@ namespace bnet.protocol.channel_invitation {
       public override Builder MergeFrom(SubscribeRequest other) {
         if (other == global::bnet.protocol.channel_invitation.SubscribeRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasAgentd) {
-          MergeAgentd(other.Agentd);
+        if (other.HasAgentId) {
+          MergeAgentId(other.AgentId);
         }
-        if (other.HasObjectd) {
-          Objectd = other.Objectd;
+        if (other.HasObjectId) {
+          ObjectId = other.ObjectId;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1106,15 +1106,15 @@ namespace bnet.protocol.channel_invitation {
             }
             case 10: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasAgentd) {
-                subBuilder.MergeFrom(Agentd);
+              if (result.hasAgentId) {
+                subBuilder.MergeFrom(AgentId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Agentd = subBuilder.BuildPartial();
+              AgentId = subBuilder.BuildPartial();
               break;
             }
             case 16: {
-              result.hasObjectd = input.ReadUInt64(ref result.objectd_);
+              result.hasObjectId = input.ReadUInt64(ref result.objectId_);
               break;
             }
           }
@@ -1127,68 +1127,68 @@ namespace bnet.protocol.channel_invitation {
       }
       
       
-      public bool HasAgentd {
-       get { return result.hasAgentd; }
+      public bool HasAgentId {
+       get { return result.hasAgentId; }
       }
-      public global::bnet.protocol.EntityId Agentd {
-        get { return result.Agentd; }
-        set { SetAgentd(value); }
+      public global::bnet.protocol.EntityId AgentId {
+        get { return result.AgentId; }
+        set { SetAgentId(value); }
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId value) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = value;
+        result.hasAgentId = true;
+        result.agentId_ = value;
         return this;
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = builderForValue.Build();
+        result.hasAgentId = true;
+        result.agentId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAgentd(global::bnet.protocol.EntityId value) {
+      public Builder MergeAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAgentd &&
-            result.agentd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.agentd_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentd_).MergeFrom(value).BuildPartial();
+        if (result.hasAgentId &&
+            result.agentId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.agentId_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentId_).MergeFrom(value).BuildPartial();
         } else {
-          result.agentd_ = value;
+          result.agentId_ = value;
         }
-        result.hasAgentd = true;
+        result.hasAgentId = true;
         return this;
       }
-      public Builder ClearAgentd() {
+      public Builder ClearAgentId() {
         PrepareBuilder();
-        result.hasAgentd = false;
-        result.agentd_ = null;
+        result.hasAgentId = false;
+        result.agentId_ = null;
         return this;
       }
       
-      public bool HasObjectd {
-        get { return result.hasObjectd; }
+      public bool HasObjectId {
+        get { return result.hasObjectId; }
       }
-      public ulong Objectd {
-        get { return result.Objectd; }
-        set { SetObjectd(value); }
+      public ulong ObjectId {
+        get { return result.ObjectId; }
+        set { SetObjectId(value); }
       }
-      public Builder SetObjectd(ulong value) {
+      public Builder SetObjectId(ulong value) {
         PrepareBuilder();
-        result.hasObjectd = true;
-        result.objectd_ = value;
+        result.hasObjectId = true;
+        result.objectId_ = value;
         return this;
       }
-      public Builder ClearObjectd() {
+      public Builder ClearObjectId() {
         PrepareBuilder();
-        result.hasObjectd = false;
-        result.objectd_ = 0UL;
+        result.hasObjectId = false;
+        result.objectId_ = 0UL;
         return this;
       }
     }
     static SubscribeRequest() {
-      object.ReferenceEquals(global::bnet.protocol.channel_invitation.Channelnvitation.Descriptor, null);
+      object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor, null);
     }
   }
   
@@ -1213,11 +1213,11 @@ namespace bnet.protocol.channel_invitation {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_SubscribeResponse__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_SubscribeResponse__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<SubscribeResponse, SubscribeResponse.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_SubscribeResponse__FieldAccessorTable; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_SubscribeResponse__FieldAccessorTable; }
     }
     
     public const int CollectionFieldNumber = 1;
@@ -1232,16 +1232,16 @@ namespace bnet.protocol.channel_invitation {
       return collection_[index];
     }
     
-    public const int ReceivednvitationFieldNumber = 2;
-    private pbc::PopsicleList<global::bnet.protocol.invitation.Invitation> receivednvitation_ = new pbc::PopsicleList<global::bnet.protocol.invitation.Invitation>();
-    public scg::IList<global::bnet.protocol.invitation.Invitation> ReceivednvitationList {
-      get { return receivednvitation_; }
+    public const int ReceivedInvitationFieldNumber = 2;
+    private pbc::PopsicleList<global::bnet.protocol.invitation.Invitation> receivedInvitation_ = new pbc::PopsicleList<global::bnet.protocol.invitation.Invitation>();
+    public scg::IList<global::bnet.protocol.invitation.Invitation> ReceivedInvitationList {
+      get { return receivedInvitation_; }
     }
-    public int ReceivednvitationCount {
-      get { return receivednvitation_.Count; }
+    public int ReceivedInvitationCount {
+      get { return receivedInvitation_.Count; }
     }
-    public global::bnet.protocol.invitation.Invitation GetReceivednvitation(int index) {
-      return receivednvitation_[index];
+    public global::bnet.protocol.invitation.Invitation GetReceivedInvitation(int index) {
+      return receivedInvitation_[index];
     }
     
     public override bool IsInitialized {
@@ -1249,7 +1249,7 @@ namespace bnet.protocol.channel_invitation {
         foreach (global::bnet.protocol.channel_invitation.InvitationCollection element in CollectionList) {
           if (!element.IsInitialized) return false;
         }
-        foreach (global::bnet.protocol.invitation.Invitation element in ReceivednvitationList) {
+        foreach (global::bnet.protocol.invitation.Invitation element in ReceivedInvitationList) {
           if (!element.IsInitialized) return false;
         }
         return true;
@@ -1262,8 +1262,8 @@ namespace bnet.protocol.channel_invitation {
       if (collection_.Count > 0) {
         output.WriteMessageArray(1, field_names[0], collection_);
       }
-      if (receivednvitation_.Count > 0) {
-        output.WriteMessageArray(2, field_names[1], receivednvitation_);
+      if (receivedInvitation_.Count > 0) {
+        output.WriteMessageArray(2, field_names[1], receivedInvitation_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1278,7 +1278,7 @@ namespace bnet.protocol.channel_invitation {
         foreach (global::bnet.protocol.channel_invitation.InvitationCollection element in CollectionList) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
         }
-        foreach (global::bnet.protocol.invitation.Invitation element in ReceivednvitationList) {
+        foreach (global::bnet.protocol.invitation.Invitation element in ReceivedInvitationList) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, element);
         }
         size += UnknownFields.SerializedSize;
@@ -1319,7 +1319,7 @@ namespace bnet.protocol.channel_invitation {
     }
     private SubscribeResponse MakeReadOnly() {
       collection_.MakeReadOnly();
-      receivednvitation_.MakeReadOnly();
+      receivedInvitation_.MakeReadOnly();
       return this;
     }
     
@@ -1412,8 +1412,8 @@ namespace bnet.protocol.channel_invitation {
         if (other.collection_.Count != 0) {
           result.collection_.Add(other.collection_);
         }
-        if (other.receivednvitation_.Count != 0) {
-          result.receivednvitation_.Add(other.receivednvitation_);
+        if (other.receivedInvitation_.Count != 0) {
+          result.receivedInvitation_.Add(other.receivedInvitation_);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1463,7 +1463,7 @@ namespace bnet.protocol.channel_invitation {
               break;
             }
             case 18: {
-              input.ReadMessageArray(tag, field_name, result.receivednvitation_, global::bnet.protocol.invitation.Invitation.DefaultInstance, extensionRegistry);
+              input.ReadMessageArray(tag, field_name, result.receivedInvitation_, global::bnet.protocol.invitation.Invitation.DefaultInstance, extensionRegistry);
               break;
             }
           }
@@ -1520,52 +1520,52 @@ namespace bnet.protocol.channel_invitation {
         return this;
       }
       
-      public pbc::IPopsicleList<global::bnet.protocol.invitation.Invitation> ReceivednvitationList {
-        get { return PrepareBuilder().receivednvitation_; }
+      public pbc::IPopsicleList<global::bnet.protocol.invitation.Invitation> ReceivedInvitationList {
+        get { return PrepareBuilder().receivedInvitation_; }
       }
-      public int ReceivednvitationCount {
-        get { return result.ReceivednvitationCount; }
+      public int ReceivedInvitationCount {
+        get { return result.ReceivedInvitationCount; }
       }
-      public global::bnet.protocol.invitation.Invitation GetReceivednvitation(int index) {
-        return result.GetReceivednvitation(index);
+      public global::bnet.protocol.invitation.Invitation GetReceivedInvitation(int index) {
+        return result.GetReceivedInvitation(index);
       }
-      public Builder SetReceivednvitation(int index, global::bnet.protocol.invitation.Invitation value) {
+      public Builder SetReceivedInvitation(int index, global::bnet.protocol.invitation.Invitation value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.receivednvitation_[index] = value;
+        result.receivedInvitation_[index] = value;
         return this;
       }
-      public Builder SetReceivednvitation(int index, global::bnet.protocol.invitation.Invitation.Builder builderForValue) {
+      public Builder SetReceivedInvitation(int index, global::bnet.protocol.invitation.Invitation.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.receivednvitation_[index] = builderForValue.Build();
+        result.receivedInvitation_[index] = builderForValue.Build();
         return this;
       }
-      public Builder AddReceivednvitation(global::bnet.protocol.invitation.Invitation value) {
+      public Builder AddReceivedInvitation(global::bnet.protocol.invitation.Invitation value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.receivednvitation_.Add(value);
+        result.receivedInvitation_.Add(value);
         return this;
       }
-      public Builder AddReceivednvitation(global::bnet.protocol.invitation.Invitation.Builder builderForValue) {
+      public Builder AddReceivedInvitation(global::bnet.protocol.invitation.Invitation.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.receivednvitation_.Add(builderForValue.Build());
+        result.receivedInvitation_.Add(builderForValue.Build());
         return this;
       }
-      public Builder AddRangeReceivednvitation(scg::IEnumerable<global::bnet.protocol.invitation.Invitation> values) {
+      public Builder AddRangeReceivedInvitation(scg::IEnumerable<global::bnet.protocol.invitation.Invitation> values) {
         PrepareBuilder();
-        result.receivednvitation_.Add(values);
+        result.receivedInvitation_.Add(values);
         return this;
       }
-      public Builder ClearReceivednvitation() {
+      public Builder ClearReceivedInvitation() {
         PrepareBuilder();
-        result.receivednvitation_.Clear();
+        result.receivedInvitation_.Clear();
         return this;
       }
     }
     static SubscribeResponse() {
-      object.ReferenceEquals(global::bnet.protocol.channel_invitation.Channelnvitation.Descriptor, null);
+      object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor, null);
     }
   }
   
@@ -1590,27 +1590,27 @@ namespace bnet.protocol.channel_invitation {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_UnsubscribeRequest__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_UnsubscribeRequest__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<UnsubscribeRequest, UnsubscribeRequest.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_UnsubscribeRequest__FieldAccessorTable; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_UnsubscribeRequest__FieldAccessorTable; }
     }
     
-    public const int AgentdFieldNumber = 1;
-    private bool hasAgentd;
-    private global::bnet.protocol.EntityId agentd_;
-    public bool HasAgentd {
-      get { return hasAgentd; }
+    public const int AgentIdFieldNumber = 1;
+    private bool hasAgentId;
+    private global::bnet.protocol.EntityId agentId_;
+    public bool HasAgentId {
+      get { return hasAgentId; }
     }
-    public global::bnet.protocol.EntityId Agentd {
-      get { return agentd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId AgentId {
+      get { return agentId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (HasAgentd) {
-          if (!Agentd.IsInitialized) return false;
+        if (HasAgentId) {
+          if (!AgentId.IsInitialized) return false;
         }
         return true;
       }
@@ -1619,8 +1619,8 @@ namespace bnet.protocol.channel_invitation {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _unsubscribeRequestFieldNames;
-      if (hasAgentd) {
-        output.WriteMessage(1, field_names[0], Agentd);
+      if (hasAgentId) {
+        output.WriteMessage(1, field_names[0], AgentId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1632,8 +1632,8 @@ namespace bnet.protocol.channel_invitation {
         if (size != -1) return size;
         
         size = 0;
-        if (hasAgentd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Agentd);
+        if (hasAgentId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AgentId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1761,8 +1761,8 @@ namespace bnet.protocol.channel_invitation {
       public override Builder MergeFrom(UnsubscribeRequest other) {
         if (other == global::bnet.protocol.channel_invitation.UnsubscribeRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasAgentd) {
-          MergeAgentd(other.Agentd);
+        if (other.HasAgentId) {
+          MergeAgentId(other.AgentId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1809,11 +1809,11 @@ namespace bnet.protocol.channel_invitation {
             }
             case 10: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasAgentd) {
-                subBuilder.MergeFrom(Agentd);
+              if (result.hasAgentId) {
+                subBuilder.MergeFrom(AgentId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Agentd = subBuilder.BuildPartial();
+              AgentId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -1826,48 +1826,48 @@ namespace bnet.protocol.channel_invitation {
       }
       
       
-      public bool HasAgentd {
-       get { return result.hasAgentd; }
+      public bool HasAgentId {
+       get { return result.hasAgentId; }
       }
-      public global::bnet.protocol.EntityId Agentd {
-        get { return result.Agentd; }
-        set { SetAgentd(value); }
+      public global::bnet.protocol.EntityId AgentId {
+        get { return result.AgentId; }
+        set { SetAgentId(value); }
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId value) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = value;
+        result.hasAgentId = true;
+        result.agentId_ = value;
         return this;
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = builderForValue.Build();
+        result.hasAgentId = true;
+        result.agentId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAgentd(global::bnet.protocol.EntityId value) {
+      public Builder MergeAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAgentd &&
-            result.agentd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.agentd_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentd_).MergeFrom(value).BuildPartial();
+        if (result.hasAgentId &&
+            result.agentId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.agentId_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentId_).MergeFrom(value).BuildPartial();
         } else {
-          result.agentd_ = value;
+          result.agentId_ = value;
         }
-        result.hasAgentd = true;
+        result.hasAgentId = true;
         return this;
       }
-      public Builder ClearAgentd() {
+      public Builder ClearAgentId() {
         PrepareBuilder();
-        result.hasAgentd = false;
-        result.agentd_ = null;
+        result.hasAgentId = false;
+        result.agentId_ = null;
         return this;
       }
     }
     static UnsubscribeRequest() {
-      object.ReferenceEquals(global::bnet.protocol.channel_invitation.Channelnvitation.Descriptor, null);
+      object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor, null);
     }
   }
   
@@ -1892,64 +1892,64 @@ namespace bnet.protocol.channel_invitation {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_SuggestInvitationRequest__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_SuggestInvitationRequest__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<SuggestInvitationRequest, SuggestInvitationRequest.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_SuggestInvitationRequest__FieldAccessorTable; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_SuggestInvitationRequest__FieldAccessorTable; }
     }
     
-    public const int AgentdFieldNumber = 1;
-    private bool hasAgentd;
-    private global::bnet.protocol.EntityId agentd_;
-    public bool HasAgentd {
-      get { return hasAgentd; }
+    public const int AgentIdFieldNumber = 1;
+    private bool hasAgentId;
+    private global::bnet.protocol.EntityId agentId_;
+    public bool HasAgentId {
+      get { return hasAgentId; }
     }
-    public global::bnet.protocol.EntityId Agentd {
-      get { return agentd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
-    }
-    
-    public const int ChanneldFieldNumber = 2;
-    private bool hasChanneld;
-    private global::bnet.protocol.EntityId channeld_;
-    public bool HasChanneld {
-      get { return hasChanneld; }
-    }
-    public global::bnet.protocol.EntityId Channeld {
-      get { return channeld_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId AgentId {
+      get { return agentId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
-    public const int TargetdFieldNumber = 3;
-    private bool hasTargetd;
-    private global::bnet.protocol.EntityId targetd_;
-    public bool HasTargetd {
-      get { return hasTargetd; }
+    public const int ChannelIdFieldNumber = 2;
+    private bool hasChannelId;
+    private global::bnet.protocol.EntityId channelId_;
+    public bool HasChannelId {
+      get { return hasChannelId; }
     }
-    public global::bnet.protocol.EntityId Targetd {
-      get { return targetd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId ChannelId {
+      get { return channelId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
-    public const int ApprovaldFieldNumber = 4;
-    private bool hasApprovald;
-    private global::bnet.protocol.EntityId approvald_;
-    public bool HasApprovald {
-      get { return hasApprovald; }
+    public const int TargetIdFieldNumber = 3;
+    private bool hasTargetId;
+    private global::bnet.protocol.EntityId targetId_;
+    public bool HasTargetId {
+      get { return hasTargetId; }
     }
-    public global::bnet.protocol.EntityId Approvald {
-      get { return approvald_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId TargetId {
+      get { return targetId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int ApprovalIdFieldNumber = 4;
+    private bool hasApprovalId;
+    private global::bnet.protocol.EntityId approvalId_;
+    public bool HasApprovalId {
+      get { return hasApprovalId; }
+    }
+    public global::bnet.protocol.EntityId ApprovalId {
+      get { return approvalId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasChanneld) return false;
-        if (!hasTargetd) return false;
-        if (HasAgentd) {
-          if (!Agentd.IsInitialized) return false;
+        if (!hasChannelId) return false;
+        if (!hasTargetId) return false;
+        if (HasAgentId) {
+          if (!AgentId.IsInitialized) return false;
         }
-        if (!Channeld.IsInitialized) return false;
-        if (!Targetd.IsInitialized) return false;
-        if (HasApprovald) {
-          if (!Approvald.IsInitialized) return false;
+        if (!ChannelId.IsInitialized) return false;
+        if (!TargetId.IsInitialized) return false;
+        if (HasApprovalId) {
+          if (!ApprovalId.IsInitialized) return false;
         }
         return true;
       }
@@ -1958,17 +1958,17 @@ namespace bnet.protocol.channel_invitation {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _suggestInvitationRequestFieldNames;
-      if (hasAgentd) {
-        output.WriteMessage(1, field_names[0], Agentd);
+      if (hasAgentId) {
+        output.WriteMessage(1, field_names[0], AgentId);
       }
-      if (hasChanneld) {
-        output.WriteMessage(2, field_names[2], Channeld);
+      if (hasChannelId) {
+        output.WriteMessage(2, field_names[2], ChannelId);
       }
-      if (hasTargetd) {
-        output.WriteMessage(3, field_names[3], Targetd);
+      if (hasTargetId) {
+        output.WriteMessage(3, field_names[3], TargetId);
       }
-      if (hasApprovald) {
-        output.WriteMessage(4, field_names[1], Approvald);
+      if (hasApprovalId) {
+        output.WriteMessage(4, field_names[1], ApprovalId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1980,17 +1980,17 @@ namespace bnet.protocol.channel_invitation {
         if (size != -1) return size;
         
         size = 0;
-        if (hasAgentd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Agentd);
+        if (hasAgentId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AgentId);
         }
-        if (hasChanneld) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Channeld);
+        if (hasChannelId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, ChannelId);
         }
-        if (hasTargetd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(3, Targetd);
+        if (hasTargetId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(3, TargetId);
         }
-        if (hasApprovald) {
-          size += pb::CodedOutputStream.ComputeMessageSize(4, Approvald);
+        if (hasApprovalId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(4, ApprovalId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2118,17 +2118,17 @@ namespace bnet.protocol.channel_invitation {
       public override Builder MergeFrom(SuggestInvitationRequest other) {
         if (other == global::bnet.protocol.channel_invitation.SuggestInvitationRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasAgentd) {
-          MergeAgentd(other.Agentd);
+        if (other.HasAgentId) {
+          MergeAgentId(other.AgentId);
         }
-        if (other.HasChanneld) {
-          MergeChanneld(other.Channeld);
+        if (other.HasChannelId) {
+          MergeChannelId(other.ChannelId);
         }
-        if (other.HasTargetd) {
-          MergeTargetd(other.Targetd);
+        if (other.HasTargetId) {
+          MergeTargetId(other.TargetId);
         }
-        if (other.HasApprovald) {
-          MergeApprovald(other.Approvald);
+        if (other.HasApprovalId) {
+          MergeApprovalId(other.ApprovalId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -2175,38 +2175,38 @@ namespace bnet.protocol.channel_invitation {
             }
             case 10: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasAgentd) {
-                subBuilder.MergeFrom(Agentd);
+              if (result.hasAgentId) {
+                subBuilder.MergeFrom(AgentId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Agentd = subBuilder.BuildPartial();
+              AgentId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasChanneld) {
-                subBuilder.MergeFrom(Channeld);
+              if (result.hasChannelId) {
+                subBuilder.MergeFrom(ChannelId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Channeld = subBuilder.BuildPartial();
+              ChannelId = subBuilder.BuildPartial();
               break;
             }
             case 26: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasTargetd) {
-                subBuilder.MergeFrom(Targetd);
+              if (result.hasTargetId) {
+                subBuilder.MergeFrom(TargetId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Targetd = subBuilder.BuildPartial();
+              TargetId = subBuilder.BuildPartial();
               break;
             }
             case 34: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasApprovald) {
-                subBuilder.MergeFrom(Approvald);
+              if (result.hasApprovalId) {
+                subBuilder.MergeFrom(ApprovalId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Approvald = subBuilder.BuildPartial();
+              ApprovalId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -2219,168 +2219,168 @@ namespace bnet.protocol.channel_invitation {
       }
       
       
-      public bool HasAgentd {
-       get { return result.hasAgentd; }
+      public bool HasAgentId {
+       get { return result.hasAgentId; }
       }
-      public global::bnet.protocol.EntityId Agentd {
-        get { return result.Agentd; }
-        set { SetAgentd(value); }
+      public global::bnet.protocol.EntityId AgentId {
+        get { return result.AgentId; }
+        set { SetAgentId(value); }
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId value) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = value;
+        result.hasAgentId = true;
+        result.agentId_ = value;
         return this;
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = builderForValue.Build();
+        result.hasAgentId = true;
+        result.agentId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAgentd(global::bnet.protocol.EntityId value) {
+      public Builder MergeAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAgentd &&
-            result.agentd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.agentd_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentd_).MergeFrom(value).BuildPartial();
+        if (result.hasAgentId &&
+            result.agentId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.agentId_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentId_).MergeFrom(value).BuildPartial();
         } else {
-          result.agentd_ = value;
+          result.agentId_ = value;
         }
-        result.hasAgentd = true;
+        result.hasAgentId = true;
         return this;
       }
-      public Builder ClearAgentd() {
+      public Builder ClearAgentId() {
         PrepareBuilder();
-        result.hasAgentd = false;
-        result.agentd_ = null;
+        result.hasAgentId = false;
+        result.agentId_ = null;
         return this;
       }
       
-      public bool HasChanneld {
-       get { return result.hasChanneld; }
+      public bool HasChannelId {
+       get { return result.hasChannelId; }
       }
-      public global::bnet.protocol.EntityId Channeld {
-        get { return result.Channeld; }
-        set { SetChanneld(value); }
+      public global::bnet.protocol.EntityId ChannelId {
+        get { return result.ChannelId; }
+        set { SetChannelId(value); }
       }
-      public Builder SetChanneld(global::bnet.protocol.EntityId value) {
+      public Builder SetChannelId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasChanneld = true;
-        result.channeld_ = value;
+        result.hasChannelId = true;
+        result.channelId_ = value;
         return this;
       }
-      public Builder SetChanneld(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetChannelId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasChanneld = true;
-        result.channeld_ = builderForValue.Build();
+        result.hasChannelId = true;
+        result.channelId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeChanneld(global::bnet.protocol.EntityId value) {
+      public Builder MergeChannelId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasChanneld &&
-            result.channeld_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.channeld_ = global::bnet.protocol.EntityId.CreateBuilder(result.channeld_).MergeFrom(value).BuildPartial();
+        if (result.hasChannelId &&
+            result.channelId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.channelId_ = global::bnet.protocol.EntityId.CreateBuilder(result.channelId_).MergeFrom(value).BuildPartial();
         } else {
-          result.channeld_ = value;
+          result.channelId_ = value;
         }
-        result.hasChanneld = true;
+        result.hasChannelId = true;
         return this;
       }
-      public Builder ClearChanneld() {
+      public Builder ClearChannelId() {
         PrepareBuilder();
-        result.hasChanneld = false;
-        result.channeld_ = null;
+        result.hasChannelId = false;
+        result.channelId_ = null;
         return this;
       }
       
-      public bool HasTargetd {
-       get { return result.hasTargetd; }
+      public bool HasTargetId {
+       get { return result.hasTargetId; }
       }
-      public global::bnet.protocol.EntityId Targetd {
-        get { return result.Targetd; }
-        set { SetTargetd(value); }
+      public global::bnet.protocol.EntityId TargetId {
+        get { return result.TargetId; }
+        set { SetTargetId(value); }
       }
-      public Builder SetTargetd(global::bnet.protocol.EntityId value) {
+      public Builder SetTargetId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasTargetd = true;
-        result.targetd_ = value;
+        result.hasTargetId = true;
+        result.targetId_ = value;
         return this;
       }
-      public Builder SetTargetd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetTargetId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasTargetd = true;
-        result.targetd_ = builderForValue.Build();
+        result.hasTargetId = true;
+        result.targetId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeTargetd(global::bnet.protocol.EntityId value) {
+      public Builder MergeTargetId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasTargetd &&
-            result.targetd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.targetd_ = global::bnet.protocol.EntityId.CreateBuilder(result.targetd_).MergeFrom(value).BuildPartial();
+        if (result.hasTargetId &&
+            result.targetId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.targetId_ = global::bnet.protocol.EntityId.CreateBuilder(result.targetId_).MergeFrom(value).BuildPartial();
         } else {
-          result.targetd_ = value;
+          result.targetId_ = value;
         }
-        result.hasTargetd = true;
+        result.hasTargetId = true;
         return this;
       }
-      public Builder ClearTargetd() {
+      public Builder ClearTargetId() {
         PrepareBuilder();
-        result.hasTargetd = false;
-        result.targetd_ = null;
+        result.hasTargetId = false;
+        result.targetId_ = null;
         return this;
       }
       
-      public bool HasApprovald {
-       get { return result.hasApprovald; }
+      public bool HasApprovalId {
+       get { return result.hasApprovalId; }
       }
-      public global::bnet.protocol.EntityId Approvald {
-        get { return result.Approvald; }
-        set { SetApprovald(value); }
+      public global::bnet.protocol.EntityId ApprovalId {
+        get { return result.ApprovalId; }
+        set { SetApprovalId(value); }
       }
-      public Builder SetApprovald(global::bnet.protocol.EntityId value) {
+      public Builder SetApprovalId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasApprovald = true;
-        result.approvald_ = value;
+        result.hasApprovalId = true;
+        result.approvalId_ = value;
         return this;
       }
-      public Builder SetApprovald(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetApprovalId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasApprovald = true;
-        result.approvald_ = builderForValue.Build();
+        result.hasApprovalId = true;
+        result.approvalId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeApprovald(global::bnet.protocol.EntityId value) {
+      public Builder MergeApprovalId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasApprovald &&
-            result.approvald_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.approvald_ = global::bnet.protocol.EntityId.CreateBuilder(result.approvald_).MergeFrom(value).BuildPartial();
+        if (result.hasApprovalId &&
+            result.approvalId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.approvalId_ = global::bnet.protocol.EntityId.CreateBuilder(result.approvalId_).MergeFrom(value).BuildPartial();
         } else {
-          result.approvald_ = value;
+          result.approvalId_ = value;
         }
-        result.hasApprovald = true;
+        result.hasApprovalId = true;
         return this;
       }
-      public Builder ClearApprovald() {
+      public Builder ClearApprovalId() {
         PrepareBuilder();
-        result.hasApprovald = false;
-        result.approvald_ = null;
+        result.hasApprovalId = false;
+        result.approvalId_ = null;
         return this;
       }
     }
     static SuggestInvitationRequest() {
-      object.ReferenceEquals(global::bnet.protocol.channel_invitation.Channelnvitation.Descriptor, null);
+      object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor, null);
     }
   }
   
@@ -2405,64 +2405,64 @@ namespace bnet.protocol.channel_invitation {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_RevokeInvitationRequest__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_RevokeInvitationRequest__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<RevokeInvitationRequest, RevokeInvitationRequest.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_RevokeInvitationRequest__FieldAccessorTable; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_RevokeInvitationRequest__FieldAccessorTable; }
     }
     
-    public const int AgentdFieldNumber = 1;
-    private bool hasAgentd;
-    private global::bnet.protocol.EntityId agentd_;
-    public bool HasAgentd {
-      get { return hasAgentd; }
+    public const int AgentIdFieldNumber = 1;
+    private bool hasAgentId;
+    private global::bnet.protocol.EntityId agentId_;
+    public bool HasAgentId {
+      get { return hasAgentId; }
     }
-    public global::bnet.protocol.EntityId Agentd {
-      get { return agentd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
-    }
-    
-    public const int TargetdFieldNumber = 2;
-    private bool hasTargetd;
-    private global::bnet.protocol.EntityId targetd_;
-    public bool HasTargetd {
-      get { return hasTargetd; }
-    }
-    public global::bnet.protocol.EntityId Targetd {
-      get { return targetd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId AgentId {
+      get { return agentId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
-    public const int İnvitationdFieldNumber = 3;
-    private bool hasİnvitationd;
-    private ulong invitationd_;
-    public bool Hasİnvitationd {
-      get { return hasİnvitationd; }
+    public const int TargetIdFieldNumber = 2;
+    private bool hasTargetId;
+    private global::bnet.protocol.EntityId targetId_;
+    public bool HasTargetId {
+      get { return hasTargetId; }
     }
-    public ulong İnvitationd {
-      get { return invitationd_; }
+    public global::bnet.protocol.EntityId TargetId {
+      get { return targetId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
-    public const int ChanneldFieldNumber = 4;
-    private bool hasChanneld;
-    private global::bnet.protocol.EntityId channeld_;
-    public bool HasChanneld {
-      get { return hasChanneld; }
+    public const int InvitationIdFieldNumber = 3;
+    private bool hasInvitationId;
+    private ulong invitationId_;
+    public bool HasInvitationId {
+      get { return hasInvitationId; }
     }
-    public global::bnet.protocol.EntityId Channeld {
-      get { return channeld_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public ulong InvitationId {
+      get { return invitationId_; }
+    }
+    
+    public const int ChannelIdFieldNumber = 4;
+    private bool hasChannelId;
+    private global::bnet.protocol.EntityId channelId_;
+    public bool HasChannelId {
+      get { return hasChannelId; }
+    }
+    public global::bnet.protocol.EntityId ChannelId {
+      get { return channelId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasİnvitationd) return false;
-        if (!hasChanneld) return false;
-        if (HasAgentd) {
-          if (!Agentd.IsInitialized) return false;
+        if (!hasInvitationId) return false;
+        if (!hasChannelId) return false;
+        if (HasAgentId) {
+          if (!AgentId.IsInitialized) return false;
         }
-        if (HasTargetd) {
-          if (!Targetd.IsInitialized) return false;
+        if (HasTargetId) {
+          if (!TargetId.IsInitialized) return false;
         }
-        if (!Channeld.IsInitialized) return false;
+        if (!ChannelId.IsInitialized) return false;
         return true;
       }
     }
@@ -2470,17 +2470,17 @@ namespace bnet.protocol.channel_invitation {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _revokeInvitationRequestFieldNames;
-      if (hasAgentd) {
-        output.WriteMessage(1, field_names[0], Agentd);
+      if (hasAgentId) {
+        output.WriteMessage(1, field_names[0], AgentId);
       }
-      if (hasTargetd) {
-        output.WriteMessage(2, field_names[3], Targetd);
+      if (hasTargetId) {
+        output.WriteMessage(2, field_names[3], TargetId);
       }
-      if (hasİnvitationd) {
-        output.WriteFixed64(3, field_names[2], İnvitationd);
+      if (hasInvitationId) {
+        output.WriteFixed64(3, field_names[2], InvitationId);
       }
-      if (hasChanneld) {
-        output.WriteMessage(4, field_names[1], Channeld);
+      if (hasChannelId) {
+        output.WriteMessage(4, field_names[1], ChannelId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2492,17 +2492,17 @@ namespace bnet.protocol.channel_invitation {
         if (size != -1) return size;
         
         size = 0;
-        if (hasAgentd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Agentd);
+        if (hasAgentId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AgentId);
         }
-        if (hasTargetd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Targetd);
+        if (hasTargetId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, TargetId);
         }
-        if (hasİnvitationd) {
-          size += pb::CodedOutputStream.ComputeFixed64Size(3, İnvitationd);
+        if (hasInvitationId) {
+          size += pb::CodedOutputStream.ComputeFixed64Size(3, InvitationId);
         }
-        if (hasChanneld) {
-          size += pb::CodedOutputStream.ComputeMessageSize(4, Channeld);
+        if (hasChannelId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(4, ChannelId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2630,17 +2630,17 @@ namespace bnet.protocol.channel_invitation {
       public override Builder MergeFrom(RevokeInvitationRequest other) {
         if (other == global::bnet.protocol.channel_invitation.RevokeInvitationRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasAgentd) {
-          MergeAgentd(other.Agentd);
+        if (other.HasAgentId) {
+          MergeAgentId(other.AgentId);
         }
-        if (other.HasTargetd) {
-          MergeTargetd(other.Targetd);
+        if (other.HasTargetId) {
+          MergeTargetId(other.TargetId);
         }
-        if (other.Hasİnvitationd) {
-          İnvitationd = other.İnvitationd;
+        if (other.HasInvitationId) {
+          InvitationId = other.InvitationId;
         }
-        if (other.HasChanneld) {
-          MergeChanneld(other.Channeld);
+        if (other.HasChannelId) {
+          MergeChannelId(other.ChannelId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -2687,33 +2687,33 @@ namespace bnet.protocol.channel_invitation {
             }
             case 10: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasAgentd) {
-                subBuilder.MergeFrom(Agentd);
+              if (result.hasAgentId) {
+                subBuilder.MergeFrom(AgentId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Agentd = subBuilder.BuildPartial();
+              AgentId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasTargetd) {
-                subBuilder.MergeFrom(Targetd);
+              if (result.hasTargetId) {
+                subBuilder.MergeFrom(TargetId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Targetd = subBuilder.BuildPartial();
+              TargetId = subBuilder.BuildPartial();
               break;
             }
             case 25: {
-              result.hasİnvitationd = input.ReadFixed64(ref result.invitationd_);
+              result.hasInvitationId = input.ReadFixed64(ref result.invitationId_);
               break;
             }
             case 34: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasChanneld) {
-                subBuilder.MergeFrom(Channeld);
+              if (result.hasChannelId) {
+                subBuilder.MergeFrom(ChannelId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Channeld = subBuilder.BuildPartial();
+              ChannelId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -2726,148 +2726,148 @@ namespace bnet.protocol.channel_invitation {
       }
       
       
-      public bool HasAgentd {
-       get { return result.hasAgentd; }
+      public bool HasAgentId {
+       get { return result.hasAgentId; }
       }
-      public global::bnet.protocol.EntityId Agentd {
-        get { return result.Agentd; }
-        set { SetAgentd(value); }
+      public global::bnet.protocol.EntityId AgentId {
+        get { return result.AgentId; }
+        set { SetAgentId(value); }
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId value) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = value;
+        result.hasAgentId = true;
+        result.agentId_ = value;
         return this;
       }
-      public Builder SetAgentd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAgentd = true;
-        result.agentd_ = builderForValue.Build();
+        result.hasAgentId = true;
+        result.agentId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAgentd(global::bnet.protocol.EntityId value) {
+      public Builder MergeAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAgentd &&
-            result.agentd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.agentd_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentd_).MergeFrom(value).BuildPartial();
+        if (result.hasAgentId &&
+            result.agentId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.agentId_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentId_).MergeFrom(value).BuildPartial();
         } else {
-          result.agentd_ = value;
+          result.agentId_ = value;
         }
-        result.hasAgentd = true;
+        result.hasAgentId = true;
         return this;
       }
-      public Builder ClearAgentd() {
+      public Builder ClearAgentId() {
         PrepareBuilder();
-        result.hasAgentd = false;
-        result.agentd_ = null;
+        result.hasAgentId = false;
+        result.agentId_ = null;
         return this;
       }
       
-      public bool HasTargetd {
-       get { return result.hasTargetd; }
+      public bool HasTargetId {
+       get { return result.hasTargetId; }
       }
-      public global::bnet.protocol.EntityId Targetd {
-        get { return result.Targetd; }
-        set { SetTargetd(value); }
+      public global::bnet.protocol.EntityId TargetId {
+        get { return result.TargetId; }
+        set { SetTargetId(value); }
       }
-      public Builder SetTargetd(global::bnet.protocol.EntityId value) {
+      public Builder SetTargetId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasTargetd = true;
-        result.targetd_ = value;
+        result.hasTargetId = true;
+        result.targetId_ = value;
         return this;
       }
-      public Builder SetTargetd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetTargetId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasTargetd = true;
-        result.targetd_ = builderForValue.Build();
+        result.hasTargetId = true;
+        result.targetId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeTargetd(global::bnet.protocol.EntityId value) {
+      public Builder MergeTargetId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasTargetd &&
-            result.targetd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.targetd_ = global::bnet.protocol.EntityId.CreateBuilder(result.targetd_).MergeFrom(value).BuildPartial();
+        if (result.hasTargetId &&
+            result.targetId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.targetId_ = global::bnet.protocol.EntityId.CreateBuilder(result.targetId_).MergeFrom(value).BuildPartial();
         } else {
-          result.targetd_ = value;
+          result.targetId_ = value;
         }
-        result.hasTargetd = true;
+        result.hasTargetId = true;
         return this;
       }
-      public Builder ClearTargetd() {
+      public Builder ClearTargetId() {
         PrepareBuilder();
-        result.hasTargetd = false;
-        result.targetd_ = null;
+        result.hasTargetId = false;
+        result.targetId_ = null;
         return this;
       }
       
-      public bool Hasİnvitationd {
-        get { return result.hasİnvitationd; }
+      public bool HasInvitationId {
+        get { return result.hasInvitationId; }
       }
-      public ulong İnvitationd {
-        get { return result.İnvitationd; }
-        set { Setİnvitationd(value); }
+      public ulong InvitationId {
+        get { return result.InvitationId; }
+        set { SetInvitationId(value); }
       }
-      public Builder Setİnvitationd(ulong value) {
+      public Builder SetInvitationId(ulong value) {
         PrepareBuilder();
-        result.hasİnvitationd = true;
-        result.invitationd_ = value;
+        result.hasInvitationId = true;
+        result.invitationId_ = value;
         return this;
       }
-      public Builder Clearİnvitationd() {
+      public Builder ClearInvitationId() {
         PrepareBuilder();
-        result.hasİnvitationd = false;
-        result.invitationd_ = 0;
+        result.hasInvitationId = false;
+        result.invitationId_ = 0;
         return this;
       }
       
-      public bool HasChanneld {
-       get { return result.hasChanneld; }
+      public bool HasChannelId {
+       get { return result.hasChannelId; }
       }
-      public global::bnet.protocol.EntityId Channeld {
-        get { return result.Channeld; }
-        set { SetChanneld(value); }
+      public global::bnet.protocol.EntityId ChannelId {
+        get { return result.ChannelId; }
+        set { SetChannelId(value); }
       }
-      public Builder SetChanneld(global::bnet.protocol.EntityId value) {
+      public Builder SetChannelId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasChanneld = true;
-        result.channeld_ = value;
+        result.hasChannelId = true;
+        result.channelId_ = value;
         return this;
       }
-      public Builder SetChanneld(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetChannelId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasChanneld = true;
-        result.channeld_ = builderForValue.Build();
+        result.hasChannelId = true;
+        result.channelId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeChanneld(global::bnet.protocol.EntityId value) {
+      public Builder MergeChannelId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasChanneld &&
-            result.channeld_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.channeld_ = global::bnet.protocol.EntityId.CreateBuilder(result.channeld_).MergeFrom(value).BuildPartial();
+        if (result.hasChannelId &&
+            result.channelId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.channelId_ = global::bnet.protocol.EntityId.CreateBuilder(result.channelId_).MergeFrom(value).BuildPartial();
         } else {
-          result.channeld_ = value;
+          result.channelId_ = value;
         }
-        result.hasChanneld = true;
+        result.hasChannelId = true;
         return this;
       }
-      public Builder ClearChanneld() {
+      public Builder ClearChannelId() {
         PrepareBuilder();
-        result.hasChanneld = false;
-        result.channeld_ = null;
+        result.hasChannelId = false;
+        result.channelId_ = null;
         return this;
       }
     }
     static RevokeInvitationRequest() {
-      object.ReferenceEquals(global::bnet.protocol.channel_invitation.Channelnvitation.Descriptor, null);
+      object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor, null);
     }
   }
   
@@ -2892,11 +2892,11 @@ namespace bnet.protocol.channel_invitation {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_HasRoomForInvitationRequest__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_HasRoomForInvitationRequest__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<HasRoomForInvitationRequest, HasRoomForInvitationRequest.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_HasRoomForInvitationRequest__FieldAccessorTable; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_HasRoomForInvitationRequest__FieldAccessorTable; }
     }
     
     public const int ServiceTypeFieldNumber = 1;
@@ -3142,7 +3142,7 @@ namespace bnet.protocol.channel_invitation {
       }
     }
     static HasRoomForInvitationRequest() {
-      object.ReferenceEquals(global::bnet.protocol.channel_invitation.Channelnvitation.Descriptor, null);
+      object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor, null);
     }
   }
   
@@ -3152,8 +3152,8 @@ namespace bnet.protocol.channel_invitation {
   public sealed partial class InvitationAddedNotification : pb::GeneratedMessage<InvitationAddedNotification, InvitationAddedNotification.Builder> {
     private InvitationAddedNotification() { }
     private static readonly InvitationAddedNotification defaultInstance = new InvitationAddedNotification().MakeReadOnly();
-    private static readonly string[] _ınvitationAddedNotificationFieldNames = new string[] { "invitation" };
-    private static readonly uint[] _ınvitationAddedNotificationFieldTags = new uint[] { 10 };
+    private static readonly string[] _invitationAddedNotificationFieldNames = new string[] { "invitation" };
+    private static readonly uint[] _invitationAddedNotificationFieldTags = new uint[] { 10 };
     public static InvitationAddedNotification DefaultInstance {
       get { return defaultInstance; }
     }
@@ -3167,36 +3167,36 @@ namespace bnet.protocol.channel_invitation {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_InvitationAddedNotification__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_InvitationAddedNotification__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<InvitationAddedNotification, InvitationAddedNotification.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_InvitationAddedNotification__FieldAccessorTable; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_InvitationAddedNotification__FieldAccessorTable; }
     }
     
-    public const int İnvitationFieldNumber = 1;
-    private bool hasİnvitation;
+    public const int InvitationFieldNumber = 1;
+    private bool hasInvitation;
     private global::bnet.protocol.invitation.Invitation invitation_;
-    public bool Hasİnvitation {
-      get { return hasİnvitation; }
+    public bool HasInvitation {
+      get { return hasInvitation; }
     }
-    public global::bnet.protocol.invitation.Invitation İnvitation {
+    public global::bnet.protocol.invitation.Invitation Invitation {
       get { return invitation_ ?? global::bnet.protocol.invitation.Invitation.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasİnvitation) return false;
-        if (!İnvitation.IsInitialized) return false;
+        if (!hasInvitation) return false;
+        if (!Invitation.IsInitialized) return false;
         return true;
       }
     }
     
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
-      string[] field_names = _ınvitationAddedNotificationFieldNames;
-      if (hasİnvitation) {
-        output.WriteMessage(1, field_names[0], İnvitation);
+      string[] field_names = _invitationAddedNotificationFieldNames;
+      if (hasInvitation) {
+        output.WriteMessage(1, field_names[0], Invitation);
       }
       UnknownFields.WriteTo(output);
     }
@@ -3208,8 +3208,8 @@ namespace bnet.protocol.channel_invitation {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİnvitation) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, İnvitation);
+        if (hasInvitation) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, Invitation);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -3337,8 +3337,8 @@ namespace bnet.protocol.channel_invitation {
       public override Builder MergeFrom(InvitationAddedNotification other) {
         if (other == global::bnet.protocol.channel_invitation.InvitationAddedNotification.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.Hasİnvitation) {
-          Mergeİnvitation(other.İnvitation);
+        if (other.HasInvitation) {
+          MergeInvitation(other.Invitation);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -3355,9 +3355,9 @@ namespace bnet.protocol.channel_invitation {
         string field_name;
         while (input.ReadTag(out tag, out field_name)) {
           if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_ınvitationAddedNotificationFieldNames, field_name, global::System.StringComparer.Ordinal);
+            int field_ordinal = global::System.Array.BinarySearch(_invitationAddedNotificationFieldNames, field_name, global::System.StringComparer.Ordinal);
             if(field_ordinal >= 0)
-              tag = _ınvitationAddedNotificationFieldTags[field_ordinal];
+              tag = _invitationAddedNotificationFieldTags[field_ordinal];
             else {
               if (unknownFields == null) {
                 unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
@@ -3385,11 +3385,11 @@ namespace bnet.protocol.channel_invitation {
             }
             case 10: {
               global::bnet.protocol.invitation.Invitation.Builder subBuilder = global::bnet.protocol.invitation.Invitation.CreateBuilder();
-              if (result.hasİnvitation) {
-                subBuilder.MergeFrom(İnvitation);
+              if (result.hasInvitation) {
+                subBuilder.MergeFrom(Invitation);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              İnvitation = subBuilder.BuildPartial();
+              Invitation = subBuilder.BuildPartial();
               break;
             }
           }
@@ -3402,48 +3402,48 @@ namespace bnet.protocol.channel_invitation {
       }
       
       
-      public bool Hasİnvitation {
-       get { return result.hasİnvitation; }
+      public bool HasInvitation {
+       get { return result.hasInvitation; }
       }
-      public global::bnet.protocol.invitation.Invitation İnvitation {
-        get { return result.İnvitation; }
-        set { Setİnvitation(value); }
+      public global::bnet.protocol.invitation.Invitation Invitation {
+        get { return result.Invitation; }
+        set { SetInvitation(value); }
       }
-      public Builder Setİnvitation(global::bnet.protocol.invitation.Invitation value) {
+      public Builder SetInvitation(global::bnet.protocol.invitation.Invitation value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİnvitation = true;
+        result.hasInvitation = true;
         result.invitation_ = value;
         return this;
       }
-      public Builder Setİnvitation(global::bnet.protocol.invitation.Invitation.Builder builderForValue) {
+      public Builder SetInvitation(global::bnet.protocol.invitation.Invitation.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasİnvitation = true;
+        result.hasInvitation = true;
         result.invitation_ = builderForValue.Build();
         return this;
       }
-      public Builder Mergeİnvitation(global::bnet.protocol.invitation.Invitation value) {
+      public Builder MergeInvitation(global::bnet.protocol.invitation.Invitation value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasİnvitation &&
+        if (result.hasInvitation &&
             result.invitation_ != global::bnet.protocol.invitation.Invitation.DefaultInstance) {
             result.invitation_ = global::bnet.protocol.invitation.Invitation.CreateBuilder(result.invitation_).MergeFrom(value).BuildPartial();
         } else {
           result.invitation_ = value;
         }
-        result.hasİnvitation = true;
+        result.hasInvitation = true;
         return this;
       }
-      public Builder Clearİnvitation() {
+      public Builder ClearInvitation() {
         PrepareBuilder();
-        result.hasİnvitation = false;
+        result.hasInvitation = false;
         result.invitation_ = null;
         return this;
       }
     }
     static InvitationAddedNotification() {
-      object.ReferenceEquals(global::bnet.protocol.channel_invitation.Channelnvitation.Descriptor, null);
+      object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor, null);
     }
   }
   
@@ -3453,8 +3453,8 @@ namespace bnet.protocol.channel_invitation {
   public sealed partial class InvitationRemovedNotification : pb::GeneratedMessage<InvitationRemovedNotification, InvitationRemovedNotification.Builder> {
     private InvitationRemovedNotification() { }
     private static readonly InvitationRemovedNotification defaultInstance = new InvitationRemovedNotification().MakeReadOnly();
-    private static readonly string[] _ınvitationRemovedNotificationFieldNames = new string[] { "invitation", "reason" };
-    private static readonly uint[] _ınvitationRemovedNotificationFieldTags = new uint[] { 10, 16 };
+    private static readonly string[] _invitationRemovedNotificationFieldNames = new string[] { "invitation", "reason" };
+    private static readonly uint[] _invitationRemovedNotificationFieldTags = new uint[] { 10, 16 };
     public static InvitationRemovedNotification DefaultInstance {
       get { return defaultInstance; }
     }
@@ -3468,20 +3468,20 @@ namespace bnet.protocol.channel_invitation {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_InvitationRemovedNotification__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_InvitationRemovedNotification__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<InvitationRemovedNotification, InvitationRemovedNotification.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_InvitationRemovedNotification__FieldAccessorTable; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_InvitationRemovedNotification__FieldAccessorTable; }
     }
     
-    public const int İnvitationFieldNumber = 1;
-    private bool hasİnvitation;
+    public const int InvitationFieldNumber = 1;
+    private bool hasInvitation;
     private global::bnet.protocol.invitation.Invitation invitation_;
-    public bool Hasİnvitation {
-      get { return hasİnvitation; }
+    public bool HasInvitation {
+      get { return hasInvitation; }
     }
-    public global::bnet.protocol.invitation.Invitation İnvitation {
+    public global::bnet.protocol.invitation.Invitation Invitation {
       get { return invitation_ ?? global::bnet.protocol.invitation.Invitation.DefaultInstance; }
     }
     
@@ -3497,17 +3497,17 @@ namespace bnet.protocol.channel_invitation {
     
     public override bool IsInitialized {
       get {
-        if (!hasİnvitation) return false;
-        if (!İnvitation.IsInitialized) return false;
+        if (!hasInvitation) return false;
+        if (!Invitation.IsInitialized) return false;
         return true;
       }
     }
     
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
-      string[] field_names = _ınvitationRemovedNotificationFieldNames;
-      if (hasİnvitation) {
-        output.WriteMessage(1, field_names[0], İnvitation);
+      string[] field_names = _invitationRemovedNotificationFieldNames;
+      if (hasInvitation) {
+        output.WriteMessage(1, field_names[0], Invitation);
       }
       if (hasReason) {
         output.WriteUInt32(2, field_names[1], Reason);
@@ -3522,8 +3522,8 @@ namespace bnet.protocol.channel_invitation {
         if (size != -1) return size;
         
         size = 0;
-        if (hasİnvitation) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, İnvitation);
+        if (hasInvitation) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, Invitation);
         }
         if (hasReason) {
           size += pb::CodedOutputStream.ComputeUInt32Size(2, Reason);
@@ -3654,8 +3654,8 @@ namespace bnet.protocol.channel_invitation {
       public override Builder MergeFrom(InvitationRemovedNotification other) {
         if (other == global::bnet.protocol.channel_invitation.InvitationRemovedNotification.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.Hasİnvitation) {
-          Mergeİnvitation(other.İnvitation);
+        if (other.HasInvitation) {
+          MergeInvitation(other.Invitation);
         }
         if (other.HasReason) {
           Reason = other.Reason;
@@ -3675,9 +3675,9 @@ namespace bnet.protocol.channel_invitation {
         string field_name;
         while (input.ReadTag(out tag, out field_name)) {
           if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_ınvitationRemovedNotificationFieldNames, field_name, global::System.StringComparer.Ordinal);
+            int field_ordinal = global::System.Array.BinarySearch(_invitationRemovedNotificationFieldNames, field_name, global::System.StringComparer.Ordinal);
             if(field_ordinal >= 0)
-              tag = _ınvitationRemovedNotificationFieldTags[field_ordinal];
+              tag = _invitationRemovedNotificationFieldTags[field_ordinal];
             else {
               if (unknownFields == null) {
                 unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
@@ -3705,11 +3705,11 @@ namespace bnet.protocol.channel_invitation {
             }
             case 10: {
               global::bnet.protocol.invitation.Invitation.Builder subBuilder = global::bnet.protocol.invitation.Invitation.CreateBuilder();
-              if (result.hasİnvitation) {
-                subBuilder.MergeFrom(İnvitation);
+              if (result.hasInvitation) {
+                subBuilder.MergeFrom(Invitation);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              İnvitation = subBuilder.BuildPartial();
+              Invitation = subBuilder.BuildPartial();
               break;
             }
             case 16: {
@@ -3726,42 +3726,42 @@ namespace bnet.protocol.channel_invitation {
       }
       
       
-      public bool Hasİnvitation {
-       get { return result.hasİnvitation; }
+      public bool HasInvitation {
+       get { return result.hasInvitation; }
       }
-      public global::bnet.protocol.invitation.Invitation İnvitation {
-        get { return result.İnvitation; }
-        set { Setİnvitation(value); }
+      public global::bnet.protocol.invitation.Invitation Invitation {
+        get { return result.Invitation; }
+        set { SetInvitation(value); }
       }
-      public Builder Setİnvitation(global::bnet.protocol.invitation.Invitation value) {
+      public Builder SetInvitation(global::bnet.protocol.invitation.Invitation value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİnvitation = true;
+        result.hasInvitation = true;
         result.invitation_ = value;
         return this;
       }
-      public Builder Setİnvitation(global::bnet.protocol.invitation.Invitation.Builder builderForValue) {
+      public Builder SetInvitation(global::bnet.protocol.invitation.Invitation.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasİnvitation = true;
+        result.hasInvitation = true;
         result.invitation_ = builderForValue.Build();
         return this;
       }
-      public Builder Mergeİnvitation(global::bnet.protocol.invitation.Invitation value) {
+      public Builder MergeInvitation(global::bnet.protocol.invitation.Invitation value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasİnvitation &&
+        if (result.hasInvitation &&
             result.invitation_ != global::bnet.protocol.invitation.Invitation.DefaultInstance) {
             result.invitation_ = global::bnet.protocol.invitation.Invitation.CreateBuilder(result.invitation_).MergeFrom(value).BuildPartial();
         } else {
           result.invitation_ = value;
         }
-        result.hasİnvitation = true;
+        result.hasInvitation = true;
         return this;
       }
-      public Builder Clearİnvitation() {
+      public Builder ClearInvitation() {
         PrepareBuilder();
-        result.hasİnvitation = false;
+        result.hasInvitation = false;
         result.invitation_ = null;
         return this;
       }
@@ -3787,7 +3787,7 @@ namespace bnet.protocol.channel_invitation {
       }
     }
     static InvitationRemovedNotification() {
-      object.ReferenceEquals(global::bnet.protocol.channel_invitation.Channelnvitation.Descriptor, null);
+      object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor, null);
     }
   }
   
@@ -3812,11 +3812,11 @@ namespace bnet.protocol.channel_invitation {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_SuggestionAddedNotification__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_SuggestionAddedNotification__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<SuggestionAddedNotification, SuggestionAddedNotification.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.Channelnvitation.internal__static_bnet_protocol_channel_invitation_SuggestionAddedNotification__FieldAccessorTable; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitation.internal__static_bnet_protocol_channel_invitation_SuggestionAddedNotification__FieldAccessorTable; }
     }
     
     public const int SuggestionFieldNumber = 1;
@@ -4088,7 +4088,7 @@ namespace bnet.protocol.channel_invitation {
       }
     }
     static SuggestionAddedNotification() {
-      object.ReferenceEquals(global::bnet.protocol.channel_invitation.Channelnvitation.Descriptor, null);
+      object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor, null);
     }
   }
   
@@ -4129,7 +4129,7 @@ namespace bnet.protocol.channel_invitation {
         global::System.Action<global::bnet.protocol.NoData> done);
     
     public static pbd::ServiceDescriptor Descriptor {
-      get { return Channelnvitation.Descriptor.Services[0]; }
+      get { return ChannelInvitation.Descriptor.Services[0]; }
     }
     public pbd::ServiceDescriptor DescriptorForType {
       get { return Descriptor; }
@@ -4339,7 +4339,7 @@ namespace bnet.protocol.channel_invitation {
         global::System.Action<global::bnet.protocol.NoData> done);
     
     public static pbd::ServiceDescriptor Descriptor {
-      get { return Channelnvitation.Descriptor.Services[1]; }
+      get { return ChannelInvitation.Descriptor.Services[1]; }
     }
     public pbd::ServiceDescriptor DescriptorForType {
       get { return Descriptor; }

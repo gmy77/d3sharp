@@ -72,7 +72,7 @@ namespace bnet.protocol.challenge {
           internal__static_bnet_protocol_challenge_Challenge__Descriptor = Descriptor.MessageTypes[0];
           internal__static_bnet_protocol_challenge_Challenge__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.challenge.Challenge, global::bnet.protocol.challenge.Challenge.Builder>(internal__static_bnet_protocol_challenge_Challenge__Descriptor,
-                  new string[] { "Type", "İnfo", "Answer", });
+                  new string[] { "Type", "Info", "Answer", });
           internal__static_bnet_protocol_challenge_ChallengePickedRequest__Descriptor = Descriptor.MessageTypes[1];
           internal__static_bnet_protocol_challenge_ChallengePickedRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.challenge.ChallengePickedRequest, global::bnet.protocol.challenge.ChallengePickedRequest.Builder>(internal__static_bnet_protocol_challenge_ChallengePickedRequest__Descriptor,
@@ -84,7 +84,7 @@ namespace bnet.protocol.challenge {
           internal__static_bnet_protocol_challenge_SendChallengeToUserRequest__Descriptor = Descriptor.MessageTypes[3];
           internal__static_bnet_protocol_challenge_SendChallengeToUserRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.challenge.SendChallengeToUserRequest, global::bnet.protocol.challenge.SendChallengeToUserRequest.Builder>(internal__static_bnet_protocol_challenge_SendChallengeToUserRequest__Descriptor,
-                  new string[] { "Peerd", "GameAccountd", "Challenges", });
+                  new string[] { "PeerId", "GameAccountId", "Challenges", });
           internal__static_bnet_protocol_challenge_SendChallengeToUserResponse__Descriptor = Descriptor.MessageTypes[4];
           internal__static_bnet_protocol_challenge_SendChallengeToUserResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.challenge.SendChallengeToUserResponse, global::bnet.protocol.challenge.SendChallengeToUserResponse.Builder>(internal__static_bnet_protocol_challenge_SendChallengeToUserResponse__Descriptor,
@@ -150,13 +150,13 @@ namespace bnet.protocol.challenge {
       get { return type_; }
     }
     
-    public const int İnfoFieldNumber = 2;
-    private bool hasİnfo;
+    public const int InfoFieldNumber = 2;
+    private bool hasInfo;
     private string info_ = "";
-    public bool Hasİnfo {
-      get { return hasİnfo; }
+    public bool HasInfo {
+      get { return hasInfo; }
     }
-    public string İnfo {
+    public string Info {
       get { return info_; }
     }
     
@@ -183,8 +183,8 @@ namespace bnet.protocol.challenge {
       if (hasType) {
         output.WriteUInt32(1, field_names[2], Type);
       }
-      if (hasİnfo) {
-        output.WriteString(2, field_names[1], İnfo);
+      if (hasInfo) {
+        output.WriteString(2, field_names[1], Info);
       }
       if (hasAnswer) {
         output.WriteString(3, field_names[0], Answer);
@@ -202,8 +202,8 @@ namespace bnet.protocol.challenge {
         if (hasType) {
           size += pb::CodedOutputStream.ComputeUInt32Size(1, Type);
         }
-        if (hasİnfo) {
-          size += pb::CodedOutputStream.ComputeStringSize(2, İnfo);
+        if (hasInfo) {
+          size += pb::CodedOutputStream.ComputeStringSize(2, Info);
         }
         if (hasAnswer) {
           size += pb::CodedOutputStream.ComputeStringSize(3, Answer);
@@ -337,8 +337,8 @@ namespace bnet.protocol.challenge {
         if (other.HasType) {
           Type = other.Type;
         }
-        if (other.Hasİnfo) {
-          İnfo = other.İnfo;
+        if (other.HasInfo) {
+          Info = other.Info;
         }
         if (other.HasAnswer) {
           Answer = other.Answer;
@@ -391,7 +391,7 @@ namespace bnet.protocol.challenge {
               break;
             }
             case 18: {
-              result.hasİnfo = input.ReadString(ref result.info_);
+              result.hasInfo = input.ReadString(ref result.info_);
               break;
             }
             case 26: {
@@ -428,23 +428,23 @@ namespace bnet.protocol.challenge {
         return this;
       }
       
-      public bool Hasİnfo {
-        get { return result.hasİnfo; }
+      public bool HasInfo {
+        get { return result.hasInfo; }
       }
-      public string İnfo {
-        get { return result.İnfo; }
-        set { Setİnfo(value); }
+      public string Info {
+        get { return result.Info; }
+        set { SetInfo(value); }
       }
-      public Builder Setİnfo(string value) {
+      public Builder SetInfo(string value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİnfo = true;
+        result.hasInfo = true;
         result.info_ = value;
         return this;
       }
-      public Builder Clearİnfo() {
+      public Builder ClearInfo() {
         PrepareBuilder();
-        result.hasİnfo = false;
+        result.hasInfo = false;
         result.info_ = "";
         return this;
       }
@@ -1054,24 +1054,24 @@ namespace bnet.protocol.challenge {
       get { return global::bnet.protocol.challenge.Proto.Challenge.internal__static_bnet_protocol_challenge_SendChallengeToUserRequest__FieldAccessorTable; }
     }
     
-    public const int PeerdFieldNumber = 1;
-    private bool hasPeerd;
-    private global::bnet.protocol.ProcessId peerd_;
-    public bool HasPeerd {
-      get { return hasPeerd; }
+    public const int PeerIdFieldNumber = 1;
+    private bool hasPeerId;
+    private global::bnet.protocol.ProcessId peerId_;
+    public bool HasPeerId {
+      get { return hasPeerId; }
     }
-    public global::bnet.protocol.ProcessId Peerd {
-      get { return peerd_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
+    public global::bnet.protocol.ProcessId PeerId {
+      get { return peerId_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
     }
     
-    public const int GameAccountdFieldNumber = 2;
-    private bool hasGameAccountd;
-    private global::bnet.protocol.EntityId gameAccountd_;
-    public bool HasGameAccountd {
-      get { return hasGameAccountd; }
+    public const int GameAccountIdFieldNumber = 2;
+    private bool hasGameAccountId;
+    private global::bnet.protocol.EntityId gameAccountId_;
+    public bool HasGameAccountId {
+      get { return hasGameAccountId; }
     }
-    public global::bnet.protocol.EntityId GameAccountd {
-      get { return gameAccountd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId GameAccountId {
+      get { return gameAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public const int ChallengesFieldNumber = 3;
@@ -1088,11 +1088,11 @@ namespace bnet.protocol.challenge {
     
     public override bool IsInitialized {
       get {
-        if (HasPeerd) {
-          if (!Peerd.IsInitialized) return false;
+        if (HasPeerId) {
+          if (!PeerId.IsInitialized) return false;
         }
-        if (HasGameAccountd) {
-          if (!GameAccountd.IsInitialized) return false;
+        if (HasGameAccountId) {
+          if (!GameAccountId.IsInitialized) return false;
         }
         foreach (global::bnet.protocol.challenge.Challenge element in ChallengesList) {
           if (!element.IsInitialized) return false;
@@ -1104,11 +1104,11 @@ namespace bnet.protocol.challenge {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _sendChallengeToUserRequestFieldNames;
-      if (hasPeerd) {
-        output.WriteMessage(1, field_names[2], Peerd);
+      if (hasPeerId) {
+        output.WriteMessage(1, field_names[2], PeerId);
       }
-      if (hasGameAccountd) {
-        output.WriteMessage(2, field_names[1], GameAccountd);
+      if (hasGameAccountId) {
+        output.WriteMessage(2, field_names[1], GameAccountId);
       }
       if (challenges_.Count > 0) {
         output.WriteMessageArray(3, field_names[0], challenges_);
@@ -1123,11 +1123,11 @@ namespace bnet.protocol.challenge {
         if (size != -1) return size;
         
         size = 0;
-        if (hasPeerd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Peerd);
+        if (hasPeerId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PeerId);
         }
-        if (hasGameAccountd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, GameAccountd);
+        if (hasGameAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, GameAccountId);
         }
         foreach (global::bnet.protocol.challenge.Challenge element in ChallengesList) {
           size += pb::CodedOutputStream.ComputeMessageSize(3, element);
@@ -1259,11 +1259,11 @@ namespace bnet.protocol.challenge {
       public override Builder MergeFrom(SendChallengeToUserRequest other) {
         if (other == global::bnet.protocol.challenge.SendChallengeToUserRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasPeerd) {
-          MergePeerd(other.Peerd);
+        if (other.HasPeerId) {
+          MergePeerId(other.PeerId);
         }
-        if (other.HasGameAccountd) {
-          MergeGameAccountd(other.GameAccountd);
+        if (other.HasGameAccountId) {
+          MergeGameAccountId(other.GameAccountId);
         }
         if (other.challenges_.Count != 0) {
           result.challenges_.Add(other.challenges_);
@@ -1313,20 +1313,20 @@ namespace bnet.protocol.challenge {
             }
             case 10: {
               global::bnet.protocol.ProcessId.Builder subBuilder = global::bnet.protocol.ProcessId.CreateBuilder();
-              if (result.hasPeerd) {
-                subBuilder.MergeFrom(Peerd);
+              if (result.hasPeerId) {
+                subBuilder.MergeFrom(PeerId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Peerd = subBuilder.BuildPartial();
+              PeerId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasGameAccountd) {
-                subBuilder.MergeFrom(GameAccountd);
+              if (result.hasGameAccountId) {
+                subBuilder.MergeFrom(GameAccountId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              GameAccountd = subBuilder.BuildPartial();
+              GameAccountId = subBuilder.BuildPartial();
               break;
             }
             case 26: {
@@ -1343,83 +1343,83 @@ namespace bnet.protocol.challenge {
       }
       
       
-      public bool HasPeerd {
-       get { return result.hasPeerd; }
+      public bool HasPeerId {
+       get { return result.hasPeerId; }
       }
-      public global::bnet.protocol.ProcessId Peerd {
-        get { return result.Peerd; }
-        set { SetPeerd(value); }
+      public global::bnet.protocol.ProcessId PeerId {
+        get { return result.PeerId; }
+        set { SetPeerId(value); }
       }
-      public Builder SetPeerd(global::bnet.protocol.ProcessId value) {
+      public Builder SetPeerId(global::bnet.protocol.ProcessId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasPeerd = true;
-        result.peerd_ = value;
+        result.hasPeerId = true;
+        result.peerId_ = value;
         return this;
       }
-      public Builder SetPeerd(global::bnet.protocol.ProcessId.Builder builderForValue) {
+      public Builder SetPeerId(global::bnet.protocol.ProcessId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasPeerd = true;
-        result.peerd_ = builderForValue.Build();
+        result.hasPeerId = true;
+        result.peerId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergePeerd(global::bnet.protocol.ProcessId value) {
+      public Builder MergePeerId(global::bnet.protocol.ProcessId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasPeerd &&
-            result.peerd_ != global::bnet.protocol.ProcessId.DefaultInstance) {
-            result.peerd_ = global::bnet.protocol.ProcessId.CreateBuilder(result.peerd_).MergeFrom(value).BuildPartial();
+        if (result.hasPeerId &&
+            result.peerId_ != global::bnet.protocol.ProcessId.DefaultInstance) {
+            result.peerId_ = global::bnet.protocol.ProcessId.CreateBuilder(result.peerId_).MergeFrom(value).BuildPartial();
         } else {
-          result.peerd_ = value;
+          result.peerId_ = value;
         }
-        result.hasPeerd = true;
+        result.hasPeerId = true;
         return this;
       }
-      public Builder ClearPeerd() {
+      public Builder ClearPeerId() {
         PrepareBuilder();
-        result.hasPeerd = false;
-        result.peerd_ = null;
+        result.hasPeerId = false;
+        result.peerId_ = null;
         return this;
       }
       
-      public bool HasGameAccountd {
-       get { return result.hasGameAccountd; }
+      public bool HasGameAccountId {
+       get { return result.hasGameAccountId; }
       }
-      public global::bnet.protocol.EntityId GameAccountd {
-        get { return result.GameAccountd; }
-        set { SetGameAccountd(value); }
+      public global::bnet.protocol.EntityId GameAccountId {
+        get { return result.GameAccountId; }
+        set { SetGameAccountId(value); }
       }
-      public Builder SetGameAccountd(global::bnet.protocol.EntityId value) {
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasGameAccountd = true;
-        result.gameAccountd_ = value;
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = value;
         return this;
       }
-      public Builder SetGameAccountd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasGameAccountd = true;
-        result.gameAccountd_ = builderForValue.Build();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeGameAccountd(global::bnet.protocol.EntityId value) {
+      public Builder MergeGameAccountId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasGameAccountd &&
-            result.gameAccountd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.gameAccountd_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccountd_).MergeFrom(value).BuildPartial();
+        if (result.hasGameAccountId &&
+            result.gameAccountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.gameAccountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccountId_).MergeFrom(value).BuildPartial();
         } else {
-          result.gameAccountd_ = value;
+          result.gameAccountId_ = value;
         }
-        result.hasGameAccountd = true;
+        result.hasGameAccountId = true;
         return this;
       }
-      public Builder ClearGameAccountd() {
+      public Builder ClearGameAccountId() {
         PrepareBuilder();
-        result.hasGameAccountd = false;
-        result.gameAccountd_ = null;
+        result.hasGameAccountId = false;
+        result.gameAccountId_ = null;
         return this;
       }
       

@@ -1208,8 +1208,8 @@ namespace bnet.protocol {
   public sealed partial class IndexEntry : pb::GeneratedMessage<IndexEntry, IndexEntry.Builder> {
     private IndexEntry() { }
     private static readonly IndexEntry defaultInstance = new IndexEntry().MakeReadOnly();
-    private static readonly string[] _ındexEntryFieldNames = new string[] { "name", "url" };
-    private static readonly uint[] _ındexEntryFieldTags = new uint[] { 10, 18 };
+    private static readonly string[] _indexEntryFieldNames = new string[] { "name", "url" };
+    private static readonly uint[] _indexEntryFieldTags = new uint[] { 10, 18 };
     public static IndexEntry DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1260,7 +1260,7 @@ namespace bnet.protocol {
     
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
-      string[] field_names = _ındexEntryFieldNames;
+      string[] field_names = _indexEntryFieldNames;
       if (hasName) {
         output.WriteString(1, field_names[0], Name);
       }
@@ -1430,9 +1430,9 @@ namespace bnet.protocol {
         string field_name;
         while (input.ReadTag(out tag, out field_name)) {
           if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_ındexEntryFieldNames, field_name, global::System.StringComparer.Ordinal);
+            int field_ordinal = global::System.Array.BinarySearch(_indexEntryFieldNames, field_name, global::System.StringComparer.Ordinal);
             if(field_ordinal >= 0)
-              tag = _ındexEntryFieldTags[field_ordinal];
+              tag = _indexEntryFieldTags[field_ordinal];
             else {
               if (unknownFields == null) {
                 unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);

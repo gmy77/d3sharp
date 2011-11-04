@@ -85,23 +85,23 @@ namespace bnet.protocol.connection {
         internal__static_bnet_protocol_connection_ConnectRequest__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_connection_ConnectRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.ConnectRequest, global::bnet.protocol.connection.ConnectRequest.Builder>(internal__static_bnet_protocol_connection_ConnectRequest__Descriptor,
-                new string[] { "Clientd", });
+                new string[] { "ClientId", });
         internal__static_bnet_protocol_connection_ConnectResponse__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_connection_ConnectResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.ConnectResponse, global::bnet.protocol.connection.ConnectResponse.Builder>(internal__static_bnet_protocol_connection_ConnectResponse__Descriptor,
-                new string[] { "Serverd", "Clientd", });
+                new string[] { "ServerId", "ClientId", });
         internal__static_bnet_protocol_connection_BoundService__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_connection_BoundService__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.BoundService, global::bnet.protocol.connection.BoundService.Builder>(internal__static_bnet_protocol_connection_BoundService__Descriptor,
-                new string[] { "Hash", "İd", });
+                new string[] { "Hash", "Id", });
         internal__static_bnet_protocol_connection_BindRequest__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_connection_BindRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.BindRequest, global::bnet.protocol.connection.BindRequest.Builder>(internal__static_bnet_protocol_connection_BindRequest__Descriptor,
-                new string[] { "İmportedServiceHash", "ExportedService", });
+                new string[] { "ImportedServiceHash", "ExportedService", });
         internal__static_bnet_protocol_connection_BindResponse__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_connection_BindResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.BindResponse, global::bnet.protocol.connection.BindResponse.Builder>(internal__static_bnet_protocol_connection_BindResponse__Descriptor,
-                new string[] { "İmportedServiced", });
+                new string[] { "ImportedServiceId", });
         internal__static_bnet_protocol_connection_EchoRequest__Descriptor = Descriptor.MessageTypes[5];
         internal__static_bnet_protocol_connection_EchoRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.EchoRequest, global::bnet.protocol.connection.EchoRequest.Builder>(internal__static_bnet_protocol_connection_EchoRequest__Descriptor,
@@ -168,20 +168,20 @@ namespace bnet.protocol.connection {
       get { return global::bnet.protocol.connection.Connection.internal__static_bnet_protocol_connection_ConnectRequest__FieldAccessorTable; }
     }
     
-    public const int ClientdFieldNumber = 1;
-    private bool hasClientd;
-    private global::bnet.protocol.ProcessId clientd_;
-    public bool HasClientd {
-      get { return hasClientd; }
+    public const int ClientIdFieldNumber = 1;
+    private bool hasClientId;
+    private global::bnet.protocol.ProcessId clientId_;
+    public bool HasClientId {
+      get { return hasClientId; }
     }
-    public global::bnet.protocol.ProcessId Clientd {
-      get { return clientd_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
+    public global::bnet.protocol.ProcessId ClientId {
+      get { return clientId_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (HasClientd) {
-          if (!Clientd.IsInitialized) return false;
+        if (HasClientId) {
+          if (!ClientId.IsInitialized) return false;
         }
         return true;
       }
@@ -190,8 +190,8 @@ namespace bnet.protocol.connection {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _connectRequestFieldNames;
-      if (hasClientd) {
-        output.WriteMessage(1, field_names[0], Clientd);
+      if (hasClientId) {
+        output.WriteMessage(1, field_names[0], ClientId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -203,8 +203,8 @@ namespace bnet.protocol.connection {
         if (size != -1) return size;
         
         size = 0;
-        if (hasClientd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Clientd);
+        if (hasClientId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, ClientId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -332,8 +332,8 @@ namespace bnet.protocol.connection {
       public override Builder MergeFrom(ConnectRequest other) {
         if (other == global::bnet.protocol.connection.ConnectRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasClientd) {
-          MergeClientd(other.Clientd);
+        if (other.HasClientId) {
+          MergeClientId(other.ClientId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -380,11 +380,11 @@ namespace bnet.protocol.connection {
             }
             case 10: {
               global::bnet.protocol.ProcessId.Builder subBuilder = global::bnet.protocol.ProcessId.CreateBuilder();
-              if (result.hasClientd) {
-                subBuilder.MergeFrom(Clientd);
+              if (result.hasClientId) {
+                subBuilder.MergeFrom(ClientId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Clientd = subBuilder.BuildPartial();
+              ClientId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -397,43 +397,43 @@ namespace bnet.protocol.connection {
       }
       
       
-      public bool HasClientd {
-       get { return result.hasClientd; }
+      public bool HasClientId {
+       get { return result.hasClientId; }
       }
-      public global::bnet.protocol.ProcessId Clientd {
-        get { return result.Clientd; }
-        set { SetClientd(value); }
+      public global::bnet.protocol.ProcessId ClientId {
+        get { return result.ClientId; }
+        set { SetClientId(value); }
       }
-      public Builder SetClientd(global::bnet.protocol.ProcessId value) {
+      public Builder SetClientId(global::bnet.protocol.ProcessId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasClientd = true;
-        result.clientd_ = value;
+        result.hasClientId = true;
+        result.clientId_ = value;
         return this;
       }
-      public Builder SetClientd(global::bnet.protocol.ProcessId.Builder builderForValue) {
+      public Builder SetClientId(global::bnet.protocol.ProcessId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasClientd = true;
-        result.clientd_ = builderForValue.Build();
+        result.hasClientId = true;
+        result.clientId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeClientd(global::bnet.protocol.ProcessId value) {
+      public Builder MergeClientId(global::bnet.protocol.ProcessId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasClientd &&
-            result.clientd_ != global::bnet.protocol.ProcessId.DefaultInstance) {
-            result.clientd_ = global::bnet.protocol.ProcessId.CreateBuilder(result.clientd_).MergeFrom(value).BuildPartial();
+        if (result.hasClientId &&
+            result.clientId_ != global::bnet.protocol.ProcessId.DefaultInstance) {
+            result.clientId_ = global::bnet.protocol.ProcessId.CreateBuilder(result.clientId_).MergeFrom(value).BuildPartial();
         } else {
-          result.clientd_ = value;
+          result.clientId_ = value;
         }
-        result.hasClientd = true;
+        result.hasClientId = true;
         return this;
       }
-      public Builder ClearClientd() {
+      public Builder ClearClientId() {
         PrepareBuilder();
-        result.hasClientd = false;
-        result.clientd_ = null;
+        result.hasClientId = false;
+        result.clientId_ = null;
         return this;
       }
     }
@@ -470,32 +470,32 @@ namespace bnet.protocol.connection {
       get { return global::bnet.protocol.connection.Connection.internal__static_bnet_protocol_connection_ConnectResponse__FieldAccessorTable; }
     }
     
-    public const int ServerdFieldNumber = 1;
-    private bool hasServerd;
-    private global::bnet.protocol.ProcessId serverd_;
-    public bool HasServerd {
-      get { return hasServerd; }
+    public const int ServerIdFieldNumber = 1;
+    private bool hasServerId;
+    private global::bnet.protocol.ProcessId serverId_;
+    public bool HasServerId {
+      get { return hasServerId; }
     }
-    public global::bnet.protocol.ProcessId Serverd {
-      get { return serverd_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
+    public global::bnet.protocol.ProcessId ServerId {
+      get { return serverId_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
     }
     
-    public const int ClientdFieldNumber = 2;
-    private bool hasClientd;
-    private global::bnet.protocol.ProcessId clientd_;
-    public bool HasClientd {
-      get { return hasClientd; }
+    public const int ClientIdFieldNumber = 2;
+    private bool hasClientId;
+    private global::bnet.protocol.ProcessId clientId_;
+    public bool HasClientId {
+      get { return hasClientId; }
     }
-    public global::bnet.protocol.ProcessId Clientd {
-      get { return clientd_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
+    public global::bnet.protocol.ProcessId ClientId {
+      get { return clientId_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasServerd) return false;
-        if (!Serverd.IsInitialized) return false;
-        if (HasClientd) {
-          if (!Clientd.IsInitialized) return false;
+        if (!hasServerId) return false;
+        if (!ServerId.IsInitialized) return false;
+        if (HasClientId) {
+          if (!ClientId.IsInitialized) return false;
         }
         return true;
       }
@@ -504,11 +504,11 @@ namespace bnet.protocol.connection {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _connectResponseFieldNames;
-      if (hasServerd) {
-        output.WriteMessage(1, field_names[1], Serverd);
+      if (hasServerId) {
+        output.WriteMessage(1, field_names[1], ServerId);
       }
-      if (hasClientd) {
-        output.WriteMessage(2, field_names[0], Clientd);
+      if (hasClientId) {
+        output.WriteMessage(2, field_names[0], ClientId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -520,11 +520,11 @@ namespace bnet.protocol.connection {
         if (size != -1) return size;
         
         size = 0;
-        if (hasServerd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Serverd);
+        if (hasServerId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, ServerId);
         }
-        if (hasClientd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Clientd);
+        if (hasClientId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, ClientId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -652,11 +652,11 @@ namespace bnet.protocol.connection {
       public override Builder MergeFrom(ConnectResponse other) {
         if (other == global::bnet.protocol.connection.ConnectResponse.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasServerd) {
-          MergeServerd(other.Serverd);
+        if (other.HasServerId) {
+          MergeServerId(other.ServerId);
         }
-        if (other.HasClientd) {
-          MergeClientd(other.Clientd);
+        if (other.HasClientId) {
+          MergeClientId(other.ClientId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -703,20 +703,20 @@ namespace bnet.protocol.connection {
             }
             case 10: {
               global::bnet.protocol.ProcessId.Builder subBuilder = global::bnet.protocol.ProcessId.CreateBuilder();
-              if (result.hasServerd) {
-                subBuilder.MergeFrom(Serverd);
+              if (result.hasServerId) {
+                subBuilder.MergeFrom(ServerId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Serverd = subBuilder.BuildPartial();
+              ServerId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
               global::bnet.protocol.ProcessId.Builder subBuilder = global::bnet.protocol.ProcessId.CreateBuilder();
-              if (result.hasClientd) {
-                subBuilder.MergeFrom(Clientd);
+              if (result.hasClientId) {
+                subBuilder.MergeFrom(ClientId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Clientd = subBuilder.BuildPartial();
+              ClientId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -729,83 +729,83 @@ namespace bnet.protocol.connection {
       }
       
       
-      public bool HasServerd {
-       get { return result.hasServerd; }
+      public bool HasServerId {
+       get { return result.hasServerId; }
       }
-      public global::bnet.protocol.ProcessId Serverd {
-        get { return result.Serverd; }
-        set { SetServerd(value); }
+      public global::bnet.protocol.ProcessId ServerId {
+        get { return result.ServerId; }
+        set { SetServerId(value); }
       }
-      public Builder SetServerd(global::bnet.protocol.ProcessId value) {
+      public Builder SetServerId(global::bnet.protocol.ProcessId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasServerd = true;
-        result.serverd_ = value;
+        result.hasServerId = true;
+        result.serverId_ = value;
         return this;
       }
-      public Builder SetServerd(global::bnet.protocol.ProcessId.Builder builderForValue) {
+      public Builder SetServerId(global::bnet.protocol.ProcessId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasServerd = true;
-        result.serverd_ = builderForValue.Build();
+        result.hasServerId = true;
+        result.serverId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeServerd(global::bnet.protocol.ProcessId value) {
+      public Builder MergeServerId(global::bnet.protocol.ProcessId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasServerd &&
-            result.serverd_ != global::bnet.protocol.ProcessId.DefaultInstance) {
-            result.serverd_ = global::bnet.protocol.ProcessId.CreateBuilder(result.serverd_).MergeFrom(value).BuildPartial();
+        if (result.hasServerId &&
+            result.serverId_ != global::bnet.protocol.ProcessId.DefaultInstance) {
+            result.serverId_ = global::bnet.protocol.ProcessId.CreateBuilder(result.serverId_).MergeFrom(value).BuildPartial();
         } else {
-          result.serverd_ = value;
+          result.serverId_ = value;
         }
-        result.hasServerd = true;
+        result.hasServerId = true;
         return this;
       }
-      public Builder ClearServerd() {
+      public Builder ClearServerId() {
         PrepareBuilder();
-        result.hasServerd = false;
-        result.serverd_ = null;
+        result.hasServerId = false;
+        result.serverId_ = null;
         return this;
       }
       
-      public bool HasClientd {
-       get { return result.hasClientd; }
+      public bool HasClientId {
+       get { return result.hasClientId; }
       }
-      public global::bnet.protocol.ProcessId Clientd {
-        get { return result.Clientd; }
-        set { SetClientd(value); }
+      public global::bnet.protocol.ProcessId ClientId {
+        get { return result.ClientId; }
+        set { SetClientId(value); }
       }
-      public Builder SetClientd(global::bnet.protocol.ProcessId value) {
+      public Builder SetClientId(global::bnet.protocol.ProcessId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasClientd = true;
-        result.clientd_ = value;
+        result.hasClientId = true;
+        result.clientId_ = value;
         return this;
       }
-      public Builder SetClientd(global::bnet.protocol.ProcessId.Builder builderForValue) {
+      public Builder SetClientId(global::bnet.protocol.ProcessId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasClientd = true;
-        result.clientd_ = builderForValue.Build();
+        result.hasClientId = true;
+        result.clientId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeClientd(global::bnet.protocol.ProcessId value) {
+      public Builder MergeClientId(global::bnet.protocol.ProcessId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasClientd &&
-            result.clientd_ != global::bnet.protocol.ProcessId.DefaultInstance) {
-            result.clientd_ = global::bnet.protocol.ProcessId.CreateBuilder(result.clientd_).MergeFrom(value).BuildPartial();
+        if (result.hasClientId &&
+            result.clientId_ != global::bnet.protocol.ProcessId.DefaultInstance) {
+            result.clientId_ = global::bnet.protocol.ProcessId.CreateBuilder(result.clientId_).MergeFrom(value).BuildPartial();
         } else {
-          result.clientd_ = value;
+          result.clientId_ = value;
         }
-        result.hasClientd = true;
+        result.hasClientId = true;
         return this;
       }
-      public Builder ClearClientd() {
+      public Builder ClearClientId() {
         PrepareBuilder();
-        result.hasClientd = false;
-        result.clientd_ = null;
+        result.hasClientId = false;
+        result.clientId_ = null;
         return this;
       }
     }
@@ -852,20 +852,20 @@ namespace bnet.protocol.connection {
       get { return hash_; }
     }
     
-    public const int İdFieldNumber = 2;
-    private bool hasİd;
+    public const int IdFieldNumber = 2;
+    private bool hasId;
     private uint id_;
-    public bool Hasİd {
-      get { return hasİd; }
+    public bool HasId {
+      get { return hasId; }
     }
-    public uint İd {
+    public uint Id {
       get { return id_; }
     }
     
     public override bool IsInitialized {
       get {
         if (!hasHash) return false;
-        if (!hasİd) return false;
+        if (!hasId) return false;
         return true;
       }
     }
@@ -876,8 +876,8 @@ namespace bnet.protocol.connection {
       if (hasHash) {
         output.WriteFixed32(1, field_names[0], Hash);
       }
-      if (hasİd) {
-        output.WriteUInt32(2, field_names[1], İd);
+      if (hasId) {
+        output.WriteUInt32(2, field_names[1], Id);
       }
       UnknownFields.WriteTo(output);
     }
@@ -892,8 +892,8 @@ namespace bnet.protocol.connection {
         if (hasHash) {
           size += pb::CodedOutputStream.ComputeFixed32Size(1, Hash);
         }
-        if (hasİd) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(2, İd);
+        if (hasId) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, Id);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1024,8 +1024,8 @@ namespace bnet.protocol.connection {
         if (other.HasHash) {
           Hash = other.Hash;
         }
-        if (other.Hasİd) {
-          İd = other.İd;
+        if (other.HasId) {
+          Id = other.Id;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1075,7 +1075,7 @@ namespace bnet.protocol.connection {
               break;
             }
             case 16: {
-              result.hasİd = input.ReadUInt32(ref result.id_);
+              result.hasId = input.ReadUInt32(ref result.id_);
               break;
             }
           }
@@ -1108,22 +1108,22 @@ namespace bnet.protocol.connection {
         return this;
       }
       
-      public bool Hasİd {
-        get { return result.hasİd; }
+      public bool HasId {
+        get { return result.hasId; }
       }
-      public uint İd {
-        get { return result.İd; }
-        set { Setİd(value); }
+      public uint Id {
+        get { return result.Id; }
+        set { SetId(value); }
       }
-      public Builder Setİd(uint value) {
+      public Builder SetId(uint value) {
         PrepareBuilder();
-        result.hasİd = true;
+        result.hasId = true;
         result.id_ = value;
         return this;
       }
-      public Builder Clearİd() {
+      public Builder ClearId() {
         PrepareBuilder();
-        result.hasİd = false;
+        result.hasId = false;
         result.id_ = 0;
         return this;
       }
@@ -1161,16 +1161,16 @@ namespace bnet.protocol.connection {
       get { return global::bnet.protocol.connection.Connection.internal__static_bnet_protocol_connection_BindRequest__FieldAccessorTable; }
     }
     
-    public const int İmportedServiceHashFieldNumber = 1;
+    public const int ImportedServiceHashFieldNumber = 1;
     private int importedServiceHashMemoizedSerializedSize;
     private pbc::PopsicleList<uint> importedServiceHash_ = new pbc::PopsicleList<uint>();
-    public scg::IList<uint> İmportedServiceHashList {
+    public scg::IList<uint> ImportedServiceHashList {
       get { return pbc::Lists.AsReadOnly(importedServiceHash_); }
     }
-    public int İmportedServiceHashCount {
+    public int ImportedServiceHashCount {
       get { return importedServiceHash_.Count; }
     }
-    public uint GetİmportedServiceHash(int index) {
+    public uint GetImportedServiceHash(int index) {
       return importedServiceHash_[index];
     }
     
@@ -1422,31 +1422,31 @@ namespace bnet.protocol.connection {
       }
       
       
-      public pbc::IPopsicleList<uint> İmportedServiceHashList {
+      public pbc::IPopsicleList<uint> ImportedServiceHashList {
         get { return PrepareBuilder().importedServiceHash_; }
       }
-      public int İmportedServiceHashCount {
-        get { return result.İmportedServiceHashCount; }
+      public int ImportedServiceHashCount {
+        get { return result.ImportedServiceHashCount; }
       }
-      public uint GetİmportedServiceHash(int index) {
-        return result.GetİmportedServiceHash(index);
+      public uint GetImportedServiceHash(int index) {
+        return result.GetImportedServiceHash(index);
       }
-      public Builder SetİmportedServiceHash(int index, uint value) {
+      public Builder SetImportedServiceHash(int index, uint value) {
         PrepareBuilder();
         result.importedServiceHash_[index] = value;
         return this;
       }
-      public Builder AddİmportedServiceHash(uint value) {
+      public Builder AddImportedServiceHash(uint value) {
         PrepareBuilder();
         result.importedServiceHash_.Add(value);
         return this;
       }
-      public Builder AddRangeİmportedServiceHash(scg::IEnumerable<uint> values) {
+      public Builder AddRangeImportedServiceHash(scg::IEnumerable<uint> values) {
         PrepareBuilder();
         result.importedServiceHash_.Add(values);
         return this;
       }
-      public Builder ClearİmportedServiceHash() {
+      public Builder ClearImportedServiceHash() {
         PrepareBuilder();
         result.importedServiceHash_.Clear();
         return this;
@@ -1529,17 +1529,17 @@ namespace bnet.protocol.connection {
       get { return global::bnet.protocol.connection.Connection.internal__static_bnet_protocol_connection_BindResponse__FieldAccessorTable; }
     }
     
-    public const int İmportedServicedFieldNumber = 1;
-    private int importedServicedMemoizedSerializedSize;
-    private pbc::PopsicleList<uint> importedServiced_ = new pbc::PopsicleList<uint>();
-    public scg::IList<uint> İmportedServicedList {
-      get { return pbc::Lists.AsReadOnly(importedServiced_); }
+    public const int ImportedServiceIdFieldNumber = 1;
+    private int importedServiceIdMemoizedSerializedSize;
+    private pbc::PopsicleList<uint> importedServiceId_ = new pbc::PopsicleList<uint>();
+    public scg::IList<uint> ImportedServiceIdList {
+      get { return pbc::Lists.AsReadOnly(importedServiceId_); }
     }
-    public int İmportedServicedCount {
-      get { return importedServiced_.Count; }
+    public int ImportedServiceIdCount {
+      get { return importedServiceId_.Count; }
     }
-    public uint GetİmportedServiced(int index) {
-      return importedServiced_[index];
+    public uint GetImportedServiceId(int index) {
+      return importedServiceId_[index];
     }
     
     public override bool IsInitialized {
@@ -1551,8 +1551,8 @@ namespace bnet.protocol.connection {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _bindResponseFieldNames;
-      if (importedServiced_.Count > 0) {
-        output.WritePackedUInt32Array(1, field_names[0], importedServicedMemoizedSerializedSize, importedServiced_);
+      if (importedServiceId_.Count > 0) {
+        output.WritePackedUInt32Array(1, field_names[0], importedServiceIdMemoizedSerializedSize, importedServiceId_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1566,14 +1566,14 @@ namespace bnet.protocol.connection {
         size = 0;
         {
           int dataSize = 0;
-          foreach (uint element in İmportedServicedList) {
+          foreach (uint element in ImportedServiceIdList) {
             dataSize += pb::CodedOutputStream.ComputeUInt32SizeNoTag(element);
           }
           size += dataSize;
-          if (importedServiced_.Count != 0) {
+          if (importedServiceId_.Count != 0) {
             size += 1 + pb::CodedOutputStream.ComputeInt32SizeNoTag(dataSize);
           }
-          importedServicedMemoizedSerializedSize = dataSize;
+          importedServiceIdMemoizedSerializedSize = dataSize;
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1612,7 +1612,7 @@ namespace bnet.protocol.connection {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private BindResponse MakeReadOnly() {
-      importedServiced_.MakeReadOnly();
+      importedServiceId_.MakeReadOnly();
       return this;
     }
     
@@ -1702,8 +1702,8 @@ namespace bnet.protocol.connection {
       public override Builder MergeFrom(BindResponse other) {
         if (other == global::bnet.protocol.connection.BindResponse.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.importedServiced_.Count != 0) {
-          result.importedServiced_.Add(other.importedServiced_);
+        if (other.importedServiceId_.Count != 0) {
+          result.importedServiceId_.Add(other.importedServiceId_);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1750,7 +1750,7 @@ namespace bnet.protocol.connection {
             }
             case 10:
             case 8: {
-              input.ReadUInt32Array(tag, field_name, result.importedServiced_);
+              input.ReadUInt32Array(tag, field_name, result.importedServiceId_);
               break;
             }
           }
@@ -1763,33 +1763,33 @@ namespace bnet.protocol.connection {
       }
       
       
-      public pbc::IPopsicleList<uint> İmportedServicedList {
-        get { return PrepareBuilder().importedServiced_; }
+      public pbc::IPopsicleList<uint> ImportedServiceIdList {
+        get { return PrepareBuilder().importedServiceId_; }
       }
-      public int İmportedServicedCount {
-        get { return result.İmportedServicedCount; }
+      public int ImportedServiceIdCount {
+        get { return result.ImportedServiceIdCount; }
       }
-      public uint GetİmportedServiced(int index) {
-        return result.GetİmportedServiced(index);
+      public uint GetImportedServiceId(int index) {
+        return result.GetImportedServiceId(index);
       }
-      public Builder SetİmportedServiced(int index, uint value) {
+      public Builder SetImportedServiceId(int index, uint value) {
         PrepareBuilder();
-        result.importedServiced_[index] = value;
+        result.importedServiceId_[index] = value;
         return this;
       }
-      public Builder AddİmportedServiced(uint value) {
+      public Builder AddImportedServiceId(uint value) {
         PrepareBuilder();
-        result.importedServiced_.Add(value);
+        result.importedServiceId_.Add(value);
         return this;
       }
-      public Builder AddRangeİmportedServiced(scg::IEnumerable<uint> values) {
+      public Builder AddRangeImportedServiceId(scg::IEnumerable<uint> values) {
         PrepareBuilder();
-        result.importedServiced_.Add(values);
+        result.importedServiceId_.Add(values);
         return this;
       }
-      public Builder ClearİmportedServiced() {
+      public Builder ClearImportedServiceId() {
         PrepareBuilder();
-        result.importedServiced_.Clear();
+        result.importedServiceId_.Clear();
         return this;
       }
     }

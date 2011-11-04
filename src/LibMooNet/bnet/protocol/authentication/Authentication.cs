@@ -71,15 +71,15 @@ namespace bnet.protocol.authentication {
         internal__static_bnet_protocol_authentication_ModuleLoadResponse__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_authentication_ModuleLoadResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ModuleLoadResponse, global::bnet.protocol.authentication.ModuleLoadResponse.Builder>(internal__static_bnet_protocol_authentication_ModuleLoadResponse__Descriptor,
-                new string[] { "Moduled", });
+                new string[] { "ModuleId", });
         internal__static_bnet_protocol_authentication_ModuleMessageRequest__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_authentication_ModuleMessageRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ModuleMessageRequest, global::bnet.protocol.authentication.ModuleMessageRequest.Builder>(internal__static_bnet_protocol_authentication_ModuleMessageRequest__Descriptor,
-                new string[] { "Moduled", "Message", });
+                new string[] { "ModuleId", "Message", });
         internal__static_bnet_protocol_authentication_LogonRequest__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_authentication_LogonRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonRequest, global::bnet.protocol.authentication.LogonRequest.Builder>(internal__static_bnet_protocol_authentication_LogonRequest__Descriptor,
-                new string[] { "Program", "Platform", "Locale", "Email", "Listenerd", "Version", "ApplicationVersion", });
+                new string[] { "Program", "Platform", "Locale", "Email", "ListenerId", "Version", "ApplicationVersion", });
         internal__static_bnet_protocol_authentication_LogonResponse__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_authentication_LogonResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonResponse, global::bnet.protocol.authentication.LogonResponse.Builder>(internal__static_bnet_protocol_authentication_LogonResponse__Descriptor,
@@ -475,14 +475,14 @@ namespace bnet.protocol.authentication {
       get { return global::bnet.protocol.authentication.Authentication.internal__static_bnet_protocol_authentication_ModuleLoadResponse__FieldAccessorTable; }
     }
     
-    public const int ModuledFieldNumber = 2;
-    private bool hasModuled;
-    private int moduled_;
-    public bool HasModuled {
-      get { return hasModuled; }
+    public const int ModuleIdFieldNumber = 2;
+    private bool hasModuleId;
+    private int moduleId_;
+    public bool HasModuleId {
+      get { return hasModuleId; }
     }
-    public int Moduled {
-      get { return moduled_; }
+    public int ModuleId {
+      get { return moduleId_; }
     }
     
     public override bool IsInitialized {
@@ -494,8 +494,8 @@ namespace bnet.protocol.authentication {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _moduleLoadResponseFieldNames;
-      if (hasModuled) {
-        output.WriteInt32(2, field_names[0], Moduled);
+      if (hasModuleId) {
+        output.WriteInt32(2, field_names[0], ModuleId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -507,8 +507,8 @@ namespace bnet.protocol.authentication {
         if (size != -1) return size;
         
         size = 0;
-        if (hasModuled) {
-          size += pb::CodedOutputStream.ComputeInt32Size(2, Moduled);
+        if (hasModuleId) {
+          size += pb::CodedOutputStream.ComputeInt32Size(2, ModuleId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -636,8 +636,8 @@ namespace bnet.protocol.authentication {
       public override Builder MergeFrom(ModuleLoadResponse other) {
         if (other == global::bnet.protocol.authentication.ModuleLoadResponse.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasModuled) {
-          Moduled = other.Moduled;
+        if (other.HasModuleId) {
+          ModuleId = other.ModuleId;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -683,7 +683,7 @@ namespace bnet.protocol.authentication {
               break;
             }
             case 16: {
-              result.hasModuled = input.ReadInt32(ref result.moduled_);
+              result.hasModuleId = input.ReadInt32(ref result.moduleId_);
               break;
             }
           }
@@ -696,23 +696,23 @@ namespace bnet.protocol.authentication {
       }
       
       
-      public bool HasModuled {
-        get { return result.hasModuled; }
+      public bool HasModuleId {
+        get { return result.hasModuleId; }
       }
-      public int Moduled {
-        get { return result.Moduled; }
-        set { SetModuled(value); }
+      public int ModuleId {
+        get { return result.ModuleId; }
+        set { SetModuleId(value); }
       }
-      public Builder SetModuled(int value) {
+      public Builder SetModuleId(int value) {
         PrepareBuilder();
-        result.hasModuled = true;
-        result.moduled_ = value;
+        result.hasModuleId = true;
+        result.moduleId_ = value;
         return this;
       }
-      public Builder ClearModuled() {
+      public Builder ClearModuleId() {
         PrepareBuilder();
-        result.hasModuled = false;
-        result.moduled_ = 0;
+        result.hasModuleId = false;
+        result.moduleId_ = 0;
         return this;
       }
     }
@@ -749,14 +749,14 @@ namespace bnet.protocol.authentication {
       get { return global::bnet.protocol.authentication.Authentication.internal__static_bnet_protocol_authentication_ModuleMessageRequest__FieldAccessorTable; }
     }
     
-    public const int ModuledFieldNumber = 1;
-    private bool hasModuled;
-    private int moduled_;
-    public bool HasModuled {
-      get { return hasModuled; }
+    public const int ModuleIdFieldNumber = 1;
+    private bool hasModuleId;
+    private int moduleId_;
+    public bool HasModuleId {
+      get { return hasModuleId; }
     }
-    public int Moduled {
-      get { return moduled_; }
+    public int ModuleId {
+      get { return moduleId_; }
     }
     
     public const int MessageFieldNumber = 2;
@@ -771,7 +771,7 @@ namespace bnet.protocol.authentication {
     
     public override bool IsInitialized {
       get {
-        if (!hasModuled) return false;
+        if (!hasModuleId) return false;
         return true;
       }
     }
@@ -779,8 +779,8 @@ namespace bnet.protocol.authentication {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _moduleMessageRequestFieldNames;
-      if (hasModuled) {
-        output.WriteInt32(1, field_names[1], Moduled);
+      if (hasModuleId) {
+        output.WriteInt32(1, field_names[1], ModuleId);
       }
       if (hasMessage) {
         output.WriteBytes(2, field_names[0], Message);
@@ -795,8 +795,8 @@ namespace bnet.protocol.authentication {
         if (size != -1) return size;
         
         size = 0;
-        if (hasModuled) {
-          size += pb::CodedOutputStream.ComputeInt32Size(1, Moduled);
+        if (hasModuleId) {
+          size += pb::CodedOutputStream.ComputeInt32Size(1, ModuleId);
         }
         if (hasMessage) {
           size += pb::CodedOutputStream.ComputeBytesSize(2, Message);
@@ -927,8 +927,8 @@ namespace bnet.protocol.authentication {
       public override Builder MergeFrom(ModuleMessageRequest other) {
         if (other == global::bnet.protocol.authentication.ModuleMessageRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasModuled) {
-          Moduled = other.Moduled;
+        if (other.HasModuleId) {
+          ModuleId = other.ModuleId;
         }
         if (other.HasMessage) {
           Message = other.Message;
@@ -977,7 +977,7 @@ namespace bnet.protocol.authentication {
               break;
             }
             case 8: {
-              result.hasModuled = input.ReadInt32(ref result.moduled_);
+              result.hasModuleId = input.ReadInt32(ref result.moduleId_);
               break;
             }
             case 18: {
@@ -994,23 +994,23 @@ namespace bnet.protocol.authentication {
       }
       
       
-      public bool HasModuled {
-        get { return result.hasModuled; }
+      public bool HasModuleId {
+        get { return result.hasModuleId; }
       }
-      public int Moduled {
-        get { return result.Moduled; }
-        set { SetModuled(value); }
+      public int ModuleId {
+        get { return result.ModuleId; }
+        set { SetModuleId(value); }
       }
-      public Builder SetModuled(int value) {
+      public Builder SetModuleId(int value) {
         PrepareBuilder();
-        result.hasModuled = true;
-        result.moduled_ = value;
+        result.hasModuleId = true;
+        result.moduleId_ = value;
         return this;
       }
-      public Builder ClearModuled() {
+      public Builder ClearModuleId() {
         PrepareBuilder();
-        result.hasModuled = false;
-        result.moduled_ = 0;
+        result.hasModuleId = false;
+        result.moduleId_ = 0;
         return this;
       }
       
@@ -1108,14 +1108,14 @@ namespace bnet.protocol.authentication {
       get { return email_; }
     }
     
-    public const int ListenerdFieldNumber = 5;
-    private bool hasListenerd;
-    private ulong listenerd_;
-    public bool HasListenerd {
-      get { return hasListenerd; }
+    public const int ListenerIdFieldNumber = 5;
+    private bool hasListenerId;
+    private ulong listenerId_;
+    public bool HasListenerId {
+      get { return hasListenerId; }
     }
-    public ulong Listenerd {
-      get { return listenerd_; }
+    public ulong ListenerId {
+      get { return listenerId_; }
     }
     
     public const int VersionFieldNumber = 6;
@@ -1159,8 +1159,8 @@ namespace bnet.protocol.authentication {
       if (hasEmail) {
         output.WriteString(4, field_names[1], Email);
       }
-      if (hasListenerd) {
-        output.WriteUInt64(5, field_names[2], Listenerd);
+      if (hasListenerId) {
+        output.WriteUInt64(5, field_names[2], ListenerId);
       }
       if (hasVersion) {
         output.WriteString(6, field_names[6], Version);
@@ -1190,8 +1190,8 @@ namespace bnet.protocol.authentication {
         if (hasEmail) {
           size += pb::CodedOutputStream.ComputeStringSize(4, Email);
         }
-        if (hasListenerd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(5, Listenerd);
+        if (hasListenerId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(5, ListenerId);
         }
         if (hasVersion) {
           size += pb::CodedOutputStream.ComputeStringSize(6, Version);
@@ -1337,8 +1337,8 @@ namespace bnet.protocol.authentication {
         if (other.HasEmail) {
           Email = other.Email;
         }
-        if (other.HasListenerd) {
-          Listenerd = other.Listenerd;
+        if (other.HasListenerId) {
+          ListenerId = other.ListenerId;
         }
         if (other.HasVersion) {
           Version = other.Version;
@@ -1406,7 +1406,7 @@ namespace bnet.protocol.authentication {
               break;
             }
             case 40: {
-              result.hasListenerd = input.ReadUInt64(ref result.listenerd_);
+              result.hasListenerId = input.ReadUInt64(ref result.listenerId_);
               break;
             }
             case 50: {
@@ -1511,23 +1511,23 @@ namespace bnet.protocol.authentication {
         return this;
       }
       
-      public bool HasListenerd {
-        get { return result.hasListenerd; }
+      public bool HasListenerId {
+        get { return result.hasListenerId; }
       }
-      public ulong Listenerd {
-        get { return result.Listenerd; }
-        set { SetListenerd(value); }
+      public ulong ListenerId {
+        get { return result.ListenerId; }
+        set { SetListenerId(value); }
       }
-      public Builder SetListenerd(ulong value) {
+      public Builder SetListenerId(ulong value) {
         PrepareBuilder();
-        result.hasListenerd = true;
-        result.listenerd_ = value;
+        result.hasListenerId = true;
+        result.listenerId_ = value;
         return this;
       }
-      public Builder ClearListenerd() {
+      public Builder ClearListenerId() {
         PrepareBuilder();
-        result.hasListenerd = false;
-        result.listenerd_ = 0UL;
+        result.hasListenerId = false;
+        result.listenerId_ = 0UL;
         return this;
       }
       

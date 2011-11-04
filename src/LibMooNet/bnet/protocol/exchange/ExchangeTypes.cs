@@ -182,23 +182,23 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_OrderBookHandle__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_exchange_OrderBookHandle__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.OrderBookHandle, global::bnet.protocol.exchange.OrderBookHandle.Builder>(internal__static_bnet_protocol_exchange_OrderBookHandle__Descriptor,
-                new string[] { "Partitiond", "OrderBookd", });
+                new string[] { "PartitionId", "OrderBookId", });
         internal__static_bnet_protocol_exchange_OrderBookNotification__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_exchange_OrderBookNotification__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.OrderBookNotification, global::bnet.protocol.exchange.OrderBookNotification.Builder>(internal__static_bnet_protocol_exchange_OrderBookNotification__Descriptor,
-                new string[] { "OrderBook", "Partitiond", "OrderBookd", "TradeNowPrice", "WinningPrice", "Status", "UpdateTime", "ClosedTime", "FilledAmount", });
+                new string[] { "OrderBook", "PartitionId", "OrderBookId", "TradeNowPrice", "WinningPrice", "Status", "UpdateTime", "ClosedTime", "FilledAmount", });
         internal__static_bnet_protocol_exchange_OrderBookSummary__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_exchange_OrderBookSummary__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.OrderBookSummary, global::bnet.protocol.exchange.OrderBookSummary.Builder>(internal__static_bnet_protocol_exchange_OrderBookSummary__Descriptor,
-                new string[] { "Partitiond", "OrderBookd", "Result", "OrderBook", "Amount", "BestOfferPrice", "BestBidPrice", "EndTime", "Status", "CreatedTime", "ActiveTime", "ClosedTime", "Reason", "OutBidUnitPrice", });
+                new string[] { "PartitionId", "OrderBookId", "Result", "OrderBook", "Amount", "BestOfferPrice", "BestBidPrice", "EndTime", "Status", "CreatedTime", "ActiveTime", "ClosedTime", "Reason", "OutBidUnitPrice", });
         internal__static_bnet_protocol_exchange_Order__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_exchange_Order__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.Order, global::bnet.protocol.exchange.Order.Builder>(internal__static_bnet_protocol_exchange_Order__Descriptor,
-                new string[] { "Amount", "StartTime", "EndTime", "AccountForMoney", "AccountFortem", "BnetAccount", "GameAccount", "Toon", });
+                new string[] { "Amount", "StartTime", "EndTime", "AccountForMoney", "AccountForItem", "BnetAccount", "GameAccount", "Toon", });
         internal__static_bnet_protocol_exchange_Extension__Descriptor = Descriptor.MessageTypes[5];
         internal__static_bnet_protocol_exchange_Extension__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.Extension, global::bnet.protocol.exchange.Extension.Builder>(internal__static_bnet_protocol_exchange_Extension__Descriptor,
-                new string[] { "Partitiond", "OrderBookd", "Orderd", "FilledAmount", "OrderStatus", "AuthorizedTime", "CreatedTime", "ClosedTime", "Reason", "OrderBook", "OrderBookStatus", "MoneyToClaim", "İtemsToClaim", "RiskDelayed", });
+                new string[] { "PartitionId", "OrderBookId", "OrderId", "FilledAmount", "OrderStatus", "AuthorizedTime", "CreatedTime", "ClosedTime", "Reason", "OrderBook", "OrderBookStatus", "MoneyToClaim", "ItemsToClaim", "RiskDelayed", });
         internal__static_bnet_protocol_exchange_Offer__Descriptor = Descriptor.MessageTypes[6];
         internal__static_bnet_protocol_exchange_Offer__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.Offer, global::bnet.protocol.exchange.Offer.Builder>(internal__static_bnet_protocol_exchange_Offer__Descriptor,
@@ -230,7 +230,7 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_QueryFilterByOrderId__Descriptor = Descriptor.MessageTypes[13];
         internal__static_bnet_protocol_exchange_QueryFilterByOrderId__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.QueryFilterByOrderId, global::bnet.protocol.exchange.QueryFilterByOrderId.Builder>(internal__static_bnet_protocol_exchange_QueryFilterByOrderId__Descriptor,
-                new string[] { "MaxResult", "RefOrderd", "RefPrice", });
+                new string[] { "MaxResult", "RefOrderId", "RefPrice", });
         internal__static_bnet_protocol_exchange_QueryFilterByCreatedTime__Descriptor = Descriptor.MessageTypes[14];
         internal__static_bnet_protocol_exchange_QueryFilterByCreatedTime__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.QueryFilterByCreatedTime, global::bnet.protocol.exchange.QueryFilterByCreatedTime.Builder>(internal__static_bnet_protocol_exchange_QueryFilterByCreatedTime__Descriptor,
@@ -242,11 +242,11 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_Settlement__Descriptor = Descriptor.MessageTypes[16];
         internal__static_bnet_protocol_exchange_Settlement__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.Settlement, global::bnet.protocol.exchange.Settlement.Builder>(internal__static_bnet_protocol_exchange_Settlement__Descriptor,
-                new string[] { "OrderBookd", "MoneyAmount", "İtemsAmount", "OfferSettled", });
+                new string[] { "OrderBookId", "MoneyAmount", "ItemsAmount", "OfferSettleId", });
         internal__static_bnet_protocol_exchange_CurrencyConfig__Descriptor = Descriptor.MessageTypes[17];
         internal__static_bnet_protocol_exchange_CurrencyConfig__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CurrencyConfig, global::bnet.protocol.exchange.CurrencyConfig.Builder>(internal__static_bnet_protocol_exchange_CurrencyConfig__Descriptor,
-                new string[] { "Currency", "TickSize", "FlatOutbidncr", "ScaleOutbidncr", "MinStartingUnitPrice", "MaxStartingUnitPrice", "MaxUnitPrice", "MaxTotalAmount", "BuyoutRule", });
+                new string[] { "Currency", "TickSize", "FlatOutbidIncr", "ScaleOutbidIncr", "MinStartingUnitPrice", "MaxStartingUnitPrice", "MaxUnitPrice", "MaxTotalAmount", "BuyoutRule", });
         internal__static_bnet_protocol_exchange_SpecialistConfig__Descriptor = Descriptor.MessageTypes[18];
         internal__static_bnet_protocol_exchange_SpecialistConfig__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.SpecialistConfig, global::bnet.protocol.exchange.SpecialistConfig.Builder>(internal__static_bnet_protocol_exchange_SpecialistConfig__Descriptor,
@@ -254,15 +254,15 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_BillingAddress__Descriptor = Descriptor.MessageTypes[19];
         internal__static_bnet_protocol_exchange_BillingAddress__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BillingAddress, global::bnet.protocol.exchange.BillingAddress.Builder>(internal__static_bnet_protocol_exchange_BillingAddress__Descriptor,
-                new string[] { "Countryd", "City", "State", "PostalCode", });
+                new string[] { "CountryId", "City", "State", "PostalCode", });
         internal__static_bnet_protocol_exchange_FeeEstimationData__Descriptor = Descriptor.MessageTypes[20];
         internal__static_bnet_protocol_exchange_FeeEstimationData__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.FeeEstimationData, global::bnet.protocol.exchange.FeeEstimationData.Builder>(internal__static_bnet_protocol_exchange_FeeEstimationData__Descriptor,
-                new string[] { "Program", "Specialist", "Currency", "Source", "MoneyAmount", "İtemAmount", "BnetAccount", "BillingAddress", });
+                new string[] { "Program", "Specialist", "Currency", "Source", "MoneyAmount", "ItemAmount", "BnetAccount", "BillingAddress", });
         internal__static_bnet_protocol_exchange_FeeDetail__Descriptor = Descriptor.MessageTypes[21];
         internal__static_bnet_protocol_exchange_FeeDetail__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.FeeDetail, global::bnet.protocol.exchange.FeeDetail.Builder>(internal__static_bnet_protocol_exchange_FeeDetail__Descriptor,
-                new string[] { "Rownum", "FeeAuthDetaild", "Feed", "FeeAmount", "DiscountAmount", "FeeGroupd", "FeeGroupName", "FlatFeeAmount", "ScalingFeeAmount", "MaxFeeAmount", "FeeDescription", "İsTax", "CouponBookd", "CouponType", "CouponDescription", "LeftOverCouponCredit", "LeftOverCouponCharge", });
+                new string[] { "Rownum", "FeeAuthDetailId", "FeeId", "FeeAmount", "DiscountAmount", "FeeGroupId", "FeeGroupName", "FlatFeeAmount", "ScalingFeeAmount", "MaxFeeAmount", "FeeDescription", "IsTax", "CouponBookId", "CouponType", "CouponDescription", "LeftOverCouponCredit", "LeftOverCouponCharge", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -825,31 +825,31 @@ namespace bnet.protocol.exchange {
       get { return global::bnet.protocol.exchange.ExchangeTypes.internal__static_bnet_protocol_exchange_OrderBookHandle__FieldAccessorTable; }
     }
     
-    public const int PartitiondFieldNumber = 1;
-    private bool hasPartitiond;
-    private global::bnet.protocol.exchange.PartitionId partitiond_;
-    public bool HasPartitiond {
-      get { return hasPartitiond; }
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
     }
-    public global::bnet.protocol.exchange.PartitionId Partitiond {
-      get { return partitiond_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
     }
     
-    public const int OrderBookdFieldNumber = 2;
-    private bool hasOrderBookd;
-    private ulong orderBookd_;
-    public bool HasOrderBookd {
-      get { return hasOrderBookd; }
+    public const int OrderBookIdFieldNumber = 2;
+    private bool hasOrderBookId;
+    private ulong orderBookId_;
+    public bool HasOrderBookId {
+      get { return hasOrderBookId; }
     }
-    public ulong OrderBookd {
-      get { return orderBookd_; }
+    public ulong OrderBookId {
+      get { return orderBookId_; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasPartitiond) return false;
-        if (!hasOrderBookd) return false;
-        if (!Partitiond.IsInitialized) return false;
+        if (!hasPartitionId) return false;
+        if (!hasOrderBookId) return false;
+        if (!PartitionId.IsInitialized) return false;
         return true;
       }
     }
@@ -857,11 +857,11 @@ namespace bnet.protocol.exchange {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _orderBookHandleFieldNames;
-      if (hasPartitiond) {
-        output.WriteMessage(1, field_names[1], Partitiond);
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[1], PartitionId);
       }
-      if (hasOrderBookd) {
-        output.WriteUInt64(2, field_names[0], OrderBookd);
+      if (hasOrderBookId) {
+        output.WriteUInt64(2, field_names[0], OrderBookId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -873,11 +873,11 @@ namespace bnet.protocol.exchange {
         if (size != -1) return size;
         
         size = 0;
-        if (hasPartitiond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Partitiond);
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
         }
-        if (hasOrderBookd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, OrderBookd);
+        if (hasOrderBookId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, OrderBookId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1005,11 +1005,11 @@ namespace bnet.protocol.exchange {
       public override Builder MergeFrom(OrderBookHandle other) {
         if (other == global::bnet.protocol.exchange.OrderBookHandle.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasPartitiond) {
-          MergePartitiond(other.Partitiond);
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
         }
-        if (other.HasOrderBookd) {
-          OrderBookd = other.OrderBookd;
+        if (other.HasOrderBookId) {
+          OrderBookId = other.OrderBookId;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1056,15 +1056,15 @@ namespace bnet.protocol.exchange {
             }
             case 10: {
               global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
-              if (result.hasPartitiond) {
-                subBuilder.MergeFrom(Partitiond);
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Partitiond = subBuilder.BuildPartial();
+              PartitionId = subBuilder.BuildPartial();
               break;
             }
             case 16: {
-              result.hasOrderBookd = input.ReadUInt64(ref result.orderBookd_);
+              result.hasOrderBookId = input.ReadUInt64(ref result.orderBookId_);
               break;
             }
           }
@@ -1077,63 +1077,63 @@ namespace bnet.protocol.exchange {
       }
       
       
-      public bool HasPartitiond {
-       get { return result.hasPartitiond; }
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
       }
-      public global::bnet.protocol.exchange.PartitionId Partitiond {
-        get { return result.Partitiond; }
-        set { SetPartitiond(value); }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = value;
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
         return this;
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = builderForValue.Build();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergePartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasPartitiond &&
-            result.partitiond_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
-            result.partitiond_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitiond_).MergeFrom(value).BuildPartial();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
         } else {
-          result.partitiond_ = value;
+          result.partitionId_ = value;
         }
-        result.hasPartitiond = true;
+        result.hasPartitionId = true;
         return this;
       }
-      public Builder ClearPartitiond() {
+      public Builder ClearPartitionId() {
         PrepareBuilder();
-        result.hasPartitiond = false;
-        result.partitiond_ = null;
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
         return this;
       }
       
-      public bool HasOrderBookd {
-        get { return result.hasOrderBookd; }
+      public bool HasOrderBookId {
+        get { return result.hasOrderBookId; }
       }
-      public ulong OrderBookd {
-        get { return result.OrderBookd; }
-        set { SetOrderBookd(value); }
+      public ulong OrderBookId {
+        get { return result.OrderBookId; }
+        set { SetOrderBookId(value); }
       }
-      public Builder SetOrderBookd(ulong value) {
+      public Builder SetOrderBookId(ulong value) {
         PrepareBuilder();
-        result.hasOrderBookd = true;
-        result.orderBookd_ = value;
+        result.hasOrderBookId = true;
+        result.orderBookId_ = value;
         return this;
       }
-      public Builder ClearOrderBookd() {
+      public Builder ClearOrderBookId() {
         PrepareBuilder();
-        result.hasOrderBookd = false;
-        result.orderBookd_ = 0UL;
+        result.hasOrderBookId = false;
+        result.orderBookId_ = 0UL;
         return this;
       }
     }
@@ -1180,24 +1180,24 @@ namespace bnet.protocol.exchange {
       get { return orderBook_ ?? global::bnet.protocol.exchange.OrderBook.DefaultInstance; }
     }
     
-    public const int PartitiondFieldNumber = 2;
-    private bool hasPartitiond;
-    private global::bnet.protocol.exchange.PartitionId partitiond_;
-    public bool HasPartitiond {
-      get { return hasPartitiond; }
+    public const int PartitionIdFieldNumber = 2;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
     }
-    public global::bnet.protocol.exchange.PartitionId Partitiond {
-      get { return partitiond_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
     }
     
-    public const int OrderBookdFieldNumber = 3;
-    private bool hasOrderBookd;
-    private ulong orderBookd_;
-    public bool HasOrderBookd {
-      get { return hasOrderBookd; }
+    public const int OrderBookIdFieldNumber = 3;
+    private bool hasOrderBookId;
+    private ulong orderBookId_;
+    public bool HasOrderBookId {
+      get { return hasOrderBookId; }
     }
-    public ulong OrderBookd {
-      get { return orderBookd_; }
+    public ulong OrderBookId {
+      get { return orderBookId_; }
     }
     
     public const int TradeNowPriceFieldNumber = 4;
@@ -1263,13 +1263,13 @@ namespace bnet.protocol.exchange {
     public override bool IsInitialized {
       get {
         if (!hasOrderBook) return false;
-        if (!hasPartitiond) return false;
-        if (!hasOrderBookd) return false;
+        if (!hasPartitionId) return false;
+        if (!hasOrderBookId) return false;
         if (!hasStatus) return false;
         if (!hasUpdateTime) return false;
         if (!hasFilledAmount) return false;
         if (!OrderBook.IsInitialized) return false;
-        if (!Partitiond.IsInitialized) return false;
+        if (!PartitionId.IsInitialized) return false;
         return true;
       }
     }
@@ -1280,11 +1280,11 @@ namespace bnet.protocol.exchange {
       if (hasOrderBook) {
         output.WriteMessage(1, field_names[2], OrderBook);
       }
-      if (hasPartitiond) {
-        output.WriteMessage(2, field_names[4], Partitiond);
+      if (hasPartitionId) {
+        output.WriteMessage(2, field_names[4], PartitionId);
       }
-      if (hasOrderBookd) {
-        output.WriteUInt64(3, field_names[3], OrderBookd);
+      if (hasOrderBookId) {
+        output.WriteUInt64(3, field_names[3], OrderBookId);
       }
       if (hasTradeNowPrice) {
         output.WriteUInt64(4, field_names[6], TradeNowPrice);
@@ -1317,11 +1317,11 @@ namespace bnet.protocol.exchange {
         if (hasOrderBook) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, OrderBook);
         }
-        if (hasPartitiond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Partitiond);
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, PartitionId);
         }
-        if (hasOrderBookd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(3, OrderBookd);
+        if (hasOrderBookId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(3, OrderBookId);
         }
         if (hasTradeNowPrice) {
           size += pb::CodedOutputStream.ComputeUInt64Size(4, TradeNowPrice);
@@ -1470,11 +1470,11 @@ namespace bnet.protocol.exchange {
         if (other.HasOrderBook) {
           MergeOrderBook(other.OrderBook);
         }
-        if (other.HasPartitiond) {
-          MergePartitiond(other.Partitiond);
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
         }
-        if (other.HasOrderBookd) {
-          OrderBookd = other.OrderBookd;
+        if (other.HasOrderBookId) {
+          OrderBookId = other.OrderBookId;
         }
         if (other.HasTradeNowPrice) {
           TradeNowPrice = other.TradeNowPrice;
@@ -1548,15 +1548,15 @@ namespace bnet.protocol.exchange {
             }
             case 18: {
               global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
-              if (result.hasPartitiond) {
-                subBuilder.MergeFrom(Partitiond);
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Partitiond = subBuilder.BuildPartial();
+              PartitionId = subBuilder.BuildPartial();
               break;
             }
             case 24: {
-              result.hasOrderBookd = input.ReadUInt64(ref result.orderBookd_);
+              result.hasOrderBookId = input.ReadUInt64(ref result.orderBookId_);
               break;
             }
             case 32: {
@@ -1633,63 +1633,63 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasPartitiond {
-       get { return result.hasPartitiond; }
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
       }
-      public global::bnet.protocol.exchange.PartitionId Partitiond {
-        get { return result.Partitiond; }
-        set { SetPartitiond(value); }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = value;
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
         return this;
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = builderForValue.Build();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergePartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasPartitiond &&
-            result.partitiond_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
-            result.partitiond_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitiond_).MergeFrom(value).BuildPartial();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
         } else {
-          result.partitiond_ = value;
+          result.partitionId_ = value;
         }
-        result.hasPartitiond = true;
+        result.hasPartitionId = true;
         return this;
       }
-      public Builder ClearPartitiond() {
+      public Builder ClearPartitionId() {
         PrepareBuilder();
-        result.hasPartitiond = false;
-        result.partitiond_ = null;
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
         return this;
       }
       
-      public bool HasOrderBookd {
-        get { return result.hasOrderBookd; }
+      public bool HasOrderBookId {
+        get { return result.hasOrderBookId; }
       }
-      public ulong OrderBookd {
-        get { return result.OrderBookd; }
-        set { SetOrderBookd(value); }
+      public ulong OrderBookId {
+        get { return result.OrderBookId; }
+        set { SetOrderBookId(value); }
       }
-      public Builder SetOrderBookd(ulong value) {
+      public Builder SetOrderBookId(ulong value) {
         PrepareBuilder();
-        result.hasOrderBookd = true;
-        result.orderBookd_ = value;
+        result.hasOrderBookId = true;
+        result.orderBookId_ = value;
         return this;
       }
-      public Builder ClearOrderBookd() {
+      public Builder ClearOrderBookId() {
         PrepareBuilder();
-        result.hasOrderBookd = false;
-        result.orderBookd_ = 0UL;
+        result.hasOrderBookId = false;
+        result.orderBookId_ = 0UL;
         return this;
       }
       
@@ -1846,24 +1846,24 @@ namespace bnet.protocol.exchange {
       get { return global::bnet.protocol.exchange.ExchangeTypes.internal__static_bnet_protocol_exchange_OrderBookSummary__FieldAccessorTable; }
     }
     
-    public const int PartitiondFieldNumber = 1;
-    private bool hasPartitiond;
-    private global::bnet.protocol.exchange.PartitionId partitiond_;
-    public bool HasPartitiond {
-      get { return hasPartitiond; }
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
     }
-    public global::bnet.protocol.exchange.PartitionId Partitiond {
-      get { return partitiond_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
     }
     
-    public const int OrderBookdFieldNumber = 2;
-    private bool hasOrderBookd;
-    private ulong orderBookd_;
-    public bool HasOrderBookd {
-      get { return hasOrderBookd; }
+    public const int OrderBookIdFieldNumber = 2;
+    private bool hasOrderBookId;
+    private ulong orderBookId_;
+    public bool HasOrderBookId {
+      get { return hasOrderBookId; }
     }
-    public ulong OrderBookd {
-      get { return orderBookd_; }
+    public ulong OrderBookId {
+      get { return orderBookId_; }
     }
     
     public const int ResultFieldNumber = 3;
@@ -1988,10 +1988,10 @@ namespace bnet.protocol.exchange {
     
     public override bool IsInitialized {
       get {
-        if (!hasPartitiond) return false;
-        if (!hasOrderBookd) return false;
+        if (!hasPartitionId) return false;
+        if (!hasOrderBookId) return false;
         if (!hasResult) return false;
-        if (!Partitiond.IsInitialized) return false;
+        if (!PartitionId.IsInitialized) return false;
         if (HasOrderBook) {
           if (!OrderBook.IsInitialized) return false;
         }
@@ -2002,11 +2002,11 @@ namespace bnet.protocol.exchange {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _orderBookSummaryFieldNames;
-      if (hasPartitiond) {
-        output.WriteMessage(1, field_names[10], Partitiond);
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[10], PartitionId);
       }
-      if (hasOrderBookd) {
-        output.WriteUInt64(2, field_names[8], OrderBookd);
+      if (hasOrderBookId) {
+        output.WriteUInt64(2, field_names[8], OrderBookId);
       }
       if (hasResult) {
         output.WriteUInt32(3, field_names[12], Result);
@@ -2054,11 +2054,11 @@ namespace bnet.protocol.exchange {
         if (size != -1) return size;
         
         size = 0;
-        if (hasPartitiond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Partitiond);
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
         }
-        if (hasOrderBookd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, OrderBookd);
+        if (hasOrderBookId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, OrderBookId);
         }
         if (hasResult) {
           size += pb::CodedOutputStream.ComputeUInt32Size(3, Result);
@@ -2222,11 +2222,11 @@ namespace bnet.protocol.exchange {
       public override Builder MergeFrom(OrderBookSummary other) {
         if (other == global::bnet.protocol.exchange.OrderBookSummary.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasPartitiond) {
-          MergePartitiond(other.Partitiond);
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
         }
-        if (other.HasOrderBookd) {
-          OrderBookd = other.OrderBookd;
+        if (other.HasOrderBookId) {
+          OrderBookId = other.OrderBookId;
         }
         if (other.HasResult) {
           Result = other.Result;
@@ -2309,15 +2309,15 @@ namespace bnet.protocol.exchange {
             }
             case 10: {
               global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
-              if (result.hasPartitiond) {
-                subBuilder.MergeFrom(Partitiond);
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Partitiond = subBuilder.BuildPartial();
+              PartitionId = subBuilder.BuildPartial();
               break;
             }
             case 16: {
-              result.hasOrderBookd = input.ReadUInt64(ref result.orderBookd_);
+              result.hasOrderBookId = input.ReadUInt64(ref result.orderBookId_);
               break;
             }
             case 24: {
@@ -2383,63 +2383,63 @@ namespace bnet.protocol.exchange {
       }
       
       
-      public bool HasPartitiond {
-       get { return result.hasPartitiond; }
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
       }
-      public global::bnet.protocol.exchange.PartitionId Partitiond {
-        get { return result.Partitiond; }
-        set { SetPartitiond(value); }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = value;
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
         return this;
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = builderForValue.Build();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergePartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasPartitiond &&
-            result.partitiond_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
-            result.partitiond_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitiond_).MergeFrom(value).BuildPartial();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
         } else {
-          result.partitiond_ = value;
+          result.partitionId_ = value;
         }
-        result.hasPartitiond = true;
+        result.hasPartitionId = true;
         return this;
       }
-      public Builder ClearPartitiond() {
+      public Builder ClearPartitionId() {
         PrepareBuilder();
-        result.hasPartitiond = false;
-        result.partitiond_ = null;
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
         return this;
       }
       
-      public bool HasOrderBookd {
-        get { return result.hasOrderBookd; }
+      public bool HasOrderBookId {
+        get { return result.hasOrderBookId; }
       }
-      public ulong OrderBookd {
-        get { return result.OrderBookd; }
-        set { SetOrderBookd(value); }
+      public ulong OrderBookId {
+        get { return result.OrderBookId; }
+        set { SetOrderBookId(value); }
       }
-      public Builder SetOrderBookd(ulong value) {
+      public Builder SetOrderBookId(ulong value) {
         PrepareBuilder();
-        result.hasOrderBookd = true;
-        result.orderBookd_ = value;
+        result.hasOrderBookId = true;
+        result.orderBookId_ = value;
         return this;
       }
-      public Builder ClearOrderBookd() {
+      public Builder ClearOrderBookId() {
         PrepareBuilder();
-        result.hasOrderBookd = false;
-        result.orderBookd_ = 0UL;
+        result.hasOrderBookId = false;
+        result.orderBookId_ = 0UL;
         return this;
       }
       
@@ -2776,14 +2776,14 @@ namespace bnet.protocol.exchange {
       get { return accountForMoney_ ?? global::bnet.protocol.exchange.BlobFrom.DefaultInstance; }
     }
     
-    public const int AccountFortemFieldNumber = 5;
-    private bool hasAccountFortem;
-    private global::bnet.protocol.exchange.BlobFrom accountFortem_;
-    public bool HasAccountFortem {
-      get { return hasAccountFortem; }
+    public const int AccountForItemFieldNumber = 5;
+    private bool hasAccountForItem;
+    private global::bnet.protocol.exchange.BlobFrom accountForItem_;
+    public bool HasAccountForItem {
+      get { return hasAccountForItem; }
     }
-    public global::bnet.protocol.exchange.BlobFrom AccountFortem {
-      get { return accountFortem_ ?? global::bnet.protocol.exchange.BlobFrom.DefaultInstance; }
+    public global::bnet.protocol.exchange.BlobFrom AccountForItem {
+      get { return accountForItem_ ?? global::bnet.protocol.exchange.BlobFrom.DefaultInstance; }
     }
     
     public const int BnetAccountFieldNumber = 6;
@@ -2822,8 +2822,8 @@ namespace bnet.protocol.exchange {
         if (HasAccountForMoney) {
           if (!AccountForMoney.IsInitialized) return false;
         }
-        if (HasAccountFortem) {
-          if (!AccountFortem.IsInitialized) return false;
+        if (HasAccountForItem) {
+          if (!AccountForItem.IsInitialized) return false;
         }
         if (HasBnetAccount) {
           if (!BnetAccount.IsInitialized) return false;
@@ -2853,8 +2853,8 @@ namespace bnet.protocol.exchange {
       if (hasAccountForMoney) {
         output.WriteMessage(4, field_names[1], AccountForMoney);
       }
-      if (hasAccountFortem) {
-        output.WriteMessage(5, field_names[0], AccountFortem);
+      if (hasAccountForItem) {
+        output.WriteMessage(5, field_names[0], AccountForItem);
       }
       if (hasBnetAccount) {
         output.WriteMessage(6, field_names[3], BnetAccount);
@@ -2887,8 +2887,8 @@ namespace bnet.protocol.exchange {
         if (hasAccountForMoney) {
           size += pb::CodedOutputStream.ComputeMessageSize(4, AccountForMoney);
         }
-        if (hasAccountFortem) {
-          size += pb::CodedOutputStream.ComputeMessageSize(5, AccountFortem);
+        if (hasAccountForItem) {
+          size += pb::CodedOutputStream.ComputeMessageSize(5, AccountForItem);
         }
         if (hasBnetAccount) {
           size += pb::CodedOutputStream.ComputeMessageSize(6, BnetAccount);
@@ -3037,8 +3037,8 @@ namespace bnet.protocol.exchange {
         if (other.HasAccountForMoney) {
           MergeAccountForMoney(other.AccountForMoney);
         }
-        if (other.HasAccountFortem) {
-          MergeAccountFortem(other.AccountFortem);
+        if (other.HasAccountForItem) {
+          MergeAccountForItem(other.AccountForItem);
         }
         if (other.HasBnetAccount) {
           MergeBnetAccount(other.BnetAccount);
@@ -3115,11 +3115,11 @@ namespace bnet.protocol.exchange {
             }
             case 42: {
               global::bnet.protocol.exchange.BlobFrom.Builder subBuilder = global::bnet.protocol.exchange.BlobFrom.CreateBuilder();
-              if (result.hasAccountFortem) {
-                subBuilder.MergeFrom(AccountFortem);
+              if (result.hasAccountForItem) {
+                subBuilder.MergeFrom(AccountForItem);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              AccountFortem = subBuilder.BuildPartial();
+              AccountForItem = subBuilder.BuildPartial();
               break;
             }
             case 50: {
@@ -3259,43 +3259,43 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasAccountFortem {
-       get { return result.hasAccountFortem; }
+      public bool HasAccountForItem {
+       get { return result.hasAccountForItem; }
       }
-      public global::bnet.protocol.exchange.BlobFrom AccountFortem {
-        get { return result.AccountFortem; }
-        set { SetAccountFortem(value); }
+      public global::bnet.protocol.exchange.BlobFrom AccountForItem {
+        get { return result.AccountForItem; }
+        set { SetAccountForItem(value); }
       }
-      public Builder SetAccountFortem(global::bnet.protocol.exchange.BlobFrom value) {
+      public Builder SetAccountForItem(global::bnet.protocol.exchange.BlobFrom value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAccountFortem = true;
-        result.accountFortem_ = value;
+        result.hasAccountForItem = true;
+        result.accountForItem_ = value;
         return this;
       }
-      public Builder SetAccountFortem(global::bnet.protocol.exchange.BlobFrom.Builder builderForValue) {
+      public Builder SetAccountForItem(global::bnet.protocol.exchange.BlobFrom.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAccountFortem = true;
-        result.accountFortem_ = builderForValue.Build();
+        result.hasAccountForItem = true;
+        result.accountForItem_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAccountFortem(global::bnet.protocol.exchange.BlobFrom value) {
+      public Builder MergeAccountForItem(global::bnet.protocol.exchange.BlobFrom value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAccountFortem &&
-            result.accountFortem_ != global::bnet.protocol.exchange.BlobFrom.DefaultInstance) {
-            result.accountFortem_ = global::bnet.protocol.exchange.BlobFrom.CreateBuilder(result.accountFortem_).MergeFrom(value).BuildPartial();
+        if (result.hasAccountForItem &&
+            result.accountForItem_ != global::bnet.protocol.exchange.BlobFrom.DefaultInstance) {
+            result.accountForItem_ = global::bnet.protocol.exchange.BlobFrom.CreateBuilder(result.accountForItem_).MergeFrom(value).BuildPartial();
         } else {
-          result.accountFortem_ = value;
+          result.accountForItem_ = value;
         }
-        result.hasAccountFortem = true;
+        result.hasAccountForItem = true;
         return this;
       }
-      public Builder ClearAccountFortem() {
+      public Builder ClearAccountForItem() {
         PrepareBuilder();
-        result.hasAccountFortem = false;
-        result.accountFortem_ = null;
+        result.hasAccountForItem = false;
+        result.accountForItem_ = null;
         return this;
       }
       
@@ -3452,34 +3452,34 @@ namespace bnet.protocol.exchange {
       get { return global::bnet.protocol.exchange.ExchangeTypes.internal__static_bnet_protocol_exchange_Extension__FieldAccessorTable; }
     }
     
-    public const int PartitiondFieldNumber = 1;
-    private bool hasPartitiond;
-    private global::bnet.protocol.exchange.PartitionId partitiond_;
-    public bool HasPartitiond {
-      get { return hasPartitiond; }
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
     }
-    public global::bnet.protocol.exchange.PartitionId Partitiond {
-      get { return partitiond_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
-    }
-    
-    public const int OrderBookdFieldNumber = 2;
-    private bool hasOrderBookd;
-    private ulong orderBookd_;
-    public bool HasOrderBookd {
-      get { return hasOrderBookd; }
-    }
-    public ulong OrderBookd {
-      get { return orderBookd_; }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
     }
     
-    public const int OrderdFieldNumber = 3;
-    private bool hasOrderd;
-    private ulong orderd_;
-    public bool HasOrderd {
-      get { return hasOrderd; }
+    public const int OrderBookIdFieldNumber = 2;
+    private bool hasOrderBookId;
+    private ulong orderBookId_;
+    public bool HasOrderBookId {
+      get { return hasOrderBookId; }
     }
-    public ulong Orderd {
-      get { return orderd_; }
+    public ulong OrderBookId {
+      get { return orderBookId_; }
+    }
+    
+    public const int OrderIdFieldNumber = 3;
+    private bool hasOrderId;
+    private ulong orderId_;
+    public bool HasOrderId {
+      get { return hasOrderId; }
+    }
+    public ulong OrderId {
+      get { return orderId_; }
     }
     
     public const int FilledAmountFieldNumber = 4;
@@ -3572,13 +3572,13 @@ namespace bnet.protocol.exchange {
       get { return moneyToClaim_; }
     }
     
-    public const int İtemsToClaimFieldNumber = 13;
-    private bool hasİtemsToClaim;
+    public const int ItemsToClaimFieldNumber = 13;
+    private bool hasItemsToClaim;
     private ulong itemsToClaim_;
-    public bool HasİtemsToClaim {
-      get { return hasİtemsToClaim; }
+    public bool HasItemsToClaim {
+      get { return hasItemsToClaim; }
     }
-    public ulong İtemsToClaim {
+    public ulong ItemsToClaim {
       get { return itemsToClaim_; }
     }
     
@@ -3594,10 +3594,10 @@ namespace bnet.protocol.exchange {
     
     public override bool IsInitialized {
       get {
-        if (!hasPartitiond) return false;
-        if (!hasOrderBookd) return false;
-        if (!hasOrderd) return false;
-        if (!Partitiond.IsInitialized) return false;
+        if (!hasPartitionId) return false;
+        if (!hasOrderBookId) return false;
+        if (!hasOrderId) return false;
+        if (!PartitionId.IsInitialized) return false;
         if (HasOrderBook) {
           if (!OrderBook.IsInitialized) return false;
         }
@@ -3608,14 +3608,14 @@ namespace bnet.protocol.exchange {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _extensionFieldNames;
-      if (hasPartitiond) {
-        output.WriteMessage(1, field_names[11], Partitiond);
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[11], PartitionId);
       }
-      if (hasOrderBookd) {
-        output.WriteUInt64(2, field_names[7], OrderBookd);
+      if (hasOrderBookId) {
+        output.WriteUInt64(2, field_names[7], OrderBookId);
       }
-      if (hasOrderd) {
-        output.WriteUInt64(3, field_names[9], Orderd);
+      if (hasOrderId) {
+        output.WriteUInt64(3, field_names[9], OrderId);
       }
       if (hasFilledAmount) {
         output.WriteUInt64(4, field_names[3], FilledAmount);
@@ -3644,8 +3644,8 @@ namespace bnet.protocol.exchange {
       if (hasMoneyToClaim) {
         output.WriteUInt64(12, field_names[5], MoneyToClaim);
       }
-      if (hasİtemsToClaim) {
-        output.WriteUInt64(13, field_names[4], İtemsToClaim);
+      if (hasItemsToClaim) {
+        output.WriteUInt64(13, field_names[4], ItemsToClaim);
       }
       if (hasRiskDelayed) {
         output.WriteBool(14, field_names[13], RiskDelayed);
@@ -3660,14 +3660,14 @@ namespace bnet.protocol.exchange {
         if (size != -1) return size;
         
         size = 0;
-        if (hasPartitiond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Partitiond);
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
         }
-        if (hasOrderBookd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, OrderBookd);
+        if (hasOrderBookId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, OrderBookId);
         }
-        if (hasOrderd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(3, Orderd);
+        if (hasOrderId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(3, OrderId);
         }
         if (hasFilledAmount) {
           size += pb::CodedOutputStream.ComputeUInt64Size(4, FilledAmount);
@@ -3696,8 +3696,8 @@ namespace bnet.protocol.exchange {
         if (hasMoneyToClaim) {
           size += pb::CodedOutputStream.ComputeUInt64Size(12, MoneyToClaim);
         }
-        if (hasİtemsToClaim) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(13, İtemsToClaim);
+        if (hasItemsToClaim) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(13, ItemsToClaim);
         }
         if (hasRiskDelayed) {
           size += pb::CodedOutputStream.ComputeBoolSize(14, RiskDelayed);
@@ -3828,14 +3828,14 @@ namespace bnet.protocol.exchange {
       public override Builder MergeFrom(Extension other) {
         if (other == global::bnet.protocol.exchange.Extension.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasPartitiond) {
-          MergePartitiond(other.Partitiond);
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
         }
-        if (other.HasOrderBookd) {
-          OrderBookd = other.OrderBookd;
+        if (other.HasOrderBookId) {
+          OrderBookId = other.OrderBookId;
         }
-        if (other.HasOrderd) {
-          Orderd = other.Orderd;
+        if (other.HasOrderId) {
+          OrderId = other.OrderId;
         }
         if (other.HasFilledAmount) {
           FilledAmount = other.FilledAmount;
@@ -3864,8 +3864,8 @@ namespace bnet.protocol.exchange {
         if (other.HasMoneyToClaim) {
           MoneyToClaim = other.MoneyToClaim;
         }
-        if (other.HasİtemsToClaim) {
-          İtemsToClaim = other.İtemsToClaim;
+        if (other.HasItemsToClaim) {
+          ItemsToClaim = other.ItemsToClaim;
         }
         if (other.HasRiskDelayed) {
           RiskDelayed = other.RiskDelayed;
@@ -3915,19 +3915,19 @@ namespace bnet.protocol.exchange {
             }
             case 10: {
               global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
-              if (result.hasPartitiond) {
-                subBuilder.MergeFrom(Partitiond);
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Partitiond = subBuilder.BuildPartial();
+              PartitionId = subBuilder.BuildPartial();
               break;
             }
             case 16: {
-              result.hasOrderBookd = input.ReadUInt64(ref result.orderBookd_);
+              result.hasOrderBookId = input.ReadUInt64(ref result.orderBookId_);
               break;
             }
             case 24: {
-              result.hasOrderd = input.ReadUInt64(ref result.orderd_);
+              result.hasOrderId = input.ReadUInt64(ref result.orderId_);
               break;
             }
             case 32: {
@@ -3972,7 +3972,7 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 104: {
-              result.hasİtemsToClaim = input.ReadUInt64(ref result.itemsToClaim_);
+              result.hasItemsToClaim = input.ReadUInt64(ref result.itemsToClaim_);
               break;
             }
             case 112: {
@@ -3989,83 +3989,83 @@ namespace bnet.protocol.exchange {
       }
       
       
-      public bool HasPartitiond {
-       get { return result.hasPartitiond; }
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
       }
-      public global::bnet.protocol.exchange.PartitionId Partitiond {
-        get { return result.Partitiond; }
-        set { SetPartitiond(value); }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = value;
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
         return this;
       }
-      public Builder SetPartitiond(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasPartitiond = true;
-        result.partitiond_ = builderForValue.Build();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergePartitiond(global::bnet.protocol.exchange.PartitionId value) {
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasPartitiond &&
-            result.partitiond_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
-            result.partitiond_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitiond_).MergeFrom(value).BuildPartial();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
         } else {
-          result.partitiond_ = value;
+          result.partitionId_ = value;
         }
-        result.hasPartitiond = true;
+        result.hasPartitionId = true;
         return this;
       }
-      public Builder ClearPartitiond() {
+      public Builder ClearPartitionId() {
         PrepareBuilder();
-        result.hasPartitiond = false;
-        result.partitiond_ = null;
-        return this;
-      }
-      
-      public bool HasOrderBookd {
-        get { return result.hasOrderBookd; }
-      }
-      public ulong OrderBookd {
-        get { return result.OrderBookd; }
-        set { SetOrderBookd(value); }
-      }
-      public Builder SetOrderBookd(ulong value) {
-        PrepareBuilder();
-        result.hasOrderBookd = true;
-        result.orderBookd_ = value;
-        return this;
-      }
-      public Builder ClearOrderBookd() {
-        PrepareBuilder();
-        result.hasOrderBookd = false;
-        result.orderBookd_ = 0UL;
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
         return this;
       }
       
-      public bool HasOrderd {
-        get { return result.hasOrderd; }
+      public bool HasOrderBookId {
+        get { return result.hasOrderBookId; }
       }
-      public ulong Orderd {
-        get { return result.Orderd; }
-        set { SetOrderd(value); }
+      public ulong OrderBookId {
+        get { return result.OrderBookId; }
+        set { SetOrderBookId(value); }
       }
-      public Builder SetOrderd(ulong value) {
+      public Builder SetOrderBookId(ulong value) {
         PrepareBuilder();
-        result.hasOrderd = true;
-        result.orderd_ = value;
+        result.hasOrderBookId = true;
+        result.orderBookId_ = value;
         return this;
       }
-      public Builder ClearOrderd() {
+      public Builder ClearOrderBookId() {
         PrepareBuilder();
-        result.hasOrderd = false;
-        result.orderd_ = 0UL;
+        result.hasOrderBookId = false;
+        result.orderBookId_ = 0UL;
+        return this;
+      }
+      
+      public bool HasOrderId {
+        get { return result.hasOrderId; }
+      }
+      public ulong OrderId {
+        get { return result.OrderId; }
+        set { SetOrderId(value); }
+      }
+      public Builder SetOrderId(ulong value) {
+        PrepareBuilder();
+        result.hasOrderId = true;
+        result.orderId_ = value;
+        return this;
+      }
+      public Builder ClearOrderId() {
+        PrepareBuilder();
+        result.hasOrderId = false;
+        result.orderId_ = 0UL;
         return this;
       }
       
@@ -4269,22 +4269,22 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasİtemsToClaim {
-        get { return result.hasİtemsToClaim; }
+      public bool HasItemsToClaim {
+        get { return result.hasItemsToClaim; }
       }
-      public ulong İtemsToClaim {
-        get { return result.İtemsToClaim; }
-        set { SetİtemsToClaim(value); }
+      public ulong ItemsToClaim {
+        get { return result.ItemsToClaim; }
+        set { SetItemsToClaim(value); }
       }
-      public Builder SetİtemsToClaim(ulong value) {
+      public Builder SetItemsToClaim(ulong value) {
         PrepareBuilder();
-        result.hasİtemsToClaim = true;
+        result.hasItemsToClaim = true;
         result.itemsToClaim_ = value;
         return this;
       }
-      public Builder ClearİtemsToClaim() {
+      public Builder ClearItemsToClaim() {
         PrepareBuilder();
-        result.hasİtemsToClaim = false;
+        result.hasItemsToClaim = false;
         result.itemsToClaim_ = 0UL;
         return this;
       }
@@ -7416,14 +7416,14 @@ namespace bnet.protocol.exchange {
       get { return maxResult_; }
     }
     
-    public const int RefOrderdFieldNumber = 2;
-    private bool hasRefOrderd;
-    private ulong refOrderd_;
-    public bool HasRefOrderd {
-      get { return hasRefOrderd; }
+    public const int RefOrderIdFieldNumber = 2;
+    private bool hasRefOrderId;
+    private ulong refOrderId_;
+    public bool HasRefOrderId {
+      get { return hasRefOrderId; }
     }
-    public ulong RefOrderd {
-      get { return refOrderd_; }
+    public ulong RefOrderId {
+      get { return refOrderId_; }
     }
     
     public const int RefPriceFieldNumber = 3;
@@ -7449,8 +7449,8 @@ namespace bnet.protocol.exchange {
       if (hasMaxResult) {
         output.WriteUInt32(1, field_names[0], MaxResult);
       }
-      if (hasRefOrderd) {
-        output.WriteUInt64(2, field_names[1], RefOrderd);
+      if (hasRefOrderId) {
+        output.WriteUInt64(2, field_names[1], RefOrderId);
       }
       if (hasRefPrice) {
         output.WriteUInt64(3, field_names[2], RefPrice);
@@ -7468,8 +7468,8 @@ namespace bnet.protocol.exchange {
         if (hasMaxResult) {
           size += pb::CodedOutputStream.ComputeUInt32Size(1, MaxResult);
         }
-        if (hasRefOrderd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, RefOrderd);
+        if (hasRefOrderId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, RefOrderId);
         }
         if (hasRefPrice) {
           size += pb::CodedOutputStream.ComputeUInt64Size(3, RefPrice);
@@ -7603,8 +7603,8 @@ namespace bnet.protocol.exchange {
         if (other.HasMaxResult) {
           MaxResult = other.MaxResult;
         }
-        if (other.HasRefOrderd) {
-          RefOrderd = other.RefOrderd;
+        if (other.HasRefOrderId) {
+          RefOrderId = other.RefOrderId;
         }
         if (other.HasRefPrice) {
           RefPrice = other.RefPrice;
@@ -7657,7 +7657,7 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 16: {
-              result.hasRefOrderd = input.ReadUInt64(ref result.refOrderd_);
+              result.hasRefOrderId = input.ReadUInt64(ref result.refOrderId_);
               break;
             }
             case 24: {
@@ -7694,23 +7694,23 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasRefOrderd {
-        get { return result.hasRefOrderd; }
+      public bool HasRefOrderId {
+        get { return result.hasRefOrderId; }
       }
-      public ulong RefOrderd {
-        get { return result.RefOrderd; }
-        set { SetRefOrderd(value); }
+      public ulong RefOrderId {
+        get { return result.RefOrderId; }
+        set { SetRefOrderId(value); }
       }
-      public Builder SetRefOrderd(ulong value) {
+      public Builder SetRefOrderId(ulong value) {
         PrepareBuilder();
-        result.hasRefOrderd = true;
-        result.refOrderd_ = value;
+        result.hasRefOrderId = true;
+        result.refOrderId_ = value;
         return this;
       }
-      public Builder ClearRefOrderd() {
+      public Builder ClearRefOrderId() {
         PrepareBuilder();
-        result.hasRefOrderd = false;
-        result.refOrderd_ = 0UL;
+        result.hasRefOrderId = false;
+        result.refOrderId_ = 0UL;
         return this;
       }
       
@@ -8603,14 +8603,14 @@ namespace bnet.protocol.exchange {
       get { return global::bnet.protocol.exchange.ExchangeTypes.internal__static_bnet_protocol_exchange_Settlement__FieldAccessorTable; }
     }
     
-    public const int OrderBookdFieldNumber = 1;
-    private bool hasOrderBookd;
-    private ulong orderBookd_;
-    public bool HasOrderBookd {
-      get { return hasOrderBookd; }
+    public const int OrderBookIdFieldNumber = 1;
+    private bool hasOrderBookId;
+    private ulong orderBookId_;
+    public bool HasOrderBookId {
+      get { return hasOrderBookId; }
     }
-    public ulong OrderBookd {
-      get { return orderBookd_; }
+    public ulong OrderBookId {
+      get { return orderBookId_; }
     }
     
     public const int MoneyAmountFieldNumber = 2;
@@ -8623,32 +8623,32 @@ namespace bnet.protocol.exchange {
       get { return moneyAmount_; }
     }
     
-    public const int İtemsAmountFieldNumber = 3;
-    private bool hasİtemsAmount;
+    public const int ItemsAmountFieldNumber = 3;
+    private bool hasItemsAmount;
     private ulong itemsAmount_;
-    public bool HasİtemsAmount {
-      get { return hasİtemsAmount; }
+    public bool HasItemsAmount {
+      get { return hasItemsAmount; }
     }
-    public ulong İtemsAmount {
+    public ulong ItemsAmount {
       get { return itemsAmount_; }
     }
     
-    public const int OfferSettledFieldNumber = 4;
-    private bool hasOfferSettled;
-    private ulong offerSettled_;
-    public bool HasOfferSettled {
-      get { return hasOfferSettled; }
+    public const int OfferSettleIdFieldNumber = 4;
+    private bool hasOfferSettleId;
+    private ulong offerSettleId_;
+    public bool HasOfferSettleId {
+      get { return hasOfferSettleId; }
     }
-    public ulong OfferSettled {
-      get { return offerSettled_; }
+    public ulong OfferSettleId {
+      get { return offerSettleId_; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasOrderBookd) return false;
+        if (!hasOrderBookId) return false;
         if (!hasMoneyAmount) return false;
-        if (!hasİtemsAmount) return false;
-        if (!hasOfferSettled) return false;
+        if (!hasItemsAmount) return false;
+        if (!hasOfferSettleId) return false;
         return true;
       }
     }
@@ -8656,17 +8656,17 @@ namespace bnet.protocol.exchange {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _settlementFieldNames;
-      if (hasOrderBookd) {
-        output.WriteUInt64(1, field_names[3], OrderBookd);
+      if (hasOrderBookId) {
+        output.WriteUInt64(1, field_names[3], OrderBookId);
       }
       if (hasMoneyAmount) {
         output.WriteUInt64(2, field_names[1], MoneyAmount);
       }
-      if (hasİtemsAmount) {
-        output.WriteUInt64(3, field_names[0], İtemsAmount);
+      if (hasItemsAmount) {
+        output.WriteUInt64(3, field_names[0], ItemsAmount);
       }
-      if (hasOfferSettled) {
-        output.WriteUInt64(4, field_names[2], OfferSettled);
+      if (hasOfferSettleId) {
+        output.WriteUInt64(4, field_names[2], OfferSettleId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -8678,17 +8678,17 @@ namespace bnet.protocol.exchange {
         if (size != -1) return size;
         
         size = 0;
-        if (hasOrderBookd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(1, OrderBookd);
+        if (hasOrderBookId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(1, OrderBookId);
         }
         if (hasMoneyAmount) {
           size += pb::CodedOutputStream.ComputeUInt64Size(2, MoneyAmount);
         }
-        if (hasİtemsAmount) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(3, İtemsAmount);
+        if (hasItemsAmount) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(3, ItemsAmount);
         }
-        if (hasOfferSettled) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(4, OfferSettled);
+        if (hasOfferSettleId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(4, OfferSettleId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -8816,17 +8816,17 @@ namespace bnet.protocol.exchange {
       public override Builder MergeFrom(Settlement other) {
         if (other == global::bnet.protocol.exchange.Settlement.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasOrderBookd) {
-          OrderBookd = other.OrderBookd;
+        if (other.HasOrderBookId) {
+          OrderBookId = other.OrderBookId;
         }
         if (other.HasMoneyAmount) {
           MoneyAmount = other.MoneyAmount;
         }
-        if (other.HasİtemsAmount) {
-          İtemsAmount = other.İtemsAmount;
+        if (other.HasItemsAmount) {
+          ItemsAmount = other.ItemsAmount;
         }
-        if (other.HasOfferSettled) {
-          OfferSettled = other.OfferSettled;
+        if (other.HasOfferSettleId) {
+          OfferSettleId = other.OfferSettleId;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -8872,7 +8872,7 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 8: {
-              result.hasOrderBookd = input.ReadUInt64(ref result.orderBookd_);
+              result.hasOrderBookId = input.ReadUInt64(ref result.orderBookId_);
               break;
             }
             case 16: {
@@ -8880,11 +8880,11 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 24: {
-              result.hasİtemsAmount = input.ReadUInt64(ref result.itemsAmount_);
+              result.hasItemsAmount = input.ReadUInt64(ref result.itemsAmount_);
               break;
             }
             case 32: {
-              result.hasOfferSettled = input.ReadUInt64(ref result.offerSettled_);
+              result.hasOfferSettleId = input.ReadUInt64(ref result.offerSettleId_);
               break;
             }
           }
@@ -8897,23 +8897,23 @@ namespace bnet.protocol.exchange {
       }
       
       
-      public bool HasOrderBookd {
-        get { return result.hasOrderBookd; }
+      public bool HasOrderBookId {
+        get { return result.hasOrderBookId; }
       }
-      public ulong OrderBookd {
-        get { return result.OrderBookd; }
-        set { SetOrderBookd(value); }
+      public ulong OrderBookId {
+        get { return result.OrderBookId; }
+        set { SetOrderBookId(value); }
       }
-      public Builder SetOrderBookd(ulong value) {
+      public Builder SetOrderBookId(ulong value) {
         PrepareBuilder();
-        result.hasOrderBookd = true;
-        result.orderBookd_ = value;
+        result.hasOrderBookId = true;
+        result.orderBookId_ = value;
         return this;
       }
-      public Builder ClearOrderBookd() {
+      public Builder ClearOrderBookId() {
         PrepareBuilder();
-        result.hasOrderBookd = false;
-        result.orderBookd_ = 0UL;
+        result.hasOrderBookId = false;
+        result.orderBookId_ = 0UL;
         return this;
       }
       
@@ -8937,43 +8937,43 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasİtemsAmount {
-        get { return result.hasİtemsAmount; }
+      public bool HasItemsAmount {
+        get { return result.hasItemsAmount; }
       }
-      public ulong İtemsAmount {
-        get { return result.İtemsAmount; }
-        set { SetİtemsAmount(value); }
+      public ulong ItemsAmount {
+        get { return result.ItemsAmount; }
+        set { SetItemsAmount(value); }
       }
-      public Builder SetİtemsAmount(ulong value) {
+      public Builder SetItemsAmount(ulong value) {
         PrepareBuilder();
-        result.hasİtemsAmount = true;
+        result.hasItemsAmount = true;
         result.itemsAmount_ = value;
         return this;
       }
-      public Builder ClearİtemsAmount() {
+      public Builder ClearItemsAmount() {
         PrepareBuilder();
-        result.hasİtemsAmount = false;
+        result.hasItemsAmount = false;
         result.itemsAmount_ = 0UL;
         return this;
       }
       
-      public bool HasOfferSettled {
-        get { return result.hasOfferSettled; }
+      public bool HasOfferSettleId {
+        get { return result.hasOfferSettleId; }
       }
-      public ulong OfferSettled {
-        get { return result.OfferSettled; }
-        set { SetOfferSettled(value); }
+      public ulong OfferSettleId {
+        get { return result.OfferSettleId; }
+        set { SetOfferSettleId(value); }
       }
-      public Builder SetOfferSettled(ulong value) {
+      public Builder SetOfferSettleId(ulong value) {
         PrepareBuilder();
-        result.hasOfferSettled = true;
-        result.offerSettled_ = value;
+        result.hasOfferSettleId = true;
+        result.offerSettleId_ = value;
         return this;
       }
-      public Builder ClearOfferSettled() {
+      public Builder ClearOfferSettleId() {
         PrepareBuilder();
-        result.hasOfferSettled = false;
-        result.offerSettled_ = 0UL;
+        result.hasOfferSettleId = false;
+        result.offerSettleId_ = 0UL;
         return this;
       }
     }
@@ -9030,24 +9030,24 @@ namespace bnet.protocol.exchange {
       get { return tickSize_; }
     }
     
-    public const int FlatOutbidncrFieldNumber = 3;
-    private bool hasFlatOutbidncr;
-    private ulong flatOutbidncr_;
-    public bool HasFlatOutbidncr {
-      get { return hasFlatOutbidncr; }
+    public const int FlatOutbidIncrFieldNumber = 3;
+    private bool hasFlatOutbidIncr;
+    private ulong flatOutbidIncr_;
+    public bool HasFlatOutbidIncr {
+      get { return hasFlatOutbidIncr; }
     }
-    public ulong FlatOutbidncr {
-      get { return flatOutbidncr_; }
+    public ulong FlatOutbidIncr {
+      get { return flatOutbidIncr_; }
     }
     
-    public const int ScaleOutbidncrFieldNumber = 4;
-    private bool hasScaleOutbidncr;
-    private ulong scaleOutbidncr_;
-    public bool HasScaleOutbidncr {
-      get { return hasScaleOutbidncr; }
+    public const int ScaleOutbidIncrFieldNumber = 4;
+    private bool hasScaleOutbidIncr;
+    private ulong scaleOutbidIncr_;
+    public bool HasScaleOutbidIncr {
+      get { return hasScaleOutbidIncr; }
     }
-    public ulong ScaleOutbidncr {
-      get { return scaleOutbidncr_; }
+    public ulong ScaleOutbidIncr {
+      get { return scaleOutbidIncr_; }
     }
     
     public const int MinStartingUnitPriceFieldNumber = 5;
@@ -9104,8 +9104,8 @@ namespace bnet.protocol.exchange {
       get {
         if (!hasCurrency) return false;
         if (!hasTickSize) return false;
-        if (!hasFlatOutbidncr) return false;
-        if (!hasScaleOutbidncr) return false;
+        if (!hasFlatOutbidIncr) return false;
+        if (!hasScaleOutbidIncr) return false;
         if (!hasMinStartingUnitPrice) return false;
         if (!hasMaxUnitPrice) return false;
         if (!hasMaxTotalAmount) return false;
@@ -9123,11 +9123,11 @@ namespace bnet.protocol.exchange {
       if (hasTickSize) {
         output.WriteUInt64(2, field_names[8], TickSize);
       }
-      if (hasFlatOutbidncr) {
-        output.WriteUInt64(3, field_names[2], FlatOutbidncr);
+      if (hasFlatOutbidIncr) {
+        output.WriteUInt64(3, field_names[2], FlatOutbidIncr);
       }
-      if (hasScaleOutbidncr) {
-        output.WriteUInt64(4, field_names[7], ScaleOutbidncr);
+      if (hasScaleOutbidIncr) {
+        output.WriteUInt64(4, field_names[7], ScaleOutbidIncr);
       }
       if (hasMinStartingUnitPrice) {
         output.WriteUInt64(5, field_names[6], MinStartingUnitPrice);
@@ -9160,11 +9160,11 @@ namespace bnet.protocol.exchange {
         if (hasTickSize) {
           size += pb::CodedOutputStream.ComputeUInt64Size(2, TickSize);
         }
-        if (hasFlatOutbidncr) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(3, FlatOutbidncr);
+        if (hasFlatOutbidIncr) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(3, FlatOutbidIncr);
         }
-        if (hasScaleOutbidncr) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(4, ScaleOutbidncr);
+        if (hasScaleOutbidIncr) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(4, ScaleOutbidIncr);
         }
         if (hasMinStartingUnitPrice) {
           size += pb::CodedOutputStream.ComputeUInt64Size(5, MinStartingUnitPrice);
@@ -9313,11 +9313,11 @@ namespace bnet.protocol.exchange {
         if (other.HasTickSize) {
           TickSize = other.TickSize;
         }
-        if (other.HasFlatOutbidncr) {
-          FlatOutbidncr = other.FlatOutbidncr;
+        if (other.HasFlatOutbidIncr) {
+          FlatOutbidIncr = other.FlatOutbidIncr;
         }
-        if (other.HasScaleOutbidncr) {
-          ScaleOutbidncr = other.ScaleOutbidncr;
+        if (other.HasScaleOutbidIncr) {
+          ScaleOutbidIncr = other.ScaleOutbidIncr;
         }
         if (other.HasMinStartingUnitPrice) {
           MinStartingUnitPrice = other.MinStartingUnitPrice;
@@ -9386,11 +9386,11 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 24: {
-              result.hasFlatOutbidncr = input.ReadUInt64(ref result.flatOutbidncr_);
+              result.hasFlatOutbidIncr = input.ReadUInt64(ref result.flatOutbidIncr_);
               break;
             }
             case 32: {
-              result.hasScaleOutbidncr = input.ReadUInt64(ref result.scaleOutbidncr_);
+              result.hasScaleOutbidIncr = input.ReadUInt64(ref result.scaleOutbidIncr_);
               break;
             }
             case 40: {
@@ -9464,43 +9464,43 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasFlatOutbidncr {
-        get { return result.hasFlatOutbidncr; }
+      public bool HasFlatOutbidIncr {
+        get { return result.hasFlatOutbidIncr; }
       }
-      public ulong FlatOutbidncr {
-        get { return result.FlatOutbidncr; }
-        set { SetFlatOutbidncr(value); }
+      public ulong FlatOutbidIncr {
+        get { return result.FlatOutbidIncr; }
+        set { SetFlatOutbidIncr(value); }
       }
-      public Builder SetFlatOutbidncr(ulong value) {
+      public Builder SetFlatOutbidIncr(ulong value) {
         PrepareBuilder();
-        result.hasFlatOutbidncr = true;
-        result.flatOutbidncr_ = value;
+        result.hasFlatOutbidIncr = true;
+        result.flatOutbidIncr_ = value;
         return this;
       }
-      public Builder ClearFlatOutbidncr() {
+      public Builder ClearFlatOutbidIncr() {
         PrepareBuilder();
-        result.hasFlatOutbidncr = false;
-        result.flatOutbidncr_ = 0UL;
+        result.hasFlatOutbidIncr = false;
+        result.flatOutbidIncr_ = 0UL;
         return this;
       }
       
-      public bool HasScaleOutbidncr {
-        get { return result.hasScaleOutbidncr; }
+      public bool HasScaleOutbidIncr {
+        get { return result.hasScaleOutbidIncr; }
       }
-      public ulong ScaleOutbidncr {
-        get { return result.ScaleOutbidncr; }
-        set { SetScaleOutbidncr(value); }
+      public ulong ScaleOutbidIncr {
+        get { return result.ScaleOutbidIncr; }
+        set { SetScaleOutbidIncr(value); }
       }
-      public Builder SetScaleOutbidncr(ulong value) {
+      public Builder SetScaleOutbidIncr(ulong value) {
         PrepareBuilder();
-        result.hasScaleOutbidncr = true;
-        result.scaleOutbidncr_ = value;
+        result.hasScaleOutbidIncr = true;
+        result.scaleOutbidIncr_ = value;
         return this;
       }
-      public Builder ClearScaleOutbidncr() {
+      public Builder ClearScaleOutbidIncr() {
         PrepareBuilder();
-        result.hasScaleOutbidncr = false;
-        result.scaleOutbidncr_ = 0UL;
+        result.hasScaleOutbidIncr = false;
+        result.scaleOutbidIncr_ = 0UL;
         return this;
       }
       
@@ -10161,14 +10161,14 @@ namespace bnet.protocol.exchange {
       get { return global::bnet.protocol.exchange.ExchangeTypes.internal__static_bnet_protocol_exchange_BillingAddress__FieldAccessorTable; }
     }
     
-    public const int CountrydFieldNumber = 1;
-    private bool hasCountryd;
-    private int countryd_;
-    public bool HasCountryd {
-      get { return hasCountryd; }
+    public const int CountryIdFieldNumber = 1;
+    private bool hasCountryId;
+    private int countryId_;
+    public bool HasCountryId {
+      get { return hasCountryId; }
     }
-    public int Countryd {
-      get { return countryd_; }
+    public int CountryId {
+      get { return countryId_; }
     }
     
     public const int CityFieldNumber = 2;
@@ -10203,7 +10203,7 @@ namespace bnet.protocol.exchange {
     
     public override bool IsInitialized {
       get {
-        if (!hasCountryd) return false;
+        if (!hasCountryId) return false;
         if (!hasCity) return false;
         return true;
       }
@@ -10212,8 +10212,8 @@ namespace bnet.protocol.exchange {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _billingAddressFieldNames;
-      if (hasCountryd) {
-        output.WriteInt32(1, field_names[1], Countryd);
+      if (hasCountryId) {
+        output.WriteInt32(1, field_names[1], CountryId);
       }
       if (hasCity) {
         output.WriteString(2, field_names[0], City);
@@ -10234,8 +10234,8 @@ namespace bnet.protocol.exchange {
         if (size != -1) return size;
         
         size = 0;
-        if (hasCountryd) {
-          size += pb::CodedOutputStream.ComputeInt32Size(1, Countryd);
+        if (hasCountryId) {
+          size += pb::CodedOutputStream.ComputeInt32Size(1, CountryId);
         }
         if (hasCity) {
           size += pb::CodedOutputStream.ComputeStringSize(2, City);
@@ -10372,8 +10372,8 @@ namespace bnet.protocol.exchange {
       public override Builder MergeFrom(BillingAddress other) {
         if (other == global::bnet.protocol.exchange.BillingAddress.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasCountryd) {
-          Countryd = other.Countryd;
+        if (other.HasCountryId) {
+          CountryId = other.CountryId;
         }
         if (other.HasCity) {
           City = other.City;
@@ -10428,7 +10428,7 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 8: {
-              result.hasCountryd = input.ReadInt32(ref result.countryd_);
+              result.hasCountryId = input.ReadInt32(ref result.countryId_);
               break;
             }
             case 18: {
@@ -10453,23 +10453,23 @@ namespace bnet.protocol.exchange {
       }
       
       
-      public bool HasCountryd {
-        get { return result.hasCountryd; }
+      public bool HasCountryId {
+        get { return result.hasCountryId; }
       }
-      public int Countryd {
-        get { return result.Countryd; }
-        set { SetCountryd(value); }
+      public int CountryId {
+        get { return result.CountryId; }
+        set { SetCountryId(value); }
       }
-      public Builder SetCountryd(int value) {
+      public Builder SetCountryId(int value) {
         PrepareBuilder();
-        result.hasCountryd = true;
-        result.countryd_ = value;
+        result.hasCountryId = true;
+        result.countryId_ = value;
         return this;
       }
-      public Builder ClearCountryd() {
+      public Builder ClearCountryId() {
         PrepareBuilder();
-        result.hasCountryd = false;
-        result.countryd_ = 0;
+        result.hasCountryId = false;
+        result.countryId_ = 0;
         return this;
       }
       
@@ -10619,13 +10619,13 @@ namespace bnet.protocol.exchange {
       get { return moneyAmount_; }
     }
     
-    public const int İtemAmountFieldNumber = 6;
-    private bool hasİtemAmount;
+    public const int ItemAmountFieldNumber = 6;
+    private bool hasItemAmount;
     private ulong itemAmount_;
-    public bool HasİtemAmount {
-      get { return hasİtemAmount; }
+    public bool HasItemAmount {
+      get { return hasItemAmount; }
     }
-    public ulong İtemAmount {
+    public ulong ItemAmount {
       get { return itemAmount_; }
     }
     
@@ -10656,7 +10656,7 @@ namespace bnet.protocol.exchange {
         if (!hasCurrency) return false;
         if (!hasSource) return false;
         if (!hasMoneyAmount) return false;
-        if (!hasİtemAmount) return false;
+        if (!hasItemAmount) return false;
         if (HasBnetAccount) {
           if (!BnetAccount.IsInitialized) return false;
         }
@@ -10685,8 +10685,8 @@ namespace bnet.protocol.exchange {
       if (hasMoneyAmount) {
         output.WriteUInt64(5, field_names[4], MoneyAmount);
       }
-      if (hasİtemAmount) {
-        output.WriteUInt64(6, field_names[3], İtemAmount);
+      if (hasItemAmount) {
+        output.WriteUInt64(6, field_names[3], ItemAmount);
       }
       if (hasBnetAccount) {
         output.WriteMessage(7, field_names[1], BnetAccount);
@@ -10719,8 +10719,8 @@ namespace bnet.protocol.exchange {
         if (hasMoneyAmount) {
           size += pb::CodedOutputStream.ComputeUInt64Size(5, MoneyAmount);
         }
-        if (hasİtemAmount) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(6, İtemAmount);
+        if (hasItemAmount) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(6, ItemAmount);
         }
         if (hasBnetAccount) {
           size += pb::CodedOutputStream.ComputeMessageSize(7, BnetAccount);
@@ -10869,8 +10869,8 @@ namespace bnet.protocol.exchange {
         if (other.HasMoneyAmount) {
           MoneyAmount = other.MoneyAmount;
         }
-        if (other.HasİtemAmount) {
-          İtemAmount = other.İtemAmount;
+        if (other.HasItemAmount) {
+          ItemAmount = other.ItemAmount;
         }
         if (other.HasBnetAccount) {
           MergeBnetAccount(other.BnetAccount);
@@ -10942,7 +10942,7 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 48: {
-              result.hasİtemAmount = input.ReadUInt64(ref result.itemAmount_);
+              result.hasItemAmount = input.ReadUInt64(ref result.itemAmount_);
               break;
             }
             case 58: {
@@ -11074,22 +11074,22 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasİtemAmount {
-        get { return result.hasİtemAmount; }
+      public bool HasItemAmount {
+        get { return result.hasItemAmount; }
       }
-      public ulong İtemAmount {
-        get { return result.İtemAmount; }
-        set { SetİtemAmount(value); }
+      public ulong ItemAmount {
+        get { return result.ItemAmount; }
+        set { SetItemAmount(value); }
       }
-      public Builder SetİtemAmount(ulong value) {
+      public Builder SetItemAmount(ulong value) {
         PrepareBuilder();
-        result.hasİtemAmount = true;
+        result.hasItemAmount = true;
         result.itemAmount_ = value;
         return this;
       }
-      public Builder ClearİtemAmount() {
+      public Builder ClearItemAmount() {
         PrepareBuilder();
-        result.hasİtemAmount = false;
+        result.hasItemAmount = false;
         result.itemAmount_ = 0UL;
         return this;
       }
@@ -11217,24 +11217,24 @@ namespace bnet.protocol.exchange {
       get { return rownum_; }
     }
     
-    public const int FeeAuthDetaildFieldNumber = 2;
-    private bool hasFeeAuthDetaild;
-    private ulong feeAuthDetaild_;
-    public bool HasFeeAuthDetaild {
-      get { return hasFeeAuthDetaild; }
+    public const int FeeAuthDetailIdFieldNumber = 2;
+    private bool hasFeeAuthDetailId;
+    private ulong feeAuthDetailId_;
+    public bool HasFeeAuthDetailId {
+      get { return hasFeeAuthDetailId; }
     }
-    public ulong FeeAuthDetaild {
-      get { return feeAuthDetaild_; }
+    public ulong FeeAuthDetailId {
+      get { return feeAuthDetailId_; }
     }
     
-    public const int FeedFieldNumber = 3;
-    private bool hasFeed;
-    private ulong feed_;
-    public bool HasFeed {
-      get { return hasFeed; }
+    public const int FeeIdFieldNumber = 3;
+    private bool hasFeeId;
+    private ulong feeId_;
+    public bool HasFeeId {
+      get { return hasFeeId; }
     }
-    public ulong Feed {
-      get { return feed_; }
+    public ulong FeeId {
+      get { return feeId_; }
     }
     
     public const int FeeAmountFieldNumber = 4;
@@ -11257,14 +11257,14 @@ namespace bnet.protocol.exchange {
       get { return discountAmount_; }
     }
     
-    public const int FeeGroupdFieldNumber = 6;
-    private bool hasFeeGroupd;
-    private ulong feeGroupd_;
-    public bool HasFeeGroupd {
-      get { return hasFeeGroupd; }
+    public const int FeeGroupIdFieldNumber = 6;
+    private bool hasFeeGroupId;
+    private ulong feeGroupId_;
+    public bool HasFeeGroupId {
+      get { return hasFeeGroupId; }
     }
-    public ulong FeeGroupd {
-      get { return feeGroupd_; }
+    public ulong FeeGroupId {
+      get { return feeGroupId_; }
     }
     
     public const int FeeGroupNameFieldNumber = 7;
@@ -11317,24 +11317,24 @@ namespace bnet.protocol.exchange {
       get { return feeDescription_; }
     }
     
-    public const int İsTaxFieldNumber = 12;
-    private bool hasİsTax;
+    public const int IsTaxFieldNumber = 12;
+    private bool hasIsTax;
     private bool isTax_;
-    public bool HasİsTax {
-      get { return hasİsTax; }
+    public bool HasIsTax {
+      get { return hasIsTax; }
     }
-    public bool İsTax {
+    public bool IsTax {
       get { return isTax_; }
     }
     
-    public const int CouponBookdFieldNumber = 13;
-    private bool hasCouponBookd;
-    private ulong couponBookd_;
-    public bool HasCouponBookd {
-      get { return hasCouponBookd; }
+    public const int CouponBookIdFieldNumber = 13;
+    private bool hasCouponBookId;
+    private ulong couponBookId_;
+    public bool HasCouponBookId {
+      get { return hasCouponBookId; }
     }
-    public ulong CouponBookd {
-      get { return couponBookd_; }
+    public ulong CouponBookId {
+      get { return couponBookId_; }
     }
     
     public const int CouponTypeFieldNumber = 14;
@@ -11380,8 +11380,8 @@ namespace bnet.protocol.exchange {
     public override bool IsInitialized {
       get {
         if (!hasRownum) return false;
-        if (!hasFeeAuthDetaild) return false;
-        if (!hasİsTax) return false;
+        if (!hasFeeAuthDetailId) return false;
+        if (!hasIsTax) return false;
         return true;
       }
     }
@@ -11392,11 +11392,11 @@ namespace bnet.protocol.exchange {
       if (hasRownum) {
         output.WriteUInt64(1, field_names[15], Rownum);
       }
-      if (hasFeeAuthDetaild) {
-        output.WriteUInt64(2, field_names[5], FeeAuthDetaild);
+      if (hasFeeAuthDetailId) {
+        output.WriteUInt64(2, field_names[5], FeeAuthDetailId);
       }
-      if (hasFeed) {
-        output.WriteUInt64(3, field_names[9], Feed);
+      if (hasFeeId) {
+        output.WriteUInt64(3, field_names[9], FeeId);
       }
       if (hasFeeAmount) {
         output.WriteUInt64(4, field_names[4], FeeAmount);
@@ -11404,8 +11404,8 @@ namespace bnet.protocol.exchange {
       if (hasDiscountAmount) {
         output.WriteUInt64(5, field_names[3], DiscountAmount);
       }
-      if (hasFeeGroupd) {
-        output.WriteUInt64(6, field_names[7], FeeGroupd);
+      if (hasFeeGroupId) {
+        output.WriteUInt64(6, field_names[7], FeeGroupId);
       }
       if (hasFeeGroupName) {
         output.WriteString(7, field_names[8], FeeGroupName);
@@ -11422,11 +11422,11 @@ namespace bnet.protocol.exchange {
       if (hasFeeDescription) {
         output.WriteString(11, field_names[6], FeeDescription);
       }
-      if (hasİsTax) {
-        output.WriteBool(12, field_names[11], İsTax);
+      if (hasIsTax) {
+        output.WriteBool(12, field_names[11], IsTax);
       }
-      if (hasCouponBookd) {
-        output.WriteUInt64(13, field_names[0], CouponBookd);
+      if (hasCouponBookId) {
+        output.WriteUInt64(13, field_names[0], CouponBookId);
       }
       if (hasCouponType) {
         output.WriteUInt64(14, field_names[2], CouponType);
@@ -11453,11 +11453,11 @@ namespace bnet.protocol.exchange {
         if (hasRownum) {
           size += pb::CodedOutputStream.ComputeUInt64Size(1, Rownum);
         }
-        if (hasFeeAuthDetaild) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, FeeAuthDetaild);
+        if (hasFeeAuthDetailId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, FeeAuthDetailId);
         }
-        if (hasFeed) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(3, Feed);
+        if (hasFeeId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(3, FeeId);
         }
         if (hasFeeAmount) {
           size += pb::CodedOutputStream.ComputeUInt64Size(4, FeeAmount);
@@ -11465,8 +11465,8 @@ namespace bnet.protocol.exchange {
         if (hasDiscountAmount) {
           size += pb::CodedOutputStream.ComputeUInt64Size(5, DiscountAmount);
         }
-        if (hasFeeGroupd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(6, FeeGroupd);
+        if (hasFeeGroupId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(6, FeeGroupId);
         }
         if (hasFeeGroupName) {
           size += pb::CodedOutputStream.ComputeStringSize(7, FeeGroupName);
@@ -11483,11 +11483,11 @@ namespace bnet.protocol.exchange {
         if (hasFeeDescription) {
           size += pb::CodedOutputStream.ComputeStringSize(11, FeeDescription);
         }
-        if (hasİsTax) {
-          size += pb::CodedOutputStream.ComputeBoolSize(12, İsTax);
+        if (hasIsTax) {
+          size += pb::CodedOutputStream.ComputeBoolSize(12, IsTax);
         }
-        if (hasCouponBookd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(13, CouponBookd);
+        if (hasCouponBookId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(13, CouponBookId);
         }
         if (hasCouponType) {
           size += pb::CodedOutputStream.ComputeUInt64Size(14, CouponType);
@@ -11630,11 +11630,11 @@ namespace bnet.protocol.exchange {
         if (other.HasRownum) {
           Rownum = other.Rownum;
         }
-        if (other.HasFeeAuthDetaild) {
-          FeeAuthDetaild = other.FeeAuthDetaild;
+        if (other.HasFeeAuthDetailId) {
+          FeeAuthDetailId = other.FeeAuthDetailId;
         }
-        if (other.HasFeed) {
-          Feed = other.Feed;
+        if (other.HasFeeId) {
+          FeeId = other.FeeId;
         }
         if (other.HasFeeAmount) {
           FeeAmount = other.FeeAmount;
@@ -11642,8 +11642,8 @@ namespace bnet.protocol.exchange {
         if (other.HasDiscountAmount) {
           DiscountAmount = other.DiscountAmount;
         }
-        if (other.HasFeeGroupd) {
-          FeeGroupd = other.FeeGroupd;
+        if (other.HasFeeGroupId) {
+          FeeGroupId = other.FeeGroupId;
         }
         if (other.HasFeeGroupName) {
           FeeGroupName = other.FeeGroupName;
@@ -11660,11 +11660,11 @@ namespace bnet.protocol.exchange {
         if (other.HasFeeDescription) {
           FeeDescription = other.FeeDescription;
         }
-        if (other.HasİsTax) {
-          İsTax = other.İsTax;
+        if (other.HasIsTax) {
+          IsTax = other.IsTax;
         }
-        if (other.HasCouponBookd) {
-          CouponBookd = other.CouponBookd;
+        if (other.HasCouponBookId) {
+          CouponBookId = other.CouponBookId;
         }
         if (other.HasCouponType) {
           CouponType = other.CouponType;
@@ -11726,11 +11726,11 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 16: {
-              result.hasFeeAuthDetaild = input.ReadUInt64(ref result.feeAuthDetaild_);
+              result.hasFeeAuthDetailId = input.ReadUInt64(ref result.feeAuthDetailId_);
               break;
             }
             case 24: {
-              result.hasFeed = input.ReadUInt64(ref result.feed_);
+              result.hasFeeId = input.ReadUInt64(ref result.feeId_);
               break;
             }
             case 32: {
@@ -11742,7 +11742,7 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 48: {
-              result.hasFeeGroupd = input.ReadUInt64(ref result.feeGroupd_);
+              result.hasFeeGroupId = input.ReadUInt64(ref result.feeGroupId_);
               break;
             }
             case 58: {
@@ -11766,11 +11766,11 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 96: {
-              result.hasİsTax = input.ReadBool(ref result.isTax_);
+              result.hasIsTax = input.ReadBool(ref result.isTax_);
               break;
             }
             case 104: {
-              result.hasCouponBookd = input.ReadUInt64(ref result.couponBookd_);
+              result.hasCouponBookId = input.ReadUInt64(ref result.couponBookId_);
               break;
             }
             case 112: {
@@ -11819,43 +11819,43 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasFeeAuthDetaild {
-        get { return result.hasFeeAuthDetaild; }
+      public bool HasFeeAuthDetailId {
+        get { return result.hasFeeAuthDetailId; }
       }
-      public ulong FeeAuthDetaild {
-        get { return result.FeeAuthDetaild; }
-        set { SetFeeAuthDetaild(value); }
+      public ulong FeeAuthDetailId {
+        get { return result.FeeAuthDetailId; }
+        set { SetFeeAuthDetailId(value); }
       }
-      public Builder SetFeeAuthDetaild(ulong value) {
+      public Builder SetFeeAuthDetailId(ulong value) {
         PrepareBuilder();
-        result.hasFeeAuthDetaild = true;
-        result.feeAuthDetaild_ = value;
+        result.hasFeeAuthDetailId = true;
+        result.feeAuthDetailId_ = value;
         return this;
       }
-      public Builder ClearFeeAuthDetaild() {
+      public Builder ClearFeeAuthDetailId() {
         PrepareBuilder();
-        result.hasFeeAuthDetaild = false;
-        result.feeAuthDetaild_ = 0UL;
+        result.hasFeeAuthDetailId = false;
+        result.feeAuthDetailId_ = 0UL;
         return this;
       }
       
-      public bool HasFeed {
-        get { return result.hasFeed; }
+      public bool HasFeeId {
+        get { return result.hasFeeId; }
       }
-      public ulong Feed {
-        get { return result.Feed; }
-        set { SetFeed(value); }
+      public ulong FeeId {
+        get { return result.FeeId; }
+        set { SetFeeId(value); }
       }
-      public Builder SetFeed(ulong value) {
+      public Builder SetFeeId(ulong value) {
         PrepareBuilder();
-        result.hasFeed = true;
-        result.feed_ = value;
+        result.hasFeeId = true;
+        result.feeId_ = value;
         return this;
       }
-      public Builder ClearFeed() {
+      public Builder ClearFeeId() {
         PrepareBuilder();
-        result.hasFeed = false;
-        result.feed_ = 0UL;
+        result.hasFeeId = false;
+        result.feeId_ = 0UL;
         return this;
       }
       
@@ -11899,23 +11899,23 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasFeeGroupd {
-        get { return result.hasFeeGroupd; }
+      public bool HasFeeGroupId {
+        get { return result.hasFeeGroupId; }
       }
-      public ulong FeeGroupd {
-        get { return result.FeeGroupd; }
-        set { SetFeeGroupd(value); }
+      public ulong FeeGroupId {
+        get { return result.FeeGroupId; }
+        set { SetFeeGroupId(value); }
       }
-      public Builder SetFeeGroupd(ulong value) {
+      public Builder SetFeeGroupId(ulong value) {
         PrepareBuilder();
-        result.hasFeeGroupd = true;
-        result.feeGroupd_ = value;
+        result.hasFeeGroupId = true;
+        result.feeGroupId_ = value;
         return this;
       }
-      public Builder ClearFeeGroupd() {
+      public Builder ClearFeeGroupId() {
         PrepareBuilder();
-        result.hasFeeGroupd = false;
-        result.feeGroupd_ = 0UL;
+        result.hasFeeGroupId = false;
+        result.feeGroupId_ = 0UL;
         return this;
       }
       
@@ -12021,43 +12021,43 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasİsTax {
-        get { return result.hasİsTax; }
+      public bool HasIsTax {
+        get { return result.hasIsTax; }
       }
-      public bool İsTax {
-        get { return result.İsTax; }
-        set { SetİsTax(value); }
+      public bool IsTax {
+        get { return result.IsTax; }
+        set { SetIsTax(value); }
       }
-      public Builder SetİsTax(bool value) {
+      public Builder SetIsTax(bool value) {
         PrepareBuilder();
-        result.hasİsTax = true;
+        result.hasIsTax = true;
         result.isTax_ = value;
         return this;
       }
-      public Builder ClearİsTax() {
+      public Builder ClearIsTax() {
         PrepareBuilder();
-        result.hasİsTax = false;
+        result.hasIsTax = false;
         result.isTax_ = false;
         return this;
       }
       
-      public bool HasCouponBookd {
-        get { return result.hasCouponBookd; }
+      public bool HasCouponBookId {
+        get { return result.hasCouponBookId; }
       }
-      public ulong CouponBookd {
-        get { return result.CouponBookd; }
-        set { SetCouponBookd(value); }
+      public ulong CouponBookId {
+        get { return result.CouponBookId; }
+        set { SetCouponBookId(value); }
       }
-      public Builder SetCouponBookd(ulong value) {
+      public Builder SetCouponBookId(ulong value) {
         PrepareBuilder();
-        result.hasCouponBookd = true;
-        result.couponBookd_ = value;
+        result.hasCouponBookId = true;
+        result.couponBookId_ = value;
         return this;
       }
-      public Builder ClearCouponBookd() {
+      public Builder ClearCouponBookId() {
         PrepareBuilder();
-        result.hasCouponBookd = false;
-        result.couponBookd_ = 0UL;
+        result.hasCouponBookId = false;
+        result.couponBookId_ = 0UL;
         return this;
       }
       

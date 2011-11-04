@@ -91,19 +91,19 @@ namespace D3.GameMessage {
         internal__static_D3_GameMessage_HeroDigestList__Descriptor = Descriptor.MessageTypes[0];
         internal__static_D3_GameMessage_HeroDigestList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.HeroDigestList, global::D3.GameMessage.HeroDigestList.Builder>(internal__static_D3_GameMessage_HeroDigestList__Descriptor,
-                new string[] { "Accountd", "DigestList", });
+                new string[] { "AccountId", "DigestList", });
         internal__static_D3_GameMessage_ClientToonSettings__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_GameMessage_ClientToonSettings__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.ClientToonSettings, global::D3.GameMessage.ClientToonSettings.Builder>(internal__static_D3_GameMessage_ClientToonSettings__Descriptor,
-                new string[] { "Toond", "ClientToonSettings_", });
+                new string[] { "ToonId", "ClientToonSettings_", });
         internal__static_D3_GameMessage_HeroDigestListRequest__Descriptor = Descriptor.MessageTypes[2];
         internal__static_D3_GameMessage_HeroDigestListRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.HeroDigestListRequest, global::D3.GameMessage.HeroDigestListRequest.Builder>(internal__static_D3_GameMessage_HeroDigestListRequest__Descriptor,
-                new string[] { "Toond", });
+                new string[] { "ToonId", });
         internal__static_D3_GameMessage_HeroDigestResponse__Descriptor = Descriptor.MessageTypes[3];
         internal__static_D3_GameMessage_HeroDigestResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.HeroDigestResponse, global::D3.GameMessage.HeroDigestResponse.Builder>(internal__static_D3_GameMessage_HeroDigestResponse__Descriptor,
-                new string[] { "Toond", "Success", "HeroDigest", });
+                new string[] { "ToonId", "Success", "HeroDigest", });
         internal__static_D3_GameMessage_HeroDigestListResponse__Descriptor = Descriptor.MessageTypes[4];
         internal__static_D3_GameMessage_HeroDigestListResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.HeroDigestListResponse, global::D3.GameMessage.HeroDigestListResponse.Builder>(internal__static_D3_GameMessage_HeroDigestListResponse__Descriptor,
@@ -111,11 +111,11 @@ namespace D3.GameMessage {
         internal__static_D3_GameMessage_PlayerBanner__Descriptor = Descriptor.MessageTypes[5];
         internal__static_D3_GameMessage_PlayerBanner__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.PlayerBanner, global::D3.GameMessage.PlayerBanner.Builder>(internal__static_D3_GameMessage_PlayerBanner__Descriptor,
-                new string[] { "Playerndex", "Banner", });
+                new string[] { "PlayerIndex", "Banner", });
         internal__static_D3_GameMessage_SaveBannerConfiguration__Descriptor = Descriptor.MessageTypes[6];
         internal__static_D3_GameMessage_SaveBannerConfiguration__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.SaveBannerConfiguration, global::D3.GameMessage.SaveBannerConfiguration.Builder>(internal__static_D3_GameMessage_SaveBannerConfiguration__Descriptor,
-                new string[] { "Banner", "Slotndex", "MakeActive", });
+                new string[] { "Banner", "SlotIndex", "MakeActive", });
         internal__static_D3_GameMessage_HeroDigestBanner__Descriptor = Descriptor.MessageTypes[7];
         internal__static_D3_GameMessage_HeroDigestBanner__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.HeroDigestBanner, global::D3.GameMessage.HeroDigestBanner.Builder>(internal__static_D3_GameMessage_HeroDigestBanner__Descriptor,
@@ -127,19 +127,19 @@ namespace D3.GameMessage {
         internal__static_D3_GameMessage_AccountVersionList__Descriptor = Descriptor.MessageTypes[9];
         internal__static_D3_GameMessage_AccountVersionList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.AccountVersionList, global::D3.GameMessage.AccountVersionList.Builder>(internal__static_D3_GameMessage_AccountVersionList__Descriptor,
-                new string[] { "Accountd", });
+                new string[] { "AccountId", });
         internal__static_D3_GameMessage_AccountVersionSync__Descriptor = Descriptor.MessageTypes[10];
         internal__static_D3_GameMessage_AccountVersionSync__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.AccountVersionSync, global::D3.GameMessage.AccountVersionSync.Builder>(internal__static_D3_GameMessage_AccountVersionSync__Descriptor,
-                new string[] { "Accountd", "Version", });
+                new string[] { "AccountId", "Version", });
         internal__static_D3_GameMessage_TooltipIds__Descriptor = Descriptor.MessageTypes[11];
         internal__static_D3_GameMessage_TooltipIds__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.TooltipIds, global::D3.GameMessage.TooltipIds.Builder>(internal__static_D3_GameMessage_TooltipIds__Descriptor,
-                new string[] { "Locale", "İds", });
+                new string[] { "Locale", "Ids", });
         internal__static_D3_GameMessage_TooltipGenerators__Descriptor = Descriptor.MessageTypes[12];
         internal__static_D3_GameMessage_TooltipGenerators__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.TooltipGenerators, global::D3.GameMessage.TooltipGenerators.Builder>(internal__static_D3_GameMessage_TooltipGenerators__Descriptor,
-                new string[] { "Locale", "İtems", });
+                new string[] { "Locale", "Items", });
         internal__static_D3_GameMessage_TutorialMessage__Descriptor = Descriptor.MessageTypes[13];
         internal__static_D3_GameMessage_TutorialMessage__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.TutorialMessage, global::D3.GameMessage.TutorialMessage.Builder>(internal__static_D3_GameMessage_TutorialMessage__Descriptor,
@@ -187,14 +187,14 @@ namespace D3.GameMessage {
       get { return global::D3.GameMessage.GameMessage.internal__static_D3_GameMessage_HeroDigestList__FieldAccessorTable; }
     }
     
-    public const int AccountdFieldNumber = 1;
-    private bool hasAccountd;
-    private global::D3.OnlineService.EntityId accountd_;
-    public bool HasAccountd {
-      get { return hasAccountd; }
+    public const int AccountIdFieldNumber = 1;
+    private bool hasAccountId;
+    private global::D3.OnlineService.EntityId accountId_;
+    public bool HasAccountId {
+      get { return hasAccountId; }
     }
-    public global::D3.OnlineService.EntityId Accountd {
-      get { return accountd_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId AccountId {
+      get { return accountId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
     public const int DigestListFieldNumber = 2;
@@ -211,8 +211,8 @@ namespace D3.GameMessage {
     
     public override bool IsInitialized {
       get {
-        if (!hasAccountd) return false;
-        if (!Accountd.IsInitialized) return false;
+        if (!hasAccountId) return false;
+        if (!AccountId.IsInitialized) return false;
         foreach (global::D3.Hero.Digest element in DigestListList) {
           if (!element.IsInitialized) return false;
         }
@@ -223,8 +223,8 @@ namespace D3.GameMessage {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _heroDigestListFieldNames;
-      if (hasAccountd) {
-        output.WriteMessage(1, field_names[0], Accountd);
+      if (hasAccountId) {
+        output.WriteMessage(1, field_names[0], AccountId);
       }
       if (digestList_.Count > 0) {
         output.WriteMessageArray(2, field_names[1], digestList_);
@@ -239,8 +239,8 @@ namespace D3.GameMessage {
         if (size != -1) return size;
         
         size = 0;
-        if (hasAccountd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Accountd);
+        if (hasAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AccountId);
         }
         foreach (global::D3.Hero.Digest element in DigestListList) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, element);
@@ -372,8 +372,8 @@ namespace D3.GameMessage {
       public override Builder MergeFrom(HeroDigestList other) {
         if (other == global::D3.GameMessage.HeroDigestList.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasAccountd) {
-          MergeAccountd(other.Accountd);
+        if (other.HasAccountId) {
+          MergeAccountId(other.AccountId);
         }
         if (other.digestList_.Count != 0) {
           result.digestList_.Add(other.digestList_);
@@ -423,11 +423,11 @@ namespace D3.GameMessage {
             }
             case 10: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasAccountd) {
-                subBuilder.MergeFrom(Accountd);
+              if (result.hasAccountId) {
+                subBuilder.MergeFrom(AccountId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Accountd = subBuilder.BuildPartial();
+              AccountId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
@@ -444,43 +444,43 @@ namespace D3.GameMessage {
       }
       
       
-      public bool HasAccountd {
-       get { return result.hasAccountd; }
+      public bool HasAccountId {
+       get { return result.hasAccountId; }
       }
-      public global::D3.OnlineService.EntityId Accountd {
-        get { return result.Accountd; }
-        set { SetAccountd(value); }
+      public global::D3.OnlineService.EntityId AccountId {
+        get { return result.AccountId; }
+        set { SetAccountId(value); }
       }
-      public Builder SetAccountd(global::D3.OnlineService.EntityId value) {
+      public Builder SetAccountId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAccountd = true;
-        result.accountd_ = value;
+        result.hasAccountId = true;
+        result.accountId_ = value;
         return this;
       }
-      public Builder SetAccountd(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetAccountId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAccountd = true;
-        result.accountd_ = builderForValue.Build();
+        result.hasAccountId = true;
+        result.accountId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAccountd(global::D3.OnlineService.EntityId value) {
+      public Builder MergeAccountId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAccountd &&
-            result.accountd_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.accountd_ = global::D3.OnlineService.EntityId.CreateBuilder(result.accountd_).MergeFrom(value).BuildPartial();
+        if (result.hasAccountId &&
+            result.accountId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.accountId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.accountId_).MergeFrom(value).BuildPartial();
         } else {
-          result.accountd_ = value;
+          result.accountId_ = value;
         }
-        result.hasAccountd = true;
+        result.hasAccountId = true;
         return this;
       }
-      public Builder ClearAccountd() {
+      public Builder ClearAccountId() {
         PrepareBuilder();
-        result.hasAccountd = false;
-        result.accountd_ = null;
+        result.hasAccountId = false;
+        result.accountId_ = null;
         return this;
       }
       
@@ -561,14 +561,14 @@ namespace D3.GameMessage {
       get { return global::D3.GameMessage.GameMessage.internal__static_D3_GameMessage_ClientToonSettings__FieldAccessorTable; }
     }
     
-    public const int ToondFieldNumber = 1;
-    private bool hasToond;
-    private global::D3.OnlineService.EntityId toond_;
-    public bool HasToond {
-      get { return hasToond; }
+    public const int ToonIdFieldNumber = 1;
+    private bool hasToonId;
+    private global::D3.OnlineService.EntityId toonId_;
+    public bool HasToonId {
+      get { return hasToonId; }
     }
-    public global::D3.OnlineService.EntityId Toond {
-      get { return toond_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId ToonId {
+      get { return toonId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
     public const int ClientToonSettings_FieldNumber = 2;
@@ -583,9 +583,9 @@ namespace D3.GameMessage {
     
     public override bool IsInitialized {
       get {
-        if (!hasToond) return false;
+        if (!hasToonId) return false;
         if (!hasClientToonSettings_) return false;
-        if (!Toond.IsInitialized) return false;
+        if (!ToonId.IsInitialized) return false;
         return true;
       }
     }
@@ -593,8 +593,8 @@ namespace D3.GameMessage {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _clientToonSettingsFieldNames;
-      if (hasToond) {
-        output.WriteMessage(1, field_names[1], Toond);
+      if (hasToonId) {
+        output.WriteMessage(1, field_names[1], ToonId);
       }
       if (hasClientToonSettings_) {
         output.WriteMessage(2, field_names[0], ClientToonSettings_);
@@ -609,8 +609,8 @@ namespace D3.GameMessage {
         if (size != -1) return size;
         
         size = 0;
-        if (hasToond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Toond);
+        if (hasToonId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, ToonId);
         }
         if (hasClientToonSettings_) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, ClientToonSettings_);
@@ -741,8 +741,8 @@ namespace D3.GameMessage {
       public override Builder MergeFrom(ClientToonSettings other) {
         if (other == global::D3.GameMessage.ClientToonSettings.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasToond) {
-          MergeToond(other.Toond);
+        if (other.HasToonId) {
+          MergeToonId(other.ToonId);
         }
         if (other.HasClientToonSettings_) {
           MergeClientToonSettings_(other.ClientToonSettings_);
@@ -792,11 +792,11 @@ namespace D3.GameMessage {
             }
             case 10: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasToond) {
-                subBuilder.MergeFrom(Toond);
+              if (result.hasToonId) {
+                subBuilder.MergeFrom(ToonId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Toond = subBuilder.BuildPartial();
+              ToonId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
@@ -818,43 +818,43 @@ namespace D3.GameMessage {
       }
       
       
-      public bool HasToond {
-       get { return result.hasToond; }
+      public bool HasToonId {
+       get { return result.hasToonId; }
       }
-      public global::D3.OnlineService.EntityId Toond {
-        get { return result.Toond; }
-        set { SetToond(value); }
+      public global::D3.OnlineService.EntityId ToonId {
+        get { return result.ToonId; }
+        set { SetToonId(value); }
       }
-      public Builder SetToond(global::D3.OnlineService.EntityId value) {
+      public Builder SetToonId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasToond = true;
-        result.toond_ = value;
+        result.hasToonId = true;
+        result.toonId_ = value;
         return this;
       }
-      public Builder SetToond(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetToonId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasToond = true;
-        result.toond_ = builderForValue.Build();
+        result.hasToonId = true;
+        result.toonId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeToond(global::D3.OnlineService.EntityId value) {
+      public Builder MergeToonId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasToond &&
-            result.toond_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.toond_ = global::D3.OnlineService.EntityId.CreateBuilder(result.toond_).MergeFrom(value).BuildPartial();
+        if (result.hasToonId &&
+            result.toonId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.toonId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.toonId_).MergeFrom(value).BuildPartial();
         } else {
-          result.toond_ = value;
+          result.toonId_ = value;
         }
-        result.hasToond = true;
+        result.hasToonId = true;
         return this;
       }
-      public Builder ClearToond() {
+      public Builder ClearToonId() {
         PrepareBuilder();
-        result.hasToond = false;
-        result.toond_ = null;
+        result.hasToonId = false;
+        result.toonId_ = null;
         return this;
       }
       
@@ -931,21 +931,21 @@ namespace D3.GameMessage {
       get { return global::D3.GameMessage.GameMessage.internal__static_D3_GameMessage_HeroDigestListRequest__FieldAccessorTable; }
     }
     
-    public const int ToondFieldNumber = 1;
-    private pbc::PopsicleList<global::D3.OnlineService.EntityId> toond_ = new pbc::PopsicleList<global::D3.OnlineService.EntityId>();
-    public scg::IList<global::D3.OnlineService.EntityId> ToondList {
-      get { return toond_; }
+    public const int ToonIdFieldNumber = 1;
+    private pbc::PopsicleList<global::D3.OnlineService.EntityId> toonId_ = new pbc::PopsicleList<global::D3.OnlineService.EntityId>();
+    public scg::IList<global::D3.OnlineService.EntityId> ToonIdList {
+      get { return toonId_; }
     }
-    public int ToondCount {
-      get { return toond_.Count; }
+    public int ToonIdCount {
+      get { return toonId_.Count; }
     }
-    public global::D3.OnlineService.EntityId GetToond(int index) {
-      return toond_[index];
+    public global::D3.OnlineService.EntityId GetToonId(int index) {
+      return toonId_[index];
     }
     
     public override bool IsInitialized {
       get {
-        foreach (global::D3.OnlineService.EntityId element in ToondList) {
+        foreach (global::D3.OnlineService.EntityId element in ToonIdList) {
           if (!element.IsInitialized) return false;
         }
         return true;
@@ -955,8 +955,8 @@ namespace D3.GameMessage {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _heroDigestListRequestFieldNames;
-      if (toond_.Count > 0) {
-        output.WriteMessageArray(1, field_names[0], toond_);
+      if (toonId_.Count > 0) {
+        output.WriteMessageArray(1, field_names[0], toonId_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -968,7 +968,7 @@ namespace D3.GameMessage {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::D3.OnlineService.EntityId element in ToondList) {
+        foreach (global::D3.OnlineService.EntityId element in ToonIdList) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
         }
         size += UnknownFields.SerializedSize;
@@ -1008,7 +1008,7 @@ namespace D3.GameMessage {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private HeroDigestListRequest MakeReadOnly() {
-      toond_.MakeReadOnly();
+      toonId_.MakeReadOnly();
       return this;
     }
     
@@ -1098,8 +1098,8 @@ namespace D3.GameMessage {
       public override Builder MergeFrom(HeroDigestListRequest other) {
         if (other == global::D3.GameMessage.HeroDigestListRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.toond_.Count != 0) {
-          result.toond_.Add(other.toond_);
+        if (other.toonId_.Count != 0) {
+          result.toonId_.Add(other.toonId_);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1145,7 +1145,7 @@ namespace D3.GameMessage {
               break;
             }
             case 10: {
-              input.ReadMessageArray(tag, field_name, result.toond_, global::D3.OnlineService.EntityId.DefaultInstance, extensionRegistry);
+              input.ReadMessageArray(tag, field_name, result.toonId_, global::D3.OnlineService.EntityId.DefaultInstance, extensionRegistry);
               break;
             }
           }
@@ -1158,47 +1158,47 @@ namespace D3.GameMessage {
       }
       
       
-      public pbc::IPopsicleList<global::D3.OnlineService.EntityId> ToondList {
-        get { return PrepareBuilder().toond_; }
+      public pbc::IPopsicleList<global::D3.OnlineService.EntityId> ToonIdList {
+        get { return PrepareBuilder().toonId_; }
       }
-      public int ToondCount {
-        get { return result.ToondCount; }
+      public int ToonIdCount {
+        get { return result.ToonIdCount; }
       }
-      public global::D3.OnlineService.EntityId GetToond(int index) {
-        return result.GetToond(index);
+      public global::D3.OnlineService.EntityId GetToonId(int index) {
+        return result.GetToonId(index);
       }
-      public Builder SetToond(int index, global::D3.OnlineService.EntityId value) {
+      public Builder SetToonId(int index, global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.toond_[index] = value;
+        result.toonId_[index] = value;
         return this;
       }
-      public Builder SetToond(int index, global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetToonId(int index, global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.toond_[index] = builderForValue.Build();
+        result.toonId_[index] = builderForValue.Build();
         return this;
       }
-      public Builder AddToond(global::D3.OnlineService.EntityId value) {
+      public Builder AddToonId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.toond_.Add(value);
+        result.toonId_.Add(value);
         return this;
       }
-      public Builder AddToond(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder AddToonId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.toond_.Add(builderForValue.Build());
+        result.toonId_.Add(builderForValue.Build());
         return this;
       }
-      public Builder AddRangeToond(scg::IEnumerable<global::D3.OnlineService.EntityId> values) {
+      public Builder AddRangeToonId(scg::IEnumerable<global::D3.OnlineService.EntityId> values) {
         PrepareBuilder();
-        result.toond_.Add(values);
+        result.toonId_.Add(values);
         return this;
       }
-      public Builder ClearToond() {
+      public Builder ClearToonId() {
         PrepareBuilder();
-        result.toond_.Clear();
+        result.toonId_.Clear();
         return this;
       }
     }
@@ -1235,14 +1235,14 @@ namespace D3.GameMessage {
       get { return global::D3.GameMessage.GameMessage.internal__static_D3_GameMessage_HeroDigestResponse__FieldAccessorTable; }
     }
     
-    public const int ToondFieldNumber = 1;
-    private bool hasToond;
-    private global::D3.OnlineService.EntityId toond_;
-    public bool HasToond {
-      get { return hasToond; }
+    public const int ToonIdFieldNumber = 1;
+    private bool hasToonId;
+    private global::D3.OnlineService.EntityId toonId_;
+    public bool HasToonId {
+      get { return hasToonId; }
     }
-    public global::D3.OnlineService.EntityId Toond {
-      get { return toond_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId ToonId {
+      get { return toonId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
     public const int SuccessFieldNumber = 2;
@@ -1267,9 +1267,9 @@ namespace D3.GameMessage {
     
     public override bool IsInitialized {
       get {
-        if (!hasToond) return false;
+        if (!hasToonId) return false;
         if (!hasSuccess) return false;
-        if (!Toond.IsInitialized) return false;
+        if (!ToonId.IsInitialized) return false;
         if (HasHeroDigest) {
           if (!HeroDigest.IsInitialized) return false;
         }
@@ -1280,8 +1280,8 @@ namespace D3.GameMessage {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _heroDigestResponseFieldNames;
-      if (hasToond) {
-        output.WriteMessage(1, field_names[2], Toond);
+      if (hasToonId) {
+        output.WriteMessage(1, field_names[2], ToonId);
       }
       if (hasSuccess) {
         output.WriteBool(2, field_names[1], Success);
@@ -1299,8 +1299,8 @@ namespace D3.GameMessage {
         if (size != -1) return size;
         
         size = 0;
-        if (hasToond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Toond);
+        if (hasToonId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, ToonId);
         }
         if (hasSuccess) {
           size += pb::CodedOutputStream.ComputeBoolSize(2, Success);
@@ -1434,8 +1434,8 @@ namespace D3.GameMessage {
       public override Builder MergeFrom(HeroDigestResponse other) {
         if (other == global::D3.GameMessage.HeroDigestResponse.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasToond) {
-          MergeToond(other.Toond);
+        if (other.HasToonId) {
+          MergeToonId(other.ToonId);
         }
         if (other.HasSuccess) {
           Success = other.Success;
@@ -1488,11 +1488,11 @@ namespace D3.GameMessage {
             }
             case 10: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasToond) {
-                subBuilder.MergeFrom(Toond);
+              if (result.hasToonId) {
+                subBuilder.MergeFrom(ToonId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Toond = subBuilder.BuildPartial();
+              ToonId = subBuilder.BuildPartial();
               break;
             }
             case 16: {
@@ -1518,43 +1518,43 @@ namespace D3.GameMessage {
       }
       
       
-      public bool HasToond {
-       get { return result.hasToond; }
+      public bool HasToonId {
+       get { return result.hasToonId; }
       }
-      public global::D3.OnlineService.EntityId Toond {
-        get { return result.Toond; }
-        set { SetToond(value); }
+      public global::D3.OnlineService.EntityId ToonId {
+        get { return result.ToonId; }
+        set { SetToonId(value); }
       }
-      public Builder SetToond(global::D3.OnlineService.EntityId value) {
+      public Builder SetToonId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasToond = true;
-        result.toond_ = value;
+        result.hasToonId = true;
+        result.toonId_ = value;
         return this;
       }
-      public Builder SetToond(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetToonId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasToond = true;
-        result.toond_ = builderForValue.Build();
+        result.hasToonId = true;
+        result.toonId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeToond(global::D3.OnlineService.EntityId value) {
+      public Builder MergeToonId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasToond &&
-            result.toond_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.toond_ = global::D3.OnlineService.EntityId.CreateBuilder(result.toond_).MergeFrom(value).BuildPartial();
+        if (result.hasToonId &&
+            result.toonId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.toonId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.toonId_).MergeFrom(value).BuildPartial();
         } else {
-          result.toond_ = value;
+          result.toonId_ = value;
         }
-        result.hasToond = true;
+        result.hasToonId = true;
         return this;
       }
-      public Builder ClearToond() {
+      public Builder ClearToonId() {
         PrepareBuilder();
-        result.hasToond = false;
-        result.toond_ = null;
+        result.hasToonId = false;
+        result.toonId_ = null;
         return this;
       }
       
@@ -1955,14 +1955,14 @@ namespace D3.GameMessage {
       get { return global::D3.GameMessage.GameMessage.internal__static_D3_GameMessage_PlayerBanner__FieldAccessorTable; }
     }
     
-    public const int PlayerndexFieldNumber = 1;
-    private bool hasPlayerndex;
-    private uint playerndex_;
-    public bool HasPlayerndex {
-      get { return hasPlayerndex; }
+    public const int PlayerIndexFieldNumber = 1;
+    private bool hasPlayerIndex;
+    private uint playerIndex_;
+    public bool HasPlayerIndex {
+      get { return hasPlayerIndex; }
     }
-    public uint Playerndex {
-      get { return playerndex_; }
+    public uint PlayerIndex {
+      get { return playerIndex_; }
     }
     
     public const int BannerFieldNumber = 2;
@@ -1977,7 +1977,7 @@ namespace D3.GameMessage {
     
     public override bool IsInitialized {
       get {
-        if (!hasPlayerndex) return false;
+        if (!hasPlayerIndex) return false;
         if (!hasBanner) return false;
         if (!Banner.IsInitialized) return false;
         return true;
@@ -1987,8 +1987,8 @@ namespace D3.GameMessage {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _playerBannerFieldNames;
-      if (hasPlayerndex) {
-        output.WriteUInt32(1, field_names[1], Playerndex);
+      if (hasPlayerIndex) {
+        output.WriteUInt32(1, field_names[1], PlayerIndex);
       }
       if (hasBanner) {
         output.WriteMessage(2, field_names[0], Banner);
@@ -2003,8 +2003,8 @@ namespace D3.GameMessage {
         if (size != -1) return size;
         
         size = 0;
-        if (hasPlayerndex) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(1, Playerndex);
+        if (hasPlayerIndex) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, PlayerIndex);
         }
         if (hasBanner) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, Banner);
@@ -2135,8 +2135,8 @@ namespace D3.GameMessage {
       public override Builder MergeFrom(PlayerBanner other) {
         if (other == global::D3.GameMessage.PlayerBanner.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasPlayerndex) {
-          Playerndex = other.Playerndex;
+        if (other.HasPlayerIndex) {
+          PlayerIndex = other.PlayerIndex;
         }
         if (other.HasBanner) {
           MergeBanner(other.Banner);
@@ -2185,7 +2185,7 @@ namespace D3.GameMessage {
               break;
             }
             case 8: {
-              result.hasPlayerndex = input.ReadUInt32(ref result.playerndex_);
+              result.hasPlayerIndex = input.ReadUInt32(ref result.playerIndex_);
               break;
             }
             case 18: {
@@ -2207,23 +2207,23 @@ namespace D3.GameMessage {
       }
       
       
-      public bool HasPlayerndex {
-        get { return result.hasPlayerndex; }
+      public bool HasPlayerIndex {
+        get { return result.hasPlayerIndex; }
       }
-      public uint Playerndex {
-        get { return result.Playerndex; }
-        set { SetPlayerndex(value); }
+      public uint PlayerIndex {
+        get { return result.PlayerIndex; }
+        set { SetPlayerIndex(value); }
       }
-      public Builder SetPlayerndex(uint value) {
+      public Builder SetPlayerIndex(uint value) {
         PrepareBuilder();
-        result.hasPlayerndex = true;
-        result.playerndex_ = value;
+        result.hasPlayerIndex = true;
+        result.playerIndex_ = value;
         return this;
       }
-      public Builder ClearPlayerndex() {
+      public Builder ClearPlayerIndex() {
         PrepareBuilder();
-        result.hasPlayerndex = false;
-        result.playerndex_ = 0;
+        result.hasPlayerIndex = false;
+        result.playerIndex_ = 0;
         return this;
       }
       
@@ -2310,14 +2310,14 @@ namespace D3.GameMessage {
       get { return banner_ ?? global::D3.Account.BannerConfiguration.DefaultInstance; }
     }
     
-    public const int SlotndexFieldNumber = 2;
-    private bool hasSlotndex;
-    private uint slotndex_;
-    public bool HasSlotndex {
-      get { return hasSlotndex; }
+    public const int SlotIndexFieldNumber = 2;
+    private bool hasSlotIndex;
+    private uint slotIndex_;
+    public bool HasSlotIndex {
+      get { return hasSlotIndex; }
     }
-    public uint Slotndex {
-      get { return slotndex_; }
+    public uint SlotIndex {
+      get { return slotIndex_; }
     }
     
     public const int MakeActiveFieldNumber = 3;
@@ -2344,8 +2344,8 @@ namespace D3.GameMessage {
       if (hasBanner) {
         output.WriteMessage(1, field_names[0], Banner);
       }
-      if (hasSlotndex) {
-        output.WriteUInt32(2, field_names[2], Slotndex);
+      if (hasSlotIndex) {
+        output.WriteUInt32(2, field_names[2], SlotIndex);
       }
       if (hasMakeActive) {
         output.WriteBool(3, field_names[1], MakeActive);
@@ -2363,8 +2363,8 @@ namespace D3.GameMessage {
         if (hasBanner) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, Banner);
         }
-        if (hasSlotndex) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(2, Slotndex);
+        if (hasSlotIndex) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, SlotIndex);
         }
         if (hasMakeActive) {
           size += pb::CodedOutputStream.ComputeBoolSize(3, MakeActive);
@@ -2498,8 +2498,8 @@ namespace D3.GameMessage {
         if (other.HasBanner) {
           MergeBanner(other.Banner);
         }
-        if (other.HasSlotndex) {
-          Slotndex = other.Slotndex;
+        if (other.HasSlotIndex) {
+          SlotIndex = other.SlotIndex;
         }
         if (other.HasMakeActive) {
           MakeActive = other.MakeActive;
@@ -2557,7 +2557,7 @@ namespace D3.GameMessage {
               break;
             }
             case 16: {
-              result.hasSlotndex = input.ReadUInt32(ref result.slotndex_);
+              result.hasSlotIndex = input.ReadUInt32(ref result.slotIndex_);
               break;
             }
             case 24: {
@@ -2614,23 +2614,23 @@ namespace D3.GameMessage {
         return this;
       }
       
-      public bool HasSlotndex {
-        get { return result.hasSlotndex; }
+      public bool HasSlotIndex {
+        get { return result.hasSlotIndex; }
       }
-      public uint Slotndex {
-        get { return result.Slotndex; }
-        set { SetSlotndex(value); }
+      public uint SlotIndex {
+        get { return result.SlotIndex; }
+        set { SetSlotIndex(value); }
       }
-      public Builder SetSlotndex(uint value) {
+      public Builder SetSlotIndex(uint value) {
         PrepareBuilder();
-        result.hasSlotndex = true;
-        result.slotndex_ = value;
+        result.hasSlotIndex = true;
+        result.slotIndex_ = value;
         return this;
       }
-      public Builder ClearSlotndex() {
+      public Builder ClearSlotIndex() {
         PrepareBuilder();
-        result.hasSlotndex = false;
-        result.slotndex_ = 0;
+        result.hasSlotIndex = false;
+        result.slotIndex_ = 0;
         return this;
       }
       
@@ -3362,20 +3362,20 @@ namespace D3.GameMessage {
       get { return global::D3.GameMessage.GameMessage.internal__static_D3_GameMessage_AccountVersionList__FieldAccessorTable; }
     }
     
-    public const int AccountdFieldNumber = 1;
-    private bool hasAccountd;
-    private global::D3.OnlineService.EntityId accountd_;
-    public bool HasAccountd {
-      get { return hasAccountd; }
+    public const int AccountIdFieldNumber = 1;
+    private bool hasAccountId;
+    private global::D3.OnlineService.EntityId accountId_;
+    public bool HasAccountId {
+      get { return hasAccountId; }
     }
-    public global::D3.OnlineService.EntityId Accountd {
-      get { return accountd_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId AccountId {
+      get { return accountId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasAccountd) return false;
-        if (!Accountd.IsInitialized) return false;
+        if (!hasAccountId) return false;
+        if (!AccountId.IsInitialized) return false;
         return true;
       }
     }
@@ -3383,8 +3383,8 @@ namespace D3.GameMessage {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _accountVersionListFieldNames;
-      if (hasAccountd) {
-        output.WriteMessage(1, field_names[0], Accountd);
+      if (hasAccountId) {
+        output.WriteMessage(1, field_names[0], AccountId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -3396,8 +3396,8 @@ namespace D3.GameMessage {
         if (size != -1) return size;
         
         size = 0;
-        if (hasAccountd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Accountd);
+        if (hasAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AccountId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -3525,8 +3525,8 @@ namespace D3.GameMessage {
       public override Builder MergeFrom(AccountVersionList other) {
         if (other == global::D3.GameMessage.AccountVersionList.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasAccountd) {
-          MergeAccountd(other.Accountd);
+        if (other.HasAccountId) {
+          MergeAccountId(other.AccountId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -3573,11 +3573,11 @@ namespace D3.GameMessage {
             }
             case 10: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasAccountd) {
-                subBuilder.MergeFrom(Accountd);
+              if (result.hasAccountId) {
+                subBuilder.MergeFrom(AccountId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Accountd = subBuilder.BuildPartial();
+              AccountId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -3590,43 +3590,43 @@ namespace D3.GameMessage {
       }
       
       
-      public bool HasAccountd {
-       get { return result.hasAccountd; }
+      public bool HasAccountId {
+       get { return result.hasAccountId; }
       }
-      public global::D3.OnlineService.EntityId Accountd {
-        get { return result.Accountd; }
-        set { SetAccountd(value); }
+      public global::D3.OnlineService.EntityId AccountId {
+        get { return result.AccountId; }
+        set { SetAccountId(value); }
       }
-      public Builder SetAccountd(global::D3.OnlineService.EntityId value) {
+      public Builder SetAccountId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAccountd = true;
-        result.accountd_ = value;
+        result.hasAccountId = true;
+        result.accountId_ = value;
         return this;
       }
-      public Builder SetAccountd(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetAccountId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAccountd = true;
-        result.accountd_ = builderForValue.Build();
+        result.hasAccountId = true;
+        result.accountId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAccountd(global::D3.OnlineService.EntityId value) {
+      public Builder MergeAccountId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAccountd &&
-            result.accountd_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.accountd_ = global::D3.OnlineService.EntityId.CreateBuilder(result.accountd_).MergeFrom(value).BuildPartial();
+        if (result.hasAccountId &&
+            result.accountId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.accountId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.accountId_).MergeFrom(value).BuildPartial();
         } else {
-          result.accountd_ = value;
+          result.accountId_ = value;
         }
-        result.hasAccountd = true;
+        result.hasAccountId = true;
         return this;
       }
-      public Builder ClearAccountd() {
+      public Builder ClearAccountId() {
         PrepareBuilder();
-        result.hasAccountd = false;
-        result.accountd_ = null;
+        result.hasAccountId = false;
+        result.accountId_ = null;
         return this;
       }
     }
@@ -3663,14 +3663,14 @@ namespace D3.GameMessage {
       get { return global::D3.GameMessage.GameMessage.internal__static_D3_GameMessage_AccountVersionSync__FieldAccessorTable; }
     }
     
-    public const int AccountdFieldNumber = 1;
-    private bool hasAccountd;
-    private global::D3.OnlineService.EntityId accountd_;
-    public bool HasAccountd {
-      get { return hasAccountd; }
+    public const int AccountIdFieldNumber = 1;
+    private bool hasAccountId;
+    private global::D3.OnlineService.EntityId accountId_;
+    public bool HasAccountId {
+      get { return hasAccountId; }
     }
-    public global::D3.OnlineService.EntityId Accountd {
-      get { return accountd_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId AccountId {
+      get { return accountId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
     public const int VersionFieldNumber = 2;
@@ -3685,9 +3685,9 @@ namespace D3.GameMessage {
     
     public override bool IsInitialized {
       get {
-        if (!hasAccountd) return false;
+        if (!hasAccountId) return false;
         if (!hasVersion) return false;
-        if (!Accountd.IsInitialized) return false;
+        if (!AccountId.IsInitialized) return false;
         return true;
       }
     }
@@ -3695,8 +3695,8 @@ namespace D3.GameMessage {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _accountVersionSyncFieldNames;
-      if (hasAccountd) {
-        output.WriteMessage(1, field_names[0], Accountd);
+      if (hasAccountId) {
+        output.WriteMessage(1, field_names[0], AccountId);
       }
       if (hasVersion) {
         output.WriteUInt64(2, field_names[1], Version);
@@ -3711,8 +3711,8 @@ namespace D3.GameMessage {
         if (size != -1) return size;
         
         size = 0;
-        if (hasAccountd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Accountd);
+        if (hasAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AccountId);
         }
         if (hasVersion) {
           size += pb::CodedOutputStream.ComputeUInt64Size(2, Version);
@@ -3843,8 +3843,8 @@ namespace D3.GameMessage {
       public override Builder MergeFrom(AccountVersionSync other) {
         if (other == global::D3.GameMessage.AccountVersionSync.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasAccountd) {
-          MergeAccountd(other.Accountd);
+        if (other.HasAccountId) {
+          MergeAccountId(other.AccountId);
         }
         if (other.HasVersion) {
           Version = other.Version;
@@ -3894,11 +3894,11 @@ namespace D3.GameMessage {
             }
             case 10: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasAccountd) {
-                subBuilder.MergeFrom(Accountd);
+              if (result.hasAccountId) {
+                subBuilder.MergeFrom(AccountId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Accountd = subBuilder.BuildPartial();
+              AccountId = subBuilder.BuildPartial();
               break;
             }
             case 16: {
@@ -3915,43 +3915,43 @@ namespace D3.GameMessage {
       }
       
       
-      public bool HasAccountd {
-       get { return result.hasAccountd; }
+      public bool HasAccountId {
+       get { return result.hasAccountId; }
       }
-      public global::D3.OnlineService.EntityId Accountd {
-        get { return result.Accountd; }
-        set { SetAccountd(value); }
+      public global::D3.OnlineService.EntityId AccountId {
+        get { return result.AccountId; }
+        set { SetAccountId(value); }
       }
-      public Builder SetAccountd(global::D3.OnlineService.EntityId value) {
+      public Builder SetAccountId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAccountd = true;
-        result.accountd_ = value;
+        result.hasAccountId = true;
+        result.accountId_ = value;
         return this;
       }
-      public Builder SetAccountd(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetAccountId(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAccountd = true;
-        result.accountd_ = builderForValue.Build();
+        result.hasAccountId = true;
+        result.accountId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAccountd(global::D3.OnlineService.EntityId value) {
+      public Builder MergeAccountId(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAccountd &&
-            result.accountd_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.accountd_ = global::D3.OnlineService.EntityId.CreateBuilder(result.accountd_).MergeFrom(value).BuildPartial();
+        if (result.hasAccountId &&
+            result.accountId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.accountId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.accountId_).MergeFrom(value).BuildPartial();
         } else {
-          result.accountd_ = value;
+          result.accountId_ = value;
         }
-        result.hasAccountd = true;
+        result.hasAccountId = true;
         return this;
       }
-      public Builder ClearAccountd() {
+      public Builder ClearAccountId() {
         PrepareBuilder();
-        result.hasAccountd = false;
-        result.accountd_ = null;
+        result.hasAccountId = false;
+        result.accountId_ = null;
         return this;
       }
       
@@ -4018,22 +4018,22 @@ namespace D3.GameMessage {
       get { return locale_; }
     }
     
-    public const int İdsFieldNumber = 2;
+    public const int IdsFieldNumber = 2;
     private pbc::PopsicleList<global::D3.OnlineService.ItemId> ids_ = new pbc::PopsicleList<global::D3.OnlineService.ItemId>();
-    public scg::IList<global::D3.OnlineService.ItemId> İdsList {
+    public scg::IList<global::D3.OnlineService.ItemId> IdsList {
       get { return ids_; }
     }
-    public int İdsCount {
+    public int IdsCount {
       get { return ids_.Count; }
     }
-    public global::D3.OnlineService.ItemId Getİds(int index) {
+    public global::D3.OnlineService.ItemId GetIds(int index) {
       return ids_[index];
     }
     
     public override bool IsInitialized {
       get {
         if (!hasLocale) return false;
-        foreach (global::D3.OnlineService.ItemId element in İdsList) {
+        foreach (global::D3.OnlineService.ItemId element in IdsList) {
           if (!element.IsInitialized) return false;
         }
         return true;
@@ -4062,7 +4062,7 @@ namespace D3.GameMessage {
         if (hasLocale) {
           size += pb::CodedOutputStream.ComputeUInt32Size(1, Locale);
         }
-        foreach (global::D3.OnlineService.ItemId element in İdsList) {
+        foreach (global::D3.OnlineService.ItemId element in IdsList) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, element);
         }
         size += UnknownFields.SerializedSize;
@@ -4279,45 +4279,45 @@ namespace D3.GameMessage {
         return this;
       }
       
-      public pbc::IPopsicleList<global::D3.OnlineService.ItemId> İdsList {
+      public pbc::IPopsicleList<global::D3.OnlineService.ItemId> IdsList {
         get { return PrepareBuilder().ids_; }
       }
-      public int İdsCount {
-        get { return result.İdsCount; }
+      public int IdsCount {
+        get { return result.IdsCount; }
       }
-      public global::D3.OnlineService.ItemId Getİds(int index) {
-        return result.Getİds(index);
+      public global::D3.OnlineService.ItemId GetIds(int index) {
+        return result.GetIds(index);
       }
-      public Builder Setİds(int index, global::D3.OnlineService.ItemId value) {
+      public Builder SetIds(int index, global::D3.OnlineService.ItemId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
         result.ids_[index] = value;
         return this;
       }
-      public Builder Setİds(int index, global::D3.OnlineService.ItemId.Builder builderForValue) {
+      public Builder SetIds(int index, global::D3.OnlineService.ItemId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
         result.ids_[index] = builderForValue.Build();
         return this;
       }
-      public Builder Addİds(global::D3.OnlineService.ItemId value) {
+      public Builder AddIds(global::D3.OnlineService.ItemId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
         result.ids_.Add(value);
         return this;
       }
-      public Builder Addİds(global::D3.OnlineService.ItemId.Builder builderForValue) {
+      public Builder AddIds(global::D3.OnlineService.ItemId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
         result.ids_.Add(builderForValue.Build());
         return this;
       }
-      public Builder AddRangeİds(scg::IEnumerable<global::D3.OnlineService.ItemId> values) {
+      public Builder AddRangeIds(scg::IEnumerable<global::D3.OnlineService.ItemId> values) {
         PrepareBuilder();
         result.ids_.Add(values);
         return this;
       }
-      public Builder Clearİds() {
+      public Builder ClearIds() {
         PrepareBuilder();
         result.ids_.Clear();
         return this;
@@ -4366,21 +4366,21 @@ namespace D3.GameMessage {
       get { return locale_; }
     }
     
-    public const int İtemsFieldNumber = 2;
-    private bool hasİtems;
+    public const int ItemsFieldNumber = 2;
+    private bool hasItems;
     private global::D3.Items.ItemList items_;
-    public bool Hasİtems {
-      get { return hasİtems; }
+    public bool HasItems {
+      get { return hasItems; }
     }
-    public global::D3.Items.ItemList İtems {
+    public global::D3.Items.ItemList Items {
       get { return items_ ?? global::D3.Items.ItemList.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
         if (!hasLocale) return false;
-        if (!hasİtems) return false;
-        if (!İtems.IsInitialized) return false;
+        if (!hasItems) return false;
+        if (!Items.IsInitialized) return false;
         return true;
       }
     }
@@ -4391,8 +4391,8 @@ namespace D3.GameMessage {
       if (hasLocale) {
         output.WriteUInt32(1, field_names[1], Locale);
       }
-      if (hasİtems) {
-        output.WriteMessage(2, field_names[0], İtems);
+      if (hasItems) {
+        output.WriteMessage(2, field_names[0], Items);
       }
       UnknownFields.WriteTo(output);
     }
@@ -4407,8 +4407,8 @@ namespace D3.GameMessage {
         if (hasLocale) {
           size += pb::CodedOutputStream.ComputeUInt32Size(1, Locale);
         }
-        if (hasİtems) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, İtems);
+        if (hasItems) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, Items);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -4539,8 +4539,8 @@ namespace D3.GameMessage {
         if (other.HasLocale) {
           Locale = other.Locale;
         }
-        if (other.Hasİtems) {
-          Mergeİtems(other.İtems);
+        if (other.HasItems) {
+          MergeItems(other.Items);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -4591,11 +4591,11 @@ namespace D3.GameMessage {
             }
             case 18: {
               global::D3.Items.ItemList.Builder subBuilder = global::D3.Items.ItemList.CreateBuilder();
-              if (result.hasİtems) {
-                subBuilder.MergeFrom(İtems);
+              if (result.hasItems) {
+                subBuilder.MergeFrom(Items);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              İtems = subBuilder.BuildPartial();
+              Items = subBuilder.BuildPartial();
               break;
             }
           }
@@ -4628,42 +4628,42 @@ namespace D3.GameMessage {
         return this;
       }
       
-      public bool Hasİtems {
-       get { return result.hasİtems; }
+      public bool HasItems {
+       get { return result.hasItems; }
       }
-      public global::D3.Items.ItemList İtems {
-        get { return result.İtems; }
-        set { Setİtems(value); }
+      public global::D3.Items.ItemList Items {
+        get { return result.Items; }
+        set { SetItems(value); }
       }
-      public Builder Setİtems(global::D3.Items.ItemList value) {
+      public Builder SetItems(global::D3.Items.ItemList value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasİtems = true;
+        result.hasItems = true;
         result.items_ = value;
         return this;
       }
-      public Builder Setİtems(global::D3.Items.ItemList.Builder builderForValue) {
+      public Builder SetItems(global::D3.Items.ItemList.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasİtems = true;
+        result.hasItems = true;
         result.items_ = builderForValue.Build();
         return this;
       }
-      public Builder Mergeİtems(global::D3.Items.ItemList value) {
+      public Builder MergeItems(global::D3.Items.ItemList value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasİtems &&
+        if (result.hasItems &&
             result.items_ != global::D3.Items.ItemList.DefaultInstance) {
             result.items_ = global::D3.Items.ItemList.CreateBuilder(result.items_).MergeFrom(value).BuildPartial();
         } else {
           result.items_ = value;
         }
-        result.hasİtems = true;
+        result.hasItems = true;
         return this;
       }
-      public Builder Clearİtems() {
+      public Builder ClearItems() {
         PrepareBuilder();
-        result.hasİtems = false;
+        result.hasItems = false;
         result.items_ = null;
         return this;
       }

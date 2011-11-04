@@ -46,7 +46,7 @@ namespace bnet.protocol {
         internal__static_bnet_protocol_Identity__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_Identity__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.Identity, global::bnet.protocol.Identity.Builder>(internal__static_bnet_protocol_Identity__Descriptor,
-                new string[] { "Accountd", "GameAccountd", "Toond", });
+                new string[] { "AccountId", "GameAccountId", "ToonId", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -382,8 +382,8 @@ namespace bnet.protocol {
   public sealed partial class Identity : pb::GeneratedMessage<Identity, Identity.Builder> {
     private Identity() { }
     private static readonly Identity defaultInstance = new Identity().MakeReadOnly();
-    private static readonly string[] _ıdentityFieldNames = new string[] { "account_id", "game_account_id", "toon_id" };
-    private static readonly uint[] _ıdentityFieldTags = new uint[] { 10, 18, 26 };
+    private static readonly string[] _identityFieldNames = new string[] { "account_id", "game_account_id", "toon_id" };
+    private static readonly uint[] _identityFieldTags = new uint[] { 10, 18, 26 };
     public static Identity DefaultInstance {
       get { return defaultInstance; }
     }
@@ -404,46 +404,46 @@ namespace bnet.protocol {
       get { return global::bnet.protocol.Entity.internal__static_bnet_protocol_Identity__FieldAccessorTable; }
     }
     
-    public const int AccountdFieldNumber = 1;
-    private bool hasAccountd;
-    private global::bnet.protocol.EntityId accountd_;
-    public bool HasAccountd {
-      get { return hasAccountd; }
+    public const int AccountIdFieldNumber = 1;
+    private bool hasAccountId;
+    private global::bnet.protocol.EntityId accountId_;
+    public bool HasAccountId {
+      get { return hasAccountId; }
     }
-    public global::bnet.protocol.EntityId Accountd {
-      get { return accountd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
-    }
-    
-    public const int GameAccountdFieldNumber = 2;
-    private bool hasGameAccountd;
-    private global::bnet.protocol.EntityId gameAccountd_;
-    public bool HasGameAccountd {
-      get { return hasGameAccountd; }
-    }
-    public global::bnet.protocol.EntityId GameAccountd {
-      get { return gameAccountd_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId AccountId {
+      get { return accountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
-    public const int ToondFieldNumber = 3;
-    private bool hasToond;
-    private global::bnet.protocol.EntityId toond_;
-    public bool HasToond {
-      get { return hasToond; }
+    public const int GameAccountIdFieldNumber = 2;
+    private bool hasGameAccountId;
+    private global::bnet.protocol.EntityId gameAccountId_;
+    public bool HasGameAccountId {
+      get { return hasGameAccountId; }
     }
-    public global::bnet.protocol.EntityId Toond {
-      get { return toond_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId GameAccountId {
+      get { return gameAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int ToonIdFieldNumber = 3;
+    private bool hasToonId;
+    private global::bnet.protocol.EntityId toonId_;
+    public bool HasToonId {
+      get { return hasToonId; }
+    }
+    public global::bnet.protocol.EntityId ToonId {
+      get { return toonId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (HasAccountd) {
-          if (!Accountd.IsInitialized) return false;
+        if (HasAccountId) {
+          if (!AccountId.IsInitialized) return false;
         }
-        if (HasGameAccountd) {
-          if (!GameAccountd.IsInitialized) return false;
+        if (HasGameAccountId) {
+          if (!GameAccountId.IsInitialized) return false;
         }
-        if (HasToond) {
-          if (!Toond.IsInitialized) return false;
+        if (HasToonId) {
+          if (!ToonId.IsInitialized) return false;
         }
         return true;
       }
@@ -451,15 +451,15 @@ namespace bnet.protocol {
     
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
-      string[] field_names = _ıdentityFieldNames;
-      if (hasAccountd) {
-        output.WriteMessage(1, field_names[0], Accountd);
+      string[] field_names = _identityFieldNames;
+      if (hasAccountId) {
+        output.WriteMessage(1, field_names[0], AccountId);
       }
-      if (hasGameAccountd) {
-        output.WriteMessage(2, field_names[1], GameAccountd);
+      if (hasGameAccountId) {
+        output.WriteMessage(2, field_names[1], GameAccountId);
       }
-      if (hasToond) {
-        output.WriteMessage(3, field_names[2], Toond);
+      if (hasToonId) {
+        output.WriteMessage(3, field_names[2], ToonId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -471,14 +471,14 @@ namespace bnet.protocol {
         if (size != -1) return size;
         
         size = 0;
-        if (hasAccountd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Accountd);
+        if (hasAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AccountId);
         }
-        if (hasGameAccountd) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, GameAccountd);
+        if (hasGameAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, GameAccountId);
         }
-        if (hasToond) {
-          size += pb::CodedOutputStream.ComputeMessageSize(3, Toond);
+        if (hasToonId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(3, ToonId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -606,14 +606,14 @@ namespace bnet.protocol {
       public override Builder MergeFrom(Identity other) {
         if (other == global::bnet.protocol.Identity.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasAccountd) {
-          MergeAccountd(other.Accountd);
+        if (other.HasAccountId) {
+          MergeAccountId(other.AccountId);
         }
-        if (other.HasGameAccountd) {
-          MergeGameAccountd(other.GameAccountd);
+        if (other.HasGameAccountId) {
+          MergeGameAccountId(other.GameAccountId);
         }
-        if (other.HasToond) {
-          MergeToond(other.Toond);
+        if (other.HasToonId) {
+          MergeToonId(other.ToonId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -630,9 +630,9 @@ namespace bnet.protocol {
         string field_name;
         while (input.ReadTag(out tag, out field_name)) {
           if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_ıdentityFieldNames, field_name, global::System.StringComparer.Ordinal);
+            int field_ordinal = global::System.Array.BinarySearch(_identityFieldNames, field_name, global::System.StringComparer.Ordinal);
             if(field_ordinal >= 0)
-              tag = _ıdentityFieldTags[field_ordinal];
+              tag = _identityFieldTags[field_ordinal];
             else {
               if (unknownFields == null) {
                 unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
@@ -660,29 +660,29 @@ namespace bnet.protocol {
             }
             case 10: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasAccountd) {
-                subBuilder.MergeFrom(Accountd);
+              if (result.hasAccountId) {
+                subBuilder.MergeFrom(AccountId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Accountd = subBuilder.BuildPartial();
+              AccountId = subBuilder.BuildPartial();
               break;
             }
             case 18: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasGameAccountd) {
-                subBuilder.MergeFrom(GameAccountd);
+              if (result.hasGameAccountId) {
+                subBuilder.MergeFrom(GameAccountId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              GameAccountd = subBuilder.BuildPartial();
+              GameAccountId = subBuilder.BuildPartial();
               break;
             }
             case 26: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasToond) {
-                subBuilder.MergeFrom(Toond);
+              if (result.hasToonId) {
+                subBuilder.MergeFrom(ToonId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Toond = subBuilder.BuildPartial();
+              ToonId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -695,123 +695,123 @@ namespace bnet.protocol {
       }
       
       
-      public bool HasAccountd {
-       get { return result.hasAccountd; }
+      public bool HasAccountId {
+       get { return result.hasAccountId; }
       }
-      public global::bnet.protocol.EntityId Accountd {
-        get { return result.Accountd; }
-        set { SetAccountd(value); }
+      public global::bnet.protocol.EntityId AccountId {
+        get { return result.AccountId; }
+        set { SetAccountId(value); }
       }
-      public Builder SetAccountd(global::bnet.protocol.EntityId value) {
+      public Builder SetAccountId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasAccountd = true;
-        result.accountd_ = value;
+        result.hasAccountId = true;
+        result.accountId_ = value;
         return this;
       }
-      public Builder SetAccountd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasAccountd = true;
-        result.accountd_ = builderForValue.Build();
+        result.hasAccountId = true;
+        result.accountId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeAccountd(global::bnet.protocol.EntityId value) {
+      public Builder MergeAccountId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasAccountd &&
-            result.accountd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.accountd_ = global::bnet.protocol.EntityId.CreateBuilder(result.accountd_).MergeFrom(value).BuildPartial();
+        if (result.hasAccountId &&
+            result.accountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.accountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.accountId_).MergeFrom(value).BuildPartial();
         } else {
-          result.accountd_ = value;
+          result.accountId_ = value;
         }
-        result.hasAccountd = true;
+        result.hasAccountId = true;
         return this;
       }
-      public Builder ClearAccountd() {
+      public Builder ClearAccountId() {
         PrepareBuilder();
-        result.hasAccountd = false;
-        result.accountd_ = null;
+        result.hasAccountId = false;
+        result.accountId_ = null;
         return this;
       }
       
-      public bool HasGameAccountd {
-       get { return result.hasGameAccountd; }
+      public bool HasGameAccountId {
+       get { return result.hasGameAccountId; }
       }
-      public global::bnet.protocol.EntityId GameAccountd {
-        get { return result.GameAccountd; }
-        set { SetGameAccountd(value); }
+      public global::bnet.protocol.EntityId GameAccountId {
+        get { return result.GameAccountId; }
+        set { SetGameAccountId(value); }
       }
-      public Builder SetGameAccountd(global::bnet.protocol.EntityId value) {
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasGameAccountd = true;
-        result.gameAccountd_ = value;
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = value;
         return this;
       }
-      public Builder SetGameAccountd(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasGameAccountd = true;
-        result.gameAccountd_ = builderForValue.Build();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeGameAccountd(global::bnet.protocol.EntityId value) {
+      public Builder MergeGameAccountId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasGameAccountd &&
-            result.gameAccountd_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.gameAccountd_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccountd_).MergeFrom(value).BuildPartial();
+        if (result.hasGameAccountId &&
+            result.gameAccountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.gameAccountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccountId_).MergeFrom(value).BuildPartial();
         } else {
-          result.gameAccountd_ = value;
+          result.gameAccountId_ = value;
         }
-        result.hasGameAccountd = true;
+        result.hasGameAccountId = true;
         return this;
       }
-      public Builder ClearGameAccountd() {
+      public Builder ClearGameAccountId() {
         PrepareBuilder();
-        result.hasGameAccountd = false;
-        result.gameAccountd_ = null;
+        result.hasGameAccountId = false;
+        result.gameAccountId_ = null;
         return this;
       }
       
-      public bool HasToond {
-       get { return result.hasToond; }
+      public bool HasToonId {
+       get { return result.hasToonId; }
       }
-      public global::bnet.protocol.EntityId Toond {
-        get { return result.Toond; }
-        set { SetToond(value); }
+      public global::bnet.protocol.EntityId ToonId {
+        get { return result.ToonId; }
+        set { SetToonId(value); }
       }
-      public Builder SetToond(global::bnet.protocol.EntityId value) {
+      public Builder SetToonId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasToond = true;
-        result.toond_ = value;
+        result.hasToonId = true;
+        result.toonId_ = value;
         return this;
       }
-      public Builder SetToond(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetToonId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasToond = true;
-        result.toond_ = builderForValue.Build();
+        result.hasToonId = true;
+        result.toonId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeToond(global::bnet.protocol.EntityId value) {
+      public Builder MergeToonId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasToond &&
-            result.toond_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.toond_ = global::bnet.protocol.EntityId.CreateBuilder(result.toond_).MergeFrom(value).BuildPartial();
+        if (result.hasToonId &&
+            result.toonId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.toonId_ = global::bnet.protocol.EntityId.CreateBuilder(result.toonId_).MergeFrom(value).BuildPartial();
         } else {
-          result.toond_ = value;
+          result.toonId_ = value;
         }
-        result.hasToond = true;
+        result.hasToonId = true;
         return this;
       }
-      public Builder ClearToond() {
+      public Builder ClearToonId() {
         PrepareBuilder();
-        result.hasToond = false;
-        result.toond_ = null;
+        result.hasToonId = false;
+        result.toonId_ = null;
         return this;
       }
     }

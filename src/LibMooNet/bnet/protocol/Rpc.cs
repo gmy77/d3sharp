@@ -15,14 +15,14 @@ namespace bnet.protocol {
   
     #region Extension registration
     public static void RegisterAllExtensions(pb::ExtensionRegistry registry) {
-      registry.Add(global::bnet.protocol.Rpc.Methodd);
+      registry.Add(global::bnet.protocol.Rpc.MethodId);
       registry.Add(global::bnet.protocol.Rpc.Cost);
       registry.Add(global::bnet.protocol.Rpc.Timeout);
     }
     #endregion
     #region Extensions
-    public const int MethoddFieldNumber = 50000;
-    public static pb::GeneratedExtensionBase<uint> Methodd;
+    public const int MethodIdFieldNumber = 50000;
+    public static pb::GeneratedExtensionBase<uint> MethodId;
     public const int CostFieldNumber = 50001;
     public static pb::GeneratedExtensionBase<uint> Cost;
     public const int TimeoutFieldNumber = 50002;
@@ -87,7 +87,7 @@ namespace bnet.protocol {
         internal__static_bnet_protocol_ObjectAddress__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_ObjectAddress__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.ObjectAddress, global::bnet.protocol.ObjectAddress.Builder>(internal__static_bnet_protocol_ObjectAddress__Descriptor,
-                new string[] { "Host", "Objectd", });
+                new string[] { "Host", "ObjectId", });
         internal__static_bnet_protocol_NoData__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_NoData__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(internal__static_bnet_protocol_NoData__Descriptor,
@@ -95,12 +95,12 @@ namespace bnet.protocol {
         internal__static_bnet_protocol_ErrorInfo__Descriptor = Descriptor.MessageTypes[5];
         internal__static_bnet_protocol_ErrorInfo__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.ErrorInfo, global::bnet.protocol.ErrorInfo.Builder>(internal__static_bnet_protocol_ErrorInfo__Descriptor,
-                new string[] { "ObjectAddress", "Status", "ServiceHash", "Methodd", });
+                new string[] { "ObjectAddress", "Status", "ServiceHash", "MethodId", });
         internal__static_bnet_protocol_Header__Descriptor = Descriptor.MessageTypes[6];
         internal__static_bnet_protocol_Header__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.Header, global::bnet.protocol.Header.Builder>(internal__static_bnet_protocol_Header__Descriptor,
-                new string[] { "Serviced", "Methodd", "Token", "Objectd", "Size", "Status", "Error", });
-        global::bnet.protocol.Rpc.Methodd = pb::GeneratedSingleExtension<uint>.CreateInstance(global::bnet.protocol.Rpc.Descriptor.Extensions[0]);
+                new string[] { "ServiceId", "MethodId", "Token", "ObjectId", "Size", "Status", "Error", });
+        global::bnet.protocol.Rpc.MethodId = pb::GeneratedSingleExtension<uint>.CreateInstance(global::bnet.protocol.Rpc.Descriptor.Extensions[0]);
         global::bnet.protocol.Rpc.Cost = pb::GeneratedSingleExtension<uint>.CreateInstance(global::bnet.protocol.Rpc.Descriptor.Extensions[1]);
         global::bnet.protocol.Rpc.Timeout = pb::GeneratedSingleExtension<float>.CreateInstance(global::bnet.protocol.Rpc.Descriptor.Extensions[2]);
         return null;
@@ -1092,14 +1092,14 @@ namespace bnet.protocol {
       get { return host_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
     }
     
-    public const int ObjectdFieldNumber = 2;
-    private bool hasObjectd;
-    private ulong objectd_;
-    public bool HasObjectd {
-      get { return hasObjectd; }
+    public const int ObjectIdFieldNumber = 2;
+    private bool hasObjectId;
+    private ulong objectId_;
+    public bool HasObjectId {
+      get { return hasObjectId; }
     }
-    public ulong Objectd {
-      get { return objectd_; }
+    public ulong ObjectId {
+      get { return objectId_; }
     }
     
     public override bool IsInitialized {
@@ -1116,8 +1116,8 @@ namespace bnet.protocol {
       if (hasHost) {
         output.WriteMessage(1, field_names[0], Host);
       }
-      if (hasObjectd) {
-        output.WriteUInt64(2, field_names[1], Objectd);
+      if (hasObjectId) {
+        output.WriteUInt64(2, field_names[1], ObjectId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1132,8 +1132,8 @@ namespace bnet.protocol {
         if (hasHost) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, Host);
         }
-        if (hasObjectd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(2, Objectd);
+        if (hasObjectId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, ObjectId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1264,8 +1264,8 @@ namespace bnet.protocol {
         if (other.HasHost) {
           MergeHost(other.Host);
         }
-        if (other.HasObjectd) {
-          Objectd = other.Objectd;
+        if (other.HasObjectId) {
+          ObjectId = other.ObjectId;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1320,7 +1320,7 @@ namespace bnet.protocol {
               break;
             }
             case 16: {
-              result.hasObjectd = input.ReadUInt64(ref result.objectd_);
+              result.hasObjectId = input.ReadUInt64(ref result.objectId_);
               break;
             }
           }
@@ -1373,23 +1373,23 @@ namespace bnet.protocol {
         return this;
       }
       
-      public bool HasObjectd {
-        get { return result.hasObjectd; }
+      public bool HasObjectId {
+        get { return result.hasObjectId; }
       }
-      public ulong Objectd {
-        get { return result.Objectd; }
-        set { SetObjectd(value); }
+      public ulong ObjectId {
+        get { return result.ObjectId; }
+        set { SetObjectId(value); }
       }
-      public Builder SetObjectd(ulong value) {
+      public Builder SetObjectId(ulong value) {
         PrepareBuilder();
-        result.hasObjectd = true;
-        result.objectd_ = value;
+        result.hasObjectId = true;
+        result.objectId_ = value;
         return this;
       }
-      public Builder ClearObjectd() {
+      public Builder ClearObjectId() {
         PrepareBuilder();
-        result.hasObjectd = false;
-        result.objectd_ = 0UL;
+        result.hasObjectId = false;
+        result.objectId_ = 0UL;
         return this;
       }
     }
@@ -1687,14 +1687,14 @@ namespace bnet.protocol {
       get { return serviceHash_; }
     }
     
-    public const int MethoddFieldNumber = 4;
-    private bool hasMethodd;
-    private uint methodd_;
-    public bool HasMethodd {
-      get { return hasMethodd; }
+    public const int MethodIdFieldNumber = 4;
+    private bool hasMethodId;
+    private uint methodId_;
+    public bool HasMethodId {
+      get { return hasMethodId; }
     }
-    public uint Methodd {
-      get { return methodd_; }
+    public uint MethodId {
+      get { return methodId_; }
     }
     
     public override bool IsInitialized {
@@ -1702,7 +1702,7 @@ namespace bnet.protocol {
         if (!hasObjectAddress) return false;
         if (!hasStatus) return false;
         if (!hasServiceHash) return false;
-        if (!hasMethodd) return false;
+        if (!hasMethodId) return false;
         if (!ObjectAddress.IsInitialized) return false;
         return true;
       }
@@ -1720,8 +1720,8 @@ namespace bnet.protocol {
       if (hasServiceHash) {
         output.WriteUInt32(3, field_names[2], ServiceHash);
       }
-      if (hasMethodd) {
-        output.WriteUInt32(4, field_names[0], Methodd);
+      if (hasMethodId) {
+        output.WriteUInt32(4, field_names[0], MethodId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1742,8 +1742,8 @@ namespace bnet.protocol {
         if (hasServiceHash) {
           size += pb::CodedOutputStream.ComputeUInt32Size(3, ServiceHash);
         }
-        if (hasMethodd) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(4, Methodd);
+        if (hasMethodId) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(4, MethodId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1880,8 +1880,8 @@ namespace bnet.protocol {
         if (other.HasServiceHash) {
           ServiceHash = other.ServiceHash;
         }
-        if (other.HasMethodd) {
-          Methodd = other.Methodd;
+        if (other.HasMethodId) {
+          MethodId = other.MethodId;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1944,7 +1944,7 @@ namespace bnet.protocol {
               break;
             }
             case 32: {
-              result.hasMethodd = input.ReadUInt32(ref result.methodd_);
+              result.hasMethodId = input.ReadUInt32(ref result.methodId_);
               break;
             }
           }
@@ -2037,23 +2037,23 @@ namespace bnet.protocol {
         return this;
       }
       
-      public bool HasMethodd {
-        get { return result.hasMethodd; }
+      public bool HasMethodId {
+        get { return result.hasMethodId; }
       }
-      public uint Methodd {
-        get { return result.Methodd; }
-        set { SetMethodd(value); }
+      public uint MethodId {
+        get { return result.MethodId; }
+        set { SetMethodId(value); }
       }
-      public Builder SetMethodd(uint value) {
+      public Builder SetMethodId(uint value) {
         PrepareBuilder();
-        result.hasMethodd = true;
-        result.methodd_ = value;
+        result.hasMethodId = true;
+        result.methodId_ = value;
         return this;
       }
-      public Builder ClearMethodd() {
+      public Builder ClearMethodId() {
         PrepareBuilder();
-        result.hasMethodd = false;
-        result.methodd_ = 0;
+        result.hasMethodId = false;
+        result.methodId_ = 0;
         return this;
       }
     }
@@ -2090,24 +2090,24 @@ namespace bnet.protocol {
       get { return global::bnet.protocol.Rpc.internal__static_bnet_protocol_Header__FieldAccessorTable; }
     }
     
-    public const int ServicedFieldNumber = 1;
-    private bool hasServiced;
-    private uint serviced_;
-    public bool HasServiced {
-      get { return hasServiced; }
+    public const int ServiceIdFieldNumber = 1;
+    private bool hasServiceId;
+    private uint serviceId_;
+    public bool HasServiceId {
+      get { return hasServiceId; }
     }
-    public uint Serviced {
-      get { return serviced_; }
+    public uint ServiceId {
+      get { return serviceId_; }
     }
     
-    public const int MethoddFieldNumber = 2;
-    private bool hasMethodd;
-    private uint methodd_;
-    public bool HasMethodd {
-      get { return hasMethodd; }
+    public const int MethodIdFieldNumber = 2;
+    private bool hasMethodId;
+    private uint methodId_;
+    public bool HasMethodId {
+      get { return hasMethodId; }
     }
-    public uint Methodd {
-      get { return methodd_; }
+    public uint MethodId {
+      get { return methodId_; }
     }
     
     public const int TokenFieldNumber = 3;
@@ -2120,14 +2120,14 @@ namespace bnet.protocol {
       get { return token_; }
     }
     
-    public const int ObjectdFieldNumber = 4;
-    private bool hasObjectd;
-    private ulong objectd_;
-    public bool HasObjectd {
-      get { return hasObjectd; }
+    public const int ObjectIdFieldNumber = 4;
+    private bool hasObjectId;
+    private ulong objectId_;
+    public bool HasObjectId {
+      get { return hasObjectId; }
     }
-    public ulong Objectd {
-      get { return objectd_; }
+    public ulong ObjectId {
+      get { return objectId_; }
     }
     
     public const int SizeFieldNumber = 5;
@@ -2164,7 +2164,7 @@ namespace bnet.protocol {
     
     public override bool IsInitialized {
       get {
-        if (!hasServiced) return false;
+        if (!hasServiceId) return false;
         if (!hasToken) return false;
         foreach (global::bnet.protocol.ErrorInfo element in ErrorList) {
           if (!element.IsInitialized) return false;
@@ -2176,17 +2176,17 @@ namespace bnet.protocol {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _headerFieldNames;
-      if (hasServiced) {
-        output.WriteUInt32(1, field_names[3], Serviced);
+      if (hasServiceId) {
+        output.WriteUInt32(1, field_names[3], ServiceId);
       }
-      if (hasMethodd) {
-        output.WriteUInt32(2, field_names[1], Methodd);
+      if (hasMethodId) {
+        output.WriteUInt32(2, field_names[1], MethodId);
       }
       if (hasToken) {
         output.WriteUInt32(3, field_names[6], Token);
       }
-      if (hasObjectd) {
-        output.WriteUInt64(4, field_names[2], Objectd);
+      if (hasObjectId) {
+        output.WriteUInt64(4, field_names[2], ObjectId);
       }
       if (hasSize) {
         output.WriteUInt32(5, field_names[4], Size);
@@ -2207,17 +2207,17 @@ namespace bnet.protocol {
         if (size != -1) return size;
         
         size = 0;
-        if (hasServiced) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(1, Serviced);
+        if (hasServiceId) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, ServiceId);
         }
-        if (hasMethodd) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(2, Methodd);
+        if (hasMethodId) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, MethodId);
         }
         if (hasToken) {
           size += pb::CodedOutputStream.ComputeUInt32Size(3, Token);
         }
-        if (hasObjectd) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(4, Objectd);
+        if (hasObjectId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(4, ObjectId);
         }
         if (hasSize) {
           size += pb::CodedOutputStream.ComputeUInt32Size(5, Size);
@@ -2355,17 +2355,17 @@ namespace bnet.protocol {
       public override Builder MergeFrom(Header other) {
         if (other == global::bnet.protocol.Header.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasServiced) {
-          Serviced = other.Serviced;
+        if (other.HasServiceId) {
+          ServiceId = other.ServiceId;
         }
-        if (other.HasMethodd) {
-          Methodd = other.Methodd;
+        if (other.HasMethodId) {
+          MethodId = other.MethodId;
         }
         if (other.HasToken) {
           Token = other.Token;
         }
-        if (other.HasObjectd) {
-          Objectd = other.Objectd;
+        if (other.HasObjectId) {
+          ObjectId = other.ObjectId;
         }
         if (other.HasSize) {
           Size = other.Size;
@@ -2420,11 +2420,11 @@ namespace bnet.protocol {
               break;
             }
             case 8: {
-              result.hasServiced = input.ReadUInt32(ref result.serviced_);
+              result.hasServiceId = input.ReadUInt32(ref result.serviceId_);
               break;
             }
             case 16: {
-              result.hasMethodd = input.ReadUInt32(ref result.methodd_);
+              result.hasMethodId = input.ReadUInt32(ref result.methodId_);
               break;
             }
             case 24: {
@@ -2432,7 +2432,7 @@ namespace bnet.protocol {
               break;
             }
             case 32: {
-              result.hasObjectd = input.ReadUInt64(ref result.objectd_);
+              result.hasObjectId = input.ReadUInt64(ref result.objectId_);
               break;
             }
             case 40: {
@@ -2457,43 +2457,43 @@ namespace bnet.protocol {
       }
       
       
-      public bool HasServiced {
-        get { return result.hasServiced; }
+      public bool HasServiceId {
+        get { return result.hasServiceId; }
       }
-      public uint Serviced {
-        get { return result.Serviced; }
-        set { SetServiced(value); }
+      public uint ServiceId {
+        get { return result.ServiceId; }
+        set { SetServiceId(value); }
       }
-      public Builder SetServiced(uint value) {
+      public Builder SetServiceId(uint value) {
         PrepareBuilder();
-        result.hasServiced = true;
-        result.serviced_ = value;
+        result.hasServiceId = true;
+        result.serviceId_ = value;
         return this;
       }
-      public Builder ClearServiced() {
+      public Builder ClearServiceId() {
         PrepareBuilder();
-        result.hasServiced = false;
-        result.serviced_ = 0;
+        result.hasServiceId = false;
+        result.serviceId_ = 0;
         return this;
       }
       
-      public bool HasMethodd {
-        get { return result.hasMethodd; }
+      public bool HasMethodId {
+        get { return result.hasMethodId; }
       }
-      public uint Methodd {
-        get { return result.Methodd; }
-        set { SetMethodd(value); }
+      public uint MethodId {
+        get { return result.MethodId; }
+        set { SetMethodId(value); }
       }
-      public Builder SetMethodd(uint value) {
+      public Builder SetMethodId(uint value) {
         PrepareBuilder();
-        result.hasMethodd = true;
-        result.methodd_ = value;
+        result.hasMethodId = true;
+        result.methodId_ = value;
         return this;
       }
-      public Builder ClearMethodd() {
+      public Builder ClearMethodId() {
         PrepareBuilder();
-        result.hasMethodd = false;
-        result.methodd_ = 0;
+        result.hasMethodId = false;
+        result.methodId_ = 0;
         return this;
       }
       
@@ -2517,23 +2517,23 @@ namespace bnet.protocol {
         return this;
       }
       
-      public bool HasObjectd {
-        get { return result.hasObjectd; }
+      public bool HasObjectId {
+        get { return result.hasObjectId; }
       }
-      public ulong Objectd {
-        get { return result.Objectd; }
-        set { SetObjectd(value); }
+      public ulong ObjectId {
+        get { return result.ObjectId; }
+        set { SetObjectId(value); }
       }
-      public Builder SetObjectd(ulong value) {
+      public Builder SetObjectId(ulong value) {
         PrepareBuilder();
-        result.hasObjectd = true;
-        result.objectd_ = value;
+        result.hasObjectId = true;
+        result.objectId_ = value;
         return this;
       }
-      public Builder ClearObjectd() {
+      public Builder ClearObjectId() {
         PrepareBuilder();
-        result.hasObjectd = false;
-        result.objectd_ = 0UL;
+        result.hasObjectId = false;
+        result.objectId_ = 0UL;
         return this;
       }
       

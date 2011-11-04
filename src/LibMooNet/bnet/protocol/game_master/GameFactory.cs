@@ -42,7 +42,7 @@ namespace bnet.protocol.game_master {
         internal__static_bnet_protocol_game_master_GameProperties__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_game_master_GameProperties__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.game_master.GameProperties, global::bnet.protocol.game_master.GameProperties.Builder>(internal__static_bnet_protocol_game_master_GameProperties__Descriptor,
-                new string[] { "CreationAttributes", "Filter", "Create", "Open", "Programd", });
+                new string[] { "CreationAttributes", "Filter", "Create", "Open", "ProgramId", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -125,14 +125,14 @@ namespace bnet.protocol.game_master {
       get { return open_; }
     }
     
-    public const int ProgramdFieldNumber = 5;
-    private bool hasProgramd;
-    private uint programd_;
-    public bool HasProgramd {
-      get { return hasProgramd; }
+    public const int ProgramIdFieldNumber = 5;
+    private bool hasProgramId;
+    private uint programId_;
+    public bool HasProgramId {
+      get { return hasProgramId; }
     }
-    public uint Programd {
-      get { return programd_; }
+    public uint ProgramId {
+      get { return programId_; }
     }
     
     public override bool IsInitialized {
@@ -162,8 +162,8 @@ namespace bnet.protocol.game_master {
       if (hasOpen) {
         output.WriteBool(4, field_names[3], Open);
       }
-      if (hasProgramd) {
-        output.WriteFixed32(5, field_names[4], Programd);
+      if (hasProgramId) {
+        output.WriteFixed32(5, field_names[4], ProgramId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -187,8 +187,8 @@ namespace bnet.protocol.game_master {
         if (hasOpen) {
           size += pb::CodedOutputStream.ComputeBoolSize(4, Open);
         }
-        if (hasProgramd) {
-          size += pb::CodedOutputStream.ComputeFixed32Size(5, Programd);
+        if (hasProgramId) {
+          size += pb::CodedOutputStream.ComputeFixed32Size(5, ProgramId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -329,8 +329,8 @@ namespace bnet.protocol.game_master {
         if (other.HasOpen) {
           Open = other.Open;
         }
-        if (other.HasProgramd) {
-          Programd = other.Programd;
+        if (other.HasProgramId) {
+          ProgramId = other.ProgramId;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -397,7 +397,7 @@ namespace bnet.protocol.game_master {
               break;
             }
             case 45: {
-              result.hasProgramd = input.ReadFixed32(ref result.programd_);
+              result.hasProgramId = input.ReadFixed32(ref result.programId_);
               break;
             }
           }
@@ -534,23 +534,23 @@ namespace bnet.protocol.game_master {
         return this;
       }
       
-      public bool HasProgramd {
-        get { return result.hasProgramd; }
+      public bool HasProgramId {
+        get { return result.hasProgramId; }
       }
-      public uint Programd {
-        get { return result.Programd; }
-        set { SetProgramd(value); }
+      public uint ProgramId {
+        get { return result.ProgramId; }
+        set { SetProgramId(value); }
       }
-      public Builder SetProgramd(uint value) {
+      public Builder SetProgramId(uint value) {
         PrepareBuilder();
-        result.hasProgramd = true;
-        result.programd_ = value;
+        result.hasProgramId = true;
+        result.programId_ = value;
         return this;
       }
-      public Builder ClearProgramd() {
+      public Builder ClearProgramId() {
         PrepareBuilder();
-        result.hasProgramd = false;
-        result.programd_ = 0;
+        result.hasProgramId = false;
+        result.programId_ = 0;
         return this;
       }
     }

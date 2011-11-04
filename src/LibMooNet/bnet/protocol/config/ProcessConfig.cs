@@ -101,7 +101,7 @@ namespace bnet.protocol.config {
           internal__static_bnet_protocol_config_ServerSet__Descriptor = Descriptor.MessageTypes[4];
           internal__static_bnet_protocol_config_ServerSet__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.config.ServerSet, global::bnet.protocol.config.ServerSet.Builder>(internal__static_bnet_protocol_config_ServerSet__Descriptor,
-                  new string[] { "ServerAddress", "ExportedService", "İmportedService", });
+                  new string[] { "ServerAddress", "ExportedService", "ImportedService", });
           internal__static_bnet_protocol_config_SupplementalService__Descriptor = Descriptor.MessageTypes[5];
           internal__static_bnet_protocol_config_SupplementalService__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.config.SupplementalService, global::bnet.protocol.config.SupplementalService.Builder>(internal__static_bnet_protocol_config_SupplementalService__Descriptor,
@@ -1526,15 +1526,15 @@ namespace bnet.protocol.config {
       return exportedService_[index];
     }
     
-    public const int İmportedServiceFieldNumber = 3;
+    public const int ImportedServiceFieldNumber = 3;
     private pbc::PopsicleList<string> importedService_ = new pbc::PopsicleList<string>();
-    public scg::IList<string> İmportedServiceList {
+    public scg::IList<string> ImportedServiceList {
       get { return pbc::Lists.AsReadOnly(importedService_); }
     }
-    public int İmportedServiceCount {
+    public int ImportedServiceCount {
       get { return importedService_.Count; }
     }
-    public string GetİmportedService(int index) {
+    public string GetImportedService(int index) {
       return importedService_[index];
     }
     
@@ -1582,7 +1582,7 @@ namespace bnet.protocol.config {
         }
         {
           int dataSize = 0;
-          foreach (string element in İmportedServiceList) {
+          foreach (string element in ImportedServiceList) {
             dataSize += pb::CodedOutputStream.ComputeStringSizeNoTag(element);
           }
           size += dataSize;
@@ -1867,33 +1867,33 @@ namespace bnet.protocol.config {
         return this;
       }
       
-      public pbc::IPopsicleList<string> İmportedServiceList {
+      public pbc::IPopsicleList<string> ImportedServiceList {
         get { return PrepareBuilder().importedService_; }
       }
-      public int İmportedServiceCount {
-        get { return result.İmportedServiceCount; }
+      public int ImportedServiceCount {
+        get { return result.ImportedServiceCount; }
       }
-      public string GetİmportedService(int index) {
-        return result.GetİmportedService(index);
+      public string GetImportedService(int index) {
+        return result.GetImportedService(index);
       }
-      public Builder SetİmportedService(int index, string value) {
+      public Builder SetImportedService(int index, string value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
         result.importedService_[index] = value;
         return this;
       }
-      public Builder AddİmportedService(string value) {
+      public Builder AddImportedService(string value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
         result.importedService_.Add(value);
         return this;
       }
-      public Builder AddRangeİmportedService(scg::IEnumerable<string> values) {
+      public Builder AddRangeImportedService(scg::IEnumerable<string> values) {
         PrepareBuilder();
         result.importedService_.Add(values);
         return this;
       }
-      public Builder ClearİmportedService() {
+      public Builder ClearImportedService() {
         PrepareBuilder();
         result.importedService_.Clear();
         return this;
