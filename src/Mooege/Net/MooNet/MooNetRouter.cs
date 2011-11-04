@@ -44,34 +44,36 @@ namespace Mooege.Net.MooNet
         {
             var client = (MooNetClient) connection.Client;
             var packet = new PacketIn(stream);
-                  
-            if(packet.ServiceId==ServiceReply)
+
+            if (packet.Header.ServiceId == ServiceReply) // TODO: fixme /raist.
             {
                 var callback = client.RPCCallbacks.Dequeue();
-                
-                if (callback.RequestId == packet.RequestId) callback.Action(packet.ReadMessage(callback.Builder));
-                else Logger.Warn("RPC callback contains unexpected requestId: {0} where {1} was expected", callback.RequestId, packet.RequestId);
+
+                if (callback.RequestId == packet.Header.Token) callback.Action(packet.ReadMessage(callback.Builder));
+                else Logger.Warn("RPC callback contains unexpected requestId: {0} where {1} was expected", callback.RequestId, packet.Header.Token);
                 return;
             }
             
-            var service = Service.GetByID(packet.ServiceId);
+            var service = Service.GetByID(packet.Header.ServiceId);
 
             if (service == null)
             {
-                Logger.Error("No service exists with id: 0x{0}", packet.ServiceId.ToString("X2"));
+                Logger.Error("No service exists with id: 0x{0}", packet.Header.ServiceId.ToString("X2"));
                 return;
             }
 
-            var method = service.DescriptorForType.Methods.Single(m => GetMethodId(m) == packet.MethodId);
+            var method = service.DescriptorForType.Methods.Single(m => GetMethodId(m) == packet.Header.MethodId);
             var proto = service.GetRequestPrototype(method);
-            var message = packet.ReadMessage(proto.WeakToBuilder());
+            var builder = proto.WeakCreateBuilderForType();
+            var message = builder.WeakMergeFrom(CodedInputStream.CreateInstance(packet.GetPayload(stream))).WeakBuild();
+            //var message = packet.ReadMessage(proto.WeakToBuilder());
 
             try
             {
                 lock (service) // lock the service so that its in-context client does not get changed..
                 {
                     ((IServerService)service).Client = client;
-                    service.CallMethod(method, null, message, (msg => SendRPCResponse(connection, packet.RequestId, msg)));
+                    service.CallMethod(method, null, message, (msg => SendRPCResponse(connection, packet.Header.Token, msg)));
                 }
             }
             catch (NotImplementedException)
@@ -93,9 +95,9 @@ namespace Mooege.Net.MooNet
             return (uint)method.Options[bnet.protocol.Rpc.MethodId.Descriptor];
         }
 
-        private static void SendRPCResponse(IConnection connection, int requestId, IMessage message)
+        private static void SendRPCResponse(IConnection connection, uint token, IMessage message)
         {
-            var packet = new PacketOut(ServiceReply, 0x0, requestId, message);
+            var packet = new PacketOut(ServiceReply, 0x0, token, message);
             connection.Send(packet);
         }
     }

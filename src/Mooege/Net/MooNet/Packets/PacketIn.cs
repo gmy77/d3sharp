@@ -24,21 +24,14 @@ namespace Mooege.Net.MooNet.Packets
     {
         private readonly CodedInputStream _stream = null;
 
-        public byte ServiceId { get; private set; }
-        public uint MethodId { get; private set; }
-        public int RequestId { get; private set; }
-        public ulong ObjectId { get; private set; }
+        public bnet.protocol.Header Header {get; private set;}
 
         public PacketIn(CodedInputStream stream)
         {
             this._stream = stream;
 
-            this.ServiceId = stream.ReadRawByte();
-            this.MethodId = stream.ReadRawVarint32();
-            this.RequestId = stream.ReadRawByte() | (stream.ReadRawByte() << 8);
-
-            this.ObjectId = 0UL;
-            if (this.ServiceId != 0xfe) this.ObjectId = stream.ReadRawVarint64();
+            var size = (stream.ReadRawByte() << 8) | stream.ReadRawByte();
+            this.Header = bnet.protocol.Header.ParseFrom(stream);      
         }
 
         public IMessage ReadMessage(IBuilder builder)
@@ -47,15 +40,15 @@ namespace Mooege.Net.MooNet.Packets
             return builder.WeakBuild();
         }
 
-        public byte[] GetPayload()
+        public byte[] GetPayload(CodedInputStream stream)
         {
-            var payloadLength = this._stream.ReadRawVarint32();
-            return this._stream.ReadRawBytes((int)payloadLength);
+            return stream.ReadRawBytes((int)this.Header.Size);
         }
 
         public override string ToString()
         {
-            return string.Format("[S]: 0x{0}, [M]: 0x{1}, [R]: 0x{2}, [O]: 0x{3}", this.ServiceId.ToString("X2"), this.MethodId.ToString("X2"), this.RequestId.ToString("X2"), this.ObjectId.ToString("X2"));
+            return this.Header.ToString();
+            //return string.Format("[S]: 0x{0}, [M]: 0x{1}, [R]: 0x{2}, [O]: 0x{3}", this.ServiceId.ToString("X2"), this.MethodId.ToString("X2"), this.RequestId.ToString("X2"), this.ObjectId.ToString("X2"));
         }
     }
 }
