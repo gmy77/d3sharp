@@ -411,7 +411,6 @@
     <Compile Include="Net\GS\Message\Definitions\Game\JoinLANGameMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Combat\KillCounterUpdateMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Combat\KillCountMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Skill\LearnedSkillMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Connection\LogoutContextMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Connection\LogoutTickTimeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Quest\LoreMessage.cs" />
@@ -432,7 +431,6 @@
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerDeSyncSnapMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerEnterKnownMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerIndexMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Player\PlayerInteractMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerLevel.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerQuestMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Audio\PlayErrorSoundMessage.cs" />
