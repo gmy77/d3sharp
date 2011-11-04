@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Players;
+using Mooege.Core.GS.Actors.Implementations.Hirelings;
 
 namespace Mooege.Core.GS.Actors.Interactions
 {
@@ -49,7 +50,7 @@ namespace Mooege.Core.GS.Actors.Interactions
                 Type = NPCInteractionType.Hire,
                 ConversationSNO = -1,
                 Field2 = -1,
-                State = NPCInteractionState.New,
+                State = (npc as Hireling).HasHireling ? NPCInteractionState.New : NPCInteractionState.Disabled
             };
         }
     }
@@ -91,7 +92,7 @@ namespace Mooege.Core.GS.Actors.Interactions
                 Type = NPCInteractionType.Inventory,
                 ConversationSNO = -1,
                 Field2 = -1,
-                State = NPCInteractionState.New,
+                State = (npc as Hireling).HasProxy ? NPCInteractionState.New : NPCInteractionState.Disabled
             };
         }
     }

@@ -31,6 +31,7 @@ using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Actors;
+using System.Reflection;
 
 // FIXME: Most of this stuff should be elsewhere and not explicitly generate items to the player's GroundItems collection / komiga?
 
@@ -41,6 +42,8 @@ namespace Mooege.Core.Common.Items
         public static readonly Logger Logger = LogManager.CreateLogger();
 
         private static readonly Dictionary<int, ItemTable> Items = new Dictionary<int, ItemTable>();
+        private static readonly Dictionary<int, Type> GBIDHandlers = new Dictionary<int, Type>();
+        private static readonly Dictionary<int, Type> TypeHandlers = new Dictionary<int, Type>();
         private static readonly HashSet<int> AllowedItemTypes = new HashSet<int>();
 
         public static int TotalItems
@@ -51,7 +54,34 @@ namespace Mooege.Core.Common.Items
         static ItemGenerator()
         {
             LoadItems();
+            LoadHandlers();
             SetAllowedTypes();
+        }
+
+        private static void LoadHandlers()
+        {
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            {
+                if (!type.IsSubclassOf(typeof(Item))) continue;
+
+                var attributes = (HandledItemAttribute[])type.GetCustomAttributes(typeof(HandledItemAttribute), true);
+                if (attributes.Length != 0)
+                {
+                    foreach (var name in attributes.First().Names)
+                    {
+                        GBIDHandlers.Add(StringHashHelper.HashItemName(name), type);
+                    }
+                }
+
+                var typeAttributes = (HandledTypeAttribute[])type.GetCustomAttributes(typeof(HandledTypeAttribute), true);
+                if (typeAttributes.Length != 0)
+                {
+                    foreach (var typeName in typeAttributes.First().Types)
+                    {
+                        TypeHandlers.Add(StringHashHelper.HashItemName(typeName), type);
+                    }
+                }
+            }
         }
 
         private static void LoadItems()
@@ -83,6 +113,18 @@ namespace Mooege.Core.Common.Items
                 AllowedItemTypes.Add(hash);
             foreach (int hash in ItemGroup.SubTypesToHashList("CraftingPlan"))
                 AllowedItemTypes.Add(hash);
+            foreach (int hash in ItemGroup.SubTypesToHashList("HealthPotion"))
+                AllowedItemTypes.Add(hash);
+            foreach (int hash in ItemGroup.SubTypesToHashList("Dye"))
+                AllowedItemTypes.Add(hash);
+            foreach (int hash in TypeHandlers.Keys)
+            {
+                foreach(int subhash in ItemGroup.HierarchyToHashList(ItemGroup.FromHash(hash)))
+                {
+                    AllowedItemTypes.Add(subhash);
+                }
+            }
+
         }
 
         // generates a random item.
@@ -96,8 +138,9 @@ namespace Mooege.Core.Common.Items
         // we can also set a difficulty mode parameter here, but it seems current db doesnt have nightmare or hell-mode items with valid snoId's /raist.
         public static Item GenerateRandom(Mooege.Core.GS.Actors.Actor player, ItemTypeTable type)
         {
-            // TODO
-            var itemDefinition = GetRandom(Items.Values.ToList());
+            var itemDefinition = GetRandom(Items.Values
+                .Where(def => ItemGroup
+                    .HierarchyToHashList(ItemGroup.FromHash(def.ItemType1)).Contains(type.Hash)).ToList());
             return CreateItem(player, itemDefinition);
         }
 
@@ -110,7 +153,8 @@ namespace Mooege.Core.Common.Items
             {
                 itemDefinition = pool[RandomHelper.Next(0, pool.Count() - 1)];
 
-                if (!AllowedItemTypes.Contains(itemDefinition.ItemType1)) continue;
+                if (!GBIDHandlers.ContainsKey(itemDefinition.Hash) &&
+                    !AllowedItemTypes.Contains(itemDefinition.ItemType1)) continue;
 
                 // ignore gold and healthglobe, they should drop only when expect, not randomly
                 if (itemDefinition.Name.ToLower().Contains("gold")) continue;
@@ -128,12 +172,37 @@ namespace Mooege.Core.Common.Items
             return itemDefinition;
         }
 
+        public static Type GetItemClass(ItemTable definition)
+        {
+            Type type = typeof(Item);
+
+            if (GBIDHandlers.ContainsKey(definition.Hash))
+            {
+                type = GBIDHandlers[definition.Hash];
+            }
+            else
+            {
+                foreach (var hash in ItemGroup.HierarchyToHashList(ItemGroup.FromHash(definition.ItemType1)))
+                {
+                    if (TypeHandlers.ContainsKey(hash))
+                    {
+                        type = TypeHandlers[hash];
+                        break;
+                    }
+                }
+            }
+
+            return type;
+        }
+
         // Creates an item based on supplied definition.
         public static Item CreateItem(Mooege.Core.GS.Actors.Actor owner, ItemTable definition)
         {
             // Logger.Trace("Creating item: {0} [sno:{1}, gbid {2}]", definition.Name, definition.SNOActor, StringHashHelper.HashItemName(definition.Name));
 
-            var item = new Item(owner.World, definition);
+            Type type = GetItemClass(definition);
+
+            var item = (Item)Activator.CreateInstance(type, new object[] { owner.World, definition });
 
             return item;
         }
@@ -143,7 +212,9 @@ namespace Mooege.Core.Common.Items
         {
             int hash = StringHashHelper.HashItemName(name);
             ItemTable definition = Items[hash];
-            var item = new Item(player.World, definition);
+            Type type = GetItemClass(definition);
+
+            var item = (Item)Activator.CreateInstance(type, new object[] { player.World, definition });
             //player.GroundItems[item.DynamicID] = item;
 
             return item;
@@ -166,6 +237,11 @@ namespace Mooege.Core.Common.Items
             item.Attributes[GameAttribute.Health_Globe_Bonus_Health] = amount;
 
             return item;
+        }
+
+        public static bool IsValidItem(string name)
+        {
+            return Items.ContainsKey(StringHashHelper.HashItemName(name));
         }
     }
 

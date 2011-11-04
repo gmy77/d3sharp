@@ -138,7 +138,8 @@ namespace Mooege.Core.GS.Players
             {
                 var sourceGrid = (item.InvLoc.EquipmentSlot == 0 ? _inventoryGrid :
                     item.InvLoc.EquipmentSlot == (int)EquipmentSlotId.Stash ? _stashGrid : null);
-                System.Diagnostics.Debug.Assert(sourceGrid.Contains(request.ItemID) || _equipment.IsItemEquipped(request.ItemID), "Request to equip unknown item");
+
+                System.Diagnostics.Debug.Assert((sourceGrid != null && sourceGrid.Contains(request.ItemID)) || _equipment.IsItemEquipped(request.ItemID), "Request to equip unknown item");
 
                 int targetEquipSlot = request.Location.EquipmentSlot;
 
@@ -352,12 +353,8 @@ namespace Mooege.Core.GS.Players
             int actionId = inventoryRequestUseMessage.Field1; // guess 1 means dyeing. Probably other value for using identify scroll , selling , .... - angerwin
             Item usedItem = _owner.World.GetItem(usedItemId);
             Item targetItem = _owner.World.GetItem(targetItemId);
-            if (actionId == 1)
-            {
-                DyeColor.DyeItem(usedItem, targetItem);
-            }
-            DestroyInventoryItem(usedItem);
-            SendVisualInventory(_owner);
+
+            usedItem.OnRequestUse(_owner, targetItem, actionId, inventoryRequestUseMessage.Location);
         }
 
         public void DestroyInventoryItem(Item item)

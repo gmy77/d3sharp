@@ -27,15 +27,15 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
         public uint UsedItem;
         public int Field1;
         public uint UsedOnItem;
-        public WorldPlace Field3;
+        public WorldPlace Location;
 
         public override void Parse(GameBitBuffer buffer)
         {
             UsedItem = buffer.ReadUInt(32);
             Field1 = buffer.ReadInt(2) + (-1);
             UsedOnItem = buffer.ReadUInt(32);
-            Field3 = new WorldPlace();
-            Field3.Parse(buffer);
+            Location = new WorldPlace();
+            Location.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -43,7 +43,7 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
             buffer.WriteUInt(32, UsedItem);
             buffer.WriteInt(2, Field1 - (-1));
             buffer.WriteUInt(32, UsedOnItem);
-            Field3.Encode(buffer);
+            Location.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -55,7 +55,7 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
             b.Append(' ', pad); b.AppendLine("UsedItem: 0x" + UsedItem.ToString("X8") + " (" + UsedItem + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', pad); b.AppendLine("UsedOnItem: 0x" + UsedOnItem.ToString("X8") + " (" + UsedOnItem + ")");
-            Field3.AsText(b, pad);
+            Location.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
