@@ -32,7 +32,7 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
         public override void Parse(GameBitBuffer buffer)
         {
             UsedItem = buffer.ReadUInt(32);
-            Field1 = buffer.ReadInt(2) + (-1);
+            Field1 = buffer.ReadInt(3) + (-1);
             UsedOnItem = buffer.ReadUInt(32);
             Location = new WorldPlace();
             Location.Parse(buffer);
@@ -41,7 +41,7 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteUInt(32, UsedItem);
-            buffer.WriteInt(2, Field1 - (-1));
+            buffer.WriteInt(3, Field1 - (-1));
             buffer.WriteUInt(32, UsedOnItem);
             Location.Encode(buffer);
         }
