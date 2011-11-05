@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -81,6 +81,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\LibMooNet\LibMooNet.csproj">
+      <Project>{4CC19847-6F24-4453-9E31-126F94308AB9}</Project>
+      <Name>LibMooNet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Helpers\MooNetHelpers.csproj">
       <Project>{1519D483-C89D-4B86-8A48-2E4F05440423}</Project>
       <Name>MooNetHelpers</Name>
