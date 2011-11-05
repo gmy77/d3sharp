@@ -30,8 +30,9 @@ namespace Mooege.Net.MooNet.Packets
         {
             this._stream = stream;
 
-            var size = (stream.ReadRawByte() << 8) | stream.ReadRawByte();
-            this.Header = bnet.protocol.Header.ParseFrom(stream);      
+            var size = (stream.ReadRawByte() << 8) | stream.ReadRawByte(); // header size.
+            var headerData = stream.ReadRawBytes(size); // header data.
+            this.Header = bnet.protocol.Header.ParseFrom(headerData);  // parse header.    
         }
 
         public IMessage ReadMessage(IBuilder builder)

@@ -35,7 +35,7 @@ namespace Mooege.Net.MooNet.Packets
         {
             var builder = bnet.protocol.Header.CreateBuilder()
                 .SetServiceId(serviceId)
-                .SetToken(token)
+                .SetToken(token) // requestId.
                 .SetSize((uint)message.SerializedSize);
 
             if (serviceId != MooNetRouter.ServiceReply)
@@ -45,14 +45,14 @@ namespace Mooege.Net.MooNet.Packets
             }
 
             var header = builder.Build();
-            var size = (short)(header.SerializedSize + message.SerializedSize);
+            var headerSize = (short)(header.SerializedSize);
 
             using (var stream = new MemoryStream())
             {
                 var output = CodedOutputStream.CreateInstance(stream);
 
-                output.WriteRawByte((byte)(size >> 8));
-                output.WriteRawByte((byte)((size & 0xff)));
+                output.WriteRawByte((byte)(headerSize >> 8));
+                output.WriteRawByte((byte)((headerSize & 0xff)));
 
                 header.WriteTo(output);
                 message.WriteTo(output);

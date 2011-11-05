@@ -38,7 +38,8 @@ namespace Mooege.Core.MooNet.Services
             Logger.Trace("Connect()");
 
             var builder = ConnectResponse.CreateBuilder()
-                .SetServerId(ProcessId.CreateBuilder().SetLabel(0).SetEpoch(DateTime.Now.ToUnixTime()));
+                .SetServerId(ProcessId.CreateBuilder().SetLabel(0).SetEpoch(DateTime.Now.ToUnixTime()))
+                .SetClientId(ProcessId.CreateBuilder().SetLabel(1).SetEpoch(DateTime.Now.ToUnixTime()));
 
             if (request.HasClientId)
                 builder.SetClientId(request.ClientId);
