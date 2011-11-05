@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
@@ -29,6 +30,9 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Common.MPQ;
+using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Common.Helpers.Assets;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -144,8 +148,29 @@ namespace Mooege.Core.GS.Actors
             this.World.SpawnGold(player, this.Position);
             if (RandomHelper.Next(1, 100) < 20)
                 this.World.SpawnHealthGlobe(player, this.Position);
-
+            this.PlayLore();
             this.Destroy();
         }
+
+        /// <summary>
+        /// Plays lore for first death of this monster's death.
+        /// Uses lazy-initialized helper with data from MPQ.
+        /// </summary>
+        private void PlayLore()
+        {
+            int loreSNOId = LoreAssetHelper.GetLoreForMonster(this.SNOId);
+            if (loreSNOId != -1)
+            {
+                var players = this.GetPlayersInRange();
+                if (players != null)
+                {
+                    foreach (var player in players.Where(player => !player.HasLore(loreSNOId)))
+                    {
+                        player.PlayLore(loreSNOId, false);
+                    }
+                }
+            }
+        }
+                    
     }
 }
