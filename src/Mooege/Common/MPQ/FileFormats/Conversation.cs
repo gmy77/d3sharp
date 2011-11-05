@@ -28,7 +28,6 @@ namespace Mooege.Common.MPQ.FileFormats
     [FileFormat(SNOGroup.Conversation)]
     class Conversation : FileFormat
     {
-        static System.IO.StreamWriter dump = new System.IO.StreamWriter(System.IO.File.OpenWrite("F:\\conversations.txt"));
         public Header Header { get; private set; }
         public ConversationTypes ConversationType { get; private set; }
         public int I0 { get; private set; }            // looks like the conversation icon, its 1 for important quest conversations, 0 otherwise
@@ -91,14 +90,7 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position = compiledScriptPointer.Offset + 16;
             stream.Read(CompiledScript, 0, compiledScriptPointer.Size);
 
-            stream.Close();
-            
-            //dump.Write(AsText(file.Name));
-            //dump.WriteLine();
-            //dump.WriteLine();
-            //dump.WriteLine();
-            //dump.WriteLine();
-            
+            stream.Close();        
         }
 
         public string AsText(string filename)

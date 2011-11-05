@@ -241,10 +241,6 @@ namespace Mooege.Core.GS.Actors
         /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
         public override bool Reveal(Player player)
         {
-            if (questRange != null)
-                if (World.Game.Quests.IsInQuestRange(questRange) == false)
-                    return false;   // TODO may i return false? comment suggests i may only return false if it was already revealed ... -farmy
-
             if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
             player.RevealedObjects.Add(this.DynamicID, this);
 
@@ -337,7 +333,18 @@ namespace Mooege.Core.GS.Actors
 
         public List<Actor> GetActorsInRange(float radius = DefaultQueryProximity)
         {
-            return this.GetObjectsInRange<Actor>(radius);
+            var actorsAll = this.GetObjectsInRange<Actor>(radius);
+            var actorsVisible = new List<Actor>(actorsAll);
+
+            // remove all actors that are not visible because they have a questrange set which the player does not meet
+            
+            foreach (Actor actor in actorsAll)
+                if (actor.questRange != null)
+                    if (World.Game.Quests.IsInQuestRange(questRange) == false)
+                        actorsVisible.Remove(actor);
+
+            return actorsVisible;
+
         }
 
         public List<T> GetActorsInRange<T>(float radius = DefaultQueryProximity) where T : Actor
