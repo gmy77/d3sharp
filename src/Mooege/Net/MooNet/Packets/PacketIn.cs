@@ -37,8 +37,10 @@ namespace Mooege.Net.MooNet.Packets
 
         public IMessage ReadMessage(IBuilder builder)
         {
-            this._stream.ReadMessage(builder, ExtensionRegistry.Empty);
-            return builder.WeakBuild();
+            return builder.WeakMergeFrom(CodedInputStream.CreateInstance(this.GetPayload(_stream))).WeakBuild();
+            
+            // this._stream.ReadMessage(builder, ExtensionRegistry.Empty); // this method doesn't seem to work with 7728. /raist.
+            // return builder.WeakBuild();
         }
 
         public byte[] GetPayload(CodedInputStream stream)

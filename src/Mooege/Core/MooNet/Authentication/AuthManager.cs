@@ -30,7 +30,7 @@ namespace Mooege.Core.MooNet.Authentication
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         private static readonly Dictionary<MooNetClient, SRP6a> OngoingAuthentications = new Dictionary<MooNetClient, SRP6a>();
-        private static readonly byte[] ModuleHash = "8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray(); // Password.dll
+        private static readonly byte[] ModuleHash = "8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray(); // "RequestPassword" module
 
         public static void StartAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
