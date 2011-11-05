@@ -31,8 +31,7 @@ namespace Mooege.Core.Common.Items.Implementations
         public override void OnTargeted(Player player, TargetMessage message)
         {
             //Logger.Trace("OnTargeted");
-            int loreSNOId = -1;
-            LoreAssetHelper.Lores.TryGetValue(this.SNOId, out loreSNOId);
+            int loreSNOId = LoreAssetHelper.GetLoreForItem(this.SNOId);
             if (loreSNOId != -1)
             {
                 player.PlayLore(loreSNOId, true);
