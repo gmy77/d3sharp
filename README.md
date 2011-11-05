@@ -1,6 +1,6 @@
 # Stay awhile and listen
 
-* Read the [FAQ](/mooege/mooege/wiki/FAQ) before asking!
+* Read the [FAQ](http://wiki.mooege.org/FAQ) and check the [wiki](http://wiki.mooege.org/) before asking!
 * Read the [WARNING](https://github.com/mooege/mooege/blob/master/WARNING) before starting to use this software!
 * Check out [mooege.org](http://www.mooege.org) and the [forums](http://www.mooege.org/index).
 * Status: Will get you ingame.. not much else.

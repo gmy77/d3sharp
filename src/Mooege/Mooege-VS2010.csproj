@@ -158,6 +158,7 @@
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Blacksmith.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Jeweler.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Mystic.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\CaptainRumford.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Enchantress.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Hireling.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Scoundrel.cs" />
@@ -178,9 +179,12 @@
     <Compile Include="Core\GS\Games\GameCommands.cs" />
     <Compile Include="Core\GS\Games\GameDebugCommands.cs" />
     <Compile Include="Core\GS\Games\GameManager.cs" />
+    <Compile Include="Core\GS\Games\QuestManager.cs" />
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
     <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
     <Compile Include="Core\GS\Markers\Marker.cs" />
+    <Compile Include="Core\GS\Games\Quest.cs" />
+    <Compile Include="Core\GS\Players\ConversationManager.cs" />
     <Compile Include="Core\GS\Common\InventoryGrid.cs" />
     <Compile Include="Core\GS\Players\ExpBonusData.cs" />
     <Compile Include="Core\GS\Players\Equipment.cs" />
@@ -252,12 +256,15 @@
     <Compile Include="Net\GS\Message\Definitions\Artisan\RequestAddSocketMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingHire.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingDismissMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingHireMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingInventoryMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCSelectConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Player\RequestUsePowerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignSkillMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Stash\OpenSharedStashMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBusyMessage.cs" />

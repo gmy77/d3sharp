@@ -117,6 +117,14 @@ namespace Mooege.Core.Common.Items
                 AllowedItemTypes.Add(hash);
             foreach (int hash in ItemGroup.SubTypesToHashList("Dye"))
                 AllowedItemTypes.Add(hash);
+            foreach (int hash in TypeHandlers.Keys)
+            {
+                foreach(int subhash in ItemGroup.HierarchyToHashList(ItemGroup.FromHash(hash)))
+                {
+                    AllowedItemTypes.Add(subhash);
+                }
+            }
+
         }
 
         // generates a random item.
@@ -145,7 +153,8 @@ namespace Mooege.Core.Common.Items
             {
                 itemDefinition = pool[RandomHelper.Next(0, pool.Count() - 1)];
 
-                if (!AllowedItemTypes.Contains(itemDefinition.ItemType1)) continue;
+                if (!GBIDHandlers.ContainsKey(itemDefinition.Hash) &&
+                    !AllowedItemTypes.Contains(itemDefinition.ItemType1)) continue;
 
                 // ignore gold and healthglobe, they should drop only when expect, not randomly
                 if (itemDefinition.Name.ToLower().Contains("gold")) continue;

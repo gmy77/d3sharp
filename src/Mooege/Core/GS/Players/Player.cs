@@ -45,6 +45,8 @@ using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
+using Mooege.Core.GS.Actors.Implementations.Hirelings;
+using Mooege.Net.GS.Message.Definitions.Hireling;
 
 namespace Mooege.Core.GS.Players
 {
@@ -88,6 +90,9 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public Dictionary<uint, IRevealable> RevealedObjects = new Dictionary<uint, IRevealable>();
 
+        public ConversationManager Conversations { get; private set; }
+
+
         // Collection of items that only the player can see. This is only used when items drop from killing an actor
         // TODO: Might want to just have a field on the item itself to indicate whether it is visible to only one player
         /// <summary>
@@ -95,21 +100,75 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public Dictionary<uint, Item> GroundItems { get; private set; }
 
+
         /// <summary>
         /// Everything connected to ExpBonuses.
         /// </summary>
         public ExpBonusData ExpBonusData { get; private set; }
 
         /// <summary>
-        /// Open converstations.
-        /// </summary>
-        public List<OpenConversation> OpenConversations { get; set; }
-
-        /// <summary>
         /// NPC currently interaced with
         /// </summary>
         public InteractiveNPC SelectedNPC { get; set; }
-     
+
+        private Hireling _activeHireling = null;
+        public Hireling ActiveHireling
+        {
+            get { return _activeHireling; }
+            set
+            {
+                if (value == _activeHireling)
+                    return;
+
+                if (_activeHireling != null)
+                {
+                    _activeHireling.Dismiss(this);
+                }
+
+                _activeHireling = value;
+
+                if (value != null)
+                {
+                    InGameClient.SendMessage(new PetMessage()
+                    {
+                        Field0 = 0,
+                        Field1 = 0,
+                        PetId = value.DynamicID,
+                        Field3 = 0,
+                    });
+                }
+            }
+        }
+
+        private Hireling _activeHirelingProxy = null;
+        public Hireling ActiveHirelingProxy
+        {
+            get { return _activeHirelingProxy; }
+            set
+            {
+                if (value == _activeHirelingProxy)
+                    return;
+
+                if (_activeHirelingProxy != null)
+                {
+                    _activeHirelingProxy.Dismiss(this);
+                }
+
+                _activeHirelingProxy = value;
+
+                if (value != null)
+                {
+                    InGameClient.SendMessage(new PetMessage()
+                    {
+                        Field0 = 0,
+                        Field1 = 0,
+                        PetId = value.DynamicID,
+                        Field3 = 22,
+                    });
+                }
+            }
+        }
+
         /// <summary>
         /// Creates a new player.
         /// </summary>
@@ -140,8 +199,8 @@ namespace Mooege.Core.GS.Players
 
             this.SkillSet = new SkillSet(this.Properties.Class);
             this.GroundItems = new Dictionary<uint, Item>();
+            this.Conversations = new ConversationManager(this, this.World.Game.Quests);
             this.ExpBonusData = new ExpBonusData(this);
-            this.OpenConversations = new List<OpenConversation>();
             this.SelectedNPC = null;
 
             #region Attributes
@@ -320,9 +379,6 @@ namespace Mooege.Core.GS.Players
             //this.Attributes[GameAttribute.Disabled] = true; // we should be making use of these ones too /raist.
             //this.Attributes[GameAttribute.Loading] = true;
             //this.Attributes[GameAttribute.Invulnerable] = true;
-
-            this.Attributes[GameAttribute.Hireling_Class] = 1; // Templar selected /fasbat
-
             this.Attributes[GameAttribute.Hidden] = false;
             this.Attributes[GameAttribute.Immobolize] = true;
             this.Attributes[GameAttribute.Untargetable] = true;
@@ -355,9 +411,9 @@ namespace Mooege.Core.GS.Players
             else if (message is TryWaypointMessage) OnTryWaypoint(client, (TryWaypointMessage)message);
             else if (message is RequestBuyItemMessage) OnRequestBuyItem(client, (RequestBuyItemMessage)message);
             else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
+            else if (message is HirelingDismissMessage) OnHirelingDismiss();
             else return;
         }
-
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
         {
@@ -405,6 +461,10 @@ namespace Mooege.Core.GS.Players
             if (message.Position != null)
                 this.Position = message.Position;
 
+            if (message.Angle != null)
+                this.RotationAmount = message.Angle.Value;
+
+
             var msg = new NotifyActorMovementMessage
             {
                 ActorId = message.ActorId,
@@ -435,10 +495,10 @@ namespace Mooege.Core.GS.Players
 
         private void OnRequestBuyItem(GameClient client, RequestBuyItemMessage requestBuyItemMessage)
         {
-            var item = World.GetItem(requestBuyItemMessage.ItemId);
-            if (item == null || item.Owner == null || !(item.Owner is Vendor))
+            var vendor = this.SelectedNPC as Vendor;
+            if (vendor == null)
                 return;
-            (item.Owner as Vendor).OnRequestBuyItem(this, item);
+            vendor.OnRequestBuyItem(this, requestBuyItemMessage.ItemId);
         }
 
         private void OnRequestAddSocket(GameClient client, RequestAddSocketMessage requestAddSocketMessage)
@@ -453,6 +513,11 @@ namespace Mooege.Core.GS.Players
             jeweler.OnAddSocket(this, item);
         }
 
+        private void OnHirelingDismiss()
+        {
+            ActiveHireling = null;
+        }
+
         #endregion
 
         #region update-logic
@@ -464,7 +529,7 @@ namespace Mooege.Core.GS.Players
             this.ExpBonusData.Check(1);
 
             // Check if there is an conversation to close in this tick
-            CheckOpenConversations();
+            Conversations.Update(this.World.Game.TickCounter);
 
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
@@ -478,7 +543,7 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void RevealScenesToPlayer()
         {
-            var scenes = this.GetScenesInRegion();
+            var scenes = this.GetScenesInRegion(DefaultQueryProximity * 2);
 
             foreach (var scene in scenes) // reveal scenes in player's proximity.
             {
@@ -504,7 +569,9 @@ namespace Mooege.Core.GS.Players
                 if (actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
                     continue;
 
-                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment || actor.ActorType == ActorType.Critter)
+                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player 
+                    || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment 
+                    || actor.ActorType == ActorType.Critter || actor.ActorType == ActorType.Item)
                     actor.Reveal(this);
             }
         }
@@ -557,7 +624,29 @@ namespace Mooege.Core.GS.Players
                 });
             }
 
+            this.Inventory.Reveal(player);
+
             return true;
+        }
+
+        public override bool Unreveal(Player player)
+        {
+            if (!base.Unreveal(player))
+                return false;
+
+            this.Inventory.Unreveal(player);
+
+            return true;
+        }
+
+        public override void BeforeChangeWorld()
+        {
+            this.Inventory.Unreveal(this);
+        }
+
+        public override void AfterChangeWorld()
+        {
+            this.Inventory.Reveal(this);
         }
 
         #endregion
@@ -853,10 +942,10 @@ namespace Mooege.Core.GS.Players
 
         public HirelingInfo[] HirelingInfo = new HirelingInfo[4]
         {
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x0000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000001, Field1 = -1, Field2 = 0x00000007, Field3 = 0x00003C19, Field4 = false, Field5 = 0x000006D3, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
-            new HirelingInfo { Field0 = 0x00000000, Field1 = -1, Field2 = 0x00000000, Field3 = 0x00000000, Field4 = false, Field5 = -1, Field6 = -1, Field7 = -1, Field8 = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000000, Field1 = -1, Level = 0x00000000, Field3 = 0x0000, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000001, Field1 = -1, Level = 20, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = 0x000006D3, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000002, Field1 = -1, Level = 25, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000003, Field1 = -1, Level = 30, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
         };
 
         public SkillKeyMapping[] SkillKeyMappings = new SkillKeyMapping[15]
@@ -1139,76 +1228,6 @@ namespace Mooege.Core.GS.Players
             }
             this.Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
-        }
-
-        public void PlayHeroConversation(int snoConversation, int lineID)
-        {
-            this.InGameClient.SendMessage(new PlayConvLineMessage()
-            {
-                Id = 0xba,
-                ActorID = this.DynamicID,
-                Field1 = new uint[9]
-                    {
-                        this.DynamicID, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
-                    },
-
-                Params = new PlayLineParams()
-                {
-                    SNOConversation = snoConversation,
-                    Field1 = 0x00000001,
-                    Field2 = false,
-                    LineID = lineID,
-                    Field4 = 0x00000000,
-                    Field5 = -1,
-                    TextClass = (Class)this.Properties.VoiceClassID,
-                    Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
-                    AudioClass = (Class)this.Properties.VoiceClassID,
-                    SNOSpeakerActor = this.SNOId,
-                    Name = this.Properties.Name,
-                    Field11 = 0x00000002,
-                    Field12 = -1,
-                    Field13 = 0x00000069,
-                    Field14 = 0x0000006E,
-                    Field15 = 0x00000032
-                },
-                Field3 = 0x00000069,
-            });
-
-            this.OpenConversations.Add(new OpenConversation(
-                new EndConversationMessage()
-                {
-                    ActorId = this.DynamicID,
-                    Field0 = 0x0000006E,
-                    SNOConversation = snoConversation
-                },
-                this.InGameClient.Game.TickCounter + 200
-            ));
-        }
-
-        public void CheckOpenConversations()
-        {
-            if (this.OpenConversations.Count > 0)
-            {
-                foreach (OpenConversation openConversation in this.OpenConversations)
-                {
-                    if (openConversation.endTick <= this.InGameClient.Game.TickCounter)
-                    {
-                        this.InGameClient.SendMessage(openConversation.endConversationMessage);
-                    }
-                }
-            }
-        }
-
-        public struct OpenConversation
-        {
-            public EndConversationMessage endConversationMessage;
-            public int endTick;
-
-            public OpenConversation(EndConversationMessage endConversationMessage, int endTick)
-            {
-                this.endConversationMessage = endConversationMessage;
-                this.endTick = endTick;
-            }
         }
 
         #endregion

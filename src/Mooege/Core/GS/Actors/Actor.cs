@@ -109,7 +109,15 @@ namespace Mooege.Core.GS.Actors
         public int CollFlags { get; set; }
 
         /// <summary>
-        /// Returns true if actor has world location. TODO: I belive this belongs to WorldObject.cs /raist.
+        /// The QuestRange specifies the visibility of an actor, depending on quest progress
+        /// </summary>
+        private Mooege.Common.MPQ.FileFormats.QuestRange questRange;
+
+        protected Mooege.Common.MPQ.FileFormats.ConversationList conversationList;
+
+        /// <summary>
+        /// Returns true if actor has world location.
+        /// TODO: I belive this belongs to WorldObject.cs /raist.
         /// </summary>
         public virtual bool HasWorldLocation
         {
@@ -126,6 +134,8 @@ namespace Mooege.Core.GS.Actors
         public int? Field11 = null;
         public int? Field12 = null;
         public int? Field13 = null;
+
+        private int snoTriggeredConversation = -1;
 
         /// <summary>
         /// Creates a new actor.
@@ -179,6 +189,17 @@ namespace Mooege.Core.GS.Actors
                 this.World.Enter(this); // let him enter first.
         }
 
+        public virtual void BeforeChangeWorld()
+        {
+
+        }
+
+        public virtual void AfterChangeWorld()
+        {
+
+        }
+
+
         public void ChangeWorld(World world, Vector3D position)
         {
             if (this.World == world)
@@ -189,9 +210,13 @@ namespace Mooege.Core.GS.Actors
             if (this.World != null) // if actor is already in a existing-world
                 this.World.Leave(this); // make him leave it first.
 
+            BeforeChangeWorld();
+
             this.World = world;
             if (this.World != null) // if actor got into a new world.
                 this.World.Enter(this); // let him enter first.
+
+            AfterChangeWorld();
 
             world.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
         }
@@ -225,21 +250,14 @@ namespace Mooege.Core.GS.Actors
             return player.RevealedObjects.ContainsKey(this.DynamicID);
         }
 
-        /// <summary>
-        /// Reveals an actor to a player.
-        /// </summary>
-        /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
-        public override bool Reveal(Player player)
+        public ACDEnterKnownMessage ACDEnterKnown()
         {
-            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
-            player.RevealedObjects.Add(this.DynamicID, this);
-
-            var msg = new ACDEnterKnownMessage
+            return new ACDEnterKnownMessage
             {
                 ActorID = this.DynamicID,
                 ActorSNO = this.SNOId,
                 Field2 = Field2,
-                Field3 = Field3, // this.hasWorldLocation ? 0 : 1;
+                Field3 =  this.HasWorldLocation ? 0 : 1,
                 WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
                 InventoryLocation = this.HasWorldLocation ? null : this.InventoryLocationMessage,
                 GBHandle = this.GBHandle,
@@ -251,6 +269,18 @@ namespace Mooege.Core.GS.Actors
                 Field12 = Field12,
                 Field13 = Field13,
             };
+        }
+
+        /// <summary>
+        /// Reveals an actor to a player.
+        /// </summary>
+        /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
+        public override bool Reveal(Player player)
+        {
+            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
+            player.RevealedObjects.Add(this.DynamicID, this);
+
+            var msg = ACDEnterKnown();
 
             // normaly when we send acdenterknown for players own actor it's set to 0x09. But while sending the acdenterknown for another player's actor we should set it to 0x01. /raist
             if ((this is Player) && this != player)
@@ -323,7 +353,18 @@ namespace Mooege.Core.GS.Actors
 
         public List<Actor> GetActorsInRange(float radius = DefaultQueryProximity)
         {
-            return this.GetObjectsInRange<Actor>(radius);
+            var actorsAll = this.GetObjectsInRange<Actor>(radius);
+            var actorsVisible = new List<Actor>(actorsAll);
+
+            // remove all actors that are not visible because they have a questrange set which the player does not meet
+            
+            foreach (Actor actor in actorsAll)
+                if (actor.questRange != null)
+                    if (World.Game.Quests.IsInQuestRange(actor.questRange) == false)
+                        actorsVisible.Remove(actor);
+
+            return actorsVisible;
+
         }
 
         public List<T> GetActorsInRange<T>(float radius = DefaultQueryProximity) where T : Actor
@@ -472,6 +513,30 @@ namespace Mooege.Core.GS.Actors
 
             if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
                 this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.QuestRange))
+            {
+                int snoQuestRange = Tags[(int)MarkerTagTypes.QuestRange].Int2;
+                if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange].ContainsKey(snoQuestRange))
+                    questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
+                else
+                    Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
+            }
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.ConversationList))
+            {
+                int snoConversationList = Tags[(int)MarkerTagTypes.ConversationList].Int2;
+                if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList].ContainsKey(snoConversationList))
+                    conversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
+                else
+                    Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", SNOId, snoConversationList);
+            }
+
+
+            if(this.Tags.ContainsKey((int)MarkerTagTypes.TriggeredConversation))
+                snoTriggeredConversation = Tags[(int)MarkerTagTypes.TriggeredConversation].Int2;
+
+
         }
 
         #endregion

@@ -59,17 +59,10 @@ namespace Mooege.Core.GS.Actors
             switch (actorData.Type)
             {
                 case ActorType.Monster:
-                    if (!MPQStorage.Data.Assets[SNOGroup.Monster].ContainsKey(actorData.MonsterSNO))
-                        return null;
-
-                    var monsterAsset = MPQStorage.Data.Assets[SNOGroup.Monster][actorData.MonsterSNO];
-                    var monsterData = monsterAsset.Data as Mooege.Common.MPQ.FileFormats.Monster;
-                    if (monsterData.Type == Mooege.Common.MPQ.FileFormats.Monster.MonsterType.Ally ||
-                        monsterData.Type == Mooege.Common.MPQ.FileFormats.Monster.MonsterType.Helper)
-                        return new NPC(world, snoId, tags);
+                    if(tags.ContainsKey((int)MarkerTagTypes.ConversationList))
+                        return new InteractiveNPC(world, snoId, tags);
                     else
                         return new Monster(world, snoId, tags);
-
                 case ActorType.Gizmo:
                     return CreateGizmo(world, snoId, tags);
 

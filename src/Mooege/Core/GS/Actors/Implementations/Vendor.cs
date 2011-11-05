@@ -95,13 +95,17 @@ namespace Mooege.Core.GS.Actors.Implementations
 
         public override void OnTargeted(Player player, TargetMessage message)
         {
+            base.OnTargeted(player, message);
             player.InGameClient.SendMessage(new OpenTradeWindowMessage((int)this.DynamicID));
         }
 
 
-        public virtual void OnRequestBuyItem(Players.Player player, Item item)
+        public virtual void OnRequestBuyItem(Players.Player player, uint itemId)
         {
             // TODO: Check gold here
+            Item item = _vendorGrid.GetItem(itemId);
+            if (item == null)
+                return;
 
             if (!player.Inventory.HasInventorySpace(item))
             {
@@ -109,10 +113,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             }
 
             // TODO: Remove the gold
-            // TODO: new item would randomize new stats, should better copy item as it // dark0ne
-            var newItem = new Item(this.World, item.ItemDefinition);
-
-            player.Inventory.PickUp(newItem); // TODO: Dont use pickup? ;)
+            player.Inventory.BuyItem(item);
         }
     }
 }
