@@ -98,6 +98,9 @@
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Common\Extensions\ListExtensions.cs" />
+    <Compile Include="Common\Helpers\Assets\AssetHelper.cs" />
+    <Compile Include="Common\Helpers\Assets\SpellRuneIndexHelper.cs" />
+    <Compile Include="Common\Helpers\Assets\LoreAssetHelper.cs" />
     <Compile Include="Common\Helpers\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\Data.cs" />
@@ -138,6 +141,7 @@
     <Compile Include="Core\Common\Items\AffixGenerator.cs" />
     <Compile Include="Core\Common\Items\HandledItem.cs" />
     <Compile Include="Core\Common\Items\HandledType.cs" />
+    <Compile Include="Core\Common\Items\Implementations\Book.cs" />
     <Compile Include="Core\Common\Items\Implementations\Dye.cs" />
     <Compile Include="Core\Common\Items\Implementations\HealthPotion.cs" />
     <Compile Include="Core\Common\Items\Implementations\Potion.cs" />

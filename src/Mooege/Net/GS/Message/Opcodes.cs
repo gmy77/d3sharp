@@ -230,8 +230,8 @@ namespace Mooege.Net.GS.Message
         FloatingAmountMessage = 209, // len: 	40
         RemoveRagdollMessage = 210, // len: 	16
         SNONameDataMessage = 211, // len: 	16
-        LoreMessage1 = 212, // len: 	16
-        LoreMessage2 = 213, // len: 	16
+        PlayLoreWithButton = 212, // len: 	16 // former LoreMessage1
+        PlayLoreImmediately = 213, // len: 	16 // former LoreMessage2
         SimpleMessage14 = 216, // len: 	8
         WorldDeletedMessage = 217, // len: 	12
         SimpleMessage15 = 218, // len: 	8
