@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,41 +17,35 @@
  */
 
 using System.Text;
-using Mooege.Net.GS.Message.Fields;
 
-namespace Mooege.Net.GS.Message.Definitions.Player
+namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
-    [Message(Opcodes.PlayerDeSyncSnapMessage)]
-    public class PlayerDeSyncSnapMessage : GameMessage
+    [Message(Opcodes.InventoryDropStackPortionMessage)]
+    public class InventoryDropStackPortionMessage : GameMessage
     {
-        public WorldPlace Field0;
-        public int Field1;
-        public int /* sno */ Field2;
+        public int Field0;
+        public long Field1;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = new WorldPlace();
-            Field0.Parse(buffer);
-            Field1 = buffer.ReadInt(2);
-            Field2 = buffer.ReadInt(32);
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadInt64(64);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            Field0.Encode(buffer);
-            buffer.WriteInt(2, Field1);
-            buffer.WriteInt(32, Field2);
+            buffer.WriteInt(32, Field0);
+            buffer.WriteInt64(64,Field1);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("PlayerDeSyncSnapMessage:");
+            b.AppendLine("InventoryDropStackPortionMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            Field0.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("Field1: " + Field1.ToString());
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X16") + " (" + Field1 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
@@ -59,3 +53,4 @@ namespace Mooege.Net.GS.Message.Definitions.Player
 
     }
 }
+

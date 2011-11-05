@@ -24,37 +24,43 @@ namespace Mooege.Net.MooNet.Packets
 {
     public class PacketOut
     {
-        public byte ServiceId { get; private set; }
-        public uint MethodId { get; private set; }
-        public int RequestId { get; private set; }
-        public ulong ObjectId { get; private set; }
-        public IMessage Message { get; private set; }
         public byte[] Data { get; private set; }
 
-        public PacketOut(byte serviceId, uint methodId, int requestId, IMessage message)
-            : this(serviceId, methodId, requestId, 0x0, message)
+        public PacketOut(byte serviceId, uint methodId, uint token, IMessage message)
+            : this(serviceId, methodId, token, 0x0, message)
         {
         }
 
-        public PacketOut(byte serviceId, uint methodId, int requestId, ulong objectId, IMessage message)
+        public PacketOut(byte serviceId, uint methodId, uint token, ulong objectId, IMessage message)
         {
-            this.ServiceId = serviceId;
-            this.MethodId = methodId;
-            this.RequestId = requestId;
-            this.ObjectId = objectId;
+            var builder = bnet.protocol.Header.CreateBuilder()
+                .SetServiceId(serviceId)
+                .SetToken(token);
+
+            if (serviceId != MooNetRouter.ServiceReply)
+            {
+                builder.SetMethodId(methodId)
+                    .SetObjectId(objectId);
+            }
+
+            // TODO: 
+            //.SetSize((uint) message.SerializedSize) // optional
+            // status optional
+            // errors repeated
+
+            var header = builder.Build();
+            var size = (short)(header.SerializedSize + message.SerializedSize);
 
             using (var stream = new MemoryStream())
             {
                 var output = CodedOutputStream.CreateInstance(stream);
 
-                output.WriteRawByte(serviceId);
-                output.WriteInt32NoTag((int) methodId);
-                output.WriteInt16NoTag((short) requestId);
+                output.WriteRawByte((byte)(size >> 8));
+                output.WriteRawByte((byte)(size & 0xff));
 
-                if (serviceId != 0xfe) output.WriteRawVarint64(this.ObjectId);
+                output.WriteRawBytes(header.ToByteArray());
 
-                this.Message = message;
-                output.WriteMessageNoTag(message);
+                output.WriteRawBytes(message.ToByteArray());
                 output.Flush();
                 this.Data = stream.ToArray();
             }

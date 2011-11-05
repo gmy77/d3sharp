@@ -28,10 +28,11 @@ namespace Mooege.Net.GS.Message.Fields
         public int Field3;
         public int Field4;
         public int Field5;
-        // MaxLength = 2
-        public int[] Field6;
+        public int Field6;
         // MaxLength = 2
         public int[] Field7;
+        // MaxLength = 2
+        public int[] Field8;
 
         public void Parse(GameBitBuffer buffer)
         {
@@ -41,10 +42,11 @@ namespace Mooege.Net.GS.Message.Fields
             Field3 = buffer.ReadInt(32);
             Field4 = buffer.ReadInt(32);
             Field5 = buffer.ReadInt(32);
-            Field6 = new int[2];
-            for (int i = 0; i < Field6.Length; i++) Field6[i] = buffer.ReadInt(32);
+            Field6 = buffer.ReadInt(32);
             Field7 = new int[2];
             for (int i = 0; i < Field7.Length; i++) Field7[i] = buffer.ReadInt(32);
+            Field8 = new int[2];
+            for (int i = 0; i < Field8.Length; i++) Field8[i] = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
@@ -55,8 +57,9 @@ namespace Mooege.Net.GS.Message.Fields
             buffer.WriteInt(32, Field3);
             buffer.WriteInt(32, Field4);
             buffer.WriteInt(32, Field5);
-            for (int i = 0; i < Field6.Length; i++) buffer.WriteInt(32, Field6[i]);
+            buffer.WriteInt(32, Field6);
             for (int i = 0; i < Field7.Length; i++) buffer.WriteInt(32, Field7[i]);
+            for (int i = 0; i < Field8.Length; i++) buffer.WriteInt(32, Field8[i]);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -78,21 +81,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("Field5: 0x" + Field5.ToString("X8") + " (" + Field5 + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field6:");
-            b.Append(' ', pad);
-            b.AppendLine("{");
-            for (int i = 0; i < Field6.Length;)
-            {
-                b.Append(' ', pad + 1);
-                for (int j = 0; j < 8 && i < Field6.Length; j++, i++)
-                {
-                    b.Append("0x" + Field6[i].ToString("X8") + ", ");
-                }
-                b.AppendLine();
-            }
-            b.Append(' ', pad);
-            b.AppendLine("}");
-            b.AppendLine();
+            b.AppendLine("Field6: 0x" + Field6.ToString("X8") + " (" + Field6 + ")");
             b.Append(' ', pad);
             b.AppendLine("Field7:");
             b.Append(' ', pad);
@@ -103,6 +92,22 @@ namespace Mooege.Net.GS.Message.Fields
                 for (int j = 0; j < 8 && i < Field7.Length; j++, i++)
                 {
                     b.Append("0x" + Field7[i].ToString("X8") + ", ");
+                }
+                b.AppendLine();
+            }
+            b.Append(' ', pad);
+            b.AppendLine("}");
+            b.AppendLine();
+            b.Append(' ', pad);
+            b.AppendLine("Field8:");
+            b.Append(' ', pad);
+            b.AppendLine("{");
+            for (int i = 0; i < Field8.Length;)
+            {
+                b.Append(' ', pad + 1);
+                for (int j = 0; j < 8 && i < Field8.Length; j++, i++)
+                {
+                    b.Append("0x" + Field8[i].ToString("X8") + ", ");
                 }
                 b.AppendLine();
             }

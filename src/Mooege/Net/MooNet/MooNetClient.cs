@@ -174,7 +174,7 @@ namespace Mooege.Net.MooNet
 
             RPCCallbacks.Enqueue(new RPCCallback(done, responsePrototype.WeakToBuilder(), requestId));
 
-            var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), requestId, this._listenerId, request);
+            var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), (uint)requestId, this._listenerId, request);
             this.Connection.Send(packet);
         }
 

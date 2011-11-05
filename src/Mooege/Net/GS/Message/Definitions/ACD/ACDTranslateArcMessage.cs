@@ -37,6 +37,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public float Field6;                // some sort of fallof / individual gravity..always < 0...math is unknown - farmy
         public int /* sno */ Field7;        // its a power sno, like in knockback.pow. but i dont know what its used for -farmy
         public float Field8;
+        public float Field9;
 
         public ACDTranslateArcMessage() 
             : base(Opcodes.ACDTranslateArcMessage) 
@@ -55,6 +56,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             Field6 = buffer.ReadFloat32();
             Field7 = buffer.ReadInt(32);
             Field8 = buffer.ReadFloat32();
+            Field9 = buffer.ReadFloat32();
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -68,6 +70,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             buffer.WriteFloat32(Field6);
             buffer.WriteInt(32, Field7);
             buffer.WriteFloat32(Field8);
+            buffer.WriteFloat32(Field9);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -85,6 +88,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.Append(' ', pad); b.AppendLine("Field6: " + Field6.ToString("G"));
             b.Append(' ', pad); b.AppendLine("Field7: 0x" + Field7.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Field8: " + Field8.ToString("G"));
+            b.Append(' ', pad); b.AppendLine("Field9: " + Field9.ToString("G"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
