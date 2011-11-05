@@ -104,7 +104,7 @@ namespace Mooege.Core.GS.Games
                         started = true;
                 }
                 else
-                    logger.Warn("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.Start.SNOQuest);
+                    logger.Info("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.Start.SNOQuest);
             }
 
             if (range.End.SNOQuest == -1 || range.End.StepID < 0)
@@ -117,7 +117,7 @@ namespace Mooege.Core.GS.Games
                         ended = true;
                 }
                 else
-                    logger.Warn("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.End.SNOQuest);
+                    logger.Info("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.End.SNOQuest);
             }
 
             return started && !ended;

@@ -104,8 +104,6 @@ namespace Mooege.Core.GS.Games
                 public int FollowUpStepID;
             }
 
-
-
             public List<ObjectiveSet> ObjectivesSets = new List<ObjectiveSet>(); // this is only public for GameCommand / Debug
             private List<List<QuestObjective>> bonusObjectives = new List<List<QuestObjective>>();
             private Mooege.Common.MPQ.FileFormats.IQuestStep _questStep = null;
@@ -176,8 +174,8 @@ namespace Mooege.Core.GS.Games
             }
         }
 
-
-
+        public delegate void QuestProgressDelegate(Quest quest);
+        public event QuestProgressDelegate OnQuestProgress;
         private Mooege.Common.MPQ.FileFormats.Quest asset = null;
         public SNOName SNOName { get; set; }
         private Game game { get; set; }
@@ -217,6 +215,8 @@ namespace Mooege.Core.GS.Games
                 });
             completedSteps.Add(CurrentStep.QuestStepID);
             CurrentStep = (from step in asset.QuestSteps where step.ID == FollowUpStepID select new QuestStep(step, this)).FirstOrDefault();
+            if (OnQuestProgress != null)
+                OnQuestProgress(this);
         }
 
         public void Notify(Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType type, int value)

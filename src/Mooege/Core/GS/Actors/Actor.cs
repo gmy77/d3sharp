@@ -35,6 +35,7 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Core.Common.Items;
+using Mooege.Core.GS.Games;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -109,6 +110,11 @@ namespace Mooege.Core.GS.Actors
         public int CollFlags { get; set; }
 
         /// <summary>
+        /// Gets whether the actor is visible by questrange, privately set on quest progress
+        /// </summary>
+        public bool Visible { get; private set; }
+
+        /// <summary>
         /// The QuestRange specifies the visibility of an actor, depending on quest progress
         /// </summary>
         private Mooege.Common.MPQ.FileFormats.QuestRange questRange;
@@ -157,6 +163,12 @@ namespace Mooege.Core.GS.Actors
 
             this.Tags = tags;
             this.ReadTags();
+
+            // Listen for quest progress if the actor has a QuestRange attached to it
+            foreach(var quest in World.Game.Quests)
+                if(questRange != null)
+                    quest.OnQuestProgress += new Games.Quest.QuestProgressDelegate(quest_OnQuestProgress);
+            UpdateQuestRangeVisbility();
         }
 
         /// <summary>
@@ -239,6 +251,14 @@ namespace Mooege.Core.GS.Actors
         #endregion
 
         #region reveal & unreveal handling
+
+        private void UpdateQuestRangeVisbility()
+        {
+            if (questRange != null)
+                Visible = World.Game.Quests.IsInQuestRange(questRange);
+            else
+                Visible = true;
+        }
 
         /// <summary>
         /// Returns true if the actor is revealed to player.
@@ -353,18 +373,7 @@ namespace Mooege.Core.GS.Actors
 
         public List<Actor> GetActorsInRange(float radius = DefaultQueryProximity)
         {
-            var actorsAll = this.GetObjectsInRange<Actor>(radius);
-            var actorsVisible = new List<Actor>(actorsAll);
-
-            // remove all actors that are not visible because they have a questrange set which the player does not meet
-            
-            foreach (Actor actor in actorsAll)
-                if (actor.questRange != null)
-                    if (World.Game.Quests.IsInQuestRange(actor.questRange) == false)
-                        actorsVisible.Remove(actor);
-
-            return actorsVisible;
-
+            return this.GetObjectsInRange<Actor>(radius);
         }
 
         public List<T> GetActorsInRange<T>(float radius = DefaultQueryProximity) where T : Actor
@@ -438,6 +447,11 @@ namespace Mooege.Core.GS.Actors
         #endregion
 
         #region events
+
+        private void quest_OnQuestProgress(Quest quest)
+        {
+            UpdateQuestRangeVisbility();
+        }
 
         public virtual void OnEnter(World world)
         {
