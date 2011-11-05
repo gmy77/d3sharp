@@ -35,18 +35,14 @@ namespace Mooege.Net.MooNet.Packets
         {
             var builder = bnet.protocol.Header.CreateBuilder()
                 .SetServiceId(serviceId)
-                .SetToken(token);
+                .SetToken(token)
+                .SetSize((uint)message.SerializedSize);
 
             if (serviceId != MooNetRouter.ServiceReply)
             {
                 builder.SetMethodId(methodId)
                     .SetObjectId(objectId);
             }
-
-            // TODO: 
-            //.SetSize((uint) message.SerializedSize) // optional
-            // status optional
-            // errors repeated
 
             var header = builder.Build();
             var size = (short)(header.SerializedSize + message.SerializedSize);
@@ -56,11 +52,11 @@ namespace Mooege.Net.MooNet.Packets
                 var output = CodedOutputStream.CreateInstance(stream);
 
                 output.WriteRawByte((byte)(size >> 8));
-                output.WriteRawByte((byte)(size & 0xff));
+                output.WriteRawByte((byte)((size & 0xff)));
 
-                output.WriteRawBytes(header.ToByteArray());
+                header.WriteTo(output);
+                message.WriteTo(output);
 
-                output.WriteRawBytes(message.ToByteArray());
                 output.Flush();
                 this.Data = stream.ToArray();
             }
