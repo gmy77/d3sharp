@@ -302,10 +302,17 @@ namespace Mooege.Core.GS.Map
         {
             get
             {
+                SceneSpecification specification = this.Specification;
+                specification.SNOMusic = World.Environment.snoMusic;
+                specification.SNOCombatMusic = World.Environment.snoCombatMusic;
+                specification.SNOAmbient = World.Environment.snoAmbient;
+                specification.SNOReverb = World.Environment.snoReverb;
+                specification.SNOWeather = World.Environment.snoWeather;
+
                 return new RevealSceneMessage
                 {
                     WorldID = this.World.DynamicID,
-                    SceneSpec = this.Specification,
+                    SceneSpec = specification,
                     ChunkID = this.DynamicID,
                     Transform = this.Transform,
                     SceneSNO = this.SNOId,
