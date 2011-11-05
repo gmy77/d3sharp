@@ -44,6 +44,7 @@ using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
 using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
+using System;
 
 namespace Mooege.Core.GS.Players
 {
