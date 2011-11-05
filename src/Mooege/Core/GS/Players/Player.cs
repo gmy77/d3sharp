@@ -495,10 +495,10 @@ namespace Mooege.Core.GS.Players
 
         private void OnRequestBuyItem(GameClient client, RequestBuyItemMessage requestBuyItemMessage)
         {
-            var item = World.GetItem(requestBuyItemMessage.ItemId);
-            if (item == null || item.Owner == null || !(item.Owner is Vendor))
+            var vendor = this.SelectedNPC as Vendor;
+            if (vendor == null)
                 return;
-            (item.Owner as Vendor).OnRequestBuyItem(this, item);
+            vendor.OnRequestBuyItem(this, requestBuyItemMessage.ItemId);
         }
 
         private void OnRequestAddSocket(GameClient client, RequestAddSocketMessage requestAddSocketMessage)
@@ -569,7 +569,9 @@ namespace Mooege.Core.GS.Players
                 if (actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
                     continue;
 
-                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment || actor.ActorType == ActorType.Critter)
+                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player 
+                    || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment 
+                    || actor.ActorType == ActorType.Critter || actor.ActorType == ActorType.Item)
                     actor.Reveal(this);
             }
         }
@@ -622,7 +624,29 @@ namespace Mooege.Core.GS.Players
                 });
             }
 
+            this.Inventory.Reveal(player);
+
             return true;
+        }
+
+        public override bool Unreveal(Player player)
+        {
+            if (!base.Unreveal(player))
+                return false;
+
+            this.Inventory.Unreveal(player);
+
+            return true;
+        }
+
+        public override void BeforeChangeWorld()
+        {
+            this.Inventory.Unreveal(this);
+        }
+
+        public override void AfterChangeWorld()
+        {
+            this.Inventory.Reveal(this);
         }
 
         #endregion

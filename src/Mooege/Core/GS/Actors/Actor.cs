@@ -189,6 +189,17 @@ namespace Mooege.Core.GS.Actors
                 this.World.Enter(this); // let him enter first.
         }
 
+        public virtual void BeforeChangeWorld()
+        {
+
+        }
+
+        public virtual void AfterChangeWorld()
+        {
+
+        }
+
+
         public void ChangeWorld(World world, Vector3D position)
         {
             if (this.World == world)
@@ -199,9 +210,13 @@ namespace Mooege.Core.GS.Actors
             if (this.World != null) // if actor is already in a existing-world
                 this.World.Leave(this); // make him leave it first.
 
+            BeforeChangeWorld();
+
             this.World = world;
             if (this.World != null) // if actor got into a new world.
                 this.World.Enter(this); // let him enter first.
+
+            AfterChangeWorld();
 
             world.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
         }
@@ -235,21 +250,14 @@ namespace Mooege.Core.GS.Actors
             return player.RevealedObjects.ContainsKey(this.DynamicID);
         }
 
-        /// <summary>
-        /// Reveals an actor to a player.
-        /// </summary>
-        /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
-        public override bool Reveal(Player player)
+        public ACDEnterKnownMessage ACDEnterKnown()
         {
-            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
-            player.RevealedObjects.Add(this.DynamicID, this);
-
-            var msg = new ACDEnterKnownMessage
+            return new ACDEnterKnownMessage
             {
                 ActorID = this.DynamicID,
                 ActorSNO = this.SNOId,
                 Field2 = Field2,
-                Field3 = Field3, // this.hasWorldLocation ? 0 : 1;
+                Field3 =  this.HasWorldLocation ? 0 : 1,
                 WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
                 InventoryLocation = this.HasWorldLocation ? null : this.InventoryLocationMessage,
                 GBHandle = this.GBHandle,
@@ -261,6 +269,18 @@ namespace Mooege.Core.GS.Actors
                 Field12 = Field12,
                 Field13 = Field13,
             };
+        }
+
+        /// <summary>
+        /// Reveals an actor to a player.
+        /// </summary>
+        /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
+        public override bool Reveal(Player player)
+        {
+            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
+            player.RevealedObjects.Add(this.DynamicID, this);
+
+            var msg = ACDEnterKnown();
 
             // normaly when we send acdenterknown for players own actor it's set to 0x09. But while sending the acdenterknown for another player's actor we should set it to 0x01. /raist
             if ((this is Player) && this != player)
