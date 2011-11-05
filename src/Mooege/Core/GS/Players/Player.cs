@@ -47,6 +47,7 @@ using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
 using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
+using Mooege.Common.Helpers.Assets;
 
 namespace Mooege.Core.GS.Players
 {
@@ -893,7 +894,7 @@ namespace Mooege.Core.GS.Players
 
         public LearnedLore LearnedLore = new LearnedLore()
         {
-            Field0 = 0x00000000,
+            Count = 0x00000000,
             m_snoLoreLearned = new int[256]
              {
                 0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
@@ -1295,6 +1296,52 @@ namespace Mooege.Core.GS.Players
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
             else
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
+        }
+
+        #endregion
+
+        #region lore
+
+        /// <summary>
+        /// Checks if player has lore
+        /// </summary>
+        /// <param name="loreSNOId"></param>
+        /// <returns></returns>
+        public bool HasLore(int loreSNOId)
+        {
+            return LearnedLore.m_snoLoreLearned.Contains(loreSNOId);
+        }
+
+        /// <summary>
+        /// Plays lore to player
+        /// </summary>
+        /// <param name="loreSNOId"></param>
+        /// <param name="immediately">if false, lore will have new lore button</param>
+        public void PlayLore(int loreSNOId, bool immediately)
+        {
+            // play lore to player
+            InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Quest.LoreMessage
+            {
+                Id = (int)(immediately ? Opcodes.PlayLoreImmediately : Opcodes.PlayLoreWithButton),
+                LoreSNOId = loreSNOId
+            });
+            if (!HasLore(loreSNOId))
+            {
+                AddLore(loreSNOId);
+            }
+        }
+
+        /// <summary>
+        /// Adds lore to player's state
+        /// </summary>
+        /// <param name="loreSNOId"></param>
+        public void AddLore(int loreSNOId) {
+            if (this.LearnedLore.Count < this.LearnedLore.m_snoLoreLearned.Length)
+            {
+                LearnedLore.m_snoLoreLearned[LearnedLore.Count] = loreSNOId;
+                LearnedLore.Count++; // Count
+                UpdateHeroState();
+            }
         }
 
         #endregion
