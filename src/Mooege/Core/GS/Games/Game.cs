@@ -237,8 +237,9 @@ namespace Mooege.Core.GS.Games
                                 Field3 = 0x0,
                                 Field4 = 0x0,
                                 Field5 = 0x0,
-                                Field6 = new[] {0x0, 0x0},
-                                Field7 = new[] {0x0, 0x0}
+                                Field6 = 0x0,
+                                Field7 = new[] {0x0, 0x0},
+                                Field8 = new[] {0x0, 0x0}
                             }
             });
 

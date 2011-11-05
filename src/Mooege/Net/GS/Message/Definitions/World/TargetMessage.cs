@@ -34,7 +34,7 @@ namespace Mooege.Net.GS.Message.Definitions.World
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(2) + (-1);
+            Field0 = buffer.ReadInt(3) + (-1);
             TargetID = buffer.ReadUInt(32);
             Field2 = new WorldPlace();
             Field2.Parse(buffer);
@@ -50,7 +50,7 @@ namespace Mooege.Net.GS.Message.Definitions.World
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(2, Field0 - (-1));
+            buffer.WriteInt(3, Field0 - (-1));
             buffer.WriteUInt(32, TargetID);
             Field2.Encode(buffer);
             buffer.WriteInt(32, PowerSNO);

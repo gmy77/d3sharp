@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,40 +18,40 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Skill
+namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
-    [Message(Opcodes.LearnedSkillMessage)]
-    public class LearnedSkillMessage : GameMessage
+    [Message(Opcodes.UpdateConvAutoAdvanceMessage)]
+    class UpdateConvAutoAdvanceMessage : GameMessage
     {
-        // MaxLength = 128
-        public int /* sno */[] aSkillSNOs;
+        public int Field0;
+        public int Field1;
+        public int Field2;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            aSkillSNOs = new int /* sno */[buffer.ReadInt(8)];
-            for (int i = 0; i < aSkillSNOs.Length; i++) aSkillSNOs[i] = buffer.ReadInt(32);
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadInt(32);
+            Field2 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(8, aSkillSNOs.Length);
-            for (int i = 0; i < aSkillSNOs.Length; i++) buffer.WriteInt(32, aSkillSNOs[i]);
+            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, Field2);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("LearnedSkillMessage:");
+            b.AppendLine("UpdateConvAutoAdvanceMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("aSkillSNOs:");
-            b.Append(' ', pad); b.AppendLine("{");
-            for (int i = 0; i < aSkillSNOs.Length; ) { b.Append(' ', pad + 1); for (int j = 0; j < 8 && i < aSkillSNOs.Length; j++, i++) { b.Append("0x" + aSkillSNOs[i].ToString("X8") + ", "); } b.AppendLine(); }
-            b.Append(' ', pad); b.AppendLine("}"); b.AppendLine();
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

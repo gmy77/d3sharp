@@ -1174,7 +1174,6 @@ namespace Mooege.Core.GS.Players
 
                 this.InGameClient.SendMessage(new PlayerLevel()
                 {
-                    Id = 0x98,
                     Field0 = 0x00000000,
                     Field1 = this.Attributes[GameAttribute.Level],
                 });
@@ -1207,7 +1206,6 @@ namespace Mooege.Core.GS.Players
         {
             this.InGameClient.SendMessage(new PlayConvLineMessage()
             {
-                Id = 0xba,
                 ActorID = this.DynamicID,
                 Field1 = new uint[9]
                     {

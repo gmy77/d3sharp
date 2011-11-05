@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,30 +18,30 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Player
+namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
-    [Message(Opcodes.PlayerInteractMessage)]
-    public class PlayerInteractMessage : GameMessage
+    [Message(Opcodes.AdvanceConvMessage)]
+    class AdvanceConvMessage : GameMessage
     {
         public int Field0;
         public int Field1;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(3);
-            Field1 = buffer.ReadInt(1) + (-1);
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(3, Field0);
-            buffer.WriteInt(1, Field1 - (-1));
+            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, Field1);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("PlayerInteractMessage:");
+            b.AppendLine("AdvanceConvMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
@@ -49,7 +49,5 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

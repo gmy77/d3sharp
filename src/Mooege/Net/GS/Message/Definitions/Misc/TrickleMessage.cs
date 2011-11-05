@@ -48,6 +48,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         public int? StringListSNO;      // ALWAYS?? 0x0000F063:Minimap.stl 
         public float? Field13;          // either 225 or null 
         public float? Field14;          // never seen != null
+        public bool? Field15;
 
         public TrickleMessage() : base(Opcodes.TrickleMessage) {}
 
@@ -95,6 +96,10 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             if (buffer.ReadBool())
             {
                 Field14 = buffer.ReadFloat32();
+            }
+            if (buffer.ReadBool())
+            {
+                Field15 = buffer.ReadBool();
             }
         }
 
@@ -151,6 +156,11 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             {
                 buffer.WriteFloat32(Field14.Value);
             }
+            buffer.WriteBool(Field15.HasValue);
+            if (Field15.HasValue)
+            {
+                buffer.WriteBool(Field15.Value);
+            }
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -200,6 +210,10 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             if (Field14.HasValue)
             {
                 b.Append(' ', pad); b.AppendLine("Field14.Value: " + Field14.Value.ToString("G"));
+            }
+            if (Field15.HasValue)
+            {
+                b.Append(' ', pad); b.AppendLine("Field15.Value: " + (Field15.Value ? "true" : "false"));
             }
             b.Append(' ', --pad);
             b.AppendLine("}");

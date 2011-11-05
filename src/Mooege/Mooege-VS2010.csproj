@@ -246,13 +246,19 @@
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Animation\LoopingAnimationPowerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\OpenArtisanWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\RequestAddSocketMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Conversation\AdvanceConvMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Conversation\UpdateConvAutoAdvanceMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingDismissMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingHireMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingInventoryMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropStackPortionMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\Message.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\VoteKickMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCSelectConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
@@ -409,7 +415,6 @@
     <Compile Include="Net\GS\Message\Definitions\Game\JoinLANGameMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Combat\KillCounterUpdateMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Combat\KillCountMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Skill\LearnedSkillMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Connection\LogoutContextMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Connection\LogoutTickTimeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Quest\LoreMessage.cs" />
@@ -430,7 +435,6 @@
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerDeSyncSnapMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerEnterKnownMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerIndexMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Player\PlayerInteractMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerLevel.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerQuestMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Audio\PlayErrorSoundMessage.cs" />
