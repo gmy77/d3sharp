@@ -27,13 +27,14 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
+using Mooege.Core.GS.Common.Types;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.DeadlyReach)]
-    public class MonkDeadlyReach : ContinuableEffect
+    public class MonkDeadlyReach : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             int effectSNO;
             float reachLength;
@@ -87,9 +88,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.FistsOfThunder)]
-    public class MonkFistsOfThunder : ContinuableEffect
+    public class MonkFistsOfThunder : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             switch (Message.Field5)
             {
@@ -142,9 +143,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.SevenSidedStrike)]
-    public class MonkSevenSidedStrike : ContinuableEffect
+    public class MonkSevenSidedStrike : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(50f);
             StartCooldown(WaitSeconds(30f));
@@ -173,9 +174,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.CripplingWave)]
-    public class MonkCripplingWave : ContinuableEffect
+    public class MonkCripplingWave : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             int effectSNO;
             switch (Message.Field5)
@@ -224,9 +225,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.ExplodingPalm)]
-    public class MonkExplodingPalm : ContinuableEffect
+    public class MonkExplodingPalm : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             int effectSNO;
             switch (Message.Field5)
@@ -258,9 +259,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.SweepingWind)]
-    public class MonkSweepingWind : ContinuableEffect
+    public class MonkSweepingWind : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             int effectSNO;
             switch (Message.Field5)
@@ -292,9 +293,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.DashingStrike)]
-    public class MonkDashingStrike : ContinuableEffect
+    public class MonkDashingStrike : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(10f);
 
@@ -350,7 +351,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (Target != null && Target.World != null) // target could've died or left world
             {
-                User.FacingTranslate(Target.Position, true);
+                User.TranslateFacing(Target.Position, true);
                 Target.PlayHitEffect(2, User);
                 Damage(Target, 64f, 0);
             }

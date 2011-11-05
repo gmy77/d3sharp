@@ -33,6 +33,7 @@ using Mooege.Core.Common.Items;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Core.GS.Powers;
 
 namespace Mooege.Core.GS.Map
 {
@@ -107,6 +108,8 @@ namespace Mooege.Core.GS.Map
             get { return this.Actors.Values.OfType<StartingPoint>().Select(actor => actor).ToList(); }
         }
 
+        public PowerManager PowerManager;
+
         /// <summary>
         /// Creates a new world for the given game with given snoId.
         /// </summary>
@@ -122,7 +125,8 @@ namespace Mooege.Core.GS.Map
             this.Actors = new ConcurrentDictionary<uint, Actor>();
             this.Players = new ConcurrentDictionary<uint, Player>();
             this.QuadTree = new QuadTree(new Size(60, 60), 0);
-            this.Game.AddWorld(this); 
+            this.PowerManager = new PowerManager();
+            this.Game.AddWorld(this);
         }
 
         #region update & tick logic
@@ -134,6 +138,8 @@ namespace Mooege.Core.GS.Map
 
             // update players.
             foreach (var pair in this.Players) { pair.Value.Update(); }
+
+            this.PowerManager.Update();
         }
 
         #endregion

@@ -401,7 +401,7 @@ namespace Mooege.Core.GS.Players
 
         private void OnObjectTargeted(GameClient client, TargetMessage message)
         {
-            if (this.PowerManager.UsePower(message.PowerSNO, message.TargetID, message.Field2.Position, message))
+            if (this.World.PowerManager.UsePower(this, message.PowerSNO, message.TargetID, message.Field2.Position, message))
                 return;
 
             Actor actor = this.World.GetActor(message.TargetID);

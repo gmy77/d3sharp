@@ -19,6 +19,7 @@
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Core.GS.Powers;
+using Mooege.Core.GS.Common.Types;
 
 namespace Mooege.Core.GS.Actors.Buffs
 {
@@ -32,7 +33,7 @@ namespace Mooege.Core.GS.Actors.Buffs
         public BooleanAttributeBuff(TickTimer timeout,
                                    GameAttributeB attribute,
                                    FloatingNumberMessage.FloatType? message = null)
-            : base(timeout) 
+            : base(timeout)
         {
             _attribute = attribute;
             _message = message;

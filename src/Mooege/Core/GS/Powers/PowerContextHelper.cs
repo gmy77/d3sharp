@@ -1,25 +1,8 @@
-﻿/*
- * Copyright (C) 2011 mooege project
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Mooege.Common;
+using System.Threading;
 using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Common.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
@@ -29,30 +12,19 @@ using Mooege.Net.GS.Message.Definitions.World;
 
 namespace Mooege.Core.GS.Powers
 {
-    public abstract class ContinuableEffect
+    public class PowerContextHelper
     {
-        public static readonly Logger Logger = LogManager.CreateLogger();
-        public static Random Rand = new Random();
-        
+        private static ThreadLocal<Random> _threadRand = new ThreadLocal<Random>(() => new Random());
+        public static Random Rand { get { return _threadRand.Value; } }
+
         public PowerManager PowerManager;
         public int PowerSNO;
         public World World;
         public Actor User;
         public Actor Target;
         public Vector3D TargetPosition;
+        public float TargetZ;
         public TargetMessage Message;
-        public bool UserIsChanneling;
-        public bool ThrottledCast;
-
-        // Called to start executing a power
-        // Yields timers that signify when to continue execution.
-        public abstract IEnumerable<TickTimer> Continue();
-
-        // token instance that can be yielded by Run() to indicate the power manager should stop
-        // running a power implementation.
-        public static TickTimer StopExecution = new TickTimer(null, 0);
-
-        #region Implementation helpers
 
         // helper variables
         private TickTimer _defaultEffectTimeout;
@@ -70,6 +42,11 @@ namespace Mooege.Core.GS.Powers
         public TickTimer WaitTicks(int ticks)
         {
             return new TickRelativeTimer(World.Game, ticks);
+        }
+
+        public TickTimer WaitInfinite()
+        {
+            return new TickTimer(World.Game, int.MaxValue);
         }
 
         public void StartCooldown(TickTimer timeout)
@@ -116,18 +93,12 @@ namespace Mooege.Core.GS.Powers
             }
         }
         
-        public void RegisterChannelingPower(TickTimer channelCastDelay = null)
-        {
-            PowerManager.RegisterChannelingPower(channelCastDelay);
-        }
-
         public void Damage(Actor target, float amount, int type)
         {
             if (target == null || target.World == null) return;
 
             World.BroadcastIfRevealed(new FloatingNumberMessage
             {
-                Id = 0xd0,
                 ActorID = target.DynamicID,
                 Number = amount,
                 Type = FloatingNumberMessage.FloatType.White//type,
@@ -153,7 +124,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public ClientEffect SpawnEffect(int actorSNO, Vector3D position, float angle = -1f /*random*/, TickTimer timeout = null)
+        public ClientEffect SpawnEffect(int actorSNO, Vector3D position, float angle = 0, TickTimer timeout = null)
         {
             if (angle == -1f)
                 angle = (float)(Rand.NextDouble() * (Math.PI * 2));
@@ -177,16 +148,6 @@ namespace Mooege.Core.GS.Powers
         public ClientEffect SpawnProxy(Vector3D position, TickTimer timeout = null)
         {
             return SpawnEffect(187359, position, 0, timeout);
-        }
-
-        public ClientEffect GetChanneledEffect(int index, int actorSNO, Vector3D position, bool snapped = false)
-        {
-            return PowerManager.GetChanneledEffect(User, index, actorSNO, position, snapped);
-        }
-
-        public ClientEffect GetChanneledProxy(int index, Vector3D position, bool snapped = false)
-        {
-            return GetChanneledEffect(index, 187359, position, snapped);
         }
 
         public IList<Actor> GetTargetsInRange(Vector3D center, float range, int maxCount = -1)
@@ -221,8 +182,5 @@ namespace Mooege.Core.GS.Powers
             var move = PowerMath.ProjectAndTranslate2D(User.Position, target.Position, target.Position, amount);
             target.MoveNormal(move);
         }
-
-        #endregion
-
     }
 }

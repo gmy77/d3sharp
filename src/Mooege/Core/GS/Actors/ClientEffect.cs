@@ -17,8 +17,8 @@
  */
 
 using System;
+using Mooege.Core.GS.Common.Types;
 using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Powers;
 
 namespace Mooege.Core.GS.Actors
 {

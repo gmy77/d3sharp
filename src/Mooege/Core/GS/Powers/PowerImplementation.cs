@@ -16,26 +16,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Core.GS.Skills;
+using Mooege.Common;
 using Mooege.Core.GS.Common.Types;
 
-namespace Mooege.Core.GS.Powers.Implementations
+namespace Mooege.Core.GS.Powers
 {
-    [ImplementsPowerSNO(0x00007780/*Skills.Skills.BasicAttack*/)]
-    public class Melee : PowerImplementation
+    public abstract class PowerImplementation : PowerContextHelper
     {
-        public override IEnumerable<TickTimer> Run()
-        {
-            if (CanHitMeleeTarget(Target))
-            {
-                Target.PlayHitEffect(2, User);
-                Damage(Target, 25f, 0);
-            }
-            yield break;
-        }
+        public static readonly Logger Logger = LogManager.CreateLogger();
+
+        // Called to start executing a power
+        // Yields timers that signify when to continue execution.
+        public abstract IEnumerable<TickTimer> Run();
+
+        // token instance that can be yielded by Run() to indicate the power manager should stop
+        // running a power implementation.
+        public static TickTimer StopExecution = new TickTimer(null, 0);
     }
 }

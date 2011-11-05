@@ -22,19 +22,20 @@ using System.Linq;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Actors.Buffs;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Meteor)]
-    public class WizardMeteor : ContinuableEffect
+    public class WizardMeteor : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(60f);
             SpawnEffect(86790, TargetPosition);
             yield return WaitSeconds(2f); // wait for meteor to hit
             SpawnEffect(86769, TargetPosition);
-            SpawnEffect(90364, TargetPosition, -1, WaitSeconds(4f));
+            SpawnEffect(90364, TargetPosition, 0, WaitSeconds(4f));
 
             IList<Actor> hits = GetTargetsInRange(TargetPosition, 13f);
             Damage(hits, 150f, 0);
@@ -44,23 +45,33 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.Electrocute)]
-    public class WizardElectrocute : ContinuableEffect
+    public class WizardElectrocute : ChanneledPowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
-        {
-            RegisterChannelingPower(WaitSeconds(0.5f));
-            
-            if (ThrottledCast)
-                yield break;
+        private Actor _proxy = null;
 
-            User.FacingTranslate(TargetPosition);
+        public override void OnChannelOpen()
+        {
+            RunDelay = 0.5f;
+        }
+
+        public override void OnChannelClose()
+        {
+            if (_proxy != null)
+                _proxy.Destroy();
+        }
+
+        public override IEnumerable<TickTimer> RunChannel()
+        {
+            User.TranslateFacing(TargetPosition);
 
             UsePrimaryResource(10f);
 
             if (Target == null)
             {
                 // no target, just zap the air with miss effect rope
-                User.AddRopeEffect(30913, GetChanneledProxy(0, TargetPosition));
+                if (_proxy == null)
+                    _proxy = SpawnProxy(TargetPosition, WaitInfinite());
+                User.AddRopeEffect(30913, _proxy);
             }
             else
             {
@@ -96,15 +107,21 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.MagicMissile)]
-    public class WizardMagicMissile : ContinuableEffect
+    public class WizardMagicMissile : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(20f);
 
             User.PlayEffectGroup(19305); // cast effect
 
-            var projectile = new PowerProjectile(User.World, 99567, User.Position, TargetPosition, 1f, 2000, 1f, 3f, 5f, 0f);
+            Vector3D startPosition = new Vector3D(User.Position);
+            if (TargetZ != 0)
+                startPosition.Z = TargetZ;
+            else
+                startPosition.Z = TargetPosition.Z;
+
+            var projectile = new PowerProjectile(User.World, 99567, startPosition, TargetPosition, 1f, 2000, 1f, 3f, 0f/*hoi*/, 0f);
             projectile.OnHit = () =>
             {
                 SpawnEffect(99572, projectile.getCurrentPosition()); // impact effect
@@ -117,9 +134,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Hydra)]
-    public class WizardHydra : ContinuableEffect
+    public class WizardHydra : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(60f);
 
@@ -133,39 +150,54 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Disintegrate)]
-    public class WizardDisintegrate : ContinuableEffect
+    public class WizardDisintegrate : ChanneledPowerImplementation
     {
         const float BeamLength = 40f;
 
-        public override IEnumerable<TickTimer> Continue()
+        private Actor _target = null;
+
+        private void _calcTargetPosition()
         {
-            RegisterChannelingPower(WaitSeconds(0.1f));
-                        
             // project beam end to always be a certain length
             TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
                                                                User.Position, BeamLength);
+            TargetPosition.Z = TargetZ;
+        }
 
-            if (!ThrottledCast)
-            {
-                UsePrimaryResource(3f);
+        public override void OnChannelOpen()
+        {
+            RunDelay = 0.1f;
 
-                foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
-                {
-                    if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
-                    {  
-                        actor.PlayHitEffect(32, User);
-                        actor.PlayEffectGroup(18793);
-                        Damage(actor, 10, 0);
-                    }
-                }
-            }
-
-            // always update effect locations
             // spawn target effect a little bit above the ground target
-            var pid = GetChanneledEffect(0, 52687, new Vector3D(TargetPosition.X, TargetPosition.Y, TargetPosition.Z + 10f), true);
-            if (! UserIsChanneling)
+            _calcTargetPosition();
+            _target = SpawnEffect(52687, TargetPosition, 0, WaitInfinite());
+            User.AddComplexEffect(18792, _target);
+        }
+
+        public override void OnChannelClose()
+        {
+            if (_target != null)
+                _target.Destroy();
+        }
+
+        public override void OnChannelUpdated()
+        {
+            _calcTargetPosition();
+            _target.MoveSnapped(TargetPosition);
+        }
+
+        public override IEnumerable<TickTimer> RunChannel()
+        {
+            UsePrimaryResource(3f);
+
+            foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
             {
-                User.AddComplexEffect(18792, pid);
+                if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
+                {  
+                    actor.PlayHitEffect(32, User);
+                    actor.PlayEffectGroup(18793);
+                    Damage(actor, 10, 0);
+                }
             }
 
             yield break;
@@ -173,9 +205,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.WaveOfForce)]
-    public class WizardWaveOfForce : ContinuableEffect
+    public class WizardWaveOfForce : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(25f);
             StartCooldown(WaitSeconds(15f));
@@ -195,66 +227,62 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneTorrent)]
-    public class WizardArcaneTorrent : ContinuableEffect
+    public class WizardArcaneTorrent : ChanneledPowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        private Actor _targetProxy = null;
+        private Actor _userProxy = null;
+
+        public override void OnChannelOpen()
         {
-            RegisterChannelingPower(WaitSeconds(0.2f));
+            RunDelay = 0.2f;
 
-            if (!UserIsChanneling)
-            {
-                Actor targetProxy = GetChanneledProxy(0, TargetPosition);
-                Actor userProxy = GetChanneledProxy(1, User.Position);
-                // TODO: fixed casting effect so it rotates along with actor
-                userProxy.PlayEffectGroup(97385);
-                userProxy.PlayEffectGroup(134442, targetProxy);
-            }
+            _targetProxy = SpawnProxy(TargetPosition, WaitInfinite());
+            _userProxy = SpawnProxy(User.Position, WaitInfinite());
+            // TODO: fixed casting effect so it rotates along with actor
+            _userProxy.PlayEffectGroup(97385);
+            _userProxy.PlayEffectGroup(134442, _targetProxy);
+        }
 
-            if (!ThrottledCast)
-            {
-                UsePrimaryResource(10f);
-                yield return WaitSeconds(0.9f);
-                // update proxy target location laggy
-                GetChanneledProxy(0, TargetPosition);
+        public override void OnChannelClose()
+        {
+            _targetProxy.Destroy();
+            _userProxy.Destroy();
+        }
 
-                SpawnEffect(97821, TargetPosition);
-                Damage(GetTargetsInRange(TargetPosition, 6f), 20, 0);
-            }
+        public override IEnumerable<TickTimer> RunChannel()
+        {
+            UsePrimaryResource(10f);
+
+            Vector3D laggyPosition = new Vector3D(TargetPosition);
+
+            yield return WaitSeconds(0.9f);
+
+            // update proxy target delayed so animation lines up with explosions a bit better
+            if (ChannelOpen)
+                _targetProxy.MoveNormal(laggyPosition, 8f);
+
+            SpawnEffect(97821, laggyPosition);
+            Damage(GetTargetsInRange(laggyPosition, 6f), 20, 0);
         }
     }
 
     //bumbasher
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.FrostNova)]
-    public class WizardFrostNova : ContinuableEffect
+    public class WizardFrostNova : PowerImplementation
     {
-        public const int FrostNova_Emitter = 4402; //plain frost nova effect
-        public const int FrostNova_Emitter_alabaster_unfreeze = 0x2e27a;
-        public const int FrostNova_Emitter_crimson_addDamage = 0x2e277;
-        public const int FrostNova_Emitter_golden_reduceCooldown = 0x2e279;
-        public const int FrostNova_Emitter_indigo_miniFrostNovas = 0x2e278;
-        public const int FrostNova_Minor_Emitter = 0x1133;
+        public const int FrostNova_Emitter = 4402;
 
-        public List<int> Effects = new List<int>
-        {
-            FrostNova_Emitter,
-            FrostNova_Emitter_alabaster_unfreeze,
-            FrostNova_Emitter_crimson_addDamage,
-            FrostNova_Emitter_golden_reduceCooldown,
-            FrostNova_Emitter_indigo_miniFrostNovas,
-            FrostNova_Minor_Emitter
-        };
-
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             StartCooldown(WaitSeconds(12f));
 
-            SpawnEffect(FrostNova_Emitter, User.Position); //center on self
+            SpawnEffect(FrostNova_Emitter, User.Position);
 
-            IList<Actor> hits = GetTargetsInRange(User.Position, 18); //FIXME: is the range correct? what units?
+            IList<Actor> hits = GetTargetsInRange(User.Position, 18);
             foreach (Actor actor in hits)
             {
                 actor.AddBuff(new FreezeBuff(WaitSeconds(4f)));
-                Damage(actor, Rand.Next(2, 4+1), 0); //does 2-4 damage, TODO: use player DPS or something
+                Damage(actor, Rand.Next(2, 4+1), 0);
             }
 
             yield break;
@@ -262,107 +290,97 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
-    public class WizardBlizzard : ContinuableEffect
+    public class WizardBlizzard : PowerImplementation
     {
         public const int Wizard_Blizzard = 0x1977;
-        public const int Wizard_Blizzard_addFreeze = 0x2d53f;
-        public const int Wizard_Blizzard_addSize = 0x2d53d;
-        public const int wizard_blizzard_addSize_panels = 0x2d490;
-        public const int Wizard_Blizzard_addTime = 0x2d53c;
-        public const int wizard_blizzard_addTime_panels = 0x2d473;
-        public const int wizard_blizzard_panels = 0xd28;
-        public const int Wizard_Blizzard_reduceCost = 0x2d53e;
-        public const int wizard_blizzard_reduceCost_panels = 0x2d4a9;
-        public const int Wizard_BlizzardRune_Mist = 0x1277a;
 
-        public static List<int> Effects = new List<int> 
-        {
-            Wizard_Blizzard,
-            Wizard_Blizzard_addFreeze,
-            Wizard_Blizzard_addSize,
-            wizard_blizzard_addSize_panels,
-            Wizard_Blizzard_addTime,
-            wizard_blizzard_addTime_panels,
-            wizard_blizzard_panels,
-            Wizard_Blizzard_reduceCost,
-            wizard_blizzard_reduceCost_panels,
-            Wizard_BlizzardRune_Mist
-        };
-
-        //deals 12-18 DPS for 3 seconds
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(45f);
 
             SpawnEffect(Wizard_Blizzard, TargetPosition);
 
-            //do damage for 3 seconds
             const int blizzard_duration = 3;
 
-            for(int i=0; i<blizzard_duration; ++i)
+            for(int i = 0; i < blizzard_duration; ++i)
             {
-                IList<Actor> hits = GetTargetsInRange(TargetPosition, 18); //FIXME: is the range correct? what units?
+                IList<Actor> hits = GetTargetsInRange(TargetPosition, 18);
                 foreach (Actor actor in hits)
                 {
-                    actor.AddBuff(new ChilledBuff(WaitSeconds(1f)));  //FIXME: does blizzard slows the monsters?
+                    actor.AddBuff(new ChilledBuff(WaitSeconds(1f)));
                     Damage(actor, Rand.Next(12, 18+1), 0);
                 }
 
                 yield return WaitSeconds(1f);
             }
-
-            yield break;
         }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.RayOfFrost)]
-    public class WizardRayOfFrost : ContinuableEffect
+    public class WizardRayOfFrost : ChanneledPowerImplementation
     {
         const float BeamLength = 40f;
 
-        public override IEnumerable<TickTimer> Continue() //TODO: still WIP
+        private Actor _target = null;
+
+        private void _calcTargetPosition()
         {
-            RegisterChannelingPower(WaitSeconds(0.1f));
-
-            User.FacingTranslate(TargetPosition);
-
             // project beam end to always be a certain length
             TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
                                                                User.Position, BeamLength);
+            TargetPosition.Z = TargetZ;
+        }
 
-            if (!ThrottledCast)
-            {
-                UsePrimaryResource(3.5f);
-                foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
-                {
-                    if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
-                    {
-                        //hit effects: 8 - disintegrate, 4 - some witch doctor green crap, 2 - electric, 1 - some fire methink, 16-ice particles, 
-                        actor.PlayHitEffect(64, User);
-                        //FIXME: it only need to last as long as the monster is getting hit
-                        // fixed? 100ms time limit seems make it a bit better /mdz
-                        SpawnEffect(6535, actor.Position, 0, WaitSeconds(0.1f));
-                        Damage(actor, 10, 0);
-                    }
-                }
-            }
+        public override void OnChannelOpen()
+        {
+            RunDelay = 0.1f;
 
-            // always update effect locations
             // spawn target effect a little bit above the ground target
-            ClientEffect pid = GetChanneledEffect(0, 6535, new Vector3D(TargetPosition.X, TargetPosition.Y, TargetPosition.Z + 10f), true);
-            if (!UserIsChanneling)
+            _calcTargetPosition();
+            _target = SpawnEffect(6535, TargetPosition, 0, WaitInfinite());
+            User.AddComplexEffect(19327, _target);
+        }
+
+        public override void OnChannelClose()
+        {
+            if (_target != null)
+                _target.Destroy();
+        }
+
+        public override void OnChannelUpdated()
+        {
+            _calcTargetPosition();
+            _target.MoveSnapped(TargetPosition);
+            User.TranslateFacing(TargetPosition);
+        }
+        
+        public override IEnumerable<TickTimer> RunChannel()
+        {
+            UsePrimaryResource(3.5f);
+
+            foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
             {
-                User.AddComplexEffect(19327, pid);
+                if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
+                {
+                    NewMethod(actor);
+                    Damage(actor, 10, 0);
+                }
             }
 
             yield break;
         }
+
+        private void NewMethod(Actor actor)
+        {
+            actor.PlayHitEffect(64, User);
+            SpawnEffect(6535, actor.Position, 0, WaitSeconds(0.1f)); // TODO: change this to somethign else?
+        }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Teleport)]
-    public class WizardTeleport : ContinuableEffect
+    public class WizardTeleport : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(15f);
             //StartCooldown(WaitSeconds(16f));
@@ -374,9 +392,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.SpectralBlade)]
-    public class WizardSpectralBlade : ContinuableEffect
+    public class WizardSpectralBlade : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(15f);
 
@@ -398,9 +416,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.ShockPulse)]
-    public class WizardSpectralShockPulse : ContinuableEffect
+    public class WizardSpectralShockPulse : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             yield break;
         }

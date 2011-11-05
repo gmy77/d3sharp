@@ -16,15 +16,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
 using Mooege.Common;
+using Mooege.Common.Helpers;
 using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Common.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
-using Mooege.Net.GS.Message.Definitions.World;
-using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message;
+using Mooege.Net.GS.Message.Definitions.World;
+using System.Linq;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -32,23 +33,19 @@ namespace Mooege.Core.GS.Powers
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
-        private Actor _user;
-
-        private bool _isChanneling = false;
-        private TickTimer _channelCastDelay = null;
-        private IList<ClientEffect> _channelEffects = null;
+        // list of all actively channeled powers
+        private List<ChanneledPowerImplementation> _channeledPowers = new List<ChanneledPowerImplementation>();
 
         // list of all waiting to execute powers
         private class WaitingPower
         {
             public IEnumerator<TickTimer> PowerEnumerator;
-            public ContinuableEffect Implementation;
+            public PowerImplementation Implementation;
         }
         private List<WaitingPower> _waitingPowers = new List<WaitingPower>();
         
-        public PowerManager(Actor user)
+        public PowerManager()
         {
-            _user = user;
         }
 
         public void Update()
@@ -56,31 +53,38 @@ namespace Mooege.Core.GS.Powers
             UpdateWaitingPowers();
         }
 
-        public bool UsePower(int powerSNO, uint targetId = uint.MaxValue, Vector3D targetPosition = null,
+        public bool UsePower(Actor user, int powerSNO, uint targetId = uint.MaxValue, Vector3D targetPosition = null,
                              TargetMessage message = null)
         {
             Actor target;
 
+            float targetZ = 0f; // Z value of targetPosition, regardless if a targetId has been specified.
+            if (targetPosition != null)
+                targetZ = targetPosition.Z;
+
             if (targetId == uint.MaxValue)
             {
                 target = null;
+                if (targetPosition == null)
+                    targetPosition = new Vector3D(0, 0, 0);
             }
-            else if (_user.World.GetActor(targetId) != null)
+            else if (user.World.GetActor(targetId) != null)
             {
-                target = _user.World.GetActor(targetId);
+                target = user.World.GetActor(targetId);
+
+                if (targetPosition == null)
+                    targetZ = target.Position.Z;
+
                 targetPosition = target.Position;
             }
             else
             {
                 return false;
             }
-
-            if (targetPosition == null)
-                targetPosition = new Vector3D(0, 0, 0);
-
+            
             #region Monster spawn HACK
             // HACK: intercept hotbar skill 1 to always spawn test mobs.
-            if (_user is Player && powerSNO == (_user as Player).SkillSet.HotBarSkills[4].SNOSkill)
+            if (user is Player && powerSNO == (user as Player).SkillSet.HotBarSkills[4].SNOSkill)
             {
                 // number of monsters to spawn
                 int spawn_count = 10;
@@ -94,7 +98,7 @@ namespace Mooege.Core.GS.Powers
 
                     if (targetPosition.X == 0f)
                     {
-                        position = new Vector3D(_user.Position);
+                        position = new Vector3D(user.Position);
                         if ((n % 2) == 0)
                         {
                             position.X += (float)(RandomHelper.NextDouble() * 20);
@@ -111,18 +115,18 @@ namespace Mooege.Core.GS.Powers
                         position = new Vector3D(targetPosition);
                         position.X += (float)(RandomHelper.NextDouble() - 0.5) * 20;
                         position.Y += (float)(RandomHelper.NextDouble() - 0.5) * 20;
-                        position.Z = _user.Position.Z;
+                        position.Z = user.Position.Z;
                     }
 
                     int actorSNO = actorSNO_values[RandomHelper.Next(actorSNO_values.Length - 1)];
 
-                    Monster mon = new Monster(_user.World, actorSNO, position, null);
+                    Monster mon = new Monster(user.World, actorSNO, position, null);
                     mon.Scale = 1.35f;
                     mon.Attributes[GameAttribute.Hitpoints_Max_Total] = 50f;
                     mon.Attributes[GameAttribute.Hitpoints_Max] = 50f;
                     mon.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 0f;
                     mon.Attributes[GameAttribute.Hitpoints_Cur] = 50f;
-                    _user.World.Enter(mon);
+                    user.World.Enter(mon);
                 }
 
                 return true;
@@ -133,29 +137,43 @@ namespace Mooege.Core.GS.Powers
             var implementation = PowerLoader.CreateImplementationForPowerSNO(powerSNO);
             if (implementation != null)
             {
-                // copy in base params
-                implementation.PowerManager = this;
-                implementation.PowerSNO = powerSNO;
-                implementation.User = _user;
-                implementation.Target = target;
-                implementation.World = _user.World;
-                implementation.TargetPosition = targetPosition;
-                implementation.Message = message;
-
-                // process channeled skill params
-                implementation.UserIsChanneling = _isChanneling;
-                implementation.ThrottledCast = false;
-                if (_isChanneling && _channelCastDelay != null)
+                // replace implementation with existing channel instance if one exists
+                if (implementation is ChanneledPowerImplementation)
                 {
-                    if (_channelCastDelay.TimedOut())
-                        _channelCastDelay = null;
-                    else
-                        implementation.ThrottledCast = true;
+                    var chanpow = _FindChannelingPower(user, powerSNO);
+                    if (chanpow != null)
+                        implementation = chanpow;
                 }
 
-                var powerEnum = implementation.Continue().GetEnumerator();
+                // copy in context params
+                implementation.PowerManager = this;
+                implementation.PowerSNO = powerSNO;
+                implementation.User = user;
+                implementation.Target = target;
+                implementation.World = user.World;
+                implementation.TargetPosition = targetPosition;
+                implementation.TargetZ = targetZ;
+                implementation.Message = message;
+
+                // process channeled power events
+                var channeledPower = implementation as ChanneledPowerImplementation;
+                if (channeledPower != null)
+                {
+                    if (channeledPower.ChannelOpen)
+                    {
+                        channeledPower.OnChannelUpdated();
+                    }
+                    else
+                    {
+                        channeledPower.OnChannelOpen();
+                        channeledPower.ChannelOpen = true;
+                        _channeledPowers.Add(channeledPower);
+                    }
+                }
+                
+                var powerEnum = implementation.Run().GetEnumerator();
                 // actual power will first run here, if it yielded a timer process it in the waiting list
-                if (powerEnum.MoveNext() && powerEnum.Current != ContinuableEffect.StopExecution)
+                if (powerEnum.MoveNext() && powerEnum.Current != PowerImplementation.StopExecution)
                 {
                     _waitingPowers.Add(new WaitingPower
                     {
@@ -172,7 +190,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private void UpdateWaitingPowers()
+        public void UpdateWaitingPowers()
         {
             // process all powers, removing from the list the ones that expire
             _waitingPowers.RemoveAll((wait) =>
@@ -180,7 +198,7 @@ namespace Mooege.Core.GS.Powers
                 if (wait.PowerEnumerator.Current.TimedOut())
                 {
                     if (wait.PowerEnumerator.MoveNext())
-                        return wait.PowerEnumerator.Current == ContinuableEffect.StopExecution;
+                        return wait.PowerEnumerator.Current == PowerImplementation.StopExecution;
                     else
                         return true;
                 }
@@ -191,50 +209,22 @@ namespace Mooege.Core.GS.Powers
             });
         }
 
-        public void RegisterChannelingPower(TickTimer channelCastDelay = null)
+        public void CancelChanneledPower(Actor user, int powerSNO)
         {
-            _isChanneling = true;
-            if (_channelCastDelay == null)
-                _channelCastDelay = channelCastDelay;
-        }
-
-        public void CancelChanneledPower(int powerSNO)
-        {
-            _isChanneling = false;
-            _channelCastDelay = null;
-            if (_channelEffects != null)
+            var channeledPower = _FindChannelingPower(user, powerSNO);
+            if (channeledPower != null)
             {
-                foreach (ClientEffect effect in _channelEffects)
-                    effect.Destroy();
-
-                _channelEffects = null;
+                channeledPower.OnChannelClose();
+                channeledPower.ChannelOpen = false;
+                _channeledPowers.Remove(channeledPower);
             }
         }
 
-        public ClientEffect GetChanneledEffect(Actor user, int index, int actorSNO, Vector3D position, bool snapped)
+        private ChanneledPowerImplementation _FindChannelingPower(Actor user, int powerSNOId)
         {
-            if (!_isChanneling) return null;
-            
-            if (_channelEffects == null)
-                _channelEffects = new List<ClientEffect>();
-
-            // ensure effects list is at least big enough for specified index
-            while (_channelEffects.Count < index + 1)
-            {
-                _channelEffects.Add(new ClientEffect(user.World, actorSNO, position, 0, null));
-            }
-
-            if (snapped)
-                _channelEffects[index].MoveSnapped(position);
-            else
-                _channelEffects[index].MoveNormal(position, 8f);
-
-            return _channelEffects[index];
-        }
-
-        public ClientEffect GetChanneledProxy(Actor user, int index, Vector3D position, bool snapped)
-        {
-            return GetChanneledEffect(user, index, 187359, position, snapped);
+            return _channeledPowers.FirstOrDefault(impl => impl.User == user &&
+                                                           impl.PowerSNO == powerSNOId &&
+                                                           impl.ChannelOpen);
         }
     }
 }

@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using Mooege.Core.GS.Common.Types;
 using Mooege.Core.GS.Players;
-using Mooege.Core.GS.Powers;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Misc;
 
@@ -31,7 +31,6 @@ namespace Mooege.Core.GS.Actors.Buffs
         {
         }
     }
-
 
     //appears to be some kind of arcane slow
     public class SlowBuff : BooleanAttributeBuff

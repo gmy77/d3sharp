@@ -47,11 +47,6 @@ namespace Mooege.Core.GS.Actors
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         /// <summary>
-        /// PowerManager for actor.
-        /// </summary>
-        public PowerManager PowerManager;
-
-        /// <summary>
         /// SNO Id of the actor.
         /// </summary>
         private int _snoId;
@@ -193,8 +188,6 @@ namespace Mooege.Core.GS.Actors
 
             this.Tags = tags;
             this.ReadTags();
-
-            this.PowerManager = new PowerManager(this);
         }
 
         protected Actor(World world, uint dynamicId)
@@ -215,9 +208,7 @@ namespace Mooege.Core.GS.Actors
         }
 
         #endregion
-
-        #region reveal & unreveal handling
-
+        
         #region Buffs and Debuffs
 
         List<TimedBuff> _activeBuffs = new List<TimedBuff>(); //< list of all active buffs on the actor
@@ -266,7 +257,6 @@ namespace Mooege.Core.GS.Actors
 
             World.BroadcastIfRevealed(new NotifyActorMovementMessage
             {
-                Id = 0x6e,
                 ActorId = (int)DynamicID,
                 Position = destination,
                 Angle = (float)Math.Acos(this.RotationAmount) * 2f,
@@ -290,7 +280,7 @@ namespace Mooege.Core.GS.Actors
             }, this);
         }
 
-        public void FacingTranslate(Vector3D target, bool immediately = false)
+        public void TranslateFacing(Vector3D target, bool immediately = false)
         {
             float radianAngle = PowerMath.AngleLookAt(this.Position, target);
 
@@ -313,13 +303,7 @@ namespace Mooege.Core.GS.Actors
 
         public void PlayEffectGroup(int effectGroupSNO)
         {
-            World.BroadcastIfRevealed(new PlayEffectMessage
-            {
-                Id = 0x7a,
-                ActorId = DynamicID,
-                Effect = Net.GS.Message.Definitions.Effect.Effect.PlayEffectGroup,
-                OptionalParameter = effectGroupSNO
-            }, this);
+            PlayEffect(Effect.PlayEffectGroup, effectGroupSNO);
         }
 
         public void PlayEffectGroup(int effectGroupSNO, Actor target)
@@ -339,7 +323,6 @@ namespace Mooege.Core.GS.Actors
         {
             World.BroadcastIfRevealed(new PlayHitEffectMessage
             {
-                Id = 0x7b,
                 ActorID = DynamicID,
                 HitDealer = hitDealer.DynamicID,
                 Field2 = hitEffect,
@@ -406,11 +389,11 @@ namespace Mooege.Core.GS.Actors
         public override void Update()
         {
             base.Update();
-            //UpdateBuffs();
-
-            this.PowerManager.Update();
+            UpdateBuffs();
         }
-        
+
+        #region reveal & unreveal handling
+
         /// <summary>
         /// Reveals an actor to a player.
         /// </summary>

@@ -22,13 +22,14 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Actors.Buffs;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Core.GS.Common.Types;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.Bash)]
-    public class BarbarianBash : ContinuableEffect
+    public class BarbarianBash : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             yield return WaitSeconds(0.25f); // wait for swing animation
 
@@ -47,9 +48,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.LeapAttack)]
-    public class BarbarianLeap : ContinuableEffect
+    public class BarbarianLeap : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             //StartCooldown(WaitSeconds(10f));
 
@@ -99,9 +100,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FurySpenders.Whirlwind)]
-    public class BarbarianWhirlwind : ContinuableEffect
+    public class BarbarianWhirlwind : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             User.AddBuff(new WhirlWindEffectBuff(WaitSeconds(0.250f)));
 
@@ -116,9 +117,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.AncientSpear)]
-    public class BarbarianAncientSpear : ContinuableEffect
+    public class BarbarianAncientSpear : PowerImplementation
     {
-        public override IEnumerable<TickTimer> Continue()
+        public override IEnumerable<TickTimer> Run()
         {
             //StartCooldown(WaitSeconds(10f));
             
