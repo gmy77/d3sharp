@@ -153,8 +153,11 @@ namespace Mooege.Core.Common.Items
             {
                 itemDefinition = pool[RandomHelper.Next(0, pool.Count() - 1)];
 
-                if (!GBIDHandlers.ContainsKey(itemDefinition.Hash) &&
-                    !AllowedItemTypes.Contains(itemDefinition.ItemType1)) continue;
+                if (itemDefinition.SNOActor == -1) continue;
+                
+                // if ((itemDefinition.ItemType1 == StringHashHelper.HashItemName("Book")) && (itemDefinition.BaseGoldValue != 0)) return itemDefinition; // testing books /xsochor
+                // if (itemDefinition.ItemType1 != StringHashHelper.HashItemName("Book")) continue; // testing books /xsochor
+
 
                 // ignore gold and healthglobe, they should drop only when expect, not randomly
                 if (itemDefinition.Name.ToLower().Contains("gold")) continue;
@@ -163,8 +166,10 @@ namespace Mooege.Core.Common.Items
                 if (itemDefinition.Name.ToLower().Contains("unique")) continue;
                 if (itemDefinition.Name.ToLower().Contains("crafted")) continue;
                 if (itemDefinition.Name.ToLower().Contains("debug")) continue;
+                if ((itemDefinition.ItemType1 == StringHashHelper.HashItemName("Book")) && (itemDefinition.BaseGoldValue == 0)) continue; // i hope it catches all lore with npc spawned /xsochor
 
-                if (itemDefinition.SNOActor == -1) continue;
+                if (!GBIDHandlers.ContainsKey(itemDefinition.Hash) &&
+                    !AllowedItemTypes.Contains(itemDefinition.ItemType1)) continue;
 
                 found = true;
             }

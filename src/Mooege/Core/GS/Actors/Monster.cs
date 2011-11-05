@@ -158,9 +158,7 @@ namespace Mooege.Core.GS.Actors
         /// </summary>
         private void PlayLore()
         {
-            int loreSNOId = -1;
-            LoreAssetHelper.AddLoreForMonster(this.SNOId);
-            LoreAssetHelper.Lores.TryGetValue(this.SNOId, out loreSNOId);
+            int loreSNOId = LoreAssetHelper.GetLoreForMonster(this.SNOId);
             if (loreSNOId != -1)
             {
                 var players = this.GetPlayersInRange();

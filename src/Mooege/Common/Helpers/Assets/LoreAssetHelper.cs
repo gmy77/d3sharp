@@ -40,26 +40,51 @@ namespace Mooege.Common.Helpers.Assets
         }
 
         /// <summary>
+        /// Returns lore's SNOId for item's SNOId. If item is not present in dictionary, it's added.
+        /// </summary>
+        /// <param name="itemSNOId"></param>
+        /// <returns></returns>
+        public static int GetLoreForItem(int itemSNOId)
+        {
+            if (!LoreAssetHelper.Lores.ContainsKey(itemSNOId))
+            {
+                AddLoreForItem(itemSNOId);
+            }
+            return Lores[itemSNOId];
+        }
+
+        /// <summary>
+        /// Returns lore's SNOId for monster's actorSNOId. If item is not present in dictionary, it's added.
+        /// </summary>
+        /// <param name="itemSNOId"></param>
+        /// <returns></returns>
+        public static int GetLoreForMonster(int monsterSNOId)
+        {
+            if (!LoreAssetHelper.Lores.ContainsKey(monsterSNOId))
+            {
+                AddLoreForMonster(monsterSNOId);
+            }
+            return Lores[monsterSNOId];
+        }
+
+        /// <summary>
         /// Adds actorSNOId->LoreSNOId mapping if not present in dictionary for Item.
         /// If loreSNOId is not found (or item doesn't have lore), sets loreSNOId to -1 to prevent subsequent searches.
         /// </summary>
         /// <param name="itemSNOId"></param>
         public static void AddLoreForItem(int itemSNOId)
         {
-            if (!LoreAssetHelper.Lores.ContainsKey(itemSNOId))
+            // lazy initialization of helper's value
+            // find actor's asset
+            var actorAssetPair = MPQStorage.Data.Assets[SNOGroup.Actor].FirstOrDefault(x => x.Value.SNOId == itemSNOId);
+            // find lore tag
+            var loreTag = (actorAssetPair.Value.Data as Mooege.Common.MPQ.FileFormats.Actor).TagMap.TagMapEntries.FirstOrDefault(z => z.TagID == (int)MarkerTagTypes.LoreSNOId);
+            int loreSNOId = -1;
+            if (loreTag != null)
             {
-                // lazy initialization of helper's value
-                // find actor's asset
-                var actorAssetPair = MPQStorage.Data.Assets[SNOGroup.Actor].FirstOrDefault(x => x.Value.SNOId == itemSNOId);
-                // find lore tag
-                var loreTag = (actorAssetPair.Value.Data as Mooege.Common.MPQ.FileFormats.Actor).TagMap.TagMapEntries.FirstOrDefault(z => z.TagID == (int)MarkerTagTypes.LoreSNOId);
-                int loreSNOId = -1;
-                if (loreTag != null)
-                {
-                    loreSNOId = loreTag.Int2;
-                }
-                LoreAssetHelper.Lores.TryAdd(itemSNOId, loreSNOId);
+                loreSNOId = loreTag.Int2;
             }
+            LoreAssetHelper.Lores.TryAdd(itemSNOId, loreSNOId);
         }
 
         /// <summary>
@@ -69,18 +94,15 @@ namespace Mooege.Common.Helpers.Assets
         /// <param name="monsterSNOId"></param>
         public static void AddLoreForMonster(int monsterSNOId)
         {
-            if (!LoreAssetHelper.Lores.ContainsKey(monsterSNOId))
+            // lazy initialization of helper's value
+            // find monster's asset
+            var monsterAssetPair = MPQStorage.Data.Assets[SNOGroup.Monster].FirstOrDefault(x => (x.Value.Data as Mooege.Common.MPQ.FileFormats.Monster).ActorSNO == monsterSNOId);
+            int loreSNOId = -1;
+            if (monsterAssetPair.Value != null)
             {
-                // lazy initialization of helper's value
-                // find monster's asset
-                var monsterAssetPair = MPQStorage.Data.Assets[SNOGroup.Monster].FirstOrDefault(x => (x.Value.Data as Mooege.Common.MPQ.FileFormats.Monster).ActorSNO == monsterSNOId);
-                int loreSNOId = -1;
-                if (monsterAssetPair.Value != null)
-                {
-                    loreSNOId = (monsterAssetPair.Value.Data as Mooege.Common.MPQ.FileFormats.Monster).SNOLore;
-                }
-                LoreAssetHelper.Lores.TryAdd(monsterSNOId, loreSNOId);
+                loreSNOId = (monsterAssetPair.Value.Data as Mooege.Common.MPQ.FileFormats.Monster).SNOLore;
             }
+            LoreAssetHelper.Lores.TryAdd(monsterSNOId, loreSNOId);
         }
     }
 }

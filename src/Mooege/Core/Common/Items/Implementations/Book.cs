@@ -25,7 +25,7 @@ namespace Mooege.Core.Common.Items.Implementations
         public Book(World world, Mooege.Common.MPQ.FileFormats.ItemTable definition)
             : base(world, definition)
         {
-            LoreAssetHelper.AddLoreForItem(this.SNOId);
+            LoreAssetHelper.GetLoreForItem(this.SNOId);
         }
 
         public override void OnTargeted(Player player, TargetMessage message)
