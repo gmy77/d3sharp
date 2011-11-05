@@ -104,9 +104,9 @@ namespace D3TypeDescriptor
                 NetAttribute a = new NetAttribute();
                 a.Id = int.Parse(e.Attribute("Id").Value);
                 a.U2 = int.Parse(e.Attribute("U2").Value);
-                a.U2 = int.Parse(e.Attribute("U3").Value);
-                a.U2 = int.Parse(e.Attribute("U4").Value);
-                a.U2 = int.Parse(e.Attribute("U5").Value);
+                a.U3 = int.Parse(e.Attribute("U3").Value);
+                a.U4 = int.Parse(e.Attribute("U4").Value);
+                a.U5 = int.Parse(e.Attribute("U5").Value);
 
                 a.ScriptA = e.Attribute("ScriptA").Value;
                 a.ScriptB = e.Attribute("ScriptB").Value;
@@ -121,6 +121,53 @@ namespace D3TypeDescriptor
 
                 Attributes[a.Id] = a;
             }
+        }
+
+        public static void GenerateClass(StringBuilder b)
+        {
+            b.Append("public partial class GameAttribute\n{\n\n");
+
+            foreach (var attr in Attributes)
+            {
+                string newName = attr.Name.Replace(' ', '_');
+
+                b.Append("public static readonly GameAttribute");
+                if (attr.BitCount == 1)
+                    b.Append("B");
+                else if (attr.IsInteger)
+                    b.Append("I");
+                else
+                    b.Append("F");
+
+                b.Append(" ");
+                b.Append(newName);
+                b.Append(" = new GameAttribute");
+
+                if (attr.BitCount == 1)
+                    b.Append("B");
+                else if (attr.IsInteger)
+                    b.Append("I");
+                else
+                    b.Append("F");
+
+                b.Append("(");
+                b.Append(attr.Id); b.Append(", ");
+                b.Append(attr.U2); b.Append(", ");
+                b.Append(attr.U3); b.Append(", ");
+                b.Append(attr.U4); b.Append(", ");
+                b.Append(attr.U5); b.Append(", ");
+                b.Append("\""); b.Append(attr.ScriptA); b.Append("\""); b.Append(", ");
+                b.Append("\""); b.Append(attr.ScriptB); b.Append("\""); b.Append(", ");
+                b.Append("\""); b.Append(attr.Name); b.Append("\""); b.Append(", ");
+                b.Append("GameAttributeEncoding."); b.Append(attr.EncodingType); b.Append(", ");
+                b.Append(attr.U10); b.Append(", ");
+                b.Append(attr.Min); b.Append(", ");
+                b.Append(attr.Max); b.Append(", ");
+                b.Append(attr.BitCount);
+                b.Append(");\n");
+            }
+
+            b.Append("}");
         }
     }
 }
