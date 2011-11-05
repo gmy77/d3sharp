@@ -334,7 +334,8 @@ namespace Mooege.Core.GS.Players
             }
             else
             {
-                _inventoryGrid.RemoveItem(item);
+                var sourceGrid = (item.InvLoc.EquipmentSlot == 0 ? _inventoryGrid : _stashGrid);
+                sourceGrid.RemoveItem(item);
             }
 
             item.CurrentState = ItemState.Dropping;
