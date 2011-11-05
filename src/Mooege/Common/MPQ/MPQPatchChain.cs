@@ -102,26 +102,9 @@ namespace Mooege.Common.MPQ
             {
                 foreach(var mpq in pair.Value)
                 {
-                    this.FileSystem.Archives.Add(new MpqArchive(mpq));    
+                    this.FileSystem.Archives.Add(new MpqArchive(mpq, false));
                 }
             }
-        }
-
-        public List<string> FindMatchingFiles(string mask)
-        {
-            var list = new List<string>();
-            foreach(var archive in this.FileSystem.Archives)
-            {
-                foreach(var file in archive.Files)
-                {
-                    if (!file.Name.Contains(mask)) continue;
-                    if (list.Contains(file.Name)) continue;
-
-                    list.Add(file.Name);
-                }
-            }
-
-            return list;
         }
     }
 }
