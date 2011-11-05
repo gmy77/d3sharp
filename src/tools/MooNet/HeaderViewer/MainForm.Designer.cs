@@ -53,14 +53,14 @@
             this.outputBox.Multiline = true;
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(340, 75);
+            this.outputBox.Size = new System.Drawing.Size(340, 105);
             this.outputBox.TabIndex = 1;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 127);
+            this.ClientSize = new System.Drawing.Size(365, 157);
             this.Controls.Add(this.outputBox);
             this.Controls.Add(this.inputBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
