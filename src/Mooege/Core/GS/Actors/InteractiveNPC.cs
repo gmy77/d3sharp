@@ -34,7 +34,7 @@ using Mooege.Core.GS.Games;
 
 namespace Mooege.Core.GS.Actors
 {
-    public class InteractiveNPC : NPC, IMessageConsumer, IUpdateable
+    public class InteractiveNPC : NPC, IMessageConsumer
     {
         public List<IInteraction> Interactions { get; private set; }
         public List<ConversationInteraction> Conversations { get; private set; }
