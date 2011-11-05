@@ -27,11 +27,18 @@ namespace Mooege.Core.GS.Markers
     public enum MarkerTagTypes : int
     {
         Scale                = 524288,
+
+        QuestRange           = 524544,
+
+        ConversationList     = 526080,
+
         // Used for portal destination resolution
         DestinationWorld     = 526850,
         DestinationActorTag  = 526851,
         ActorTag             = 526852,  // maybe find another name
         DestinationLevelArea = 526853,
+
         LoreSNOId            = 67331,
+        TriggeredConversation = 528128
     }
 }

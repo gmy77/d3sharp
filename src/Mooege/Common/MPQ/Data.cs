@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Common.Helpers.Assets;
+using System.Linq;
 
 namespace Mooege.Common.MPQ
 {
@@ -32,6 +33,7 @@ namespace Mooege.Common.MPQ
         public Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>> Assets = new Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>>();
         public readonly Dictionary<SNOGroup, Type> Parsers = new Dictionary<SNOGroup, Type>();
         private readonly List<Task> _tasks = new List<Task>();
+        private static SNOGroup[] PatchExceptions = new SNOGroup[] { SNOGroup.TreasureClass, SNOGroup.TimedEvent, SNOGroup.ConversationList };
 
         public Data()
             : base(7447, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
@@ -111,6 +113,20 @@ namespace Mooege.Common.MPQ
 
             var parser = this.Parsers[asset.Group]; // get the type the asset's parser.
             var file = this.FileSystem.FindFile(asset.FileName); // get the asset file.
+
+            // if file is in any of the follow groups, try to load the original version
+            if (PatchExceptions.Contains(asset.Group))
+            {
+                foreach (CrystalMpq.MpqArchive archive in this.FileSystem.Archives.Reverse()) //search mpqs starting from base
+                {
+                    file = archive.FindFile(asset.FileName);
+
+                    if (file != null)
+
+                        break;
+                }
+            }
+
             if (file == null || file.Size < 10) return asset; // if it's empty, give up again.
 
             this._tasks.Add(new Task(() => asset.RunParser(parser, file))); // add it to our task list, so we can parse them concurrently.
@@ -149,7 +165,7 @@ namespace Mooege.Common.MPQ
 
             var elapsedTime = DateTime.Now - timerStart;
 
-            Logger.Info("Initialized total of {0} helpers with {1} values in {2:c}.", helpersCount, this._tasks.Count, elapsedTime);
+            Logger.Info("Initialized total of {0} helpers with {1} tasks in {2:c}.", helpersCount, this._tasks.Count, elapsedTime);
         }
 
     }
