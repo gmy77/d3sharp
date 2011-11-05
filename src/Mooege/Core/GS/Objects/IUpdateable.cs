@@ -16,30 +16,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
 namespace Mooege.Core.GS.Objects
 {
     /// <summary>
-    /// A dynamic object that can have a dynamicId
+    /// Defines an interface for objects that can update on game ticks.
     /// </summary>
-    public abstract class DynamicObject
+    public interface IUpdateable
     {
         /// <summary>
-        /// The dynamic unique runtime ID for the actor.
+        /// Tells object to update itself and call it's IUpdateable childs if any.
         /// </summary>
-        public readonly uint DynamicID;
-
-        /// <summary>
-        /// Initialization constructor.
-        /// </summary>
-        /// <param name="dynamicID">The dynamic ID to initialize with.</param>
-        protected DynamicObject(uint dynamicID)
-        {
-            this.DynamicID = dynamicID;
-        }
-
-        /// <summary>
-        /// Destroy the object. This should remove any references to the object throughout GS.
-        /// </summary>
-        public abstract void Destroy();
+        /// <param name="tickCounter">The Game.TickCounter value when the function gets called.</param>
+        void Update(int tickCounter);
     }
 }

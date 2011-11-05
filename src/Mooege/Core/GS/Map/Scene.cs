@@ -17,6 +17,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using Mooege.Common;
 using Mooege.Common.MPQ;
@@ -158,21 +159,6 @@ namespace Mooege.Core.GS.Map
             this.MarkerSets = data.MarkerSets;
             this.LookLink = data.LookLink;
             this.NavZone = data.NavZone;
-        }
-
-        #endregion
-
-        #region update & tick logic
-
-        public override void Update(int tickCounter)
-        {
-            if (!this.HasPlayers) // don't update actors if we have no players in scene.
-                return;
-            
-            foreach(var actor in this.Actors)
-            {
-                actor.Update(tickCounter);
-            }
         }
 
         #endregion
