@@ -159,20 +159,8 @@ namespace Mooege.Core.GS.Actors
         private void PlayLore()
         {
             int loreSNOId = -1;
-            if (!LoreAssetHelper.Lores.ContainsKey(this.SNOId))
-            {
-                // lazy initialization of helper's value
-                // find monster's asset
-                var monsterAssetPair = MPQStorage.Data.Assets[SNOGroup.Monster].FirstOrDefault(x => (x.Value.Data as Mooege.Common.MPQ.FileFormats.Monster).ActorSNO == this.SNOId);
-                if (monsterAssetPair.Value != null)
-                {
-                    loreSNOId = (monsterAssetPair.Value.Data as Mooege.Common.MPQ.FileFormats.Monster).SNOLore;
-                }
-            }
-            else
-            {
-                LoreAssetHelper.Lores.TryGetValue(this.SNOId, out loreSNOId);
-            }
+            LoreAssetHelper.AddLoreForMonster(this.SNOId);
+            LoreAssetHelper.Lores.TryGetValue(this.SNOId, out loreSNOId);
             if (loreSNOId != -1)
             {
                 var players = this.GetPlayersInRange();

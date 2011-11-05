@@ -25,27 +25,15 @@ namespace Mooege.Core.Common.Items.Implementations
         public Book(World world, Mooege.Common.MPQ.FileFormats.ItemTable definition)
             : base(world, definition)
         {
-            if (!LoreAssetHelper.Lores.ContainsKey(this.SNOId))
-            {
-                // lazy initialization of helper's value
-                // find actor's asset
-                var actorAssetPair = MPQStorage.Data.Assets[SNOGroup.Actor].FirstOrDefault(x => x.Value.SNOId == this.SNOId);
-                // find lore tag
-                var loreTag = (actorAssetPair.Value.Data as Mooege.Common.MPQ.FileFormats.Actor).TagMap.TagMapEntries.FirstOrDefault(z => z.TagID == (int)MarkerTagTypes.LoreSNOId);
-                int loreSNOId = -1;
-                if (loreTag != null)
-                {
-                    loreSNOId = loreTag.Int2;
-                }
-                LoreAssetHelper.Lores.TryAdd(this.SNOId, loreSNOId);
-            }
+            LoreAssetHelper.AddLoreForItem(this.SNOId);
         }
 
         public override void OnTargeted(Player player, TargetMessage message)
         {
             //Logger.Trace("OnTargeted");
             int loreSNOId = -1;
-            if (LoreAssetHelper.Lores.TryGetValue(this.SNOId, out loreSNOId) && (loreSNOId != -1))
+            LoreAssetHelper.Lores.TryGetValue(this.SNOId, out loreSNOId);
+            if (loreSNOId != -1)
             {
                 player.PlayLore(loreSNOId, true);
                 if (player.GroundItems.ContainsKey(this.DynamicID))
