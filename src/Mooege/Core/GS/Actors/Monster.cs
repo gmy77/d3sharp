@@ -16,12 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -29,19 +29,16 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Core.GS.Actors.Buffs;
+using Mooege.Common.Helpers.Assets;
 
 namespace Mooege.Core.GS.Actors
 {
-    public class Monster : Living
+    public class Monster : Living, IUpdateable
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
-        // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
-        public int AnimationSNO { get; set; }
-
-        public Monster(World world, int actorSNO, Vector3D position, Dictionary<int, TagMapEntry> tags)
-            : base(world, actorSNO, position, tags)
+        public Monster(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
             this.Field2 = 0x8;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
@@ -54,10 +51,19 @@ namespace Mooege.Core.GS.Actors
             this.Die(player);
         }
 
+
+        public void Update(int tickCounter)
+        {
+            if (this.Brain == null)
+                return;
+
+            this.Brain.Think(tickCounter);
+        }
+
         // FIXME: Hardcoded hell. /komiga
         public void Die(Player player)
         {
-            var killAni = new int[]{
+            /*var killAni = new int[]{
                     0x2cd7,
                     0x2cd4,
                     0x01b378,
@@ -74,12 +80,7 @@ namespace Mooege.Core.GS.Actors
                     0x2cd8,
                     0x2cda,
                     0x2cd9
-            };
-
-            player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
-            player.UpdateExpBonusData(player.GBHandle.Type, this.GBHandle.Type);
-
-            RemoveAllBuffs();
+            };*/
 
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
@@ -114,6 +115,9 @@ namespace Mooege.Core.GS.Actors
                 ActorID = this.DynamicID
             }, this);
 
+            player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
+            player.ExpBonusData.Update(player.GBHandle.Type, this.GBHandle.Type);
+
             this.World.BroadcastIfRevealed(new PlayAnimationMessage()
             {
                 ActorID = this.DynamicID,
@@ -124,7 +128,7 @@ namespace Mooege.Core.GS.Actors
                     new PlayAnimationMessageSpec()
                     {
                         Field0 = 0x2,
-                        Field1 = killAni[RandomHelper.Next(killAni.Length)],
+                        Field1 = AnimationSet.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
                         Field2 = 0x0,
                         Field3 = 1f
                     }
@@ -144,32 +148,33 @@ namespace Mooege.Core.GS.Actors
             foreach (var msg in attribs.GetMessageList(this.DynamicID))
                 this.World.BroadcastIfRevealed(msg, this);
 
-            this.World.BroadcastIfRevealed(new PlayEffectMessage()
-            {
-                ActorId = this.DynamicID,
-                Effect = Effect.Unknown12
-            }, this);
-
-            this.World.BroadcastIfRevealed(new PlayEffectMessage()
-            {
-                ActorId = this.DynamicID,
-                Effect = Effect.Burned2
-            }, this);
-
-            this.World.BroadcastIfRevealed(new PlayHitEffectMessage()
-            {
-                ActorID = this.DynamicID,
-                HitDealer = player.DynamicID,
-                Field2 = 0x2,
-                Field3 = false,
-            }, this);
-
             this.World.SpawnRandomItemDrop(player, this.Position);
             this.World.SpawnGold(player, this.Position);
             if (RandomHelper.Next(1, 100) < 20)
                 this.World.SpawnHealthGlobe(player, this.Position);
-
+            this.PlayLore();
             this.Destroy();
         }
+
+        /// <summary>
+        /// Plays lore for first death of this monster's death.
+        /// Uses lazy-initialized helper with data from MPQ.
+        /// </summary>
+        private void PlayLore()
+        {
+            int loreSNOId = LoreAssetHelper.GetLoreForMonster(this.SNOId);
+            if (loreSNOId != -1)
+            {
+                var players = this.GetPlayersInRange();
+                if (players != null)
+                {
+                    foreach (var player in players.Where(player => !player.HasLore(loreSNOId)))
+                    {
+                        player.PlayLore(loreSNOId, false);
+                    }
+                }
+            }
+        }
+                    
     }
 }

@@ -19,19 +19,20 @@
 using System;
 using Mooege.Core.GS.Common.Types;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Objects;
+using Mooege.Core.GS.Map;
 
 namespace Mooege.Core.GS.Actors
 {
-    public class ClientEffect : Actor
+    public class ClientEffect : Actor, IUpdateable
     {
         public TickTimer Timeout;
 
         public override ActorType ActorType { get { return Actors.ActorType.ClientEffect; } }
 
-        public ClientEffect(Map.World world, int actorSNO, Vector3D position, float angle, TickTimer timeout = null)
-            : base(world, world.NewActorID)
+        public ClientEffect(World world, int actorSNO, Vector3D position, float angle, TickTimer timeout = null)
+            : base(world, actorSNO)
         {
-            this.SNOId = actorSNO;
             RotationAmount = (float)Math.Cos(angle / 2f);
             RotationAxis = new Vector3D(0, 0, (float)Math.Sin(angle / 2f));
 
@@ -42,7 +43,7 @@ namespace Mooege.Core.GS.Actors
             //this.Field7 = -1; // used by some effects, but not needed?
             this.Field8 = actorSNO;
             this.Scale = 1f;
-            this.Position.Set(position);
+            this.Position = position;
             this.GBHandle.Type = -1; this.GBHandle.GBID = -1; // TODO: use proper enum value
             
             Timeout = timeout;
@@ -50,10 +51,8 @@ namespace Mooege.Core.GS.Actors
             world.Enter(this);
         }
 
-        public override void Update()
+        public void Update(int tickCounter)
         {
-            base.Update();
-
             if (Timeout != null && Timeout.TimedOut())
                 this.Destroy();
         }

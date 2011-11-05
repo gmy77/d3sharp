@@ -18,6 +18,9 @@
 
 namespace Mooege.Core.GS.Objects
 {
+    /// <summary>
+    /// A dynamic object that can have a dynamicId
+    /// </summary>
     public abstract class DynamicObject
     {
         /// <summary>
@@ -33,11 +36,6 @@ namespace Mooege.Core.GS.Objects
         {
             this.DynamicID = dynamicID;
         }
-
-        /// <summary>
-        /// Tells object to update itself and notify it's childs.
-        /// </summary>
-        public virtual void Update() { }
 
         /// <summary>
         /// Destroy the object. This should remove any references to the object throughout GS.

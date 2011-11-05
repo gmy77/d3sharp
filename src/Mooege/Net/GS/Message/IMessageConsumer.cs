@@ -11,6 +11,8 @@
          ClientManager,
          Game,
          Inventory,
-         Player
+         Conversations,
+         Player,
+         SelectedNPC
      }
  }

@@ -78,7 +78,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Field7 = Skills.Skills.Barbarian.FuryGenerators.LeapAttack,
                 Field8 = 0
             }, User);
-            User.Position.Set(TargetPosition);
+            User.Position = TargetPosition;
 
             // wait for leap to hit
             yield return WaitSeconds(0.65f);

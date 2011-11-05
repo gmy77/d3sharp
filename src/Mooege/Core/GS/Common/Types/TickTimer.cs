@@ -37,14 +37,14 @@ namespace Mooege.Core.GS.Common.Types
 
         public bool TimedOut()
         {
-            return _game.Tick >= TimeoutTick;
+            return _game.TickCounter >= TimeoutTick;
         }
     }
 
     public class TickRelativeTimer : TickTimer
     {
         public TickRelativeTimer(Game game, int ticks)
-            : base(game, game.Tick + ticks)
+            : base(game, game.TickCounter + ticks)
         {
         }
     }

@@ -27,6 +27,7 @@ using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Core.GS.Common.Types.Misc;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -73,7 +74,7 @@ namespace Mooege.Core.GS.Powers
             {
                 // TODO: update User.Attribute instead of creating temp map
                 GameAttributeMap map = new GameAttributeMap();
-                map[GameAttribute.Power_Cooldown_Start, PowerSNO] = World.Game.Tick;
+                map[GameAttribute.Power_Cooldown_Start, PowerSNO] = World.Game.TickCounter;
                 map[GameAttribute.Power_Cooldown, PowerSNO] = timeout.TimeoutTick;
                 map.SendMessage((User as Player).InGameClient, User.DynamicID);
             }
@@ -178,7 +179,7 @@ namespace Mooege.Core.GS.Powers
         public IList<Actor> GetTargetsInRange(Vector3D center, float range, int maxCount = -1)
         {
             List<Actor> hits = new List<Actor>();
-            foreach (Actor actor in World.GetActorsInRange(center, range))
+            foreach (Actor actor in World.QuadTree.Query<Actor>(new Circle(center.X, center.Y, range)))
             {
                 if (hits.Count == maxCount)
                     break;

@@ -53,7 +53,5 @@ namespace Mooege.Net.GS.Message.Definitions.Waypoint
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

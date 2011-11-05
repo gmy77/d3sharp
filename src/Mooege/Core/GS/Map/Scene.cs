@@ -17,6 +17,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using Mooege.Common;
 using Mooege.Common.MPQ;
@@ -80,15 +81,7 @@ namespace Mooege.Core.GS.Map
         /// Applied labels.
         /// Not sure on usage /raist.
         /// </summary>
-        public int[] AppliedLabels;
-        
-        /// <summary>
-        /// Scenes world.
-        /// </summary>
-        public override World World
-        {
-            get { return this._world; }
-        }
+        public int[] AppliedLabels;       
 
         /// <summary>
         /// PRTransform for the scene.
@@ -144,8 +137,9 @@ namespace Mooege.Core.GS.Map
             this.Scale = 1.0f;                   
             this.AppliedLabels = new int[0];
             this.LoadSceneData(); // load data from mpqs.
+
+            this.Size = new Size(this.NavZone.V0.X*this.NavZone.Float0, this.NavZone.V0.Y*this.NavZone.Float0);
             this.Position = position;
-            this.Bounds = new Rect(this.Position.X, this.Position.Y, this.NavZone.V0.X * this.NavZone.Float0, this.NavZone.V0.Y * this.NavZone.Float0); // the scene bounds.
             this.World.AddScene(this); // add scene to the world.
         }
 
@@ -169,6 +163,35 @@ namespace Mooege.Core.GS.Map
 
         #endregion
 
+        #region range-queries
+
+        public List<Player> Players
+        {
+            get { return this.GetObjects<Player>(); }
+        }
+
+        public bool HasPlayers
+        {
+            get { return this.Players.Count > 0; }
+        }
+
+        public List<Actor> Actors
+        {
+            get { return this.GetObjects<Actor>(); }
+        }
+
+        public bool HasActors
+        {
+            get { return this.Actors.Count > 0; }
+        }
+
+        public List<T> GetObjects<T>() where T : WorldObject
+        {
+            return this.World.QuadTree.Query<T>(this.Bounds);
+        }
+
+        #endregion
+
         #region actor-loading
 
         /// <summary>
@@ -186,15 +209,15 @@ namespace Mooege.Core.GS.Map
                 foreach (var marker in markerSetData.Markers)
                 {
                     if (marker.SNOName.Group != SNOGroup.Actor) continue; // skip non-actor markers.
-
-                    var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
-                    var actor = ActorFactory.Create(this.World, marker.SNOName.SNOId, position, marker.TagMap); // try to create it.
+                    
+                    var actor = ActorFactory.Create(this.World, marker.SNOName.SNOId, marker.TagMap); // try to create it.
                     if (actor == null) continue;
 
+                    var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
                     actor.RotationAmount = marker.PRTransform.Quaternion.W;
                     actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
-                    this.World.Enter(actor); // this call probably reveals actor to all players in the world, fix it. /raist.
+                    actor.EnterWorld(position);
                 }
             }
         }
@@ -202,6 +225,16 @@ namespace Mooege.Core.GS.Map
         #endregion
 
         #region scene revealing & unrevealing 
+
+        /// <summary>
+        /// Returns true if the actor is revealed to player.
+        /// </summary>
+        /// <param name="player">The player.</param>
+        /// <returns><see cref="bool"/></returns>
+        public bool IsRevealedToPlayer(Player player)
+        {
+            return player.RevealedObjects.ContainsKey(this.DynamicID);
+        }
 
         /// <summary>
         /// Reveal the scene to given player.
@@ -255,10 +288,17 @@ namespace Mooege.Core.GS.Map
         {
             get
             {
+                SceneSpecification specification = this.Specification;
+                specification.SNOMusic = World.Environment.snoMusic;
+                specification.SNOCombatMusic = World.Environment.snoCombatMusic;
+                specification.SNOAmbient = World.Environment.snoAmbient;
+                specification.SNOReverb = World.Environment.snoReverb;
+                specification.SNOWeather = World.Environment.snoWeather;
+
                 return new RevealSceneMessage
                 {
                     WorldID = this.World.DynamicID,
-                    SceneSpec = this.Specification,
+                    SceneSpec = specification,
                     ChunkID = this.DynamicID,
                     Transform = this.Transform,
                     SceneSNO = this.SNOId,
@@ -291,7 +331,7 @@ namespace Mooege.Core.GS.Map
 
         public override string ToString()
         {
-            return string.Format("Scene SNOId: {0} Position: {1}", this.SNOId, this.Position);
+            return string.Format("[Scene] SNOId: {0} DynamicId: {1} Position: {2}", this.SNOId, this.DynamicID, this.Position);
         }
     }
 

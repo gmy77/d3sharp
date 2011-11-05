@@ -2,3 +2,4 @@ bin/
 obj/
 /*.ReSharper
 /*.pidb
+/*.csproj.user

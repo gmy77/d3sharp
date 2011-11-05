@@ -68,9 +68,9 @@ namespace Mooege.Core.GS.Powers
                 if (targetPosition == null)
                     targetPosition = new Vector3D(0, 0, 0);
             }
-            else if (user.World.GetActor(targetId) != null)
+            else if (user.World.GetActorByDynamicId(targetId) != null)
             {
-                target = user.World.GetActor(targetId);
+                target = user.World.GetActorByDynamicId(targetId);
 
                 if (targetPosition == null)
                     targetZ = target.Position.Z;
@@ -120,7 +120,8 @@ namespace Mooege.Core.GS.Powers
 
                     int actorSNO = actorSNO_values[RandomHelper.Next(actorSNO_values.Length - 1)];
 
-                    Monster mon = new Monster(user.World, actorSNO, position, null);
+                    Monster mon = new Monster(user.World, actorSNO, null);
+                    mon.Position = position;
                     mon.Scale = 1.35f;
                     mon.Attributes[GameAttribute.Hitpoints_Max_Total] = 50f;
                     mon.Attributes[GameAttribute.Hitpoints_Max] = 50f;

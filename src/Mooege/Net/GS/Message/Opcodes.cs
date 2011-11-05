@@ -97,7 +97,7 @@ namespace Mooege.Net.GS.Message
         ProjectileStickMessage = 79, // len: 	28
         TargetMessage = 80, // len: 	60
         SecondaryAnimationPowerMessage = 81, // len: 	28
-        SNODataMessage1 = 82, // len: 	12
+        RequestUsePowerMessage = 82, // len: 	12 former SNODataMessage1
         DWordDataMessage2 = 83, // len: 	12
         DWordDataMessage3 = 84, // len: 	12
         DWordDataMessage4 = 85, // len: 	12
@@ -230,8 +230,8 @@ namespace Mooege.Net.GS.Message
         FloatingAmountMessage = 209, // len: 	40
         RemoveRagdollMessage = 210, // len: 	16
         SNONameDataMessage = 211, // len: 	16
-        LoreMessage1 = 212, // len: 	16
-        LoreMessage2 = 213, // len: 	16
+        PlayLoreWithButton = 212, // len: 	16 // former LoreMessage1
+        PlayLoreImmediately = 213, // len: 	16 // former LoreMessage2
         SimpleMessage14 = 216, // len: 	8
         WorldDeletedMessage = 217, // len: 	12
         SimpleMessage15 = 218, // len: 	8
@@ -282,7 +282,7 @@ namespace Mooege.Net.GS.Message
         ANNDataMessage29 = 263, // len: 	12
         SimpleMessage31 = 264, // len: 	8
         SimpleMessage32 = 265, // len: 	8
-        ANNDataMessage30 = 266, // len: 	12
+        RequestAddSocketMessage = 266, // len: 	12 former ANNDataMessage30
         SimpleMessage33 = 267, // len: 	8
         IntDataMessage6 = 268, // len: 	12
         DebugDrawPrimMessage = 269, // len: 	188
@@ -311,11 +311,11 @@ namespace Mooege.Net.GS.Message
         BroadcastTextMessage = 292, // len: 	520
         SimpleMessage41 = 293, // len: 	8
         SimpleMessage42 = 294, // len: 	8
-        SNODataMessage6 = 295, // len: 	12
-        ANNDataMessage33 = 296, // len: 	12
+        NPCSelectConversationMessage = 295, // len: 	12 former SNODataMessage6
+        HirelingDismissMessage = 296, // len: 	12 former ANNDataMessage33
         SimpleMessage43 = 297, // len: 	8
-        SimpleMessage44 = 298, // len: 	8
-        SimpleMessage45 = 299, // len: 	8
+        HirelingHireMessage = 298, // len: 	8
+        HirelingInventoryMessage = 299, // len: 	8 former SimpleMessage45
         SNODataMessage7 = 300, // len:  12
         SimpleMessage46 = 301, // len: 	8
     }

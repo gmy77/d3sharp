@@ -18,7 +18,7 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Crafting
+namespace Mooege.Net.GS.Message.Definitions.Artisan
 {
     [Message(Opcodes.CrafterLevelUpMessage)]
     public class CrafterLevelUpMessage : GameMessage

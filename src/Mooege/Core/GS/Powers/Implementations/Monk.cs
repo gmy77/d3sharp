@@ -323,7 +323,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             _SetupAttributes(true);
 
             var dashTimout = WaitSeconds(0.15f);
-            int dashTicks = dashTimout.TimeoutTick - User.World.Game.Tick;
+            int dashTicks = dashTimout.TimeoutTick - User.World.Game.TickCounter;
             
             // TODO: Generalize this and put it in Actor
             User.World.BroadcastInclusive(new NotifyActorMovementMessage
@@ -337,7 +337,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 AnimationTag = (User as Player).Properties.Gender == 0 ? 69808 : 90432, // select based on gender,
                 Field7 = 0x00000006 // ?
             }, User);
-            User.Position.Set(TargetPosition);
+            User.Position = TargetPosition;
 
             yield return dashTimout;
 

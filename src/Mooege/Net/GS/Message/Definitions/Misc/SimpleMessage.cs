@@ -31,7 +31,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         Opcodes.SimpleMessage18, Opcodes.SimpleMessage19, Opcodes.SimpleMessage20, Opcodes.SimpleMessage21, Opcodes.SimpleMessage22, Opcodes.SimpleMessage23, Opcodes.SimpleMessage24, 
         Opcodes.SimpleMessage25, Opcodes.SimpleMessage26, Opcodes.SimpleMessage27, Opcodes.SimpleMessage28, Opcodes.SimpleMessage29, Opcodes.SimpleMessage30, Opcodes.SimpleMessage31,
         Opcodes.SimpleMessage32, Opcodes.SimpleMessage33, Opcodes.SimpleMessage34, Opcodes.SimpleMessage35, Opcodes.SimpleMessage36, Opcodes.SimpleMessage37, Opcodes.SimpleMessage38, 
-        Opcodes.SimpleMessage39, Opcodes.SimpleMessage40, Opcodes.SimpleMessage41, Opcodes.SimpleMessage42, Opcodes.SimpleMessage43, Opcodes.SimpleMessage44, Opcodes.SimpleMessage45, 
+        Opcodes.SimpleMessage39, Opcodes.SimpleMessage40, Opcodes.SimpleMessage41, Opcodes.SimpleMessage42, Opcodes.SimpleMessage43,
         Opcodes.SimpleMessage46})]
     public class SimpleMessage : GameMessage, ISelfHandler
     {
@@ -44,34 +44,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                     {
                         // What the dickens is this stuff
                         #region hardcoded1
-                        #region HirelingInfo
-                        client.SendMessage(new HirelingInfoUpdateMessage()
-                        {
-                            Id = 0x009D,
-                            Field0 = 0x00000001,
-                            Field1 = false,
-                            Field2 = -1,
-                            Field3 = 0x00000000,
-                        });
-
-                        client.SendMessage(new HirelingInfoUpdateMessage()
-                        {
-                            Id = 0x009D,
-                            Field0 = 0x00000002,
-                            Field1 = false,
-                            Field2 = -1,
-                            Field3 = 0x00000000,
-                        });
-
-                        client.SendMessage(new HirelingInfoUpdateMessage()
-                        {
-                            Id = 0x009D,
-                            Field0 = 0x00000003,
-                            Field1 = false,
-                            Field2 = -1,
-                            Field3 = 0x00000000,
-                        });
-                        #endregion
                         #region Player Attribute Values
 
                         GameAttributeMap attributes = new GameAttributeMap();

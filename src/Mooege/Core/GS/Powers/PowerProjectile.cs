@@ -23,6 +23,7 @@ using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common.Types;
+using Mooege.Core.GS.Common.Types.Misc;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -65,7 +66,7 @@ namespace Mooege.Core.GS.Powers
         public PowerProjectile(World world, int actorSNO, Vector3D position, Vector3D aimPosition, float speed,
                                float timetolive, float scale = 1.35f, float collisionError = 3f,
                                float heightOffset = 0, float distanceOffset = 0, bool handleTranslation = false)
-            : base(world, world.NewActorID)
+            : base(world, actorSNO)
         {
             this.SNOId = actorSNO;
             this.startingPosition = new Vector3D(position);
@@ -77,7 +78,7 @@ namespace Mooege.Core.GS.Powers
             Timeout = new TickSecondsTimer(this.World.Game, timetolive / 1000f);
 
             //Save projectile creation tick
-            this.creationTick = this.World.Game.Tick;
+            this.creationTick = this.World.Game.TickCounter;
 
             // FIXME: This is hardcoded crap
             this.Field2 = 0x8;
@@ -111,7 +112,7 @@ namespace Mooege.Core.GS.Powers
             this.startingPosition.X += this.velocity.X * distanceOffset;
             this.startingPosition.Y += this.velocity.Y * distanceOffset;
 
-            this.Position.Set(this.startingPosition);
+            this.Position = this.startingPosition;
             this.World.Enter(this); // Enter only once all fields have been initialized to prevent a run condition
 
             //If the creator dont specify he want to manipulate the projectil itself, launch it
@@ -123,14 +124,14 @@ namespace Mooege.Core.GS.Powers
         public bool detectCollision()
         {
             //Get projectile age
-            float delta_tick = this.World.Game.Tick - this.creationTick;
+            float delta_tick = this.World.Game.TickCounter - this.creationTick;
 
             //Is it time to dispose of the projectile ?
             if ((delta_tick / 6f > this.timetolive / 100f) && this.World != null) { this.Destroy(); return false; }
 
             //Get Actor
-            // TODO: make this 2d
-            Actor victim = this.World.GetActorsInRange(this.getCurrentPosition(), this.collisionError).FirstOrDefault(a => a.ActorType == ActorType.Monster);
+            var curPos = getCurrentPosition();
+            Actor victim = this.World.QuadTree.Query<Monster>(new Circle(curPos.X, curPos.Y, this.collisionError)).FirstOrDefault();
 
             if (victim != null) { this.hittedActor = victim; return true; }
 
@@ -149,7 +150,7 @@ namespace Mooege.Core.GS.Powers
             if (this.World == null) { return new Vector3D(0, 0, 0); }
 
             //Get projectile age
-            float delta_tick = this.World.Game.Tick - this.creationTick;
+            float delta_tick = this.World.Game.TickCounter - this.creationTick;
 
             //Calculate current pos
             return new Vector3D(this.Position.X + (5f * this.velocity.X * (delta_tick / 6f)),
@@ -157,10 +158,8 @@ namespace Mooege.Core.GS.Powers
                                 this.Position.Z + (5f * this.velocity.Z * (delta_tick / 6f)));
         }
 
-        public override void Update()
+        public void Update(int tickCounter)
         {
-            base.Update();
-
             bool doHitDetect = true;
             if (OnUpdate != null)
                 doHitDetect = OnUpdate();

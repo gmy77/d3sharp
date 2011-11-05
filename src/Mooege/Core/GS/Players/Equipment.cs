@@ -1,6 +1,8 @@
 ﻿using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message;
+using System.Collections.Generic;
+using Mooege.Core.GS.Objects;
 
 namespace Mooege.Core.GS.Players
 {
@@ -9,13 +11,14 @@ namespace Mooege.Core.GS.Players
     public enum EquipmentSlotId
     {
         Helm = 1, Chest = 2, Off_Hand = 3, Main_Hand = 4, Hands = 5, Belt = 6, Feet = 7,
-        Shoulders = 8, Legs = 9, Bracers = 10, Ring_right = 11, Ring_left = 12, Amulett = 13
+        Shoulders = 8, Legs = 9, Bracers = 10, Ring_right = 11, Ring_left = 12, Amulett = 13,
+        Stash = 17, Gold = 18, Vendor = 20 // To do: Should this be here? Its not really an eq. slot /fasbat
     }
 
-    class Equipment
+    class Equipment : IRevealable
     {
         public int EquipmentSlots { get { return _equipment.GetLength(0); } }
-        
+        public Dictionary<uint, Item> Items { get; private set; }
         private readonly Player _owner; // Used, because most information is not in the item class but Actors managed by the world
         private Item _inventoryGold;
 
@@ -23,8 +26,13 @@ namespace Mooege.Core.GS.Players
 
         public Equipment(Player owner){
             this._equipment = new uint[16];
-            this._inventoryGold = null;           
             this._owner = owner;
+            this.Items = new Dictionary<uint, Item>();
+            this._inventoryGold = ItemGenerator.CreateGold(_owner, 0);
+            this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = 0;
+            this._inventoryGold.SetInventoryLocation(18, 0, 0);
+            this._inventoryGold.Owner = _owner;
+            this.Items.Add(_inventoryGold.DynamicID,_inventoryGold);
         }
        
         /// <summary>
@@ -33,13 +41,17 @@ namespace Mooege.Core.GS.Players
         public void EquipItem(Item item, int slot)
         {
             _equipment[slot] = item.DynamicID;
+            if (!Items.ContainsKey(item.DynamicID))
+                Items.Add(item.DynamicID, item);
             item.Owner = _owner;
+            item.Attributes[GameAttribute.Item_Equipped] = true; // Probaly should be handled by Equipable class /fasbat
+            item.Attributes.SendChangedMessage(_owner.InGameClient, item.DynamicID);
             item.SetInventoryLocation(slot, 0, 0);            
         }
 
         public void EquipItem(uint itemID, int slot)
         {
-            EquipItem(_owner.World.GetItem(itemID), slot);
+            EquipItem(_owner.Inventory.GetItem(itemID), slot);
         }
 
         /// <summary>
@@ -48,15 +60,17 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public int UnequipItem(Item item)
         {
-            for (int i = 0; i < EquipmentSlots; i++)
+            if (!Items.ContainsKey(item.DynamicID))
+                return 0;
+            Items.Remove(item.DynamicID);
+
+            var slot = item.EquipmentSlot;
+            if (_equipment[slot] == item.DynamicID)
             {
-                if (_equipment[i] == item.DynamicID)
-                {
-                    _equipment[i] = 0;
-                    item.SetInventoryLocation(-1, -1, -1);
-                    item.Owner = null;
-                    return i;
-                }
+                _equipment[slot] = 0;
+                item.Attributes[GameAttribute.Item_Equipped] = false; // Probaly should be handled by Equipable class /fasbat
+                item.Attributes.SendChangedMessage(_owner.InGameClient, item.DynamicID);
+                return slot;
             }
 
             return 0;
@@ -67,10 +81,7 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public bool IsItemEquipped(uint itemID)
         {
-            for (int i = 0; i < EquipmentSlots; i++)
-                if (_equipment[i] == itemID)
-                    return true;
-            return false;
+            return Items.ContainsKey(itemID);
         }
 
         public bool IsItemEquipped(Item item)
@@ -92,7 +103,7 @@ namespace Mooege.Core.GS.Players
             }
             else
             {
-                return _owner.World.GetItem(_equipment[(int)equipSlot]).CreateVisualItem();
+                return Items[(_equipment[(int)equipSlot])].CreateVisualItem();
             }
         }
 
@@ -110,32 +121,50 @@ namespace Mooege.Core.GS.Players
                     };
         }
 
-        internal Item AddGoldItem(Item collectedItem)
+        public Item AddGoldItem(Item collectedItem)
         {
-            if (_inventoryGold == null)
-            {
-                _inventoryGold = ItemGenerator.CreateGold(_owner, collectedItem.Attributes[GameAttribute.Gold]);
-                _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = collectedItem.Attributes[GameAttribute.Gold];
-                _inventoryGold.Owner = _owner;
-                _inventoryGold.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
-                _inventoryGold.Reveal(_owner);
-            }
-            else
-            {
-                _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += collectedItem.Attributes[GameAttribute.Gold];
-            }
-
+            _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += collectedItem.Attributes[GameAttribute.Gold];
+            _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID);
             return _inventoryGold;
         }
 
         internal Item GetEquipment(int targetEquipSlot)
         {
-            return _owner.World.GetItem(this._equipment[targetEquipSlot]);
+            return GetItem(this._equipment[targetEquipSlot]);
         }
 
         internal Item GetEquipment(EquipmentSlotId targetEquipSlot)
         {
             return GetEquipment((int)targetEquipSlot);
+        }
+
+        public bool Reveal(Player player)
+        {
+            foreach (var item in Items.Values)
+            {
+                item.Reveal(player);
+            }
+
+            _inventoryGold.SetInventoryLocation((int)EquipmentSlotId.Gold, 0, 0);
+            return true;
+        }
+
+        public bool Unreveal(Player player)
+        {
+            foreach (var item in Items.Values)
+            {
+                item.Unreveal(player);
+            }
+
+            return true;
+        }
+
+        public Item GetItem(uint itemId)
+        {
+            Item item;
+            if (!Items.TryGetValue(itemId, out item))
+                return null;
+            return item;
         }
     }
 }
