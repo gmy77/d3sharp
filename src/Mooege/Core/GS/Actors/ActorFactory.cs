@@ -59,10 +59,6 @@ namespace Mooege.Core.GS.Actors
             switch (actorData.Type)
             {
                 case ActorType.Monster:
-                    if(snoId == 3739)
-                        if(!tags.ContainsKey(526080))
-                            tags.Add(526080, new TagMapEntry(526080, 108832, 2));
-
                     if(tags.ContainsKey((int)MarkerTagTypes.ConversationList))
                         return new InteractiveNPC(world, snoId, tags);
                     else

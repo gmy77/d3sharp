@@ -158,6 +158,7 @@
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Blacksmith.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Jeweler.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Mystic.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\CaptainRumford.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Enchantress.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Hireling.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Scoundrel.cs" />
