@@ -29,7 +29,7 @@ using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message;
-using Mooege.Common.MPQ.FileFormats;
+using FF = Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.Helpers;
 using Mooege.Core.Common.Scripting;
 
@@ -59,12 +59,13 @@ namespace Mooege.Core.Common.Items
 
         public Mooege.Core.GS.Actors.Actor Owner { get; set; } // Only set when the _actor_ has the item in its inventory. /fasbat
 
-        public ItemTable ItemDefinition { get; private set; }
-        public ItemTypeTable ItemType { get; private set; }
+        public FF.ItemTable ItemDefinition { get; private set; }
+        public FF.ItemTypeTable ItemType { get; private set; }
 
         public ItemRandomHelper RandomGenerator { get; private set; }
         public int ItemLevel { get; private set; }
 
+        public ItemState CurrentState { get; set; }
 
         public int EquipmentSlot { get; private set; }
         public Vector2D InventoryLocation { get; private set; } // Column, row; NOTE: Call SetInventoryLocation() instead of setting fields on this
@@ -101,7 +102,7 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        public Item(GS.Map.World world, ItemTable definition)
+        public Item(GS.Map.World world, FF.ItemTable definition)
             : base(world, definition.SNOActor)
         {
             this.ItemDefinition = definition;
@@ -114,7 +115,7 @@ namespace Mooege.Core.Common.Items
             this.Scale = 1.0f;
             this.RotationAmount = 0.0f;
             this.RotationAxis.Set(0.0f, 0.0f, 1.0f);
-
+            this.CurrentState = ItemState.Normal;
             this.Field2 = 0x00000000;
             this.Field3 = 0x00000000;
             this.Field7 = 0;
@@ -130,7 +131,7 @@ namespace Mooege.Core.Common.Items
             Attributes[GameAttribute.Item_Quality_Level] = 1;
             if (Item.IsArmor(this.ItemType) || Item.IsWeapon(this.ItemType)|| Item.IsOffhand(this.ItemType))
                 Attributes[GameAttribute.Item_Quality_Level] = RandomHelper.Next(6);
-            if(this.ItemType.Flags.HasFlag(ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
+            if(this.ItemType.Flags.HasFlag(FF.ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
                 Attributes[GameAttribute.Item_Quality_Level] = 3;
 
             Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
@@ -161,7 +162,7 @@ namespace Mooege.Core.Common.Items
             AffixGenerator.Generate(this, affixNumber);
         }
 
-        private void ApplyWeaponSpecificOptions(ItemTable definition)
+        private void ApplyWeaponSpecificOptions(FF.ItemTable definition)
         {
             if (definition.WeaponDamageMin > 0)
             {
@@ -184,7 +185,7 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        private void ApplyArmorSpecificOptions(ItemTable definition)
+        private void ApplyArmorSpecificOptions(FF.ItemTable definition)
         {
             if (definition.ArmorValue > 0)
             {
@@ -194,7 +195,7 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        private void ApplyDurability(ItemTable definition)
+        private void ApplyDurability(FF.ItemTable definition)
         {
             if (definition.DurabilityMin > 0)
             {
@@ -204,7 +205,7 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        private void ApplySkills(ItemTable definition)
+        private void ApplySkills(FF.ItemTable definition)
         {
             if (definition.SNOSkill0 != -1)
             {
@@ -224,7 +225,7 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        private void ApplyAttributeSpecifier(ItemTable definition)
+        private void ApplyAttributeSpecifier(FF.ItemTable definition)
         {
             foreach (var effect in definition.Attribute)
             {
@@ -266,59 +267,59 @@ namespace Mooege.Core.Common.Items
         }
 
         #region Is*
-        public static bool IsHealthGlobe(ItemTypeTable itemType)
+        public static bool IsHealthGlobe(FF.ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "HealthGlyph");
         }
 
-        public static bool IsGold(ItemTypeTable itemType)
+        public static bool IsGold(FF.ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Gold");
         }
 
-        public static bool IsPotion(ItemTypeTable itemType)
+        public static bool IsPotion(FF.ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Potion");
         }
 
-        public static bool IsAccessory(ItemTypeTable itemType)
+        public static bool IsAccessory(FF.ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Jewelry");
         }
 
-        public static bool IsRuneOrJewel(ItemTypeTable itemType)
+        public static bool IsRuneOrJewel(FF.ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Gem") ||
                 ItemGroup.IsSubType(itemType, "SpellRune");
         }
 
-        public static bool IsJournalOrScroll(ItemTypeTable itemType)
+        public static bool IsJournalOrScroll(FF.ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Scroll") ||
                 ItemGroup.IsSubType(itemType, "Book");
         }
 
-        public static bool IsDye(ItemTypeTable itemType)
+        public static bool IsDye(FF.ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Dye");
         }
 
-        public static bool IsWeapon(ItemTypeTable itemType)
+        public static bool IsWeapon(FF.ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Weapon");
         }
 
-        public static bool IsArmor(ItemTypeTable itemType)
+        public static bool IsArmor(FF.ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Armor");
         }
 
-        public static bool IsOffhand(ItemTypeTable itemType)
+        public static bool IsOffhand(FF.ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Offhand");
         }
 
-        public static bool Is2H(ItemTypeTable itemType)
+        public static bool Is2H(FF.ItemTypeTable itemType)
         {
             return ItemGroup.Is2H(itemType);
         }
@@ -332,11 +333,19 @@ namespace Mooege.Core.Common.Items
             if (this.Owner is GS.Players.Player)
             {
                 var player = (this.Owner as GS.Players.Player);
-                if (!this.Reveal(player)) // What if we add the item straight to inv?
+                if (!this.Reveal(player))
                 {
                     player.InGameClient.SendMessage(this.ACDInventoryPositionMessage);
                 }
             }
+        }
+
+        public void SetNewWorld(World world)
+        {
+            if (this.World == world)
+                return;
+
+            this.World = world;
         }
 
         public void Drop(Player owner, Vector3D position)
@@ -358,6 +367,9 @@ namespace Mooege.Core.Common.Items
 
         public override bool Reveal(Player player)
         {
+            if (this.CurrentState == ItemState.PickingUp)
+                return false;
+
             if (!base.Reveal(player))
                 return false;
 
@@ -390,5 +402,23 @@ namespace Mooege.Core.Common.Items
 
             return true;
         }
+
+        public override bool Unreveal(Player player)
+        {
+            if (CurrentState == ItemState.PickingUp && player == Owner) 
+            {
+                return false;
+            }
+            return base.Unreveal(player);
+        }
+
+
+    }
+
+    public enum ItemState
+    {
+        Normal,
+        PickingUp,
+        Dropping
     }
 }
