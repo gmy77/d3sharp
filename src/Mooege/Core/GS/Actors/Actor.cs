@@ -360,7 +360,7 @@ namespace Mooege.Core.GS.Actors
             
             foreach (Actor actor in actorsAll)
                 if (actor.questRange != null)
-                    if (World.Game.Quests.IsInQuestRange(questRange) == false)
+                    if (World.Game.Quests.IsInQuestRange(actor.questRange) == false)
                         actorsVisible.Remove(actor);
 
             return actorsVisible;
