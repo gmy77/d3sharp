@@ -25,6 +25,7 @@ using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
+using System.Text;
 using Mooege.Core.Common.Items;
 
 namespace Mooege.Core.GS.Games
@@ -194,6 +195,100 @@ namespace Mooege.Core.GS.Games
             return "Invalid arguments. Type 'help tp' to get help.";
         }
     }
+
+    [CommandGroup("conversation", "Starts a conversation. \n Usage: conversation snoConversation")]
+    public class ConversationCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Conversation(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            if (@params.Count() != 1)
+                return "Invalid arguments. Type 'help conversation' to get help.";
+
+            try
+            {
+                var conversation = MPQStorage.Data.Assets[SNOGroup.Conversation][Int32.Parse(@params[0])];
+                invokerClient.InGameClient.Player.Conversations.StartConversation(Int32.Parse(@params[0]));
+                return String.Format("Started conversation {0}", conversation.FileName);
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+    }
+
+
+    [CommandGroup("quest", "Retrieves information about quest states and manipulates quest progress.\n Usage: quest [triggers | trigger eventType eventValue | advance snoQuest]")]
+    public class QuestCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Quest(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+             return "";
+        }
+
+        [Command("advance", "Advances a quest by a single step\n Usage advance snoQuest")]
+        public string Advance(string[] @params, MooNetClient invokerClient)
+        {
+            if (@params == null)
+                return this.Fallback();
+
+            if (@params.Count() != 1)
+                return "Invalid arguments. Type 'help lookup advance' to get help.";
+
+            try
+            {
+                var quest = MPQStorage.Data.Assets[SNOGroup.Quest][Int32.Parse(@params[0])];
+                invokerClient.InGameClient.Game.Quests.Advance(Int32.Parse(@params[0]));
+                return String.Format("Advancing quest {0}", quest.FileName);
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        [Command("trigger", "Triggers a single quest objective\n Usage trigger type value")]
+        public string Trigger(string[] @params, MooNetClient invokerClient)
+        {
+            if (@params == null)
+                return this.Fallback();
+
+            if (@params.Count() < 2)
+                return "Invalid arguments. Type 'help lookup trigger' to get help.";
+
+            invokerClient.InGameClient.Game.Quests.Notify((Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType)Int32.Parse(@params[0]), Int32.Parse(@params[1]));
+            return "Triggered";
+        }
+
+        [Command("triggers", "lists all current quest triggers")]
+        public string Triggers(string[] @params, MooNetClient invokerClient)
+        {
+            StringBuilder returnValue = new StringBuilder();
+
+            foreach (var quest in invokerClient.InGameClient.Game.Quests)
+                foreach (var objectiveSet in quest.CurrentStep.ObjectivesSets)
+                    foreach (var objective in objectiveSet.Objectives)
+                        returnValue.AppendLine(String.Format("{0}, {1} ({2}) - {3}", quest.SNOName.ToString(), objective.ObjectiveType, (int)objective.ObjectiveType, objective.ObjectiveValue));
+
+            return returnValue.ToString();
+        }
+
+    }
+
 
     [CommandGroup("town", "Transfers your character back to town.")]
     public class TownCommand : CommandGroup

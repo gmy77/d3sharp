@@ -127,6 +127,8 @@ namespace Mooege.Core.GS.Games
         /// </summary>
         public uint NewWorldID { get { return _lastWorldID++; } }
 
+        public QuestManager Quests { get; private set; }
+
         /// <summary>
         /// Creates a new game with given gameId.
         /// </summary>
@@ -138,6 +140,7 @@ namespace Mooege.Core.GS.Games
             this._objects = new ConcurrentDictionary<uint, DynamicObject>();
             this._worlds = new ConcurrentDictionary<int, World>();
             this.StartingWorldSNOId = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff. /komiga
+            this.Quests = new QuestManager(this);
             var loopThread = new Thread(Update) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture }; ; // create the game update thread.
             loopThread.Start();
         }
@@ -187,6 +190,11 @@ namespace Mooege.Core.GS.Games
                     case Consumers.Player:
                         client.Player.Consume(client, message);
                         break;
+
+                    case Consumers.Conversations:
+                        client.Player.Conversations.Consume(client, message);
+                        break;
+
                     case Consumers.SelectedNPC:
                         if (client.Player.SelectedNPC != null)
                             client.Player.SelectedNPC.Consume(client, message);

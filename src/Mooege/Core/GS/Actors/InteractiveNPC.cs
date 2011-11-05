@@ -47,6 +47,66 @@ namespace Mooege.Core.GS.Actors
             Conversations = new List<ConversationInteraction>();
         }
 
+        public override void Update(int tickCounter)
+        {
+            if (tickCounter < 500) return;
+            base.Update(tickCounter);
+
+            if (conversationList != null)
+            {
+                var ConversationsNew = new List<int>();
+                foreach (var entry in conversationList.ConversationListEntries)
+                {
+                    if(entry.SNOLevelArea == -1 && entry.SNOQuestActive == -1 && entry.SNOQuestAssigned == -1 && entry.SNOQuestComplete == -1 && entry.SNOQuestCurrent == -1 && entry.SNOQuestRange == -1)
+                        ConversationsNew.Add(entry.SNOConv);
+
+                    if (Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.QuestRange].ContainsKey(entry.SNOQuestRange))
+                        if (World.Game.Quests.IsInQuestRange(Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.QuestRange][entry.SNOQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange))
+                            ConversationsNew.Add(entry.SNOConv);
+
+                    if (World.Game.Quests.HasCurrentQuest(entry.SNOQuestCurrent, entry.I3))
+                        ConversationsNew.Add(entry.SNOConv);
+                }
+
+                // remove outdates conversation options
+                Conversations = Conversations.Where(x => ConversationsNew.Contains(x.ConversationSNO)).ToList();
+                
+                foreach(var sno in ConversationsNew)
+                    if(!Conversations.Select(x => x.ConversationSNO).Contains(sno))
+                        Conversations.Add(new ConversationInteraction(sno));
+
+                bool questConversation = false;
+
+                foreach (var conversation in Conversations)
+                {
+                    if (Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Conversation].ContainsKey(conversation.ConversationSNO))
+                        if ((Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Conversation][conversation.ConversationSNO].Data as Mooege.Common.MPQ.FileFormats.Conversation).I0 == 1)
+                            if(conversation.Read == false)
+                                questConversation = true;
+                }
+
+                if (!questConversation && (Attributes[GameAttribute.Conversation_Icon, 0] != 0))
+                {
+                    Attributes[GameAttribute.Conversation_Icon, 0] = 0;
+                    foreach (var message in Attributes.GetChangedMessageList(this.DynamicID))
+                        World.BroadcastIfRevealed(message, this);
+                    Attributes.ClearChanged();
+                }
+
+                if (questConversation && (Attributes[GameAttribute.Conversation_Icon, 0] != 1))
+                {
+                    Attributes[GameAttribute.Conversation_Icon, 0] = 1;
+                    foreach (var message in Attributes.GetChangedMessageList(this.DynamicID))
+                        World.BroadcastIfRevealed(message, this);
+                    Attributes.ClearChanged();
+                }
+
+
+            }
+
+
+        }
+
         public override void OnTargeted(Player player, TargetMessage message)
         {
             player.SelectedNPC = this;
@@ -54,6 +114,14 @@ namespace Mooege.Core.GS.Actors
             var count = Interactions.Count + Conversations.Count;
             if (count == 0)
                 return;
+
+            // If there is only one conversation option, immediatly select it without showing menu
+            if (Interactions.Count == 0 && Conversations.Count == 1)
+            {
+                player.Conversations.StartConversation(Conversations[0].ConversationSNO);
+                Conversations[0].MarkAsRead();
+                return;
+            }
 
             NPCInteraction[] npcInters = new NPCInteraction[count];
 
@@ -69,6 +137,7 @@ namespace Mooege.Core.GS.Actors
                 npcInters[it] = inter.AsNPCInteraction(this, player);
                 it++;
             }
+
 
             player.InGameClient.SendMessage(new NPCInteractOptionsMessage()
             {
@@ -109,6 +178,7 @@ namespace Mooege.Core.GS.Actors
             if (conversation == null) 
                 return;
 
+            player.Conversations.StartConversation(conversation.ConversationSNO);
             conversation.MarkAsRead();
         }
     }
