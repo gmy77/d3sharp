@@ -60,6 +60,7 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += (14*4);
             this.Environment = new Environment(stream);
 
+            stream.Position += 4;
             LabelRuleSet = new LabelRuleSet(stream);
             this.Int0 = stream.ReadValueS32();
 
@@ -386,11 +387,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int int2;
         public int int3;
         public UberMaterial UberMaterial4;
-         
-        there is a shadermap on 12 
         */
-
-
         public int[] Unknown { get; private set; }
         public int snoMusic { get; private set; }
         public int snoCombatMusic { get; private set; }
