@@ -32,8 +32,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             if (CanHitMeleeTarget(Target))
             {
-                Target.PlayHitEffect(2, User);
-                Damage(Target, 25f, 0);
+                WeaponDamage(Target, 1.00f, DamageType.Physical);
             }
             yield break;
         }

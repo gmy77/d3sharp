@@ -75,8 +75,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, reachThickness))
                 {
                     hitAnything = true;
-                    actor.PlayHitEffect(5, User);
-                    Damage(actor, 30f, 0);
+                    WeaponDamage(actor, 1.20f, DamageType.Physical);
                 }
             }
 
@@ -118,8 +117,8 @@ namespace Mooege.Core.GS.Powers.Implementations
                     foreach (Actor actor in GetTargetsInRange(TargetPosition, 7f))
                     {
                         hitAnything = true;
-                        actor.PlayHitEffect(2, User);
-                        Damage(actor, 25f, 0);
+                        Knockback(actor, 4f);
+                        WeaponDamage(actor, 1.20f, DamageType.Lightning);
                     }
 
                     if (hitAnything)
@@ -136,8 +135,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             if (CanHitMeleeTarget(Target))
             {
                 GeneratePrimaryResource(6f);
-                Target.PlayHitEffect(2, User);
-                Damage(Target, 25f, 0);
+                WeaponDamage(Target, 1.20f, DamageType.Lightning);
             }
         }
     }
@@ -147,7 +145,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            UsePrimaryResource(50f);
+            UsePrimaryResource(90f);
             StartCooldown(WaitSeconds(30f));
 
             Vector3D startpos;
@@ -162,7 +160,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (nearby.Count > 0)
                 {
                     SpawnEffect(99063, nearby[0].Position);
-                    Damage(nearby[0], 100f, 0);
+                    WeaponDamage(nearby[0], 2.15f, DamageType.Physical);
                     yield return WaitSeconds(0.1f);
                 }
                 else
@@ -202,8 +200,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (CanHitMeleeTarget(Target))
                 {
                     hitAnything = true;
-                    Target.PlayHitEffect(6, User);
-                    Damage(Target, 25f, 0);
+                    WeaponDamage(Target, 1.35f, DamageType.Physical);
                 }
             }
             else
@@ -212,8 +209,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 foreach (Actor hit in hits)
                 {
                     hitAnything = true;
-                    hit.PlayHitEffect(6, User);
-                    Damage(hit, 25f, 0);
+                    WeaponDamage(hit, 1.35f, DamageType.Physical);
                 }
             }
 
@@ -250,8 +246,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             if (CanHitMeleeTarget(Target))
             {
                 GeneratePrimaryResource(6f);
-                Target.PlayHitEffect(0, User);
-                Damage(Target, 25f, 0);
+                WeaponDamage(Target, 1.00f, DamageType.Physical);
             }
 
             yield break;
@@ -284,8 +279,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             if (CanHitMeleeTarget(Target))
             {
                 GeneratePrimaryResource(6f);
-                Target.PlayHitEffect(0, User);
-                Damage(Target, 25f, 0);
+                WeaponDamage(Target, 1.00f, DamageType.Physical);
             }
 
             yield break;
@@ -297,7 +291,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            UsePrimaryResource(10f);
+            UsePrimaryResource(15f);
 
             // FIXME: some of the code currently assumes User is Player
 
@@ -347,13 +341,12 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             yield return dashTimout;
 
-            _SetupAttributes(false);                                                    
+            _SetupAttributes(false);
 
             if (Target != null && Target.World != null) // target could've died or left world
             {
                 User.TranslateFacing(Target.Position, true);
-                Target.PlayHitEffect(2, User);
-                Damage(Target, 64f, 0);
+                WeaponDamage(Target, 0.65f, DamageType.Physical);
             }
         }
 

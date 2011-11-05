@@ -64,6 +64,7 @@ namespace Mooege.Core.GS.Actors
 
         public override void Update()
         {
+            base.Update();
             this.Brain(); // let him think. /raist 
         }
 

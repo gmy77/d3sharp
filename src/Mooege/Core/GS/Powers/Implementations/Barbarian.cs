@@ -39,8 +39,10 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 GeneratePrimaryResource(6f);
                 
-                Knockback(Target, 4f);
-                Damage(Target, 35, 0);
+                if (Rand.NextDouble() < 0.20)
+                    Knockback(Target, 4f);
+
+                WeaponDamage(Target, 1.45f, DamageType.Physical);
             }
 
             yield break;
@@ -66,7 +68,6 @@ namespace Mooege.Core.GS.Powers.Implementations
             // TODO: Generalize this and put it in Actor
             User.World.BroadcastIfRevealed(new ACDTranslateArcMessage()
             {
-                Id = 114,
                 ActorId = (int)User.DynamicID,
                 Start = User.Position,
                 Velocity = ramp,
@@ -82,14 +83,14 @@ namespace Mooege.Core.GS.Powers.Implementations
             // wait for leap to hit
             yield return WaitSeconds(0.65f);
 
+            // ground smash effect
             User.PlayEffectGroup(18688);
 
             bool hitAnything = false;
             foreach (Actor actor in GetTargetsInRange(TargetPosition, 8f))
             {
                 hitAnything = true;
-                actor.PlayHitEffect(0, User);
-                Damage(actor, 55, 0);
+                WeaponDamage(actor, 0.70f, DamageType.Physical);
             }
 
             if (hitAnything)
@@ -104,12 +105,13 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
+            //UsePrimaryResource(14f);
+
             User.AddBuff(new WhirlWindEffectBuff(WaitSeconds(0.250f)));
 
             foreach (Actor target in GetTargetsInRange(User.Position, 9f))
             {
-                target.PlayHitEffect(0, User);
-                Damage(target, 10, 0);
+                WeaponDamage(target, 0.44f, DamageType.Physical);
             }
 
             yield break;
@@ -129,7 +131,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             projectile.OnHit = () =>
             {
-                GeneratePrimaryResource(20f);
+                GeneratePrimaryResource(15f);
 
                 var inFrontOfUser = PowerMath.ProjectAndTranslate2D(User.Position, projectile.hittedActor.Position,
                     User.Position, 5f);
@@ -139,7 +141,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 // GET OVER HERE
                 projectile.hittedActor.MoveNormal(inFrontOfUser, 2f);
                 projectile.hittedActor.PlayHitEffect(0, User);
-                Damage(projectile.hittedActor, 15f, 0);
+                WeaponDamage(projectile.hittedActor, 1.00f, DamageType.Physical);
 
                 projectile.Destroy();
             };

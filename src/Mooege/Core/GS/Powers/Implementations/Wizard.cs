@@ -38,7 +38,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             SpawnEffect(90364, TargetPosition, 0, WaitSeconds(4f));
 
             IList<Actor> hits = GetTargetsInRange(TargetPosition, 13f);
-            Damage(hits, 150f, 0);
+            WeaponDamage(hits, 3.05f, DamageType.Fire);
 
             // TODO: ground fire damage?
         }
@@ -47,17 +47,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.Electrocute)]
     public class WizardElectrocute : ChanneledPowerImplementation
     {
-        private Actor _proxy = null;
-
         public override void OnChannelOpen()
         {
             RunDelay = 0.5f;
-        }
-
-        public override void OnChannelClose()
-        {
-            if (_proxy != null)
-                _proxy.Destroy();
         }
 
         public override IEnumerable<TickTimer> RunChannel()
@@ -69,33 +61,39 @@ namespace Mooege.Core.GS.Powers.Implementations
             if (Target == null)
             {
                 // no target, just zap the air with miss effect rope
-                if (_proxy == null)
-                    _proxy = SpawnProxy(TargetPosition, WaitInfinite());
-                User.AddRopeEffect(30913, _proxy);
+                User.AddRopeEffect(30913, SpawnProxy(TargetPosition));
             }
             else
             {
                 IList<Actor> targets = new List<Actor>() { Target };
                 Actor ropeSource = User;
                 Actor curTarget = Target;
-                float damage = 22f;
+                float damage = 0.4f;
                 while (targets.Count < 4) // original target + bounce 2 times
                 {
-                    curTarget.PlayHitEffect(2, User);
-                    ropeSource.AddRopeEffect(0x78c0, curTarget);
-                    ropeSource = curTarget;
+                    // replace source with proxy if it died while doing bounce delay
+                    if (ropeSource.World == null)
+                        ropeSource = SpawnProxy(ropeSource.Position);
 
-                    Damage(curTarget, damage, 0);
-                    damage *= 0.7f;
+                    if (curTarget.World != null)
+                    {
+                        ropeSource.AddRopeEffect(0x78c0, curTarget);
+                        ropeSource = curTarget;
+
+                        WeaponDamage(curTarget, damage, DamageType.Lightning);
+                        damage *= 0.7f;
+                    }
+                    else
+                    {
+                        // early out if monster to be bounced died prematurely
+                        break;
+                    }
 
                     curTarget = GetTargetsInRange(curTarget.Position, 15f, 3).FirstOrDefault(t => !targets.Contains(t));
                     if (curTarget != null)
                     {
                         targets.Add(curTarget);
                         yield return WaitSeconds(0.150f);
-                        // end loop if target or ropeSource are no longer in this world after resuming
-                        if (curTarget.World != World || ropeSource.World != World)
-                            break;
                     }
                     else
                     {
@@ -126,7 +124,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 SpawnEffect(99572, projectile.getCurrentPosition()); // impact effect
                 projectile.Destroy();
-                Damage(projectile.hittedActor, 20f, 0);
+                WeaponDamage(projectile.hittedActor, 1.10f, DamageType.Arcane);
             };
 
             yield break;
@@ -145,7 +143,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield return WaitSeconds(0.4f);
 
             IList<Actor> hits = GetTargetsInRange(TargetPosition, 10f);
-            Damage(hits, 100f, 0);
+            WeaponDamage(hits, 10f, DamageType.Fire);
         }
     }
 
@@ -188,15 +186,14 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override IEnumerable<TickTimer> RunChannel()
         {
-            UsePrimaryResource(3f);
+            UsePrimaryResource(23f * RunDelay);
 
             foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
                 {  
-                    actor.PlayHitEffect(32, User);
                     actor.PlayEffectGroup(18793);
-                    Damage(actor, 10, 0);
+                    WeaponDamage(actor, 1.35f * RunDelay, DamageType.Arcane, true);
                 }
             }
 
@@ -220,7 +217,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 Knockback(actor, 5f);
                 actor.AddBuff(new StunBuff(WaitSeconds(2f)));
-                Damage(actor, 20, 0);
+                WeaponDamage(actor, 2.05f, DamageType.Physical);
             }
             yield break;
         }
@@ -251,7 +248,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override IEnumerable<TickTimer> RunChannel()
         {
-            UsePrimaryResource(10f);
+            UsePrimaryResource(20f * RunDelay);
 
             Vector3D laggyPosition = new Vector3D(TargetPosition);
 
@@ -262,7 +259,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 _targetProxy.MoveNormal(laggyPosition, 8f);
 
             SpawnEffect(97821, laggyPosition);
-            Damage(GetTargetsInRange(laggyPosition, 6f), 20, 0);
+            WeaponDamage(GetTargetsInRange(laggyPosition, 6f), 2.00f * RunDelay, DamageType.Arcane);
         }
     }
 
@@ -282,7 +279,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             foreach (Actor actor in hits)
             {
                 actor.AddBuff(new FreezeBuff(WaitSeconds(4f)));
-                Damage(actor, Rand.Next(2, 4+1), 0);
+                WeaponDamage(actor, 0.65f, DamageType.Cold);
             }
 
             yield break;
@@ -308,7 +305,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 foreach (Actor actor in hits)
                 {
                     actor.AddBuff(new ChilledBuff(WaitSeconds(1f)));
-                    Damage(actor, Rand.Next(12, 18+1), 0);
+                    WeaponDamage(actor, 0.65f, DamageType.Cold);
                 }
 
                 yield return WaitSeconds(1f);
@@ -356,24 +353,17 @@ namespace Mooege.Core.GS.Powers.Implementations
         
         public override IEnumerable<TickTimer> RunChannel()
         {
-            UsePrimaryResource(3.5f);
+            UsePrimaryResource(29f * RunDelay);
 
             foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
                 {
-                    NewMethod(actor);
-                    Damage(actor, 10, 0);
+                    WeaponDamage(actor, 2.70f * RunDelay, DamageType.Cold);
                 }
             }
 
             yield break;
-        }
-
-        private void NewMethod(Actor actor)
-        {
-            actor.PlayHitEffect(64, User);
-            SpawnEffect(6535, actor.Position, 0, WaitSeconds(0.1f)); // TODO: change this to somethign else?
         }
     }
 
@@ -407,8 +397,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 foreach (var target in GetTargetsInRange(TargetPosition, 9f))
                 {
-                    target.PlayHitEffect(7, User);
-                    Damage(target, 20f, 0);
+                    WeaponDamage(target, 0.30f, DamageType.Physical);
                 }
                 yield return WaitSeconds(0.2f);
             }

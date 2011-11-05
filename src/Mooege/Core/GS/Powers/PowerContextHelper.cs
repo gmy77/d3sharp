@@ -93,19 +93,26 @@ namespace Mooege.Core.GS.Powers
             }
         }
         
-        public void Damage(Actor target, float amount, int type)
+        public void WeaponDamage(Actor target, float percentage, DamageType damageType, bool hitEffectOverridden = false)
         {
             if (target == null || target.World == null) return;
+
+            // TODO: this all needs to really be forwarded to a real combat system
+            // just use hardcoded weapon damage range for now
+            float damageAmount = Rand.Next(20, 35) * percentage;
 
             World.BroadcastIfRevealed(new FloatingNumberMessage
             {
                 ActorID = target.DynamicID,
-                Number = amount,
-                Type = FloatingNumberMessage.FloatType.White//type,
+                Number = damageAmount,
+                Type = FloatingNumberMessage.FloatType.White
             }, target);
 
+            if (!hitEffectOverridden)
+                target.PlayHitEffect((int)damageType.HitEffect, User);
+
             // Update hp, kill if Monster and 0hp
-            float new_hp = Math.Max(target.Attributes[GameAttribute.Hitpoints_Cur] - amount, 0f);
+            float new_hp = Math.Max(target.Attributes[GameAttribute.Hitpoints_Cur] - damageAmount, 0f);
             target.Attributes[GameAttribute.Hitpoints_Cur] = new_hp;
             GameAttributeMap map = new GameAttributeMap();
             map[GameAttribute.Hitpoints_Cur] = new_hp;
@@ -116,11 +123,11 @@ namespace Mooege.Core.GS.Powers
                 (target as Monster).Die(User as Player);
         }
 
-        public void Damage(IList<Actor> target_list, float amount, int type)
+        public void WeaponDamage(IList<Actor> target_list, float percentage, DamageType damageType, bool hitEffectOverridden = false)
         {
             foreach (Actor target in target_list)
             {
-                Damage(target, amount, type);
+                WeaponDamage(target, percentage, damageType);
             }
         }
 

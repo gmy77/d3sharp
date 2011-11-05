@@ -100,6 +100,7 @@
     <Compile Include="Core\GS\Actors\Buffs\TimedBuff.cs" />
     <Compile Include="Core\GS\Actors\ClientEffect.cs" />
     <Compile Include="Core\GS\Powers\ChanneledPowerImplementation.cs" />
+    <Compile Include="Core\GS\Powers\DamageType.cs" />
     <Compile Include="Core\GS\Powers\Implementations\Barbarian.cs" />
     <Compile Include="Core\GS\Powers\Implementations\DemonHunter.cs" />
     <Compile Include="Core\GS\Powers\Implementations\Melee.cs" />
