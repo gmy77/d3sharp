@@ -83,6 +83,10 @@ namespace Mooege.Core.GS.Map
         // Returns a new dynamicId for actors.
         public uint NewActorID { get { return this.Game.NewObjectID; } }
 
+        // Environment
+        public Mooege.Common.MPQ.FileFormats.Environment Environment { get; private set; }
+
+
         /// <summary>
         /// Returns list of available starting points.
         /// </summary>
@@ -101,6 +105,7 @@ namespace Mooege.Core.GS.Map
         {
             this.Game = game;
             this.SNOId = snoId; // NOTE: WorldSNO must be valid before adding it to the game
+            Environment = (Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Worlds][snoId].Data as Mooege.Common.MPQ.FileFormats.World).Environment;
             this.Game.StartTracking(this); // start tracking the dynamicId for the world.            
             this._scenes = new ConcurrentDictionary<uint, Scene>();
             this._actors = new ConcurrentDictionary<uint, Actor>();

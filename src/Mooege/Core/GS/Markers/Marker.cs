@@ -38,6 +38,7 @@ namespace Mooege.Core.GS.Markers
         ActorTag             = 526852,  // maybe find another name
         DestinationLevelArea = 526853,
 
+        LoreSNOId            = 67331,
         TriggeredConversation = 528128
     }
 }

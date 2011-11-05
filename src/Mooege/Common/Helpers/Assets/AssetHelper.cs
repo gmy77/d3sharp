@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,36 +16,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Text;
-
-namespace Mooege.Net.GS.Message.Definitions.Quest
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Mooege.Common.MPQ;
+namespace Mooege.Common.Helpers.Assets
 {
-    [Message(new[] {Opcodes.PlayLoreImmediately,Opcodes.PlayLoreWithButton})]
-    public class LoreMessage : GameMessage
+    public class AssetHelper
     {
-        public int LoreSNOId;
+        protected static readonly Logger Logger = LogManager.CreateLogger();
 
-        public override void Parse(GameBitBuffer buffer)
+        public static List<Task> GetTasks(Data data)
         {
-            LoreSNOId = buffer.ReadInt(32);
+            throw new System.NotImplementedException();
         }
 
-        public override void Encode(GameBitBuffer buffer)
+        public static void AddHelperValue(Asset asset)
         {
-            buffer.WriteInt(32, LoreSNOId);
+            throw new System.NotImplementedException();
         }
-
-        public override void AsText(StringBuilder b, int pad)
-        {
-            b.Append(' ', pad);
-            b.AppendLine("LoreMessage:");
-            b.Append(' ', pad++);
-            b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("LoreSNOId: 0x" + LoreSNOId.ToString("X8"));
-            b.Append(' ', --pad);
-            b.AppendLine("}");
-        }
-
-
     }
 }
