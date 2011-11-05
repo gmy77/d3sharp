@@ -21,14 +21,13 @@ using System.Collections.Generic;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Animation;
 
 namespace Mooege.Core.GS.Actors
 {
-    public class Living : Actor, IUpdateable
+    public class Living : Actor
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
@@ -64,14 +63,6 @@ namespace Mooege.Core.GS.Actors
             this.Attributes[GameAttribute.Hitpoints_Cur] = 4.546875f;
 
             this.Attributes[GameAttribute.Level] = 1;
-        }
-
-        public void Update(int tickCounter)
-        {
-            if (this.Brain == null) 
-                return;
-
-            this.Brain.Think(tickCounter);
         }
 
         public override bool Reveal(Player player)

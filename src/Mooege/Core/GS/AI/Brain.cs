@@ -38,36 +38,20 @@ namespace Mooege.Core.GS.AI
         {
             this.Body = body;
         }
-
-        public TickTimer timer;
        
         public virtual void Think(int tickCounter)
         {
-            Logger.Info(tickCounter.ToString());
-
-            if(timer==null)
-            {
-                timer = TickTimer.WaitSeconds(this.Body.World.Game, 1, Test);
-            }
+            if (this.Body == null || this.Body.World == null) return; // hack fix until i get brain-states in. /raist.
 
             var players = this.Body.GetPlayersInRange();
             if (players.Count == 0) return;
 
             this.Chase(players.First());
-
-            if (timer != null)
-                timer.Update(tickCounter);
-        }
-
-        public void Test(int tickCount)
-        {
-            Logger.Warn("Triggered!" + tickCount);
-            timer = TickTimer.WaitSeconds(this.Body.World.Game, 1, Test);
         }
 
         public void Chase(Actor actor)
         {
-            if (this.Heading == actor.Position && Math.Abs(this.Body.RotationAmount - ActorHelpers.GetFacingAngle(this.Body, actor)) < 0.1)
+            if (this.Heading == actor.Position)
                 return;
 
             this.Target = actor;
@@ -84,7 +68,8 @@ namespace Mooege.Core.GS.AI
 
         public void Move(Actor actor)
         {
-            this.Move(actor.Position, ActorHelpers.GetFacingAngle(this.Body, actor));            
+            this.Move(actor.Position, ActorHelpers.GetFacingAngle(this.Body, actor));
+            this.Body.Position = actor.Position; // hack /raist.
         }
     }
 }

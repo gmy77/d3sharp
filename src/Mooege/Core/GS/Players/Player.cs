@@ -38,14 +38,12 @@ using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Effect;
-using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
 using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
-using Mooege.Common.Helpers.Assets;
 
 namespace Mooege.Core.GS.Players
 {
@@ -91,14 +89,12 @@ namespace Mooege.Core.GS.Players
 
         public ConversationManager Conversations { get; private set; }
 
-
         // Collection of items that only the player can see. This is only used when items drop from killing an actor
         // TODO: Might want to just have a field on the item itself to indicate whether it is visible to only one player
         /// <summary>
         /// Dropped items for the player
         /// </summary>
         public Dictionary<uint, Item> GroundItems { get; private set; }
-
 
         /// <summary>
         /// Everything connected to ExpBonuses.

@@ -119,23 +119,22 @@ namespace Mooege.Core.GS.Map
 
         public void Update(int tickCounter)
         {
+            var actorsToUpdate = new List<IUpdateable>(); // list of actor to update.
+
             foreach(var player in this.Players.Values) // get players in the world.
             {
-                foreach(var sceneInRange in player.GetScenesInRegion()) // get scenes in the range for the player.
+                foreach(var actor in player.GetActorsInRange().OfType<IUpdateable>()) // get IUpdateable actors in range.
                 {
-                    var scene = sceneInRange;
-                    if (scene.Parent != null) 
-                        scene = scene.Parent; // we only want to update master-scenes.
-
-                    if (!scene.HasPlayers) // if there are no players in the scene - just skip it.
+                    if (actorsToUpdate.Contains(actor as IUpdateable)) // don't let a single actor in range of more than players to get updated more thance per tick /raist.
                         continue;
 
-                    // As master-scenes Update() can be triggered by child-scenes too, check if it's Update() is already called within the current Game.Update(). /raist.
-                    if (scene.LastUpdateTick >= tickCounter)
-                        continue;
-
-                    scene.Update(tickCounter); // run the update logic for the scene.
+                    actorsToUpdate.Add(actor as IUpdateable);
                 }
+            }
+
+            foreach(var actor in actorsToUpdate) // trigger the updates.
+            {
+                actor.Update(tickCounter);
             }
         }
 

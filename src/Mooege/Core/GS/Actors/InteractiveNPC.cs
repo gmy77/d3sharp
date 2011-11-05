@@ -21,6 +21,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -32,7 +33,7 @@ using Mooege.Net.GS.Message.Definitions.Hireling;
 
 namespace Mooege.Core.GS.Actors
 {
-    public class InteractiveNPC : NPC, IMessageConsumer
+    public class InteractiveNPC : NPC, IMessageConsumer, IUpdateable
     {
         public List<IInteraction> Interactions { get; private set; }
         public List<ConversationInteraction> Conversations { get; private set; }
@@ -47,10 +48,9 @@ namespace Mooege.Core.GS.Actors
             Conversations = new List<ConversationInteraction>();
         }
 
-        public override void Update(int tickCounter)
+        public void Update(int tickCounter)
         {
             if (tickCounter < 500) return;
-            base.Update(tickCounter);
 
             if (conversationList != null)
             {

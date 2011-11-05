@@ -34,7 +34,7 @@ using Mooege.Net.GS.Message.Definitions.Scene;
 namespace Mooege.Core.GS.Map
 {
 
-    public sealed class Scene : WorldObject, IUpdateable
+    public sealed class Scene : WorldObject
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -122,11 +122,6 @@ namespace Mooege.Core.GS.Map
         public Mooege.Common.MPQ.FileFormats.Scene.NavZoneDef NavZone { get; private set; }
 
         /// <summary>
-        /// Last tick-value when Scene.Update() got called.
-        /// </summary>
-        public int LastUpdateTick { get; private set; }
-
-        /// <summary>
         /// Creates a new scene and adds it to given world.
         /// </summary>
         /// <param name="world">The parent world.</param>
@@ -164,24 +159,6 @@ namespace Mooege.Core.GS.Map
             this.MarkerSets = data.MarkerSets;
             this.LookLink = data.LookLink;
             this.NavZone = data.NavZone;
-        }
-
-        #endregion
-
-        #region update & tick logic
-
-        public void Update(int tickCounter)
-        {
-            if (!this.HasPlayers) // don't update actors if we have no players in scene.
-                return;
-
-            foreach (IUpdateable actor in this.Actors.OfType<IUpdateable>())
-            {
-                actor.Update(tickCounter); // Call update for IUpdateable actors.
-            }
-
-            // master-scenes Update() can be triggered by child-scenes, so with the LastUpdateTick value we can prevent multiple updates per Game.Update for the scene and it's actors. /raist.
-            this.LastUpdateTick = tickCounter;
         }
 
         #endregion

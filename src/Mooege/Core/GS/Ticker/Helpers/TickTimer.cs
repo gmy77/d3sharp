@@ -26,7 +26,7 @@ namespace Mooege.Core.GS.Ticker.Helpers
     {
         public int TimeoutTick;
         private readonly Game _game;
-        private Action<int> _action;
+        private readonly Action<int> _action;
 
         public TickTimer(Game game, int timeoutTick, Action<int> callback = null)
         {
