@@ -1244,7 +1244,6 @@ namespace Mooege.Core.GS.Players
                 List<Player> playersAffected = this.GetPlayersInRange(50f);
                 int amount = (int)Math.Max(1, Math.Round((double)item.Attributes[GameAttribute.Gold] / playersAffected.Count, 0));
                 item.Attributes[GameAttribute.Gold] = amount;
-                Logger.Trace("gold = " + amount);
                 foreach (Player player in playersAffected)
                 {
                     player.InGameClient.SendMessage(new FloatingAmountMessage()
