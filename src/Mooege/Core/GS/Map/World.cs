@@ -264,9 +264,11 @@ namespace Mooege.Core.GS.Map
             foreach (var player in this.Players.Values)
             {
                 if (actor != player)
+                {
                     actor.Unreveal(player);
+                }
             }
-
+            
             this.RemoveActor(actor);
 
             if (!(actor is Player)) return; // if the leaving actors is a player, unreveal the actors revealed to him contained in the world.
