@@ -109,7 +109,15 @@ namespace Mooege.Core.GS.Actors
         public int CollFlags { get; set; }
 
         /// <summary>
-        /// Returns true if actor has world location. TODO: I belive this belongs to WorldObject.cs /raist.
+        /// The QuestRange specifies the visibility of an actor, depending on quest progress
+        /// </summary>
+        private Mooege.Common.MPQ.FileFormats.QuestRange questRange;
+
+        protected Mooege.Common.MPQ.FileFormats.ConversationList conversationList;
+
+        /// <summary>
+        /// Returns true if actor has world location.
+        /// TODO: I belive this belongs to WorldObject.cs /raist.
         /// </summary>
         public virtual bool HasWorldLocation
         {
@@ -126,6 +134,8 @@ namespace Mooege.Core.GS.Actors
         public int? Field11 = null;
         public int? Field12 = null;
         public int? Field13 = null;
+
+        private int snoTriggeredConversation = -1;
 
         /// <summary>
         /// Creates a new actor.
@@ -343,7 +353,18 @@ namespace Mooege.Core.GS.Actors
 
         public List<Actor> GetActorsInRange(float radius = DefaultQueryProximity)
         {
-            return this.GetObjectsInRange<Actor>(radius);
+            var actorsAll = this.GetObjectsInRange<Actor>(radius);
+            var actorsVisible = new List<Actor>(actorsAll);
+
+            // remove all actors that are not visible because they have a questrange set which the player does not meet
+            
+            foreach (Actor actor in actorsAll)
+                if (actor.questRange != null)
+                    if (World.Game.Quests.IsInQuestRange(actor.questRange) == false)
+                        actorsVisible.Remove(actor);
+
+            return actorsVisible;
+
         }
 
         public List<T> GetActorsInRange<T>(float radius = DefaultQueryProximity) where T : Actor
@@ -492,6 +513,30 @@ namespace Mooege.Core.GS.Actors
 
             if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
                 this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.QuestRange))
+            {
+                int snoQuestRange = Tags[(int)MarkerTagTypes.QuestRange].Int2;
+                if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange].ContainsKey(snoQuestRange))
+                    questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
+                else
+                    Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
+            }
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.ConversationList))
+            {
+                int snoConversationList = Tags[(int)MarkerTagTypes.ConversationList].Int2;
+                if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList].ContainsKey(snoConversationList))
+                    conversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
+                else
+                    Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", SNOId, snoConversationList);
+            }
+
+
+            if(this.Tags.ContainsKey((int)MarkerTagTypes.TriggeredConversation))
+                snoTriggeredConversation = Tags[(int)MarkerTagTypes.TriggeredConversation].Int2;
+
+
         }
 
         #endregion
