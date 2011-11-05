@@ -84,8 +84,17 @@ namespace Mooege.Common.MPQ
                 if (!match.Success) continue;
                 if (!match.Groups["version"].Success) continue;
 
-                MPQFileList.Add(Int32.Parse(match.Groups["version"].Value), file);
-                Logger.Trace("Applied patch file: {0}.", match.Groups[0].Value);
+                var patchName = match.Groups[0].Value;
+                var patchVersion = Int32.Parse(match.Groups["version"].Value);
+
+                if (patchVersion > this.RequiredVersion) // ignore the patch if it's version is higher than our required.
+                {
+                    Logger.Trace("Ignoring patch file {0}", patchName);
+                    continue;
+                }
+
+                MPQFileList.Add(patchVersion, file);
+                Logger.Trace("Applied patch file: {0}.", patchName);
             }
 
             /* add mpq's to mpq-file system in reverse-order (highest version first) */
