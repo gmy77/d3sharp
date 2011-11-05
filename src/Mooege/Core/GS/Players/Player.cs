@@ -561,7 +561,7 @@ namespace Mooege.Core.GS.Players
 
             foreach (var actor in actors) // reveal actors in player's proximity.
             {
-                if (actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
+                if (actor.Visible == false || actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
                     continue;
 
                 if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player 
