@@ -60,6 +60,7 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += (14*4);
             this.Environment = new Environment(stream);
 
+            stream.Position += 4;
             LabelRuleSet = new LabelRuleSet(stream);
             this.Int0 = stream.ReadValueS32();
 
@@ -386,21 +387,22 @@ namespace Mooege.Common.MPQ.FileFormats
         public int int2;
         public int int3;
         public UberMaterial UberMaterial4;
-        public int snoMusic;
-        public int snoCombatMusic;
-        public int snoAmbient;
-        public int snoReverb;
-        public int snoWeather;
-        public int snoIrradianceTex;
-        public int snoIrradianceTexDead;*/
+        */
+        public int[] Unknown { get; private set; }
+        public int snoMusic { get; private set; }
+        public int snoCombatMusic { get; private set; }
+        public int snoAmbient { get; private set; }
+        public int snoReverb { get; private set; }
+        public int snoWeather { get; private set; }
+        public int snoIrradianceTex { get; private set; }
+        public int snoIrradianceTexDead { get; private set; }
 
-        public int[] Env { get; private set; }
         public Environment(MpqFileStream stream)
         {
-            Env = new int[46];
-            for (int i = 0; i < 46; i++)
+            Unknown = new int[38];
+            for (int i = 0; i < 38; i++)
             {
-                Env[i] = stream.ReadValueS32();
+                Unknown[i] = stream.ReadValueS32();
             }
 
             /* RGBAColor0 = new RGBAColor(stream);
@@ -408,13 +410,14 @@ namespace Mooege.Common.MPQ.FileFormats
              int2 = stream.ReadInt32();
              int3 = stream.ReadInt32();
              UberMaterial4 = new UberMaterial(stream);
-             snoMusic = stream.ReadInt32();
-             snoCombatMusic = stream.ReadInt32();
-             snoAmbient = stream.ReadInt32();
-             snoReverb = stream.ReadInt32();
-             snoWeather = stream.ReadInt32();
-             snoIrradianceTex = stream.ReadInt32();
-             snoIrradianceTexDead = stream.ReadInt32();*/
+             * */
+             snoMusic = stream.ReadValueS32();
+             snoCombatMusic = stream.ReadValueS32();
+             snoAmbient = stream.ReadValueS32();
+             snoReverb = stream.ReadValueS32();
+             snoWeather = stream.ReadValueS32();
+             snoIrradianceTex = stream.ReadValueS32();
+             snoIrradianceTexDead = stream.ReadValueS32();
         }
     }
 

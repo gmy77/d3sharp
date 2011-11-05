@@ -98,6 +98,9 @@
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Common\Extensions\ListExtensions.cs" />
+    <Compile Include="Common\Helpers\Assets\AssetHelper.cs" />
+    <Compile Include="Common\Helpers\Assets\SpellRuneIndexHelper.cs" />
+    <Compile Include="Common\Helpers\Assets\LoreAssetHelper.cs" />
     <Compile Include="Common\Helpers\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\Data.cs" />
@@ -138,6 +141,7 @@
     <Compile Include="Core\Common\Items\AffixGenerator.cs" />
     <Compile Include="Core\Common\Items\HandledItem.cs" />
     <Compile Include="Core\Common\Items\HandledType.cs" />
+    <Compile Include="Core\Common\Items\Implementations\Book.cs" />
     <Compile Include="Core\Common\Items\Implementations\Dye.cs" />
     <Compile Include="Core\Common\Items\Implementations\HealthPotion.cs" />
     <Compile Include="Core\Common\Items\Implementations\Potion.cs" />
@@ -159,6 +163,7 @@
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Blacksmith.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Jeweler.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Mystic.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\CaptainRumford.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Enchantress.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Hireling.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Scoundrel.cs" />
@@ -181,9 +186,12 @@
     <Compile Include="Core\GS\Games\GameCommands.cs" />
     <Compile Include="Core\GS\Games\GameDebugCommands.cs" />
     <Compile Include="Core\GS\Games\GameManager.cs" />
+    <Compile Include="Core\GS\Games\QuestManager.cs" />
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
     <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
     <Compile Include="Core\GS\Markers\Marker.cs" />
+    <Compile Include="Core\GS\Games\Quest.cs" />
+    <Compile Include="Core\GS\Players\ConversationManager.cs" />
     <Compile Include="Core\GS\Common\InventoryGrid.cs" />
     <Compile Include="Core\GS\Objects\IUpdateable.cs" />
     <Compile Include="Core\GS\Players\ExpBonusData.cs" />
@@ -265,6 +273,7 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Player\RequestUsePowerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignSkillMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Stash\OpenSharedStashMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBusyMessage.cs" />

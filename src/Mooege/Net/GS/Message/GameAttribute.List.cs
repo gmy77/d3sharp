@@ -170,10 +170,10 @@ namespace Mooege.Net.GS.Message
         public static readonly GameAttributeF Damage_Type_Percent_Bonus = new GameAttributeF(162, 0f, 0, 0, 0, "", "", "Damage_Type_Percent_Bonus", GameAttributeEncoding.Float16, 9, 0f, 0f, 16);
         public static readonly GameAttributeF Damage_Percent_Bonus_Witchdoctor = new GameAttributeF(163, 0f, -1, 0, 0, "", "", "Damage_Percent_Bonus_Witchdoctor", GameAttributeEncoding.Float16, 9, 0f, 0f, 16);
         public static readonly GameAttributeF Damage_Percent_Bonus_Wizard = new GameAttributeF(164, 0f, -1, 0, 0, "", "", "Damage_Percent_Bonus_Wizard", GameAttributeEncoding.Float16, 9, 0f, 0f, 16);
-        public static readonly GameAttributeI Crit_Percent_Base = new GameAttributeI(165, 0, -1, 0, 0, "", "", "Crit_Percent_Base", GameAttributeEncoding.Int, 9, 0, 0, 32);
-        public static readonly GameAttributeI Crit_Percent_Bonus_Capped = new GameAttributeI(166, 0, -1, 0, 0, "", "", "Crit_Percent_Bonus_Capped", GameAttributeEncoding.Int, 9, 0, 0, 32);
-        public static readonly GameAttributeI Crit_Percent_Bonus_Uncapped = new GameAttributeI(167, 0, -1, 0, 0, "", "", "Crit_Percent_Bonus_Uncapped", GameAttributeEncoding.Int, 9, 0, 0, 32);
-        public static readonly GameAttributeI Crit_Percent_Cap = new GameAttributeI(168, 0, -1, 0, 0, "", "", "Crit_Percent_Cap", GameAttributeEncoding.Int, 9, 0, 0, 32);
+        public static readonly GameAttributeF Crit_Percent_Base = new GameAttributeF(165, 0f, 0, 0, 0, "", "", "Crit_Percent_Base", GameAttributeEncoding.Float32, 9, 0, 0, 32);
+        public static readonly GameAttributeF Crit_Percent_Bonus_Capped = new GameAttributeF(166, 0f, 0, 0, 0, "", "", "Crit_Percent_Bonus_Capped", GameAttributeEncoding.Float32, 9, 0f, 0f, 32);
+        public static readonly GameAttributeF Crit_Percent_Bonus_Uncapped = new GameAttributeF(167, 0f, 0, 0, 0, "", "", "Crit_Percent_Bonus_Uncapped", GameAttributeEncoding.Float32, 9, 0f, 0f, 32);
+        public static readonly GameAttributeF Crit_Percent_Cap = new GameAttributeF(168, 0f, 0, 0, 0, "", "", "Crit_Percent_Cap", GameAttributeEncoding.Float32, 9, 0f, 0f, 32);
         public static readonly GameAttributeF Crit_Damage_Percent = new GameAttributeF(169, 0f, 0, 0, 0, "", "", "Crit_Damage_Percent", GameAttributeEncoding.Float32, 9, 0f, 0f, 32);
         public static readonly GameAttributeI Crit_Effect_Time = new GameAttributeI(170, 0, -1, 3, 1, "", "", "Crit_Effect_Time", GameAttributeEncoding.Int, 9, 0, 0, 32);
         public static readonly GameAttributeF Pierce_Chance = new GameAttributeF(171, 0f, -1, 0, 0, "", "", "Pierce_Chance", GameAttributeEncoding.Float16, 9, 0f, 0f, 16);
