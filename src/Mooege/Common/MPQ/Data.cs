@@ -33,7 +33,7 @@ namespace Mooege.Common.MPQ
         public Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>> Assets = new Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>>();
         public readonly Dictionary<SNOGroup, Type> Parsers = new Dictionary<SNOGroup, Type>();
         private readonly List<Task> _tasks = new List<Task>();
-        private static SNOGroup[] PatchExceptions = new SNOGroup[] { SNOGroup.TreasureClass, SNOGroup.TimedEvent, SNOGroup.ConversationList };
+        private static readonly SNOGroup[] PatchExceptions = new[] { SNOGroup.TreasureClass, SNOGroup.TimedEvent, SNOGroup.ConversationList };
 
         public Data()
             : base(7447, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
@@ -114,7 +114,7 @@ namespace Mooege.Common.MPQ
             var parser = this.Parsers[asset.Group]; // get the type the asset's parser.
             var file = this.FileSystem.FindFile(asset.FileName); // get the asset file.
 
-            // if file is in any of the follow groups, try to load the original version
+            // if file is in any of the follow groups, try to load the original version - the reason is that assets in those groups got patched to 0 bytes.
             if (PatchExceptions.Contains(asset.Group))
             {
                 foreach (CrystalMpq.MpqArchive archive in this.FileSystem.Archives.Reverse()) //search mpqs starting from base
