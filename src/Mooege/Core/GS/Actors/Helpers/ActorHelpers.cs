@@ -16,30 +16,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Core.GS.Objects
+using System;
+using Mooege.Core.GS.Common.Types.Math;
+
+namespace Mooege.Core.GS.Actors.Helpers
 {
-    /// <summary>
-    /// A dynamic object that can have a dynamicId
-    /// </summary>
-    public abstract class DynamicObject
+    public static class ActorHelpers
     {
         /// <summary>
-        /// The dynamic unique runtime ID for the actor.
+        /// Returns 2D angle to face the target position.
         /// </summary>
-        public readonly uint DynamicID;
-
-        /// <summary>
-        /// Initialization constructor.
-        /// </summary>
-        /// <param name="dynamicID">The dynamic ID to initialize with.</param>
-        protected DynamicObject(uint dynamicID)
+        /// <param name="lookerPosition">The looker.</param>
+        /// <param name="targetPosition">The target.</param>
+        /// <returns></returns>
+        public static float GetFacingAngle(Vector3D lookerPosition, Vector3D targetPosition)
         {
-            this.DynamicID = dynamicID;
+            if ((lookerPosition == null) || (targetPosition == null))
+                return 0f;
+
+            return (float) Math.Atan2((targetPosition.Y - lookerPosition.Y), (targetPosition.X - lookerPosition.X));
         }
 
-        /// <summary>
-        /// Destroy the object. This should remove any references to the object throughout GS.
-        /// </summary>
-        public abstract void Destroy();
+        public static float GetFacingAngle(Actor looker, Actor target)
+        {
+            return GetFacingAngle(looker.Position, target.Position);
+        }
     }
 }

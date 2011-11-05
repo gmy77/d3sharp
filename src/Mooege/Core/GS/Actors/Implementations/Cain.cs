@@ -21,9 +21,6 @@ using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.World;
-using Mooege.Net.GS.Message.Definitions.NPC;
-using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Actors.Interactions;
 
 namespace Mooege.Core.GS.Actors.Implementations

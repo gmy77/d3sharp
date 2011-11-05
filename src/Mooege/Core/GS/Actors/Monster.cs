@@ -16,13 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -30,18 +29,13 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Common.MPQ;
-using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Common.Helpers.Assets;
 
 namespace Mooege.Core.GS.Actors
 {
-    public class Monster : Living
+    public class Monster : Living, IUpdateable
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
-
-        // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
-        //public int AnimationSNO { get; set; }
 
         public Monster(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
@@ -55,6 +49,15 @@ namespace Mooege.Core.GS.Actors
         public override void OnTargeted(Player player, TargetMessage message)
         {
             this.Die(player);
+        }
+
+
+        public void Update(int tickCounter)
+        {
+            if (this.Brain == null)
+                return;
+
+            this.Brain.Think(tickCounter);
         }
 
         // FIXME: Hardcoded hell. /komiga
@@ -124,7 +127,7 @@ namespace Mooege.Core.GS.Actors
                     new PlayAnimationMessageSpec()
                     {
                         Field0 = 0x2,
-                        Field1 = Animset.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
+                        Field1 = AnimationSet.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
                         Field2 = 0x0,
                         Field3 = 1f
                     }
