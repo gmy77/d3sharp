@@ -112,14 +112,8 @@ namespace Mooege.Core.GS.Powers.Implementations
             UsePrimaryResource(20f);
 
             User.PlayEffectGroup(19305); // cast effect
-
-            Vector3D startPosition = new Vector3D(User.Position);
-            if (TargetZ != 0)
-                startPosition.Z = TargetZ;
-            else
-                startPosition.Z = TargetPosition.Z;
-
-            var projectile = new PowerProjectile(User.World, 99567, startPosition, TargetPosition, 1f, 2000, 1f, 3f, 0f/*hoi*/, 0f);
+            
+            var projectile = new PowerProjectile(User.World, 99567, User.Position, TargetPosition, 1f, 2000, 1f, 3f, 5f, 0f);
             projectile.OnHit = () =>
             {
                 SpawnEffect(99572, projectile.getCurrentPosition()); // impact effect
