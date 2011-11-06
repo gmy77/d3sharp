@@ -100,7 +100,6 @@
     <Compile Include="Common\Extensions\ListExtensions.cs" />
     <Compile Include="Common\Helpers\Assets\AssetHelper.cs" />
     <Compile Include="Common\Helpers\Assets\SpellRuneIndexHelper.cs" />
-    <Compile Include="Common\Helpers\Assets\LoreAssetHelper.cs" />
     <Compile Include="Common\Helpers\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\Data.cs" />
