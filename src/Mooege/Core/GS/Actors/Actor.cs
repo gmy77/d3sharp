@@ -262,36 +262,36 @@ namespace Mooege.Core.GS.Actors
         
         #region Movement/Translation
 
-        public void MoveWorldPosition(Vector3D destination)
+        public void TranslateNormal(Vector3D destination, float speed = 1.0f)
         {
             this.Position = destination;
-            this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
-        }
-
-        public void MoveNormal(Vector3D destination, float speed = 1.0f)
-        {
-            this.Position = destination;
+            float angle = (float)Math.Acos(this.RotationAmount) * 2f;
+            if (float.IsNaN(angle)) // just use RotationAmount if Quat is bad
+                angle = this.RotationAmount;
 
             World.BroadcastIfRevealed(new NotifyActorMovementMessage
             {
                 ActorId = (int)DynamicID,
                 Position = destination,
-                Angle = (float)Math.Acos(this.RotationAmount) * 2f,
+                Angle = angle,
                 Field3 = false,
                 Speed = speed,
             }, this);
         }
 
-        public void MoveSnapped(Vector3D destination)
+        public void TranslateSnapped(Vector3D destination)
         {
             this.Position = destination;
+            float angle = (float)Math.Acos(this.RotationAmount) * 2f;
+            if (float.IsNaN(angle)) // just use RotationAmount if Quat is bad
+                angle = this.RotationAmount;
 
             World.BroadcastIfRevealed(new ACDTranslateSnappedMessage
             {
                 Id = 0x6f,
                 Field0 = (int)this.DynamicID,
                 Field1 = destination,
-                Field2 = (float)Math.Acos(this.RotationAmount) * 2f,
+                Field2 = angle,
                 Field3 = false,
                 Field4 = 0x900 // ?
             }, this);

@@ -162,9 +162,15 @@ namespace Mooege.Core.GS.Powers
             return new EffectActor(World, actorSNO, position, angle, timeout);
         }
 
-        public EffectActor SpawnEffect(int actorSNO, Vector3D position, Actor point_to_actor, TickTimer timeout = null)
+        public EffectActor SpawnEffect(int actorSNO, Vector3D position, Actor facingTarget, TickTimer timeout = null)
         {
-            float angle = (point_to_actor != null) ? PowerMath.AngleLookAt(User.Position, point_to_actor.Position) : -1f;
+            float angle = (facingTarget != null) ? PowerMath.AngleLookAt(User.Position, facingTarget.Position) : -1f;
+            return SpawnEffect(actorSNO, position, angle, timeout);
+        }
+
+        public EffectActor SpawnEffect(int actorSNO, Vector3D position, Vector3D facingTarget, TickTimer timeout = null)
+        {
+            float angle = PowerMath.AngleLookAt(User.Position, facingTarget);
             return SpawnEffect(actorSNO, position, angle, timeout);
         }
 
@@ -203,7 +209,7 @@ namespace Mooege.Core.GS.Powers
             if (target == null) return;
 
             var move = PowerMath.ProjectAndTranslate2D(User.Position, target.Position, target.Position, amount);
-            target.MoveNormal(move);
+            target.TranslateNormal(move);
         }
     }
 }

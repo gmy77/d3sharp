@@ -22,6 +22,7 @@ using System.Linq;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Ticker.Helpers;
+using Mooege.Net.GS.Message.Definitions.ACD;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -174,7 +175,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override void OnChannelUpdated()
         {
             _calcTargetPosition();
-            _target.MoveSnapped(TargetPosition);
+            _target.TranslateSnapped(TargetPosition);
         }
 
         public override IEnumerable<TickTimer> RunChannel()
@@ -248,7 +249,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             // update proxy target delayed so animation lines up with explosions a bit better
             if (ChannelOpen)
-                _targetProxy.MoveNormal(laggyPosition, 8f);
+                _targetProxy.TranslateNormal(laggyPosition, 8f);
 
             SpawnEffect(97821, laggyPosition);
             WeaponDamage(GetTargetsInRange(laggyPosition, 6f), 2.00f * RunDelay, DamageType.Arcane);
@@ -337,7 +338,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override void OnChannelUpdated()
         {
             _calcTargetPosition();
-            _target.MoveSnapped(TargetPosition);
+            _target.TranslateSnapped(TargetPosition);
             User.TranslateFacing(TargetPosition);
         }
         
@@ -366,7 +367,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             //StartCooldown(WaitSeconds(16f));
             SpawnProxy(User.Position).PlayEffectGroup(19352);  // alt cast efg: 170231
             yield return WaitSeconds(0.3f);
-            User.MoveWorldPosition(TargetPosition);
+            User.Teleport(TargetPosition);
             User.PlayEffectGroup(170232);
         }
     }
@@ -395,11 +396,48 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.ShockPulse)]
-    public class WizardSpectralShockPulse : PowerImplementation
+    public class WizardShockPulse : PowerImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
+            User.PlayEffectGroup(0x0001061B); // cast effect
+
+            for (int n = 0; n < 3; ++n)
+                _SpawnBolt();
+
             yield break;
+        }
+
+        private void _SpawnBolt()
+        {
+            var eff = SpawnEffect(176247, User.Position, 0, WaitSeconds(10f));
+            
+            World.BroadcastIfRevealed(new ACDTranslateDetPathMessage
+            {
+                Id = 0x73,
+                Field0 = (int)eff.DynamicID,
+                Field1 = 1, // 0 - crashes client
+                            // 1 - random scuttle (charged bolt effect)
+                            // 2 - random movement, random movement pauses (toads hopping)
+                            // 3 - clockwise spiral
+                            // 4 - counter-clockwise spiral
+                            // >=5 - nothing it seems
+                Field2 = Rand.Next(), // RNG seed for style 1 and 2
+                Field3 = Rand.Next(), // RNG seed for style 1 and 2
+                Field4 = new Vector3D(0.0f, 0.3f, 0),  // length of this vector is amount moved for style 1 and 2, 
+                Field5 = PowerMath.AngleLookAt(User.Position, TargetPosition), // facing angle
+                Field6 = User.Position,
+                Field7 = 1,
+                Field8 = 0,
+                Field9 = -1,
+                Field10 = PowerSNO, // power sno
+                Field11 = 0,
+                Field12 = 0f, // spiral control?
+                Field13 = 0f, // spiral control? for charged bolt this is facing angle again, but seems to effect nothing.
+                Field14 = 0f, // spiral control? for charged bolt this is Position.X and seems to effect nothing
+                Field15 = 0f  // spiral control? for charged bolt this is Position.Y and seems to effect nothing
+            }, eff);
+
         }
     }
 }

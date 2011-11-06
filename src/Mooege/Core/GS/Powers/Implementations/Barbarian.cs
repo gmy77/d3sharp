@@ -138,8 +138,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 _setupReturnProjectile(projectile.hittedActor.Position, 5f);
 
                 // GET OVER HERE
-                projectile.hittedActor.MoveNormal(inFrontOfUser, 2f);
-                projectile.hittedActor.PlayHitEffect(0, User);
+                projectile.hittedActor.TranslateNormal(inFrontOfUser, 2f);
                 WeaponDamage(projectile.hittedActor, 1.00f, DamageType.Physical);
 
                 projectile.Destroy();

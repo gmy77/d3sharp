@@ -24,10 +24,11 @@ using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Ticker.Helpers;
+using Mooege.Core.GS.Objects;
 
 namespace Mooege.Core.GS.Powers
 {
-    public class PowerProjectile : Actor
+    public class PowerProjectile : Actor, IUpdateable
     {
         //Define actor type
         public override ActorType ActorType { get { return ActorType.Projectile; } }
@@ -68,7 +69,6 @@ namespace Mooege.Core.GS.Powers
                                float heightOffset = 0, float distanceOffset = 0, bool handleTranslation = false)
             : base(world, actorSNO)
         {
-            this.SNOId = actorSNO;
             this.startingPosition = new Vector3D(position);
             this.startingPosition.Z += heightOffset;
             this.speed = speed;
