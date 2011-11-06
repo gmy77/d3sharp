@@ -31,13 +31,13 @@ namespace Mooege.Net.GS.Message.Definitions.Hireling
 
         public override void Parse(GameBitBuffer buffer)
         {
-            ActorID = buffer.ReadUInt(32);
+            HirelingID = buffer.ReadUInt(32);
             PowerSNOId = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteUInt(32, ActorID);
+            buffer.WriteUInt(32, HirelingID);
             buffer.WriteInt(32, PowerSNOId);
         }
 
@@ -47,7 +47,7 @@ namespace Mooege.Net.GS.Message.Definitions.Hireling
             b.AppendLine("HirelingRequestLearnSkillMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
+            b.Append(' ', pad); b.AppendLine("HirelingID: 0x" + HirelingID.ToString("X8") + " (" + HirelingID + ")");
             b.Append(' ', pad); b.AppendLine("PowerSNOId: 0x" + PowerSNOId.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
