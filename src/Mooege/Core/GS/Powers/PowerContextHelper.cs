@@ -72,11 +72,10 @@ namespace Mooege.Core.GS.Powers
         {
             if (User is Player)
             {
-                // TODO: update User.Attribute instead of creating temp map
-                GameAttributeMap map = new GameAttributeMap();
+                GameAttributeMap map = User.Attributes;
                 map[GameAttribute.Power_Cooldown_Start, PowerSNO] = World.Game.TickCounter;
                 map[GameAttribute.Power_Cooldown, PowerSNO] = timeout.TimeoutTick;
-                map.SendMessage((User as Player).InGameClient, User.DynamicID);
+                map.SendChangedMessage((User as Player).InGameClient, User.DynamicID);
             }
         }
 
@@ -133,9 +132,7 @@ namespace Mooege.Core.GS.Powers
             // Update hp, kill if Monster and 0hp
             float new_hp = Math.Max(target.Attributes[GameAttribute.Hitpoints_Cur] - damageAmount, 0f);
             target.Attributes[GameAttribute.Hitpoints_Cur] = new_hp;
-            GameAttributeMap map = new GameAttributeMap();
-            map[GameAttribute.Hitpoints_Cur] = new_hp;
-            foreach (var msg in map.GetMessageList(target.DynamicID))
+            foreach (var msg in target.Attributes.GetChangedMessageList(target.DynamicID))
                 World.BroadcastIfRevealed(msg, target);
 
             if (new_hp == 0f && target is Monster && User is Player)

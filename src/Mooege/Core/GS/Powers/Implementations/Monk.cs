@@ -153,13 +153,13 @@ namespace Mooege.Core.GS.Powers.Implementations
                 startpos = User.Position;
             else
                 startpos = TargetPosition;
-            
+
             for (int n = 0; n < 7; ++n)
             {
                 IList<Actor> nearby = GetTargetsInRange(startpos, 20f, 1);
                 if (nearby.Count > 0)
                 {
-                    SpawnEffect(99063, nearby[0].Position);
+                    SpawnEffect(99063, nearby[0].Position, -1);
                     WeaponDamage(nearby[0], 2.15f, DamageType.Physical);
                     yield return WaitSeconds(0.1f);
                 }
@@ -354,7 +354,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             int intval = active ? 1 : 0;
             // TODO: modify User.Attribute with these changes instead of just sending them.
-            GameAttributeMap map = new GameAttributeMap();
+            GameAttributeMap map = User.Attributes;
             map[GameAttribute.Buff_Active, GameAttribute.Stun_Immune.Id] = active; //immune to stun during buff
             map[GameAttribute.Buff_Icon_Count0, GameAttribute.Stun_Immune.Id] = intval;
             map[GameAttribute.Buff_Active, GameAttribute.Root_Immune.Id] = active; //immune to root during buff
@@ -368,7 +368,8 @@ namespace Mooege.Core.GS.Powers.Implementations
             map[GameAttribute.Buff_Active, PowerSNO] = active;
             map[GameAttribute.Hidden] = active;
 
-            map.SendMessage(((Player)User).InGameClient, User.DynamicID);
+            foreach (var msg in map.GetChangedMessageList(User.DynamicID))
+                User.World.BroadcastIfRevealed(msg, User);
         }
     }
 }
