@@ -38,9 +38,6 @@ using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Effect;
-using Mooege.Net.GS.Message.Definitions.Conversation;
-using Mooege.Common.Helpers;
-using System;
 using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Net.GS.Message.Definitions.Artisan;
@@ -50,7 +47,7 @@ using Mooege.Net.GS.Message.Definitions.Hireling;
 
 namespace Mooege.Core.GS.Players
 {
-    public class Player : Actor, IMessageConsumer
+    public class Player : Actor, IMessageConsumer, IUpdateable
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -90,6 +87,8 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public Dictionary<uint, IRevealable> RevealedObjects = new Dictionary<uint, IRevealable>();
 
+        public ConversationManager Conversations { get; private set; }
+
         // Collection of items that only the player can see. This is only used when items drop from killing an actor
         // TODO: Might want to just have a field on the item itself to indicate whether it is visible to only one player
         /// <summary>
@@ -101,11 +100,6 @@ namespace Mooege.Core.GS.Players
         /// Everything connected to ExpBonuses.
         /// </summary>
         public ExpBonusData ExpBonusData { get; private set; }
-
-        /// <summary>
-        /// Open converstations.
-        /// </summary>
-        public List<OpenConversation> OpenConversations { get; set; }
 
         /// <summary>
         /// NPC currently interaced with
@@ -177,7 +171,7 @@ namespace Mooege.Core.GS.Players
         /// <param name="client">The gameclient for the player.</param>
         /// <param name="bnetToon">Toon of the player.</param>
         public Player(World world, GameClient client, Toon bnetToon)
-            : base(world)
+            : base(world, GetClassSNOId(bnetToon.Gender, bnetToon.Class))
         {
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
@@ -200,8 +194,8 @@ namespace Mooege.Core.GS.Players
 
             this.SkillSet = new SkillSet(this.Properties.Class);
             this.GroundItems = new Dictionary<uint, Item>();
+            this.Conversations = new ConversationManager(this, this.World.Game.Quests);
             this.ExpBonusData = new ExpBonusData(this);
-            this.OpenConversations = new List<OpenConversation>();
             this.SelectedNPC = null;
 
             #region Attributes
@@ -462,6 +456,10 @@ namespace Mooege.Core.GS.Players
             if (message.Position != null)
                 this.Position = message.Position;
 
+            if (message.Angle != null)
+                this.RotationAmount = message.Angle.Value;
+
+
             var msg = new NotifyActorMovementMessage
             {
                 ActorId = message.ActorId,
@@ -492,10 +490,10 @@ namespace Mooege.Core.GS.Players
 
         private void OnRequestBuyItem(GameClient client, RequestBuyItemMessage requestBuyItemMessage)
         {
-            var item = World.GetItem(requestBuyItemMessage.ItemId);
-            if (item == null || item.Owner == null || !(item.Owner is Vendor))
+            var vendor = this.SelectedNPC as Vendor;
+            if (vendor == null)
                 return;
-            (item.Owner as Vendor).OnRequestBuyItem(this, item);
+            vendor.OnRequestBuyItem(this, requestBuyItemMessage.ItemId);
         }
 
         private void OnRequestAddSocket(GameClient client, RequestAddSocketMessage requestAddSocketMessage)
@@ -519,14 +517,14 @@ namespace Mooege.Core.GS.Players
 
         #region update-logic
 
-        public override void Update(int tickCounter)
+        public void Update(int tickCounter)
         {
             // Check the Killstreaks
             this.ExpBonusData.Check(0);
             this.ExpBonusData.Check(1);
 
             // Check if there is an conversation to close in this tick
-            CheckOpenConversations();
+            Conversations.Update(this.World.Game.TickCounter);
 
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
@@ -540,7 +538,7 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void RevealScenesToPlayer()
         {
-            var scenes = this.GetScenesInRegion();
+            var scenes = this.GetScenesInRegion(DefaultQueryProximity * 2);
 
             foreach (var scene in scenes) // reveal scenes in player's proximity.
             {
@@ -563,10 +561,12 @@ namespace Mooege.Core.GS.Players
 
             foreach (var actor in actors) // reveal actors in player's proximity.
             {
-                if (actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
+                if (actor.Visible == false || actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
                     continue;
 
-                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment || actor.ActorType == ActorType.Critter)
+                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player 
+                    || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment 
+                    || actor.ActorType == ActorType.Critter || actor.ActorType == ActorType.Item)
                     actor.Reveal(this);
             }
         }
@@ -619,7 +619,29 @@ namespace Mooege.Core.GS.Players
                 });
             }
 
+            this.Inventory.Reveal(player);
+
             return true;
+        }
+
+        public override bool Unreveal(Player player)
+        {
+            if (!base.Unreveal(player))
+                return false;
+
+            this.Inventory.Unreveal(player);
+
+            return true;
+        }
+
+        public override void BeforeChangeWorld()
+        {
+            this.Inventory.Unreveal(this);
+        }
+
+        public override void AfterChangeWorld()
+        {
+            this.Inventory.Reveal(this);
         }
 
         #endregion
@@ -866,7 +888,7 @@ namespace Mooege.Core.GS.Players
 
         public LearnedLore LearnedLore = new LearnedLore()
         {
-            Field0 = 0x00000000,
+            Count = 0x00000000,
             m_snoLoreLearned = new int[256]
              {
                 0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
@@ -984,6 +1006,43 @@ namespace Mooege.Core.GS.Players
         #endregion
 
         #region generic properties
+
+        public static int GetClassSNOId(int gender, ToonClass @class)
+        {
+            if(gender==0) // male
+            {
+                switch(@class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x0CE5;
+                    case ToonClass.DemonHunter:
+                        return 0x0125C7;
+                    case ToonClass.Monk:
+                        return 0x1271;
+                    case ToonClass.WitchDoctor:
+                        return 0x1955;
+                    case ToonClass.Wizard:
+                        return 0x1990;
+                }
+            }
+            else // female
+            {
+                switch (@class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x0CD5;
+                    case ToonClass.DemonHunter:
+                        return 0x0123D2;
+                    case ToonClass.Monk:
+                        return 0x126D;
+                    case ToonClass.WitchDoctor:
+                        return 0x1951;
+                    case ToonClass.Wizard:
+                        return 0x197E;
+                }
+            }
+            return 0x0;
+        }
 
         public int ClassSNO
         {
@@ -1203,76 +1262,6 @@ namespace Mooege.Core.GS.Players
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
         }
 
-        public void PlayHeroConversation(int snoConversation, int lineID)
-        {
-            this.InGameClient.SendMessage(new PlayConvLineMessage()
-            {
-                Id = 0xba,
-                ActorID = this.DynamicID,
-                Field1 = new uint[9]
-                    {
-                        this.DynamicID, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
-                    },
-
-                Params = new PlayLineParams()
-                {
-                    SNOConversation = snoConversation,
-                    Field1 = 0x00000001,
-                    Field2 = false,
-                    LineID = lineID,
-                    Field4 = 0x00000000,
-                    Field5 = -1,
-                    TextClass = (Class)this.Properties.VoiceClassID,
-                    Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
-                    AudioClass = (Class)this.Properties.VoiceClassID,
-                    SNOSpeakerActor = this.SNOId,
-                    Name = this.Properties.Name,
-                    Field11 = 0x00000002,
-                    Field12 = -1,
-                    Field13 = 0x00000069,
-                    Field14 = 0x0000006E,
-                    Field15 = 0x00000032
-                },
-                Field3 = 0x00000069,
-            });
-
-            this.OpenConversations.Add(new OpenConversation(
-                new EndConversationMessage()
-                {
-                    ActorId = this.DynamicID,
-                    Field0 = 0x0000006E,
-                    SNOConversation = snoConversation
-                },
-                this.InGameClient.Game.TickCounter + 200
-            ));
-        }
-
-        public void CheckOpenConversations()
-        {
-            if (this.OpenConversations.Count > 0)
-            {
-                foreach (OpenConversation openConversation in this.OpenConversations)
-                {
-                    if (openConversation.endTick <= this.InGameClient.Game.TickCounter)
-                    {
-                        this.InGameClient.SendMessage(openConversation.endConversationMessage);
-                    }
-                }
-            }
-        }
-
-        public struct OpenConversation
-        {
-            public EndConversationMessage endConversationMessage;
-            public int endTick;
-
-            public OpenConversation(EndConversationMessage endConversationMessage, int endTick)
-            {
-                this.endConversationMessage = endConversationMessage;
-                this.endTick = endTick;
-            }
-        }
-
         #endregion
 
         #region gold, heath-glob collection
@@ -1338,6 +1327,52 @@ namespace Mooege.Core.GS.Players
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
             else
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
+        }
+
+        #endregion
+
+        #region lore
+
+        /// <summary>
+        /// Checks if player has lore
+        /// </summary>
+        /// <param name="loreSNOId"></param>
+        /// <returns></returns>
+        public bool HasLore(int loreSNOId)
+        {
+            return LearnedLore.m_snoLoreLearned.Contains(loreSNOId);
+        }
+
+        /// <summary>
+        /// Plays lore to player
+        /// </summary>
+        /// <param name="loreSNOId"></param>
+        /// <param name="immediately">if false, lore will have new lore button</param>
+        public void PlayLore(int loreSNOId, bool immediately)
+        {
+            // play lore to player
+            InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Quest.LoreMessage
+            {
+                Id = (int)(immediately ? Opcodes.PlayLoreImmediately : Opcodes.PlayLoreWithButton),
+                LoreSNOId = loreSNOId
+            });
+            if (!HasLore(loreSNOId))
+            {
+                AddLore(loreSNOId);
+            }
+        }
+
+        /// <summary>
+        /// Adds lore to player's state
+        /// </summary>
+        /// <param name="loreSNOId"></param>
+        public void AddLore(int loreSNOId) {
+            if (this.LearnedLore.Count < this.LearnedLore.m_snoLoreLearned.Length)
+            {
+                LearnedLore.m_snoLoreLearned[LearnedLore.Count] = loreSNOId;
+                LearnedLore.Count++; // Count
+                UpdateHeroState();
+            }
         }
 
         #endregion

@@ -23,7 +23,6 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
     /// <summary>
     /// Plays a single line from a conversation.
-    /// Proper SNOconversation with correct LineID and correct Field4 will play everything (so far) - farmy
     /// </summary>
     [Message(Opcodes.PlayConvLineMessage)]
     public class PlayConvLineMessage : GameMessage
@@ -32,7 +31,8 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
         // MaxLength = 9
         public uint[] Field1;            // looks like a list of conversation participants - farmy
         public PlayLineParams Params;
-        public int Field3;              // seems to be a running number across conversationlines. StopConvLine.Field0 == PlayConvLine.Field3 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
+        public int Duration;             // playback duration in ms
+
         public PlayConvLineMessage() : base(Opcodes.PlayConvLineMessage) {}
 
         public override void Parse(GameBitBuffer buffer)
@@ -42,7 +42,7 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
             for (int i = 0; i < Field1.Length; i++) Field1[i] = buffer.ReadUInt(32);
             Params = new PlayLineParams();
             Params.Parse(buffer);
-            Field3 = buffer.ReadInt(32);
+            Duration = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -50,7 +50,7 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
             buffer.WriteUInt(32, ActorID);
             for (int i = 0; i < Field1.Length; i++) buffer.WriteUInt(32, Field1[i]);
             Params.Encode(buffer);
-            buffer.WriteInt(32, Field3);
+            buffer.WriteInt(32, Duration);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -65,7 +65,7 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
             for (int i = 0; i < Field1.Length; ) { b.Append(' ', pad + 1); for (int j = 0; j < 8 && i < Field1.Length; j++, i++) { b.Append("0x" + Field1[i].ToString("X8") + ", "); } b.AppendLine(); }
             b.Append(' ', pad); b.AppendLine("}"); b.AppendLine();
             Params.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
+            b.Append(' ', pad); b.AppendLine("Duration: 0x" + Duration.ToString("X8") + " (" + Duration + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

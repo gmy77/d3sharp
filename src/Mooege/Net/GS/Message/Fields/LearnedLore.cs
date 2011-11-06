@@ -22,20 +22,20 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class LearnedLore
     {
-        public int Field0;
+        public int Count;
         // MaxLength = 256
         public int /* sno */[] m_snoLoreLearned;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            Count = buffer.ReadInt(32);
             m_snoLoreLearned = new int /* sno */[256];
             for (int i = 0; i < m_snoLoreLearned.Length; i++) m_snoLoreLearned[i] = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, Count);
             for (int i = 0; i < m_snoLoreLearned.Length; i++) buffer.WriteInt(32, m_snoLoreLearned[i]);
         }
 
@@ -46,7 +46,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.AppendLine("Count: 0x" + Count.ToString("X8") + " (" + Count + ")");
             b.Append(' ', pad);
             b.AppendLine("m_snoLoreLearned:");
             b.Append(' ', pad);

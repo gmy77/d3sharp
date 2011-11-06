@@ -97,7 +97,7 @@ namespace Mooege.Net.GS.Message
         ProjectileStickMessage = 79, // len: 	28
         TargetMessage = 80, // len: 	60
         SecondaryAnimationPowerMessage = 81, // len: 	28
-        SNODataMessage1 = 82, // len: 	12
+        RequestUsePowerMessage = 82, // len: 	12 former SNODataMessage1
         DWordDataMessage2 = 83, // len: 	12
         DWordDataMessage3 = 84, // len: 	12
         DWordDataMessage4 = 85, // len: 	12
@@ -230,8 +230,8 @@ namespace Mooege.Net.GS.Message
         FloatingAmountMessage = 209, // len: 	40
         RemoveRagdollMessage = 210, // len: 	16
         SNONameDataMessage = 211, // len: 	16
-        LoreMessage1 = 212, // len: 	16
-        LoreMessage2 = 213, // len: 	16
+        PlayLoreWithButton = 212, // len: 	16 // former LoreMessage1
+        PlayLoreImmediately = 213, // len: 	16 // former LoreMessage2
         SimpleMessage14 = 216, // len: 	8
         WorldDeletedMessage = 217, // len: 	12
         SimpleMessage15 = 218, // len: 	8

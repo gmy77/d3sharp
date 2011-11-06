@@ -25,16 +25,17 @@ using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
-using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
+using Mooege.Core.GS.Map;
+using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Core.Common.Items;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -109,12 +110,36 @@ namespace Mooege.Core.GS.Actors
         public int CollFlags { get; set; }
 
         /// <summary>
-        /// Returns true if actor has world location. TODO: I belive this belongs to WorldObject.cs /raist.
+        /// Gets whether the actor is visible by questrange, privately set on quest progress
+        /// </summary>
+        public bool Visible { get; private set; }
+
+        /// <summary>
+        /// The QuestRange specifies the visibility of an actor, depending on quest progress
+        /// </summary>
+        private Mooege.Common.MPQ.FileFormats.QuestRange questRange;
+
+        protected Mooege.Common.MPQ.FileFormats.ConversationList conversationList;
+
+        /// <summary>
+        /// Returns true if actor has world location.
+        /// TODO: I belive this belongs to WorldObject.cs /raist.
         /// </summary>
         public virtual bool HasWorldLocation
         {
             get { return true; }
         }
+
+        protected Mooege.Common.MPQ.FileFormats.Actor ActorData { get; private set; }
+
+        /// <summary>
+        /// The animation set for actor.
+        /// </summary>
+        public Mooege.Common.MPQ.FileFormats.AnimSet AnimationSet { get; private set; }
+
+        // TODO: read them from MPQ data's instead /raist.
+        public float WalkSpeed = 0.2797852f;
+        public float RunSpeed = 0.3598633f;
 
         // Some ACD uncertainties /komiga.
         public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself /komiga & /raist.
@@ -126,6 +151,8 @@ namespace Mooege.Core.GS.Actors
         public int? Field11 = null;
         public int? Field12 = null;
         public int? Field13 = null;
+
+        private int snoTriggeredConversation = -1;
 
         /// <summary>
         /// Creates a new actor.
@@ -145,8 +172,18 @@ namespace Mooege.Core.GS.Actors
             this.GBHandle = new GBHandle { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
             this.CollFlags = 0x00000000;
 
+            this.ActorData = (Mooege.Common.MPQ.FileFormats.Actor) Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.Actor][snoId].Data;
+            if (this.ActorData.AnimSetSNO != -1) 
+                this.AnimationSet = (Mooege.Common.MPQ.FileFormats.AnimSet) Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.AnimSet][this.ActorData.AnimSetSNO].Data;
+
             this.Tags = tags;
             this.ReadTags();
+
+            // Listen for quest progress if the actor has a QuestRange attached to it
+            foreach(var quest in World.Game.Quests)
+                if(questRange != null)
+                    quest.OnQuestProgress += new Games.Quest.QuestProgressDelegate(quest_OnQuestProgress);
+            UpdateQuestRangeVisbility();
         }
 
         /// <summary>
@@ -156,14 +193,6 @@ namespace Mooege.Core.GS.Actors
         /// <param name="snoId">SNOId of the actor.</param>
         protected Actor(World world, int snoId)
             : this(world, snoId, null)
-        { }
-
-        /// <summary>
-        /// Creates a new world.
-        /// </summary>
-        /// <param name="world">The world that initially belongs to.</param>
-        protected Actor(World world)
-            : this(world, -1, null)
         { }
 
         #region enter-world, change-world, teleport helpers
@@ -179,6 +208,17 @@ namespace Mooege.Core.GS.Actors
                 this.World.Enter(this); // let him enter first.
         }
 
+        public virtual void BeforeChangeWorld()
+        {
+
+        }
+
+        public virtual void AfterChangeWorld()
+        {
+
+        }
+
+
         public void ChangeWorld(World world, Vector3D position)
         {
             if (this.World == world)
@@ -189,9 +229,13 @@ namespace Mooege.Core.GS.Actors
             if (this.World != null) // if actor is already in a existing-world
                 this.World.Leave(this); // make him leave it first.
 
+            BeforeChangeWorld();
+
             this.World = world;
             if (this.World != null) // if actor got into a new world.
                 this.World.Enter(this); // let him enter first.
+
+            AfterChangeWorld();
 
             world.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
         }
@@ -215,6 +259,14 @@ namespace Mooege.Core.GS.Actors
 
         #region reveal & unreveal handling
 
+        private void UpdateQuestRangeVisbility()
+        {
+            if (questRange != null)
+                Visible = World.Game.Quests.IsInQuestRange(questRange);
+            else
+                Visible = true;
+        }
+
         /// <summary>
         /// Returns true if the actor is revealed to player.
         /// </summary>
@@ -225,21 +277,14 @@ namespace Mooege.Core.GS.Actors
             return player.RevealedObjects.ContainsKey(this.DynamicID);
         }
 
-        /// <summary>
-        /// Reveals an actor to a player.
-        /// </summary>
-        /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
-        public override bool Reveal(Player player)
+        public ACDEnterKnownMessage ACDEnterKnown()
         {
-            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
-            player.RevealedObjects.Add(this.DynamicID, this);
-
-            var msg = new ACDEnterKnownMessage
+            return new ACDEnterKnownMessage
             {
                 ActorID = this.DynamicID,
                 ActorSNO = this.SNOId,
                 Field2 = Field2,
-                Field3 = Field3, // this.hasWorldLocation ? 0 : 1;
+                Field3 =  this.HasWorldLocation ? 0 : 1,
                 WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
                 InventoryLocation = this.HasWorldLocation ? null : this.InventoryLocationMessage,
                 GBHandle = this.GBHandle,
@@ -251,6 +296,18 @@ namespace Mooege.Core.GS.Actors
                 Field12 = Field12,
                 Field13 = Field13,
             };
+        }
+
+        /// <summary>
+        /// Reveals an actor to a player.
+        /// </summary>
+        /// <returns>true if the actor was revealed or false if the actor was already revealed.</returns>
+        public override bool Reveal(Player player)
+        {
+            if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // already revealed
+            player.RevealedObjects.Add(this.DynamicID, this);
+
+            var msg = ACDEnterKnown();
 
             // normaly when we send acdenterknown for players own actor it's set to 0x09. But while sending the acdenterknown for another player's actor we should set it to 0x01. /raist
             if ((this is Player) && this != player)
@@ -398,6 +455,11 @@ namespace Mooege.Core.GS.Actors
 
         #region events
 
+        private void quest_OnQuestProgress(Quest quest)
+        {
+            UpdateQuestRangeVisbility();
+        }
+
         public virtual void OnEnter(World world)
         {
 
@@ -413,7 +475,7 @@ namespace Mooege.Core.GS.Actors
             // TODO: Unreveal from players that are now outside the actor's range. /komiga
         }
 
-        public virtual void OnTargeted(Player player, TargetMessage message)
+        public virtual void OnTargeted(Player player, Mooege.Net.GS.Message.Definitions.World.TargetMessage message)
         {
 
         }
@@ -472,6 +534,50 @@ namespace Mooege.Core.GS.Actors
 
             if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
                 this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.QuestRange))
+            {
+                int snoQuestRange = Tags[(int)MarkerTagTypes.QuestRange].Int2;
+                if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange].ContainsKey(snoQuestRange))
+                    questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
+                else
+                    Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
+            }
+
+            if (this.Tags.ContainsKey((int)MarkerTagTypes.ConversationList))
+            {
+                int snoConversationList = Tags[(int)MarkerTagTypes.ConversationList].Int2;
+                if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList].ContainsKey(snoConversationList))
+                    conversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
+                else
+                    Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", SNOId, snoConversationList);
+            }
+
+
+            if(this.Tags.ContainsKey((int)MarkerTagTypes.TriggeredConversation))
+                snoTriggeredConversation = Tags[(int)MarkerTagTypes.TriggeredConversation].Int2;
+
+
+        }
+
+        #endregion
+
+        #region movement
+
+        public void Move(Vector3D point, float facingAngle)
+        {
+            var movementMessage = new NotifyActorMovementMessage
+            {
+                ActorId = (int)this.DynamicID,
+                Position = point,
+                Angle = facingAngle,
+                Field3 = false,
+                Speed = this.WalkSpeed,
+                Field5 = 0,
+                AnimationTag = this.AnimationSet == null ? 0 : this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk)
+            };
+
+            this.World.BroadcastIfRevealed(movementMessage, this);
         }
 
         #endregion
