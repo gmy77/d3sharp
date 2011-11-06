@@ -20,12 +20,12 @@ using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Common.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
 using System.Linq;
+using Mooege.Core.GS.Ticker.Helpers;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -90,7 +90,9 @@ namespace Mooege.Core.GS.Powers
                 int spawn_count = 10;
 
                 // list of actorSNO values to pick from when spawning
-                int[] actorSNO_values = { 4282, 3893, 6652, 5428, 5346, 6024, 5393, 5433, 5467 };
+                int[] actorSNO_values = { 4282, 3893, 6652, 5428, 5346, 6024, 5393, 5467 };
+                int actorSNO = actorSNO_values[RandomHelper.Next(actorSNO_values.Length - 1)];
+                //Logger.Debug("PowerManager spawning sno {0}", actorSNO);
 
                 for (int n = 0; n < spawn_count; ++n)
                 {
@@ -117,8 +119,6 @@ namespace Mooege.Core.GS.Powers
                         position.Y += (float)(RandomHelper.NextDouble() - 0.5) * 20;
                         position.Z = user.Position.Z;
                     }
-
-                    int actorSNO = actorSNO_values[RandomHelper.Next(actorSNO_values.Length - 1)];
 
                     Monster mon = new Monster(user.World, actorSNO, null);
                     mon.Position = position;
@@ -196,7 +196,7 @@ namespace Mooege.Core.GS.Powers
             // process all powers, removing from the list the ones that expire
             _waitingPowers.RemoveAll((wait) =>
             {
-                if (wait.PowerEnumerator.Current.TimedOut())
+                if (wait.PowerEnumerator.Current.TimedOut)
                 {
                     if (wait.PowerEnumerator.MoveNext())
                         return wait.PowerEnumerator.Current == PowerImplementation.StopExecution;

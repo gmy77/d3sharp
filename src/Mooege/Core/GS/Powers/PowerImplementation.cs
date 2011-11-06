@@ -18,7 +18,7 @@
 
 using System.Collections.Generic;
 using Mooege.Common;
-using Mooege.Core.GS.Common.Types;
+using Mooege.Core.GS.Ticker.Helpers;
 
 namespace Mooege.Core.GS.Powers
 {

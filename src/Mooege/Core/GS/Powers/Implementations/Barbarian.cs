@@ -19,10 +19,9 @@
 using System;
 using System.Collections.Generic;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Actors.Buffs;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Core.GS.Common.Types;
+using Mooege.Core.GS.Ticker.Helpers;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -107,7 +106,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             //UsePrimaryResource(14f);
 
-            User.AddBuff(new WhirlWindEffectBuff(WaitSeconds(0.250f)));
+            //User.AddBuff(new WhirlWindEffectBuff(WaitSeconds(0.250f)));
 
             foreach (Actor target in GetTargetsInRange(User.Position, 9f))
             {

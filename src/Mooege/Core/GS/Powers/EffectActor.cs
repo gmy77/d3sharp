@@ -17,20 +17,21 @@
  */
 
 using System;
-using Mooege.Core.GS.Common.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Ticker.Helpers;
+using Mooege.Core.GS.Actors;
 
-namespace Mooege.Core.GS.Actors
+namespace Mooege.Core.GS.Powers
 {
-    public class ClientEffect : Actor, IUpdateable
+    public class EffectActor : Actor, IUpdateable
     {
         public TickTimer Timeout;
 
         public override ActorType ActorType { get { return Actors.ActorType.ClientEffect; } }
 
-        public ClientEffect(World world, int actorSNO, Vector3D position, float angle, TickTimer timeout = null)
+        public EffectActor(World world, int actorSNO, Vector3D position, float angle, TickTimer timeout = null)
             : base(world, actorSNO)
         {
             RotationAmount = (float)Math.Cos(angle / 2f);
@@ -42,7 +43,8 @@ namespace Mooege.Core.GS.Actors
             this.Field3 = 0x0;
             //this.Field7 = -1; // used by some effects, but not needed?
             this.Field8 = actorSNO;
-            this.Scale = 1f;
+            if (this.Scale == 0f)
+                this.Scale = 1f;
             this.Position = position;
             this.GBHandle.Type = -1; this.GBHandle.GBID = -1; // TODO: use proper enum value
             
@@ -53,7 +55,7 @@ namespace Mooege.Core.GS.Actors
 
         public void Update(int tickCounter)
         {
-            if (Timeout != null && Timeout.TimedOut())
+            if (Timeout != null && Timeout.TimedOut)
                 this.Destroy();
         }
     }

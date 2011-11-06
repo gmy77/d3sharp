@@ -36,7 +36,6 @@ using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Core.GS.Actors.Buffs;
 using System;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Core.GS.Powers;
@@ -261,40 +260,6 @@ namespace Mooege.Core.GS.Actors
 
         #endregion
         
-        #region Buffs and Debuffs
-
-        List<TimedBuff> _activeBuffs = new List<TimedBuff>(); //< list of all active buffs on the actor
-        
-        public void AddBuff(TimedBuff buff)
-        {
-            buff.Target = this;
-            // lookup by .net type and update it already exists
-            Type buffType = buff.GetType();
-            int activeIndex = _activeBuffs.FindIndex(b => b.GetType() == buffType);
-            if (activeIndex != -1)
-            {
-                _activeBuffs[activeIndex] = buff;
-            }
-            else
-            {
-                _activeBuffs.Add(buff);
-                buff.Apply();
-            }
-        }
-
-        public void UpdateBuffs()
-        {
-            _activeBuffs.RemoveAll(buff => buff.Update()); // Update() returns true if finished
-        }
-
-        public void RemoveAllBuffs()
-        {
-            foreach (TimedBuff tb in _activeBuffs)
-                tb.Remove();
-        }
-
-        #endregion
-
         #region Movement/Translation
 
         public void MoveWorldPosition(Vector3D destination)

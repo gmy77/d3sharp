@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Mooege.Core.GS.Common.Types;
+using Mooege.Core.GS.Ticker.Helpers;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -38,7 +38,7 @@ namespace Mooege.Core.GS.Powers
 
         public sealed override IEnumerable<TickTimer> Run()
         {
-            if (_runTimeout == null || _runTimeout.TimedOut())
+            if (_runTimeout == null || _runTimeout.TimedOut)
             {
                 _runTimeout = WaitSeconds(RunDelay);
                 foreach (TickTimer timeout in RunChannel())

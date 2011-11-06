@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mooege.Core.GS.Skills;
-using Mooege.Core.GS.Common.Types;
+using Mooege.Core.GS.Ticker.Helpers;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {

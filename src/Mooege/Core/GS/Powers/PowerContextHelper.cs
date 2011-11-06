@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Common.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
@@ -28,6 +27,7 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Core.GS.Common.Types.Misc;
+using Mooege.Core.GS.Ticker.Helpers;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -150,7 +150,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public ClientEffect SpawnEffect(int actorSNO, Vector3D position, float angle = 0, TickTimer timeout = null)
+        public EffectActor SpawnEffect(int actorSNO, Vector3D position, float angle = 0, TickTimer timeout = null)
         {
             if (angle == -1f)
                 angle = (float)(Rand.NextDouble() * (Math.PI * 2));
@@ -162,16 +162,16 @@ namespace Mooege.Core.GS.Powers
                 timeout = _defaultEffectTimeout;
             }
 
-            return new ClientEffect(World, actorSNO, position, angle, timeout);
+            return new EffectActor(World, actorSNO, position, angle, timeout);
         }
 
-        public ClientEffect SpawnEffect(int actorSNO, Vector3D position, Actor point_to_actor, TickTimer timeout = null)
+        public EffectActor SpawnEffect(int actorSNO, Vector3D position, Actor point_to_actor, TickTimer timeout = null)
         {
             float angle = (point_to_actor != null) ? PowerMath.AngleLookAt(User.Position, point_to_actor.Position) : -1f;
             return SpawnEffect(actorSNO, position, angle, timeout);
         }
 
-        public ClientEffect SpawnProxy(Vector3D position, TickTimer timeout = null)
+        public EffectActor SpawnProxy(Vector3D position, TickTimer timeout = null)
         {
             return SpawnEffect(187359, position, 0, timeout);
         }

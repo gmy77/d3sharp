@@ -20,9 +20,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Actors.Buffs;
 using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Common.Types;
+using Mooege.Core.GS.Ticker.Helpers;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -210,7 +209,6 @@ namespace Mooege.Core.GS.Powers.Implementations
             foreach (Actor actor in hits)
             {
                 Knockback(actor, 5f);
-                actor.AddBuff(new StunBuff(WaitSeconds(2f)));
                 WeaponDamage(actor, 2.05f, DamageType.Physical);
             }
             yield break;
@@ -272,7 +270,6 @@ namespace Mooege.Core.GS.Powers.Implementations
             IList<Actor> hits = GetTargetsInRange(User.Position, 18);
             foreach (Actor actor in hits)
             {
-                actor.AddBuff(new FreezeBuff(WaitSeconds(4f)));
                 WeaponDamage(actor, 0.65f, DamageType.Cold);
             }
 
@@ -298,7 +295,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                 IList<Actor> hits = GetTargetsInRange(TargetPosition, 18);
                 foreach (Actor actor in hits)
                 {
-                    actor.AddBuff(new ChilledBuff(WaitSeconds(1f)));
                     WeaponDamage(actor, 0.65f, DamageType.Cold);
                 }
 

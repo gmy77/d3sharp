@@ -22,8 +22,8 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Core.GS.Common.Types;
 using Mooege.Core.GS.Common.Types.Misc;
+using Mooege.Core.GS.Ticker.Helpers;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -170,7 +170,7 @@ namespace Mooege.Core.GS.Powers
 
             if (this.World != null)
             {
-                if (Timeout.TimedOut())
+                if (Timeout.TimedOut)
                 {
                     if (OnTimeout != null)
                         OnTimeout();
