@@ -84,8 +84,17 @@ namespace Mooege.Common.MPQ
                 if (!match.Success) continue;
                 if (!match.Groups["version"].Success) continue;
 
-                MPQFileList.Add(Int32.Parse(match.Groups["version"].Value), file);
-                Logger.Trace("Applied patch file: {0}.", match.Groups[0].Value);
+                var patchName = match.Groups[0].Value;
+                var patchVersion = Int32.Parse(match.Groups["version"].Value);
+
+                if (patchVersion > this.RequiredVersion) // ignore the patch if it's version is higher than our required.
+                {
+                    Logger.Trace("Ignoring patch file {0}", patchName);
+                    continue;
+                }
+
+                MPQFileList.Add(patchVersion, file);
+                Logger.Trace("Applied patch file: {0}.", patchName);
             }
 
             /* add mpq's to mpq-file system in reverse-order (highest version first) */
@@ -93,26 +102,9 @@ namespace Mooege.Common.MPQ
             {
                 foreach(var mpq in pair.Value)
                 {
-                    this.FileSystem.Archives.Add(new MpqArchive(mpq));    
+                    this.FileSystem.Archives.Add(new MpqArchive(mpq, false));
                 }
             }
-        }
-
-        public List<string> FindMatchingFiles(string mask)
-        {
-            var list = new List<string>();
-            foreach(var archive in this.FileSystem.Archives)
-            {
-                foreach(var file in archive.Files)
-                {
-                    if (!file.Name.Contains(mask)) continue;
-                    if (list.Contains(file.Name)) continue;
-
-                    list.Add(file.Name);
-                }
-            }
-
-            return list;
         }
     }
 }

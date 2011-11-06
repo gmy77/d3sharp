@@ -16,30 +16,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Core.GS.Objects
+using System.Collections.Generic;
+using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Map;
+
+namespace Mooege.Core.GS.Actors.Implementations
 {
-    /// <summary>
-    /// A dynamic object that can have a dynamicId
-    /// </summary>
-    public abstract class DynamicObject
+    [HandledSNO(6652)]
+    public class Zombie : Monster
     {
-        /// <summary>
-        /// The dynamic unique runtime ID for the actor.
-        /// </summary>
-        public readonly uint DynamicID;
-
-        /// <summary>
-        /// Initialization constructor.
-        /// </summary>
-        /// <param name="dynamicID">The dynamic ID to initialize with.</param>
-        protected DynamicObject(uint dynamicID)
+        public Zombie(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+            : base(world, snoId, tags)
         {
-            this.DynamicID = dynamicID;
+            // this.Brain = new AI.Brain(this); disabled for now. /raist.
         }
-
-        /// <summary>
-        /// Destroy the object. This should remove any references to the object throughout GS.
-        /// </summary>
-        public abstract void Destroy();
     }
 }

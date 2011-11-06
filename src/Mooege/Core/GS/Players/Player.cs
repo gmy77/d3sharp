@@ -38,20 +38,16 @@ using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Effect;
-using Mooege.Net.GS.Message.Definitions.Conversation;
-using Mooege.Common.Helpers;
-using System;
 using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
 using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
-using Mooege.Common.Helpers.Assets;
 
 namespace Mooege.Core.GS.Players
 {
-    public class Player : Actor, IMessageConsumer
+    public class Player : Actor, IMessageConsumer, IUpdateable
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -93,14 +89,12 @@ namespace Mooege.Core.GS.Players
 
         public ConversationManager Conversations { get; private set; }
 
-
         // Collection of items that only the player can see. This is only used when items drop from killing an actor
         // TODO: Might want to just have a field on the item itself to indicate whether it is visible to only one player
         /// <summary>
         /// Dropped items for the player
         /// </summary>
         public Dictionary<uint, Item> GroundItems { get; private set; }
-
 
         /// <summary>
         /// Everything connected to ExpBonuses.
@@ -177,7 +171,7 @@ namespace Mooege.Core.GS.Players
         /// <param name="client">The gameclient for the player.</param>
         /// <param name="bnetToon">Toon of the player.</param>
         public Player(World world, GameClient client, Toon bnetToon)
-            : base(world)
+            : base(world, GetClassSNOId(bnetToon.Gender, bnetToon.Class))
         {
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
@@ -523,7 +517,7 @@ namespace Mooege.Core.GS.Players
 
         #region update-logic
 
-        public override void Update(int tickCounter)
+        public void Update(int tickCounter)
         {
             // Check the Killstreaks
             this.ExpBonusData.Check(0);
@@ -567,7 +561,7 @@ namespace Mooege.Core.GS.Players
 
             foreach (var actor in actors) // reveal actors in player's proximity.
             {
-                if (actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
+                if (actor.Visible == false || actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
                     continue;
 
                 if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player 
@@ -1012,6 +1006,43 @@ namespace Mooege.Core.GS.Players
         #endregion
 
         #region generic properties
+
+        public static int GetClassSNOId(int gender, ToonClass @class)
+        {
+            if(gender==0) // male
+            {
+                switch(@class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x0CE5;
+                    case ToonClass.DemonHunter:
+                        return 0x0125C7;
+                    case ToonClass.Monk:
+                        return 0x1271;
+                    case ToonClass.WitchDoctor:
+                        return 0x1955;
+                    case ToonClass.Wizard:
+                        return 0x1990;
+                }
+            }
+            else // female
+            {
+                switch (@class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x0CD5;
+                    case ToonClass.DemonHunter:
+                        return 0x0123D2;
+                    case ToonClass.Monk:
+                        return 0x126D;
+                    case ToonClass.WitchDoctor:
+                        return 0x1951;
+                    case ToonClass.Wizard:
+                        return 0x197E;
+                }
+            }
+            return 0x0;
+        }
 
         public int ClassSNO
         {

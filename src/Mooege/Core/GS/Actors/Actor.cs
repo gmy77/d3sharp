@@ -25,16 +25,17 @@ using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
-using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
+using Mooege.Core.GS.Map;
+using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Core.Common.Items;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -109,6 +110,11 @@ namespace Mooege.Core.GS.Actors
         public int CollFlags { get; set; }
 
         /// <summary>
+        /// Gets whether the actor is visible by questrange, privately set on quest progress
+        /// </summary>
+        public bool Visible { get; private set; }
+
+        /// <summary>
         /// The QuestRange specifies the visibility of an actor, depending on quest progress
         /// </summary>
         private Mooege.Common.MPQ.FileFormats.QuestRange questRange;
@@ -123,6 +129,17 @@ namespace Mooege.Core.GS.Actors
         {
             get { return true; }
         }
+
+        protected Mooege.Common.MPQ.FileFormats.Actor ActorData { get; private set; }
+
+        /// <summary>
+        /// The animation set for actor.
+        /// </summary>
+        public Mooege.Common.MPQ.FileFormats.AnimSet AnimationSet { get; private set; }
+
+        // TODO: read them from MPQ data's instead /raist.
+        public float WalkSpeed = 0.2797852f;
+        public float RunSpeed = 0.3598633f;
 
         // Some ACD uncertainties /komiga.
         public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself /komiga & /raist.
@@ -155,8 +172,18 @@ namespace Mooege.Core.GS.Actors
             this.GBHandle = new GBHandle { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
             this.CollFlags = 0x00000000;
 
+            this.ActorData = (Mooege.Common.MPQ.FileFormats.Actor) Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.Actor][snoId].Data;
+            if (this.ActorData.AnimSetSNO != -1) 
+                this.AnimationSet = (Mooege.Common.MPQ.FileFormats.AnimSet) Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.AnimSet][this.ActorData.AnimSetSNO].Data;
+
             this.Tags = tags;
             this.ReadTags();
+
+            // Listen for quest progress if the actor has a QuestRange attached to it
+            foreach(var quest in World.Game.Quests)
+                if(questRange != null)
+                    quest.OnQuestProgress += new Games.Quest.QuestProgressDelegate(quest_OnQuestProgress);
+            UpdateQuestRangeVisbility();
         }
 
         /// <summary>
@@ -166,14 +193,6 @@ namespace Mooege.Core.GS.Actors
         /// <param name="snoId">SNOId of the actor.</param>
         protected Actor(World world, int snoId)
             : this(world, snoId, null)
-        { }
-
-        /// <summary>
-        /// Creates a new world.
-        /// </summary>
-        /// <param name="world">The world that initially belongs to.</param>
-        protected Actor(World world)
-            : this(world, -1, null)
         { }
 
         #region enter-world, change-world, teleport helpers
@@ -239,6 +258,14 @@ namespace Mooege.Core.GS.Actors
         #endregion
 
         #region reveal & unreveal handling
+
+        private void UpdateQuestRangeVisbility()
+        {
+            if (questRange != null)
+                Visible = World.Game.Quests.IsInQuestRange(questRange);
+            else
+                Visible = true;
+        }
 
         /// <summary>
         /// Returns true if the actor is revealed to player.
@@ -353,18 +380,7 @@ namespace Mooege.Core.GS.Actors
 
         public List<Actor> GetActorsInRange(float radius = DefaultQueryProximity)
         {
-            var actorsAll = this.GetObjectsInRange<Actor>(radius);
-            var actorsVisible = new List<Actor>(actorsAll);
-
-            // remove all actors that are not visible because they have a questrange set which the player does not meet
-            
-            foreach (Actor actor in actorsAll)
-                if (actor.questRange != null)
-                    if (World.Game.Quests.IsInQuestRange(actor.questRange) == false)
-                        actorsVisible.Remove(actor);
-
-            return actorsVisible;
-
+            return this.GetObjectsInRange<Actor>(radius);
         }
 
         public List<T> GetActorsInRange<T>(float radius = DefaultQueryProximity) where T : Actor
@@ -439,6 +455,11 @@ namespace Mooege.Core.GS.Actors
 
         #region events
 
+        private void quest_OnQuestProgress(Quest quest)
+        {
+            UpdateQuestRangeVisbility();
+        }
+
         public virtual void OnEnter(World world)
         {
 
@@ -454,7 +475,7 @@ namespace Mooege.Core.GS.Actors
             // TODO: Unreveal from players that are now outside the actor's range. /komiga
         }
 
-        public virtual void OnTargeted(Player player, TargetMessage message)
+        public virtual void OnTargeted(Player player, Mooege.Net.GS.Message.Definitions.World.TargetMessage message)
         {
 
         }
@@ -537,6 +558,26 @@ namespace Mooege.Core.GS.Actors
                 snoTriggeredConversation = Tags[(int)MarkerTagTypes.TriggeredConversation].Int2;
 
 
+        }
+
+        #endregion
+
+        #region movement
+
+        public void Move(Vector3D point, float facingAngle)
+        {
+            var movementMessage = new NotifyActorMovementMessage
+            {
+                ActorId = (int)this.DynamicID,
+                Position = point,
+                Angle = facingAngle,
+                Field3 = false,
+                Speed = this.WalkSpeed,
+                Field5 = 0,
+                AnimationTag = this.AnimationSet == null ? 0 : this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk)
+            };
+
+            this.World.BroadcastIfRevealed(movementMessage, this);
         }
 
         #endregion
