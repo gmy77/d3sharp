@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Common.Helpers.Assets;
+using Mooege.Common.Config.Compatibility;
 using System.Linq;
 
 namespace Mooege.Common.MPQ
@@ -90,7 +91,8 @@ namespace Mooege.Common.MPQ
 
             stream.Close();
 
-            // Run the parsers for assets (that have a parser there).
+            // Run the parsers for assets (that have a parser)
+			// This will not run the parser if tasks are turned off in config.ini
             foreach (var task in this._tasks)
             {
                 task.Start();
@@ -128,8 +130,13 @@ namespace Mooege.Common.MPQ
             }
 
             if (file == null || file.Size < 10) return asset; // if it's empty, give up again.
-
-            this._tasks.Add(new Task(() => asset.RunParser(parser, file))); // add it to our task list, so we can parse them concurrently.
+			
+			if (Compatibility.Instance.EnableTasks)
+			{
+	        	this._tasks.Add(new Task(() => asset.RunParser(parser, file))); // add it to our task list, so we can parse them concurrently.
+			} else {
+				asset.RunParser(parser, file); // just run the parsers serially
+			}
             return asset;
         }
 
