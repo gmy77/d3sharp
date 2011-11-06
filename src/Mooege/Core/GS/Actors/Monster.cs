@@ -29,7 +29,6 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Common.Helpers.Assets;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
 

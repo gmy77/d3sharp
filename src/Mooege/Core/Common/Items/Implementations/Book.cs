@@ -13,7 +13,6 @@ using Mooege.Common.MPQ;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Markers;
-using Mooege.Common.Helpers.Assets;
 
 namespace Mooege.Core.Common.Items.Implementations
 {
