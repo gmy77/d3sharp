@@ -23,10 +23,10 @@ namespace Mooege.Net.GS.Message.Definitions.Hireling
 	/// <summary>
     /// Sent to the client when a skill is requested to be learnt for a follower
     /// </summary>
-    [Message(Opcodes.HirelingRequestLearnSkillMessage, Consumers.SelectedNPC)]
+    [Message(Opcodes.HirelingRequestLearnSkillMessage, Consumers.Player)]
     public class HirelingRequestLearnSkillMessage : GameMessage
     {
-        public uint ActorID; 
+        public uint HirelingID; //Actor ID of the hireling
         public int /* sno */ PowerSNOId;
 
         public override void Parse(GameBitBuffer buffer)
