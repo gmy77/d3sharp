@@ -219,7 +219,7 @@
     <Compile Include="Core\MooNet\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\MooNet\Online\PlayerManager.cs" />
     <Compile Include="Core\MooNet\Services\AuthenticationService.cs" />
-    <Compile Include="Core\MooNet\Services\BaseService.cs" />
+    <Compile Include="Core\MooNet\Services\ConnectionService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelInvitationService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelOwnerService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelService.cs" />

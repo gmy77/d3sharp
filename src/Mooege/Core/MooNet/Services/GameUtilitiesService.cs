@@ -20,9 +20,6 @@ using System;
 using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Net.MooNet;
-using bnet.protocol;
-using bnet.protocol.game_utilities;
-using bnet.protocol.toon;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -44,27 +41,27 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void CreateToon(IRpcController controller, bnet.protocol.game_utilities.CreateToonRequest request, Action<NoData> done)
+        public override void CreateToon(IRpcController controller, bnet.protocol.game_utilities.CreateToonRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void DeleteToon(IRpcController controller, bnet.protocol.game_utilities.DeleteToonRequest request, Action<NoData> done)
+        public override void DeleteToon(IRpcController controller, bnet.protocol.game_utilities.DeleteToonRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void TransferToon(IRpcController controller, bnet.protocol.game_utilities.TransferToonRequest request, Action<NoData> done)
+        public override void TransferToon(IRpcController controller, bnet.protocol.game_utilities.TransferToonRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void SelectToon(IRpcController controller, bnet.protocol.game_utilities.SelectToonRequest request, Action<NoData> done)
+        public override void SelectToon(IRpcController controller, bnet.protocol.game_utilities.SelectToonRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void PresenceChannelCreated(IRpcController controller, bnet.protocol.game_utilities.PresenceChannelCreatedRequest request, Action<NoData> done)
+        public override void PresenceChannelCreated(IRpcController controller, bnet.protocol.game_utilities.PresenceChannelCreatedRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
@@ -84,17 +81,17 @@ namespace Mooege.Core.MooNet.Services
             throw new NotImplementedException();
         }
 
-        public override void CreateToonEntity(IRpcController controller, CreateToonEntityRequest request, Action<CreateToonEntityResponse> done)
+        public override void CreateToonEntity(IRpcController controller, bnet.protocol.toon.CreateToonEntityRequest request, Action<bnet.protocol.toon.CreateToonEntityResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void FinalizeToonCreation(IRpcController controller, FinalizeToonCreationRequest request, Action<NoData> done)
+        public override void FinalizeToonCreation(IRpcController controller, bnet.protocol.toon.FinalizeToonCreationRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ProcessServerRequest(IRpcController controller, ServerRequest request, Action<ServerResponse> done)
+        public override void ProcessServerRequest(IRpcController controller, bnet.protocol.game_utilities.ServerRequest request, Action<bnet.protocol.game_utilities.ServerResponse> done)
         {
             throw new NotImplementedException();
         }

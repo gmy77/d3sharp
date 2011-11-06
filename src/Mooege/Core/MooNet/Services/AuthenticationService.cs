@@ -52,12 +52,15 @@ namespace Mooege.Core.MooNet.Services
                 }
 
                 Logger.Info("User {0} authenticated successfuly.", request.Email);
-                var builder = bnet.protocol.authentication.LogonResponse.
+                var logonResponseBuilder = bnet.protocol.authentication.LogonResponse.
                     CreateBuilder()
                     .SetAccount(Client.Account.BnetAccountID)
                     .SetGameAccount(Client.Account.BnetGameAccountID);
 
-                done(builder.Build());
+                done(logonResponseBuilder.Build());
+
+                var encryptRequest = bnet.protocol.connection.EncryptRequest.CreateBuilder().Build();
+                bnet.protocol.connection.ConnectionService.CreateStub(this.Client).Encrypt(null, encryptRequest, callback => { });
 
                 PlayerManager.PlayerConnected(this.Client);
 

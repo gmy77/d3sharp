@@ -22,24 +22,22 @@ using System.Linq;
 using Mooege.Common;
 using Mooege.Common.Extensions;
 using Mooege.Net.MooNet;
-using bnet.protocol;
-using bnet.protocol.connection;
 
 namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x0, serviceHash: 0x0)]
-    public class BaseService :  ConnectionService,  IServerService
+    public class ConnectionService :  bnet.protocol.connection.ConnectionService,  IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
 
-        public override void Connect(Google.ProtocolBuffers.IRpcController controller, ConnectRequest request, Action<ConnectResponse> done)
+        public override void Connect(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.connection.ConnectRequest request, Action<bnet.protocol.connection.ConnectResponse> done)
         {
             Logger.Trace("Connect()");
 
-            var builder = ConnectResponse.CreateBuilder()
-                .SetServerId(ProcessId.CreateBuilder().SetLabel(0).SetEpoch(DateTime.Now.ToUnixTime()))
-                .SetClientId(ProcessId.CreateBuilder().SetLabel(1).SetEpoch(DateTime.Now.ToUnixTime()));
+            var builder = bnet.protocol.connection.ConnectResponse.CreateBuilder()
+                .SetServerId(bnet.protocol.ProcessId.CreateBuilder().SetLabel(0).SetEpoch(DateTime.Now.ToUnixTime()))
+                .SetClientId(bnet.protocol.ProcessId.CreateBuilder().SetLabel(1).SetEpoch(DateTime.Now.ToUnixTime()));
 
             if (request.HasClientId)
                 builder.SetClientId(request.ClientId);
@@ -47,7 +45,7 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void Bind(Google.ProtocolBuffers.IRpcController controller, BindRequest request, Action<BindResponse> done)
+        public override void Bind(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.connection.BindRequest request, Action<bnet.protocol.connection.BindResponse> done)
         {
             var requestedServiceIDs = new List<uint>();
             foreach (var serviceHash in request.ImportedServiceHashList)
@@ -67,33 +65,33 @@ namespace Mooege.Core.MooNet.Services
                 Logger.Trace(string.Format("Bind() {0} [import] Hash: 0x{1} Id: 0x{2}", this.Client, service.Hash.ToString("X8"), service.Id.ToString("X2")));
             }
 
-            var builder = BindResponse.CreateBuilder();
+            var builder = bnet.protocol.connection.BindResponse.CreateBuilder();
             foreach (var serviceId in requestedServiceIDs) builder.AddImportedServiceId(serviceId);
             
             done(builder.Build());
         }
 
-        public override void Echo(Google.ProtocolBuffers.IRpcController controller, EchoRequest request, Action<EchoResponse> done)
+        public override void Echo(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.connection.EchoRequest request, Action<bnet.protocol.connection.EchoResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void Encrypt(Google.ProtocolBuffers.IRpcController controller, EncryptRequest request, Action<NoData> done)
+        public override void Encrypt(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.connection.EncryptRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ForceDisconnect(Google.ProtocolBuffers.IRpcController controller, DisconnectNotification request, Action<NO_RESPONSE> done)
+        public override void ForceDisconnect(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.connection.DisconnectNotification request, Action<bnet.protocol.NO_RESPONSE> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void Null(Google.ProtocolBuffers.IRpcController controller, NullRequest request, Action<NO_RESPONSE> done)
+        public override void Null(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.connection.NullRequest request, Action<bnet.protocol.NO_RESPONSE> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void RequestDisconnect(Google.ProtocolBuffers.IRpcController controller, DisconnectRequest request, Action<NO_RESPONSE> done)
+        public override void RequestDisconnect(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.connection.DisconnectRequest request, Action<bnet.protocol.NO_RESPONSE> done)
         {
             throw new NotImplementedException();
         }        

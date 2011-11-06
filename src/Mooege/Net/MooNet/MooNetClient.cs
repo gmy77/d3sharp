@@ -84,9 +84,9 @@ namespace Mooege.Net.MooNet
         private Dictionary<ulong, ulong> MappedObjects { get; set; }
 
         /// <summary>
-        /// Request counter for RPCs.
+        /// Token counter for RPCs.
         /// </summary>
-        private int _requestCounter = 0;
+        private int _tokenCounter = 1;
         
         /// <summary>
         /// Listener Id for upcoming rpc.
@@ -97,6 +97,7 @@ namespace Mooege.Net.MooNet
         {
             this.Connection = connection;            
             this.Services = new Dictionary<uint, uint>();
+            this.Services.Add(0x65446991, 0x0); // connection-service is always bound by defult.
             this.MappedObjects = new Dictionary<ulong, ulong>();
         }
 
@@ -170,11 +171,11 @@ namespace Mooege.Net.MooNet
             }
 
             var serviceId = this.Services[serviceHash];
-            var requestId = this._requestCounter++;
+            var token = this._tokenCounter++;
 
-            RPCCallbacks.Enqueue(new RPCCallback(done, responsePrototype.WeakToBuilder(), requestId));
+            RPCCallbacks.Enqueue(new RPCCallback(done, responsePrototype.WeakToBuilder(), token));
 
-            var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), (uint)requestId, this._listenerId, request);
+            var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), (uint)token, this._listenerId, request);
             this.Connection.Send(packet);
         }
 
