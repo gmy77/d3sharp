@@ -209,7 +209,7 @@ namespace Mooege.Core.GS.Powers
             if (target == null) return;
 
             var move = PowerMath.ProjectAndTranslate2D(User.Position, target.Position, target.Position, amount);
-            target.TranslateNormal(move);
+            target.TranslateNormal(move, 1f);
         }
     }
 }

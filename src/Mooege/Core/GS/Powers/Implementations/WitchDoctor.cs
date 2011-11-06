@@ -29,6 +29,18 @@ using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
+    [ImplementsPowerSNO(Skills.Skills.WitchDoctor.PhysicalRealm.PoisonDart)]
+    public class WitchDoctorPoisonDart : PowerImplementation
+    {
+        public override IEnumerable<TickTimer> Run()
+        {
+            var eff = SpawnProxy(TargetPosition);
+            eff.PlayEffectGroup(106365);
+            yield break;
+
+        }
+    }
+
     [ImplementsPowerSNO(Skills.Skills.WitchDoctor.PhysicalRealm.PlagueOfToads)]
     public class WitchDoctorPlagueOfToads : PowerImplementation
     {
@@ -48,11 +60,11 @@ namespace Mooege.Core.GS.Powers.Implementations
             TickTimer waitAttackEnd = WaitTicks(60);
             yield return WaitTicks(6 * 3); // wait for attack ani to play a bit
 
-            var tongueTipProxy = SpawnProxy(TargetPosition);
+            var tongueTipProxy = SpawnProxy(TargetPosition, WaitInfinite());
             bigtoad.AddRopeEffect(107892, tongueTipProxy);
 
             // calculate time it will take for actors to reach toad
-            const float moveSpeed = 2f;
+            const float moveSpeed = 3f;
             TickTimer waitMove = WaitTicks((int)(PowerMath.Distance(bigtoad.Position, TargetPosition) / moveSpeed));
 
             tongueTipProxy.TranslateNormal(bigtoad.Position, moveSpeed);
@@ -81,8 +93,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     _SetHiddenAttribute(Target, false);
 
                     _PlayAni(bigtoad, 110637, 50); // regurgitate ani
-                    Vector3D inFrontOfToad = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, bigtoad.Position, 8f);
-                    Target.TranslateNormal(inFrontOfToad, 1f);
+                    Knockback(Target, 8f);
                     yield return WaitTicks(50);
                 }
             }

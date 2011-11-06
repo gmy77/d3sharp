@@ -262,7 +262,7 @@ namespace Mooege.Core.GS.Actors
         
         #region Movement/Translation
 
-        public void TranslateNormal(Vector3D destination, float speed = 1.0f)
+        public void TranslateNormal(Vector3D destination, float speed = 1.0f, int? animationTag = null)
         {
             this.Position = destination;
             float angle = (float)Math.Acos(this.RotationAmount) * 2f;
@@ -276,6 +276,7 @@ namespace Mooege.Core.GS.Actors
                 Angle = angle,
                 Field3 = false,
                 Speed = speed,
+                AnimationTag = animationTag
             }, this);
         }
 
