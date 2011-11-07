@@ -28,6 +28,7 @@ using Mooege.Core.Common.Items;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Net.GS.Message.Definitions.Stash;
 using Mooege.Core.GS.Objects;
+using Mooege.Common.Helpers.Assets;
 
 namespace Mooege.Core.GS.Players
 {
@@ -42,6 +43,8 @@ namespace Mooege.Core.GS.Players
         private Equipment _equipment;
         private InventoryGrid _inventoryGrid;
         private InventoryGrid _stashGrid;
+        // backpack for spellRunes, their Items are kept in equipment
+        private uint[] _skillSocketRunes;
 
         public Inventory(Player owner)
         {
@@ -49,6 +52,7 @@ namespace Mooege.Core.GS.Players
             this._equipment = new Equipment(owner);
             this._inventoryGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Backpack_Slots]/10, 10);
             this._stashGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Shared_Stash_Slots]/7, 7, (int) EquipmentSlotId.Stash);
+            this._skillSocketRunes = new uint[6];
         }
 
         private void AcceptMoveRequest(Item item)
@@ -208,6 +212,25 @@ namespace Mooege.Core.GS.Players
             // Request to move an item (from backpack or equipmentslot)
             else
             {
+                if (request.Location.EquipmentSlot == 0)
+                {
+                    // check if not unsocketting rune
+                    for (int i = 0; i < _skillSocketRunes.Length; i++)
+                    {
+                        if (_skillSocketRunes[i] == request.ItemID)
+                        {
+                            if (_inventoryGrid.FreeSpace(item, request.Location.Row, request.Location.Column))
+                            {
+                                RemoveRune(i);
+                                _inventoryGrid.AddItem(item, request.Location.Row, request.Location.Column);
+                                if (item.InvLoc.EquipmentSlot != request.Location.EquipmentSlot)
+                                    AcceptMoveRequest(item);
+                            }
+                            return;
+                        }
+                    }
+                }
+
                 var destGrid = (request.Location.EquipmentSlot == 0 ? _inventoryGrid : _stashGrid);
 
                 if (destGrid.FreeSpace(item, request.Location.Row, request.Location.Column))
@@ -387,7 +410,9 @@ namespace Mooege.Core.GS.Players
         {
             _inventoryGrid.RemoveItem(item);
             _equipment.UnequipItem(item);
-            item.Destroy();
+//            item.Destroy();
+            item.Unreveal(_owner);
+            _owner.World.Game.EndTracking(item);
         }
 
         public bool Reveal(Player player)
@@ -424,5 +449,83 @@ namespace Mooege.Core.GS.Players
             }
             return result;
         }
+
+        /// <summary>
+        /// Returns rune in skill's socket
+        /// </summary>
+        /// <param name="skillIndex"></param>
+        /// <returns></returns>
+        public Item GetRune(int skillIndex)
+        {
+            if ((skillIndex < 0) || (skillIndex > 5))
+            {
+                return null;
+            }
+            if (_skillSocketRunes[skillIndex] == 0)
+            {
+                return null;
+            }
+            return _equipment.GetItem(_skillSocketRunes[skillIndex]);
+        }
+
+        /// <summary>
+        /// Visually adds rune to skill (move from backpack to runes' slot)
+        /// </summary>
+        /// <param name="rune"></param>
+        /// <param name="PowerSNOId"></param>
+        /// <param name="skillIndex"></param>
+        public void SetRune(Item rune, int powerSNOId, int skillIndex)
+        {
+            if ((skillIndex < 0) || (skillIndex > 5))
+            {
+                return;
+            }
+            if (rune == null)
+            {
+                _skillSocketRunes[skillIndex] = 0;
+                return;
+            }
+            if (_inventoryGrid.Items.ContainsKey(rune.DynamicID))
+            {
+                _inventoryGrid.RemoveItem(rune);
+            }
+            else
+            {
+                // unattuned rune changes to attuned w/o getting into inventory
+                rune.World.Leave(rune);
+                rune.Reveal(_owner);
+            }
+            _equipment.Items.Add(rune.DynamicID, rune);
+            _skillSocketRunes[skillIndex] = rune.DynamicID;
+            // position of rune is read from mpq as INDEX of skill in skill kit - loaded in helper /xsochor
+            rune.SetInventoryLocation(16, SpellRuneIndexHelper.GetRuneIndex(powerSNOId), 0);
+        }
+
+        /// <summary>
+        /// Visually removes rune from skill. Also removes effect of that rune
+        /// </summary>
+        /// <param name="skillIndex"></param>
+        /// <returns></returns>
+        public Item RemoveRune(int skillIndex)
+        {
+            if ((skillIndex < 0) || (skillIndex > 5))
+            {
+                return null;
+            }
+            Item rune = GetRune(skillIndex);
+            if (rune != null)
+            {
+                _equipment.Items.Remove(rune.DynamicID);
+            }
+            int powerSNOId = _owner.SkillSet.ActiveSkills[skillIndex];
+            _skillSocketRunes[skillIndex] = 0;
+            _owner.Attributes[GameAttribute.Rune_A, powerSNOId] = 0;
+            _owner.Attributes[GameAttribute.Rune_B, powerSNOId] = 0;
+            _owner.Attributes[GameAttribute.Rune_C, powerSNOId] = 0;
+            _owner.Attributes[GameAttribute.Rune_D, powerSNOId] = 0;
+            _owner.Attributes[GameAttribute.Rune_E, powerSNOId] = 0;
+            return rune;
+        }
+
     }
 }
