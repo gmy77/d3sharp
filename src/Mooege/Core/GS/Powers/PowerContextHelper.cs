@@ -204,12 +204,27 @@ namespace Mooege.Core.GS.Powers
                         Math.Pow(User.Position.Z - target.Position.Z, 2)) <= range);
         }
 
-        public void Knockback(Actor target, float amount)
+        public void Knockback(Actor target, Vector3D from, float amount)
         {
             if (target == null) return;
 
-            var move = PowerMath.ProjectAndTranslate2D(User.Position, target.Position, target.Position, amount);
+            var move = PowerMath.ProjectAndTranslate2D(from, target.Position, target.Position, amount);
             target.TranslateNormal(move, 1f);
+        }
+
+        public void Knockback(Actor target, float amount)
+        {
+            Knockback(target, User.Position, amount);
+        }
+
+        public bool ValidTarget(Actor target)
+        {
+            return Target != null && Target.World != null; // TODO: check if world is same as powers?
+        }
+
+        public bool ValidTarget()
+        {
+            return ValidTarget(Target);
         }
     }
 }

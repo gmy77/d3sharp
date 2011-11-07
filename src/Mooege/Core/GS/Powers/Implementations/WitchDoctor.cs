@@ -48,58 +48,62 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             // NOTE: not normal plague of toads right now but Obsidian runed "Toad of Hugeness"
 
+            Vector3D userCastPosition = new Vector3D(User.Position);
             Vector3D inFrontOfUser = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, User.Position, 7f);
             var bigtoad = SpawnEffect(109906, inFrontOfUser, TargetPosition, WaitInfinite());
             
             // HACK: holy hell there is alot of hardcoded animation timings here
             
-            _PlayAni(bigtoad, 110766, 50); // spawn ani
-            yield return WaitTicks(50);
+            _PlayAni(bigtoad, 110766); // spawn ani
+            yield return WaitSeconds(1f);
 
-            _PlayAni(bigtoad, 110520, 60); // attack ani
-            TickTimer waitAttackEnd = WaitTicks(60);
-            yield return WaitTicks(6 * 3); // wait for attack ani to play a bit
+            _PlayAni(bigtoad, 110520); // attack ani
+            TickTimer waitAttackEnd = WaitSeconds(1.5f);
+            yield return WaitSeconds(0.3f); // wait for attack ani to play a bit
 
-            var tongueTipProxy = SpawnProxy(TargetPosition, WaitInfinite());
-            bigtoad.AddRopeEffect(107892, tongueTipProxy);
+            var tongueEnd = SpawnProxy(TargetPosition, WaitInfinite());
+            bigtoad.AddRopeEffect(107892, tongueEnd);
 
             // calculate time it will take for actors to reach toad
-            const float moveSpeed = 3f;
-            TickTimer waitMove = WaitTicks((int)(PowerMath.Distance(bigtoad.Position, TargetPosition) / moveSpeed));
+            const float tongueSpeed = 4f;
+            int waitMoveTicks = (int)(PowerMath.Distance(bigtoad.Position, TargetPosition) / tongueSpeed);
 
-            tongueTipProxy.TranslateNormal(bigtoad.Position, moveSpeed);
-            if (Target != null && Target.World != null)
-                Target.TranslateNormal(bigtoad.Position, moveSpeed);
-            
-            yield return waitMove;
-            tongueTipProxy.Destroy();
+            yield return WaitSeconds(0.3f); // have tongue hang there for a bit
 
-            if (Target != null && Target.World != null)
+            tongueEnd.TranslateNormal(bigtoad.Position, tongueSpeed);
+            if (ValidTarget())
+                Target.TranslateNormal(bigtoad.Position, tongueSpeed);
+
+            yield return WaitTicks(waitMoveTicks);
+            tongueEnd.Destroy();
+
+            if (ValidTarget())
             {
                 _SetHiddenAttribute(Target, true);
 
                 if (!waitAttackEnd.TimedOut)
                     yield return waitAttackEnd;
 
-                _PlayAni(bigtoad, 110636, 60 * 5); // disgest ani, 5 seconds
-                for (int n = 0; n < 5 && Target.World != null; ++n)
+                _PlayAni(bigtoad, 110636); // disgest ani, 5 seconds
+                for (int n = 0; n < 5 && ValidTarget(); ++n)
                 {
-                    WeaponDamage(Target, 0.39f, DamageType.Poison, true);
+                    WeaponDamage(Target, 0.039f, DamageType.Poison, true);
                     yield return WaitSeconds(1f);
                 }
 
-                if (Target.World != null)
+                if (ValidTarget())
                 {
                     _SetHiddenAttribute(Target, false);
 
-                    _PlayAni(bigtoad, 110637, 50); // regurgitate ani
-                    Knockback(Target, 8f);
-                    yield return WaitTicks(50);
+                    _PlayAni(bigtoad, 110637); // regurgitate ani
+                    Knockback(Target, userCastPosition, 6f);
+                    Target.PlayEffectGroup(18281); // actual regurgitate efg isn't working so use generic acid effect
+                    yield return WaitSeconds(0.9f);
                 }
             }
 
-            _PlayAni(bigtoad, 110764, 6 * 7); // despawn ani
-            yield return WaitTicks(6 * 7);
+            _PlayAni(bigtoad, 110764); // despawn ani
+            yield return WaitSeconds(0.7f);
             bigtoad.Destroy();
         }
 
@@ -111,7 +115,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
 
         // hackish animation player until a centralized one can be made
-        private void _PlayAni(Actor actor, int aniSNO, int aniTicks)
+        private void _PlayAni(Actor actor, int aniSNO)
         {
             World.BroadcastIfRevealed(new PlayAnimationMessage()
             {
@@ -122,7 +126,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 {
                     new PlayAnimationMessageSpec()
                     {
-                        Field0 = aniTicks,
+                        Field0 = -2,
                         Field1 = aniSNO,
                         Field2 = 0x0,
                         Field3 = 1f
