@@ -16,28 +16,56 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Linq;
 using Google.ProtocolBuffers;
+using Gibbed.IO;
 
 namespace Mooege.Net.MooNet.Packets
 {
     public class PacketIn
     {
-        private readonly CodedInputStream _stream = null;
+        public MooNetClient Client {get; private set;}
+        public CodedInputStream Stream {get; private set;}
 
         public bnet.protocol.Header Header {get; private set;}
 
-        public PacketIn(CodedInputStream stream)
+        public PacketIn(MooNetClient client, CodedInputStream stream)
         {
-            this._stream = stream;
+            this.Client = client;
+            this.Stream = stream;
 
-            var size = (stream.ReadRawByte() << 8) | stream.ReadRawByte(); // header size.
-            var headerData = stream.ReadRawBytes(size); // header data.
-            this.Header = bnet.protocol.Header.ParseFrom(headerData);  // parse header.    
+            if (this.Client.EncryptionEnabled)
+                this.Decrypt();
+
+            this.Read();
+        }
+
+        private void Decrypt()
+        {
+            var data = new byte[0x1000];
+
+            int i = 0;
+            while (!this.Stream.IsAtEnd)
+            {
+                data[i] = this.Stream.ReadRawByte();
+                i++;
+            }
+
+            data = data.Take(i).ToArray();
+            this.Client.ClientDecryptor.Process(data, 0, data.Length);
+            this.Stream = CodedInputStream.CreateInstance(data);
+        }
+
+        private void Read()
+        {
+            var size = (this.Stream.ReadRawByte() << 8) | this.Stream.ReadRawByte(); // header size.
+            var headerData = this.Stream.ReadRawBytes(size); // header data.
+            this.Header = bnet.protocol.Header.ParseFrom(headerData);  // parse header. 
         }
 
         public IMessage ReadMessage(IBuilder builder)
         {
-            return builder.WeakMergeFrom(CodedInputStream.CreateInstance(this.GetPayload(_stream))).WeakBuild();
+            return builder.WeakMergeFrom(CodedInputStream.CreateInstance(this.GetPayload(Stream))).WeakBuild();
             
             // this._stream.ReadMessage(builder, ExtensionRegistry.Empty); // this method doesn't seem to work with 7728. /raist.
             // return builder.WeakBuild();

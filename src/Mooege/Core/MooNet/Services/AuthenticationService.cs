@@ -59,8 +59,7 @@ namespace Mooege.Core.MooNet.Services
 
                 done(logonResponseBuilder.Build());
 
-                var encryptRequest = bnet.protocol.connection.EncryptRequest.CreateBuilder().Build();
-                bnet.protocol.connection.ConnectionService.CreateStub(this.Client).Encrypt(null, encryptRequest, callback => { });
+                this.Client.EnableEncryption();
 
                 PlayerManager.PlayerConnected(this.Client);
 

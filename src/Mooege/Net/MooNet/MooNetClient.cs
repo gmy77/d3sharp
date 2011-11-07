@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Threading;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
@@ -25,6 +26,7 @@ using Mooege.Common;
 using Mooege.Common.Helpers;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Core.MooNet.Objects;
@@ -74,6 +76,22 @@ namespace Mooege.Net.MooNet
         public AuthenticationErrorCodes AuthenticationErrorCode;
 
         /// <summary>
+        /// Is encryption enabled for communication?
+        /// </summary>
+        public bool EncryptionEnabled { get; private set; }
+
+        /// <summary>
+        /// Session key for encrypted communication.
+        /// </summary>
+        public byte[] SessionKey { get; private set; }
+
+        private static readonly byte[] ServerEncryptionSeed = { 0x68, 0xE0, 0xC7, 0x2E, 0xDD, 0xD6, 0xD2, 0xF3, 0x1E, 0x5A, 0xB1, 0x55, 0xB1, 0x8B, 0x63, 0x1E }; // server's crypto seed - these are the values for sc2, seems we've to figure them out for d3 /raist.
+        private static readonly byte[] ClientEncryptionSeed = { 0xDE, 0xA9, 0x65, 0xAE, 0x54, 0x3A, 0x1E, 0x93, 0x9E, 0x69, 0x0C, 0xAA, 0x68, 0xDE, 0x78, 0x39 }; // client's crypto seed - these are the values for sc2, seems we've to figure them out for d3 /raist.
+
+        public ARC4 ServerEncryptor { get; private set; }
+        public ARC4 ClientDecryptor { get; private set; }
+
+        /// <summary>
         /// Callback list for issued client RPCs.
         /// </summary>
         public readonly Queue<RPCCallback> RPCCallbacks = new Queue<RPCCallback>();
@@ -99,6 +117,7 @@ namespace Mooege.Net.MooNet
             this.Services = new Dictionary<uint, uint>();
             this.Services.Add(0x65446991, 0x0); // connection-service is always bound by defult.
             this.MappedObjects = new Dictionary<ulong, ulong>();
+            this.EncryptionEnabled = false;
         }
 
         public bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon)
@@ -224,6 +243,29 @@ namespace Mooege.Net.MooNet
         public ulong GetRemoteObjectID(ulong localObjectId)
         {
             return localObjectId != 0 ? this.MappedObjects[localObjectId] : 0;
+        }
+
+        #endregion
+
+        #region communication encryption
+
+        public void InitEncryption(byte[] sessionKey)
+        {
+            this.SessionKey = sessionKey;
+            var sessionKeyHMAC = new HMACSHA256(this.SessionKey);
+
+            var encryptHash = sessionKeyHMAC.ComputeHash(ServerEncryptionSeed);
+            var decryptHash = sessionKeyHMAC.ComputeHash(ClientEncryptionSeed);
+
+            this.ServerEncryptor = new ARC4(encryptHash); // used to encrypt packets sent by the server.
+            this.ClientDecryptor = new ARC4(decryptHash); // used to decrypt packets sent by the client.
+        }
+
+        public void EnableEncryption()
+        {
+            // enable the encryption.
+            var encryptRequest = bnet.protocol.connection.EncryptRequest.CreateBuilder().Build();
+            bnet.protocol.connection.ConnectionService.CreateStub(this).Encrypt(null, encryptRequest, callback => { this. EncryptionEnabled = true; });
         }
 
         #endregion

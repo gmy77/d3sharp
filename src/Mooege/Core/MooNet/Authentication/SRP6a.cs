@@ -17,7 +17,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -64,6 +63,11 @@ namespace Mooege.Core.MooNet.Authentication
         /// Identity salt that's hashed using account email.
         /// </summary>
         public string IdentitySalt { get; private set; }
+
+        /// <summary>
+        ///  K = H(S) - Shared, strong session key.
+        /// </summary>
+        public byte[] SessionKey { get; private set; }
 
         /// <summary>
         /// Server's secret ephemeral value.
@@ -142,7 +146,8 @@ namespace Mooege.Core.MooNet.Authentication
             var u = H.ComputeHash(new byte[0].Concat(ABytes).Concat(B.ToArray()).ToArray()).ToBigInteger(); // Random scrambling parameter - u = H(A, B)
 
             var S_s = BigInteger.ModPow(A * BigInteger.ModPow(this.Account.PasswordVerifier.ToBigInteger(), u, N), b, N); // calculate server session key - S = (Av^u) ^ b     
-            var K = Calc_K(S_s.ToArray()).ToBigInteger(); // K = H(S) - Shared, strong session key.
+            this.SessionKey = Calc_K(S_s.ToArray()); //  K = H(S) - Shared, strong session key.
+            var K = this.SessionKey.ToBigInteger();
 
             var hashgxorhashN = Hash_g_and_N_and_xor_them().ToBigInteger(); // H(N) ^ H(g)
             var hashedIdentitySalt = H.ComputeHash(Encoding.ASCII.GetBytes(this.IdentitySalt)); // H(I)

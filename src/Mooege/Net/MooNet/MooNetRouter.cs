@@ -43,7 +43,7 @@ namespace Mooege.Net.MooNet
         public static void Identify(IConnection connection, CodedInputStream stream)
         {
             var client = (MooNetClient) connection.Client;
-            var packet = new PacketIn(stream);
+            var packet = new PacketIn(client, stream);
 
             if (packet.Header.ServiceId == ServiceReply) // TODO: fixme /raist.
             {

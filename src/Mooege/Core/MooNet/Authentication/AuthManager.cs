@@ -86,6 +86,8 @@ namespace Mooege.Core.MooNet.Authentication
 
             if(srp6.Verify(A,M_client,seed)) // authentication sucesseful
             {
+                client.InitEncryption(srp6.SessionKey);
+
                 // send the logon proof.
                 var message = bnet.protocol.authentication.ModuleMessageRequest.CreateBuilder()
                     .SetModuleId(moduleId)
