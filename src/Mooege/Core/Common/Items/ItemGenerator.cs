@@ -113,14 +113,18 @@ namespace Mooege.Core.Common.Items
                 AllowedItemTypes.Add(hash);
             foreach (int hash in ItemGroup.SubTypesToHashList("CraftingPlan"))
                 AllowedItemTypes.Add(hash);
-            foreach (int hash in ItemGroup.SubTypesToHashList("HealthPotion"))
-                AllowedItemTypes.Add(hash);
-            foreach (int hash in ItemGroup.SubTypesToHashList("Dye"))
-                AllowedItemTypes.Add(hash);
             foreach (int hash in TypeHandlers.Keys)
             {
-                foreach(int subhash in ItemGroup.HierarchyToHashList(ItemGroup.FromHash(hash)))
+                if (AllowedItemTypes.Contains(hash)) {
+                    // already added structure
+                    continue;
+                }
+                foreach (int subhash in ItemGroup.SubTypesToHashList(ItemGroup.FromHash(hash).Name))
                 {
+                    if (AllowedItemTypes.Contains(subhash)) {
+                        // already added structure
+                        continue;
+                    }
                     AllowedItemTypes.Add(subhash);
                 }
             }
@@ -157,7 +161,7 @@ namespace Mooege.Core.Common.Items
                 
                 // if ((itemDefinition.ItemType1 == StringHashHelper.HashItemName("Book")) && (itemDefinition.BaseGoldValue != 0)) return itemDefinition; // testing books /xsochor
                 // if (itemDefinition.ItemType1 != StringHashHelper.HashItemName("Book")) continue; // testing books /xsochor
-
+                // if (!ItemGroup.SubTypesToHashList("SpellRune").Contains(itemDefinition.ItemType1)) continue; // testing spellrunes /xsochor
 
                 // ignore gold and healthglobe, they should drop only when expect, not randomly
                 if (itemDefinition.Name.ToLower().Contains("gold")) continue;
@@ -170,7 +174,7 @@ namespace Mooege.Core.Common.Items
 
                 if (!GBIDHandlers.ContainsKey(itemDefinition.Hash) &&
                     !AllowedItemTypes.Contains(itemDefinition.ItemType1)) continue;
-
+                              
                 found = true;
             }
 

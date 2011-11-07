@@ -281,7 +281,7 @@ namespace Mooege.Core.GS.Skills
                 public const int FanOfKnives = 0x00012EEA;
                 public const int Multishot = 0x00012F51;
                 public const int ClusterArrow = 0x0001F8BE;
-                public const int RainOfVengeance = 0x001FF01;
+                public const int RainOfVengeance = 0x001FF0F;
 
                 public static readonly List<int> List = new List<int>
                 {

@@ -32,10 +32,16 @@ namespace Mooege.Common.Helpers.Assets
         /// <summary>
         /// Dictionary with PowerSNOs as keys and their indexes as values
         /// </summary>
-        public static ConcurrentDictionary<int, int> PowerToRuneIndex;
+        public static ConcurrentDictionary<int, int> PowerToRuneIndex = new ConcurrentDictionary<int, int>();
 
-        static SpellRuneIndexHelper() {
-            PowerToRuneIndex = new ConcurrentDictionary<int, int>();
+        /// <summary>
+        /// Returns index of Power. Needed for visual feedback on socketting skills
+        /// </summary>
+        /// <param name="PowerSNOId"></param>
+        /// <returns></returns>
+        public static int GetRuneIndex(int PowerSNOId)
+        {
+            return PowerToRuneIndex[PowerSNOId];
         }
 
         public static new List<Task> GetTasks(Data data)
