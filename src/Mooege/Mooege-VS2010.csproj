@@ -115,7 +115,6 @@
     <Compile Include="Common\Extensions\ListExtensions.cs" />
     <Compile Include="Common\Helpers\Assets\AssetHelper.cs" />
     <Compile Include="Common\Helpers\Assets\SpellRuneIndexHelper.cs" />
-    <Compile Include="Common\Helpers\Assets\LoreAssetHelper.cs" />
     <Compile Include="Common\Helpers\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\Data.cs" />
@@ -160,6 +159,7 @@
     <Compile Include="Core\Common\Items\Implementations\Dye.cs" />
     <Compile Include="Core\Common\Items\Implementations\HealthPotion.cs" />
     <Compile Include="Core\Common\Items\Implementations\Potion.cs" />
+    <Compile Include="Core\Common\Items\Implementations\SpellRune.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />

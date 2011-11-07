@@ -45,6 +45,7 @@ using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
 using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
+using Mooege.Common.Helpers;
 
 namespace Mooege.Core.GS.Players
 {
@@ -212,16 +213,10 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Skill, 0x7545] = 1;
             this.Attributes[GameAttribute.Skill_Total, 0x76B7] = 1; //Punch!
             this.Attributes[GameAttribute.Skill, 0x76B7] = 1;
-            this.Attributes[GameAttribute.Skill_Total, 0x216FA] = 1; //Monk's Blinding Flash
-            this.Attributes[GameAttribute.Skill, 0x216FA] = 1;
-            this.Attributes[GameAttribute.Skill_Total, 0x176C4] = 1; //Monk's Fist of Thunder
-            this.Attributes[GameAttribute.Skill, 0x176C4] = 1;
             this.Attributes[GameAttribute.Skill_Total, 0x6DF] = 1; //Use Item
             this.Attributes[GameAttribute.Skill, 0x6DF] = 1;
             this.Attributes[GameAttribute.Skill_Total, 0x7780] = 1; //Basic Attack
             this.Attributes[GameAttribute.Skill, 0x7780] = 1;
-            this.Attributes[GameAttribute.Skill_Total, 0x0000CE11] = 1;  //Monk Spirit Trait
-            this.Attributes[GameAttribute.Skill, 0x0000CE11] = 1;
             this.Attributes[GameAttribute.Skill_Total, 0x0002EC66] = 0; //stone of recall
             this.Attributes[GameAttribute.Skill_Total, 0xFFFFF] = 1;
             this.Attributes[GameAttribute.Skill, 0xFFFFF] = 1;
@@ -351,16 +346,61 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Resource_Regen_Total, this.ResourceID] = 3.051758E-05f;
             this.Attributes[GameAttribute.Resource_Type_Primary] = this.ResourceID;
 
-            //Secondary Resource for the Demon Hunter
-            if (this.Properties.Class == ToonClass.DemonHunter)
+            // Class specific
+            switch (this.Properties.Class)
             {
-                int discipline = this.ResourceID + 1; //0x00000006
-                this.Attributes[GameAttribute.Resource_Cur, discipline] = 30f;
-                this.Attributes[GameAttribute.Resource_Max, discipline] = 30f;
-                this.Attributes[GameAttribute.Resource_Max_Total, discipline] = 30f;
-                this.Attributes[GameAttribute.Resource_Effective_Max, discipline] = 30f;
-                this.Attributes[GameAttribute.Resource_Regen_Total, discipline] = 3.051758E-05f;
-                this.Attributes[GameAttribute.Resource_Type_Secondary] = discipline;
+                case ToonClass.Barbarian:
+                    this.Attributes[GameAttribute.Skill_Total, 30078] = 1;  //Fury Trait
+                    this.Attributes[GameAttribute.Skill, 30078] = 1;
+                    this.Attributes[GameAttribute.Trait, 30078] = 1;
+                    this.Attributes[GameAttribute.Buff_Active, 30078] = true;
+                    this.Attributes[GameAttribute.Buff_Icon_Count0, 30078] = 1;
+                    break;
+                case ToonClass.DemonHunter:
+                    /* // unknown
+                    this.Attributes[GameAttribute.Skill_Total, ] = 1;  // Hatred Trait
+                    this.Attributes[GameAttribute.Skill, ] = 1;
+                    this.Attributes[GameAttribute.Trait, ] = 1;
+                    this.Attributes[GameAttribute.Buff_Active, ] = true;
+                    this.Attributes[GameAttribute.Buff_Icon_Count0, ] = 1;
+                    this.Attributes[GameAttribute.Skill_Total, ] = 1;  // Discipline Trait
+                    this.Attributes[GameAttribute.Skill, ] = 1;
+                    this.Attributes[GameAttribute.Trait, ] = 1;
+                    this.Attributes[GameAttribute.Buff_Active, ] = true;
+                    this.Attributes[GameAttribute.Buff_Icon_Count0, ] = 1;
+                     */
+                    //Secondary Resource for the Demon Hunter
+                    int Discipline = this.ResourceID + 1; //0x00000006
+                    this.Attributes[GameAttribute.Resource_Cur, Discipline] = 30f;
+                    this.Attributes[GameAttribute.Resource_Max, Discipline] = 30f;
+                    this.Attributes[GameAttribute.Resource_Max_Total, Discipline] = 30f;
+                    this.Attributes[GameAttribute.Resource_Effective_Max, Discipline] = 30f;
+                    this.Attributes[GameAttribute.Resource_Type_Secondary] = Discipline;
+                    break;
+                case ToonClass.Monk:
+                    this.Attributes[GameAttribute.Skill_Total, 0x0000CE11] = 1;  //Spirit Trait
+                    this.Attributes[GameAttribute.Skill, 0x0000CE11] = 1;
+                    this.Attributes[GameAttribute.Trait, 0x0000CE11] = 1;
+                    this.Attributes[GameAttribute.Buff_Active, 0xCE11] = true;
+                    this.Attributes[GameAttribute.Buff_Icon_Count0, 0x0000CE11] = 1;
+                    break;
+                case ToonClass.WitchDoctor:
+                    /* // unknown
+                    this.Attributes[GameAttribute.Skill_Total, ] = 1;  //Mana Trait
+                    this.Attributes[GameAttribute.Skill, ] = 1;
+                    this.Attributes[GameAttribute.Buff_Active, ] = true;
+                    this.Attributes[GameAttribute.Buff_Icon_Count0, ] = 1;
+                     */
+                    break;
+                case ToonClass.Wizard:
+                    /* // unknown
+                    this.Attributes[GameAttribute.Skill_Total, ] = 1;  //Arcane Power Trait
+                    this.Attributes[GameAttribute.Skill, ] = 1;
+                    this.Attributes[GameAttribute.Trait, ] = 1;
+                    this.Attributes[GameAttribute.Buff_Active, ] = true;
+                    this.Attributes[GameAttribute.Buff_Icon_Count0, ] = 1;
+                     */
+                    break;
             }
 
             //Movement
@@ -392,6 +432,13 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.General_Cooldown] = 0;
             #endregion // Attributes
 
+            // unlocking assigned skills
+            for (int i = 0; i < this.SkillSet.ActiveSkills.Length; i++)
+            {
+                this.Attributes[GameAttribute.Skill, this.SkillSet.ActiveSkills[i]] = 1;
+                this.Attributes[GameAttribute.Skill_Total, this.SkillSet.ActiveSkills[i]] = 1;
+            }
+
             this.Inventory = new Inventory(this); // Here because it needs attributes /fasbat
         }
 
@@ -413,12 +460,34 @@ namespace Mooege.Core.GS.Players
             else if (message is RequestBuyItemMessage) OnRequestBuyItem(client, (RequestBuyItemMessage)message);
             else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
             else if (message is HirelingDismissMessage) OnHirelingDismiss();
+            else if (message is SocketSpellMessage) OnSocketSpell(client, (SocketSpellMessage)message);
             else return;
         }
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
         {
             var oldSNOSkill = this.SkillSet.ActiveSkills[message.SkillIndex]; // find replaced skills SNO.
+            if (oldSNOSkill != -1)
+            {
+                // if old power was socketted, pickup rune
+                Item oldRune = this.Inventory.RemoveRune(message.SkillIndex);
+                if (oldRune != null)
+                {
+                    if (!this.Inventory.PickUp(oldRune))
+                    {
+                        // full inventory, cancel socketting
+                        this.Inventory.SetRune(oldRune, oldSNOSkill, message.SkillIndex); // readd old rune
+                        return;
+                    }
+                }
+                // switch off old skill in hotbar
+                this.Attributes[GameAttribute.Skill, oldSNOSkill] = 0;
+                this.Attributes[GameAttribute.Skill_Total, oldSNOSkill] = 0;
+            }
+            // switch on new skill in hotbar
+            this.Attributes[GameAttribute.Skill, message.SNOSkill] = 1;
+            this.Attributes[GameAttribute.Skill_Total, message.SNOSkill] = 1;
+            this.Attributes.SendChangedMessage(InGameClient, this.DynamicID);
 
             foreach (HotbarButtonData button in this.SkillSet.HotBarSkills.Where(button => button.SNOSkill == oldSNOSkill)) // loop through hotbar and replace the old skill with new one
             {
@@ -431,6 +500,19 @@ namespace Mooege.Core.GS.Players
 
         private void OnAssignPassiveSkill(GameClient client, AssignPassiveSkillMessage message)
         {
+            var oldSNOSkill = this.SkillSet.PassiveSkills[message.SkillIndex]; // find replaced skills SNO.
+            if (oldSNOSkill != -1)
+            {
+                // switch off old passive skill
+                this.Attributes[GameAttribute.Trait, oldSNOSkill] = 0;
+                this.Attributes[GameAttribute.Skill, oldSNOSkill] = 0;
+                this.Attributes[GameAttribute.Skill_Total, oldSNOSkill] = 0;
+            }
+            // switch on new passive skill
+            this.Attributes[GameAttribute.Trait, message.SNOSkill] = 1;
+            this.Attributes[GameAttribute.Skill, message.SNOSkill] = 1;
+            this.Attributes[GameAttribute.Skill_Total, message.SNOSkill] = 1;
+            this.Attributes.SendChangedMessage(InGameClient, this.DynamicID);
             this.SkillSet.PassiveSkills[message.SkillIndex] = message.SNOSkill;
             this.UpdateHeroState();
         }
@@ -438,6 +520,86 @@ namespace Mooege.Core.GS.Players
         private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
         {
             this.SkillSet.HotBarSkills[message.BarIndex] = message.ButtonData;
+        }
+
+        /// <summary>
+        /// Sockets skill with rune.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="socketSpellMessage"></param>
+        private void OnSocketSpell(GameClient client, SocketSpellMessage socketSpellMessage)
+        {
+            Item rune = this.Inventory.GetItem(unchecked((uint)socketSpellMessage.RuneDynamicId));
+            int PowerSNOId = socketSpellMessage.PowerSNOId;
+            int skillIndex = -1; // find index of power in skills
+            for (int i = 0; i < this.SkillSet.ActiveSkills.Length; i++)
+            {
+                if (this.SkillSet.ActiveSkills[i] == PowerSNOId)
+                {
+                    skillIndex = i;
+                    break;
+                }
+            }
+            if (skillIndex == -1)
+            {
+                // validity of message is controlled on client side, this shouldn't happen
+                return;
+            }
+            Item oldRune = this.Inventory.RemoveRune(skillIndex); // removes old rune (if present)
+            if (rune.Attributes[GameAttribute.Rune_Rank] != 0)
+            {
+                // unattuned rune: pick random color, create new rune, set attunement to new rune and destroy unattuned one
+                int rank = rune.Attributes[GameAttribute.Rune_Rank];
+                int colorIndex = RandomHelper.Next(0, 5);
+                Item newRune = ItemGenerator.Cook(this, "Runestone_" + (char)('A' + colorIndex) + "_0" + rank); // TODO: quite of hack, find better solution /xsochor
+                newRune.Attributes[GameAttribute.Rune_Attuned_Power] = PowerSNOId;
+                switch (colorIndex)
+                {
+                    case 0:
+                        newRune.Attributes[GameAttribute.Rune_A] = rank;
+                        this.Attributes[GameAttribute.Rune_A, PowerSNOId] = rank;
+                        break;
+                    case 1:
+                        newRune.Attributes[GameAttribute.Rune_B] = rank;
+                        this.Attributes[GameAttribute.Rune_B, PowerSNOId] = rank;
+                        break;
+                    case 2:
+                        newRune.Attributes[GameAttribute.Rune_C] = rank;
+                        this.Attributes[GameAttribute.Rune_C, PowerSNOId] = rank;
+                        break;
+                    case 3:
+                        newRune.Attributes[GameAttribute.Rune_D] = rank;
+                        this.Attributes[GameAttribute.Rune_D, PowerSNOId] = rank;
+                        break;
+                    case 4:
+                        newRune.Attributes[GameAttribute.Rune_E] = rank;
+                        this.Attributes[GameAttribute.Rune_E, PowerSNOId] = rank;
+                        break;
+                }
+                newRune.Owner = this;
+                newRune.InventoryLocation.X = rune.InventoryLocation.X; // sets position of original
+                newRune.InventoryLocation.Y = rune.InventoryLocation.Y; // sets position of original
+                this.Inventory.DestroyInventoryItem(rune); // destroy unattuned rune
+                newRune.EnterWorld(this.Position);
+                newRune.Reveal(this);
+                this.Inventory.SetRune(newRune, PowerSNOId, skillIndex);
+            }
+            else
+            {
+                // will set only one of these to rank
+                Attributes[GameAttribute.Rune_A, PowerSNOId] = rune.Attributes[GameAttribute.Rune_A];
+                Attributes[GameAttribute.Rune_B, PowerSNOId] = rune.Attributes[GameAttribute.Rune_B];
+                Attributes[GameAttribute.Rune_C, PowerSNOId] = rune.Attributes[GameAttribute.Rune_C];
+                Attributes[GameAttribute.Rune_D, PowerSNOId] = rune.Attributes[GameAttribute.Rune_D];
+                Attributes[GameAttribute.Rune_E, PowerSNOId] = rune.Attributes[GameAttribute.Rune_E];
+                this.Inventory.SetRune(rune, PowerSNOId, skillIndex);
+            }
+            if (oldRune != null)
+            {
+                this.Inventory.PickUp(oldRune); // pick removed rune
+            }
+            this.Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
+            UpdateHeroState();
         }
 
         private void OnObjectTargeted(GameClient client, TargetMessage message)

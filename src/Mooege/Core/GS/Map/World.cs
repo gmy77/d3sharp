@@ -323,7 +323,13 @@ namespace Mooege.Core.GS.Map
         public void SpawnRandomItemDrop(Player player, Vector3D position)
         {
             var item = ItemGenerator.GenerateRandom(player);
-            
+            if ((item is Mooege.Core.Common.Items.Implementations.SpellRune) && (item.Attributes[GameAttribute.Rune_Rank] == 0)) {
+                // favor player's class in attuned runes // TODO: remove or move this
+                if (RandomHelper.NextDouble() > 0.6f)
+                {
+                    (item as Mooege.Core.Common.Items.Implementations.SpellRune).ReAttuneToClass(player.Properties.Class);
+                }
+            }
             item.Drop(null, position); // NOTE: The owner field for an item is only set when it is in the owner's inventory. /komiga
             player.GroundItems[item.DynamicID] = item; // FIXME: Hacky. /komiga
         }

@@ -29,13 +29,16 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Common.Helpers.Assets;
+using Mooege.Common.MPQ;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Core.GS.Actors
 {
     public class Monster : Living, IUpdateable
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
+
+        public int LoreSNOId { get; private set; }
 
         public Monster(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
@@ -44,6 +47,17 @@ namespace Mooege.Core.GS.Actors
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
             this.Attributes[GameAttribute.TeamID] = 10;
             this.Attributes[GameAttribute.Experience_Granted] = 125;
+            var monsterAsset = MPQStorage.Data.Assets[SNOGroup.Monster][SNOMonsterId];
+            var monsterData = monsterAsset.Data as Mooege.Common.MPQ.FileFormats.Monster;
+            if (monsterData != null)
+            {
+                LoreSNOId = monsterData.SNOLore;
+            }
+            else
+            {
+                LoreSNOId = -1;
+            }
+
         }
 
         public override void OnTargeted(Player player, TargetMessage message)
@@ -158,19 +172,17 @@ namespace Mooege.Core.GS.Actors
 
         /// <summary>
         /// Plays lore for first death of this monster's death.
-        /// Uses lazy-initialized helper with data from MPQ.
         /// </summary>
         private void PlayLore()
         {
-            int loreSNOId = LoreAssetHelper.GetLoreForMonster(this.SNOId);
-            if (loreSNOId != -1)
+            if (LoreSNOId != -1)
             {
                 var players = this.GetPlayersInRange();
                 if (players != null)
                 {
-                    foreach (var player in players.Where(player => !player.HasLore(loreSNOId)))
+                    foreach (var player in players.Where(player => !player.HasLore(LoreSNOId)))
                     {
-                        player.PlayLore(loreSNOId, false);
+                        player.PlayLore(LoreSNOId, false);
                     }
                 }
             }
