@@ -18,14 +18,13 @@
 
 using System.Collections.Generic;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Core.GS.Common;
-using Mooege.Core.Common.Items;
-using Mooege.Core.Common.Items.ItemCreation;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {

@@ -19,7 +19,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Toons;
 
 // TODO: Might be able to make all toon-class classes into enums instead of having a bunch of const fields and
 //       lists, with maybe an implicit cast operator for each one
