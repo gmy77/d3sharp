@@ -22,7 +22,8 @@ namespace Mooege.Core.Common.Storage
     {
         public string Root { get { return this.GetString("Root", "Assets"); } set { this.Set("Root", value); } }
         public string MPQRoot { get { return this.GetString("MPQRoot", "Assets/MPQ"); } set { this.Set("MPQRoot", value); } }
-
+        public bool EnableTasks { get { return this.GetBoolean("EnableTasks", true); } set { this.Set("EnableTasks", value); } }
+        
         private static readonly Config _instance = new Config();
         public static Config Instance { get { return _instance; } }
         private Config() : base("Storage") { }
