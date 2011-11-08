@@ -23,8 +23,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.Common.Storage;
 using Mooege.Common.Helpers.Assets;
-using Mooege.Common.Config.Compatibility;
 using System.Linq;
 
 namespace Mooege.Common.MPQ
@@ -131,7 +131,7 @@ namespace Mooege.Common.MPQ
 
             if (file == null || file.Size < 10) return asset; // if it's empty, give up again.
 
-            if (Compatibility.Instance.EnableTasks)
+            if (Core.Common.Storage.Config.Instance.EnableTasks)
             {
                 this._tasks.Add(new Task(() => asset.RunParser(parser, file))); // add it to our task list, so we can parse them concurrently.
             } else {
