@@ -16,23 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Mooege.Common.MPQ;
-namespace Mooege.Common.Helpers.Assets
+namespace Mooege.Core.GS.Items.ItemCreation
 {
-    public class AssetHelper
+    public interface IItemAttributeCreator
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
-
-        public static List<Task> GetTasks(Data data)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public static void AddHelperValue(Asset asset)
-        {
-            throw new System.NotImplementedException();
-        }
+        void CreateAttributes(Item item);
     }
 }

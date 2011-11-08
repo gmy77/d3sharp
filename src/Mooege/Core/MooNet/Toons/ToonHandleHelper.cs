@@ -19,7 +19,7 @@
 using Google.ProtocolBuffers;
 using Mooege.Core.MooNet.Helpers;
 
-namespace Mooege.Core.Common.Toons
+namespace Mooege.Core.MooNet.Toons
 {
     public class ToonHandleHelper
     {

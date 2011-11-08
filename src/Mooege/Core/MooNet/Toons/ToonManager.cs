@@ -21,11 +21,11 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using Mooege.Common;
-using Mooege.Core.Common.Storage;
+using Mooege.Common.Storage;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Commands;
 
-namespace Mooege.Core.Common.Toons
+namespace Mooege.Core.MooNet.Toons
 {
     // Just a quick hack - not to be meant final
     public static class ToonManager

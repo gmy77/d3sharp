@@ -16,28 +16,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Items;
-using Mooege.Core.GS.Map;
-using Mooege.Net.GS.Message;
+using System;
+using System.Data.SQLite;
+using Mooege.Common.Helpers;
 
-namespace Mooege.Core.GS.Actors.Implementations.Artisans
+namespace Mooege.Common.Storage
 {
-    [HandledSNO(56949 /* PT_Jewler.acr */)]
-    public class Jeweler : Artisan
+    // just a quick hack - not to be meant a final layer.
+    public static class DBManager
     {
-        public Jeweler(World world, int snoId, Dictionary<int, TagMapEntry> tags)
-            : base(world, snoId, tags)
+        public static SQLiteConnection Connection { get; private set; }
+        public static readonly Logger Logger = LogManager.CreateLogger();
+
+        static DBManager()
         {
+            Connect();            
         }
 
-        public void OnAddSocket(Players.Player player, Item item)
+        private static void Connect()
         {
-            // TODO: Animate Jeweler? Who knows. /fasbat
-            item.Attributes[GameAttribute.Sockets] += 1;
-            // Why this not work? :/
-            item.Attributes.SendChangedMessage(player.InGameClient, item.DynamicID);
+            try
+            {
+                Connection = new SQLiteConnection(String.Format("Data Source={0}/{1}/account.db", FileHelpers.AssemblyRoot, Config.Instance.Root));
+                Connection.Open();
+            }
+            catch (Exception e)
+            {
+                Logger.FatalException(e, "Connect()");
+            }
         }
     }
 }

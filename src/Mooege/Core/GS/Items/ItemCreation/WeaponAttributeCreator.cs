@@ -17,10 +17,9 @@
  */
 
 using Mooege.Common.Helpers;
-using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message;
 
-namespace Mooege.Core.Common.Items.ItemCreation
+namespace Mooege.Core.GS.Items.ItemCreation
 {
     class WeaponAttributeCreator : IItemAttributeCreator
     {

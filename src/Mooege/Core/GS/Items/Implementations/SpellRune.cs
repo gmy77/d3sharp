@@ -1,20 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * Copyright (C) 2011 mooege project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 using System.Linq;
-using System.Text;
 using Mooege.Common.Helpers;
-using System.Diagnostics;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.GS.Message;
 using Mooege.Common;
-using Mooege.Core.GS.Players;
-using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Map;
-using Mooege.Common.MPQ;
-using Mooege.Net.GS.Message.Definitions.World;
-using Mooege.Core.GS.Common.Types.SNO;
-using Mooege.Core.GS.Markers;
 
-namespace Mooege.Core.Common.Items.Implementations
+namespace Mooege.Core.GS.Items.Implementations
 {
     [HandledType("SpellRune")]
     public class SpellRune : Item
@@ -37,19 +46,19 @@ namespace Mooege.Core.Common.Items.Implementations
                 switch (classRnd)
                 {
                     case 0:
-                        PowerSNOId = Mooege.Core.GS.Skills.Skills.Barbarian.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.Barbarian.AllActiveSkillsList.Count));
+                        PowerSNOId = Skills.Skills.Barbarian.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.Barbarian.AllActiveSkillsList.Count));
                         break;
                     case 1:
-                        PowerSNOId = Mooege.Core.GS.Skills.Skills.DemonHunter.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.DemonHunter.AllActiveSkillsList.Count));
+                        PowerSNOId = Skills.Skills.DemonHunter.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.DemonHunter.AllActiveSkillsList.Count));
                         break;
                     case 2:
-                        PowerSNOId = Mooege.Core.GS.Skills.Skills.Monk.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.Monk.AllActiveSkillsList.Count));
+                        PowerSNOId = Skills.Skills.Monk.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.Monk.AllActiveSkillsList.Count));
                         break;
                     case 3:
-                        PowerSNOId = Mooege.Core.GS.Skills.Skills.WitchDoctor.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.WitchDoctor.AllActiveSkillsList.Count));
+                        PowerSNOId = Skills.Skills.WitchDoctor.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.WitchDoctor.AllActiveSkillsList.Count));
                         break;
                     case 4:
-                        PowerSNOId = Mooege.Core.GS.Skills.Skills.Wizard.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.Wizard.AllActiveSkillsList.Count));
+                        PowerSNOId = Skills.Skills.Wizard.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.Wizard.AllActiveSkillsList.Count));
                         break;
                 }
                 this.Attributes[GameAttribute.Rune_Attuned_Power] = PowerSNOId;
@@ -60,24 +69,24 @@ namespace Mooege.Core.Common.Items.Implementations
         /// Re-attunes rune to player's class. Used for favoring.
         /// </summary>
         /// <param name="toonClass"></param>
-        public void ReAttuneToClass(Toons.ToonClass toonClass)
+        public void ReAttuneToClass(ToonClass toonClass)
         {
             int PowerSNOId = -1;
             switch (toonClass)
             {
-                case Toons.ToonClass.Barbarian:
+                case ToonClass.Barbarian:
                     PowerSNOId = Mooege.Core.GS.Skills.Skills.Barbarian.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.Barbarian.AllActiveSkillsList.Count));
                     break;
-                case Toons.ToonClass.DemonHunter:
+                case ToonClass.DemonHunter:
                     PowerSNOId = Mooege.Core.GS.Skills.Skills.DemonHunter.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.DemonHunter.AllActiveSkillsList.Count));
                     break;
-                case Toons.ToonClass.Monk:
+                case ToonClass.Monk:
                     PowerSNOId = Mooege.Core.GS.Skills.Skills.Monk.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.Monk.AllActiveSkillsList.Count));
                     break;
-                case Toons.ToonClass.WitchDoctor:
+                case ToonClass.WitchDoctor:
                     PowerSNOId = Mooege.Core.GS.Skills.Skills.WitchDoctor.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.WitchDoctor.AllActiveSkillsList.Count));
                     break;
-                case Toons.ToonClass.Wizard:
+                case ToonClass.Wizard:
                     PowerSNOId = Mooege.Core.GS.Skills.Skills.Wizard.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.Wizard.AllActiveSkillsList.Count));
                     break;
             }

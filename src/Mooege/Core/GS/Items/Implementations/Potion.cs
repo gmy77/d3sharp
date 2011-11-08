@@ -16,16 +16,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Core.Common.Storage
+using Mooege.Common.MPQ.FileFormats;
+using Mooege.Net.GS.Message;
+
+namespace Mooege.Core.GS.Items.Implementations
 {
-    public sealed class Config : Mooege.Common.Config.Config
+    // A quick example of type handling. /fasbat
+    [HandledType("Potion")]
+    public class Potion : Item
     {
-        public string Root { get { return this.GetString("Root", "Assets"); } set { this.Set("Root", value); } }
-        public string MPQRoot { get { return this.GetString("MPQRoot", "Assets/MPQ"); } set { this.Set("MPQRoot", value); } }
-        public bool EnableTasks { get { return this.GetBoolean("EnableTasks", true); } set { this.Set("EnableTasks", value); } }
-        
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Storage") { }
+        public Potion(Map.World world, ItemTable definition)
+            : base(world, definition)
+        {
+            Attributes[GameAttribute.ItemStackQuantityLo] = 1;
+        }
     }
 }

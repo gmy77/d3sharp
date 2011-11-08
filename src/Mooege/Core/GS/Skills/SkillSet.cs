@@ -17,7 +17,7 @@
  */
 
 using System.Linq;
-using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Core.GS.Skills

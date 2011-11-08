@@ -16,21 +16,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message;
 using Mooege.Common;
-using System.Reflection;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
-using Mooege.Core.Common.Scripting;
 using Mooege.Common.Extensions;
 
-namespace Mooege.Core.Common.Items
+namespace Mooege.Core.GS.Items
 {
     static class AffixGenerator
     {

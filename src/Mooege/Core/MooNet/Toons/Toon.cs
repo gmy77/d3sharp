@@ -20,13 +20,13 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using Mooege.Common.Helpers;
-using Mooege.Core.Common.Storage;
+using Mooege.Common.Storage;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
 
-namespace Mooege.Core.Common.Toons
+namespace Mooege.Core.MooNet.Toons
 {
     public class Toon : PersistentRPCObject
     {

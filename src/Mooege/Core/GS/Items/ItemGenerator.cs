@@ -17,25 +17,20 @@
  */
 
 using System;
-using System.Data.SQLite;
 using System.Linq;
 using Mooege.Common;
 using Mooege.Common.Helpers;
 using System.Collections.Generic;
-using Mooege.Core.Common.Storage;
 using Mooege.Core.GS.Players;
-using Mooege.Core.Common.Items.ItemCreation;
-using Wintellect.PowerCollections;
 using Mooege.Net.GS.Message;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
-using Mooege.Core.GS.Actors;
 using System.Reflection;
 
 // FIXME: Most of this stuff should be elsewhere and not explicitly generate items to the player's GroundItems collection / komiga?
 
-namespace Mooege.Core.Common.Items
+namespace Mooege.Core.GS.Items
 {
     public static class ItemGenerator
     {

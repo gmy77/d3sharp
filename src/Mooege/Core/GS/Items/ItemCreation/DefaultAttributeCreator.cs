@@ -16,35 +16,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Data.SQLite;
-using Mooege.Common;
+using Mooege.Net.GS.Message;
 using Mooege.Common.Helpers;
 
-namespace Mooege.Core.Common.Storage
+namespace Mooege.Core.GS.Items.ItemCreation
 {
-    // just a quick hack - not to be meant a final layer.
-    public static class DBManager
+    class DefaultAttributeCreator : IItemAttributeCreator
     {
-        public static SQLiteConnection Connection { get; private set; }
-        public static readonly Logger Logger = LogManager.CreateLogger();
-
-        static DBManager()
+        public void CreateAttributes(Item item)
         {
-            Connect();            
-        }
-
-        private static void Connect()
-        {
-            try
-            {
-                Connection = new SQLiteConnection(String.Format("Data Source={0}/{1}/account.db", FileHelpers.AssemblyRoot, Config.Instance.Root));
-                Connection.Open();
-            }
-            catch (Exception e)
-            {
-                Logger.FatalException(e, "Connect()");
-            }
+            item.Attributes[GameAttribute.Item_Quality_Level] = 1;
+            item.Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
         }
     }
 }

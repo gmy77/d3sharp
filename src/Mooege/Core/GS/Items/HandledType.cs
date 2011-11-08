@@ -19,20 +19,20 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mooege.Core.Common.Items
+namespace Mooege.Core.GS.Items
 {
     /// <summary>
-    /// Allows implementing items for given named items.
+    /// Allows implementing items for given types.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public sealed class HandledItemAttribute : Attribute
+    public sealed class HandledTypeAttribute : Attribute
     {
-        public List<string> Names { get; private set; }
+        public List<string> Types { get; private set; }
 
-        public HandledItemAttribute(params string[] names)
+        public HandledTypeAttribute(params string[] types)
         {
-            this.Names = new List<string>();
-            this.Names.AddRange(names);
+            this.Types = new List<string>();
+            this.Types.AddRange(types);
         }
     }
 }

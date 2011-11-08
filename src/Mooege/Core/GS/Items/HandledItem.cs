@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,21 +16,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
-using Mooege.Common.MPQ.FileFormats;
 
-namespace Mooege.Core.Common.Items.ItemCreation
+namespace Mooege.Core.GS.Items
 {
-    internal class AttributeCreatorFactory
+    /// <summary>
+    /// Allows implementing items for given named items.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public sealed class HandledItemAttribute : Attribute
     {
-        public List<IItemAttributeCreator> Create(ItemTypeTable itemType)
+        public List<string> Names { get; private set; }
+
+        public HandledItemAttribute(params string[] names)
         {
-            var creatorList = new List<IItemAttributeCreator> {new DefaultAttributeCreator()};
-
-            //if (Item.IsWeapon(itemType)) creatorList.Add(new WeaponAttributeCreator());
-            //else if (Item.IsPotion(itemType))  creatorList.Add(new PotionAttributeCreator());
-
-            return creatorList;
+            this.Names = new List<string>();
+            this.Names.AddRange(names);
         }
     }
 }

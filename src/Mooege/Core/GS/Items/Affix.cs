@@ -16,17 +16,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message;
+using System;
+using Mooege.Common;
 
-namespace Mooege.Core.Common.Items.ItemCreation
+namespace Mooege.Core.GS.Items
 {
-    class PotionAttributeCreator: IItemAttributeCreator
+    public class Affix
     {
-        public void CreateAttributes(Item item)
+        public static readonly Logger Logger = LogManager.CreateLogger();
+        public int AffixGbid { get; set; }
+
+        public Affix(int gbid)
         {
-            item.Attributes[GameAttribute.Hitpoints_Granted] = 250f;
-            item.Attributes[GameAttribute.ItemStackQuantityLo] = 1;
+            AffixGbid = gbid;
         }
+
+        public override String ToString()
+        {
+            return String.Format("{0}", AffixGbid);
+        }
+
+        public static Affix Parse(String affixString)
+        {
+            try
+            {
+                int gbid = int.Parse(affixString);
+                var affix = new Affix(gbid);
+                return affix;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(String.Format("Affix can not be parsed: {0}", affixString), e);
+            }
+        }
+
     }
 }

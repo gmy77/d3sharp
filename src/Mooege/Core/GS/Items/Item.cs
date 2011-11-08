@@ -16,26 +16,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-using System.Reflection;
 using Mooege.Common;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Map;
-using Mooege.Core.Common.Items.ItemCreation;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message;
-using FF = Mooege.Common.MPQ.FileFormats;
+using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.Helpers;
-using Mooege.Core.Common.Scripting;
+using Actor = Mooege.Core.GS.Actors.Actor;
+using World = Mooege.Core.GS.Map.World;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
 
-namespace Mooege.Core.Common.Items
+namespace Mooege.Core.GS.Items
 {
     /*
     public enum ItemType
@@ -51,16 +48,16 @@ namespace Mooege.Core.Common.Items
         // Diamond, Sapphire - I realised some days ago, that the Item type Diamond and Shappire (maybe not the only one) causes client crash and BAD GBID messages, although they actually have SNO IDs. /angerwin
     }
     */
-    public class Item : Mooege.Core.GS.Actors.Actor
+    public class Item : Actor
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         public override ActorType ActorType { get { return ActorType.Item; } }
 
-        public Mooege.Core.GS.Actors.Actor Owner { get; set; } // Only set when the _actor_ has the item in its inventory. /fasbat
+        public Actor Owner { get; set; } // Only set when the _actor_ has the item in its inventory. /fasbat
 
-        public FF.ItemTable ItemDefinition { get; private set; }
-        public FF.ItemTypeTable ItemType { get; private set; }
+        public ItemTable ItemDefinition { get; private set; }
+        public ItemTypeTable ItemType { get; private set; }
 
         public ItemRandomHelper RandomGenerator { get; private set; }
         public int ItemLevel { get; private set; }
@@ -102,7 +99,7 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        public Item(GS.Map.World world, FF.ItemTable definition)
+        public Item(GS.Map.World world, ItemTable definition)
             : base(world, definition.SNOActor)
         {
             this.ItemDefinition = definition;
@@ -131,7 +128,7 @@ namespace Mooege.Core.Common.Items
             Attributes[GameAttribute.Item_Quality_Level] = 1;
             if (Item.IsArmor(this.ItemType) || Item.IsWeapon(this.ItemType)|| Item.IsOffhand(this.ItemType))
                 Attributes[GameAttribute.Item_Quality_Level] = RandomHelper.Next(6);
-            if(this.ItemType.Flags.HasFlag(FF.ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
+            if(this.ItemType.Flags.HasFlag(ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
                 Attributes[GameAttribute.Item_Quality_Level] = 3;
 
             Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
@@ -162,7 +159,7 @@ namespace Mooege.Core.Common.Items
             AffixGenerator.Generate(this, affixNumber);
         }
 
-        private void ApplyWeaponSpecificOptions(FF.ItemTable definition)
+        private void ApplyWeaponSpecificOptions(ItemTable definition)
         {
             if (definition.WeaponDamageMin > 0)
             {
@@ -185,7 +182,7 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        private void ApplyArmorSpecificOptions(FF.ItemTable definition)
+        private void ApplyArmorSpecificOptions(ItemTable definition)
         {
             if (definition.ArmorValue > 0)
             {
@@ -195,7 +192,7 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        private void ApplyDurability(FF.ItemTable definition)
+        private void ApplyDurability(ItemTable definition)
         {
             if (definition.DurabilityMin > 0)
             {
@@ -205,7 +202,7 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        private void ApplySkills(FF.ItemTable definition)
+        private void ApplySkills(ItemTable definition)
         {
             if (definition.SNOSkill0 != -1)
             {
@@ -225,7 +222,7 @@ namespace Mooege.Core.Common.Items
             }
         }
 
-        private void ApplyAttributeSpecifier(FF.ItemTable definition)
+        private void ApplyAttributeSpecifier(ItemTable definition)
         {
             foreach (var effect in definition.Attribute)
             {
@@ -267,59 +264,59 @@ namespace Mooege.Core.Common.Items
         }
 
         #region Is*
-        public static bool IsHealthGlobe(FF.ItemTypeTable itemType)
+        public static bool IsHealthGlobe(ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "HealthGlyph");
         }
 
-        public static bool IsGold(FF.ItemTypeTable itemType)
+        public static bool IsGold(ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Gold");
         }
 
-        public static bool IsPotion(FF.ItemTypeTable itemType)
+        public static bool IsPotion(ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Potion");
         }
 
-        public static bool IsAccessory(FF.ItemTypeTable itemType)
+        public static bool IsAccessory(ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Jewelry");
         }
 
-        public static bool IsRuneOrJewel(FF.ItemTypeTable itemType)
+        public static bool IsRuneOrJewel(ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Gem") ||
                 ItemGroup.IsSubType(itemType, "SpellRune");
         }
 
-        public static bool IsJournalOrScroll(FF.ItemTypeTable itemType)
+        public static bool IsJournalOrScroll(ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Scroll") ||
                 ItemGroup.IsSubType(itemType, "Book");
         }
 
-        public static bool IsDye(FF.ItemTypeTable itemType)
+        public static bool IsDye(ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Dye");
         }
 
-        public static bool IsWeapon(FF.ItemTypeTable itemType)
+        public static bool IsWeapon(ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Weapon");
         }
 
-        public static bool IsArmor(FF.ItemTypeTable itemType)
+        public static bool IsArmor(ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Armor");
         }
 
-        public static bool IsOffhand(FF.ItemTypeTable itemType)
+        public static bool IsOffhand(ItemTypeTable itemType)
         {
             return ItemGroup.IsSubType(itemType, "Offhand");
         }
 
-        public static bool Is2H(FF.ItemTypeTable itemType)
+        public static bool Is2H(ItemTypeTable itemType)
         {
             return ItemGroup.Is2H(itemType);
         }

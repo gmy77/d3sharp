@@ -16,18 +16,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Net.GS.Message.Fields;
-using Mooege.Net.GS.Message;
-using Mooege.Common.Helpers;
-
-namespace Mooege.Core.Common.Items.ItemCreation
+namespace Mooege.Common.Storage
 {
-    class DefaultAttributeCreator : IItemAttributeCreator
+    public sealed class Config : Common.Config.Config
     {
-        public void CreateAttributes(Item item)
-        {
-            item.Attributes[GameAttribute.Item_Quality_Level] = 1;
-            item.Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
-        }
+        public string Root { get { return this.GetString("Root", "Assets"); } set { this.Set("Root", value); } }
+        public string MPQRoot { get { return this.GetString("MPQRoot", "Assets/MPQ"); } set { this.Set("MPQRoot", value); } }
+        public bool EnableTasks { get { return this.GetBoolean("EnableTasks", true); } set { this.Set("EnableTasks", value); } }
+        
+        private static readonly Config _instance = new Config();
+        public static Config Instance { get { return _instance; } }
+        private Config() : base("Storage") { }
     }
 }
