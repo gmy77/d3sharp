@@ -41,21 +41,15 @@ namespace Mooege.Core.GS.Actors
         public Living(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
         {
-            this.SNOId = snoId;
             this.SNOMonsterId = this.ActorData.MonsterSNO;
 
             // FIXME: This is hardcoded crap
-            this.Field3 = 0x0;
             this.RotationAmount = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);
             this.RotationAxis.X = 0f; this.RotationAxis.Y = 0f; this.RotationAxis.Z = 1f;
             this.GBHandle.Type = -1; this.GBHandle.GBID = -1;
             this.Field7 = 0x00000001;
-            this.Field8 = this.SNOId;
             this.Field10 = 0x0;
             this.Field11 = 0x0;
-            this.Field12 = 0x0;
-            this.Field13 = 0x0;
-            this.CollFlags = 1;
 
             this.Attributes[GameAttribute.Hitpoints_Max_Total] = 4.546875f;
             this.Attributes[GameAttribute.Hitpoints_Max] = 4.546875f;

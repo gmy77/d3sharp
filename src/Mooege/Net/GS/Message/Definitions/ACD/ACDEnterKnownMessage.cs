@@ -40,12 +40,12 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public InventoryLocationMessageData InventoryLocation;
         public GBHandle GBHandle;
         public int Field7;
-        public int Field8;      
-        public int Field9;      // Item quality if an item, otherwise 0
+        public int NameActorSNO;    // Actor providing a name for the this actor, you can name zombies leah etc..  
+        public int Quality;         // Item quality if an item, SpawnType for mobs, 0 otherwise
         public byte Field10;
         public int? /* sno */ Field11;
-        public int? Field12;
-        public int? Field13;    // Seems to be a running number for all actors, just a counting how many actors there already are
+        public int? MarkerSetSNO;
+        public int? MarkerSetIndex;
 
         public ACDEnterKnownMessage() : base(Opcodes.ACDEnterKnownMessage) { }
 
@@ -68,8 +68,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             GBHandle = new GBHandle();
             GBHandle.Parse(buffer);
             Field7 = buffer.ReadInt(32);
-            Field8 = buffer.ReadInt(32);
-            Field9 = buffer.ReadInt(4) + (-1);
+            NameActorSNO = buffer.ReadInt(32);
+            Quality = buffer.ReadInt(4) + (-1);
             Field10 = (byte)buffer.ReadInt(8);
             if (buffer.ReadBool())
             {
@@ -77,11 +77,11 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             }
             if (buffer.ReadBool())
             {
-                Field12 = buffer.ReadInt(32);
+                MarkerSetSNO = buffer.ReadInt(32);
             }
             if (buffer.ReadBool())
             {
-                Field13 = buffer.ReadInt(32);
+                MarkerSetIndex = buffer.ReadInt(32);
             }
         }
 
@@ -103,23 +103,23 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             }
             GBHandle.Encode(buffer);
             buffer.WriteInt(32, Field7);
-            buffer.WriteInt(32, Field8);
-            buffer.WriteInt(4, Field9 - (-1));
+            buffer.WriteInt(32, NameActorSNO);
+            buffer.WriteInt(4, Quality - (-1));
             buffer.WriteInt(8, Field10);
             buffer.WriteBool(Field11.HasValue);
             if (Field11.HasValue)
             {
                 buffer.WriteInt(32, Field11.Value);
             }
-            buffer.WriteBool(Field12.HasValue);
-            if (Field12.HasValue)
+            buffer.WriteBool(MarkerSetSNO.HasValue);
+            if (MarkerSetSNO.HasValue)
             {
-                buffer.WriteInt(32, Field12.Value);
+                buffer.WriteInt(32, MarkerSetSNO.Value);
             }
-            buffer.WriteBool(Field13.HasValue);
-            if (Field13.HasValue)
+            buffer.WriteBool(MarkerSetIndex.HasValue);
+            if (MarkerSetIndex.HasValue)
             {
-                buffer.WriteInt(32, Field13.Value);
+                buffer.WriteInt(32, MarkerSetIndex.Value);
             }
         }
 
@@ -143,20 +143,20 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             }
             GBHandle.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("Field7: 0x" + Field7.ToString("X8") + " (" + Field7 + ")");
-            b.Append(' ', pad); b.AppendLine("Field8: 0x" + Field8.ToString("X8") + " (" + Field8 + ")");
-            b.Append(' ', pad); b.AppendLine("Field9: 0x" + Field9.ToString("X8") + " (" + Field9 + ")");
+            b.Append(' ', pad); b.AppendLine("NameActorSNO: 0x" + NameActorSNO.ToString("X8") + " (" + NameActorSNO + ")");
+            b.Append(' ', pad); b.AppendLine("Quality: 0x" + Quality.ToString("X8") + " (" + Quality + ")");
             b.Append(' ', pad); b.AppendLine("Field10: 0x" + Field10.ToString("X2"));
             if (Field11.HasValue)
             {
                 b.Append(' ', pad); b.AppendLine("Field11.Value: 0x" + Field11.Value.ToString("X8"));
             }
-            if (Field12.HasValue)
+            if (MarkerSetSNO.HasValue)
             {
-                b.Append(' ', pad); b.AppendLine("Field12.Value: 0x" + Field12.Value.ToString("X8") + " (" + Field12.Value + ")");
+                b.Append(' ', pad); b.AppendLine("MarkerSetSNO.Value: 0x" + MarkerSetSNO.Value.ToString("X8") + " (" + MarkerSetSNO.Value + ")");
             }
-            if (Field13.HasValue)
+            if (MarkerSetIndex.HasValue)
             {
-                b.Append(' ', pad); b.AppendLine("Field13.Value: 0x" + Field13.Value.ToString("X8") + " (" + Field13.Value + ")");
+                b.Append(' ', pad); b.AppendLine("MarkerSetIndex.Value: 0x" + MarkerSetIndex.Value.ToString("X8") + " (" + MarkerSetIndex.Value + ")");
             }
             b.Append(' ', --pad);
             b.AppendLine("}");
