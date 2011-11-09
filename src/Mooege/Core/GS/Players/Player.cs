@@ -44,6 +44,7 @@ using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
 using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
+using System;
 using Mooege.Common.Helpers;
 
 namespace Mooege.Core.GS.Players
@@ -1419,25 +1420,31 @@ namespace Mooege.Core.GS.Players
 
         private void CollectGold()
         {
-            var items = this.GetItemsInRange(25f);
-
-            foreach(var item in items)
+            List<Item> itemList = this.GetItemsInRange(5f);
+            foreach (Item item in itemList)
             {
                 if (!Item.IsGold(item.ItemType)) continue;
 
-                this.InGameClient.SendMessage(new FloatingAmountMessage()
+                List<Player> playersAffected = this.GetPlayersInRange(26f);
+                int amount = (int)Math.Max(1, Math.Round((double)item.Attributes[GameAttribute.Gold] / playersAffected.Count, 0));
+                item.Attributes[GameAttribute.Gold] = amount;
+                foreach (Player player in playersAffected)
                 {
-                    Place = new WorldPlace
+                    player.InGameClient.SendMessage(new FloatingAmountMessage()
                     {
-                        Position = this.Position,
-                        WorldID = this.World.DynamicID,
-                    },
+                        Place = new WorldPlace()
+                        {
+                            Position = player.Position,
+                            WorldID = player.World.DynamicID,
+                        },
 
-                    Amount = item.Attributes[GameAttribute.Gold],
-                    Type = FloatingAmountMessage.FloatType.Gold,
-                });
+                        Amount = amount,
+                        Type = FloatingAmountMessage.FloatType.Gold,
+                    });
 
-                this.Inventory.PickUpGold(item.DynamicID);
+                    player.Inventory.PickUpGold(item.DynamicID);
+                }
+
 
                 item.Destroy();
             }
@@ -1445,24 +1452,28 @@ namespace Mooege.Core.GS.Players
 
         private void CollectHealthGlobe()
         {
-            var items = this.GetItemsInRange(25f);
-
-            foreach (var item in items)
+            var itemList = this.GetItemsInRange(5f);
+            foreach (Item item in itemList)
             {
                 if (!Item.IsHealthGlobe(item.ItemType)) continue;
 
-                this.InGameClient.SendMessage(new PlayEffectMessage() //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
+                var playersAffected = this.GetPlayersInRange(26f);
+                foreach (Player player in playersAffected)
                 {
-                    ActorId = this.DynamicID,
-                    Effect = Effect.HealthOrbPickup
-                });
+                    foreach (Player targetAffected in playersAffected)
+                    {
+                        player.InGameClient.SendMessage(new PlayEffectMessage()
+                        {
+                            ActorId = targetAffected.DynamicID,
+                            Effect = Effect.HealthOrbPickup
+                        });
+                    }
 
-                foreach (var pair in this.World.Players) // should be actually checking for players in proximity. /raist
-                {
-                    pair.Value.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
+                    //every summon and mercenary owned by you must broadcast their green text to you /H_DANILO
+                    player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
                 }
-
                 item.Destroy();
+
             }
         }
 
@@ -1478,6 +1489,14 @@ namespace Mooege.Core.GS.Players
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
             else
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
+
+            this.InGameClient.SendMessage(new FloatingNumberMessage()
+            {
+                ActorID = this.DynamicID,
+                Number = quantity,
+                Type = FloatingNumberMessage.FloatType.Green
+            });
+
         }
 
         #endregion
