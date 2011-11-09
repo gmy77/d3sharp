@@ -23,8 +23,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.SNO;
-using Mooege.Core.Common.Storage;
-using Mooege.Common.Helpers.Assets;
 using System.Linq;
 
 namespace Mooege.Common.MPQ
@@ -44,7 +42,6 @@ namespace Mooege.Common.MPQ
         {
             this.InitCatalog(); // init asset-group dictionaries and parsers.
             this.LoadCatalog(); // process the assets.
-            this.LoadHelpers(); // init helpers with informations combining several assets
         }
 
         private void InitCatalog()
@@ -91,14 +88,17 @@ namespace Mooege.Common.MPQ
 
             stream.Close();
 
-            // Run the parsers for assets (that have a parser)
-            // This will not run the parser if tasks are turned off in config.ini
-            foreach (var task in this._tasks)
-            {
-                task.Start();
-            }
+            // Run the parsers for assets (that have a parser).
 
-            Task.WaitAll(this._tasks.ToArray()); // Wait all tasks to finish.           
+            if (this._tasks.Count > 0) // if we're running in tasked mode, run the parser tasks.
+            {
+                foreach (var task in this._tasks)
+                {
+                    task.Start();
+                }
+
+                Task.WaitAll(this._tasks.ToArray()); // Wait all tasks to finish.
+            }
 
             GC.Collect(); // force a garbage collection.
             GC.WaitForPendingFinalizers();
@@ -122,58 +122,19 @@ namespace Mooege.Common.MPQ
                 foreach (CrystalMpq.MpqArchive archive in this.FileSystem.Archives.Reverse()) //search mpqs starting from base
                 {
                     file = archive.FindFile(asset.FileName);
-
                     if (file != null)
-
                         break;
                 }
             }
 
             if (file == null || file.Size < 10) return asset; // if it's empty, give up again.
 
-            if (Core.Common.Storage.Config.Instance.EnableTasks)
-            {
-                this._tasks.Add(new Task(() => asset.RunParser(parser, file))); // add it to our task list, so we can parse them concurrently.
-            } else {
-                asset.RunParser(parser, file); // just run the parsers serially
-            }
+            if (Storage.Config.Instance.EnableTasks)
+                this._tasks.Add(new Task(() => asset.RunParser(parser, file))); // add it to our task list, so we can parse them concurrently.        
+            else
+                asset.RunParser(parser, file); // run the parsers sequentally.
+    
             return asset;
         }
-
-        private void LoadHelpers()
-        {
-            this._tasks.Clear();
-            
-            var timerStart = DateTime.Now;
-
-            int helpersCount = 0;
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
-            {
-                if (!type.IsSubclassOf(typeof(AssetHelper))) continue;
-                helpersCount++;
-                this._tasks.AddRange((List<Task>)type.GetMethod("GetTasks").Invoke(null, new object[] {this}));
-            }
-
-            if (helpersCount == 0)
-            {
-                return;
-            }
-
-            // Run tasks for helpers' values
-            foreach (var task in this._tasks)
-            {
-                task.Start();
-            }
-
-            Task.WaitAll(this._tasks.ToArray()); // Wait all tasks to finish.           
-
-            GC.Collect(); // force a garbage collection.
-            GC.WaitForPendingFinalizers();
-
-            var elapsedTime = DateTime.Now - timerStart;
-
-            Logger.Info("Initialized total of {0} helpers with {1} tasks in {2:c}.", helpersCount, this._tasks.Count, elapsedTime);
-        }
-
     }
 }

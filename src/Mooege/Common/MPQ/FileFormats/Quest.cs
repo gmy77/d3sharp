@@ -288,19 +288,14 @@ namespace Mooege.Common.MPQ.FileFormats
     public class QuestCompletionStep : ISerializableData, IQuestStep
     {
         public string Unknown { get; private set; }
-        public int I1 { get; private set; }
+        public int ID { get; private set; }
         public int I2 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             Unknown = stream.ReadString(64, true);
-            I1 = stream.ReadValueS32();
+            ID = stream.ReadValueS32();
             I2 = stream.ReadValueS32();
-        }
-
-        public int ID
-        {
-            get { throw new System.NotImplementedException(); }
         }
 
         public List<QuestStepObjectiveSet> StepObjectiveSets

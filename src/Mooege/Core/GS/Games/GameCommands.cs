@@ -23,10 +23,10 @@ using Mooege.Common.Helpers;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Items;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
 using System.Text;
-using Mooege.Core.Common.Items;
 
 namespace Mooege.Core.GS.Games
 {
