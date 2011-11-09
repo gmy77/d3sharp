@@ -44,7 +44,6 @@ namespace Mooege.Core.GS.Actors
             this.SNOMonsterId = this.ActorData.MonsterSNO;
 
             // FIXME: This is hardcoded crap
-            this.Field3 = 0x0;
             this.RotationAmount = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);
             this.RotationAxis.X = 0f; this.RotationAxis.Y = 0f; this.RotationAxis.Z = 1f;
             this.GBHandle.Type = -1; this.GBHandle.GBID = -1;

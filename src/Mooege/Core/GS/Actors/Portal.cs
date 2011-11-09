@@ -56,7 +56,6 @@ namespace Mooege.Core.GS.Actors
                 Logger.Warn("Found portal {0}without target location actor", this.SNOName.SNOId);
 
             this.Field2 = 16;
-            this.Field3 = 0;
             this.CollFlags = 0x00000001;
 
             // FIXME: Hardcoded crap; probably don't need to set most of these. /komiga

@@ -30,7 +30,6 @@ namespace Mooege.Core.GS.Actors
             : base(world, snoId, tags)
         {
             this.Field2 = 16;
-            this.Field3 = 0x0;
             this.Field7 = 0x00000001;
         }
     }
