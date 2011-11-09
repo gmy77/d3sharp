@@ -1481,23 +1481,17 @@ namespace Mooege.Core.GS.Players
                     }
 
                     //every summon and mercenary owned by you must broadcast their green text to you /H_DANILO
-                    player.InGameClient.SendMessage(new FloatingNumberMessage()
-                    {
-                        ActorID = player.DynamicID,
-                        Number = player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]),
-                        Type = FloatingNumberMessage.FloatType.Green
-                    });
+                    player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
                 }
                 item.Destroy();
 
             }
         }
 
-        public float AddPercentageHP(int percentage)
+        public void AddPercentageHP(int percentage)
         {
             float quantity = (percentage * this.Attributes[GameAttribute.Hitpoints_Max]) / 100;
             this.AddHP(quantity);
-            return quantity;
         }
 
         public void AddHP(float quantity)
@@ -1506,6 +1500,14 @@ namespace Mooege.Core.GS.Players
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
             else
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
+
+            this.InGameClient.SendMessage(new FloatingNumberMessage()
+            {
+                ActorID = this.DynamicID,
+                Number = quantity,
+                Type = FloatingNumberMessage.FloatType.Green
+            });
+
         }
 
         #endregion
