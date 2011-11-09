@@ -186,7 +186,6 @@ namespace Mooege.Core.GS.Players
             this.Scale = this.ModelScale;
             this.RotationAmount = 0.05940768f;
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
-            this.CollFlags = 0x00000000;
             this.Field7 = -1;
             this.ActorNameSNO = -1;
             this.Field10 = 0x0;

@@ -196,7 +196,7 @@ namespace Mooege.Core.GS.Actors
             this.Spawned = false;
             this.Size = new Size(1, 1);
             this.GBHandle = new GBHandle { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
-            this.CollFlags = 0x00000000;
+            this.CollFlags = this.ActorData.ActorCollisionData.ColFlags.I3;
 
             this.Tags = tags;
             this.ReadTags();

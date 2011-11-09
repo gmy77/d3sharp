@@ -50,7 +50,6 @@ namespace Mooege.Core.GS.Actors
             this.Field7 = 0x00000001;
             this.Field10 = 0x0;
             this.Field11 = 0x0;
-            this.CollFlags = 1;
 
             this.Attributes[GameAttribute.Hitpoints_Max_Total] = 4.546875f;
             this.Attributes[GameAttribute.Hitpoints_Max] = 4.546875f;
