@@ -46,8 +46,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 
         protected Player owner = null;
 
-        public bool IsProxy { get { return this.SNOId == proxySNO; } }
-        public bool IsHireling { get { return this.SNOId == hirelingSNO; } }
+        public bool IsProxy { get { return SNOName.SNOId == proxySNO; } }
+        public bool IsHireling { get { return SNOName.SNOId == hirelingSNO; } }
         public bool HasHireling { get { return this.hirelingSNO != -1; } }
         public bool HasProxy { get { return this.proxySNO != -1; } }
         public int PetType { get { return IsProxy ? 22 : 0; } }

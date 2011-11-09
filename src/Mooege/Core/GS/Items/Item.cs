@@ -67,6 +67,18 @@ namespace Mooege.Core.GS.Items
         public int EquipmentSlot { get; private set; }
         public Vector2D InventoryLocation { get; private set; } // Column, row; NOTE: Call SetInventoryLocation() instead of setting fields on this
 
+        public override int Quality
+        {
+            get
+            {
+                return Attributes[GameAttribute.Item_Quality_Level];
+            }
+            set
+            {
+                Attributes[GameAttribute.Item_Quality_Level] = value;
+            }
+        }
+
         public override bool HasWorldLocation
         {
             get { return this.Owner == null; }
@@ -114,10 +126,8 @@ namespace Mooege.Core.GS.Items
             this.RotationAxis.Set(0.0f, 0.0f, 1.0f);
             this.CurrentState = ItemState.Normal;
             this.Field2 = 0x00000000;
-            this.Field3 = 0x00000000;
             this.Field7 = 0;
-            this.Field8 = 0;
-            this.Field9 = 0x00000000;
+            this.ActorNameSNO = -1;      // I think it is ignored anyways - farmy
             this.Field10 = 0x00;
 
             this.ItemLevel = definition.ItemLevel;

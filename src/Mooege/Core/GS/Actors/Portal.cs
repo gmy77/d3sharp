@@ -53,9 +53,8 @@ namespace Mooege.Core.GS.Actors
             if (tags.ContainsKey((int)MarkerTagTypes.DestinationActorTag))
                 this.Destination.StartingPointActorTag = tags[(int)MarkerTagTypes.DestinationActorTag].Int2;
             else
-                Logger.Warn("Found portal {0}without target location actor", this.SNOId);
+                Logger.Warn("Found portal {0}without target location actor", this.SNOName.SNOId);
 
-            this.Field8 = this.SNOId;
             this.Field2 = 16;
             this.Field3 = 0;
             this.CollFlags = 0x00000001;

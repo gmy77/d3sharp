@@ -44,11 +44,6 @@ namespace Mooege.Core.GS.Actors
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         /// <summary>
-        /// SNO Id of the actor.
-        /// </summary>
-        public int SNOId { get; protected set; }
-
-        /// <summary>
         /// SNOName - TODO: we can handle this better /raist.
         /// </summary>
         public SNOName SNOName { get; private set; }
@@ -143,14 +138,38 @@ namespace Mooege.Core.GS.Actors
 
         // Some ACD uncertainties /komiga.
         public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself /komiga & /raist.
-        public int Field3 = 0x00000001; // TODO: What dis? <-- I guess its just 0 for WorldItem and 1 for InventoryItem // Farmy
-        public int Field7 = -1;
-        public int Field8 = -1; // Animation set SNO?
-        public int Field9; // SNOName.Group?
-        public byte Field10 = 0x00;
-        public int? Field11 = null;
-        public int? Field12 = null;
-        public int? Field13 = null;
+        public int Field7 = -1;         // Either -1 when ActorNameSNO is -1 or 1 if ActorNameSno is set
+
+        /// <summary>
+        /// Gets or sets the sno of the actor used to identify the actor to the player
+        /// This is usually the same as actorSNO except for actors that have a GBHandle
+        /// There are few exceptions though like the Inn_Zombies that have both
+        /// </summary>
+        public int ActorNameSNO { get; set; }
+
+        /// <summary>
+        /// Quality of the actor as presented to the client. This is either ItemQualityLevel
+        /// or LevelArea.SpawnType for monsters or GameBalance.ItemQuality for Items and 0 for all other actors
+        /// TODO ACDEnterKnown.Quality seems to be overridden by actor.attributes anyways, at least for items, so im not sure if it maybe has some other purpose -farmy
+        /// </summary>
+        public virtual int Quality { get; set; }
+
+        public byte Field10 = 0x00;     // always 0 except for a few loots corpses (not all)... 
+        public int? Field11 = null;     // never used at all?
+
+        /// <summary>
+        /// Gets or sets the MarkerSet from which this item has been loaded.
+        /// TODO MarkerSetData for actors is currently never sent with ACDEnterKnown and it is unclear what it is used for
+        /// </summary>
+        public int? MarkerSetSNO { get; private set; }
+
+        /// <summary>
+        /// Gets or sets hte index within the markerset actor list which was the
+        /// source of this actor (markerset may point to an encounter which
+        /// creates this actor or this actor directly)
+        /// TODO MarkerSetData for actors is currently never sent with ACDEnterKnown and it is unclear what it is used for
+        /// </summary>
+        public int? MarkerSetIndex { get; private set; }
 
         private int snoTriggeredConversation = -1;
 
@@ -163,18 +182,21 @@ namespace Mooege.Core.GS.Actors
         protected Actor(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, world.NewActorID)
         {
-            this.SNOId = snoId;
-            this.SNOName = new SNOName { Group = SNOGroup.Actor, SNOId = this.SNOId };
-            this.Spawned = false;
-            this.Size = new Size(1, 1);
             this.Attributes = new GameAttributeMap();
             this.AffixList = new List<Affix>();
+
+            this.ActorData = (Mooege.Common.MPQ.FileFormats.Actor)Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.Actor][snoId].Data;
+            if (this.ActorData.AnimSetSNO != -1)
+                this.AnimationSet = (Mooege.Common.MPQ.FileFormats.AnimSet)Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.AnimSet][this.ActorData.AnimSetSNO].Data;
+
+
+            this.SNOName = new SNOName { Group = SNOGroup.Actor, SNOId = snoId };
+            this.ActorNameSNO = snoId;
+            this.Quality = 0;
+            this.Spawned = false;
+            this.Size = new Size(1, 1);
             this.GBHandle = new GBHandle { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
             this.CollFlags = 0x00000000;
-
-            this.ActorData = (Mooege.Common.MPQ.FileFormats.Actor) Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.Actor][snoId].Data;
-            if (this.ActorData.AnimSetSNO != -1) 
-                this.AnimationSet = (Mooege.Common.MPQ.FileFormats.AnimSet) Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.AnimSet][this.ActorData.AnimSetSNO].Data;
 
             this.Tags = tags;
             this.ReadTags();
@@ -282,19 +304,19 @@ namespace Mooege.Core.GS.Actors
             return new ACDEnterKnownMessage
             {
                 ActorID = this.DynamicID,
-                ActorSNO = this.SNOId,
+                ActorSNO = this.SNOName.SNOId,
                 Field2 = Field2,
                 Field3 =  this.HasWorldLocation ? 0 : 1,
                 WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
                 InventoryLocation = this.HasWorldLocation ? null : this.InventoryLocationMessage,
                 GBHandle = this.GBHandle,
                 Field7 = Field7,
-                Field8 = Field8,
-                Field9 = Field9,
+                Field8 = this.SNOName.SNOId,
+                Field9 = Quality,
                 Field10 = Field10,
                 Field11 = Field11,
-                Field12 = Field12,
-                Field13 = Field13,
+                Field12 = MarkerSetSNO,
+                Field13 = MarkerSetIndex,
             };
         }
 
@@ -582,7 +604,7 @@ namespace Mooege.Core.GS.Actors
 
         public override string ToString()
         {
-            return string.Format("[Actor] [Type: {0}] SNOId:{1} DynamicId: {2} Position: {3} Name: {4}", this.ActorType, this.SNOId, this.DynamicID, this.Position, this.SNOName.Name);
+            return string.Format("[Actor] [Type: {0}] SNOId:{1} DynamicId: {2} Position: {3} Name: {4}", this.ActorType, this.SNOName.SNOId, this.DynamicID, this.Position, this.SNOName.Name);
         }
     }
 

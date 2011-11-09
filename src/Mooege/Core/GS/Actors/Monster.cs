@@ -31,12 +31,25 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
+using System;
 
 namespace Mooege.Core.GS.Actors
 {
     public class Monster : Living, IUpdateable
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
+
+        public override int Quality
+        {
+            get
+            {
+                return (int)Mooege.Common.MPQ.FileFormats.SpawnType.Normal;
+            }
+            set
+            {
+                // TODO MonsterQuality setter not implemented. Throwing a NotImplementedError is catched as message not beeing implemented and nothing works anymore...
+            }
+        }
 
         public int LoreSNOId { get; private set; }
 
