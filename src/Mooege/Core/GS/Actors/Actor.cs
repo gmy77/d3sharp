@@ -305,18 +305,18 @@ namespace Mooege.Core.GS.Actors
             {
                 ActorID = this.DynamicID,
                 ActorSNO = this.SNOName.SNOId,
-                Field2 = Field2,
+                Field2 = this.Field2,
                 Field3 =  this.HasWorldLocation ? 0 : 1,
                 WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
                 InventoryLocation = this.HasWorldLocation ? null : this.InventoryLocationMessage,
                 GBHandle = this.GBHandle,
-                Field7 = Field7,
-                Field8 = this.SNOName.SNOId,
-                Field9 = Quality,
-                Field10 = Field10,
-                Field11 = Field11,
-                Field12 = MarkerSetSNO,
-                Field13 = MarkerSetIndex,
+                Field7 = this.Field7,
+                NameActorSNO = this.SNOName.SNOId,
+                Quality = this.Quality,
+                Field10 = this.Field10,
+                Field11 = this.Field11,
+                MarkerSetSNO = this.MarkerSetSNO,
+                MarkerSetIndex = this.MarkerSetIndex,
             };
         }
 

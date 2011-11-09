@@ -56,7 +56,7 @@ namespace Mooege.Core.GS.Actors
         public Monster(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
         {
-            this.Field2 = 26; //0x8;
+            this.Field2 = 0x8;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
             this.Attributes[GameAttribute.TeamID] = 10;
             this.Attributes[GameAttribute.Experience_Granted] = 125;
