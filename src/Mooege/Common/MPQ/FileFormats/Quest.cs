@@ -118,8 +118,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public QuestStepObjectiveType ObjectiveType { get; private set; }
         public int I2 { get; private set; }
         public int CounterTarget { get; private set; }
-        public SNOName SNOName1 { get; private set; }
-        public SNOName SNOName2 { get; private set; }
+        public SNOHandle SNOName1 { get; private set; }
+        public SNOHandle SNOName2 { get; private set; }
         public int GBID1 { get; private set; }
         public int GBID2 { get; private set; }
         public string Unknown1 { get; private set; }
@@ -134,8 +134,8 @@ namespace Mooege.Common.MPQ.FileFormats
             ObjectiveType = (QuestStepObjectiveType)stream.ReadValueS32();
             I2 = stream.ReadValueS32();
             CounterTarget = stream.ReadValueS32();
-            SNOName1 = new SNOName(stream);
-            SNOName2 = new SNOName(stream);
+            SNOName1 = new SNOHandle(stream);
+            SNOName2 = new SNOHandle(stream);
             GBID1 = stream.ReadValueS32();
             GBID2 = stream.ReadValueS32();
             Unknown1 = stream.ReadString(256, true);
@@ -162,8 +162,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public QuestStepFailureConditionType ConditionType { get; private set; }
         public int I2 { get; private set; }
         public int I3 { get; private set; }
-        public SNOName SNOName1 { get; private set; }
-        public SNOName SNOName2 { get; private set; }
+        public SNOHandle SNOName1 { get; private set; }
+        public SNOHandle SNOName2 { get; private set; }
         public int GBID1 { get; private set; }
         public int GBID2 { get; private set; }
         public string Unknown1 { get; private set; }
@@ -174,8 +174,8 @@ namespace Mooege.Common.MPQ.FileFormats
             ConditionType = (QuestStepFailureConditionType)stream.ReadValueS32();
             I2 = stream.ReadValueS32();
             I3 = stream.ReadValueS32();
-            SNOName1 = new SNOName(stream);
-            SNOName2 = new SNOName(stream);
+            SNOName1 = new SNOHandle(stream);
+            SNOName2 = new SNOHandle(stream);
             GBID1 = stream.ReadValueS32();
             GBID2 = stream.ReadValueS32();
             Unknown1 = stream.ReadString(256, true);

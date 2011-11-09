@@ -60,10 +60,10 @@ namespace Mooege.Core.GS.Actors
 
         private void UpdateConversationList()
         {
-            if (conversationList != null)
+            if (ConversationList != null)
             {
                 var ConversationsNew = new List<int>();
-                foreach (var entry in conversationList.ConversationListEntries)
+                foreach (var entry in ConversationList.ConversationListEntries)
                 {
                     if (entry.SNOLevelArea == -1 && entry.SNOQuestActive == -1 && entry.SNOQuestAssigned == -1 && entry.SNOQuestComplete == -1 && entry.SNOQuestCurrent == -1 && entry.SNOQuestRange == -1)
                         ConversationsNew.Add(entry.SNOConv);

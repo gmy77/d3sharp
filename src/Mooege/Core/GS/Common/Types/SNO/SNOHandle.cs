@@ -24,18 +24,25 @@ using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Common.Types.SNO
 {
-    public class SNOName
+    public class SNOHandle
     {
+        /// <summary>
+        /// SNOGroup
+        /// </summary>
         public SNOGroup Group;
-        public int SNOId; /* snoname_handle */
 
-        public SNOName() { }
+        /// <summary>
+        /// SNOId
+        /// </summary>
+        public int SNOId;
+
+        public SNOHandle() { }
 
         /// <summary>
         /// Reads SNOName from given MPQFileStream.
         /// </summary>
         /// <param name="stream">The MPQFileStream to read from.</param>
-        public SNOName(MpqFileStream stream)
+        public SNOHandle(MpqFileStream stream)
         {
             this.Group = (SNOGroup)stream.ReadValueS32();
             this.SNOId = stream.ReadValueS32();

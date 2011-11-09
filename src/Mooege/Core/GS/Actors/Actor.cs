@@ -44,9 +44,17 @@ namespace Mooege.Core.GS.Actors
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         /// <summary>
-        /// SNOName - TODO: we can handle this better /raist.
+        /// ActorSNO.
         /// </summary>
-        public SNOName SNOName { get; private set; }
+        public SNOHandle ActorSNO { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the sno of the actor used to identify the actor to the player
+        /// This is usually the same as actorSNO except for actors that have a GBHandle
+        /// There are few exceptions though like the Inn_Zombies that have both.
+        /// Used by ACDEnterKnown to name the actor.
+        /// </summary>
+        public int NameSNOId { get; set; }
 
         /// <summary>
         /// The actor type.
@@ -112,9 +120,9 @@ namespace Mooege.Core.GS.Actors
         /// <summary>
         /// The QuestRange specifies the visibility of an actor, depending on quest progress
         /// </summary>
-        private Mooege.Common.MPQ.FileFormats.QuestRange questRange;
+        private Mooege.Common.MPQ.FileFormats.QuestRange _questRange;
 
-        protected Mooege.Common.MPQ.FileFormats.ConversationList conversationList;
+        protected Mooege.Common.MPQ.FileFormats.ConversationList ConversationList;
 
         /// <summary>
         /// Returns true if actor has world location.
@@ -139,13 +147,6 @@ namespace Mooege.Core.GS.Actors
         // Some ACD uncertainties /komiga.
         public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself /komiga & /raist.
         public int Field7 = -1;         // Either -1 when ActorNameSNO is -1 or 1 if ActorNameSno is set
-
-        /// <summary>
-        /// Gets or sets the sno of the actor used to identify the actor to the player
-        /// This is usually the same as actorSNO except for actors that have a GBHandle
-        /// There are few exceptions though like the Inn_Zombies that have both
-        /// </summary>
-        public int ActorNameSNO { get; set; }
 
         /// <summary>
         /// Quality of the actor as presented to the client. This is either ItemQualityLevel
@@ -190,8 +191,8 @@ namespace Mooege.Core.GS.Actors
                 this.AnimationSet = (Mooege.Common.MPQ.FileFormats.AnimSet)Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.AnimSet][this.ActorData.AnimSetSNO].Data;
 
 
-            this.SNOName = new SNOName { Group = SNOGroup.Actor, SNOId = snoId };
-            this.ActorNameSNO = snoId;
+            this.ActorSNO = new SNOHandle { Group = SNOGroup.Actor, SNOId = snoId };
+            this.NameSNOId = snoId;
             this.Quality = 0;
             this.Spawned = false;
             this.Size = new Size(1, 1);
@@ -203,7 +204,7 @@ namespace Mooege.Core.GS.Actors
 
             // Listen for quest progress if the actor has a QuestRange attached to it
             foreach(var quest in World.Game.Quests)
-                if(questRange != null)
+                if(_questRange != null)
                     quest.OnQuestProgress += new Games.Quest.QuestProgressDelegate(quest_OnQuestProgress);
             UpdateQuestRangeVisbility();
         }
@@ -283,8 +284,8 @@ namespace Mooege.Core.GS.Actors
 
         private void UpdateQuestRangeVisbility()
         {
-            if (questRange != null)
-                Visible = World.Game.Quests.IsInQuestRange(questRange);
+            if (_questRange != null)
+                Visible = World.Game.Quests.IsInQuestRange(_questRange);
             else
                 Visible = true;
         }
@@ -304,14 +305,14 @@ namespace Mooege.Core.GS.Actors
             return new ACDEnterKnownMessage
             {
                 ActorID = this.DynamicID,
-                ActorSNO = this.SNOName.SNOId,
+                ActorSNOId = this.ActorSNO.SNOId,
                 Field2 = this.Field2,
                 Field3 =  this.HasWorldLocation ? 0 : 1,
                 WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
                 InventoryLocation = this.HasWorldLocation ? null : this.InventoryLocationMessage,
                 GBHandle = this.GBHandle,
                 Field7 = this.Field7,
-                NameActorSNO = this.SNOName.SNOId,
+                NameSNOId = this.NameSNOId,
                 Quality = this.Quality,
                 Field10 = this.Field10,
                 Field11 = this.Field11,
@@ -360,8 +361,8 @@ namespace Mooege.Core.GS.Actors
 
             // This is always sent even though it doesn't identify the actor. /komiga
             player.InGameClient.SendMessage(new SNONameDataMessage
-                                                {
-                Name = this.SNOName
+            {
+                Name = this.ActorSNO
             });
 
             return true;
@@ -561,7 +562,7 @@ namespace Mooege.Core.GS.Actors
             {
                 int snoQuestRange = Tags[(int)MarkerTagTypes.QuestRange].Int2;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange].ContainsKey(snoQuestRange))
-                    questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
+                    _questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
                 //else Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
             }
 
@@ -569,7 +570,7 @@ namespace Mooege.Core.GS.Actors
             {
                 int snoConversationList = Tags[(int)MarkerTagTypes.ConversationList].Int2;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList].ContainsKey(snoConversationList))
-                    conversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
+                    ConversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
                 //else Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", SNOId, snoConversationList);
             }
 
@@ -604,7 +605,7 @@ namespace Mooege.Core.GS.Actors
 
         public override string ToString()
         {
-            return string.Format("[Actor] [Type: {0}] SNOId:{1} DynamicId: {2} Position: {3} Name: {4}", this.ActorType, this.SNOName.SNOId, this.DynamicID, this.Position, this.SNOName.Name);
+            return string.Format("[Actor] [Type: {0}] SNOId:{1} DynamicId: {2} Position: {3} Name: {4}", this.ActorType, this.ActorSNO.SNOId, this.DynamicID, this.Position, this.ActorSNO.Name);
         }
     }
 

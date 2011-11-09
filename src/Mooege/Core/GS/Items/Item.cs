@@ -127,7 +127,7 @@ namespace Mooege.Core.GS.Items
             this.CurrentState = ItemState.Normal;
             this.Field2 = 0x00000000;
             this.Field7 = 0;
-            this.ActorNameSNO = -1;      // I think it is ignored anyways - farmy
+            this.NameSNOId = -1;      // I think it is ignored anyways - farmy
             this.Field10 = 0x00;
 
             this.ItemLevel = definition.ItemLevel;

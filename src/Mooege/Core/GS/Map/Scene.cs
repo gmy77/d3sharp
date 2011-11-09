@@ -208,9 +208,9 @@ namespace Mooege.Core.GS.Map
 
                 foreach (var marker in markerSetData.Markers)
                 {
-                    if (marker.SNOName.Group != SNOGroup.Actor) continue; // skip non-actor markers.
+                    if (marker.SNOHandle.Group != SNOGroup.Actor) continue; // skip non-actor markers.
                     
-                    var actor = ActorFactory.Create(this.World, marker.SNOName.SNOId, marker.TagMap); // try to create it.
+                    var actor = ActorFactory.Create(this.World, marker.SNOHandle.SNOId, marker.TagMap); // try to create it.
                     if (actor == null) continue;
 
                     var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
