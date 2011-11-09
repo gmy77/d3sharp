@@ -286,6 +286,26 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         }
     }
 
+
+    public class ItemSpecifierData
+    {
+        public int ItemGBId { get; private set; }
+        public int I0 { get; private set; }
+        public int[] GBIdAffixes = new int[3];
+        public int I1 { get; private set; }
+
+        public ItemSpecifierData(MpqFileStream stream)
+        {
+            ItemGBId = stream.ReadValueS32();
+            I0 = stream.ReadValueS32();
+            for (int i = 0; i < GBIdAffixes.Length; i++)
+            {
+                GBIdAffixes[i] = stream.ReadValueS32();
+            }
+            I1 = stream.ReadValueS32();
+        }
+    }
+
     //public class PostFXParams // unused for now. /raist.
     //{
     //    public float[] Float0;
