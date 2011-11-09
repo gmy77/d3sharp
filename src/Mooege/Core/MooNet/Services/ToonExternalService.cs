@@ -18,7 +18,7 @@
 
 using System;
 using Mooege.Common;
-using Mooege.Core.Common.Toons;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
 using bnet.protocol.toon.external;
 

@@ -26,11 +26,11 @@ using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Games;
+using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Core.GS.Map;
-using Mooege.Core.Common.Items;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Fields;
@@ -686,8 +686,7 @@ namespace Mooege.Core.GS.Actors
                 int snoQuestRange = Tags[(int)MarkerTagTypes.QuestRange].Int2;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange].ContainsKey(snoQuestRange))
                     questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
-                else
-                    Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
+                //else Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
             }
 
             if (this.Tags.ContainsKey((int)MarkerTagTypes.ConversationList))
@@ -695,8 +694,7 @@ namespace Mooege.Core.GS.Actors
                 int snoConversationList = Tags[(int)MarkerTagTypes.ConversationList].Int2;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList].ContainsKey(snoConversationList))
                     conversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
-                else
-                    Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", SNOId, snoConversationList);
+                //else Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", SNOId, snoConversationList);
             }
 
 

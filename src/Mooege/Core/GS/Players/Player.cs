@@ -21,13 +21,13 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using Mooege.Common;
-using Mooege.Core.Common.Toons;
-using Mooege.Core.Common.Items;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Skills;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
@@ -45,6 +45,7 @@ using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
 using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
+using System;
 using Mooege.Common.Helpers;
 
 namespace Mooege.Core.GS.Players
@@ -67,7 +68,7 @@ namespace Mooege.Core.GS.Players
         /// The player's toon.
         /// We need a better name /raist.
         /// </summary>
-        public Toon Properties { get; private set; }
+        public Toon Toon { get; private set; }
 
         /// <summary>
         /// Skillset for the player (or actually for player's toons class).
@@ -180,9 +181,9 @@ namespace Mooege.Core.GS.Players
         {
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
-            this.Properties = bnetToon;
+            this.Toon = bnetToon;
             this.GBHandle.Type = (int)GBHandleType.Player;
-            this.GBHandle.GBID = this.Properties.ClassID;
+            this.GBHandle.GBID = this.Toon.ClassID;
 
             // actor values.
             this.SNOId = this.ClassSNO;
@@ -197,7 +198,7 @@ namespace Mooege.Core.GS.Players
             this.Field9 = 0x00000000;
             this.Field10 = 0x0;
 
-            this.SkillSet = new SkillSet(this.Properties.Class);
+            this.SkillSet = new SkillSet(this.Toon.Class);
             this.GroundItems = new Dictionary<uint, Item>();
             this.Conversations = new ConversationManager(this, this.World.Game.Quests);
             this.ExpBonusData = new ExpBonusData(this);
@@ -319,8 +320,8 @@ namespace Mooege.Core.GS.Players
 
             //Basic stats
             this.Attributes[GameAttribute.Level_Cap] = 13;
-            this.Attributes[GameAttribute.Level] = this.Properties.Level;
-            this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Properties.Level];
+            this.Attributes[GameAttribute.Level] = this.Toon.Level;
+            this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Toon.Level];
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             this.Attributes[GameAttribute.Armor_Total] = 0;
             this.Attributes[GameAttribute.Attack] = this.InitialAttack;
@@ -347,7 +348,7 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Resource_Type_Primary] = this.ResourceID;
 
             // Class specific
-            switch (this.Properties.Class)
+            switch (this.Toon.Class)
             {
                 case ToonClass.Barbarian:
                     this.Attributes[GameAttribute.Skill_Total, 30078] = 1;  //Fury Trait
@@ -839,7 +840,7 @@ namespace Mooege.Core.GS.Players
                 Field0 = 0x00000000,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
-                Gender = Properties.Gender,
+                Gender = Toon.Gender,
                 PlayerSavedData = this.GetSavedData(),
                 Field5 = 0x00000000,
                 tQuestRewardHistory = QuestRewardHistory,
@@ -854,20 +855,20 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.DemonHunter:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.Monk:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.WitchDoctor:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.Wizard:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                 }
-                return 10f + (this.Properties.Level - 1) * 2;
+                return 10f + (this.Toon.Level - 1) * 2;
             }
         }
 
@@ -875,20 +876,20 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 9f + (this.Properties.Level - 1);
+                        return 9f + (this.Toon.Level - 1);
                     case ToonClass.DemonHunter:
-                        return 11f + ((this.Properties.Level - 1) * 2);
+                        return 11f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.Monk:
-                        return 11f + ((this.Properties.Level - 1) * 2);
+                        return 11f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.WitchDoctor:
-                        return 9f + ((this.Properties.Level - 1) * 2);
+                        return 9f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.Wizard:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                 }
-                return 10f + ((this.Properties.Level - 1) * 2);
+                return 10f + ((this.Toon.Level - 1) * 2);
             }
         }
 
@@ -896,23 +897,23 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 11f + ((this.Properties.Level - 1) * 2);
+                        return 11f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.DemonHunter:
                         // For DH and Wizard, half the levels (starting with the first) give 2 defense => (Level / 2) * 2
                         // and half give 1 defense => ((Level - 1) / 2) * 1
                         // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
-                        return 9f + (((this.Properties.Level / 2) * 2) + ((this.Properties.Level - 1) / 2));
+                        return 9f + (((this.Toon.Level / 2) * 2) + ((this.Toon.Level - 1) / 2));
                     case ToonClass.Monk:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.WitchDoctor:
-                        return 9f + ((this.Properties.Level - 1) * 2);
+                        return 9f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.Wizard:
-                        return 8f + (((this.Properties.Level / 2) * 2) + ((this.Properties.Level - 1) / 2));
+                        return 8f + (((this.Toon.Level / 2) * 2) + ((this.Toon.Level - 1) / 2));
                 }
-                return 10f + ((this.Properties.Level - 1) * 2);
+                return 10f + ((this.Toon.Level - 1) * 2);
             }
         }
 
@@ -920,23 +921,23 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 11f + ((this.Properties.Level - 1) * 2);
+                        return 11f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.DemonHunter:
                         // For DH and Wizard, half the levels give 2 vit => ((Level - 1) / 2) * 2
                         // and half (starting with the first) give 1 vit => (Level / 2) * 1
                         // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
-                        return 9f + ((((this.Properties.Level - 1) / 2) * 2) + (this.Properties.Level / 2));
+                        return 9f + ((((this.Toon.Level - 1) / 2) * 2) + (this.Toon.Level / 2));
                     case ToonClass.Monk:
-                        return 9f + (this.Properties.Level - 1);
+                        return 9f + (this.Toon.Level - 1);
                     case ToonClass.WitchDoctor:
-                        return 10f + (this.Properties.Level - 1);
+                        return 10f + (this.Toon.Level - 1);
                     case ToonClass.Wizard:
-                        return 9f + ((((this.Properties.Level - 1) / 2) * 2) + (this.Properties.Level / 2));
+                        return 9f + ((((this.Toon.Level - 1) / 2) * 2) + (this.Toon.Level / 2));
                 }
-                return 10f + ((this.Properties.Level - 1) * 2);
+                return 10f + ((this.Toon.Level - 1) * 2);
             }
         }
 
@@ -949,7 +950,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 2f;
@@ -970,7 +971,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 2f;
@@ -991,7 +992,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 2f;
@@ -1012,7 +1013,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 1f;
@@ -1143,7 +1144,7 @@ namespace Mooege.Core.GS.Players
         {
             var playerBanner = D3.GameMessage.PlayerBanner.CreateBuilder()
                 .SetPlayerIndex((uint) this.PlayerIndex)
-                .SetBanner(this.Properties.Owner.BannerConfiguration)
+                .SetBanner(this.Toon.Owner.BannerConfiguration)
                 .Build();
 
             return new GenericBlobMessage(Opcodes.GenericBlobMessage6) {Data = playerBanner.ToByteArray()};
@@ -1221,9 +1222,9 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                if (this.Properties.Gender == 0)
+                if (this.Toon.Gender == 0)
                 {
-                    switch (this.Properties.Class)
+                    switch (this.Toon.Class)
                     {
                         case ToonClass.Barbarian:
                             return 0x0CE5;
@@ -1239,7 +1240,7 @@ namespace Mooege.Core.GS.Players
                 }
                 else
                 {
-                    switch (this.Properties.Class)
+                    switch (this.Toon.Class)
                     {
                         case ToonClass.Barbarian:
                             return 0x0CD5;
@@ -1261,7 +1262,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 1.2f;
@@ -1282,7 +1283,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 0x00000002;
@@ -1303,7 +1304,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 0x00008AF4;
@@ -1380,7 +1381,7 @@ namespace Mooege.Core.GS.Players
             if ((this.Attributes[GameAttribute.Experience_Next] <= 0) && (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]))
             {
                 this.Attributes[GameAttribute.Level]++;
-                this.Properties.LevelUp();
+                this.Toon.LevelUp();
                 if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
                 else { this.Attributes[GameAttribute.Experience_Next] = 0; }
 
@@ -1441,25 +1442,31 @@ namespace Mooege.Core.GS.Players
 
         private void CollectGold()
         {
-            var items = this.GetItemsInRange(25f);
-
-            foreach(var item in items)
+            List<Item> itemList = this.GetItemsInRange(5f);
+            foreach (Item item in itemList)
             {
                 if (!Item.IsGold(item.ItemType)) continue;
 
-                this.InGameClient.SendMessage(new FloatingAmountMessage()
+                List<Player> playersAffected = this.GetPlayersInRange(26f);
+                int amount = (int)Math.Max(1, Math.Round((double)item.Attributes[GameAttribute.Gold] / playersAffected.Count, 0));
+                item.Attributes[GameAttribute.Gold] = amount;
+                foreach (Player player in playersAffected)
                 {
-                    Place = new WorldPlace
+                    player.InGameClient.SendMessage(new FloatingAmountMessage()
                     {
-                        Position = this.Position,
-                        WorldID = this.World.DynamicID,
-                    },
+                        Place = new WorldPlace()
+                        {
+                            Position = player.Position,
+                            WorldID = player.World.DynamicID,
+                        },
 
-                    Amount = item.Attributes[GameAttribute.Gold],
-                    Type = FloatingAmountMessage.FloatType.Gold,
-                });
+                        Amount = amount,
+                        Type = FloatingAmountMessage.FloatType.Gold,
+                    });
 
-                this.Inventory.PickUpGold(item.DynamicID);
+                    player.Inventory.PickUpGold(item.DynamicID);
+                }
+
 
                 item.Destroy();
             }
@@ -1467,24 +1474,28 @@ namespace Mooege.Core.GS.Players
 
         private void CollectHealthGlobe()
         {
-            var items = this.GetItemsInRange(25f);
-
-            foreach (var item in items)
+            var itemList = this.GetItemsInRange(5f);
+            foreach (Item item in itemList)
             {
                 if (!Item.IsHealthGlobe(item.ItemType)) continue;
 
-                this.InGameClient.SendMessage(new PlayEffectMessage() //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
+                var playersAffected = this.GetPlayersInRange(26f);
+                foreach (Player player in playersAffected)
                 {
-                    ActorId = this.DynamicID,
-                    Effect = Effect.HealthOrbPickup
-                });
+                    foreach (Player targetAffected in playersAffected)
+                    {
+                        player.InGameClient.SendMessage(new PlayEffectMessage()
+                        {
+                            ActorId = targetAffected.DynamicID,
+                            Effect = Effect.HealthOrbPickup
+                        });
+                    }
 
-                foreach (var pair in this.World.Players) // should be actually checking for players in proximity. /raist
-                {
-                    pair.Value.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
+                    //every summon and mercenary owned by you must broadcast their green text to you /H_DANILO
+                    player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
                 }
-
                 item.Destroy();
+
             }
         }
 
@@ -1500,6 +1511,14 @@ namespace Mooege.Core.GS.Players
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
             else
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
+
+            this.InGameClient.SendMessage(new FloatingNumberMessage()
+            {
+                ActorID = this.DynamicID,
+                Number = quantity,
+                Type = FloatingNumberMessage.FloatType.Green
+            });
+
         }
 
         #endregion
@@ -1563,7 +1582,7 @@ namespace Mooege.Core.GS.Players
             _lastResourceUpdateTick = this.InGameClient.Game.TickCounter;
 
             // TODO: setup and use attributes Resource_Regen_Per_Second or Resource_Regen_Percent_Per_Second
-            switch (this.Properties.Class)
+            switch (this.Toon.Class)
             {
                 case ToonClass.Barbarian:
                     UsePrimaryResource(0.2f);

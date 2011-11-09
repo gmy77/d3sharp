@@ -17,8 +17,8 @@
  */
 
 using Mooege.Common.Helpers;
-using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Accounts;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Commands

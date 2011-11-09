@@ -16,19 +16,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
 using Mooege.Common;
+using Mooege.Core.GS.Items;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common;
-using Mooege.Core.Common.Items;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Net.GS.Message.Definitions.Stash;
 using Mooege.Core.GS.Objects;
-using Mooege.Common.Helpers.Assets;
 
 namespace Mooege.Core.GS.Players
 {
@@ -472,7 +470,7 @@ namespace Mooege.Core.GS.Players
         /// Visually adds rune to skill (move from backpack to runes' slot)
         /// </summary>
         /// <param name="rune"></param>
-        /// <param name="PowerSNOId"></param>
+        /// <param name="powerSNOId"></param>
         /// <param name="skillIndex"></param>
         public void SetRune(Item rune, int powerSNOId, int skillIndex)
         {
@@ -497,8 +495,9 @@ namespace Mooege.Core.GS.Players
             }
             _equipment.Items.Add(rune.DynamicID, rune);
             _skillSocketRunes[skillIndex] = rune.DynamicID;
+
             // position of rune is read from mpq as INDEX of skill in skill kit - loaded in helper /xsochor
-            rune.SetInventoryLocation(16, SpellRuneIndexHelper.GetRuneIndex(powerSNOId), 0);
+            rune.SetInventoryLocation(16, RuneHelper.GetRuneIndexForPower(powerSNOId), 0);
         }
 
         /// <summary>

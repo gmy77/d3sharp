@@ -334,7 +334,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Field3 = true,
                 Speed = PowerMath.Distance(User.Position, TargetPosition) / dashTicks, // speed, distance per tick
                 Field5 = 0x00009206, // ???
-                AnimationTag = (User as Player).Properties.Gender == 0 ? 69808 : 90432, // select based on gender,
+                AnimationTag = (User as Player).Toon.Gender == 0 ? 69808 : 90432, // select based on gender,
                 Field7 = 0x00000006 // ?
             }, User);
             User.Position = TargetPosition;

@@ -281,11 +281,11 @@ namespace Mooege.Core.GS.Games
             {
                 PlayerIndex = joinedPlayer.PlayerIndex, // player index
                 Field1 = "", //Owner name?
-                ToonName = joinedPlayer.Properties.Name,
+                ToonName = joinedPlayer.Toon.Name,
                 Field3 = 0x00000002, //party frame class
                 Field4 = target!=joinedPlayer? 0x2 : 0x4, //party frame level /boyc - may mean something different /raist.
                 snoActorPortrait = joinedPlayer.ClassSNO, //party frame portrait
-                Field6 = joinedPlayer.Properties.Level,
+                Field6 = joinedPlayer.Toon.Level,
                 StateData = joinedPlayer.GetStateData(),
                 Field8 = this.Players.Count != 1, //announce party join
                 Field9 = 0x00000001,

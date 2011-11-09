@@ -28,9 +28,10 @@ using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.QuadTrees;
 using Mooege.Core.GS.Games;
+using Mooege.Core.GS.Items;
+using Mooege.Core.GS.Items.Implementations;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.Common.Items;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -323,11 +324,11 @@ namespace Mooege.Core.GS.Map
         public void SpawnRandomItemDrop(Player player, Vector3D position)
         {
             var item = ItemGenerator.GenerateRandom(player);
-            if ((item is Mooege.Core.Common.Items.Implementations.SpellRune) && (item.Attributes[GameAttribute.Rune_Rank] == 0)) {
+            if ((item is SpellRune) && (item.Attributes[GameAttribute.Rune_Rank] == 0)) {
                 // favor player's class in attuned runes // TODO: remove or move this
                 if (RandomHelper.NextDouble() > 0.6f)
                 {
-                    (item as Mooege.Core.Common.Items.Implementations.SpellRune).ReAttuneToClass(player.Properties.Class);
+                    (item as SpellRune).ReAttuneToClass(player.Toon.Class);
                 }
             }
             item.Drop(null, position); // NOTE: The owner field for an item is only set when it is in the owner's inventory. /komiga
