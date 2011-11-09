@@ -1436,7 +1436,7 @@ namespace Mooege.Core.GS.Players
             {
                 if (!Item.IsGold(item.ItemType)) continue;
 
-                List<Player> playersAffected = this.GetPlayersInRange(50f);
+                List<Player> playersAffected = this.GetPlayersInRange(26f);
                 int amount = (int)Math.Max(1, Math.Round((double)item.Attributes[GameAttribute.Gold] / playersAffected.Count, 0));
                 item.Attributes[GameAttribute.Gold] = amount;
                 foreach (Player player in playersAffected)
@@ -1468,7 +1468,7 @@ namespace Mooege.Core.GS.Players
             {
                 if (!Item.IsHealthGlobe(item.ItemType)) continue;
 
-                var playersAffected = this.GetPlayersInRange(50f);
+                var playersAffected = this.GetPlayersInRange(26f);
                 foreach (Player player in playersAffected)
                 {
                     foreach (Player targetAffected in playersAffected)
