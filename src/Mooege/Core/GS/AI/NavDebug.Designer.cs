@@ -34,17 +34,19 @@
             // panel1
             // 
             this.panel1.AutoScroll = true;
-            this.panel1.AutoScrollMinSize = new System.Drawing.Size(4000, 4000);
+            this.panel1.AutoScrollMinSize = new System.Drawing.Size(5000, 5000);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(789, 493);
+            this.panel1.Size = new System.Drawing.Size(5000, 5000);
             this.panel1.TabIndex = 0;
             // 
             // NavDebug
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.AutoScrollMinSize = new System.Drawing.Size(5000, 5000);
             this.ClientSize = new System.Drawing.Size(789, 493);
             this.Controls.Add(this.panel1);
             this.Name = "NavDebug";
