@@ -38,7 +38,7 @@ namespace Mooege.Core.GS.Items.Implementations
             : base(world, definition)
         {
             // Items are NOT constructed with tags
-            var actorData = (Mooege.Common.MPQ.FileFormats.Actor)Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.Actor][this.SNOName.SNOId].Data;
+            var actorData = (Mooege.Common.MPQ.FileFormats.Actor)Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.Actor][this.ActorSNO.SNOId].Data;
 
             if (actorData.TagMap.ContainsKey(TagKeys.Lore))
             {

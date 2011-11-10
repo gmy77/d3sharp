@@ -71,11 +71,11 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             }
         }
 
-        public SNOName this[TagKeySNO key]
+        public SNOHandle this[TagKeySNO key]
         {
             get
             {
-                return new SNOName() { Group = 0, SNOId = _TagMapEntries[key.ID].Int2 };
+                return new SNOHandle() { Group = 0, SNOId = _TagMapEntries[key.ID].Int2 };
             }
         }
 
@@ -139,7 +139,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public static TagKeySNO ConversationList = new TagKeySNO() { ID = 526080 };
         public static TagKeyFloat Scale = new TagKeyFloat() { ID = 524288 };
         public static TagKeySNO OnActorSpawnedScript = new TagKeySNO() { ID = 524808 };
-        public static TagKeyInt SpawnerGroupHash = new TagKeyInt() { ID = 524814 };
+        public static TagKeyInt GroupHash = new TagKeyInt() { ID = 524814 };
 
         // Used for portal destination resolution
         public static TagKeySNO DestinationWorld = new TagKeySNO() { ID = 526850 };
