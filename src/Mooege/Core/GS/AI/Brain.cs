@@ -16,10 +16,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections;
+using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Actors.Actions;
 using Mooege.Core.GS.Actors.Movement;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.AI
 {
@@ -37,13 +41,26 @@ namespace Mooege.Core.GS.AI
         /// </summary>
         public BrainState State { get; protected set; }
 
-        public Vector3D Heading { get; private set; }
-        public Actor Target { get; private set; }
+        /// <summary>
+        /// Target.
+        /// </summary>
+        public Actor Target { get; protected set; }
+
+        /// <summary>
+        /// Actions to be taken.
+        /// </summary>
+        public Queue<ActorAction> Actions { get; protected set; }
 
         protected Brain(Actor body)
         {
             this.Body = body;
             this.State = BrainState.Idle;
+            this.Actions = new Queue<ActorAction>();
+        }
+
+        protected void QueueAction(ActorAction action)
+        {
+            this.Actions.Enqueue(action);
         }
        
         public virtual void Update(int tickCounter)
@@ -51,25 +68,14 @@ namespace Mooege.Core.GS.AI
             if(this.State == BrainState.Dead || this.Body == null || this.Body.World == null)
                 return;
 
-            this.Think();
+            this.Think(tickCounter);
         }        
 
         /// <summary>
         /// Lets the brain think and decide the next action to take.
         /// </summary>
-        public virtual void Think()
+        public virtual void Think(int tickCounter)
         { }
-
-        public void Chase(Actor actor)
-        {
-            if (this.Heading == actor.Position)
-                return;
-
-            this.Target = actor;
-            this.Heading = this.Target.Position;
-
-            this.Move(this.Target);
-        }
 
         public void Move(Vector3D position, float facingAngle)
         {

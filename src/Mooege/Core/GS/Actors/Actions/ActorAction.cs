@@ -16,16 +16,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.AI;
 
-namespace Mooege.Core.GS.AI.Brains
+namespace Mooege.Core.GS.Actors.Actions
 {
-    public class NPCBrain:Brain
+    public abstract class ActorAction
     {
-        protected NPCBrain(Actor body) : base(body)
-        { }
+        /// <summary>
+        /// Action's owner brain.
+        /// </summary>
+        public Brain Owner { get; private set; }
 
-        public override void Think(int tickCounter)
-        { }
+        public abstract void Start(int tickCounter);
+
+        public abstract void Update(int tickCounter);
+
+        public abstract void Stop(int tickCounter);
     }
 }

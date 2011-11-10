@@ -29,7 +29,7 @@ namespace Mooege.Core.GS.AI.Brains
         protected FollowerBrain(Actor body) : base(body)
         { }
 
-        public override void Think()
+        public override void Think(int tickCounter)
         { }
     }
 }

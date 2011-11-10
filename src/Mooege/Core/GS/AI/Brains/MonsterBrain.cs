@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Players;
+using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.AI.Brains
 {
@@ -29,10 +30,12 @@ namespace Mooege.Core.GS.AI.Brains
         /// </summary>
         public List<Player> EnemiesInRange { get; protected set; }
 
-        public MonsterBrain(Actor body) : base(body)
-        { }
+        public MonsterBrain(Actor body)
+            : base(body)
+        {
+        }
 
-        public override void Think()
+        public override void Think(int tickCounter)
         {
             if (this.Body is NPC) return;
 
