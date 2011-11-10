@@ -1,4 +1,22 @@
-﻿using System;
+﻿/*
+ * Copyright (C) 2011 mooege project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,13 +27,18 @@ using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Common.MPQ.FileFormats.Types
 {
+    /// <summary>
+    /// Implementation of a dictionary like tag map.
+    /// You can access elements either using a key object that identifies which of the TagKey
+    /// fields holds your value or by accessing the entry directly with the interger tag id.
+    /// </summary>
     public class TagMap : ISerializableData, IEnumerable<TagMapEntry>
     {
         public int TagMapSize { get; private set; }
 
         private Dictionary<int, TagMapEntry> _TagMapEntries { get; set; }
 
-        [Obsolete("Use TagKeys instead")]
+        [Obsolete("Use TagKeys instead. If it is missing create it")]
         public List<TagMapEntry> TagMapEntries
         {
             get
@@ -24,12 +47,11 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             }
         }
 
-        [Obsolete("Use strong keys")]
+        [Obsolete("Use TagKeys instead. If it is missing create it")]
         public bool ContainsKey(int key) { return _TagMapEntries.ContainsKey(key); }
-        public bool ContainsKey(TagKey key) { return _TagMapEntries.ContainsKey(key.ID); }
+        public bool ContainsKey(TagKeys.TagKey key) { return _TagMapEntries.ContainsKey(key.ID); }
 
-        public void Add(TagKey key, TagMapEntry entry) { _TagMapEntries.Add(key.ID, entry) ; }
-
+        public void Add(TagKeys.TagKey key, TagMapEntry entry) { _TagMapEntries.Add(key.ID, entry); }
 
         public void Read(MpqFileStream stream)
         {
@@ -47,23 +69,23 @@ namespace Mooege.Common.MPQ.FileFormats.Types
 
         #region accessors
 
-        public int this[TagKeyInt key]
+        public int this[TagKeys.TagKeyInt key]
         {
             get
             {
-                return _TagMapEntries[key.ID].Int2;
+                return _TagMapEntries[key.ID].Int;
             }
         }
 
-        public float this[TagKeyFloat key]
+        public float this[TagKeys.TagKeyFloat key]
         {
             get
             {
-                return _TagMapEntries[key.ID].Float0;
+                return _TagMapEntries[key.ID].Float;
             }
         }
 
-        public ScriptFormula this[TagKeyScript key]
+        public ScriptFormula this[TagKeys.TagKeyScript key]
         {
             get
             {
@@ -71,11 +93,20 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             }
         }
 
-        public SNOHandle this[TagKeySNO key]
+        public SNOHandle this[TagKeys.TagKeySNO key]
         {
             get
             {
-                return new SNOHandle() { Group = 0, SNOId = _TagMapEntries[key.ID].Int2 };
+                return new SNOHandle() { Group = 0, SNOId = _TagMapEntries[key.ID].Int };
+            }
+        }
+
+        [Obsolete("Use TagKeys instead. If it is missing create it")]
+        public TagMapEntry this[int key]
+        {
+            get
+            {
+                return _TagMapEntries[key];
             }
         }
 
@@ -90,31 +121,25 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         {
             return _TagMapEntries.Values.GetEnumerator();
         }
-
-        [Obsolete("Use strong keys instead")]
-        public TagMapEntry this[int key]
-        {
-            get
-            {
-                return _TagMapEntries[key];
-            }
-        }
-
     }
 
-    public class TagKey { 
-        public int ID; 
-        public string Name;
-    }
-
-    public class TagKeyInt : TagKey { }
-    public class TagKeyFloat : TagKey { }
-    public class TagKeyScript : TagKey { }
-    public class TagKeySNO : TagKey { }
-
-
+    /// <summary>
+    /// This class holds all currently defined keys as well as a way to get the matching key for a TagID
+    /// </summary>
     public class TagKeys
     {
+        public class TagKey
+        {
+            public int ID;
+            public string Name;
+        }
+
+        public class TagKeyInt : TagKey { }
+        public class TagKeyFloat : TagKey { }
+        public class TagKeyScript : TagKey { }
+        public class TagKeySNO : TagKey { }
+
+        # region compile a dictionary to access keys from ids. If you need a readable name for a TagID, look up its key and get its name
         private static Dictionary<int, TagKey> tags = new Dictionary<int, TagKey>();
 
         public static TagKey GetKey(int index)
@@ -131,6 +156,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
                 tags.Add(key.ID, key);
             }
         }
+        #endregion
 
         //524864 == hasinteractionoptions?
 
@@ -147,10 +173,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public static TagKeyInt ActorTag = new TagKeyInt() { ID = 526852 };
         public static TagKeySNO DestinationLevelArea = new TagKeySNO() { ID = 526853 };
 
-
         public static TagKeySNO TriggeredConversation = new TagKeySNO() { ID = 528128 };
-
-
 
 
 
@@ -159,7 +182,6 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public static TagKeySNO Flippy = new TagKeySNO() { ID = 65688 };
         public static TagKeySNO Projectile = new TagKeySNO() { ID = 66138 };
         public static TagKeySNO Lore = new TagKeySNO() { ID = 67331 };
-
 
         public static TagKeySNO MinimapMarker = new TagKeySNO() { ID = 458752 };
 
@@ -186,31 +208,27 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public int Type { get; private set; }
         public int TagID { get; private set; }
         public ScriptFormula ScriptFormula { get; private set; }
-        public int Int2 { get; private set; }
-        public float Float0 { get; private set; }
+        public int Int { get; private set; }
+        public float Float { get; private set; }
 
         public TagMapEntry(int tag, int value, int type)
         {
             Type = type;
             TagID = tag;
-            Int2 = value;
+            Int = value;
         }
 
         public override string ToString()
         {
-            TagKey key = TagKeys.GetKey(TagID);
+            TagKeys.TagKey key = TagKeys.GetKey(TagID);
 
             switch (Type)
             {
-                case 0: return String.Format("{0} = {1}", key != null ? key.Name : TagID.ToString(), Int2);
-                case 1: return String.Format("{0} = {1}", key != null ? key.Name : TagID.ToString(), Float0);
-                case 2: return String.Format("{0} = {1}", key != null ? key.Name : TagID.ToString(), Int2);
+                case 1: return String.Format("{0} = {1}", key != null ? key.Name : TagID.ToString(), Float);
                 case 4: return String.Format("{0} = {1}", key != null ? key.Name : TagID.ToString(), ScriptFormula);
-                default: return String.Format("{0} = {1}", key != null ? key.Name : TagID.ToString(), Int2);
+                default: return String.Format("{0} = {1}", key != null ? key.Name : TagID.ToString(), Int);
             }
         }
-
-
 
         public TagMapEntry(MpqFileStream stream)
         {
@@ -220,19 +238,19 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             switch (this.Type)
             {
                 case 0:
-                    this.Int2 = stream.ReadValueS32();
+                    this.Int = stream.ReadValueS32();
                     break;
                 case 1:
-                    Float0 = stream.ReadValueF32();
+                    Float = stream.ReadValueF32();
                     break;
                 case 2: // SNO
-                    this.Int2 = stream.ReadValueS32();
+                    this.Int = stream.ReadValueS32();
                     break;
                 case 4:
                     this.ScriptFormula = new ScriptFormula(stream);
                     break;
                 default:
-                    this.Int2 = stream.ReadValueS32();
+                    this.Int = stream.ReadValueS32();
                     break;
             }
         }
