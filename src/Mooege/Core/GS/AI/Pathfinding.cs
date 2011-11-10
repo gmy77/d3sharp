@@ -80,7 +80,7 @@ namespace Mooege.Core.GS.AI
             // Todo make multiple world aware, store mesh's for each world. Generation is fast using the squares for lookups rather than cells.- DarkLotus
             if (world != null) { return; }
             world = World;
-            foreach (var scene in world.QuadTree.Query<Scene>(new Common.Types.Misc.Circle(new Vector2F(2000, 3000), 5000)))// We just want all the scenes in the world. - DarkLotus
+            foreach (var scene in world.QuadTree.Query<Scene>(world.QuadTree.RootNode.Bounds))// We just want all the scenes in the world. - DarkLotus
             {
                 int x = (int)scene.Position.X;
                 int y = (int)scene.Position.Y;

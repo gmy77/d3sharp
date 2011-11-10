@@ -29,6 +29,7 @@ using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
 using System.Text;
 using Monster = Mooege.Core.GS.Actors.Monster;
+using System.Threading;
 
 namespace Mooege.Core.GS.Games
 {
@@ -170,8 +171,9 @@ namespace Mooege.Core.GS.Games
                 return "You can only invoke this command while ingame.";
 
             var player = invokerClient.InGameClient.Player;
-            System.Windows.Forms.Application.Run(new Mooege.Core.GS.AI.NavDebug(player.World));
-            return "Form Closed";
+            var formThread = new Thread(c => System.Windows.Forms.Application.Run(new Mooege.Core.GS.AI.NavDebug(player.World)));
+            formThread.Start();
+            return "Done.";
         }
     }
     //[CommandGroup("levelup", "Levels your character.")]

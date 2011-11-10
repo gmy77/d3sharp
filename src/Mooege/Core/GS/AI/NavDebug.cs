@@ -145,7 +145,7 @@ namespace Mooege.Core.GS.AI
                 Walkable = new List<System.Windows.Rect>();
 
                 float Xl = 0f, Xh = 0f, Yl = 0f, Yh = 0f;
-                foreach (var scene in world.QuadTree.Query<Scene>(new Common.Types.Misc.Circle(new Vector2F(2000, 3000), 5000)))
+                foreach (var scene in world.QuadTree.Query<Scene>(world.QuadTree.RootNode.Bounds))
                 {
                     int scenesize = (int)(scene.NavMesh.SquaresCountX * 2.5);
 
