@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats;
@@ -28,6 +29,7 @@ using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Map;
 using Mooege.Core.MooNet.Commands;
+using Mooege.Core.MooNet.Games;
 using Mooege.Net.MooNet;
 using System.Text;
 using Monster = Mooege.Core.GS.Actors.Monster;
@@ -528,23 +530,42 @@ namespace Mooege.Core.GS.Games
         }
     }
 
-    [CommandGroup("drawworld", "Draws current world visualization.\nUsage: drawworld")]
+    [CommandGroup("drawworld", "Draws current world visualization.\nUsage: drawworld [worldId]")]
     public class DrawWorldCommand : CommandGroup
     {
         [DefaultCommand]
         public string DrawWorld(string[] @params, MooNetClient invokerClient)
         {
-            if (invokerClient == null)
-                return "You can not invoke this command from console.";
+            if (invokerClient == null && @params == null)
+                return "Invalid arguments. Type 'help drawworld' to get help.";
 
-            if (invokerClient.InGameClient == null)
-                return "You can only invoke this command while ingame.";
+            Map.World world;
+            int worldId;
 
-            var player = invokerClient.InGameClient.Player;
-            var formThread = new Thread(c => System.Windows.Forms.Application.Run(new WorldVisualizer(player.World)));
-            formThread.Start();
+            if(@params.Count() == 0)
+            {
+                if(invokerClient==null || invokerClient.InGameClient==null|| invokerClient.InGameClient.Player==null)
+                    return "Invalid arguments. Type 'help drawworld' to get help.";
 
-            return "Done.";
+                world = invokerClient.InGameClient.Player.World;
+                worldId = world.SNOId;
+            }
+            else
+            {               
+                if (!Int32.TryParse(@params[0], out worldId))
+                    worldId = 71150;
+
+                var game = GameManager.CreateGame(worldId); // hack-hack /raist.
+                world = game.GetWorld(worldId);
+            }
+
+            if (world != null)
+            {
+                new Thread(c => Application.Run(new WorldVisualizer(world))).Start();
+                return string.Format("Done visualizing world {0}.", worldId);
+            }
+
+            return string.Format("Invalid world id: {0}.", worldId);
         }
     }
 }

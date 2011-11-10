@@ -11,6 +11,9 @@ namespace Mooege.Core.GS.Games
 
         public static Game CreateGame(int gameId)
         {
+            if (Games.ContainsKey(gameId))
+                return Games[gameId];
+
             var game = new Game(gameId);
             Games.Add(gameId, game);
             return game;

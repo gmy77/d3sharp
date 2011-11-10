@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Forms;
-using Mooege.Core.GS.Common.Types.Math;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -32,13 +31,19 @@ namespace Mooege.Core.GS.Map
         public WorldNavMesh Mesh { get; private set; }
         public Bitmap Bitmap { get; private set; }
 
-        Pen playerPen = new Pen(Color.DarkMagenta, 2.0f);
-        Pen actorPen = new Pen(Color.Green, 2.0f);
-        Pen unWalkablePen = new Pen(Color.Red, 1.0f);
-        Pen walkablePen = new Pen(Color.Blue, 1.0f);
+        private readonly Pen _masterScenePen = new Pen(Color.DarkGray, 5.0f);
+        private readonly Pen _subScenePen = new Pen(Color.Gray, 3.0f);
+        private readonly Pen _playerPen = new Pen(Color.DarkMagenta, 2.0f);
+        private readonly Pen _actorPen = new Pen(Color.Green, 2.0f);
+        private readonly Pen _unWalkablePen = new Pen(Color.Red, 1.0f);
+        private readonly Pen _walkablePen = new Pen(Color.Blue, 1.0f);
+
+        private readonly Font _sceneFont = new Font("Verdana", 7);
 
         public WorldVisualizer(World world)
         {
+            _subScenePen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
+
             InitializeComponent();
             this.World = world;
             this.Mesh = new WorldNavMesh(world);
@@ -58,35 +63,44 @@ namespace Mooege.Core.GS.Map
 
             graphicsObject.FillRectangle(Brushes.Wheat, 0, 0, this.Bitmap.Width, this.Bitmap.Height);
 
-            foreach (var x in this.Mesh.Walkable)
+            foreach(var scene in this.Mesh.Scenes)
             {
-                var rec = new Rectangle(new Point((int)x.Left, (int)x.Top), new Size((int)x.Width, (int)x.Height));
-                graphicsObject.DrawRectangle(walkablePen, rec);
+                var rect = new Rectangle((int) scene.Bounds.Left, (int) scene.Bounds.Top, (int) scene.Bounds.Width, (int) scene.Bounds.Height);
+                graphicsObject.DrawRectangle(scene.Parent!=null ? _masterScenePen:_subScenePen, rect);
 
+                if (!string.IsNullOrEmpty(scene.SceneSNO.Name))
+                    graphicsObject.DrawString(scene.SceneSNO.Name, _sceneFont, Brushes.Gray, rect);
             }
 
-            this.Mesh.UpdateActors();
+            //foreach (var x in this.Mesh.Walkable)
+            //{
+            //    var rec = new Rectangle(new Point((int)x.Left, (int)x.Top), new Size((int)x.Width, (int)x.Height));
+            //    graphicsObject.DrawRectangle(_walkablePen, rec);
 
-            foreach (var x in this.Mesh.UnWalkable)
-            {
-                var rec = new Rectangle(new Point((int)x.Left, (int)x.Top), new Size((int)x.Width, (int)x.Height));
-                graphicsObject.DrawRectangle(unWalkablePen, rec);
+            //}
 
-            }
+            //this.Mesh.UpdateActors();
 
-            foreach (var x in this.Mesh.Actors)
-            {
-                var rec = new Rectangle(new Point((int)x.Left, (int)x.Top), new Size((int)x.Width, (int)x.Height));
-                graphicsObject.DrawRectangle(actorPen, rec);
+            //foreach (var x in this.Mesh.UnWalkable)
+            //{
+            //    var rec = new Rectangle(new Point((int)x.Left, (int)x.Top), new Size((int)x.Width, (int)x.Height));
+            //    graphicsObject.DrawRectangle(_unWalkablePen, rec);
 
-            }
+            //}
 
-            foreach (var x in this.Mesh.Players)
-            {
-                var rec = new Rectangle(new Point((int)x.Left, (int)x.Top), new Size((int)x.Width * 4, (int)x.Height * 4));
-                graphicsObject.DrawRectangle(playerPen, rec);
+            //foreach (var x in this.Mesh.Actors)
+            //{
+            //    var rec = new Rectangle(new Point((int)x.Left, (int)x.Top), new Size((int)x.Width, (int)x.Height));
+            //    graphicsObject.DrawRectangle(_actorPen, rec);
 
-            }
+            //}
+
+            //foreach (var x in this.Mesh.Players)
+            //{
+            //    var rec = new Rectangle(new Point((int)x.Left, (int)x.Top), new Size((int)x.Width * 4, (int)x.Height * 4));
+            //    graphicsObject.DrawRectangle(_playerPen, rec);
+
+            //}
 
             graphicsObject.Save();
             graphicsObject.Dispose();
@@ -97,6 +111,7 @@ namespace Mooege.Core.GS.Map
             public World World { get; private set; }
             public Rect Bounds { get { return World.QuadTree.RootNode.Bounds; } }
 
+            public List<Scene> Scenes { get; private set; }
             public List<Rect> UnWalkable { get; private set; }
             public List<Rect> Walkable { get; private set; }
             public List<Rect> Actors { get; private set; }
@@ -105,21 +120,25 @@ namespace Mooege.Core.GS.Map
             public WorldNavMesh(World world)
             {
                 this.World = world;
+
+                this.Scenes = new List<Scene>();
+                this.Actors = new List<Rect>();
+                this.UnWalkable = new List<Rect>();
+                this.Walkable = new List<Rect>();
+
                 this.Update();
             }
 
             public void Update()
-            {
-                Actors = new List<Rect>();
-                UnWalkable = new List<Rect>();
-                Walkable = new List<Rect>();
-
+            {                
                 float Xl = 0f;
                 float Xh = 0f;
                 float Yl = 0f;
                 float Yh = 0f;
 
-                foreach (var scene in World.QuadTree.Query<Scene>(World.QuadTree.RootNode.Bounds))
+                this.Scenes = World.QuadTree.Query<Scene>(World.QuadTree.RootNode.Bounds);
+
+                foreach (var scene in this.Scenes)
                 {
                     var scenesize = (int)(scene.NavMesh.SquaresCountX * 2.5);
 

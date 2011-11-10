@@ -43,6 +43,8 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         public int SNOId { get; private set; }
 
+        public SNOHandle SceneSNO { get; private set; }
+
         /// <summary>
         /// Scene group's SNOId.
         /// Not sure on usage /raist.
@@ -131,6 +133,7 @@ namespace Mooege.Core.GS.Map
         public Scene(World world, Vector3D position, int snoId, Scene parent)
             : base(world, world.NewSceneID)
         {
+            this.SceneSNO = new SNOHandle { Group = SNOGroup.Scene, SNOId = snoId };
             this.SNOId = snoId;
             this.Parent = parent;
             this.Subscenes = new List<Scene>();
