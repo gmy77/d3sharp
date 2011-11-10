@@ -84,7 +84,7 @@ namespace Mooege.Core.GS.Actors
             if (this.Brain == null)
                 return;
 
-            this.Brain.Think(tickCounter);
+            this.Brain.Update(tickCounter);
         }
 
         // FIXME: Hardcoded hell. /komiga

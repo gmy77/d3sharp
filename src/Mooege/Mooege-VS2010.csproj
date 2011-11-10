@@ -134,6 +134,10 @@
     <Compile Include="Common\MPQ\SerializableData.cs" />
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
+    <Compile Include="Core\GS\AI\Brains\HirelingBrain.cs" />
+    <Compile Include="Core\GS\AI\Brains\MonsterBrain.cs" />
+    <Compile Include="Core\GS\AI\BrainState.cs" />
+    <Compile Include="Core\GS\AI\Brains\NPCBrain.cs" />
     <Compile Include="Core\GS\Items\Affix.cs" />
     <Compile Include="Core\GS\Items\AffixGenerator.cs" />
     <Compile Include="Core\GS\Items\HandledItem.cs" />

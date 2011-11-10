@@ -16,38 +16,49 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Linq;
 using Mooege.Common;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Actors.Helpers;
+using Mooege.Core.GS.Actors.Movement;
 using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Ticker.Helpers;
 
 namespace Mooege.Core.GS.AI
 {
     public class Brain
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
+        protected static readonly Logger Logger = LogManager.CreateLogger();
 
+        /// <summary>
+        /// The body chained to brain.
+        /// </summary>
         public Actor Body { get; private set; }
+
+        /// <summary>
+        /// The current brain state.
+        /// </summary>
+        public BrainState State { get; protected set; }
+
         public Vector3D Heading { get; private set; }
         public Actor Target { get; private set; }
 
-        public Brain(Actor body)
+        protected Brain(Actor body)
         {
             this.Body = body;
+            this.State = BrainState.Idle;
         }
        
-        public virtual void Think(int tickCounter)
+        public virtual void Update(int tickCounter)
         {
-            if (this.Body == null || this.Body.World == null) return; // hack fix until i get brain-states in. /raist.
+            if(this.State == BrainState.Dead || this.Body == null || this.Body.World == null)
+                return;
 
-            var players = this.Body.GetPlayersInRange();
-            if (players.Count == 0) return;
+            this.Think();
+        }        
 
-            this.Chase(players.First());
-        }
+        /// <summary>
+        /// Lets the brain think and decide the next action to take.
+        /// </summary>
+        public virtual void Think()
+        { }
 
         public void Chase(Actor actor)
         {
@@ -62,7 +73,7 @@ namespace Mooege.Core.GS.AI
 
         public void Move(Vector3D position, float facingAngle)
         {
-            this.Body.RotationAmount = facingAngle;
+            this.Body.FacingAngle = facingAngle;
             this.Body.Move(position, facingAngle);
         }
 

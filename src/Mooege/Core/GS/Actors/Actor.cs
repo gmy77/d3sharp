@@ -84,7 +84,7 @@ namespace Mooege.Core.GS.Actors
         /// </summary>
         public virtual PRTransform Transform
         {
-            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.FacingAngle, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace Mooege.Core.GS.Actors
         public void ChangeWorld(World world, StartingPoint startingPoint)
         {
             this.RotationAxis = startingPoint.RotationAxis;
-            this.RotationAmount = startingPoint.RotationAmount;
+            this.FacingAngle = startingPoint.FacingAngle;
 
             this.ChangeWorld(world, startingPoint.Position);
         }

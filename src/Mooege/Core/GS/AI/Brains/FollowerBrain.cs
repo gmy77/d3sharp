@@ -1,4 +1,4 @@
-﻿﻿/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,20 +16,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
-using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.AI.Brains;
-using Mooege.Core.GS.Map;
+using System.Linq;
+using System.Text;
+using Mooege.Core.GS.Actors;
 
-namespace Mooege.Core.GS.Actors.Implementations
+namespace Mooege.Core.GS.AI.Brains
 {
-    [HandledSNO(6652)]
-    public class Zombie : Monster
+    public class FollowerBrain:Brain
     {
-        public Zombie(World world, int snoId, Dictionary<int, TagMapEntry> tags)
-            : base(world, snoId, tags)
-        {
-            this.Brain = new MonsterBrain(this);
-        }
+        protected FollowerBrain(Actor body) : base(body)
+        { }
+
+        public override void Think()
+        { }
     }
 }
