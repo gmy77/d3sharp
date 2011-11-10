@@ -23,12 +23,14 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Actors.Helpers;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Ticker.Helpers;
+using System.Collections.Generic;
 
 namespace Mooege.Core.GS.AI
 {
     public class Brain
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
+        private List<Vector3D> path = new List<Vector3D>();
 
         public Actor Body { get; private set; }
         public Vector3D Heading { get; private set; }
@@ -53,11 +55,21 @@ namespace Mooege.Core.GS.AI
         {
             if (this.Heading == actor.Position)
                 return;
+            if (path.Count < 2)
+            {
+                path = Pathfinding.FindPath(this.Body, this.Body.Position, actor.Position);
+                path.Reverse();
+            }
+            if (path.Count < 2) { return; }
+
+            this.path.RemoveAt(0); // Each move will be 2f as we skip moves, first move removed as its only to move to our current loc
 
             this.Target = actor;
-            this.Heading = this.Target.Position;
-
-            this.Move(this.Target);
+            this.Heading = this.path[0];// this.Target.Position;
+            this.Move(path[0], ActorHelpers.GetFacingAngle(this.Body.Position,path[0]));
+            this.Body.Position = path[0]; //Fix me i guess, actor bounces around without. -DarkLotus
+            this.path.RemoveAt(0);
+            //this.Move(this.Target);
         }
 
         public void Move(Vector3D position, float facingAngle)

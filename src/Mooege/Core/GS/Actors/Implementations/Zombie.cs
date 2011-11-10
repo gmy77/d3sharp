@@ -28,7 +28,7 @@ namespace Mooege.Core.GS.Actors.Implementations
         public Zombie(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
         {
-            // this.Brain = new AI.Brain(this); disabled for now. /raist.
+            this.Brain = new AI.Brain(this); //disabled for now. /raist.
         }
     }
 }
