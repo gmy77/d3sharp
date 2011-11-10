@@ -28,7 +28,7 @@ namespace Mooege.Core.GS.Actors.Implementations
     [HandledSNO(130400 /* Player_Shared_Stash.acr */)]
     public sealed class Stash : Gizmo
     {
-        public Stash(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Stash(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         { }
 

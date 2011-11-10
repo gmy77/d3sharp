@@ -45,63 +45,6 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         }
     }
 
-    public class TagMap : ISerializableData
-    {
-        public int TagMapSize { get; private set; }
-        public TagMapEntry[] TagMapEntries { get; private set; }
-
-        public void Read(MpqFileStream stream)
-        {
-            TagMapSize = stream.ReadValueS32();
-            TagMapEntries = new TagMapEntry[TagMapSize];
-
-            for (int i = 0; i < TagMapSize; i++)
-            {
-                TagMapEntries[i] = new TagMapEntry(stream);
-            }
-        }
-    }
-
-    public class TagMapEntry
-    {
-        public int Type { get; private set; }
-        public int TagID { get; private set; }
-        public ScriptFormula ScriptFormula { get; private set; }
-        public int Int2 { get; private set; }
-        public float Float0 { get; private set; }
-
-        public TagMapEntry(int tag, int value, int type)
-        {
-            Type = type;
-            TagID = tag;
-            Int2 = value;
-        }
-
-        public TagMapEntry(MpqFileStream stream)
-        {
-            this.Type = stream.ReadValueS32();
-            this.TagID = stream.ReadValueS32();
-
-            switch (this.Type)
-            {
-                case 0:
-                    this.Int2 = stream.ReadValueS32();
-                    break;
-                case 1:
-                    Float0 = stream.ReadValueF32();
-                    break;
-                case 2: // SNO
-                    this.Int2 = stream.ReadValueS32();
-                    break;
-                case 4:
-                    this.ScriptFormula = new ScriptFormula(stream);
-                    break;
-                default:
-                    this.Int2 = stream.ReadValueS32();
-                    break;
-            }
-        }
-    }
 
     public class ScriptFormula
     {

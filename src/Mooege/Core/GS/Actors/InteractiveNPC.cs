@@ -39,7 +39,7 @@ namespace Mooege.Core.GS.Actors
         public List<IInteraction> Interactions { get; private set; }
         public List<ConversationInteraction> Conversations { get; private set; }
         
-        public InteractiveNPC(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public InteractiveNPC(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.NPC_Has_Interact_Options, 0] = true;

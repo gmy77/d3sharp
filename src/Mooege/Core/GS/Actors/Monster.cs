@@ -53,7 +53,7 @@ namespace Mooege.Core.GS.Actors
 
         public int LoreSNOId { get; private set; }
 
-        public Monster(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Monster(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Field2 = 0x8;

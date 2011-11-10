@@ -28,7 +28,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
     [HandledSNO(4644 /* Scoundrel.acr */)]
     public class Scoundrel : Hireling
     {
-        public Scoundrel(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Scoundrel(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             mainSNO = 4644;
@@ -39,7 +39,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             Attributes[GameAttribute.Hireling_Class] = 2;
         }
 
-        public override Hireling CreateHireling(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public override Hireling CreateHireling(World world, int snoId, TagMap tags)
         {
             return new Scoundrel(world, snoId, tags);
         }

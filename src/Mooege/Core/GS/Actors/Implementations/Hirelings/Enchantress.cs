@@ -27,7 +27,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
     [HandledSNO(4062 /* Enchantress.acr */)]
     public class Enchantress : Hireling
     {
-        public Enchantress(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Enchantress(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             mainSNO = 4062;
@@ -38,7 +38,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             Attributes[Mooege.Net.GS.Message.GameAttribute.Hireling_Class] = 3;
         }
 
-        public override Hireling CreateHireling(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public override Hireling CreateHireling(World world, int snoId, TagMap tags)
         {
             return new Enchantress(world, snoId, tags);
         }

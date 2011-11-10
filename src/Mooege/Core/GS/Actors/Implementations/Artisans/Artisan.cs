@@ -28,7 +28,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
 {
     public class Artisan : InteractiveNPC
     {
-        public Artisan(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Artisan(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
