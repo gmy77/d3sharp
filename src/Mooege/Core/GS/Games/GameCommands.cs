@@ -104,6 +104,7 @@ namespace Mooege.Core.GS.Games
                 return "You can only invoke this command while ingame.";
 
             var player = invokerClient.InGameClient.Player;
+            
             var actorSNO = 6652; /* zombie */
             var amount = 1;
 
@@ -156,7 +157,23 @@ namespace Mooege.Core.GS.Games
             return string.Format("Killed {0} monsters in range.", monstersInRange.Count);
         }
     }
+    [CommandGroup("drawmesh", "draws a mesh.\nUsage: drawmesh")]
+    public class DrawMeshCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string DrawMesh(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
 
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            var player = invokerClient.InGameClient.Player;
+            System.Windows.Forms.Application.Run(new Mooege.Core.GS.AI.NavDebug(player.World));
+            return "Form Closed";
+        }
+    }
     //[CommandGroup("levelup", "Levels your character.")]
     //public class LevelUpCommand : CommandGroup
     //{
