@@ -38,11 +38,11 @@ namespace Mooege.Core.GS.Items.Implementations
             : base(world, definition)
         {
             // Items are NOT constructed with tags
-            var actorData = (Mooege.Common.MPQ.FileFormats.Actor)Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.Actor][this.ActorSNO.SNOId].Data;
+            var actorData = ActorSNO.Target as Mooege.Common.MPQ.FileFormats.Actor;
 
             if (actorData.TagMap.ContainsKey(TagKeys.Lore))
             {
-                LoreSNOId = actorData.TagMap[TagKeys.Lore].SNOId;
+                LoreSNOId = actorData.TagMap[TagKeys.Lore].Id;
             }
         }
 

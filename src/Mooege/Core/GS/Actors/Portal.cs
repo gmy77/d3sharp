@@ -44,16 +44,16 @@ namespace Mooege.Core.GS.Actors
         {
             this.Destination = new ResolvedPortalDestination
             {
-                WorldSNO = tags[TagKeys.DestinationWorld].SNOId,
+                WorldSNO = tags[TagKeys.DestinationWorld].Id,
             };
 
             if (tags.ContainsKey(TagKeys.DestinationLevelArea))
-                this.Destination.DestLevelAreaSNO = tags[TagKeys.DestinationLevelArea].SNOId;
+                this.Destination.DestLevelAreaSNO = tags[TagKeys.DestinationLevelArea].Id;
 
             if (tags.ContainsKey(TagKeys.DestinationActorTag))
                 this.Destination.StartingPointActorTag = tags[TagKeys.DestinationActorTag];
             else
-                Logger.Warn("Found portal {0}without target location actor", this.ActorSNO.SNOId);
+                Logger.Warn("Found portal {0}without target location actor", this.ActorSNO.Id);
 
             this.Field2 = 16;
 

@@ -21,22 +21,118 @@ using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ;
 using Mooege.Net.GS.Message;
+using System;
 
 namespace Mooege.Core.GS.Common.Types.SNO
 {
+    public class InvalidSnoException : Exception { public InvalidSnoException(string message):base(message) {} }
+
     public class SNOHandle
     {
         /// <summary>
-        /// SNOGroup
+        /// Gets the group of the referenced object or null if the handle was
+        /// initialized without group and the id is not found in mpq storage
         /// </summary>
-        public SNOGroup Group;
+        public SNOGroup? Group
+        {
+            get
+            {
+                if (!_isInitialized) Initialize();
+                return _group.Value;
+            }
+        }
 
         /// <summary>
-        /// SNOId
+        /// The id of the referenced object
         /// </summary>
-        public int SNOId;
+        public int Id { get; private set; }
+
+        /// <summary>
+        /// The target object this handle refers to.
+        /// </summary>
+        public FileFormat Target
+        {
+            get
+            {
+                if (!_isInitialized) Initialize();
+                return _target;
+            }
+        }
+
+        /// <summary>
+        /// Gets whether the handle is valid
+        /// </summary>
+        public bool IsValid
+        {
+            get
+            {
+                if (!_isInitialized) Initialize();
+                return _isValid;
+            }
+        }
+
+        /// <summary>
+        /// Get the name of the asset containing the target object
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                if (!_isInitialized) Initialize();
+                return _name;              
+            }
+        }
+
+        private string _name = "";
+        private FileFormat _target = null;      
+        private SNOGroup? _group = null;
+        private bool _isValid = false;
+        private bool _isInitialized = false;
+
 
         public SNOHandle() { }
+
+        public SNOHandle(SNOGroup group, int id)
+        {
+            _group = group;
+            Id = id;
+        }
+
+        public SNOHandle(int snoId)
+        {
+            Id = snoId;
+        }
+
+
+        /// <summary>
+        /// Lazy initialization of handle fields. They are initialized on the first access.
+        /// because the mpq storage may not have finished loading and thus, the referenced sno may not be found
+        /// </summary>
+        private void Initialize()
+        {
+            // Look up the group if it is not set. Maybe one big
+            // asset dictionary would be more convenient here
+            _isInitialized = true;
+            if (!_group.HasValue)
+            {
+                foreach (var pair in MPQStorage.Data.Assets)
+                    if (pair.Value.ContainsKey(Id))
+                    {
+                        _group = pair.Key;
+                        break;
+                    }
+            }
+
+            if (_group.HasValue)
+                if (MPQStorage.Data.Assets.ContainsKey(_group.Value))
+                    if (MPQStorage.Data.Assets[_group.Value].ContainsKey(Id))
+                    {
+                        _isValid = true;
+                        _target = MPQStorage.Data.Assets[_group.Value][Id].Data;
+                        _name = MPQStorage.Data.Assets[_group.Value][Id].Name;
+                    }
+        }
+
 
         /// <summary>
         /// Reads SNOName from given MPQFileStream.
@@ -44,20 +140,8 @@ namespace Mooege.Core.GS.Common.Types.SNO
         /// <param name="stream">The MPQFileStream to read from.</param>
         public SNOHandle(MpqFileStream stream)
         {
-            this.Group = (SNOGroup)stream.ReadValueS32();
-            this.SNOId = stream.ReadValueS32();
-        }
-
-        public string Name
-        {
-            get
-            {
-                if (!MPQStorage.Data.Assets.ContainsKey(this.Group))
-                    return ""; // it's here because of the SNOGroup 0, could it be the Act? /raist
-                return MPQStorage.Data.Assets[this.Group].ContainsKey(this.SNOId)
-                                ? MPQStorage.Data.Assets[this.Group][SNOId].Name
-                                : ""; // put it here because it seems we miss loading some scenes there /raist.                
-            }
+            _group = (SNOGroup)stream.ReadValueS32();
+            Id = stream.ReadValueS32();
         }
 
         /// <summary>
@@ -66,8 +150,8 @@ namespace Mooege.Core.GS.Common.Types.SNO
         /// <param name="buffer">The GameBitBuffer to parse from.</param>
         public void Parse(GameBitBuffer buffer)
         {
-            Group = (SNOGroup)buffer.ReadInt(32);
-            SNOId = buffer.ReadInt(32);
+            _group = (SNOGroup)buffer.ReadInt(32);
+            Id = buffer.ReadInt(32);
         }
 
         /// <summary>
@@ -77,26 +161,29 @@ namespace Mooege.Core.GS.Common.Types.SNO
         public void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, (int)Group);
-            buffer.WriteInt(32, SNOId);
+            buffer.WriteInt(32, Id);
         }
 
         public void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("SNOName:");
+            b.AppendLine("SNOHandle:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
             b.AppendLine("Group: 0x" + ((int)Group).ToString("X8"));
             b.Append(' ', pad);
-            b.AppendLine("SNOId: 0x" + SNOId.ToString("X8"));
+            b.AppendLine("Id: 0x" + Id.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
 
         public override string ToString()
         {
-            return string.Format("[{0}] {1} - {2}", this.Group, this.SNOId, this.Name);
+            if(IsValid)
+                return string.Format("[{0}] {1} - {2}", this.Group, this.Id, this.Name);
+            else
+                return string.Format("[{0}] {1} - Invalid handle", _group, this.Id);
         }
     }
 }

@@ -51,7 +51,7 @@ namespace Mooege.Core.GS.Games
 
                 // these are only needed to show information in console
                 public Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType ObjectiveType { get { return objective.ObjectiveType; } }
-                public int ObjectiveValue { get { return objective.SNOName1.SNOId; } }
+                public int ObjectiveValue { get { return objective.SNOName1.Id; } }
 
                 private Mooege.Common.MPQ.FileFormats.QuestStepObjective objective;
                 private QuestStep questStep;
@@ -78,7 +78,7 @@ namespace Mooege.Core.GS.Games
                         case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.CompleteQuest:
                         case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.HadConversation:
                         case Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType.EnterLevelArea:
-                            if (value == objective.SNOName1.SNOId)
+                            if (value == objective.SNOName1.Id)
                             {
                                 Counter++;
                                 questStep.UpdateCounter(this);
@@ -117,7 +117,7 @@ namespace Mooege.Core.GS.Games
                     foreach (var player in _quest.game.Players.Values)
                         player.InGameClient.SendMessage(new QuestCounterMessage()
                         {
-                            snoQuest = _quest.SNOHandle.SNOId,
+                            snoQuest = _quest.SNOHandle.Id,
                             snoLevelArea = -1,
                             StepID = _questStep.ID,
                             TaskIndex = objective.ID,
@@ -185,9 +185,8 @@ namespace Mooege.Core.GS.Games
         public Quest(Game game, int SNOQuest)
         {
             this.game = game;
-            //SNOId = SNOQuest;
-            SNOHandle = new SNOHandle() { SNOId = SNOQuest, Group = SNOGroup.Quest };
-            asset = MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Quest][SNOQuest].Data as Mooege.Common.MPQ.FileFormats.Quest;
+            SNOHandle = new SNOHandle(SNOGroup.Quest, SNOQuest);
+            asset = SNOHandle.Target as  Mooege.Common.MPQ.FileFormats.Quest;
             CurrentStep = new QuestStep(asset.QuestUnassignedStep, this);
         }
 
@@ -207,7 +206,7 @@ namespace Mooege.Core.GS.Games
             foreach (var player in game.Players.Values)
                 player.InGameClient.SendMessage(new QuestUpdateMessage()
                 {
-                    snoQuest = SNOHandle.SNOId,
+                    snoQuest = SNOHandle.Id,
                     snoLevelArea = -1,
                     StepID = FollowUpStepID,
                     Field3 = true,

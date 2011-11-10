@@ -97,7 +97,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         {
             get
             {
-                return new SNOHandle() { Group = 0, SNOId = _TagMapEntries[key.ID].Int };
+                return new SNOHandle(_TagMapEntries[key.ID].Int);
             }
         }
 

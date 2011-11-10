@@ -191,7 +191,7 @@ namespace Mooege.Core.GS.Actors
                 this.AnimationSet = (Mooege.Common.MPQ.FileFormats.AnimSet)Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.AnimSet][this.ActorData.AnimSetSNO].Data;
 
 
-            this.ActorSNO = new SNOHandle { Group = SNOGroup.Actor, SNOId = snoId };
+            this.ActorSNO = new SNOHandle(SNOGroup.Actor, snoId);
             this.NameSNOId = snoId;
             this.Quality = 0;
             this.Spawned = false;
@@ -305,7 +305,7 @@ namespace Mooege.Core.GS.Actors
             return new ACDEnterKnownMessage
             {
                 ActorID = this.DynamicID,
-                ActorSNOId = this.ActorSNO.SNOId,
+                ActorSNOId = this.ActorSNO.Id,
                 Field2 = this.Field2,
                 Field3 =  this.HasWorldLocation ? 0 : 1,
                 WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
@@ -560,7 +560,7 @@ namespace Mooege.Core.GS.Actors
 
             if (Tags.ContainsKey(TagKeys.QuestRange))
             {
-                int snoQuestRange = Tags[TagKeys.QuestRange].SNOId;
+                int snoQuestRange = Tags[TagKeys.QuestRange].Id;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange].ContainsKey(snoQuestRange))
                     _questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
                 //else Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
@@ -568,7 +568,7 @@ namespace Mooege.Core.GS.Actors
 
             if (Tags.ContainsKey(TagKeys.ConversationList))
             {
-                int snoConversationList = Tags[TagKeys.ConversationList].SNOId;
+                int snoConversationList = Tags[TagKeys.ConversationList].Id;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList].ContainsKey(snoConversationList))
                     ConversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
                 //else Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", SNOId, snoConversationList);
@@ -576,7 +576,7 @@ namespace Mooege.Core.GS.Actors
 
 
             if(this.Tags.ContainsKey(TagKeys.TriggeredConversation))
-                snoTriggeredConversation = Tags[TagKeys.TriggeredConversation].SNOId;
+                snoTriggeredConversation = Tags[TagKeys.TriggeredConversation].Id;
 
 
         }
@@ -605,7 +605,7 @@ namespace Mooege.Core.GS.Actors
 
         public override string ToString()
         {
-            return string.Format("[Actor] [Type: {0}] SNOId:{1} DynamicId: {2} Position: {3} Name: {4}", this.ActorType, this.ActorSNO.SNOId, this.DynamicID, this.Position, this.ActorSNO.Name);
+            return string.Format("[Actor] [Type: {0}] SNOId:{1} DynamicId: {2} Position: {3} Name: {4}", this.ActorType, this.ActorSNO.Id, this.DynamicID, this.Position, this.ActorSNO.Name);
         }
     }
 
