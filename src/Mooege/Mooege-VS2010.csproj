@@ -322,7 +322,7 @@
     <Compile Include="Core\GS\Common\Types\Scene\SceneCachedValues.cs" />
     <Compile Include="Core\GS\Common\Types\Scene\SceneSpecification.cs" />
     <Compile Include="Net\GS\Message\Fields\SkillKeyMapping.cs" />
-    <Compile Include="Core\GS\Common\Types\SNO\SNOName.cs" />
+    <Compile Include="Core\GS\Common\Types\SNO\SNOHandle.cs" />
     <Compile Include="Core\GS\Common\Types\Math\Vector3D.cs" />
     <Compile Include="Net\GS\Message\Fields\VisualEquipment.cs" />
     <Compile Include="Net\GS\Message\Fields\VisualItem.cs" />

@@ -28,7 +28,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
     public class ACDEnterKnownMessage : GameMessage
     {
         public uint ActorID; // The actor's DynamicID
-        public int /* sno */ ActorSNO;
+        public int ActorSNOId;
 
         // For many actors, bit 0x8 is set the first time the item is introduced with ACDEnterKnown... if the item
         // is later deleted with an ANN Message and reintroduced, 0x8 is NOT set... (StartLocation, BlockingCart, MarkerLocation)
@@ -40,7 +40,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public InventoryLocationMessageData InventoryLocation;
         public GBHandle GBHandle;
         public int Field7;
-        public int NameActorSNO;    // Actor providing a name for the this actor, you can name zombies leah etc..  
+        public int NameSNOId;    // Actor providing a name for the this actor, you can name zombies leah etc..  
         public int Quality;         // Item quality if an item, SpawnType for mobs, 0 otherwise
         public byte Field10;
         public int? /* sno */ Field11;
@@ -52,7 +52,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public override void Parse(GameBitBuffer buffer)
         {
             ActorID = buffer.ReadUInt(32);
-            ActorSNO = buffer.ReadInt(32);
+            ActorSNOId = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(5);
             Field3 = buffer.ReadInt(2) + (-1);
             if (buffer.ReadBool())
@@ -68,7 +68,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             GBHandle = new GBHandle();
             GBHandle.Parse(buffer);
             Field7 = buffer.ReadInt(32);
-            NameActorSNO = buffer.ReadInt(32);
+            NameSNOId = buffer.ReadInt(32);
             Quality = buffer.ReadInt(4) + (-1);
             Field10 = (byte)buffer.ReadInt(8);
             if (buffer.ReadBool())
@@ -88,7 +88,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteUInt(32, ActorID);
-            buffer.WriteInt(32, ActorSNO);
+            buffer.WriteInt(32, ActorSNOId);
             buffer.WriteInt(5, Field2);
             buffer.WriteInt(2, Field3 - (-1));
             buffer.WriteBool(WorldLocation != null);
@@ -103,7 +103,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             }
             GBHandle.Encode(buffer);
             buffer.WriteInt(32, Field7);
-            buffer.WriteInt(32, NameActorSNO);
+            buffer.WriteInt(32, NameSNOId);
             buffer.WriteInt(4, Quality - (-1));
             buffer.WriteInt(8, Field10);
             buffer.WriteBool(Field11.HasValue);
@@ -130,7 +130,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
-            b.Append(' ', pad); b.AppendLine("ActorSNO: 0x" + ActorSNO.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("ActorSNOId: 0x" + ActorSNOId.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
             if (WorldLocation != null)
@@ -143,7 +143,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             }
             GBHandle.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("Field7: 0x" + Field7.ToString("X8") + " (" + Field7 + ")");
-            b.Append(' ', pad); b.AppendLine("NameActorSNO: 0x" + NameActorSNO.ToString("X8") + " (" + NameActorSNO + ")");
+            b.Append(' ', pad); b.AppendLine("NameSNOId: 0x" + NameSNOId.ToString("X8") + " (" + NameSNOId + ")");
             b.Append(' ', pad); b.AppendLine("Quality: 0x" + Quality.ToString("X8") + " (" + Quality + ")");
             b.Append(' ', pad); b.AppendLine("Field10: 0x" + Field10.ToString("X2"));
             if (Field11.HasValue)

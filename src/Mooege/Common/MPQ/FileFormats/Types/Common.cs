@@ -152,7 +152,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public int I0 { get; private set; }
         public TriggerConditions TriggerConditions { get; private set; }
         public int I1 { get; private set; }
-        public SNOName SnoName { get; private set; }
+        public SNOHandle SNOHandle { get; private set; }
         public int I2 { get; private set; }
         public int I3 { get; private set; }
         public int RuneType { get; private set; }
@@ -185,7 +185,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             I0 = stream.ReadValueS32();
             TriggerConditions = new TriggerConditions(stream);
             I1 = stream.ReadValueS32();
-            SnoName = new SNOName(stream);
+            SNOHandle = new SNOHandle(stream);
             I2 = stream.ReadValueS32();
             I3 = stream.ReadValueS32();
             RuneType = stream.ReadValueS32();

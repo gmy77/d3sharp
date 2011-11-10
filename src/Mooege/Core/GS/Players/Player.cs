@@ -182,13 +182,13 @@ namespace Mooege.Core.GS.Players
             this.GBHandle.GBID = this.Toon.ClassID;
 
             // actor values.
-            SNOName.SNOId = this.ClassSNO;
+            this.ActorSNO.SNOId = this.ClassSNO;
             this.Field2 = 0x00000009;
             this.Scale = this.ModelScale;
             this.RotationAmount = 0.05940768f;
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.Field7 = -1;
-            this.ActorNameSNO = -1;
+            this.NameSNOId = -1;
             this.Field10 = 0x0;
 
             this.SkillSet = new SkillSet(this.Toon.Class);
