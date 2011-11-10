@@ -27,6 +27,7 @@ using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.QuadTrees;
+using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Items.Implementations;
@@ -50,7 +51,9 @@ namespace Mooege.Core.GS.Map
         /// <summary>
         /// The SNOId for the world.
         /// </summary>
-        public int SNOId { get; set; }
+        public int SNOId { get; private set; }
+
+        public SNOHandle WorldSNO { get; private set; }
 
         /// <summary>
         /// QuadTree that contains scenes & actors.
@@ -107,6 +110,8 @@ namespace Mooege.Core.GS.Map
         {
             this.Game = game;
             this.SNOId = snoId; // NOTE: WorldSNO must be valid before adding it to the game
+            this.WorldSNO = new SNOHandle { Group = SNOGroup.Worlds, SNOId = snoId };
+
             Environment = (Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Worlds][snoId].Data as Mooege.Common.MPQ.FileFormats.World).Environment;
             this.Game.StartTracking(this); // start tracking the dynamicId for the world.            
             this._scenes = new ConcurrentDictionary<uint, Scene>();

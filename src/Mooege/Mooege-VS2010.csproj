@@ -197,10 +197,12 @@
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
     <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
     <Compile Include="Core\GS\Items\RuneHelper.cs" />
-    <Compile Include="Core\GS\Map\WorldVisualizer.cs">
+    <Compile Include="Core\GS\Map\Debug\ControlExtensions.cs" />
+    <Compile Include="Core\GS\Map\Debug\DebugNavMesh.cs" />
+    <Compile Include="Core\GS\Map\Debug\WorldVisualizer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\GS\Map\WorldVisualizer.Designer.cs">
+    <Compile Include="Core\GS\Map\Debug\WorldVisualizer.Designer.cs">
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GS\Markers\Marker.cs" />
@@ -587,7 +589,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Core\GS\Map\WorldVisualizer.resx">
+    <EmbeddedResource Include="Core\GS\Map\Debug\WorldVisualizer.resx">
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

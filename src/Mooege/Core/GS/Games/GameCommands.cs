@@ -529,43 +529,4 @@ namespace Mooege.Core.GS.Games
                                      (current, match) => current + string.Format("[{0}] {1}\n", match.SNOActor.ToString("D6"), match.Name));
         }
     }
-
-    [CommandGroup("drawworld", "Draws current world visualization.\nUsage: drawworld [worldId]")]
-    public class DrawWorldCommand : CommandGroup
-    {
-        [DefaultCommand]
-        public string DrawWorld(string[] @params, MooNetClient invokerClient)
-        {
-            if (invokerClient == null && @params == null)
-                return "Invalid arguments. Type 'help drawworld' to get help.";
-
-            Map.World world;
-            int worldId;
-
-            if(@params.Count() == 0)
-            {
-                if(invokerClient==null || invokerClient.InGameClient==null|| invokerClient.InGameClient.Player==null)
-                    return "Invalid arguments. Type 'help drawworld' to get help.";
-
-                world = invokerClient.InGameClient.Player.World;
-                worldId = world.SNOId;
-            }
-            else
-            {               
-                if (!Int32.TryParse(@params[0], out worldId))
-                    worldId = 71150;
-
-                var game = GameManager.CreateGame(worldId); // hack-hack /raist.
-                world = game.GetWorld(worldId);
-            }
-
-            if (world != null)
-            {
-                new Thread(c => Application.Run(new WorldVisualizer(world))).Start();
-                return string.Format("Done visualizing world {0}.", worldId);
-            }
-
-            return string.Format("Invalid world id: {0}.", worldId);
-        }
-    }
 }
