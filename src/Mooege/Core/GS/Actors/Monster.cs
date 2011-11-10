@@ -172,13 +172,14 @@ namespace Mooege.Core.GS.Actors
                 this.World.BroadcastIfRevealed(msg, this);
 
             // Spawn Random item and give exp for each player in range
-            foreach (var plr in this.GetPlayersInRange())
+            List<Player> players = this.GetPlayersInRange(26f);
+            foreach (Player plr in players)
             {
                 plr.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
-                plr.ExpBonusData.Update(plr.GBHandle.Type, this.GBHandle.Type);
                 this.World.SpawnRandomItemDrop(plr, this.Position);
             }
 
+            player.ExpBonusData.Update(player.GBHandle.Type, this.GBHandle.Type);
             this.World.SpawnGold(player, this.Position);
             if (RandomHelper.Next(1, 100) < 20)
                 this.World.SpawnHealthGlobe(player, this.Position);

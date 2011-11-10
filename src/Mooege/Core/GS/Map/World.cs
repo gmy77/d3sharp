@@ -326,9 +326,6 @@ namespace Mooege.Core.GS.Map
                 }
             }
             item.Drop(null, position); // NOTE: The owner field for an item is only set when it is in the owner's inventory. /komiga
-            foreach (var plr in item.GetPlayersInRange())
-                if (plr != player)
-                    item.Unreveal(plr);
             player.GroundItems[item.DynamicID] = item; // FIXME: Hacky. /komiga
         }
 
@@ -342,10 +339,6 @@ namespace Mooege.Core.GS.Map
             var item = ItemGenerator.CreateGold(player, RandomHelper.Next(1000, 3000)); // somehow the actual ammount is not shown on ground /raist.
             // TODO: Gold should be spawned for all players in range. /raist.
             item.Drop(null, position);
-            var attributeMap = new GameAttributeMap();
-            attributeMap[GameAttribute.Gold] = item.Attributes[GameAttribute.Gold];
-            foreach (var i in attributeMap.GetMessageList(item.DynamicID))
-                item.World.BroadcastExclusive(i, player);
         }
 
         /// <summary>
