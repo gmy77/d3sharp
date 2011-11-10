@@ -49,9 +49,6 @@ namespace Mooege.Net.GS
         public void OnDisconnect(object sender, ConnectionEventArgs e)
         {
             Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
-            var toon = ((GameClient)e.Connection.Client).Player.Toon;
-            toon.TimePlayed += DateTimeExtensions.ToUnixTime(DateTime.UtcNow) - toon.LoginTime;
-            toon.SaveToDB();
             GameManager.RemovePlayerFromGame((GameClient)e.Connection.Client);
         }
 
