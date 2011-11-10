@@ -29,12 +29,12 @@ namespace Mooege.Common.MPQ.FileFormats
     {
         public Header Header { get; private set; }
         public QuestType QuestType { get; private set; }
-        public int I0 { get; private set; }
-        public int I1 { get; private set; }
-        public int I2 { get; private set; }
-        public int I3 { get; private set; }
-        public int I4 { get; private set; }
-        public int I5 { get; private set; }
+        public int NumberOfSteps { get; private set; }
+        public int NumberOfCompletionSteps { get; private set; }
+        public int I2 { get; private set; } // not uniqe..10 for like 3 quests
+        public int I3 { get; private set; } // always 6 except for vendor_rescue_event which has 4
+        public int I4 { get; private set; } // always -1 in beta
+        public int I5 { get; private set; } // always 0 in beta
         public QuestUnassignedStep QuestUnassignedStep { get; private set; }
         public List<QuestStep> QuestSteps { get; private set; }
         public List<QuestCompletionStep> QuestCompletionSteps { get; private set; }
@@ -49,8 +49,8 @@ namespace Mooege.Common.MPQ.FileFormats
 
             Header = new Header(stream);
             QuestType = (QuestType)stream.ReadValueS32();
-            I0 = stream.ReadValueS32();
-            I1 = stream.ReadValueS32();
+            NumberOfSteps = stream.ReadValueS32();
+            NumberOfCompletionSteps = stream.ReadValueS32();
             I2 = stream.ReadValueS32();
             I3 = stream.ReadValueS32();
             I4 = stream.ReadValueS32();
@@ -67,36 +67,44 @@ namespace Mooege.Common.MPQ.FileFormats
             LevelRange3 = new QuestLevelRange(stream);
             LevelRange4 = new QuestLevelRange(stream);
 
+
             stream.Close();
         }
     }
 
-    public class QuestUnassignedStep
+
+    public interface IQuestStep
     {
-        public int I0 { get; private set; }
+        int ID { get; }
+        List<QuestStepObjectiveSet> StepObjectiveSets { get; }
+    }
+
+    public class QuestUnassignedStep : IQuestStep
+    {
+        public int ID { get; private set; }
         public List<QuestStepObjectiveSet> StepObjectiveSets { get; private set; }
-        public List<QuestStepFailureConditionSet> StepFailureConditionsSets { get; private set; }
+        public List<QuestStepFailureConditionSet> StepFailureConditionSets { get; private set; }
 
         public QuestUnassignedStep(MpqFileStream stream)
         {
-            I0 = stream.ReadValueS32();
+            ID = stream.ReadValueS32();
             stream.Position += 4;       // unaccounted in xml
             stream.Position += (2 * 4);
             StepObjectiveSets = stream.ReadSerializedData<QuestStepObjectiveSet>();
 
             stream.Position += (2 * 4);
-            StepFailureConditionsSets = stream.ReadSerializedData<QuestStepFailureConditionSet>();
+            StepFailureConditionSets = stream.ReadSerializedData<QuestStepFailureConditionSet>();
         }
     }
 
     public class QuestStepObjectiveSet : ISerializableData
     {
-        public int I0 { get; private set; }
+        public int FollowUpStepID { get; private set; }
         public List<QuestStepObjective> StepObjectives { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            I0 = stream.ReadValueS32();
+            FollowUpStepID = stream.ReadValueS32();
 
             stream.Position += 4;
             stream.Position += 8;
@@ -109,9 +117,9 @@ namespace Mooege.Common.MPQ.FileFormats
         public int I0 { get; private set; }
         public QuestStepObjectiveType ObjectiveType { get; private set; }
         public int I2 { get; private set; }
-        public int I3 { get; private set; }
-        public SNOName SNOName1 { get; private set; }
-        public SNOName SNOName2 { get; private set; }
+        public int CounterTarget { get; private set; }
+        public SNOHandle SNOName1 { get; private set; }
+        public SNOHandle SNOName2 { get; private set; }
         public int GBID1 { get; private set; }
         public int GBID2 { get; private set; }
         public string Unknown1 { get; private set; }
@@ -125,9 +133,9 @@ namespace Mooege.Common.MPQ.FileFormats
             I0 = stream.ReadValueS32();
             ObjectiveType = (QuestStepObjectiveType)stream.ReadValueS32();
             I2 = stream.ReadValueS32();
-            I3 = stream.ReadValueS32();
-            SNOName1 = new SNOName(stream);
-            SNOName2 = new SNOName(stream);
+            CounterTarget = stream.ReadValueS32();
+            SNOName1 = new SNOHandle(stream);
+            SNOName2 = new SNOHandle(stream);
             GBID1 = stream.ReadValueS32();
             GBID2 = stream.ReadValueS32();
             Unknown1 = stream.ReadString(256, true);
@@ -154,8 +162,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public QuestStepFailureConditionType ConditionType { get; private set; }
         public int I2 { get; private set; }
         public int I3 { get; private set; }
-        public SNOName SNOName1 { get; private set; }
-        public SNOName SNOName2 { get; private set; }
+        public SNOHandle SNOName1 { get; private set; }
+        public SNOHandle SNOName2 { get; private set; }
         public int GBID1 { get; private set; }
         public int GBID2 { get; private set; }
         public string Unknown1 { get; private set; }
@@ -166,8 +174,8 @@ namespace Mooege.Common.MPQ.FileFormats
             ConditionType = (QuestStepFailureConditionType)stream.ReadValueS32();
             I2 = stream.ReadValueS32();
             I3 = stream.ReadValueS32();
-            SNOName1 = new SNOName(stream);
-            SNOName2 = new SNOName(stream);
+            SNOName1 = new SNOHandle(stream);
+            SNOName2 = new SNOHandle(stream);
             GBID1 = stream.ReadValueS32();
             GBID2 = stream.ReadValueS32();
             Unknown1 = stream.ReadString(256, true);
@@ -187,10 +195,10 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    public class QuestStep : ISerializableData
+    public class QuestStep : ISerializableData, IQuestStep
     {
-        public string Unknown1 { get; private set; }
-        public int I0 { get; private set; }
+        public string Name { get; private set; }
+        public int ID { get; private set; }
         public int I1 { get; private set; }
         public int[] I2 = new int[4];
         public Enum1 Enum1 { get; private set; }
@@ -206,14 +214,14 @@ namespace Mooege.Common.MPQ.FileFormats
         public int SNOPowerGranted { get; private set; }
         public int[] SNOWaypointLevelAreas = new int[2];
 
-        public List<QuestStepObjectiveSet> StepObjectiveSets;
-        public List<QuestStepBonusObjectiveSet> StepBonusObjectiveSets;
-        public List<QuestStepFailureConditionSet> StepFailureConditionSet;
+        public List<QuestStepObjectiveSet> StepObjectiveSets { get; private set; }
+        public List<QuestStepBonusObjectiveSet> StepBonusObjectiveSets { get; private set; }
+        public List<QuestStepFailureConditionSet> StepFailureConditionSets { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            Unknown1 = stream.ReadString(64, true);
-            I0 = stream.ReadValueS32();
+            Name = stream.ReadString(64, true);
+            ID = stream.ReadValueS32();
             I1 = stream.ReadValueS32();
 
             for (int i = 0; i < I2.Length; i++)
@@ -240,7 +248,6 @@ namespace Mooege.Common.MPQ.FileFormats
             for (int i = 0; i < SNOWaypointLevelAreas.Length; i++)
                 SNOWaypointLevelAreas[i] = stream.ReadValueS32();
 
-
             stream.Position += 4;      // unnacounted for in the xml
 
             stream.Position += 8;
@@ -250,7 +257,7 @@ namespace Mooege.Common.MPQ.FileFormats
             StepBonusObjectiveSets = stream.ReadSerializedData<QuestStepBonusObjectiveSet>();
 
             stream.Position += 8;
-            StepFailureConditionSet = stream.ReadSerializedData<QuestStepFailureConditionSet>();
+            StepFailureConditionSets = stream.ReadSerializedData<QuestStepFailureConditionSet>();
         }
     }
 
@@ -278,17 +285,22 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    public class QuestCompletionStep : ISerializableData
+    public class QuestCompletionStep : ISerializableData, IQuestStep
     {
         public string Unknown { get; private set; }
-        public int I1 { get; private set; }
+        public int ID { get; private set; }
         public int I2 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             Unknown = stream.ReadString(64, true);
-            I1 = stream.ReadValueS32();
+            ID = stream.ReadValueS32();
             I2 = stream.ReadValueS32();
+        }
+
+        public List<QuestStepObjectiveSet> StepObjectiveSets
+        {
+            get { return new List<QuestStepObjectiveSet>(); }
         }
     }
 

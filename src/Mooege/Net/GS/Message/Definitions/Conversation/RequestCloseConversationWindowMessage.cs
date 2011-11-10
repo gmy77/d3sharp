@@ -24,7 +24,7 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
     /// <summary>
     /// Sent by the client when the user clicks on "X" in a conversation window
     /// </summary>
-    [Message(Opcodes.RequestCloseConversationWindowMessage)]
+    [Message(Opcodes.RequestCloseConversationWindowMessage, Consumers.Conversations)]
     public class RequestCloseConversationWindowMessage : GameMessage
     {
 

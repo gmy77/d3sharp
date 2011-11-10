@@ -68,7 +68,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public string Name { get; private set; }
         public int Int0 { get; private set; }
         public PRTransform PRTransform { get; private set; }
-        public SNOName SNOName { get; private set; }
+        public SNOHandle SNOHandle { get; private set; }
         public TagMap TagMap { get; private set; }
         public int IntTagMap { get; private set; }
         public int Int1 { get; private set; }
@@ -79,7 +79,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Name = stream.ReadString(128, true);
             this.Int0 = stream.ReadValueS32();
             this.PRTransform = new PRTransform(stream);
-            this.SNOName = new SNOName(stream);
+            this.SNOHandle = new SNOHandle(stream);
 
             this.TagMap = stream.ReadSerializedItem<TagMap>();
 

@@ -23,20 +23,22 @@ using System.Linq;
 using System.Windows;
 using Mooege.Common;
 using Mooege.Common.Helpers;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.QuadTrees;
 using Mooege.Core.GS.Games;
+using Mooege.Core.GS.Items;
+using Mooege.Core.GS.Items.Implementations;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.Common.Items;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
 
 namespace Mooege.Core.GS.Map
 {
-    public sealed class World : DynamicObject, IRevealable
+    public sealed class World : DynamicObject, IRevealable, IUpdateable
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -83,6 +85,10 @@ namespace Mooege.Core.GS.Map
         // Returns a new dynamicId for actors.
         public uint NewActorID { get { return this.Game.NewObjectID; } }
 
+        // Environment
+        public Mooege.Common.MPQ.FileFormats.Environment Environment { get; private set; }
+
+
         /// <summary>
         /// Returns list of available starting points.
         /// </summary>
@@ -101,6 +107,7 @@ namespace Mooege.Core.GS.Map
         {
             this.Game = game;
             this.SNOId = snoId; // NOTE: WorldSNO must be valid before adding it to the game
+            Environment = (Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Worlds][snoId].Data as Mooege.Common.MPQ.FileFormats.World).Environment;
             this.Game.StartTracking(this); // start tracking the dynamicId for the world.            
             this._scenes = new ConcurrentDictionary<uint, Scene>();
             this._actors = new ConcurrentDictionary<uint, Actor>();
@@ -111,15 +118,24 @@ namespace Mooege.Core.GS.Map
 
         #region update & tick logic
 
-        public override void Update(int tickCounter)
+        public void Update(int tickCounter)
         {
-            // TODO: we should be skipping child-scenes, so actors contained doesn't get updated() twice.
-            foreach(var scene in this._scenes.Values)
-            {
-                if (!scene.HasPlayers) 
-                    continue; // if scene has no players in, just skip the scene.
+            var actorsToUpdate = new List<IUpdateable>(); // list of actor to update.
 
-                scene.Update(tickCounter);
+            foreach(var player in this.Players.Values) // get players in the world.
+            {
+                foreach(var actor in player.GetActorsInRange().OfType<IUpdateable>()) // get IUpdateable actors in range.
+                {
+                    if (actorsToUpdate.Contains(actor as IUpdateable)) // don't let a single actor in range of more than players to get updated more thance per tick /raist.
+                        continue;
+
+                    actorsToUpdate.Add(actor as IUpdateable);
+                }
+            }
+
+            foreach(var actor in actorsToUpdate) // trigger the updates.
+            {
+                actor.Update(tickCounter);
             }
         }
 
@@ -264,9 +280,11 @@ namespace Mooege.Core.GS.Map
             foreach (var player in this.Players.Values)
             {
                 if (actor != player)
+                {
                     actor.Unreveal(player);
+                }
             }
-
+            
             this.RemoveActor(actor);
 
             if (!(actor is Player)) return; // if the leaving actors is a player, unreveal the actors revealed to him contained in the world.
@@ -287,7 +305,8 @@ namespace Mooege.Core.GS.Map
         /// <param name="position">The position to spawn it.</param>
         public void SpawnMonster(int monsterSNOId, Vector3D position)
         {
-            var monster = new Monster(this, monsterSNOId, new Dictionary<int, Mooege.Common.MPQ.FileFormats.Types.TagMapEntry>()) { Scale = 1.35f };
+            var monster = ActorFactory.Create(this, monsterSNOId, new TagMap());
+            monster.Scale = 1.35f;
             monster.EnterWorld(position);
         }
 
@@ -299,7 +318,13 @@ namespace Mooege.Core.GS.Map
         public void SpawnRandomItemDrop(Player player, Vector3D position)
         {
             var item = ItemGenerator.GenerateRandom(player);
-            
+            if ((item is SpellRune) && (item.Attributes[GameAttribute.Rune_Rank] == 0)) {
+                // favor player's class in attuned runes // TODO: remove or move this
+                if (RandomHelper.NextDouble() > 0.6f)
+                {
+                    (item as SpellRune).ReAttuneToClass(player.Toon.Class);
+                }
+            }
             item.Drop(null, position); // NOTE: The owner field for an item is only set when it is in the owner's inventory. /komiga
             player.GroundItems[item.DynamicID] = item; // FIXME: Hacky. /komiga
         }

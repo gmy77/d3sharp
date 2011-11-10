@@ -18,8 +18,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Objects;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Channels

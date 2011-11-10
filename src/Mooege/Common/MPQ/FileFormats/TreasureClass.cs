@@ -38,8 +38,6 @@ namespace Mooege.Common.MPQ.FileFormats
             var stream = file.Open();
             this.Header = new Header(stream);
             this.Percentage = stream.ReadValueF32();
-            if (this.Percentage != 0)
-                this.Percentage += 0;
             this.I0 = stream.ReadValueS32();
             this.I1 = stream.ReadValueS32();
             stream.Position += 8;

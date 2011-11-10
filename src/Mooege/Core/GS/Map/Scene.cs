@@ -17,6 +17,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using Mooege.Common;
 using Mooege.Common.MPQ;
@@ -162,21 +163,6 @@ namespace Mooege.Core.GS.Map
 
         #endregion
 
-        #region update & tick logic
-
-        public override void Update(int tickCounter)
-        {
-            if (!this.HasPlayers) // don't update actors if we have no players in scene.
-                return;
-            
-            foreach(var actor in this.Actors)
-            {
-                actor.Update(tickCounter);
-            }
-        }
-
-        #endregion
-
         #region range-queries
 
         public List<Player> Players
@@ -222,9 +208,9 @@ namespace Mooege.Core.GS.Map
 
                 foreach (var marker in markerSetData.Markers)
                 {
-                    if (marker.SNOName.Group != SNOGroup.Actor) continue; // skip non-actor markers.
+                    if (marker.SNOHandle.Group != SNOGroup.Actor) continue; // skip non-actor markers.
                     
-                    var actor = ActorFactory.Create(this.World, marker.SNOName.SNOId, marker.TagMap); // try to create it.
+                    var actor = ActorFactory.Create(this.World, marker.SNOHandle.SNOId, marker.TagMap); // try to create it.
                     if (actor == null) continue;
 
                     var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
@@ -302,10 +288,17 @@ namespace Mooege.Core.GS.Map
         {
             get
             {
+                SceneSpecification specification = this.Specification;
+                specification.SNOMusic = World.Environment.snoMusic;
+                specification.SNOCombatMusic = World.Environment.snoCombatMusic;
+                specification.SNOAmbient = World.Environment.snoAmbient;
+                specification.SNOReverb = World.Environment.snoReverb;
+                specification.SNOWeather = World.Environment.snoWeather;
+
                 return new RevealSceneMessage
                 {
                     WorldID = this.World.DynamicID,
-                    SceneSpec = this.Specification,
+                    SceneSpec = specification,
                     ChunkID = this.DynamicID,
                     Transform = this.Transform,
                     SceneSNO = this.SNOId,

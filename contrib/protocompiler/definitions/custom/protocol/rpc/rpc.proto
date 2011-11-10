@@ -1,0 +1,10 @@
+package custom.protocol.rpc;
+
+message Packet {
+	optional uint32 size = 1;
+	optional bytes data = 2;
+}
+
+message Varint {
+	optional uint32 value = 1;
+}
