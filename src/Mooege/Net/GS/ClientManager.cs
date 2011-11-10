@@ -17,9 +17,9 @@
  */
 
 using Mooege.Common;
-using Mooege.Core.Common.Toons;
 using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Players;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Act;
 using Mooege.Net.GS.Message.Definitions.Connection;
@@ -49,7 +49,7 @@ namespace Mooege.Net.GS
         public void OnDisconnect(object sender, ConnectionEventArgs e)
         {
             Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
-            var toon = ((GameClient)e.Connection.Client).Player.Properties;
+            var toon = ((GameClient)e.Connection.Client).Player.Toon;
             toon.TimePlayed += DateTimeExtensions.ToUnixTime(DateTime.UtcNow) - toon.LoginTime;
             toon.SaveToDB();
             GameManager.RemovePlayerFromGame((GameClient)e.Connection.Client);
@@ -87,7 +87,7 @@ namespace Mooege.Net.GS
                 client.BnetClient.InGameClient = client;
 
                 client.Player = new Player(game.StartingWorld, client, toon);
-                Logger.Info("Player {0}[PlayerIndex: {1}] connected.", client.Player.Properties.Name, client.Player.PlayerIndex);
+                Logger.Info("Player {0}[PlayerIndex: {1}] connected.", client.Player.Toon.Name, client.Player.PlayerIndex);
 
                 client.SendMessage(new VersionsMessage(message.SNOPackHash));
 

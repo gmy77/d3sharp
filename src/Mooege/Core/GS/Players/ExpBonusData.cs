@@ -203,7 +203,7 @@ namespace Mooege.Core.GS.Players
                 });
 
                 this._player.UpdateExp(expBonus);
-                this._player.PlayHeroConversation(0x0002A73F, RandomHelper.Next(0, 8));
+                this._player.Conversations.StartConversation(0x0002A73F);
             }
         }
 

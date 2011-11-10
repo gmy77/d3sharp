@@ -25,13 +25,13 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     [Message(Opcodes.SNONameDataMessage)]
     public class SNONameDataMessage : GameMessage
     {
-        public SNOName Name;
+        public SNOHandle Name;
 
         public SNONameDataMessage() : base(Opcodes.SNONameDataMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Name = new SNOName();
+            Name = new SNOHandle();
             Name.Parse(buffer);
         }
 

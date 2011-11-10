@@ -16,8 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
 using System.Linq;
 using Mooege.Core.MooNet.Commands;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Accounts
@@ -88,8 +90,6 @@ namespace Mooege.Core.MooNet.Accounts
         [Command("delete", "Allows you to delete an existing account.\nUsage: account delete <email>", Account.UserLevels.GM)]
         public string Delete(string[] @params, MooNetClient invokerClient)
         {
-            // TODO: we should be also deleting account's toons. /raist.
-
             if(@params.Count()==0)
                 return "Invalid arguments. Type 'help account delete' to get help.";
 
@@ -98,7 +98,14 @@ namespace Mooege.Core.MooNet.Accounts
             if (account == null)
                   return string.Format("No account with email '{0}' exists.", @params);
 
+            //Delete toons of the account.
+            foreach (var toon in ToonManager.GetToonsForAccount(account).Values)
+            {
+                ToonManager.DeleteToon(toon);
+            }
+
             AccountManager.DeleteAccount(account);
+
             return string.Format("Deleted account {0}.", @params);
         }
 

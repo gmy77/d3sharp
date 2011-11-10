@@ -98,16 +98,18 @@ namespace Mooege.Net.GS.Message
         public List<GameMessage> GetMessageList(uint actorID)
         {
             var e = _attributeValues.Keys.GetEnumerator();
-            return GetMessageListFromEnumerator(actorID, e, _attributeValues.Count);
+            var level = _attributeValues.ContainsKey(new KeyId() { Id = GameAttribute.Level.Id });
+            return GetMessageListFromEnumerator(actorID, e, _attributeValues.Count, level);
         }
 
         public List<GameMessage> GetChangedMessageList(uint actorID)
         {
             var e = _changedAttributes.GetEnumerator();
-            return GetMessageListFromEnumerator(actorID, e, _changedAttributes.Count);
+            var level = _changedAttributes.Contains(new KeyId() { Id = GameAttribute.Level.Id });
+            return GetMessageListFromEnumerator(actorID, e, _changedAttributes.Count, level);
         }
 
-        private List<GameMessage> GetMessageListFromEnumerator(uint actorID, IEnumerator<KeyId> e, int count)
+        private List<GameMessage> GetMessageListFromEnumerator(uint actorID, IEnumerator<KeyId> e, int count, bool level)
         {
             var messageList = new List<GameMessage>();
 
@@ -150,11 +152,31 @@ namespace Mooege.Net.GS.Message
                             msg.atKeyVals[i] = new Fields.NetAttributeKeyValue();
                         for (int i = 0; i < 15; i++)
                         {
+                            KeyId keyid;
                             if (!e.MoveNext())
-                                throw new Exception("Expected values in enumerator.");
-                            var kv = msg.atKeyVals[i];
+                            {
+                                if (level)
+                                {
+                                    keyid = new KeyId { Id = GameAttribute.Level.Id };
+                                    level = false;
+                                }
+                                else
+                                {
+                                    throw new Exception("Expected values in enumerator.");
+                                }
+                            }
+                            else
+                            {
+                                keyid = e.Current;
+                            }
 
-                            var keyid = e.Current;
+                            var kv = msg.atKeyVals[i];
+                            if (level && keyid.Id == GameAttribute.Level.Id)
+                            {
+                                i--;
+                                continue;
+                            }
+
                             var value = _attributeValues[keyid];
                             var id = keyid.Id;
 
@@ -176,12 +198,32 @@ namespace Mooege.Net.GS.Message
                     msg.atKeyVals = new Fields.NetAttributeKeyValue[count];
                     for (int i = 0; i < count; i++)
                     {
+                        KeyId keyid;
                         if (!e.MoveNext())
-                            throw new Exception("Expected values in enumerator.");
+                        {
+                            if (level)
+                            {
+                                keyid = new KeyId { Id = GameAttribute.Level.Id };
+                                level = false;
+                            }
+                            else
+                            {
+                                throw new Exception("Expected values in enumerator.");
+                            }
+                        }
+                        else
+                        {
+                            keyid = e.Current;
+                        }
                         var kv = new Fields.NetAttributeKeyValue();
                         msg.atKeyVals[i] = kv;
 
-                        var keyid = e.Current;
+                        if (level && keyid.Id == GameAttribute.Level.Id)
+                        {
+                            i--;
+                            continue;
+                        }
+
                         var value = _attributeValues[keyid];
                         var id = keyid.Id;
 
@@ -194,6 +236,7 @@ namespace Mooege.Net.GS.Message
                     }
                     messageList.Add(msg);
                 }
+
             }
             return messageList;
         }

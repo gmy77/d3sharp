@@ -16,40 +16,41 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
 using Mooege.Common;
+using Mooege.Core.GS.Items;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common;
-using Mooege.Core.Common.Items;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Net.GS.Message.Definitions.Stash;
+using Mooege.Core.GS.Objects;
 
 namespace Mooege.Core.GS.Players
 {
 
-    public class Inventory : IMessageConsumer
+    public class Inventory : IMessageConsumer, IRevealable
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
         // Access by ID
-        public Dictionary<uint, Item> Items { get; private set; } // Not needed atm. Whats the suppose of it?
         private readonly Player _owner; // Used, because most information is not in the item class but Actors managed by the world
 
         private Equipment _equipment;
         private InventoryGrid _inventoryGrid;
         private InventoryGrid _stashGrid;
+        // backpack for spellRunes, their Items are kept in equipment
+        private uint[] _skillSocketRunes;
 
         public Inventory(Player owner)
         {
             this._owner = owner;
-            this.Items = new Dictionary<uint, Item>();
             this._equipment = new Equipment(owner);
             this._inventoryGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Backpack_Slots]/10, 10);
             this._stashGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Shared_Stash_Slots]/7, 7, (int) EquipmentSlotId.Stash);
+            this._skillSocketRunes = new uint[6];
         }
 
         private void AcceptMoveRequest(Item item)
@@ -113,20 +114,31 @@ namespace Mooege.Core.GS.Players
             }
             else
             {
-                _inventoryGrid.AddItem(item);
+                item.CurrentState = ItemState.PickingUp;
+                if (item.HasWorldLocation && item.World != null)
+                {
+                    item.Owner = _owner;
+                    item.World.Leave(item);
 
-                // Hide my picked up item from other players
-                foreach (var player in item.GetPlayersInRange())
-                    if (player != _owner)
-                        item.Unreveal(player);
+                }
+
+                _inventoryGrid.AddItem(item);
 
                 if (_owner.GroundItems.ContainsKey(item.DynamicID))
                     _owner.GroundItems.Remove(item.DynamicID);
                 success = true;
+                item.CurrentState = ItemState.Normal;
+                AcceptMoveRequest(item);
             }
-
-            AcceptMoveRequest(item);
+          
             return success;
+        }
+
+        public void BuyItem(Item originalItem)
+        {
+            // TODO: Create a copy instead of random.
+            var newItem = ItemGenerator.CreateItem(_owner, originalItem.ItemDefinition);
+            _inventoryGrid.AddItem(newItem);
         }
 
         /// <summary>
@@ -137,13 +149,16 @@ namespace Mooege.Core.GS.Players
         public void HandleInventoryRequestMoveMessage(InventoryRequestMoveMessage request)
         {
             // TODO Normal inventory movement does not require setting of inv loc msg! Just Tick. /fasbat
-            Item item = _owner.World.GetItem(request.ItemID);
+            Item item = GetItem(request.ItemID);
+            if (item == null)
+                return;
             // Request to equip item from backpack
             if (request.Location.EquipmentSlot != 0 && request.Location.EquipmentSlot != (int) EquipmentSlotId.Stash)
             {
                 var sourceGrid = (item.InvLoc.EquipmentSlot == 0 ? _inventoryGrid :
                     item.InvLoc.EquipmentSlot == (int)EquipmentSlotId.Stash ? _stashGrid : null);
-                System.Diagnostics.Debug.Assert(sourceGrid.Contains(request.ItemID) || _equipment.IsItemEquipped(request.ItemID), "Request to equip unknown item");
+
+                System.Diagnostics.Debug.Assert((sourceGrid != null && sourceGrid.Contains(request.ItemID)) || _equipment.IsItemEquipped(request.ItemID), "Request to equip unknown item");
 
                 int targetEquipSlot = request.Location.EquipmentSlot;
 
@@ -195,6 +210,25 @@ namespace Mooege.Core.GS.Players
             // Request to move an item (from backpack or equipmentslot)
             else
             {
+                if (request.Location.EquipmentSlot == 0)
+                {
+                    // check if not unsocketting rune
+                    for (int i = 0; i < _skillSocketRunes.Length; i++)
+                    {
+                        if (_skillSocketRunes[i] == request.ItemID)
+                        {
+                            if (_inventoryGrid.FreeSpace(item, request.Location.Row, request.Location.Column))
+                            {
+                                RemoveRune(i);
+                                _inventoryGrid.AddItem(item, request.Location.Row, request.Location.Column);
+                                if (item.InvLoc.EquipmentSlot != request.Location.EquipmentSlot)
+                                    AcceptMoveRequest(item);
+                            }
+                            return;
+                        }
+                    }
+                }
+
                 var destGrid = (request.Location.EquipmentSlot == 0 ? _inventoryGrid : _stashGrid);
 
                 if (destGrid.FreeSpace(item, request.Location.Row, request.Location.Column))
@@ -310,7 +344,10 @@ namespace Mooege.Core.GS.Players
 
         private void OnInventoryDropItemMessage(InventoryDropItemMessage msg)
         {
-            Item item = _owner.World.GetItem(msg.ItemID);
+            var item = GetItem(msg.ItemID);
+            if (item == null)
+                return; // TODO: Throw smthg? /fasbat
+
             if (_equipment.IsItemEquipped(item))
             {
                 _equipment.UnequipItem(item);
@@ -318,15 +355,15 @@ namespace Mooege.Core.GS.Players
             }
             else
             {
-                _inventoryGrid.RemoveItem(item);
+                var sourceGrid = (item.InvLoc.EquipmentSlot == 0 ? _inventoryGrid : _stashGrid);
+                sourceGrid.RemoveItem(item);
             }
+
+            item.CurrentState = ItemState.Dropping;
+            item.Unreveal(_owner);
+            item.SetNewWorld(_owner.World);
             item.Drop(null, _owner.Position);
-            // Unreveal then Reveal the item -- Fixes issue where you can't pickup the item
-            foreach (var player in item.GetPlayersInRange())
-            {
-                item.Unreveal(player);
-                item.Reveal(player);
-            }
+            item.CurrentState = ItemState.Normal;
             AcceptMoveRequest(item);
         }
 
@@ -371,7 +408,123 @@ namespace Mooege.Core.GS.Players
         {
             _inventoryGrid.RemoveItem(item);
             _equipment.UnequipItem(item);
-            item.Destroy();
+//            item.Destroy();
+            item.Unreveal(_owner);
+            _owner.World.Game.EndTracking(item);
         }
+
+        public bool Reveal(Player player)
+        {
+            _equipment.Reveal(player);
+            if (player == _owner)
+            {
+                _inventoryGrid.Reveal(player);
+                _stashGrid.Reveal(player);
+            }
+            return true;
+        }
+
+        public bool Unreveal(Player player)
+        {
+            _equipment.Unreveal(player);
+            if (player == _owner)
+            {
+                _inventoryGrid.Unreveal(player);
+                _stashGrid.Unreveal(player);
+            }
+
+            return true;
+        }
+
+        public Item GetItem(uint itemId)
+        {
+            Item result;
+            if (!_inventoryGrid.Items.TryGetValue(itemId, out result) &&
+                !_stashGrid.Items.TryGetValue(itemId, out result) &&
+                !_equipment.Items.TryGetValue(itemId, out result))
+            {
+                return null;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Returns rune in skill's socket
+        /// </summary>
+        /// <param name="skillIndex"></param>
+        /// <returns></returns>
+        public Item GetRune(int skillIndex)
+        {
+            if ((skillIndex < 0) || (skillIndex > 5))
+            {
+                return null;
+            }
+            if (_skillSocketRunes[skillIndex] == 0)
+            {
+                return null;
+            }
+            return _equipment.GetItem(_skillSocketRunes[skillIndex]);
+        }
+
+        /// <summary>
+        /// Visually adds rune to skill (move from backpack to runes' slot)
+        /// </summary>
+        /// <param name="rune"></param>
+        /// <param name="powerSNOId"></param>
+        /// <param name="skillIndex"></param>
+        public void SetRune(Item rune, int powerSNOId, int skillIndex)
+        {
+            if ((skillIndex < 0) || (skillIndex > 5))
+            {
+                return;
+            }
+            if (rune == null)
+            {
+                _skillSocketRunes[skillIndex] = 0;
+                return;
+            }
+            if (_inventoryGrid.Items.ContainsKey(rune.DynamicID))
+            {
+                _inventoryGrid.RemoveItem(rune);
+            }
+            else
+            {
+                // unattuned rune changes to attuned w/o getting into inventory
+                rune.World.Leave(rune);
+                rune.Reveal(_owner);
+            }
+            _equipment.Items.Add(rune.DynamicID, rune);
+            _skillSocketRunes[skillIndex] = rune.DynamicID;
+
+            // position of rune is read from mpq as INDEX of skill in skill kit - loaded in helper /xsochor
+            rune.SetInventoryLocation(16, RuneHelper.GetRuneIndexForPower(powerSNOId), 0);
+        }
+
+        /// <summary>
+        /// Visually removes rune from skill. Also removes effect of that rune
+        /// </summary>
+        /// <param name="skillIndex"></param>
+        /// <returns></returns>
+        public Item RemoveRune(int skillIndex)
+        {
+            if ((skillIndex < 0) || (skillIndex > 5))
+            {
+                return null;
+            }
+            Item rune = GetRune(skillIndex);
+            if (rune != null)
+            {
+                _equipment.Items.Remove(rune.DynamicID);
+            }
+            int powerSNOId = _owner.SkillSet.ActiveSkills[skillIndex];
+            _skillSocketRunes[skillIndex] = 0;
+            _owner.Attributes[GameAttribute.Rune_A, powerSNOId] = 0;
+            _owner.Attributes[GameAttribute.Rune_B, powerSNOId] = 0;
+            _owner.Attributes[GameAttribute.Rune_C, powerSNOId] = 0;
+            _owner.Attributes[GameAttribute.Rune_D, powerSNOId] = 0;
+            _owner.Attributes[GameAttribute.Rune_E, powerSNOId] = 0;
+            return rune;
+        }
+
     }
 }

@@ -16,12 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -29,15 +29,29 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Common.MPQ;
+using Mooege.Core.GS.Common.Types.SNO;
+using System;
 
 namespace Mooege.Core.GS.Actors
 {
-    public class Monster : Living
+    public class Monster : Living, IUpdateable
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
-        // TODO: Setter needs to update world. Also, this is probably an ACD field. /komiga
-        //public int AnimationSNO { get; set; }
+        public override int Quality
+        {
+            get
+            {
+                return (int)Mooege.Common.MPQ.FileFormats.SpawnType.Normal;
+            }
+            set
+            {
+                // TODO MonsterQuality setter not implemented. Throwing a NotImplementedError is catched as message not beeing implemented and nothing works anymore...
+            }
+        }
+
+        public int LoreSNOId { get; private set; }
 
         public Monster(World world, int snoId, Dictionary<int, TagMapEntry> tags)
             : base(world, snoId, tags)
@@ -46,11 +60,31 @@ namespace Mooege.Core.GS.Actors
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
             this.Attributes[GameAttribute.TeamID] = 10;
             this.Attributes[GameAttribute.Experience_Granted] = 125;
+            var monsterAsset = MPQStorage.Data.Assets[SNOGroup.Monster][SNOMonsterId];
+            var monsterData = monsterAsset.Data as Mooege.Common.MPQ.FileFormats.Monster;
+            if (monsterData != null)
+            {
+                LoreSNOId = monsterData.SNOLore;
+            }
+            else
+            {
+                LoreSNOId = -1;
+            }
+
         }
 
         public override void OnTargeted(Player player, TargetMessage message)
         {
             this.Die(player);
+        }
+
+
+        public void Update(int tickCounter)
+        {
+            if (this.Brain == null)
+                return;
+
+            this.Brain.Think(tickCounter);
         }
 
         // FIXME: Hardcoded hell. /komiga
@@ -117,7 +151,7 @@ namespace Mooege.Core.GS.Actors
                     new PlayAnimationMessageSpec()
                     {
                         Field0 = 0x2,
-                        Field1 = Animset.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
+                        Field1 = AnimationSet.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
                         Field2 = 0x0,
                         Field3 = 1f
                     }
@@ -148,8 +182,27 @@ namespace Mooege.Core.GS.Actors
             this.World.SpawnGold(player, this.Position);
             if (RandomHelper.Next(1, 100) < 20)
                 this.World.SpawnHealthGlobe(player, this.Position);
-
+            this.PlayLore();
             this.Destroy();
         }
+
+        /// <summary>
+        /// Plays lore for first death of this monster's death.
+        /// </summary>
+        private void PlayLore()
+        {
+            if (LoreSNOId != -1)
+            {
+                var players = this.GetPlayersInRange();
+                if (players != null)
+                {
+                    foreach (var player in players.Where(player => !player.HasLore(LoreSNOId)))
+                    {
+                        player.PlayLore(LoreSNOId, false);
+                    }
+                }
+            }
+        }
+                    
     }
 }

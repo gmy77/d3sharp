@@ -34,7 +34,7 @@ namespace Mooege.Core.GS.Games
             Player p = null;
             if (!game.Players.TryRemove(gameClient, out p))
             {
-                Logger.Error("Can't remove player ({0}) from game with id: {1}", gameClient.Player.Properties.Name, gameId);
+                Logger.Error("Can't remove player ({0}) from game with id: {1}", gameClient.Player.Toon.Name, gameId);
             }
 
             if (game.Players.Count == 0)

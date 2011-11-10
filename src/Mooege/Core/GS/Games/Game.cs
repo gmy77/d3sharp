@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -77,7 +78,7 @@ namespace Mooege.Core.GS.Games
         /// <summary>
         /// Update frequency for the game - 100 ms.
         /// </summary>
-        public readonly int UpdateFrequency=100;
+        public readonly long UpdateFrequency = 100;
 
         /// <summary>
         /// Incremented tick value on each Game.Update().
@@ -96,6 +97,11 @@ namespace Mooege.Core.GS.Games
         {
             get { return _tickCounter; }
         }
+
+        /// <summary>
+        /// Stopwatch that measures time takent to get a full Game.Update(). 
+        /// </summary>
+        private readonly Stopwatch _tickWatch;
 
         /// <summary>
         /// DynamicId counter for objects.
@@ -127,6 +133,8 @@ namespace Mooege.Core.GS.Games
         /// </summary>
         public uint NewWorldID { get { return _lastWorldID++; } }
 
+        public QuestManager Quests { get; private set; }
+
         /// <summary>
         /// Creates a new game with given gameId.
         /// </summary>
@@ -138,6 +146,9 @@ namespace Mooege.Core.GS.Games
             this._objects = new ConcurrentDictionary<uint, DynamicObject>();
             this._worlds = new ConcurrentDictionary<int, World>();
             this.StartingWorldSNOId = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff. /komiga
+            this.Quests = new QuestManager(this);
+
+            this._tickWatch = new Stopwatch();
             var loopThread = new Thread(Update) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture }; ; // create the game update thread.
             loopThread.Start();
         }
@@ -151,6 +162,7 @@ namespace Mooege.Core.GS.Games
         {
             while (true)
             {
+                this._tickWatch.Restart();
                 Interlocked.Add(ref this._tickCounter, this.TickRate); // +6 ticks per 100ms. Verified by setting LogoutTickTimeMessage.Ticks to 600 which eventually renders a 10 sec logout timer on client. /raist
 
                 // only update worlds with active players in it - so mob brain()'s in empty worlds doesn't get called and take actions for nothing. /raist.
@@ -159,7 +171,14 @@ namespace Mooege.Core.GS.Games
                     pair.Value.Update(this._tickCounter);
                 }
 
-                Thread.Sleep(this.UpdateFrequency); // sleep until next tick.
+                this._tickWatch.Stop();
+
+                var compensation = (int) (this.UpdateFrequency - this._tickWatch.ElapsedMilliseconds); // the compensation value we need to sleep in order to get consistent 100 ms Game.Update().
+
+                if(this._tickWatch.ElapsedMilliseconds > this.UpdateFrequency)
+                    Logger.Warn("Game.Update() took [{0}ms] more than Game.UpdateFrequency [{1}ms].", this._tickWatch.ElapsedMilliseconds, this.UpdateFrequency); // TODO: We may need to eventually use dynamic tickRate / updateFrenquencies. /raist.
+                else
+                    Thread.Sleep(compensation); // sleep until next Update().
             }
         }
 
@@ -187,6 +206,11 @@ namespace Mooege.Core.GS.Games
                     case Consumers.Player:
                         client.Player.Consume(client, message);
                         break;
+
+                    case Consumers.Conversations:
+                        client.Player.Conversations.Consume(client, message);
+                        break;
+
                     case Consumers.SelectedNPC:
                         if (client.Player.SelectedNPC != null)
                             client.Player.SelectedNPC.Consume(client, message);
@@ -257,11 +281,11 @@ namespace Mooege.Core.GS.Games
             {
                 PlayerIndex = joinedPlayer.PlayerIndex, // player index
                 Field1 = "", //Owner name?
-                ToonName = joinedPlayer.Properties.Name,
+                ToonName = joinedPlayer.Toon.Name,
                 Field3 = 0x00000002, //party frame class
                 Field4 = target!=joinedPlayer? 0x2 : 0x4, //party frame level /boyc - may mean something different /raist.
                 snoActorPortrait = joinedPlayer.ClassSNO, //party frame portrait
-                Field6 = joinedPlayer.Properties.Level,
+                Field6 = joinedPlayer.Toon.Level,
                 StateData = joinedPlayer.GetStateData(),
                 Field8 = this.Players.Count != 1, //announce party join
                 Field9 = 0x00000001,

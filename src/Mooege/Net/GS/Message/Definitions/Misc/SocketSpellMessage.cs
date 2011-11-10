@@ -20,22 +20,22 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    [Message(Opcodes.SocketSpellMessage)]
+    [Message(Opcodes.SocketSpellMessage, Consumers.Player)]
     public class SocketSpellMessage : GameMessage
     {
-        public int Field0;
-        public int Field1;
+        public int RuneDynamicId;
+        public int PowerSNOId;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            RuneDynamicId = buffer.ReadInt(32);
+            PowerSNOId = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, RuneDynamicId);
+            buffer.WriteInt(32, PowerSNOId);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -44,8 +44,8 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("SocketSpellMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("RuneDynamicId: 0x" + RuneDynamicId.ToString("X8") + " (" + RuneDynamicId + ")");
+            b.Append(' ', pad); b.AppendLine("PowerSNOId: 0x" + PowerSNOId.ToString("X8") + " (" + PowerSNOId + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

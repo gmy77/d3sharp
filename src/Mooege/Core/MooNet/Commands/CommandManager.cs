@@ -65,6 +65,7 @@ namespace Mooege.Core.MooNet.Commands
             string parameters;
             var found = false;
 
+            if (line == null) return;
             if (line.Trim() == string.Empty) return;
 
             if(!ExtractCommandAndParameters(line, out command, out parameters))
