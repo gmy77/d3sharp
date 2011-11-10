@@ -53,6 +53,7 @@ namespace Mooege.Core.GS.AI
 
         public void Chase(Actor actor)
         {
+            
             if (this.Heading == actor.Position)
                 return;
             if (path.Count < 2)
@@ -62,7 +63,8 @@ namespace Mooege.Core.GS.AI
             }
             if (path.Count < 2) { return; }
 
-            this.path.RemoveAt(0); // Each move will be 2f as we skip moves, first move removed as its only to move to our current loc
+            this.path.RemoveAt(0); // Each move will be 2f as we skip moves, first move removed as its only to move to our current loc - DarkLotus
+            // TODO Run if actor > X yards? - DarkLotus
 
             this.Target = actor;
             this.Heading = this.path[0];// this.Target.Position;

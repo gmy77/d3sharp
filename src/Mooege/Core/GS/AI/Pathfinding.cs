@@ -38,7 +38,7 @@ namespace Mooege.Core.GS.AI
 
         public static List<Vector3D> FindPath(Actor actor, Vector3D Start, Vector3D Destination)
         {
-            // TODO check if dest is blocked, if target is standing against some walls it may be blocked, replace dest with closest reachable.
+            // TODO check if dest is blocked, if target is standing against some walls it may be blocked, replace dest with closest reachable. - DarkLotus
             InitWorld(actor.World);
             Point start = new Point((int)Start.X, (int)Start.Y);
             Point dest = new Point((int)Destination.X, (int)Destination.Y);
@@ -77,10 +77,10 @@ namespace Mooege.Core.GS.AI
 
         public static void InitWorld(World World)
         {
-            // Todo make multiple world aware, store mesh's for each world. Generation is fast using the squares for lookups rather than cells.
+            // Todo make multiple world aware, store mesh's for each world. Generation is fast using the squares for lookups rather than cells.- DarkLotus
             if (world != null) { return; }
             world = World;
-            foreach (var scene in world.QuadTree.Query<Scene>(new Common.Types.Misc.Circle(new Vector2F(2000, 3000), 5000)))// We just want all the scenes in the world.
+            foreach (var scene in world.QuadTree.Query<Scene>(new Common.Types.Misc.Circle(new Vector2F(2000, 3000), 5000)))// We just want all the scenes in the world. - DarkLotus
             {
                 int x = (int)scene.Position.X;
                 int y = (int)scene.Position.Y;
@@ -112,6 +112,7 @@ namespace Mooege.Core.GS.AI
                         }
                     }
                 }
+                
             }
         }
     }
