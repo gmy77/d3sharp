@@ -31,13 +31,9 @@ namespace Mooege.Core.GS.AI
             WorldNavMesh.Init(world);
             path = Pathfinding.FindPath(world.Players.Values.First(),new Common.Types.Math.Vector3D(2962, 2850, 24), new Common.Types.Math.Vector3D(3003, 2817, 24));
             panel1.Paint += new PaintEventHandler(panel1_Paint);
-            panel1.Scroll += new ScrollEventHandler(panel1_Scroll);
         }
 
-        void panel1_Scroll(object sender, ScrollEventArgs e)
-        {
-            this.Refresh();
-        }
+ 
         void panel1_Paint(object sender, PaintEventArgs e)
         {
             
