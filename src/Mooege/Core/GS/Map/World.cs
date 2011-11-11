@@ -110,7 +110,8 @@ namespace Mooege.Core.GS.Map
         {
             this.Game = game;
             this.SNOId = snoId; // NOTE: WorldSNO must be valid before adding it to the game
-            this.WorldSNO = new SNOHandle { Group = SNOGroup.Worlds, SNOId = snoId };
+
+            this.WorldSNO = new SNOHandle(SNOGroup.Worlds, snoId);
 
             Environment = (Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Worlds][snoId].Data as Mooege.Common.MPQ.FileFormats.World).Environment;
             this.Game.StartTracking(this); // start tracking the dynamicId for the world.            

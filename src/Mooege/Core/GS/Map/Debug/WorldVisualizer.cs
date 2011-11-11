@@ -38,7 +38,7 @@ namespace Mooege.Core.GS.Map.Debug
 
         private void WorldVisualizer_Load(object sender, EventArgs e)
         {
-            this.Text = string.Format("World Visualizer - {0} [{1}]", this.World.WorldSNO.Name, this.World.WorldSNO.SNOId);
+            this.Text = string.Format("World Visualizer - {0} [{1}]", this.World.WorldSNO.Name, this.World.WorldSNO.Id);
             this.Mesh = new DebugNavMesh(this.World);
 
             splitContainer_Panel1_Resize(null, EventArgs.Empty);

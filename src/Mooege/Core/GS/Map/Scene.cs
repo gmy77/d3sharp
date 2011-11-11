@@ -133,7 +133,7 @@ namespace Mooege.Core.GS.Map
         public Scene(World world, Vector3D position, int snoId, Scene parent)
             : base(world, world.NewSceneID)
         {
-            this.SceneSNO = new SNOHandle { Group = SNOGroup.Scene, SNOId = snoId };
+            this.SceneSNO = new SNOHandle(SNOGroup.Scene, snoId);
             this.SNOId = snoId;
             this.Parent = parent;
             this.Subscenes = new List<Scene>();
