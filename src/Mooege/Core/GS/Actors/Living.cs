@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;

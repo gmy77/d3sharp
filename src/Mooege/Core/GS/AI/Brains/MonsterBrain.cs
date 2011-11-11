@@ -17,9 +17,11 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Common.Helpers.Math;
 using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Actors.Movement;
+using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
-using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.AI.Brains
 {
@@ -45,7 +47,15 @@ namespace Mooege.Core.GS.AI.Brains
             if (this.EnemiesInRange.Count > 0) // if there are enemies around
                 this.State = BrainState.Combat; // attack them.
             else
-                this.State = BrainState.Wander; // else just wander around.            
+                this.State = BrainState.Wander; // else just wander around.
+
+            if (this.CurrentAction == null)
+            {
+                var heading = new Vector3D(this.Body.Position.X + FastRandom.Current.Next(-10,10), this.Body.Position.Y + FastRandom.Current.Next(-10,10), this.Body.Position.Z);
+                
+                if (this.Body.Position.DistanceSquared(ref heading) > this.Body.WalkSpeed * this.Body.World.Game.TickRate) // just skip the movements that can be accomplished in a single game.update(). /raist.
+                    this.CurrentAction = new MoveToPointAction(this.Body, heading);
+            }
         }
     }
 }

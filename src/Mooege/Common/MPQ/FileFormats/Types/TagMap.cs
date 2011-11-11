@@ -38,6 +38,11 @@ namespace Mooege.Common.MPQ.FileFormats.Types
 
         private Dictionary<int, TagMapEntry> _TagMapEntries { get; set; }
 
+        public TagMap()
+        {
+            this._TagMapEntries = new Dictionary<int, TagMapEntry>();
+        }
+
         [Obsolete("Use TagKeys instead. If it is missing create it")]
         public List<TagMapEntry> TagMapEntries
         {
@@ -57,8 +62,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         {
             object h = TagKeys.ArcaneEffectGroup;
 
-            TagMapSize = stream.ReadValueS32();
-            _TagMapEntries = new Dictionary<int, TagMapEntry>();
+            TagMapSize = stream.ReadValueS32();            
 
             for (int i = 0; i < TagMapSize; i++)
             {

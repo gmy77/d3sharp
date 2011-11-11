@@ -20,7 +20,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Mooege.Common.Helpers
+namespace Mooege.Common.Helpers.Math
 {
     public class RandomHelper
     {

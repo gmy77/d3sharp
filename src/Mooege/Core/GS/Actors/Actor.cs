@@ -27,7 +27,6 @@ using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Items;
-using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Core.GS.Map;
@@ -586,6 +585,8 @@ namespace Mooege.Core.GS.Actors
 
         public void Move(Vector3D point, float facingAngle)
         {
+            this.FacingAngle = facingAngle;
+
             var movementMessage = new NotifyActorMovementMessage
             {
                 ActorId = (int)this.DynamicID,

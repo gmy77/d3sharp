@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;

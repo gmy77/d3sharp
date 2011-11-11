@@ -17,6 +17,7 @@
  */
 
 using Mooege.Common;
+using Mooege.Common.Helpers.Math;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
