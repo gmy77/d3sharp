@@ -548,23 +548,18 @@ namespace Mooege.Core.GS.Players
                 {
                     case 0:
                         newRune.Attributes[GameAttribute.Rune_A] = rank;
-                        this.Attributes[GameAttribute.Rune_A, PowerSNOId] = rank;
                         break;
                     case 1:
                         newRune.Attributes[GameAttribute.Rune_B] = rank;
-                        this.Attributes[GameAttribute.Rune_B, PowerSNOId] = rank;
                         break;
                     case 2:
                         newRune.Attributes[GameAttribute.Rune_C] = rank;
-                        this.Attributes[GameAttribute.Rune_C, PowerSNOId] = rank;
                         break;
                     case 3:
                         newRune.Attributes[GameAttribute.Rune_D] = rank;
-                        this.Attributes[GameAttribute.Rune_D, PowerSNOId] = rank;
                         break;
                     case 4:
                         newRune.Attributes[GameAttribute.Rune_E] = rank;
-                        this.Attributes[GameAttribute.Rune_E, PowerSNOId] = rank;
                         break;
                 }
                 newRune.Owner = this;
@@ -577,12 +572,6 @@ namespace Mooege.Core.GS.Players
             }
             else
             {
-                // will set only one of these to rank
-                Attributes[GameAttribute.Rune_A, PowerSNOId] = rune.Attributes[GameAttribute.Rune_A];
-                Attributes[GameAttribute.Rune_B, PowerSNOId] = rune.Attributes[GameAttribute.Rune_B];
-                Attributes[GameAttribute.Rune_C, PowerSNOId] = rune.Attributes[GameAttribute.Rune_C];
-                Attributes[GameAttribute.Rune_D, PowerSNOId] = rune.Attributes[GameAttribute.Rune_D];
-                Attributes[GameAttribute.Rune_E, PowerSNOId] = rune.Attributes[GameAttribute.Rune_E];
                 this.Inventory.SetRune(rune, PowerSNOId, skillIndex);
             }
             if (oldRune != null)

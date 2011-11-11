@@ -495,7 +495,12 @@ namespace Mooege.Core.GS.Players
             }
             _equipment.Items.Add(rune.DynamicID, rune);
             _skillSocketRunes[skillIndex] = rune.DynamicID;
-
+            // will set only one of these to rank
+            _owner.Attributes[GameAttribute.Rune_A, powerSNOId] = rune.Attributes[GameAttribute.Rune_A];
+            _owner.Attributes[GameAttribute.Rune_B, powerSNOId] = rune.Attributes[GameAttribute.Rune_B];
+            _owner.Attributes[GameAttribute.Rune_C, powerSNOId] = rune.Attributes[GameAttribute.Rune_C];
+            _owner.Attributes[GameAttribute.Rune_D, powerSNOId] = rune.Attributes[GameAttribute.Rune_D];
+            _owner.Attributes[GameAttribute.Rune_E, powerSNOId] = rune.Attributes[GameAttribute.Rune_E];
             // position of rune is read from mpq as INDEX of skill in skill kit - loaded in helper /xsochor
             rune.SetInventoryLocation(16, RuneHelper.GetRuneIndexForPower(powerSNOId), 0);
         }
