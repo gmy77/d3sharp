@@ -43,7 +43,10 @@
             this.groupOptions = new System.Windows.Forms.GroupBox();
             this.checkPrintLabels = new System.Windows.Forms.CheckBox();
             this.checkFillCells = new System.Windows.Forms.CheckBox();
+			#if NET_4_0
+			// Does not work for mono yet. https://bugzilla.novell.com/show_bug.cgi?id=648403			
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+			#endif
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
@@ -264,7 +267,10 @@
             this.Load += new System.EventHandler(this.WorldVisualizer_Load);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
+			#if NET_4_0
+			// Does not work for mono yet. https://bugzilla.novell.com/show_bug.cgi?id=648403	
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+			#endif
             this.splitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Stage)).EndInit();
             this.groupActorVisibility.ResumeLayout(false);
