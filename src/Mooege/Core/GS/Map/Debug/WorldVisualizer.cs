@@ -32,7 +32,7 @@ namespace Mooege.Core.GS.Map.Debug
         public WorldVisualizer(World world)
         {
             InitializeComponent();
-            this.Stage.DoubleBuffer();
+            this.stage.DoubleBuffer();
             this.World = world;
         }
 
@@ -41,7 +41,6 @@ namespace Mooege.Core.GS.Map.Debug
             this.Text = string.Format("World Visualizer - {0} [{1}]", this.World.WorldSNO.Name, this.World.WorldSNO.Id);
             this.Mesh = new DebugNavMesh(this.World);
 
-            splitContainer_Panel1_Resize(null, EventArgs.Empty);
             this.RequestRedraw();
         }
 
@@ -52,14 +51,9 @@ namespace Mooege.Core.GS.Map.Debug
             lock (this.Mesh.Lock)
             {
                 e.Graphics.Clear(Color.White);
+                stage.Size = this.Bitmap.Size;
                 e.Graphics.DrawImage(this.Bitmap, 0, 0, this.Bitmap.Width, this.Bitmap.Height);
             }
-        }
-
-        private void splitContainer_Panel1_Resize(object sender, EventArgs e)
-        {
-            if (this.Mesh != null)
-                splitContainer.Panel1.AutoScrollMinSize = new Size((int)this.Mesh.Bounds.Width, (int)this.Mesh.Bounds.Height);
         }
 
         private void RequestRedraw()
@@ -68,15 +62,15 @@ namespace Mooege.Core.GS.Map.Debug
             this.groupActorVisibility.Enabled = false;
             this.groupOptions.Enabled = false;
 
-            this.Mesh.DrawMasterScenes = checkMasterScenes.Checked;
-            this.Mesh.DrawSubScenes = checkSubScenes.Checked;
-            this.Mesh.DrawWalkableCells = checkWalkableCells.Checked;
-            this.Mesh.DrawUnwalkableCells = checkUnwalkableCells.Checked;
-            this.Mesh.DrawMonsters = checkMonsters.Checked;
-            this.Mesh.DrawNPCs = checkNPCs.Checked;
-            this.Mesh.DrawPlayers = checkPlayers.Checked;
-            this.Mesh.PrintLabels = checkPrintLabels.Checked;
-            this.Mesh.FillCells = checkFillCells.Checked;
+            this.Mesh.DrawMasterScenes = checkBoxMasterScenes.Checked;
+            this.Mesh.DrawSubScenes = checkBoxSubScenes.Checked;
+            this.Mesh.DrawWalkableCells = checkBoxWalkableCells.Checked;
+            this.Mesh.DrawUnwalkableCells = checkBoxUnwalkableCells.Checked;
+            this.Mesh.DrawMonsters = checkBoxMonsters.Checked;
+            this.Mesh.DrawNPCs = checkBoxNPCs.Checked;
+            this.Mesh.DrawPlayers = checkBoxPlayers.Checked;
+            this.Mesh.PrintLabels = checkBoxPrintLabels.Checked;
+            this.Mesh.FillCells = checkBoxFillCells.Checked;
 
             if (this.Bitmap != null)
             {
@@ -85,7 +79,7 @@ namespace Mooege.Core.GS.Map.Debug
             }
 
             this.Bitmap = this.Mesh.Draw();
-            this.Stage.Refresh();
+            this.stage.Refresh();
 
             this.groupMapVisibility.Enabled = true;
             this.groupActorVisibility.Enabled = true;
