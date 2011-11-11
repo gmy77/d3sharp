@@ -87,7 +87,10 @@ namespace Mooege.Net.MooNet
 
         private static readonly byte[] ServerEncryptionSeed = { 0x68, 0xE0, 0xC7, 0x2E, 0xDD, 0xD6, 0xD2, 0xF3, 0x1E, 0x5A, 0xB1, 0x55, 0xB1, 0x8B, 0x63, 0x1E }; // server's crypto seed - these are the values for sc2, seems we've to figure them out for d3 /raist.
         private static readonly byte[] ClientEncryptionSeed = { 0xDE, 0xA9, 0x65, 0xAE, 0x54, 0x3A, 0x1E, 0x93, 0x9E, 0x69, 0x0C, 0xAA, 0x68, 0xDE, 0x78, 0x39 }; // client's crypto seed - these are the values for sc2, seems we've to figure them out for d3 /raist.
-
+        private static readonly byte[] _serverEncClientDec =  { 0xcc, 0x98, 0xae, 0x04, 0xe8, 0x97, 0xea, 0xca, 0x12, 0xdd, 0xc0, 0x93, 0x42, 0x91, 0x53, 0x57 }; // wow
+        private static readonly byte[] _serverDecClientEnc =  { 0xc2, 0xb3, 0x72, 0x3c, 0xc6, 0xae, 0xd9, 0xb5, 0x34, 0x3c, 0x53, 0xee, 0x2f, 0x43, 0x67, 0xce }; // wow
+        private static readonly byte[] ServerDecryptionKey =  { 0xF4, 0x66, 0x31, 0x59, 0xFC, 0x83, 0x6E, 0x31, 0x31, 0x02, 0x51, 0xD5, 0x44, 0x31, 0x67, 0x98 }; // old wow
+        private static readonly byte[] ServerEncryptionKey =  { 0x22, 0xBE, 0xE5, 0xCF, 0xBB, 0x07, 0x64, 0xD9, 0x00, 0x45, 0x1B, 0xD0, 0x24, 0xB8, 0xD5, 0x45 }; // old wow
         public ARC4 ServerEncryptor { get; private set; }
         public ARC4 ClientDecryptor { get; private set; }
 
@@ -254,8 +257,8 @@ namespace Mooege.Net.MooNet
             this.SessionKey = sessionKey;
             var sessionKeyHMAC = new HMACSHA256(this.SessionKey);
 
-            var encryptHash = sessionKeyHMAC.ComputeHash(ServerEncryptionSeed);
-            var decryptHash = sessionKeyHMAC.ComputeHash(ClientEncryptionSeed);
+            var encryptHash = sessionKeyHMAC.ComputeHash(_serverEncClientDec);
+            var decryptHash = sessionKeyHMAC.ComputeHash(_serverDecClientEnc);
 
             this.ServerEncryptor = new ARC4(encryptHash); // used to encrypt packets sent by the server.
             this.ClientDecryptor = new ARC4(decryptHash); // used to decrypt packets sent by the client.

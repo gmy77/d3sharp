@@ -17,6 +17,7 @@
  */
 
 using System.IO;
+using Mooege.Common;
 using Mooege.Common.Extensions;
 using Google.ProtocolBuffers;
 
@@ -25,6 +26,7 @@ namespace Mooege.Net.MooNet.Packets
     public class PacketOut
     {
         public byte[] Data { get; private set; }
+        private static readonly Logger Logger = LogManager.CreateLogger();
 
         public PacketOut(byte serviceId, uint methodId, uint token, IMessage message)
             : this(serviceId, methodId, token, 0x0, message)
@@ -59,6 +61,9 @@ namespace Mooege.Net.MooNet.Packets
 
                 output.Flush();
                 this.Data = stream.ToArray();
+                Logger.LogOutgoing(this.Data);
+                Logger.LogHeader(header);
+                Logger.LogOutgoing(message);
             }
         }
     }

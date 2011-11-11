@@ -19,6 +19,8 @@
 using System.Linq;
 using Google.ProtocolBuffers;
 using Gibbed.IO;
+using Mooege.Common;
+using Mooege.Common.Extensions;
 
 namespace Mooege.Net.MooNet.Packets
 {
@@ -26,6 +28,7 @@ namespace Mooege.Net.MooNet.Packets
     {
         public MooNetClient Client {get; private set;}
         public CodedInputStream Stream {get; private set;}
+        private static readonly Logger Logger = LogManager.CreateLogger();
 
         public bnet.protocol.Header Header {get; private set;}
 
@@ -52,6 +55,9 @@ namespace Mooege.Net.MooNet.Packets
             }
 
             data = data.Take(i).ToArray();
+            System.Console.WriteLine("SessionKey: " + this.Client.SessionKey.ToHexString());
+            System.Console.WriteLine("Encrypted Packet: " + data.ToHexString());
+
             this.Client.ClientDecryptor.Process(data, 0, data.Length);
             this.Stream = CodedInputStream.CreateInstance(data);
         }
@@ -61,12 +67,15 @@ namespace Mooege.Net.MooNet.Packets
             var size = (this.Stream.ReadRawByte() << 8) | this.Stream.ReadRawByte(); // header size.
             var headerData = this.Stream.ReadRawBytes(size); // header data.
             this.Header = bnet.protocol.Header.ParseFrom(headerData);  // parse header. 
+            Logger.LogIncoming(headerData);
+            Logger.LogHeader(this.Header);
         }
 
         public IMessage ReadMessage(IBuilder builder)
         {
-            return builder.WeakMergeFrom(CodedInputStream.CreateInstance(this.GetPayload(Stream))).WeakBuild();
-            
+            var message = builder.WeakMergeFrom(CodedInputStream.CreateInstance(this.GetPayload(Stream))).WeakBuild();
+            Logger.LogIncoming(message);
+            return message;
             // this._stream.ReadMessage(builder, ExtensionRegistry.Empty); // this method doesn't seem to work with 7728. /raist.
             // return builder.WeakBuild();
         }
