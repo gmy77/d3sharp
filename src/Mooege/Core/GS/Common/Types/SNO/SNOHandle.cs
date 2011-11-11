@@ -29,6 +29,8 @@ namespace Mooege.Core.GS.Common.Types.SNO
 
     public class SNOHandle
     {
+        private const int NO_ID = -1;
+
         /// <summary>
         /// Gets the group of the referenced object or null if the handle was
         /// initialized without group and the id is not found in mpq storage
@@ -101,6 +103,8 @@ namespace Mooege.Core.GS.Common.Types.SNO
         public SNOHandle(int snoId)
         {
             Id = snoId;
+            if (snoId == NO_ID)
+                _group = SNOGroup.None;
         }
 
 
