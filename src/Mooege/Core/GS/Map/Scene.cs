@@ -39,10 +39,8 @@ namespace Mooege.Core.GS.Map
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         /// <summary>
-        /// SNOId of the scene.
+        /// SNOHandle for the scene.
         /// </summary>
-        public int SNOId { get; private set; }
-
         public SNOHandle SceneSNO { get; private set; }
 
         /// <summary>
@@ -134,7 +132,6 @@ namespace Mooege.Core.GS.Map
             : base(world, world.NewSceneID)
         {
             this.SceneSNO = new SNOHandle(SNOGroup.Scene, snoId);
-            this.SNOId = snoId;
             this.Parent = parent;
             this.Subscenes = new List<Scene>();
             this.Scale = 1.0f;                   
@@ -153,7 +150,7 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         private void LoadSceneData()
         {
-            var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SNOId].Data as Mooege.Common.MPQ.FileFormats.Scene;
+            var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SceneSNO.Id].Data as Mooege.Common.MPQ.FileFormats.Scene;
             if (data == null) return;
 
             this.AABBBounds = data.AABBBounds;
@@ -304,7 +301,7 @@ namespace Mooege.Core.GS.Map
                     SceneSpec = specification,
                     ChunkID = this.DynamicID,
                     Transform = this.Transform,
-                    SceneSNO = this.SNOId,
+                    SceneSNO = this.SceneSNO.Id,
                     ParentChunkID = this.ParentChunkID,
                     SceneGroupSNO = this.SceneGroupSNO,
                     arAppliedLabels = this.AppliedLabels
@@ -322,7 +319,7 @@ namespace Mooege.Core.GS.Map
                 return new MapRevealSceneMessage
                 {
                     ChunkID = this.DynamicID,
-                    SceneSNO = this.SNOId,
+                    SceneSNO = this.SceneSNO.Id,
                     Transform = this.Transform,
                     WorldID = this.World.DynamicID,
                     MiniMapVisibility = this.MiniMapVisibility
@@ -334,7 +331,7 @@ namespace Mooege.Core.GS.Map
 
         public override string ToString()
         {
-            return string.Format("[Scene] SNOId: {0} DynamicId: {1} Position: {2}", this.SNOId, this.DynamicID, this.Position);
+            return string.Format("[Scene] SNOId: {0} DynamicId: {1} Name: {2}", this.SceneSNO.Id, this.DynamicID, this.SceneSNO.Name);
         }
     }
 

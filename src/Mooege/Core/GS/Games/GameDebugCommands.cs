@@ -149,7 +149,7 @@ namespace Mooege.Core.GS.Games
                         return "Invalid arguments. Type 'help draw' to get help.";
 
                     world = invokerClient.InGameClient.Player.World;
-                    worldId = world.SNOId;
+                    worldId = world.WorldSNO.Id;
                 }
                 else
                 {
