@@ -37,7 +37,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
             // TODO: Animate Jeweler? Who knows. /fasbat
             item.Attributes[GameAttribute.Sockets] += 1;
             // Why this not work? :/
-            item.Attributes.SendChangedMessage(player.InGameClient, item.DynamicID);
+            item.Attributes.SendChangedMessage(player.InGameClient);
         }
     }
 }

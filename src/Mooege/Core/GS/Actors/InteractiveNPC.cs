@@ -92,9 +92,7 @@ namespace Mooege.Core.GS.Actors
 
                 // show the exclamation mark if actor has an unread quest conversation
                 Attributes[GameAttribute.Conversation_Icon, 0] = questConversation ? 1 : 0;
-                foreach (var message in Attributes.GetChangedMessageList(this.DynamicID))
-                    World.BroadcastIfRevealed(message, this);
-                Attributes.ClearChanged();
+                Attributes.BroadcastChangedIfRevealed();
             }
         }
 

@@ -46,7 +46,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         #region hardcoded1
                         #region Player Attribute Values
 
-                        GameAttributeMap attributes = new GameAttributeMap();
+                        var attributes = client.Player.Attributes; // TODO change it /fasbat
                         attributes[GameAttribute.Banter_Cooldown, 0xFFFFF] = 0x000007C9;
                         attributes[GameAttribute.Buff_Active, 0x20CBE] = true;
                         attributes[GameAttribute.Buff_Active, 0x33C40] = false;
@@ -63,7 +63,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                         attributes[GameAttribute.Invulnerable] = false;
                         attributes[GameAttribute.Buff_Icon_Count0, 0x20CBE] = 1;
                         attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x33C40] = 0;
-                        attributes.SendMessage(client, player.DynamicID);
+                        attributes.SendMessage(client);
 
                         #endregion
 

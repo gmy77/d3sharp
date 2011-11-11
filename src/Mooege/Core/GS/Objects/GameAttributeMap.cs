@@ -19,8 +19,12 @@
 using System;
 using System.Collections.Generic;
 using Mooege.Net.GS.Message.Definitions.Attribute;
+using Mooege.Core.GS.Objects;
+using System.Linq;
+using Mooege.Net.GS.Message;
+using Mooege.Net.GS;
 
-namespace Mooege.Net.GS.Message
+namespace Mooege.Core.GS.Objects
 {
     public class GameAttributeMap
     {
@@ -54,34 +58,28 @@ namespace Mooege.Net.GS.Message
 
         private HashSet<KeyId> _changedAttributes = new HashSet<KeyId>();
         private Dictionary<KeyId, GameAttributeValue> _attributeValues = new Dictionary<KeyId, GameAttributeValue>();
+        private WorldObject _parent;
 
-        public void SendMessage(GameClient client, uint actorID)
+        public GameAttributeMap(WorldObject parent)
         {
-            var list = GetMessageList(actorID);
+            _parent = parent;
+        }
+
+
+
+        #region message broadcasting
+
+        public void SendMessage(GameClient client)
+        {
+            var list = GetMessageList();
             foreach (var msg in list)
                 client.SendMessage(msg);
             _changedAttributes.Clear();
         }
 
-        /// <summary>
-        /// Send only the changed attributes. How nice is that?
-        /// </summary>
-        /// <param name="client">the client we send it to</param>
-        /// <param name="actorID">the actor this attribs belong to</param>
-        public void SendChangedMessage(GameClient client, uint actorID)
+        public void SendMessage(IEnumerable<GameClient> clients)
         {
-            var list = GetChangedMessageList(actorID);
-            foreach (var msg in list)
-                client.SendMessage(msg);
-            _changedAttributes.Clear();
-        }
-
-        public void SendChangedMessage(IEnumerable<GameClient> clients, uint actorID)
-        {
-            if (_changedAttributes.Count == 0)
-                return;
-
-            var list = GetChangedMessageList(actorID);
+            var list = GetMessageList();
             foreach (var msg in list)
             {
                 foreach(var client in clients)
@@ -90,26 +88,75 @@ namespace Mooege.Net.GS.Message
             _changedAttributes.Clear();
         }
 
+        /// <summary>
+        /// Send only the changed attributes. How nice is that?
+        /// You should generaly use Broadcast if possible
+        /// </summary>
+        /// <param name="client">the client we send it to</param>
+        public void SendChangedMessage(GameClient client)
+        {
+            var list = GetChangedMessageList();
+            foreach (var msg in list)
+                client.SendMessage(msg);
+            _changedAttributes.Clear();
+        }
+
+        public void SendChangedMessage(IEnumerable<GameClient> clients)
+        {
+            if (_changedAttributes.Count == 0)
+                return;
+
+            var list = GetChangedMessageList();
+            foreach (var msg in list)
+            {
+                foreach (var client in clients)
+                    client.SendMessage(msg);
+            }
+            _changedAttributes.Clear();
+        }
+
+        /// <summary>
+        /// Broadcasts attribs to players that the parent actor has been revealed to.
+        /// </summary>
+        public void BroadcastIfRevealed()
+        {
+            SendMessage(_parent.World.Players.Values
+                .Where(@player => @player.RevealedObjects.ContainsKey(_parent.DynamicID))
+                .Select(@player => @player.InGameClient));
+        }
+
+        /// <summary>
+        /// Broadcasts changed attribs to players that the parent actor has been revealed to.
+        /// </summary>
+        public void BroadcastChangedIfRevealed()
+        {
+            SendChangedMessage(_parent.World.Players.Values
+                .Where(@player => @player.RevealedObjects.ContainsKey(_parent.DynamicID))
+                .Select(@player => @player.InGameClient));
+        }
+
+        #endregion
+
         public void ClearChanged()
         {
             _changedAttributes.Clear();
         }
 
-        public List<GameMessage> GetMessageList(uint actorID)
+        private List<GameMessage> GetMessageList()
         {
             var e = _attributeValues.Keys.GetEnumerator();
             var level = _attributeValues.ContainsKey(new KeyId() { Id = GameAttribute.Level.Id });
-            return GetMessageListFromEnumerator(actorID, e, _attributeValues.Count, level);
+            return GetMessageListFromEnumerator(e, _attributeValues.Count, level);
         }
 
-        public List<GameMessage> GetChangedMessageList(uint actorID)
+        private List<GameMessage> GetChangedMessageList()
         {
             var e = _changedAttributes.GetEnumerator();
             var level = _changedAttributes.Contains(new KeyId() { Id = GameAttribute.Level.Id });
-            return GetMessageListFromEnumerator(actorID, e, _changedAttributes.Count, level);
+            return GetMessageListFromEnumerator(e, _changedAttributes.Count, level);
         }
 
-        private List<GameMessage> GetMessageListFromEnumerator(uint actorID, IEnumerator<KeyId> e, int count, bool level)
+        private List<GameMessage> GetMessageListFromEnumerator(IEnumerator<KeyId> e, int count, bool level)
         {
             var messageList = new List<GameMessage>();
 
@@ -126,8 +173,8 @@ namespace Mooege.Net.GS.Message
                 var value = _attributeValues[keyid];
 
                 int id = keyid.Id;
-                msg.ActorID = actorID;
-                msg.Field1 = new Fields.NetAttributeKeyValue();
+                msg.ActorID = _parent.DynamicID;
+                msg.Field1 = new Mooege.Net.GS.Message.Fields.NetAttributeKeyValue();
                 msg.Field1.Field0 = keyid.Key;
                 // FIXME: need to rework NetAttributeKeyValue, and maybe rename GameAttribute to NetAttribute?
                 msg.Field1.Attribute = GameAttribute.Attributes[id]; // FIXME
@@ -146,10 +193,10 @@ namespace Mooege.Net.GS.Message
                     for (; count >= 15; count -= 15)
                     {
                         AttributesSetValuesMessage msg = new AttributesSetValuesMessage();
-                        msg.ActorID = actorID;
-                        msg.atKeyVals = new Fields.NetAttributeKeyValue[15];
+                        msg.ActorID = _parent.DynamicID;
+                        msg.atKeyVals = new Mooege.Net.GS.Message.Fields.NetAttributeKeyValue[15];
                         for (int i = 0; i < 15; i++)
-                            msg.atKeyVals[i] = new Fields.NetAttributeKeyValue();
+                            msg.atKeyVals[i] = new Mooege.Net.GS.Message.Fields.NetAttributeKeyValue();
                         for (int i = 0; i < 15; i++)
                         {
                             KeyId keyid;
@@ -194,8 +241,8 @@ namespace Mooege.Net.GS.Message
                 if (count > 0)
                 {
                     AttributesSetValuesMessage msg = new AttributesSetValuesMessage();
-                    msg.ActorID = actorID;
-                    msg.atKeyVals = new Fields.NetAttributeKeyValue[count];
+                    msg.ActorID = _parent.DynamicID;
+                    msg.atKeyVals = new Mooege.Net.GS.Message.Fields.NetAttributeKeyValue[count];
                     for (int i = 0; i < count; i++)
                     {
                         KeyId keyid;
@@ -215,7 +262,7 @@ namespace Mooege.Net.GS.Message
                         {
                             keyid = e.Current;
                         }
-                        var kv = new Fields.NetAttributeKeyValue();
+                        var kv = new Mooege.Net.GS.Message.Fields.NetAttributeKeyValue();
                         msg.atKeyVals[i] = kv;
 
                         if (level && keyid.Id == GameAttribute.Level.Id)
