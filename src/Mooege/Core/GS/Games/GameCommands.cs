@@ -21,15 +21,76 @@ using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common.Helpers;
 using Mooege.Common.MPQ;
+using Mooege.Common.MPQ.FileFormats;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Items;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
 using System.Text;
-using Mooege.Core.Common.Items;
+using Monster = Mooege.Core.GS.Actors.Monster;
 
 namespace Mooege.Core.GS.Games
 {
+    [CommandGroup("tp", "Transfers your character to another world.")]
+    public class TeleportCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Portal(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            if (@params != null && @params.Count() > 0)
+            {
+                var worldId = 0;
+                Int32.TryParse(@params[0], out worldId);
+
+                if (worldId == 0)
+                    return "Invalid arguments. Type 'help tp' to get help.";
+
+                if (!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldId))
+                    return "There exist no world with SNOId: " + worldId;
+
+                var world = invokerClient.InGameClient.Game.GetWorld(worldId);
+
+                if (world == null)
+                    return "Can't teleport you to world with snoId " + worldId;
+
+                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
+                return string.Format("Teleported to: {0} [id: {1}]", MPQStorage.Data.Assets[SNOGroup.Worlds][worldId].Name, worldId);
+            }
+
+            return "Invalid arguments. Type 'help tp' to get help.";
+        }
+    }
+
+    [CommandGroup("town", "Transfers your character back to town.")]
+    public class TownCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Portal(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            var world = invokerClient.InGameClient.Game.GetWorld(71150);
+
+            if (world != invokerClient.InGameClient.Player.World)
+                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
+            else
+                invokerClient.InGameClient.Player.Teleport(world.StartingPoints.First().Position);
+
+            return string.Format("Teleported back to town.");
+        }
+    }
+
     [CommandGroup("spawn", "Spawns a mob.\nUsage: spawn [amount] [actorSNO]")]
     public class SpawnCommand : CommandGroup
     {
@@ -71,6 +132,62 @@ namespace Mooege.Core.GS.Games
             return string.Format("Spawned {0} mobs with ActorSNO: {1}", amount, actorSNO);
         }
     }
+
+    [CommandGroup("killall", "Kills monsters in range.")]
+    public class KillAllCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string KillAll(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            var player = invokerClient.InGameClient.Player;
+
+            var monstersInRange = player.GetActorsInRange<Monster>();
+            foreach (var monster in monstersInRange)
+            {
+                    monster.Die(player);
+            }
+
+            return string.Format("Killed {0} monsters in range.", monstersInRange.Count);
+        }
+    }
+
+    //[CommandGroup("levelup", "Levels your character.")]
+    //public class LevelUpCommand : CommandGroup
+    //{
+    //    [DefaultCommand]
+    //    public string LevelUp(string[] @params, MooNetClient invokerClient)
+    //    {
+    //        // TODO: does not work, should be actually refactoring Player.cs:UpdateExp() and use it. /raist.
+
+    //        if (invokerClient == null)
+    //            return "You can not invoke this command from console.";
+
+    //        if (invokerClient.InGameClient == null)
+    //            return "You can only invoke this command while ingame.";
+
+    //        var player = invokerClient.InGameClient.Player;
+    //        var amount = 1;
+
+    //        if(@params!=null)
+    //        {
+    //            if (!Int32.TryParse(@params[0], out amount))
+    //                amount = 1;
+    //        }
+
+    //        for(int i=0;i<amount;i++)
+    //        {
+    //            player.Toon.LevelUp();                
+    //        }
+
+    //        return string.Format("New level: {0}", player.Toon.Level);
+    //    }
+    //}
 
     [CommandGroup("item", "Spawns an item (with a name or type).\nUsage: item [type <type>|<name>] [amount]")]
     public class ItemCommand : CommandGroup
@@ -159,43 +276,7 @@ namespace Mooege.Core.GS.Games
             return string.Format("Spawned {0} items with type: {1}", amount, name);
         }
     }
-
-    [CommandGroup("tp", "Transfers your character to another world.")]
-    public class TeleportCommand : CommandGroup
-    {
-        [DefaultCommand]
-        public string Portal(string[] @params, MooNetClient invokerClient)
-        {
-            if (invokerClient == null)
-                return "You can not invoke this command from console.";
-
-            if (invokerClient.InGameClient == null)
-                return "You can only invoke this command while ingame.";
-
-            if (@params != null && @params.Count() > 0)
-            {
-                var worldId = 0;
-                Int32.TryParse(@params[0], out worldId);
-
-                if(worldId==0)
-                    return "Invalid arguments. Type 'help tp' to get help.";
-
-                if(!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldId))
-                    return "There exist no world with SNOId: " + worldId;
-
-                var world = invokerClient.InGameClient.Game.GetWorld(worldId);
-                
-                if(world==null)
-                    return "Can't teleport you to world with snoId " + worldId;
-
-                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
-                return string.Format("Teleported to: {0} [id: {1}]", MPQStorage.Data.Assets[SNOGroup.Worlds][worldId].Name, worldId);
-            }
-
-            return "Invalid arguments. Type 'help tp' to get help.";
-        }
-    }
-
+    
     [CommandGroup("conversation", "Starts a conversation. \n Usage: conversation snoConversation")]
     public class ConversationCommand : CommandGroup
     {
@@ -282,36 +363,13 @@ namespace Mooege.Core.GS.Games
             foreach (var quest in invokerClient.InGameClient.Game.Quests)
                 foreach (var objectiveSet in quest.CurrentStep.ObjectivesSets)
                     foreach (var objective in objectiveSet.Objectives)
-                        returnValue.AppendLine(String.Format("{0}, {1} ({2}) - {3}", quest.SNOName.ToString(), objective.ObjectiveType, (int)objective.ObjectiveType, objective.ObjectiveValue));
+                        returnValue.AppendLine(String.Format("{0}, {1} ({2}) - {3}", quest.SNOHandle.ToString(), objective.ObjectiveType, (int)objective.ObjectiveType, objective.ObjectiveValue));
 
             return returnValue.ToString();
         }
 
     }
 
-
-    [CommandGroup("town", "Transfers your character back to town.")]
-    public class TownCommand : CommandGroup
-    {
-        [DefaultCommand]
-        public string Portal(string[] @params, MooNetClient invokerClient)
-        {
-            if (invokerClient == null)
-                return "You can not invoke this command from console.";
-
-            if (invokerClient.InGameClient == null)
-                return "You can only invoke this command while ingame.";
-
-            var world = invokerClient.InGameClient.Game.GetWorld(71150);
-
-            if (world != invokerClient.InGameClient.Player.World)
-                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
-            else
-                invokerClient.InGameClient.Player.Teleport(world.StartingPoints.First().Position);
-
-            return string.Format("Teleported back to town.");
-        }
-    }
 
     [CommandGroup("lookup", "Searches in sno databases.\nUsage: lookup [actor|npc|mob|power|scene] <pattern>")]
     public class LookupCommand : CommandGroup
@@ -427,7 +485,7 @@ namespace Mooege.Core.GS.Games
 
             var pattern = @params[0].ToLower();
 
-            foreach (var pair in MPQStorage.Data.Assets[SNOGroup.Monster])
+            foreach (var pair in MPQStorage.Data.Assets[SNOGroup.Scene])
             {
                 if (pair.Value.Name.ToLower().Contains(pattern))
                     matches.Add(pair.Value);
@@ -435,6 +493,30 @@ namespace Mooege.Core.GS.Games
 
             return matches.Aggregate(matches.Count >= 1 ? "Scene Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
-    }
+
+       [Command("item", "Allows you to search for an item.\nUsage: lookup item <pattern>")]
+       public string Item(string[] @params, MooNetClient invokerClient)
+       {
+           var matches = new List<ItemTable>();
+
+           if (@params.Count() < 1)
+               return "Invalid arguments. Type 'help lookup item' to get help.";
+
+           var pattern = @params[0].ToLower();
+
+           foreach (var asset in MPQStorage.Data.Assets[SNOGroup.GameBalance].Values)
+           {
+               var data = asset.Data as GameBalance;
+               if (data == null || data.Type != BalanceType.Items) continue;
+
+               foreach (var itemDefinition in data.Item)
+               {
+                   if (itemDefinition.Name.ToLower().Contains(pattern))
+                       matches.Add(itemDefinition);
+               }
+           }
+           return matches.Aggregate(matches.Count >= 1 ? "Item Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOActor.ToString("D6"), match.Name));
+       }
+   }   
 }
 

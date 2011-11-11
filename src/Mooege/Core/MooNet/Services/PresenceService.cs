@@ -17,9 +17,9 @@
  */
 
 using Mooege.Common;
-using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
 
 // TODO: Need to do some more testing and inspection to make sure that

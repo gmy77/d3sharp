@@ -20,11 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
+using Mooege.Common.Storage;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
-using Mooege.Core.Common.Storage;
 using Wintellect.PowerCollections;
 
 namespace Mooege.Core.MooNet.Friends

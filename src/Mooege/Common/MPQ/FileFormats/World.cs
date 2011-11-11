@@ -100,13 +100,13 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SceneChunk : ISerializableData
     {
-        public SNOName SNOName { get; private set; }
+        public SNOHandle SNOHandle { get; private set; }
         public PRTransform PRTransform { get; private set; }
         public SceneSpecification SceneSpecification { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.SNOName = new SNOName(stream);
+            this.SNOHandle = new SNOHandle(stream);
             this.PRTransform = new PRTransform(stream);
             this.SceneSpecification = new SceneSpecification(stream);
         }

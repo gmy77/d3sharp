@@ -104,8 +104,6 @@ namespace Mooege.Core.GS.Games
                 public int FollowUpStepID;
             }
 
-
-
             public List<ObjectiveSet> ObjectivesSets = new List<ObjectiveSet>(); // this is only public for GameCommand / Debug
             private List<List<QuestObjective>> bonusObjectives = new List<List<QuestObjective>>();
             private Mooege.Common.MPQ.FileFormats.IQuestStep _questStep = null;
@@ -119,7 +117,7 @@ namespace Mooege.Core.GS.Games
                     foreach (var player in _quest.game.Players.Values)
                         player.InGameClient.SendMessage(new QuestCounterMessage()
                         {
-                            snoQuest = _quest.SNOName.SNOId,
+                            snoQuest = _quest.SNOHandle.SNOId,
                             snoLevelArea = -1,
                             StepID = _questStep.ID,
                             TaskIndex = objective.ID,
@@ -176,10 +174,10 @@ namespace Mooege.Core.GS.Games
             }
         }
 
-
-
+        public delegate void QuestProgressDelegate(Quest quest);
+        public event QuestProgressDelegate OnQuestProgress;
         private Mooege.Common.MPQ.FileFormats.Quest asset = null;
-        public SNOName SNOName { get; set; }
+        public SNOHandle SNOHandle { get; set; }
         private Game game { get; set; }
         public QuestStep CurrentStep { get; set; }
         private List<int> completedSteps = new List<int>();           // this list has to be saved if quest progress should be saved. It is required to keep track of questranges
@@ -188,7 +186,7 @@ namespace Mooege.Core.GS.Games
         {
             this.game = game;
             //SNOId = SNOQuest;
-            SNOName = new SNOName() { SNOId = SNOQuest, Group = SNOGroup.Quest };
+            SNOHandle = new SNOHandle() { SNOId = SNOQuest, Group = SNOGroup.Quest };
             asset = MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Quest][SNOQuest].Data as Mooege.Common.MPQ.FileFormats.Quest;
             CurrentStep = new QuestStep(asset.QuestUnassignedStep, this);
         }
@@ -209,7 +207,7 @@ namespace Mooege.Core.GS.Games
             foreach (var player in game.Players.Values)
                 player.InGameClient.SendMessage(new QuestUpdateMessage()
                 {
-                    snoQuest = SNOName.SNOId,
+                    snoQuest = SNOHandle.SNOId,
                     snoLevelArea = -1,
                     StepID = FollowUpStepID,
                     Field3 = true,
@@ -217,6 +215,8 @@ namespace Mooege.Core.GS.Games
                 });
             completedSteps.Add(CurrentStep.QuestStepID);
             CurrentStep = (from step in asset.QuestSteps where step.ID == FollowUpStepID select new QuestStep(step, this)).FirstOrDefault();
+            if (OnQuestProgress != null)
+                OnQuestProgress(this);
         }
 
         public void Notify(Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType type, int value)

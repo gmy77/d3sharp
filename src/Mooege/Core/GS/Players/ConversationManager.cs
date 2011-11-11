@@ -88,11 +88,11 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                var node = from a in currentLineNode.ChildNodes where a.ClassFilter == player.Properties.VoiceClassID select a;
+                var node = from a in currentLineNode.ChildNodes where a.ClassFilter == player.Toon.VoiceClassID select a;
                 if (node.Count() == 0)
                     node = from a in currentLineNode.ChildNodes where a.ClassFilter == -1 select a;
 
-                return node.First().ConvLocalDisplayTimes.ElementAt((int)manager.ClientLanguage).Languages[player.Properties.VoiceClassID * 2 + (player.Properties.Gender == 0 ? 0 : 1)];
+                return node.First().ConvLocalDisplayTimes.ElementAt((int)manager.ClientLanguage).Languages[player.Toon.VoiceClassID * 2 + (player.Toon.Gender == 0 ? 0 : 1)];
             }
         }
 
@@ -120,7 +120,7 @@ namespace Mooege.Core.GS.Players
 
         private Mooege.Core.GS.Actors.Actor GetActorBySNO(int sno)
         {
-            var actors = (from a in player.RevealedObjects.Values where a is Mooege.Core.GS.Actors.Actor && (a as Mooege.Core.GS.Actors.Actor).SNOId == sno select a);
+            var actors = (from a in player.RevealedObjects.Values where a is Mooege.Core.GS.Actors.Actor && (a as Mooege.Core.GS.Actors.Actor).ActorSNO.SNOId == sno select a);
             if (actors.Count() > 1)
                 logger.Warn("Found more than one actors in range");
             if (actors.Count() == 0)
@@ -282,11 +282,11 @@ namespace Mooege.Core.GS.Players
                     LineID = currentLineNode.LineID,
                     Speaker = (int)currentLineNode.Speaker1,
                     Field5 = -1,
-                    TextClass = currentLineNode.Speaker1 == Speaker.Player ? (Class)player.Properties.VoiceClassID : Class.None,
-                    Gender = (player.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
-                    AudioClass = (Class)player.Properties.VoiceClassID,
-                    SNOSpeakerActor = GetSpeaker(currentLineNode.Speaker1).SNOId,
-                    Name = player.Properties.Name,
+                    TextClass = currentLineNode.Speaker1 == Speaker.Player ? (Class)player.Toon.VoiceClassID : Class.None,
+                    Gender = (player.Toon.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
+                    AudioClass = (Class)player.Toon.VoiceClassID,
+                    SNOSpeakerActor = GetSpeaker(currentLineNode.Speaker1).ActorSNO.SNOId,
+                    Name = player.Toon.Name,
                     Field11 = 0x00000000,  // is this field I1? and if...what does it do?? 2 for level up -farmy
                     AnimationTag = currentLineNode.AnimationTag,
                     Duration = duration,

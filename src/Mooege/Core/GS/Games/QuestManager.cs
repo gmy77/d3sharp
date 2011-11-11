@@ -103,8 +103,7 @@ namespace Mooege.Core.GS.Games
                     if (quests[range.Start.SNOQuest].HasStepCompleted(range.Start.StepID) || quests[range.Start.SNOQuest].CurrentStep.QuestStepID == range.Start.StepID) // rumford conversation needs current step
                         started = true;
                 }
-                else
-                    logger.Warn("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.Start.SNOQuest);
+                //else logger.Warn("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.Start.SNOQuest);
             }
 
             if (range.End.SNOQuest == -1 || range.End.StepID < 0)
@@ -116,8 +115,7 @@ namespace Mooege.Core.GS.Games
                     if (quests[range.End.SNOQuest].HasStepCompleted(range.End.StepID))
                         ended = true;
                 }
-                else
-                    logger.Warn("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.End.SNOQuest);
+                //else logger.Warn("QuestRange {0} references unknown quest {1}", range.Header.SNOId, range.End.SNOQuest);
             }
 
             return started && !ended;
