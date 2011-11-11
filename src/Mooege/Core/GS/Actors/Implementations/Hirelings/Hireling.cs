@@ -46,14 +46,14 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 
         protected Player owner = null;
 
-        public bool IsProxy { get { return ActorSNO.SNOId == proxySNO; } }
-        public bool IsHireling { get { return ActorSNO.SNOId == hirelingSNO; } }
+        public bool IsProxy { get { return ActorSNO.Id == proxySNO; } }
+        public bool IsHireling { get { return ActorSNO.Id == hirelingSNO; } }
         public bool HasHireling { get { return this.hirelingSNO != -1; } }
         public bool HasProxy { get { return this.proxySNO != -1; } }
         public int PetType { get { return IsProxy ? 22 : 0; } }
-        
 
-        public Hireling(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+
+        public Hireling(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.TeamID] = 2;
@@ -208,7 +208,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 
         }
 
-        public virtual Hireling CreateHireling(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public virtual Hireling CreateHireling(World world, int snoId, TagMap tags)
         {
             throw new NotImplementedException();
         }

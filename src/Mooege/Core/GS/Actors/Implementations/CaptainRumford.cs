@@ -11,7 +11,7 @@ namespace Mooege.Core.GS.Actors.Implementations
     [HandledSNO(3739)]
     class CaptainRumford : InteractiveNPC
     {
-        public CaptainRumford(World world, int snoID, Dictionary<int, TagMapEntry> tags)
+        public CaptainRumford(World world, int snoID, TagMap tags)
             : base(world, snoID, tags)
         {
         }
@@ -22,8 +22,8 @@ namespace Mooege.Core.GS.Actors.Implementations
         // TODO If the client lacks all information, we need a system to combine mpq data with custom data
         protected override void ReadTags()
         {
-            if (!this.Tags.ContainsKey((int)MarkerTagTypes.ConversationList))
-                Tags.Add((int)MarkerTagTypes.ConversationList, new TagMapEntry((int)MarkerTagTypes.ConversationList, 108832, 2));
+            if (!Tags.ContainsKey(TagKeys.ConversationList))
+                Tags.Add(TagKeys.ConversationList, new TagMapEntry(TagKeys.ConversationList.ID, 108832, 2));
 
             base.ReadTags();
         }

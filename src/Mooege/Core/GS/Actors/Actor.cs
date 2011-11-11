@@ -90,7 +90,7 @@ namespace Mooege.Core.GS.Actors
         /// <summary>
         /// Tags read from MPQ's for the actor.
         /// </summary>
-        public Dictionary<int, TagMapEntry> Tags { get; private set; }
+        public TagMap Tags { get; private set; }
 
         /// <summary>
         /// Attribute map.
@@ -180,7 +180,7 @@ namespace Mooege.Core.GS.Actors
         /// <param name="world">The world that initially belongs to.</param>
         /// <param name="snoId">SNOId of the actor.</param>
         /// <param name="tags">TagMapEntry dictionary read for the actor from MPQ's..</param>           
-        protected Actor(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        protected Actor(World world, int snoId, TagMap tags)
             : base(world, world.NewActorID)
         {
             this.Attributes = new GameAttributeMap();
@@ -191,7 +191,7 @@ namespace Mooege.Core.GS.Actors
                 this.AnimationSet = (Mooege.Common.MPQ.FileFormats.AnimSet)Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.AnimSet][this.ActorData.AnimSetSNO].Data;
 
 
-            this.ActorSNO = new SNOHandle { Group = SNOGroup.Actor, SNOId = snoId };
+            this.ActorSNO = new SNOHandle(SNOGroup.Actor, snoId);
             this.NameSNOId = snoId;
             this.Quality = 0;
             this.Spawned = false;
@@ -305,7 +305,7 @@ namespace Mooege.Core.GS.Actors
             return new ACDEnterKnownMessage
             {
                 ActorID = this.DynamicID,
-                ActorSNOId = this.ActorSNO.SNOId,
+                ActorSNOId = this.ActorSNO.Id,
                 Field2 = this.Field2,
                 Field3 =  this.HasWorldLocation ? 0 : 1,
                 WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
@@ -555,28 +555,28 @@ namespace Mooege.Core.GS.Actors
         {
             if (this.Tags == null) return;
 
-            if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
-                this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
+            this.Scale = Tags.ContainsKey(TagKeys.Scale) ? Tags[TagKeys.Scale] : 1;
 
-            if (this.Tags.ContainsKey((int)MarkerTagTypes.QuestRange))
+
+            if (Tags.ContainsKey(TagKeys.QuestRange))
             {
-                int snoQuestRange = Tags[(int)MarkerTagTypes.QuestRange].Int2;
+                int snoQuestRange = Tags[TagKeys.QuestRange].Id;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange].ContainsKey(snoQuestRange))
                     _questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
                 //else Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
             }
 
-            if (this.Tags.ContainsKey((int)MarkerTagTypes.ConversationList))
+            if (Tags.ContainsKey(TagKeys.ConversationList))
             {
-                int snoConversationList = Tags[(int)MarkerTagTypes.ConversationList].Int2;
+                int snoConversationList = Tags[TagKeys.ConversationList].Id;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList].ContainsKey(snoConversationList))
                     ConversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
                 //else Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", SNOId, snoConversationList);
             }
 
 
-            if(this.Tags.ContainsKey((int)MarkerTagTypes.TriggeredConversation))
-                snoTriggeredConversation = Tags[(int)MarkerTagTypes.TriggeredConversation].Int2;
+            if(this.Tags.ContainsKey(TagKeys.TriggeredConversation))
+                snoTriggeredConversation = Tags[TagKeys.TriggeredConversation].Id;
 
 
         }
@@ -605,7 +605,7 @@ namespace Mooege.Core.GS.Actors
 
         public override string ToString()
         {
-            return string.Format("[Actor] [Type: {0}] SNOId:{1} DynamicId: {2} Position: {3} Name: {4}", this.ActorType, this.ActorSNO.SNOId, this.DynamicID, this.Position, this.ActorSNO.Name);
+            return string.Format("[Actor] [Type: {0}] SNOId:{1} DynamicId: {2} Position: {3} Name: {4}", this.ActorType, this.ActorSNO.Id, this.DynamicID, this.Position, this.ActorSNO.Name);
         }
     }
 

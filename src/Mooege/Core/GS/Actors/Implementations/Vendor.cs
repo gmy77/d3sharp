@@ -33,7 +33,7 @@ namespace Mooege.Core.GS.Actors.Implementations
     {
         private InventoryGrid _vendorGrid;
 
-        public Vendor(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Vendor(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
