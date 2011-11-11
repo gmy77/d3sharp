@@ -84,7 +84,7 @@ namespace Mooege.Core.GS.Actors
         /// </summary>
         public virtual PRTransform Transform
         {
-            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.FacingAngle, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
         /// <summary>
@@ -190,7 +190,6 @@ namespace Mooege.Core.GS.Actors
             if (this.ActorData.AnimSetSNO != -1)
                 this.AnimationSet = (Mooege.Common.MPQ.FileFormats.AnimSet)Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.AnimSet][this.ActorData.AnimSetSNO].Data;
 
-
             this.ActorSNO = new SNOHandle { Group = SNOGroup.Actor, SNOId = snoId };
             this.NameSNOId = snoId;
             this.Quality = 0;
@@ -266,7 +265,7 @@ namespace Mooege.Core.GS.Actors
         public void ChangeWorld(World world, StartingPoint startingPoint)
         {
             this.RotationAxis = startingPoint.RotationAxis;
-            this.RotationAmount = startingPoint.RotationAmount;
+            this.FacingAngle = startingPoint.FacingAngle;
 
             this.ChangeWorld(world, startingPoint.Position);
         }

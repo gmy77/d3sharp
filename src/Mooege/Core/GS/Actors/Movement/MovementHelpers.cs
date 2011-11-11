@@ -19,7 +19,7 @@
 using System;
 using Mooege.Core.GS.Common.Types.Math;
 
-namespace Mooege.Core.GS.Actors.Helpers
+namespace Mooege.Core.GS.Actors.Movement
 {
     public static class ActorHelpers
     {
@@ -40,6 +40,11 @@ namespace Mooege.Core.GS.Actors.Helpers
         public static float GetFacingAngle(Actor looker, Actor target)
         {
             return GetFacingAngle(looker.Position, target.Position);
+        }
+
+        public static float GetFacingAngle(Actor looker, Vector2F targetPosition)
+        {
+            return GetFacingAngle(looker.Position, new Vector3D(targetPosition.X, targetPosition.Y, 0));
         }
     }
 }

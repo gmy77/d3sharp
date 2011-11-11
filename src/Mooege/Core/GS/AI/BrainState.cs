@@ -1,4 +1,4 @@
-﻿﻿/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,20 +16,47 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
-using Mooege.Common.MPQ.FileFormats.Types;
-using Mooege.Core.GS.AI.Brains;
-using Mooege.Core.GS.Map;
+using System.Linq;
+using System.Text;
 
-namespace Mooege.Core.GS.Actors.Implementations
+namespace Mooege.Core.GS.AI
 {
-    [HandledSNO(6652)]
-    public class Zombie : Monster
+    /// <summary>
+    /// Available brain states.
+    /// </summary>
+    public enum BrainState
     {
-        public Zombie(World world, int snoId, Dictionary<int, TagMapEntry> tags)
-            : base(world, snoId, tags)
-        {
-            this.Brain = new MonsterBrain(this);
-        }
+        /// <summary>
+        /// The idle state, which basically means brain never got an update.
+        /// </summary>
+        Idle,
+
+        /// <summary>
+        /// The wandering state.
+        /// </summary>
+        Wander,
+
+        /// <summary>
+        /// Attack nearby enemies.
+        /// </summary>
+        Combat,
+
+        /// <summary>
+        /// Follow.
+        /// </summary>
+        Follow,
+
+        /// <summary>
+        /// Follow and guard.
+        /// </summary>
+        Guard,
+
+        /// <summary>
+        /// I see dead brains.
+        /// </summary>
+        Dead,
+        End
     }
 }

@@ -43,6 +43,8 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         public int SNOId { get; private set; }
 
+        public SNOHandle SceneSNO { get; private set; }
+
         /// <summary>
         /// Scene group's SNOId.
         /// Not sure on usage /raist.
@@ -88,7 +90,7 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         public PRTransform Transform
         {
-            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.FacingAngle, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
         /// <summary>
@@ -131,6 +133,7 @@ namespace Mooege.Core.GS.Map
         public Scene(World world, Vector3D position, int snoId, Scene parent)
             : base(world, world.NewSceneID)
         {
+            this.SceneSNO = new SNOHandle { Group = SNOGroup.Scene, SNOId = snoId };
             this.SNOId = snoId;
             this.Parent = parent;
             this.Subscenes = new List<Scene>();
@@ -214,7 +217,7 @@ namespace Mooege.Core.GS.Map
                     if (actor == null) continue;
 
                     var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
-                    actor.RotationAmount = marker.PRTransform.Quaternion.W;
+                    actor.FacingAngle = marker.PRTransform.Quaternion.W;
                     actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
                     actor.EnterWorld(position);

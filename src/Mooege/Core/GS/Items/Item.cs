@@ -122,7 +122,7 @@ namespace Mooege.Core.GS.Items
             this.EquipmentSlot = 0;
             this.InventoryLocation = new Vector2D { X = 0, Y = 0 };
             this.Scale = 1.0f;
-            this.RotationAmount = 0.0f;
+            this.FacingAngle = 0.0f;
             this.RotationAxis.Set(0.0f, 0.0f, 1.0f);
             this.CurrentState = ItemState.Normal;
             this.Field2 = 0x00000000;

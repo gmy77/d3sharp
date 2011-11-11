@@ -108,7 +108,7 @@ namespace Mooege.Core.GS.Generators
                 var scene = new Scene(world, position, sceneChunk.SNOHandle.SNOId, null)
                 {
                     MiniMapVisibility = SceneMiniMapVisibility.Revealed,                    
-                    RotationAmount = sceneChunk.PRTransform.Quaternion.W,
+                    FacingAngle = sceneChunk.PRTransform.Quaternion.W,
                     RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                     SceneGroupSNO = -1
                 };
@@ -145,7 +145,7 @@ namespace Mooege.Core.GS.Generators
                             var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
                             {
                                 MiniMapVisibility = SceneMiniMapVisibility.Revealed,
-                                RotationAmount = sceneChunk.PRTransform.Quaternion.W,
+                                FacingAngle = sceneChunk.PRTransform.Quaternion.W,
                                 RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                                 Specification = sceneChunk.SceneSpecification
                             };
