@@ -181,8 +181,6 @@ namespace Mooege.Core.GS.Players
             this.GBHandle.Type = (int)GBHandleType.Player;
             this.GBHandle.GBID = this.Toon.ClassID;
 
-            // actor values.
-            this.ActorSNO.SNOId = this.ClassSNO;
             this.Field2 = 0x00000009;
             this.Scale = this.ModelScale;
             this.FacingAngle = 0.05940768f;

@@ -41,7 +41,7 @@ namespace Mooege.Common.MPQ.FileFormats
                 _animations = new Dictionary<int, int>();
                 foreach (var x in TagMapAnimDefault.TagMapEntries)
                 {
-                    _animations.Add(x.TagID, x.Int2);
+                    _animations.Add(x.TagID, x.Int);
                 }
                 //not sure how better to do this, cant load parents anims on init as they may not be loaded first. - DarkLotus
                 if (SNOParentAnimSet != -1)
