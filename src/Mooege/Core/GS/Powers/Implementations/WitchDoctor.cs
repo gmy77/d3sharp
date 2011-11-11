@@ -34,10 +34,21 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
+            YIMP();
+
             var eff = SpawnProxy(TargetPosition);
             eff.PlayEffectGroup(106365);
             yield break;
 
+        }
+
+        private void YIMP()
+        {
+            float result;
+            bool success = PowerFormulaScript.Evaluate(Skills.Skills.WitchDoctor.PhysicalRealm.PoisonDart,
+                266512, User.Attributes, Rand, out result);
+            Logger.Error("fsuccess: {0}", success);
+            Logger.Error("fresult: {0}", result);
         }
     }
 

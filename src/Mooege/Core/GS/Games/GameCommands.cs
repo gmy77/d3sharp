@@ -436,56 +436,5 @@ namespace Mooege.Core.GS.Games
             return matches.Aggregate(matches.Count >= 1 ? "Scene Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
     }
-
-    [CommandGroup("effect", "Play an effect above your character.\nUsage: effect [FromUser] <efgSNO>")]
-    public class EffectCommand : CommandGroup
-    {
-        [DefaultCommand]
-        public string Effect(string[] @params, MooNetClient invokerClient)
-        {
-            if (@params == null)
-                return this.Fallback();
-
-            if (invokerClient == null)
-                return "You can not invoke this command from console.";
-
-            if (invokerClient.InGameClient == null)
-                return "You can only invoke this command while ingame.";
-
-            bool fromUser = false;
-            if (@params.Length >= 1 && @params[0] == "FromUser")
-                fromUser = true;
-
-            string efgParam;
-            if (fromUser && @params.Length >= 2)
-                efgParam = @params[1];
-            else if (@params.Length >= 1)
-                efgParam = @params[0];
-            else
-                return "Invalid arguments. Type 'help effect' to get help.";
-
-            int effectSNO;
-            if (!int.TryParse(efgParam, out effectSNO))
-                return "Invalid argument. Type 'help effect' to get help.";
-
-            int actorSNO = fromUser ? 6652 : 187359;
-
-            _TestActorWithEffect(invokerClient.InGameClient.Player, actorSNO, effectSNO, fromUser);
-
-            return string.Format("Playing effect {0} on actor.", effectSNO);
-        }
-
-        private void _TestActorWithEffect(Mooege.Core.GS.Actors.Actor user, int actorSNO, int effectSNO, bool fromUser)
-        {
-            var position = new Vector3D(user.Position);
-            position.Y += 10f;
-            var actor = new Mooege.Core.GS.Powers.EffectActor(user.World, actorSNO, position, 0,
-                                                              new Ticker.Helpers.TickSecondsTimer(user.World.Game, 5f));
-            if (fromUser)
-                user.PlayEffectGroup(effectSNO, actor);
-            else
-                actor.PlayEffectGroup(effectSNO);
-        }
-    }
 }
 
