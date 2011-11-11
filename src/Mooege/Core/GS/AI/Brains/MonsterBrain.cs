@@ -51,7 +51,7 @@ namespace Mooege.Core.GS.AI.Brains
 
             if (this.CurrentAction == null)
             {
-                var heading = new Vector3D(this.Body.Position.X + FastRandom.Current.Next(-10,10), this.Body.Position.Y + FastRandom.Current.Next(-10,10), this.Body.Position.Z);
+                var heading = new Vector3D(this.Body.Position.X + FastRandom.Instance.Next(-10,10), this.Body.Position.Y + FastRandom.Instance.Next(-10,10), this.Body.Position.Z);
                 
                 if (this.Body.Position.DistanceSquared(ref heading) > this.Body.WalkSpeed * this.Body.World.Game.TickRate) // just skip the movements that can be accomplished in a single game.update(). /raist.
                     this.CurrentAction = new MoveToPointAction(this.Body, heading);
