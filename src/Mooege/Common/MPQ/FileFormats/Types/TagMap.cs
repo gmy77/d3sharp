@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using CrystalMpq;
 using Gibbed.IO;
 using System.Reflection;
@@ -35,35 +34,37 @@ namespace Mooege.Common.MPQ.FileFormats.Types
     public class TagMap : ISerializableData, IEnumerable<TagMapEntry>
     {
         public int TagMapSize { get; private set; }
+        private readonly Dictionary<int, TagMapEntry> _tagMapEntries;
 
-        private Dictionary<int, TagMapEntry> _TagMapEntries { get; set; }
-
-        [Obsolete("Use TagKeys instead. If it is missing create it")]
+        [Obsolete("Use TagKeys instead. If it is missing create it.")]
         public List<TagMapEntry> TagMapEntries
         {
             get
             {
-                return _TagMapEntries.Values.ToList();
+                return _tagMapEntries.Values.ToList();
             }
         }
 
-        [Obsolete("Use TagKeys instead. If it is missing create it")]
-        public bool ContainsKey(int key) { return _TagMapEntries.ContainsKey(key); }
-        public bool ContainsKey(TagKeys.TagKey key) { return _TagMapEntries.ContainsKey(key.ID); }
+        public TagMap()
+        {
+            this._tagMapEntries = new Dictionary<int, TagMapEntry>();
+        }
 
-        public void Add(TagKeys.TagKey key, TagMapEntry entry) { _TagMapEntries.Add(key.ID, entry); }
+        [Obsolete("Use TagKeys instead. If it is missing create it.")]
+        public bool ContainsKey(int key) { return _tagMapEntries.ContainsKey(key); }
+
+        public bool ContainsKey(TagKeys.TagKey key) { return _tagMapEntries.ContainsKey(key.ID); }
+
+        public void Add(TagKeys.TagKey key, TagMapEntry entry) { _tagMapEntries.Add(key.ID, entry); }
 
         public void Read(MpqFileStream stream)
         {
-            object h = TagKeys.ArcaneEffectGroup;
-
-            TagMapSize = stream.ReadValueS32();
-            _TagMapEntries = new Dictionary<int, TagMapEntry>();
+            this.TagMapSize = stream.ReadValueS32();
 
             for (int i = 0; i < TagMapSize; i++)
             {
-                TagMapEntry entry = new TagMapEntry(stream);
-                _TagMapEntries.Add(entry.TagID, entry);
+                var entry = new TagMapEntry(stream);
+                this._tagMapEntries.Add(entry.TagID, entry);
             }
         }
 
@@ -73,7 +74,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         {
             get
             {
-                return _TagMapEntries[key.ID].Int;
+                return _tagMapEntries[key.ID].Int;
             }
         }
 
@@ -81,7 +82,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         {
             get
             {
-                return _TagMapEntries[key.ID].Float;
+                return _tagMapEntries[key.ID].Float;
             }
         }
 
@@ -89,7 +90,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         {
             get
             {
-                return _TagMapEntries[key.ID].ScriptFormula;
+                return _tagMapEntries[key.ID].ScriptFormula;
             }
         }
 
@@ -97,7 +98,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         {
             get
             {
-                return new SNOHandle(_TagMapEntries[key.ID].Int);
+                return new SNOHandle(_tagMapEntries[key.ID].Int);
             }
         }
 
@@ -106,21 +107,25 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         {
             get
             {
-                return _TagMapEntries[key];
+                return _tagMapEntries[key];
             }
         }
 
         #endregion
 
+        #region enumurators
+
         public IEnumerator<TagMapEntry> GetEnumerator()
         {
-            return _TagMapEntries.Values.GetEnumerator();
+            return _tagMapEntries.Values.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return _TagMapEntries.Values.GetEnumerator();
+            return _tagMapEntries.Values.GetEnumerator();
         }
+
+        #endregion
     }
 
     /// <summary>
@@ -140,20 +145,21 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public class TagKeySNO : TagKey { }
 
         # region compile a dictionary to access keys from ids. If you need a readable name for a TagID, look up its key and get its name
-        private static Dictionary<int, TagKey> tags = new Dictionary<int, TagKey>();
+
+        private static readonly Dictionary<int, TagKey> Tags = new Dictionary<int, TagKey>();
 
         public static TagKey GetKey(int index)
         {
-            return tags.ContainsKey(index) ? tags[index] : null;
+            return Tags.ContainsKey(index) ? Tags[index] : null;
         }
 
         static TagKeys()
         {
             foreach (FieldInfo field in typeof(TagKeys).GetFields())
             {
-                TagKey key = field.GetValue(null) as TagKey;
+                var key = field.GetValue(null) as TagKey;
                 key.Name = field.Name;
-                tags.Add(key.ID, key);
+                Tags.Add(key.ID, key);
             }
         }
         #endregion
@@ -174,9 +180,6 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public static TagKeySNO DestinationLevelArea = new TagKeySNO() { ID = 526853 };
 
         public static TagKeySNO TriggeredConversation = new TagKeySNO() { ID = 528128 };
-
-
-
 
         // Actor Tags
         public static TagKeySNO Flippy = new TagKeySNO() { ID = 65688 };
@@ -201,7 +204,6 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public static TagKeySNO Spell1EffectGroup = new TagKeySNO() { ID = 74077 };
         public static TagKeySNO Spell2EffectGroup = new TagKeySNO() { ID = 74078 };
     }
-
 
     public class TagMapEntry
     {
