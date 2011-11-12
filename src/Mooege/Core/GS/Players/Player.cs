@@ -686,7 +686,7 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void RevealScenesToPlayer()
         {
-            var scenes = this.GetScenesInRegion(DefaultQueryProximity * 2);
+            var scenes = this.GetScenesInRegion(DefaultQueryProximityLenght * 2);
 
             foreach (var scene in scenes) // reveal scenes in player's proximity.
             {

@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorldVisualizer));
             this.pictureBoxStage = new System.Windows.Forms.PictureBox();
-            this.groupOptions = new System.Windows.Forms.GroupBox();
             this.checkBoxFillCells = new System.Windows.Forms.CheckBox();
             this.checkBoxPrintLabels = new System.Windows.Forms.CheckBox();
             this.groupActorVisibility = new System.Windows.Forms.GroupBox();
@@ -43,17 +42,24 @@
             this.checkBoxSubScenes = new System.Windows.Forms.CheckBox();
             this.checkBoxMasterScenes = new System.Windows.Forms.CheckBox();
             this.groupSettings = new System.Windows.Forms.GroupBox();
+            this.groupBoxRenderMode = new System.Windows.Forms.GroupBox();
+            this.radioButtonPlayerProximity = new System.Windows.Forms.RadioButton();
+            this.radioButtonAllWorld = new System.Windows.Forms.RadioButton();
             this.groupPreview = new System.Windows.Forms.GroupBox();
             this.pictureBoxPreview = new System.Windows.Forms.PictureBox();
             this.panelStage = new System.Windows.Forms.Panel();
+            this.groupOptions = new System.Windows.Forms.GroupBox();
+            this.checkBoxDrawPlayerProximityCircle = new System.Windows.Forms.CheckBox();
+            this.checkBoxDrawPlayerProximityRect = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStage)).BeginInit();
-            this.groupOptions.SuspendLayout();
             this.groupActorVisibility.SuspendLayout();
             this.groupMapVisibility.SuspendLayout();
             this.groupSettings.SuspendLayout();
+            this.groupBoxRenderMode.SuspendLayout();
             this.groupPreview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).BeginInit();
             this.panelStage.SuspendLayout();
+            this.groupOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBoxStage
@@ -66,27 +72,14 @@
             this.pictureBoxStage.TabStop = false;
             this.pictureBoxStage.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxStage_Paint);
             // 
-            // groupOptions
-            // 
-            this.groupOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupOptions.Controls.Add(this.checkBoxFillCells);
-            this.groupOptions.Controls.Add(this.checkBoxPrintLabels);
-            this.groupOptions.Location = new System.Drawing.Point(446, 10);
-            this.groupOptions.Name = "groupOptions";
-            this.groupOptions.Size = new System.Drawing.Size(119, 191);
-            this.groupOptions.TabIndex = 5;
-            this.groupOptions.TabStop = false;
-            this.groupOptions.Text = "Render Options";
-            // 
             // checkBoxFillCells
             // 
             this.checkBoxFillCells.AutoSize = true;
-            this.checkBoxFillCells.Location = new System.Drawing.Point(6, 42);
+            this.checkBoxFillCells.Location = new System.Drawing.Point(6, 43);
             this.checkBoxFillCells.Name = "checkBoxFillCells";
-            this.checkBoxFillCells.Size = new System.Drawing.Size(63, 17);
+            this.checkBoxFillCells.Size = new System.Drawing.Size(96, 17);
             this.checkBoxFillCells.TabIndex = 1;
-            this.checkBoxFillCells.Text = "Fill Cells";
+            this.checkBoxFillCells.Text = "Fill Visible Cells";
             this.checkBoxFillCells.UseVisualStyleBackColor = true;
             this.checkBoxFillCells.CheckedChanged += new System.EventHandler(this.checkFillCells_CheckedChanged);
             // 
@@ -97,22 +90,22 @@
             this.checkBoxPrintLabels.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxPrintLabels.Location = new System.Drawing.Point(6, 19);
             this.checkBoxPrintLabels.Name = "checkBoxPrintLabels";
-            this.checkBoxPrintLabels.Size = new System.Drawing.Size(81, 17);
+            this.checkBoxPrintLabels.Size = new System.Drawing.Size(137, 17);
             this.checkBoxPrintLabels.TabIndex = 0;
-            this.checkBoxPrintLabels.Text = "Print Labels";
+            this.checkBoxPrintLabels.Text = "Print Labels On Scenes";
             this.checkBoxPrintLabels.UseVisualStyleBackColor = true;
             this.checkBoxPrintLabels.CheckedChanged += new System.EventHandler(this.checkPrintLabels_CheckedChanged);
             // 
             // groupActorVisibility
             // 
-            this.groupActorVisibility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupActorVisibility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.groupActorVisibility.Controls.Add(this.checkBoxMonsters);
             this.groupActorVisibility.Controls.Add(this.checkBoxPlayers);
             this.groupActorVisibility.Controls.Add(this.checkBoxNPCs);
-            this.groupActorVisibility.Location = new System.Drawing.Point(321, 10);
+            this.groupActorVisibility.Location = new System.Drawing.Point(360, 13);
             this.groupActorVisibility.Name = "groupActorVisibility";
-            this.groupActorVisibility.Size = new System.Drawing.Size(119, 191);
+            this.groupActorVisibility.Size = new System.Drawing.Size(158, 191);
             this.groupActorVisibility.TabIndex = 4;
             this.groupActorVisibility.TabStop = false;
             this.groupActorVisibility.Text = "Actor Visibility";
@@ -125,9 +118,9 @@
             this.checkBoxMonsters.ForeColor = System.Drawing.Color.Green;
             this.checkBoxMonsters.Location = new System.Drawing.Point(6, 65);
             this.checkBoxMonsters.Name = "checkBoxMonsters";
-            this.checkBoxMonsters.Size = new System.Drawing.Size(69, 17);
+            this.checkBoxMonsters.Size = new System.Drawing.Size(102, 17);
             this.checkBoxMonsters.TabIndex = 4;
-            this.checkBoxMonsters.Text = "Monsters";
+            this.checkBoxMonsters.Text = "Monsters Visible";
             this.checkBoxMonsters.UseVisualStyleBackColor = true;
             this.checkBoxMonsters.CheckedChanged += new System.EventHandler(this.checkMonsters_CheckedChanged);
             // 
@@ -139,9 +132,9 @@
             this.checkBoxPlayers.ForeColor = System.Drawing.Color.DarkViolet;
             this.checkBoxPlayers.Location = new System.Drawing.Point(6, 19);
             this.checkBoxPlayers.Name = "checkBoxPlayers";
-            this.checkBoxPlayers.Size = new System.Drawing.Size(60, 17);
+            this.checkBoxPlayers.Size = new System.Drawing.Size(93, 17);
             this.checkBoxPlayers.TabIndex = 2;
-            this.checkBoxPlayers.Text = "Players";
+            this.checkBoxPlayers.Text = "Players Visible";
             this.checkBoxPlayers.UseVisualStyleBackColor = true;
             this.checkBoxPlayers.CheckedChanged += new System.EventHandler(this.checkPlayers_CheckedChanged);
             // 
@@ -153,23 +146,23 @@
             this.checkBoxNPCs.ForeColor = System.Drawing.Color.Orange;
             this.checkBoxNPCs.Location = new System.Drawing.Point(6, 42);
             this.checkBoxNPCs.Name = "checkBoxNPCs";
-            this.checkBoxNPCs.Size = new System.Drawing.Size(53, 17);
+            this.checkBoxNPCs.Size = new System.Drawing.Size(86, 17);
             this.checkBoxNPCs.TabIndex = 3;
-            this.checkBoxNPCs.Text = "NPCs";
+            this.checkBoxNPCs.Text = "NPCs Visible";
             this.checkBoxNPCs.UseVisualStyleBackColor = true;
             this.checkBoxNPCs.CheckedChanged += new System.EventHandler(this.checkNPCs_CheckedChanged);
             // 
             // groupMapVisibility
             // 
-            this.groupMapVisibility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupMapVisibility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.groupMapVisibility.Controls.Add(this.checkBoxUnwalkableCells);
             this.groupMapVisibility.Controls.Add(this.checkBoxWalkableCells);
             this.groupMapVisibility.Controls.Add(this.checkBoxSubScenes);
             this.groupMapVisibility.Controls.Add(this.checkBoxMasterScenes);
             this.groupMapVisibility.Location = new System.Drawing.Point(196, 10);
             this.groupMapVisibility.Name = "groupMapVisibility";
-            this.groupMapVisibility.Size = new System.Drawing.Size(119, 191);
+            this.groupMapVisibility.Size = new System.Drawing.Size(158, 191);
             this.groupMapVisibility.TabIndex = 3;
             this.groupMapVisibility.TabStop = false;
             this.groupMapVisibility.Text = "Map Visibility";
@@ -177,14 +170,12 @@
             // checkBoxUnwalkableCells
             // 
             this.checkBoxUnwalkableCells.AutoSize = true;
-            this.checkBoxUnwalkableCells.Checked = true;
-            this.checkBoxUnwalkableCells.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxUnwalkableCells.ForeColor = System.Drawing.Color.Red;
             this.checkBoxUnwalkableCells.Location = new System.Drawing.Point(6, 88);
             this.checkBoxUnwalkableCells.Name = "checkBoxUnwalkableCells";
-            this.checkBoxUnwalkableCells.Size = new System.Drawing.Size(107, 17);
+            this.checkBoxUnwalkableCells.Size = new System.Drawing.Size(140, 17);
             this.checkBoxUnwalkableCells.TabIndex = 4;
-            this.checkBoxUnwalkableCells.Text = "Unwalkable Cells";
+            this.checkBoxUnwalkableCells.Text = "Unwalkable Cells Visible";
             this.checkBoxUnwalkableCells.UseVisualStyleBackColor = true;
             this.checkBoxUnwalkableCells.CheckedChanged += new System.EventHandler(this.checkUnwalkableCells_CheckedChanged);
             // 
@@ -196,9 +187,9 @@
             this.checkBoxWalkableCells.ForeColor = System.Drawing.Color.Blue;
             this.checkBoxWalkableCells.Location = new System.Drawing.Point(6, 65);
             this.checkBoxWalkableCells.Name = "checkBoxWalkableCells";
-            this.checkBoxWalkableCells.Size = new System.Drawing.Size(96, 17);
+            this.checkBoxWalkableCells.Size = new System.Drawing.Size(129, 17);
             this.checkBoxWalkableCells.TabIndex = 3;
-            this.checkBoxWalkableCells.Text = "Walkable Cells";
+            this.checkBoxWalkableCells.Text = "Walkable Cells Visible";
             this.checkBoxWalkableCells.UseVisualStyleBackColor = true;
             this.checkBoxWalkableCells.CheckedChanged += new System.EventHandler(this.checkWalkableCells_CheckedChanged);
             // 
@@ -210,9 +201,9 @@
             this.checkBoxSubScenes.ForeColor = System.Drawing.Color.DarkGray;
             this.checkBoxSubScenes.Location = new System.Drawing.Point(6, 42);
             this.checkBoxSubScenes.Name = "checkBoxSubScenes";
-            this.checkBoxSubScenes.Size = new System.Drawing.Size(84, 17);
+            this.checkBoxSubScenes.Size = new System.Drawing.Size(117, 17);
             this.checkBoxSubScenes.TabIndex = 2;
-            this.checkBoxSubScenes.Text = "Sub Scenes";
+            this.checkBoxSubScenes.Text = "Sub Scenes Visible";
             this.checkBoxSubScenes.UseVisualStyleBackColor = true;
             this.checkBoxSubScenes.CheckedChanged += new System.EventHandler(this.checkSubScenes_CheckedChanged);
             // 
@@ -223,16 +214,17 @@
             this.checkBoxMasterScenes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxMasterScenes.Location = new System.Drawing.Point(6, 19);
             this.checkBoxMasterScenes.Name = "checkBoxMasterScenes";
-            this.checkBoxMasterScenes.Size = new System.Drawing.Size(97, 17);
+            this.checkBoxMasterScenes.Size = new System.Drawing.Size(130, 17);
             this.checkBoxMasterScenes.TabIndex = 1;
-            this.checkBoxMasterScenes.Text = "Master Scenes";
+            this.checkBoxMasterScenes.Text = "Master Scenes Visible";
             this.checkBoxMasterScenes.UseVisualStyleBackColor = true;
             this.checkBoxMasterScenes.CheckedChanged += new System.EventHandler(this.checkMasterScenes_CheckedChanged);
             // 
             // groupSettings
             // 
-            this.groupSettings.Controls.Add(this.groupPreview);
             this.groupSettings.Controls.Add(this.groupOptions);
+            this.groupSettings.Controls.Add(this.groupBoxRenderMode);
+            this.groupSettings.Controls.Add(this.groupPreview);
             this.groupSettings.Controls.Add(this.groupMapVisibility);
             this.groupSettings.Controls.Add(this.groupActorVisibility);
             this.groupSettings.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -242,10 +234,49 @@
             this.groupSettings.TabIndex = 1;
             this.groupSettings.TabStop = false;
             // 
+            // groupBoxRenderMode
+            // 
+            this.groupBoxRenderMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBoxRenderMode.Controls.Add(this.checkBoxDrawPlayerProximityRect);
+            this.groupBoxRenderMode.Controls.Add(this.checkBoxDrawPlayerProximityCircle);
+            this.groupBoxRenderMode.Controls.Add(this.radioButtonPlayerProximity);
+            this.groupBoxRenderMode.Controls.Add(this.radioButtonAllWorld);
+            this.groupBoxRenderMode.Location = new System.Drawing.Point(524, 13);
+            this.groupBoxRenderMode.Name = "groupBoxRenderMode";
+            this.groupBoxRenderMode.Size = new System.Drawing.Size(177, 191);
+            this.groupBoxRenderMode.TabIndex = 6;
+            this.groupBoxRenderMode.TabStop = false;
+            this.groupBoxRenderMode.Text = "Render Mode";
+            // 
+            // radioButtonPlayerProximity
+            // 
+            this.radioButtonPlayerProximity.AutoSize = true;
+            this.radioButtonPlayerProximity.Enabled = false;
+            this.radioButtonPlayerProximity.Location = new System.Drawing.Point(6, 42);
+            this.radioButtonPlayerProximity.Name = "radioButtonPlayerProximity";
+            this.radioButtonPlayerProximity.Size = new System.Drawing.Size(149, 17);
+            this.radioButtonPlayerProximity.TabIndex = 0;
+            this.radioButtonPlayerProximity.Text = "Objects In Player Proximity";
+            this.radioButtonPlayerProximity.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonAllWorld
+            // 
+            this.radioButtonAllWorld.AutoSize = true;
+            this.radioButtonAllWorld.Checked = true;
+            this.radioButtonAllWorld.Location = new System.Drawing.Point(6, 19);
+            this.radioButtonAllWorld.Name = "radioButtonAllWorld";
+            this.radioButtonAllWorld.Size = new System.Drawing.Size(82, 17);
+            this.radioButtonAllWorld.TabIndex = 0;
+            this.radioButtonAllWorld.TabStop = true;
+            this.radioButtonAllWorld.Text = "All the world";
+            this.radioButtonAllWorld.UseVisualStyleBackColor = true;
+            this.radioButtonAllWorld.CheckedChanged += new System.EventHandler(this.radioButtonAllWorld_CheckedChanged);
+            // 
             // groupPreview
             // 
-            this.groupPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.groupPreview.Controls.Add(this.pictureBoxPreview);
             this.groupPreview.Location = new System.Drawing.Point(6, 10);
             this.groupPreview.Name = "groupPreview";
@@ -276,6 +307,41 @@
             this.panelStage.TabIndex = 0;
             this.panelStage.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelStage_Scroll);
             // 
+            // groupOptions
+            // 
+            this.groupOptions.Controls.Add(this.checkBoxFillCells);
+            this.groupOptions.Controls.Add(this.checkBoxPrintLabels);
+            this.groupOptions.Location = new System.Drawing.Point(707, 13);
+            this.groupOptions.Name = "groupOptions";
+            this.groupOptions.Size = new System.Drawing.Size(158, 191);
+            this.groupOptions.TabIndex = 7;
+            this.groupOptions.TabStop = false;
+            this.groupOptions.Text = "Options";
+            // 
+            // checkBoxDrawPlayerProximityCircle
+            // 
+            this.checkBoxDrawPlayerProximityCircle.AutoSize = true;
+            this.checkBoxDrawPlayerProximityCircle.Enabled = false;
+            this.checkBoxDrawPlayerProximityCircle.Location = new System.Drawing.Point(5, 65);
+            this.checkBoxDrawPlayerProximityCircle.Name = "checkBoxDrawPlayerProximityCircle";
+            this.checkBoxDrawPlayerProximityCircle.Size = new System.Drawing.Size(156, 17);
+            this.checkBoxDrawPlayerProximityCircle.TabIndex = 1;
+            this.checkBoxDrawPlayerProximityCircle.Text = "Draw Player Proximity Circle";
+            this.checkBoxDrawPlayerProximityCircle.UseVisualStyleBackColor = true;
+            this.checkBoxDrawPlayerProximityCircle.CheckedChanged += new System.EventHandler(this.checkBoxDrawPlayerProximityCircle_CheckedChanged);
+            // 
+            // checkBoxDrawPlayerProximityRect
+            // 
+            this.checkBoxDrawPlayerProximityRect.AutoSize = true;
+            this.checkBoxDrawPlayerProximityRect.Enabled = false;
+            this.checkBoxDrawPlayerProximityRect.Location = new System.Drawing.Point(5, 87);
+            this.checkBoxDrawPlayerProximityRect.Name = "checkBoxDrawPlayerProximityRect";
+            this.checkBoxDrawPlayerProximityRect.Size = new System.Drawing.Size(153, 17);
+            this.checkBoxDrawPlayerProximityRect.TabIndex = 2;
+            this.checkBoxDrawPlayerProximityRect.Text = "Draw Player Proximity Rect";
+            this.checkBoxDrawPlayerProximityRect.UseVisualStyleBackColor = true;
+            this.checkBoxDrawPlayerProximityRect.CheckedChanged += new System.EventHandler(this.checkBoxDrawPlayerProximityRect_CheckedChanged);
+            // 
             // WorldVisualizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -290,16 +356,18 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WorldVisualizer_FormClosing);
             this.Load += new System.EventHandler(this.WorldVisualizer_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStage)).EndInit();
-            this.groupOptions.ResumeLayout(false);
-            this.groupOptions.PerformLayout();
             this.groupActorVisibility.ResumeLayout(false);
             this.groupActorVisibility.PerformLayout();
             this.groupMapVisibility.ResumeLayout(false);
             this.groupMapVisibility.PerformLayout();
             this.groupSettings.ResumeLayout(false);
+            this.groupBoxRenderMode.ResumeLayout(false);
+            this.groupBoxRenderMode.PerformLayout();
             this.groupPreview.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).EndInit();
             this.panelStage.ResumeLayout(false);
+            this.groupOptions.ResumeLayout(false);
+            this.groupOptions.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -316,13 +384,18 @@
         private System.Windows.Forms.CheckBox checkBoxNPCs;
         private System.Windows.Forms.CheckBox checkBoxPlayers;
         private System.Windows.Forms.GroupBox groupActorVisibility;
-        private System.Windows.Forms.GroupBox groupOptions;
         private System.Windows.Forms.CheckBox checkBoxFillCells;
         private System.Windows.Forms.CheckBox checkBoxPrintLabels;
         private System.Windows.Forms.GroupBox groupSettings;
         private System.Windows.Forms.Panel panelStage;
         private System.Windows.Forms.GroupBox groupPreview;
         private System.Windows.Forms.PictureBox pictureBoxPreview;
+        private System.Windows.Forms.GroupBox groupBoxRenderMode;
+        private System.Windows.Forms.RadioButton radioButtonPlayerProximity;
+        private System.Windows.Forms.RadioButton radioButtonAllWorld;
+        private System.Windows.Forms.GroupBox groupOptions;
+        private System.Windows.Forms.CheckBox checkBoxDrawPlayerProximityRect;
+        private System.Windows.Forms.CheckBox checkBoxDrawPlayerProximityCircle;
 
     }
 }

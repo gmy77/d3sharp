@@ -19,31 +19,40 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Map.Debug
 {
     public partial class WorldVisualizer : Form
     {
         public World World { get; private set; }
+        public Player Player { get; private set; }
         public DebugNavMesh Mesh { get; private set; }
         public Bitmap StageBitmap { get; private set; }
         public Bitmap PreviewBitmap { get; private set; }
 
         private readonly Pen _selectionPen = new Pen(Brushes.Blue, 2);
 
-        public WorldVisualizer(World world)
+        public WorldVisualizer(World world, Player player = null)
         {
             InitializeComponent();
 
             this.pictureBoxStage.DoubleBuffer();
             this.pictureBoxPreview.DoubleBuffer();
+
             this.World = world;
+            this.Player = player;
+            
+            radioButtonPlayerProximity.Enabled = radioButtonPlayerProximity.Checked = this.Player != null;
+            checkBoxDrawPlayerProximityCircle.Enabled = checkBoxDrawPlayerProximityCircle.Checked = this.Player != null;
+            checkBoxDrawPlayerProximityRect.Enabled = checkBoxDrawPlayerProximityRect.Checked = this.Player != null;
         }
 
         private void WorldVisualizer_Load(object sender, EventArgs e)
         {
             this.Text = string.Format("World Visualizer - {0} [{1}]", this.World.WorldSNO.Name, this.World.WorldSNO.Id);
-            this.Mesh = new DebugNavMesh(this.World);
+            this.Mesh = new DebugNavMesh(this.World, this.Player);
+            this.Mesh.Update(this.radioButtonAllWorld.Checked);
 
             this.RequestStageRedraw();
         }
@@ -61,6 +70,8 @@ namespace Mooege.Core.GS.Map.Debug
             this.Mesh.DrawMonsters = checkBoxMonsters.Checked;
             this.Mesh.DrawNPCs = checkBoxNPCs.Checked;
             this.Mesh.DrawPlayers = checkBoxPlayers.Checked;
+            this.Mesh.DrawPlayerProximityCircle = checkBoxDrawPlayerProximityCircle.Checked;
+            this.Mesh.DrawPlayerProximityRectangle = checkBoxDrawPlayerProximityRect.Checked;
             this.Mesh.PrintLabels = checkBoxPrintLabels.Checked;
             this.Mesh.FillCells = checkBoxFillCells.Checked;
 
@@ -189,6 +200,31 @@ namespace Mooege.Core.GS.Map.Debug
             this.RequestStageRedraw();
         }
 
+        private void radioButtonAllWorld_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.Mesh == null)
+                return;
+
+            this.Mesh.Update(this.radioButtonAllWorld.Checked);
+            this.RequestStageRedraw();
+        }
+
+        private void checkBoxDrawPlayerProximityCircle_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.Mesh == null)
+                return;
+
+            this.RequestStageRedraw();
+        }
+
+        private void checkBoxDrawPlayerProximityRect_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.Mesh == null)
+                return;
+
+            this.RequestStageRedraw();
+        }
+
         #endregion
 
         #region bitmap helpers
@@ -240,6 +276,6 @@ namespace Mooege.Core.GS.Map.Debug
         }
 
         #endregion        
-
+        
     }    
 }

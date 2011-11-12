@@ -27,6 +27,7 @@ namespace Mooege.Core.GS.Map.Debug
     public class DebugNavMesh
     {
         public World World { get; private set; }
+        public Player Player { get; private set; }
         public Rect Bounds { get { return World.QuadTree.RootNode.Bounds; } }
 
         public object Lock = new object();
@@ -48,6 +49,8 @@ namespace Mooege.Core.GS.Map.Debug
         public bool DrawPlayers;
         public bool PrintLabels;
         public bool FillCells;
+        public bool DrawPlayerProximityCircle;
+        public bool DrawPlayerProximityRectangle;
 
         private readonly Pen _masterScenePen = new Pen(Color.Black, 1.0f);
         private readonly Pen _subScenePen = new Pen(Color.DarkGray, 1.0f);
@@ -55,11 +58,15 @@ namespace Mooege.Core.GS.Map.Debug
         private readonly Pen _unwalkablePen = new Pen(Color.Red, 1.0f);
         private readonly Brush _walkableBrush = Brushes.Blue;
         private readonly Pen _walkablePen = new Pen(Color.Blue, 1.0f);
-        private readonly Font _sceneFont = new Font("Verdana", 7);
+        private readonly Pen _playerProximityPen = new Pen(Brushes.DarkViolet, 2.0f);
+        private readonly Font _sceneFont = new Font("Verdana", 7);        
 
-        public DebugNavMesh(World world)
+        public DebugNavMesh(World world, Player player = null)
         {
             this.World = world;
+            this.Player = player;
+
+            this._subScenePen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
 
             this.MasterScenes = new List<Scene>();
             this.SubScenes = new List<Scene>();
@@ -67,16 +74,12 @@ namespace Mooege.Core.GS.Map.Debug
             this.WalkableCells = new List<Rect>();
             this.Players = new List<Player>();
             this.Monsters = new List<Monster>();
-            this.NPCs = new List<NPC>();
-
-            this._subScenePen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
-
-            this.Update();
+            this.NPCs = new List<NPC>();           
         }
 
         #region update
 
-        public void Update()
+        public void Update(bool processObjectsInAllTheWorld)
         {
             lock (this.Lock)
             {
@@ -88,7 +91,12 @@ namespace Mooege.Core.GS.Map.Debug
                 this.Monsters.Clear();
                 this.NPCs.Clear();
 
-                foreach (var scene in World.QuadTree.Query<Scene>(World.QuadTree.RootNode.Bounds))
+
+                var scenes = (processObjectsInAllTheWorld || this.Player == null)
+                                         ? World.QuadTree.Query<Scene>(World.QuadTree.RootNode.Bounds)
+                                         : this.Player.GetScenesInRegion();
+
+                foreach (var scene in scenes)
                 {
                     if (scene.Parent == null)
                         this.MasterScenes.Add(scene);
@@ -98,7 +106,11 @@ namespace Mooege.Core.GS.Map.Debug
                     this.AnalyzeScene(scene);
                 }
 
-                foreach (var actor in World.QuadTree.Query<Actor>(World.QuadTree.RootNode.Bounds))
+                var actors = (processObjectsInAllTheWorld || this.Player == null)
+                         ? World.QuadTree.Query<Actor>(World.QuadTree.RootNode.Bounds)
+                         : this.Player.GetActorsInRange();
+
+                foreach (var actor in actors)
                 {
                     if (actor is Player)
                         this.Players.Add(actor as Player);
@@ -201,6 +213,12 @@ namespace Mooege.Core.GS.Map.Debug
                     this.DrawActor(player, graphics, Brushes.DarkViolet, 7);
                 }
             }
+
+            if(this.DrawPlayerProximityCircle)
+                this.DrawProximityCircle(graphics);
+
+            if(this.DrawPlayerProximityRectangle)
+                this.DrawProximityRectangle(graphics);
         }
 
         private void DrawScene(Graphics graphics, Scene scene)
@@ -239,6 +257,31 @@ namespace Mooege.Core.GS.Map.Debug
         {
             var rect = new Rectangle((int)actor.Bounds.X, (int)actor.Bounds.Y, (int)actor.Bounds.Width + radius, (int)actor.Bounds.Height + radius);
             graphics.FillEllipse(brush, rect);
+        }
+
+        private void DrawProximityCircle(Graphics graphics)
+        {
+            if (this.Player == null) 
+                return;
+
+            var rect = new RectangleF(this.Player.Position.X - Actor.DefaultQueryProximityRadius,
+                                      this.Player.Position.Y - Actor.DefaultQueryProximityRadius,
+                                      Actor.DefaultQueryProximityRadius * 2,
+                                      Actor.DefaultQueryProximityRadius * 2);
+
+            graphics.DrawEllipse(this._playerProximityPen, rect);
+        }
+
+        private void DrawProximityRectangle(Graphics graphics)
+        {
+            if (this.Player == null)
+                return;
+
+            graphics.DrawRectangle(this._playerProximityPen,
+                                   this.Player.Position.X - Actor.DefaultQueryProximityLenght/2,
+                                   this.Player.Position.Y - Actor.DefaultQueryProximityLenght/2,
+                                   Actor.DefaultQueryProximityLenght,
+                                   Actor.DefaultQueryProximityLenght);
         }
 
         private void DrawLabels(Graphics graphics)
