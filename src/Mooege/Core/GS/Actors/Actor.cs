@@ -36,6 +36,7 @@ using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -555,28 +556,28 @@ namespace Mooege.Core.GS.Actors
         {
             if (this.Tags == null) return;
 
-            this.Scale = Tags.ContainsKey(TagKeys.Scale) ? Tags[TagKeys.Scale] : 1;
+            this.Scale = Tags.ContainsKey(MarkerKeys.Scale) ? Tags[MarkerKeys.Scale] : 1;
 
 
-            if (Tags.ContainsKey(TagKeys.QuestRange))
+            if (Tags.ContainsKey(MarkerKeys.QuestRange))
             {
-                int snoQuestRange = Tags[TagKeys.QuestRange].Id;
+                int snoQuestRange = Tags[MarkerKeys.QuestRange].Id;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange].ContainsKey(snoQuestRange))
                     _questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
                 //else Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
             }
 
-            if (Tags.ContainsKey(TagKeys.ConversationList))
+            if (Tags.ContainsKey(MarkerKeys.ConversationList))
             {
-                int snoConversationList = Tags[TagKeys.ConversationList].Id;
+                int snoConversationList = Tags[MarkerKeys.ConversationList].Id;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList].ContainsKey(snoConversationList))
                     ConversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
                 //else Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", SNOId, snoConversationList);
             }
 
 
-            if(this.Tags.ContainsKey(TagKeys.TriggeredConversation))
-                snoTriggeredConversation = Tags[TagKeys.TriggeredConversation].Id;
+            if (this.Tags.ContainsKey(MarkerKeys.TriggeredConversation))
+                snoTriggeredConversation = Tags[MarkerKeys.TriggeredConversation].Id;
 
 
         }

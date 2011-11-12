@@ -24,6 +24,7 @@ using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
 using System;
 using Mooege.Common.Helpers;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -34,6 +35,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public int SNOParentAnimSet { get; private set; }
         public TagMap TagMapAnimDefault { get; private set; }
         public TagMap[] AnimSetTagMaps;
+
+        
         private Dictionary<int, int> _animations;
         public Dictionary<int, int> Animations { get {
             if (_animations == null)
@@ -56,7 +59,7 @@ namespace Mooege.Common.MPQ.FileFormats
                
             } return _animations;
         } }
-
+        
         public AnimSet(MpqFile file)
         {
             var stream = file.Open();

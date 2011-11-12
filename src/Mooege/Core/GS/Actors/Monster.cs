@@ -32,6 +32,7 @@ using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
 using System;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors
 {

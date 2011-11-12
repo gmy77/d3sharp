@@ -18,7 +18,6 @@
 
 using System.Collections.Generic;
 using Mooege.Common;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Players;
@@ -28,6 +27,7 @@ using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Common.Helpers;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -44,14 +44,14 @@ namespace Mooege.Core.GS.Actors
         {
             this.Destination = new ResolvedPortalDestination
             {
-                WorldSNO = tags[TagKeys.DestinationWorld].Id,
+                WorldSNO = tags[MarkerKeys.DestinationWorld].Id,
             };
 
-            if (tags.ContainsKey(TagKeys.DestinationLevelArea))
-                this.Destination.DestLevelAreaSNO = tags[TagKeys.DestinationLevelArea].Id;
+            if (tags.ContainsKey(MarkerKeys.DestinationLevelArea))
+                this.Destination.DestLevelAreaSNO = tags[MarkerKeys.DestinationLevelArea].Id;
 
-            if (tags.ContainsKey(TagKeys.DestinationActorTag))
-                this.Destination.StartingPointActorTag = tags[TagKeys.DestinationActorTag];
+            if (tags.ContainsKey(MarkerKeys.DestinationActorTag))
+                this.Destination.StartingPointActorTag = tags[MarkerKeys.DestinationActorTag];
             else
                 Logger.Warn("Found portal {0}without target location actor", this.ActorSNO.Id);
 

@@ -24,16 +24,19 @@ using CrystalMpq;
 using Gibbed.IO;
 using System.Reflection;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Common.MPQ;
+using Mooege.Common.MPQ.FileFormats.Types;
 
-namespace Mooege.Common.MPQ.FileFormats.Types
+namespace Mooege.Core.GS.Common.Types.TagMap
 {
     /// <summary>
-    /// Implementation of a dictionary like tag map.
+    /// Implementation of a dictionary-like tag map.
     /// You can access elements either using a key object that identifies which of the TagKey
     /// fields holds your value or by accessing the entry directly with the interger tag id.
     /// </summary>
     public class TagMap : ISerializableData, IEnumerable<TagMapEntry>
     {
+
         public int TagMapSize { get; private set; }
 
         private Dictionary<int, TagMapEntry> _TagMapEntries { get; set; }
@@ -47,16 +50,41 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             }
         }
 
+        # region compile a dictionary to access keys from ids. If you need a readable name for a TagID, look up its key and get its name.
+        // This is a combination of all dictionaries, so it HAS COLLISIONS
+        // This is mainly for debugging purposes, if you have a tagID and want to know what key it is / might be
+        private static Dictionary<int, List<TagKey>> tags = new Dictionary<int, List<TagKey>>();
+
+        public static List<TagKey> GetKeys(int index)
+        {
+            return tags.ContainsKey(index) ? tags[index] : new List<TagKey>();
+        }
+
+        static TagMap()
+        {
+            foreach (Type t in new Type[] { typeof(MarkerKeys), typeof(ActorKeys), typeof(PowerKeys), typeof(AnimationSetKeys) })
+                foreach (FieldInfo field in t.GetFields())
+                {
+                    TagKey key = field.GetValue(null) as TagKey;
+                    if(!tags.ContainsKey(key.ID))
+                        tags.Add(key.ID, new List<TagKey>());
+
+                    tags[key.ID].Add(key);
+                }
+        }
+        #endregion
+
+
+
+
         [Obsolete("Use TagKeys instead. If it is missing create it")]
         public bool ContainsKey(int key) { return _TagMapEntries.ContainsKey(key); }
-        public bool ContainsKey(TagKeys.TagKey key) { return _TagMapEntries.ContainsKey(key.ID); }
+        public bool ContainsKey(TagKey key) { return _TagMapEntries.ContainsKey(key.ID); }
 
-        public void Add(TagKeys.TagKey key, TagMapEntry entry) { _TagMapEntries.Add(key.ID, entry); }
+        public void Add(TagKey key, TagMapEntry entry) { _TagMapEntries.Add(key.ID, entry); }
 
         public void Read(MpqFileStream stream)
         {
-            object h = TagKeys.ArcaneEffectGroup;
-
             TagMapSize = stream.ReadValueS32();
             _TagMapEntries = new Dictionary<int, TagMapEntry>();
 
@@ -69,7 +97,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
 
         #region accessors
 
-        public int this[TagKeys.TagKeyInt key]
+        public int this[TagKeyInt key]
         {
             get
             {
@@ -77,7 +105,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             }
         }
 
-        public float this[TagKeys.TagKeyFloat key]
+        public float this[TagKeyFloat key]
         {
             get
             {
@@ -85,7 +113,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             }
         }
 
-        public ScriptFormula this[TagKeys.TagKeyScript key]
+        public ScriptFormula this[TagKeyScript key]
         {
             get
             {
@@ -93,7 +121,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             }
         }
 
-        public SNOHandle this[TagKeys.TagKeySNO key]
+        public SNOHandle this[TagKeySNO key]
         {
             get
             {
@@ -123,84 +151,19 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         }
     }
 
-    /// <summary>
-    /// This class holds all currently defined keys as well as a way to get the matching key for a TagID
-    /// </summary>
-    public class TagKeys
+
+    public class TagKey
     {
-        public class TagKey
-        {
-            public int ID;
-            public string Name;
-        }
+        public int ID { get; private set; }
+        public string Name { get; set; }
 
-        public class TagKeyInt : TagKey { }
-        public class TagKeyFloat : TagKey { }
-        public class TagKeyScript : TagKey { }
-        public class TagKeySNO : TagKey { }
-
-        # region compile a dictionary to access keys from ids. If you need a readable name for a TagID, look up its key and get its name
-        private static Dictionary<int, TagKey> tags = new Dictionary<int, TagKey>();
-
-        public static TagKey GetKey(int index)
-        {
-            return tags.ContainsKey(index) ? tags[index] : null;
-        }
-
-        static TagKeys()
-        {
-            foreach (FieldInfo field in typeof(TagKeys).GetFields())
-            {
-                TagKey key = field.GetValue(null) as TagKey;
-                key.Name = field.Name;
-                tags.Add(key.ID, key);
-            }
-        }
-        #endregion
-
-        //524864 == hasinteractionoptions?
-
-        // MarkerSet Tags
-        public static TagKeySNO QuestRange = new TagKeySNO() { ID = 524544 };
-        public static TagKeySNO ConversationList = new TagKeySNO() { ID = 526080 };
-        public static TagKeyFloat Scale = new TagKeyFloat() { ID = 524288 };
-        public static TagKeySNO OnActorSpawnedScript = new TagKeySNO() { ID = 524808 };
-        public static TagKeyInt GroupHash = new TagKeyInt() { ID = 524814 };
-
-        // Used for portal destination resolution
-        public static TagKeySNO DestinationWorld = new TagKeySNO() { ID = 526850 };
-        public static TagKeyInt DestinationActorTag = new TagKeyInt() { ID = 526851 };
-        public static TagKeyInt ActorTag = new TagKeyInt() { ID = 526852 };
-        public static TagKeySNO DestinationLevelArea = new TagKeySNO() { ID = 526853 };
-
-        public static TagKeySNO TriggeredConversation = new TagKeySNO() { ID = 528128 };
-
-
-
-
-        // Actor Tags
-        public static TagKeySNO Flippy = new TagKeySNO() { ID = 65688 };
-        public static TagKeySNO Projectile = new TagKeySNO() { ID = 66138 };
-        public static TagKeySNO Lore = new TagKeySNO() { ID = 67331 };
-
-        public static TagKeySNO MinimapMarker = new TagKeySNO() { ID = 458752 };
-
-        public static TagKeySNO FireEffectGroup = new TagKeySNO() { ID = 74064 };
-        public static TagKeySNO ColdEffectGroup = new TagKeySNO() { ID = 74065 };
-        public static TagKeySNO LightningEffectGroup = new TagKeySNO() { ID = 74066 };
-        public static TagKeySNO PoisonEffectGroup = new TagKeySNO() { ID = 74067 };
-        public static TagKeySNO ArcaneEffectGroup = new TagKeySNO() { ID = 74068 };
-
-        public static TagKeySNO LifeStealEffectGroup = new TagKeySNO() { ID = 74070 };
-        public static TagKeySNO ManaStealEffectGroup = new TagKeySNO() { ID = 74071 };
-        public static TagKeySNO MagicFindEffectGroup = new TagKeySNO() { ID = 74072 };
-        public static TagKeySNO GoldFindEffectGroup = new TagKeySNO() { ID = 74073 };
-        public static TagKeySNO AttackEffectGroup = new TagKeySNO() { ID = 74074 };
-        public static TagKeySNO CastEffectGroup = new TagKeySNO() { ID = 74075 };
-        public static TagKeySNO HolyEffectGroup = new TagKeySNO() { ID = 74076 };
-        public static TagKeySNO Spell1EffectGroup = new TagKeySNO() { ID = 74077 };
-        public static TagKeySNO Spell2EffectGroup = new TagKeySNO() { ID = 74078 };
+        public TagKey(int id) { ID = id; }
     }
+
+    public class TagKeyInt : TagKey { public TagKeyInt(int id) : base(id) { } }
+    public class TagKeyFloat : TagKey { public TagKeyFloat(int id) : base(id) { } }
+    public class TagKeyScript : TagKey { public TagKeyScript(int id) : base(id) { } }
+    public class TagKeySNO : TagKey { public TagKeySNO(int id) : base(id) { } }
 
 
     public class TagMapEntry
@@ -220,7 +183,16 @@ namespace Mooege.Common.MPQ.FileFormats.Types
 
         public override string ToString()
         {
-            TagKeys.TagKey key = TagKeys.GetKey(TagID);
+            List<TagKey> keys = TagMap.GetKeys(TagID);
+            TagKey key = null;
+
+            if (keys.Count == 1)
+                key = keys.First();
+            else if(keys.Count > 0)
+            {
+                key = new TagKey(TagID);
+                key.Name = String.Format("Ambigious key: Depending of the context it one of {0}", String.Join(",", keys.Select(x => x.Name).ToArray()));
+            }
 
             switch (Type)
             {
