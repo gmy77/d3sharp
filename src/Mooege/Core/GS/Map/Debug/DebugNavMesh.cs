@@ -31,8 +31,6 @@ namespace Mooege.Core.GS.Map.Debug
         public Player Player { get; private set; }
         public Rect Bounds { get { return World.QuadTree.RootNode.Bounds; } }
 
-        public object Lock = new object();
-
         public ConcurrentList<Scene> MasterScenes { get; private set; }
         public ConcurrentList<Scene> SubScenes { get; private set; }
         public ConcurrentList<Rect> UnWalkableCells { get; private set; }
@@ -82,45 +80,41 @@ namespace Mooege.Core.GS.Map.Debug
 
         public void Update(bool processObjectsInAllTheWorld)
         {
-            lock (this.Lock)
+            this.MasterScenes.Clear();
+            this.SubScenes.Clear();
+            this.WalkableCells.Clear();
+            this.UnWalkableCells.Clear();
+            this.Players.Clear();
+            this.Monsters.Clear();
+            this.NPCs.Clear();
+
+            var scenes = (processObjectsInAllTheWorld || this.Player == null)
+                                        ? World.QuadTree.Query<Scene>(World.QuadTree.RootNode.Bounds)
+                                        : this.Player.GetScenesInRegion();
+
+            Parallel.ForEach(scenes, scene =>
             {
-                this.MasterScenes.Clear();
-                this.SubScenes.Clear();
-                this.WalkableCells.Clear();
-                this.UnWalkableCells.Clear();
-                this.Players.Clear();
-                this.Monsters.Clear();
-                this.NPCs.Clear();
+                if (scene.Parent == null)
+                    this.MasterScenes.Add(scene);
+                else
+                    this.SubScenes.Add(scene);
 
+                this.AnalyzeScene(scene);
+            });
 
-                var scenes = (processObjectsInAllTheWorld || this.Player == null)
-                                         ? World.QuadTree.Query<Scene>(World.QuadTree.RootNode.Bounds)
-                                         : this.Player.GetScenesInRegion();
+            var actors = (processObjectsInAllTheWorld || this.Player == null)
+                        ? World.QuadTree.Query<Actor>(World.QuadTree.RootNode.Bounds)
+                        : this.Player.GetActorsInRange();
 
-                Parallel.ForEach(scenes, scene =>
-                {
-                    if (scene.Parent == null)
-                        this.MasterScenes.Add(scene);
-                    else
-                        this.SubScenes.Add(scene);
-
-                    this.AnalyzeScene(scene);
-                });
-
-                var actors = (processObjectsInAllTheWorld || this.Player == null)
-                         ? World.QuadTree.Query<Actor>(World.QuadTree.RootNode.Bounds)
-                         : this.Player.GetActorsInRange();
-
-                Parallel.ForEach(actors, actor =>
-                {
-                    if (actor is Player)
-                        this.Players.Add(actor as Player);
-                    else if (actor is NPC)
-                        this.NPCs.Add(actor as NPC);
-                    else if (actor is Monster)
-                        this.Monsters.Add(actor as Monster);
-                });
-            }
+            Parallel.ForEach(actors, actor =>
+            {
+                if (actor is Player)
+                    this.Players.Add(actor as Player);
+                else if (actor is NPC)
+                    this.NPCs.Add(actor as NPC);
+                else if (actor is Monster)
+                    this.Monsters.Add(actor as Monster);
+            });
         }
 
         private void AnalyzeScene(Scene scene)
@@ -135,12 +129,12 @@ namespace Mooege.Core.GS.Map.Debug
 
                 var rect = new Rect(x, y, sizex, sizey);
 
+                // TODO: Feature request: Also allow drawing of NavCellFlags.NOSpawn, NavCellFlags.LevelAreaBit0, NavCellFlags.LevelAreaBit1 cells. /raist.
+
                 if ((cell.Flags & Mooege.Common.MPQ.FileFormats.Scene.NavCellFlags.AllowWalk) != Mooege.Common.MPQ.FileFormats.Scene.NavCellFlags.AllowWalk)
                     UnWalkableCells.Add(rect);
                 else
                     WalkableCells.Add(rect);
-
-                // TODO: Feature request: Also allow drawing of NavCellFlags.NOSpawn, NavCellFlags.LevelAreaBit0, NavCellFlags.LevelAreaBit1 cells. /raist.
             });
         }
 
@@ -150,12 +144,16 @@ namespace Mooege.Core.GS.Map.Debug
 
         public Bitmap Draw()
         {
-            lock (this.Lock)
-            {
-                var bitmap = new Bitmap((int)this.World.QuadTree.RootNode.Bounds.Width, (int)this.World.QuadTree.RootNode.Bounds.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                var graphics = Graphics.FromImage(bitmap);
+            var bitmap = new Bitmap((int)this.World.QuadTree.RootNode.Bounds.Width, (int)this.World.QuadTree.RootNode.Bounds.Height, System.Drawing.Imaging.PixelFormat.Format16bppRgb555);
 
-                graphics.FillRectangle(Brushes.Wheat, 0, 0, bitmap.Width, bitmap.Height);
+            using (var graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
+                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
+
+                graphics.FillRectangle(Brushes.LightGray, 0, 0, bitmap.Width, bitmap.Height);
 
                 this.DrawShapes(graphics);
 
@@ -163,10 +161,9 @@ namespace Mooege.Core.GS.Map.Debug
                     this.DrawLabels(graphics);
 
                 graphics.Save();
-                graphics.Dispose();
-
-                return bitmap;
             }
+
+            return bitmap;
         }
 
         private void DrawShapes(Graphics graphics)

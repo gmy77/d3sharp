@@ -87,6 +87,9 @@ namespace Mooege.Core.GS.Map.Debug
                 this.PreviewBitmap = null;
             }
 
+            GC.Collect(); // force a garbage collection.
+            GC.WaitForPendingFinalizers();
+
             this.StageBitmap = this.Mesh.Draw();
             this.PreviewBitmap = this.ResizeImage(this.StageBitmap, this.pictureBoxPreview.Width, this.pictureBoxPreview.Height);
             this.pictureBoxStage.Refresh();
@@ -98,34 +101,38 @@ namespace Mooege.Core.GS.Map.Debug
 
         #region stage painting
 
+        private bool _donePaintingStage = true;
+
         private void pictureBoxStage_Paint(object sender, PaintEventArgs e)
         {
-            lock (this.Mesh.Lock)
-            {
-                this.pictureBoxStage.Size = this.StageBitmap.Size;
-                e.Graphics.Clear(Color.White);
-                e.Graphics.DrawImage(this.StageBitmap, 0, 0, this.StageBitmap.Width, this.StageBitmap.Height);
-            }
+            if (!_donePaintingStage) return;
+
+            _donePaintingStage = false;
+            this.pictureBoxStage.Size = this.StageBitmap.Size;
+            e.Graphics.DrawImage(this.StageBitmap, 0, 0, this.StageBitmap.Width, this.StageBitmap.Height);
+            _donePaintingStage = true;
         }
 
         #endregion
 
         #region preview handling
 
+        private bool _donePaintingPreview = true;
+
         private void pictureBoxPreview_Paint(object sender, PaintEventArgs e)
         {
-            lock (this.Mesh.Lock)
-            {
-                e.Graphics.Clear(Color.White);
-                e.Graphics.DrawImage(this.PreviewBitmap, 0, 0, this.PreviewBitmap.Width, this.PreviewBitmap.Height);
+            if (!_donePaintingPreview) return;
 
-                var rectLeft = (this.pictureBoxPreview.Width * this.panelStage.HorizontalScroll.Value) / this.panelStage.HorizontalScroll.Maximum;
-                var rectTop = (this.pictureBoxPreview.Height * this.panelStage.VerticalScroll.Value) / this.panelStage.VerticalScroll.Maximum;
-                var rectWidth = (this.pictureBoxPreview.Width * this.panelStage.Size.Width) / this.pictureBoxStage.Width;
-                var rectHeight = (this.pictureBoxPreview.Height * this.panelStage.Size.Height) / this.pictureBoxStage.Height;
+            _donePaintingPreview = false;
+            e.Graphics.DrawImage(this.PreviewBitmap, 0, 0, this.PreviewBitmap.Width, this.PreviewBitmap.Height);
 
-                e.Graphics.DrawRectangle(this._selectionPen, rectLeft, rectTop, rectWidth, rectHeight);
-            }
+            var rectLeft = (this.pictureBoxPreview.Width * this.panelStage.HorizontalScroll.Value) / this.panelStage.HorizontalScroll.Maximum;
+            var rectTop = (this.pictureBoxPreview.Height * this.panelStage.VerticalScroll.Value) / this.panelStage.VerticalScroll.Maximum;
+            var rectWidth = (this.pictureBoxPreview.Width * this.panelStage.Size.Width) / this.pictureBoxStage.Width;
+            var rectHeight = (this.pictureBoxPreview.Height * this.panelStage.Size.Height) / this.pictureBoxStage.Height;
+
+            e.Graphics.DrawRectangle(this._selectionPen, rectLeft, rectTop, rectWidth, rectHeight);
+            _donePaintingPreview = true;
         }
 
         private void panelStage_Scroll(object sender, ScrollEventArgs e)
