@@ -27,7 +27,7 @@ namespace Mooege.Core.GS.Actors
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
-        public NPC(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public NPC(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Field2 = 0x9;

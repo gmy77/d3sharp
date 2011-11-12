@@ -25,7 +25,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
     [HandledSNO(56948 /* PT_Mystic.acr */)]
     public class Mystic : Artisan
     {
-        public Mystic(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Mystic(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
         }

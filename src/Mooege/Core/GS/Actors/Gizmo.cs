@@ -26,7 +26,7 @@ namespace Mooege.Core.GS.Actors
     {
         public override ActorType ActorType { get { return ActorType.Gizmo; } }
 
-        public Gizmo(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Gizmo(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Field2 = 16;

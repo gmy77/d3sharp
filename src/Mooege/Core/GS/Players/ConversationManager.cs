@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mooege.Common.Helpers.Math;
 using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message;
@@ -120,7 +121,7 @@ namespace Mooege.Core.GS.Players
 
         private Mooege.Core.GS.Actors.Actor GetActorBySNO(int sno)
         {
-            var actors = (from a in player.RevealedObjects.Values where a is Mooege.Core.GS.Actors.Actor && (a as Mooege.Core.GS.Actors.Actor).ActorSNO.SNOId == sno select a);
+            var actors = (from a in player.RevealedObjects.Values where a is Mooege.Core.GS.Actors.Actor && (a as Mooege.Core.GS.Actors.Actor).ActorSNO.Id == sno select a);
             if (actors.Count() > 1)
                 logger.Warn("Found more than one actors in range");
             if (actors.Count() == 0)
@@ -285,7 +286,7 @@ namespace Mooege.Core.GS.Players
                     TextClass = currentLineNode.Speaker1 == Speaker.Player ? (Class)player.Toon.VoiceClassID : Class.None,
                     Gender = (player.Toon.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
                     AudioClass = (Class)player.Toon.VoiceClassID,
-                    SNOSpeakerActor = GetSpeaker(currentLineNode.Speaker1).ActorSNO.SNOId,
+                    SNOSpeakerActor = GetSpeaker(currentLineNode.Speaker1).ActorSNO.Id,
                     Name = player.Toon.Name,
                     Field11 = 0x00000000,  // is this field I1? and if...what does it do?? 2 for level up -farmy
                     AnimationTag = currentLineNode.AnimationTag,

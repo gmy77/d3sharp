@@ -16,14 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections;
 using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Actors.Actions;
-using Mooege.Core.GS.Actors.Movement;
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.AI
 {
@@ -42,9 +38,9 @@ namespace Mooege.Core.GS.AI
         public BrainState State { get; protected set; }
 
         /// <summary>
-        /// Target.
+        /// The current action for the brain.
         /// </summary>
-        public Actor Target { get; protected set; }
+        public ActorAction CurrentAction { get; protected set; }
 
         /// <summary>
         /// Actions to be taken.
@@ -68,7 +64,8 @@ namespace Mooege.Core.GS.AI
             if(this.State == BrainState.Dead || this.Body == null || this.Body.World == null)
                 return;
 
-            this.Think(tickCounter);
+            this.Think(tickCounter); // let the brain think.
+            this.Perform(tickCounter); // perform any outstanding actions.
         }        
 
         /// <summary>
@@ -77,16 +74,21 @@ namespace Mooege.Core.GS.AI
         public virtual void Think(int tickCounter)
         { }
 
-        public void Move(Vector3D position, float facingAngle)
+        private void Perform(int tickCounter)
         {
-            this.Body.FacingAngle = facingAngle;
-            this.Body.Move(position, facingAngle);
-        }
+            if (this.CurrentAction == null)
+                return;
 
-        public void Move(Actor actor)
-        {
-            this.Move(actor.Position, ActorHelpers.GetFacingAngle(this.Body, actor));
-            this.Body.Position = actor.Position; // hack /raist.
-        }
+            if (this.CurrentAction.Done)
+            {
+                this.CurrentAction = null;
+                return;
+            }
+
+            if (!this.CurrentAction.Started)
+                this.CurrentAction.Start(tickCounter);
+            else
+                this.CurrentAction.Update(tickCounter);
+        }        
     }
 }

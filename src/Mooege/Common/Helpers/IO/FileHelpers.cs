@@ -21,7 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Mooege.Common.Helpers
+namespace Mooege.Common.Helpers.IO
 {
     public static class FileHelpers
     {

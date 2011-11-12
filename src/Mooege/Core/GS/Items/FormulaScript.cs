@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Mooege.Common;
-using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Math;
 using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Items
@@ -40,7 +40,7 @@ namespace Mooege.Core.GS.Items
             result = 0;
             Stack<float> stack = new Stack<float>(64);
             int pos = 0;
-            float numb1, numb2, numb3;
+            float numb1, numb2; //numb3;
             while (pos < script.Length)
             {
                 switch ((byte)script[pos])

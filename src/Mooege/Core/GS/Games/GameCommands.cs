@@ -22,6 +22,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Core.GS.Common.Types.Math;

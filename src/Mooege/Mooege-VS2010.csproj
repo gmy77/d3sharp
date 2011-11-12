@@ -42,6 +42,7 @@
     <Externalconsole>true</Externalconsole>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <UseVSHostingProcess>true</UseVSHostingProcess>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -101,7 +102,8 @@
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Common\Extensions\ListExtensions.cs" />
-    <Compile Include="Common\Helpers\FileHelpers.cs" />
+    <Compile Include="Common\Helpers\Math\FastRandom.cs" />
+    <Compile Include="Common\Helpers\IO\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\Data.cs" />
     <Compile Include="Common\MPQ\FileFormats\Act.cs" />
@@ -134,10 +136,12 @@
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
     <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Types\TagMap.cs" />
     <Compile Include="Common\MPQ\SerializableData.cs" />
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
     <Compile Include="Core\GS\Actors\Actions\ActorAction.cs" />
+    <Compile Include="Core\GS\Actors\Movement\MoveToPointAction.cs" />
     <Compile Include="Core\GS\AI\Brains\FollowerBrain.cs" />
     <Compile Include="Core\GS\AI\Brains\HirelingBrain.cs" />
     <Compile Include="Core\GS\AI\Brains\MonsterBrain.cs" />
@@ -238,7 +242,7 @@
     <Compile Include="Core\MooNet\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\MooNet\Helpers\FieldKeyHelper.cs" />
     <Compile Include="Core\MooNet\Helpers\NotificationTypeHelper.cs" />
-    <Compile Include="Common\Helpers\RandomHelper.cs" />
+    <Compile Include="Common\Helpers\Math\RandomHelper.cs" />
     <Compile Include="Core\GS\Items\Item.cs" />
     <Compile Include="Core\GS\Items\ItemGenerator.cs" />
     <Compile Include="Core\GS\Actors\Portal.cs" />
@@ -532,7 +536,7 @@
     <Compile Include="Common\Extensions\DateTimeExtensions.cs" />
     <Compile Include="Common\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Net\MooNet\MooNetRouter.cs" />
-    <Compile Include="Common\Helpers\StringHashHelper.cs" />
+    <Compile Include="Common\Helpers\Hash\StringHashHelper.cs" />
     <Compile Include="Common\Extensions\IMessageExtensions.cs" />
     <Compile Include="Common\TinyLogger.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObjectManager.cs" />

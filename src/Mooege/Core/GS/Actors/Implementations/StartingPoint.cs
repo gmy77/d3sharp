@@ -28,7 +28,7 @@ namespace Mooege.Core.GS.Actors.Implementations
     {
         public int TargetId { get; private set; }
 
-        public StartingPoint(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public StartingPoint(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
         }
@@ -37,8 +37,8 @@ namespace Mooege.Core.GS.Actors.Implementations
         {
             if (this.Tags == null) return;
 
-            if (this.Tags.ContainsKey((int)MarkerTagTypes.ActorTag))
-                this.TargetId = this.Tags[(int)MarkerTagTypes.ActorTag].Int2;
+            if (this.Tags.ContainsKey(TagKeys.ActorTag))
+                this.TargetId = this.Tags[TagKeys.ActorTag];
         }
     }
 }

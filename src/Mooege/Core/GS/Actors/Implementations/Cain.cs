@@ -28,7 +28,7 @@ namespace Mooege.Core.GS.Actors.Implementations
     [HandledSNO(3533 /* Ho-ho-horadrim */)]
     public class Cain : InteractiveNPC
     {
-        public Cain(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Cain(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;

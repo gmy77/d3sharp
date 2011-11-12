@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
@@ -105,7 +106,7 @@ namespace Mooege.Core.GS.Generators
             foreach (var sceneChunk in worldData.SceneParams.SceneChunks)
             {
                 var position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
-                var scene = new Scene(world, position, sceneChunk.SNOHandle.SNOId, null)
+                var scene = new Scene(world, position, sceneChunk.SNOHandle.Id, null)
                 {
                     MiniMapVisibility = SceneMiniMapVisibility.Revealed,                    
                     FacingAngle = sceneChunk.PRTransform.Quaternion.W,
@@ -118,7 +119,7 @@ namespace Mooege.Core.GS.Generators
                 {
                     if (!clusters.ContainsKey(sceneChunk.SceneSpecification.ClusterID))
                     {
-                        Logger.Warn("Referenced clusterID {0} not found for chunk {1} in world {2}", sceneChunk.SceneSpecification.ClusterID, sceneChunk.SNOHandle.SNOId, worldSNO);
+                        Logger.Warn("Referenced clusterID {0} not found for chunk {1} in world {2}", sceneChunk.SceneSpecification.ClusterID, sceneChunk.SNOHandle.Id, worldSNO);
                     }
                     else
                     {
@@ -137,7 +138,7 @@ namespace Mooege.Core.GS.Generators
 
                         if (pos == null)
                         {
-                            Logger.Error("No scene position marker for SubScenes of Scene {0} found", sceneChunk.SNOHandle.SNOId);
+                            Logger.Error("No scene position marker for SubScenes of Scene {0} found", sceneChunk.SNOHandle.Id);
                         }
                         else
                         {
@@ -167,7 +168,7 @@ namespace Mooege.Core.GS.Generators
         /// </summary>
         private static Vector3D FindSubScenePosition(Mooege.Common.MPQ.FileFormats.SceneChunk sceneChunk)
         {
-            var mpqScene = MPQStorage.Data.Assets[SNOGroup.Scene][sceneChunk.SNOHandle.SNOId].Data as Mooege.Common.MPQ.FileFormats.Scene;
+            var mpqScene = MPQStorage.Data.Assets[SNOGroup.Scene][sceneChunk.SNOHandle.Id].Data as Mooege.Common.MPQ.FileFormats.Scene;
 
             foreach (var markerSet in mpqScene.MarkerSets)
             {

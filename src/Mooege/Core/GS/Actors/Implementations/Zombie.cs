@@ -26,7 +26,7 @@ namespace Mooege.Core.GS.Actors.Implementations
     [HandledSNO(6652)]
     public class Zombie : Monster
     {
-        public Zombie(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Zombie(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Brain = new MonsterBrain(this);

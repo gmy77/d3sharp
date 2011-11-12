@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Hash;
 using Mooege.Common.Storage;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;

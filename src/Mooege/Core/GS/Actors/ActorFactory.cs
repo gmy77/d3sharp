@@ -37,7 +37,7 @@ namespace Mooege.Core.GS.Actors
             LoadSNOHandlers();
         }
 
-        public static Actor Create(World world, int snoId, TagMap tagMap)
+        public static Actor Create(World world, int snoId, TagMap tags)
         {
             if (!MPQStorage.Data.Assets[SNOGroup.Actor].ContainsKey(snoId))
                 return null;
@@ -49,11 +49,6 @@ namespace Mooege.Core.GS.Actors
             if (actorData.Type == ActorType.Invalid) 
                 return null;
 
-            // read tagMapEntries and put them into a dictionary
-            var tags = new Dictionary<int, TagMapEntry>();
-            if (tagMap != null && tagMap.TagMapEntries != null)
-                tags = tagMap.TagMapEntries.ToDictionary(entry => entry.TagID);
-
             // see if we have an implementation for actor.
             if (SNOHandlers.ContainsKey(snoId))
                 return (Actor) Activator.CreateInstance(SNOHandlers[snoId], new object[] {world, snoId, tags});
@@ -61,7 +56,7 @@ namespace Mooege.Core.GS.Actors
             switch (actorData.Type)
             {
                 case ActorType.Monster:
-                    if(tags.ContainsKey((int)MarkerTagTypes.ConversationList))
+                    if(tags.ContainsKey(TagKeys.ConversationList))
                         return new InteractiveNPC(world, snoId, tags);
                     else
                         if (!MPQStorage.Data.Assets[SNOGroup.Monster].ContainsKey(actorData.MonsterSNO))
@@ -82,9 +77,9 @@ namespace Mooege.Core.GS.Actors
             return null;
         }
 
-        private static Actor CreateGizmo(World world, int snoId, Dictionary<int,TagMapEntry> tags)
+        private static Actor CreateGizmo(World world, int snoId, TagMap tags)
         {
-            if (tags.ContainsKey((int)MarkerTagTypes.DestinationWorld))
+            if (tags.ContainsKey(TagKeys.DestinationWorld))
                 return new Portal(world, snoId, tags);
 
             return new Gizmo(world, snoId, tags);

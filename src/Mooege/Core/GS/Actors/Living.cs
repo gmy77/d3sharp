@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
@@ -38,7 +39,7 @@ namespace Mooege.Core.GS.Actors
         /// </summary>
         public AI.Brain Brain { get; protected set; }
 
-        public Living(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Living(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.SNOMonsterId = this.ActorData.MonsterSNO;
@@ -49,7 +50,6 @@ namespace Mooege.Core.GS.Actors
             this.GBHandle.Type = -1; this.GBHandle.GBID = -1;
             this.Field7 = 0x00000001;
             this.Field10 = 0x0;
-            this.Field11 = 0x0;
 
             this.Attributes[GameAttribute.Hitpoints_Max_Total] = 4.546875f;
             this.Attributes[GameAttribute.Hitpoints_Max] = 4.546875f;
