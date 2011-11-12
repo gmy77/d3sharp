@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
@@ -136,10 +135,12 @@ namespace Mooege.Core.GS.Map.Debug
 
                 var rect = new Rect(x, y, sizex, sizey);
 
-                if ((cell.Flags & 0x1) != 0x1)
+                if ((cell.Flags & Mooege.Common.MPQ.FileFormats.Scene.NavCellFlags.AllowWalk) != Mooege.Common.MPQ.FileFormats.Scene.NavCellFlags.AllowWalk)
                     UnWalkableCells.Add(rect);
                 else
                     WalkableCells.Add(rect);
+
+                // TODO: Feature request: Also allow drawing of NavCellFlags.NOSpawn, NavCellFlags.LevelAreaBit0, NavCellFlags.LevelAreaBit1 cells. /raist.
             });
         }
 
