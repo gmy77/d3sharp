@@ -18,7 +18,9 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows;
+using Mooege.Common.Helpers.Concurrency;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Players;
 
@@ -32,13 +34,13 @@ namespace Mooege.Core.GS.Map.Debug
 
         public object Lock = new object();
 
-        public List<Scene> MasterScenes { get; private set; }
-        public List<Scene> SubScenes { get; private set; }
-        public List<Rect> UnWalkableCells { get; private set; }
-        public List<Rect> WalkableCells { get; private set; }
-        public List<Player> Players { get; private set; }
-        public List<Monster> Monsters { get; private set; }
-        public List<NPC> NPCs { get; private set; }
+        public ConcurrentList<Scene> MasterScenes { get; private set; }
+        public ConcurrentList<Scene> SubScenes { get; private set; }
+        public ConcurrentList<Rect> UnWalkableCells { get; private set; }
+        public ConcurrentList<Rect> WalkableCells { get; private set; }
+        public ConcurrentList<Player> Players { get; private set; }
+        public ConcurrentList<Monster> Monsters { get; private set; }
+        public ConcurrentList<NPC> NPCs { get; private set; }
 
         public bool DrawMasterScenes;
         public bool DrawSubScenes;
@@ -47,7 +49,7 @@ namespace Mooege.Core.GS.Map.Debug
         public bool DrawMonsters;
         public bool DrawNPCs;
         public bool DrawPlayers;
-        public bool PrintLabels;
+        public bool PrintSceneLabels;
         public bool FillCells;
         public bool DrawPlayerProximityCircle;
         public bool DrawPlayerProximityRectangle;
@@ -68,13 +70,13 @@ namespace Mooege.Core.GS.Map.Debug
 
             this._subScenePen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
 
-            this.MasterScenes = new List<Scene>();
-            this.SubScenes = new List<Scene>();
-            this.UnWalkableCells = new List<Rect>();
-            this.WalkableCells = new List<Rect>();
-            this.Players = new List<Player>();
-            this.Monsters = new List<Monster>();
-            this.NPCs = new List<NPC>();           
+            this.MasterScenes = new ConcurrentList<Scene>();
+            this.SubScenes = new ConcurrentList<Scene>();
+            this.UnWalkableCells = new ConcurrentList<Rect>();
+            this.WalkableCells = new ConcurrentList<Rect>();
+            this.Players = new ConcurrentList<Player>();
+            this.Monsters = new ConcurrentList<Monster>();
+            this.NPCs = new ConcurrentList<NPC>();           
         }
 
         #region update
@@ -96,7 +98,7 @@ namespace Mooege.Core.GS.Map.Debug
                                          ? World.QuadTree.Query<Scene>(World.QuadTree.RootNode.Bounds)
                                          : this.Player.GetScenesInRegion();
 
-                foreach (var scene in scenes)
+                Parallel.ForEach(scenes, scene =>
                 {
                     if (scene.Parent == null)
                         this.MasterScenes.Add(scene);
@@ -104,13 +106,13 @@ namespace Mooege.Core.GS.Map.Debug
                         this.SubScenes.Add(scene);
 
                     this.AnalyzeScene(scene);
-                }
+                });
 
                 var actors = (processObjectsInAllTheWorld || this.Player == null)
                          ? World.QuadTree.Query<Actor>(World.QuadTree.RootNode.Bounds)
                          : this.Player.GetActorsInRange();
 
-                foreach (var actor in actors)
+                Parallel.ForEach(actors, actor =>
                 {
                     if (actor is Player)
                         this.Players.Add(actor as Player);
@@ -118,13 +120,13 @@ namespace Mooege.Core.GS.Map.Debug
                         this.NPCs.Add(actor as NPC);
                     else if (actor is Monster)
                         this.Monsters.Add(actor as Monster);
-                }
+                });
             }
         }
 
         private void AnalyzeScene(Scene scene)
         {
-            foreach (var cell in scene.NavZone.NavCells)
+            Parallel.ForEach(scene.NavZone.NavCells, cell =>
             {
                 float x = scene.Position.X + cell.Min.X;
                 float y = scene.Position.Y + cell.Min.Y;
@@ -138,7 +140,7 @@ namespace Mooege.Core.GS.Map.Debug
                     UnWalkableCells.Add(rect);
                 else
                     WalkableCells.Add(rect);
-            }
+            });
         }
 
         #endregion
@@ -156,7 +158,7 @@ namespace Mooege.Core.GS.Map.Debug
 
                 this.DrawShapes(graphics);
 
-                if (this.PrintLabels)
+                if (this.PrintSceneLabels)
                     this.DrawLabels(graphics);
 
                 graphics.Save();

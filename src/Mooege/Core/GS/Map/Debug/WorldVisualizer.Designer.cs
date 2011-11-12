@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorldVisualizer));
             this.pictureBoxStage = new System.Windows.Forms.PictureBox();
             this.checkBoxFillCells = new System.Windows.Forms.CheckBox();
-            this.checkBoxPrintLabels = new System.Windows.Forms.CheckBox();
+            this.checkBoxPrintSceneLabels = new System.Windows.Forms.CheckBox();
             this.groupActorVisibility = new System.Windows.Forms.GroupBox();
             this.checkBoxMonsters = new System.Windows.Forms.CheckBox();
             this.checkBoxPlayers = new System.Windows.Forms.CheckBox();
@@ -83,18 +83,18 @@
             this.checkBoxFillCells.UseVisualStyleBackColor = true;
             this.checkBoxFillCells.CheckedChanged += new System.EventHandler(this.checkFillCells_CheckedChanged);
             // 
-            // checkBoxPrintLabels
+            // checkBoxPrintSceneLabels
             // 
-            this.checkBoxPrintLabels.AutoSize = true;
-            this.checkBoxPrintLabels.Checked = true;
-            this.checkBoxPrintLabels.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxPrintLabels.Location = new System.Drawing.Point(6, 19);
-            this.checkBoxPrintLabels.Name = "checkBoxPrintLabels";
-            this.checkBoxPrintLabels.Size = new System.Drawing.Size(137, 17);
-            this.checkBoxPrintLabels.TabIndex = 0;
-            this.checkBoxPrintLabels.Text = "Print Labels On Scenes";
-            this.checkBoxPrintLabels.UseVisualStyleBackColor = true;
-            this.checkBoxPrintLabels.CheckedChanged += new System.EventHandler(this.checkPrintLabels_CheckedChanged);
+            this.checkBoxPrintSceneLabels.AutoSize = true;
+            this.checkBoxPrintSceneLabels.Checked = true;
+            this.checkBoxPrintSceneLabels.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxPrintSceneLabels.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxPrintSceneLabels.Name = "checkBoxPrintSceneLabels";
+            this.checkBoxPrintSceneLabels.Size = new System.Drawing.Size(115, 17);
+            this.checkBoxPrintSceneLabels.TabIndex = 0;
+            this.checkBoxPrintSceneLabels.Text = "Print Scene Labels";
+            this.checkBoxPrintSceneLabels.UseVisualStyleBackColor = true;
+            this.checkBoxPrintSceneLabels.CheckedChanged += new System.EventHandler(this.checkPrintLabels_CheckedChanged);
             // 
             // groupActorVisibility
             // 
@@ -310,7 +310,7 @@
             // groupOptions
             // 
             this.groupOptions.Controls.Add(this.checkBoxFillCells);
-            this.groupOptions.Controls.Add(this.checkBoxPrintLabels);
+            this.groupOptions.Controls.Add(this.checkBoxPrintSceneLabels);
             this.groupOptions.Location = new System.Drawing.Point(707, 13);
             this.groupOptions.Name = "groupOptions";
             this.groupOptions.Size = new System.Drawing.Size(158, 191);
@@ -385,7 +385,7 @@
         private System.Windows.Forms.CheckBox checkBoxPlayers;
         private System.Windows.Forms.GroupBox groupActorVisibility;
         private System.Windows.Forms.CheckBox checkBoxFillCells;
-        private System.Windows.Forms.CheckBox checkBoxPrintLabels;
+        private System.Windows.Forms.CheckBox checkBoxPrintSceneLabels;
         private System.Windows.Forms.GroupBox groupSettings;
         private System.Windows.Forms.Panel panelStage;
         private System.Windows.Forms.GroupBox groupPreview;

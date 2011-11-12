@@ -72,7 +72,7 @@ namespace Mooege.Core.GS.Map.Debug
             this.Mesh.DrawPlayers = checkBoxPlayers.Checked;
             this.Mesh.DrawPlayerProximityCircle = checkBoxDrawPlayerProximityCircle.Checked;
             this.Mesh.DrawPlayerProximityRectangle = checkBoxDrawPlayerProximityRect.Checked;
-            this.Mesh.PrintLabels = checkBoxPrintLabels.Checked;
+            this.Mesh.PrintSceneLabels = checkBoxPrintSceneLabels.Checked;
             this.Mesh.FillCells = checkBoxFillCells.Checked;
 
             if (this.StageBitmap != null)
