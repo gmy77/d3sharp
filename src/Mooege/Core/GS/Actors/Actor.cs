@@ -219,6 +219,19 @@ namespace Mooege.Core.GS.Actors
             : this(world, snoId, null)
         { }
 
+        /// <summary>
+        /// Unregister from quest events when object is destroyed 
+        /// </summary>
+        public override void Destroy()
+        {
+            if (_questRange != null)
+                foreach (var quest in World.Game.Quests)
+                    quest.OnQuestProgress -= quest_OnQuestProgress;
+   
+            base.Destroy();
+        }
+
+
         #region enter-world, change-world, teleport helpers
 
         public void EnterWorld(Vector3D position)
