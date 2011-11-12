@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorldVisualizer));
-            this.stage = new System.Windows.Forms.PictureBox();
+            this.pictureBoxStage = new System.Windows.Forms.PictureBox();
             this.groupOptions = new System.Windows.Forms.GroupBox();
             this.checkBoxFillCells = new System.Windows.Forms.CheckBox();
             this.checkBoxPrintLabels = new System.Windows.Forms.CheckBox();
@@ -43,24 +43,28 @@
             this.checkBoxSubScenes = new System.Windows.Forms.CheckBox();
             this.checkBoxMasterScenes = new System.Windows.Forms.CheckBox();
             this.groupSettings = new System.Windows.Forms.GroupBox();
+            this.groupPreview = new System.Windows.Forms.GroupBox();
+            this.pictureBoxPreview = new System.Windows.Forms.PictureBox();
             this.panelStage = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize)(this.stage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStage)).BeginInit();
             this.groupOptions.SuspendLayout();
             this.groupActorVisibility.SuspendLayout();
             this.groupMapVisibility.SuspendLayout();
             this.groupSettings.SuspendLayout();
+            this.groupPreview.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).BeginInit();
             this.panelStage.SuspendLayout();
             this.SuspendLayout();
             // 
-            // stage
+            // pictureBoxStage
             // 
-            this.stage.Location = new System.Drawing.Point(6, 3);
-            this.stage.Name = "stage";
-            this.stage.Size = new System.Drawing.Size(1002, 595);
-            this.stage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.stage.TabIndex = 0;
-            this.stage.TabStop = false;
-            this.stage.Paint += new System.Windows.Forms.PaintEventHandler(this.Stage_Paint);
+            this.pictureBoxStage.Location = new System.Drawing.Point(2, 3);
+            this.pictureBoxStage.Name = "pictureBoxStage";
+            this.pictureBoxStage.Size = new System.Drawing.Size(1002, 517);
+            this.pictureBoxStage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxStage.TabIndex = 0;
+            this.pictureBoxStage.TabStop = false;
+            this.pictureBoxStage.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxStage_Paint);
             // 
             // groupOptions
             // 
@@ -68,12 +72,12 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.groupOptions.Controls.Add(this.checkBoxFillCells);
             this.groupOptions.Controls.Add(this.checkBoxPrintLabels);
-            this.groupOptions.Location = new System.Drawing.Point(256, 10);
+            this.groupOptions.Location = new System.Drawing.Point(446, 10);
             this.groupOptions.Name = "groupOptions";
-            this.groupOptions.Size = new System.Drawing.Size(119, 110);
-            this.groupOptions.TabIndex = 2;
+            this.groupOptions.Size = new System.Drawing.Size(119, 191);
+            this.groupOptions.TabIndex = 5;
             this.groupOptions.TabStop = false;
-            this.groupOptions.Text = "Options";
+            this.groupOptions.Text = "Render Options";
             // 
             // checkBoxFillCells
             // 
@@ -106,10 +110,10 @@
             this.groupActorVisibility.Controls.Add(this.checkBoxMonsters);
             this.groupActorVisibility.Controls.Add(this.checkBoxPlayers);
             this.groupActorVisibility.Controls.Add(this.checkBoxNPCs);
-            this.groupActorVisibility.Location = new System.Drawing.Point(131, 10);
+            this.groupActorVisibility.Location = new System.Drawing.Point(321, 10);
             this.groupActorVisibility.Name = "groupActorVisibility";
-            this.groupActorVisibility.Size = new System.Drawing.Size(119, 110);
-            this.groupActorVisibility.TabIndex = 1;
+            this.groupActorVisibility.Size = new System.Drawing.Size(119, 191);
+            this.groupActorVisibility.TabIndex = 4;
             this.groupActorVisibility.TabStop = false;
             this.groupActorVisibility.Text = "Actor Visibility";
             // 
@@ -163,10 +167,10 @@
             this.groupMapVisibility.Controls.Add(this.checkBoxWalkableCells);
             this.groupMapVisibility.Controls.Add(this.checkBoxSubScenes);
             this.groupMapVisibility.Controls.Add(this.checkBoxMasterScenes);
-            this.groupMapVisibility.Location = new System.Drawing.Point(6, 10);
+            this.groupMapVisibility.Location = new System.Drawing.Point(196, 10);
             this.groupMapVisibility.Name = "groupMapVisibility";
-            this.groupMapVisibility.Size = new System.Drawing.Size(119, 110);
-            this.groupMapVisibility.TabIndex = 0;
+            this.groupMapVisibility.Size = new System.Drawing.Size(119, 191);
+            this.groupMapVisibility.TabIndex = 3;
             this.groupMapVisibility.TabStop = false;
             this.groupMapVisibility.Text = "Map Visibility";
             // 
@@ -227,26 +231,50 @@
             // 
             // groupSettings
             // 
+            this.groupSettings.Controls.Add(this.groupPreview);
             this.groupSettings.Controls.Add(this.groupOptions);
             this.groupSettings.Controls.Add(this.groupMapVisibility);
             this.groupSettings.Controls.Add(this.groupActorVisibility);
             this.groupSettings.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupSettings.Location = new System.Drawing.Point(0, 604);
+            this.groupSettings.Location = new System.Drawing.Point(0, 520);
             this.groupSettings.Name = "groupSettings";
-            this.groupSettings.Size = new System.Drawing.Size(1008, 126);
-            this.groupSettings.TabIndex = 3;
+            this.groupSettings.Size = new System.Drawing.Size(1008, 210);
+            this.groupSettings.TabIndex = 1;
             this.groupSettings.TabStop = false;
+            // 
+            // groupPreview
+            // 
+            this.groupPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupPreview.Controls.Add(this.pictureBoxPreview);
+            this.groupPreview.Location = new System.Drawing.Point(6, 10);
+            this.groupPreview.Name = "groupPreview";
+            this.groupPreview.Size = new System.Drawing.Size(186, 194);
+            this.groupPreview.TabIndex = 2;
+            this.groupPreview.TabStop = false;
+            // 
+            // pictureBoxPreview
+            // 
+            this.pictureBoxPreview.Location = new System.Drawing.Point(4, 9);
+            this.pictureBoxPreview.Name = "pictureBoxPreview";
+            this.pictureBoxPreview.Size = new System.Drawing.Size(180, 180);
+            this.pictureBoxPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxPreview.TabIndex = 3;
+            this.pictureBoxPreview.TabStop = false;
+            this.pictureBoxPreview.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxPreview_Paint);
+            this.pictureBoxPreview.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBoxPreview_MouseMove);
             // 
             // panelStage
             // 
             this.panelStage.AutoScroll = true;
-            this.panelStage.AutoScrollMinSize = new System.Drawing.Size(500, 500);
-            this.panelStage.Controls.Add(this.stage);
+            this.panelStage.AutoScrollMinSize = new System.Drawing.Size(1008, 500);
+            this.panelStage.Controls.Add(this.pictureBoxStage);
             this.panelStage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelStage.Location = new System.Drawing.Point(0, 0);
             this.panelStage.Name = "panelStage";
-            this.panelStage.Size = new System.Drawing.Size(1008, 604);
-            this.panelStage.TabIndex = 4;
+            this.panelStage.Size = new System.Drawing.Size(1008, 520);
+            this.panelStage.TabIndex = 0;
+            this.panelStage.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelStage_Scroll);
             // 
             // WorldVisualizer
             // 
@@ -256,11 +284,12 @@
             this.Controls.Add(this.panelStage);
             this.Controls.Add(this.groupSettings);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Name = "WorldVisualizer";
             this.Text = "World Visualizer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WorldVisualizer_FormClosing);
             this.Load += new System.EventHandler(this.WorldVisualizer_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.stage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStage)).EndInit();
             this.groupOptions.ResumeLayout(false);
             this.groupOptions.PerformLayout();
             this.groupActorVisibility.ResumeLayout(false);
@@ -268,6 +297,8 @@
             this.groupMapVisibility.ResumeLayout(false);
             this.groupMapVisibility.PerformLayout();
             this.groupSettings.ResumeLayout(false);
+            this.groupPreview.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).EndInit();
             this.panelStage.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -275,7 +306,7 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox stage;
+        private System.Windows.Forms.PictureBox pictureBoxStage;
         private System.Windows.Forms.GroupBox groupMapVisibility;
         private System.Windows.Forms.CheckBox checkBoxUnwalkableCells;
         private System.Windows.Forms.CheckBox checkBoxWalkableCells;
@@ -290,6 +321,8 @@
         private System.Windows.Forms.CheckBox checkBoxPrintLabels;
         private System.Windows.Forms.GroupBox groupSettings;
         private System.Windows.Forms.Panel panelStage;
+        private System.Windows.Forms.GroupBox groupPreview;
+        private System.Windows.Forms.PictureBox pictureBoxPreview;
 
     }
 }
