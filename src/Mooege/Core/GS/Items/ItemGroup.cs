@@ -17,6 +17,7 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Common.Helpers.Hash;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;

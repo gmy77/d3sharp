@@ -19,7 +19,7 @@
 using System.Linq;
 using System.Text;
 
-namespace Mooege.Common.Helpers
+namespace Mooege.Common.Helpers.Hash
 {
     public class StringHashHelper
     {

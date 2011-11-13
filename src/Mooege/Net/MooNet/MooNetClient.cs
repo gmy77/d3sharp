@@ -23,6 +23,7 @@ using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
 using Mooege.Common;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Hash;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Commands;

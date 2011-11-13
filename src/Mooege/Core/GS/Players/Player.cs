@@ -20,6 +20,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using Mooege.Common;
+using Mooege.Common.Helpers.Math;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Objects;
@@ -183,7 +184,7 @@ namespace Mooege.Core.GS.Players
 
             this.Field2 = 0x00000009;
             this.Scale = this.ModelScale;
-            this.RotationAmount = 0.05940768f;
+            this.FacingAngle = 0.05940768f;
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.Field7 = -1;
             this.NameSNOId = -1;
@@ -604,7 +605,7 @@ namespace Mooege.Core.GS.Players
                 this.Position = message.Position;
 
             if (message.Angle != null)
-                this.RotationAmount = message.Angle.Value;
+                this.FacingAngle = message.Angle.Value;
 
 
             var msg = new NotifyActorMovementMessage
@@ -685,7 +686,7 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void RevealScenesToPlayer()
         {
-            var scenes = this.GetScenesInRegion(DefaultQueryProximity * 2);
+            var scenes = this.GetScenesInRegion(DefaultQueryProximityLenght * 2);
 
             foreach (var scene in scenes) // reveal scenes in player's proximity.
             {

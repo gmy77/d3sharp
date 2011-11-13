@@ -19,13 +19,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
-using Mooege.Common.Helpers;
-
 
 namespace Mooege.Core.GS.Generators
 {
@@ -108,7 +107,7 @@ namespace Mooege.Core.GS.Generators
                 var scene = new Scene(world, position, sceneChunk.SNOHandle.Id, null)
                 {
                     MiniMapVisibility = SceneMiniMapVisibility.Revealed,                    
-                    RotationAmount = sceneChunk.PRTransform.Quaternion.W,
+                    FacingAngle = sceneChunk.PRTransform.Quaternion.W,
                     RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                     SceneGroupSNO = -1
                 };
@@ -145,7 +144,7 @@ namespace Mooege.Core.GS.Generators
                             var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
                             {
                                 MiniMapVisibility = SceneMiniMapVisibility.Revealed,
-                                RotationAmount = sceneChunk.PRTransform.Quaternion.W,
+                                FacingAngle = sceneChunk.PRTransform.Quaternion.W,
                                 RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                                 Specification = sceneChunk.SceneSpecification
                             };

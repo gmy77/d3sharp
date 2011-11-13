@@ -19,13 +19,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Items;
+using Mooege.Core.GS.Map;
 using Mooege.Core.MooNet.Commands;
+using Mooege.Core.MooNet.Games;
 using Mooege.Net.MooNet;
 using System.Text;
 using Monster = Mooege.Core.GS.Actors.Monster;
@@ -377,7 +382,7 @@ namespace Mooege.Core.GS.Games
         [DefaultCommand]
         public string Search(string[] @params, MooNetClient invokerClient)
         {
-            if (@params == null) 
+            if (@params == null)
                 return this.Fallback();
 
             var matches = new List<Asset>();
@@ -389,14 +394,15 @@ namespace Mooege.Core.GS.Games
 
             foreach (var groupPair in MPQStorage.Data.Assets)
             {
-                foreach(var pair in groupPair.Value)
+                foreach (var pair in groupPair.Value)
                 {
                     if (pair.Value.Name.ToLower().Contains(pattern))
-                        matches.Add(pair.Value);   
+                        matches.Add(pair.Value);
                 }
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? "Matches:\n" : "No matches found.", (current, match) => current + string.Format("[{0}] [{1}] {2}\n", match.SNOId.ToString("D6"), match.Group, match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Matches:\n" : "No matches found.",
+                                     (current, match) => current + string.Format("[{0}] [{1}] {2}\n", match.SNOId.ToString("D6"), match.Group, match.Name));
         }
 
         [Command("actor", "Allows you to search for an actor.\nUsage: lookup actor <pattern>")]
@@ -415,7 +421,8 @@ namespace Mooege.Core.GS.Games
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? "Actor Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Actor Matches:\n" : "No match found.",
+                                     (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
 
         [Command("monster", "Allows you to search for a monster.\nUsage: lookup monster <pattern>")]
@@ -434,7 +441,8 @@ namespace Mooege.Core.GS.Games
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? "Monster Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Monster Matches:\n" : "No match found.",
+                                     (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
 
         [Command("power", "Allows you to search for a power.\nUsage: lookup power <pattern>")]
@@ -453,7 +461,8 @@ namespace Mooege.Core.GS.Games
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? "Power Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Power Matches:\n" : "No match found.",
+                                     (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
 
         [Command("world", "Allows you to search for a world.\nUsage: lookup world <pattern>")]
@@ -472,7 +481,8 @@ namespace Mooege.Core.GS.Games
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? "World Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "World Matches:\n" : "No match found.",
+                                     (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
 
         [Command("scene", "Allows you to search for a scene.\nUsage: lookup scene <pattern>")]
@@ -491,32 +501,33 @@ namespace Mooege.Core.GS.Games
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? "Scene Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Scene Matches:\n" : "No match found.",
+                                     (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
 
-       [Command("item", "Allows you to search for an item.\nUsage: lookup item <pattern>")]
-       public string Item(string[] @params, MooNetClient invokerClient)
-       {
-           var matches = new List<ItemTable>();
+        [Command("item", "Allows you to search for an item.\nUsage: lookup item <pattern>")]
+        public string Item(string[] @params, MooNetClient invokerClient)
+        {
+            var matches = new List<ItemTable>();
 
-           if (@params.Count() < 1)
-               return "Invalid arguments. Type 'help lookup item' to get help.";
+            if (@params.Count() < 1)
+                return "Invalid arguments. Type 'help lookup item' to get help.";
 
-           var pattern = @params[0].ToLower();
+            var pattern = @params[0].ToLower();
 
-           foreach (var asset in MPQStorage.Data.Assets[SNOGroup.GameBalance].Values)
-           {
-               var data = asset.Data as GameBalance;
-               if (data == null || data.Type != BalanceType.Items) continue;
+            foreach (var asset in MPQStorage.Data.Assets[SNOGroup.GameBalance].Values)
+            {
+                var data = asset.Data as GameBalance;
+                if (data == null || data.Type != BalanceType.Items) continue;
 
-               foreach (var itemDefinition in data.Item)
-               {
-                   if (itemDefinition.Name.ToLower().Contains(pattern))
-                       matches.Add(itemDefinition);
-               }
-           }
-           return matches.Aggregate(matches.Count >= 1 ? "Item Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOActor.ToString("D6"), match.Name));
-       }
-   }   
+                foreach (var itemDefinition in data.Item)
+                {
+                    if (itemDefinition.Name.ToLower().Contains(pattern))
+                        matches.Add(itemDefinition);
+                }
+            }
+            return matches.Aggregate(matches.Count >= 1 ? "Item Matches:\n" : "No match found.",
+                                     (current, match) => current + string.Format("[{0}] {1}\n", match.SNOActor.ToString("D6"), match.Name));
+        }
+    }
 }
-

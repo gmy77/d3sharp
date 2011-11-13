@@ -21,6 +21,8 @@ using System.Linq;
 using Mooege.Common;
 using Mooege.Common.Helpers;
 using System.Collections.Generic;
+using Mooege.Common.Helpers.Hash;
+using Mooege.Common.Helpers.Math;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Common.MPQ.FileFormats;

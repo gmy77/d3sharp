@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Objects;
@@ -84,7 +85,7 @@ namespace Mooege.Core.GS.Actors
             if (this.Brain == null)
                 return;
 
-            this.Brain.Think(tickCounter);
+            this.Brain.Update(tickCounter);
         }
 
         // FIXME: Hardcoded hell. /komiga
