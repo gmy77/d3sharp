@@ -17,6 +17,7 @@
  */
 
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Mooege.Common.Helpers.Concurrency;
@@ -144,7 +145,36 @@ namespace Mooege.Core.GS.Map.Debug
 
         public Bitmap Draw()
         {
-            var bitmap = new Bitmap((int)this.World.QuadTree.RootNode.Bounds.Width, (int)this.World.QuadTree.RootNode.Bounds.Height, System.Drawing.Imaging.PixelFormat.Format16bppRgb555);
+            // As quad-tree always has 4 quad-nodes beneath the root node, the quad node's area will be far larger then actual area covered by scenes.
+            // We don't want to draw a bitmap that's as large as quad-tree's area, as it'll be consuming so much memory.
+            // So instead find the rightMostScene and bottomMostScene and limit the drawed bitmaps size according. /raist.
+            // TODO: We can even limit to leftMostScene and topMostScene because player-proximity rendering mode will be also containing large empty areas. /raist.
+
+            Scene rightMostScene = null;
+            Scene bottomMostScene = null;
+
+            foreach (var scene in this.MasterScenes)
+            {
+                if (rightMostScene == null)
+                    rightMostScene = scene;
+
+                if (bottomMostScene == null)
+                    bottomMostScene = scene;
+
+                if (scene.Bounds.X + scene.Bounds.Width > rightMostScene.Bounds.X + rightMostScene.Bounds.Width)
+                    rightMostScene = scene;
+
+                if (scene.Bounds.Y + scene.Bounds.Height > bottomMostScene.Bounds.Y + bottomMostScene.Bounds.Height)
+                    bottomMostScene = scene;
+            }
+
+            if (rightMostScene == null || bottomMostScene == null) 
+                return null;
+
+            var maxX = (int) (rightMostScene.Bounds.X + rightMostScene.Bounds.Width) + 1;
+            var maxY = (int)(bottomMostScene.Bounds.Y + bottomMostScene.Bounds.Height) + 1;
+
+            var bitmap = new Bitmap(maxX, maxY, System.Drawing.Imaging.PixelFormat.Format16bppRgb555);
 
             using (var graphics = Graphics.FromImage(bitmap))
             {

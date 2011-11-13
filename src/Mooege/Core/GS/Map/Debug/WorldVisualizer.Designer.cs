@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorldVisualizer));
             this.pictureBoxStage = new System.Windows.Forms.PictureBox();
             this.checkBoxFillCells = new System.Windows.Forms.CheckBox();
@@ -42,35 +43,38 @@
             this.checkBoxSubScenes = new System.Windows.Forms.CheckBox();
             this.checkBoxMasterScenes = new System.Windows.Forms.CheckBox();
             this.groupSettings = new System.Windows.Forms.GroupBox();
+            this.groupOptions = new System.Windows.Forms.GroupBox();
             this.groupBoxRenderMode = new System.Windows.Forms.GroupBox();
+            this.checkBoxDrawPlayerProximityRect = new System.Windows.Forms.CheckBox();
+            this.checkBoxDrawPlayerProximityCircle = new System.Windows.Forms.CheckBox();
             this.radioButtonPlayerProximity = new System.Windows.Forms.RadioButton();
             this.radioButtonAllWorld = new System.Windows.Forms.RadioButton();
             this.groupPreview = new System.Windows.Forms.GroupBox();
             this.pictureBoxPreview = new System.Windows.Forms.PictureBox();
             this.panelStage = new System.Windows.Forms.Panel();
-            this.groupOptions = new System.Windows.Forms.GroupBox();
-            this.checkBoxDrawPlayerProximityCircle = new System.Windows.Forms.CheckBox();
-            this.checkBoxDrawPlayerProximityRect = new System.Windows.Forms.CheckBox();
+            this.trackBarUpdateFrequency = new System.Windows.Forms.TrackBar();
+            this.label1 = new System.Windows.Forms.Label();
+            this.timerUpdate = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStage)).BeginInit();
             this.groupActorVisibility.SuspendLayout();
             this.groupMapVisibility.SuspendLayout();
             this.groupSettings.SuspendLayout();
+            this.groupOptions.SuspendLayout();
             this.groupBoxRenderMode.SuspendLayout();
             this.groupPreview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).BeginInit();
             this.panelStage.SuspendLayout();
-            this.groupOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarUpdateFrequency)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBoxStage
             // 
-            this.pictureBoxStage.Location = new System.Drawing.Point(2, 3);
+            this.pictureBoxStage.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxStage.Name = "pictureBoxStage";
-            this.pictureBoxStage.Size = new System.Drawing.Size(1002, 517);
-            this.pictureBoxStage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxStage.Size = new System.Drawing.Size(1008, 520);
+            this.pictureBoxStage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBoxStage.TabIndex = 0;
             this.pictureBoxStage.TabStop = false;
-            this.pictureBoxStage.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxStage_Paint);
             // 
             // checkBoxFillCells
             // 
@@ -98,14 +102,14 @@
             // 
             // groupActorVisibility
             // 
-            this.groupActorVisibility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupActorVisibility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupActorVisibility.Controls.Add(this.checkBoxMonsters);
             this.groupActorVisibility.Controls.Add(this.checkBoxPlayers);
             this.groupActorVisibility.Controls.Add(this.checkBoxNPCs);
-            this.groupActorVisibility.Location = new System.Drawing.Point(360, 13);
+            this.groupActorVisibility.Location = new System.Drawing.Point(399, 10);
             this.groupActorVisibility.Name = "groupActorVisibility";
-            this.groupActorVisibility.Size = new System.Drawing.Size(158, 191);
+            this.groupActorVisibility.Size = new System.Drawing.Size(197, 191);
             this.groupActorVisibility.TabIndex = 4;
             this.groupActorVisibility.TabStop = false;
             this.groupActorVisibility.Text = "Actor Visibility";
@@ -154,15 +158,15 @@
             // 
             // groupMapVisibility
             // 
-            this.groupMapVisibility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupMapVisibility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupMapVisibility.Controls.Add(this.checkBoxUnwalkableCells);
             this.groupMapVisibility.Controls.Add(this.checkBoxWalkableCells);
             this.groupMapVisibility.Controls.Add(this.checkBoxSubScenes);
             this.groupMapVisibility.Controls.Add(this.checkBoxMasterScenes);
             this.groupMapVisibility.Location = new System.Drawing.Point(196, 10);
             this.groupMapVisibility.Name = "groupMapVisibility";
-            this.groupMapVisibility.Size = new System.Drawing.Size(158, 191);
+            this.groupMapVisibility.Size = new System.Drawing.Size(197, 191);
             this.groupMapVisibility.TabIndex = 3;
             this.groupMapVisibility.TabStop = false;
             this.groupMapVisibility.Text = "Map Visibility";
@@ -234,20 +238,57 @@
             this.groupSettings.TabIndex = 1;
             this.groupSettings.TabStop = false;
             // 
+            // groupOptions
+            // 
+            this.groupOptions.Controls.Add(this.label1);
+            this.groupOptions.Controls.Add(this.trackBarUpdateFrequency);
+            this.groupOptions.Controls.Add(this.checkBoxFillCells);
+            this.groupOptions.Controls.Add(this.checkBoxPrintSceneLabels);
+            this.groupOptions.Location = new System.Drawing.Point(805, 10);
+            this.groupOptions.Name = "groupOptions";
+            this.groupOptions.Size = new System.Drawing.Size(197, 191);
+            this.groupOptions.TabIndex = 7;
+            this.groupOptions.TabStop = false;
+            this.groupOptions.Text = "Options";
+            // 
             // groupBoxRenderMode
             // 
-            this.groupBoxRenderMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBoxRenderMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBoxRenderMode.Controls.Add(this.checkBoxDrawPlayerProximityRect);
             this.groupBoxRenderMode.Controls.Add(this.checkBoxDrawPlayerProximityCircle);
             this.groupBoxRenderMode.Controls.Add(this.radioButtonPlayerProximity);
             this.groupBoxRenderMode.Controls.Add(this.radioButtonAllWorld);
-            this.groupBoxRenderMode.Location = new System.Drawing.Point(524, 13);
+            this.groupBoxRenderMode.Location = new System.Drawing.Point(602, 10);
             this.groupBoxRenderMode.Name = "groupBoxRenderMode";
-            this.groupBoxRenderMode.Size = new System.Drawing.Size(177, 191);
+            this.groupBoxRenderMode.Size = new System.Drawing.Size(197, 191);
             this.groupBoxRenderMode.TabIndex = 6;
             this.groupBoxRenderMode.TabStop = false;
             this.groupBoxRenderMode.Text = "Render Mode";
+            // 
+            // checkBoxDrawPlayerProximityRect
+            // 
+            this.checkBoxDrawPlayerProximityRect.AutoSize = true;
+            this.checkBoxDrawPlayerProximityRect.Enabled = false;
+            this.checkBoxDrawPlayerProximityRect.Location = new System.Drawing.Point(5, 87);
+            this.checkBoxDrawPlayerProximityRect.Name = "checkBoxDrawPlayerProximityRect";
+            this.checkBoxDrawPlayerProximityRect.Size = new System.Drawing.Size(153, 17);
+            this.checkBoxDrawPlayerProximityRect.TabIndex = 2;
+            this.checkBoxDrawPlayerProximityRect.Text = "Draw Player Proximity Rect";
+            this.checkBoxDrawPlayerProximityRect.UseVisualStyleBackColor = true;
+            this.checkBoxDrawPlayerProximityRect.CheckedChanged += new System.EventHandler(this.checkBoxDrawPlayerProximityRect_CheckedChanged);
+            // 
+            // checkBoxDrawPlayerProximityCircle
+            // 
+            this.checkBoxDrawPlayerProximityCircle.AutoSize = true;
+            this.checkBoxDrawPlayerProximityCircle.Enabled = false;
+            this.checkBoxDrawPlayerProximityCircle.Location = new System.Drawing.Point(5, 65);
+            this.checkBoxDrawPlayerProximityCircle.Name = "checkBoxDrawPlayerProximityCircle";
+            this.checkBoxDrawPlayerProximityCircle.Size = new System.Drawing.Size(156, 17);
+            this.checkBoxDrawPlayerProximityCircle.TabIndex = 1;
+            this.checkBoxDrawPlayerProximityCircle.Text = "Draw Player Proximity Circle";
+            this.checkBoxDrawPlayerProximityCircle.UseVisualStyleBackColor = true;
+            this.checkBoxDrawPlayerProximityCircle.CheckedChanged += new System.EventHandler(this.checkBoxDrawPlayerProximityCircle_CheckedChanged);
             // 
             // radioButtonPlayerProximity
             // 
@@ -275,8 +316,8 @@
             // 
             // groupPreview
             // 
-            this.groupPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupPreview.Controls.Add(this.pictureBoxPreview);
             this.groupPreview.Location = new System.Drawing.Point(6, 10);
             this.groupPreview.Name = "groupPreview";
@@ -298,7 +339,7 @@
             // panelStage
             // 
             this.panelStage.AutoScroll = true;
-            this.panelStage.AutoScrollMinSize = new System.Drawing.Size(1008, 500);
+            this.panelStage.AutoScrollMinSize = new System.Drawing.Size(1008, 520);
             this.panelStage.Controls.Add(this.pictureBoxStage);
             this.panelStage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelStage.Location = new System.Drawing.Point(0, 0);
@@ -307,40 +348,27 @@
             this.panelStage.TabIndex = 0;
             this.panelStage.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelStage_Scroll);
             // 
-            // groupOptions
+            // trackBarUpdateFrequency
             // 
-            this.groupOptions.Controls.Add(this.checkBoxFillCells);
-            this.groupOptions.Controls.Add(this.checkBoxPrintSceneLabels);
-            this.groupOptions.Location = new System.Drawing.Point(707, 13);
-            this.groupOptions.Name = "groupOptions";
-            this.groupOptions.Size = new System.Drawing.Size(158, 191);
-            this.groupOptions.TabIndex = 7;
-            this.groupOptions.TabStop = false;
-            this.groupOptions.Text = "Options";
+            this.trackBarUpdateFrequency.Location = new System.Drawing.Point(6, 87);
+            this.trackBarUpdateFrequency.Name = "trackBarUpdateFrequency";
+            this.trackBarUpdateFrequency.Size = new System.Drawing.Size(185, 45);
+            this.trackBarUpdateFrequency.TabIndex = 2;
+            this.trackBarUpdateFrequency.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBarUpdateFrequency.ValueChanged += new System.EventHandler(this.trackBarUpdateFrequency_ValueChanged);
             // 
-            // checkBoxDrawPlayerProximityCircle
+            // label1
             // 
-            this.checkBoxDrawPlayerProximityCircle.AutoSize = true;
-            this.checkBoxDrawPlayerProximityCircle.Enabled = false;
-            this.checkBoxDrawPlayerProximityCircle.Location = new System.Drawing.Point(5, 65);
-            this.checkBoxDrawPlayerProximityCircle.Name = "checkBoxDrawPlayerProximityCircle";
-            this.checkBoxDrawPlayerProximityCircle.Size = new System.Drawing.Size(156, 17);
-            this.checkBoxDrawPlayerProximityCircle.TabIndex = 1;
-            this.checkBoxDrawPlayerProximityCircle.Text = "Draw Player Proximity Circle";
-            this.checkBoxDrawPlayerProximityCircle.UseVisualStyleBackColor = true;
-            this.checkBoxDrawPlayerProximityCircle.CheckedChanged += new System.EventHandler(this.checkBoxDrawPlayerProximityCircle_CheckedChanged);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 69);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(98, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Update Frequency:";
             // 
-            // checkBoxDrawPlayerProximityRect
+            // timerUpdate
             // 
-            this.checkBoxDrawPlayerProximityRect.AutoSize = true;
-            this.checkBoxDrawPlayerProximityRect.Enabled = false;
-            this.checkBoxDrawPlayerProximityRect.Location = new System.Drawing.Point(5, 87);
-            this.checkBoxDrawPlayerProximityRect.Name = "checkBoxDrawPlayerProximityRect";
-            this.checkBoxDrawPlayerProximityRect.Size = new System.Drawing.Size(153, 17);
-            this.checkBoxDrawPlayerProximityRect.TabIndex = 2;
-            this.checkBoxDrawPlayerProximityRect.Text = "Draw Player Proximity Rect";
-            this.checkBoxDrawPlayerProximityRect.UseVisualStyleBackColor = true;
-            this.checkBoxDrawPlayerProximityRect.CheckedChanged += new System.EventHandler(this.checkBoxDrawPlayerProximityRect_CheckedChanged);
+            this.timerUpdate.Tick += new System.EventHandler(this.timerUpdate_Tick);
             // 
             // WorldVisualizer
             // 
@@ -355,19 +383,22 @@
             this.Text = "World Visualizer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WorldVisualizer_FormClosing);
             this.Load += new System.EventHandler(this.WorldVisualizer_Load);
+            this.SizeChanged += new System.EventHandler(this.WorldVisualizer_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStage)).EndInit();
             this.groupActorVisibility.ResumeLayout(false);
             this.groupActorVisibility.PerformLayout();
             this.groupMapVisibility.ResumeLayout(false);
             this.groupMapVisibility.PerformLayout();
             this.groupSettings.ResumeLayout(false);
+            this.groupOptions.ResumeLayout(false);
+            this.groupOptions.PerformLayout();
             this.groupBoxRenderMode.ResumeLayout(false);
             this.groupBoxRenderMode.PerformLayout();
             this.groupPreview.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).EndInit();
             this.panelStage.ResumeLayout(false);
-            this.groupOptions.ResumeLayout(false);
-            this.groupOptions.PerformLayout();
+            this.panelStage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarUpdateFrequency)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -396,6 +427,9 @@
         private System.Windows.Forms.GroupBox groupOptions;
         private System.Windows.Forms.CheckBox checkBoxDrawPlayerProximityRect;
         private System.Windows.Forms.CheckBox checkBoxDrawPlayerProximityCircle;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TrackBar trackBarUpdateFrequency;
+        private System.Windows.Forms.Timer timerUpdate;
 
     }
 }

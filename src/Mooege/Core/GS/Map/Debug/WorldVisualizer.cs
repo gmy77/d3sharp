@@ -92,25 +92,9 @@ namespace Mooege.Core.GS.Map.Debug
 
             this.StageBitmap = this.Mesh.Draw();
             this.PreviewBitmap = this.ResizeImage(this.StageBitmap, this.pictureBoxPreview.Width, this.pictureBoxPreview.Height);
-            this.pictureBoxStage.Refresh();
+            this.pictureBoxStage.Image = this.StageBitmap;
 
             this.groupSettings.Enabled = true;
-        }
-
-        #endregion
-
-        #region stage painting
-
-        private bool _donePaintingStage = true;
-
-        private void pictureBoxStage_Paint(object sender, PaintEventArgs e)
-        {
-            if (!_donePaintingStage) return;
-
-            _donePaintingStage = false;
-            this.pictureBoxStage.Size = this.StageBitmap.Size;
-            e.Graphics.DrawImage(this.StageBitmap, 0, 0, this.StageBitmap.Width, this.StageBitmap.Height);
-            _donePaintingStage = true;
         }
 
         #endregion
@@ -156,6 +140,31 @@ namespace Mooege.Core.GS.Map.Debug
                 this.panelStage.VerticalScroll.Value = y;
 
             this.pictureBoxPreview.Refresh();
+        }
+
+        private void WorldVisualizer_SizeChanged(object sender, EventArgs e)
+        {
+            this.pictureBoxPreview.Refresh();
+        }
+
+        #endregion
+
+        #region updates
+
+        private void trackBarUpdateFrequency_ValueChanged(object sender, EventArgs e)
+        {
+            if (trackBarUpdateFrequency.Value == 0)
+                timerUpdate.Enabled = false;
+            else
+            {
+                timerUpdate.Interval = trackBarUpdateFrequency.Value*1000;
+                timerUpdate.Enabled = true;
+            }
+        }
+
+        private void timerUpdate_Tick(object sender, EventArgs e)
+        {
+            this.RequestStageRedraw();
         }
 
         #endregion
@@ -282,7 +291,7 @@ namespace Mooege.Core.GS.Map.Debug
             GC.WaitForPendingFinalizers();
         }
 
-        #endregion        
-        
+        #endregion            
+
     }    
 }
