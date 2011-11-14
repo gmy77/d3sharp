@@ -42,30 +42,32 @@ namespace Mooege.Core.GS.Actors.Movement
         public override void Start(int tickCounter)
         {
             // Each path step will be 2.5f apart roughly, not sure on the math to get correct walk speed for the timer.
+            // mobs sometimes skip a bit, not sure why :( - DarkLotus
             var distance = MovementHelpers.GetDistance(this.Owner.Position, this.Heading);
             var facingAngle = MovementHelpers.GetFacingAngle(this.Owner, this.Heading);
             
             if (distance < 1f)
-            { this.Done = true; return; }
+            { Path.Clear(); this.Done = true; return; }
             this.Timer = new SteppedRelativeTickTimer(this.Owner.World.Game, 6, (int)(distance / this.Owner.WalkSpeed),
             (tick) =>
             {
                 //this.Owner.Position = MovementHelpers.GetMovementPosition(this.Owner.Position, this.Owner.WalkSpeed, facingAngle, 6);
-                if (Path.Count > 1)
+                if (Path.Count >= 1)
                 {
                     this.Owner.Move(this.Path.First(), MovementHelpers.GetFacingAngle(this.Owner, this.Path.First()));
                     this.Owner.Position = Path.First();
                     Path.RemoveAt(0);
                     //Logger.Trace("Step left in Queue: " + Path.Count);
                 }
-                else { Logger.Trace("Ticking with no path steps left"); this.Done = true; }
+                else { //Logger.Trace("Ticking with no path steps left"); 
+                        this.Done = true; }
 
             },
             (tick) =>
             {
                 this.Owner.Position = Heading;
-                Logger.Trace("Completed! Path contains :" + this.Path.Count);
-                //this.Done = true;
+                //Logger.Trace("Completed! Path contains :" + this.Path.Count);
+                this.Done = true;
             });
 
             this.Started = true;

@@ -9,3 +9,4 @@
 //
 //  Copyright (C) 2006 Franco, Gustavo 
 //
+http://www.codeproject.com/KB/recipes/PathFinder.aspx

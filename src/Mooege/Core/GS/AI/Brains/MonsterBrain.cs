@@ -37,7 +37,7 @@ namespace Mooege.Core.GS.AI.Brains
         public MonsterBrain(Actor body)
             : base(body)
         {
-            pather = new Pathfinder();
+            pather = new Pathfinder(this.Body.World);
         }
 
         public override void Think(int tickCounter)
@@ -54,7 +54,7 @@ namespace Mooege.Core.GS.AI.Brains
             
 
             if (this.EnemiesInRange.Count > 0) // if there are enemies around
-                if((MovementHelpers.GetDistance(this.Body.Position, this.EnemiesInRange[0].Position) < 30f))
+                if((MovementHelpers.GetDistance(this.Body.Position, this.EnemiesInRange[0].Position) < 50f))
                 {
                 this.State = BrainState.Combat; // attack them
                 }
@@ -80,16 +80,16 @@ namespace Mooege.Core.GS.AI.Brains
         {
             var heading = new Vector3D(this.Body.Position.X + FastRandom.Instance.Next(-40, 40), this.Body.Position.Y + FastRandom.Instance.Next(-40, 40), this.Body.Position.Z);
             if (MovementHelpers.GetDistance(this.Body.Position, heading) > 5f && MovementHelpers.GetDistance(this.Body.Position, heading) < 50f)
-            {// just skip the movements that can be accomplished in a single game.update(). /raist.
+            {
                 if (path == null)
                 {
                     path = Pather.GetPath(pather, this.Body, this.Body.Position, heading);
                     if (path == null) { return; } //Path should be waiting in cache when we tick around again - DarkLotus
                     path.Reverse();
                 }
-                if (path.Count < 2)
+                if (path.Count < 1)
                 {
-                    this.CurrentAction = new MoveToPointAction(this.Body, new Vector3D(this.path[0]));
+                    //this.CurrentAction = new MoveToPointAction(this.Body, new Vector3D(this.path[1]));
                     path = null; return;
                 }
                 this.CurrentAction = new FollowPathAction(this.Body, this.path);
@@ -103,20 +103,20 @@ namespace Mooege.Core.GS.AI.Brains
 
         private void Combat()
         {
-            // This is all wrong. Just PoC for wandering then switching to chasing.
+            // Mobs should discard path their following if target destination changes. - DarkLotus
             var heading = new Vector3D(this.EnemiesInRange[0].Position);
 
             if (MovementHelpers.GetDistance(this.Body.Position, heading) > 5f && MovementHelpers.GetDistance(this.Body.Position, heading) < 50f)
-            {// just skip the movements that can be accomplished in a single game.update(). /raist.
+            {
                 if (path == null)
                 {
                     path = Pather.GetPath(pather, this.Body, this.Body.Position, heading);
                     if (path == null) { return; }
                     path.Reverse();
                 }
-                if (path.Count < 2)
+                if (path.Count < 1)
                 {
-                    this.CurrentAction = new MoveToPointAction(this.Body, new Vector3D(this.path[0]));
+                    //this.CurrentAction = new MoveToPointAction(this.Body, new Vector3D(this.path[1]));
                     path = null; return;
                 }
                 this.CurrentAction = new FollowPathAction(this.Body,this.path);

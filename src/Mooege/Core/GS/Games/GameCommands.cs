@@ -34,7 +34,6 @@ using Mooege.Core.MooNet.Games;
 using Mooege.Net.MooNet;
 using System.Text;
 using Monster = Mooege.Core.GS.Actors.Monster;
-using System.Threading;
 
 namespace Mooege.Core.GS.Games
 {
