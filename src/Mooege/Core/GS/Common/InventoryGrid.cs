@@ -183,7 +183,7 @@ namespace Mooege.Core.GS.Common
             }
             else
             {
-                Logger.Error("Can't find slot in backpack to add item {0}", item.SNOName);
+                Logger.Error("Can't find slot in backpack to add item {0}", item.ActorSNO);
                 return false;
             }
         }

@@ -33,7 +33,7 @@ namespace Mooege.Core.GS.Actors.Implementations
     {
         private InventoryGrid _vendorGrid;
 
-        public Vendor(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Vendor(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
@@ -68,7 +68,6 @@ namespace Mooege.Core.GS.Actors.Implementations
 
             foreach (var item in items)
             {
-                item.Field3 = 1; // this is needed for inv items, should be handled in actor /fasbat
                 _vendorGrid.AddItem(item);
             }
 

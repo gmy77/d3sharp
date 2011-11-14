@@ -19,13 +19,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
-using Mooege.Common.Helpers;
-
 
 namespace Mooege.Core.GS.Generators
 {
@@ -105,10 +104,10 @@ namespace Mooege.Core.GS.Generators
             foreach (var sceneChunk in worldData.SceneParams.SceneChunks)
             {
                 var position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
-                var scene = new Scene(world, position, sceneChunk.SNOName.SNOId, null)
+                var scene = new Scene(world, position, sceneChunk.SNOHandle.Id, null)
                 {
                     MiniMapVisibility = SceneMiniMapVisibility.Revealed,                    
-                    RotationAmount = sceneChunk.PRTransform.Quaternion.W,
+                    FacingAngle = sceneChunk.PRTransform.Quaternion.W,
                     RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                     SceneGroupSNO = -1
                 };
@@ -118,7 +117,7 @@ namespace Mooege.Core.GS.Generators
                 {
                     if (!clusters.ContainsKey(sceneChunk.SceneSpecification.ClusterID))
                     {
-                        Logger.Warn("Referenced clusterID {0} not found for chunk {1} in world {2}", sceneChunk.SceneSpecification.ClusterID, sceneChunk.SNOName.SNOId, worldSNO);
+                        Logger.Warn("Referenced clusterID {0} not found for chunk {1} in world {2}", sceneChunk.SceneSpecification.ClusterID, sceneChunk.SNOHandle.Id, worldSNO);
                     }
                     else
                     {
@@ -137,7 +136,7 @@ namespace Mooege.Core.GS.Generators
 
                         if (pos == null)
                         {
-                            Logger.Error("No scene position marker for SubScenes of Scene {0} found", sceneChunk.SNOName.SNOId);
+                            Logger.Error("No scene position marker for SubScenes of Scene {0} found", sceneChunk.SNOHandle.Id);
                         }
                         else
                         {
@@ -145,7 +144,7 @@ namespace Mooege.Core.GS.Generators
                             var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
                             {
                                 MiniMapVisibility = SceneMiniMapVisibility.Revealed,
-                                RotationAmount = sceneChunk.PRTransform.Quaternion.W,
+                                FacingAngle = sceneChunk.PRTransform.Quaternion.W,
                                 RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                                 Specification = sceneChunk.SceneSpecification
                             };
@@ -167,7 +166,7 @@ namespace Mooege.Core.GS.Generators
         /// </summary>
         private static Vector3D FindSubScenePosition(Mooege.Common.MPQ.FileFormats.SceneChunk sceneChunk)
         {
-            var mpqScene = MPQStorage.Data.Assets[SNOGroup.Scene][sceneChunk.SNOName.SNOId].Data as Mooege.Common.MPQ.FileFormats.Scene;
+            var mpqScene = MPQStorage.Data.Assets[SNOGroup.Scene][sceneChunk.SNOHandle.Id].Data as Mooege.Common.MPQ.FileFormats.Scene;
 
             foreach (var markerSet in mpqScene.MarkerSets)
             {

@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Objects;
@@ -31,6 +32,7 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
+using System;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -38,9 +40,21 @@ namespace Mooege.Core.GS.Actors
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
+        public override int Quality
+        {
+            get
+            {
+                return (int)Mooege.Common.MPQ.FileFormats.SpawnType.Normal;
+            }
+            set
+            {
+                // TODO MonsterQuality setter not implemented. Throwing a NotImplementedError is catched as message not beeing implemented and nothing works anymore...
+            }
+        }
+
         public int LoreSNOId { get; private set; }
 
-        public Monster(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Monster(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Field2 = 0x8;
@@ -71,7 +85,7 @@ namespace Mooege.Core.GS.Actors
             if (this.Brain == null)
                 return;
 
-            this.Brain.Think(tickCounter);
+            this.Brain.Update(tickCounter);
         }
 
         // FIXME: Hardcoded hell. /komiga
@@ -129,9 +143,6 @@ namespace Mooege.Core.GS.Actors
                 ActorID = this.DynamicID
             }, this);
 
-            player.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
-            player.ExpBonusData.Update(player.GBHandle.Type, this.GBHandle.Type);
-
             this.World.BroadcastIfRevealed(new PlayAnimationMessage()
             {
                 ActorID = this.DynamicID,
@@ -162,7 +173,15 @@ namespace Mooege.Core.GS.Actors
             foreach (var msg in attribs.GetMessageList(this.DynamicID))
                 this.World.BroadcastIfRevealed(msg, this);
 
-            this.World.SpawnRandomItemDrop(player, this.Position);
+            // Spawn Random item and give exp for each player in range
+            List<Player> players = this.GetPlayersInRange(26f);
+            foreach (Player plr in players)
+            {
+                plr.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
+                this.World.SpawnRandomItemDrop(plr, this.Position);
+            }
+
+            player.ExpBonusData.Update(player.GBHandle.Type, this.GBHandle.Type);
             this.World.SpawnGold(player, this.Position);
             if (RandomHelper.Next(1, 100) < 20)
                 this.World.SpawnHealthGlobe(player, this.Position);

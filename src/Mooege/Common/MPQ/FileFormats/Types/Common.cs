@@ -45,63 +45,6 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         }
     }
 
-    public class TagMap : ISerializableData
-    {
-        public int TagMapSize { get; private set; }
-        public TagMapEntry[] TagMapEntries { get; private set; }
-
-        public void Read(MpqFileStream stream)
-        {
-            TagMapSize = stream.ReadValueS32();
-            TagMapEntries = new TagMapEntry[TagMapSize];
-
-            for (int i = 0; i < TagMapSize; i++)
-            {
-                TagMapEntries[i] = new TagMapEntry(stream);
-            }
-        }
-    }
-
-    public class TagMapEntry
-    {
-        public int Type { get; private set; }
-        public int TagID { get; private set; }
-        public ScriptFormula ScriptFormula { get; private set; }
-        public int Int2 { get; private set; }
-        public float Float0 { get; private set; }
-
-        public TagMapEntry(int tag, int value, int type)
-        {
-            Type = type;
-            TagID = tag;
-            Int2 = value;
-        }
-
-        public TagMapEntry(MpqFileStream stream)
-        {
-            this.Type = stream.ReadValueS32();
-            this.TagID = stream.ReadValueS32();
-
-            switch (this.Type)
-            {
-                case 0:
-                    this.Int2 = stream.ReadValueS32();
-                    break;
-                case 1:
-                    Float0 = stream.ReadValueF32();
-                    break;
-                case 2: // SNO
-                    this.Int2 = stream.ReadValueS32();
-                    break;
-                case 4:
-                    this.ScriptFormula = new ScriptFormula(stream);
-                    break;
-                default:
-                    this.Int2 = stream.ReadValueS32();
-                    break;
-            }
-        }
-    }
 
     public class ScriptFormula
     {
@@ -209,7 +152,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public int I0 { get; private set; }
         public TriggerConditions TriggerConditions { get; private set; }
         public int I1 { get; private set; }
-        public SNOName SnoName { get; private set; }
+        public SNOHandle SNOHandle { get; private set; }
         public int I2 { get; private set; }
         public int I3 { get; private set; }
         public int RuneType { get; private set; }
@@ -242,7 +185,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             I0 = stream.ReadValueS32();
             TriggerConditions = new TriggerConditions(stream);
             I1 = stream.ReadValueS32();
-            SnoName = new SNOName(stream);
+            SNOHandle = new SNOHandle(stream);
             I2 = stream.ReadValueS32();
             I3 = stream.ReadValueS32();
             RuneType = stream.ReadValueS32();

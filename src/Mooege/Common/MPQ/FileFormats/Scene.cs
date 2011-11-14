@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
@@ -164,7 +165,7 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             public Vector3D Min { get; private set; }
             public Vector3D Max { get; private set; }
-            public short Flags { get; private set; }
+            public NavCellFlags Flags { get; private set; }
             public short NeighbourCount { get; private set; }
             public int NeighborsIndex { get; private set; }
 
@@ -172,10 +173,34 @@ namespace Mooege.Common.MPQ.FileFormats
             {
                 this.Min = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
                 this.Max = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());
-                this.Flags = stream.ReadValueS16();
+                this.Flags = (NavCellFlags)stream.ReadValueS16();
                 this.NeighbourCount = stream.ReadValueS16();
                 this.NeighborsIndex = stream.ReadValueS32();
             }
+        }
+
+        /// <summary>
+        /// Flags for NavCell.
+        /// </summary>
+        [Flags]
+        public enum NavCellFlags : int
+        {
+            AllowWalk = 0x1,
+            AllowFlier = 0x2,
+            AllowSpider = 0x4,
+            LevelAreaBit0 = 0x8,
+            LevelAreaBit1 = 0x10,
+            NoNavMeshIntersected = 0x20,
+            NoSpawn = 0x40,
+            Special0 = 0x80,
+            Special1 = 0x100,
+            SymbolNotFound = 0x200,
+            AllowProjectile = 0x400,
+            AllowGhost = 0x800,
+            RoundedCorner0 = 0x1000,
+            RoundedCorner1 = 0x2000,
+            RoundedCorner2 = 0x4000,
+            RoundedCorner3 = 0x8000
         }
 
         public class NavCellLookup : ISerializableData

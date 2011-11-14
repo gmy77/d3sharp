@@ -19,9 +19,9 @@
 using System;
 using Mooege.Core.GS.Common.Types.Math;
 
-namespace Mooege.Core.GS.Actors.Helpers
+namespace Mooege.Core.GS.Actors.Movement
 {
-    public static class ActorHelpers
+    public static class MovementHelpers
     {
         /// <summary>
         /// Returns 2D angle to face the target position.
@@ -40,6 +40,30 @@ namespace Mooege.Core.GS.Actors.Helpers
         public static float GetFacingAngle(Actor looker, Actor target)
         {
             return GetFacingAngle(looker.Position, target.Position);
+        }
+
+        public static float GetFacingAngle(Actor looker, Vector2F targetPosition)
+        {
+            return GetFacingAngle(looker.Position, new Vector3D(targetPosition.X, targetPosition.Y, 0));
+        }
+
+        public static float GetFacingAngle(Actor looker, Vector3D targetPosition)
+        {
+            return GetFacingAngle(looker.Position, targetPosition);
+        }
+
+        public static float GetDistance(Vector3D startPosition, Vector3D targetPosition)
+        {
+            if ((startPosition == null) || (targetPosition == null)) return 0;
+            return (float)Math.Sqrt(Math.Pow(startPosition.X - targetPosition.X, 2) + Math.Pow(startPosition.Y - targetPosition.Y, 2));
+        }
+
+        public static Vector3D GetMovementPosition(Vector3D position, float speed, float facingAngle, int ticks = 6)
+        {
+            var xDelta = (speed * ticks) * (float)Math.Cos(facingAngle);
+            var yDelta = (speed * ticks) * (float)Math.Sin(facingAngle);
+
+            return new Vector3D(position.X + xDelta, position.Y + yDelta, position.Z);
         }
     }
 }

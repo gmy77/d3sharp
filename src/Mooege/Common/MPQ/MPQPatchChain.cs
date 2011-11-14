@@ -89,7 +89,7 @@ namespace Mooege.Common.MPQ
 
                 if (patchVersion > this.RequiredVersion) // ignore the patch if it's version is higher than our required.
                 {
-                    Logger.Trace("Ignoring patch file {0}", patchName);
+                    Logger.Trace("Ignoring patch file {0}.", patchName);
                     continue;
                 }
 

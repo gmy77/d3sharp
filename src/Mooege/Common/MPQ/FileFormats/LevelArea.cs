@@ -81,14 +81,14 @@ namespace Mooege.Common.MPQ.FileFormats
     {
         public int I0 { get; private set; }
         public int I1 { get; private set; }
-        public SNOName SNOName { get; private set; }
+        public SNOHandle SNOHandle { get; private set; }
         public int I2 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             this.I0 = stream.ReadValueS32();
             this.I1 = stream.ReadValueS32();
-            this.SNOName = new SNOName(stream);
+            this.SNOHandle = new SNOHandle(stream);
             this.I2 = stream.ReadValueS32();
         }
     }
@@ -147,7 +147,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LevelAreaSpawnItem : ISerializableData
     {
-        public SNOName SNOName { get; private set; }
+        public SNOHandle SNOHandle { get; private set; }
         public SpawnType SpawnType { get; private set; }
         public int I0 { get; private set; }
         public int I1 { get; private set; }
@@ -156,7 +156,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            this.SNOName = new SNOName(stream);
+            this.SNOHandle = new SNOHandle(stream);
             this.SpawnType = (SpawnType)stream.ReadValueS32();
             this.I0 = stream.ReadValueS32();
             this.I1 = stream.ReadValueS32();

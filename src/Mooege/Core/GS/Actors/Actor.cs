@@ -27,7 +27,6 @@ using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Items;
-using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Core.GS.Map;
@@ -47,14 +46,17 @@ namespace Mooege.Core.GS.Actors
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         /// <summary>
-        /// SNO Id of the actor.
+        /// ActorSNO.
         /// </summary>
-        public int SNOId { get; protected set; }
+        public SNOHandle ActorSNO { get; private set; }
 
         /// <summary>
-        /// SNOName - TODO: we can handle this better /raist.
+        /// Gets or sets the sno of the actor used to identify the actor to the player
+        /// This is usually the same as actorSNO except for actors that have a GBHandle
+        /// There are few exceptions though like the Inn_Zombies that have both.
+        /// Used by ACDEnterKnown to name the actor.
         /// </summary>
-        public SNOName SNOName { get; private set; }
+        public int NameSNOId { get; set; }
 
         /// <summary>
         /// The actor type.
@@ -75,22 +77,27 @@ namespace Mooege.Core.GS.Actors
         public bool Spawned { get; private set; }
 
         /// <summary>
-        /// Default query radius value.
+        /// Default lenght value for region based queries.
         /// </summary>
-        protected const int DefaultQueryProximity = 240;
+        public const int DefaultQueryProximityLenght = 240;
+
+        /// <summary>
+        /// Default lenght value for range based queries.
+        /// </summary>
+        public const int DefaultQueryProximityRadius = 120;
 
         /// <summary>
         /// PRTransform for the actor.
         /// </summary>
         public virtual PRTransform Transform
         {
-            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.FacingAngle, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
         /// <summary>
         /// Tags read from MPQ's for the actor.
         /// </summary>
-        public Dictionary<int, TagMapEntry> Tags { get; private set; }
+        public TagMap Tags { get; private set; }
 
         /// <summary>
         /// Attribute map.
@@ -120,9 +127,9 @@ namespace Mooege.Core.GS.Actors
         /// <summary>
         /// The QuestRange specifies the visibility of an actor, depending on quest progress
         /// </summary>
-        private Mooege.Common.MPQ.FileFormats.QuestRange questRange;
+        private Mooege.Common.MPQ.FileFormats.QuestRange _questRange;
 
-        protected Mooege.Common.MPQ.FileFormats.ConversationList conversationList;
+        protected Mooege.Common.MPQ.FileFormats.ConversationList ConversationList;
 
         /// <summary>
         /// Returns true if actor has world location.
@@ -146,14 +153,31 @@ namespace Mooege.Core.GS.Actors
 
         // Some ACD uncertainties /komiga.
         public int Field2 = 0x00000000; // TODO: Probably flags or actor type. 0x8==monster, 0x1a==item, 0x10=npc, 0x01=other player, 0x09=player-itself /komiga & /raist.
-        public int Field3 = 0x00000001; // TODO: What dis? <-- I guess its just 0 for WorldItem and 1 for InventoryItem // Farmy
-        public int Field7 = -1;
-        public int Field8 = -1; // Animation set SNO?
-        public int Field9; // SNOName.Group?
-        public byte Field10 = 0x00;
-        public int? Field11 = null;
-        public int? Field12 = null;
-        public int? Field13 = null;
+        public int Field7 = -1;         // Either -1 when ActorNameSNO is -1 or 1 if ActorNameSno is set
+
+        /// <summary>
+        /// Quality of the actor as presented to the client. This is either ItemQualityLevel
+        /// or LevelArea.SpawnType for monsters or GameBalance.ItemQuality for Items and 0 for all other actors
+        /// TODO ACDEnterKnown.Quality seems to be overridden by actor.attributes anyways, at least for items, so im not sure if it maybe has some other purpose -farmy
+        /// </summary>
+        public virtual int Quality { get; set; }
+
+        public byte Field10 = 0x00;     // always 0 except for a few loots corpses (not all)... 
+        public int? Field11 = null;     // never used at all?
+
+        /// <summary>
+        /// Gets or sets the MarkerSet from which this item has been loaded.
+        /// TODO MarkerSetData for actors is currently never sent with ACDEnterKnown and it is unclear what it is used for
+        /// </summary>
+        public int? MarkerSetSNO { get; private set; }
+
+        /// <summary>
+        /// Gets or sets hte index within the markerset actor list which was the
+        /// source of this actor (markerset may point to an encounter which
+        /// creates this actor or this actor directly)
+        /// TODO MarkerSetData for actors is currently never sent with ACDEnterKnown and it is unclear what it is used for
+        /// </summary>
+        public int? MarkerSetIndex { get; private set; }
 
         private int snoTriggeredConversation = -1;
 
@@ -163,28 +187,30 @@ namespace Mooege.Core.GS.Actors
         /// <param name="world">The world that initially belongs to.</param>
         /// <param name="snoId">SNOId of the actor.</param>
         /// <param name="tags">TagMapEntry dictionary read for the actor from MPQ's..</param>           
-        protected Actor(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        protected Actor(World world, int snoId, TagMap tags)
             : base(world, world.NewActorID)
         {
-            this.SNOId = snoId;
-            this.SNOName = new SNOName { Group = SNOGroup.Actor, SNOId = this.SNOId };
-            this.Spawned = false;
-            this.Size = new Size(1, 1);
             this.Attributes = new GameAttributeMap();
             this.AffixList = new List<Affix>();
-            this.GBHandle = new GBHandle { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
-            this.CollFlags = 0x00000000;
 
-            this.ActorData = (Mooege.Common.MPQ.FileFormats.Actor) Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.Actor][snoId].Data;
-            if (this.ActorData.AnimSetSNO != -1) 
-                this.AnimationSet = (Mooege.Common.MPQ.FileFormats.AnimSet) Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.AnimSet][this.ActorData.AnimSetSNO].Data;
+            this.ActorData = (Mooege.Common.MPQ.FileFormats.Actor)Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.Actor][snoId].Data;
+            if (this.ActorData.AnimSetSNO != -1)
+                this.AnimationSet = (Mooege.Common.MPQ.FileFormats.AnimSet)Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.AnimSet][this.ActorData.AnimSetSNO].Data;
+
+            this.ActorSNO = new SNOHandle(SNOGroup.Actor, snoId);
+            this.NameSNOId = snoId;
+            this.Quality = 0;
+            this.Spawned = false;
+            this.Size = new Size(1, 1);
+            this.GBHandle = new GBHandle { Type = -1, GBID = -1 }; // Seems to be the default. /komiga
+            this.CollFlags = this.ActorData.ActorCollisionData.ColFlags.I3;
 
             this.Tags = tags;
             this.ReadTags();
 
             // Listen for quest progress if the actor has a QuestRange attached to it
             foreach(var quest in World.Game.Quests)
-                if(questRange != null)
+                if(_questRange != null)
                     quest.OnQuestProgress += new Games.Quest.QuestProgressDelegate(quest_OnQuestProgress);
             UpdateQuestRangeVisbility();
         }
@@ -246,7 +272,7 @@ namespace Mooege.Core.GS.Actors
         public void ChangeWorld(World world, StartingPoint startingPoint)
         {
             this.RotationAxis = startingPoint.RotationAxis;
-            this.RotationAmount = startingPoint.RotationAmount;
+            this.FacingAngle = startingPoint.FacingAngle;
 
             this.ChangeWorld(world, startingPoint.Position);
         }
@@ -395,8 +421,8 @@ namespace Mooege.Core.GS.Actors
 
         private void UpdateQuestRangeVisbility()
         {
-            if (questRange != null)
-                Visible = World.Game.Quests.IsInQuestRange(questRange);
+            if (_questRange != null)
+                Visible = World.Game.Quests.IsInQuestRange(_questRange);
             else
                 Visible = true;
         }
@@ -416,19 +442,19 @@ namespace Mooege.Core.GS.Actors
             return new ACDEnterKnownMessage
             {
                 ActorID = this.DynamicID,
-                ActorSNO = this.SNOId,
-                Field2 = Field2,
+                ActorSNOId = this.ActorSNO.Id,
+                Field2 = this.Field2,
                 Field3 =  this.HasWorldLocation ? 0 : 1,
                 WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
                 InventoryLocation = this.HasWorldLocation ? null : this.InventoryLocationMessage,
                 GBHandle = this.GBHandle,
-                Field7 = Field7,
-                Field8 = Field8,
-                Field9 = Field9,
-                Field10 = Field10,
-                Field11 = Field11,
-                Field12 = Field12,
-                Field13 = Field13,
+                Field7 = this.Field7,
+                NameSNOId = this.NameSNOId,
+                Quality = this.Quality,
+                Field10 = this.Field10,
+                Field11 = this.Field11,
+                MarkerSetSNO = this.MarkerSetSNO,
+                MarkerSetIndex = this.MarkerSetIndex,
             };
         }
 
@@ -472,8 +498,8 @@ namespace Mooege.Core.GS.Actors
 
             // This is always sent even though it doesn't identify the actor. /komiga
             player.InGameClient.SendMessage(new SNONameDataMessage
-                                                {
-                Name = this.SNOName
+            {
+                Name = this.ActorSNO
             });
 
             return true;
@@ -497,42 +523,42 @@ namespace Mooege.Core.GS.Actors
 
         #region circurlar region queries
 
-        public List<Player> GetPlayersInRange(float radius = DefaultQueryProximity)
+        public List<Player> GetPlayersInRange(float radius = DefaultQueryProximityRadius)
         {
             return this.GetObjectsInRange<Player>(radius);
         }
 
-        public List<Item> GetItemsInRange(float radius = DefaultQueryProximity)
+        public List<Item> GetItemsInRange(float radius = DefaultQueryProximityRadius)
         {
             return this.GetObjectsInRange<Item>(radius);
         }
 
-        public List<Monster> GetMonstersInRange(float radius = DefaultQueryProximity)
+        public List<Monster> GetMonstersInRange(float radius = DefaultQueryProximityRadius)
         {
             return this.GetObjectsInRange<Monster>(radius);
         }
 
-        public List<Actor> GetActorsInRange(float radius = DefaultQueryProximity)
+        public List<Actor> GetActorsInRange(float radius = DefaultQueryProximityRadius)
         {
             return this.GetObjectsInRange<Actor>(radius);
         }
 
-        public List<T> GetActorsInRange<T>(float radius = DefaultQueryProximity) where T : Actor
+        public List<T> GetActorsInRange<T>(float radius = DefaultQueryProximityRadius) where T : Actor
         {
             return this.GetObjectsInRange<T>(radius);
         }
 
-        public List<Scene> GetScenesInRange(float radius = DefaultQueryProximity)
+        public List<Scene> GetScenesInRange(float radius = DefaultQueryProximityRadius)
         {
             return this.GetObjectsInRange<Scene>(radius);
         }
 
-        public List<WorldObject> GetObjectsInRange(float radius = DefaultQueryProximity)
+        public List<WorldObject> GetObjectsInRange(float radius = DefaultQueryProximityRadius)
         {
             return this.GetObjectsInRange<WorldObject>(radius);
         }
 
-        public List<T> GetObjectsInRange<T>(float radius=DefaultQueryProximity) where T : WorldObject
+        public List<T> GetObjectsInRange<T>(float radius = DefaultQueryProximityRadius) where T : WorldObject
         {
             var proximityCircle = new Circle(this.Position.X, this.Position.Y, radius);
             return this.World.QuadTree.Query<T>(proximityCircle);
@@ -542,42 +568,42 @@ namespace Mooege.Core.GS.Actors
 
         #region rectangluar region queries
 
-        public List<Player> GetPlayersInRegion(int lenght = DefaultQueryProximity)
+        public List<Player> GetPlayersInRegion(int lenght = DefaultQueryProximityLenght)
         {
             return this.GetObjectsInRegion<Player>(lenght);
         }
 
-        public List<Item> GetItemsInRegion(int lenght = DefaultQueryProximity)
+        public List<Item> GetItemsInRegion(int lenght = DefaultQueryProximityLenght)
         {
             return this.GetObjectsInRegion<Item>(lenght);
         }
 
-        public List<Monster> GetMonstersInRegion(int lenght = DefaultQueryProximity)
+        public List<Monster> GetMonstersInRegion(int lenght = DefaultQueryProximityLenght)
         {
             return this.GetObjectsInRegion<Monster>(lenght);
         }
 
-        public List<Actor> GetActorsInRegion(int lenght = DefaultQueryProximity)
+        public List<Actor> GetActorsInRegion(int lenght = DefaultQueryProximityLenght)
         {
             return this.GetObjectsInRegion<Actor>(lenght);
         }
 
-        public List<T> GetActorsInRegion<T>(int lenght = DefaultQueryProximity) where T : Actor
+        public List<T> GetActorsInRegion<T>(int lenght = DefaultQueryProximityLenght) where T : Actor
         {
             return this.GetObjectsInRegion<T>(lenght);
         }
 
-        public List<Scene> GetScenesInRegion(int lenght = DefaultQueryProximity)
+        public List<Scene> GetScenesInRegion(int lenght = DefaultQueryProximityLenght)
         {
             return this.GetObjectsInRegion<Scene>(lenght);
         }
 
-        public List<WorldObject> GetObjectsInRegion(int lenght = DefaultQueryProximity)
+        public List<WorldObject> GetObjectsInRegion(int lenght = DefaultQueryProximityLenght)
         {
             return this.GetObjectsInRegion<WorldObject>(lenght);
         }
 
-        public List<T> GetObjectsInRegion<T>(int lenght = DefaultQueryProximity) where T : WorldObject
+        public List<T> GetObjectsInRegion<T>(int lenght = DefaultQueryProximityLenght) where T : WorldObject
         {
             var proximityRectangle = new Rect(this.Position.X - lenght / 2, this.Position.Y - lenght / 2, lenght, lenght);
             return this.World.QuadTree.Query<T>(proximityRectangle);
@@ -666,28 +692,28 @@ namespace Mooege.Core.GS.Actors
         {
             if (this.Tags == null) return;
 
-            if (this.Tags.ContainsKey((int)MarkerTagTypes.Scale))
-                this.Scale = this.Tags[(int)MarkerTagTypes.Scale].Float0;
+            this.Scale = Tags.ContainsKey(TagKeys.Scale) ? Tags[TagKeys.Scale] : 1;
 
-            if (this.Tags.ContainsKey((int)MarkerTagTypes.QuestRange))
+
+            if (Tags.ContainsKey(TagKeys.QuestRange))
             {
-                int snoQuestRange = Tags[(int)MarkerTagTypes.QuestRange].Int2;
+                int snoQuestRange = Tags[TagKeys.QuestRange].Id;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange].ContainsKey(snoQuestRange))
-                    questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
+                    _questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
                 //else Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
             }
 
-            if (this.Tags.ContainsKey((int)MarkerTagTypes.ConversationList))
+            if (Tags.ContainsKey(TagKeys.ConversationList))
             {
-                int snoConversationList = Tags[(int)MarkerTagTypes.ConversationList].Int2;
+                int snoConversationList = Tags[TagKeys.ConversationList].Id;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList].ContainsKey(snoConversationList))
-                    conversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
+                    ConversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
                 //else Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", SNOId, snoConversationList);
             }
 
 
-            if(this.Tags.ContainsKey((int)MarkerTagTypes.TriggeredConversation))
-                snoTriggeredConversation = Tags[(int)MarkerTagTypes.TriggeredConversation].Int2;
+            if(this.Tags.ContainsKey(TagKeys.TriggeredConversation))
+                snoTriggeredConversation = Tags[TagKeys.TriggeredConversation].Id;
 
 
         }
@@ -698,6 +724,8 @@ namespace Mooege.Core.GS.Actors
 
         public void Move(Vector3D point, float facingAngle)
         {
+            this.FacingAngle = facingAngle;
+
             var movementMessage = new NotifyActorMovementMessage
             {
                 ActorId = (int)this.DynamicID,
@@ -716,7 +744,7 @@ namespace Mooege.Core.GS.Actors
 
         public override string ToString()
         {
-            return string.Format("[Actor] [Type: {0}] SNOId:{1} DynamicId: {2} Position: {3} Name: {4}", this.ActorType, this.SNOId, this.DynamicID, this.Position, this.SNOName.Name);
+            return string.Format("[Actor] [Type: {0}] SNOId:{1} DynamicId: {2} Position: {3} Name: {4}", this.ActorType, this.ActorSNO.Id, this.DynamicID, this.Position, this.ActorSNO.Name);
         }
     }
 

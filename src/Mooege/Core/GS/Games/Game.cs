@@ -341,18 +341,18 @@ namespace Mooege.Core.GS.Games
 
         public void AddWorld(World world)
         {
-            if (world.SNOId == -1 || WorldExists(world.SNOId))
-                throw new Exception(String.Format("World has an invalid SNO or was already being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.SNOId));
-            this._worlds.TryAdd(world.SNOId, world);
+            if (world.WorldSNO.Id == -1 || WorldExists(world.WorldSNO.Id))
+                throw new Exception(String.Format("World has an invalid SNO or was already being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.WorldSNO.Id));
+            this._worlds.TryAdd(world.WorldSNO.Id, world);
         }
 
         public void RemoveWorld(World world)
         {
-            if (world.SNOId == -1 || !WorldExists(world.SNOId))
-                throw new Exception(String.Format("World has an invalid SNO or was not being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.SNOId));
+            if (world.WorldSNO.Id == -1 || !WorldExists(world.WorldSNO.Id))
+                throw new Exception(String.Format("World has an invalid SNO or was not being tracked (ID = {0}, SNO = {1})", world.DynamicID, world.WorldSNO.Id));
 
             World removed;
-            this._worlds.TryRemove(world.SNOId, out removed);
+            this._worlds.TryRemove(world.WorldSNO.Id, out removed);
         }
 
         public World GetWorld(int worldSNO)

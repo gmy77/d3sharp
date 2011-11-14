@@ -27,12 +27,11 @@ namespace Mooege.Core.GS.Actors
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
-        public NPC(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public NPC(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Field2 = 0x9;
-            this.Field7 = 1;
-            this.Field8 = snoId; //TODO check if this is not true for every actor / living? /fasbat
+            this.Field7 = 2;
             this.Attributes[GameAttribute.TeamID] = 1;
             this.Attributes[GameAttribute.Is_NPC] = true;
         }

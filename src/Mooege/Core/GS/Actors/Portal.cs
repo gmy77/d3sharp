@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Mooege.Common;
+using Mooege.Common.Helpers.Hash;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
@@ -39,26 +40,23 @@ namespace Mooege.Core.GS.Actors
 
         public ResolvedPortalDestination Destination { get; private set; }
 
-        public Portal(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Portal(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Destination = new ResolvedPortalDestination
             {
-                WorldSNO = tags[(int)MarkerTagTypes.DestinationWorld].Int2,
+                WorldSNO = tags[TagKeys.DestinationWorld].Id,
             };
 
-            if (tags.ContainsKey((int)MarkerTagTypes.DestinationLevelArea))
-                this.Destination.DestLevelAreaSNO = tags[(int)MarkerTagTypes.DestinationLevelArea].Int2;
+            if (tags.ContainsKey(TagKeys.DestinationLevelArea))
+                this.Destination.DestLevelAreaSNO = tags[TagKeys.DestinationLevelArea].Id;
 
-            if (tags.ContainsKey((int)MarkerTagTypes.DestinationActorTag))
-                this.Destination.StartingPointActorTag = tags[(int)MarkerTagTypes.DestinationActorTag].Int2;
+            if (tags.ContainsKey(TagKeys.DestinationActorTag))
+                this.Destination.StartingPointActorTag = tags[TagKeys.DestinationActorTag];
             else
-                Logger.Warn("Found portal {0}without target location actor", this.SNOId);
+                Logger.Warn("Found portal {0}without target location actor", this.ActorSNO.Id);
 
-            this.Field8 = this.SNOId;
             this.Field2 = 16;
-            this.Field3 = 0;
-            this.CollFlags = 0x00000001;
 
             // FIXME: Hardcoded crap; probably don't need to set most of these. /komiga
             this.Attributes[GameAttribute.MinimapActive] = true;

@@ -22,6 +22,7 @@ using System.Linq;
 using System.Reflection;
 using Google.ProtocolBuffers;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Hash;
 
 namespace Mooege.Core.MooNet.Services
 {

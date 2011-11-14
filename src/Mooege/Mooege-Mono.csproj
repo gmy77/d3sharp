@@ -42,6 +42,7 @@
     <Externalconsole>true</Externalconsole>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <UseVSHostingProcess>true</UseVSHostingProcess>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -91,14 +92,19 @@
     <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\dep\PowerCollections.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Common\Extensions\ListExtensions.cs" />
-    <Compile Include="Common\Helpers\FileHelpers.cs" />
+    <Compile Include="Common\Helpers\Concurrency\ConcurrentList.cs" />
+    <Compile Include="Common\Helpers\Math\FastRandom.cs" />
+    <Compile Include="Common\Helpers\IO\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\Data.cs" />
     <Compile Include="Common\MPQ\FileFormats\Act.cs" />
@@ -131,9 +137,17 @@
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
     <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Types\TagMap.cs" />
     <Compile Include="Common\MPQ\SerializableData.cs" />
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
+    <Compile Include="Core\GS\Actors\Actions\ActorAction.cs" />
+    <Compile Include="Core\GS\Actors\Movement\MoveToPointAction.cs" />
+    <Compile Include="Core\GS\AI\Brains\FollowerBrain.cs" />
+    <Compile Include="Core\GS\AI\Brains\HirelingBrain.cs" />
+    <Compile Include="Core\GS\AI\Brains\MonsterBrain.cs" />
+    <Compile Include="Core\GS\AI\BrainState.cs" />
+    <Compile Include="Core\GS\AI\Brains\NPCBrain.cs" />
     <Compile Include="Core\GS\Items\Affix.cs" />
     <Compile Include="Core\GS\Items\AffixGenerator.cs" />
     <Compile Include="Core\GS\Items\HandledItem.cs" />
@@ -156,7 +170,7 @@
     <Compile Include="Core\GS\Actors\Gizmo.cs" />
     <Compile Include="Core\GS\Actors\Environment.cs" />
     <Compile Include="Core\GS\Actors\HandledSNO.cs" />
-    <Compile Include="Core\GS\Actors\Helpers\ActorHelpers.cs" />
+    <Compile Include="Core\GS\Actors\Movement\MovementHelpers.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Artisan.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Blacksmith.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Jeweler.cs" />
@@ -188,6 +202,14 @@
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
     <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
     <Compile Include="Core\GS\Items\RuneHelper.cs" />
+    <Compile Include="Core\GS\Map\Debug\ControlExtensions.cs" />
+    <Compile Include="Core\GS\Map\Debug\DebugNavMesh.cs" />
+    <Compile Include="Core\GS\Map\Debug\WorldVisualizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GS\Map\Debug\WorldVisualizer.Designer.cs">
+      <DependentUpon>WorldVisualizer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GS\Markers\Marker.cs" />
     <Compile Include="Core\GS\Games\Quest.cs" />
     <Compile Include="Core\GS\Players\ConversationManager.cs" />
@@ -195,7 +217,8 @@
     <Compile Include="Core\GS\Objects\IUpdateable.cs" />
     <Compile Include="Core\GS\Players\ExpBonusData.cs" />
     <Compile Include="Core\GS\Players\Equipment.cs" />
-    <Compile Include="Core\GS\Ticker\Helpers\TickTimer.cs" />
+    <Compile Include="Core\GS\Ticker\SteppedTickTimer.cs" />
+    <Compile Include="Core\GS\Ticker\TickTimer.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
@@ -220,7 +243,7 @@
     <Compile Include="Core\MooNet\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\MooNet\Helpers\FieldKeyHelper.cs" />
     <Compile Include="Core\MooNet\Helpers\NotificationTypeHelper.cs" />
-    <Compile Include="Common\Helpers\RandomHelper.cs" />
+    <Compile Include="Common\Helpers\Math\RandomHelper.cs" />
     <Compile Include="Core\GS\Items\Item.cs" />
     <Compile Include="Core\GS\Items\ItemGenerator.cs" />
     <Compile Include="Core\GS\Actors\Portal.cs" />
@@ -321,7 +344,7 @@
     <Compile Include="Core\GS\Common\Types\Scene\SceneCachedValues.cs" />
     <Compile Include="Core\GS\Common\Types\Scene\SceneSpecification.cs" />
     <Compile Include="Net\GS\Message\Fields\SkillKeyMapping.cs" />
-    <Compile Include="Core\GS\Common\Types\SNO\SNOName.cs" />
+    <Compile Include="Core\GS\Common\Types\SNO\SNOHandle.cs" />
     <Compile Include="Core\GS\Common\Types\Math\Vector3D.cs" />
     <Compile Include="Net\GS\Message\Fields\VisualEquipment.cs" />
     <Compile Include="Net\GS\Message\Fields\VisualItem.cs" />
@@ -514,7 +537,7 @@
     <Compile Include="Common\Extensions\DateTimeExtensions.cs" />
     <Compile Include="Common\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Net\MooNet\MooNetRouter.cs" />
-    <Compile Include="Common\Helpers\StringHashHelper.cs" />
+    <Compile Include="Common\Helpers\Hash\StringHashHelper.cs" />
     <Compile Include="Common\Extensions\IMessageExtensions.cs" />
     <Compile Include="Common\TinyLogger.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObjectManager.cs" />
@@ -570,5 +593,9 @@
       <Name>LibMooNet</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Core\GS\Map\Debug\WorldVisualizer.resx">
+      <DependentUpon>WorldVisualizer.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

@@ -21,6 +21,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using Mooege.Common;
+using Mooege.Common.Helpers.Math;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Objects;
@@ -185,17 +186,12 @@ namespace Mooege.Core.GS.Players
             this.GBHandle.Type = (int)GBHandleType.Player;
             this.GBHandle.GBID = this.Toon.ClassID;
 
-            // actor values.
-            this.SNOId = this.ClassSNO;
             this.Field2 = 0x00000009;
-            this.Field3 = 0x00000000;
             this.Scale = this.ModelScale;
-            this.RotationAmount = 0.05940768f;
+            this.FacingAngle = 0.05940768f;
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
-            this.CollFlags = 0x00000000;
             this.Field7 = -1;
-            this.Field8 = -1;
-            this.Field9 = 0x00000000;
+            this.NameSNOId = -1;
             this.Field10 = 0x0;
 
             this.SkillSet = new SkillSet(this.Toon.Class);
@@ -558,23 +554,18 @@ namespace Mooege.Core.GS.Players
                 {
                     case 0:
                         newRune.Attributes[GameAttribute.Rune_A] = rank;
-                        this.Attributes[GameAttribute.Rune_A, PowerSNOId] = rank;
                         break;
                     case 1:
                         newRune.Attributes[GameAttribute.Rune_B] = rank;
-                        this.Attributes[GameAttribute.Rune_B, PowerSNOId] = rank;
                         break;
                     case 2:
                         newRune.Attributes[GameAttribute.Rune_C] = rank;
-                        this.Attributes[GameAttribute.Rune_C, PowerSNOId] = rank;
                         break;
                     case 3:
                         newRune.Attributes[GameAttribute.Rune_D] = rank;
-                        this.Attributes[GameAttribute.Rune_D, PowerSNOId] = rank;
                         break;
                     case 4:
                         newRune.Attributes[GameAttribute.Rune_E] = rank;
-                        this.Attributes[GameAttribute.Rune_E, PowerSNOId] = rank;
                         break;
                 }
                 newRune.Owner = this;
@@ -587,12 +578,6 @@ namespace Mooege.Core.GS.Players
             }
             else
             {
-                // will set only one of these to rank
-                Attributes[GameAttribute.Rune_A, PowerSNOId] = rune.Attributes[GameAttribute.Rune_A];
-                Attributes[GameAttribute.Rune_B, PowerSNOId] = rune.Attributes[GameAttribute.Rune_B];
-                Attributes[GameAttribute.Rune_C, PowerSNOId] = rune.Attributes[GameAttribute.Rune_C];
-                Attributes[GameAttribute.Rune_D, PowerSNOId] = rune.Attributes[GameAttribute.Rune_D];
-                Attributes[GameAttribute.Rune_E, PowerSNOId] = rune.Attributes[GameAttribute.Rune_E];
                 this.Inventory.SetRune(rune, PowerSNOId, skillIndex);
             }
             if (oldRune != null)
@@ -629,7 +614,7 @@ namespace Mooege.Core.GS.Players
                 this.Position = message.Position;
 
             if (message.Angle != null)
-                this.RotationAmount = message.Angle.Value;
+                this.FacingAngle = message.Angle.Value;
 
 
             var msg = new NotifyActorMovementMessage
@@ -712,7 +697,7 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void RevealScenesToPlayer()
         {
-            var scenes = this.GetScenesInRegion(DefaultQueryProximity * 2);
+            var scenes = this.GetScenesInRegion(DefaultQueryProximityLenght * 2);
 
             foreach (var scene in scenes) // reveal scenes in player's proximity.
             {

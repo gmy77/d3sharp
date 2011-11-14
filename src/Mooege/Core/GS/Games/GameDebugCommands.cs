@@ -20,6 +20,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Map.Debug;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Core.MooNet.Accounts;
@@ -125,6 +129,47 @@ namespace Mooege.Core.GS.Games
             }
 
             return output.ToString();
+        }
+
+        [CommandGroup("draw", "Draws current world's visualization.\nUsage: draw [worldId]")]
+        public class DrawCommand : CommandGroup
+        {
+            [DefaultCommand]
+            public string DrawWorld(string[] @params, MooNetClient invokerClient)
+            {
+                if (invokerClient == null && @params == null)
+                    return "Invalid arguments. Type 'help draw' to get help.";
+
+                World world;
+                Player player = null;
+                int worldId;
+
+                if (@params == null)
+                {
+                    if (invokerClient.InGameClient == null || invokerClient.InGameClient.Player == null)
+                        return "Invalid arguments. Type 'help draw' to get help.";
+
+                    player = invokerClient.InGameClient.Player;
+                    world = invokerClient.InGameClient.Player.World;
+                    worldId = world.WorldSNO.Id;
+                }
+                else
+                {
+                    if (!Int32.TryParse(@params[0], out worldId))
+                        worldId = 71150;
+
+                    var game = GameManager.CreateGame(worldId); // hack-hack /raist.
+                    world = game.GetWorld(worldId);
+                }
+
+                if (world != null)
+                {
+                    new Thread(c => Application.Run(new WorldVisualizer(world, player))).Start();
+                    return string.Format("Done visualizing world {0}.", worldId);
+                }
+
+                return string.Format("Invalid world id: {0}.", worldId);
+            }
         }
     }
 }
