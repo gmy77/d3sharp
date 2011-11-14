@@ -208,9 +208,11 @@ namespace Mooege.Core.GS.Generators
 
                             if (amount > gizmoLocations.Count)
                             {
-                                Logger.Warn("Breaking after spawnEntry {0} for LevelArea {1} because there are less locations than min spawn amount ({2} to {3})", spawnEntry.SNOHandle, la, gizmoLocations.Count, spawnEntry.Min);
+                                Logger.Warn("Breaking after spawnEntry {0} for LevelArea {1} because there are less locations than min spawn amount ({2} to {3})", spawnEntry.SNOHandle, levelAreaHandle, gizmoLocations.Count, spawnEntry.Min);
                                 break;
                             }
+
+                            Logger.Trace("Spawning {0} {1} in {2}", amount, spawnEntry.SNOHandle, levelAreaHandle);
 
                             for (; amount > 0; amount--)
                             {
