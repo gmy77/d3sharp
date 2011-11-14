@@ -113,13 +113,14 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             User.PlayEffectGroup(19305); // cast effect
             
-            var projectile = new PowerProjectile(User.World, 99567, User.Position, TargetPosition, 1f, 2000, 1f, 3f, 5f, 0f);
-            projectile.OnHit = () =>
+            var projectile = new Projectile(this, 99567, User.Position);
+            projectile.OnHit = (hit) =>
             {
-                SpawnEffect(99572, projectile.getCurrentPosition()); // impact effect
+                SpawnEffect(99572, hit.Position); // impact effect
                 projectile.Destroy();
-                WeaponDamage(projectile.hittedActor, 1.10f, DamageType.Arcane);
+                WeaponDamage(hit, 1.10f, DamageType.Arcane);
             };
+            projectile.Launch(TargetPosition, 1f);
 
             yield break;
         }

@@ -27,6 +27,10 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message;
 
+using Mooege.Common.MPQ;
+using Mooege.Core.GS.Common.Types.SNO;
+using System.IO;
+
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.WitchDoctor.PhysicalRealm.PoisonDart)]
@@ -34,21 +38,53 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            YIMP();
+            int numProjectiles = (int)ScriptFormula(4);
+            for (int n = 0; n < numProjectiles; ++n)
+            {
+                // chance to make snake
+                bool snake = ValidTarget() && Rune_E > 0 && Rand.NextDouble() < ScriptFormula(11);
 
-            var eff = SpawnProxy(TargetPosition);
-            eff.PlayEffectGroup(106365);
-            yield break;
+                var proj = new Projectile(this,
+                                          RuneSelectsId(107011, 107030, 107035, 107223, 107265, snake ? 107114 : 107011),
+                                          User.Position);
+                proj.Position.Z += 3f;
+                proj.OnHit = (hit) =>
+                {
+                    // TODO: fix positioning of hit actors. possibly increase model scale?
+                    SpawnEffect(RuneSelectsId(112327, 112338, 112327, 112345, 112347, snake ? 112311 : 112327), proj.Position);
+                    proj.Destroy();
+                    if (snake)
+                        hit.PlayEffectGroup(107163);
+                    WeaponDamage(hit, (ScriptFormula(13) + 0.16f * Rune_A), (Rune_A > 0 ? DamageType.Fire : DamageType.Poison));
+                };
+                proj.Launch(TargetPosition, 1f);
 
+                yield return WaitSeconds(ScriptFormula(17));
+            }
         }
+    }
 
-        private void YIMP()
+    [ImplementsPowerSNO(Skills.Skills.WitchDoctor.PhysicalRealm.ZombieCharger)]
+    public class WitchDoctorZombieCharger : PowerImplementation
+    {
+        public override IEnumerable<TickTimer> Run()
         {
-            float result;
-            bool success = PowerFormulaScript.Evaluate(Skills.Skills.WitchDoctor.PhysicalRealm.PoisonDart,
-                266512, User.Attributes, Rand, out result);
-            Logger.Error("fsuccess: {0}", success);
-            Logger.Error("fresult: {0}", result);
+            new EffectActor(this.World, 117557, TargetPosition, 0, WaitSeconds(2f));
+
+            var proj = new Projectile(this, 77569, User.Position);
+
+            proj.OnUpdate = () =>
+            {
+                new EffectActor(this.World, 99567, proj.Position, 0, WaitSeconds(5f));
+            };
+            proj.OnArrival = () =>
+            {
+                new EffectActor(this.World, 88244, proj.Position, 0, WaitSeconds(5f));
+            };
+
+            proj.Launch(TargetPosition, 1f);
+
+            yield break;         
         }
     }
 
@@ -78,9 +114,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             // calculate time it will take for actors to reach toad
             const float tongueSpeed = 4f;
             int waitMoveTicks = (int)(PowerMath.Distance(bigtoad.Position, TargetPosition) / tongueSpeed);
-
+            
             yield return WaitSeconds(0.3f); // have tongue hang there for a bit
-
+            
             tongueEnd.TranslateNormal(bigtoad.Position, tongueSpeed);
             if (ValidTarget())
                 Target.TranslateNormal(bigtoad.Position, tongueSpeed);
@@ -98,7 +134,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 _PlayAni(bigtoad, 110636); // disgest ani, 5 seconds
                 for (int n = 0; n < 5 && ValidTarget(); ++n)
                 {
-                    WeaponDamage(Target, 0.039f, DamageType.Poison, true);
+                    WeaponDamage(Target, 0.39f, DamageType.Poison, true);
                     yield return WaitSeconds(1f);
                 }
 
@@ -117,7 +153,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield return WaitSeconds(0.7f);
             bigtoad.Destroy();
         }
-
+        
         private void _SetHiddenAttribute(Actor actor, bool active)
         {
             actor.Attributes[GameAttribute.Hidden] = active;

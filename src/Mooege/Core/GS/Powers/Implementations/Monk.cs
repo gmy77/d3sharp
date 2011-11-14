@@ -44,18 +44,18 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 case 0:
                     yield return WaitSeconds(0.1f);
-                    effectSNO = 71921;
+                    effectSNO = 140870;
                     reachLength = 13;
                     reachThickness = 6;
                     break;
                 case 1:
-                    effectSNO = 72134;
+                    effectSNO = 140871;
                     reachLength = 14;
                     reachThickness = 8;
                     break;
                 case 2:
                     yield return WaitSeconds(0.3f);
-                    effectSNO = 72331;
+                    effectSNO = 140872;
                     reachLength = 18;
                     reachThickness = 8;
                     break;

@@ -22,7 +22,7 @@ using Mooege.Core.GS.Ticker.Helpers;
 
 namespace Mooege.Core.GS.Powers
 {
-    public abstract class PowerImplementation : PowerContextHelper
+    public abstract class PowerImplementation : PowerContext
     {
         public static readonly Logger Logger = LogManager.CreateLogger();
 

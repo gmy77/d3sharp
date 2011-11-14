@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Common.Types.Misc;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -41,6 +42,12 @@ namespace Mooege.Core.GS.Powers
                 Y = y;
             }
 
+            public Vec2D(Vector2F v)
+            {
+                X = v.X;
+                Y = v.Y;
+            }
+
             public static Vec2D WithoutZ(Vector3D v)
             {
                 return new Vec2D(v.X, v.Y);
@@ -54,6 +61,11 @@ namespace Mooege.Core.GS.Powers
             public Vector3D ToVector3D(float z = 0f)
             {
                 return new Vector3D(X, Y, z);
+            }
+
+            public Vector2F ToVector2F()
+            {
+                return new Vector2F(X, Y);
             }
 
             public static Vec2D operator +(Vec2D a, Vec2D b)
@@ -115,6 +127,12 @@ namespace Mooege.Core.GS.Powers
                                     Math.Pow(a.Z - b.Z, 2));
         }
 
+        public static float Distance2D(Vector3D a, Vector3D b)
+        {
+            return (float)Math.Sqrt(Math.Pow(a.X - b.X, 2) +
+                                    Math.Pow(a.Y - b.Y, 2));
+        }
+
         public static float AngleLookAt(Vector3D source, Vector3D target)
         {
             return (float)Math.Atan2(target.Y - source.Y, target.X - source.X);
@@ -174,6 +192,27 @@ namespace Mooege.Core.GS.Powers
                     0 <= local_point.Dot(side2) &&
                     local_point.Dot(side2) <= side2.Dot(side2));
         }
+        
+        public static Vec2D ClosestPointOnLineSegment(Vec2D lineStart, Vec2D lineEnd, Vec2D point)
+        {
+            Vec2D line = lineEnd - lineStart;
+            float lineMag = line.X * line.X + line.Y * line.Y;
+            if (lineMag == 0f)
+                return lineStart.Copy();
+
+            float t = (point - lineStart).Dot(line) / lineMag;
+            t = Math.Min(Math.Max(0, t), 1);
+            return lineStart + line * t;
+        }
+
+        public static bool MovingCircleCollides(Circle mover, Vec2D velocity, Circle target)
+        {
+            Vec2D closest = ClosestPointOnLineSegment(new Vec2D(mover.Center),
+                                                      new Vec2D(mover.Center) + velocity,
+                                                      new Vec2D(target.Center));
+            float distanceSq = (float)(Math.Pow(closest.X - target.Center.X, 2) + Math.Pow(closest.Y - target.Center.Y, 2));
+            return distanceSq <= (float)Math.Pow(mover.Radius + target.Radius, 2);
+        }                        
 
         #endregion // Math helpers
     }

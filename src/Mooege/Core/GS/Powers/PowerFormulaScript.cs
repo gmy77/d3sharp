@@ -30,7 +30,7 @@ using Mooege.Common.MPQ.FileFormats.Types;
 
 namespace Mooege.Core.GS.Powers
 {
-    // Based off Item's FormulaScript class, modified to read Actor attributes and execute script formulas.
+    // Based off Items.FormulaScript class, modified to read game attributes and fully execute power script formulas.
     static class PowerFormulaScript
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
@@ -53,7 +53,7 @@ namespace Mooege.Core.GS.Powers
 
             Stack<float> stack = new Stack<float>(64);
             int pos = 0;
-            float numb1, numb2;
+            float numb1, numb2, numb3;
             float temp;
             while (pos < script.Length)
             {
@@ -72,6 +72,43 @@ namespace Mooege.Core.GS.Powers
                         byte funcId = (byte)script[pos];
                         switch (funcId)
                         {
+                            case 0: // Min()
+                                if (stack.Count < 2)
+                                {
+                                    Logger.Error("Stack underflow");
+                                    return false;
+                                }
+                                numb2 = stack.Pop();
+                                numb1 = stack.Pop();
+                                stack.Push(Math.Min(numb1, numb2));
+                                break;
+                            case 1: // Max()
+                                if (stack.Count < 2)
+                                {
+                                    Logger.Error("Stack underflow");
+                                    return false;
+                                }
+                                numb2 = stack.Pop();
+                                numb1 = stack.Pop();
+                                stack.Push(Math.Max(numb1, numb2));
+                                break;
+                            case 2: // Pin()
+                                if (stack.Count < 3)
+                                {
+                                    Logger.Error("Stack underflow");
+                                    return false;
+                                }
+                                numb3 = stack.Pop();
+                                numb2 = stack.Pop();
+                                numb1 = stack.Pop();
+                                if (numb2 > numb1)
+                                    stack.Push(numb2);
+                                else if (numb1 > numb3)
+                                    stack.Push(numb3);
+                                else
+                                    stack.Push(numb1);
+
+                                break;
                             case 3:
                                 if (stack.Count < 2)
                                 {
@@ -80,7 +117,7 @@ namespace Mooege.Core.GS.Powers
                                 }
                                 numb2 = stack.Pop();
                                 numb1 = stack.Pop();
-                                stack.Push(numb1 + (float)rand.Next() * numb2);
+                                stack.Push(numb1 + (float)rand.NextDouble() * numb2); // TODO: should these be int rounded?
                                 break;
                             case 4:
                                 if (stack.Count < 2)
@@ -90,7 +127,36 @@ namespace Mooege.Core.GS.Powers
                                 }
                                 numb2 = stack.Pop();
                                 numb1 = stack.Pop();
-                                stack.Push(numb1 + (float)rand.Next() * (numb2 - numb1));
+                                stack.Push(numb1 + (float)rand.NextDouble() * (numb2 - numb1));
+                                break;
+                            case 5: // Floor()
+                                if (stack.Count < 1)
+                                {
+                                    Logger.Error("Stack underflow");
+                                    return false;
+                                }
+                                numb1 = stack.Pop();
+                                stack.Push((float)Math.Floor(numb1));
+                                break;
+                            case 9: // RandomFloatMinRange()
+                                if (stack.Count < 2)
+                                {
+                                    Logger.Error("Stack underflow");
+                                    return false;
+                                }
+                                numb2 = stack.Pop();
+                                numb1 = stack.Pop();
+                                stack.Push(numb1 + (float)rand.NextDouble() * numb2);
+                                break;
+                            case 10: // RandomFloatMinMax()
+                                if (stack.Count < 2)
+                                {
+                                    Logger.Error("Stack underflow");
+                                    return false;
+                                }
+                                numb2 = stack.Pop();
+                                numb1 = stack.Pop();
+                                stack.Push(numb1 + (float)rand.NextDouble() * (numb2 - numb1));
                                 break;
                             case 11: // Table()
                                 if (stack.Count < 2)
@@ -124,6 +190,16 @@ namespace Mooege.Core.GS.Powers
                     case 6:
                         ++pos;
                         stack.Push(BinaryIntToFloat(script[pos]));
+                        break;
+                    case 8: // operator >
+                        if (stack.Count < 2)
+                        {
+                            Logger.Error("Stack underflow");
+                            return false;
+                        }
+                        numb2 = stack.Pop();
+                        numb1 = stack.Pop();
+                        stack.Push(numb1 > numb2 ? 1 : 0);
                         break;
                     case 11:
                         if (stack.Count < 2)
@@ -170,13 +246,38 @@ namespace Mooege.Core.GS.Powers
                         }
                         stack.Push(numb1 / numb2);
                         break;
+                    case 16: // operator -(unary)
+                        if (stack.Count < 1)
+                        {
+                            Logger.Error("Stack underflow");
+                            return false;
+                        }
+                        numb1 = stack.Pop();
+                        stack.Push(-numb1);
+                        break;
+                    case 17: // operator ?:
+                        if (stack.Count < 3)
+                        {
+                            Logger.Error("Stack underflow");
+                            return false;
+                        }
+                        numb3 = stack.Pop();
+                        numb2 = stack.Pop();
+                        numb1 = stack.Pop();
+                        stack.Push(numb1 != 0 ? numb2 : numb3);
+                        break;
                     default:
-                        Logger.Error("Unimplemented OpCode");
+                        Logger.Error("Unimplemented OpCode({0})", (byte)script[pos]);
                         return false;
                 }
                 ++pos;
             }
             return false;
+        }
+
+        public static int GetScriptFormulaTagId(int index)
+        {
+            return 266496 + 256 * (index / 10) + 16 * (index % 10);
         }
 
         private static float BinaryIntToFloat(int n)
@@ -192,20 +293,22 @@ namespace Mooege.Core.GS.Powers
             switch (numb1)
             {
                 case 0:
-                    return LoadAttribute(attributes, numb2, out result);
-                case 22:
-                    // 22 is always power formula ref?
+                    return LoadAttribute(powerSNO, attributes, numb2, out result);
+                case 1: // slevel
+                    result = attributes[GameAttribute.Skill, powerSNO];
+                    return true;
+                case 22: // absolute power formula ref
                     return Evaluate(numb2, numb3, attributes, rand, out result);
                 default:
-                    if (numb1 > 22 && numb1 < 40) // SF_N, power relative script formula reference
+                    if (numb1 >= 23 && numb1 <= 62) // SF_N, relative power formula ref
                     {
                         int SF_N = numb1 - 23;
-                        int relativeTagId = 266496 + 256 * (SF_N / 10) + 16 * (SF_N % 10);
+                        int relativeTagId = GetScriptFormulaTagId(SF_N);
                         return Evaluate(powerSNO, relativeTagId, attributes, rand, out result);
                     }
-                    else if (numb1 > 62 && numb1 < 72) // known gamebalance power table code range
+                    else if (numb1 >= 63 && numb1 <= 71) // known gamebalance power table id range
                     {
-                        result = BinaryIntToFloat(numb1);
+                        result = BinaryIntToFloat(numb1); // simply store id, used later by Table()
                         return true;
                     }
                     else
@@ -217,23 +320,40 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private static bool LoadAttribute(GameAttributeMap attributes, int attributeId, out float result)
+        // this lists the attributes that need to be keyed with the powerSNO to work
+        private static readonly SortedSet<int> _powerKeyedAttributes = new SortedSet<int>()
+        {
+            GameAttribute.Rune_A.Id,
+            GameAttribute.Rune_B.Id,
+            GameAttribute.Rune_C.Id,
+            GameAttribute.Rune_D.Id,
+            GameAttribute.Rune_E.Id
+        };
+
+        private static bool LoadAttribute(int powerSNO, GameAttributeMap attributes, int attributeId, out float result)
         {
             GameAttribute attr = GameAttribute.Attributes[attributeId];
+            bool needs_key = _powerKeyedAttributes.Contains(attributeId);
 
-            if (attr is GameAttributeI)
+            if (attr is GameAttributeF)
             {
-                result = (float)attributes[(GameAttributeI)attr];
+                if (needs_key) result = attributes[(GameAttributeF)attr, powerSNO];
+                else result = attributes[(GameAttributeF)attr];
+
                 return true;
-            }
-            else if (attr is GameAttributeF)
+            }            
+            else if (attr is GameAttributeI)
             {
-                result = attributes[(GameAttributeF)attr];
+                if (needs_key) result = (float)attributes[(GameAttributeI)attr, powerSNO];
+                else result = (float)attributes[(GameAttributeI)attr];
+                
                 return true;
             }
             else if (attr is GameAttributeB)
             {
-                result = attributes[(GameAttributeB)attr] ? 1 : 0;
+                if (needs_key) result = attributes[(GameAttributeB)attr, powerSNO] ? 1 : 0;
+                else result = attributes[(GameAttributeB)attr] ? 1 : 0;
+
                 return true;
             }
             else
@@ -250,17 +370,17 @@ namespace Mooege.Core.GS.Powers
 
             TagMap[] tagMaps = new TagMap[]
             {
+                power.Powerdef.GeneralTagMap,
+                power.Powerdef.TagMap,
                 power.Powerdef.ContactTagMap0,
                 power.Powerdef.ContactTagMap1,
                 power.Powerdef.ContactTagMap2,
                 power.Powerdef.ContactTagMap3,
-                power.Powerdef.GeneralTagMap,
+                power.Powerdef.PVPGeneralTagMap,
                 power.Powerdef.PVPContactTagMap0,
                 power.Powerdef.PVPContactTagMap1,
                 power.Powerdef.PVPContactTagMap2,
                 power.Powerdef.PVPContactTagMap3,
-                power.Powerdef.PVPGeneralTagMap,
-                power.Powerdef.TagMap
             };
 
             foreach (TagMap tagmap in tagMaps)
@@ -282,7 +402,6 @@ namespace Mooege.Core.GS.Powers
             result = 0;
 
             int tableByte = BitConverter.GetBytes(tableId)[0];
-            int indexByte = BitConverter.GetBytes(index)[0];
             string tableName = GetTableName(tableByte);
             if (tableName == null)
                 return false;
@@ -295,7 +414,7 @@ namespace Mooege.Core.GS.Powers
                 {
                     if (powerEntry.S0 == tableName)
                     {
-                        result = powerEntry.F0[indexByte];
+                        result = powerEntry.F0[(int)index];
                         return true;
                     }
                 }
@@ -332,6 +451,8 @@ namespace Mooege.Core.GS.Powers
                     return null;
             }
         }
+
+        // TODO: disassembler is completely out of date
 
         public static string ToString(int[] script)
         {

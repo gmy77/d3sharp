@@ -276,7 +276,7 @@ namespace Mooege.Core.GS.Actors
                 Angle = angle,
                 Field3 = false,
                 Speed = speed,
-                AnimationTag = animationTag
+                AnimationTag = animationTag,
             }, this);
         }
 
@@ -370,18 +370,6 @@ namespace Mooege.Core.GS.Actors
                 Field3 = (int)target.DynamicID,
                 Field4 = 1
             }, this);
-        }
-
-        public void AttachActor(Actor actor)
-        {
-            GameAttributeMap map = new GameAttributeMap();
-            map[GameAttribute.Attached_To_ACD] = unchecked((int)DynamicID);
-            map[GameAttribute.Attachment_Handled_By_Client] = true;
-            map[GameAttribute.Actor_Updates_Attributes_From_Owner] = true;
-            foreach (var msg in map.GetMessageList(actor.DynamicID))
-                actor.World.BroadcastIfRevealed(msg, actor);
-
-            // TODO: track attached actors
         }
 
         public void AddComplexEffect(int effectGroupSNO, Actor target)

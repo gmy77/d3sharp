@@ -22,6 +22,7 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Ticker.Helpers;
+using Mooege.Core.GS.Common.Types.Misc;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -73,7 +74,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Field3 = 303110, // used for male barb leap
                 FlyingAnimationTagID = 69792, // used for male barb leap
                 LandingAnimationTagID = -1,
-                Field6 = -0.1f, // leap falloff
+                Field6 = -0.1f, // gravity
                 Field7 = Skills.Skills.Barbarian.FuryGenerators.LeapAttack,
                 Field8 = 0
             }, User);
@@ -123,51 +124,47 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Run()
         {
             //StartCooldown(WaitSeconds(10f));
-            
-            var projectile = new PowerProjectile(User.World, 74636, User.Position, TargetPosition, 2f, 500f, 1f, 3f, 5f, 0f);
 
-            User.AddRopeEffect(79402, projectile);
-
-            projectile.OnHit = () =>
+            var projectile = new Projectile(this, 74636, User.Position);
+            projectile.Timeout = WaitSeconds(0.5f);
+            projectile.OnHit = (hit) =>
             {
                 GeneratePrimaryResource(15f);
 
-                var inFrontOfUser = PowerMath.ProjectAndTranslate2D(User.Position, projectile.hittedActor.Position,
+                var inFrontOfUser = PowerMath.ProjectAndTranslate2D(User.Position, hit.Position,
                     User.Position, 5f);
 
-                _setupReturnProjectile(projectile.hittedActor.Position, 5f);
+                _setupReturnProjectile(hit.Position);
 
                 // GET OVER HERE
-                projectile.hittedActor.TranslateNormal(inFrontOfUser, 2f);
-                WeaponDamage(projectile.hittedActor, 1.00f, DamageType.Physical);
+                hit.TranslateNormal(inFrontOfUser, 2f);
+                WeaponDamage(hit, 1.00f, DamageType.Physical);
 
                 projectile.Destroy();
             };
-
             projectile.OnTimeout = () =>
             {
-                _setupReturnProjectile(projectile.getCurrentPosition(), 0f);
+                _setupReturnProjectile(projectile.Position);
             };
+
+            projectile.Launch(TargetPosition, 2f);
+            User.AddRopeEffect(79402, projectile);
 
             yield break;
         }
 
-        private void _setupReturnProjectile(Vector3D spawnPosition, float heightOffset)
+        private void _setupReturnProjectile(Vector3D spawnPosition)
         {
-            var return_proj = new PowerProjectile(User.World, 79400, spawnPosition,
-                User.Position, 2f, 500f, 1f, 3f, heightOffset, 0f);
-
-            User.AddRopeEffect(79402, return_proj);
-
+            var return_proj = new Projectile(this, 79400, new Vector3D(spawnPosition.X, spawnPosition.Y, User.Position.Z));
+            Vector3D prevPosition = return_proj.Position;
             return_proj.OnUpdate = () =>
             {
-                if (PowerMath.Distance(return_proj.getCurrentPosition(), User.Position) < 15f) // TODO: make this tick based distance?
-                {
+                if (PowerMath.Distance2D(return_proj.Position, User.Position) < 15f)
                     return_proj.Destroy();
-                    return false;
-                }
-                return true;
             };
+
+            return_proj.Launch(User.Position, 2f);
+            User.AddRopeEffect(79402, return_proj);
         }
     }
 }

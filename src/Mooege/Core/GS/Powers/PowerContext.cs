@@ -31,7 +31,7 @@ using Mooege.Core.GS.Ticker.Helpers;
 
 namespace Mooege.Core.GS.Powers
 {
-    public class PowerContextHelper
+    public class PowerContext
     {
         private static ThreadLocal<Random> _threadRand = new ThreadLocal<Random>(() => new Random());
         public static Random Rand { get { return _threadRand.Value; } }
@@ -119,12 +119,15 @@ namespace Mooege.Core.GS.Powers
             // just use hardcoded weapon damage range for now
             float damageAmount = Rand.Next(20, 35) * percentage;
 
-            World.BroadcastIfRevealed(new FloatingNumberMessage
+            if (User is Player)
             {
-                ActorID = target.DynamicID,
-                Number = damageAmount,
-                Type = FloatingNumberMessage.FloatType.White
-            }, target);
+                (User as Player).InGameClient.SendMessage(new FloatingNumberMessage
+                {
+                    ActorID = target.DynamicID,
+                    Number = damageAmount,
+                    Type = FloatingNumberMessage.FloatType.White
+                });
+            }
 
             if (!hitEffectOverridden)
                 target.PlayHitEffect((int)damageType.HitEffect, User);
@@ -225,6 +228,38 @@ namespace Mooege.Core.GS.Powers
         public bool ValidTarget()
         {
             return ValidTarget(Target);
+        }
+
+        public float ScriptFormula(int index)
+        {
+            float result;
+            if (!PowerFormulaScript.Evaluate(this.PowerSNO, PowerFormulaScript.GetScriptFormulaTagId(index),
+                                            User.Attributes, Rand, out result))
+                return 0;
+
+            return result;
+        }
+
+        public int Rune_A { get { return User.Attributes[GameAttribute.Rune_A, PowerSNO]; } }
+        public int Rune_B { get { return User.Attributes[GameAttribute.Rune_B, PowerSNO]; } }
+        public int Rune_C { get { return User.Attributes[GameAttribute.Rune_C, PowerSNO]; } }
+        public int Rune_D { get { return User.Attributes[GameAttribute.Rune_D, PowerSNO]; } }
+        public int Rune_E { get { return User.Attributes[GameAttribute.Rune_E, PowerSNO]; } }
+
+        public int RuneSelectsId(int none, int runeA, int runeB, int runeC, int runeD, int runeE)
+        {
+            if (Rune_A > 0)
+                return runeA;
+            else if (Rune_B > 0)
+                return runeB;
+            else if (Rune_C > 0)
+                return runeC;
+            else if (Rune_D > 0)
+                return runeD;
+            else if (Rune_E > 0)
+                return runeE;
+            else
+                return none;
         }
     }
 }
