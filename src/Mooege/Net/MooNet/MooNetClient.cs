@@ -104,7 +104,7 @@ namespace Mooege.Net.MooNet
         /// <summary>
         /// Token counter for RPCs.
         /// </summary>
-        private uint _tokenCounter = 1;
+        private uint _tokenCounter = 0;
         
         /// <summary>
         /// Listener Id for upcoming rpc.
