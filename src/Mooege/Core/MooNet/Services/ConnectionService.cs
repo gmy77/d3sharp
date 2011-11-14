@@ -47,14 +47,16 @@ namespace Mooege.Core.MooNet.Services
 
         public override void Bind(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.connection.BindRequest request, Action<bnet.protocol.connection.BindResponse> done)
         {
+            Logger.Trace("Bind(): {0}", this.Client);
+
             var requestedServiceIDs = new List<uint>();
+
             foreach (var serviceHash in request.ImportedServiceHashList)
             {
                 var serviceID = Service.GetByHash(serviceHash);
-                Logger.Trace("Bind() {0} [export] Hash: 0x{1} Id: 0x{2} Service: {3} ", this.Client, serviceHash.ToString("X8"), serviceID.ToString("X2"),
-
-                Service.GetByID(serviceID) != null ? Service.GetByID(serviceID).GetType().Name : "N/A");
                 requestedServiceIDs.Add(serviceID);
+
+                Logger.Trace("[export] Hash: 0x{0} Id: 0x{1} Service: {2} ", serviceHash.ToString("X8"),serviceID.ToString("X2"), Service.GetByID(serviceID) != null ? Service.GetByID(serviceID).GetType().Name : "N/A");                
             }
 
             // read services supplied by client..
@@ -62,7 +64,8 @@ namespace Mooege.Core.MooNet.Services
             {
                 if (Client.Services.ContainsKey(service.Hash)) continue;
                 Client.Services.Add(service.Hash, service.Id);
-                Logger.Trace(string.Format("Bind() {0} [import] Hash: 0x{1} Id: 0x{2}", this.Client, service.Hash.ToString("X8"), service.Id.ToString("X2")));
+
+                Logger.Trace(string.Format("[import] Hash: 0x{0} Id: 0x{1}", service.Hash.ToString("X8"), service.Id.ToString("X2")));
             }
 
             var builder = bnet.protocol.connection.BindResponse.CreateBuilder();

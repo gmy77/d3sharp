@@ -23,6 +23,7 @@ using Google.ProtocolBuffers.Descriptors;
 using Mooege.Common;
 using Mooege.Core.MooNet.Services;
 using Mooege.Net.MooNet.Packets;
+using Mooege.Common.Extensions;
 
 namespace Mooege.Net.MooNet
 {
@@ -33,6 +34,9 @@ namespace Mooege.Net.MooNet
 
         public static void Route(ConnectionDataEventArgs e)
         {
+            var client = (MooNetClient)e.Connection.Client;
+            Logger.Debug("Incoming packet - encrypted: {0}\n{1}", client.EncryptionEnabled, e.Data.ToArray().Dump());
+
             var stream = CodedInputStream.CreateInstance(e.Data.ToArray());
             while (!stream.IsAtEnd)
             {
@@ -45,12 +49,22 @@ namespace Mooege.Net.MooNet
             var client = (MooNetClient) connection.Client;
             var packet = new PacketIn(client, stream);
 
-            if (packet.Header.ServiceId == ServiceReply) // TODO: fixme /raist.
+            if (packet.Header.ServiceId == ServiceReply)
             {
-                var callback = client.RPCCallbacks.Dequeue();
+                if (client.RPCCallbacks.ContainsKey(packet.Header.Token))
+                {
+                    var callback = client.RPCCallbacks[packet.Header.Token];
+                    Logger.Trace("RPCReply => {0}", callback.Action.Target);
 
-                if (callback.RequestId == packet.Header.Token) callback.Action(packet.ReadMessage(callback.Builder));
-                else Logger.Warn("RPC callback contains unexpected requestId: {0} where {1} was expected", callback.RequestId, packet.Header.Token);
+                    callback.Action(packet.ReadMessage(callback.Builder));
+                    client.RPCCallbacks.Remove(packet.Header.Token);
+                }
+                else
+                {
+                    Logger.Warn("RPC callback contains unexpected token: {0}", packet.Header.Token);
+                    connection.Disconnect();
+                }
+
                 return;
             }
             
