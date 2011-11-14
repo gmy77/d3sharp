@@ -26,6 +26,7 @@ using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Common.Types.TagMap;
+using System;
 
 
 namespace Mooege.Core.GS.Generators
@@ -193,18 +194,24 @@ namespace Mooege.Core.GS.Generators
 
                     for (int i = 0; i < 26; i++)
                     {
+                        // Combine all the gizmo starting locations from all scenes and
+                        // their subscenes into a single list for the whole level area
+                        List<PRTransform> gizmoLocations = new List<PRTransform>();
+                        foreach (var scene in levelAreas[la])
+                        {
+                            if (scene.GizmoSpawningLocations[i] != null)
+                                gizmoLocations.AddRange(scene.GizmoSpawningLocations[i]);
+                            foreach (Scene subScene in scene.Subscenes)
+                            {
+                                if (subScene.GizmoSpawningLocations[i] != null)
+                                    gizmoLocations.AddRange(subScene.GizmoSpawningLocations[i]);
+                            }
+                        }
 
-                        var gizmoLocations = levelAreas[la].Aggregate(new List<PRTransform>(),
-                                                                    (l, s) =>
-                                                                    {
-                                                                        if (s.GizmoSpawningLocations[i] != null)
-                                                                            l.AddRange(s.GizmoSpawningLocations[i]);
-                                                                        return l;
-                                                                    });
 
                         foreach (Mooege.Common.MPQ.FileFormats.GizmoLocSpawnEntry spawnEntry in levelArea.LocSet.SpawnType[i].SpawnEntry)
                         {
-                            int amount = Mooege.Common.Helpers.RandomHelper.Next(spawnEntry.Min, spawnEntry.Max);
+                            int amount = Mooege.Common.Helpers.RandomHelper.Next(spawnEntry.Max, spawnEntry.Max);
 
                             if (amount > gizmoLocations.Count)
                             {
@@ -217,19 +224,21 @@ namespace Mooege.Core.GS.Generators
                             for (; amount > 0; amount--)
                             {
                                 int location = Mooege.Common.Helpers.RandomHelper.Next(gizmoLocations.Count - 1);
-                                var gizmo = Mooege.Core.GS.Actors.ActorFactory.Create(world, spawnEntry.SNOHandle.Id, new TagMap());
 
-                                if (gizmo == null)
+                                switch (spawnEntry.SNOHandle.Group)
                                 {
-                                    Logger.Warn("ActorFactory did not load actor {0}", spawnEntry.SNOHandle);
-                                    break;
-                                }
+                                    case SNOGroup.Actor:
+                                        loadActor(spawnEntry.SNOHandle, gizmoLocations[location], world);
+                                        break;
 
-                                gizmo.RotationAmount = gizmoLocations[location].Quaternion.W;
-                                //gizmo.Position = gizmoLocations[location].Vector3D;
-                                gizmo.RotationAxis = gizmoLocations[location].Quaternion.Vector3D;
-                                gizmo.EnterWorld(gizmoLocations[location].Vector3D);
+                                    case SNOGroup.Encounter:
+                                        var encounter = spawnEntry.SNOHandle.Target as Mooege.Common.MPQ.FileFormats.Encounter;
+                                        var actor = RandomHelper.RandomItem(encounter.Spawnoptions, x => x.Probability);
+                                        loadActor(new SNOHandle(actor.SNOSpawn), gizmoLocations[location], world);
+                                        break;
+                                }
                                 gizmoLocations.RemoveAt(location);
+
                             }
 
                         }
@@ -243,6 +252,24 @@ namespace Mooege.Core.GS.Generators
             }
 
         }
+
+
+        private static void loadActor(SNOHandle actorHandle, PRTransform location, World world)
+        {
+            var actor = Mooege.Core.GS.Actors.ActorFactory.Create(world, actorHandle.Id, new TagMap());
+
+            if (actor == null)
+            {
+                Logger.Warn("ActorFactory did not load actor {0}", actorHandle);
+                return;
+            }
+
+            actor.RotationAmount = location.Quaternion.W;
+            actor.RotationAxis = location.Quaternion.Vector3D;
+            actor.EnterWorld(location.Vector3D);
+
+        }
+
 
 
         /// <summary>

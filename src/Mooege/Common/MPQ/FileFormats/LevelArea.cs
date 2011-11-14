@@ -66,14 +66,14 @@ namespace Mooege.Common.MPQ.FileFormats
     {
         public List<GizmoLocSpawnEntry> SpawnEntry { get; private set; }
         public string Description { get; private set; }
-        public string S1 { get; private set; }
+        public string Comment { get; private set; }
 
         public GizmoLocSpawnType(MpqFileStream stream)
         {
             stream.Position += 8;
             this.SpawnEntry = stream.ReadSerializedData<GizmoLocSpawnEntry>();
             this.Description = stream.ReadString(80, true);
-            this.S1 = stream.ReadString(256, true);
+            this.Comment = stream.ReadString(256, true);
         }
     }
 

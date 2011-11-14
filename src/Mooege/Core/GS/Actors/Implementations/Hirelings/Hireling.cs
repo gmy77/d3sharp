@@ -56,7 +56,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
         public Hireling(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Attributes[GameAttribute.TeamID] = 2;
+            //this.Attributes[GameAttribute.TeamID] = 2;
             Interactions.Add(new HireInteraction());
             Interactions.Add(new InventoryInteraction());
         }

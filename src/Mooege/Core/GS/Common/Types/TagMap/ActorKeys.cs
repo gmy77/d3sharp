@@ -43,6 +43,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         }
         #endregion
 
+        public static TagKeyInt TeamID = new TagKeyInt(65556);
         public static TagKeySNO Flippy = new TagKeySNO(65688);
         public static TagKeySNO Projectile = new TagKeySNO(66138);
         public static TagKeySNO Lore = new TagKeySNO(67331);

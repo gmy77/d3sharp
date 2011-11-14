@@ -63,7 +63,7 @@ namespace Mooege.Core.GS.Actors
             this.Attributes[GameAttribute.Hitpoints_Max] = 0.0009994507f;
             this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
             this.Attributes[GameAttribute.Hitpoints_Cur] = 0.0009994507f;
-            this.Attributes[GameAttribute.TeamID] = 1;
+            //this.Attributes[GameAttribute.TeamID] = 1;
             this.Attributes[GameAttribute.Level] = 1;
         }
 

@@ -32,7 +32,6 @@ namespace Mooege.Core.GS.Actors
         {
             this.Field2 = 0x9;
             this.Field7 = 2;
-            this.Attributes[GameAttribute.TeamID] = 1;
             this.Attributes[GameAttribute.Is_NPC] = true;
         }
     }

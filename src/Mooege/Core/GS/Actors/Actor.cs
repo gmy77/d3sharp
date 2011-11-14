@@ -195,6 +195,9 @@ namespace Mooege.Core.GS.Actors
             this.ActorSNO = new SNOHandle(SNOGroup.Actor, snoId);
             this.NameSNOId = snoId;
             this.Quality = 0;
+
+            if(ActorData.TagMap.ContainsKey(ActorKeys.TeamID))
+                this.Attributes[GameAttribute.TeamID] = ActorData.TagMap[ActorKeys.TeamID];
             this.Spawned = false;
             this.Size = new Size(1, 1);
             this.GBHandle = new GBHandle { Type = -1, GBID = -1 }; // Seems to be the default. /komiga

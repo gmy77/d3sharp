@@ -29,10 +29,9 @@ namespace Mooege.Core.GS.Actors
         public Gizmo(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Field2 = 8;
+            this.Field2 = 16;
             this.Field7 = 0x00000001;
 
-            this.Attributes[Mooege.Net.GS.Message.GameAttribute.TeamID] = 1;
             this.Attributes[Mooege.Net.GS.Message.GameAttribute.Hitpoints_Cur] = 1;
 
 
