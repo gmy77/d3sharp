@@ -34,7 +34,7 @@ namespace Mooege.Core.MooNet.Services
         
         public override void Logon(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.LogonRequest request, Action<bnet.protocol.authentication.LogonResponse> done)
         {
-            Logger.Trace("LogonRequest(); Email={0}", request.Email);
+            Logger.Trace("LogonRequest(): Email={0}", request.Email);
 
             // we should be also checking here version, program, locale and similar stuff /raist.
 
@@ -72,6 +72,8 @@ namespace Mooege.Core.MooNet.Services
         {
             var moduleMessage = request.Message.ToByteArray();
             var command = moduleMessage[0];
+
+            Logger.Trace("ModuleMessage(): command: {0}", command);
 
             done(bnet.protocol.NoData.CreateBuilder().Build());
 

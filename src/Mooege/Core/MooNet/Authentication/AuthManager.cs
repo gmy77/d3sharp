@@ -111,7 +111,7 @@ namespace Mooege.Core.MooNet.Authentication
 
         private static void ModuleLoadResponse(IMessage response)
         {
-            Logger.Trace("{0}", response.ToString());
+            Logger.Trace("ModuleLoadResponse(): {0}", response.ToString());
         }
     }
 }

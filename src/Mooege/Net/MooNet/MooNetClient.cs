@@ -94,7 +94,7 @@ namespace Mooege.Net.MooNet
         /// <summary>
         /// Callback list for issued client RPCs.
         /// </summary>
-        public readonly Queue<RPCCallback> RPCCallbacks = new Queue<RPCCallback>();
+        public readonly Dictionary<uint, RPCCallback> RPCCallbacks = new Dictionary<uint, RPCCallback>();
         
         /// <summary>
         /// Object ID map with local object ID as key and remote object ID as value.
@@ -104,7 +104,7 @@ namespace Mooege.Net.MooNet
         /// <summary>
         /// Token counter for RPCs.
         /// </summary>
-        private int _tokenCounter = 1;
+        private uint _tokenCounter = 1;
         
         /// <summary>
         /// Listener Id for upcoming rpc.
@@ -192,7 +192,7 @@ namespace Mooege.Net.MooNet
             var serviceId = this.Services[serviceHash];
             var token = this._tokenCounter++;
 
-            RPCCallbacks.Enqueue(new RPCCallback(done, responsePrototype.WeakToBuilder(), token));
+            RPCCallbacks.Add(token, new RPCCallback(done, responsePrototype.WeakToBuilder()));
 
             var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), (uint)token, this._listenerId, request);
             this.Connection.Send(packet);
@@ -265,7 +265,7 @@ namespace Mooege.Net.MooNet
         {
             // enable the encryption.
             var encryptRequest = bnet.protocol.connection.EncryptRequest.CreateBuilder().Build();
-            bnet.protocol.connection.ConnectionService.CreateStub(this).Encrypt(null, encryptRequest, callback => { this. EncryptionEnabled = true; });
+            this.MakeRPC(() =>bnet.protocol.connection.ConnectionService.CreateStub(this).Encrypt(null, encryptRequest, callback => { this.EncryptionEnabled = true; }));
         }
 
         #endregion
