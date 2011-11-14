@@ -20,8 +20,8 @@ using System;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Ticker.Helpers;
 using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -34,21 +34,16 @@ namespace Mooege.Core.GS.Powers
         public EffectActor(World world, int actorSNO, Vector3D position, float angle, TickTimer timeout = null)
             : base(world, actorSNO)
         {
-            RotationAmount = (float)Math.Cos(angle / 2f);
+            FacingAngle = (float)Math.Cos(angle / 2f);
             RotationAxis = new Vector3D(0, 0, (float)Math.Sin(angle / 2f));
 
-            // FIXME: This is hardcoded crap
-            this.Field2 = 0x8; // monster=0x8, using client effect's id results in not being able to do smooth actor movements
-            //this.Field2 = 0x18; // used some effects, but not needed?
-            this.Field3 = 0x0;
-            //this.Field7 = -1; // used by some effects, but not needed?
-            this.Field8 = actorSNO;
+            this.Field2 = 0x8;
             if (this.Scale == 0f)
                 this.Scale = 1f;
             this.Position = position;
             this.GBHandle.Type = -1; this.GBHandle.GBID = -1; // TODO: use proper enum value
             
-            Timeout = timeout;
+            this.Timeout = timeout;
             
             world.Enter(this);
         }

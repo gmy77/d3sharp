@@ -21,8 +21,8 @@ using System.Collections.Generic;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Core.GS.Ticker.Helpers;
 using Mooege.Core.GS.Common.Types.Misc;
+using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {

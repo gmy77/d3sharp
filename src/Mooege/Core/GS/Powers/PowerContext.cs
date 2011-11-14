@@ -27,7 +27,7 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Core.GS.Common.Types.Misc;
-using Mooege.Core.GS.Ticker.Helpers;
+using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -55,12 +55,12 @@ namespace Mooege.Core.GS.Powers
 
         public TickTimer WaitSeconds(float seconds)
         {
-            return new TickSecondsTimer(World.Game, seconds);
+            return new SecondsTickTimer(World.Game, seconds);
         }
 
         public TickTimer WaitTicks(int ticks)
         {
-            return new TickRelativeTimer(World.Game, ticks);
+            return new RelativeTickTimer(World.Game, ticks);
         }
 
         public TickTimer WaitInfinite()
@@ -157,7 +157,7 @@ namespace Mooege.Core.GS.Powers
             if (timeout == null)
             {
                 if (_defaultEffectTimeout == null)
-                    _defaultEffectTimeout = new TickSecondsTimer(World.Game, 2f); // default timeout of 2 seconds for now
+                    _defaultEffectTimeout = new SecondsTickTimer(World.Game, 2f); // default timeout of 2 seconds for now
 
                 timeout = _defaultEffectTimeout;
             }

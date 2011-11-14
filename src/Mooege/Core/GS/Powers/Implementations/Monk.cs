@@ -27,7 +27,7 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
-using Mooege.Core.GS.Ticker.Helpers;
+using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {

@@ -23,9 +23,9 @@ using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common.Types.Misc;
-using Mooege.Core.GS.Ticker.Helpers;
 using Mooege.Core.GS.Objects;
 using Mooege.Net.GS.Message.Definitions.Actor;
+using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -52,21 +52,20 @@ namespace Mooege.Core.GS.Powers
             : base(context.World, actorSNO)
         {
             this.Field2 = 0x8;
-            this.Field3 = 0x0;
             this.Scale = 1.35f;
             // just use default? GBHandle.Projectile is 10, but most projectiles I see use 17
             //this.GBHandle.Type = (int)GBHandleType.Projectile; this.GBHandle.GBID = 1;
             this.Field7 = 0x00000001;
-            this.Field8 = this.SNOId;
-            this.Field10 = 0x1;
-            this.Field11 = 0x1;
-            this.Field12 = 0x1;
-            this.Field13 = 0x1;
-            this.CollFlags = 0x4;
+            // these no longer needed?
+            //this.Field10 = 0x1;
+            //this.Field11 = 0x1;
+            //this.Field12 = 0x1;
+            //this.Field13 = 0x1;
+            //this.CollFlags = 0x4;
             
             this.Context = context;
             this.Position = new Vector3D(position);
-            this.Timeout = new TickSecondsTimer(context.World.Game, 2f);  // 2 second default timeout for projectiles
+            this.Timeout = new SecondsTickTimer(context.World.Game, 2f);  // 2 second default timeout for projectiles
 
             _arrivalTime = null;
             _lastUpdateTick = 0;
@@ -103,7 +102,7 @@ namespace Mooege.Core.GS.Powers
         private void _SetupLaunch(Vector3D target, float speed)
         {
             float facing = PowerMath.AngleLookAt(this.Position, target);
-            this.RotationAmount = (float)Math.Cos(facing / 2f);
+            this.FacingAngle = (float)Math.Cos(facing / 2f);
             this.RotationAxis = new Vector3D(0, 0, (float)Math.Sin(facing / 2f));
             
             Vector3D dir_normal = PowerMath.Normalize(new Vector3D(target.X - this.Position.X,
@@ -114,7 +113,7 @@ namespace Mooege.Core.GS.Powers
                                          dir_normal.Y * speed,
                                          dir_normal.Z * speed);
 
-            _arrivalTime = new TickRelativeTimer(this.World.Game, (int)(PowerMath.Distance2D(this.Position, target) / speed));
+            _arrivalTime = new RelativeTickTimer(this.World.Game, (int)(PowerMath.Distance2D(this.Position, target) / speed));
             _lastUpdateTick = this.World.Game.TickCounter;
             _prevUpdatePosition = this.Position;
             _onArrivalCalled = false;
@@ -142,7 +141,7 @@ namespace Mooege.Core.GS.Powers
 
             // check if we collided with anything since last update
 
-            float radius = this.ActorData != null ? this.ActorData.Cylinder.Ax2 : 1f;
+            float radius = this.ActorData.Cylinder.Ax2;
             Circle startCircle = new Circle(_prevUpdatePosition.X, _prevUpdatePosition.Y, radius);
             // make a velocity representing the change to the current position
             PowerMath.Vec2D velocity = PowerMath.Vec2D.WithoutZ(this.Position - _prevUpdatePosition);
@@ -150,7 +149,7 @@ namespace Mooege.Core.GS.Powers
             Actor hit = null;
             foreach (Actor target in this.GetMonstersInRange(radius + 25f))
             {
-                float targetRadius = 1.5f; // target.ActorData != null ? target.ActorData.Cylinder.Ax2 : 1f;
+                float targetRadius = 1.5f; // target.ActorData.Cylinder.Ax2;
                 if (PowerMath.MovingCircleCollides(startCircle, velocity, new Circle(target.Position.X, target.Position.Y, targetRadius)))
                 {
                     hit = target;

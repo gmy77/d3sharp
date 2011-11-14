@@ -18,7 +18,7 @@
 
 using System.Collections.Generic;
 using Mooege.Common;
-using Mooege.Core.GS.Ticker.Helpers;
+using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -32,6 +32,6 @@ namespace Mooege.Core.GS.Powers
 
         // token instance that can be yielded by Run() to indicate the power manager should stop
         // running a power implementation.
-        public static TickTimer StopExecution = new TickTimer(null, 0);
+        public static readonly TickTimer StopExecution = null;
     }
 }

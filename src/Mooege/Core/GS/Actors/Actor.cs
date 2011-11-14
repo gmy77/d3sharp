@@ -291,9 +291,9 @@ namespace Mooege.Core.GS.Actors
         public void TranslateNormal(Vector3D destination, float speed = 1.0f, int? animationTag = null)
         {
             this.Position = destination;
-            float angle = (float)Math.Acos(this.RotationAmount) * 2f;
+            float angle = (float)Math.Acos(this.FacingAngle) * 2f;
             if (float.IsNaN(angle)) // just use RotationAmount if Quat is bad
-                angle = this.RotationAmount;
+                angle = this.FacingAngle;
 
             World.BroadcastIfRevealed(new NotifyActorMovementMessage
             {
@@ -309,9 +309,9 @@ namespace Mooege.Core.GS.Actors
         public void TranslateSnapped(Vector3D destination)
         {
             this.Position = destination;
-            float angle = (float)Math.Acos(this.RotationAmount) * 2f;
+            float angle = (float)Math.Acos(this.FacingAngle) * 2f;
             if (float.IsNaN(angle)) // just use RotationAmount if Quat is bad
-                angle = this.RotationAmount;
+                angle = this.FacingAngle;
 
             World.BroadcastIfRevealed(new ACDTranslateSnappedMessage
             {
@@ -329,7 +329,7 @@ namespace Mooege.Core.GS.Actors
             float radianAngle = PowerMath.AngleLookAt(this.Position, target);
 
             // convert to quaternion and store in instance
-            this.RotationAmount = (float)Math.Cos(radianAngle / 2f);
+            this.FacingAngle = (float)Math.Cos(radianAngle / 2f);
             this.RotationAxis = new Vector3D(0, 0, (float)Math.Sin(radianAngle / 2f));
 
             World.BroadcastIfRevealed(new ACDTranslateFacingMessage

@@ -18,14 +18,14 @@
 
 using System.Collections.Generic;
 using Mooege.Common;
-using Mooege.Common.Helpers;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
 using System.Linq;
-using Mooege.Core.GS.Ticker.Helpers;
+using Mooege.Core.GS.Ticker;
+using Mooege.Common.Helpers.Math;
 
 namespace Mooege.Core.GS.Powers
 {
