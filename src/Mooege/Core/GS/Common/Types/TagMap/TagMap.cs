@@ -74,7 +74,10 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         }
         #endregion
 
-
+        public TagMap()
+        {
+            _TagMapEntries = new Dictionary<int, TagMapEntry>();
+        }
 
 
         [Obsolete("Use TagKeys instead. If it is missing create it")]
@@ -82,6 +85,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public bool ContainsKey(TagKey key) { return _TagMapEntries.ContainsKey(key.ID); }
 
         public void Add(TagKey key, TagMapEntry entry) { _TagMapEntries.Add(key.ID, entry); }
+
 
         public void Read(MpqFileStream stream)
         {

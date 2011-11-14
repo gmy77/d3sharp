@@ -25,6 +25,7 @@ using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
 using Mooege.Common.Helpers;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 
 namespace Mooege.Core.GS.Generators
@@ -44,6 +45,7 @@ namespace Mooege.Core.GS.Generators
             var worldAsset = MPQStorage.Data.Assets[SNOGroup.Worlds][worldSNO];
             var worldData = (Mooege.Common.MPQ.FileFormats.World)worldAsset.Data;
 
+
             if (worldData.SceneParams.SceneChunks.Count == 0)
             {
                 Logger.Error("World {0} [{1}] is a dynamic world! Can't generate dynamic worlds yet!", worldAsset.Name, worldAsset.SNOId);
@@ -51,6 +53,7 @@ namespace Mooege.Core.GS.Generators
             }
 
             var world = new World(game, worldSNO);
+            var levelAreas = new Dictionary<int, List<Scene>>();
 
             // Create a clusterID => Cluster Dictionary
             var clusters = new Dictionary<int, Mooege.Common.MPQ.FileFormats.SceneCluster>();
@@ -127,6 +130,8 @@ namespace Mooege.Core.GS.Generators
 
                         if (entries.Count > 0)
                         {
+                            //subSceneEntry = entries[RandomHelper.Next(entries.Count - 1)];
+
                             subSceneEntry = RandomHelper.RandomItem<Mooege.Common.MPQ.FileFormats.SubSceneEntry>(entries, entry => 1); // TODO Just shuffle the list, dont random every time. /fasbat
                             entries.Remove(subSceneEntry);
                         }
@@ -150,17 +155,93 @@ namespace Mooege.Core.GS.Generators
                                 Specification = sceneChunk.SceneSpecification
                             };
                             scene.Subscenes.Add(subscene);
-                            subscene.LoadActors();
+                            subscene.LoadMarkers();
                         }
                     }
 
                 }
                 scene.Specification = sceneChunk.SceneSpecification;
-                scene.LoadActors();
+                scene.LoadMarkers();
+
+                // add scene to level area dictionary
+                foreach (var levelArea in scene.Specification.SNOLevelAreas)
+                {
+                    if (levelArea != -1)
+                    {
+                        if (!levelAreas.ContainsKey(levelArea))
+                            levelAreas.Add(levelArea, new List<Scene>());
+
+                        levelAreas[levelArea].Add(scene);
+                    }
+                }
             }
 
+            loadLevelAreas(levelAreas, world);
             return world;
         }
+
+
+        private static void loadLevelAreas(Dictionary<int, List<Scene>> levelAreas, World world)
+        {
+            foreach (int la in levelAreas.Keys)
+            {
+                SNOHandle levelAreaHandle = new SNOHandle(SNOGroup.LevelArea, la);
+
+                if (levelAreaHandle.IsValid)
+                {
+                    var levelArea = levelAreaHandle.Target as Mooege.Common.MPQ.FileFormats.LevelArea;
+
+                    for (int i = 0; i < 26; i++)
+                    {
+
+                        var gizmoLocations = levelAreas[la].Aggregate(new List<PRTransform>(),
+                                                                    (l, s) =>
+                                                                    {
+                                                                        if (s.GizmoSpawningLocations[i] != null)
+                                                                            l.AddRange(s.GizmoSpawningLocations[i]);
+                                                                        return l;
+                                                                    });
+
+                        foreach (Mooege.Common.MPQ.FileFormats.GizmoLocSpawnEntry spawnEntry in levelArea.LocSet.SpawnType[i].SpawnEntry)
+                        {
+                            int amount = Mooege.Common.Helpers.RandomHelper.Next(spawnEntry.Min, spawnEntry.Max);
+
+                            if (amount > gizmoLocations.Count)
+                            {
+                                Logger.Warn("Breaking after spawnEntry {0} for LevelArea {1} because there are less locations than min spawn amount ({2} to {3})", spawnEntry.SNOHandle, la, gizmoLocations.Count, spawnEntry.Min);
+                                break;
+                            }
+
+                            for (; amount > 0; amount--)
+                            {
+                                int location = Mooege.Common.Helpers.RandomHelper.Next(gizmoLocations.Count - 1);
+                                var gizmo = Mooege.Core.GS.Actors.ActorFactory.Create(world, spawnEntry.SNOHandle.Id, new TagMap());
+
+                                if (gizmo == null)
+                                {
+                                    Logger.Warn("ActorFactory did not load actor {0}", spawnEntry.SNOHandle);
+                                    break;
+                                }
+
+                                gizmo.RotationAmount = gizmoLocations[location].Quaternion.W;
+                                //gizmo.Position = gizmoLocations[location].Vector3D;
+                                gizmo.RotationAxis = gizmoLocations[location].Quaternion.Vector3D;
+                                gizmo.EnterWorld(gizmoLocations[location].Vector3D);
+                                gizmoLocations.RemoveAt(location);
+                            }
+
+                        }
+                    }
+                }
+
+                else
+                {
+                    Logger.Warn("Level area {0} does not exist", la);
+                }
+            }
+
+        }
+
 
         /// <summary>
         /// Loads all markersets of a scene and looks for the one with the subscene position
@@ -173,7 +254,7 @@ namespace Mooege.Core.GS.Generators
             {
                 var mpqMarkerSet = MPQStorage.Data.Assets[SNOGroup.MarkerSet][markerSet].Data as Mooege.Common.MPQ.FileFormats.MarkerSet;
                 foreach (var marker in mpqMarkerSet.Markers)
-                    if (marker.Int0 == 16)      // TODO Make this an enum value /farmy
+                    if (marker.Type == Mooege.Common.MPQ.FileFormats.MarkerType.SubScenePosition)      // TODO Make this an enum value /farmy
                         return marker.PRTransform.Vector3D;
             }
 

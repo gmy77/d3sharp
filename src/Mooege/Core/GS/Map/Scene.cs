@@ -122,6 +122,11 @@ namespace Mooege.Core.GS.Map
         public Mooege.Common.MPQ.FileFormats.Scene.NavZoneDef NavZone { get; private set; }
 
         /// <summary>
+        /// Possible spawning locations for randomized gizmo placement
+        /// </summary>
+        public List<PRTransform>[] GizmoSpawningLocations { get; private set; }
+
+        /// <summary>
         /// Creates a new scene and adds it to given world.
         /// </summary>
         /// <param name="world">The parent world.</param>
@@ -195,10 +200,12 @@ namespace Mooege.Core.GS.Map
         #region actor-loading
 
         /// <summary>
-        /// Loads all actors for the scene.        
+        /// Loads all markers for the scene.        
         /// </summary>
-        public void LoadActors()
+        public void LoadMarkers()
         {
+            this.GizmoSpawningLocations = new List<PRTransform>[26]; // LocationA to LocationZ
+
             // TODO: We should be instead loading actors but let them get revealed based on quest/triggers/player proximity. /raist.
 
             foreach (var markerSet in this.MarkerSets)
@@ -208,16 +215,41 @@ namespace Mooege.Core.GS.Map
 
                 foreach (var marker in markerSetData.Markers)
                 {
-                    if (marker.SNOHandle.Group != SNOGroup.Actor) continue; // skip non-actor markers.
-                    
-                    var actor = ActorFactory.Create(this.World, marker.SNOHandle.Id, marker.TagMap); // try to create it.
-                    if (actor == null) continue;
+                    switch (marker.Type)
+                    {
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.Actor:
 
-                    var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
-                    actor.RotationAmount = marker.PRTransform.Quaternion.W;
-                    actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
+                            var actor = ActorFactory.Create(this.World, marker.SNOHandle.Id, marker.TagMap); // try to create it.
+                            if (actor == null) continue;
 
-                    actor.EnterWorld(position);
+                            var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
+                            actor.RotationAmount = marker.PRTransform.Quaternion.W;
+                            actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
+
+                            actor.EnterWorld(position);
+                            break;
+
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.Encounter:
+
+                            // TODO Load encounter when seeing a marker
+                            break;
+
+                        default:
+
+                            // Save gizmo locations. They are used to spawn loots and gizmos randomly in a level area
+                            if ((int)marker.Type >= (int)Mooege.Common.MPQ.FileFormats.MarkerType.GizmoLocationA && (int)marker.Type <= (int)Mooege.Common.MPQ.FileFormats.MarkerType.GizmoLocationZ)
+                            {
+                                int index = (int)marker.Type - 50; // LocationA has id 50...
+
+                                if (GizmoSpawningLocations[index] == null)
+                                    GizmoSpawningLocations[index] = new List<PRTransform>();
+
+                                marker.PRTransform.Vector3D += this.Position;
+                                GizmoSpawningLocations[index].Add(marker.PRTransform);
+                            }
+                            break;
+
+                    }
                 }
             }
         }
