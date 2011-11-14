@@ -31,10 +31,13 @@ namespace Mooege.Core.GS.AI.Brains
         /// Hostile actors in range.
         /// </summary>
         public List<Player> EnemiesInRange { get; protected set; }
-
+        private Pathfinder pather;
+        private List<Vector3D> path;
+        private int nextPlayerSearch = 0;
         public MonsterBrain(Actor body)
             : base(body)
         {
+            pather = new Pathfinder();
         }
 
         public override void Think(int tickCounter)
@@ -42,19 +45,83 @@ namespace Mooege.Core.GS.AI.Brains
             if (this.Body is NPC) return;
 
             // Reading enemies in range from quad map is quite expensive, so read it once at the very start. /raist.
-            this.EnemiesInRange = this.Body.GetPlayersInRange();
+            //Temp fix till someone smart fixes it - DarkLotus
+            if (nextPlayerSearch < tickCounter)
+            {
+                this.EnemiesInRange = this.Body.GetPlayersInRange();
+                nextPlayerSearch = tickCounter + 25;
+            }
+            
 
             if (this.EnemiesInRange.Count > 0) // if there are enemies around
-                this.State = BrainState.Combat; // attack them.
+                if((MovementHelpers.GetDistance(this.Body.Position, this.EnemiesInRange[0].Position) < 30f))
+                {
+                this.State = BrainState.Combat; // attack them
+                }
             else
                 this.State = BrainState.Wander; // else just wander around.
 
             if (this.CurrentAction == null)
             {
-                var heading = new Vector3D(this.Body.Position.X + FastRandom.Instance.Next(-10,10), this.Body.Position.Y + FastRandom.Instance.Next(-10,10), this.Body.Position.Z);
+                switch (this.State)
+                { 
+                    case BrainState.Wander:
+                        this.Wander();
+                        break;
+                    case BrainState.Combat:
+                        this.Combat();
+                        break;
+                }
                 
-                if (this.Body.Position.DistanceSquared(ref heading) > this.Body.WalkSpeed * this.Body.World.Game.TickRate) // just skip the movements that can be accomplished in a single game.update(). /raist.
-                    this.CurrentAction = new MoveToPointAction(this.Body, heading);
+            }
+        }
+
+        private void Wander()
+        {
+            var heading = new Vector3D(this.Body.Position.X + FastRandom.Instance.Next(-40, 40), this.Body.Position.Y + FastRandom.Instance.Next(-40, 40), this.Body.Position.Z);
+            if (MovementHelpers.GetDistance(this.Body.Position, heading) > 5f && MovementHelpers.GetDistance(this.Body.Position, heading) < 50f)
+            {// just skip the movements that can be accomplished in a single game.update(). /raist.
+                if (path == null)
+                {
+                    path = Pather.GetPath(pather, this.Body, this.Body.Position, heading);
+                    if (path == null) { return; } //Path should be waiting in cache when we tick around again - DarkLotus
+                    path.Reverse();
+                }
+                if (path.Count < 2)
+                {
+                    this.CurrentAction = new MoveToPointAction(this.Body, new Vector3D(this.path[0]));
+                    path = null; return;
+                }
+                this.CurrentAction = new FollowPathAction(this.Body, this.path);
+
+                return;
+            }
+            //if (this.Body.Position.DistanceSquared(ref heading) > this.Body.WalkSpeed * this.Body.World.Game.TickRate) // just skip the movements that can be accomplished in a single game.update(). /raist.
+             //   this.CurrentAction = new MoveToPointAction(this.Body, heading);
+        }
+        
+
+        private void Combat()
+        {
+            // This is all wrong. Just PoC for wandering then switching to chasing.
+            var heading = new Vector3D(this.EnemiesInRange[0].Position);
+
+            if (MovementHelpers.GetDistance(this.Body.Position, heading) > 5f && MovementHelpers.GetDistance(this.Body.Position, heading) < 50f)
+            {// just skip the movements that can be accomplished in a single game.update(). /raist.
+                if (path == null)
+                {
+                    path = Pather.GetPath(pather, this.Body, this.Body.Position, heading);
+                    if (path == null) { return; }
+                    path.Reverse();
+                }
+                if (path.Count < 2)
+                {
+                    this.CurrentAction = new MoveToPointAction(this.Body, new Vector3D(this.path[0]));
+                    path = null; return;
+                }
+                this.CurrentAction = new FollowPathAction(this.Body,this.path);
+                
+                return;
             }
         }
     }

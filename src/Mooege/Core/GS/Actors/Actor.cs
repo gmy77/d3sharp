@@ -74,9 +74,14 @@ namespace Mooege.Core.GS.Actors
         public bool Spawned { get; private set; }
 
         /// <summary>
-        /// Default query radius value.
+        /// Default lenght value for region based queries.
         /// </summary>
-        protected const int DefaultQueryProximity = 240;
+        public const int DefaultQueryProximityLenght = 240;
+
+        /// <summary>
+        /// Default lenght value for range based queries.
+        /// </summary>
+        public const int DefaultQueryProximityRadius = 120;
 
         /// <summary>
         /// PRTransform for the actor.
@@ -384,42 +389,42 @@ namespace Mooege.Core.GS.Actors
 
         #region circurlar region queries
 
-        public List<Player> GetPlayersInRange(float radius = DefaultQueryProximity)
+        public List<Player> GetPlayersInRange(float radius = DefaultQueryProximityRadius)
         {
             return this.GetObjectsInRange<Player>(radius);
         }
 
-        public List<Item> GetItemsInRange(float radius = DefaultQueryProximity)
+        public List<Item> GetItemsInRange(float radius = DefaultQueryProximityRadius)
         {
             return this.GetObjectsInRange<Item>(radius);
         }
 
-        public List<Monster> GetMonstersInRange(float radius = DefaultQueryProximity)
+        public List<Monster> GetMonstersInRange(float radius = DefaultQueryProximityRadius)
         {
             return this.GetObjectsInRange<Monster>(radius);
         }
 
-        public List<Actor> GetActorsInRange(float radius = DefaultQueryProximity)
+        public List<Actor> GetActorsInRange(float radius = DefaultQueryProximityRadius)
         {
             return this.GetObjectsInRange<Actor>(radius);
         }
 
-        public List<T> GetActorsInRange<T>(float radius = DefaultQueryProximity) where T : Actor
+        public List<T> GetActorsInRange<T>(float radius = DefaultQueryProximityRadius) where T : Actor
         {
             return this.GetObjectsInRange<T>(radius);
         }
 
-        public List<Scene> GetScenesInRange(float radius = DefaultQueryProximity)
+        public List<Scene> GetScenesInRange(float radius = DefaultQueryProximityRadius)
         {
             return this.GetObjectsInRange<Scene>(radius);
         }
 
-        public List<WorldObject> GetObjectsInRange(float radius = DefaultQueryProximity)
+        public List<WorldObject> GetObjectsInRange(float radius = DefaultQueryProximityRadius)
         {
             return this.GetObjectsInRange<WorldObject>(radius);
         }
 
-        public List<T> GetObjectsInRange<T>(float radius=DefaultQueryProximity) where T : WorldObject
+        public List<T> GetObjectsInRange<T>(float radius = DefaultQueryProximityRadius) where T : WorldObject
         {
             var proximityCircle = new Circle(this.Position.X, this.Position.Y, radius);
             return this.World.QuadTree.Query<T>(proximityCircle);
@@ -429,42 +434,42 @@ namespace Mooege.Core.GS.Actors
 
         #region rectangluar region queries
 
-        public List<Player> GetPlayersInRegion(int lenght = DefaultQueryProximity)
+        public List<Player> GetPlayersInRegion(int lenght = DefaultQueryProximityLenght)
         {
             return this.GetObjectsInRegion<Player>(lenght);
         }
 
-        public List<Item> GetItemsInRegion(int lenght = DefaultQueryProximity)
+        public List<Item> GetItemsInRegion(int lenght = DefaultQueryProximityLenght)
         {
             return this.GetObjectsInRegion<Item>(lenght);
         }
 
-        public List<Monster> GetMonstersInRegion(int lenght = DefaultQueryProximity)
+        public List<Monster> GetMonstersInRegion(int lenght = DefaultQueryProximityLenght)
         {
             return this.GetObjectsInRegion<Monster>(lenght);
         }
 
-        public List<Actor> GetActorsInRegion(int lenght = DefaultQueryProximity)
+        public List<Actor> GetActorsInRegion(int lenght = DefaultQueryProximityLenght)
         {
             return this.GetObjectsInRegion<Actor>(lenght);
         }
 
-        public List<T> GetActorsInRegion<T>(int lenght = DefaultQueryProximity) where T : Actor
+        public List<T> GetActorsInRegion<T>(int lenght = DefaultQueryProximityLenght) where T : Actor
         {
             return this.GetObjectsInRegion<T>(lenght);
         }
 
-        public List<Scene> GetScenesInRegion(int lenght = DefaultQueryProximity)
+        public List<Scene> GetScenesInRegion(int lenght = DefaultQueryProximityLenght)
         {
             return this.GetObjectsInRegion<Scene>(lenght);
         }
 
-        public List<WorldObject> GetObjectsInRegion(int lenght = DefaultQueryProximity)
+        public List<WorldObject> GetObjectsInRegion(int lenght = DefaultQueryProximityLenght)
         {
             return this.GetObjectsInRegion<WorldObject>(lenght);
         }
 
-        public List<T> GetObjectsInRegion<T>(int lenght = DefaultQueryProximity) where T : WorldObject
+        public List<T> GetObjectsInRegion<T>(int lenght = DefaultQueryProximityLenght) where T : WorldObject
         {
             var proximityRectangle = new Rect(this.Position.X - lenght / 2, this.Position.Y - lenght / 2, lenght, lenght);
             return this.World.QuadTree.Query<T>(proximityRectangle);

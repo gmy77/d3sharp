@@ -141,6 +141,7 @@ namespace Mooege.Core.GS.Games
                     return "Invalid arguments. Type 'help draw' to get help.";
 
                 World world;
+                Player player = null;
                 int worldId;
 
                 if (@params == null)
@@ -148,6 +149,7 @@ namespace Mooege.Core.GS.Games
                     if (invokerClient.InGameClient == null || invokerClient.InGameClient.Player == null)
                         return "Invalid arguments. Type 'help draw' to get help.";
 
+                    player = invokerClient.InGameClient.Player;
                     world = invokerClient.InGameClient.Player.World;
                     worldId = world.WorldSNO.Id;
                 }
@@ -162,7 +164,7 @@ namespace Mooege.Core.GS.Games
 
                 if (world != null)
                 {
-                    new Thread(c => Application.Run(new WorldVisualizer(world))).Start();
+                    new Thread(c => Application.Run(new WorldVisualizer(world, player))).Start();
                     return string.Format("Done visualizing world {0}.", worldId);
                 }
 

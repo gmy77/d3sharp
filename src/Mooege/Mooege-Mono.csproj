@@ -102,6 +102,7 @@
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Common\Extensions\ListExtensions.cs" />
+    <Compile Include="Common\Helpers\Concurrency\ConcurrentList.cs" />
     <Compile Include="Common\Helpers\Math\FastRandom.cs" />
     <Compile Include="Common\Helpers\IO\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />

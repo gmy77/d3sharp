@@ -26,38 +26,46 @@ using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.Actors.Movement
 {
-    public class MoveToPointAction : ActorAction
+    public class FollowPathAction : ActorAction
     {
         public Vector3D Heading { get; private set; }
 
         public SteppedRelativeTickTimer Timer;
-
-        public MoveToPointAction(Actor owner, Vector3D heading) 
+        List<Vector3D> Path;
+        public FollowPathAction(Actor owner, List<Vector3D> Path)
             : base(owner)
         {
-            this.Heading = heading;            
+            this.Path = Path;
+            this.Heading = Path.Last();
         }
 
         public override void Start(int tickCounter)
         {
+            // Each path step will be 2.5f apart roughly, not sure on the math to get correct walk speed for the timer.
             var distance = MovementHelpers.GetDistance(this.Owner.Position, this.Heading);
             var facingAngle = MovementHelpers.GetFacingAngle(this.Owner, this.Heading);
-            this.Owner.Move(this.Heading, facingAngle);
-
-            //Logger.Trace("Heading: " + this.Heading); 
-            //Logger.Trace("Start point: " + this.Owner.Position);
-
-            this.Timer = new SteppedRelativeTickTimer(this.Owner.World.Game, 6, (int)(distance/this.Owner.WalkSpeed), 
+            
+            if (distance < 1f)
+            { this.Done = true; return; }
+            this.Timer = new SteppedRelativeTickTimer(this.Owner.World.Game, 6, (int)(distance / this.Owner.WalkSpeed),
             (tick) =>
             {
-                this.Owner.Position = MovementHelpers.GetMovementPosition(this.Owner.Position, this.Owner.WalkSpeed, facingAngle, 6);                
-                Logger.Trace("Step: " + this.Owner.Position);
+                //this.Owner.Position = MovementHelpers.GetMovementPosition(this.Owner.Position, this.Owner.WalkSpeed, facingAngle, 6);
+                if (Path.Count > 1)
+                {
+                    this.Owner.Move(this.Path.First(), MovementHelpers.GetFacingAngle(this.Owner, this.Path.First()));
+                    this.Owner.Position = Path.First();
+                    Path.RemoveAt(0);
+                    //Logger.Trace("Step left in Queue: " + Path.Count);
+                }
+                else { Logger.Trace("Ticking with no path steps left"); this.Done = true; }
+
             },
             (tick) =>
             {
                 this.Owner.Position = Heading;
-                //Logger.Trace("Completed: " + this.Owner.Position);
-                this.Done = true;
+                Logger.Trace("Completed! Path contains :" + this.Path.Count);
+                //this.Done = true;
             });
 
             this.Started = true;

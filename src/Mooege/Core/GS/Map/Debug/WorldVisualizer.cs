@@ -19,31 +19,40 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Map.Debug
 {
     public partial class WorldVisualizer : Form
     {
         public World World { get; private set; }
+        public Player Player { get; private set; }
         public DebugNavMesh Mesh { get; private set; }
         public Bitmap StageBitmap { get; private set; }
         public Bitmap PreviewBitmap { get; private set; }
 
         private readonly Pen _selectionPen = new Pen(Brushes.Blue, 2);
 
-        public WorldVisualizer(World world)
+        public WorldVisualizer(World world, Player player = null)
         {
             InitializeComponent();
 
             this.pictureBoxStage.DoubleBuffer();
             this.pictureBoxPreview.DoubleBuffer();
+
             this.World = world;
+            this.Player = player;
+            
+            radioButtonPlayerProximity.Enabled = radioButtonPlayerProximity.Checked = this.Player != null;
+            checkBoxDrawPlayerProximityCircle.Enabled = checkBoxDrawPlayerProximityCircle.Checked = this.Player != null;
+            checkBoxDrawPlayerProximityRect.Enabled = checkBoxDrawPlayerProximityRect.Checked = this.Player != null;
         }
 
         private void WorldVisualizer_Load(object sender, EventArgs e)
         {
             this.Text = string.Format("World Visualizer - {0} [{1}]", this.World.WorldSNO.Name, this.World.WorldSNO.Id);
-            this.Mesh = new DebugNavMesh(this.World);
+            this.Mesh = new DebugNavMesh(this.World, this.Player);
+            this.Mesh.Update(this.radioButtonAllWorld.Checked);
 
             this.RequestStageRedraw();
         }
@@ -61,7 +70,9 @@ namespace Mooege.Core.GS.Map.Debug
             this.Mesh.DrawMonsters = checkBoxMonsters.Checked;
             this.Mesh.DrawNPCs = checkBoxNPCs.Checked;
             this.Mesh.DrawPlayers = checkBoxPlayers.Checked;
-            this.Mesh.PrintLabels = checkBoxPrintLabels.Checked;
+            this.Mesh.DrawPlayerProximityCircle = checkBoxDrawPlayerProximityCircle.Checked;
+            this.Mesh.DrawPlayerProximityRectangle = checkBoxDrawPlayerProximityRect.Checked;
+            this.Mesh.PrintSceneLabels = checkBoxPrintSceneLabels.Checked;
             this.Mesh.FillCells = checkBoxFillCells.Checked;
 
             if (this.StageBitmap != null)
@@ -76,45 +87,36 @@ namespace Mooege.Core.GS.Map.Debug
                 this.PreviewBitmap = null;
             }
 
+            GC.Collect(); // force a garbage collection.
+            GC.WaitForPendingFinalizers();
+
             this.StageBitmap = this.Mesh.Draw();
             this.PreviewBitmap = this.ResizeImage(this.StageBitmap, this.pictureBoxPreview.Width, this.pictureBoxPreview.Height);
-            this.pictureBoxStage.Refresh();
+            this.pictureBoxStage.Image = this.StageBitmap;
 
             this.groupSettings.Enabled = true;
         }
 
         #endregion
 
-        #region stage painting
-
-        private void pictureBoxStage_Paint(object sender, PaintEventArgs e)
-        {
-            lock (this.Mesh.Lock)
-            {
-                this.pictureBoxStage.Size = this.StageBitmap.Size;
-                e.Graphics.Clear(Color.White);
-                e.Graphics.DrawImage(this.StageBitmap, 0, 0, this.StageBitmap.Width, this.StageBitmap.Height);
-            }
-        }
-
-        #endregion
-
         #region preview handling
+
+        private bool _donePaintingPreview = true;
 
         private void pictureBoxPreview_Paint(object sender, PaintEventArgs e)
         {
-            lock (this.Mesh.Lock)
-            {
-                e.Graphics.Clear(Color.White);
-                e.Graphics.DrawImage(this.PreviewBitmap, 0, 0, this.PreviewBitmap.Width, this.PreviewBitmap.Height);
+            if (!_donePaintingPreview) return;
 
-                var rectLeft = (this.pictureBoxPreview.Width * this.panelStage.HorizontalScroll.Value) / this.panelStage.HorizontalScroll.Maximum;
-                var rectTop = (this.pictureBoxPreview.Height * this.panelStage.VerticalScroll.Value) / this.panelStage.VerticalScroll.Maximum;
-                var rectWidth = (this.pictureBoxPreview.Width * this.panelStage.Size.Width) / this.pictureBoxStage.Width;
-                var rectHeight = (this.pictureBoxPreview.Height * this.panelStage.Size.Height) / this.pictureBoxStage.Height;
+            _donePaintingPreview = false;
+            e.Graphics.DrawImage(this.PreviewBitmap, 0, 0, this.PreviewBitmap.Width, this.PreviewBitmap.Height);
 
-                e.Graphics.DrawRectangle(this._selectionPen, rectLeft, rectTop, rectWidth, rectHeight);
-            }
+            var rectLeft = (this.pictureBoxPreview.Width * this.panelStage.HorizontalScroll.Value) / this.panelStage.HorizontalScroll.Maximum;
+            var rectTop = (this.pictureBoxPreview.Height * this.panelStage.VerticalScroll.Value) / this.panelStage.VerticalScroll.Maximum;
+            var rectWidth = (this.pictureBoxPreview.Width * this.panelStage.Size.Width) / this.pictureBoxStage.Width;
+            var rectHeight = (this.pictureBoxPreview.Height * this.panelStage.Size.Height) / this.pictureBoxStage.Height;
+
+            e.Graphics.DrawRectangle(this._selectionPen, rectLeft, rectTop, rectWidth, rectHeight);
+            _donePaintingPreview = true;
         }
 
         private void panelStage_Scroll(object sender, ScrollEventArgs e)
@@ -138,6 +140,31 @@ namespace Mooege.Core.GS.Map.Debug
                 this.panelStage.VerticalScroll.Value = y;
 
             this.pictureBoxPreview.Refresh();
+        }
+
+        private void WorldVisualizer_SizeChanged(object sender, EventArgs e)
+        {
+            this.pictureBoxPreview.Refresh();
+        }
+
+        #endregion
+
+        #region updates
+
+        private void trackBarUpdateFrequency_ValueChanged(object sender, EventArgs e)
+        {
+            if (trackBarUpdateFrequency.Value == 0)
+                timerUpdate.Enabled = false;
+            else
+            {
+                timerUpdate.Interval = trackBarUpdateFrequency.Value*1000;
+                timerUpdate.Enabled = true;
+            }
+        }
+
+        private void timerUpdate_Tick(object sender, EventArgs e)
+        {
+            this.RequestStageRedraw();
         }
 
         #endregion
@@ -186,6 +213,31 @@ namespace Mooege.Core.GS.Map.Debug
 
         private void checkFillCells_CheckedChanged(object sender, EventArgs e)
         {
+            this.RequestStageRedraw();
+        }
+
+        private void radioButtonAllWorld_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.Mesh == null)
+                return;
+
+            this.Mesh.Update(this.radioButtonAllWorld.Checked);
+            this.RequestStageRedraw();
+        }
+
+        private void checkBoxDrawPlayerProximityCircle_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.Mesh == null)
+                return;
+
+            this.RequestStageRedraw();
+        }
+
+        private void checkBoxDrawPlayerProximityRect_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.Mesh == null)
+                return;
+
             this.RequestStageRedraw();
         }
 
@@ -239,7 +291,7 @@ namespace Mooege.Core.GS.Map.Debug
             GC.WaitForPendingFinalizers();
         }
 
-        #endregion        
+        #endregion            
 
     }    
 }

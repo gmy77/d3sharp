@@ -55,6 +55,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="astar2">
+      <HintPath>..\..\dep\astar\astar2.dll</HintPath>
+    </Reference>
     <Reference Include="CrystalMpq">
       <HintPath>..\..\dep\crystalmpq\CrystalMpq.dll</HintPath>
     </Reference>
@@ -102,6 +105,7 @@
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Common\Extensions\ListExtensions.cs" />
+    <Compile Include="Common\Helpers\Concurrency\ConcurrentList.cs" />
     <Compile Include="Common\Helpers\Math\FastRandom.cs" />
     <Compile Include="Common\Helpers\IO\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />
@@ -141,12 +145,14 @@
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
     <Compile Include="Core\GS\Actors\Actions\ActorAction.cs" />
+    <Compile Include="Core\GS\Actors\Movement\FollowPathAction.cs" />
     <Compile Include="Core\GS\Actors\Movement\MoveToPointAction.cs" />
     <Compile Include="Core\GS\AI\Brains\FollowerBrain.cs" />
     <Compile Include="Core\GS\AI\Brains\HirelingBrain.cs" />
     <Compile Include="Core\GS\AI\Brains\MonsterBrain.cs" />
     <Compile Include="Core\GS\AI\BrainState.cs" />
     <Compile Include="Core\GS\AI\Brains\NPCBrain.cs" />
+    <Compile Include="Core\GS\AI\Pathfinder.cs" />
     <Compile Include="Core\GS\Items\Affix.cs" />
     <Compile Include="Core\GS\Items\AffixGenerator.cs" />
     <Compile Include="Core\GS\Items\HandledItem.cs" />
