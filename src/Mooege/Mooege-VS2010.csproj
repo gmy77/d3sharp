@@ -541,6 +541,10 @@
       <Link>authority.pem</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\dep\openssl\ManagedOpenSsl.dll.config">
+      <Link>ManagedOpenSsl.dll.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\dep\openssl\mooege.pfx">
       <Link>mooege.pfx</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

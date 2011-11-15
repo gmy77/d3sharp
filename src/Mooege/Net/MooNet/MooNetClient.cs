@@ -271,7 +271,7 @@ namespace Mooege.Net.MooNet
 
             try
             {
-                this.TLSStream.BeginAuthenticateAsServer(CertificateHelper.Certificate, true, CertificateHelper.ServerCAChain, SslProtocols.Tls, SslStrength.All, false, this.OnTSLAuthentication, this.TLSStream);
+                this.TLSStream.BeginAuthenticateAsServer(CertificateHelper.Certificate, true, null, SslProtocols.Tls, SslStrength.All, false, this.OnTSLAuthentication, this.TLSStream);
             }
             catch(Exception e)
             {

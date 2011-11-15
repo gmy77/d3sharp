@@ -22,39 +22,37 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using OpenSSL.Core;
+using OpenSSL.Crypto;
 using OpenSSL.X509;
 
 namespace Mooege.Core.Cryptography.SSL
 {
     public static class CertificateHelper
     {
-        public static X509Chain ServerCAChain = null;
         public static X509Certificate Certificate = null;
-
-        public const string CertificateFile = "mooege.pfx";
-        public const string AuthorityFile = "authority.pem";
-        private const string CertificatePrivateKey = "p@ssw0rd";
 
         static CertificateHelper()
         {
-            ServerCAChain = LoadCACertificateChain(AuthorityFile);
-            Certificate = LoadPKCS12Certificate(CertificateFile, CertificatePrivateKey);
+            Certificate = CreateCertificate();
         }
 
-        private static X509Certificate LoadPKCS12Certificate(string certFilename, string password)
+        private static X509Certificate CreateCertificate()
         {
-            using (BIO certFile = BIO.File(certFilename, "r"))
-            {
-                return X509Certificate.FromPKCS12(certFile, password);
-            }
-        }
+            BigNumber bn = 0x10001;
+            var rsa = new RSA();
+            rsa.GenerateKeys(2048, bn, null, null);
+            var key = new CryptoKey(rsa);
 
-        private static X509Chain LoadCACertificateChain(string caFilename)
-        {
-            using (BIO bio = BIO.File(caFilename, "r"))
-            {
-                return new X509Chain(bio);
-            }
+            var cert = new X509Certificate(
+                new SimpleSerialNumber().Next(),
+                new X509Name("Mooege"),
+                new X509Name("Mooege"),
+                key,
+                DateTime.Now,
+                DateTime.Now + TimeSpan.FromDays(365));
+
+            cert.PrivateKey = key;
+            return cert;
         }
     }
 }
