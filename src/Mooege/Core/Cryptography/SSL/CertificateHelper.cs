@@ -28,19 +28,17 @@ namespace Mooege.Core.Cryptography.SSL
 {
     public static class CertificateHelper
     {
-        // OpenSSL & OpenSSL.net implementation:
+        public static X509Chain ServerCAChain = null;
+        public static X509Certificate Certificate = null;
 
-        public static X509Chain serverCAChain = null;
-        public static X509Certificate serverCertificate = null;
+        public const string CertificateFile = "mooege.pfx";
+        public const string AuthorityFile = "authority.pem";
+        private const string CertificatePrivateKey = "p@ssw0rd";
 
         static CertificateHelper()
         {
-            string serverCertPath = @"server.pfx";
-            string serverPrivateKeyPassword = "p@ssw0rd";
-            string caFilePath = "ca_chain.pem";
-
-            serverCAChain = LoadCACertificateChain(caFilePath);
-            serverCertificate = LoadPKCS12Certificate(serverCertPath, serverPrivateKeyPassword);
+            ServerCAChain = LoadCACertificateChain(AuthorityFile);
+            Certificate = LoadPKCS12Certificate(CertificateFile, CertificatePrivateKey);
         }
 
         private static X509Certificate LoadPKCS12Certificate(string certFilename, string password)
@@ -58,29 +56,5 @@ namespace Mooege.Core.Cryptography.SSL
                 return new X509Chain(bio);
             }
         }
-
-        // Microsoft SChannel Implementation:
-        //public const string SertificateFile = "mooege.pfx";
-        //public static X509Certificate Certificate = null;
-
-        //if (!CertificateExists())
-        //    Create();
-
-        //Certificate = new X509Certificate2(SertificateFile, "mooege");
-
-        //private static void Create()
-        //{
-        //    byte[] certificate = CertificateCreator.CreateSelfSignCertificatePfx("CN=mooege.org", DateTime.Parse("2011-01-01"), DateTime.Parse("2013-01-01"), "mooege");
-
-        //    using (var writer = new BinaryWriter(File.Open(SertificateFile, FileMode.Create)))
-        //    {
-        //        writer.Write(certificate);
-        //    }
-        //}
-
-        //public static bool CertificateExists()
-        //{
-        //    return File.Exists(SertificateFile);
-        //}
     }
 }

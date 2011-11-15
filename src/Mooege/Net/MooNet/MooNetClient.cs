@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Threading;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
@@ -49,14 +48,14 @@ namespace Mooege.Net.MooNet
         public IConnection Connection { get; set; }
 
         /// <summary>
-        /// The underlying SSL stream.
-        /// </summary>
-        public SslStream SSLStream { get; private set; }
-
-        /// <summary>
         /// The underlying network stream.
         /// </summary>
         public NetworkStream NetworkStream { get; private set; }
+
+        /// <summary>
+        /// The underlying TLS stream.
+        /// </summary>
+        public SslStream TLSStream { get; private set; }
 
         /// <summary>
         /// Logged in gs client if any.
@@ -86,18 +85,7 @@ namespace Mooege.Net.MooNet
         /// <summary>
         /// Resulting error code for the authentication process.
         /// </summary>
-        public AuthenticationErrorCodes AuthenticationErrorCode;
-
-        /// <summary>
-        /// Session key for encrypted communication.
-        /// </summary>
-        public byte[] SessionKey { get; private set; }
-
-        private static readonly byte[] ServerEncryptionSeed = { 0x68, 0xE0, 0xC7, 0x2E, 0xDD, 0xD6, 0xD2, 0xF3, 0x1E, 0x5A, 0xB1, 0x55, 0xB1, 0x8B, 0x63, 0x1E }; // server's crypto seed - these are the values for sc2, seems we've to figure them out for d3 /raist.
-        private static readonly byte[] ClientEncryptionSeed = { 0xDE, 0xA9, 0x65, 0xAE, 0x54, 0x3A, 0x1E, 0x93, 0x9E, 0x69, 0x0C, 0xAA, 0x68, 0xDE, 0x78, 0x39 }; // client's crypto seed - these are the values for sc2, seems we've to figure them out for d3 /raist.
-
-        public ARC4 ServerEncryptor { get; private set; }
-        public ARC4 ClientDecryptor { get; private set; }
+        public AuthManager.AuthenticationErrorCodes AuthenticationErrorCode;
 
         /// <summary>
         /// Callback list for issued client RPCs.
@@ -121,9 +109,12 @@ namespace Mooege.Net.MooNet
         
         public MooNetClient(IConnection connection)
         {
-            this.Connection = connection;            
+            this.Connection = connection;
+            if (this.Connection != null)
+                this.NetworkStream = new NetworkStream(this.Connection._Socket, true);
+
             this.Services = new Dictionary<uint, uint>();
-            this.Services.Add(0x65446991, 0x0); // connection-service is always bound by defult.
+            this.Services.Add(0x65446991, 0x0); // connection-service is always bound by default. /raist.
             this.MappedObjects = new Dictionary<ulong, ulong>();
         }
 
@@ -254,117 +245,72 @@ namespace Mooege.Net.MooNet
 
         #endregion
 
-        #region communication encryption
+        #region TLS support
 
-        public void InitEncryption(byte[] sessionKey)
-        {
-            this.SessionKey = sessionKey;
-            var sessionKeyHMAC = new HMACSHA256(this.SessionKey);
-
-            var encryptHash = sessionKeyHMAC.ComputeHash(ServerEncryptionSeed);
-            var decryptHash = sessionKeyHMAC.ComputeHash(ClientEncryptionSeed);
-
-            this.ServerEncryptor = new ARC4(encryptHash); // used to encrypt packets sent by the server.
-            this.ClientDecryptor = new ARC4(decryptHash); // used to decrypt packets sent by the client.
-        }
+        // D3 uses TLS 1.0 ( 0x16 0x3 0x1 ) (http://en.wikipedia.org/wiki/Transport_Layer_Security) with following ciphers;
+        // * Cipher Suite: TLS_PSK_WITH_AES_256_CBC_SHA (0x008d)
+        // * Cipher Suite: TLS_PSK_WITH_3DES_EDE_CBC_SHA (0x008b)
+        // * Cipher Suite: TLS_PSK_WITH_AES_128_CBC_SHA (0x008c)
+        // * Cipher Suite: TLS_PSK_WITH_RC4_128_SHA (0x008a)
+        // * Cipher Suite: TLS_EMPTY_RENEGOTIATION_INFO_SCSV (0x00ff)
+        // Which Microsoft's or Mono's System.Net.Security implementation does NOT support them (yet?).
+        // So we've to instead use openssl over openssl.net (http://openssl-net.sourceforge.net/) wrapper to support them.
+        // GNUTls and so the DotGNU Portable.net (http://dotgnu.org/pnet.html) also supports those chippers but openssl-net gives us that kinda cool SSLStream implementation that's seamlessly handles the stuff.
+        // Sample SSLStream code: http://msdn.microsoft.com/en-us/library/system.net.security.sslstream.aspx
 
         public void EnableEncryption()
         {
             // enable the encryption.
             var encryptRequest = bnet.protocol.connection.EncryptRequest.CreateBuilder().Build();
-            this.MakeRPC(() => bnet.protocol.connection.ConnectionService.CreateStub(this).Encrypt(null, encryptRequest, callback => StartupSSLHandshake()));
+            this.MakeRPC(() => bnet.protocol.connection.ConnectionService.CreateStub(this).Encrypt(null, encryptRequest, callback => StartupTSLHandshake()));
         }
         
-        // OpenSSL & OpenSSL.net implementation:
-        private void StartupSSLHandshake()
-        {
-
-            this.NetworkStream = new NetworkStream(this.Connection._Socket, true);
-            this.SSLStream = new SslStream(this.NetworkStream, false);
+        private void StartupTSLHandshake()
+        {            
+            this.TLSStream = new SslStream(this.NetworkStream, false);
 
             try
             {
-                // TODO: use async methods instead.
-                this.SSLStream.AuthenticateAsServer(CertificateHelper.serverCertificate, true, CertificateHelper.serverCAChain, SslProtocols.Tls,
-                                                    SslStrength.All, false);                
+                this.TLSStream.BeginAuthenticateAsServer(CertificateHelper.Certificate, true, CertificateHelper.ServerCAChain, SslProtocols.Tls, SslStrength.All, false, this.OnTSLAuthentication, this.TLSStream);
             }
             catch(Exception e)
             {
-                Logger.FatalException(e, "Certificate exception");
+                Logger.FatalException(e, "Certificate exception: ");
             }
         }
 
-        // Microsoft SChannel Implementation:
-        //private void StartupSSLHandshake()
-        //{            
-        //    this.NetworkStream = new NetworkStream(this.Connection._Socket, true);
-        //    this.SSLStream = new SslStream(this.NetworkStream, false);
+        void OnTSLAuthentication(IAsyncResult result)
+        {
+            try
+            {
+                this.TLSStream.EndAuthenticateAsServer(result);
+            }
+            catch(Exception e)
+            {
+                Logger.FatalException(e, "OnTSLAuthentication() exception: ");
+            }
 
-        //    //this.SSLStream = new SslStream(networkStream, false, new RemoteCertificateValidationCallback(CertificateValidationCallback), new LocalCertificateSelectionCallback(CertificateSelectionCallback));
+            if (!this.TLSStream.IsAuthenticated) return;
 
-        //    try
-        //    {
-        //        this.SSLStream.BeginAuthenticateAsServer(CertificateHelper.Certificate, true, SslProtocols.Tls, true, OnAuthenticateAsServer, this.SSLStream);
-        //        //this.SSLStream.AuthenticateAsServer(CertificateHelper.Certificate, true, SslProtocols.Tls, true);
+            Logger.Trace("TLSStream: authenticated: {0}, signed: {1}, encrypted: {2}, cipher: {3} cipher-strength: {4}, hash algorithm: {5}, hash-strength: {6}, key-exchange algorithm: {7}, key-exchange strength: {8}, protocol: {9}",
+                this.TLSStream.IsAuthenticated,
+                this.TLSStream.IsSigned,
+                this.TLSStream.IsEncrypted,
+                this.TLSStream.CipherAlgorithm, this.TLSStream.CipherStrength,
+                this.TLSStream.HashAlgorithm, this.TLSStream.HashStrength,
+                this.TLSStream.KeyExchangeAlgorithm, this.TLSStream.KeyExchangeStrength,
+                this.TLSStream.SslProtocol);
 
-        //        Console.WriteLine("Cipher: {0} strength {1}", SSLStream.CipherAlgorithm, SSLStream.CipherStrength);
-        //        Console.WriteLine("Hash: {0} strength {1}", SSLStream.HashAlgorithm, SSLStream.HashStrength);
-        //        Console.WriteLine("Key exchange: {0} strength {1}", SSLStream.KeyExchangeAlgorithm, SSLStream.KeyExchangeStrength);
-        //        Console.WriteLine("Protocol: {0}", SSLStream.SslProtocol);
+            if (this.TLSStream.LocalCertificate != null)
+                Logger.Trace("Local certificate was issued to {0} by {1} and is valid from {2} until {3}.", this.TLSStream.LocalCertificate.Subject, this.TLSStream.LocalCertificate.Issuer, this.TLSStream.LocalCertificate.NotBefore, this.TLSStream.LocalCertificate.NotAfter);
 
-        //    }
-        //    catch(AuthenticationException e)
-        //    {
-        //        Logger.FatalException(e, "Certificate exception");
-        //    }
-        //    //this.EncryptionEnabled = true;
-        //}
-
-        //void OnAuthenticateAsServer(IAsyncResult result)
-        //{
-        //    try
-        //    {
-        //        this.SSLStream.EndAuthenticateAsServer(result);
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        Logger.FatalException(e, "OnAuthenticateAsServer exception: ");
-        //    }
-        //}
-
-        //private bool CertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
-        //{
-        //    if (sslpolicyerrors != SslPolicyErrors.None)
-        //    {
-
-        //        Console.WriteLine("IgnoreCertificateErrorsCallback: {0}", sslpolicyerrors);
-        //        //you should implement different logic here...
-
-        //        if ((sslpolicyerrors & SslPolicyErrors.RemoteCertificateChainErrors) != 0)
-        //        {
-        //            foreach (X509ChainStatus chainStatus in chain.ChainStatus)
-        //            {
-        //                Console.WriteLine("\t" + chainStatus.Status);
-        //            }
-        //        }
-        //    }
-
-        //    //returning true tells the SslStream object you don't care about any errors.
-        //    return true;
-        //}
-
-        //static X509Certificate CertificateSelectionCallback(object sender,string targetHost, X509CertificateCollection localCertificates, X509Certificate remoteCertificate, string[] acceptableIssuers)
-        //{
-        //    return CertificateHelper.Certificate;
-        //}
-
+            //if (this.TLSStream.RemoteCertificate != null) // throws exception too, should be fixed /raist.
+                // Logger.Warn("Remote certificate was issued to {0} by {1} and is valid from {2} until {3}.", this.TLSStream.RemoteCertificate.Subject, this.TLSStream.RemoteCertificate.Issuer, this.TLSStream.RemoteCertificate.NotBefore, this.TLSStream.RemoteCertificate.NotAfter);
+        }
 
         #endregion
 
-        public override string ToString()
-        {
-            return String.Format("{{ Client: {0} }}", this.Account==null ? "??" : this.Account.Email);
-        }
+        #region text-messaging functionality from server to client
 
         /// <summary>
         /// Sends a message to given client. Can be used for sending command replies.
@@ -386,6 +332,7 @@ namespace Mooege.Net.MooNet
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(this).NotifySendMessage(null, notification, callback => { }));
         }
 
+        // used by server-toon
         public void SendServerWhisper(string text)
         {
             if (text.Trim() == string.Empty) return;
@@ -401,6 +348,10 @@ namespace Mooege.Net.MooNet
                 OnNotificationReceived(null, notification, callback => { }));
         }
 
+        #endregion
+
+        #region current channel hack - fixme
+
         private Channel _currentChannel;
         public Channel CurrentChannel
         {
@@ -413,7 +364,8 @@ namespace Mooege.Net.MooNet
                 this._currentChannel = value;
                 if (value == null) return;
 
-                #region still trying to figure a bit below - commented meanwhile /raist. 
+                // TODO: still trying to figure a bit below - commented meanwhile /raist.
+
                 // notify friends.
                 //if (FriendManager.Friends[this.Account.BnetAccountID.Low].Count == 0) return; // if account has no friends just skip.
 
@@ -434,19 +386,14 @@ namespace Mooege.Net.MooNet
                 //        bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"),
                 //        notification, this.Account.DynamicId);
                 //}
-                #endregion
             }
         }
 
-        /// <summary>
-        /// Error codes for authentication process.
-        /// </summary>
-        public enum AuthenticationErrorCodes
+        #endregion
+
+        public override string ToString()
         {
-            None = 0,
-            InvalidCredentials = 3,
-            NoToonSelected = 11,
-            NoGameAccount = 12,
+            return String.Format("{{ Client: {0} }}", this.Account==null ? "??" : this.Account.Email);
         }
     }
 }

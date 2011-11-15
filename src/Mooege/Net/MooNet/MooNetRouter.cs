@@ -23,7 +23,6 @@ using Google.ProtocolBuffers.Descriptors;
 using Mooege.Common;
 using Mooege.Core.MooNet.Services;
 using Mooege.Net.MooNet.Packets;
-using Mooege.Common.Extensions;
 
 namespace Mooege.Net.MooNet
 {
@@ -34,9 +33,6 @@ namespace Mooege.Net.MooNet
 
         public static void Route(ConnectionDataEventArgs e)
         {
-            var client = (MooNetClient)e.Connection.Client;
-            Logger.Debug("Incoming packet\n{0}", e.Data.ToArray().Dump());
-
             var stream = CodedInputStream.CreateInstance(e.Data.ToArray());
             while (!stream.IsAtEnd)
             {

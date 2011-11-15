@@ -18,7 +18,7 @@
 
 // Contains code from: https://wcell.svn.codeplex.com/svn/wcell/Services/WCell.RealmServer/Network/RealmClient.cs
 
-namespace Mooege.Core.MooNet.Authentication
+namespace Mooege.Core.Cryptography
 {
     public class ARC4
     {
