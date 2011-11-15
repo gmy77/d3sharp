@@ -20,37 +20,41 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using OpenSSL.Core;
+using OpenSSL.X509;
 
 namespace Mooege.Core.Cryptography.SSL
 {
     public static class CertificateHelper
     {
-        public const string SertificateFile = "mooege.pfx";
+        public static X509Chain ServerCAChain = null;
         public static X509Certificate Certificate = null;
+
+        public const string CertificateFile = "mooege.pfx";
+        public const string AuthorityFile = "authority.pem";
+        private const string CertificatePrivateKey = "p@ssw0rd";
 
         static CertificateHelper()
         {
-            if (!CertificateExists())
-                Create();
-
-            Certificate = new X509Certificate2(SertificateFile, "mooege");
+            ServerCAChain = LoadCACertificateChain(AuthorityFile);
+            Certificate = LoadPKCS12Certificate(CertificateFile, CertificatePrivateKey);
         }
 
-        private static void Create()
+        private static X509Certificate LoadPKCS12Certificate(string certFilename, string password)
         {
-            byte[] certificate = CertificateCreator.CreateSelfSignCertificatePfx("CN=mooege.org", DateTime.Parse("2011-01-01"), DateTime.Parse("2013-01-01"), "mooege");
-
-            using (var writer = new BinaryWriter(File.Open(SertificateFile, FileMode.Create)))
+            using (BIO certFile = BIO.File(certFilename, "r"))
             {
-                writer.Write(certificate);
+                return X509Certificate.FromPKCS12(certFile, password);
             }
         }
 
-        public static bool CertificateExists()
+        private static X509Chain LoadCACertificateChain(string caFilename)
         {
-            return File.Exists(SertificateFile);
+            using (BIO bio = BIO.File(caFilename, "r"))
+            {
+                return new X509Chain(bio);
+            }
         }
     }
 }

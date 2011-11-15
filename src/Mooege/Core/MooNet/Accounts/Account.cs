@@ -22,6 +22,7 @@ using System.Data.SQLite;
 using System.Linq;
 using Mooege.Core.Common.Storage;
 using Mooege.Core.Common.Toons;
+using Mooege.Core.Cryptography;
 using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Friends;
 using Mooege.Core.MooNet.Helpers;

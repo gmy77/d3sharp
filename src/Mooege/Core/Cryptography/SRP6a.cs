@@ -24,7 +24,7 @@ using System.Text;
 using Mooege.Common.Extensions;
 using Mooege.Core.MooNet.Accounts;
 
-namespace Mooege.Core.MooNet.Authentication
+namespace Mooege.Core.Cryptography
 {
     /// <summary>
     /// SRP6-a implementation.

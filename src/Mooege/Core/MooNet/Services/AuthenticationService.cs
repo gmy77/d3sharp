@@ -44,7 +44,7 @@ namespace Mooege.Core.MooNet.Services
             {
                 this.Client.AuthenticationCompleteSignal.WaitOne(); // wait the signal;
 
-                if(this.Client.AuthenticationErrorCode != MooNetClient.AuthenticationErrorCodes.None)
+                if(this.Client.AuthenticationErrorCode != AuthManager.AuthenticationErrorCodes.None)
                 {
                     Logger.Info("Authentication failed for {0} because of invalid credentals.", request.Email);
                     done(bnet.protocol.authentication.LogonResponse.DefaultInstance);

@@ -63,6 +63,9 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\dep\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="ManagedOpenSsl">
+      <HintPath>..\..\dep\openssl\ManagedOpenSsl.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp">
     </Reference>
     <Reference Include="System">
@@ -150,7 +153,6 @@
     <Compile Include="Common\MPQ\MPQStorage.cs" />
     <Compile Include="Core\Common\Items\ItemGroup.cs" />
     <Compile Include="Core\Common\Scripting\FormulaScript.cs" />
-    <Compile Include="Core\Cryptography\SSL\CertificateCreator.cs" />
     <Compile Include="Core\Cryptography\SSL\CertificateHelper.cs" />
     <Compile Include="Core\GS\Actors\ActorFactory.cs" />
     <Compile Include="Core\GS\Actors\Gizmo.cs" />
@@ -190,10 +192,10 @@
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
-    <Compile Include="Core\MooNet\Authentication\ARC4.cs" />
+    <Compile Include="Core\Cryptography\ARC4.cs" />
     <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
     <Compile Include="Core\MooNet\Authentication\Config.cs" />
-    <Compile Include="Core\MooNet\Authentication\SRP6a.cs" />
+    <Compile Include="Core\Cryptography\SRP6a.cs" />
     <Compile Include="Core\MooNet\Channels\Channel.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelManager.cs" />
     <Compile Include="Core\MooNet\Channels\Member.cs" />
@@ -535,6 +537,14 @@
       <Link>Assets\MPQ\IMPORTANT</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\dep\openssl\authority.pem">
+      <Link>authority.pem</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\dep\openssl\mooege.pfx">
+      <Link>mooege.pfx</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -562,5 +572,14 @@
       <Name>LibMooNet</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="..\..\dep\openssl\libeay32.dll">
+      <Link>libeay32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\dep\openssl\ssleay32.dll">
+      <Link>ssleay32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
