@@ -41,7 +41,6 @@ namespace Mooege.Core.GS.Powers
             if (this.Scale == 0f)
                 this.Scale = 1f;
             this.Position = position;
-            this.GBHandle.Type = -1; this.GBHandle.GBID = -1; // TODO: use proper enum value
             
             this.Timeout = timeout;
             

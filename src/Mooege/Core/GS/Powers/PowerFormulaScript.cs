@@ -368,6 +368,7 @@ namespace Mooege.Core.GS.Powers
         {
             Power power = (Power)MPQStorage.Data.Assets[SNOGroup.Power][powerSNO].Data;
 
+            // TODO: figure out which tagmaps to search and in what order
             TagMap[] tagMaps = new TagMap[]
             {
                 power.Powerdef.GeneralTagMap,

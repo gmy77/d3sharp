@@ -37,20 +37,20 @@ namespace Mooege.Core.GS.Powers.Implementations
             int numProjectiles = (int)ScriptFormula(4);
             for (int n = 0; n < numProjectiles; ++n)
             {
-                // chance to make snake
-                bool snake = ValidTarget() && Rune_E > 0 && Rand.NextDouble() < ScriptFormula(11);
-
                 var proj = new Projectile(this,
-                                          RuneSelectsId(107011, 107030, 107035, 107223, 107265, snake ? 107114 : 107011),
+                                          RuneSelectsId(107011, 107030, 107035, 107223, 107265, 107114),
                                           User.Position);
                 proj.Position.Z += 3f;
                 proj.OnHit = (hit) =>
                 {
                     // TODO: fix positioning of hit actors. possibly increase model scale?
-                    SpawnEffect(RuneSelectsId(112327, 112338, 112327, 112345, 112347, snake ? 112311 : 112327), proj.Position);
+                    SpawnEffect(RuneSelectsId(112327, 112338, 112327, 112345, 112347, 112311), proj.Position);
+
                     proj.Destroy();
-                    if (snake)
+
+                    if (Rune_E > 0 && Rand.NextDouble() < ScriptFormula(11))
                         hit.PlayEffectGroup(107163);
+
                     WeaponDamage(hit, (ScriptFormula(13) + 0.16f * Rune_A), (Rune_A > 0 ? DamageType.Fire : DamageType.Poison));
                 };
                 proj.Launch(TargetPosition, 1f);
@@ -65,22 +65,58 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            new EffectActor(this.World, 117557, TargetPosition, 0, WaitSeconds(2f));
+            // HACK: made up garggy spell :)
 
-            var proj = new Projectile(this, 77569, User.Position);
+            Vector3D inFrontOfTarget = PowerMath.ProjectAndTranslate2D(TargetPosition, User.Position, TargetPosition, 11f);
+            inFrontOfTarget.Z = User.Position.Z;
+            var garggy = SpawnEffect(122305, inFrontOfTarget, TargetPosition, WaitInfinite());
 
-            proj.OnUpdate = () =>
+            _PlayAni(garggy, 155988);
+
+            yield return WaitSeconds(2f);
+
+            for (int n = 0; n < 3; ++n)
             {
-                new EffectActor(this.World, 99567, proj.Position, 0, WaitSeconds(5f));
-            };
-            proj.OnArrival = () =>
+                _PlayAni(garggy, 211382);
+
+                yield return WaitSeconds(0.5f);
+
+                SpawnEffect(192210, TargetPosition);
+                WeaponDamage(GetTargetsInRange(TargetPosition, 12f), 1.00f, DamageType.Poison);
+
+                yield return WaitSeconds(0.4f);
+            }
+
+            _PlayAni(garggy, 155536); //mwhaha
+            yield return WaitSeconds(1.5f);
+
+            _PlayAni(garggy, 171024);
+            yield return WaitSeconds(2f);
+
+            garggy.Destroy();
+
+            yield break;       
+        }
+
+        // hackish animation player until a centralized one can be made
+        private void _PlayAni(Actor actor, int aniSNO)
+        {
+            World.BroadcastIfRevealed(new PlayAnimationMessage()
             {
-                new EffectActor(this.World, 88244, proj.Position, 0, WaitSeconds(5f));
-            };
-
-            proj.Launch(TargetPosition, 1f);
-
-            yield break;         
+                ActorID = actor.DynamicID,
+                Field1 = 0x3,
+                Field2 = 0,
+                tAnim = new PlayAnimationMessageSpec[1]
+                {
+                    new PlayAnimationMessageSpec()
+                    {
+                        Field0 = -2,
+                        Field1 = aniSNO,
+                        Field2 = 0x0,
+                        Field3 = 1f
+                    }
+                }
+            }, actor);
         }
     }
 
