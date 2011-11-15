@@ -18,11 +18,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Net.Security;
 using System.Net.Sockets;
-using System.Security.Authentication;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
@@ -38,6 +35,7 @@ using Mooege.Core.MooNet.Objects;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet.Packets;
 using Mooege.Net.MooNet.RPC;
+using OpenSSL;
 
 namespace Mooege.Net.MooNet
 {
@@ -54,6 +52,11 @@ namespace Mooege.Net.MooNet
         /// The underlying SSL stream.
         /// </summary>
         public SslStream SSLStream { get; private set; }
+
+        /// <summary>
+        /// The underlying network stream.
+        /// </summary>
+        public NetworkStream NetworkStream { get; private set; }
 
         /// <summary>
         /// Logged in gs client if any.
@@ -84,11 +87,6 @@ namespace Mooege.Net.MooNet
         /// Resulting error code for the authentication process.
         /// </summary>
         public AuthenticationErrorCodes AuthenticationErrorCode;
-
-        /// <summary>
-        /// Is encryption enabled for communication?
-        /// </summary>
-        public bool EncryptionEnabled { get; private set; }
 
         /// <summary>
         /// Session key for encrypted communication.
@@ -127,7 +125,6 @@ namespace Mooege.Net.MooNet
             this.Services = new Dictionary<uint, uint>();
             this.Services.Add(0x65446991, 0x0); // connection-service is always bound by defult.
             this.MappedObjects = new Dictionary<ulong, ulong>();
-            this.EncryptionEnabled = false;
         }
 
         public bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon)
@@ -277,57 +274,89 @@ namespace Mooege.Net.MooNet
             var encryptRequest = bnet.protocol.connection.EncryptRequest.CreateBuilder().Build();
             this.MakeRPC(() => bnet.protocol.connection.ConnectionService.CreateStub(this).Encrypt(null, encryptRequest, callback => StartupSSLHandshake()));
         }
-
+        
+        // OpenSSL & OpenSSL.net implementation:
         private void StartupSSLHandshake()
         {
-            using (var networkStream = new NetworkStream(this.Connection._Socket, true))
+
+            this.NetworkStream = new NetworkStream(this.Connection._Socket, true);
+            this.SSLStream = new SslStream(this.NetworkStream, false);
+
+            try
             {
-                this.SSLStream = new SslStream(networkStream, false);
-                //this.SSLStream = new SslStream(networkStream, false, new RemoteCertificateValidationCallback(CertificateValidationCallback), new LocalCertificateSelectionCallback(CertificateSelectionCallback));
-
-                try
-                {
-                    this.SSLStream.AuthenticateAsServer(CertificateHelper.Certificate, true, SslProtocols.Tls, true);
-
-                    Console.WriteLine("Cipher: {0} strength {1}", SSLStream.CipherAlgorithm, SSLStream.CipherStrength);
-                    Console.WriteLine("Hash: {0} strength {1}", SSLStream.HashAlgorithm, SSLStream.HashStrength);
-                    Console.WriteLine("Key exchange: {0} strength {1}", SSLStream.KeyExchangeAlgorithm, SSLStream.KeyExchangeStrength);
-                    Console.WriteLine("Protocol: {0}", SSLStream.SslProtocol);
-
-                }
-                catch(AuthenticationException e)
-                {
-                    Logger.FatalException(e, "Certificate exception");
-                }
+                // TODO: use async methods instead.
+                this.SSLStream.AuthenticateAsServer(CertificateHelper.serverCertificate, true, CertificateHelper.serverCAChain, SslProtocols.Tls,
+                                                    SslStrength.All, false);                
             }
-            //this.EncryptionEnabled = true;
-        }
-
-        private bool CertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
-        {
-            if (sslpolicyerrors != SslPolicyErrors.None)
+            catch(Exception e)
             {
-
-                Console.WriteLine("IgnoreCertificateErrorsCallback: {0}", sslpolicyerrors);
-                //you should implement different logic here...
-
-                if ((sslpolicyerrors & SslPolicyErrors.RemoteCertificateChainErrors) != 0)
-                {
-                    foreach (X509ChainStatus chainStatus in chain.ChainStatus)
-                    {
-                        Console.WriteLine("\t" + chainStatus.Status);
-                    }
-                }
+                Logger.FatalException(e, "Certificate exception");
             }
-
-            //returning true tells the SslStream object you don't care about any errors.
-            return true;
         }
 
-        static X509Certificate CertificateSelectionCallback(object sender,string targetHost, X509CertificateCollection localCertificates, X509Certificate remoteCertificate, string[] acceptableIssuers)
-        {
-            return CertificateHelper.Certificate;
-        }
+        // Microsoft SChannel Implementation:
+        //private void StartupSSLHandshake()
+        //{            
+        //    this.NetworkStream = new NetworkStream(this.Connection._Socket, true);
+        //    this.SSLStream = new SslStream(this.NetworkStream, false);
+
+        //    //this.SSLStream = new SslStream(networkStream, false, new RemoteCertificateValidationCallback(CertificateValidationCallback), new LocalCertificateSelectionCallback(CertificateSelectionCallback));
+
+        //    try
+        //    {
+        //        this.SSLStream.BeginAuthenticateAsServer(CertificateHelper.Certificate, true, SslProtocols.Tls, true, OnAuthenticateAsServer, this.SSLStream);
+        //        //this.SSLStream.AuthenticateAsServer(CertificateHelper.Certificate, true, SslProtocols.Tls, true);
+
+        //        Console.WriteLine("Cipher: {0} strength {1}", SSLStream.CipherAlgorithm, SSLStream.CipherStrength);
+        //        Console.WriteLine("Hash: {0} strength {1}", SSLStream.HashAlgorithm, SSLStream.HashStrength);
+        //        Console.WriteLine("Key exchange: {0} strength {1}", SSLStream.KeyExchangeAlgorithm, SSLStream.KeyExchangeStrength);
+        //        Console.WriteLine("Protocol: {0}", SSLStream.SslProtocol);
+
+        //    }
+        //    catch(AuthenticationException e)
+        //    {
+        //        Logger.FatalException(e, "Certificate exception");
+        //    }
+        //    //this.EncryptionEnabled = true;
+        //}
+
+        //void OnAuthenticateAsServer(IAsyncResult result)
+        //{
+        //    try
+        //    {
+        //        this.SSLStream.EndAuthenticateAsServer(result);
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        Logger.FatalException(e, "OnAuthenticateAsServer exception: ");
+        //    }
+        //}
+
+        //private bool CertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+        //{
+        //    if (sslpolicyerrors != SslPolicyErrors.None)
+        //    {
+
+        //        Console.WriteLine("IgnoreCertificateErrorsCallback: {0}", sslpolicyerrors);
+        //        //you should implement different logic here...
+
+        //        if ((sslpolicyerrors & SslPolicyErrors.RemoteCertificateChainErrors) != 0)
+        //        {
+        //            foreach (X509ChainStatus chainStatus in chain.ChainStatus)
+        //            {
+        //                Console.WriteLine("\t" + chainStatus.Status);
+        //            }
+        //        }
+        //    }
+
+        //    //returning true tells the SslStream object you don't care about any errors.
+        //    return true;
+        //}
+
+        //static X509Certificate CertificateSelectionCallback(object sender,string targetHost, X509CertificateCollection localCertificates, X509Certificate remoteCertificate, string[] acceptableIssuers)
+        //{
+        //    return CertificateHelper.Certificate;
+        //}
 
 
         #endregion

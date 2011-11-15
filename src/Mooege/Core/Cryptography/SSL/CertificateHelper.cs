@@ -20,37 +20,67 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using OpenSSL.Core;
+using OpenSSL.X509;
 
 namespace Mooege.Core.Cryptography.SSL
 {
     public static class CertificateHelper
     {
-        public const string SertificateFile = "mooege.pfx";
-        public static X509Certificate Certificate = null;
+        // OpenSSL & OpenSSL.net implementation:
+
+        public static X509Chain serverCAChain = null;
+        public static X509Certificate serverCertificate = null;
 
         static CertificateHelper()
         {
-            if (!CertificateExists())
-                Create();
+            string serverCertPath = @"server.pfx";
+            string serverPrivateKeyPassword = "p@ssw0rd";
+            string caFilePath = "ca_chain.pem";
 
-            Certificate = new X509Certificate2(SertificateFile, "mooege");
+            serverCAChain = LoadCACertificateChain(caFilePath);
+            serverCertificate = LoadPKCS12Certificate(serverCertPath, serverPrivateKeyPassword);
         }
 
-        private static void Create()
+        private static X509Certificate LoadPKCS12Certificate(string certFilename, string password)
         {
-            byte[] certificate = CertificateCreator.CreateSelfSignCertificatePfx("CN=mooege.org", DateTime.Parse("2011-01-01"), DateTime.Parse("2013-01-01"), "mooege");
-
-            using (var writer = new BinaryWriter(File.Open(SertificateFile, FileMode.Create)))
+            using (BIO certFile = BIO.File(certFilename, "r"))
             {
-                writer.Write(certificate);
+                return X509Certificate.FromPKCS12(certFile, password);
             }
         }
 
-        public static bool CertificateExists()
+        private static X509Chain LoadCACertificateChain(string caFilename)
         {
-            return File.Exists(SertificateFile);
+            using (BIO bio = BIO.File(caFilename, "r"))
+            {
+                return new X509Chain(bio);
+            }
         }
+
+        // Microsoft SChannel Implementation:
+        //public const string SertificateFile = "mooege.pfx";
+        //public static X509Certificate Certificate = null;
+
+        //if (!CertificateExists())
+        //    Create();
+
+        //Certificate = new X509Certificate2(SertificateFile, "mooege");
+
+        //private static void Create()
+        //{
+        //    byte[] certificate = CertificateCreator.CreateSelfSignCertificatePfx("CN=mooege.org", DateTime.Parse("2011-01-01"), DateTime.Parse("2013-01-01"), "mooege");
+
+        //    using (var writer = new BinaryWriter(File.Open(SertificateFile, FileMode.Create)))
+        //    {
+        //        writer.Write(certificate);
+        //    }
+        //}
+
+        //public static bool CertificateExists()
+        //{
+        //    return File.Exists(SertificateFile);
+        //}
     }
 }

@@ -35,7 +35,7 @@ namespace Mooege.Net.MooNet
         public static void Route(ConnectionDataEventArgs e)
         {
             var client = (MooNetClient)e.Connection.Client;
-            Logger.Debug("Incoming packet - encrypted: {0}\n{1}", client.EncryptionEnabled, e.Data.ToArray().Dump());
+            Logger.Debug("Incoming packet\n{0}", e.Data.ToArray().Dump());
 
             var stream = CodedInputStream.CreateInstance(e.Data.ToArray());
             while (!stream.IsAtEnd)
