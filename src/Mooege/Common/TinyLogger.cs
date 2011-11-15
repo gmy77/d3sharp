@@ -118,9 +118,6 @@ namespace Mooege.Common
         public void Fatal(string message, params object[] args) { Log(Level.Fatal, message, args); }
 
         // moonet packet loggers
-        public void LogIncoming(byte[] data) { Log(Level.Dump, "[ Recv" + data.ToFormatedHexString() + " ]", null); }
-        public void LogOutgoing(byte[] data) { Log(Level.Dump, "[ Send" + data.ToFormatedHexString() + " ]", null); }
-        public void LogHeader(bnet.protocol.Header header) { Log(Level.Dump, header.AsText(), null); }
         public void LogIncoming(Google.ProtocolBuffers.IMessage msg) { Log(Level.Dump, "[I] " + msg.AsText(), null); }
         public void LogOutgoing(Google.ProtocolBuffers.IMessage msg) { Log(Level.Dump, "[O] " + msg.AsText(), null); }
 

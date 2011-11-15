@@ -61,8 +61,6 @@ namespace Mooege.Net.MooNet.Packets
 
                 output.Flush();
                 this.Data = stream.ToArray();
-                Logger.LogOutgoing(this.Data);
-                Logger.LogHeader(header);
                 Logger.LogOutgoing(message);
             }
         }
