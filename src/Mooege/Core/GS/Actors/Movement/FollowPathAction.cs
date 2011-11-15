@@ -48,7 +48,7 @@ namespace Mooege.Core.GS.Actors.Movement
             
             if (distance < 1f)
             { Path.Clear(); this.Done = true; return; }
-            this.Timer = new SteppedRelativeTickTimer(this.Owner.World.Game, 6, (int)(distance / this.Owner.WalkSpeed),
+            this.Timer = new SteppedRelativeTickTimer(this.Owner.World.Game, 6, (int)(Path.Count / this.Owner.WalkSpeed),
             (tick) =>
             {
                 //this.Owner.Position = MovementHelpers.GetMovementPosition(this.Owner.Position, this.Owner.WalkSpeed, facingAngle, 6);
@@ -59,14 +59,16 @@ namespace Mooege.Core.GS.Actors.Movement
                     Path.RemoveAt(0);
                     //Logger.Trace("Step left in Queue: " + Path.Count);
                 }
-                else { //Logger.Trace("Ticking with no path steps left"); 
+                else
+                {
+                    this.Owner.Position = Heading; ; Logger.Trace("Ticking with no path steps left"); 
                         this.Done = true; }
 
             },
             (tick) =>
             {
                 this.Owner.Position = Heading;
-                //Logger.Trace("Completed! Path contains :" + this.Path.Count);
+                Logger.Trace("Completed! Path contains :" + this.Path.Count);
                 this.Done = true;
             });
 

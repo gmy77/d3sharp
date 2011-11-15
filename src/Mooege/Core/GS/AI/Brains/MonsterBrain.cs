@@ -58,7 +58,7 @@ namespace Mooege.Core.GS.AI.Brains
                 {
                 this.State = BrainState.Combat; // attack them
                 }
-            else
+            //else
                 this.State = BrainState.Wander; // else just wander around.
 
             if (this.CurrentAction == null)
@@ -106,7 +106,7 @@ namespace Mooege.Core.GS.AI.Brains
             // Mobs should discard path their following if target destination changes. - DarkLotus
             var heading = new Vector3D(this.EnemiesInRange[0].Position);
 
-            if (MovementHelpers.GetDistance(this.Body.Position, heading) > 5f && MovementHelpers.GetDistance(this.Body.Position, heading) < 50f)
+            if (MovementHelpers.GetDistance(this.Body.Position, heading) > 5f && MovementHelpers.GetDistance(this.Body.Position, heading) < 30f)
             {
                 if (path == null)
                 {
