@@ -27,6 +27,9 @@ using Mooege.Core.GS.Map;
 using Mooege.Common.Helpers;
 using Mooege.Core.GS.Common.Types.TagMap;
 using System;
+using Mooege.Common.MPQ.FileFormats;
+using World = Mooege.Core.GS.Map.World;
+using Scene = Mooege.Core.GS.Map.Scene;
 
 
 namespace Mooege.Core.GS.Generators
@@ -181,93 +184,158 @@ namespace Mooege.Core.GS.Generators
             return world;
         }
 
-
+        /// <summary>
+        /// Loads content for level areas. Call this after scenes have been generated and after scenes have their GizmoLocations
+        /// set (this is done in Scene.LoadActors right now)
+        /// </summary>
+        /// <param name="levelAreas">Dictionary that for every level area has the scenes it consists of</param>
+        /// <param name="world">The world to which to add loaded actors</param>
         private static void loadLevelAreas(Dictionary<int, List<Scene>> levelAreas, World world)
         {
+            /// Each Scene has one to four level areas assigned to it, so each level area consists of at
+            /// least one scene. Scenes marker tags have generic GizmoLocationA to Z that are used 
+            /// to provide random spawning possibilities.
+            /// For each of these 26 LocationGroups, the LevelArea has a entry in its SpawnType array that defines
+            /// what type of actor/encounter/adventure could spawn there
+            /// 
+            /// It could for example define, that for a level area X, out of the four spawning options
+            /// two are randomly picked and have barrels placed there
+
             foreach (int la in levelAreas.Keys)
             {
                 SNOHandle levelAreaHandle = new SNOHandle(SNOGroup.LevelArea, la);
-
-                if (levelAreaHandle.IsValid)
+                if (!levelAreaHandle.IsValid)
                 {
-                    var levelArea = levelAreaHandle.Target as Mooege.Common.MPQ.FileFormats.LevelArea;
+                    Logger.Warn("Level area {0} does not exist", la);
+                    continue;
+                }
+                var levelArea = levelAreaHandle.Target as LevelArea;
 
-                    for (int i = 0; i < 26; i++)
+                for (int i = 0; i < 26; i++)
+                {
+                    // Merge the gizmo starting locations from all scenes and
+                    // their subscenes into a single list for the whole level area
+                    List<PRTransform> gizmoLocations = new List<PRTransform>();
+                    foreach (var scene in levelAreas[la])
                     {
-                        // Combine all the gizmo starting locations from all scenes and
-                        // their subscenes into a single list for the whole level area
-                        List<PRTransform> gizmoLocations = new List<PRTransform>();
-                        foreach (var scene in levelAreas[la])
+                        if (scene.GizmoSpawningLocations[i] != null)
+                            gizmoLocations.AddRange(scene.GizmoSpawningLocations[i]);
+                        foreach (Scene subScene in scene.Subscenes)
                         {
-                            if (scene.GizmoSpawningLocations[i] != null)
-                                gizmoLocations.AddRange(scene.GizmoSpawningLocations[i]);
-                            foreach (Scene subScene in scene.Subscenes)
-                            {
-                                if (subScene.GizmoSpawningLocations[i] != null)
-                                    gizmoLocations.AddRange(subScene.GizmoSpawningLocations[i]);
-                            }
+                            if (subScene.GizmoSpawningLocations[i] != null)
+                                gizmoLocations.AddRange(subScene.GizmoSpawningLocations[i]);
+                        }
+                    }
+
+                    // Load all spawns that are defined for that location group 
+                    foreach (GizmoLocSpawnEntry spawnEntry in levelArea.LocSet.SpawnType[i].SpawnEntry)
+                    {
+                        // Get a random amount of spawns ...
+                        int amount = RandomHelper.Next(spawnEntry.Max, spawnEntry.Max);
+                        if (amount > gizmoLocations.Count)
+                        {
+                            Logger.Warn("Breaking after spawnEntry {0} for LevelArea {1} because there are less locations ({2}) than spawn amount ({3}, {4} min)", spawnEntry.SNOHandle, levelAreaHandle, gizmoLocations.Count, amount, spawnEntry.Min);
+                            break;
                         }
 
+                        Logger.Trace("Spawning {0} ({3} - {4} {1} in {2}", amount, spawnEntry.SNOHandle, levelAreaHandle, spawnEntry.Min, spawnEntry.Max);
 
-                        foreach (Mooege.Common.MPQ.FileFormats.GizmoLocSpawnEntry spawnEntry in levelArea.LocSet.SpawnType[i].SpawnEntry)
+                        // ...and place each one on a random position within the location group
+                        for (; amount > 0; amount--)
                         {
-                            int amount = Mooege.Common.Helpers.RandomHelper.Next(spawnEntry.Max, spawnEntry.Max);
+                            int location = RandomHelper.Next(gizmoLocations.Count - 1);
 
-                            if (amount > gizmoLocations.Count)
+                            switch (spawnEntry.SNOHandle.Group)
                             {
-                                Logger.Warn("Breaking after spawnEntry {0} for LevelArea {1} because there are less locations than min spawn amount ({2} to {3})", spawnEntry.SNOHandle, levelAreaHandle, gizmoLocations.Count, spawnEntry.Min);
-                                break;
+                                case SNOGroup.Actor:
+
+                                    loadActor(spawnEntry.SNOHandle, gizmoLocations[location], world, new TagMap());
+                                    break;
+
+                                case SNOGroup.Encounter:
+
+                                    var encounter = spawnEntry.SNOHandle.Target as Encounter;
+                                    var actor = RandomHelper.RandomItem(encounter.Spawnoptions, x => x.Probability);
+                                    loadActor(new SNOHandle(actor.SNOSpawn), gizmoLocations[location], world, new TagMap());
+                                    break;
+
+                                case SNOGroup.Adventure:
+
+                                    // Adventure are basically made up of a markerSet that has relative PRTransforms
+                                    // it has some other fields that are always 0 and a reference to a symbol actor
+                                    // no idea what they are used for - farmy
+                                    
+                                    var adventure = spawnEntry.SNOHandle.Target as Adventure;
+                                    var markerSet = new SNOHandle(adventure.SNOMarkerSet).Target as MarkerSet;
+
+                                    foreach (var marker in markerSet.Markers)
+                                    {
+                                        // relative marker set coordinates to absolute world coordinates
+                                        var absolutePRTransform = new PRTransform
+                                        {
+                                            Vector3D = marker.PRTransform.Vector3D + gizmoLocations[location].Vector3D,
+                                            Quaternion = new Quaternion
+                                            {
+                                                Vector3D = new Vector3D(marker.PRTransform.Quaternion.Vector3D.X, marker.PRTransform.Quaternion.Vector3D.Y, marker.PRTransform.Quaternion.Vector3D.Z),
+                                                W = marker.PRTransform.Quaternion.W
+                                            }
+                                        };
+
+                                        switch (marker.Type)
+                                        {
+                                            case MarkerType.Actor:
+
+                                                loadActor(marker.SNOHandle, absolutePRTransform, world, marker.TagMap);
+                                                break;
+
+                                            case MarkerType.Encounter:
+
+                                                var encounter2 = marker.SNOHandle.Target as Encounter;
+                                                var actor2 = RandomHelper.RandomItem(encounter2.Spawnoptions, x => x.Probability);
+                                                loadActor(new SNOHandle(actor2.SNOSpawn), absolutePRTransform, world, marker.TagMap);
+                                                break;
+
+                                            default:
+
+                                                Logger.Warn("Unhandled marker type {0} in actor loading", marker.Type);
+                                                break;
+                                        }
+                                    }
+
+                                    break;
+
+                                default:
+
+                                    if (spawnEntry.SNOHandle.Id != -1)
+                                        Logger.Warn("Unknown sno handle in LevelArea spawn entries: {0}", spawnEntry.SNOHandle);
+                                    break;
+
                             }
 
-                            Logger.Trace("Spawning {0} {1} in {2}", amount, spawnEntry.SNOHandle, levelAreaHandle);
-
-                            for (; amount > 0; amount--)
-                            {
-                                int location = Mooege.Common.Helpers.RandomHelper.Next(gizmoLocations.Count - 1);
-
-                                switch (spawnEntry.SNOHandle.Group)
-                                {
-                                    case SNOGroup.Actor:
-                                        loadActor(spawnEntry.SNOHandle, gizmoLocations[location], world);
-                                        break;
-
-                                    case SNOGroup.Encounter:
-                                        var encounter = spawnEntry.SNOHandle.Target as Mooege.Common.MPQ.FileFormats.Encounter;
-                                        var actor = RandomHelper.RandomItem(encounter.Spawnoptions, x => x.Probability);
-                                        loadActor(new SNOHandle(actor.SNOSpawn), gizmoLocations[location], world);
-                                        break;
-                                }
-                                gizmoLocations.RemoveAt(location);
-
-                            }
+                            // dont use that location again
+                            gizmoLocations.RemoveAt(location);
 
                         }
                     }
                 }
-
-                else
-                {
-                    Logger.Warn("Level area {0} does not exist", la);
-                }
             }
-
         }
 
 
-        private static void loadActor(SNOHandle actorHandle, PRTransform location, World world)
+        private static void loadActor(SNOHandle actorHandle, PRTransform location, World world, TagMap tagMap)
         {
-            var actor = Mooege.Core.GS.Actors.ActorFactory.Create(world, actorHandle.Id, new TagMap());
+            var actor = Mooege.Core.GS.Actors.ActorFactory.Create(world, actorHandle.Id, tagMap);
 
             if (actor == null)
             {
-                Logger.Warn("ActorFactory did not load actor {0}", actorHandle);
+                if(actorHandle.Id != -1)
+                    Logger.Warn("ActorFactory did not load actor {0}", actorHandle);
                 return;
             }
 
             actor.RotationAmount = location.Quaternion.W;
             actor.RotationAxis = location.Quaternion.Vector3D;
             actor.EnterWorld(location.Vector3D);
-
         }
 
 

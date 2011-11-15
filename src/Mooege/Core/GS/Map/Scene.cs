@@ -30,6 +30,7 @@ using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Net.GS.Message.Definitions.Scene;
+using Mooege.Common.Helpers;
 
 namespace Mooege.Core.GS.Map
 {
@@ -217,6 +218,17 @@ namespace Mooege.Core.GS.Map
                 {
                     switch (marker.Type)
                     {
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.AmbientSound:
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.Light:
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.Particle:
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.SubScenePosition:
+                            // nothing to do for these here
+                            break;
+
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.MinimapMarker:
+                            // TODO Load minimap markers here
+                            break;
+
                         case Mooege.Common.MPQ.FileFormats.MarkerType.Actor:
 
                             var actor = ActorFactory.Create(this.World, marker.SNOHandle.Id, marker.TagMap); // try to create it.
@@ -231,7 +243,17 @@ namespace Mooege.Core.GS.Map
 
                         case Mooege.Common.MPQ.FileFormats.MarkerType.Encounter:
 
-                            // TODO Load encounter when seeing a marker
+                            var encounter = marker.SNOHandle.Target as Mooege.Common.MPQ.FileFormats.Encounter;
+                            var actorsno = RandomHelper.RandomItem(encounter.Spawnoptions, x => x.Probability);
+                            var actor2 = ActorFactory.Create(this.World, actorsno.SNOSpawn, marker.TagMap); // try to create it.
+                            if (actor2 == null) continue;
+
+                            var position2 = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
+                            actor2.RotationAmount = marker.PRTransform.Quaternion.W;
+                            actor2.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
+
+                            actor2.EnterWorld(position2);
+
                             break;
 
                         default:
@@ -247,6 +269,10 @@ namespace Mooege.Core.GS.Map
                                 marker.PRTransform.Vector3D += this.Position;
                                 GizmoSpawningLocations[index].Add(marker.PRTransform);
                             }
+                            else
+                                Logger.Warn("Unhandled marker type {0} in actor loading", marker.Type);
+
+
                             break;
 
                     }

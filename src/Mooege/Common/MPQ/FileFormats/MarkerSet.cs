@@ -53,7 +53,7 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += (14 * 4);
             this.AABB = new AABB(stream);
             int i0 = stream.ReadValueS32();
-            if(i0 != 0 && i0 != 1)
+            if (i0 != 0 && i0 != 1)
                 throw new System.Exception("Farmy thought this field is a bool, but apparently its not");
             this.ContainsActorLocations = i0 == 1;
 
@@ -112,6 +112,8 @@ namespace Mooege.Common.MPQ.FileFormats
         Encounter = 10,
 
         SubScenePosition = 16,
+
+        MinimapMarker = 28,
 
         // don't blame me - farmy :-)
         GizmoLocationA = 50,
