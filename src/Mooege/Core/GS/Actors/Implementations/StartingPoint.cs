@@ -17,9 +17,9 @@
  */
 
 using System.Collections.Generic;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
@@ -37,8 +37,8 @@ namespace Mooege.Core.GS.Actors.Implementations
         {
             if (this.Tags == null) return;
 
-            if (this.Tags.ContainsKey(TagKeys.ActorTag))
-                this.TargetId = this.Tags[TagKeys.ActorTag];
+            if (this.Tags.ContainsKey(MarkerKeys.ActorTag))
+                this.TargetId = this.Tags[MarkerKeys.ActorTag];
         }
     }
 }

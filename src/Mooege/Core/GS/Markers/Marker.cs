@@ -23,15 +23,4 @@ namespace Mooege.Core.GS.Markers
         Banner_Player_4 = 123717,
         Savepoint = 180941,
     }
-
-    public enum MarkerTagTypes : int
-    {
-        // Used for portal destination resolution
-        DestinationWorld     = 526850,
-        DestinationActorTag  = 526851,
-        ActorTag             = 526852,  // maybe find another name
-        DestinationLevelArea = 526853,
-
-        TriggeredConversation = 528128
-    }
 }

@@ -25,6 +25,8 @@ using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Animation;
+using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -32,7 +34,7 @@ namespace Mooege.Core.GS.Actors
     {
         public override ActorType ActorType { get { return ActorType.Monster; } }
 
-        public int SNOMonsterId { get; private set; }
+        public SNOHandle Monster { get; private set; }
 
         /// <summary>
         /// The brain for 
@@ -42,7 +44,7 @@ namespace Mooege.Core.GS.Actors
         public Living(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.SNOMonsterId = this.ActorData.MonsterSNO;
+            this.Monster = new SNOHandle(SNOGroup.Monster, (ActorData.MonsterSNO));
 
             // FIXME: This is hardcoded crap
             this.FacingAngle = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);

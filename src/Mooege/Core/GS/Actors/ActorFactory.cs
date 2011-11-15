@@ -25,6 +25,7 @@ using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -56,7 +57,7 @@ namespace Mooege.Core.GS.Actors
             switch (actorData.Type)
             {
                 case ActorType.Monster:
-                    if(tags.ContainsKey(TagKeys.ConversationList))
+                    if(tags.ContainsKey(MarkerKeys.ConversationList))
                         return new InteractiveNPC(world, snoId, tags);
                     else
                         if (!MPQStorage.Data.Assets[SNOGroup.Monster].ContainsKey(actorData.MonsterSNO))
@@ -72,6 +73,9 @@ namespace Mooege.Core.GS.Actors
                 case ActorType.Gizmo:
                     return CreateGizmo(world, snoId, tags);
 
+                case ActorType.ServerProp:
+                    return CreateGizmo(world, snoId, tags);
+
             }
 
             return null;
@@ -79,7 +83,7 @@ namespace Mooege.Core.GS.Actors
 
         private static Actor CreateGizmo(World world, int snoId, TagMap tags)
         {
-            if (tags.ContainsKey(TagKeys.DestinationWorld))
+            if (tags.ContainsKey(MarkerKeys.DestinationWorld))
                 return new Portal(world, snoId, tags);
 
             return new Gizmo(world, snoId, tags);
