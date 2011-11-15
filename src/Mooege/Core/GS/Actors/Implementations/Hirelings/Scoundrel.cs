@@ -17,22 +17,33 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Common.Helpers.Hash;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
+using Mooege.Common.Helpers;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 {
     [HandledSNO(4644 /* Scoundrel.acr */)]
     public class Scoundrel : Hireling
     {
-        public Scoundrel(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Scoundrel(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            //enable this for some spectacular crashes /fasbat
-            //hirelingSNO = 52694;
+            mainSNO = 4644;
+            hirelingSNO = 52694;
+            proxySNO = 192941;
+            skillKit = 0x8AFE;
+            hirelingGBID = StringHashHelper.HashItemName("Scoundrel");
             Attributes[GameAttribute.Hireling_Class] = 2;
+        }
+
+        public override Hireling CreateHireling(World world, int snoId, TagMap tags)
+        {
+            return new Scoundrel(world, snoId, tags);
         }
     }
 }

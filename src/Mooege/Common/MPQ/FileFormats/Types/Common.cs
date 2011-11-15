@@ -45,56 +45,6 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         }
     }
 
-    public class TagMap : ISerializableData
-    {
-        public int TagMapSize { get; private set; }
-        public TagMapEntry[] TagMapEntries { get; private set; }
-
-        public void Read(MpqFileStream stream)
-        {
-            TagMapSize = stream.ReadValueS32();
-            TagMapEntries = new TagMapEntry[TagMapSize];
-
-            for (int i = 0; i < TagMapSize; i++)
-            {
-                TagMapEntries[i] = new TagMapEntry(stream);
-            }
-        }
-    }
-
-    public class TagMapEntry
-    {
-        public int Type { get; private set; }
-        public int TagID { get; private set; }
-        public ScriptFormula ScriptFormula { get; private set; }
-        public int Int2 { get; private set; }
-        public float Float0 { get; private set; }
-
-        public TagMapEntry(MpqFileStream stream)
-        {
-            this.Type = stream.ReadValueS32();
-            this.TagID = stream.ReadValueS32();
-
-            switch (this.Type)
-            {
-                case 0:
-                    this.Int2 = stream.ReadValueS32();
-                    break;
-                case 1:
-                    Float0 = stream.ReadValueF32();
-                    break;
-                case 2: // SNO
-                    this.Int2 = stream.ReadValueS32();
-                    break;
-                case 4:
-                    this.ScriptFormula = new ScriptFormula(stream);
-                    break;
-                default:
-                    this.Int2 = stream.ReadValueS32();
-                    break;
-            }
-        }
-    }
 
     public class ScriptFormula
     {
@@ -172,8 +122,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
     
     public class TriggerConditions
     {
-        // Unsure if these should be ints or floats - DarkLotus
-        public float Float0 { get; private set; }
+        public int Percent { get; private set; } //0-255
         public int Int1 { get; private set; }
         public int Int2 { get; private set; }
         public int Int3 { get; private set; }
@@ -185,7 +134,8 @@ namespace Mooege.Common.MPQ.FileFormats.Types
 
         public TriggerConditions(MpqFileStream stream)
         {
-            Float0 = stream.ReadValueF32();
+            Percent = stream.ReadByte();
+            stream.Position += 3;
             Int1 = stream.ReadValueS32();
             Int2 = stream.ReadValueS32();
             Int3 = stream.ReadValueS32();
@@ -202,9 +152,11 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public int I0 { get; private set; }
         public TriggerConditions TriggerConditions { get; private set; }
         public int I1 { get; private set; }
-        public SNOName SnoName { get; private set; }
+        public SNOHandle SNOHandle { get; private set; }
         public int I2 { get; private set; }
         public int I3 { get; private set; }
+        public int RuneType { get; private set; }
+        public int UseRuneType { get; private set; }
         public HardPointLink[] HardPointLinks { get; private set; }
         public string LookLink { get; private set; }
         public string ConstraintLink { get; private set; }
@@ -218,13 +170,11 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public float F1 { get; private set; }
         public float F2 { get; private set; }
         public int I10 { get; private set; }
-        public int I11 { get; private set; }
         public float F3 { get; private set; }
-        public int I12 { get; private set; }
+        public int I11 { get; private set; }
         public float Velocity { get; private set; }
-        public int I13 { get; private set; } // DT_TIME
-        public int RuneType { get; private set; }
-        public int UseRuneType { get; private set; }
+        public int I12 { get; private set; }
+        public int Ticks1 { get; private set; } // DT_TIME
         public RGBAColor Color1 { get; private set; }
         public int I14 { get; private set; } // DT_TIME
         public RGBAColor Color2 { get; private set; }
@@ -235,9 +185,11 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             I0 = stream.ReadValueS32();
             TriggerConditions = new TriggerConditions(stream);
             I1 = stream.ReadValueS32();
-            SnoName = new SNOName(stream);
+            SNOHandle = new SNOHandle(stream);
             I2 = stream.ReadValueS32();
             I3 = stream.ReadValueS32();
+            RuneType = stream.ReadValueS32();
+            UseRuneType = stream.ReadValueS32();
             HardPointLinks = new HardPointLink[2];
             HardPointLinks[0] = new HardPointLink(stream);
             HardPointLinks[1] = new HardPointLink(stream);
@@ -253,18 +205,15 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             F1 = stream.ReadValueF32();
             F2 = stream.ReadValueF32();
             I10 = stream.ReadValueS32();
-            I11 = stream.ReadValueS32();
             F3 = stream.ReadValueF32();
-            I12 = stream.ReadValueS32();
+            I11 = stream.ReadValueS32();
             Velocity = stream.ReadValueF32();
-            I13 = stream.ReadValueS32();
-            RuneType = stream.ReadValueS32();
-            UseRuneType = stream.ReadValueS32();
+            I12 = stream.ReadValueS32();
+            Ticks1 = stream.ReadValueS32();
             Color1 = new RGBAColor(stream);
             I14 = stream.ReadValueS32();
             Color2 = new RGBAColor(stream);
             I15 = stream.ReadValueS32();
-
         }
     }
 
@@ -277,6 +226,26 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         {
             I0 = stream.ReadValueS32();
             TriggerEvent = new TriggerEvent(stream);
+        }
+    }
+
+
+    public class ItemSpecifierData
+    {
+        public int ItemGBId { get; private set; }
+        public int I0 { get; private set; }
+        public int[] GBIdAffixes = new int[3];
+        public int I1 { get; private set; }
+
+        public ItemSpecifierData(MpqFileStream stream)
+        {
+            ItemGBId = stream.ReadValueS32();
+            I0 = stream.ReadValueS32();
+            for (int i = 0; i < GBIdAffixes.Length; i++)
+            {
+                GBIdAffixes[i] = stream.ReadValueS32();
+            }
+            I1 = stream.ReadValueS32();
         }
     }
 

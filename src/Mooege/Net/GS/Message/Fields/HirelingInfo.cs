@@ -22,40 +22,40 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class HirelingInfo
     {
-        public int Field0;
+        public int HirelingIndex;
         public int Field1;
-        public int Field2;
+        public int Level;
         public int Field3;
         public bool Field4;
-        public int Field5;
-        public int Field6;
-        public int Field7;
-        public int Field8;
+        public int Skill1SNOId;
+        public int Skill2SNOId;
+        public int Skill3SNOId;
+        public int Skill4SNOId;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(2);
+            HirelingIndex = buffer.ReadInt(2);
             Field1 = buffer.ReadInt(32);
-            Field2 = buffer.ReadInt(7);
+            Level = buffer.ReadInt(7);
             Field3 = buffer.ReadInt(32);
             Field4 = buffer.ReadBool();
-            Field5 = buffer.ReadInt(32);
-            Field6 = buffer.ReadInt(32);
-            Field7 = buffer.ReadInt(32);
-            Field8 = buffer.ReadInt(32);
+            Skill1SNOId = buffer.ReadInt(32);
+            Skill2SNOId = buffer.ReadInt(32);
+            Skill3SNOId = buffer.ReadInt(32);
+            Skill4SNOId = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(2, Field0);
+            buffer.WriteInt(2, HirelingIndex);
             buffer.WriteInt(32, Field1);
-            buffer.WriteInt(7, Field2);
+            buffer.WriteInt(7, Level);
             buffer.WriteInt(32, Field3);
             buffer.WriteBool(Field4);
-            buffer.WriteInt(32, Field5);
-            buffer.WriteInt(32, Field6);
-            buffer.WriteInt(32, Field7);
-            buffer.WriteInt(32, Field8);
+            buffer.WriteInt(32, Skill1SNOId);
+            buffer.WriteInt(32, Skill2SNOId);
+            buffer.WriteInt(32, Skill3SNOId);
+            buffer.WriteInt(32, Skill4SNOId);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -65,23 +65,23 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.AppendLine("HirelingIndex: 0x" + HirelingIndex.ToString("X8") + " (" + HirelingIndex + ")");
             b.Append(' ', pad);
             b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.AppendLine("Level: 0x" + Level.ToString("X8") + " (" + Level + ")");
             b.Append(' ', pad);
             b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
             b.Append(' ', pad);
             b.AppendLine("Field4: " + (Field4 ? "true" : "false"));
             b.Append(' ', pad);
-            b.AppendLine("Field5: 0x" + Field5.ToString("X8") + " (" + Field5 + ")");
+            b.AppendLine("Skill1SNOId: 0x" + Skill1SNOId.ToString("X8") + " (" + Skill1SNOId + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field6: 0x" + Field6.ToString("X8") + " (" + Field6 + ")");
+            b.AppendLine("Skill2SNOId: 0x" + Skill2SNOId.ToString("X8") + " (" + Skill2SNOId + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field7: 0x" + Field7.ToString("X8") + " (" + Field7 + ")");
+            b.AppendLine("Skill3SNOId: 0x" + Skill3SNOId.ToString("X8") + " (" + Skill3SNOId + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field8: 0x" + Field8.ToString("X8") + " (" + Field8 + ")");
+            b.AppendLine("Skill4SNOId: 0x" + Skill4SNOId.ToString("X8") + " (" + Skill4SNOId + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

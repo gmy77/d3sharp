@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.SNO;
+using System.Linq;
 
 namespace Mooege.Common.MPQ
 {
@@ -31,6 +32,7 @@ namespace Mooege.Common.MPQ
         public Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>> Assets = new Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>>();
         public readonly Dictionary<SNOGroup, Type> Parsers = new Dictionary<SNOGroup, Type>();
         private readonly List<Task> _tasks = new List<Task>();
+        private static readonly SNOGroup[] PatchExceptions = new[] { SNOGroup.TreasureClass, SNOGroup.TimedEvent, SNOGroup.ConversationList };
 
         public Data()
             : base(7447, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
@@ -86,13 +88,17 @@ namespace Mooege.Common.MPQ
 
             stream.Close();
 
-            // Run the parsers for assets (that have a parser there).
-            foreach (var task in this._tasks)
-            {
-                task.Start();
-            }
+            // Run the parsers for assets (that have a parser).
 
-            Task.WaitAll(this._tasks.ToArray()); // Wait all tasks to finish.           
+            if (this._tasks.Count > 0) // if we're running in tasked mode, run the parser tasks.
+            {
+                foreach (var task in this._tasks)
+                {
+                    task.Start();
+                }
+
+                Task.WaitAll(this._tasks.ToArray()); // Wait all tasks to finish.
+            }
 
             GC.Collect(); // force a garbage collection.
             GC.WaitForPendingFinalizers();
@@ -109,9 +115,25 @@ namespace Mooege.Common.MPQ
 
             var parser = this.Parsers[asset.Group]; // get the type the asset's parser.
             var file = this.FileSystem.FindFile(asset.FileName); // get the asset file.
+
+            // if file is in any of the follow groups, try to load the original version - the reason is that assets in those groups got patched to 0 bytes.
+            if (PatchExceptions.Contains(asset.Group))
+            {
+                foreach (CrystalMpq.MpqArchive archive in this.FileSystem.Archives.Reverse()) //search mpqs starting from base
+                {
+                    file = archive.FindFile(asset.FileName);
+                    if (file != null)
+                        break;
+                }
+            }
+
             if (file == null || file.Size < 10) return asset; // if it's empty, give up again.
 
-            this._tasks.Add(new Task(() => asset.RunParser(parser, file))); // add it to our task list, so we can parse them concurrently.
+            if (Storage.Config.Instance.EnableTasks)
+                this._tasks.Add(new Task(() => asset.RunParser(parser, file))); // add it to our task list, so we can parse them concurrently.        
+            else
+                asset.RunParser(parser, file); // run the parsers sequentally.
+    
             return asset;
         }
     }

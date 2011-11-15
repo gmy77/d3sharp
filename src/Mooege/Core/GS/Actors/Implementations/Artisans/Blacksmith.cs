@@ -17,15 +17,15 @@
  */
 
 using System.Collections.Generic;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations.Artisans
 {
     [HandledSNO(56947 /* PT_Blacksmith.acr */)]
     public class Blacksmith : Artisan
     {
-        public Blacksmith(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Blacksmith(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             // TODO add all blacksmith functionality? /fasbat

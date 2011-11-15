@@ -19,20 +19,23 @@
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Common.MPQ.FileFormats.Types;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.QuestRange)]
     public class QuestRange : FileFormat
     {
-        public QuestTime Time0 { get; private set; }
-        public QuestTime Time1 { get; private set; }
+        public Header Header { get; private set; }
+        public QuestTime Start { get; private set; }
+        public QuestTime End { get; private set; }
 
         public QuestRange(MpqFile file)
         {
             var stream = file.Open();
-            this.Time0 = new QuestTime(stream);
-            this.Time1 = new QuestTime(stream);
+            this.Header = new Header(stream);
+            this.Start = new QuestTime(stream);
+            this.End = new QuestTime(stream);
             stream.Close();
         }
     }
@@ -40,12 +43,12 @@ namespace Mooege.Common.MPQ.FileFormats
     public class QuestTime
     {
         public int SNOQuest { get; private set; }
-        public int I0 { get; private set; }
+        public int StepID { get; private set; }
 
         public QuestTime(MpqFileStream stream)
         {
             this.SNOQuest = stream.ReadValueS32();
-            this.I0 = stream.ReadValueS32();
+            this.StepID = stream.ReadValueS32();
         }
     }
 }

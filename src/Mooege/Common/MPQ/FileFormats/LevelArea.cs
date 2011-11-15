@@ -65,30 +65,30 @@ namespace Mooege.Common.MPQ.FileFormats
     public class GizmoLocSpawnType
     {
         public List<GizmoLocSpawnEntry> SpawnEntry { get; private set; }
-        public string S0 { get; private set; }
-        public string S1 { get; private set; }
+        public string Description { get; private set; }
+        public string Comment { get; private set; }
 
         public GizmoLocSpawnType(MpqFileStream stream)
         {
             stream.Position += 8;
             this.SpawnEntry = stream.ReadSerializedData<GizmoLocSpawnEntry>();
-            this.S0 = stream.ReadString(80, true);
-            this.S1 = stream.ReadString(256, true);
+            this.Description = stream.ReadString(80, true);
+            this.Comment = stream.ReadString(256, true);
         }
     }
 
     public class GizmoLocSpawnEntry : ISerializableData
     {
-        public int I0 { get; private set; }
-        public int I1 { get; private set; }
-        public SNOName SNOName { get; private set; }
+        public int Min { get; private set; }
+        public int Max { get; private set; }
+        public SNOHandle SNOHandle { get; private set; }
         public int I2 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.I0 = stream.ReadValueS32();
-            this.I1 = stream.ReadValueS32();
-            this.SNOName = new SNOName(stream);
+            this.Min = stream.ReadValueS32();
+            this.Max = stream.ReadValueS32();
+            this.SNOHandle = new SNOHandle(stream);
             this.I2 = stream.ReadValueS32();
         }
     }
@@ -147,7 +147,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LevelAreaSpawnItem : ISerializableData
     {
-        public SNOName SNOName { get; private set; }
+        public SNOHandle SNOHandle { get; private set; }
         public SpawnType SpawnType { get; private set; }
         public int I0 { get; private set; }
         public int I1 { get; private set; }
@@ -156,7 +156,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            this.SNOName = new SNOName(stream);
+            this.SNOHandle = new SNOHandle(stream);
             this.SpawnType = (SpawnType)stream.ReadValueS32();
             this.I0 = stream.ReadValueS32();
             this.I1 = stream.ReadValueS32();

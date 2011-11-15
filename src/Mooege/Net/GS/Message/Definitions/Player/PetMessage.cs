@@ -25,14 +25,19 @@ namespace Mooege.Net.GS.Message.Definitions.Player
     {
         public int Field0;
         public int Field1;
-        public int Field2;
+        public uint PetId;
         public int Field3;
+
+        public PetMessage()
+            : base(Opcodes.PetMessage)
+        {
+        }
 
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(3);
             Field1 = buffer.ReadInt(5);
-            Field2 = buffer.ReadInt(32);
+            PetId = buffer.ReadUInt(32);
             Field3 = buffer.ReadInt(5) + (-1);
         }
 
@@ -40,7 +45,7 @@ namespace Mooege.Net.GS.Message.Definitions.Player
         {
             buffer.WriteInt(3, Field0);
             buffer.WriteInt(5, Field1);
-            buffer.WriteInt(32, Field2);
+            buffer.WriteUInt(32, PetId);
             buffer.WriteInt(5, Field3 - (-1));
         }
 
@@ -52,7 +57,7 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.Append(' ', pad); b.AppendLine("PetId: 0x" + PetId.ToString("X8") + " (" + PetId + ")");
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");

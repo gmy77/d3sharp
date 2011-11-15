@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.GS.Players;
+using Mooege.Common.Extensions;
+using System;
 
 namespace Mooege.Core.GS.Games
 {
@@ -11,6 +13,9 @@ namespace Mooege.Core.GS.Games
 
         public static Game CreateGame(int gameId)
         {
+            if (Games.ContainsKey(gameId))
+                return Games[gameId];
+
             var game = new Game(gameId);
             Games.Add(gameId, game);
             return game;
@@ -34,7 +39,18 @@ namespace Mooege.Core.GS.Games
             Player p = null;
             if (!game.Players.TryRemove(gameClient, out p))
             {
-                Logger.Error("Can't remove player ({0}) from game with id: {1}", gameClient.Player.Properties.Name, gameId);
+                Logger.Error("Can't remove player ({0}) from game with id: {1}", gameClient.Player.Toon.Name, gameId);
+            }
+
+            if (p != null)
+            {
+                var toon = p.Toon;
+                toon.TimePlayed += DateTimeExtensions.ToUnixTime(DateTime.UtcNow) - toon.LoginTime;
+                toon.SaveToDB();
+
+                // Remove Player From World
+                if (p.InGameClient != null)
+                    p.World.Leave(p);
             }
 
             if (game.Players.Count == 0)

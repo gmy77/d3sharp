@@ -65,6 +65,7 @@ namespace Mooege.Core.MooNet.Commands
             string parameters;
             var found = false;
 
+            if (line == null) return;
             if (line.Trim() == string.Empty) return;
 
             if(!ExtractCommandAndParameters(line, out command, out parameters))
@@ -135,7 +136,7 @@ namespace Mooege.Core.MooNet.Commands
 
         public static bool ExtractCommandAndParameters(string line, out string command, out string parameters)
         {
-            line = line.Trim().ToLower();
+            line = line.Trim();
             command = string.Empty;
             parameters = string.Empty;
 
@@ -146,9 +147,9 @@ namespace Mooege.Core.MooNet.Commands
                 return false;
 
             line = line.Substring(1); // advance to actual command.
-            command = line.Split(' ')[0]; // get command
+            command = line.Split(' ')[0].ToLower(); // get command
             parameters = String.Empty;
-            if (line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).ToLower().Trim(); // get parameters if any.
+            if (line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).Trim(); // get parameters if any.
 
             return true;
         }

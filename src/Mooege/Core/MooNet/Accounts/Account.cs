@@ -20,12 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
-using Mooege.Core.Common.Storage;
-using Mooege.Core.Common.Toons;
+using Mooege.Common.Storage;
 using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Friends;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Accounts
