@@ -29,6 +29,7 @@ namespace Mooege.Net
         IPEndPoint RemoteEndPoint { get; }
         IPEndPoint LocalEndPoint { get; }
         IClient Client { get; set; }
+        Socket _Socket { get; }
         
         int Send(PacketOut packet);
         int Send(IEnumerable<byte> data);

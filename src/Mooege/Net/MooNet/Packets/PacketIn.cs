@@ -34,27 +34,27 @@ namespace Mooege.Net.MooNet.Packets
             this.Client = client;
             this.Stream = stream;
 
-            if (this.Client.EncryptionEnabled)
-                this.Decrypt();
+            //if (this.Client.EncryptionEnabled)
+            //    this.Decrypt();
 
             this.Read();
         }
 
-        private void Decrypt()
-        {
-            var data = new byte[0x1000];
+        //private void Decrypt()
+        //{
+        //    var data = new byte[0x1000];
 
-            int i = 0;
-            while (!this.Stream.IsAtEnd)
-            {
-                data[i] = this.Stream.ReadRawByte();
-                i++;
-            }
+        //    int i = 0;
+        //    while (!this.Stream.IsAtEnd)
+        //    {
+        //        data[i] = this.Stream.ReadRawByte();
+        //        i++;
+        //    }
 
-            data = data.Take(i).ToArray();
-            this.Client.ClientDecryptor.Process(data, 0, data.Length);
-            this.Stream = CodedInputStream.CreateInstance(data);
-        }
+        //    data = data.Take(i).ToArray();
+        //    this.Client.ClientDecryptor.Process(data, 0, data.Length);
+        //    this.Stream = CodedInputStream.CreateInstance(data);
+        //}
 
         private void Read()
         {
