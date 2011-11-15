@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -54,15 +54,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CrystalMpq">
-      <HintPath>..\..\dep\crystalmpq\CrystalMpq.dll</HintPath>
-    </Reference>
-    <Reference Include="CrystalMpq.Utility">
-      <HintPath>..\..\dep\crystalmpq\CrystalMpq.Utility.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\dep\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp">
     </Reference>
     <Reference Include="System">
@@ -75,10 +66,6 @@
     <Reference Include="Gibbed.IO, Version=1.0.4289.8017, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dep\Gibbed.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.ProtocolBuffers, Version=2.3.0.277, Culture=neutral, PublicKeyToken=17b3b1f090c3ea48">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dep\Google.ProtocolBuffers.dll</HintPath>
     </Reference>
     <Reference Include="Nini, Version=1.1.0.0, Culture=neutral, PublicKeyToken=691faec150a7fa7b">
       <SpecificVersion>False</SpecificVersion>
@@ -93,6 +80,22 @@
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="WindowsBase" />
+    <Reference Include="CrystalMpq, Version=1.7.0.0, Culture=neutral, PublicKeyToken=42eef6b97b056988">
+      <HintPath>..\..\dep\crystalmpq\CrystalMpq.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalMpq.Utility, Version=2.0.0.0, Culture=neutral, PublicKeyToken=42eef6b97b056988">
+      <HintPath>..\..\dep\crystalmpq\CrystalMpq.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.1.271, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
+      <HintPath>..\..\dep\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="ManagedOpenSsl, Version=0.4.3.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\dep\openssl\ManagedOpenSsl.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.ProtocolBuffers, Version=2.4.1.473, Culture=neutral, PublicKeyToken=55f7125234beb589">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dep\Google.ProtocolBuffers.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
@@ -136,7 +139,11 @@
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
     <Compile Include="Core\Common\Items\Affix.cs" />
     <Compile Include="Core\Common\Items\AffixGenerator.cs" />
-    <Compile Include="Core\Common\Items\Dye.cs" />
+    <Compile Include="Core\Common\Items\HandledItem.cs" />
+    <Compile Include="Core\Common\Items\HandledType.cs" />
+    <Compile Include="Core\Common\Items\Implementations\Dye.cs" />
+    <Compile Include="Core\Common\Items\Implementations\HealthPotion.cs" />
+    <Compile Include="Core\Common\Items\Implementations\Potion.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
     <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
@@ -146,6 +153,7 @@
     <Compile Include="Common\MPQ\MPQStorage.cs" />
     <Compile Include="Core\Common\Items\ItemGroup.cs" />
     <Compile Include="Core\Common\Scripting\FormulaScript.cs" />
+    <Compile Include="Core\Cryptography\SSL\CertificateHelper.cs" />
     <Compile Include="Core\GS\Actors\ActorFactory.cs" />
     <Compile Include="Core\GS\Actors\Gizmo.cs" />
     <Compile Include="Core\GS\Actors\Environment.cs" />
@@ -184,9 +192,10 @@
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
+    <Compile Include="Core\Cryptography\ARC4.cs" />
     <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
     <Compile Include="Core\MooNet\Authentication\Config.cs" />
-    <Compile Include="Core\MooNet\Authentication\SRP6a.cs" />
+    <Compile Include="Core\Cryptography\SRP6a.cs" />
     <Compile Include="Core\MooNet\Channels\Channel.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelManager.cs" />
     <Compile Include="Core\MooNet\Channels\Member.cs" />
@@ -215,11 +224,10 @@
     <Compile Include="Core\MooNet\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\MooNet\Online\PlayerManager.cs" />
     <Compile Include="Core\MooNet\Services\AuthenticationService.cs" />
-    <Compile Include="Core\MooNet\Services\BaseService.cs" />
+    <Compile Include="Core\MooNet\Services\ConnectionService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelInvitationService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelOwnerService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelService.cs" />
-    <Compile Include="Core\MooNet\Services\ChatService.cs" />
     <Compile Include="Core\MooNet\Services\ExchangeService.cs" />
     <Compile Include="Core\MooNet\Services\FollowersService.cs" />
     <Compile Include="Core\MooNet\Services\FriendsService.cs" />
@@ -227,7 +235,6 @@
     <Compile Include="Core\MooNet\Services\GameUtilitiesService.cs" />
     <Compile Include="Core\MooNet\Services\IServerService.cs" />
     <Compile Include="Core\MooNet\Services\NotificationService.cs" />
-    <Compile Include="Core\MooNet\Services\PartyService.cs" />
     <Compile Include="Core\MooNet\Services\PresenceService.cs" />
     <Compile Include="Core\MooNet\Services\SearchService.cs" />
     <Compile Include="Core\MooNet\Services\Service.cs" />
@@ -244,11 +251,19 @@
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Animation\LoopingAnimationPowerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\OpenArtisanWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\RequestAddSocketMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Conversation\AdvanceConvMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingHire.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Conversation\UpdateConvAutoAdvanceMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingDismissMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingHireMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingInventoryMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropStackPortionMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\Message.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\VoteKickMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCSelectConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
@@ -405,7 +420,6 @@
     <Compile Include="Net\GS\Message\Definitions\Game\JoinLANGameMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Combat\KillCounterUpdateMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Combat\KillCountMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Skill\LearnedSkillMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Connection\LogoutContextMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Connection\LogoutTickTimeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Quest\LoreMessage.cs" />
@@ -426,7 +440,6 @@
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerDeSyncSnapMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerEnterKnownMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerIndexMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Player\PlayerInteractMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerLevel.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerQuestMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Audio\PlayErrorSoundMessage.cs" />
@@ -524,8 +537,20 @@
       <Link>Assets\MPQ\IMPORTANT</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\dep\openssl\authority.pem">
+      <Link>authority.pem</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\dep\openssl\mooege.pfx">
+      <Link>mooege.pfx</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="app.config">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="..\..\dep\openssl\ManagedOpenSsl.dll.config">
+      <Link>ManagedOpenSsl.dll.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -551,5 +576,14 @@
       <Name>LibMooNet</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="..\..\dep\openssl\libeay32.dll">
+      <Link>libeay32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\dep\openssl\ssleay32.dll">
+      <Link>ssleay32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
