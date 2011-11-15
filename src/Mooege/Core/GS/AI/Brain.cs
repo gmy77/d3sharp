@@ -16,60 +16,79 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Linq;
+using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.GS.Actors;
-using Mooege.Core.GS.Actors.Helpers;
-using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Ticker.Helpers;
+using Mooege.Core.GS.Actors.Actions;
 
 namespace Mooege.Core.GS.AI
 {
     public class Brain
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
+        protected static readonly Logger Logger = LogManager.CreateLogger();
 
+        /// <summary>
+        /// The body chained to brain.
+        /// </summary>
         public Actor Body { get; private set; }
-        public Vector3D Heading { get; private set; }
-        public Actor Target { get; private set; }
 
-        public Brain(Actor body)
+        /// <summary>
+        /// The current brain state.
+        /// </summary>
+        public BrainState State { get; protected set; }
+
+        /// <summary>
+        /// The current action for the brain.
+        /// </summary>
+        public ActorAction CurrentAction { get; protected set; }
+
+        /// <summary>
+        /// Actions to be taken.
+        /// </summary>
+        public Queue<ActorAction> Actions { get; protected set; }
+
+        protected Brain(Actor body)
         {
             this.Body = body;
+            this.State = BrainState.Idle;
+            this.Actions = new Queue<ActorAction>();
+        }
+
+        protected void QueueAction(ActorAction action)
+        {
+            this.Actions.Enqueue(action);
         }
        
-        public virtual void Think(int tickCounter)
+        public virtual void Update(int tickCounter)
         {
-            if (this.Body == null || this.Body.World == null) return; // hack fix until i get brain-states in. /raist.
-
-            var players = this.Body.GetPlayersInRange();
-            if (players.Count == 0) return;
-
-            this.Chase(players.First());
-        }
-
-        public void Chase(Actor actor)
-        {
-            if (this.Heading == actor.Position)
+            if(this.State == BrainState.Dead || this.Body == null || this.Body.World == null)
                 return;
 
-            this.Target = actor;
-            this.Heading = this.Target.Position;
+            this.Think(tickCounter); // let the brain think.
+            this.Perform(tickCounter); // perform any outstanding actions.
+        }        
 
-            this.Move(this.Target);
-        }
+        /// <summary>
+        /// Lets the brain think and decide the next action to take.
+        /// </summary>
+        public virtual void Think(int tickCounter)
+        { }
 
-        public void Move(Vector3D position, float facingAngle)
+        private void Perform(int tickCounter)
         {
-            this.Body.RotationAmount = facingAngle;
-            this.Body.Move(position, facingAngle);
-        }
+            if (this.CurrentAction == null)
+                return;
 
-        public void Move(Actor actor)
-        {
-            this.Move(actor.Position, ActorHelpers.GetFacingAngle(this.Body, actor));
-            this.Body.Position = actor.Position; // hack /raist.
-        }
+            if (this.CurrentAction.Done)
+            {
+                this.CurrentAction = null;
+                return;
+            }
+
+            if (!this.CurrentAction.Started)
+                this.CurrentAction.Start(tickCounter);
+            else
+                this.CurrentAction.Update(tickCounter);
+        }        
     }
 }

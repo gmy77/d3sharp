@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Math;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
@@ -45,7 +47,7 @@ namespace Mooege.Core.GS.Actors
             this.Monster = new SNOHandle(SNOGroup.Monster, (ActorData.MonsterSNO));
 
             // FIXME: This is hardcoded crap
-            this.RotationAmount = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);
+            this.FacingAngle = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);
             this.RotationAxis.X = 0f; this.RotationAxis.Y = 0f; this.RotationAxis.Z = 1f;
             this.GBHandle.Type = -1; this.GBHandle.GBID = -1;
             this.Field7 = 0x00000001;

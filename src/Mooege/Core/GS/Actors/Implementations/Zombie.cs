@@ -17,6 +17,8 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.AI.Brains;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Common.Types.TagMap;
 
@@ -28,7 +30,7 @@ namespace Mooege.Core.GS.Actors.Implementations
         public Zombie(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            // this.Brain = new AI.Brain(this); disabled for now. /raist.
+            // this.Brain = new MonsterBrain(this);
         }
     }
 }

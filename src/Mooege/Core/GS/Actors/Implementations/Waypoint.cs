@@ -73,7 +73,7 @@ namespace Mooege.Core.GS.Actors.Implementations
                 if (scene.Specification == null) continue;
                 foreach (var area in scene.Specification.SNOLevelAreas)
                 {
-                    if (wayPointInfo[i].SNOWorld != this.World.SNOId || wayPointInfo[i].SNOLevelArea != area)
+                    if (wayPointInfo[i].SNOWorld != this.World.WorldSNO.Id || wayPointInfo[i].SNOLevelArea != area)
                         continue;
 
                     this.WaypointId = i;

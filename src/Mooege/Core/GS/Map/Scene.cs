@@ -31,6 +31,7 @@ using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Net.GS.Message.Definitions.Scene;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Math;
 
 namespace Mooege.Core.GS.Map
 {
@@ -40,9 +41,9 @@ namespace Mooege.Core.GS.Map
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         /// <summary>
-        /// SNOId of the scene.
+        /// SNOHandle for the scene.
         /// </summary>
-        public int SNOId { get; private set; }
+        public SNOHandle SceneSNO { get; private set; }
 
         /// <summary>
         /// Scene group's SNOId.
@@ -89,7 +90,7 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         public PRTransform Transform
         {
-            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.FacingAngle, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
         /// <summary>
@@ -137,7 +138,7 @@ namespace Mooege.Core.GS.Map
         public Scene(World world, Vector3D position, int snoId, Scene parent)
             : base(world, world.NewSceneID)
         {
-            this.SNOId = snoId;
+            this.SceneSNO = new SNOHandle(SNOGroup.Scene, snoId);
             this.Parent = parent;
             this.Subscenes = new List<Scene>();
             this.Scale = 1.0f;                   
@@ -156,7 +157,7 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         private void LoadSceneData()
         {
-            var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SNOId].Data as Mooege.Common.MPQ.FileFormats.Scene;
+            var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SceneSNO.Id].Data as Mooege.Common.MPQ.FileFormats.Scene;
             if (data == null) return;
 
             this.AABBBounds = data.AABBBounds;
@@ -235,7 +236,7 @@ namespace Mooege.Core.GS.Map
                             if (actor == null) continue;
 
                             var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
-                            actor.RotationAmount = marker.PRTransform.Quaternion.W;
+                            actor.FacingAngle = marker.PRTransform.Quaternion.W;
                             actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
                             actor.EnterWorld(position);
@@ -249,7 +250,7 @@ namespace Mooege.Core.GS.Map
                             if (actor2 == null) continue;
 
                             var position2 = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
-                            actor2.RotationAmount = marker.PRTransform.Quaternion.W;
+                            actor2.FacingAngle = marker.PRTransform.Quaternion.W;
                             actor2.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
                             actor2.EnterWorld(position2);
@@ -359,7 +360,7 @@ namespace Mooege.Core.GS.Map
                     SceneSpec = specification,
                     ChunkID = this.DynamicID,
                     Transform = this.Transform,
-                    SceneSNO = this.SNOId,
+                    SceneSNO = this.SceneSNO.Id,
                     ParentChunkID = this.ParentChunkID,
                     SceneGroupSNO = this.SceneGroupSNO,
                     arAppliedLabels = this.AppliedLabels
@@ -377,7 +378,7 @@ namespace Mooege.Core.GS.Map
                 return new MapRevealSceneMessage
                 {
                     ChunkID = this.DynamicID,
-                    SceneSNO = this.SNOId,
+                    SceneSNO = this.SceneSNO.Id,
                     Transform = this.Transform,
                     WorldID = this.World.DynamicID,
                     MiniMapVisibility = this.MiniMapVisibility
@@ -389,7 +390,7 @@ namespace Mooege.Core.GS.Map
 
         public override string ToString()
         {
-            return string.Format("[Scene] SNOId: {0} DynamicId: {1} Position: {2}", this.SNOId, this.DynamicID, this.Position);
+            return string.Format("[Scene] SNOId: {0} DynamicId: {1} Name: {2}", this.SceneSNO.Id, this.DynamicID, this.SceneSNO.Name);
         }
     }
 

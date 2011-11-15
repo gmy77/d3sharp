@@ -73,7 +73,7 @@ namespace Mooege.Core.GS.Objects
 
         public Vector3D RotationAxis { get; set; }
 
-        public float RotationAmount { get; set; }
+        public float FacingAngle { get; set; }
 
         /// <summary>
         /// Creates a new world object.

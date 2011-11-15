@@ -17,6 +17,8 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Common.Helpers.Hash;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Common.Helpers;

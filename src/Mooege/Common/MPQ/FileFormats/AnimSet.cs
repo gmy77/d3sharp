@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CrystalMpq;
 using Gibbed.IO;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
 using System;

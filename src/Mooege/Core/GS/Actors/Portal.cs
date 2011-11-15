@@ -18,6 +18,8 @@
 
 using System.Collections.Generic;
 using Mooege.Common;
+using Mooege.Common.Helpers.Hash;
+using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Players;

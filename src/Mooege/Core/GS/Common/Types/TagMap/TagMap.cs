@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using CrystalMpq;
 using Gibbed.IO;
 using System.Reflection;
@@ -38,15 +37,14 @@ namespace Mooege.Core.GS.Common.Types.TagMap
     {
 
         public int TagMapSize { get; private set; }
+        private Dictionary<int, TagMapEntry> _tagMapEntries;
 
-        private Dictionary<int, TagMapEntry> _TagMapEntries { get; set; }
-
-        [Obsolete("Use TagKeys instead. If it is missing create it")]
+        [Obsolete("Use TagKeys instead. If it is missing create it.")]
         public List<TagMapEntry> TagMapEntries
         {
             get
             {
-                return _TagMapEntries.Values.ToList();
+                return _tagMapEntries.Values.ToList();
             }
         }
 
@@ -76,26 +74,26 @@ namespace Mooege.Core.GS.Common.Types.TagMap
 
         public TagMap()
         {
-            _TagMapEntries = new Dictionary<int, TagMapEntry>();
+            _tagMapEntries = new Dictionary<int, TagMapEntry>();
         }
 
 
         [Obsolete("Use TagKeys instead. If it is missing create it")]
-        public bool ContainsKey(int key) { return _TagMapEntries.ContainsKey(key); }
-        public bool ContainsKey(TagKey key) { return _TagMapEntries.ContainsKey(key.ID); }
+        public bool ContainsKey(int key) { return _tagMapEntries.ContainsKey(key); }
+        public bool ContainsKey(TagKey key) { return _tagMapEntries.ContainsKey(key.ID); }
 
-        public void Add(TagKey key, TagMapEntry entry) { _TagMapEntries.Add(key.ID, entry); }
+        public void Add(TagKey key, TagMapEntry entry) { _tagMapEntries.Add(key.ID, entry); }
 
 
         public void Read(MpqFileStream stream)
         {
             TagMapSize = stream.ReadValueS32();
-            _TagMapEntries = new Dictionary<int, TagMapEntry>();
+            _tagMapEntries = new Dictionary<int, TagMapEntry>();
 
             for (int i = 0; i < TagMapSize; i++)
             {
-                TagMapEntry entry = new TagMapEntry(stream);
-                _TagMapEntries.Add(entry.TagID, entry);
+                var entry = new TagMapEntry(stream);
+                this._tagMapEntries.Add(entry.TagID, entry);
             }
         }
 
@@ -105,7 +103,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         {
             get
             {
-                return _TagMapEntries[key.ID].Int;
+                return _tagMapEntries[key.ID].Int;
             }
         }
 
@@ -113,7 +111,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         {
             get
             {
-                return _TagMapEntries[key.ID].Float;
+                return _tagMapEntries[key.ID].Float;
             }
         }
 
@@ -121,7 +119,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         {
             get
             {
-                return _TagMapEntries[key.ID].ScriptFormula;
+                return _tagMapEntries[key.ID].ScriptFormula;
             }
         }
 
@@ -129,7 +127,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         {
             get
             {
-                return new SNOHandle(_TagMapEntries[key.ID].Int);
+                return new SNOHandle(_tagMapEntries[key.ID].Int);
             }
         }
 
@@ -138,21 +136,25 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         {
             get
             {
-                return _TagMapEntries[key];
+                return _tagMapEntries[key];
             }
         }
 
         #endregion
 
+        #region enumurators
+
         public IEnumerator<TagMapEntry> GetEnumerator()
         {
-            return _TagMapEntries.Values.GetEnumerator();
+            return _tagMapEntries.Values.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return _TagMapEntries.Values.GetEnumerator();
+            return _tagMapEntries.Values.GetEnumerator();
         }
+
+        #endregion
     }
 
 
