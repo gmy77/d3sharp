@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -54,6 +54,18 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CrystalMpq">
+      <HintPath>..\..\dep\crystalmpq\CrystalMpq.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalMpq.Utility">
+      <HintPath>..\..\dep\crystalmpq\CrystalMpq.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\dep\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="ManagedOpenSsl">
+      <HintPath>..\..\dep\openssl\ManagedOpenSsl.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp">
     </Reference>
     <Reference Include="System">
@@ -66,6 +78,10 @@
     <Reference Include="Gibbed.IO, Version=1.0.4289.8017, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dep\Gibbed.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.ProtocolBuffers, Version=2.3.0.277, Culture=neutral, PublicKeyToken=17b3b1f090c3ea48">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dep\Google.ProtocolBuffers.dll</HintPath>
     </Reference>
     <Reference Include="Nini, Version=1.1.0.0, Culture=neutral, PublicKeyToken=691faec150a7fa7b">
       <SpecificVersion>False</SpecificVersion>
@@ -80,22 +96,6 @@
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="WindowsBase" />
-    <Reference Include="CrystalMpq, Version=1.7.0.0, Culture=neutral, PublicKeyToken=42eef6b97b056988">
-      <HintPath>..\..\dep\crystalmpq\CrystalMpq.dll</HintPath>
-    </Reference>
-    <Reference Include="CrystalMpq.Utility, Version=2.0.0.0, Culture=neutral, PublicKeyToken=42eef6b97b056988">
-      <HintPath>..\..\dep\crystalmpq\CrystalMpq.Utility.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.1.271, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
-      <HintPath>..\..\dep\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="ManagedOpenSsl, Version=0.4.3.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\dep\openssl\ManagedOpenSsl.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.ProtocolBuffers, Version=2.4.1.473, Culture=neutral, PublicKeyToken=55f7125234beb589">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dep\Google.ProtocolBuffers.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
@@ -541,16 +541,16 @@
       <Link>authority.pem</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\dep\openssl\ManagedOpenSsl.dll.config">
+      <Link>ManagedOpenSsl.dll.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\dep\openssl\mooege.pfx">
       <Link>mooege.pfx</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.config">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="..\..\dep\openssl\ManagedOpenSsl.dll.config">
-      <Link>ManagedOpenSsl.dll.config</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
