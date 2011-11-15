@@ -233,7 +233,7 @@ namespace Mooege.Core.GS.Powers
         public float ScriptFormula(int index)
         {
             float result;
-            if (!PowerFormulaScript.Evaluate(this.PowerSNO, PowerFormulaScript.GetScriptFormulaTagId(index),
+            if (!PowerFormulaScript.Evaluate(this.PowerSNO, PowerFormulaScript.GenerateTagForScriptFormula(index),
                                             User.Attributes, Rand, out result))
                 return 0;
 

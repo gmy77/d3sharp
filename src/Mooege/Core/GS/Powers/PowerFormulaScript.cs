@@ -18,15 +18,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
+using System.Text;
 using Mooege.Common;
 using Mooege.Common.Helpers;
-using Mooege.Net.GS.Message;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats;
-using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -35,21 +36,26 @@ namespace Mooege.Core.GS.Powers
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        public static bool Evaluate(int powerSNO, int tagId, GameAttributeMap attributes, Random rand, out float result)
+        public static TagKeyScript GenerateTagForScriptFormula(int SF_N)
+        {
+            return new TagKeyScript(266496 + 256 * (SF_N / 10) + 16 * (SF_N % 10));
+        }
+
+        public static bool Evaluate(int powerSNO, TagKeyScript scriptTag, GameAttributeMap attributes, Random rand, out float result)
         {
             result = 0;
 
-            TagMapEntry tagEntry = FindTagMapEntry(powerSNO, tagId);
-            if (tagEntry == null)
+            ScriptFormula scriptFormula = FindScriptFormula(powerSNO, scriptTag);
+            if (scriptFormula == null)
             {
-                Logger.Error("could not find tag id {0} in power {1}", tagId, powerSNO);
+                Logger.Error("could not find script tag {0} in power {1}", scriptTag.ID, powerSNO);
                 return false;
             }
 
             // load script from byte[] into int[]
-            int[] script = new int[tagEntry.ScriptFormula.OpCodeArray.Length / 4];
-            for (int i = 0; i * 4 < tagEntry.ScriptFormula.OpCodeArray.Length; ++i)
-                script[i] = BitConverter.ToInt32(tagEntry.ScriptFormula.OpCodeArray, i * 4);
+            int[] script = new int[scriptFormula.OpCodeArray.Length / 4];
+            for (int i = 0; i * 4 < scriptFormula.OpCodeArray.Length; ++i)
+                script[i] = BitConverter.ToInt32(scriptFormula.OpCodeArray, i * 4);
 
             Stack<float> stack = new Stack<float>(64);
             int pos = 0;
@@ -176,7 +182,7 @@ namespace Mooege.Core.GS.Powers
                         }
                         break;
                     case 5:
-                        if (!LoadIdentifier(powerSNO, tagId, attributes, rand,
+                        if (!LoadIdentifier(powerSNO, scriptTag, attributes, rand,
                                             script[pos + 1],
                                             script[pos + 2],
                                             script[pos + 3],
@@ -275,18 +281,13 @@ namespace Mooege.Core.GS.Powers
             return false;
         }
 
-        public static int GetScriptFormulaTagId(int index)
-        {
-            return 266496 + 256 * (index / 10) + 16 * (index % 10);
-        }
-
         private static float BinaryIntToFloat(int n)
         {
             byte[] array = BitConverter.GetBytes(n);
             return BitConverter.ToSingle(array, 0);
         }
 
-        private static bool LoadIdentifier(int powerSNO, int tagId, GameAttributeMap attributes, Random rand, 
+        private static bool LoadIdentifier(int powerSNO, TagKeyScript scriptTag, GameAttributeMap attributes, Random rand, 
                                            int numb1, int numb2, int numb3, int numb4,
                                            out float result)
         {
@@ -298,13 +299,13 @@ namespace Mooege.Core.GS.Powers
                     result = attributes[GameAttribute.Skill, powerSNO];
                     return true;
                 case 22: // absolute power formula ref
-                    return Evaluate(numb2, numb3, attributes, rand, out result);
+                    return Evaluate(numb2, new TagKeyScript(numb3), attributes, rand, out result);
                 default:
                     if (numb1 >= 23 && numb1 <= 62) // SF_N, relative power formula ref
                     {
                         int SF_N = numb1 - 23;
-                        int relativeTagId = GetScriptFormulaTagId(SF_N);
-                        return Evaluate(powerSNO, relativeTagId, attributes, rand, out result);
+                        TagKeyScript relativeTag = GenerateTagForScriptFormula(SF_N);
+                        return Evaluate(powerSNO, relativeTag, attributes, rand, out result);
                     }
                     else if (numb1 >= 63 && numb1 <= 71) // known gamebalance power table id range
                     {
@@ -364,7 +365,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private static TagMapEntry FindTagMapEntry(int powerSNO, int tagId)
+        private static ScriptFormula FindScriptFormula(int powerSNO, TagKeyScript scriptTag)
         {
             Power power = (Power)MPQStorage.Data.Assets[SNOGroup.Power][powerSNO].Data;
 
@@ -386,13 +387,8 @@ namespace Mooege.Core.GS.Powers
 
             foreach (TagMap tagmap in tagMaps)
             {
-                foreach (TagMapEntry entry in tagmap.TagMapEntries)
-                {
-                    if (entry.TagID == tagId)
-                    {
-                        return entry;
-                    }
-                }
+                if (tagmap.ContainsKey(scriptTag))
+                    return tagmap[scriptTag];
             }
 
             return null;

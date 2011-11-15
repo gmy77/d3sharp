@@ -17,8 +17,8 @@
  */
 
 using System.Collections.Generic;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -31,6 +31,10 @@ namespace Mooege.Core.GS.Actors
         {
             this.Field2 = 16;
             this.Field7 = 0x00000001;
+
+            this.Attributes[Mooege.Net.GS.Message.GameAttribute.Hitpoints_Cur] = 1;
+
+
         }
     }
 }

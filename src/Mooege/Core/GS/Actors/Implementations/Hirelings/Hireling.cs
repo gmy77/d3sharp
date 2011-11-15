@@ -17,7 +17,6 @@
  */
 
 using System.Collections.Generic;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
@@ -29,6 +28,7 @@ using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Hireling;
 using System;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 {
@@ -56,7 +56,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
         public Hireling(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Attributes[GameAttribute.TeamID] = 2;
+            //this.Attributes[GameAttribute.TeamID] = 2;
             Interactions.Add(new HireInteraction());
             Interactions.Add(new InventoryInteraction());
         }

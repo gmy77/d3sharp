@@ -33,6 +33,10 @@ using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
 using System;
+using Mooege.Core.GS.Common.Types.TagMap;
+using MonsterFF = Mooege.Common.MPQ.FileFormats.Monster;
+using ActorFF = Mooege.Common.MPQ.FileFormats.Actor;
+
 
 namespace Mooege.Core.GS.Actors
 {
@@ -52,25 +56,20 @@ namespace Mooege.Core.GS.Actors
             }
         }
 
-        public int LoreSNOId { get; private set; }
+        public int LoreSNOId
+        {
+            get
+            {
+                return Monster.IsValid ? (Monster.Target as MonsterFF).SNOLore : -1;
+            }
+        }
 
         public Monster(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Field2 = 0x8;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
-            this.Attributes[GameAttribute.TeamID] = 10;
             this.Attributes[GameAttribute.Experience_Granted] = 125;
-            var monsterAsset = MPQStorage.Data.Assets[SNOGroup.Monster][SNOMonsterId];
-            var monsterData = monsterAsset.Data as Mooege.Common.MPQ.FileFormats.Monster;
-            if (monsterData != null)
-            {
-                LoreSNOId = monsterData.SNOLore;
-            }
-            else
-            {
-                LoreSNOId = -1;
-            }
 
         }
 

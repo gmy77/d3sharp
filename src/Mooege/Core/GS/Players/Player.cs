@@ -744,7 +744,9 @@ namespace Mooege.Core.GS.Players
         }
 
         public override void OnLeave(World world)
-        { }
+        {
+            this.Conversations.StopAll();
+        }
 
         public override bool Reveal(Player player)
         {

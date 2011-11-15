@@ -154,6 +154,15 @@ namespace Mooege.Core.GS.Players
         }
 
         /// <summary>
+        ///  Immediatly ends the conversation
+        /// </summary>
+        public void Stop()
+        {
+            StopLine(true);
+            EndConversation();
+        }
+
+        /// <summary>
         /// Skips to the next line of the conversation
         /// </summary>
         public void Interrupt()
@@ -325,6 +334,24 @@ namespace Mooege.Core.GS.Players
             this.player = player;
             this.quests = quests;
         }
+
+        /// <summary>
+        /// Stops all conversations
+        /// </summary>
+        public void StopAll()
+        {
+            List<Conversation> clonedList;
+
+            // update from a cloned list, so you can remove conversations in their ConversationEnded event
+            lock (openConversations)
+            {
+                clonedList = (from c in openConversations select c.Value).ToList();
+            }
+
+            foreach (Conversation conversation in clonedList)
+                conversation.Stop();
+        }
+
 
         /// <summary>
         /// Starts and plays a conversation

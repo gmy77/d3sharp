@@ -31,6 +31,7 @@ using Mooege.Net.GS.Message.Definitions.NPC;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message.Definitions.Hireling;
 using Mooege.Core.GS.Games;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors
 {
