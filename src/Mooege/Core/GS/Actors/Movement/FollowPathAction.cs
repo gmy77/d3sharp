@@ -48,7 +48,7 @@ namespace Mooege.Core.GS.Actors.Movement
             
             if (distance < 1f)
             { Path.Clear(); this.Done = true; return; }
-            this.Timer = new SteppedRelativeTickTimer(this.Owner.World.Game, 6, (int)(Path.Count / this.Owner.WalkSpeed),
+            this.Timer = new SteppedRelativeTickTimer(this.Owner.World.Game, 18, (int)(Path.Count *2 / this.Owner.WalkSpeed),
             (tick) =>
             {
                 //this.Owner.Position = MovementHelpers.GetMovementPosition(this.Owner.Position, this.Owner.WalkSpeed, facingAngle, 6);
