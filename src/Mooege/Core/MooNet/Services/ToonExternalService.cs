@@ -63,9 +63,15 @@ namespace Mooege.Core.MooNet.Services
             int hashCode = ToonManager.GetUnusedHashCodeForToonName(request.Name);
             var toon = new Toon(request.Name, hashCode, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account);
             if (ToonManager.SaveToon(toon))
-                //builder.SetToon(toon.BnetEntityID); obsole as of 7728 /raist.
-                builder.SetToken((uint)toon.BnetEntityID.Low); // TODO: Brand new stuff in 7728. Fix this! /raist.
+                builder.SetToken((uint)toon.BnetEntityID.Low);
             done(builder.Build());
+
+            var notification = bnet.protocol.toon.external.ToonCreatedNotification.CreateBuilder()
+                .SetToon(toon.BnetEntityID)
+                .SetToken((uint) toon.BnetEntityID.Low)
+                .SetErrorCode(0).Build();
+
+            this.Client.MakeRPC(() => bnet.protocol.toon.external.ToonNotifyExternal.CreateStub(this.Client).NotifyToonCreated(null, notification, callback => { }));
 
             Logger.Trace("CreateToon() {0}", toon);
         }

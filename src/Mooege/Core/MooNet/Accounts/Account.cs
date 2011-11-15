@@ -51,7 +51,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             get
             {
-                var builder = D3.Account.Digest.CreateBuilder().SetVersion(99)
+                var builder = D3.Account.Digest.CreateBuilder().SetVersion(100) // 7447=>99, 7728=> 100 /raist. 
                     .SetBannerConfiguration(this.BannerConfiguration)
                     .SetFlags(0);
 
