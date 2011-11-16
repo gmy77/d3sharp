@@ -293,8 +293,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             UsePrimaryResource(15f);
 
-            // FIXME: some of the code currently assumes User is Player
-
             // dashing strike never specifies the target's id so we just search for the closest target
             // ultimately need to know the radius of each target and select the one most covered
             float min_distance = float.MaxValue;
@@ -315,9 +313,8 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
             else
             {
-                // if no target, dash is limited in range
-                if (PowerMath.Distance(User.Position, TargetPosition) > 13f)
-                    TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, User.Position, 13f);
+                // if no target, always dash fixed amount
+                TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, User.Position, 13f);
             }
 
             _SetupAttributes(true);
@@ -331,11 +328,11 @@ namespace Mooege.Core.GS.Powers.Implementations
                 ActorId = (int)User.DynamicID,
                 Position = TargetPosition,
                 Angle = PowerMath.AngleLookAt(User.Position, TargetPosition),
-                Field3 = true,
+                Field3 = true, // turn instantly toward target
                 Speed = PowerMath.Distance(User.Position, TargetPosition) / dashTicks, // speed, distance per tick
-                Field5 = 0x00009206, // ???
-                AnimationTag = (User as Player).Toon.Gender == 0 ? 69808 : 90432, // select based on gender,
-                Field7 = 0x00000006 // ?
+                Field5 = 0x9206, // alt: 0x920e, not sure what this param is for.
+                AnimationTag = 69808, // dashing strike attack animation
+                Field7 = 6, // ticks to wait before playing animation
             }, User);
             User.Position = TargetPosition;
 
@@ -349,23 +346,13 @@ namespace Mooege.Core.GS.Powers.Implementations
                 WeaponDamage(Target, 0.65f, DamageType.Physical);
             }
         }
-
+        
         private void _SetupAttributes(bool active)
         {
             int intval = active ? 1 : 0;
-            // TODO: modify User.Attribute with these changes instead of just sending them.
             GameAttributeMap map = User.Attributes;
-            map[GameAttribute.Buff_Active, GameAttribute.Stun_Immune.Id] = active; //immune to stun during buff
-            map[GameAttribute.Buff_Icon_Count0, GameAttribute.Stun_Immune.Id] = intval;
-            map[GameAttribute.Buff_Active, GameAttribute.Root_Immune.Id] = active; //immune to root during buff
-            map[GameAttribute.Buff_Icon_Count0, GameAttribute.Root_Immune.Id] = intval;
-            map[GameAttribute.Buff_Active, GameAttribute.Fear_Immune.Id] = active; //immune to fear during buff
-            map[GameAttribute.Buff_Icon_Count0, GameAttribute.Fear_Immune.Id] = intval;
-            map[GameAttribute.Buff_Active, GameAttribute.Uninterruptible.Id] = active; //uninteruptable during buff
             map[GameAttribute.Buff_Icon_Count0, PowerSNO] = intval;
-            map[GameAttribute.Uninterruptible, PowerSNO] = active;
-            map[GameAttribute.Power_Buff_0_Visual_Effect_None, PowerSNO] = active; // switch on effect				
-            map[GameAttribute.Buff_Active, PowerSNO] = active;
+            map[GameAttribute.Power_Buff_0_Visual_Effect_None, PowerSNO] = active; // switch on effect
             map[GameAttribute.Hidden] = active;
 
             foreach (var msg in map.GetChangedMessageList(User.DynamicID))

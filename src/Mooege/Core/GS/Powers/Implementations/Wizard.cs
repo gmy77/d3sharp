@@ -176,7 +176,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override void OnChannelUpdated()
         {
             _calcTargetPosition();
-            _target.TranslateSnapped(TargetPosition);
+            User.TranslateFacing(TargetPosition);
+            // client updates target actor position
         }
 
         public override IEnumerable<TickTimer> RunChannel()
@@ -339,8 +340,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override void OnChannelUpdated()
         {
             _calcTargetPosition();
-            _target.TranslateSnapped(TargetPosition);
             User.TranslateFacing(TargetPosition);
+            // client updates target actor position
         }
         
         public override IEnumerable<TickTimer> RunChannel()

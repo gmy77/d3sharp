@@ -323,24 +323,6 @@ namespace Mooege.Core.GS.Actors
             }, this);
         }
 
-        public void TranslateSnapped(Vector3D destination)
-        {
-            this.Position = destination;
-            float angle = (float)Math.Acos(this.FacingAngle) * 2f;
-            if (float.IsNaN(angle)) // just use RotationAmount if Quat is bad
-                angle = this.FacingAngle;
-
-            World.BroadcastIfRevealed(new ACDTranslateSnappedMessage
-            {
-                Id = 0x6f,
-                Field0 = (int)this.DynamicID,
-                Field1 = destination,
-                Field2 = angle,
-                Field3 = false,
-                Field4 = 0x900 // ?
-            }, this);
-        }
-
         public void TranslateFacing(Vector3D target, bool immediately = false)
         {
             float radianAngle = PowerMath.AngleLookAt(this.Position, target);
