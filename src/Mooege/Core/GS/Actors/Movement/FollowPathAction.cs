@@ -42,7 +42,7 @@ namespace Mooege.Core.GS.Actors.Movement
         public override void Start(int tickCounter)
         {
             // Each path step will be 2.5f apart roughly, not sure on the math to get correct walk speed for the timer.
-            // mobs sometimes skip a bit, not sure why :( - DarkLotus
+            // mobs sometimes skip a bit, pretty sure this is because timing isnt correct.  :( - DarkLotus
             var distance = MovementHelpers.GetDistance(this.Owner.Position, this.Heading);
             var facingAngle = MovementHelpers.GetFacingAngle(this.Owner, this.Heading);
             
@@ -61,14 +61,14 @@ namespace Mooege.Core.GS.Actors.Movement
                 }
                 else
                 {
-                    this.Owner.Position = Heading; ; Logger.Trace("Ticking with no path steps left"); 
+                    this.Owner.Position = Heading; //Logger.Trace("Ticking with no path steps left"); 
                         this.Done = true; }
 
             },
             (tick) =>
             {
                 this.Owner.Position = Heading;
-                Logger.Trace("Completed! Path contains :" + this.Path.Count);
+                //Logger.Trace("Completed! Path contains :" + this.Path.Count);
                 this.Done = true;
             });
 

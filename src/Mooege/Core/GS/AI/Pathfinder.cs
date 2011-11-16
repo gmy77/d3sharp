@@ -157,16 +157,17 @@ namespace Mooege.Core.GS.AI
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         private static Dictionary<uint, List<Vector3D>> CompletedTasks = new Dictionary<uint, List<Vector3D>>();
-        private static Dictionary<uint, PathingTask> queuedTasks = new Dictionary<uint, PathingTask>();
-
+        //private static Dictionary<uint, PathingTask> queuedTasks = new Dictionary<uint, PathingTask>();
+        private static System.Collections.Concurrent.ConcurrentDictionary<uint, PathingTask> queuedtasks = new System.Collections.Concurrent.ConcurrentDictionary<uint, PathingTask>();
     
         public static void AddRequest(Pathfinder pathing, Actor actor, Vector3D Start, Vector3D Destination)
         {
-            lock (queuedTasks)
+            queuedtasks.TryAdd(actor.DynamicID, new PathingTask(pathing, actor, Start, Destination));
+           /* lock (queuedTasks)
             {
                 if (!queuedTasks.ContainsKey(actor.DynamicID))
                     queuedTasks.Add(actor.DynamicID, new PathingTask(pathing, actor, Start, Destination));
-            }
+            }*/
 
         }
         public static List<Vector3D> GetPath(Pathfinder pathing, Actor actor, Vector3D Start, Vector3D Destination)
@@ -180,15 +181,35 @@ namespace Mooege.Core.GS.AI
             AddRequest(pathing, actor, Start, Destination);
             return null;
         }
-
+        //static System.Diagnostics.Stopwatch st;
+        //static int cnt;
         public static void UpdateLoop()
         {
+            //st = new System.Diagnostics.Stopwatch();
             while (true)
             {
-                if (queuedTasks.Count > 0)
+                if (!queuedtasks.IsEmpty)
+                {
+                    PathingTask k; var x = queuedtasks.First(); 
+                    if (!CompletedTasks.ContainsKey(x.Value.Actor.DynamicID))
+                                CompletedTasks.Add(x.Value.Actor.DynamicID, x.Value.getit());
+
+                    queuedtasks.TryRemove(x.Key, out k);
+                }
+                /*if (queuedTasks.Count > 0)
                 {
                     lock (queuedTasks)
                     {
+                        st.Restart();
+                        foreach (var x in queuedTasks.Values)
+                        {
+                            if (!CompletedTasks.ContainsKey(x.Actor.DynamicID))
+                                CompletedTasks.Add(x.Actor.DynamicID, x.getit());
+                        }
+                        cnt = queuedTasks.Count;
+                        queuedTasks.Clear();
+                        st.Stop();
+                        //Logger.Debug("Found: " + cnt + " Paths in " + st.Elapsed);
                         var x = queuedTasks.Values.First();
                         lock (CompletedTasks)
                         {
@@ -198,8 +219,8 @@ namespace Mooege.Core.GS.AI
                         queuedTasks.Remove(x.Actor.DynamicID);
                     }
 
-                }
-                else { System.Threading.Thread.Sleep(5); }
+                }*/
+                else { System.Threading.Thread.Sleep(50); }
             }
 
         }

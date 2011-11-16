@@ -40,6 +40,19 @@ namespace Mooege.Core.GS.AI.Brains
             pather = new Pathfinder(this.Body.World);
         }
 
+        private List<Player> GetPlayersInRange(Mooege.Core.GS.Map.World world)
+        {
+            // Not as clean and fancy as quadtreee, but the cost is like 1/10th or less. - Darklotus
+            List<Player> playerList = new List<Player>();
+            foreach (var p in world.Players.Values)
+            {
+                if (MovementHelpers.GetDistance(this.Body.Position, p.Position) < 240f)
+                {
+                    playerList.Add(p);
+                }
+            }
+            return playerList;
+        }
         public override void Think(int tickCounter)
         {
             if (this.Body is NPC) return;
@@ -48,8 +61,8 @@ namespace Mooege.Core.GS.AI.Brains
             //Temp fix till someone smart fixes it - DarkLotus
             if (nextPlayerSearch < tickCounter)
             {
-                this.EnemiesInRange = this.Body.GetPlayersInRange();
-                nextPlayerSearch = tickCounter + 25;
+                this.EnemiesInRange = this.GetPlayersInRange(Body.World);
+                nextPlayerSearch = tickCounter + 5000;
             }
             
 
