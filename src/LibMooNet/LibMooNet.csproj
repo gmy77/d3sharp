@@ -41,7 +41,7 @@
     <Compile Include="bnet\protocol\ContentHandle.cs" />
     <Compile Include="bnet\protocol\Descriptor.cs" />
     <Compile Include="bnet\protocol\Entity.cs" />
-    <Compile Include="bnet\protocol\exchange\ExchangeSvc.cs" />
+    <Compile Include="bnet\protocol\exchange\ExchangeService.cs" />
     <Compile Include="bnet\protocol\invitation\Invitation.cs" />
     <Compile Include="bnet\protocol\Resource.cs" />
     <Compile Include="bnet\protocol\Rpc.cs" />
