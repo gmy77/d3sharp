@@ -32,8 +32,8 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
-using Mooege.Core.Common.Items;
-using Mooege.Core.GS.Actors.Implementations.Items;
+using Mooege.Core.GS.Items.Implementations;
+using Mooege.Core.GS.Items;
 
 namespace Mooege.Core.GS.Games
 {
@@ -273,15 +273,15 @@ namespace Mooege.Core.GS.Games
 
             // TODO: These items do not droped randomly. They should be created during MainQuest
             #region Hacky Main-Quest-Items       
-            var cauldornOfJordan = new CauldronOfJordan(joinedPlayer.World);
+            var cauldornOfJordan = ItemGenerator.Cook(joinedPlayer, "StoneOfWealth");
             cauldornOfJordan.Drop(null, joinedPlayer.Position);
             joinedPlayer.GroundItems[cauldornOfJordan.DynamicID] = cauldornOfJordan;
 
-            var cubeOfNephalm = new NephalemCube(joinedPlayer.World);
+            var cubeOfNephalm = ItemGenerator.Cook(joinedPlayer, "NephalemCube");
             cubeOfNephalm.Drop(null, joinedPlayer.Position);
             joinedPlayer.GroundItems[cubeOfNephalm.DynamicID] = cubeOfNephalm;
 
-            var stoneOfRecall = new StoneOfRecall(joinedPlayer.World);
+            var stoneOfRecall =  ItemGenerator.Cook(joinedPlayer, "StoneOfRecall");
             stoneOfRecall.Drop(null, joinedPlayer.Position);
             joinedPlayer.GroundItems[stoneOfRecall.DynamicID] = stoneOfRecall;
             #endregion

@@ -98,6 +98,11 @@ namespace Mooege.Core.GS.Items
             }
         }
 
+        public bool IsStackable()
+        {
+            return ItemDefinition.MaxStackAmount > 1;
+        }
+
         public InvLoc InvLoc
         {
             get
@@ -121,7 +126,7 @@ namespace Mooege.Core.GS.Items
             this.GBHandle.GBID = definition.Hash;
             this.ItemType = ItemGroup.FromHash(definition.ItemType1);
             this.EquipmentSlot = 0;
-            this.InventoryLocation = new Vector2D { X = 0, Y = 0 };
+            this.InventoryLocation = new Vector2D { X = -1, Y = -1 }; // Prevent that item is revealed at legal position
             this.Scale = 1.0f;
             this.FacingAngle = 0.0f;
             this.RotationAxis.Set(0.0f, 0.0f, 1.0f);
@@ -142,15 +147,8 @@ namespace Mooege.Core.GS.Items
             if(this.ItemType.Flags.HasFlag(ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
                 Attributes[GameAttribute.Item_Quality_Level] = 3;
 
+            Attributes[GameAttribute.ItemStackQuantityLo] = 1;
             Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
-
-            /*
-            List<IItemAttributeCreator> attributeCreators = new AttributeCreatorFactory().Create(this.ItemType);
-            foreach (IItemAttributeCreator creator in attributeCreators)
-            {
-                creator.CreateAttributes(this);
-            }
-            */
 
             RandomGenerator = new ItemRandomHelper(Attributes[GameAttribute.Seed]);
             RandomGenerator.Next();

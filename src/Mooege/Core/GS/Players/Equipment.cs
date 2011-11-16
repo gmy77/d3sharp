@@ -146,17 +146,8 @@ namespace Mooege.Core.GS.Players
 
         internal Item AddGoldAmount(int amount)
         {
-            // the logic is flawed, we shouldn't be creating new gold when it's collected! /raist.
-            if (_inventoryGold == null)
-            {
-                _inventoryGold = ItemGenerator.CreateGold(_owner, 0);
-                _inventoryGold.Owner = _owner;
-                _inventoryGold.SetInventoryLocation(18, 0, 0); // Equipment slot 18 ==> Gold
-                _inventoryGold.Reveal(_owner);
-            }
             _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += amount;
-            //_inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID); // causes: !!!ERROR!!! Setting attribute for unknown ACD [ANN:1253] [Attribute:ItemStackQuantityLo-1048575:  8669] and client crash /raist.
-
+            _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID);
             return _inventoryGold;
         }
 

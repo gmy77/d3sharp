@@ -29,6 +29,8 @@ using Mooege.Net.GS.Message.Definitions.Stash;
 using Mooege.Core.GS.Objects;
 using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Misc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mooege.Core.GS.Players
 {
@@ -66,7 +68,7 @@ namespace Mooege.Core.GS.Players
         }
 
 
-         /// <summary>
+        /// <summary>
         /// Refreshes the visual appearance of the hero
         /// </summary>
         public void SendVisualInventory(Player player)
@@ -104,6 +106,25 @@ namespace Mooege.Core.GS.Players
             System.Diagnostics.Debug.Assert(!_inventoryGrid.Contains(item) && !_equipment.IsItemEquipped(item), "Item already in inventory");
             // TODO: Autoequip when equipment slot is empty
 
+            // If Item is Stackable try to add the amount
+            if (item.IsStackable())
+            {
+                // Find items of same type (GBID) and try to add it to one of them
+                List<Item> baseItems = FindSameItems(item.GBHandle.GBID);
+                foreach (Item baseItem in baseItems)
+                {
+                    if (baseItem.Attributes[GameAttribute.ItemStackQuantityLo] + item.Attributes[GameAttribute.ItemStackQuantityLo] < baseItem.ItemDefinition.MaxStackAmount)
+                    {
+                        baseItem.Attributes[GameAttribute.ItemStackQuantityLo] += item.Attributes[GameAttribute.ItemStackQuantityLo];
+                        baseItem.Attributes.SendChangedMessage(_owner.InGameClient, baseItem.DynamicID);
+
+                        // Item amount successful added. Don't place item in inventory instead destroy it.
+                        item.Destroy();
+                        return true;
+                    }
+                }
+            }
+
             bool success = false;
             if (!_inventoryGrid.HasFreeSpace(item))
             {
@@ -136,6 +157,11 @@ namespace Mooege.Core.GS.Players
             return success;
         }
 
+        private List<Item> FindSameItems(int gbid)
+        {
+            return _inventoryGrid.Items.Values.Where(i => i.GBHandle.GBID == gbid).ToList();
+        }
+       
         public void BuyItem(Item originalItem)
         {
             // TODO: Create a copy instead of random.
@@ -318,9 +344,21 @@ namespace Mooege.Core.GS.Players
             return true;
         }
 
+        /// <summary>
+        /// Transfers an amount from one stack to a free space
+        /// </summary>
         public void OnInventorySplitStackMessage(InventorySplitStackMessage msg)
         {
-            // TODO need to create and introduce a new item that is of the same type as the source
+            Item itemFrom = GetItem((uint)msg.FromID);
+            itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
+            itemFrom.Attributes.SendChangedMessage(_owner.InGameClient, itemFrom.DynamicID);
+
+            Item item = ItemGenerator.CreateItem(_owner, itemFrom.ItemDefinition);
+            item.Attributes[GameAttribute.ItemStackQuantityLo] = (int)msg.Amount;
+            RevealInventoryItem(item);
+
+            InventoryGrid targetGrid = (msg.InvLoc.EquipmentSlot == (int)EquipmentSlotId.Stash) ? _stashGrid : _inventoryGrid;
+            targetGrid.AddItem(item, msg.InvLoc.Row, msg.InvLoc.Column);
         }
 
         /// <summary>
@@ -328,19 +366,13 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void OnInventoryStackTransferMessage(InventoryStackTransferMessage msg)
         {
-            Item itemFrom = _owner.World.GetItem(msg.FromID);
-            Item itemTo = _owner.World.GetItem(msg.ToID);
+            Item itemFrom = GetItem(msg.FromID);
+            Item itemTo = GetItem(msg.ToID);
 
             itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
-            itemTo.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
+            itemTo.Attributes[GameAttribute.ItemStackQuantityLo] += (int)msg.Amount;
 
-
-            // TODO: This needs to change the attribute on the item itself. /komiga
-            // Update source
             itemFrom.Attributes.SendChangedMessage(_owner.InGameClient, itemFrom.DynamicID);
-
-            // TODO: This needs to change the attribute on the item itself. /komiga
-            // Update target
             itemTo.Attributes.SendChangedMessage(_owner.InGameClient, itemTo.DynamicID);
         }
 
@@ -402,20 +434,26 @@ namespace Mooege.Core.GS.Players
         {
             uint targetItemId = inventoryRequestUseMessage.UsedOnItem;
             uint usedItemId = inventoryRequestUseMessage.UsedItem;
-            int actionId = inventoryRequestUseMessage.Field1; // guess 1 means dyeing. Probably other value for using identify scroll , selling , .... - angerwin
-            Item usedItem = _owner.World.GetItem(usedItemId);
-            Item targetItem = _owner.World.GetItem(targetItemId);
+            int actionId = inventoryRequestUseMessage.Field1;
+            Item usedItem = GetItem(usedItemId);
+            Item targetItem = GetItem(targetItemId);
 
             usedItem.OnRequestUse(_owner, targetItem, actionId, inventoryRequestUseMessage.Location);
         }
 
         public void DestroyInventoryItem(Item item)
         {
-            _inventoryGrid.RemoveItem(item);
-            _equipment.UnequipItem(item);
-//            item.Destroy();
-            item.Unreveal(_owner);
-            _owner.World.Game.EndTracking(item);
+            if (_equipment.IsItemEquipped(item))
+            {
+                _equipment.UnequipItem(item);
+                SendVisualInventory(_owner);
+            }
+            else
+            {
+                _inventoryGrid.RemoveItem(item);
+            }
+
+            item.Destroy();
         }
 
         public bool Reveal(Player player)
@@ -539,39 +577,54 @@ namespace Mooege.Core.GS.Players
 
         private void OnUseNephalmCubeMessage(RequestUseNephalemCubeMessage requestUseNephalemCubeMessage)
         {
-            Item salvageItem = _owner.World.GetItem(requestUseNephalemCubeMessage.ActorID);
+            Item salvageItem = GetItem(requestUseNephalemCubeMessage.ActorID);
+            if (salvageItem == null) return;
             DestroyInventoryItem(salvageItem);
-            // TODO: hacked crafting material
-            Item crafingItem = CreateInventoryItem("Crafting_Gem_Dust");
-            PickUp(crafingItem);            
+
+            List<int> craftigItemsGbids = new List<int>();
+            List<Item> craftingMaterials = TreasureClassManager.CreateLoot(_owner, salvageItem.ItemDefinition.SNOComponentTreasureClass);
+            if (salvageItem.Attributes[GameAttribute.Item_Quality_Level] >= 3)
+            {
+                craftingMaterials.AddRange(TreasureClassManager.CreateLoot(_owner, salvageItem.ItemDefinition.SNOComponentTreasureClassMagic));
+            }
+            if (salvageItem.Attributes[GameAttribute.Item_Quality_Level] >= 6)
+            {
+                craftingMaterials.AddRange(TreasureClassManager.CreateLoot(_owner, salvageItem.ItemDefinition.SNOComponentTreasureClassRare));
+            }
+            foreach (Item crafingItem in craftingMaterials)
+            {
+                craftigItemsGbids.Add(crafingItem.GBHandle.GBID);
+                // reveal new item to player  
+                RevealInventoryItem(crafingItem);
+                PickUp(crafingItem);
+            }
 
             // TODO: This Message doesn't work. I think i should produce an entry in the chat window like "Salvaging Gloves gave you Common scrap!" - angerwin
             SalvageResultsMessage message = new SalvageResultsMessage
             {
-                gbidNewItems = new int[] { crafingItem.GBHandle.GBID },
+                gbidNewItems = craftigItemsGbids.ToArray(),
                 gbidOriginalItem = salvageItem.GBHandle.GBID,
                 Field1 = 0, // Unkown
                 Field2 = 0, // Unkown 
 
             };
-            _owner.InGameClient.SendMessage(message, true);            
+            //_owner.InGameClient.SendMessage(message);
         }
 
         private void OnUseCauldronOfJordanMessage(RequestUseCauldronOfJordanMessage requestUseCauldronOfJordanMessage)
         {
-            Item selledItem = _owner.World.GetItem(requestUseCauldronOfJordanMessage.ActorID);
-            int sellValue = selledItem.ItemDefinition.BaseGoldValue; // TODO: get item sell value
+            Item selledItem = GetItem(requestUseCauldronOfJordanMessage.ActorID);
+            int sellValue = selledItem.ItemDefinition.BaseGoldValue; // TODO: calculate correct sell value for magic items
             Item sumGoldItem = _equipment.AddGoldAmount(sellValue);
 
             // TODO: instead of destroying item, it should be moved to merchants inventory for rebuy. 
             DestroyInventoryItem(selledItem);            
         }
 
-        private Item CreateInventoryItem(string itemName)
+        private Item RevealInventoryItem(Item item)
         {
-            Item item = ItemGenerator.Cook(_owner, itemName);
             item.Owner = _owner;
-            _owner.World.Enter(item); // this does not reveal an Item to the Player because item has no Position
+            _owner.World.Enter(item); // this does not reveal an Item to the Player because item has no Worldposition                        
             item.Reveal(_owner);
             return item;
         }
