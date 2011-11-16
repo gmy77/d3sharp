@@ -137,7 +137,11 @@
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
     <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
-    <Compile Include="Common\MPQ\FileFormats\Types\TagMap.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\ActorKeys.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\AnimationSetKeys.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\MarkerKeys.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\PowerKeys.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\TagMap.cs" />
     <Compile Include="Common\MPQ\SerializableData.cs" />
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
@@ -153,10 +157,13 @@
     <Compile Include="Core\GS\Items\HandledItem.cs" />
     <Compile Include="Core\GS\Items\HandledType.cs" />
     <Compile Include="Core\GS\Items\Implementations\Book.cs" />
+    <Compile Include="Core\GS\Items\Implementations\CauldronOfJordan.cs" />
     <Compile Include="Core\GS\Items\Implementations\Dye.cs" />
     <Compile Include="Core\GS\Items\Implementations\HealthPotion.cs" />
+    <Compile Include="Core\GS\Items\Implementations\NephalemCube.cs" />
     <Compile Include="Core\GS\Items\Implementations\Potion.cs" />
     <Compile Include="Core\GS\Items\Implementations\SpellRune.cs" />
+    <Compile Include="Core\GS\Items\Implementations\StoneOfRecall.cs" />
     <Compile Include="Core\GS\Items\ItemCreation\AttributeCreatorFactory.cs" />
     <Compile Include="Core\GS\Items\ItemCreation\DefaultAttributeCreator.cs" />
     <Compile Include="Core\GS\Items\ItemCreation\IItemAttributeCreator.cs" />
@@ -176,9 +183,6 @@
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Jeweler.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Mystic.cs" />
     <Compile Include="Core\GS\Actors\Implementations\CaptainRumford.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\Items\CauldronOfJordan.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\Items\NephalemCube.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\Items\StoneOfRecall.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Enchantress.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Hireling.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Scoundrel.cs" />
@@ -205,6 +209,7 @@
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
     <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
     <Compile Include="Core\GS\Items\RuneHelper.cs" />
+    <Compile Include="Core\GS\Items\TreasureClassManager.cs" />
     <Compile Include="Core\GS\Map\Debug\ControlExtensions.cs" />
     <Compile Include="Core\GS\Map\Debug\DebugNavMesh.cs" />
     <Compile Include="Core\GS\Map\Debug\WorldVisualizer.cs">
