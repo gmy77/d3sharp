@@ -46,24 +46,30 @@ namespace Mooege.Net.MooNet
             var packet = new PacketIn(client, stream);
 
             if (packet.Header.ServiceId == ServiceReply)
+                ProcessReply(client, packet);
+            else
+                ProcessMessage(client, stream, packet);           
+        }
+
+        private static void ProcessReply(MooNetClient client, PacketIn packet)
+        {
+            if (client.RPCCallbacks.ContainsKey(packet.Header.Token))
             {
-                if (client.RPCCallbacks.ContainsKey(packet.Header.Token))
-                {
-                    var callback = client.RPCCallbacks[packet.Header.Token];
-                    Logger.Trace("RPCReply => {0}", callback.Action.Target);
+                var callback = client.RPCCallbacks[packet.Header.Token];
+                Logger.Trace("RPCReply => {0}", callback.Action.Target);
 
-                    callback.Action(packet.ReadMessage(callback.Builder));
-                    client.RPCCallbacks.Remove(packet.Header.Token);
-                }
-                else
-                {
-                    Logger.Warn("RPC callback contains unexpected token: {0}", packet.Header.Token);
-                    connection.Disconnect();
-                }
-
-                return;
+                callback.Action(packet.ReadMessage(callback.Builder));
+                client.RPCCallbacks.Remove(packet.Header.Token);
             }
-            
+            else
+            {
+                Logger.Warn("RPC callback contains unexpected token: {0}", packet.Header.Token);
+                client.Connection.Disconnect();
+            }
+        }
+
+        private static void ProcessMessage(MooNetClient client, CodedInputStream stream, PacketIn packet)
+        {
             var service = Service.GetByID(packet.Header.ServiceId);
 
             if (service == null)
@@ -75,16 +81,15 @@ namespace Mooege.Net.MooNet
             var method = service.DescriptorForType.Methods.Single(m => GetMethodId(m) == packet.Header.MethodId);
             var proto = service.GetRequestPrototype(method);
             var builder = proto.WeakCreateBuilderForType();
-            var message = builder.WeakMergeFrom(CodedInputStream.CreateInstance(packet.GetPayload(stream))).WeakBuild();
+            var message = builder.WeakMergeFrom(CodedInputStream.CreateInstance(packet.GetPayload(stream))).WeakBuild(); //var message = packet.ReadMessage(proto.WeakToBuilder()); // this method doesn't seem to work with 7728. /raist.
             Logger.LogIncoming(message);
-            //var message = packet.ReadMessage(proto.WeakToBuilder()); // this method doesn't seem to work with 7728. /raist.
 
             try
             {
                 lock (service) // lock the service so that its in-context client does not get changed..
                 {
                     ((IServerService)service).Client = client;
-                    service.CallMethod(method, null, message, (msg => SendRPCResponse(connection, packet.Header.Token, msg)));
+                    service.CallMethod(method, null, message, (msg => SendRPCResponse(client.Connection, packet.Header.Token, msg)));
                 }
             }
             catch (NotImplementedException)
