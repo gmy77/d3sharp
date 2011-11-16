@@ -191,30 +191,34 @@ namespace Mooege.Core.MooNet.Accounts
             var operations = new List<bnet.protocol.presence.FieldOperation>();
 
             // RealID name field - NOTE: Probably won't ever use this for its actual purpose, but showing the email in final might not be a good idea
-            var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet,1, 1, 0);
-            var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Email).Build()).Build();
-            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build());
+            var realNameKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet,1, 1, 0);
+            var realNameField = bnet.protocol.presence.Field.CreateBuilder().SetKey(realNameKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Email).Build()).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(realNameField).Build());
 
             // Account online?
-            var fieldKey2 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
-            var field2 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey2).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
-            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build());
+            var accountOnlineKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
+            var accountOnlineField = bnet.protocol.presence.Field.CreateBuilder().SetKey(accountOnlineKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(accountOnlineField).Build());
 
             // Selected toon
             if (this.LoggedInClient != null && this.LoggedInClient.CurrentToon!=null)
             {
-                var fieldKey3 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 1, 0);
-                var field3 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey3).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LoggedInClient.CurrentToon.D3EntityID.ToByteString()).Build()).Build();
-                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field3).Build());
+                var selectedToonKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 1, 0);
+                var selectedToonField = bnet.protocol.presence.Field.CreateBuilder().SetKey(selectedToonKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LoggedInClient.CurrentToon.D3EntityID.ToByteString()).Build()).Build();
+                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(selectedToonField).Build());
             }
 
             // toon list
             foreach(var pair in this.Toons)
             {
-                var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 4, 0);
-                var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(pair.Value.BnetEntityID.ToByteString()).Build()).Build();
-                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build());
+                var toonKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 4, 0);
+                var toonField = bnet.protocol.presence.Field.CreateBuilder().SetKey(toonKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(pair.Value.BnetEntityID.ToByteString()).Build()).Build();
+                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(toonField).Build());
             }
+
+            var tempNameKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 5, 0);
+            var tempNameField = bnet.protocol.presence.Field.CreateBuilder().SetKey(tempNameKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("NICKTEMPNAME").Build()).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(tempNameField).Build());
 
             // Create a presence.ChannelState
             var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetAccountID).AddRangeFieldOperation(operations).Build();

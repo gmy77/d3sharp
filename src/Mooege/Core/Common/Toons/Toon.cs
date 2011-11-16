@@ -270,6 +270,10 @@ namespace Mooege.Core.Common.Toons
             switch ((FieldKeyHelper.Program)queryKey.Program)
             {
                 case FieldKeyHelper.Program.D3:
+                    if (queryKey.Group == 1 && queryKey.Field == 1) // Account's selected toon.
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.D3EntityID.ToByteString()).Build());
+                    }
                     if (queryKey.Group == 2 && queryKey.Field == 1) // Banner configuration
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.BannerConfiguration.ToByteString()).Build());
@@ -305,9 +309,25 @@ namespace Mooege.Core.Common.Toons
                     }
                     break;
                 case FieldKeyHelper.Program.BNet:
+                    if (queryKey.Group == 1 && queryKey.Field == 1) // RealID name
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Owner.Email).Build());
+                    }
+                    if (queryKey.Group == 1 && queryKey.Field == 2) // Whether the account is online
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.Owner.IsOnline).Build());
+                    }
+                    if (queryKey.Group == 1 && queryKey.Field == 4) // Current Toon's ID
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.BnetEntityID.ToByteString()).Build());
+                    }
+                    if (queryKey.Group == 1 && queryKey.Field == 5) // Always NICKTEMPNAME for 7728
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("NICKTEMPNAME").Build());
+                    }
                     if (queryKey.Group == 3 && queryKey.Field == 2) // Toon name
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name + "#" + this.HashCodeString).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 3) // Whether the toon is selected one for owner account.
                     {

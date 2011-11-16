@@ -23,8 +23,6 @@ using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Net.MooNet;
-using bnet.protocol;
-using bnet.protocol.presence;
 
 // TODO: Need to do some more testing and inspection to make sure that
 // responding before performing the action requested is proper
@@ -128,7 +126,7 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void Query(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.QueryRequest request, System.Action<bnet.protocol.presence.QueryResponse> done)
+        public override void Query(IRpcController controller, bnet.protocol.presence.QueryRequest request, Action<bnet.protocol.presence.QueryResponse> done)
         {            
             var builder = bnet.protocol.presence.QueryResponse.CreateBuilder();
 
@@ -159,12 +157,12 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void Ownership(IRpcController controller, OwnershipRequest request, Action<NoData> done)
+        public override void Ownership(IRpcController controller, bnet.protocol.presence.OwnershipRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void Heal(IRpcController controller, UpdateRequest request, Action<NoData> done)
+        public override void Heal(IRpcController controller, bnet.protocol.presence.UpdateRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
