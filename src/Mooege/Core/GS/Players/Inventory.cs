@@ -581,16 +581,13 @@ namespace Mooege.Core.GS.Players
             if (salvageItem == null) return;
             DestroyInventoryItem(salvageItem);
 
-            List<int> craftigItemsGbids = new List<int>();
             List<Item> craftingMaterials = TreasureClassManager.CreateLoot(_owner, salvageItem.ItemDefinition.SNOComponentTreasureClass);
-            if (salvageItem.Attributes[GameAttribute.Item_Quality_Level] >= 3)
-            {
+            if (salvageItem.Attributes[GameAttribute.Item_Quality_Level] >= (int)ItemTable.ItemQuality.Magic1)
                 craftingMaterials.AddRange(TreasureClassManager.CreateLoot(_owner, salvageItem.ItemDefinition.SNOComponentTreasureClassMagic));
-            }
-            if (salvageItem.Attributes[GameAttribute.Item_Quality_Level] >= 6)
-            {
+            if (salvageItem.Attributes[GameAttribute.Item_Quality_Level] >= (int)ItemTable.ItemQuality.Rare4)
                 craftingMaterials.AddRange(TreasureClassManager.CreateLoot(_owner, salvageItem.ItemDefinition.SNOComponentTreasureClassRare));
-            }
+
+            List<int> craftigItemsGbids = new List<int>();
             foreach (Item crafingItem in craftingMaterials)
             {
                 craftigItemsGbids.Add(crafingItem.GBHandle.GBID);
@@ -618,7 +615,7 @@ namespace Mooege.Core.GS.Players
             Item sumGoldItem = _equipment.AddGoldAmount(sellValue);
 
             // TODO: instead of destroying item, it should be moved to merchants inventory for rebuy. 
-            DestroyInventoryItem(selledItem);            
+            DestroyInventoryItem(selledItem);
         }
 
         private Item RevealInventoryItem(Item item)
