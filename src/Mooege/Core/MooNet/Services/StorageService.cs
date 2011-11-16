@@ -103,10 +103,10 @@ namespace Mooege.Core.MooNet.Services
 
                 var toon = client.Account.Toons[toonId];
 
-                if(operation.ColumnId.Hash.Equals(HeroDigestColumn))
+                if (operation.ColumnId.Hash.Equals(HeroDigestColumn))
                     data = toon.Digest.ToByteString();
                 else if (operation.ColumnId.Hash.Equals(HeroNameColumn))
-                    data = ByteString.CopyFromUtf8(string.Format("\n\010{0}#{1}", toon.Name, toon.HashCodeString));
+                    data = toon.NameText.ToByteString();
                                  
                 var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
                 operationResult.AddData(

@@ -45,14 +45,69 @@ namespace Mooege.Core.Common.Toons
         /// </summary>
         public ToonHandleHelper ToonHandle { get; private set; }
 
+        /// <summary>
+        /// Toon's name.
+        /// </summary>
         public string Name { get; private set; }
+
+        /// <summary>
+        /// Toon's hash-code.
+        /// </summary>
         public int HashCode { get; set; }
-        public uint TimePlayed { get; set; }
-        public uint LoginTime { get; set; }
+
+        /// <summary>
+        /// Toon's hash-code as string.
+        /// </summary>
         public string HashCodeString { get; private set; }
+
+        /// <summary>
+        /// NameText as name#hashcode.
+        /// </summary>
+        public D3.Hero.NameText NameText { get; private set; }
+
+        /// <summary>
+        /// Toon's owner account.
+        /// </summary>
+        public Account Owner { get; set; }
+
+        /// <summary>
+        /// Toon's class.
+        /// </summary>
         public ToonClass Class { get; private set; }
+
+        /// <summary>
+        /// Toon's flags.
+        /// </summary>
         public ToonFlags Flags { get; private set; }
+
+        /// <summary>
+        /// Toon's level.
+        /// </summary>
         public byte Level { get; private set; }
+
+        /// <summary>
+        /// Total time played for toon.
+        /// </summary>
+        public uint TimePlayed { get; set; }
+
+        /// <summary>
+        /// Last login time for toon.
+        /// </summary>
+        public uint LoginTime { get; set; }
+        
+        /// <summary>
+        /// Away status for the toon? (shouldn't it be account stuff? /raist).
+        /// </summary>
+        public AwayStatus AwayStatus { get; private set; }
+
+        /// <summary>
+        /// The visual equipment for toon.
+        /// </summary>
+        public D3.Hero.VisualEquipment Equipment { get; protected set; }
+        
+        /// <summary>
+        /// Toon digest.
+        /// </summary>
         public D3.Hero.Digest Digest
         {
             get
@@ -74,10 +129,6 @@ namespace Mooege.Core.Common.Toons
                                 .Build();
             }
         }
-        public D3.Hero.VisualEquipment Equipment { get; protected set; }
-        public AwayStatus AwayStatus { get; private set; }
-
-        public Account Owner { get; set; }
 
         public bool IsSelected
         {
@@ -164,6 +215,7 @@ namespace Mooege.Core.Common.Toons
             this.Name = name;
             this.HashCode = hashCode;
             this.HashCodeString = HashCode.ToString("D3");
+            this.NameText = D3.Hero.NameText.CreateBuilder().SetName(string.Format("{0}#{1}", this.Name, this.HashCodeString)).Build();
             this.Class = @class;
             this.Flags = flags;
             this.Level = level;
