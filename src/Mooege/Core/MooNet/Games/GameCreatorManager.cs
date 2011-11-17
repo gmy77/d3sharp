@@ -60,28 +60,22 @@ namespace Mooege.Core.MooNet.Games
             D3.OnlineService.GameCreateParams gameCreateParams = null;
             foreach (bnet.protocol.attribute.Attribute attribute in request.Properties.CreationAttributesList)
             {
-                if (attribute.Name == "GameCreateParams")
-                {
-                    gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
-                }
+                if (attribute.Name != "GameCreateParams") continue;
+
+                gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
             }
 
             foreach(bnet.protocol.attribute.Attribute attribute in request.Properties.Filter.AttributeList)
             {
-                if(attribute.Name == "GameCreateParams")
-                {
-                    gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
-                }
-                else if(attribute.Name == "version")
-                {
-                    version = attribute.Value.StringValue;
-                }
+                if (attribute.Name != "version") continue;
+
+                version = attribute.Value.StringValue;
             }
 
             List<GameCreator> matchingGames;
             if (!request.Properties.Create && (matchingGames = FindMatchingGames(request)).Count > 0)
             {
-                Random rand = new Random();
+                var rand = new Random();
                 var game = matchingGames[rand.Next(matchingGames.Count)];
                 game.JoinGame(clients, request.ObjectId);
             }

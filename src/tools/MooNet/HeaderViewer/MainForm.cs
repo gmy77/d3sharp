@@ -72,7 +72,7 @@ namespace Mooege.Tools.HeaderViewer
               Header.ServiceId,
               Header.HasMethodId ? Header.MethodId.ToString() : "None",
               Header.HasToken ? Header.Token.ToString() : "None",
-              Header.HasObjectId ? Header.HasObjectId.ToString() : "None",
+              Header.HasObjectId ? Header.ObjectId.ToString() : "None",
               Header.HasSize ? Header.Size.ToString() : "None",
               Header.HasStatus ? Header.Status.ToString() : "None",
               Header.ErrorCount);

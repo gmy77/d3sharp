@@ -73,13 +73,18 @@ namespace Mooege.Core.MooNet.Services
 
         public override void UpdateChannelState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateChannelStateRequest request, System.Action<bnet.protocol.NoData> done)
         {
+            Logger.Trace("UpdateChannelState()");
+
+            // TODO: Should be actually applying changes on channel. /raist.
+
             var channelState = bnet.protocol.channel.ChannelState.CreateBuilder();
-            D3.OnlineService.GameCreateParams gameCreateParams = null;
+
             foreach (bnet.protocol.attribute.Attribute attribute in request.StateChange.AttributeList)
             {
                 if (attribute.Name == "D3.Party.GameCreateParams")
                 {
-                    gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
+                    var gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
+
                     var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                         .SetName("D3.Party.GameCreateParams")
                         .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameCreateParams.ToByteString()).Build());
@@ -100,18 +105,18 @@ namespace Mooege.Core.MooNet.Services
                 }
                 else if (attribute.Name == "D3.Party.JoinPermissionPreviousToLock")
                 {
-                    var JoinPermission = attribute.Value;
+                    var joinPermission = attribute.Value;
                     var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                         .SetName("D3.Party.JoinPermissionPreviousToLock")
-                        .SetValue(JoinPermission);
+                        .SetValue(joinPermission);
                     channelState.AddAttribute(attr);
                 }
                 else if (attribute.Name == "D3.Party.LockReasons")
                 {
-                    var LockReason = attribute.Value;
+                    var lockReason = attribute.Value;
                     var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                         .SetName("D3.Party.LockReasons")
-                        .SetValue(LockReason);
+                        .SetValue(lockReason);
                     channelState.AddAttribute(attr);
                 }
                 else
@@ -119,6 +124,7 @@ namespace Mooege.Core.MooNet.Services
                     Logger.Warn("UpdateChannelState(): Unknown attribute: {0}", attribute.Name);
                 }
             }
+
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
 
@@ -130,10 +136,9 @@ namespace Mooege.Core.MooNet.Services
                 .SetStateChange(channelState)
                 .Build();
 
-            // Send UpdateChannelStateNotification RPC reply
-            this.Client.MakeTargetedRPC(this.Client.CurrentToon, () => 
+            // Send UpdateChannelStateNotification RPC
+            this.Client.MakeTargetedRPC(this.Client.CurrentChannel, () => 
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notification, callback => { }));
-            //throw new NotImplementedException();
         }
 
         public override void UpdateMemberState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateMemberStateRequest request, System.Action<bnet.protocol.NoData> done)
