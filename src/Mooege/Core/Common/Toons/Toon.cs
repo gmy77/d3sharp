@@ -114,7 +114,7 @@ namespace Mooege.Core.Common.Toons
             {
                 return D3.Hero.Digest.CreateBuilder().SetVersion(891)
                                 .SetHeroId(this.D3EntityID)
-                                .SetHeroName(this.Name)
+                                //.SetHeroName(this.Name) //no longer used in 7728, uses D3.Hero.NameText query -Egris
                                 .SetGbidClass((int)this.ClassID)
                                 .SetPlayerFlags((uint)this.Flags)
                                 .SetLevel(this.Level)
@@ -292,7 +292,7 @@ namespace Mooege.Core.Common.Toons
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 4) // Hero's flags (gender and such)
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.Flags | ToonFlags.BothUnknowns)).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.Flags | ToonFlags.AllUnknowns)).Build());
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if the client is online
                     {
@@ -447,12 +447,12 @@ namespace Mooege.Core.Common.Toons
 
             // Flags
             var fieldKey5 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 4, 0);
-            var field5 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey5).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.Flags | ToonFlags.BothUnknowns)).Build()).Build();
+            var field5 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey5).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.Flags | ToonFlags.AllUnknowns)).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field5).Build());
 
             // Name
             var fieldKey6 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 2, 0);
-            var field6 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey6).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build()).Build();
+            var field6 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey6).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name + "#" + this.HashCodeString).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field6).Build());
 
             // Is it selected toon?
@@ -470,10 +470,20 @@ namespace Mooege.Core.Common.Toons
             var field8 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey8).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field8).Build());
 
-            // Unknown int - maybe highest completed act? /raist
-            var fieldKey9 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 9, 10);
+            // Unknown int - maybe highest completed act? /raist - not sent in 7728 -Egris
+            //var fieldKey9 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 9, 10);
+            //var field9 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey9).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build()).Build();
+            //operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field9).Build());
+
+            //Unknown int64 - always 0 -Egris
+            var fieldKey9 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 10, 0);
             var field9 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey9).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field9).Build());
+
+            //Unknown string = always "NICKTEMPNAME" -Egris
+            var fieldKey11 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 12, 0);
+            var field11 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey11).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("NICKTEMPNAME").Build()).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field11).Build());
 
             // Create a presence.ChannelState
             var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityID).AddRangeFieldOperation(operations).Build();
@@ -573,8 +583,10 @@ namespace Mooege.Core.Common.Toons
         Female = 0x02,
         // TODO: These two need to be figured out still.. /plash
         Unknown1 = 0x20,
-        Unknown2 = 0x2000000,
-        BothUnknowns = Unknown1 | Unknown2
+        Unknown2 = 0x40,
+        Unknown3 = 0x80000,
+        Unknown4 = 0x2000000,
+        AllUnknowns = Unknown1 | Unknown2 | Unknown3 | Unknown4
     }
 
     //TODO: figure out what 1 and 3 represent, or if it is a flag since all observed values are powers of 2 so far /dustinconrad

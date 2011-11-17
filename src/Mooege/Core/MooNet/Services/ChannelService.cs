@@ -73,7 +73,67 @@ namespace Mooege.Core.MooNet.Services
 
         public override void UpdateChannelState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateChannelStateRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            var channelState = bnet.protocol.channel.ChannelState.CreateBuilder();
+            D3.OnlineService.GameCreateParams gameCreateParams = null;
+            foreach (bnet.protocol.attribute.Attribute attribute in request.StateChange.AttributeList)
+            {
+                if (attribute.Name == "D3.Party.GameCreateParams")
+                {
+                    gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
+                    var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                        .SetName("D3.Party.GameCreateParams")
+                        .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameCreateParams.ToByteString()).Build());
+                    channelState.AddAttribute(attr);
+                }
+                else if (attribute.Name == "D3.Party.ScreenStatus")
+                {
+                    if (attribute.HasValue) //Sometimes not present -Egris
+                    {
+                        var newScreen = attribute.Value.MessageValue;
+                        var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                            .SetName("D3.Party.ScreenStatus")
+                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(newScreen).Build());
+                        channelState.AddAttribute(attr);
+                        //save screen status for use with friends -Egris
+                        //attribute.Value.MessageValue message_value: "\010\003\020\000" (08031000)
+                    }
+                }
+                else if (attribute.Name == "D3.Party.JoinPermissionPreviousToLock")
+                {
+                    var JoinPermission = attribute.Value;
+                    var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                        .SetName("D3.Party.JoinPermissionPreviousToLock")
+                        .SetValue(JoinPermission);
+                    channelState.AddAttribute(attr);
+                }
+                else if (attribute.Name == "D3.Party.LockReasons")
+                {
+                    var LockReason = attribute.Value;
+                    var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                        .SetName("D3.Party.LockReasons")
+                        .SetValue(LockReason);
+                    channelState.AddAttribute(attr);
+                }
+                else
+                {
+                    Logger.Warn("UpdateChannelState(): Unknown attribute: {0}", attribute.Name);
+                }
+            }
+            var builder = bnet.protocol.NoData.CreateBuilder();
+            done(builder.Build());
+
+            if (request.StateChange.HasPrivacyLevel)
+                channelState.PrivacyLevel = request.StateChange.PrivacyLevel;
+
+            var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
+                .SetAgentId(this.Client.CurrentToon.BnetEntityID)
+                .SetStateChange(channelState)
+                .Build();
+
+            // Send UpdateChannelStateNotification RPC reply
+            this.Client.MakeTargetedRPC(this.Client.CurrentToon, () => 
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notification, callback => { }));
+            //throw new NotImplementedException();
         }
 
         public override void UpdateMemberState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateMemberStateRequest request, System.Action<bnet.protocol.NoData> done)
