@@ -31,13 +31,12 @@ namespace Mooege.Core.MooNet.Services
 
         public override void CreateChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.CreateChannelRequest request, System.Action<bnet.protocol.channel.CreateChannelResponse> done)
         {
-            Logger.Warn("ChannelOwnerService:CreateChannel()");
             var channel = ChannelManager.CreateNewChannel(this.Client, request.ObjectId);
             var builder = bnet.protocol.channel.CreateChannelResponse.CreateBuilder()
-                .SetChannelId(channel.BnetEntityId)
-                .SetObjectId(channel.DynamicId);
-            done(builder.Build());
+                .SetObjectId(channel.DynamicId)
+                .SetChannelId(channel.BnetEntityId);
 
+            done(builder.Build());
             channel.SetOwner(Client); // Set the client that requested the creation of channel as the owner
 
             Logger.Trace("CreateChannel() {0} for {1}", channel, Client.CurrentToon);
