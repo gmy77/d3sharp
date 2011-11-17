@@ -270,10 +270,6 @@ namespace Mooege.Core.Common.Toons
             switch ((FieldKeyHelper.Program)queryKey.Program)
             {
                 case FieldKeyHelper.Program.D3:
-                    if (queryKey.Group == 1 && queryKey.Field == 1) // Account's selected toon.
-                    {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.D3EntityID.ToByteString()).Build());
-                    }
                     if (queryKey.Group == 2 && queryKey.Field == 1) // Banner configuration
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.BannerConfiguration.ToByteString()).Build());
@@ -309,22 +305,6 @@ namespace Mooege.Core.Common.Toons
                     }
                     break;
                 case FieldKeyHelper.Program.BNet:
-                    if (queryKey.Group == 1 && queryKey.Field == 1) // RealID name
-                    {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Owner.Email).Build());
-                    }
-                    if (queryKey.Group == 1 && queryKey.Field == 2) // Whether the account is online
-                    {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.Owner.IsOnline).Build());
-                    }
-                    if (queryKey.Group == 1 && queryKey.Field == 4) // Current Toon's ID
-                    {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.BnetEntityID.ToByteString()).Build());
-                    }
-                    if (queryKey.Group == 1 && queryKey.Field == 5) // Always NICKTEMPNAME for 7728
-                    {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("NICKTEMPNAME").Build());
-                    }
                     if (queryKey.Group == 3 && queryKey.Field == 2) // Toon name
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name + "#" + this.HashCodeString).Build());
@@ -470,12 +450,7 @@ namespace Mooege.Core.Common.Toons
             var field8 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey8).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field8).Build());
 
-            // Unknown int - maybe highest completed act? /raist - not sent in 7728 -Egris
-            //var fieldKey9 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 9, 10);
-            //var field9 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey9).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build()).Build();
-            //operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field9).Build());
-
-            //Unknown int64 - always 0 -Egris
+            // Unknown int - maybe highest completed act? /raist
             var fieldKey9 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 10, 0);
             var field9 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey9).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field9).Build());
