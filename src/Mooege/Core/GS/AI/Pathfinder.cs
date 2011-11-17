@@ -14,6 +14,7 @@ namespace Mooege.Core.GS.AI
 {
     public class Pathfinder
     {
+        //TODO Grab Z axis for each move from scene grid. - DarkLotus
         private static readonly Logger Logger = LogManager.CreateLogger();
         private World world;
         private Algorithms.IPathFinder mPathFinder;
@@ -21,6 +22,8 @@ namespace Mooege.Core.GS.AI
         private List<PathFinderNode> nodePathList = new List<PathFinderNode>();
         private Point start, dest;
         private float basex = 0, basey = 0;
+        private Scene curScene;
+        private Scene destScene;
         public Pathfinder(World world)
         {
             this.world = world;
@@ -28,38 +31,39 @@ namespace Mooege.Core.GS.AI
         public List<Vector3D> FindPath(Actor actor, Vector3D Start, Vector3D Destination)
         {
             basex = 0; basey = 0;
-            var curscene = actor.CurrentScene;
-            Scene destScene;
-            if (curscene.Bounds.IntersectsWith(new System.Windows.Rect(Destination.X, Destination.Y, 1, 1)))
+            curScene = actor.CurrentScene;
+            if (curScene.Bounds.IntersectsWith(new System.Windows.Rect(Destination.X, Destination.Y, 1, 1)))
             {
-                destScene = curscene;
+                destScene = curScene;
             }
             else
             {
                 destScene = world.QuadTree.Query<Scene>(new System.Windows.Rect(Destination.X, Destination.Y, 1, 1)).FirstOrDefault();
             }
-            if (curscene != destScene)
+            if (curScene != destScene)
             {
-                mPathFinder = new PathFinderFast(buildOutOfSceneGrid(curscene, destScene, ref basex, ref basey));
+                mPathFinder = new PathFinderFast(buildOutOfSceneGrid(curScene, destScene, ref basex, ref basey));
                 initPathFinder();
             }
             else
             {
-                mPathFinder = new PathFinderFast(curscene.NavMesh.WalkGrid);
-                basex = curscene.Position.X;
-                basey = curscene.Position.Y;
+                mPathFinder = new PathFinderFast(curScene.NavMesh.WalkGrid);
+                basex = curScene.Position.X;
+                basey = curScene.Position.Y;
                 initPathFinder();
             }   
-            nodePathList = new List<PathFinderNode>();
-            vectorPathList = new List<Vector3D>();
+            //nodePathList = new List<PathFinderNode>();
+            
             start = new Point((int)((Start.X - basex) / 2.5f), (int)((Start.Y - basey) / 2.5f));
             dest = new Point((int)((Destination.X - basex) / 2.5f), (int)((Destination.Y - basey) / 2.5f));
 
             nodePathList = mPathFinder.FindPath(start, dest);
             if (nodePathList == null) { return null; }
+            vectorPathList = new List<Vector3D>();
             for (int i = 0; i < nodePathList.Count; i++)
             {
-                vectorPathList.Add(new Vector3D(nodePathList[i].X * 2.5f + basex, nodePathList[i].Y * 2.5f + basey, 0));
+                vectorPathList.Insert(0, new Vector3D(nodePathList[i].X * 2.5f + basex, nodePathList[i].Y * 2.5f + basey, 0));
+                //vectorPathList.Add(new Vector3D(nodePathList[i].X * 2.5f + basex, nodePathList[i].Y * 2.5f + basey, 0));
             }
             return vectorPathList;
         }
@@ -156,7 +160,7 @@ namespace Mooege.Core.GS.AI
     public static class Pather
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        private static Dictionary<uint, List<Vector3D>> CompletedTasks = new Dictionary<uint, List<Vector3D>>();
+        private static System.Collections.Concurrent.ConcurrentDictionary<uint, List<Vector3D>> CompletedTasks = new System.Collections.Concurrent.ConcurrentDictionary<uint, List<Vector3D>>();
         //private static Dictionary<uint, PathingTask> queuedTasks = new Dictionary<uint, PathingTask>();
         private static System.Collections.Concurrent.ConcurrentDictionary<uint, PathingTask> queuedtasks = new System.Collections.Concurrent.ConcurrentDictionary<uint, PathingTask>();
     
@@ -172,12 +176,9 @@ namespace Mooege.Core.GS.AI
         }
         public static List<Vector3D> GetPath(Pathfinder pathing, Actor actor, Vector3D Start, Vector3D Destination)
         {
-            if (CompletedTasks.ContainsKey(actor.DynamicID))
-            {
-                var x = CompletedTasks[actor.DynamicID];
-                CompletedTasks.Remove(actor.DynamicID);
-                return x;
-            }
+            List<Vector3D> path;
+            CompletedTasks.TryRemove(actor.DynamicID, out path);
+            if(path == null)
             AddRequest(pathing, actor, Start, Destination);
             return null;
         }
@@ -191,8 +192,9 @@ namespace Mooege.Core.GS.AI
                 if (!queuedtasks.IsEmpty)
                 {
                     PathingTask k; var x = queuedtasks.First(); 
+                    
                     if (!CompletedTasks.ContainsKey(x.Value.Actor.DynamicID))
-                                CompletedTasks.Add(x.Value.Actor.DynamicID, x.Value.getit());
+                                CompletedTasks.TryAdd(x.Value.Actor.DynamicID, x.Value.getit());
 
                     queuedtasks.TryRemove(x.Key, out k);
                 }
@@ -239,7 +241,7 @@ namespace Mooege.Core.GS.AI
             }
             public List<Vector3D> getit()
             {
-                return pathing.FindPath(Actor, start, destination);
+                return null;// pathing.FindPath(Actor, start, destination);
             }
         }
 

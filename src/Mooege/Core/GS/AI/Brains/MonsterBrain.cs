@@ -94,7 +94,7 @@ namespace Mooege.Core.GS.AI.Brains
             var heading = new Vector3D(this.Body.Position.X + FastRandom.Instance.Next(-40, 40), this.Body.Position.Y + FastRandom.Instance.Next(-40, 40), this.Body.Position.Z);
             if (MovementHelpers.GetDistance(this.Body.Position, heading) > 5f && MovementHelpers.GetDistance(this.Body.Position, heading) < 50f)
             {
-                if (path == null)
+                /*if (path == null)
                 {
                     path = Pather.GetPath(pather, this.Body, this.Body.Position, heading);
                     if (path == null) { return; } //Path should be waiting in cache when we tick around again - DarkLotus
@@ -106,7 +106,11 @@ namespace Mooege.Core.GS.AI.Brains
                     path = null; return;
                 }
                 this.CurrentAction = new FollowPathAction(this.Body, this.path);
-
+                */
+                var distance = MovementHelpers.GetDistance(this.Body.Position, heading);
+                if (distance < 3f)
+                { return; }
+                this.CurrentAction = new PathfindToPoint(this.pather, this.Body, heading);
                 return;
             }
             //if (this.Body.Position.DistanceSquared(ref heading) > this.Body.WalkSpeed * this.Body.World.Game.TickRate) // just skip the movements that can be accomplished in a single game.update(). /raist.

@@ -145,6 +145,7 @@
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
     <Compile Include="Core\GS\Actors\Actions\ActorAction.cs" />
+    <Compile Include="Core\GS\Actors\Movement\PathfindToPoint.cs" />
     <Compile Include="Core\GS\Actors\Movement\FollowPathAction.cs" />
     <Compile Include="Core\GS\Actors\Movement\MoveToPointAction.cs" />
     <Compile Include="Core\GS\AI\Brains\FollowerBrain.cs" />

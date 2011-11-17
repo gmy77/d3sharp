@@ -176,7 +176,7 @@ namespace Mooege.Core.GS.Games
                 this._tickWatch.Stop();
 
                 var compensation = (int) (this.UpdateFrequency - this._tickWatch.ElapsedMilliseconds); // the compensation value we need to sleep in order to get consistent 100 ms Game.Update().
-                //Logger.Warn("Game.Update() took: " + _tickWatch.ElapsedMilliseconds);
+                //Logger.Debug("Update Took: " + this._tickWatch.ElapsedMilliseconds);
                 if(this._tickWatch.ElapsedMilliseconds > this.UpdateFrequency)
                     Logger.Warn("Game.Update() took [{0}ms] more than Game.UpdateFrequency [{1}ms].", this._tickWatch.ElapsedMilliseconds, this.UpdateFrequency); // TODO: We may need to eventually use dynamic tickRate / updateFrenquencies. /raist.
                 else
