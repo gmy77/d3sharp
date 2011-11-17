@@ -96,54 +96,45 @@ namespace Mooege.Core.MooNet.Games
             //TODO: We should actually find the server's public-interface and use that /raist
             return bnet.protocol.game_master.ConnectInfo.CreateBuilder().SetToonId(client.CurrentToon.BnetEntityID)
                 .SetHost(Net.Utils.GetGameServerIPForClient(client)).SetPort(Config.Instance.Port).SetToken(ByteString.CopyFromUtf8("13885433208400885796"))
-                .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("SGameId").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.DynamicId).Build()))
+                .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("SGameId").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(-1290927942).Build()))
                 .Build();
         }
 
         private void SendConnectionInfo(MooNetClient client)
         {
-            // if (client == this.Channel.Owner) // we should send a GameFoundNotification to part leader
-            // {
+                var builder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();
+                builder.SetRequestId(this.RequestId);
+                builder.SetGameHandle(this.GameHandle);
+                //builder.AddConnectInfo(GetConnectionInfoForClient(client)); // not sent by 7728 any more? /raist.
 
-            var builder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();
-            builder.SetRequestId(this.RequestId);
-            builder.SetGameHandle(this.GameHandle);
-            //builder.AddConnectInfo(GetConnectionInfoForClient(client)); // not sent by 7728 any more? /raist.
+                client.MakeTargetedRPC(this, () => 
+                    bnet.protocol.game_master.GameFactorySubscriber.CreateStub(client).NotifyGameFound(null, builder.Build(), callback => { }));
 
-            client.MakeTargetedRPC(this, () => 
-                bnet.protocol.game_master.GameFactorySubscriber.CreateStub(client).NotifyGameFound(null, builder.Build(), callback => { }));
-            //}
+                // send the nofitication.
+                var connectionInfo = GetConnectionInfoForClient(client);
 
-            // else // where as other members should get a bnet.protocol.notification.Notification
-            // {
+                var connectionInfoAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("connection_info")
+                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(connectionInfo.ToByteString()).Build())
+                    .Build();
 
-            // send the nofitication.
-            var connectionInfo = GetConnectionInfoForClient(client);
+                var gameHandleAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("game_handle")
+                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.GameHandle.ToByteString()).Build())
+                    .Build();
 
-            var connectionInfoAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("connection_info")
-                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(connectionInfo.ToByteString()).Build())
-                .Build();
+                var requestIdAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("game_request_id")
+                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetUintValue(this.RequestId).Build())
+                    .Build();
 
-            var gameHandleAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("game_handle")
-                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.GameHandle.ToByteString()).Build())
-                .Build();
+                var notificationBuilder = bnet.protocol.notification.Notification.CreateBuilder()
+                    .SetSenderId(this.Channel.Owner.CurrentToon.BnetEntityID)
+                    .SetTargetId(client.CurrentToon.BnetEntityID)
+                    .SetType("GAME_CONNECTION_INFO")
+                    .AddAttribute(connectionInfoAttribute)
+                    .AddAttribute(gameHandleAttribute)
+                    .AddAttribute(requestIdAttribute);
 
-            var requestIdAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("game_request_id")
-                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetUintValue(this.RequestId).Build())
-                .Build();
-
-            var notificationBuilder = bnet.protocol.notification.Notification.CreateBuilder()
-                .SetSenderId(this.Channel.Owner.CurrentToon.BnetEntityID)
-                .SetTargetId(client.CurrentToon.BnetEntityID)
-                .SetType("GAME_CONNECTION_INFO")
-                .AddAttribute(connectionInfoAttribute)
-                .AddAttribute(gameHandleAttribute)
-                .AddAttribute(requestIdAttribute);
-
-            client.MakeRPC(() => 
-                bnet.protocol.notification.NotificationListener.CreateStub(client).OnNotificationReceived(null, notificationBuilder.Build(), callback => { }));
-
-            // }
+                client.MakeRPC(() => 
+                    bnet.protocol.notification.NotificationListener.CreateStub(client).OnNotificationReceived(null, notificationBuilder.Build(), callback => { }));
         }
     }
 }
