@@ -58,6 +58,14 @@ namespace Mooege.Core.MooNet.Games
 
             string version = null;
             D3.OnlineService.GameCreateParams gameCreateParams = null;
+            foreach (bnet.protocol.attribute.Attribute attribute in request.Properties.CreationAttributesList)
+            {
+                if (attribute.Name == "GameCreateParams")
+                {
+                    gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
+                }
+            }
+
             foreach(bnet.protocol.attribute.Attribute attribute in request.Properties.Filter.AttributeList)
             {
                 if(attribute.Name == "GameCreateParams")

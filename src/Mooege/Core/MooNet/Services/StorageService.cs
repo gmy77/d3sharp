@@ -135,6 +135,7 @@ namespace Mooege.Core.MooNet.Services
             foreach (var operation in request.OperationsList)
             {
                 var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
+                operationResult.SetErrorCode(4); //this query returns error 4 in 7728 -Egris
                 operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
                         .SetColumnId(request.OperationsList[0].ColumnId)
@@ -185,6 +186,7 @@ namespace Mooege.Core.MooNet.Services
             foreach (var operation in request.OperationsList)
             {
                 var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
+                operationResult.SetErrorCode(4); //this query returns error 4 in 7728 -Egris
                 operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
                         .SetColumnId(request.OperationsList[0].ColumnId)
