@@ -102,6 +102,8 @@ namespace Mooege.Core.MooNet.Games
 
         private void SendConnectionInfo(MooNetClient client)
         {
+            if (client == this.Channel.Owner)
+            {
                 var builder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();
                 builder.SetRequestId(this.RequestId);
                 builder.SetGameHandle(this.GameHandle);
@@ -109,8 +111,9 @@ namespace Mooege.Core.MooNet.Games
 
                 client.MakeTargetedRPC(this, () => 
                     bnet.protocol.game_master.GameFactorySubscriber.CreateStub(client).NotifyGameFound(null, builder.Build(), callback => { }));
+            }
 
-                // send the nofitication.
+            // send the nofitication.
                 var connectionInfo = GetConnectionInfoForClient(client);
 
                 var connectionInfoAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("connection_info")
