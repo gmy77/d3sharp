@@ -95,7 +95,7 @@ namespace Mooege.Core.MooNet.Games
         {
             //TODO: We should actually find the server's public-interface and use that /raist
             return bnet.protocol.game_master.ConnectInfo.CreateBuilder().SetToonId(client.CurrentToon.BnetEntityID)
-                .SetHost(Net.Utils.GetGameServerIPForClient(client)).SetPort(Config.Instance.Port).SetToken(ByteString.CopyFrom(new byte[] { 0x07, 0x34, 0x02, 0x60, 0x91, 0x93, 0x76, 0x46, 0x28, 0x84 }))
+                .SetHost(Net.Utils.GetGameServerIPForClient(client)).SetPort(Config.Instance.Port).SetToken(ByteString.CopyFromUtf8("13885433208400885796"))
                 .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("SGameId").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.DynamicId).Build()))
                 .Build();
         }

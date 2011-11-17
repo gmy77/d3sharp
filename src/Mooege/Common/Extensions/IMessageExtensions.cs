@@ -80,6 +80,7 @@ namespace Mooege.Common.Extensions
                     result.AppendLine((bool)value ? "true" : "false");
                     break;
                 case FieldType.Bytes:
+                    result.AppendLine(EscapeBytes((ByteString)value));
                     AppendHexdump(result, level, ((ByteString)value).ToByteArray());
                     break;
                 case FieldType.Double:
@@ -96,15 +97,15 @@ namespace Mooege.Common.Extensions
                 case FieldType.Int64:
                 case FieldType.SFixed64:
                 case FieldType.SInt64:
-                    result.AppendLine("0x" + ((long)value).ToString("X16") + "l");
+                    result.AppendLine("0x" + ((long)value).ToString("X16") + "l (" + ((long)value) + ")");
                     break;
                 case FieldType.Fixed32:
                 case FieldType.UInt32:
-                    result.AppendLine("0x" + ((uint)value).ToString("X8") + "u");
+                    result.AppendLine("0x" + ((uint)value).ToString("X8") + "u (" + ((uint)value) + ")");
                     break;
                 case FieldType.Fixed64:
                 case FieldType.UInt64:
-                    result.AppendLine("0x" + ((ulong)value).ToString("X16") + "ul");
+                    result.AppendLine("0x" + ((ulong)value).ToString("X16") + "ul (" + ((ulong)value) + ")");
                     break;
                 case FieldType.Message:
                     result.AppendLine();
@@ -165,6 +166,55 @@ namespace Mooege.Common.Extensions
             result.AppendLine(msgDesc.FullName);
             AppendMessage(result, 0, msg);
             return result.ToString();
+        }
+
+        /// <summary>
+        /// Escapes bytes in the format used in protocol buffer text format, which
+        /// is the same as the format used for C string literals.  All bytes
+        /// that are not printable 7-bit ASCII characters are escaped, as well as
+        /// backslash, single-quote, and double-quote characters.  Characters for
+        /// which no defined short-hand escape sequence is defined will be escaped
+        /// using 3-digit octal sequences.
+        /// The returned value is guaranteed to be entirely ASCII.
+        /// </summary>
+        /// <remarks>
+        /// Code taken from protobuf-csharp project
+        /// http://code.google.com/p/protobuf-csharp-port/source/browse/src/ProtocolBuffers/TextFormat.cs
+        /// </remarks>
+        static String EscapeBytes(ByteString input)
+        {
+            StringBuilder builder = new StringBuilder(input.Length);
+            foreach (byte b in input)
+            {
+                switch (b)
+                {
+                    // C# does not use \a or \v
+                    case 0x07: builder.Append("\\a"); break;
+                    case (byte)'\b': builder.Append("\\b"); break;
+                    case (byte)'\f': builder.Append("\\f"); break;
+                    case (byte)'\n': builder.Append("\\n"); break;
+                    case (byte)'\r': builder.Append("\\r"); break;
+                    case (byte)'\t': builder.Append("\\t"); break;
+                    case 0x0b: builder.Append("\\v"); break;
+                    case (byte)'\\': builder.Append("\\\\"); break;
+                    case (byte)'\'': builder.Append("\\\'"); break;
+                    case (byte)'"': builder.Append("\\\""); break;
+                    default:
+                        if (b >= 0x20 && b < 128)
+                        {
+                            builder.Append((char)b);
+                        }
+                        else
+                        {
+                            builder.Append('\\');
+                            builder.Append((char)('0' + ((b >> 6) & 3)));
+                            builder.Append((char)('0' + ((b >> 3) & 7)));
+                            builder.Append((char)('0' + (b & 7)));
+                        }
+                        break;
+                }
+            }
+            return builder.ToString();
         }
     }
 }

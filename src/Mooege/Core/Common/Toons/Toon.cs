@@ -224,14 +224,14 @@ namespace Mooege.Core.Common.Toons
 
             var visualItems = new[]
             {                                
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Head
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Chest
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Feet
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Hands
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Weapon (1)
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Weapon (2)
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Shoulders
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Legs
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Head
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Chest
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Feet
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Hands
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Weapon (1)
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Weapon (2)
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Shoulders
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Legs
             };
 
             this.Equipment = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();

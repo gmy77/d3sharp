@@ -94,13 +94,12 @@ namespace Mooege.Core.MooNet.Services
                 {
                     if (attribute.HasValue) //Sometimes not present -Egris
                     {
-                        var newScreen = attribute.Value.MessageValue;
+                        var newScreen = D3.PartyMessage.ScreenStatus.ParseFrom(attribute.Value.MessageValue);
                         var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                             .SetName("D3.Party.ScreenStatus")
-                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(newScreen).Build());
+                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(newScreen.ToByteString()).Build());
                         channelState.AddAttribute(attr);
                         //save screen status for use with friends -Egris
-                        //attribute.Value.MessageValue message_value: "\010\003\020\000" (08031000)
                     }
                 }
                 else if (attribute.Name == "D3.Party.JoinPermissionPreviousToLock")
