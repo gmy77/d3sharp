@@ -23,7 +23,6 @@ using System.Linq;
 using Mooege.Core.Common.Storage;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.Cryptography;
-using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Friends;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
@@ -190,6 +189,14 @@ namespace Mooege.Core.MooNet.Accounts
         {
             var operations = new List<bnet.protocol.presence.FieldOperation>();
 
+            // Selected toon
+            if (this.LoggedInClient != null && this.Digest.LastPlayedHeroId != AccountHasNoToons)
+            {
+                var selectedToonKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 1, 0);
+                var selectedToonField = bnet.protocol.presence.Field.CreateBuilder().SetKey(selectedToonKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Digest.LastPlayedHeroId.ToByteString()).Build()).Build();
+                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(selectedToonField).Build());
+            }
+
             // RealID name field - NOTE: Probably won't ever use this for its actual purpose, but showing the email in final might not be a good idea
             var realNameKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet,1, 1, 0);
             var realNameField = bnet.protocol.presence.Field.CreateBuilder().SetKey(realNameKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Email).Build()).Build();
@@ -199,14 +206,6 @@ namespace Mooege.Core.MooNet.Accounts
             var accountOnlineKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
             var accountOnlineField = bnet.protocol.presence.Field.CreateBuilder().SetKey(accountOnlineKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(accountOnlineField).Build());
-
-            // Selected toon
-            if (this.LoggedInClient != null && this.Digest.LastPlayedHeroId != AccountHasNoToons)
-            {
-                var selectedToonKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 1, 0);
-                var selectedToonField = bnet.protocol.presence.Field.CreateBuilder().SetKey(selectedToonKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Digest.LastPlayedHeroId.ToByteString()).Build()).Build();
-                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(selectedToonField).Build());
-            }
 
             // toon list
             foreach(var pair in this.Toons)
