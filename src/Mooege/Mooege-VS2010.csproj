@@ -208,8 +208,8 @@
     <Compile Include="Core\MooNet\Commands\CommandManager.cs" />
     <Compile Include="Core\MooNet\Commands\CommandAttribute.cs" />
     <Compile Include="Core\MooNet\Commands\ServerCommands.cs" />
-    <Compile Include="Core\MooNet\Games\GameCreator.cs" />
-    <Compile Include="Core\MooNet\Games\GameCreatorManager.cs" />
+    <Compile Include="Core\MooNet\Games\GameFactory.cs" />
+    <Compile Include="Core\MooNet\Games\GameFactoryManager.cs" />
     <Compile Include="Core\MooNet\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\MooNet\Helpers\FieldKeyHelper.cs" />
     <Compile Include="Core\MooNet\Helpers\NotificationTypeHelper.cs" />

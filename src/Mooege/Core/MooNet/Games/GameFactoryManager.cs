@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
@@ -26,22 +25,22 @@ using bnet.protocol.game_master;
 
 namespace Mooege.Core.MooNet.Games
 {
-    public static class GameCreatorManager
+    public static class GameFactoryManager
     {
         /// <summary>
         /// List of games.
         /// </summary>
-        private static readonly Dictionary<ulong, GameCreator> GameCreators =
-            new Dictionary<ulong, GameCreator>();
+        private static readonly Dictionary<ulong, GameFactory> GameCreators =
+            new Dictionary<ulong, GameFactory>();
 
         /// <summary>
         /// Request id counter for find-game requests.
         /// </summary>
         public static ulong RequestIdCounter = 0; // request Id counter for find game responses.
 
-        public static GameCreator CreateGame(Channel channel)
+        public static GameFactory CreateGame(Channel channel)
         {
-            var game = new GameCreator(channel);
+            var game = new GameFactory(channel);
             GameCreators.Add(game.DynamicId, game);
             return game;
         }
@@ -72,7 +71,7 @@ namespace Mooege.Core.MooNet.Games
                 version = attribute.Value.StringValue;
             }
 
-            List<GameCreator> matchingGames;
+            List<GameFactory> matchingGames;
             if (!request.Properties.Create && (matchingGames = FindMatchingGames(request)).Count > 0)
             {
                 var rand = new Random();
@@ -86,7 +85,7 @@ namespace Mooege.Core.MooNet.Games
             }
         }
 
-        private static List<GameCreator> FindMatchingGames(FindGameRequest request)
+        private static List<GameFactory> FindMatchingGames(FindGameRequest request)
         {
             String version = String.Empty;
             int difficulty = 0;
@@ -122,8 +121,8 @@ namespace Mooege.Core.MooNet.Games
                     break;
             }
 
-            List<GameCreator> matches = new List<GameCreator>();
-            foreach (GameCreator game in GameCreators.Values)
+            List<GameFactory> matches = new List<GameFactory>();
+            foreach (GameFactory game in GameCreators.Values)
             {   //FIXME: don't currently track max players allowed in a game, hardcoded 4 /dustinconrad
                 if (game.InGame != null && !game.GameCreateParams.IsPrivate && game.InGame.Players.Count < 4)
                 {
@@ -175,7 +174,7 @@ namespace Mooege.Core.MooNet.Games
 
             uint games = 0;
             int players = 0;
-            foreach(GameCreator game in GameCreators.Values)
+            foreach(GameFactory game in GameCreators.Values)
             {
                 if (game.InGame != null && !game.GameCreateParams.IsPrivate)
                 {

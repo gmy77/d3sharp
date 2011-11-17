@@ -69,12 +69,12 @@ namespace Mooege.Core.MooNet.Services
         {            
             Logger.Trace("FindGame() {0}", this.Client);
 
-            var requestId = ++GameCreatorManager.RequestIdCounter;
+            var requestId = ++GameFactoryManager.RequestIdCounter;
 
             var builder = FindGameResponse.CreateBuilder().SetRequestId(requestId);
             done(builder.Build());
 
-            GameCreatorManager.FindGame(this.Client, requestId, request);
+            GameFactoryManager.FindGame(this.Client, requestId, request);
         }
 
         public override void CancelFindGame(IRpcController controller, CancelFindGameRequest request, Action<NoData> done)
@@ -135,7 +135,7 @@ namespace Mooege.Core.MooNet.Services
         public override void GetGameStats(IRpcController controller, GetGameStatsRequest request, Action<GetGameStatsResponse> done)
         {
             var response = GetGameStatsResponse.CreateBuilder()
-                .AddStatsBucket(GameCreatorManager.GetGameStats(request).Build())
+                .AddStatsBucket(GameFactoryManager.GetGameStats(request).Build())
                 .Build();
 
             done(response);

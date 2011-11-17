@@ -28,7 +28,7 @@ using Config = Mooege.Net.GS.Config;
 
 namespace Mooege.Core.MooNet.Games
 {
-    public class GameCreator : RPCObject
+    public class GameFactory : RPCObject
     {
         /// <summary>
         /// bnet.protocol.EntityId encoded Id.
@@ -57,7 +57,7 @@ namespace Mooege.Core.MooNet.Games
 
         public static ulong RequestIdCounter = 0;
 
-        public GameCreator(Channel channel)
+        public GameFactory(Channel channel)
         {
             this.Channel = channel;
 
