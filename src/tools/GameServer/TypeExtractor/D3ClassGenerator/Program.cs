@@ -31,6 +31,12 @@ namespace D3ClassGenerator
 
             writer.Close();
 
+            writer = new StreamWriter("attrs.cs");
+            var builder = new StringBuilder();
+            NetAttribute.GenerateClass(builder);
+            writer.WriteLine(builder.ToString());
+            writer.Close();
+
             Console.WriteLine("done");
             Console.ReadLine();
         }

@@ -21,6 +21,7 @@ using System.Linq;
 using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Common.Extensions;
+using Mooege.Core.Cryptography;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Net.MooNet;
 
@@ -29,8 +30,9 @@ namespace Mooege.Core.MooNet.Authentication
     public static class AuthManager
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
+
         private static readonly Dictionary<MooNetClient, SRP6a> OngoingAuthentications = new Dictionary<MooNetClient, SRP6a>();
-        private static readonly byte[] ModuleHash = "8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray(); // Password.dll
+        private static readonly byte[] ModuleHash = "8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray(); // "RequestPassword" module
 
         public static void StartAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
@@ -56,7 +58,7 @@ namespace Mooege.Core.MooNet.Authentication
             
             if (account == null) // we should be returning an error to client /raist.
             {
-                client.AuthenticationErrorCode = MooNetClient.AuthenticationErrorCodes.NoGameAccount;
+                client.AuthenticationErrorCode = AuthenticationErrorCodes.NoGameAccount;
                 client.AuthenticationCompleteSignal.Set();
                 return;
             }
@@ -104,7 +106,7 @@ namespace Mooege.Core.MooNet.Authentication
             }
             else // authentication failed because of invalid credentals.
             {
-                client.AuthenticationErrorCode = MooNetClient.AuthenticationErrorCodes.InvalidCredentials;
+                client.AuthenticationErrorCode = AuthenticationErrorCodes.InvalidCredentials;
             }
              
             OngoingAuthentications.Remove(client);
@@ -113,7 +115,18 @@ namespace Mooege.Core.MooNet.Authentication
 
         private static void ModuleLoadResponse(IMessage response)
         {
-            Logger.Trace("{0}", response.ToString());
+            Logger.Trace("ModuleLoadResponse(): {0}", response.ToString());
+        }
+
+        /// <summary>
+        /// Error codes for authentication process.
+        /// </summary>
+        public enum AuthenticationErrorCodes
+        {
+            None = 0,
+            InvalidCredentials = 3,
+            NoToonSelected = 11,
+            NoGameAccount = 12,
         }
     }
 }

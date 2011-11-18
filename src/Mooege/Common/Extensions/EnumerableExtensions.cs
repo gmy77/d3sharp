@@ -69,7 +69,6 @@ namespace Mooege.Common.Extensions
             output.Append(hexstring);
             output.Append(' ');
             output.Append(text);
-            output.Append(Environment.NewLine);
             return output.ToString();
         }
     }

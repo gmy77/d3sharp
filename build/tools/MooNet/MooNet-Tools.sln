@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMooNet", "..\..\..\src\L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeaderViewer", "..\..\..\src\tools\MooNet\HeaderViewer\HeaderViewer.csproj", "{19F1717B-23ED-475F-AC31-1ACD1155B590}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtoDumper", "..\..\..\src\tools\MooNet\ProtoDumper\ProtoDumper.csproj", "{2EFA5D57-9063-49BB-A6B4-5D125F26CA38}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtoExtractor", "..\..\..\src\tools\MooNet\ProtoExtractor\ProtoExtractor.csproj", "{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}"
 EndProject
 Global
@@ -65,17 +63,6 @@ Global
 		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Release|Mixed Platforms.Build.0 = Release|x86
 		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Release|x86.ActiveCfg = Release|x86
 		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Release|x86.Build.0 = Release|x86
-		{2EFA5D57-9063-49BB-A6B4-5D125F26CA38}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{2EFA5D57-9063-49BB-A6B4-5D125F26CA38}.Debug|Any CPU.Build.0 = Debug|x86
-		{2EFA5D57-9063-49BB-A6B4-5D125F26CA38}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{2EFA5D57-9063-49BB-A6B4-5D125F26CA38}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{2EFA5D57-9063-49BB-A6B4-5D125F26CA38}.Debug|x86.ActiveCfg = Debug|x86
-		{2EFA5D57-9063-49BB-A6B4-5D125F26CA38}.Debug|x86.Build.0 = Debug|x86
-		{2EFA5D57-9063-49BB-A6B4-5D125F26CA38}.Release|Any CPU.ActiveCfg = Release|x86
-		{2EFA5D57-9063-49BB-A6B4-5D125F26CA38}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{2EFA5D57-9063-49BB-A6B4-5D125F26CA38}.Release|Mixed Platforms.Build.0 = Release|x86
-		{2EFA5D57-9063-49BB-A6B4-5D125F26CA38}.Release|x86.ActiveCfg = Release|x86
-		{2EFA5D57-9063-49BB-A6B4-5D125F26CA38}.Release|x86.Build.0 = Release|x86
 		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Debug|Mixed Platforms.Build.0 = Debug|x86

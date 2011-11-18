@@ -27,7 +27,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     [Message(new[]{
         Opcodes.SimpleMessage1, Opcodes.SimpleMessage2, Opcodes.SimpleMessage3, Opcodes.SimpleMessage5, Opcodes.SimpleMessage6, Opcodes.SimpleMessage7, Opcodes.SimpleMessage8,
-        Opcodes.SimpleMessage9, Opcodes.SimpleMessage10, Opcodes.SimpleMessage11, Opcodes.SimpleMessage13, Opcodes.SimpleMessage14, Opcodes.SimpleMessage15, Opcodes.SimpleMessage16, 
+        Opcodes.SimpleMessage9, Opcodes.SimpleMessage10, Opcodes.SimpleMessage11, Opcodes.SimpleMessage12, Opcodes.SimpleMessage14, Opcodes.SimpleMessage15, Opcodes.SimpleMessage16, 
         Opcodes.SimpleMessage18, Opcodes.SimpleMessage19, Opcodes.SimpleMessage20, Opcodes.SimpleMessage21, Opcodes.SimpleMessage22, Opcodes.SimpleMessage23, Opcodes.SimpleMessage24, 
         Opcodes.SimpleMessage25, Opcodes.SimpleMessage26, Opcodes.SimpleMessage27, Opcodes.SimpleMessage28, Opcodes.SimpleMessage29, Opcodes.SimpleMessage30, Opcodes.SimpleMessage31,
         Opcodes.SimpleMessage32, Opcodes.SimpleMessage33, Opcodes.SimpleMessage34, Opcodes.SimpleMessage35, Opcodes.SimpleMessage36, Opcodes.SimpleMessage37, Opcodes.SimpleMessage38, 
@@ -73,11 +73,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                             CollFlags = 0x00000008,
                         });
 
-                        client.SendMessage(new DWordDataMessage()
-                        {
-                            Id = 0x0089,
-                            Field0 = 0x000000C1,
-                        });
                         #endregion
                         
                         #region hardcoded2
@@ -106,11 +101,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                             StringListSNO = 0x0000F063,
                         });
 
-                        client.SendMessage(new DWordDataMessage()
-                        {
-                            Id = 0x0089,
-                            Field0 = 0x000000D1,
-                        });
                         #endregion
                         
                     }

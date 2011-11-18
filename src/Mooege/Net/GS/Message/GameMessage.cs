@@ -26,7 +26,8 @@ namespace Mooege.Net.GS.Message
 {
     public abstract class GameMessage
     {
-        public const int ImplementedProtocolHash = 0x21EEE08D;
+        // public const int ImplementedProtocolHash = 0x21EEE08D; - 7447.
+        public const int ImplementedProtocolHash = unchecked((int)0x9E121BBD); // 7728.
 
         protected static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -91,7 +92,7 @@ namespace Mooege.Net.GS.Message
             this.Id = (int)opcode;
         }
 
-        public int Id { get; set; }
+        public int Id { get; private set; }
         public Consumers Consumer { get; set; }
 
         public abstract void Parse(GameBitBuffer buffer);

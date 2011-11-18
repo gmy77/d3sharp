@@ -1132,7 +1132,7 @@ namespace Mooege.Core.GS.Players
                 .SetLevel(45)
                 .SetCooldownEnd(0)
                 .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage8) { Data = blacksmith.ToByteArray() };
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage9) { Data = blacksmith.ToByteArray() };
         }
 
         public GenericBlobMessage GetJewelerData()
@@ -1141,7 +1141,7 @@ namespace Mooege.Core.GS.Players
                 .SetLevel(9)
                 .SetCooldownEnd(0)
                 .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage9) { Data = jeweler.ToByteArray() };
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage10) { Data = jeweler.ToByteArray() };
         }
 
         public GenericBlobMessage GetMysticData()
@@ -1150,7 +1150,7 @@ namespace Mooege.Core.GS.Players
                 .SetLevel(45)
                 .SetCooldownEnd(0)
                 .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage10) { Data = mystic.ToByteArray() };
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage11) { Data = mystic.ToByteArray() };
         }
 
         #endregion
@@ -1383,7 +1383,6 @@ namespace Mooege.Core.GS.Players
 
                 this.InGameClient.SendMessage(new PlayerLevel()
                 {
-                    Id = 0x98,
                     Field0 = 0x00000000,
                     Field1 = this.Attributes[GameAttribute.Level],
                 });
@@ -1410,6 +1409,75 @@ namespace Mooege.Core.GS.Players
             }
             this.Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
+        }
+
+        public void PlayHeroConversation(int snoConversation, int lineID)
+        {
+            this.InGameClient.SendMessage(new PlayConvLineMessage()
+            {
+                ActorID = this.DynamicID,
+                Field1 = new uint[9]
+                    {
+                        this.DynamicID, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
+                    },
+
+                Params = new PlayLineParams()
+                {
+                    SNOConversation = snoConversation,
+                    Field1 = 0x00000001,
+                    Field2 = false,
+                    LineID = lineID,
+                    Field4 = 0x00000000,
+                    Field5 = -1,
+                    TextClass = (Class)this.Properties.VoiceClassID,
+                    Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
+                    AudioClass = (Class)this.Properties.VoiceClassID,
+                    SNOSpeakerActor = this.SNOId,
+                    Name = this.Properties.Name,
+                    Field11 = 0x00000002,
+                    Field12 = -1,
+                    Field13 = 0x00000069,
+                    Field14 = 0x0000006E,
+                    Field15 = 0x00000032
+                },
+                Field3 = 0x00000069,
+            });
+
+            this.OpenConversations.Add(new OpenConversation(
+                new EndConversationMessage()
+                {
+                    ActorId = this.DynamicID,
+                    Field0 = 0x0000006E,
+                    SNOConversation = snoConversation
+                },
+                this.InGameClient.Game.TickCounter + 200
+            ));
+        }
+
+        public void CheckOpenConversations()
+        {
+            if (this.OpenConversations.Count > 0)
+            {
+                foreach (OpenConversation openConversation in this.OpenConversations)
+                {
+                    if (openConversation.endTick <= this.InGameClient.Game.TickCounter)
+                    {
+                        this.InGameClient.SendMessage(openConversation.endConversationMessage);
+                    }
+                }
+            }
+        }
+
+        public struct OpenConversation
+        {
+            public EndConversationMessage endConversationMessage;
+            public int endTick;
+
+            public OpenConversation(EndConversationMessage endConversationMessage, int endTick)
+            {
+                this.endConversationMessage = endConversationMessage;
+                this.endTick = endTick;
+            }
         }
 
         #endregion

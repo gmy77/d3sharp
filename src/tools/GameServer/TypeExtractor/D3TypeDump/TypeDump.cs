@@ -11,20 +11,20 @@ namespace D3TypeDump
     class TypeDump
     {
 
-        const int OpcodeSwitch_Address = 0x8BCBC0;
+        const int OpcodeSwitch_Address = 0x008C22F0;
 
-        const int TypeDescriptorsAddress = 0x14F23F4;
+        const int TypeDescriptorsAddress = 0x157F5CC;
         const int TypeDescriptorsOffset = 40;
 
-        const int AttributesAddress = 0x12FA3F8;
-        const int AttributeCount = 709;
-        const int Attribute_Int = 0x112ECC4;
-        const int Attribute_IntMinMax = 0x112ECCC;
-        const int Attribute_FloatMinMax = 0x112ECD4;
-        const int Attribute_Float16 = 0x112ECDC;
-        const int Attribute_Float16Or32 = 0x112ECE4;
+        const int AttributesAddress = 0x01372420;
+        const int AttributeCount = 717;
+        const int Attribute_Int = 0x011A55D4;
+        const int Attribute_IntMinMax = 0x011A55DC;
+        const int Attribute_FloatMinMax = 0x011A55E4;
+        const int Attribute_Float16 = 0x011A55EC;
+        const int Attribute_Float16Or32 = 0x011A55F4;
 
-        const int HashAddress = 0x1318A30;
+        const int HashAddress = 0x01318A30;
         const int HashOffset = 0x24;
 
         // TODO: Add patterns
@@ -84,7 +84,7 @@ namespace D3TypeDump
             string name = mem[offset + 4].CStringPtr;
             int unkValue = mem[offset + 8].Int32;
             var fields = mem[offset + 12].Ptr;
-            
+
             if (fields.Offset == 0)
             {
                 var basicType = TypeDescriptor.AllocateBasicType(name);
@@ -269,7 +269,7 @@ namespace D3TypeDump
                         root.Add(desc.ToXml());
                     }
                     doc.Add(root);
-                    
+
                     doc.Save("typedescriptors.xml");
 
                     m.Dispose();

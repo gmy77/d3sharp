@@ -25,13 +25,11 @@ namespace Mooege.Net.MooNet.RPC
     {
         public Action<IMessage> Action { get; private set; }
         public IBuilder Builder { get; private set; }
-        public int RequestId { get; private set; }
 
-        public RPCCallback(Action<IMessage> action, IBuilder builder, int requestId)
+        public RPCCallback(Action<IMessage> action, IBuilder builder)
         {
             this.Action = action;
             this.Builder = builder;
-            this.RequestId = requestId;
         }
     }
 }

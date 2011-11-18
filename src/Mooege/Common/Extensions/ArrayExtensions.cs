@@ -69,6 +69,11 @@ namespace Mooege.Common.Extensions
             return byteArray.Aggregate("", (current, b) => current + b.ToString("X2"));
         }
 
+        public static string ToFormatedHexString(this byte[] byteArray)
+        {
+            return byteArray.Aggregate("", (current, b) => current + " " + b.ToString("X2"));
+        }
+
         public static byte[] ToByteArray(this string str)
         {
             str = str.Replace(" ", String.Empty);

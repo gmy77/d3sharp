@@ -18,6 +18,7 @@
 
 using System;
 using Mooege.Common;
+using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Services
@@ -30,7 +31,19 @@ namespace Mooege.Core.MooNet.Services
 
         public override void CreateChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.CreateChannelRequest request, System.Action<bnet.protocol.channel.CreateChannelResponse> done)
         {
-            throw new NotImplementedException();
+            var channel = ChannelManager.CreateNewChannel(this.Client, request.ObjectId);
+            var builder = bnet.protocol.channel.CreateChannelResponse.CreateBuilder()
+                .SetObjectId(channel.DynamicId)
+                .SetChannelId(channel.BnetEntityId);
+
+            done(builder.Build());
+            channel.SetOwner(Client); // Set the client that requested the creation of channel as the owner
+
+            Logger.Trace("CreateChannel() {0} for {1}", channel, Client.CurrentToon);
+
+            // send our MOTD - though this is actually not the right place for it /raist.
+            //if (Config.Instance.MOTD.Trim() != string.Empty)
+            //    this.Client.SendServerWhisper(Config.Instance.MOTD);
         }
 
         public override void FindChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.FindChannelRequest request, System.Action<bnet.protocol.channel.FindChannelResponse> done)
@@ -45,14 +58,25 @@ namespace Mooege.Core.MooNet.Services
 
         public override void GetChannelInfo(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.GetChannelInfoRequest request, System.Action<bnet.protocol.channel.GetChannelInfoResponse> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("GetChannelInfoRequest() to channel {0}:{1} by toon {2}", request.ChannelId.High, request.ChannelId.Low, Client.CurrentToon.Name);
+
+            var builder = bnet.protocol.channel.GetChannelInfoResponse.CreateBuilder();
+            var channel = ChannelManager.GetChannelByEntityId(request.ChannelId);
+            if (channel != null)
+                builder.SetChannelInfo(channel.Info);
+            else
+                Logger.Warn("Channel does not exist!");
+
+            done(builder.Build());
         }
 
         public override void JoinChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.JoinChannelRequest request, System.Action<bnet.protocol.channel.JoinChannelResponse> done)
         {
             Logger.Warn("ChannelOwnerService:JoinChannel()");
-            
-            var builder = bnet.protocol.channel.JoinChannelResponse.CreateBuilder().SetObjectId(67122); // should be fixed with the actual joined channel object id.
+
+            var channel = ChannelManager.GetChannelByEntityId(request.ChannelId);
+            channel.AddMember(this.Client);
+            var builder = bnet.protocol.channel.JoinChannelResponse.CreateBuilder().SetObjectId(channel.DynamicId);
             done(builder.Build());
         }
     }

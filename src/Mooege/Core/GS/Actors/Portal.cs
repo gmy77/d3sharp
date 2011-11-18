@@ -89,7 +89,6 @@ namespace Mooege.Core.GS.Actors
 
             player.InGameClient.SendMessage(new MapMarkerInfoMessage()
             {
-                Id = (int)Opcodes.MapMarkerInfoMessage,
                 Field0 = (int)World.NewSceneID,    // TODO What is the correct id space for mapmarkers?
                 Field1 = new WorldPlace()
                 {
