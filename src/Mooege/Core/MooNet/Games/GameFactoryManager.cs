@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
@@ -37,6 +38,8 @@ namespace Mooege.Core.MooNet.Games
         /// Request id counter for find-game requests.
         /// </summary>
         public static ulong RequestIdCounter = 0; // request Id counter for find game responses.
+
+        private static readonly Logger Logger = LogManager.CreateLogger();
 
         public static GameFactory CreateGame(Channel channel)
         {
@@ -59,16 +62,18 @@ namespace Mooege.Core.MooNet.Games
             D3.OnlineService.GameCreateParams gameCreateParams = null;
             foreach (bnet.protocol.attribute.Attribute attribute in request.Properties.CreationAttributesList)
             {
-                if (attribute.Name != "GameCreateParams") continue;
-
-                gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
+                if (attribute.Name != "GameCreateParams")
+                    Logger.Warn("FindGame(): Unknown CreationAttribute: {0}", attribute.Name);
+                else
+                    gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
             }
 
             foreach(bnet.protocol.attribute.Attribute attribute in request.Properties.Filter.AttributeList)
             {
-                if (attribute.Name != "version") continue;
-
-                version = attribute.Value.StringValue;
+                if (attribute.Name != "version")
+                    Logger.Warn("FindGame(): Unknown Attribute: {0}", attribute.Name);
+                else
+                    version = attribute.Value.StringValue;
             }
 
             List<GameFactory> matchingGames;
@@ -76,11 +81,13 @@ namespace Mooege.Core.MooNet.Games
             {
                 var rand = new Random();
                 var game = matchingGames[rand.Next(matchingGames.Count)];
+                Logger.Warn("Client {0} joining game with FactoryID:{1}", client.CurrentToon.Name, game.FactoryID);
                 game.JoinGame(clients, request.ObjectId);
             }
             else
             {
                 client.CurrentChannel.Game.RequestId = requestId;
+                Logger.Warn("Client {0} creating new game", client.CurrentToon.Name);
                 client.CurrentChannel.Game.StartGame(clients, request.ObjectId, gameCreateParams, version);
             }
         }

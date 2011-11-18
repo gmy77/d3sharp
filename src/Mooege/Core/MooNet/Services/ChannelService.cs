@@ -90,20 +90,39 @@ namespace Mooege.Core.MooNet.Services
                         .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameCreateParams.ToByteString()).Build());
                     channelState.AddAttribute(attr);
                 }
+                else if (attribute.Name == "D3.Party.SearchForPublicGame.Params")
+                {
+                    //TODO: Find a game that fits the clients params and join
+                    var publicGameParams = D3.PartyMessage.SearchForPublicGameParams.ParseFrom(attribute.Value.MessageValue);
+                    Logger.Warn("SearchForPublicGameParams: {0}", publicGameParams.ToString());
+                }
                 else if (attribute.Name == "D3.Party.ScreenStatus")
                 {
-                    if (attribute.HasValue) //Sometimes not present -Egris
+                    if (!attribute.HasValue || attribute.Value.MessageValue.IsEmpty) //Sometimes not present -Egris
                     {
-                        var newScreen = D3.PartyMessage.ScreenStatus.ParseFrom(attribute.Value.MessageValue);
+                        var newScreen = this.Client.Account.ScreenStatus;
+
                         var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                             .SetName("D3.Party.ScreenStatus")
-                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(newScreen.ToByteString()).Build());
+                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(newScreen.ToByteString()));
                         channelState.AddAttribute(attr);
+                    }
+                    else
+                    {
+                        var oldScreen = D3.PartyMessage.ScreenStatus.ParseFrom(attribute.Value.MessageValue);
+                        this.Client.Account.ScreenStatus = oldScreen;
                         //save screen status for use with friends -Egris
+                        var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                            .SetName("D3.Party.ScreenStatus")
+                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(oldScreen.ToByteString()));
+                        channelState.AddAttribute(attr);
+                        Logger.Debug("Client moving to Screen: {0}, with Status: {1}", oldScreen.Screen, oldScreen.Status);
                     }
                 }
                 else if (attribute.Name == "D3.Party.JoinPermissionPreviousToLock")
                 {
+                    //0-CLOSED
+                    //1-ASK_TO_JOIN
                     var joinPermission = attribute.Value;
                     var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                         .SetName("D3.Party.JoinPermissionPreviousToLock")
@@ -112,6 +131,8 @@ namespace Mooege.Core.MooNet.Services
                 }
                 else if (attribute.Name == "D3.Party.LockReasons")
                 {
+                    //0-CREATING_GAME
+                    //2-MATCHMAKER_SEARCHING
                     var lockReason = attribute.Value;
                     var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                         .SetName("D3.Party.LockReasons")
