@@ -31,6 +31,7 @@ using Mooege.Core.MooNet.Toons;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
+using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Waypoint;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -1413,59 +1414,61 @@ namespace Mooege.Core.GS.Players
 
         public void PlayHeroConversation(int snoConversation, int lineID)
         {
-            this.InGameClient.SendMessage(new PlayConvLineMessage()
-            {
-                ActorID = this.DynamicID,
-                Field1 = new uint[9]
-                    {
-                        this.DynamicID, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
-                    },
+            // TODO: Fixme
+            //this.InGameClient.SendMessage(new PlayConvLineMessage()
+            //{
+            //    ActorID = this.DynamicID,
+            //    Field1 = new uint[9]
+            //        {
+            //            this.DynamicID, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
+            //        },
 
-                Params = new PlayLineParams()
-                {
-                    SNOConversation = snoConversation,
-                    Field1 = 0x00000001,
-                    Field2 = false,
-                    LineID = lineID,
-                    Field4 = 0x00000000,
-                    Field5 = -1,
-                    TextClass = (Class)this.Properties.VoiceClassID,
-                    Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
-                    AudioClass = (Class)this.Properties.VoiceClassID,
-                    SNOSpeakerActor = this.SNOId,
-                    Name = this.Properties.Name,
-                    Field11 = 0x00000002,
-                    Field12 = -1,
-                    Field13 = 0x00000069,
-                    Field14 = 0x0000006E,
-                    Field15 = 0x00000032
-                },
-                Field3 = 0x00000069,
-            });
+            //    Params = new PlayLineParams()
+            //    {
+            //        SNOConversation = snoConversation,
+            //        Field1 = 0x00000001,
+            //        Field2 = false,
+            //        LineID = lineID,
+            //        Field4 = 0x00000000,
+            //        Field5 = -1,
+            //        TextClass = (Class)this.Properties.VoiceClassID,
+            //        Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
+            //        AudioClass = (Class)this.Properties.VoiceClassID,
+            //        SNOSpeakerActor = this.SNOId,
+            //        Name = this.Properties.Name,
+            //        Field11 = 0x00000002,
+            //        Field12 = -1,
+            //        Field13 = 0x00000069,
+            //        Field14 = 0x0000006E,
+            //        Field15 = 0x00000032
+            //    },
+            //    Field3 = 0x00000069,
+            //});
 
-            this.OpenConversations.Add(new OpenConversation(
-                new EndConversationMessage()
-                {
-                    ActorId = this.DynamicID,
-                    Field0 = 0x0000006E,
-                    SNOConversation = snoConversation
-                },
-                this.InGameClient.Game.TickCounter + 200
-            ));
+            //this.OpenConversations.Add(new OpenConversation(
+            //    new EndConversationMessage()
+            //    {
+            //        ActorId = this.DynamicID,
+            //        Field0 = 0x0000006E,
+            //        SNOConversation = snoConversation
+            //    },
+            //    this.InGameClient.Game.TickCounter + 200
+            //));
         }
 
         public void CheckOpenConversations()
         {
-            if (this.OpenConversations.Count > 0)
-            {
-                foreach (OpenConversation openConversation in this.OpenConversations)
-                {
-                    if (openConversation.endTick <= this.InGameClient.Game.TickCounter)
-                    {
-                        this.InGameClient.SendMessage(openConversation.endConversationMessage);
-                    }
-                }
-            }
+            // TODO: Fixme
+            //if (this.OpenConversations.Count > 0)
+            //{
+            //    foreach (OpenConversation openConversation in this.OpenConversations)
+            //    {
+            //        if (openConversation.endTick <= this.InGameClient.Game.TickCounter)
+            //        {
+            //            this.InGameClient.SendMessage(openConversation.endConversationMessage);
+            //        }
+            //    }
+            //}
         }
 
         public struct OpenConversation
@@ -1586,16 +1589,17 @@ namespace Mooege.Core.GS.Players
         /// <param name="immediately">if false, lore will have new lore button</param>
         public void PlayLore(int loreSNOId, bool immediately)
         {
+            // TODO: Fixme
             // play lore to player
-            InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Quest.LoreMessage
-            {
-                Id = (int)(immediately ? Opcodes.PlayLoreImmediately : Opcodes.PlayLoreWithButton),
-                LoreSNOId = loreSNOId
-            });
-            if (!HasLore(loreSNOId))
-            {
-                AddLore(loreSNOId);
-            }
+            //InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Quest.LoreMessage
+            //{
+            //    Id = (int)(immediately ? Opcodes.PlayLoreImmediately : Opcodes.PlayLoreWithButton),
+            //    LoreSNOId = loreSNOId
+            //});
+            //if (!HasLore(loreSNOId))
+            //{
+            //    AddLore(loreSNOId);
+            //}
         }
 
         /// <summary>

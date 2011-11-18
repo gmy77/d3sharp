@@ -20,8 +20,8 @@ using System;
 using System.Collections.Generic;
 using Google.ProtocolBuffers;
 using Mooege.Common;
-using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Games;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Services

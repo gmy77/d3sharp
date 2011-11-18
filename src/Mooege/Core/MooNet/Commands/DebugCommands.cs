@@ -18,6 +18,7 @@
 
 using System;
 using System.Linq;
+using Mooege.Common.Helpers.Hash;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Core.MooNet.Services;
