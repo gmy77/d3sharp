@@ -31,12 +31,12 @@ namespace Mooege.Core.MooNet.Channels
         /// <summary>
         /// bnet.protocol.EntityId encoded channel Id.
         /// </summary>
-        public bnet.protocol.EntityId BnetEntityId { get; private set; }
+        public bnet.protocol.EntityId BnetEntityId { get; protected set; }
 
         /// <summary>
         /// D3.OnlineService.EntityId encoded channel Id.
         /// </summary>
-        public D3.OnlineService.EntityId D3EntityId { get; private set; }
+        public D3.OnlineService.EntityId D3EntityId { get; protected set; }
 
         /// <summary>
         /// Channel PrivacyLevel.
@@ -66,14 +66,14 @@ namespace Mooege.Core.MooNet.Channels
         /// <summary>
         /// Channel owner.
         /// </summary>
-        public MooNetClient Owner { get; private set; }
+        public MooNetClient Owner { get; protected set; }
 
         /// <summary>
         /// Creates a new channel for given client with supplied remote object-id.
         /// </summary>
         /// <param name="client">The client channels is created for</param>
         /// <param name="remoteObjectId">The remove object-id of the client.</param>
-        public Channel(MooNetClient client, ulong remoteObjectId)
+        public Channel(MooNetClient client, ulong remoteObjectId = 0)
         {
             this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ChannelId).SetLow(this.DynamicId).Build();
             this.D3EntityId = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ChannelId).SetIdLow(this.DynamicId).Build();
@@ -82,8 +82,8 @@ namespace Mooege.Core.MooNet.Channels
             this.MaxMembers = 8;
             this.MaxInvitations = 12;
 
-            // This is an object creator, so we have to map the remote object ID
-            client.MapLocalObjectID(this.DynamicId, remoteObjectId);
+            if (remoteObjectId != 0)
+                client.MapLocalObjectID(this.DynamicId, remoteObjectId); // This is an object creator, so we have to map the remote object ID
 
             // The client can't be set as the owner (or added as a member) here because the server must first make a response
             // to the client before using a mapped ID (presuming that this was called from a service).

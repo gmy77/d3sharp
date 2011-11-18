@@ -37,6 +37,11 @@ namespace Mooege.Core.MooNet.Channels
             return channel;
         }
 
+        public static void AddGameChannel(Channel channel)
+        {
+            Channels.Add(channel.DynamicId, channel);
+        }
+
         public static void DissolveChannel(ulong id)
         {
             Logger.Debug("Dissolving channel {0}", id);

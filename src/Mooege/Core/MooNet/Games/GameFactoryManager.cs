@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using Mooege.Common;
-using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
 
@@ -42,9 +41,10 @@ namespace Mooege.Core.MooNet.Games
 
         public static GameFactory CreateGame(MooNetClient owner, bnet.protocol.game_master.FindGameRequest request, ulong requestId)
         {
-            var game = new GameFactory(owner, request, requestId);
-            GameCreators.Add(game.DynamicId, game);
-            return game;
+            var gameFactory = new GameFactory(owner, request, requestId);
+            GameCreators.Add(gameFactory.DynamicId, gameFactory);
+            ChannelManager.AddGameChannel(gameFactory);
+            return gameFactory;
         }
 
         public static GameFactory FindGame(MooNetClient client, bnet.protocol.game_master.FindGameRequest request, ulong requestId)

@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using Google.ProtocolBuffers;
 using Mooege.Core.GS.Games;
+using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
@@ -26,22 +27,12 @@ using Config = Mooege.Net.GS.Config;
 
 namespace Mooege.Core.MooNet.Games
 {
-    public class GameFactory : RPCObject
+    public class GameFactory : Channel
     {
-        /// <summary>
-        /// bnet.protocol.EntityId encoded Id.
-        /// </summary>
-        public bnet.protocol.EntityId BnetEntityId { get; private set; }
-
         /// <summary>
         /// Ingame manager.
         /// </summary>
         public Game InGame { get; private set; }
-
-        /// <summary>
-        /// Game owner.
-        /// </summary>
-        public MooNetClient Owner { get; private set; }
 
         /// <summary>
         /// Game handle.
@@ -59,6 +50,7 @@ namespace Mooege.Core.MooNet.Games
         public bool Started { get; private set; }
 
         public GameFactory(MooNetClient owner, bnet.protocol.game_master.FindGameRequest request, ulong requestId)
+            :base(owner)
         {
             this.Started = false;
             this.Owner = owner;
