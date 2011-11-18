@@ -37,9 +37,8 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             MpqFileStream stream = file.Open();
             this.Header = new Header(stream);
-            stream.Position += (2 * 4);
+            stream.Position += (12);
             ConversationListEntries = stream.ReadSerializedData<ConversationListEntry>();
-
             stream.Close();
         }
     }

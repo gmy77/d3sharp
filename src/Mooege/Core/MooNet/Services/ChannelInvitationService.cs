@@ -19,8 +19,8 @@
 using System;
 using Mooege.Common;
 using Mooege.Common.Extensions;
-using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Channels;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Services

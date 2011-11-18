@@ -20,10 +20,12 @@ using System.Collections.Generic;
 using System.Linq;
 using CrystalMpq;
 using Gibbed.IO;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
 using System;
 using Mooege.Common.Helpers;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -34,6 +36,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public int SNOParentAnimSet { get; private set; }
         public TagMap TagMapAnimDefault { get; private set; }
         public TagMap[] AnimSetTagMaps;
+
+        
         private Dictionary<int, int> _animations;
         public Dictionary<int, int> Animations { get {
             if (_animations == null)
@@ -41,7 +45,7 @@ namespace Mooege.Common.MPQ.FileFormats
                 _animations = new Dictionary<int, int>();
                 foreach (var x in TagMapAnimDefault.TagMapEntries)
                 {
-                    _animations.Add(x.TagID, x.Int2);
+                    _animations.Add(x.TagID, x.Int);
                 }
                 //not sure how better to do this, cant load parents anims on init as they may not be loaded first. - DarkLotus
                 if (SNOParentAnimSet != -1)
@@ -56,7 +60,7 @@ namespace Mooege.Common.MPQ.FileFormats
                
             } return _animations;
         } }
-
+        
         public AnimSet(MpqFile file)
         {
             var stream = file.Open();

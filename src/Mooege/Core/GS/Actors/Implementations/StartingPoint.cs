@@ -17,9 +17,9 @@
  */
 
 using System.Collections.Generic;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
@@ -28,7 +28,7 @@ namespace Mooege.Core.GS.Actors.Implementations
     {
         public int TargetId { get; private set; }
 
-        public StartingPoint(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public StartingPoint(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
         }
@@ -37,8 +37,8 @@ namespace Mooege.Core.GS.Actors.Implementations
         {
             if (this.Tags == null) return;
 
-            if (this.Tags.ContainsKey((int)MarkerTagTypes.ActorTag))
-                this.TargetId = this.Tags[(int)MarkerTagTypes.ActorTag].Int2;
+            if (this.Tags.ContainsKey(MarkerKeys.ActorTag))
+                this.TargetId = this.Tags[MarkerKeys.ActorTag];
         }
     }
 }

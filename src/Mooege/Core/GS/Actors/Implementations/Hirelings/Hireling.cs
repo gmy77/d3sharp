@@ -17,7 +17,6 @@
  */
 
 using System.Collections.Generic;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
@@ -29,6 +28,7 @@ using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Hireling;
 using System;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 {
@@ -46,17 +46,17 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 
         protected Player owner = null;
 
-        public bool IsProxy { get { return this.SNOId == proxySNO; } }
-        public bool IsHireling { get { return this.SNOId == hirelingSNO; } }
+        public bool IsProxy { get { return ActorSNO.Id == proxySNO; } }
+        public bool IsHireling { get { return ActorSNO.Id == hirelingSNO; } }
         public bool HasHireling { get { return this.hirelingSNO != -1; } }
         public bool HasProxy { get { return this.proxySNO != -1; } }
         public int PetType { get { return IsProxy ? 22 : 0; } }
-        
 
-        public Hireling(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+
+        public Hireling(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Attributes[GameAttribute.TeamID] = 2;
+            //this.Attributes[GameAttribute.TeamID] = 2;
             Interactions.Add(new HireInteraction());
             Interactions.Add(new InventoryInteraction());
         }
@@ -208,7 +208,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 
         }
 
-        public virtual Hireling CreateHireling(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public virtual Hireling CreateHireling(World world, int snoId, TagMap tags)
         {
             throw new NotImplementedException();
         }
@@ -233,7 +233,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             hireling.Attributes[GameAttribute.Pet_Type] = 0;
             hireling.Attributes[GameAttribute.Pet_Owner] = player.PlayerIndex;
 
-            hireling.RotationAmount = this.RotationAmount;
+            hireling.FacingAngle = this.FacingAngle;
             hireling.RotationAxis = this.RotationAxis;
 
             hireling.EnterWorld(this.Position);
@@ -263,7 +263,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             hireling.originalPRT = this.Transform;
             hireling.GBHandle.Type = 4;
             hireling.GBHandle.GBID = hirelingGBID;
-            hireling.CollFlags = 0;
             hireling.Attributes[GameAttribute.Is_NPC] = false;
             hireling.Attributes[GameAttribute.NPC_Is_Operatable] = false;
             hireling.Attributes[GameAttribute.NPC_Has_Interact_Options, 0] = false;
@@ -272,7 +271,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             hireling.Attributes[GameAttribute.Pet_Type] = 22;
             hireling.Attributes[GameAttribute.Pet_Owner] = player.PlayerIndex;
 
-            hireling.RotationAmount = this.RotationAmount;
+            hireling.FacingAngle = this.FacingAngle;
             hireling.RotationAxis = this.RotationAxis;
 
             hireling.EnterWorld(this.Position);
@@ -286,7 +285,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             {
                 var original = CreateHireling(originalWorld, mainSNO, this.Tags);
                 original.SetUpAttributes(player);
-                original.RotationAmount = this.originalPRT.Quaternion.W;
+                original.FacingAngle = this.originalPRT.Quaternion.W;
                 original.RotationAxis = this.originalPRT.Quaternion.Vector3D;
                 original.EnterWorld(this.originalPRT.Vector3D);
             }

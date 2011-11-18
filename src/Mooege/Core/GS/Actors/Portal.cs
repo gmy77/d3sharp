@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Mooege.Common;
+using Mooege.Common.Helpers.Hash;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
@@ -28,6 +29,7 @@ using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Common.Helpers;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -39,26 +41,23 @@ namespace Mooege.Core.GS.Actors
 
         public ResolvedPortalDestination Destination { get; private set; }
 
-        public Portal(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Portal(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Destination = new ResolvedPortalDestination
             {
-                WorldSNO = tags[(int)MarkerTagTypes.DestinationWorld].Int2,
+                WorldSNO = tags[MarkerKeys.DestinationWorld].Id,
             };
 
-            if (tags.ContainsKey((int)MarkerTagTypes.DestinationLevelArea))
-                this.Destination.DestLevelAreaSNO = tags[(int)MarkerTagTypes.DestinationLevelArea].Int2;
+            if (tags.ContainsKey(MarkerKeys.DestinationLevelArea))
+                this.Destination.DestLevelAreaSNO = tags[MarkerKeys.DestinationLevelArea].Id;
 
-            if (tags.ContainsKey((int)MarkerTagTypes.DestinationActorTag))
-                this.Destination.StartingPointActorTag = tags[(int)MarkerTagTypes.DestinationActorTag].Int2;
+            if (tags.ContainsKey(MarkerKeys.DestinationActorTag))
+                this.Destination.StartingPointActorTag = tags[MarkerKeys.DestinationActorTag];
             else
-                Logger.Warn("Found portal {0}without target location actor", this.SNOId);
+                Logger.Warn("Found portal {0}without target location actor", this.ActorSNO.Id);
 
-            this.Field8 = this.SNOId;
             this.Field2 = 16;
-            this.Field3 = 0;
-            this.CollFlags = 0x00000001;
 
             // FIXME: Hardcoded crap; probably don't need to set most of these. /komiga
             this.Attributes[GameAttribute.MinimapActive] = true;
@@ -66,7 +65,6 @@ namespace Mooege.Core.GS.Actors
             this.Attributes[GameAttribute.Hitpoints_Max] = 0.0009994507f;
             this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
             this.Attributes[GameAttribute.Hitpoints_Cur] = 0.0009994507f;
-            this.Attributes[GameAttribute.TeamID] = 1;
             this.Attributes[GameAttribute.Level] = 1;
         }
 

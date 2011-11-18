@@ -24,6 +24,7 @@ using Mooege.Core.GS.Common.Types.Collision;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Common.MPQ.FileFormats
 {

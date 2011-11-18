@@ -20,13 +20,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.IO;
 
 namespace Mooege.Common.MPQ
 {
     public static class MPQStorage
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        private readonly static string MpqRoot = Core.Common.Storage.Config.Instance.MPQRoot;
+        private readonly static string MpqRoot = Storage.Config.Instance.MPQRoot;
 
         public static List<string> MPQList { get; private set; }
         public static Data Data { get; private set; }

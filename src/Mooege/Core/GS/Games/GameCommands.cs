@@ -19,16 +19,83 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Math;
 using Mooege.Common.MPQ;
+using Mooege.Common.MPQ.FileFormats;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Items;
+using Mooege.Core.GS.Map;
 using Mooege.Core.MooNet.Commands;
+using Mooege.Core.MooNet.Games;
 using Mooege.Net.MooNet;
-using Mooege.Core.Common.Items;
+using System.Text;
+using Monster = Mooege.Core.GS.Actors.Monster;
 
 namespace Mooege.Core.GS.Games
 {
+    [CommandGroup("tp", "Transfers your character to another world.")]
+    public class TeleportCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Portal(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            if (@params != null && @params.Count() > 0)
+            {
+                var worldId = 0;
+                Int32.TryParse(@params[0], out worldId);
+
+                if (worldId == 0)
+                    return "Invalid arguments. Type 'help tp' to get help.";
+
+                if (!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldId))
+                    return "There exist no world with SNOId: " + worldId;
+
+                var world = invokerClient.InGameClient.Game.GetWorld(worldId);
+
+                if (world == null)
+                    return "Can't teleport you to world with snoId " + worldId;
+
+                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
+                return string.Format("Teleported to: {0} [id: {1}]", MPQStorage.Data.Assets[SNOGroup.Worlds][worldId].Name, worldId);
+            }
+
+            return "Invalid arguments. Type 'help tp' to get help.";
+        }
+    }
+
+    [CommandGroup("town", "Transfers your character back to town.")]
+    public class TownCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Portal(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            var world = invokerClient.InGameClient.Game.GetWorld(71150);
+
+            if (world != invokerClient.InGameClient.Player.World)
+                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
+            else
+                invokerClient.InGameClient.Player.Teleport(world.StartingPoints.First().Position);
+
+            return string.Format("Teleported back to town.");
+        }
+    }
+
     [CommandGroup("spawn", "Spawns a mob.\nUsage: spawn [amount] [actorSNO]")]
     public class SpawnCommand : CommandGroup
     {
@@ -70,6 +137,62 @@ namespace Mooege.Core.GS.Games
             return string.Format("Spawned {0} mobs with ActorSNO: {1}", amount, actorSNO);
         }
     }
+
+    [CommandGroup("killall", "Kills monsters in range.")]
+    public class KillAllCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string KillAll(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            var player = invokerClient.InGameClient.Player;
+
+            var monstersInRange = player.GetActorsInRange<Monster>();
+            foreach (var monster in monstersInRange)
+            {
+                    monster.Die(player);
+            }
+
+            return string.Format("Killed {0} monsters in range.", monstersInRange.Count);
+        }
+    }
+
+    //[CommandGroup("levelup", "Levels your character.")]
+    //public class LevelUpCommand : CommandGroup
+    //{
+    //    [DefaultCommand]
+    //    public string LevelUp(string[] @params, MooNetClient invokerClient)
+    //    {
+    //        // TODO: does not work, should be actually refactoring Player.cs:UpdateExp() and use it. /raist.
+
+    //        if (invokerClient == null)
+    //            return "You can not invoke this command from console.";
+
+    //        if (invokerClient.InGameClient == null)
+    //            return "You can only invoke this command while ingame.";
+
+    //        var player = invokerClient.InGameClient.Player;
+    //        var amount = 1;
+
+    //        if(@params!=null)
+    //        {
+    //            if (!Int32.TryParse(@params[0], out amount))
+    //                amount = 1;
+    //        }
+
+    //        for(int i=0;i<amount;i++)
+    //        {
+    //            player.Toon.LevelUp();                
+    //        }
+
+    //        return string.Format("New level: {0}", player.Toon.Level);
+    //    }
+    //}
 
     [CommandGroup("item", "Spawns an item (with a name or type).\nUsage: item [type <type>|<name>] [amount]")]
     public class ItemCommand : CommandGroup
@@ -158,12 +281,12 @@ namespace Mooege.Core.GS.Games
             return string.Format("Spawned {0} items with type: {1}", amount, name);
         }
     }
-
-    [CommandGroup("tp", "Transfers your character to another world.")]
-    public class TeleportCommand : CommandGroup
+    
+    [CommandGroup("conversation", "Starts a conversation. \n Usage: conversation snoConversation")]
+    public class ConversationCommand : CommandGroup
     {
         [DefaultCommand]
-        public string Portal(string[] @params, MooNetClient invokerClient)
+        public string Conversation(string[] @params, MooNetClient invokerClient)
         {
             if (invokerClient == null)
                 return "You can not invoke this command from console.";
@@ -171,35 +294,28 @@ namespace Mooege.Core.GS.Games
             if (invokerClient.InGameClient == null)
                 return "You can only invoke this command while ingame.";
 
-            if (@params != null && @params.Count() > 0)
+            if (@params.Count() != 1)
+                return "Invalid arguments. Type 'help conversation' to get help.";
+
+            try
             {
-                var worldId = 0;
-                Int32.TryParse(@params[0], out worldId);
-
-                if(worldId==0)
-                    return "Invalid arguments. Type 'help tp' to get help.";
-
-                if(!MPQStorage.Data.Assets[SNOGroup.Worlds].ContainsKey(worldId))
-                    return "There exist no world with SNOId: " + worldId;
-
-                var world = invokerClient.InGameClient.Game.GetWorld(worldId);
-                
-                if(world==null)
-                    return "Can't teleport you to world with snoId " + worldId;
-
-                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
-                return string.Format("Teleported to: {0} [id: {1}]", MPQStorage.Data.Assets[SNOGroup.Worlds][worldId].Name, worldId);
+                var conversation = MPQStorage.Data.Assets[SNOGroup.Conversation][Int32.Parse(@params[0])];
+                invokerClient.InGameClient.Player.Conversations.StartConversation(Int32.Parse(@params[0]));
+                return String.Format("Started conversation {0}", conversation.FileName);
             }
-
-            return "Invalid arguments. Type 'help tp' to get help.";
+            catch (Exception e)
+            {
+                return e.Message;
+            }
         }
     }
 
-    [CommandGroup("town", "Transfers your character back to town.")]
-    public class TownCommand : CommandGroup
+
+    [CommandGroup("quest", "Retrieves information about quest states and manipulates quest progress.\n Usage: quest [triggers | trigger eventType eventValue | advance snoQuest]")]
+    public class QuestCommand : CommandGroup
     {
         [DefaultCommand]
-        public string Portal(string[] @params, MooNetClient invokerClient)
+        public string Quest(string[] @params, MooNetClient invokerClient)
         {
             if (invokerClient == null)
                 return "You can not invoke this command from console.";
@@ -207,16 +323,58 @@ namespace Mooege.Core.GS.Games
             if (invokerClient.InGameClient == null)
                 return "You can only invoke this command while ingame.";
 
-            var world = invokerClient.InGameClient.Game.GetWorld(71150);
-
-            if (world != invokerClient.InGameClient.Player.World)
-                invokerClient.InGameClient.Player.ChangeWorld(world, world.StartingPoints.First().Position);
-            else
-                invokerClient.InGameClient.Player.Teleport(world.StartingPoints.First().Position);
-
-            return string.Format("Teleported back to town.");
+             return "";
         }
+
+        [Command("advance", "Advances a quest by a single step\n Usage advance snoQuest")]
+        public string Advance(string[] @params, MooNetClient invokerClient)
+        {
+            if (@params == null)
+                return this.Fallback();
+
+            if (@params.Count() != 1)
+                return "Invalid arguments. Type 'help lookup advance' to get help.";
+
+            try
+            {
+                var quest = MPQStorage.Data.Assets[SNOGroup.Quest][Int32.Parse(@params[0])];
+                invokerClient.InGameClient.Game.Quests.Advance(Int32.Parse(@params[0]));
+                return String.Format("Advancing quest {0}", quest.FileName);
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        [Command("trigger", "Triggers a single quest objective\n Usage trigger type value")]
+        public string Trigger(string[] @params, MooNetClient invokerClient)
+        {
+            if (@params == null)
+                return this.Fallback();
+
+            if (@params.Count() < 2)
+                return "Invalid arguments. Type 'help lookup trigger' to get help.";
+
+            invokerClient.InGameClient.Game.Quests.Notify((Mooege.Common.MPQ.FileFormats.QuestStepObjectiveType)Int32.Parse(@params[0]), Int32.Parse(@params[1]));
+            return "Triggered";
+        }
+
+        [Command("triggers", "lists all current quest triggers")]
+        public string Triggers(string[] @params, MooNetClient invokerClient)
+        {
+            StringBuilder returnValue = new StringBuilder();
+
+            foreach (var quest in invokerClient.InGameClient.Game.Quests)
+                foreach (var objectiveSet in quest.CurrentStep.ObjectivesSets)
+                    foreach (var objective in objectiveSet.Objectives)
+                        returnValue.AppendLine(String.Format("{0}, {1} ({2}) - {3}", quest.SNOHandle.ToString(), objective.ObjectiveType, (int)objective.ObjectiveType, objective.ObjectiveValue));
+
+            return returnValue.ToString();
+        }
+
     }
+
 
     [CommandGroup("lookup", "Searches in sno databases.\nUsage: lookup [actor|npc|mob|power|scene] <pattern>")]
     public class LookupCommand : CommandGroup
@@ -224,7 +382,7 @@ namespace Mooege.Core.GS.Games
         [DefaultCommand]
         public string Search(string[] @params, MooNetClient invokerClient)
         {
-            if (@params == null) 
+            if (@params == null)
                 return this.Fallback();
 
             var matches = new List<Asset>();
@@ -236,14 +394,15 @@ namespace Mooege.Core.GS.Games
 
             foreach (var groupPair in MPQStorage.Data.Assets)
             {
-                foreach(var pair in groupPair.Value)
+                foreach (var pair in groupPair.Value)
                 {
                     if (pair.Value.Name.ToLower().Contains(pattern))
-                        matches.Add(pair.Value);   
+                        matches.Add(pair.Value);
                 }
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? "Matches:\n" : "No matches found.", (current, match) => current + string.Format("[{0}] [{1}] {2}\n", match.SNOId.ToString("D6"), match.Group, match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Matches:\n" : "No matches found.",
+                                     (current, match) => current + string.Format("[{0}] [{1}] {2}\n", match.SNOId.ToString("D6"), match.Group, match.Name));
         }
 
         [Command("actor", "Allows you to search for an actor.\nUsage: lookup actor <pattern>")]
@@ -262,7 +421,8 @@ namespace Mooege.Core.GS.Games
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? "Actor Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Actor Matches:\n" : "No match found.",
+                                     (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
 
         [Command("monster", "Allows you to search for a monster.\nUsage: lookup monster <pattern>")]
@@ -281,7 +441,8 @@ namespace Mooege.Core.GS.Games
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? "Monster Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Monster Matches:\n" : "No match found.",
+                                     (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
 
         [Command("power", "Allows you to search for a power.\nUsage: lookup power <pattern>")]
@@ -300,7 +461,8 @@ namespace Mooege.Core.GS.Games
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? "Power Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Power Matches:\n" : "No match found.",
+                                     (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
 
         [Command("world", "Allows you to search for a world.\nUsage: lookup world <pattern>")]
@@ -319,7 +481,8 @@ namespace Mooege.Core.GS.Games
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? "World Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "World Matches:\n" : "No match found.",
+                                     (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
         }
 
         [Command("scene", "Allows you to search for a scene.\nUsage: lookup scene <pattern>")]
@@ -332,14 +495,39 @@ namespace Mooege.Core.GS.Games
 
             var pattern = @params[0].ToLower();
 
-            foreach (var pair in MPQStorage.Data.Assets[SNOGroup.Monster])
+            foreach (var pair in MPQStorage.Data.Assets[SNOGroup.Scene])
             {
                 if (pair.Value.Name.ToLower().Contains(pattern))
                     matches.Add(pair.Value);
             }
 
-            return matches.Aggregate(matches.Count >= 1 ? "Scene Matches:\n" : "No match found.", (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
+            return matches.Aggregate(matches.Count >= 1 ? "Scene Matches:\n" : "No match found.",
+                                     (current, match) => current + string.Format("[{0}] {1}\n", match.SNOId.ToString("D6"), match.Name));
+        }
+
+        [Command("item", "Allows you to search for an item.\nUsage: lookup item <pattern>")]
+        public string Item(string[] @params, MooNetClient invokerClient)
+        {
+            var matches = new List<ItemTable>();
+
+            if (@params.Count() < 1)
+                return "Invalid arguments. Type 'help lookup item' to get help.";
+
+            var pattern = @params[0].ToLower();
+
+            foreach (var asset in MPQStorage.Data.Assets[SNOGroup.GameBalance].Values)
+            {
+                var data = asset.Data as GameBalance;
+                if (data == null || data.Type != BalanceType.Items) continue;
+
+                foreach (var itemDefinition in data.Item)
+                {
+                    if (itemDefinition.Name.ToLower().Contains(pattern))
+                        matches.Add(itemDefinition);
+                }
+            }
+            return matches.Aggregate(matches.Count >= 1 ? "Item Matches:\n" : "No match found.",
+                                     (current, match) => current + string.Format("[{0}] {1}\n", match.SNOActor.ToString("D6"), match.Name));
         }
     }
 }
-

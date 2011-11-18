@@ -73,7 +73,7 @@ namespace Mooege.Core.GS.Objects
 
         public Vector3D RotationAxis { get; set; }
 
-        public float RotationAmount { get; set; }
+        public float FacingAngle { get; set; }
 
         /// <summary>
         /// Creates a new world object.
@@ -106,7 +106,7 @@ namespace Mooege.Core.GS.Objects
         /// <summary>
         /// Makes the object leave the world and then destroys it.
         /// </summary>
-        public sealed override void Destroy()
+        public override void Destroy()
         {
             if (this is Actor)
                 this.World.Leave(this as Actor);

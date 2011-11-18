@@ -17,18 +17,18 @@
  */
 
 using System.Collections.Generic;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.Stash;
 using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
     [HandledSNO(130400 /* Player_Shared_Stash.acr */)]
     public sealed class Stash : Gizmo
     {
-        public Stash(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Stash(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         { }
 

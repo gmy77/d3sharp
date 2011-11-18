@@ -17,6 +17,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using Mooege.Common;
 using Mooege.Common.MPQ;
@@ -29,6 +30,8 @@ using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Net.GS.Message.Definitions.Scene;
+using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Math;
 
 namespace Mooege.Core.GS.Map
 {
@@ -38,9 +41,9 @@ namespace Mooege.Core.GS.Map
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         /// <summary>
-        /// SNOId of the scene.
+        /// SNOHandle for the scene.
         /// </summary>
-        public int SNOId { get; private set; }
+        public SNOHandle SceneSNO { get; private set; }
 
         /// <summary>
         /// Scene group's SNOId.
@@ -87,7 +90,7 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         public PRTransform Transform
         {
-            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationAmount, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.FacingAngle, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
         /// <summary>
@@ -121,6 +124,11 @@ namespace Mooege.Core.GS.Map
         public Mooege.Common.MPQ.FileFormats.Scene.NavZoneDef NavZone { get; private set; }
 
         /// <summary>
+        /// Possible spawning locations for randomized gizmo placement
+        /// </summary>
+        public List<PRTransform>[] GizmoSpawningLocations { get; private set; }
+
+        /// <summary>
         /// Creates a new scene and adds it to given world.
         /// </summary>
         /// <param name="world">The parent world.</param>
@@ -130,7 +138,7 @@ namespace Mooege.Core.GS.Map
         public Scene(World world, Vector3D position, int snoId, Scene parent)
             : base(world, world.NewSceneID)
         {
-            this.SNOId = snoId;
+            this.SceneSNO = new SNOHandle(SNOGroup.Scene, snoId);
             this.Parent = parent;
             this.Subscenes = new List<Scene>();
             this.Scale = 1.0f;                   
@@ -149,7 +157,7 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         private void LoadSceneData()
         {
-            var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SNOId].Data as Mooege.Common.MPQ.FileFormats.Scene;
+            var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SceneSNO.Id].Data as Mooege.Common.MPQ.FileFormats.Scene;
             if (data == null) return;
 
             this.AABBBounds = data.AABBBounds;
@@ -158,21 +166,6 @@ namespace Mooege.Core.GS.Map
             this.MarkerSets = data.MarkerSets;
             this.LookLink = data.LookLink;
             this.NavZone = data.NavZone;
-        }
-
-        #endregion
-
-        #region update & tick logic
-
-        public override void Update(int tickCounter)
-        {
-            if (!this.HasPlayers) // don't update actors if we have no players in scene.
-                return;
-            
-            foreach(var actor in this.Actors)
-            {
-                actor.Update(tickCounter);
-            }
         }
 
         #endregion
@@ -209,10 +202,12 @@ namespace Mooege.Core.GS.Map
         #region actor-loading
 
         /// <summary>
-        /// Loads all actors for the scene.        
+        /// Loads all markers for the scene.        
         /// </summary>
-        public void LoadActors()
+        public void LoadMarkers()
         {
+            this.GizmoSpawningLocations = new List<PRTransform>[26]; // LocationA to LocationZ
+
             // TODO: We should be instead loading actors but let them get revealed based on quest/triggers/player proximity. /raist.
 
             foreach (var markerSet in this.MarkerSets)
@@ -222,16 +217,66 @@ namespace Mooege.Core.GS.Map
 
                 foreach (var marker in markerSetData.Markers)
                 {
-                    if (marker.SNOName.Group != SNOGroup.Actor) continue; // skip non-actor markers.
-                    
-                    var actor = ActorFactory.Create(this.World, marker.SNOName.SNOId, marker.TagMap); // try to create it.
-                    if (actor == null) continue;
+                    switch (marker.Type)
+                    {
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.AmbientSound:
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.Light:
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.Particle:
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.SubScenePosition:
+                            // nothing to do for these here
+                            break;
 
-                    var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
-                    actor.RotationAmount = marker.PRTransform.Quaternion.W;
-                    actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.MinimapMarker:
+                            // TODO Load minimap markers here
+                            break;
 
-                    actor.EnterWorld(position);
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.Actor:
+
+                            var actor = ActorFactory.Create(this.World, marker.SNOHandle.Id, marker.TagMap); // try to create it.
+                            if (actor == null) continue;
+
+                            var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
+                            actor.FacingAngle = marker.PRTransform.Quaternion.W;
+                            actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
+
+                            actor.EnterWorld(position);
+                            break;
+
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.Encounter:
+
+                            var encounter = marker.SNOHandle.Target as Mooege.Common.MPQ.FileFormats.Encounter;
+                            var actorsno = RandomHelper.RandomItem(encounter.Spawnoptions, x => x.Probability);
+                            var actor2 = ActorFactory.Create(this.World, actorsno.SNOSpawn, marker.TagMap); // try to create it.
+                            if (actor2 == null) continue;
+
+                            var position2 = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
+                            actor2.FacingAngle = marker.PRTransform.Quaternion.W;
+                            actor2.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
+
+                            actor2.EnterWorld(position2);
+
+                            break;
+
+                        default:
+
+                            // Save gizmo locations. They are used to spawn loots and gizmos randomly in a level area
+                            if ((int)marker.Type >= (int)Mooege.Common.MPQ.FileFormats.MarkerType.GizmoLocationA && (int)marker.Type <= (int)Mooege.Common.MPQ.FileFormats.MarkerType.GizmoLocationZ)
+                            {
+                                int index = (int)marker.Type - 50; // LocationA has id 50...
+
+                                if (GizmoSpawningLocations[index] == null)
+                                    GizmoSpawningLocations[index] = new List<PRTransform>();
+
+                                marker.PRTransform.Vector3D += this.Position;
+                                GizmoSpawningLocations[index].Add(marker.PRTransform);
+                            }
+                            else
+                                Logger.Warn("Unhandled marker type {0} in actor loading", marker.Type);
+
+
+                            break;
+
+                    }
                 }
             }
         }
@@ -302,13 +347,20 @@ namespace Mooege.Core.GS.Map
         {
             get
             {
+                SceneSpecification specification = this.Specification;
+                specification.SNOMusic = World.Environment.snoMusic;
+                specification.SNOCombatMusic = World.Environment.snoCombatMusic;
+                specification.SNOAmbient = World.Environment.snoAmbient;
+                specification.SNOReverb = World.Environment.snoReverb;
+                specification.SNOWeather = World.Environment.snoWeather;
+
                 return new RevealSceneMessage
                 {
                     WorldID = this.World.DynamicID,
-                    SceneSpec = this.Specification,
+                    SceneSpec = specification,
                     ChunkID = this.DynamicID,
                     Transform = this.Transform,
-                    SceneSNO = this.SNOId,
+                    SceneSNO = this.SceneSNO.Id,
                     ParentChunkID = this.ParentChunkID,
                     SceneGroupSNO = this.SceneGroupSNO,
                     arAppliedLabels = this.AppliedLabels
@@ -326,7 +378,7 @@ namespace Mooege.Core.GS.Map
                 return new MapRevealSceneMessage
                 {
                     ChunkID = this.DynamicID,
-                    SceneSNO = this.SNOId,
+                    SceneSNO = this.SceneSNO.Id,
                     Transform = this.Transform,
                     WorldID = this.World.DynamicID,
                     MiniMapVisibility = this.MiniMapVisibility
@@ -338,7 +390,7 @@ namespace Mooege.Core.GS.Map
 
         public override string ToString()
         {
-            return string.Format("[Scene] SNOId: {0} DynamicId: {1} Position: {2}", this.SNOId, this.DynamicID, this.Position);
+            return string.Format("[Scene] SNOId: {0} DynamicId: {1} Name: {2}", this.SceneSNO.Id, this.DynamicID, this.SceneSNO.Name);
         }
     }
 

@@ -165,6 +165,27 @@ namespace Mooege.Core.GS.Common.Types.Math
             result.Y = value.Y*num;
         }
 
+        /// <summary>
+        /// Returns the angle in radians between this vector and another vector
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public float Angle(Vector2F other)
+        {
+            return (float)System.Math.Acos(Dot(this, other) / Length() / other.Length());
+        }
+
+        /// <summary>
+        /// Returns the rotation of this vector to the x unity vector in radians
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public float Rotation()
+        {
+            return Angle(Vector2F.UnitY) > Angle(-Vector2F.UnitY) ? -Angle(Vector2F.UnitX) : Angle(Vector2F.UnitX);
+        }
+
+
         public static Vector2F Reflect(Vector2F vector, Vector2F normal)
         {
             Vector2F vector2F;

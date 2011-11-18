@@ -20,16 +20,18 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using Mooege.Common;
-using Mooege.Core.Common.Toons;
-using Mooege.Core.Common.Items;
+using Mooege.Common.Helpers.Math;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Skills;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
+using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Waypoint;
 using Mooege.Net.GS.Message.Definitions.World;
@@ -38,19 +40,18 @@ using Mooege.Net.GS.Message.Definitions.Hero;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Skill;
 using Mooege.Net.GS.Message.Definitions.Effect;
-using Mooege.Net.GS.Message.Definitions.Conversation;
-using Mooege.Common.Helpers;
-using System;
 using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
 using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
+using System;
+using Mooege.Common.Helpers;
 
 namespace Mooege.Core.GS.Players
 {
-    public class Player : Actor, IMessageConsumer
+    public class Player : Actor, IMessageConsumer, IUpdateable
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -68,7 +69,7 @@ namespace Mooege.Core.GS.Players
         /// The player's toon.
         /// We need a better name /raist.
         /// </summary>
-        public Toon Properties { get; private set; }
+        public Toon Toon { get; private set; }
 
         /// <summary>
         /// Skillset for the player (or actually for player's toons class).
@@ -90,6 +91,8 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public Dictionary<uint, IRevealable> RevealedObjects = new Dictionary<uint, IRevealable>();
 
+        public ConversationManager Conversations { get; private set; }
+
         // Collection of items that only the player can see. This is only used when items drop from killing an actor
         // TODO: Might want to just have a field on the item itself to indicate whether it is visible to only one player
         /// <summary>
@@ -101,11 +104,6 @@ namespace Mooege.Core.GS.Players
         /// Everything connected to ExpBonuses.
         /// </summary>
         public ExpBonusData ExpBonusData { get; private set; }
-
-        /// <summary>
-        /// Open converstations.
-        /// </summary>
-        public List<OpenConversation> OpenConversations { get; set; }
 
         /// <summary>
         /// NPC currently interaced with
@@ -177,31 +175,26 @@ namespace Mooege.Core.GS.Players
         /// <param name="client">The gameclient for the player.</param>
         /// <param name="bnetToon">Toon of the player.</param>
         public Player(World world, GameClient client, Toon bnetToon)
-            : base(world)
+            : base(world, GetClassSNOId(bnetToon.Gender, bnetToon.Class))
         {
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
-            this.Properties = bnetToon;
+            this.Toon = bnetToon;
             this.GBHandle.Type = (int)GBHandleType.Player;
-            this.GBHandle.GBID = this.Properties.ClassID;
+            this.GBHandle.GBID = this.Toon.ClassID;
 
-            // actor values.
-            this.SNOId = this.ClassSNO;
             this.Field2 = 0x00000009;
-            this.Field3 = 0x00000000;
             this.Scale = this.ModelScale;
-            this.RotationAmount = 0.05940768f;
+            this.FacingAngle = 0.05940768f;
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
-            this.CollFlags = 0x00000000;
             this.Field7 = -1;
-            this.Field8 = -1;
-            this.Field9 = 0x00000000;
+            this.NameSNOId = -1;
             this.Field10 = 0x0;
 
-            this.SkillSet = new SkillSet(this.Properties.Class);
+            this.SkillSet = new SkillSet(this.Toon.Class);
             this.GroundItems = new Dictionary<uint, Item>();
+            this.Conversations = new ConversationManager(this, this.World.Game.Quests);
             this.ExpBonusData = new ExpBonusData(this);
-            this.OpenConversations = new List<OpenConversation>();
             this.SelectedNPC = null;
 
             #region Attributes
@@ -212,16 +205,10 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Skill, 0x7545] = 1;
             this.Attributes[GameAttribute.Skill_Total, 0x76B7] = 1; //Punch!
             this.Attributes[GameAttribute.Skill, 0x76B7] = 1;
-            this.Attributes[GameAttribute.Skill_Total, 0x216FA] = 1; //Monk's Blinding Flash
-            this.Attributes[GameAttribute.Skill, 0x216FA] = 1;
-            this.Attributes[GameAttribute.Skill_Total, 0x176C4] = 1; //Monk's Fist of Thunder
-            this.Attributes[GameAttribute.Skill, 0x176C4] = 1;
             this.Attributes[GameAttribute.Skill_Total, 0x6DF] = 1; //Use Item
             this.Attributes[GameAttribute.Skill, 0x6DF] = 1;
             this.Attributes[GameAttribute.Skill_Total, 0x7780] = 1; //Basic Attack
             this.Attributes[GameAttribute.Skill, 0x7780] = 1;
-            this.Attributes[GameAttribute.Skill_Total, 0x0000CE11] = 1;  //Monk Spirit Trait
-            this.Attributes[GameAttribute.Skill, 0x0000CE11] = 1;
             this.Attributes[GameAttribute.Skill_Total, 0x0002EC66] = 0; //stone of recall
             this.Attributes[GameAttribute.Skill_Total, 0xFFFFF] = 1;
             this.Attributes[GameAttribute.Skill, 0xFFFFF] = 1;
@@ -324,8 +311,8 @@ namespace Mooege.Core.GS.Players
 
             //Basic stats
             this.Attributes[GameAttribute.Level_Cap] = 13;
-            this.Attributes[GameAttribute.Level] = this.Properties.Level;
-            this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Properties.Level];
+            this.Attributes[GameAttribute.Level] = this.Toon.Level;
+            this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Toon.Level];
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             this.Attributes[GameAttribute.Armor_Total] = 0;
             this.Attributes[GameAttribute.Attack] = this.InitialAttack;
@@ -351,16 +338,61 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Resource_Regen_Total, this.ResourceID] = 3.051758E-05f;
             this.Attributes[GameAttribute.Resource_Type_Primary] = this.ResourceID;
 
-            //Secondary Resource for the Demon Hunter
-            if (this.Properties.Class == ToonClass.DemonHunter)
+            // Class specific
+            switch (this.Toon.Class)
             {
-                int discipline = this.ResourceID + 1; //0x00000006
-                this.Attributes[GameAttribute.Resource_Cur, discipline] = 30f;
-                this.Attributes[GameAttribute.Resource_Max, discipline] = 30f;
-                this.Attributes[GameAttribute.Resource_Max_Total, discipline] = 30f;
-                this.Attributes[GameAttribute.Resource_Effective_Max, discipline] = 30f;
-                this.Attributes[GameAttribute.Resource_Regen_Total, discipline] = 3.051758E-05f;
-                this.Attributes[GameAttribute.Resource_Type_Secondary] = discipline;
+                case ToonClass.Barbarian:
+                    this.Attributes[GameAttribute.Skill_Total, 30078] = 1;  //Fury Trait
+                    this.Attributes[GameAttribute.Skill, 30078] = 1;
+                    this.Attributes[GameAttribute.Trait, 30078] = 1;
+                    this.Attributes[GameAttribute.Buff_Active, 30078] = true;
+                    this.Attributes[GameAttribute.Buff_Icon_Count0, 30078] = 1;
+                    break;
+                case ToonClass.DemonHunter:
+                    /* // unknown
+                    this.Attributes[GameAttribute.Skill_Total, ] = 1;  // Hatred Trait
+                    this.Attributes[GameAttribute.Skill, ] = 1;
+                    this.Attributes[GameAttribute.Trait, ] = 1;
+                    this.Attributes[GameAttribute.Buff_Active, ] = true;
+                    this.Attributes[GameAttribute.Buff_Icon_Count0, ] = 1;
+                    this.Attributes[GameAttribute.Skill_Total, ] = 1;  // Discipline Trait
+                    this.Attributes[GameAttribute.Skill, ] = 1;
+                    this.Attributes[GameAttribute.Trait, ] = 1;
+                    this.Attributes[GameAttribute.Buff_Active, ] = true;
+                    this.Attributes[GameAttribute.Buff_Icon_Count0, ] = 1;
+                     */
+                    //Secondary Resource for the Demon Hunter
+                    int Discipline = this.ResourceID + 1; //0x00000006
+                    this.Attributes[GameAttribute.Resource_Cur, Discipline] = 30f;
+                    this.Attributes[GameAttribute.Resource_Max, Discipline] = 30f;
+                    this.Attributes[GameAttribute.Resource_Max_Total, Discipline] = 30f;
+                    this.Attributes[GameAttribute.Resource_Effective_Max, Discipline] = 30f;
+                    this.Attributes[GameAttribute.Resource_Type_Secondary] = Discipline;
+                    break;
+                case ToonClass.Monk:
+                    this.Attributes[GameAttribute.Skill_Total, 0x0000CE11] = 1;  //Spirit Trait
+                    this.Attributes[GameAttribute.Skill, 0x0000CE11] = 1;
+                    this.Attributes[GameAttribute.Trait, 0x0000CE11] = 1;
+                    this.Attributes[GameAttribute.Buff_Active, 0xCE11] = true;
+                    this.Attributes[GameAttribute.Buff_Icon_Count0, 0x0000CE11] = 1;
+                    break;
+                case ToonClass.WitchDoctor:
+                    /* // unknown
+                    this.Attributes[GameAttribute.Skill_Total, ] = 1;  //Mana Trait
+                    this.Attributes[GameAttribute.Skill, ] = 1;
+                    this.Attributes[GameAttribute.Buff_Active, ] = true;
+                    this.Attributes[GameAttribute.Buff_Icon_Count0, ] = 1;
+                     */
+                    break;
+                case ToonClass.Wizard:
+                    /* // unknown
+                    this.Attributes[GameAttribute.Skill_Total, ] = 1;  //Arcane Power Trait
+                    this.Attributes[GameAttribute.Skill, ] = 1;
+                    this.Attributes[GameAttribute.Trait, ] = 1;
+                    this.Attributes[GameAttribute.Buff_Active, ] = true;
+                    this.Attributes[GameAttribute.Buff_Icon_Count0, ] = 1;
+                     */
+                    break;
             }
 
             //Movement
@@ -392,6 +424,13 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.General_Cooldown] = 0;
             #endregion // Attributes
 
+            // unlocking assigned skills
+            for (int i = 0; i < this.SkillSet.ActiveSkills.Length; i++)
+            {
+                this.Attributes[GameAttribute.Skill, this.SkillSet.ActiveSkills[i]] = 1;
+                this.Attributes[GameAttribute.Skill_Total, this.SkillSet.ActiveSkills[i]] = 1;
+            }
+
             this.Inventory = new Inventory(this); // Here because it needs attributes /fasbat
         }
 
@@ -413,12 +452,34 @@ namespace Mooege.Core.GS.Players
             else if (message is RequestBuyItemMessage) OnRequestBuyItem(client, (RequestBuyItemMessage)message);
             else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
             else if (message is HirelingDismissMessage) OnHirelingDismiss();
+            else if (message is SocketSpellMessage) OnSocketSpell(client, (SocketSpellMessage)message);
             else return;
         }
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
         {
             var oldSNOSkill = this.SkillSet.ActiveSkills[message.SkillIndex]; // find replaced skills SNO.
+            if (oldSNOSkill != -1)
+            {
+                // if old power was socketted, pickup rune
+                Item oldRune = this.Inventory.RemoveRune(message.SkillIndex);
+                if (oldRune != null)
+                {
+                    if (!this.Inventory.PickUp(oldRune))
+                    {
+                        // full inventory, cancel socketting
+                        this.Inventory.SetRune(oldRune, oldSNOSkill, message.SkillIndex); // readd old rune
+                        return;
+                    }
+                }
+                // switch off old skill in hotbar
+                this.Attributes[GameAttribute.Skill, oldSNOSkill] = 0;
+                this.Attributes[GameAttribute.Skill_Total, oldSNOSkill] = 0;
+            }
+            // switch on new skill in hotbar
+            this.Attributes[GameAttribute.Skill, message.SNOSkill] = 1;
+            this.Attributes[GameAttribute.Skill_Total, message.SNOSkill] = 1;
+            this.Attributes.SendChangedMessage(InGameClient, this.DynamicID);
 
             foreach (HotbarButtonData button in this.SkillSet.HotBarSkills.Where(button => button.SNOSkill == oldSNOSkill)) // loop through hotbar and replace the old skill with new one
             {
@@ -431,6 +492,19 @@ namespace Mooege.Core.GS.Players
 
         private void OnAssignPassiveSkill(GameClient client, AssignPassiveSkillMessage message)
         {
+            var oldSNOSkill = this.SkillSet.PassiveSkills[message.SkillIndex]; // find replaced skills SNO.
+            if (oldSNOSkill != -1)
+            {
+                // switch off old passive skill
+                this.Attributes[GameAttribute.Trait, oldSNOSkill] = 0;
+                this.Attributes[GameAttribute.Skill, oldSNOSkill] = 0;
+                this.Attributes[GameAttribute.Skill_Total, oldSNOSkill] = 0;
+            }
+            // switch on new passive skill
+            this.Attributes[GameAttribute.Trait, message.SNOSkill] = 1;
+            this.Attributes[GameAttribute.Skill, message.SNOSkill] = 1;
+            this.Attributes[GameAttribute.Skill_Total, message.SNOSkill] = 1;
+            this.Attributes.SendChangedMessage(InGameClient, this.DynamicID);
             this.SkillSet.PassiveSkills[message.SkillIndex] = message.SNOSkill;
             this.UpdateHeroState();
         }
@@ -438,6 +512,75 @@ namespace Mooege.Core.GS.Players
         private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
         {
             this.SkillSet.HotBarSkills[message.BarIndex] = message.ButtonData;
+        }
+
+        /// <summary>
+        /// Sockets skill with rune.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="socketSpellMessage"></param>
+        private void OnSocketSpell(GameClient client, SocketSpellMessage socketSpellMessage)
+        {
+            Item rune = this.Inventory.GetItem(unchecked((uint)socketSpellMessage.RuneDynamicId));
+            int PowerSNOId = socketSpellMessage.PowerSNOId;
+            int skillIndex = -1; // find index of power in skills
+            for (int i = 0; i < this.SkillSet.ActiveSkills.Length; i++)
+            {
+                if (this.SkillSet.ActiveSkills[i] == PowerSNOId)
+                {
+                    skillIndex = i;
+                    break;
+                }
+            }
+            if (skillIndex == -1)
+            {
+                // validity of message is controlled on client side, this shouldn't happen
+                return;
+            }
+            Item oldRune = this.Inventory.RemoveRune(skillIndex); // removes old rune (if present)
+            if (rune.Attributes[GameAttribute.Rune_Rank] != 0)
+            {
+                // unattuned rune: pick random color, create new rune, set attunement to new rune and destroy unattuned one
+                int rank = rune.Attributes[GameAttribute.Rune_Rank];
+                int colorIndex = RandomHelper.Next(0, 5);
+                Item newRune = ItemGenerator.Cook(this, "Runestone_" + (char)('A' + colorIndex) + "_0" + rank); // TODO: quite of hack, find better solution /xsochor
+                newRune.Attributes[GameAttribute.Rune_Attuned_Power] = PowerSNOId;
+                switch (colorIndex)
+                {
+                    case 0:
+                        newRune.Attributes[GameAttribute.Rune_A] = rank;
+                        break;
+                    case 1:
+                        newRune.Attributes[GameAttribute.Rune_B] = rank;
+                        break;
+                    case 2:
+                        newRune.Attributes[GameAttribute.Rune_C] = rank;
+                        break;
+                    case 3:
+                        newRune.Attributes[GameAttribute.Rune_D] = rank;
+                        break;
+                    case 4:
+                        newRune.Attributes[GameAttribute.Rune_E] = rank;
+                        break;
+                }
+                newRune.Owner = this;
+                newRune.InventoryLocation.X = rune.InventoryLocation.X; // sets position of original
+                newRune.InventoryLocation.Y = rune.InventoryLocation.Y; // sets position of original
+                this.Inventory.DestroyInventoryItem(rune); // destroy unattuned rune
+                newRune.EnterWorld(this.Position);
+                newRune.Reveal(this);
+                this.Inventory.SetRune(newRune, PowerSNOId, skillIndex);
+            }
+            else
+            {
+                this.Inventory.SetRune(rune, PowerSNOId, skillIndex);
+            }
+            if (oldRune != null)
+            {
+                this.Inventory.PickUp(oldRune); // pick removed rune
+            }
+            this.Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
+            UpdateHeroState();
         }
 
         private void OnObjectTargeted(GameClient client, TargetMessage message)
@@ -461,6 +604,10 @@ namespace Mooege.Core.GS.Players
 
             if (message.Position != null)
                 this.Position = message.Position;
+
+            if (message.Angle != null)
+                this.FacingAngle = message.Angle.Value;
+
 
             var msg = new NotifyActorMovementMessage
             {
@@ -492,10 +639,10 @@ namespace Mooege.Core.GS.Players
 
         private void OnRequestBuyItem(GameClient client, RequestBuyItemMessage requestBuyItemMessage)
         {
-            var item = World.GetItem(requestBuyItemMessage.ItemId);
-            if (item == null || item.Owner == null || !(item.Owner is Vendor))
+            var vendor = this.SelectedNPC as Vendor;
+            if (vendor == null)
                 return;
-            (item.Owner as Vendor).OnRequestBuyItem(this, item);
+            vendor.OnRequestBuyItem(this, requestBuyItemMessage.ItemId);
         }
 
         private void OnRequestAddSocket(GameClient client, RequestAddSocketMessage requestAddSocketMessage)
@@ -519,14 +666,14 @@ namespace Mooege.Core.GS.Players
 
         #region update-logic
 
-        public override void Update(int tickCounter)
+        public void Update(int tickCounter)
         {
             // Check the Killstreaks
             this.ExpBonusData.Check(0);
             this.ExpBonusData.Check(1);
 
             // Check if there is an conversation to close in this tick
-            CheckOpenConversations();
+            Conversations.Update(this.World.Game.TickCounter);
 
             this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
@@ -540,7 +687,7 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void RevealScenesToPlayer()
         {
-            var scenes = this.GetScenesInRegion();
+            var scenes = this.GetScenesInRegion(DefaultQueryProximityLenght * 2);
 
             foreach (var scene in scenes) // reveal scenes in player's proximity.
             {
@@ -563,10 +710,12 @@ namespace Mooege.Core.GS.Players
 
             foreach (var actor in actors) // reveal actors in player's proximity.
             {
-                if (actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
+                if (actor.Visible == false || actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
                     continue;
 
-                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment || actor.ActorType == ActorType.Critter)
+                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player 
+                    || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment 
+                    || actor.ActorType == ActorType.Critter || actor.ActorType == ActorType.Item)
                     actor.Reveal(this);
             }
         }
@@ -586,7 +735,9 @@ namespace Mooege.Core.GS.Players
         }
 
         public override void OnLeave(World world)
-        { }
+        {
+            this.Conversations.StopAll();
+        }
 
         public override bool Reveal(Player player)
         {
@@ -619,7 +770,29 @@ namespace Mooege.Core.GS.Players
                 });
             }
 
+            this.Inventory.Reveal(player);
+
             return true;
+        }
+
+        public override bool Unreveal(Player player)
+        {
+            if (!base.Unreveal(player))
+                return false;
+
+            this.Inventory.Unreveal(player);
+
+            return true;
+        }
+
+        public override void BeforeChangeWorld()
+        {
+            this.Inventory.Unreveal(this);
+        }
+
+        public override void AfterChangeWorld()
+        {
+            this.Inventory.Reveal(this);
         }
 
         #endregion
@@ -644,7 +817,7 @@ namespace Mooege.Core.GS.Players
                 Field0 = 0x00000000,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
-                Gender = Properties.Gender,
+                Gender = Toon.Gender,
                 PlayerSavedData = this.GetSavedData(),
                 Field5 = 0x00000000,
                 tQuestRewardHistory = QuestRewardHistory,
@@ -659,20 +832,20 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.DemonHunter:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.Monk:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.WitchDoctor:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.Wizard:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                 }
-                return 10f + (this.Properties.Level - 1) * 2;
+                return 10f + (this.Toon.Level - 1) * 2;
             }
         }
 
@@ -680,20 +853,20 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 9f + (this.Properties.Level - 1);
+                        return 9f + (this.Toon.Level - 1);
                     case ToonClass.DemonHunter:
-                        return 11f + ((this.Properties.Level - 1) * 2);
+                        return 11f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.Monk:
-                        return 11f + ((this.Properties.Level - 1) * 2);
+                        return 11f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.WitchDoctor:
-                        return 9f + ((this.Properties.Level - 1) * 2);
+                        return 9f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.Wizard:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                 }
-                return 10f + ((this.Properties.Level - 1) * 2);
+                return 10f + ((this.Toon.Level - 1) * 2);
             }
         }
 
@@ -701,23 +874,23 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 11f + ((this.Properties.Level - 1) * 2);
+                        return 11f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.DemonHunter:
                         // For DH and Wizard, half the levels (starting with the first) give 2 defense => (Level / 2) * 2
                         // and half give 1 defense => ((Level - 1) / 2) * 1
                         // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
-                        return 9f + (((this.Properties.Level / 2) * 2) + ((this.Properties.Level - 1) / 2));
+                        return 9f + (((this.Toon.Level / 2) * 2) + ((this.Toon.Level - 1) / 2));
                     case ToonClass.Monk:
-                        return 10f + ((this.Properties.Level - 1) * 2);
+                        return 10f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.WitchDoctor:
-                        return 9f + ((this.Properties.Level - 1) * 2);
+                        return 9f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.Wizard:
-                        return 8f + (((this.Properties.Level / 2) * 2) + ((this.Properties.Level - 1) / 2));
+                        return 8f + (((this.Toon.Level / 2) * 2) + ((this.Toon.Level - 1) / 2));
                 }
-                return 10f + ((this.Properties.Level - 1) * 2);
+                return 10f + ((this.Toon.Level - 1) * 2);
             }
         }
 
@@ -725,23 +898,23 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 11f + ((this.Properties.Level - 1) * 2);
+                        return 11f + ((this.Toon.Level - 1) * 2);
                     case ToonClass.DemonHunter:
                         // For DH and Wizard, half the levels give 2 vit => ((Level - 1) / 2) * 2
                         // and half (starting with the first) give 1 vit => (Level / 2) * 1
                         // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
-                        return 9f + ((((this.Properties.Level - 1) / 2) * 2) + (this.Properties.Level / 2));
+                        return 9f + ((((this.Toon.Level - 1) / 2) * 2) + (this.Toon.Level / 2));
                     case ToonClass.Monk:
-                        return 9f + (this.Properties.Level - 1);
+                        return 9f + (this.Toon.Level - 1);
                     case ToonClass.WitchDoctor:
-                        return 10f + (this.Properties.Level - 1);
+                        return 10f + (this.Toon.Level - 1);
                     case ToonClass.Wizard:
-                        return 9f + ((((this.Properties.Level - 1) / 2) * 2) + (this.Properties.Level / 2));
+                        return 9f + ((((this.Toon.Level - 1) / 2) * 2) + (this.Toon.Level / 2));
                 }
-                return 10f + ((this.Properties.Level - 1) * 2);
+                return 10f + ((this.Toon.Level - 1) * 2);
             }
         }
 
@@ -754,7 +927,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 2f;
@@ -775,7 +948,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 2f;
@@ -796,7 +969,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 2f;
@@ -817,7 +990,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 1f;
@@ -866,7 +1039,7 @@ namespace Mooege.Core.GS.Players
 
         public LearnedLore LearnedLore = new LearnedLore()
         {
-            Field0 = 0x00000000,
+            Count = 0x00000000,
             m_snoLoreLearned = new int[256]
              {
                 0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,
@@ -948,7 +1121,7 @@ namespace Mooege.Core.GS.Players
         {
             var playerBanner = D3.GameMessage.PlayerBanner.CreateBuilder()
                 .SetPlayerIndex((uint) this.PlayerIndex)
-                .SetBanner(this.Properties.Owner.BannerConfiguration)
+                .SetBanner(this.Toon.Owner.BannerConfiguration)
                 .Build();
 
             return new GenericBlobMessage(Opcodes.GenericBlobMessage6) {Data = playerBanner.ToByteArray()};
@@ -985,13 +1158,50 @@ namespace Mooege.Core.GS.Players
 
         #region generic properties
 
+        public static int GetClassSNOId(int gender, ToonClass @class)
+        {
+            if(gender==0) // male
+            {
+                switch(@class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x0CE5;
+                    case ToonClass.DemonHunter:
+                        return 0x0125C7;
+                    case ToonClass.Monk:
+                        return 0x1271;
+                    case ToonClass.WitchDoctor:
+                        return 0x1955;
+                    case ToonClass.Wizard:
+                        return 0x1990;
+                }
+            }
+            else // female
+            {
+                switch (@class)
+                {
+                    case ToonClass.Barbarian:
+                        return 0x0CD5;
+                    case ToonClass.DemonHunter:
+                        return 0x0123D2;
+                    case ToonClass.Monk:
+                        return 0x126D;
+                    case ToonClass.WitchDoctor:
+                        return 0x1951;
+                    case ToonClass.Wizard:
+                        return 0x197E;
+                }
+            }
+            return 0x0;
+        }
+
         public int ClassSNO
         {
             get
             {
-                if (this.Properties.Gender == 0)
+                if (this.Toon.Gender == 0)
                 {
-                    switch (this.Properties.Class)
+                    switch (this.Toon.Class)
                     {
                         case ToonClass.Barbarian:
                             return 0x0CE5;
@@ -1007,7 +1217,7 @@ namespace Mooege.Core.GS.Players
                 }
                 else
                 {
-                    switch (this.Properties.Class)
+                    switch (this.Toon.Class)
                     {
                         case ToonClass.Barbarian:
                             return 0x0CD5;
@@ -1029,7 +1239,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 1.2f;
@@ -1050,7 +1260,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 0x00000002;
@@ -1071,7 +1281,7 @@ namespace Mooege.Core.GS.Players
         {
             get
             {
-                switch (this.Properties.Class)
+                switch (this.Toon.Class)
                 {
                     case ToonClass.Barbarian:
                         return 0x00008AF4;
@@ -1148,7 +1358,7 @@ namespace Mooege.Core.GS.Players
             if ((this.Attributes[GameAttribute.Experience_Next] <= 0) && (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]))
             {
                 this.Attributes[GameAttribute.Level]++;
-                this.Properties.LevelUp();
+                this.Toon.LevelUp();
                 if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
                 else { this.Attributes[GameAttribute.Experience_Next] = 0; }
 
@@ -1204,59 +1414,61 @@ namespace Mooege.Core.GS.Players
 
         public void PlayHeroConversation(int snoConversation, int lineID)
         {
-            this.InGameClient.SendMessage(new PlayConvLineMessage()
-            {
-                ActorID = this.DynamicID,
-                Field1 = new uint[9]
-                    {
-                        this.DynamicID, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
-                    },
+            // TODO: Fixme
+            //this.InGameClient.SendMessage(new PlayConvLineMessage()
+            //{
+            //    ActorID = this.DynamicID,
+            //    Field1 = new uint[9]
+            //        {
+            //            this.DynamicID, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
+            //        },
 
-                Params = new PlayLineParams()
-                {
-                    SNOConversation = snoConversation,
-                    Field1 = 0x00000001,
-                    Field2 = false,
-                    LineID = lineID,
-                    Field4 = 0x00000000,
-                    Field5 = -1,
-                    TextClass = (Class)this.Properties.VoiceClassID,
-                    Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
-                    AudioClass = (Class)this.Properties.VoiceClassID,
-                    SNOSpeakerActor = this.SNOId,
-                    Name = this.Properties.Name,
-                    Field11 = 0x00000002,
-                    Field12 = -1,
-                    Field13 = 0x00000069,
-                    Field14 = 0x0000006E,
-                    Field15 = 0x00000032
-                },
-                Field3 = 0x00000069,
-            });
+            //    Params = new PlayLineParams()
+            //    {
+            //        SNOConversation = snoConversation,
+            //        Field1 = 0x00000001,
+            //        Field2 = false,
+            //        LineID = lineID,
+            //        Field4 = 0x00000000,
+            //        Field5 = -1,
+            //        TextClass = (Class)this.Properties.VoiceClassID,
+            //        Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
+            //        AudioClass = (Class)this.Properties.VoiceClassID,
+            //        SNOSpeakerActor = this.SNOId,
+            //        Name = this.Properties.Name,
+            //        Field11 = 0x00000002,
+            //        Field12 = -1,
+            //        Field13 = 0x00000069,
+            //        Field14 = 0x0000006E,
+            //        Field15 = 0x00000032
+            //    },
+            //    Field3 = 0x00000069,
+            //});
 
-            this.OpenConversations.Add(new OpenConversation(
-                new EndConversationMessage()
-                {
-                    ActorId = this.DynamicID,
-                    Field0 = 0x0000006E,
-                    SNOConversation = snoConversation
-                },
-                this.InGameClient.Game.TickCounter + 200
-            ));
+            //this.OpenConversations.Add(new OpenConversation(
+            //    new EndConversationMessage()
+            //    {
+            //        ActorId = this.DynamicID,
+            //        Field0 = 0x0000006E,
+            //        SNOConversation = snoConversation
+            //    },
+            //    this.InGameClient.Game.TickCounter + 200
+            //));
         }
 
         public void CheckOpenConversations()
         {
-            if (this.OpenConversations.Count > 0)
-            {
-                foreach (OpenConversation openConversation in this.OpenConversations)
-                {
-                    if (openConversation.endTick <= this.InGameClient.Game.TickCounter)
-                    {
-                        this.InGameClient.SendMessage(openConversation.endConversationMessage);
-                    }
-                }
-            }
+            // TODO: Fixme
+            //if (this.OpenConversations.Count > 0)
+            //{
+            //    foreach (OpenConversation openConversation in this.OpenConversations)
+            //    {
+            //        if (openConversation.endTick <= this.InGameClient.Game.TickCounter)
+            //        {
+            //            this.InGameClient.SendMessage(openConversation.endConversationMessage);
+            //        }
+            //    }
+            //}
         }
 
         public struct OpenConversation
@@ -1277,25 +1489,31 @@ namespace Mooege.Core.GS.Players
 
         private void CollectGold()
         {
-            var items = this.GetItemsInRange(25f);
-
-            foreach(var item in items)
+            List<Item> itemList = this.GetItemsInRange(5f);
+            foreach (Item item in itemList)
             {
                 if (!Item.IsGold(item.ItemType)) continue;
 
-                this.InGameClient.SendMessage(new FloatingAmountMessage()
+                List<Player> playersAffected = this.GetPlayersInRange(26f);
+                int amount = (int)Math.Max(1, Math.Round((double)item.Attributes[GameAttribute.Gold] / playersAffected.Count, 0));
+                item.Attributes[GameAttribute.Gold] = amount;
+                foreach (Player player in playersAffected)
                 {
-                    Place = new WorldPlace
+                    player.InGameClient.SendMessage(new FloatingAmountMessage()
                     {
-                        Position = this.Position,
-                        WorldID = this.World.DynamicID,
-                    },
+                        Place = new WorldPlace()
+                        {
+                            Position = player.Position,
+                            WorldID = player.World.DynamicID,
+                        },
 
-                    Amount = item.Attributes[GameAttribute.Gold],
-                    Type = FloatingAmountMessage.FloatType.Gold,
-                });
+                        Amount = amount,
+                        Type = FloatingAmountMessage.FloatType.Gold,
+                    });
 
-                this.Inventory.PickUpGold(item.DynamicID);
+                    player.Inventory.PickUpGold(item.DynamicID);
+                }
+
 
                 item.Destroy();
             }
@@ -1303,24 +1521,28 @@ namespace Mooege.Core.GS.Players
 
         private void CollectHealthGlobe()
         {
-            var items = this.GetItemsInRange(25f);
-
-            foreach (var item in items)
+            var itemList = this.GetItemsInRange(5f);
+            foreach (Item item in itemList)
             {
                 if (!Item.IsHealthGlobe(item.ItemType)) continue;
 
-                this.InGameClient.SendMessage(new PlayEffectMessage() //Remember, for PlayEffectMessage, field1=7 are globes picking animation.
+                var playersAffected = this.GetPlayersInRange(26f);
+                foreach (Player player in playersAffected)
                 {
-                    ActorId = this.DynamicID,
-                    Effect = Effect.HealthOrbPickup
-                });
+                    foreach (Player targetAffected in playersAffected)
+                    {
+                        player.InGameClient.SendMessage(new PlayEffectMessage()
+                        {
+                            ActorId = targetAffected.DynamicID,
+                            Effect = Effect.HealthOrbPickup
+                        });
+                    }
 
-                foreach (var pair in this.World.Players) // should be actually checking for players in proximity. /raist
-                {
-                    pair.Value.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
+                    //every summon and mercenary owned by you must broadcast their green text to you /H_DANILO
+                    player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
                 }
-
                 item.Destroy();
+
             }
         }
 
@@ -1336,6 +1558,61 @@ namespace Mooege.Core.GS.Players
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
             else
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Cur] + quantity;
+
+            this.InGameClient.SendMessage(new FloatingNumberMessage()
+            {
+                ActorID = this.DynamicID,
+                Number = quantity,
+                Type = FloatingNumberMessage.FloatType.Green
+            });
+
+        }
+
+        #endregion
+
+        #region lore
+
+        /// <summary>
+        /// Checks if player has lore
+        /// </summary>
+        /// <param name="loreSNOId"></param>
+        /// <returns></returns>
+        public bool HasLore(int loreSNOId)
+        {
+            return LearnedLore.m_snoLoreLearned.Contains(loreSNOId);
+        }
+
+        /// <summary>
+        /// Plays lore to player
+        /// </summary>
+        /// <param name="loreSNOId"></param>
+        /// <param name="immediately">if false, lore will have new lore button</param>
+        public void PlayLore(int loreSNOId, bool immediately)
+        {
+            // TODO: Fixme
+            // play lore to player
+            //InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Quest.LoreMessage
+            //{
+            //    Id = (int)(immediately ? Opcodes.PlayLoreImmediately : Opcodes.PlayLoreWithButton),
+            //    LoreSNOId = loreSNOId
+            //});
+            //if (!HasLore(loreSNOId))
+            //{
+            //    AddLore(loreSNOId);
+            //}
+        }
+
+        /// <summary>
+        /// Adds lore to player's state
+        /// </summary>
+        /// <param name="loreSNOId"></param>
+        public void AddLore(int loreSNOId) {
+            if (this.LearnedLore.Count < this.LearnedLore.m_snoLoreLearned.Length)
+            {
+                LearnedLore.m_snoLoreLearned[LearnedLore.Count] = loreSNOId;
+                LearnedLore.Count++; // Count
+                UpdateHeroState();
+            }
         }
 
         #endregion

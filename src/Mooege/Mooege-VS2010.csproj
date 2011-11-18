@@ -42,6 +42,7 @@
     <Externalconsole>true</Externalconsole>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <UseVSHostingProcess>true</UseVSHostingProcess>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -94,14 +95,19 @@
     <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\dep\PowerCollections.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Common\Extensions\ListExtensions.cs" />
-    <Compile Include="Common\Helpers\FileHelpers.cs" />
+    <Compile Include="Common\Helpers\Concurrency\ConcurrentList.cs" />
+    <Compile Include="Common\Helpers\Math\FastRandom.cs" />
+    <Compile Include="Common\Helpers\IO\FileHelpers.cs" />
     <Compile Include="Common\MPQ\Asset.cs" />
     <Compile Include="Common\MPQ\Data.cs" />
     <Compile Include="Common\MPQ\FileFormats\Act.cs" />
@@ -134,34 +140,50 @@
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
     <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\ActorKeys.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\AnimationSetKeys.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\MarkerKeys.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\PowerKeys.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\TagMap.cs" />
     <Compile Include="Common\MPQ\SerializableData.cs" />
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
-    <Compile Include="Core\Common\Items\Affix.cs" />
-    <Compile Include="Core\Common\Items\AffixGenerator.cs" />
-    <Compile Include="Core\Common\Items\HandledItem.cs" />
-    <Compile Include="Core\Common\Items\HandledType.cs" />
-    <Compile Include="Core\Common\Items\Implementations\Dye.cs" />
-    <Compile Include="Core\Common\Items\Implementations\HealthPotion.cs" />
-    <Compile Include="Core\Common\Items\Implementations\Potion.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\AttributeCreatorFactory.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\DefaultAttributeCreator.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\IItemAttributeCreator.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\PotionAttributeCreator.cs" />
-    <Compile Include="Core\Common\Items\ItemCreation\WeaponAttributeCreator.cs" />
+    <Compile Include="Core\GS\Actors\Actions\ActorAction.cs" />
+    <Compile Include="Core\GS\Actors\Movement\MoveToPointAction.cs" />
+    <Compile Include="Core\GS\AI\Brains\FollowerBrain.cs" />
+    <Compile Include="Core\GS\AI\Brains\HirelingBrain.cs" />
+    <Compile Include="Core\GS\AI\Brains\MonsterBrain.cs" />
+    <Compile Include="Core\GS\AI\BrainState.cs" />
+    <Compile Include="Core\GS\AI\Brains\NPCBrain.cs" />
+    <Compile Include="Core\GS\Items\Affix.cs" />
+    <Compile Include="Core\GS\Items\AffixGenerator.cs" />
+    <Compile Include="Core\GS\Items\HandledItem.cs" />
+    <Compile Include="Core\GS\Items\HandledType.cs" />
+    <Compile Include="Core\GS\Items\Implementations\Book.cs" />
+    <Compile Include="Core\GS\Items\Implementations\Dye.cs" />
+    <Compile Include="Core\GS\Items\Implementations\HealthPotion.cs" />
+    <Compile Include="Core\GS\Items\Implementations\Potion.cs" />
+    <Compile Include="Core\GS\Items\Implementations\SpellRune.cs" />
+    <Compile Include="Core\GS\Items\ItemCreation\AttributeCreatorFactory.cs" />
+    <Compile Include="Core\GS\Items\ItemCreation\DefaultAttributeCreator.cs" />
+    <Compile Include="Core\GS\Items\ItemCreation\IItemAttributeCreator.cs" />
+    <Compile Include="Core\GS\Items\ItemCreation\PotionAttributeCreator.cs" />
+    <Compile Include="Core\GS\Items\ItemCreation\WeaponAttributeCreator.cs" />
     <Compile Include="Common\MPQ\MPQPatchChain.cs" />
     <Compile Include="Common\MPQ\MPQStorage.cs" />
-    <Compile Include="Core\Common\Items\ItemGroup.cs" />
-    <Compile Include="Core\Common\Scripting\FormulaScript.cs" />
+    <Compile Include="Core\GS\Items\ItemGroup.cs" />
+    <Compile Include="Core\GS\Items\FormulaScript.cs" />
     <Compile Include="Core\Cryptography\SSL\CertificateHelper.cs" />
     <Compile Include="Core\GS\Actors\ActorFactory.cs" />
     <Compile Include="Core\GS\Actors\Gizmo.cs" />
     <Compile Include="Core\GS\Actors\Environment.cs" />
     <Compile Include="Core\GS\Actors\HandledSNO.cs" />
+    <Compile Include="Core\GS\Actors\Movement\MovementHelpers.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Artisan.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Blacksmith.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Jeweler.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\Mystic.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\CaptainRumford.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Enchantress.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Hireling.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Hirelings\Scoundrel.cs" />
@@ -171,9 +193,11 @@
     <Compile Include="Core\GS\Actors\Implementations\Waypoint.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Cain.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Vendor.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Zombie.cs" />
     <Compile Include="Core\GS\Actors\Interactions\Interactions.cs" />
     <Compile Include="Core\GS\Actors\Living.cs" />
     <Compile Include="Core\GS\Actors\NPC.cs" />
+    <Compile Include="Core\GS\AI\Brain.cs" />
     <Compile Include="Core\GS\Common\Types\Misc\Circle.cs" />
     <Compile Include="Core\GS\Common\Types\QuadTrees\QuadNode.cs" />
     <Compile Include="Core\GS\Common\Types\QuadTrees\QuadTree.cs" />
@@ -182,12 +206,27 @@
     <Compile Include="Core\GS\Games\GameCommands.cs" />
     <Compile Include="Core\GS\Games\GameDebugCommands.cs" />
     <Compile Include="Core\GS\Games\GameManager.cs" />
+    <Compile Include="Core\GS\Games\QuestManager.cs" />
     <Compile Include="Core\GS\Generators\WorldGenerator.cs" />
     <Compile Include="Core\GS\Actors\InteractiveNPC.cs" />
+    <Compile Include="Core\GS\Items\RuneHelper.cs" />
+    <Compile Include="Core\GS\Map\Debug\ControlExtensions.cs" />
+    <Compile Include="Core\GS\Map\Debug\DebugNavMesh.cs" />
+    <Compile Include="Core\GS\Map\Debug\WorldVisualizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\GS\Map\Debug\WorldVisualizer.Designer.cs">
+      <DependentUpon>WorldVisualizer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Core\GS\Markers\Marker.cs" />
+    <Compile Include="Core\GS\Games\Quest.cs" />
+    <Compile Include="Core\GS\Players\ConversationManager.cs" />
     <Compile Include="Core\GS\Common\InventoryGrid.cs" />
+    <Compile Include="Core\GS\Objects\IUpdateable.cs" />
     <Compile Include="Core\GS\Players\ExpBonusData.cs" />
     <Compile Include="Core\GS\Players\Equipment.cs" />
+    <Compile Include="Core\GS\Ticker\SteppedTickTimer.cs" />
+    <Compile Include="Core\GS\Ticker\TickTimer.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
@@ -213,9 +252,9 @@
     <Compile Include="Core\MooNet\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\MooNet\Helpers\FieldKeyHelper.cs" />
     <Compile Include="Core\MooNet\Helpers\NotificationTypeHelper.cs" />
-    <Compile Include="Common\Helpers\RandomHelper.cs" />
-    <Compile Include="Core\Common\Items\Item.cs" />
-    <Compile Include="Core\Common\Items\ItemGenerator.cs" />
+    <Compile Include="Common\Helpers\Math\RandomHelper.cs" />
+    <Compile Include="Core\GS\Items\Item.cs" />
+    <Compile Include="Core\GS\Items\ItemGenerator.cs" />
     <Compile Include="Core\GS\Actors\Portal.cs" />
     <Compile Include="Core\GS\Map\Scene.cs" />
     <Compile Include="Core\GS\Map\World.cs" />
@@ -243,10 +282,10 @@
     <Compile Include="Core\MooNet\Services\UserManagerService.cs" />
     <Compile Include="Core\GS\Skills\SkillSet.cs" />
     <Compile Include="Core\GS\Skills\Skills.cs" />
-    <Compile Include="Core\Common\Storage\DBManager.cs" />
-    <Compile Include="Core\Common\Toons\Toon.cs" />
-    <Compile Include="Core\Common\Toons\ToonHandleHelper.cs" />
-    <Compile Include="Core\Common\Toons\ToonManager.cs" />
+    <Compile Include="Common\Storage\DBManager.cs" />
+    <Compile Include="Core\MooNet\Toons\Toon.cs" />
+    <Compile Include="Core\MooNet\Toons\ToonHandleHelper.cs" />
+    <Compile Include="Core\MooNet\Toons\ToonManager.cs" />
     <Compile Include="LogConfig.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
@@ -269,6 +308,7 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Player\RequestUsePowerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignSkillMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Stash\OpenSharedStashMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBusyMessage.cs" />
@@ -317,7 +357,7 @@
     <Compile Include="Core\GS\Common\Types\Scene\SceneCachedValues.cs" />
     <Compile Include="Core\GS\Common\Types\Scene\SceneSpecification.cs" />
     <Compile Include="Net\GS\Message\Fields\SkillKeyMapping.cs" />
-    <Compile Include="Core\GS\Common\Types\SNO\SNOName.cs" />
+    <Compile Include="Core\GS\Common\Types\SNO\SNOHandle.cs" />
     <Compile Include="Core\GS\Common\Types\Math\Vector3D.cs" />
     <Compile Include="Net\GS\Message\Fields\VisualEquipment.cs" />
     <Compile Include="Net\GS\Message\Fields\VisualItem.cs" />
@@ -508,12 +548,12 @@
     <Compile Include="Common\Extensions\DateTimeExtensions.cs" />
     <Compile Include="Common\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Net\MooNet\MooNetRouter.cs" />
-    <Compile Include="Common\Helpers\StringHashHelper.cs" />
+    <Compile Include="Common\Helpers\Hash\StringHashHelper.cs" />
     <Compile Include="Common\Extensions\IMessageExtensions.cs" />
     <Compile Include="Common\TinyLogger.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObjectManager.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObject.cs" />
-    <Compile Include="Core\Common\Storage\Config.cs" />
+    <Compile Include="Common\Storage\Config.cs" />
     <Compile Include="Core\GS\Games\Game.cs" />
     <Compile Include="Core\GS\Actors\Monster.cs" />
     <Compile Include="Core\GS\Objects\WorldObject.cs" />
@@ -541,6 +581,14 @@
       <Link>ManagedOpenSsl.dll.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\dep\openssl\libeay32.dll">
+      <Link>libeay32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\dep\openssl\ssleay32.dll">
+      <Link>ssleay32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>    
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -569,13 +617,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\dep\openssl\libeay32.dll">
-      <Link>libeay32.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\dep\openssl\ssleay32.dll">
-      <Link>ssleay32.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Core\GS\Map\Debug\WorldVisualizer.resx">
+      <DependentUpon>WorldVisualizer.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

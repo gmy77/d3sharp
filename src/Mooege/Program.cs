@@ -22,7 +22,7 @@ using System.Reflection;
 using System.Threading;
 using Mooege.Common;
 using Mooege.Common.MPQ;
-using Mooege.Core.Common.Items;
+using Mooege.Core.GS.Items;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet;
@@ -65,6 +65,7 @@ namespace Mooege
             }
 
             Logger.Info("Item database loaded with a total of {0} item definitions.", ItemGenerator.TotalItems);
+
             StartupServers();
         }
 

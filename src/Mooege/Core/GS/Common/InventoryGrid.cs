@@ -1,10 +1,26 @@
-﻿using System;
+﻿/*
+ * Copyright (C) 2011 mooege project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Mooege.Common;
-using Mooege.Core.Common.Items;
 using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 
@@ -22,9 +38,11 @@ namespace Mooege.Core.GS.Common
         public int EquipmentSlot { get; private set; }
         public int Rows { get { return _backpack.GetLength(0); } }
         public int Columns { get { return _backpack.GetLength(1); } }
+        public Dictionary<uint, Item> Items {get; private set;}
         private uint[,] _backpack;
 
         private readonly Actor _owner; // Used, because most information is not in the item class but Actors managed by the world
+        
 
         private struct InventorySize
         {
@@ -42,6 +60,7 @@ namespace Mooege.Core.GS.Common
         {
             this._backpack = new uint[rows, columns];
             this._owner = owner;
+            this.Items = new Dictionary<uint, Item>();
             this.EquipmentSlot = slot;
         }
 
@@ -110,6 +129,11 @@ namespace Mooege.Core.GS.Common
         /// </summary>
         public void RemoveItem(Item item)
         {
+            if (!Items.ContainsKey(item.DynamicID))
+                return;
+
+            Items.Remove(item.DynamicID);
+
             for (int r = 0; r < Rows; r++)
             {
                 for (int c = 0; c < Columns; c++)
@@ -117,8 +141,6 @@ namespace Mooege.Core.GS.Common
                     if (_backpack[r, c] == item.DynamicID)
                     {
                         _backpack[r, c] = 0;
-                        item.SetInventoryLocation(-1, -1, -1);
-                        item.Owner = null;
                     }
                 }
             }
@@ -133,6 +155,8 @@ namespace Mooege.Core.GS.Common
 
             //check backpack boundaries
             if (row + size.Width > Rows || column + size.Width > Columns) return;
+
+            Items.Add(item.DynamicID, item);
 
             for (int r = row; r < Math.Min(row + size.Height, Rows); r++)
                 for (int c = column; c < Math.Min(column + size.Width, Columns); c++)
@@ -159,7 +183,7 @@ namespace Mooege.Core.GS.Common
             }
             else
             {
-                Logger.Error("Can't find slot in backpack to add item {0}", item.SNOName);
+                Logger.Error("Can't find slot in backpack to add item {0}", item.ActorSNO);
                 return false;
             }
         }
@@ -174,11 +198,7 @@ namespace Mooege.Core.GS.Common
         /// </summary>
         public bool Contains(uint itemID)
         {
-            for (int r = 0; r < Rows; r++)
-                for (int c = 0; c < Columns; c++)
-                    if (_backpack[r, c] == itemID)
-                        return true;
-            return false;
+            return Items.ContainsKey(itemID);
         }
 
         public bool Contains(Item item)
@@ -205,18 +225,8 @@ namespace Mooege.Core.GS.Common
             if (_owner == null || _owner.World == null)
                 return false;
 
-            for (int r = 0; r < Rows; r++)
-            {
-                for (int c = 0; c < Columns; c++)
-                {
-                    if (_backpack[r, c] != 0)
-                    {
-                        var item = _owner.World.GetItem(_backpack[r, c]);
-                        if (item != null)
-                            item.Reveal(player);
-                    }
-                }
-            }
+            foreach (var item in Items.Values)
+                item.Reveal(player);
 
             return true;
         }
@@ -226,18 +236,18 @@ namespace Mooege.Core.GS.Common
             if (_owner == null || _owner.World == null)
                 return false;
 
-            for (int r = 0; r < Rows; r++)
-            {
-                for (int c = 0; c < Columns; c++)
-                {
-                    if (_backpack[r, c] != 0)
-                    {
-                        //_owner.World.Actors[_backpack[r, c]].Unreveal(player); // TODO: Fixme /raist
-                    }
-                }
-            }
+            foreach (var item in Items.Values)
+                item.Unreveal(player);
 
             return true;
+        }
+
+        public Item GetItem(uint itemId)
+        {
+            Item item;
+            if (!Items.TryGetValue(itemId, out item))
+                return null;
+            return item;
         }
     }
 }

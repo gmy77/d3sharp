@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.Extensions;
+using Mooege.Common.Helpers.Hash;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Common.Helpers;
@@ -689,22 +690,22 @@ namespace Mooege.Common.MPQ.FileFormats
         public Resource SecondaryResource { get; private set; }
         public float F0 { get; private set; }
         public int I1 { get; private set; }
-        public float F1 { get; private set; }
-        public float F2 { get; private set; }
+        public float HitpointsMax { get; private set; }
+        public float HitpointsFactorLevel { get; private set; }
         public float F3 { get; private set; }
-        public float F4 { get; private set; }
-        public float F5 { get; private set; }
-        public float F6 { get; private set; }
+        public float ResourceMax { get; private set; }
+        public float ResourceFactorLevel { get; private set; }
+        public float ResourceRegenPerSecond { get; private set; }
         public float F7 { get; private set; }
         public float F8 { get; private set; }
         public float F9 { get; private set; }
         public float F10 { get; private set; }
         public float F11 { get; private set; }
-        public float F12 { get; private set; }
+        public float CritPercentCap { get; private set; }
         public float F13 { get; private set; }
         public float F14 { get; private set; }
-        public float F15 { get; private set; }
-        public float F16 { get; private set; }
+        public float WalkingRate { get; private set; }
+        public float RunningRate { get; private set; }
         public float F17 { get; private set; }
         public float F18 { get; private set; }
         public float F19 { get; private set; }
@@ -712,25 +713,25 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F21 { get; private set; }
         public float F22 { get; private set; }
         public float F23 { get; private set; }
-        public float F24 { get; private set; }
-        public float F25 { get; private set; }
-        public float F26 { get; private set; }
+        public float F24 { get; private set; } //Resistance?
+        public float F25 { get; private set; } //ResistanceTotal?
+        public float F26 { get; private set; } //CastingSpeed?
         public float F27 { get; private set; }
         public float F28 { get; private set; }
         public float F29 { get; private set; }
-        public float F30 { get; private set; }
+        public float F30 { get; private set; } //HitChance?
         public float F31 { get; private set; }
         public float F32 { get; private set; }
         public float F33 { get; private set; }
         public float F34 { get; private set; }
-        public float F35 { get; private set; }
-        public float F36 { get; private set; }
-        public float F37 { get; private set; }
-        public float F38 { get; private set; }
-        public float F39 { get; private set; }
-        public float F40 { get; private set; }
-        public float F41 { get; private set; }
-        public float F42 { get; private set; }
+        public float Attack { get; private set; }
+        public float Precision { get; private set; }
+        public float Vitality { get; private set; }
+        public float Defense { get; private set; }
+        public float GetHitMaxBase { get; private set; }
+        public float GetHitMaxPerLevel { get; private set; }
+        public float GetHitRecoveryBase { get; private set; }
+        public float GetHitRecoveryPerLevel { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -751,13 +752,13 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F0 = stream.ReadValueF32(); //308
             this.I1 = stream.ReadValueS32(); //312
             stream.Position += 16;
-            this.F1 = stream.ReadValueF32(); //332
-            this.F2 = stream.ReadValueF32(); //336
+            this.HitpointsMax = stream.ReadValueF32(); //332
+            this.HitpointsFactorLevel = stream.ReadValueF32(); //336
             stream.Position += 8;
             this.F3 = stream.ReadValueF32(); //348
-            this.F4 = stream.ReadValueF32(); //352
-            this.F5 = stream.ReadValueF32(); //356
-            this.F6 = stream.ReadValueF32(); //360
+            this.ResourceMax = stream.ReadValueF32(); //352
+            this.ResourceFactorLevel = stream.ReadValueF32(); //356
+            this.ResourceRegenPerSecond = stream.ReadValueF32(); //360
             stream.Position += 4;
             this.F7 = stream.ReadValueF32(); //368
             this.F8 = stream.ReadValueF32(); //372
@@ -766,13 +767,13 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F10 = stream.ReadValueF32(); //404
             stream.Position += 72;
             this.F11 = stream.ReadValueF32(); //480
-            this.F12 = stream.ReadValueF32(); //484
+            this.CritPercentCap = stream.ReadValueF32(); //484
             this.F13 = stream.ReadValueF32(); //488
             stream.Position += 4;
             this.F14 = stream.ReadValueF32(); //496
             stream.Position += 32;
-            this.F15 = stream.ReadValueF32(); //532
-            this.F16 = stream.ReadValueF32(); //536
+            this.WalkingRate = stream.ReadValueF32(); //532
+            this.RunningRate = stream.ReadValueF32(); //536
             stream.Position += 4;
             this.F17 = stream.ReadValueF32(); //544
             stream.Position += 32;
@@ -799,15 +800,15 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += 40;
             this.F34 = stream.ReadValueF32(); //768
             stream.Position += 24;
-            this.F35 = stream.ReadValueF32(); //796
-            this.F36 = stream.ReadValueF32(); //800
-            this.F37 = stream.ReadValueF32(); //804
-            this.F38 = stream.ReadValueF32(); //808
+            this.Attack = stream.ReadValueF32(); //796
+            this.Precision = stream.ReadValueF32(); //800
+            this.Vitality = stream.ReadValueF32(); //804
+            this.Defense = stream.ReadValueF32(); //808
             stream.Position += 40;
-            this.F39 = stream.ReadValueF32(); //852
-            this.F40 = stream.ReadValueF32(); //856
-            this.F41 = stream.ReadValueF32(); //860
-            this.F42 = stream.ReadValueF32(); //864
+            this.GetHitMaxBase = stream.ReadValueF32(); //852
+            this.GetHitMaxPerLevel = stream.ReadValueF32(); //856
+            this.GetHitRecoveryBase = stream.ReadValueF32(); //860
+            this.GetHitRecoveryPerLevel = stream.ReadValueF32(); //864
         }
 
         public enum Resource : int
@@ -1249,12 +1250,12 @@ namespace Mooege.Common.MPQ.FileFormats
     public class RecipeIngredient
     {
         public int ItemGBId { get; private set; }
-        public int I0 { get; private set; }
+        public int Count { get; private set; }
 
         public RecipeIngredient(MpqFileStream stream)
         {
             this.ItemGBId = stream.ReadValueS32();
-            this.I0 = stream.ReadValueS32();
+            this.Count = stream.ReadValueS32();
         }
     }
 
@@ -1268,8 +1269,8 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             stream.Position += 4;
             this.Name = stream.ReadString(256, true);
-            this.I0 = new int[219];
-            for (int i = 0; i < 219; i++)
+            this.I0 = new int[220];
+            for (int i = 0; i < 220; i++)
                 this.I0[i] = stream.ReadValueS32();
         }
     }
@@ -1339,8 +1340,8 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             stream.Position += 4;
             this.Name = stream.ReadString(256, true);
-            this.F0 = new float[22];
-            for (int i = 0; i < 22; i++)
+            this.F0 = new float[23];
+            for (int i = 0; i < 23; i++)
                 this.F0[i] = stream.ReadValueF32();
         }
     }

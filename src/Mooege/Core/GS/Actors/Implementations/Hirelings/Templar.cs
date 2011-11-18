@@ -17,18 +17,20 @@
  */
 
 using System.Collections.Generic;
+using Mooege.Common.Helpers.Hash;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
 using Mooege.Common.Helpers;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 {
     [HandledSNO(4538 /* Templar.acr */)]
     public class Templar : Hireling
     {
-        public Templar(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Templar(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             mainSNO = 4538;
@@ -39,7 +41,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             this.Attributes[GameAttribute.Hireling_Class] = 1;
         }
 
-        public override Hireling CreateHireling(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public override Hireling CreateHireling(World world, int snoId, TagMap tags)
         {
             return new Templar(world, snoId, tags);
         }

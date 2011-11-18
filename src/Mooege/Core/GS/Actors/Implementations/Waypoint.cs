@@ -28,6 +28,7 @@ using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
@@ -36,7 +37,7 @@ namespace Mooege.Core.GS.Actors.Implementations
     {
         public int WaypointId { get; private set; }
 
-        public Waypoint(World world, int snoId, Dictionary<int, TagMapEntry> tags)
+        public Waypoint(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
@@ -72,7 +73,7 @@ namespace Mooege.Core.GS.Actors.Implementations
                 if (scene.Specification == null) continue;
                 foreach (var area in scene.Specification.SNOLevelAreas)
                 {
-                    if (wayPointInfo[i].SNOWorld != this.World.SNOId || wayPointInfo[i].SNOLevelArea != area)
+                    if (wayPointInfo[i].SNOWorld != this.World.WorldSNO.Id || wayPointInfo[i].SNOLevelArea != area)
                         continue;
 
                     this.WaypointId = i;

@@ -20,19 +20,21 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Quest
 {
+/* TODO: FIXME
+    [Message(new[] {Opcodes.PlayLoreImmediately,Opcodes.PlayLoreWithButton})]
     [Message(Opcodes.LoreMessage)]
     public class LoreMessage : GameMessage
     {
-        public int /* sno */ snoLore;
+        public int LoreSNOId;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            snoLore = buffer.ReadInt(32);
+            LoreSNOId = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, snoLore);
+            buffer.WriteInt(32, LoreSNOId);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -41,11 +43,10 @@ namespace Mooege.Net.GS.Message.Definitions.Quest
             b.AppendLine("LoreMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("snoLore: 0x" + snoLore.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("LoreSNOId: 0x" + LoreSNOId.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
+*/
 }

@@ -28,36 +28,14 @@ namespace Mooege.Common.MPQ.FileFormats
     public class Recipe : FileFormat
     {
         public Header Header { get; private set; }
-        public int SNO { get; private set; }
         public ItemSpecifierData ItemSpecifierData { get; private set; }
 
         public Recipe(MpqFile file)
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            this.SNO = stream.ReadValueS32();
-            stream.Position += (2 * 4);
             ItemSpecifierData = new ItemSpecifierData(stream);
             stream.Close();
-        }
-    }
-
-    public class ItemSpecifierData
-    {
-        public int ItemGBId { get; private set; }
-        public int I0 { get; private set; }
-        public int[] GBIdAffixes = new int[3];
-        public int I1 { get; private set; }
-
-        public ItemSpecifierData(MpqFileStream stream)
-        {
-            ItemGBId = stream.ReadValueS32();
-            I0 = stream.ReadValueS32();
-            for (int i = 0; i > 3; i++)
-            {
-                GBIdAffixes[i] = stream.ReadValueS32();
-            }
-            I1 = stream.ReadValueS32();
         }
     }
 }
