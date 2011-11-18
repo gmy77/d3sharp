@@ -24,6 +24,7 @@ using Mooege.Core.Common.Storage;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
+using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.Common.Toons
@@ -350,12 +351,10 @@ namespace Mooege.Core.Common.Toons
             {
                 case FieldKeyHelper.Program.D3:
                     if (field.Key.Group == 4 && field.Key.Field == 1)
-                    {   
-                        //don't know what to do with this yet, so far I have observed that the update value is always equal to the toon owner's current channel /dustinconrad
-                        if (field.Value.HasMessageValue && !field.Value.MessageValue.Equals(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()))
-                        {
-                            Logger.Warn("Toon owner's logged-in client channel is not equal to the channel specified in the update message");
-                        }
+                    {
+                        var entityId = D3.OnlineService.EntityId.ParseFrom(field.Value.MessageValue);
+                        var channel = ChannelManager.GetChannelByEntityId(entityId);
+                        this.Owner.LoggedInClient.CurrentChannel = channel;
                     }
                     else if (field.Key.Group == 4 && field.Key.Field == 2)
                     {

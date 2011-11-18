@@ -57,9 +57,19 @@ namespace Mooege.Core.MooNet.Channels
                     return Channels[entityId.Low];
             }
             else
-            {
                 Logger.Warn("Given entity ID doesn't look like a channel ID!");
+            return null;
+        }
+
+        public static Channel GetChannelByEntityId(D3.OnlineService.EntityId entityId)
+        {
+            if (entityId.IdHigh == (ulong)EntityIdHelper.HighIdType.ChannelId)
+            {
+                if (Channels.ContainsKey(entityId.IdLow))
+                    return Channels[entityId.IdLow];
             }
+            else
+                Logger.Warn("Given entity ID doesn't look like a channel ID!");
             return null;
         }
     }

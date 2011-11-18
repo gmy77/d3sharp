@@ -42,8 +42,8 @@ namespace Mooege.Core.MooNet.Services
             Logger.Trace("CreateChannel() {0} for {1}", channel, Client.CurrentToon);
 
             // send our MOTD - though this is actually not the right place for it /raist.
-            if (Config.Instance.MOTD.Trim() != string.Empty)
-                this.Client.SendServerWhisper(Config.Instance.MOTD);
+            //if (Config.Instance.MOTD.Trim() != string.Empty)
+            //    this.Client.SendServerWhisper(Config.Instance.MOTD);
         }
 
         public override void FindChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.FindChannelRequest request, System.Action<bnet.protocol.channel.FindChannelResponse> done)

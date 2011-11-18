@@ -30,6 +30,7 @@ using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Commands;
+using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet.Packets;
@@ -364,29 +365,31 @@ namespace Mooege.Net.MooNet
                 this._currentChannel = value;
                 if (value == null) return;
 
-                // TODO: still trying to figure a bit below - commented meanwhile /raist.
+                var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 4, 1, 0);
+                var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey)
+                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder()
+                    .SetMessageValue(this.CurrentChannel.D3EntityId.ToByteString()).Build()).Build();
 
-                // notify friends.
-                //if (FriendManager.Friends[this.Account.BnetAccountID.Low].Count == 0) return; // if account has no friends just skip.
+                var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.CurrentToon.BnetEntityID).AddFieldOperation(operation).Build();
 
-                //var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 4, 1, 0);
-                //var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(value.D3EntityId.ToByteString()).Build()).Build();
-                //var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+                this.SendStateChangeNotification(this.CurrentToon, state);
 
-                //var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.Account.BnetAccountID).AddFieldOperation(operation).Build();
-                //var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
-                //var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
-
-                //foreach (var friend in FriendManager.Friends[this.Account.BnetAccountID.Low])
-                //{
-                //    var account = AccountManager.GetAccountByPersistentID(friend.Id.Low);
-                //    if (account == null || account.LoggedInClient == null) return; // only send to friends that are online.
-
-                //    account.LoggedInClient.CallMethod(
-                //        bnet.protocol.channel.ChannelSubscriber.Descriptor.FindMethodByName("NotifyUpdateChannelState"),
-                //        notification, this.Account.DynamicId);
-                //}
+                // TODO: notify friends too. /raist.
             }
+        }
+      
+        #endregion
+
+        #region channel-state changes
+
+        public void SendStateChangeNotification(RPCObject target, bnet.protocol.presence.ChannelState state)
+        {
+            var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+            var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
+
+            this.MakeTargetedRPC(target, () => 
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(this).NotifyUpdateChannelState(null, notification, callback => { }));
         }
 
         #endregion
