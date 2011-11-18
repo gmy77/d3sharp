@@ -8,12 +8,12 @@ namespace Mooege.Net.GS.Message
 
         static GameAttribute()
         {
-            Attributes = typeof(GameAttribute).GetFields()
+            Attributes = typeof (GameAttribute).GetFields()
                 .Where(a =>
-                    a.IsStatic &&
-                    (a.GetType().Name == "GameAttributeI" ||
-                    a.GetType().Name == "GameAttributeF" ||
-                    a.GetType().Name == "GameAttributeB"))
+                       a.IsStatic &&
+                       (a.FieldType.Name == "GameAttributeI" ||
+                        a.FieldType.Name == "GameAttributeF" ||
+                        a.FieldType.Name == "GameAttributeB"))
                 .Select(a => a.GetValue(null) as GameAttribute)
                 .OrderBy(a => a.Id)
                 .ToArray();
