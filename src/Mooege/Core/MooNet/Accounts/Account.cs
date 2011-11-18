@@ -35,7 +35,8 @@ namespace Mooege.Core.MooNet.Accounts
         public bnet.protocol.EntityId BnetAccountID { get; private set; }
         public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
         public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
-        
+        public D3.PartyMessage.ScreenStatus ScreenStatus { get; set; }
+
         public string Email { get; private set; } // I - Username
         public byte[] Salt { get; private set; }  // s- User's salt.
         public byte[] PasswordVerifier { get; private set; } // v - password verifier.
