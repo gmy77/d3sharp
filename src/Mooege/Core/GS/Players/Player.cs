@@ -960,7 +960,7 @@ namespace Mooege.Core.GS.Players
                 .SetLevel(45)
                 .SetCooldownEnd(0)
                 .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage8) { Data = blacksmith.ToByteArray() };
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage9) { Data = blacksmith.ToByteArray() };
         }
 
         public GenericBlobMessage GetJewelerData()
@@ -969,7 +969,7 @@ namespace Mooege.Core.GS.Players
                 .SetLevel(9)
                 .SetCooldownEnd(0)
                 .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage9) { Data = jeweler.ToByteArray() };
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage10) { Data = jeweler.ToByteArray() };
         }
 
         public GenericBlobMessage GetMysticData()
@@ -978,7 +978,7 @@ namespace Mooege.Core.GS.Players
                 .SetLevel(45)
                 .SetCooldownEnd(0)
                 .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage10) { Data = mystic.ToByteArray() };
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage11) { Data = mystic.ToByteArray() };
         }
 
         #endregion
