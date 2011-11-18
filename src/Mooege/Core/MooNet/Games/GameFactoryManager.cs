@@ -22,7 +22,6 @@ using Mooege.Common;
 using Mooege.Core.Common.Toons;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
-using bnet.protocol.game_master;
 
 namespace Mooege.Core.MooNet.Games
 {
@@ -41,58 +40,28 @@ namespace Mooege.Core.MooNet.Games
 
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        public static GameFactory CreateGame(Channel channel)
+        public static GameFactory CreateGame(MooNetClient owner, bnet.protocol.game_master.FindGameRequest request, ulong requestId)
         {
-            var game = new GameFactory(channel);
+            var game = new GameFactory(owner, request, requestId);
             GameCreators.Add(game.DynamicId, game);
             return game;
         }
 
-        public static void FindGame(MooNetClient client, ulong requestId, FindGameRequest request)
-        {
-            var clients = new List<MooNetClient>();
-            foreach(var player in request.PlayerList)
-            {
-                var toon = ToonManager.GetToonByLowID(player.ToonId.Low);
-                if(toon.Owner.LoggedInClient==null) continue;
-                clients.Add(toon.Owner.LoggedInClient);
-            }
+        public static GameFactory FindGame(MooNetClient client, bnet.protocol.game_master.FindGameRequest request, ulong requestId)
+        { 
+            List<GameFactory> matchingGames = FindMatchingGames(request);
+            var rand = new Random();
+            GameFactory gameFactory = null;
 
-            string version = null;
-            D3.OnlineService.GameCreateParams gameCreateParams = null;
-            foreach (bnet.protocol.attribute.Attribute attribute in request.Properties.CreationAttributesList)
-            {
-                if (attribute.Name != "GameCreateParams")
-                    Logger.Warn("FindGame(): Unknown CreationAttribute: {0}", attribute.Name);
-                else
-                    gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
-            }
-
-            foreach(bnet.protocol.attribute.Attribute attribute in request.Properties.Filter.AttributeList)
-            {
-                if (attribute.Name != "version")
-                    Logger.Warn("FindGame(): Unknown Attribute: {0}", attribute.Name);
-                else
-                    version = attribute.Value.StringValue;
-            }
-
-            List<GameFactory> matchingGames;
-            if (!request.Properties.Create && (matchingGames = FindMatchingGames(request)).Count > 0)
-            {
-                var rand = new Random();
-                var game = matchingGames[rand.Next(matchingGames.Count)];
-                Logger.Warn("Client {0} joining game with FactoryID:{1}", client.CurrentToon.Name, game.FactoryID);
-                game.JoinGame(clients, request.ObjectId);
-            }
+            if (!request.Properties.Create && matchingGames.Count > 0)                
+                gameFactory = matchingGames[rand.Next(matchingGames.Count)];
             else
-            {
-                client.CurrentChannel.Game.RequestId = requestId;
-                Logger.Warn("Client {0} creating new game", client.CurrentToon.Name);
-                client.CurrentChannel.Game.StartGame(clients, request.ObjectId, gameCreateParams, version);
-            }
+                gameFactory = CreateGame(client, request, requestId);
+
+            return gameFactory;
         }
 
-        private static List<GameFactory> FindMatchingGames(FindGameRequest request)
+        private static List<GameFactory> FindMatchingGames(bnet.protocol.game_master.FindGameRequest request)
         {
             String version = String.Empty;
             int difficulty = 0;
@@ -123,14 +92,15 @@ namespace Mooege.Core.MooNet.Games
                     matchOp = (bool b1, bool b2, bool b3) => !b1 && !b2 && !b3;
                     break;
                 case bnet.protocol.attribute.AttributeFilter.Types.Operation.MATCH_ALL:
-                default://default to match all, fall through is on purpose
+                default: //default to match all, fall through is on purpose
                     matchOp = (bool b1, bool b2, bool b3) => b1 && b2 && b3;
                     break;
             }
 
             List<GameFactory> matches = new List<GameFactory>();
             foreach (GameFactory game in GameCreators.Values)
-            {   //FIXME: don't currently track max players allowed in a game, hardcoded 4 /dustinconrad
+            {   
+                //FIXME: don't currently track max players allowed in a game, hardcoded 4 /dustinconrad
                 if (game.InGame != null && !game.GameCreateParams.IsPrivate && game.InGame.Players.Count < 4)
                 {
                     if (matchOp(version == game.Version, difficulty == game.GameCreateParams.Coop.DifficultyLevel, currentQuest == game.GameCreateParams.Coop.SnoQuest))
@@ -143,7 +113,7 @@ namespace Mooege.Core.MooNet.Games
         }
 
         //FIXME: MATCH_ALL_MOST_SPECIFIC not implemented /dustinconrad
-        public static GameStatsBucket.Builder GetGameStats(GetGameStatsRequest request)
+        public static bnet.protocol.game_master.GameStatsBucket.Builder GetGameStats(bnet.protocol.game_master.GetGameStatsRequest request)
         {
             String version = String.Empty;
             int difficulty = 0;
@@ -193,7 +163,7 @@ namespace Mooege.Core.MooNet.Games
                 }
             }
 
-            var bucket = GameStatsBucket.CreateBuilder()
+            var bucket = bnet.protocol.game_master.GameStatsBucket.CreateBuilder()
                 .SetWaitMilliseconds(200)
                 .SetActiveGames(games)
                 .SetActivePlayers((uint)players)

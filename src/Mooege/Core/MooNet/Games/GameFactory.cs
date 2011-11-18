@@ -36,11 +36,14 @@ namespace Mooege.Core.MooNet.Games
         public bnet.protocol.EntityId BnetEntityId { get; private set; }
 
         /// <summary>
-        /// The channel bound to game.
+        /// Ingame manager.
         /// </summary>
-        public Channel Channel { get; private set; }
-
         public Game InGame { get; private set; }
+
+        /// <summary>
+        /// Game owner.
+        /// </summary>
+        public MooNetClient Owner { get; private set; }
 
         /// <summary>
         /// Game handle.
@@ -53,40 +56,54 @@ namespace Mooege.Core.MooNet.Games
 
         public ulong FactoryID { get; private set; }
 
-        public ulong RequestId { get; set; }
+        public ulong RequestId { get; private set; }
 
-        public static ulong RequestIdCounter = 0;
+        public bool Started { get; private set; }
 
-        public GameFactory(Channel channel)
+        public GameFactory(MooNetClient owner, bnet.protocol.game_master.FindGameRequest request, ulong requestId)
         {
-            this.Channel = channel;
-
-            this.FactoryID = 14249086168335147635;
+            this.Started = false;
+            this.Owner = owner;
+            this.RequestId = requestId;
+            this.FactoryID = request.FactoryId;
             this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameId).SetLow(this.DynamicId).Build();
             this.GameHandle = bnet.protocol.game_master.GameHandle.CreateBuilder().SetFactoryId(this.FactoryID).SetGameId(this.BnetEntityId).Build();
+
+            foreach (bnet.protocol.attribute.Attribute attribute in request.Properties.CreationAttributesList)
+            {
+                if (attribute.Name != "GameCreateParams")
+                    Logger.Warn("FindGame(): Unknown CreationAttribute: {0}", attribute.Name);
+                else
+                    this.GameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
+            }
+
+            foreach (bnet.protocol.attribute.Attribute attribute in request.Properties.Filter.AttributeList)
+            {
+                if (attribute.Name != "version")
+                    Logger.Warn("FindGame(): Unknown Attribute: {0}", attribute.Name);
+                else
+                    this.Version = attribute.Value.StringValue;
+            }
         }
 
-        public void StartGame(List<MooNetClient> clients, ulong objectId, D3.OnlineService.GameCreateParams gameCreateParams, string version)
+        public void StartGame(List<MooNetClient> clients, ulong objectId)
         {
-            this.GameCreateParams = gameCreateParams;
-            this.Version = version;
             this.InGame = GameManager.CreateGame((int) this.DynamicId); // create the ingame.
-
-            clients.First().MapLocalObjectID(this.DynamicId, objectId); // map remote object-id for party leader.
 
             foreach(var client in clients) // get all clients in game.
             {
+                client.MapLocalObjectID(this.DynamicId, objectId); // map remote object-id.
                 this.SendConnectionInfo(client);
             }
+
+            this.Started = true;
         }
 
         public void JoinGame(List<MooNetClient> clients, ulong objectId)
         {
-            //Seems to work whether the line below is there or not.  Commenting out as it is easier to detect if something is completely missing vs wrong... /dustinconrad
-            //clients.First().MapLocalObjectID(this.DynamicId, objectId);
-
             foreach (var client in clients) // get all clients in game.
             {
+                client.MapLocalObjectID(this.DynamicId, objectId); // map remote object-id.
                 this.SendConnectionInfo(client);
             }
         }
@@ -102,78 +119,53 @@ namespace Mooege.Core.MooNet.Games
 
         private void SendConnectionInfo(MooNetClient client)
         {
-            if (client == this.Channel.Owner)
-            {
-                //TODO: All these ChannelState updates can be moved to functions someplace else after packet flow is discovered and working -Egris
-                //Send current JoinPermission to client before locking it
-                var channelStatePermission = bnet.protocol.channel.ChannelState.CreateBuilder()
-                    .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder()
-                    .SetName("D3.Party.JoinPermissionPreviousToLock")
-                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build())
-                    .Build()).Build();
-                var notificationPermission = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                    .SetAgentId(client.CurrentToon.BnetEntityID)
-                    .SetStateChange(channelStatePermission)
-                    .Build();
-                client.MakeTargetedRPC(client.CurrentChannel, () =>
-                    bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPermission, callback => { }));
-                
-                var builder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder();
-                builder.SetRequestId(this.RequestId);
-                builder.SetGameHandle(this.GameHandle);
-                //builder.AddConnectInfo(GetConnectionInfoForClient(client)); // not sent by 7728 any more? /raist.
-
-                client.MakeTargetedRPC(this, () => 
-                    bnet.protocol.game_master.GameFactorySubscriber.CreateStub(client).NotifyGameFound(null, builder.Build(), callback => { }));
-            }
-
             // Lock party and close privacy level while entering game
-            var channelStatePrivacyLevel = bnet.protocol.channel.ChannelState.CreateBuilder()
-                .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_CLOSED).Build();
-            var notificationPrivacyLevel = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(client.CurrentToon.BnetEntityID)
-                .SetStateChange(channelStatePrivacyLevel)
-                .Build();
-            client.MakeTargetedRPC(client.CurrentChannel, () =>
-                bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPrivacyLevel, callback => { }));
+            //var channelStatePrivacyLevel = bnet.protocol.channel.ChannelState.CreateBuilder()
+            //    .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_CLOSED).Build();
+            //var notificationPrivacyLevel = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
+            //    .SetAgentId(client.CurrentToon.BnetEntityID)
+            //    .SetStateChange(channelStatePrivacyLevel)
+            //    .Build();
+            //client.MakeTargetedRPC(client.CurrentChannel, () =>
+            //    bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPrivacyLevel, callback => { }));
 
-            var channelStatePartyLock = bnet.protocol.channel.ChannelState.CreateBuilder()
-                .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder()
-                .SetName("D3.Party.LockReasons")
-                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build())
-                .Build()).Build();
-            var notificationPartyLock = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(client.CurrentToon.BnetEntityID)
-                .SetStateChange(channelStatePartyLock)
-                .Build();
-            client.MakeTargetedRPC(client.CurrentChannel, () =>
-                bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPartyLock, callback => { }));
+            //var channelStatePartyLock = bnet.protocol.channel.ChannelState.CreateBuilder()
+            //    .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder()
+            //    .SetName("D3.Party.LockReasons")
+            //    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build())
+            //    .Build()).Build();
+            //var notificationPartyLock = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
+            //    .SetAgentId(client.CurrentToon.BnetEntityID)
+            //    .SetStateChange(channelStatePartyLock)
+            //    .Build();
+            //client.MakeTargetedRPC(client.CurrentChannel, () =>
+            //    bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPartyLock, callback => { }));
 
             // send the notification.
-                var connectionInfo = GetConnectionInfoForClient(client);
+            var connectionInfo = GetConnectionInfoForClient(client);
 
-                var connectionInfoAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("connection_info")
-                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(connectionInfo.ToByteString()).Build())
-                    .Build();
+            var connectionInfoAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("connection_info")
+                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(connectionInfo.ToByteString()).Build())
+                .Build();
 
-                var gameHandleAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("game_handle")
-                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.GameHandle.ToByteString()).Build())
-                    .Build();
+            var gameHandleAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("game_handle")
+                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.GameHandle.ToByteString()).Build())
+                .Build();
 
-                var requestIdAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("game_request_id")
-                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetUintValue(this.RequestId).Build())
-                    .Build();
+            var requestIdAttribute = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("game_request_id")
+                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetUintValue(this.RequestId).Build())
+                .Build();
 
-                var notificationBuilder = bnet.protocol.notification.Notification.CreateBuilder()
-                    .SetSenderId(this.Channel.Owner.CurrentToon.BnetEntityID)
-                    .SetTargetId(client.CurrentToon.BnetEntityID)
-                    .SetType("GAME_CONNECTION_INFO")
-                    .AddAttribute(connectionInfoAttribute)
-                    .AddAttribute(gameHandleAttribute)
-                    .AddAttribute(requestIdAttribute);
+            var notificationBuilder = bnet.protocol.notification.Notification.CreateBuilder()
+                .SetSenderId(this.Owner.CurrentToon.BnetEntityID)
+                .SetTargetId(client.CurrentToon.BnetEntityID)
+                .SetType("GAME_CONNECTION_INFO")
+                .AddAttribute(connectionInfoAttribute)
+                .AddAttribute(gameHandleAttribute)
+                .AddAttribute(requestIdAttribute);
 
-                client.MakeRPC(() =>
-                    bnet.protocol.notification.NotificationListener.CreateStub(client).OnNotificationReceived(null, notificationBuilder.Build(), callback => { }));
+            client.MakeRPC(() =>
+                bnet.protocol.notification.NotificationListener.CreateStub(client).OnNotificationReceived(null, notificationBuilder.Build(), callback => { }));
         }
     }
 }
