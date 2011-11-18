@@ -72,6 +72,22 @@ namespace Mooege.Core.MooNet.Services
             // find the game.
             var gameFound = GameFactoryManager.FindGame(this.Client, request, ++GameFactoryManager.RequestIdCounter);
 
+            //TODO: All these ChannelState updates can be moved to functions someplace else after packet flow is discovered and working -Egris
+            //Send current JoinPermission to client before locking it
+            var channelStatePermission = bnet.protocol.channel.ChannelState.CreateBuilder()
+                .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder()
+                .SetName("D3.Party.JoinPermissionPreviousToLock")
+                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build())
+                .Build()).Build();
+
+            var notificationPermission = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
+                .SetAgentId(this.Client.CurrentToon.BnetEntityID)
+                .SetStateChange(channelStatePermission)
+                .Build();
+
+            this.Client.MakeTargetedRPC(Client.CurrentChannel, () =>
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notificationPermission, callback => { }));
+
             var builder = bnet.protocol.game_master.FindGameResponse.CreateBuilder().SetRequestId(gameFound.RequestId);
             done(builder.Build());
 
@@ -90,22 +106,6 @@ namespace Mooege.Core.MooNet.Services
 
             this.Client.MakeRPCWithListenerId(request.ObjectId, () =>
                 bnet.protocol.game_master.GameFactorySubscriber.CreateStub(this.Client).NotifyGameFound(null, notificationBuilder.Build(), callback => { }));
-
-            //TODO: All these ChannelState updates can be moved to functions someplace else after packet flow is discovered and working -Egris
-            //Send current JoinPermission to client before locking it
-            var channelStatePermission = bnet.protocol.channel.ChannelState.CreateBuilder()
-                .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder()
-                .SetName("D3.Party.JoinPermissionPreviousToLock")
-                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build())
-                .Build()).Build();
-
-            var notificationPermission = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(this.Client.CurrentToon.BnetEntityID)
-                .SetStateChange(channelStatePermission)
-                .Build();
-            
-            this.Client.MakeTargetedRPC(Client.CurrentChannel, () =>
-                bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notificationPermission, callback => { }));
             
             if(gameFound.Started)
             {
