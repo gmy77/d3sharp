@@ -16,11 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Linq;
 using System.Collections.Generic;
 using Google.ProtocolBuffers;
 using Mooege.Core.GS.Games;
-using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
@@ -120,26 +118,30 @@ namespace Mooege.Core.MooNet.Games
         private void SendConnectionInfo(MooNetClient client)
         {
             // Lock party and close privacy level while entering game
-            //var channelStatePrivacyLevel = bnet.protocol.channel.ChannelState.CreateBuilder()
-            //    .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_CLOSED).Build();
-            //var notificationPrivacyLevel = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-            //    .SetAgentId(client.CurrentToon.BnetEntityID)
-            //    .SetStateChange(channelStatePrivacyLevel)
-            //    .Build();
-            //client.MakeTargetedRPC(client.CurrentChannel, () =>
-            //    bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPrivacyLevel, callback => { }));
+            var channelStatePrivacyLevel = bnet.protocol.channel.ChannelState.CreateBuilder()
+                .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_CLOSED).Build();
 
-            //var channelStatePartyLock = bnet.protocol.channel.ChannelState.CreateBuilder()
-            //    .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder()
-            //    .SetName("D3.Party.LockReasons")
-            //    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build())
-            //    .Build()).Build();
-            //var notificationPartyLock = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-            //    .SetAgentId(client.CurrentToon.BnetEntityID)
-            //    .SetStateChange(channelStatePartyLock)
-            //    .Build();
-            //client.MakeTargetedRPC(client.CurrentChannel, () =>
-            //    bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPartyLock, callback => { }));
+            var notificationPrivacyLevel = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
+                .SetAgentId(client.CurrentToon.BnetEntityID)
+                .SetStateChange(channelStatePrivacyLevel)
+                .Build();
+
+            client.MakeTargetedRPC(client.CurrentChannel, () =>
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPrivacyLevel, callback => { }));
+
+            var channelStatePartyLock = bnet.protocol.channel.ChannelState.CreateBuilder()
+                .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder()
+                .SetName("D3.Party.LockReasons")
+                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build())
+                .Build()).Build();
+
+            var notificationPartyLock = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
+                .SetAgentId(client.CurrentToon.BnetEntityID)
+                .SetStateChange(channelStatePartyLock)
+                .Build();
+
+            client.MakeTargetedRPC(client.CurrentChannel, () =>
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPartyLock, callback => { }));
 
             // send the notification.
             var connectionInfo = GetConnectionInfoForClient(client);
