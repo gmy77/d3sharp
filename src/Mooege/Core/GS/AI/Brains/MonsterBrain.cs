@@ -31,13 +31,13 @@ namespace Mooege.Core.GS.AI.Brains
         /// Hostile actors in range.
         /// </summary>
         public List<Player> EnemiesInRange { get; protected set; }
-        private Pathfinder pather;
+
         private List<Vector3D> path;
         private int nextPlayerSearch = 0;
         public MonsterBrain(Actor body)
             : base(body)
         {
-            pather = new Pathfinder(this.Body.World);
+
         }
 
         private List<Player> GetPlayersInRange(Mooege.Core.GS.Map.World world)
@@ -110,7 +110,7 @@ namespace Mooege.Core.GS.AI.Brains
                 var distance = MovementHelpers.GetDistance(this.Body.Position, heading);
                 if (distance < 3f)
                 { return; }
-                this.CurrentAction = new PathfindToPoint(this.pather, this.Body, heading);
+                this.CurrentAction = new PathfindToPoint(this.Body, heading);
                 return;
             }
             //if (this.Body.Position.DistanceSquared(ref heading) > this.Body.WalkSpeed * this.Body.World.Game.TickRate) // just skip the movements that can be accomplished in a single game.update(). /raist.
@@ -127,7 +127,7 @@ namespace Mooege.Core.GS.AI.Brains
             {
                 if (path == null)
                 {
-                    path = Pather.GetPath(pather, this.Body, this.Body.Position, heading);
+                    //path = Pather.GetPath(this.Body, this.Body.Position, heading);
                     if (path == null) { return; }
                     path.Reverse();
                 }

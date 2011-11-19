@@ -33,36 +33,29 @@ namespace Mooege.Core.GS.Actors.Movement
         public Vector3D Heading { get; private set; }
 
         public SteppedRelativeTickTimer Timer;
-        private List<Vector3D> Path;
+        private List<Vector3D> Path = new List<Vector3D>();
         Task<List<Vector3D>> task;
-        public PathfindToPoint(Pathfinder pather, Actor owner, Vector3D heading)
+        int finished = 0;
+        public PathfindToPoint(Actor owner, Vector3D heading)
             : base(owner)
         {
                   //task = Task.Factory.StartNew(() => pather.FindPath(ref Path,owner,owner.Position,heading));
-                  task = Task<List<Vector3D>>.Factory.StartNew(() => pather.FindPath(owner, owner.Position, heading)); 
+                  //task = Task<List<Vector3D>>.Factory.StartNew(() => pather.FindPath(owner, owner.Position, heading)); 
+            owner.World.Game.Pathfinder.GetPath(owner, owner.Position, heading, ref Path,ref finished);
             this.Heading = heading;
 
         }
 
         public override void Start(int tickCounter)
         {
-            if (!task.IsCompleted)
+            if (Path.Count == 0)
                 return;
-            if (task.Result == null)
+            if (Path.Count < 2)
             {
                 this.Started = true;
                 this.Done = true;
                 return;
             }
-                
-            if (task.Result.Count < 1)
-            {
-                this.Started = true;
-                this.Done = true;
-                return;
-            }
-            Path = task.Result;
-            
             // Each path step will be 2.5f apart roughly, not sure on the math to get correct walk speed for the timer.
             // mobs sometimes skip a bit, pretty sure this is because timing isnt correct.  :( - DarkLotus
             

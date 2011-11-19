@@ -12,15 +12,22 @@ using Mooege.Core.GS.Actors;
 
 namespace Mooege.Core.GS.AI
 {
+
+
+
+
+
     public class Pathfinder
     {
         //TODO Grab Z axis for each move from scene grid. - DarkLotus
         private static readonly Logger Logger = LogManager.CreateLogger();
+        private static System.Collections.Concurrent.ConcurrentDictionary<int, PathFinderFast> patherlist = new System.Collections.Concurrent.ConcurrentDictionary<int, PathFinderFast>();
         private World world;
-        private Algorithms.IPathFinder mPathFinder;
+        private Algorithms.PathFinderFast mPathFinder;
         private List<Vector3D> vectorPathList = new List<Vector3D>();
         private List<PathFinderNode> nodePathList = new List<PathFinderNode>();
-        private Point start, dest;
+        private Point start = new Point();
+        private Point dest = new Point();
         private float basex = 0, basey = 0;
         private Scene curScene;
         private Scene destScene;
@@ -31,7 +38,32 @@ namespace Mooege.Core.GS.AI
         public List<Vector3D> FindPath(Actor actor, Vector3D Start, Vector3D Destination)
         {
             basex = 0; basey = 0;
-            curScene = actor.CurrentScene;
+            if (curScene == null)
+            {
+                curScene = actor.CurrentScene;
+                if(!patherlist.TryGetValue(curScene.SceneSNO.Id,out mPathFinder))
+                {
+                    mPathFinder = new PathFinderFast(curScene.NavMesh.WalkGrid);
+                    patherlist.TryAdd(curScene.SceneSNO.Id, mPathFinder);
+                }
+                
+                initPathFinder();
+            }
+            
+
+            if (!curScene.Bounds.IntersectsWith(new System.Windows.Rect(Start.X, Start.Y, 1, 1)))
+            {
+                curScene = actor.CurrentScene;
+                if (!patherlist.TryGetValue(curScene.SceneSNO.Id, out mPathFinder))
+                {
+                    mPathFinder = new PathFinderFast(curScene.NavMesh.WalkGrid);
+                    patherlist.TryAdd(curScene.SceneSNO.Id, mPathFinder);
+                }
+
+                initPathFinder();
+            }
+            basex = curScene.Position.X;
+            basey = curScene.Position.Y;
             if (curScene.Bounds.IntersectsWith(new System.Windows.Rect(Destination.X, Destination.Y, 1, 1)))
             {
                 destScene = curScene;
@@ -39,27 +71,27 @@ namespace Mooege.Core.GS.AI
             else
             {
                 destScene = world.QuadTree.Query<Scene>(new System.Windows.Rect(Destination.X, Destination.Y, 1, 1)).FirstOrDefault();
-            }
-            if (curScene != destScene)
-            {
                 mPathFinder = new PathFinderFast(buildOutOfSceneGrid(curScene, destScene, ref basex, ref basey));
                 initPathFinder();
             }
-            else
-            {
-                mPathFinder = new PathFinderFast(curScene.NavMesh.WalkGrid);
-                basex = curScene.Position.X;
-                basey = curScene.Position.Y;
-                initPathFinder();
-            }   
+                        
             //nodePathList = new List<PathFinderNode>();
-            
-            start = new Point((int)((Start.X - basex) / 2.5f), (int)((Start.Y - basey) / 2.5f));
-            dest = new Point((int)((Destination.X - basex) / 2.5f), (int)((Destination.Y - basey) / 2.5f));
+            start.X = (int)((Start.X - basex) / 2.5f);
+            start.Y = (int)((Start.Y - basey) / 2.5f);
+            dest.X = (int)((Destination.X - basex) / 2.5f);
+            dest.Y = (int)((Destination.Y - basey) / 2.5f);
+            //start = new Point((int)((Start.X - basex) / 2.5f), (int)((Start.Y - basey) / 2.5f));
+            //dest = new Point((int)((Destination.X - basex) / 2.5f), (int)((Destination.Y - basey) / 2.5f));
 
             nodePathList = mPathFinder.FindPath(start, dest);
-            if (nodePathList == null) { return null; }
-            vectorPathList = new List<Vector3D>();
+            if (vectorPathList == null)
+                vectorPathList = new List<Vector3D>();
+            else
+                vectorPathList.Clear();
+
+            if (nodePathList == null) { return vectorPathList; }
+            if (nodePathList.Count < 1) { return vectorPathList; }
+           
             for (int i = 0; i < nodePathList.Count; i++)
             {
                 vectorPathList.Insert(0, new Vector3D(nodePathList[i].X * 2.5f + basex, nodePathList[i].Y * 2.5f + basey, 0));
@@ -157,45 +189,75 @@ namespace Mooege.Core.GS.AI
 
     
 
-    public static class Pather
+    public class Pather
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        private static System.Collections.Concurrent.ConcurrentDictionary<uint, List<Vector3D>> CompletedTasks = new System.Collections.Concurrent.ConcurrentDictionary<uint, List<Vector3D>>();
+        private System.Collections.Concurrent.ConcurrentDictionary<uint, List<Vector3D>> CompletedTasks = new System.Collections.Concurrent.ConcurrentDictionary<uint, List<Vector3D>>();
         //private static Dictionary<uint, PathingTask> queuedTasks = new Dictionary<uint, PathingTask>();
-        private static System.Collections.Concurrent.ConcurrentDictionary<uint, PathingTask> queuedtasks = new System.Collections.Concurrent.ConcurrentDictionary<uint, PathingTask>();
-    
-        public static void AddRequest(Pathfinder pathing, Actor actor, Vector3D Start, Vector3D Destination)
-        {
-            queuedtasks.TryAdd(actor.DynamicID, new PathingTask(pathing, actor, Start, Destination));
-           /* lock (queuedTasks)
-            {
-                if (!queuedTasks.ContainsKey(actor.DynamicID))
-                    queuedTasks.Add(actor.DynamicID, new PathingTask(pathing, actor, Start, Destination));
-            }*/
+        private System.Collections.Concurrent.ConcurrentDictionary<uint, PathingTask> queuedtasks = new System.Collections.Concurrent.ConcurrentDictionary<uint, PathingTask>();
 
-        }
-        public static List<Vector3D> GetPath(Pathfinder pathing, Actor actor, Vector3D Start, Vector3D Destination)
+        private AI.Pathfinder aipather;
+        private Games.Game game;
+
+        public Pather(Games.Game game)
         {
-            List<Vector3D> path;
+            // TODO: Complete member initialization
+            this.game = game;
+        }
+
+        internal void GetPath(Actor owner, Vector3D vector3D, Vector3D heading, ref List<Vector3D> Path, ref int finished)
+        {
+            if (aipather == null) { aipather = new Pathfinder(owner.World); } // TODO make this a list one for each world in the game.
+            //if (!CompletedTasks.TryRemove(owner.DynamicID, out Path))
+            //{
+                AddRequest(aipather, owner, vector3D, heading,ref Path,ref finished);
+                return;
+            //}
+            //return;
+        }
+
+        private void AddRequest(AI.Pathfinder pathing, Actor actor, Vector3D Start, Vector3D Destination, ref List<Vector3D> Path,ref int finished)
+        {
+            queuedtasks.TryAdd(actor.DynamicID, new PathingTask(pathing, actor, Start, Destination,ref Path,ref finished));
+        }
+
+        public List<Vector3D> GetPath(Actor actor, Vector3D Start, Vector3D Destination)
+        {
+            /*List<Vector3D> path;
+            PathFinderFast pather;
             CompletedTasks.TryRemove(actor.DynamicID, out path);
             if(path == null)
-            AddRequest(pathing, actor, Start, Destination);
+
+                if (actor.CurrentScene.Bounds.IntersectsWith(new System.Windows.Rect(Start.X, Start.Y, 1, 1)) && actor.CurrentScene.Bounds.IntersectsWith(new System.Windows.Rect(Destination.X, Destination.Y, 1, 1)))
+                {
+                    if (patherlist.TryGetValue(actor.CurrentScene.SceneSNO.Id, out pather))
+                    {
+                        AddRequest(pather, actor, Start, Destination);
+                    }
+                    else
+                    {
+                        pather = new PathFinderFast(actor.CurrentScene.NavMesh.WalkGrid);
+                        patherlist.TryAdd(actor.CurrentScene.SceneSNO.Id, pather);
+                    }
+                }
+            */
             return null;
         }
         //static System.Diagnostics.Stopwatch st;
         //static int cnt;
-        public static void UpdateLoop()
+        public void UpdateLoop()
         {
             //st = new System.Diagnostics.Stopwatch();
             while (true)
             {
                 if (!queuedtasks.IsEmpty)
                 {
-                    PathingTask k; var x = queuedtasks.First(); 
+                    PathingTask k; 
+                    var x = queuedtasks.First(); 
                     
-                    if (!CompletedTasks.ContainsKey(x.Value.Actor.DynamicID))
-                                CompletedTasks.TryAdd(x.Value.Actor.DynamicID, x.Value.getit());
-
+                    //if (!CompletedTasks.ContainsKey(x.Value.Actor.DynamicID))
+                                //CompletedTasks.TryAdd(x.Value.Actor.DynamicID, x.Value.getit());
+                    x.Value.getit();
                     queuedtasks.TryRemove(x.Key, out k);
                 }
                 /*if (queuedTasks.Count > 0)
@@ -232,18 +294,32 @@ namespace Mooege.Core.GS.AI
             public Actor Actor;
             private Vector3D start;
             private Vector3D destination;
-            public PathingTask(Pathfinder pathing, Actor actor, Vector3D Start, Vector3D Destination)
+            List<Vector3D> Path;
+            int finished;
+            public PathingTask(Pathfinder pathing, Actor actor, Vector3D Start, Vector3D Destination, ref List<Vector3D> Path, ref int finished)
             {
                 this.pathing = pathing;
                 this.Actor = actor;
                 this.start = Start;
                 this.destination = Destination;
+                this.Path = Path;
+                this.finished = finished;
             }
             public List<Vector3D> getit()
             {
-                return null;// pathing.FindPath(Actor, start, destination);
+                Path.AddRange(pathing.FindPath(Actor, start, destination));
+                this.finished = 1;
+                if (Path.Count == 0)
+                {
+                    Path.Add(new Vector3D(0,0,0));
+                }
+                return Path;
             }
         }
 
+
+
+
+       
     }
 }

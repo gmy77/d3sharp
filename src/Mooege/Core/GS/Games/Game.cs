@@ -154,13 +154,14 @@ namespace Mooege.Core.GS.Games
         }
 
         #region update & tick managment
-
+        public Mooege.Core.GS.AI.Pather Pathfinder;
         /// <summary>
         /// The main game loop.
         /// </summary>
         public void Update()
         {
-            var aiThread = new Thread(Mooege.Core.GS.AI.Pather.UpdateLoop) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture }; ; // create the game update thread.
+            Pathfinder = new Mooege.Core.GS.AI.Pather(this);
+            var aiThread = new Thread(Pathfinder.UpdateLoop) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture }; ; // create the game update thread.
             aiThread.Start();
             while (true)
             {
@@ -172,7 +173,7 @@ namespace Mooege.Core.GS.Games
                 {
                     pair.Value.Update(this._tickCounter);
                 }
-
+                
                 this._tickWatch.Stop();
 
                 var compensation = (int) (this.UpdateFrequency - this._tickWatch.ElapsedMilliseconds); // the compensation value we need to sleep in order to get consistent 100 ms Game.Update().
