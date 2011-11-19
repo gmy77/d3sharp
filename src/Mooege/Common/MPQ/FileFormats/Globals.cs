@@ -288,6 +288,7 @@ namespace Mooege.Common.MPQ.FileFormats
     class BannerColorSet : ISerializableData
     {
         public RGBAColor[] Color { get; private set; }
+        public string String1 { get; private set; }
         public int I0 { get; private set; }
         public string S0 { get; private set; }
 
@@ -296,6 +297,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Color = new RGBAColor[2];
             for (int i = 0; i < 2; i++)
                 this.Color[i] = new RGBAColor(stream);
+            this.String1 = stream.ReadString(64, true);
             this.I0 = stream.ReadValueS32();
             this.S0 = stream.ReadString(64, true);
         }

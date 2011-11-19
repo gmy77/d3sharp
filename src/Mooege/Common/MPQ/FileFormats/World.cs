@@ -31,18 +31,21 @@ namespace Mooege.Common.MPQ.FileFormats
     public class World : FileFormat
     {
         public Header Header { get; private set; }
+        public bool Bool0 { get; private set; }
+        public int Int1 { get; private set; }
+        public int Int2 { get; private set; }
         public DRLGParams DRLGParams = new DRLGParams();
         public SceneParams SceneParams = new SceneParams();
         public List<int> MarkerSets = new List<int>();
         public Environment Environment { get; private set; }
-        public LabelRuleSet LabelRuleSet { get; private set; }        
+        public LabelRuleSet LabelRuleSet { get; private set; }
         public SceneClusterSet SceneClusterSet { get; private set; }
         public int[] SNONavMeshFunctions = new int[4];
-        public int Int0 { get; private set; }
+        public int Int4 { get; private set; }
         public float Float0 { get; private set; }
-        public int Int1 { get; private set; }
+        public int Int5 { get; private set; }
         public int SNOScript { get; private set; }
-        public int Int2 { get; private set; }
+        public int Int6 { get; private set; }
 
         public World(MpqFile file)
         {
@@ -50,20 +53,24 @@ namespace Mooege.Common.MPQ.FileFormats
 
             this.Header = new Header(stream);
 
+            this.Bool0 = (stream.ReadValueS32() != 0);
+            this.Int1 = stream.ReadValueS32();
+            this.Int2 = stream.ReadValueS32();
+
             this.DRLGParams = stream.ReadSerializedItem<DRLGParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/120) /raist
 
-            stream.Position += (3*4);
+            stream.Position += (2 * 4);
             this.SceneParams = stream.ReadSerializedItem<SceneParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/24) /raist
 
-            stream.Position += (2*4);
+            stream.Position += (2 * 4);
             this.MarkerSets = stream.ReadSerializedInts();
 
-            stream.Position += (14*4);
+            stream.Position += (14 * 4);
             this.Environment = new Environment(stream);
 
             stream.Position += 4;
             LabelRuleSet = new LabelRuleSet(stream);
-            this.Int0 = stream.ReadValueS32();
+            this.Int4 = stream.ReadValueS32();
 
             stream.Position += 4;
             this.SceneClusterSet = new SceneClusterSet(stream);
@@ -75,9 +82,9 @@ namespace Mooege.Common.MPQ.FileFormats
 
             stream.Position += 4;
             Float0 = stream.ReadValueF32();
-            Int1 = stream.ReadValueS32();
+            Int5 = stream.ReadValueS32();
             SNOScript = stream.ReadValueS32();
-            Int2 = stream.ReadValueS32();
+            Int6 = stream.ReadValueS32();
 
             stream.Close();
         }
@@ -112,7 +119,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.SceneSpecification = new SceneSpecification(stream);
         }
     }
-  
+
     #endregion
 
     #region drlg-params
@@ -232,7 +239,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public SceneClusterSet(MpqFileStream stream)
         {
             this.ClusterCount = stream.ReadValueS32();
-            stream.Position += (4*3);
+            stream.Position += (4 * 3);
             this.SceneClusters = stream.ReadSerializedData<SceneCluster>(this.ClusterCount);
         }
     }
@@ -250,7 +257,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Name = stream.ReadString(128, true);
             this.ClusterId = stream.ReadValueS32();
             this.GroupCount = stream.ReadValueS32();
-            stream.Position += (2*4);
+            stream.Position += (2 * 4);
             this.SubSceneGroups = stream.ReadSerializedData<SubSceneGroup>(this.GroupCount);
 
             this.Default = new SubSceneGroup(stream);
@@ -412,13 +419,13 @@ namespace Mooege.Common.MPQ.FileFormats
              int3 = stream.ReadInt32();
              UberMaterial4 = new UberMaterial(stream);
              * */
-             snoMusic = stream.ReadValueS32();
-             snoCombatMusic = stream.ReadValueS32();
-             snoAmbient = stream.ReadValueS32();
-             snoReverb = stream.ReadValueS32();
-             snoWeather = stream.ReadValueS32();
-             snoIrradianceTex = stream.ReadValueS32();
-             snoIrradianceTexDead = stream.ReadValueS32();
+            snoMusic = stream.ReadValueS32();
+            snoCombatMusic = stream.ReadValueS32();
+            snoAmbient = stream.ReadValueS32();
+            snoReverb = stream.ReadValueS32();
+            snoWeather = stream.ReadValueS32();
+            snoIrradianceTex = stream.ReadValueS32();
+            snoIrradianceTexDead = stream.ReadValueS32();
         }
     }
 
