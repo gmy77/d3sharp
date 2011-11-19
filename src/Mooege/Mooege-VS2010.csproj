@@ -304,6 +304,7 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\Message.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\VoteKickMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCSelectConversationMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Pet\PetDetachMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
@@ -470,7 +471,7 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\NetworkAddressMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\NewPlayerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCInteractOptionsMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Player\PetMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Pet\PetMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Animation\PlayAnimationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\PlayConvLineMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayCutsceneMessage.cs" />
@@ -621,4 +622,5 @@
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
 </Project>

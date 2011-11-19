@@ -16,51 +16,49 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Text;
-using Mooege.Core.GS.Common.Types.Math;
 
-namespace Mooege.Net.GS.Message.Definitions.ACD
+namespace Mooege.Net.GS.Message.Definitions.Pet
 {
-    [Message(Opcodes.ACDTranslateSnappedMessage)]
-    public class ACDTranslateSnappedMessage : GameMessage
+    [Message(Opcodes.PetMessage)]
+    public class PetMessage : GameMessage
     {
         public int Field0;
-        public Vector3D Field1;
-        public float /* angle */ Field2;
-        public bool Field3;
-        public int Field4;
+        public int Field1;
+        public uint PetId;
+        public int Field3;
+
+        public PetMessage()
+            : base(Opcodes.PetMessage)
+        {
+        }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = new Vector3D();
-            Field1.Parse(buffer);
-            Field2 = buffer.ReadFloat32();
-            Field3 = buffer.ReadBool();
-            Field4 = buffer.ReadInt(25);
+            Field0 = buffer.ReadInt(3);
+            Field1 = buffer.ReadInt(5);
+            PetId = buffer.ReadUInt(32);
+            Field3 = buffer.ReadInt(5) + (-1);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
-            buffer.WriteFloat32(Field2);
-            buffer.WriteBool(Field3);
-            buffer.WriteInt(25, Field4);
+            buffer.WriteInt(3, Field0);
+            buffer.WriteInt(5, Field1);
+            buffer.WriteUInt(32, PetId);
+            buffer.WriteInt(5, Field3 - (-1));
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("ACDTranslateSnappedMessage:");
+            b.AppendLine("PetMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
-            Field1.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("Field2: " + Field2.ToString("G"));
-            b.Append(' ', pad); b.AppendLine("Field3: " + (Field3 ? "true" : "false"));
-            b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("PetId: 0x" + PetId.ToString("X8") + " (" + PetId + ")");
+            b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

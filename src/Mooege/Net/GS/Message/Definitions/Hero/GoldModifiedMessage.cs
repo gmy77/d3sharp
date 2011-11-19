@@ -24,17 +24,20 @@ namespace Mooege.Net.GS.Message.Definitions.Hero
     public class GoldModifiedMessage : GameMessage
     {
         public bool Modified;
+        public int Field1;
 
         public GoldModifiedMessage() : base(Opcodes.GoldModifiedMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
             Modified = buffer.ReadBool();
+            Field1 = buffer.ReadInt(2);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteBool(Modified);
+            buffer.WriteInt(2, Field1);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -44,6 +47,7 @@ namespace Mooege.Net.GS.Message.Definitions.Hero
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Modified: " + (Modified ? "true" : "false"));
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
