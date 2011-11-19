@@ -233,7 +233,6 @@
     <Compile Include="Core\GS\Actors\Actor.cs" />
     <Compile Include="Core\Cryptography\ARC4.cs" />
     <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
-    <Compile Include="Core\MooNet\Authentication\Config.cs" />
     <Compile Include="Core\Cryptography\SRP6a.cs" />
     <Compile Include="Core\MooNet\Channels\Channel.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelManager.cs" />
