@@ -353,9 +353,16 @@ namespace Mooege.Core.MooNet.Toons
                 case FieldKeyHelper.Program.D3:
                     if (field.Key.Group == 4 && field.Key.Field == 1)
                     {
-                        var entityId = D3.OnlineService.EntityId.ParseFrom(field.Value.MessageValue);
-                        var channel = ChannelManager.GetChannelByEntityId(entityId);
-                        this.Owner.LoggedInClient.CurrentChannel = channel;
+                        if (field.Value.HasMessageValue) //7727 Sends empty SET instead of a CLEAR -Egris
+                        {
+                            var entityId = D3.OnlineService.EntityId.ParseFrom(field.Value.MessageValue);
+                            var channel = ChannelManager.GetChannelByEntityId(entityId);
+                            this.Owner.LoggedInClient.CurrentChannel = channel;
+                        }
+                        else
+                        {
+                            Logger.Warn("Emtpy-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
+                        }
                     }
                     else if (field.Key.Group == 4 && field.Key.Field == 2)
                     {
