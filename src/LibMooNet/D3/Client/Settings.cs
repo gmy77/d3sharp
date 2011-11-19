@@ -22,6 +22,8 @@ namespace D3.Client {
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Client.ToonSettings, global::D3.Client.ToonSettings.Builder> internal__static_D3_Client_ToonSettings__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Client_GameAccountSettings__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Client.GameAccountSettings, global::D3.Client.GameAccountSettings.Builder> internal__static_D3_Client_GameAccountSettings__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_D3_Client_Preferences__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::D3.Client.Preferences, global::D3.Client.Preferences.Builder> internal__static_D3_Client_Preferences__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -34,7 +36,9 @@ namespace D3.Client {
           "Cg5TZXR0aW5ncy5wcm90bxIJRDMuQ2xpZW50IiMKDFRvb25TZXR0aW5ncxIT" + 
           "Cgh1aV9mbGFncxgBIAEoDToBMCJuChNHYW1lQWNjb3VudFNldHRpbmdzEhgK" + 
           "DXVzZV9sYXN0X2hlcm8YASABKAU6ATASHQoSc2hvd19vZmZsaW5lX3RvYXN0" + 
-          "GAIgASgFOgEwEh4KFnJtdF9sYXN0X3VzZWRfY3VycmVuY3kYAyABKAk=");
+          "GAIgASgFOgEwEh4KFnJtdF9sYXN0X3VzZWRfY3VycmVuY3kYAyABKAkiSQoL" + 
+          "UHJlZmVyZW5jZXMSDQoFa2V5XzEYASABKAUSDQoFa2V5XzIYAiABKAUSDQoF" + 
+          "a2V5XzMYAyABKAUSDQoFa2V5XzQYBCABKAU=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Client_ToonSettings__Descriptor = Descriptor.MessageTypes[0];
@@ -45,6 +49,10 @@ namespace D3.Client {
         internal__static_D3_Client_GameAccountSettings__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Client.GameAccountSettings, global::D3.Client.GameAccountSettings.Builder>(internal__static_D3_Client_GameAccountSettings__Descriptor,
                 new string[] { "UseLastHero", "ShowOfflineToast", "RmtLastUsedCurrency", });
+        internal__static_D3_Client_Preferences__Descriptor = Descriptor.MessageTypes[2];
+        internal__static_D3_Client_Preferences__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::D3.Client.Preferences, global::D3.Client.Preferences.Builder>(internal__static_D3_Client_Preferences__Descriptor,
+                new string[] { "Key1", "Key2", "Key3", "Key4", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -686,6 +694,409 @@ namespace D3.Client {
       }
     }
     static GameAccountSettings() {
+      object.ReferenceEquals(global::D3.Client.Settings.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class Preferences : pb::GeneratedMessage<Preferences, Preferences.Builder> {
+    private Preferences() { }
+    private static readonly Preferences defaultInstance = new Preferences().MakeReadOnly();
+    private static readonly string[] _preferencesFieldNames = new string[] { "key_1", "key_2", "key_3", "key_4" };
+    private static readonly uint[] _preferencesFieldTags = new uint[] { 8, 16, 24, 32 };
+    public static Preferences DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override Preferences DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override Preferences ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::D3.Client.Settings.internal__static_D3_Client_Preferences__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<Preferences, Preferences.Builder> InternalFieldAccessors {
+      get { return global::D3.Client.Settings.internal__static_D3_Client_Preferences__FieldAccessorTable; }
+    }
+    
+    public const int Key1FieldNumber = 1;
+    private bool hasKey1;
+    private int key1_;
+    public bool HasKey1 {
+      get { return hasKey1; }
+    }
+    public int Key1 {
+      get { return key1_; }
+    }
+    
+    public const int Key2FieldNumber = 2;
+    private bool hasKey2;
+    private int key2_;
+    public bool HasKey2 {
+      get { return hasKey2; }
+    }
+    public int Key2 {
+      get { return key2_; }
+    }
+    
+    public const int Key3FieldNumber = 3;
+    private bool hasKey3;
+    private int key3_;
+    public bool HasKey3 {
+      get { return hasKey3; }
+    }
+    public int Key3 {
+      get { return key3_; }
+    }
+    
+    public const int Key4FieldNumber = 4;
+    private bool hasKey4;
+    private int key4_;
+    public bool HasKey4 {
+      get { return hasKey4; }
+    }
+    public int Key4 {
+      get { return key4_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _preferencesFieldNames;
+      if (hasKey1) {
+        output.WriteInt32(1, field_names[0], Key1);
+      }
+      if (hasKey2) {
+        output.WriteInt32(2, field_names[1], Key2);
+      }
+      if (hasKey3) {
+        output.WriteInt32(3, field_names[2], Key3);
+      }
+      if (hasKey4) {
+        output.WriteInt32(4, field_names[3], Key4);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasKey1) {
+          size += pb::CodedOutputStream.ComputeInt32Size(1, Key1);
+        }
+        if (hasKey2) {
+          size += pb::CodedOutputStream.ComputeInt32Size(2, Key2);
+        }
+        if (hasKey3) {
+          size += pb::CodedOutputStream.ComputeInt32Size(3, Key3);
+        }
+        if (hasKey4) {
+          size += pb::CodedOutputStream.ComputeInt32Size(4, Key4);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static Preferences ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static Preferences ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static Preferences ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static Preferences ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static Preferences ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static Preferences ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static Preferences ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static Preferences ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static Preferences ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static Preferences ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private Preferences MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(Preferences prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<Preferences, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(Preferences cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private Preferences result;
+      
+      private Preferences PrepareBuilder() {
+        if (resultIsReadOnly) {
+          Preferences original = result;
+          result = new Preferences();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override Preferences MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::D3.Client.Preferences.Descriptor; }
+      }
+      
+      public override Preferences DefaultInstanceForType {
+        get { return global::D3.Client.Preferences.DefaultInstance; }
+      }
+      
+      public override Preferences BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is Preferences) {
+          return MergeFrom((Preferences) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(Preferences other) {
+        if (other == global::D3.Client.Preferences.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasKey1) {
+          Key1 = other.Key1;
+        }
+        if (other.HasKey2) {
+          Key2 = other.Key2;
+        }
+        if (other.HasKey3) {
+          Key3 = other.Key3;
+        }
+        if (other.HasKey4) {
+          Key4 = other.Key4;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_preferencesFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _preferencesFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasKey1 = input.ReadInt32(ref result.key1_);
+              break;
+            }
+            case 16: {
+              result.hasKey2 = input.ReadInt32(ref result.key2_);
+              break;
+            }
+            case 24: {
+              result.hasKey3 = input.ReadInt32(ref result.key3_);
+              break;
+            }
+            case 32: {
+              result.hasKey4 = input.ReadInt32(ref result.key4_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasKey1 {
+        get { return result.hasKey1; }
+      }
+      public int Key1 {
+        get { return result.Key1; }
+        set { SetKey1(value); }
+      }
+      public Builder SetKey1(int value) {
+        PrepareBuilder();
+        result.hasKey1 = true;
+        result.key1_ = value;
+        return this;
+      }
+      public Builder ClearKey1() {
+        PrepareBuilder();
+        result.hasKey1 = false;
+        result.key1_ = 0;
+        return this;
+      }
+      
+      public bool HasKey2 {
+        get { return result.hasKey2; }
+      }
+      public int Key2 {
+        get { return result.Key2; }
+        set { SetKey2(value); }
+      }
+      public Builder SetKey2(int value) {
+        PrepareBuilder();
+        result.hasKey2 = true;
+        result.key2_ = value;
+        return this;
+      }
+      public Builder ClearKey2() {
+        PrepareBuilder();
+        result.hasKey2 = false;
+        result.key2_ = 0;
+        return this;
+      }
+      
+      public bool HasKey3 {
+        get { return result.hasKey3; }
+      }
+      public int Key3 {
+        get { return result.Key3; }
+        set { SetKey3(value); }
+      }
+      public Builder SetKey3(int value) {
+        PrepareBuilder();
+        result.hasKey3 = true;
+        result.key3_ = value;
+        return this;
+      }
+      public Builder ClearKey3() {
+        PrepareBuilder();
+        result.hasKey3 = false;
+        result.key3_ = 0;
+        return this;
+      }
+      
+      public bool HasKey4 {
+        get { return result.hasKey4; }
+      }
+      public int Key4 {
+        get { return result.Key4; }
+        set { SetKey4(value); }
+      }
+      public Builder SetKey4(int value) {
+        PrepareBuilder();
+        result.hasKey4 = true;
+        result.key4_ = value;
+        return this;
+      }
+      public Builder ClearKey4() {
+        PrepareBuilder();
+        result.hasKey4 = false;
+        result.key4_ = 0;
+        return this;
+      }
+    }
+    static Preferences() {
       object.ReferenceEquals(global::D3.Client.Settings.Descriptor, null);
     }
   }

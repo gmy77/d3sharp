@@ -36,6 +36,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Compile Include="bnet\protocol\achievements\Achievements.cs" />
+    <Compile Include="bnet\protocol\achievements\AchievementsStaticData.cs" />
     <Compile Include="bnet\protocol\channel_invitation\ChannelInvitation.cs" />
     <Compile Include="bnet\protocol\channel_invitation\ChannelInvitationTypes.cs" />
     <Compile Include="bnet\protocol\ContentHandle.cs" />
@@ -44,6 +46,7 @@
     <Compile Include="bnet\protocol\exchange\ExchangeService.cs" />
     <Compile Include="bnet\protocol\invitation\Invitation.cs" />
     <Compile Include="bnet\protocol\Resource.cs" />
+    <Compile Include="bnet\protocol\resources\Resources.cs" />
     <Compile Include="bnet\protocol\Rpc.cs" />
     <Compile Include="bnet\protocol\attribute\Attribute.cs" />
     <Compile Include="bnet\protocol\authentication\Authentication.cs" />

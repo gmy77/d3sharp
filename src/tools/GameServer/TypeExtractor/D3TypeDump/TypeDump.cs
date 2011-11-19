@@ -10,22 +10,37 @@ namespace D3TypeDump
 {
     class TypeDump
     {
+        //Build 7728 Addresses
+        //const int OpcodeSwitch_Address = 0x008C22F0;
 
-        const int OpcodeSwitch_Address = 0x008C22F0;
+        //const int TypeDescriptorsAddress = 0x157F5CC;
+        //const int TypeDescriptorsOffset = 40;
 
-        const int TypeDescriptorsAddress = 0x157F5CC;
-        const int TypeDescriptorsOffset = 40;
-
-        const int AttributesAddress = 0x01372420;
-        const int AttributeCount = 717;
-        const int Attribute_Int = 0x011A55D4;
-        const int Attribute_IntMinMax = 0x011A55DC;
-        const int Attribute_FloatMinMax = 0x011A55E4;
-        const int Attribute_Float16 = 0x011A55EC;
-        const int Attribute_Float16Or32 = 0x011A55F4;
+        //const int AttributesAddress = 0x01372420;
+        //const int AttributeCount = 717;
+        //const int Attribute_Int = 0x011A55D4;
+        //const int Attribute_IntMinMax = 0x011A55DC;
+        //const int Attribute_FloatMinMax = 0x011A55E4;
+        //const int Attribute_Float16 = 0x011A55EC;
+        //const int Attribute_Float16Or32 = 0x011A55F4;
 
         const int HashAddress = 0x01318A30;
         const int HashOffset = 0x24;
+
+        //Build 7841 Addresses
+        const int OpcodeSwitch_Address = 0x008C4260;
+
+        const int TypeDescriptorsAddress = 0x15C9008;
+        const int TypeDescriptorsOffset = 40;
+
+        const int AttributesAddress = 0x013AC420;
+        const int AttributeCount = 727;
+        const int Attribute_Int = 0x11D4C5C;
+        const int Attribute_IntMinMax = 0x011D4C64;
+        const int Attribute_FloatMinMax = 0x011D4C6C;
+        const int Attribute_Float16 = 0x011D4C74;
+        const int Attribute_Float16Or32 = 0x011D4C7C;
+
 
         // TODO: Add patterns
 

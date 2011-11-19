@@ -83,12 +83,15 @@ namespace Mooege.Core.MooNet.Services
             {
                 if (attribute.Name == "D3.Party.GameCreateParams")
                 {
-                    var gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
+                    if (attribute.HasValue && !attribute.Value.MessageValue.IsEmpty) //Sometimes not present -Egris
+                    {
+                        var gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
 
-                    var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
-                        .SetName("D3.Party.GameCreateParams")
-                        .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameCreateParams.ToByteString()).Build());
-                    channelState.AddAttribute(attr);
+                        var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                            .SetName("D3.Party.GameCreateParams")
+                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameCreateParams.ToByteString()).Build());
+                        channelState.AddAttribute(attr);
+                    }
                 }
                 else if (attribute.Name == "D3.Party.SearchForPublicGame.Params")
                 {
@@ -138,6 +141,18 @@ namespace Mooege.Core.MooNet.Services
                         .SetName("D3.Party.LockReasons")
                         .SetValue(lockReason);
                     channelState.AddAttribute(attr);
+                }
+                else if (attribute.Name == "D3.Party.GameId")
+                {
+                    if (attribute.HasValue && !attribute.Value.MessageValue.IsEmpty) //Sometimes not present -Egris
+                    {
+                        var gameId = D3.OnlineService.GameId.ParseFrom(attribute.Value.MessageValue);
+                        var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                            .SetName("D3.Party.GameId")
+                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameId.ToByteString()).Build());
+                        channelState.AddAttribute(attr);
+                    }
+
                 }
                 else
                 {

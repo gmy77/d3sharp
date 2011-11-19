@@ -53,7 +53,7 @@ namespace Mooege.Core.MooNet.Games
             :base(owner)
         {
             this.Started = false;
-            this.Owner = owner;
+            this.Owner = owner; //Game is really the owner Channel.Owner should maybe be EntityId instead of MooNetClient -Egris
             this.RequestId = requestId;
             this.FactoryID = request.FactoryId;
             this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameId).SetLow(this.DynamicId).Build();

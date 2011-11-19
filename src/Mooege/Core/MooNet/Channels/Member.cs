@@ -41,7 +41,7 @@ namespace Mooege.Core.MooNet.Channels
 
             // Combinations with unknowns..
             UnkCreator = 0x0000FBFF,
-            UnkMember = 0x00030B8A,
+            UnkMember = 0x00030BAA,
             UnkMember2 = 0x00030B80,
             UnkJoinedMember = 0x0000DBC5
         }
