@@ -47,13 +47,9 @@ namespace Mooege.Core.MooNet.Services
                     .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
                         .SetCurrency("D3_GOLD")
                         .SetTickSize(1)
-                        .SetFlatOutbidIncr(1)
-                        .SetScaleOutbidIncr(10)
-                        .SetMinStartingUnitPrice(5)
-                        .SetMaxStartingUnitPrice(4294967295)
+                        .SetMinUnitPrice(5)
                         .SetMaxUnitPrice(4294967295)
-                        .SetMaxTotalAmount(281474976710655)
-                        .SetBuyoutRule(1)));
+                        .SetMaxTotalPrice(4294967295)));
             done(builder.Build());
         }
 
@@ -212,6 +208,11 @@ namespace Mooege.Core.MooNet.Services
         }
 
         public override void GetFeeDetails(IRpcController controller, bnet.protocol.exchange.GetFeeDetailsRequest request, Action<bnet.protocol.exchange.GetFeeDetailsResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void GetOrderBookStatistics(IRpcController controller, bnet.protocol.exchange.GetOrderBookStatisticsRequest request, Action<bnet.protocol.exchange.GetOrderBookStatisticsResponse> done)
         {
             throw new NotImplementedException();
         }

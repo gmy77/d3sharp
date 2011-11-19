@@ -114,6 +114,7 @@ namespace Mooege.Net.GS.Message
         InventoryDropStackPortionMessage = 95, //len:   24
         InventoryStackTransferMessage = 96, // len: 	24
         ANNDataMessage10 = 97, // len: 	12
+        SimpleMessage47 = 98, //len 8 added in 7841
         ANNDataMessage11 = 98, // len: 	12
         InventoryRequestUseMessage = 99, // len: 	36
         SocketSpellMessage = 100, // len: 	16
@@ -171,14 +172,15 @@ namespace Mooege.Net.GS.Message
         GenericBlobMessage8 = 151, // len: 	
         //PlayerInteractMessage = 151, // len: 	16 removed 7728
         PlayerIndexMessage3 = 152, // len: 	12
-        PlayerLevel = 153, // len: 	16
+        PlayerLevel = 154, // len: 	16
         OpenSharedStashMessage = 154, // len: 	12, former ANNDataMessage19
-        ANNDataMessage19 = 155, //len:  12 added 7728
+        ANNDataMessage19 = 156, //len:  12 added 7728
         SimpleMessage9 = 156, // len: 8
-        ACDPickupFailedMessage = 157, // len: 	16
-        PetMessage = 158, // len: 	24
-        ANNDataMessage20 = 159, // len: 	12
-        HirelingInfoUpdateMessage = 160, // len: 	24
+        ACDPickupFailedMessage = 158, // len: 	16
+        PetMessage = 159, // len: 	24
+        //ANNDataMessage20 = 159, // len: 	12 removed 7841
+        PetDetachMessage = 160, // len: 16
+        HirelingInfoUpdateMessage = 161, // len: 	24
         UIElementMessage = 161, // len: 	16
         PlayerBusyMessage = 162, // len: 	12      //  former: BoolDataMessage
         TradeMessage1 = 163, // len: 	56
@@ -323,12 +325,12 @@ namespace Mooege.Net.GS.Message
         HirelingInventoryMessage = 303, // len: 	8 former SimpleMessage45
         SNODataMessage7 = 304, // len:  12
         SimpleMessage46 = 305, // len: 	8
-        VoteKickMessage1 = 306, //len:   528
-        PlayerIndexMessage8 = 307, // len: 	12
-        PlayerIndexMessage9 = 308, // len: 	12
-        VoteKickMessage2 = 309, //len:   528
-        BoolDataMessage3 = 310, // len: 	12
-        PlayerIndexMessage10 = 311, // len: 	12
-        PlayerIndexMessage11 = 312, // len: 	12
+        VoteKickMessage1 = 307, //len:   528
+        PlayerIndexMessage8 = 308, // len: 	12
+        PlayerIndexMessage9 = 309, // len: 	12
+        VoteKickMessage2 = 310, //len:   528
+        BoolDataMessage3 = 311, // len: 	12
+        PlayerIndexMessage10 = 312, // len: 	12
+        PlayerIndexMessage11 = 313, // len: 	12
     }
 }

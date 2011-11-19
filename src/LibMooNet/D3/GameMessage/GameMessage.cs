@@ -46,6 +46,8 @@ namespace D3.GameMessage {
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.TooltipGenerators, global::D3.GameMessage.TooltipGenerators.Builder> internal__static_D3_GameMessage_TooltipGenerators__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_GameMessage_TutorialMessage__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.TutorialMessage, global::D3.GameMessage.TutorialMessage.Builder> internal__static_D3_GameMessage_TutorialMessage__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_D3_GameMessage_SetAchievementShowcase__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.SetAchievementShowcase, global::D3.GameMessage.SetAchievementShowcase.Builder> internal__static_D3_GameMessage_SetAchievementShowcase__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -85,7 +87,8 @@ namespace D3.GameMessage {
           "aW5lU2VydmljZS5JdGVtSWQiRgoRVG9vbHRpcEdlbmVyYXRvcnMSDgoGbG9j" + 
           "YWxlGAEgAigNEiEKBWl0ZW1zGAIgAigLMhIuRDMuSXRlbXMuSXRlbUxpc3Qi" + 
           "PwoPVHV0b3JpYWxNZXNzYWdlEhQKDHR1dG9yaWFsX3NubxgBIAIoDRIWCg51" + 
-          "aV9hbmNob3JfbmFtZRgCIAEoCQ==");
+          "aV9hbmNob3JfbmFtZRgCIAEoCSI+ChZTZXRBY2hpZXZlbWVudFNob3djYXNl" + 
+          "EhYKDmFjaGlldmVtZW50X2lkGAEgAigEEgwKBHNsb3QYAiACKA0=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_GameMessage_HeroDigestList__Descriptor = Descriptor.MessageTypes[0];
@@ -144,6 +147,10 @@ namespace D3.GameMessage {
         internal__static_D3_GameMessage_TutorialMessage__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.TutorialMessage, global::D3.GameMessage.TutorialMessage.Builder>(internal__static_D3_GameMessage_TutorialMessage__Descriptor,
                 new string[] { "TutorialSno", "UiAnchorName", });
+        internal__static_D3_GameMessage_SetAchievementShowcase__Descriptor = Descriptor.MessageTypes[14];
+        internal__static_D3_GameMessage_SetAchievementShowcase__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.SetAchievementShowcase, global::D3.GameMessage.SetAchievementShowcase.Builder>(internal__static_D3_GameMessage_SetAchievementShowcase__Descriptor,
+                new string[] { "AchievementId", "Slot", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -4988,6 +4995,325 @@ namespace D3.GameMessage {
       }
     }
     static TutorialMessage() {
+      object.ReferenceEquals(global::D3.GameMessage.GameMessage.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class SetAchievementShowcase : pb::GeneratedMessage<SetAchievementShowcase, SetAchievementShowcase.Builder> {
+    private SetAchievementShowcase() { }
+    private static readonly SetAchievementShowcase defaultInstance = new SetAchievementShowcase().MakeReadOnly();
+    private static readonly string[] _setAchievementShowcaseFieldNames = new string[] { "achievement_id", "slot" };
+    private static readonly uint[] _setAchievementShowcaseFieldTags = new uint[] { 8, 16 };
+    public static SetAchievementShowcase DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override SetAchievementShowcase DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override SetAchievementShowcase ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::D3.GameMessage.GameMessage.internal__static_D3_GameMessage_SetAchievementShowcase__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<SetAchievementShowcase, SetAchievementShowcase.Builder> InternalFieldAccessors {
+      get { return global::D3.GameMessage.GameMessage.internal__static_D3_GameMessage_SetAchievementShowcase__FieldAccessorTable; }
+    }
+    
+    public const int AchievementIdFieldNumber = 1;
+    private bool hasAchievementId;
+    private ulong achievementId_;
+    public bool HasAchievementId {
+      get { return hasAchievementId; }
+    }
+    public ulong AchievementId {
+      get { return achievementId_; }
+    }
+    
+    public const int SlotFieldNumber = 2;
+    private bool hasSlot;
+    private uint slot_;
+    public bool HasSlot {
+      get { return hasSlot; }
+    }
+    public uint Slot {
+      get { return slot_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasAchievementId) return false;
+        if (!hasSlot) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _setAchievementShowcaseFieldNames;
+      if (hasAchievementId) {
+        output.WriteUInt64(1, field_names[0], AchievementId);
+      }
+      if (hasSlot) {
+        output.WriteUInt32(2, field_names[1], Slot);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasAchievementId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(1, AchievementId);
+        }
+        if (hasSlot) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, Slot);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static SetAchievementShowcase ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static SetAchievementShowcase ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static SetAchievementShowcase ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static SetAchievementShowcase ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static SetAchievementShowcase ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static SetAchievementShowcase ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static SetAchievementShowcase ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static SetAchievementShowcase ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static SetAchievementShowcase ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static SetAchievementShowcase ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private SetAchievementShowcase MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(SetAchievementShowcase prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<SetAchievementShowcase, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(SetAchievementShowcase cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private SetAchievementShowcase result;
+      
+      private SetAchievementShowcase PrepareBuilder() {
+        if (resultIsReadOnly) {
+          SetAchievementShowcase original = result;
+          result = new SetAchievementShowcase();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override SetAchievementShowcase MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::D3.GameMessage.SetAchievementShowcase.Descriptor; }
+      }
+      
+      public override SetAchievementShowcase DefaultInstanceForType {
+        get { return global::D3.GameMessage.SetAchievementShowcase.DefaultInstance; }
+      }
+      
+      public override SetAchievementShowcase BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is SetAchievementShowcase) {
+          return MergeFrom((SetAchievementShowcase) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(SetAchievementShowcase other) {
+        if (other == global::D3.GameMessage.SetAchievementShowcase.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasAchievementId) {
+          AchievementId = other.AchievementId;
+        }
+        if (other.HasSlot) {
+          Slot = other.Slot;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_setAchievementShowcaseFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _setAchievementShowcaseFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasAchievementId = input.ReadUInt64(ref result.achievementId_);
+              break;
+            }
+            case 16: {
+              result.hasSlot = input.ReadUInt32(ref result.slot_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasAchievementId {
+        get { return result.hasAchievementId; }
+      }
+      public ulong AchievementId {
+        get { return result.AchievementId; }
+        set { SetAchievementId(value); }
+      }
+      public Builder SetAchievementId(ulong value) {
+        PrepareBuilder();
+        result.hasAchievementId = true;
+        result.achievementId_ = value;
+        return this;
+      }
+      public Builder ClearAchievementId() {
+        PrepareBuilder();
+        result.hasAchievementId = false;
+        result.achievementId_ = 0UL;
+        return this;
+      }
+      
+      public bool HasSlot {
+        get { return result.hasSlot; }
+      }
+      public uint Slot {
+        get { return result.Slot; }
+        set { SetSlot(value); }
+      }
+      public Builder SetSlot(uint value) {
+        PrepareBuilder();
+        result.hasSlot = true;
+        result.slot_ = value;
+        return this;
+      }
+      public Builder ClearSlot() {
+        PrepareBuilder();
+        result.hasSlot = false;
+        result.slot_ = 0;
+        return this;
+      }
+    }
+    static SetAchievementShowcase() {
       object.ReferenceEquals(global::D3.GameMessage.GameMessage.Descriptor, null);
     }
   }

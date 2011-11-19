@@ -62,6 +62,8 @@ namespace bnet.protocol.exchange {
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.FeeEstimationData, global::bnet.protocol.exchange.FeeEstimationData.Builder> internal__static_bnet_protocol_exchange_FeeEstimationData__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_FeeDetail__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.FeeDetail, global::bnet.protocol.exchange.FeeDetail.Builder> internal__static_bnet_protocol_exchange_FeeDetail__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_PriceDetail__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.PriceDetail, global::bnet.protocol.exchange.PriceDetail.Builder> internal__static_bnet_protocol_exchange_PriceDetail__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -145,34 +147,37 @@ namespace bnet.protocol.exchange {
           "RQoLdGltZV9maWx0ZXIYBiACKAsyMC5ibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
           "LlF1ZXJ5RmlsdGVyQnlDcmVhdGVkVGltZSJoCgpTZXR0bGVtZW50EhUKDW9y" + 
           "ZGVyX2Jvb2tfaWQYASACKAQSFAoMbW9uZXlfYW1vdW50GAIgAigEEhQKDGl0" + 
-          "ZW1zX2Ftb3VudBgDIAIoBBIXCg9vZmZlcl9zZXR0bGVfaWQYBCACKAQi8wEK" + 
-          "DkN1cnJlbmN5Q29uZmlnEhAKCGN1cnJlbmN5GAEgAigJEhEKCXRpY2tfc2l6" + 
-          "ZRgCIAIoBBIYChBmbGF0X291dGJpZF9pbmNyGAMgAigEEhkKEXNjYWxlX291" + 
-          "dGJpZF9pbmNyGAQgAigEEh8KF21pbl9zdGFydGluZ191bml0X3ByaWNlGAUg" + 
-          "AigEEh8KF21heF9zdGFydGluZ191bml0X3ByaWNlGAYgASgEEhYKDm1heF91" + 
-          "bml0X3ByaWNlGAcgAigEEhgKEG1heF90b3RhbF9hbW91bnQYCCACKAQSEwoL" + 
-          "YnV5b3V0X3J1bGUYCSACKAUizgEKEFNwZWNpYWxpc3RDb25maWcSEgoKc3Bl" + 
-          "Y2lhbGlzdBgBIAIoBRIdChFhdWN0aW9uX2R1cmF0aW9ucxgCIAMoBEICEAES" + 
-          "IAoUYXVjdGlvbl9zdGFydF9kZWxheXMYAyADKARCAhABEiQKHGFudGlfc25p" + 
-          "cGluZ19leHRlbnNpb25fZGVsYXkYBCACKAQSPwoPY3VycmVuY3lfY29uZmln" + 
-          "GAUgAygLMiYuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5DdXJyZW5jeUNvbmZp" + 
-          "ZyJWCg5CaWxsaW5nQWRkcmVzcxISCgpjb3VudHJ5X2lkGAEgAigFEgwKBGNp" + 
-          "dHkYAiACKAkSDQoFc3RhdGUYAyABKAkSEwoLcG9zdGFsX2NvZGUYBCABKAki" + 
-          "9QEKEUZlZUVzdGltYXRpb25EYXRhEg8KB3Byb2dyYW0YASACKAcSEgoKc3Bl" + 
-          "Y2lhbGlzdBgCIAIoBRIQCghjdXJyZW5jeRgDIAIoCRIOCgZzb3VyY2UYBCAC" + 
-          "KAcSFAoMbW9uZXlfYW1vdW50GAUgAigEEhMKC2l0ZW1fYW1vdW50GAYgAigE" + 
-          "Ei0KDGJuZXRfYWNjb3VudBgHIAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5" + 
-          "SWQSPwoPYmlsbGluZ19hZGRyZXNzGAggASgLMiYuYm5ldC5wcm90b2NvbC5l" + 
-          "eGNoYW5nZS5CaWxsaW5nQWRkcmVzcyKjAwoJRmVlRGV0YWlsEg4KBnJvd251" + 
-          "bRgBIAIoBBIaChJmZWVfYXV0aF9kZXRhaWxfaWQYAiACKAQSDgoGZmVlX2lk" + 
-          "GAMgASgEEhIKCmZlZV9hbW91bnQYBCABKAQSFwoPZGlzY291bnRfYW1vdW50" + 
-          "GAUgASgEEhQKDGZlZV9ncm91cF9pZBgGIAEoBBIWCg5mZWVfZ3JvdXBfbmFt" + 
-          "ZRgHIAEoCRIXCg9mbGF0X2ZlZV9hbW91bnQYCCABKAQSGgoSc2NhbGluZ19m" + 
-          "ZWVfYW1vdW50GAkgASgEEhYKDm1heF9mZWVfYW1vdW50GAogASgEEhcKD2Zl" + 
-          "ZV9kZXNjcmlwdGlvbhgLIAEoCRIOCgZpc190YXgYDCACKAgSFgoOY291cG9u" + 
-          "X2Jvb2tfaWQYDSABKAQSEwoLY291cG9uX3R5cGUYDiABKAQSGgoSY291cG9u" + 
-          "X2Rlc2NyaXB0aW9uGA8gASgJEh8KF2xlZnRfb3Zlcl9jb3Vwb25fY3JlZGl0" + 
-          "GBAgASgEEh8KF2xlZnRfb3Zlcl9jb3Vwb25fY2hhcmdlGBEgASgE");
+          "ZW1zX2Ftb3VudBgDIAIoBBIXCg9vZmZlcl9zZXR0bGVfaWQYBCACKAQifgoO" + 
+          "Q3VycmVuY3lDb25maWcSEAoIY3VycmVuY3kYASACKAkSEQoJdGlja19zaXpl" + 
+          "GAIgAigEEhYKDm1pbl91bml0X3ByaWNlGAMgAigEEhYKDm1heF91bml0X3By" + 
+          "aWNlGAQgAigEEhcKD21heF90b3RhbF9wcmljZRgHIAIoBCKRAwoQU3BlY2lh" + 
+          "bGlzdENvbmZpZxISCgpzcGVjaWFsaXN0GAEgAigFEh0KEWF1Y3Rpb25fZHVy" + 
+          "YXRpb25zGAIgAygEQgIQARIgChRhdWN0aW9uX3N0YXJ0X2RlbGF5cxgDIAMo" + 
+          "BEICEAESJAocYW50aV9zbmlwaW5nX2V4dGVuc2lvbl9kZWxheRgEIAIoBBIY" + 
+          "ChBtYXhfaXRlbXNfYW1vdW50GAUgAigEEiAKGHN0YXJ0aW5nX3VuaXRfcHJp" + 
+          "Y2VfcnVsZRgGIAIoBRIgChhyZXNlcnZlZF91bml0X3ByaWNlX3J1bGUYByAC" + 
+          "KAUSIQoZdHJhZGVfbm93X3VuaXRfcHJpY2VfcnVsZRgIIAIoBRIfChdjdXJy" + 
+          "ZW50X3VuaXRfcHJpY2VfcnVsZRgJIAIoBRIfChdtYXhpbXVtX3VuaXRfcHJp" + 
+          "Y2VfcnVsZRgKIAIoBRI/Cg9jdXJyZW5jeV9jb25maWcYCyADKAsyJi5ibmV0" + 
+          "LnByb3RvY29sLmV4Y2hhbmdlLkN1cnJlbmN5Q29uZmlnIlYKDkJpbGxpbmdB" + 
+          "ZGRyZXNzEhIKCmNvdW50cnlfaWQYASACKAUSDAoEY2l0eRgCIAIoCRINCgVz" + 
+          "dGF0ZRgDIAEoCRITCgtwb3N0YWxfY29kZRgEIAEoCSL1AQoRRmVlRXN0aW1h" + 
+          "dGlvbkRhdGESDwoHcHJvZ3JhbRgBIAIoBxISCgpzcGVjaWFsaXN0GAIgAigF" + 
+          "EhAKCGN1cnJlbmN5GAMgAigJEg4KBnNvdXJjZRgEIAIoBxIUCgxtb25leV9h" + 
+          "bW91bnQYBSACKAQSEwoLaXRlbV9hbW91bnQYBiACKAQSLQoMYm5ldF9hY2Nv" + 
+          "dW50GAcgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBI/Cg9iaWxsaW5n" + 
+          "X2FkZHJlc3MYCCABKAsyJi5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkJpbGxp" + 
+          "bmdBZGRyZXNzIqMDCglGZWVEZXRhaWwSDgoGcm93bnVtGAEgAigEEhoKEmZl" + 
+          "ZV9hdXRoX2RldGFpbF9pZBgCIAIoBBIOCgZmZWVfaWQYAyABKAQSEgoKZmVl" + 
+          "X2Ftb3VudBgEIAEoBBIXCg9kaXNjb3VudF9hbW91bnQYBSABKAQSFAoMZmVl" + 
+          "X2dyb3VwX2lkGAYgASgEEhYKDmZlZV9ncm91cF9uYW1lGAcgASgJEhcKD2Zs" + 
+          "YXRfZmVlX2Ftb3VudBgIIAEoBBIaChJzY2FsaW5nX2ZlZV9hbW91bnQYCSAB" + 
+          "KAQSFgoObWF4X2ZlZV9hbW91bnQYCiABKAQSFwoPZmVlX2Rlc2NyaXB0aW9u" + 
+          "GAsgASgJEg4KBmlzX3RheBgMIAIoCBIWCg5jb3Vwb25fYm9va19pZBgNIAEo" + 
+          "BBITCgtjb3Vwb25fdHlwZRgOIAEoBBIaChJjb3Vwb25fZGVzY3JpcHRpb24Y" + 
+          "DyABKAkSHwoXbGVmdF9vdmVyX2NvdXBvbl9jcmVkaXQYECABKAQSHwoXbGVm" + 
+          "dF9vdmVyX2NvdXBvbl9jaGFyZ2UYESABKAQiMgoLUHJpY2VEZXRhaWwSEwoL" + 
+          "dHJhZGVfcHJpY2UYASACKAQSDgoGYW1vdW50GAIgAigE");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_OrderBook__Descriptor = Descriptor.MessageTypes[0];
@@ -246,11 +251,11 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_CurrencyConfig__Descriptor = Descriptor.MessageTypes[17];
         internal__static_bnet_protocol_exchange_CurrencyConfig__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CurrencyConfig, global::bnet.protocol.exchange.CurrencyConfig.Builder>(internal__static_bnet_protocol_exchange_CurrencyConfig__Descriptor,
-                new string[] { "Currency", "TickSize", "FlatOutbidIncr", "ScaleOutbidIncr", "MinStartingUnitPrice", "MaxStartingUnitPrice", "MaxUnitPrice", "MaxTotalAmount", "BuyoutRule", });
+                new string[] { "Currency", "TickSize", "MinUnitPrice", "MaxUnitPrice", "MaxTotalPrice", });
         internal__static_bnet_protocol_exchange_SpecialistConfig__Descriptor = Descriptor.MessageTypes[18];
         internal__static_bnet_protocol_exchange_SpecialistConfig__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.SpecialistConfig, global::bnet.protocol.exchange.SpecialistConfig.Builder>(internal__static_bnet_protocol_exchange_SpecialistConfig__Descriptor,
-                new string[] { "Specialist", "AuctionDurations", "AuctionStartDelays", "AntiSnipingExtensionDelay", "CurrencyConfig", });
+                new string[] { "Specialist", "AuctionDurations", "AuctionStartDelays", "AntiSnipingExtensionDelay", "MaxItemsAmount", "StartingUnitPriceRule", "ReservedUnitPriceRule", "TradeNowUnitPriceRule", "CurrentUnitPriceRule", "MaximumUnitPriceRule", "CurrencyConfig", });
         internal__static_bnet_protocol_exchange_BillingAddress__Descriptor = Descriptor.MessageTypes[19];
         internal__static_bnet_protocol_exchange_BillingAddress__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BillingAddress, global::bnet.protocol.exchange.BillingAddress.Builder>(internal__static_bnet_protocol_exchange_BillingAddress__Descriptor,
@@ -263,6 +268,10 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_FeeDetail__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.FeeDetail, global::bnet.protocol.exchange.FeeDetail.Builder>(internal__static_bnet_protocol_exchange_FeeDetail__Descriptor,
                 new string[] { "Rownum", "FeeAuthDetailId", "FeeId", "FeeAmount", "DiscountAmount", "FeeGroupId", "FeeGroupName", "FlatFeeAmount", "ScalingFeeAmount", "MaxFeeAmount", "FeeDescription", "IsTax", "CouponBookId", "CouponType", "CouponDescription", "LeftOverCouponCredit", "LeftOverCouponCharge", });
+        internal__static_bnet_protocol_exchange_PriceDetail__Descriptor = Descriptor.MessageTypes[22];
+        internal__static_bnet_protocol_exchange_PriceDetail__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.PriceDetail, global::bnet.protocol.exchange.PriceDetail.Builder>(internal__static_bnet_protocol_exchange_PriceDetail__Descriptor,
+                new string[] { "TradePrice", "Amount", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -8988,8 +8997,8 @@ namespace bnet.protocol.exchange {
   public sealed partial class CurrencyConfig : pb::GeneratedMessage<CurrencyConfig, CurrencyConfig.Builder> {
     private CurrencyConfig() { }
     private static readonly CurrencyConfig defaultInstance = new CurrencyConfig().MakeReadOnly();
-    private static readonly string[] _currencyConfigFieldNames = new string[] { "buyout_rule", "currency", "flat_outbid_incr", "max_starting_unit_price", "max_total_amount", "max_unit_price", "min_starting_unit_price", "scale_outbid_incr", "tick_size" };
-    private static readonly uint[] _currencyConfigFieldTags = new uint[] { 72, 10, 24, 48, 64, 56, 40, 32, 16 };
+    private static readonly string[] _currencyConfigFieldNames = new string[] { "currency", "max_total_price", "max_unit_price", "min_unit_price", "tick_size" };
+    private static readonly uint[] _currencyConfigFieldTags = new uint[] { 10, 56, 32, 24, 16 };
     public static CurrencyConfig DefaultInstance {
       get { return defaultInstance; }
     }
@@ -9030,47 +9039,17 @@ namespace bnet.protocol.exchange {
       get { return tickSize_; }
     }
     
-    public const int FlatOutbidIncrFieldNumber = 3;
-    private bool hasFlatOutbidIncr;
-    private ulong flatOutbidIncr_;
-    public bool HasFlatOutbidIncr {
-      get { return hasFlatOutbidIncr; }
+    public const int MinUnitPriceFieldNumber = 3;
+    private bool hasMinUnitPrice;
+    private ulong minUnitPrice_;
+    public bool HasMinUnitPrice {
+      get { return hasMinUnitPrice; }
     }
-    public ulong FlatOutbidIncr {
-      get { return flatOutbidIncr_; }
-    }
-    
-    public const int ScaleOutbidIncrFieldNumber = 4;
-    private bool hasScaleOutbidIncr;
-    private ulong scaleOutbidIncr_;
-    public bool HasScaleOutbidIncr {
-      get { return hasScaleOutbidIncr; }
-    }
-    public ulong ScaleOutbidIncr {
-      get { return scaleOutbidIncr_; }
+    public ulong MinUnitPrice {
+      get { return minUnitPrice_; }
     }
     
-    public const int MinStartingUnitPriceFieldNumber = 5;
-    private bool hasMinStartingUnitPrice;
-    private ulong minStartingUnitPrice_;
-    public bool HasMinStartingUnitPrice {
-      get { return hasMinStartingUnitPrice; }
-    }
-    public ulong MinStartingUnitPrice {
-      get { return minStartingUnitPrice_; }
-    }
-    
-    public const int MaxStartingUnitPriceFieldNumber = 6;
-    private bool hasMaxStartingUnitPrice;
-    private ulong maxStartingUnitPrice_;
-    public bool HasMaxStartingUnitPrice {
-      get { return hasMaxStartingUnitPrice; }
-    }
-    public ulong MaxStartingUnitPrice {
-      get { return maxStartingUnitPrice_; }
-    }
-    
-    public const int MaxUnitPriceFieldNumber = 7;
+    public const int MaxUnitPriceFieldNumber = 4;
     private bool hasMaxUnitPrice;
     private ulong maxUnitPrice_;
     public bool HasMaxUnitPrice {
@@ -9080,36 +9059,23 @@ namespace bnet.protocol.exchange {
       get { return maxUnitPrice_; }
     }
     
-    public const int MaxTotalAmountFieldNumber = 8;
-    private bool hasMaxTotalAmount;
-    private ulong maxTotalAmount_;
-    public bool HasMaxTotalAmount {
-      get { return hasMaxTotalAmount; }
+    public const int MaxTotalPriceFieldNumber = 7;
+    private bool hasMaxTotalPrice;
+    private ulong maxTotalPrice_;
+    public bool HasMaxTotalPrice {
+      get { return hasMaxTotalPrice; }
     }
-    public ulong MaxTotalAmount {
-      get { return maxTotalAmount_; }
-    }
-    
-    public const int BuyoutRuleFieldNumber = 9;
-    private bool hasBuyoutRule;
-    private int buyoutRule_;
-    public bool HasBuyoutRule {
-      get { return hasBuyoutRule; }
-    }
-    public int BuyoutRule {
-      get { return buyoutRule_; }
+    public ulong MaxTotalPrice {
+      get { return maxTotalPrice_; }
     }
     
     public override bool IsInitialized {
       get {
         if (!hasCurrency) return false;
         if (!hasTickSize) return false;
-        if (!hasFlatOutbidIncr) return false;
-        if (!hasScaleOutbidIncr) return false;
-        if (!hasMinStartingUnitPrice) return false;
+        if (!hasMinUnitPrice) return false;
         if (!hasMaxUnitPrice) return false;
-        if (!hasMaxTotalAmount) return false;
-        if (!hasBuyoutRule) return false;
+        if (!hasMaxTotalPrice) return false;
         return true;
       }
     }
@@ -9118,31 +9084,19 @@ namespace bnet.protocol.exchange {
       int size = SerializedSize;
       string[] field_names = _currencyConfigFieldNames;
       if (hasCurrency) {
-        output.WriteString(1, field_names[1], Currency);
+        output.WriteString(1, field_names[0], Currency);
       }
       if (hasTickSize) {
-        output.WriteUInt64(2, field_names[8], TickSize);
+        output.WriteUInt64(2, field_names[4], TickSize);
       }
-      if (hasFlatOutbidIncr) {
-        output.WriteUInt64(3, field_names[2], FlatOutbidIncr);
-      }
-      if (hasScaleOutbidIncr) {
-        output.WriteUInt64(4, field_names[7], ScaleOutbidIncr);
-      }
-      if (hasMinStartingUnitPrice) {
-        output.WriteUInt64(5, field_names[6], MinStartingUnitPrice);
-      }
-      if (hasMaxStartingUnitPrice) {
-        output.WriteUInt64(6, field_names[3], MaxStartingUnitPrice);
+      if (hasMinUnitPrice) {
+        output.WriteUInt64(3, field_names[3], MinUnitPrice);
       }
       if (hasMaxUnitPrice) {
-        output.WriteUInt64(7, field_names[5], MaxUnitPrice);
+        output.WriteUInt64(4, field_names[2], MaxUnitPrice);
       }
-      if (hasMaxTotalAmount) {
-        output.WriteUInt64(8, field_names[4], MaxTotalAmount);
-      }
-      if (hasBuyoutRule) {
-        output.WriteInt32(9, field_names[0], BuyoutRule);
+      if (hasMaxTotalPrice) {
+        output.WriteUInt64(7, field_names[1], MaxTotalPrice);
       }
       UnknownFields.WriteTo(output);
     }
@@ -9160,26 +9114,14 @@ namespace bnet.protocol.exchange {
         if (hasTickSize) {
           size += pb::CodedOutputStream.ComputeUInt64Size(2, TickSize);
         }
-        if (hasFlatOutbidIncr) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(3, FlatOutbidIncr);
-        }
-        if (hasScaleOutbidIncr) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(4, ScaleOutbidIncr);
-        }
-        if (hasMinStartingUnitPrice) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(5, MinStartingUnitPrice);
-        }
-        if (hasMaxStartingUnitPrice) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(6, MaxStartingUnitPrice);
+        if (hasMinUnitPrice) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(3, MinUnitPrice);
         }
         if (hasMaxUnitPrice) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(7, MaxUnitPrice);
+          size += pb::CodedOutputStream.ComputeUInt64Size(4, MaxUnitPrice);
         }
-        if (hasMaxTotalAmount) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(8, MaxTotalAmount);
-        }
-        if (hasBuyoutRule) {
-          size += pb::CodedOutputStream.ComputeInt32Size(9, BuyoutRule);
+        if (hasMaxTotalPrice) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(7, MaxTotalPrice);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -9313,26 +9255,14 @@ namespace bnet.protocol.exchange {
         if (other.HasTickSize) {
           TickSize = other.TickSize;
         }
-        if (other.HasFlatOutbidIncr) {
-          FlatOutbidIncr = other.FlatOutbidIncr;
-        }
-        if (other.HasScaleOutbidIncr) {
-          ScaleOutbidIncr = other.ScaleOutbidIncr;
-        }
-        if (other.HasMinStartingUnitPrice) {
-          MinStartingUnitPrice = other.MinStartingUnitPrice;
-        }
-        if (other.HasMaxStartingUnitPrice) {
-          MaxStartingUnitPrice = other.MaxStartingUnitPrice;
+        if (other.HasMinUnitPrice) {
+          MinUnitPrice = other.MinUnitPrice;
         }
         if (other.HasMaxUnitPrice) {
           MaxUnitPrice = other.MaxUnitPrice;
         }
-        if (other.HasMaxTotalAmount) {
-          MaxTotalAmount = other.MaxTotalAmount;
-        }
-        if (other.HasBuyoutRule) {
-          BuyoutRule = other.BuyoutRule;
+        if (other.HasMaxTotalPrice) {
+          MaxTotalPrice = other.MaxTotalPrice;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -9386,31 +9316,15 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 24: {
-              result.hasFlatOutbidIncr = input.ReadUInt64(ref result.flatOutbidIncr_);
+              result.hasMinUnitPrice = input.ReadUInt64(ref result.minUnitPrice_);
               break;
             }
             case 32: {
-              result.hasScaleOutbidIncr = input.ReadUInt64(ref result.scaleOutbidIncr_);
-              break;
-            }
-            case 40: {
-              result.hasMinStartingUnitPrice = input.ReadUInt64(ref result.minStartingUnitPrice_);
-              break;
-            }
-            case 48: {
-              result.hasMaxStartingUnitPrice = input.ReadUInt64(ref result.maxStartingUnitPrice_);
-              break;
-            }
-            case 56: {
               result.hasMaxUnitPrice = input.ReadUInt64(ref result.maxUnitPrice_);
               break;
             }
-            case 64: {
-              result.hasMaxTotalAmount = input.ReadUInt64(ref result.maxTotalAmount_);
-              break;
-            }
-            case 72: {
-              result.hasBuyoutRule = input.ReadInt32(ref result.buyoutRule_);
+            case 56: {
+              result.hasMaxTotalPrice = input.ReadUInt64(ref result.maxTotalPrice_);
               break;
             }
           }
@@ -9464,83 +9378,23 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasFlatOutbidIncr {
-        get { return result.hasFlatOutbidIncr; }
+      public bool HasMinUnitPrice {
+        get { return result.hasMinUnitPrice; }
       }
-      public ulong FlatOutbidIncr {
-        get { return result.FlatOutbidIncr; }
-        set { SetFlatOutbidIncr(value); }
+      public ulong MinUnitPrice {
+        get { return result.MinUnitPrice; }
+        set { SetMinUnitPrice(value); }
       }
-      public Builder SetFlatOutbidIncr(ulong value) {
+      public Builder SetMinUnitPrice(ulong value) {
         PrepareBuilder();
-        result.hasFlatOutbidIncr = true;
-        result.flatOutbidIncr_ = value;
+        result.hasMinUnitPrice = true;
+        result.minUnitPrice_ = value;
         return this;
       }
-      public Builder ClearFlatOutbidIncr() {
+      public Builder ClearMinUnitPrice() {
         PrepareBuilder();
-        result.hasFlatOutbidIncr = false;
-        result.flatOutbidIncr_ = 0UL;
-        return this;
-      }
-      
-      public bool HasScaleOutbidIncr {
-        get { return result.hasScaleOutbidIncr; }
-      }
-      public ulong ScaleOutbidIncr {
-        get { return result.ScaleOutbidIncr; }
-        set { SetScaleOutbidIncr(value); }
-      }
-      public Builder SetScaleOutbidIncr(ulong value) {
-        PrepareBuilder();
-        result.hasScaleOutbidIncr = true;
-        result.scaleOutbidIncr_ = value;
-        return this;
-      }
-      public Builder ClearScaleOutbidIncr() {
-        PrepareBuilder();
-        result.hasScaleOutbidIncr = false;
-        result.scaleOutbidIncr_ = 0UL;
-        return this;
-      }
-      
-      public bool HasMinStartingUnitPrice {
-        get { return result.hasMinStartingUnitPrice; }
-      }
-      public ulong MinStartingUnitPrice {
-        get { return result.MinStartingUnitPrice; }
-        set { SetMinStartingUnitPrice(value); }
-      }
-      public Builder SetMinStartingUnitPrice(ulong value) {
-        PrepareBuilder();
-        result.hasMinStartingUnitPrice = true;
-        result.minStartingUnitPrice_ = value;
-        return this;
-      }
-      public Builder ClearMinStartingUnitPrice() {
-        PrepareBuilder();
-        result.hasMinStartingUnitPrice = false;
-        result.minStartingUnitPrice_ = 0UL;
-        return this;
-      }
-      
-      public bool HasMaxStartingUnitPrice {
-        get { return result.hasMaxStartingUnitPrice; }
-      }
-      public ulong MaxStartingUnitPrice {
-        get { return result.MaxStartingUnitPrice; }
-        set { SetMaxStartingUnitPrice(value); }
-      }
-      public Builder SetMaxStartingUnitPrice(ulong value) {
-        PrepareBuilder();
-        result.hasMaxStartingUnitPrice = true;
-        result.maxStartingUnitPrice_ = value;
-        return this;
-      }
-      public Builder ClearMaxStartingUnitPrice() {
-        PrepareBuilder();
-        result.hasMaxStartingUnitPrice = false;
-        result.maxStartingUnitPrice_ = 0UL;
+        result.hasMinUnitPrice = false;
+        result.minUnitPrice_ = 0UL;
         return this;
       }
       
@@ -9564,43 +9418,23 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasMaxTotalAmount {
-        get { return result.hasMaxTotalAmount; }
+      public bool HasMaxTotalPrice {
+        get { return result.hasMaxTotalPrice; }
       }
-      public ulong MaxTotalAmount {
-        get { return result.MaxTotalAmount; }
-        set { SetMaxTotalAmount(value); }
+      public ulong MaxTotalPrice {
+        get { return result.MaxTotalPrice; }
+        set { SetMaxTotalPrice(value); }
       }
-      public Builder SetMaxTotalAmount(ulong value) {
+      public Builder SetMaxTotalPrice(ulong value) {
         PrepareBuilder();
-        result.hasMaxTotalAmount = true;
-        result.maxTotalAmount_ = value;
+        result.hasMaxTotalPrice = true;
+        result.maxTotalPrice_ = value;
         return this;
       }
-      public Builder ClearMaxTotalAmount() {
+      public Builder ClearMaxTotalPrice() {
         PrepareBuilder();
-        result.hasMaxTotalAmount = false;
-        result.maxTotalAmount_ = 0UL;
-        return this;
-      }
-      
-      public bool HasBuyoutRule {
-        get { return result.hasBuyoutRule; }
-      }
-      public int BuyoutRule {
-        get { return result.BuyoutRule; }
-        set { SetBuyoutRule(value); }
-      }
-      public Builder SetBuyoutRule(int value) {
-        PrepareBuilder();
-        result.hasBuyoutRule = true;
-        result.buyoutRule_ = value;
-        return this;
-      }
-      public Builder ClearBuyoutRule() {
-        PrepareBuilder();
-        result.hasBuyoutRule = false;
-        result.buyoutRule_ = 0;
+        result.hasMaxTotalPrice = false;
+        result.maxTotalPrice_ = 0UL;
         return this;
       }
     }
@@ -9615,8 +9449,8 @@ namespace bnet.protocol.exchange {
   public sealed partial class SpecialistConfig : pb::GeneratedMessage<SpecialistConfig, SpecialistConfig.Builder> {
     private SpecialistConfig() { }
     private static readonly SpecialistConfig defaultInstance = new SpecialistConfig().MakeReadOnly();
-    private static readonly string[] _specialistConfigFieldNames = new string[] { "anti_sniping_extension_delay", "auction_durations", "auction_start_delays", "currency_config", "specialist" };
-    private static readonly uint[] _specialistConfigFieldTags = new uint[] { 32, 18, 26, 42, 8 };
+    private static readonly string[] _specialistConfigFieldNames = new string[] { "anti_sniping_extension_delay", "auction_durations", "auction_start_delays", "currency_config", "current_unit_price_rule", "max_items_amount", "maximum_unit_price_rule", "reserved_unit_price_rule", "specialist", "starting_unit_price_rule", "trade_now_unit_price_rule" };
+    private static readonly uint[] _specialistConfigFieldTags = new uint[] { 32, 18, 26, 90, 72, 40, 80, 56, 8, 48, 64 };
     public static SpecialistConfig DefaultInstance {
       get { return defaultInstance; }
     }
@@ -9683,7 +9517,67 @@ namespace bnet.protocol.exchange {
       get { return antiSnipingExtensionDelay_; }
     }
     
-    public const int CurrencyConfigFieldNumber = 5;
+    public const int MaxItemsAmountFieldNumber = 5;
+    private bool hasMaxItemsAmount;
+    private ulong maxItemsAmount_;
+    public bool HasMaxItemsAmount {
+      get { return hasMaxItemsAmount; }
+    }
+    public ulong MaxItemsAmount {
+      get { return maxItemsAmount_; }
+    }
+    
+    public const int StartingUnitPriceRuleFieldNumber = 6;
+    private bool hasStartingUnitPriceRule;
+    private int startingUnitPriceRule_;
+    public bool HasStartingUnitPriceRule {
+      get { return hasStartingUnitPriceRule; }
+    }
+    public int StartingUnitPriceRule {
+      get { return startingUnitPriceRule_; }
+    }
+    
+    public const int ReservedUnitPriceRuleFieldNumber = 7;
+    private bool hasReservedUnitPriceRule;
+    private int reservedUnitPriceRule_;
+    public bool HasReservedUnitPriceRule {
+      get { return hasReservedUnitPriceRule; }
+    }
+    public int ReservedUnitPriceRule {
+      get { return reservedUnitPriceRule_; }
+    }
+    
+    public const int TradeNowUnitPriceRuleFieldNumber = 8;
+    private bool hasTradeNowUnitPriceRule;
+    private int tradeNowUnitPriceRule_;
+    public bool HasTradeNowUnitPriceRule {
+      get { return hasTradeNowUnitPriceRule; }
+    }
+    public int TradeNowUnitPriceRule {
+      get { return tradeNowUnitPriceRule_; }
+    }
+    
+    public const int CurrentUnitPriceRuleFieldNumber = 9;
+    private bool hasCurrentUnitPriceRule;
+    private int currentUnitPriceRule_;
+    public bool HasCurrentUnitPriceRule {
+      get { return hasCurrentUnitPriceRule; }
+    }
+    public int CurrentUnitPriceRule {
+      get { return currentUnitPriceRule_; }
+    }
+    
+    public const int MaximumUnitPriceRuleFieldNumber = 10;
+    private bool hasMaximumUnitPriceRule;
+    private int maximumUnitPriceRule_;
+    public bool HasMaximumUnitPriceRule {
+      get { return hasMaximumUnitPriceRule; }
+    }
+    public int MaximumUnitPriceRule {
+      get { return maximumUnitPriceRule_; }
+    }
+    
+    public const int CurrencyConfigFieldNumber = 11;
     private pbc::PopsicleList<global::bnet.protocol.exchange.CurrencyConfig> currencyConfig_ = new pbc::PopsicleList<global::bnet.protocol.exchange.CurrencyConfig>();
     public scg::IList<global::bnet.protocol.exchange.CurrencyConfig> CurrencyConfigList {
       get { return currencyConfig_; }
@@ -9699,6 +9593,12 @@ namespace bnet.protocol.exchange {
       get {
         if (!hasSpecialist) return false;
         if (!hasAntiSnipingExtensionDelay) return false;
+        if (!hasMaxItemsAmount) return false;
+        if (!hasStartingUnitPriceRule) return false;
+        if (!hasReservedUnitPriceRule) return false;
+        if (!hasTradeNowUnitPriceRule) return false;
+        if (!hasCurrentUnitPriceRule) return false;
+        if (!hasMaximumUnitPriceRule) return false;
         foreach (global::bnet.protocol.exchange.CurrencyConfig element in CurrencyConfigList) {
           if (!element.IsInitialized) return false;
         }
@@ -9710,7 +9610,7 @@ namespace bnet.protocol.exchange {
       int size = SerializedSize;
       string[] field_names = _specialistConfigFieldNames;
       if (hasSpecialist) {
-        output.WriteInt32(1, field_names[4], Specialist);
+        output.WriteInt32(1, field_names[8], Specialist);
       }
       if (auctionDurations_.Count > 0) {
         output.WritePackedUInt64Array(2, field_names[1], auctionDurationsMemoizedSerializedSize, auctionDurations_);
@@ -9721,8 +9621,26 @@ namespace bnet.protocol.exchange {
       if (hasAntiSnipingExtensionDelay) {
         output.WriteUInt64(4, field_names[0], AntiSnipingExtensionDelay);
       }
+      if (hasMaxItemsAmount) {
+        output.WriteUInt64(5, field_names[5], MaxItemsAmount);
+      }
+      if (hasStartingUnitPriceRule) {
+        output.WriteInt32(6, field_names[9], StartingUnitPriceRule);
+      }
+      if (hasReservedUnitPriceRule) {
+        output.WriteInt32(7, field_names[7], ReservedUnitPriceRule);
+      }
+      if (hasTradeNowUnitPriceRule) {
+        output.WriteInt32(8, field_names[10], TradeNowUnitPriceRule);
+      }
+      if (hasCurrentUnitPriceRule) {
+        output.WriteInt32(9, field_names[4], CurrentUnitPriceRule);
+      }
+      if (hasMaximumUnitPriceRule) {
+        output.WriteInt32(10, field_names[6], MaximumUnitPriceRule);
+      }
       if (currencyConfig_.Count > 0) {
-        output.WriteMessageArray(5, field_names[3], currencyConfig_);
+        output.WriteMessageArray(11, field_names[3], currencyConfig_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -9762,8 +9680,26 @@ namespace bnet.protocol.exchange {
         if (hasAntiSnipingExtensionDelay) {
           size += pb::CodedOutputStream.ComputeUInt64Size(4, AntiSnipingExtensionDelay);
         }
+        if (hasMaxItemsAmount) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(5, MaxItemsAmount);
+        }
+        if (hasStartingUnitPriceRule) {
+          size += pb::CodedOutputStream.ComputeInt32Size(6, StartingUnitPriceRule);
+        }
+        if (hasReservedUnitPriceRule) {
+          size += pb::CodedOutputStream.ComputeInt32Size(7, ReservedUnitPriceRule);
+        }
+        if (hasTradeNowUnitPriceRule) {
+          size += pb::CodedOutputStream.ComputeInt32Size(8, TradeNowUnitPriceRule);
+        }
+        if (hasCurrentUnitPriceRule) {
+          size += pb::CodedOutputStream.ComputeInt32Size(9, CurrentUnitPriceRule);
+        }
+        if (hasMaximumUnitPriceRule) {
+          size += pb::CodedOutputStream.ComputeInt32Size(10, MaximumUnitPriceRule);
+        }
         foreach (global::bnet.protocol.exchange.CurrencyConfig element in CurrencyConfigList) {
-          size += pb::CodedOutputStream.ComputeMessageSize(5, element);
+          size += pb::CodedOutputStream.ComputeMessageSize(11, element);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -9906,6 +9842,24 @@ namespace bnet.protocol.exchange {
         if (other.HasAntiSnipingExtensionDelay) {
           AntiSnipingExtensionDelay = other.AntiSnipingExtensionDelay;
         }
+        if (other.HasMaxItemsAmount) {
+          MaxItemsAmount = other.MaxItemsAmount;
+        }
+        if (other.HasStartingUnitPriceRule) {
+          StartingUnitPriceRule = other.StartingUnitPriceRule;
+        }
+        if (other.HasReservedUnitPriceRule) {
+          ReservedUnitPriceRule = other.ReservedUnitPriceRule;
+        }
+        if (other.HasTradeNowUnitPriceRule) {
+          TradeNowUnitPriceRule = other.TradeNowUnitPriceRule;
+        }
+        if (other.HasCurrentUnitPriceRule) {
+          CurrentUnitPriceRule = other.CurrentUnitPriceRule;
+        }
+        if (other.HasMaximumUnitPriceRule) {
+          MaximumUnitPriceRule = other.MaximumUnitPriceRule;
+        }
         if (other.currencyConfig_.Count != 0) {
           result.currencyConfig_.Add(other.currencyConfig_);
         }
@@ -9970,7 +9924,31 @@ namespace bnet.protocol.exchange {
               result.hasAntiSnipingExtensionDelay = input.ReadUInt64(ref result.antiSnipingExtensionDelay_);
               break;
             }
-            case 42: {
+            case 40: {
+              result.hasMaxItemsAmount = input.ReadUInt64(ref result.maxItemsAmount_);
+              break;
+            }
+            case 48: {
+              result.hasStartingUnitPriceRule = input.ReadInt32(ref result.startingUnitPriceRule_);
+              break;
+            }
+            case 56: {
+              result.hasReservedUnitPriceRule = input.ReadInt32(ref result.reservedUnitPriceRule_);
+              break;
+            }
+            case 64: {
+              result.hasTradeNowUnitPriceRule = input.ReadInt32(ref result.tradeNowUnitPriceRule_);
+              break;
+            }
+            case 72: {
+              result.hasCurrentUnitPriceRule = input.ReadInt32(ref result.currentUnitPriceRule_);
+              break;
+            }
+            case 80: {
+              result.hasMaximumUnitPriceRule = input.ReadInt32(ref result.maximumUnitPriceRule_);
+              break;
+            }
+            case 90: {
               input.ReadMessageArray(tag, field_name, result.currencyConfig_, global::bnet.protocol.exchange.CurrencyConfig.DefaultInstance, extensionRegistry);
               break;
             }
@@ -10081,6 +10059,126 @@ namespace bnet.protocol.exchange {
         PrepareBuilder();
         result.hasAntiSnipingExtensionDelay = false;
         result.antiSnipingExtensionDelay_ = 0UL;
+        return this;
+      }
+      
+      public bool HasMaxItemsAmount {
+        get { return result.hasMaxItemsAmount; }
+      }
+      public ulong MaxItemsAmount {
+        get { return result.MaxItemsAmount; }
+        set { SetMaxItemsAmount(value); }
+      }
+      public Builder SetMaxItemsAmount(ulong value) {
+        PrepareBuilder();
+        result.hasMaxItemsAmount = true;
+        result.maxItemsAmount_ = value;
+        return this;
+      }
+      public Builder ClearMaxItemsAmount() {
+        PrepareBuilder();
+        result.hasMaxItemsAmount = false;
+        result.maxItemsAmount_ = 0UL;
+        return this;
+      }
+      
+      public bool HasStartingUnitPriceRule {
+        get { return result.hasStartingUnitPriceRule; }
+      }
+      public int StartingUnitPriceRule {
+        get { return result.StartingUnitPriceRule; }
+        set { SetStartingUnitPriceRule(value); }
+      }
+      public Builder SetStartingUnitPriceRule(int value) {
+        PrepareBuilder();
+        result.hasStartingUnitPriceRule = true;
+        result.startingUnitPriceRule_ = value;
+        return this;
+      }
+      public Builder ClearStartingUnitPriceRule() {
+        PrepareBuilder();
+        result.hasStartingUnitPriceRule = false;
+        result.startingUnitPriceRule_ = 0;
+        return this;
+      }
+      
+      public bool HasReservedUnitPriceRule {
+        get { return result.hasReservedUnitPriceRule; }
+      }
+      public int ReservedUnitPriceRule {
+        get { return result.ReservedUnitPriceRule; }
+        set { SetReservedUnitPriceRule(value); }
+      }
+      public Builder SetReservedUnitPriceRule(int value) {
+        PrepareBuilder();
+        result.hasReservedUnitPriceRule = true;
+        result.reservedUnitPriceRule_ = value;
+        return this;
+      }
+      public Builder ClearReservedUnitPriceRule() {
+        PrepareBuilder();
+        result.hasReservedUnitPriceRule = false;
+        result.reservedUnitPriceRule_ = 0;
+        return this;
+      }
+      
+      public bool HasTradeNowUnitPriceRule {
+        get { return result.hasTradeNowUnitPriceRule; }
+      }
+      public int TradeNowUnitPriceRule {
+        get { return result.TradeNowUnitPriceRule; }
+        set { SetTradeNowUnitPriceRule(value); }
+      }
+      public Builder SetTradeNowUnitPriceRule(int value) {
+        PrepareBuilder();
+        result.hasTradeNowUnitPriceRule = true;
+        result.tradeNowUnitPriceRule_ = value;
+        return this;
+      }
+      public Builder ClearTradeNowUnitPriceRule() {
+        PrepareBuilder();
+        result.hasTradeNowUnitPriceRule = false;
+        result.tradeNowUnitPriceRule_ = 0;
+        return this;
+      }
+      
+      public bool HasCurrentUnitPriceRule {
+        get { return result.hasCurrentUnitPriceRule; }
+      }
+      public int CurrentUnitPriceRule {
+        get { return result.CurrentUnitPriceRule; }
+        set { SetCurrentUnitPriceRule(value); }
+      }
+      public Builder SetCurrentUnitPriceRule(int value) {
+        PrepareBuilder();
+        result.hasCurrentUnitPriceRule = true;
+        result.currentUnitPriceRule_ = value;
+        return this;
+      }
+      public Builder ClearCurrentUnitPriceRule() {
+        PrepareBuilder();
+        result.hasCurrentUnitPriceRule = false;
+        result.currentUnitPriceRule_ = 0;
+        return this;
+      }
+      
+      public bool HasMaximumUnitPriceRule {
+        get { return result.hasMaximumUnitPriceRule; }
+      }
+      public int MaximumUnitPriceRule {
+        get { return result.MaximumUnitPriceRule; }
+        set { SetMaximumUnitPriceRule(value); }
+      }
+      public Builder SetMaximumUnitPriceRule(int value) {
+        PrepareBuilder();
+        result.hasMaximumUnitPriceRule = true;
+        result.maximumUnitPriceRule_ = value;
+        return this;
+      }
+      public Builder ClearMaximumUnitPriceRule() {
+        PrepareBuilder();
+        result.hasMaximumUnitPriceRule = false;
+        result.maximumUnitPriceRule_ = 0;
         return this;
       }
       
@@ -12143,6 +12241,325 @@ namespace bnet.protocol.exchange {
       }
     }
     static FeeDetail() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.ExchangeTypes.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class PriceDetail : pb::GeneratedMessage<PriceDetail, PriceDetail.Builder> {
+    private PriceDetail() { }
+    private static readonly PriceDetail defaultInstance = new PriceDetail().MakeReadOnly();
+    private static readonly string[] _priceDetailFieldNames = new string[] { "amount", "trade_price" };
+    private static readonly uint[] _priceDetailFieldTags = new uint[] { 16, 8 };
+    public static PriceDetail DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override PriceDetail DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override PriceDetail ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.ExchangeTypes.internal__static_bnet_protocol_exchange_PriceDetail__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<PriceDetail, PriceDetail.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.ExchangeTypes.internal__static_bnet_protocol_exchange_PriceDetail__FieldAccessorTable; }
+    }
+    
+    public const int TradePriceFieldNumber = 1;
+    private bool hasTradePrice;
+    private ulong tradePrice_;
+    public bool HasTradePrice {
+      get { return hasTradePrice; }
+    }
+    public ulong TradePrice {
+      get { return tradePrice_; }
+    }
+    
+    public const int AmountFieldNumber = 2;
+    private bool hasAmount;
+    private ulong amount_;
+    public bool HasAmount {
+      get { return hasAmount; }
+    }
+    public ulong Amount {
+      get { return amount_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasTradePrice) return false;
+        if (!hasAmount) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _priceDetailFieldNames;
+      if (hasTradePrice) {
+        output.WriteUInt64(1, field_names[1], TradePrice);
+      }
+      if (hasAmount) {
+        output.WriteUInt64(2, field_names[0], Amount);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasTradePrice) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(1, TradePrice);
+        }
+        if (hasAmount) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, Amount);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static PriceDetail ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static PriceDetail ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static PriceDetail ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static PriceDetail ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static PriceDetail ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static PriceDetail ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static PriceDetail ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static PriceDetail ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static PriceDetail ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static PriceDetail ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private PriceDetail MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(PriceDetail prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<PriceDetail, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(PriceDetail cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private PriceDetail result;
+      
+      private PriceDetail PrepareBuilder() {
+        if (resultIsReadOnly) {
+          PriceDetail original = result;
+          result = new PriceDetail();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override PriceDetail MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.PriceDetail.Descriptor; }
+      }
+      
+      public override PriceDetail DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.PriceDetail.DefaultInstance; }
+      }
+      
+      public override PriceDetail BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is PriceDetail) {
+          return MergeFrom((PriceDetail) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(PriceDetail other) {
+        if (other == global::bnet.protocol.exchange.PriceDetail.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasTradePrice) {
+          TradePrice = other.TradePrice;
+        }
+        if (other.HasAmount) {
+          Amount = other.Amount;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_priceDetailFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _priceDetailFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasTradePrice = input.ReadUInt64(ref result.tradePrice_);
+              break;
+            }
+            case 16: {
+              result.hasAmount = input.ReadUInt64(ref result.amount_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasTradePrice {
+        get { return result.hasTradePrice; }
+      }
+      public ulong TradePrice {
+        get { return result.TradePrice; }
+        set { SetTradePrice(value); }
+      }
+      public Builder SetTradePrice(ulong value) {
+        PrepareBuilder();
+        result.hasTradePrice = true;
+        result.tradePrice_ = value;
+        return this;
+      }
+      public Builder ClearTradePrice() {
+        PrepareBuilder();
+        result.hasTradePrice = false;
+        result.tradePrice_ = 0UL;
+        return this;
+      }
+      
+      public bool HasAmount {
+        get { return result.hasAmount; }
+      }
+      public ulong Amount {
+        get { return result.Amount; }
+        set { SetAmount(value); }
+      }
+      public Builder SetAmount(ulong value) {
+        PrepareBuilder();
+        result.hasAmount = true;
+        result.amount_ = value;
+        return this;
+      }
+      public Builder ClearAmount() {
+        PrepareBuilder();
+        result.hasAmount = false;
+        result.amount_ = 0UL;
+        return this;
+      }
+    }
+    static PriceDetail() {
       object.ReferenceEquals(global::bnet.protocol.exchange.ExchangeTypes.Descriptor, null);
     }
   }

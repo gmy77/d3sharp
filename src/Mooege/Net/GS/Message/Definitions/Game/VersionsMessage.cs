@@ -31,7 +31,8 @@ namespace Mooege.Net.GS.Message.Definitions.Game
         {
             this.SNOPackHash = snoPacketHash;
             this.ProtocolHash = ImplementedProtocolHash;
-            this.Version = "0.3.1.7779"; // 7728
+            this.Version = "0.4.0.7865"; //7841
+            //this.Version = "0.3.1.7779"; // 7728
             //this.Version = "0.3.0.7484"; // 7447    
             //this.Version = "0.3.0.7333"; // beta patch-3
         }
