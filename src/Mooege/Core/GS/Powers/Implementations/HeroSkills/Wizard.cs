@@ -27,7 +27,7 @@ using Mooege.Core.GS.Ticker;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Meteor)]
-    public class WizardMeteor : PowerScriptImplementation
+    public class WizardMeteor : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -105,7 +105,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.MagicMissile)]
-    public class WizardMagicMissile : PowerScriptImplementation
+    public class WizardMagicMissile : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -127,7 +127,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Hydra)]
-    public class WizardHydra : PowerScriptImplementation
+    public class WizardHydra : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -153,8 +153,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             // project beam end to always be a certain length
             TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
-                                                               User.Position, BeamLength);
-            TargetPosition.Z = TargetZ;
+                                                             new Vector3D(User.Position.X, User.Position.Y, TargetPosition.Z),
+                                                             BeamLength);
         }
 
         public override void OnChannelOpen()
@@ -186,7 +186,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             foreach (Actor actor in GetEnemiesInRange(User.Position, BeamLength + 10f))
             {
-                if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
+                if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
                 {  
                     actor.PlayEffectGroup(18793);
                     WeaponDamage(actor, 1.35f * RunDelay, DamageType.Arcane, true);
@@ -198,7 +198,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.WaveOfForce)]
-    public class WizardWaveOfForce : PowerScriptImplementation
+    public class WizardWaveOfForce : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -260,7 +260,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
     //bumbasher
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.FrostNova)]
-    public class WizardFrostNova : PowerScriptImplementation
+    public class WizardFrostNova : PowerScript
     {
         public const int FrostNova_Emitter = 4402;
 
@@ -281,7 +281,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
-    public class WizardBlizzard : PowerScriptImplementation
+    public class WizardBlizzard : PowerScript
     {
         public const int Wizard_Blizzard = 0x1977;
 
@@ -317,8 +317,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             // project beam end to always be a certain length
             TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
-                                                               User.Position, BeamLength);
-            TargetPosition.Z = TargetZ;
+                                                             new Vector3D(User.Position.X, User.Position.Y, TargetPosition.Z),
+                                                             BeamLength);
         }
 
         public override void OnChannelOpen()
@@ -350,7 +350,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             foreach (Actor actor in GetEnemiesInRange(User.Position, BeamLength + 10f))
             {
-                if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
+                if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
                 {
                     WeaponDamage(actor, 2.70f * RunDelay, DamageType.Cold);
                 }
@@ -361,7 +361,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Teleport)]
-    public class WizardTeleport : PowerScriptImplementation
+    public class WizardTeleport : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -375,7 +375,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.SpectralBlade)]
-    public class WizardSpectralBlade : PowerScriptImplementation
+    public class WizardSpectralBlade : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -398,7 +398,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.ShockPulse)]
-    public class WizardShockPulse : PowerScriptImplementation
+    public class WizardShockPulse : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {

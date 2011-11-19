@@ -45,9 +45,6 @@ namespace Mooege.Core.GS.Powers
         public World World;
         public Actor User;
         public Actor Target;
-        public Vector3D TargetPosition;
-        public float TargetZ;
-        public TargetMessage TargetMessage;
 
         // helper variables
         private TickTimer _defaultEffectTimeout;
@@ -238,7 +235,7 @@ namespace Mooege.Core.GS.Powers
         {
             float result;
             if (!PowerFormulaScript.Evaluate(this.PowerSNO, PowerFormulaScript.GenerateTagForScriptFormula(index),
-                                            User.Attributes, Rand, out result))
+                                             User.Attributes, Rand, out result))
                 return 0;
 
             return result;

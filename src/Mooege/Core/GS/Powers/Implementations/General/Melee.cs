@@ -26,7 +26,7 @@ using Mooege.Core.GS.Ticker;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(0x00007780)]  // Weapon_Melee_Instant.pow
-    public class WeaponMeleeInstant : PowerScriptImplementation
+    public class WeaponMeleeInstant : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {

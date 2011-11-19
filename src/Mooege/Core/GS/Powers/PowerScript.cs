@@ -19,12 +19,15 @@
 using System.Collections.Generic;
 using Mooege.Common;
 using Mooege.Core.GS.Ticker;
+using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Net.GS.Message.Definitions.World;
 
 namespace Mooege.Core.GS.Powers
 {
-    public abstract class PowerScriptImplementation : PowerContext
+    public abstract class PowerScript : PowerContext
     {
-        public static readonly Logger Logger = LogManager.CreateLogger();
+        public Vector3D TargetPosition;
+        public TargetMessage TargetMessage;
 
         // Called to start executing a power
         // Yields timers that signify when to continue execution.

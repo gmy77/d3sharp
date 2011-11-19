@@ -114,7 +114,7 @@
     <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Wizard.cs" />
     <Compile Include="Core\GS\Powers\ImplementsPowerSNO.cs" />
     <Compile Include="Core\GS\Powers\PowerContext.cs" />
-    <Compile Include="Core\GS\Powers\PowerScriptImplementation.cs" />
+    <Compile Include="Core\GS\Powers\PowerScript.cs" />
     <Compile Include="Core\GS\Powers\PowerLoader.cs" />
     <Compile Include="Core\GS\Powers\PowerManager.cs" />
     <Compile Include="Core\GS\Powers\PowerTag.cs" />

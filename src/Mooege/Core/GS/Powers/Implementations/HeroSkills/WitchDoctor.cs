@@ -30,7 +30,7 @@ using Mooege.Core.GS.Ticker;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.WitchDoctor.PhysicalRealm.PoisonDart)]
-    public class WitchDoctorPoisonDart : PowerScriptImplementation
+    public class WitchDoctorPoisonDart : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -61,7 +61,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.WitchDoctor.PhysicalRealm.ZombieCharger)]
-    public class WitchDoctorZombieCharger : PowerScriptImplementation
+    public class WitchDoctorZombieCharger : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -121,7 +121,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.WitchDoctor.PhysicalRealm.PlagueOfToads)]
-    public class WitchDoctorPlagueOfToads : PowerScriptImplementation
+    public class WitchDoctorPlagueOfToads : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {

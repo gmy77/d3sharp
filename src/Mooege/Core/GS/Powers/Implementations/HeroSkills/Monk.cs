@@ -30,7 +30,7 @@ using Mooege.Core.GS.Ticker;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.DeadlyReach)]
-    public class MonkDeadlyReach : PowerScriptImplementation
+    public class MonkDeadlyReach : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -44,18 +44,18 @@ namespace Mooege.Core.GS.Powers.Implementations
                     yield return WaitSeconds(0.1f);
                     effectSNO = 140870;
                     reachLength = 13;
-                    reachThickness = 6;
+                    reachThickness = 3f;
                     break;
                 case 1:
                     effectSNO = 140871;
                     reachLength = 14;
-                    reachThickness = 8;
+                    reachThickness = 4.5f;
                     break;
                 case 2:
                     yield return WaitSeconds(0.3f);
                     effectSNO = 140872;
                     reachLength = 18;
-                    reachThickness = 8;
+                    reachThickness = 4.5f;
                     break;
                 default:
                     yield break;
@@ -85,7 +85,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.FistsOfThunder)]
-    public class MonkFistsOfThunder : PowerScriptImplementation
+    public class MonkFistsOfThunder : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -139,7 +139,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.SevenSidedStrike)]
-    public class MonkSevenSidedStrike : PowerScriptImplementation
+    public class MonkSevenSidedStrike : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -170,7 +170,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.CripplingWave)]
-    public class MonkCripplingWave : PowerScriptImplementation
+    public class MonkCripplingWave : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -219,7 +219,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.ExplodingPalm)]
-    public class MonkExplodingPalm : PowerScriptImplementation
+    public class MonkExplodingPalm : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -252,7 +252,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.SweepingWind)]
-    public class MonkSweepingWind : PowerScriptImplementation
+    public class MonkSweepingWind : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -285,7 +285,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.DashingStrike)]
-    public class MonkDashingStrike : PowerScriptImplementation
+    public class MonkDashingStrike : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {

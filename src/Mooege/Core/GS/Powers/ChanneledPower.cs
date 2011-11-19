@@ -24,7 +24,7 @@ using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.Powers
 {
-    public abstract class ChanneledPower : PowerScriptImplementation
+    public abstract class ChanneledPower : PowerScript
     {
         public bool ChannelOpen = false;
         public float RunDelay = 1.0f;

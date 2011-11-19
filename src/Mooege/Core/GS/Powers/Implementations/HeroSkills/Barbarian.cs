@@ -29,7 +29,7 @@ using Mooege.Core.GS.Common.Types.TagMap;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.Bash)]
-    public class BarbarianBash : PowerScriptImplementation
+    public class BarbarianBash : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -52,7 +52,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.LeapAttack)]
-    public class BarbarianLeap : PowerScriptImplementation
+    public class BarbarianLeap : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -103,7 +103,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FurySpenders.Whirlwind)]
-    public class BarbarianWhirlwind : PowerScriptImplementation
+    public class BarbarianWhirlwind : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -164,7 +164,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.AncientSpear)]
-    public class BarbarianAncientSpear : PowerScriptImplementation
+    public class BarbarianAncientSpear : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
