@@ -52,7 +52,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("ACDCreateActor:");
+            b.AppendLine("ACDDestroyActorMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorId.ToString("X8") + " (" + ActorId + ")");
