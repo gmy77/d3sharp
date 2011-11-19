@@ -43,29 +43,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                 case 0x0030: // Sent with DwordDataMessage(0x0125, Value:0) and SimpleMessage(0x0125)
                     {
                         // What the dickens is this stuff
-                        #region hardcoded1
-                        #region Player Attribute Values
-
-                        GameAttributeMap attributes = new GameAttributeMap();
-                        attributes[GameAttribute.Banter_Cooldown, 0xFFFFF] = 0x000007C9;
-                        attributes[GameAttribute.Buff_Active, 0x20CBE] = true;
-                        attributes[GameAttribute.Buff_Active, 0x33C40] = false;
-                        attributes[GameAttribute.Immobolize] = false;
-                        attributes[GameAttribute.Untargetable] = false;
-                        attributes[GameAttribute.CantStartDisplayedPowers] = false;
-                        attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x20CBE] = 0xC1;
-                        attributes[GameAttribute.Disabled] = false;
-                        attributes[GameAttribute.Hidden] = false;
-                        attributes[GameAttribute.Buff_Icon_Count0, 0x33C40] = 0;
-                        attributes[GameAttribute.Buff_Icon_End_Tick0, 0x20CBE] = 0x7C9;
-                        attributes[GameAttribute.Loading] = false;
-                        attributes[GameAttribute.Buff_Icon_End_Tick0, 0x33C40] = 0;
-                        attributes[GameAttribute.Invulnerable] = false;
-                        attributes[GameAttribute.Buff_Icon_Count0, 0x20CBE] = 1;
-                        attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x33C40] = 0;
-                        attributes.SendMessage(client, player.DynamicID);
-
-                        #endregion
 
                         client.SendMessage(new ACDCollFlagsMessage()
                         {
@@ -73,9 +50,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                             CollFlags = 0x00000008,
                         });
 
-                        #endregion
                         
-                        #region hardcoded2
                         // NOTE: This is very similar to ACDEnterKnown fields
                         // TODO: Map proper values from the actor..
                         client.SendMessage(new TrickleMessage()
@@ -101,7 +76,6 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
                             StringListSNO = 0x0000F063,
                         });
 
-                        #endregion
                         
                     }
                     break;

@@ -422,6 +422,26 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Shared_Stash_Slots] = 14;
             this.Attributes[GameAttribute.Backpack_Slots] = 60;
             this.Attributes[GameAttribute.General_Cooldown] = 0;
+
+
+            // TODO: Fix this shit! Should be actually done so after loading is complete /raist.
+            this.Attributes[GameAttribute.Banter_Cooldown, 0xFFFFF] = 0x000007C9;
+            this.Attributes[GameAttribute.Buff_Active, 0x20CBE] = true;
+            this.Attributes[GameAttribute.Buff_Active, 0x33C40] = false;
+            this.Attributes[GameAttribute.Immobolize] = false;
+            this.Attributes[GameAttribute.Untargetable] = false;
+            this.Attributes[GameAttribute.CantStartDisplayedPowers] = false;
+            this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x20CBE] = 0xC1;
+            this.Attributes[GameAttribute.Disabled] = false;
+            this.Attributes[GameAttribute.Hidden] = false;
+            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x33C40] = 0;
+            this.Attributes[GameAttribute.Buff_Icon_End_Tick0, 0x20CBE] = 0x7C9;
+            this.Attributes[GameAttribute.Loading] = false;
+            this.Attributes[GameAttribute.Buff_Icon_End_Tick0, 0x33C40] = 0;
+            this.Attributes[GameAttribute.Invulnerable] = false;
+            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x20CBE] = 1;
+            this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x33C40] = 0;
+
             #endregion // Attributes
 
             // unlocking assigned skills
