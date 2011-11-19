@@ -35,17 +35,21 @@ namespace bnet.protocol.resources {
             "bxIXYm5ldC5wcm90b2NvbC5yZXNvdXJjZXMaIWxpYi9wcm90b2NvbC9jb250" + 
             "ZW50X2hhbmRsZS5wcm90bxoRbGliL3JwYy9ycGMucHJvdG8iWQoUQ29udGVu" + 
             "dEhhbmRsZVJlcXVlc3QSEgoKcHJvZ3JhbV9pZBgBIAIoBxIRCglzdHJlYW1f" + 
-            "aWQYAiACKAcSGgoGbG9jYWxlGAMgASgHOgoxNzAxNzI5NjE5MmwKCVJlc291" + 
-            "cmNlcxJfChBHZXRDb250ZW50SGFuZGxlEi0uYm5ldC5wcm90b2NvbC5yZXNv" + 
+            "aWQYAiACKAcSGgoGbG9jYWxlGAMgASgHOgoxNzAxNzI5NjE5MnIKCVJlc291" + 
+            "cmNlcxJlChBHZXRDb250ZW50SGFuZGxlEi0uYm5ldC5wcm90b2NvbC5yZXNv" + 
             "dXJjZXMuQ29udGVudEhhbmRsZVJlcXVlc3QaHC5ibmV0LnByb3RvY29sLkNv" + 
-            "bnRlbnRIYW5kbGU=");
+            "bnRlbnRIYW5kbGUiBIC1GAFCA4ABAA==");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_resources_ContentHandleRequest__Descriptor = Descriptor.MessageTypes[0];
           internal__static_bnet_protocol_resources_ContentHandleRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.resources.ContentHandleRequest, global::bnet.protocol.resources.ContentHandleRequest.Builder>(internal__static_bnet_protocol_resources_ContentHandleRequest__Descriptor,
                   new string[] { "ProgramId", "StreamId", "Locale", });
-          return null;
+          pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
+          RegisterAllExtensions(registry);
+          global::bnet.protocol.Proto.ContentHandle.RegisterAllExtensions(registry);
+          global::bnet.protocol.Rpc.RegisterAllExtensions(registry);
+          return registry;
         };
         pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
             new pbd::FileDescriptor[] {
