@@ -20,7 +20,7 @@ namespace D3ClassGenerator
 
             var structs = TypeDescriptor.FilterGameMessageStructures(descriptors);
 
-            var writer = new StreamWriter("output.cs");
+            var writer = new StreamWriter("classgenerator-output.cs");
 
             foreach (var s in structs)
             {
@@ -31,7 +31,7 @@ namespace D3ClassGenerator
 
             writer.Close();
 
-            writer = new StreamWriter("attrs.cs");
+            writer = new StreamWriter("attributes-output.cs");
             var builder = new StringBuilder();
             NetAttribute.GenerateClass(builder);
             writer.WriteLine(builder.ToString());
