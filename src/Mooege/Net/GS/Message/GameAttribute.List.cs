@@ -19,6 +19,10 @@ namespace Mooege.Net.GS.Message
                 .ToArray();
         }
 
+        // Caution: Be advised, converting these attribs from Int to Float may crash d3 client or make it throw an error! Do it with caution if needed any! /raist.
+        // Attack, Precision, Vitality, Defense
+
+
         // TODO: move into categories? will probably just end up as properties on actor objects
 
         public static readonly GameAttributeI Axe_Bad_Data = new GameAttributeI(0, 0, -1, 0, 0, "", "", "Axe_Bad_Data", GameAttributeEncoding.Int, 0, 0, 0, 32);
@@ -31,10 +35,10 @@ namespace Mooege.Net.GS.Message
         public static readonly GameAttributeI Respawn_Game_Time = new GameAttributeI(7, 0, -1, 0, 1, "", "", "Respawn_Game_Time", GameAttributeEncoding.Int, 1, 0, 0, 32);
         public static readonly GameAttributeI Backpack_Slots = new GameAttributeI(8, 0, -1, 0, 1, "", "", "Backpack_Slots", GameAttributeEncoding.IntMinMax, 1, 0, 128, 8);
         public static readonly GameAttributeI Shared_Stash_Slots = new GameAttributeI(9, 0, -1, 0, 1, "", "", "Shared_Stash_Slots", GameAttributeEncoding.IntMinMax, 1, 0, 350, 9);
-        public static readonly GameAttributeF Attack = new GameAttributeF(10, 0, -1, 0, 0, "", "((Attack.Agg + Stats_All_Bonus + Attack_Bonus) * (1 + Attack_Bonus_Percent)) * (1 - Attack_Reduction_Percent)", "Attack", GameAttributeEncoding.Float16, 9, 0, 0, 16);
-        public static readonly GameAttributeF Precision = new GameAttributeF(11, 0, -1, 0, 0, "", "((Precision.Agg + Stats_All_Bonus + Precision_Bonus) * (1 + Precision_Bonus_Percent)) * (1 - Precision_Reduction_Percent)", "Precision", GameAttributeEncoding.Float16, 9, 0, 0, 16);
-        public static readonly GameAttributeF Vitality = new GameAttributeF(12, 0, -1, 0, 0, "", "((Vitality.Agg + Stats_All_Bonus + Vitality_Bonus) * (1 + Vitality_Bonus_Percent)) * (1 - Vitality_Reduction_Percent)", "Vitality", GameAttributeEncoding.Float16, 9, 0, 0, 16);
-        public static readonly GameAttributeF Defense = new GameAttributeF(13, 0, -1, 0, 0, "", "((Defense.Agg + Stats_All_Bonus + Defense_Bonus) * (1 + Defense_Bonus_Percent)) * (1 - Defense_Reduction_Percent)", "Defense", GameAttributeEncoding.Float16, 9, 0, 0, 16);
+        public static readonly GameAttributeI Attack = new GameAttributeI(10, 0, -1, 0, 0, "", "((Attack.Agg + Stats_All_Bonus + Attack_Bonus) * (1 + Attack_Bonus_Percent)) * (1 - Attack_Reduction_Percent)", "Attack", GameAttributeEncoding.Int, 9, 0, 0, 32);
+        public static readonly GameAttributeI Precision = new GameAttributeI(11, 0, -1, 0, 0, "", "((Precision.Agg + Stats_All_Bonus + Precision_Bonus) * (1 + Precision_Bonus_Percent)) * (1 - Precision_Reduction_Percent)", "Precision", GameAttributeEncoding.Int, 9, 0, 0, 32);
+        public static readonly GameAttributeI Vitality = new GameAttributeI(12, 0, -1, 0, 0, "", "((Vitality.Agg + Stats_All_Bonus + Vitality_Bonus) * (1 + Vitality_Bonus_Percent)) * (1 - Vitality_Reduction_Percent)", "Vitality", GameAttributeEncoding.Int, 9, 0, 0, 32);
+        public static readonly GameAttributeI Defense = new GameAttributeI(13, 0, -1, 0, 0, "", "((Defense.Agg + Stats_All_Bonus + Defense_Bonus) * (1 + Defense_Bonus_Percent)) * (1 - Defense_Reduction_Percent)", "Defense", GameAttributeEncoding.Int, 9, 0, 0, 32);
         public static readonly GameAttributeF Attack_Bonus = new GameAttributeF(14, 0, -1, 0, 0, "", "", "Attack_Bonus", GameAttributeEncoding.Float16, 9, 0, 0, 16);
         public static readonly GameAttributeF Precision_Bonus = new GameAttributeF(15, 0, -1, 0, 0, "", "", "Precision_Bonus", GameAttributeEncoding.Float16, 9, 0, 0, 16);
         public static readonly GameAttributeF Vitality_Bonus = new GameAttributeF(16, 0, -1, 0, 0, "", "", "Vitality_Bonus", GameAttributeEncoding.Float16, 9, 0, 0, 16);
@@ -748,6 +752,5 @@ namespace Mooege.Net.GS.Message
         public static readonly GameAttributeF Damage_Percent_Reduction_Turns_Into_Heal = new GameAttributeF(724, 0, -1, 7, 0, "", "", "Damage_Percent_Reduction_Turns_Into_Heal", GameAttributeEncoding.Float16, 9, 0, 0, 16);
         public static readonly GameAttributeF Damage_Percent_Percent_Bonus_Vs_Monster_Type = new GameAttributeF(725, 0, 18, 7, 0, "", "", "Damage_Percent_Percent_Bonus_Vs_Monster_Type", GameAttributeEncoding.Float16, 9, 0, 0, 16);
         public static readonly GameAttributeI Item_Manipulation_Timeout = new GameAttributeI(726, 0, -1, 4, 1, "", "", "Item_Manipulation_Timeout", GameAttributeEncoding.Int, 0, 0, 0, 32);
-
     }
 }
