@@ -50,8 +50,9 @@ namespace Mooege.Core.GS.Ticker
         /// <param name="completionCallback">The completition action to be called on timeout</param>
         public TickTimer(Game game, int timeoutTick, Action<int> completionCallback = null)
         {
-            if (timeoutTick <= game.TickCounter)
-                throw new ArgumentOutOfRangeException("timeoutTick", string.Format("timeoutTick value {0} can not be equal or less then timer's belonging game's current TickCounter value {1}.", timeoutTick, game.TickCounter));
+            // why is this even here? it causes problems for me /MDZ
+            //if (timeoutTick <= game.TickCounter)
+            //    throw new ArgumentOutOfRangeException("timeoutTick", string.Format("timeoutTick value {0} can not be equal or less then timer's belonging game's current TickCounter value {1}.", timeoutTick, game.TickCounter));
                                                           
             this.Game = game;
             this.TimeoutTick = timeoutTick;

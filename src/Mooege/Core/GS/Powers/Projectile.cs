@@ -26,11 +26,14 @@ using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Objects;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Core.GS.Ticker;
+using Mooege.Common;
 
 namespace Mooege.Core.GS.Powers
 {
     public class Projectile : Actor, IUpdateable
     {
+        public static readonly Logger Logger = LogManager.CreateLogger();
+
         public override ActorType ActorType { get { return ActorType.Projectile; } }
 
         public PowerContext Context;
@@ -112,7 +115,7 @@ namespace Mooege.Core.GS.Powers
             this.Velocity = new Vector3D(dir_normal.X * speed,
                                          dir_normal.Y * speed,
                                          dir_normal.Z * speed);
-
+                        
             _arrivalTime = new RelativeTickTimer(this.World.Game, (int)(PowerMath.Distance2D(this.Position, target) / speed));
             _lastUpdateTick = this.World.Game.TickCounter;
             _prevUpdatePosition = this.Position;

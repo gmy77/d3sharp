@@ -20,20 +20,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Mooege.Core.GS.Skills;
 using Mooege.Core.GS.Ticker;
 
-namespace Mooege.Core.GS.Powers.Implementations
+namespace Mooege.Core.GS.Powers
 {
-    [ImplementsPowerSNO(0x00007780/*Skills.Skills.BasicAttack*/)]
-    public class Melee : PowerImplementation
+    public abstract class ChanneledPower : PowerScriptImplementation
     {
-        public override IEnumerable<TickTimer> Run()
+        public bool ChannelOpen = false;
+        public float RunDelay = 1.0f;
+
+        public virtual void OnChannelOpen() { }
+        public virtual void OnChannelClose() { }
+        public virtual void OnChannelUpdated() { }
+        public abstract IEnumerable<TickTimer> RunChannel();
+
+        private TickTimer _runTimeout = null;
+
+        public sealed override IEnumerable<TickTimer> Run()
         {
-            if (CanHitMeleeTarget(Target))
+            if (_runTimeout == null || _runTimeout.TimedOut)
             {
-                WeaponDamage(Target, 1.00f, DamageType.Physical);
+                _runTimeout = WaitSeconds(RunDelay);
+                foreach (TickTimer timeout in RunChannel())
+                    yield return timeout;
             }
+
             yield break;
         }
     }

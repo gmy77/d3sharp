@@ -27,7 +27,7 @@ using Mooege.Core.GS.Ticker;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Meteor)]
-    public class WizardMeteor : PowerImplementation
+    public class WizardMeteor : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -37,7 +37,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             SpawnEffect(86769, TargetPosition);
             SpawnEffect(90364, TargetPosition, 0, WaitSeconds(4f));
 
-            IList<Actor> hits = GetTargetsInRange(TargetPosition, 13f);
+            IList<Actor> hits = GetEnemiesInRange(TargetPosition, 13f);
             WeaponDamage(hits, 3.05f, DamageType.Fire);
 
             // TODO: ground fire damage?
@@ -45,7 +45,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.Electrocute)]
-    public class WizardElectrocute : ChanneledPowerImplementation
+    public class WizardElectrocute : ChanneledPower
     {
         public override void OnChannelOpen()
         {
@@ -89,7 +89,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                         break;
                     }
 
-                    curTarget = GetTargetsInRange(curTarget.Position, 15f, 3).FirstOrDefault(t => !targets.Contains(t));
+                    curTarget = GetEnemiesInRange(curTarget.Position, 15f, 3).FirstOrDefault(t => !targets.Contains(t));
                     if (curTarget != null)
                     {
                         targets.Add(curTarget);
@@ -105,7 +105,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.MagicMissile)]
-    public class WizardMagicMissile : PowerImplementation
+    public class WizardMagicMissile : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -127,7 +127,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Hydra)]
-    public class WizardHydra : PowerImplementation
+    public class WizardHydra : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -137,13 +137,13 @@ namespace Mooege.Core.GS.Powers.Implementations
             SpawnEffect(185366, TargetPosition);
             yield return WaitSeconds(0.4f);
 
-            IList<Actor> hits = GetTargetsInRange(TargetPosition, 10f);
+            IList<Actor> hits = GetEnemiesInRange(TargetPosition, 10f);
             WeaponDamage(hits, 10f, DamageType.Fire);
         }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Disintegrate)]
-    public class WizardDisintegrate : ChanneledPowerImplementation
+    public class WizardDisintegrate : ChanneledPower
     {
         const float BeamLength = 40f;
 
@@ -184,7 +184,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             UsePrimaryResource(23f * RunDelay);
 
-            foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
+            foreach (Actor actor in GetEnemiesInRange(User.Position, BeamLength + 10f))
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
                 {  
@@ -198,7 +198,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.WaveOfForce)]
-    public class WizardWaveOfForce : PowerImplementation
+    public class WizardWaveOfForce : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -208,7 +208,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield return WaitSeconds(0.350f); // wait for wizard to land
             User.PlayEffectGroup(19356);
 
-            IList<Actor> hits = GetTargetsInRange(User.Position, 20);
+            IList<Actor> hits = GetEnemiesInRange(User.Position, 20);
             foreach (Actor actor in hits)
             {
                 Knockback(actor, 5f);
@@ -219,7 +219,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneTorrent)]
-    public class WizardArcaneTorrent : ChanneledPowerImplementation
+    public class WizardArcaneTorrent : ChanneledPower
     {
         private Actor _targetProxy = null;
         private Actor _userProxy = null;
@@ -254,13 +254,13 @@ namespace Mooege.Core.GS.Powers.Implementations
                 _targetProxy.TranslateNormal(laggyPosition, 8f);
 
             SpawnEffect(97821, laggyPosition);
-            WeaponDamage(GetTargetsInRange(laggyPosition, 6f), 2.00f * RunDelay, DamageType.Arcane);
+            WeaponDamage(GetEnemiesInRange(laggyPosition, 6f), 2.00f * RunDelay, DamageType.Arcane);
         }
     }
 
     //bumbasher
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.FrostNova)]
-    public class WizardFrostNova : PowerImplementation
+    public class WizardFrostNova : PowerScriptImplementation
     {
         public const int FrostNova_Emitter = 4402;
 
@@ -270,7 +270,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             SpawnEffect(FrostNova_Emitter, User.Position);
 
-            IList<Actor> hits = GetTargetsInRange(User.Position, 18);
+            IList<Actor> hits = GetEnemiesInRange(User.Position, 18);
             foreach (Actor actor in hits)
             {
                 WeaponDamage(actor, 0.65f, DamageType.Cold);
@@ -281,7 +281,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
-    public class WizardBlizzard : PowerImplementation
+    public class WizardBlizzard : PowerScriptImplementation
     {
         public const int Wizard_Blizzard = 0x1977;
 
@@ -295,7 +295,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             for(int i = 0; i < blizzard_duration; ++i)
             {
-                IList<Actor> hits = GetTargetsInRange(TargetPosition, 18);
+                IList<Actor> hits = GetEnemiesInRange(TargetPosition, 18);
                 foreach (Actor actor in hits)
                 {
                     WeaponDamage(actor, 0.65f, DamageType.Cold);
@@ -307,7 +307,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.RayOfFrost)]
-    public class WizardRayOfFrost : ChanneledPowerImplementation
+    public class WizardRayOfFrost : ChanneledPower
     {
         const float BeamLength = 40f;
 
@@ -348,7 +348,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             UsePrimaryResource(29f * RunDelay);
 
-            foreach (Actor actor in GetTargetsInRange(User.Position, BeamLength + 10f))
+            foreach (Actor actor in GetEnemiesInRange(User.Position, BeamLength + 10f))
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 7f))
                 {
@@ -361,21 +361,21 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Teleport)]
-    public class WizardTeleport : PowerImplementation
+    public class WizardTeleport : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(15f);
             //StartCooldown(WaitSeconds(16f));
-            SpawnProxy(User.Position).PlayEffectGroup(19352);  // alt cast efg: 170231
+            SpawnProxy(User.Position).PlayEffectGroup(191848);  // alt cast efg: 170231
             yield return WaitSeconds(0.3f);
             User.Teleport(TargetPosition);
-            User.PlayEffectGroup(170232);
+            User.PlayEffectGroup(191849);
         }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.SpectralBlade)]
-    public class WizardSpectralBlade : PowerImplementation
+    public class WizardSpectralBlade : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -388,7 +388,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             for (int n = 0; n < 3; ++n)
             {
-                foreach (var target in GetTargetsInRange(TargetPosition, 9f))
+                foreach (var target in GetEnemiesInRange(TargetPosition, 9f))
                 {
                     WeaponDamage(target, 0.30f, DamageType.Physical);
                 }
@@ -398,7 +398,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.ShockPulse)]
-    public class WizardShockPulse : PowerImplementation
+    public class WizardShockPulse : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {

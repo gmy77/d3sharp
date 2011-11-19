@@ -16,36 +16,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Mooege.Common;
 using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.Powers
 {
-    public abstract class ChanneledPowerImplementation : PowerImplementation
+    public abstract class PowerScriptImplementation : PowerContext
     {
-        public bool ChannelOpen = false;
-        public float RunDelay = 1.0f;
+        public static readonly Logger Logger = LogManager.CreateLogger();
 
-        public virtual void OnChannelOpen() { }
-        public virtual void OnChannelClose() { }
-        public virtual void OnChannelUpdated() { }
-        public abstract IEnumerable<TickTimer> RunChannel();
+        // Called to start executing a power
+        // Yields timers that signify when to continue execution.
+        public abstract IEnumerable<TickTimer> Run();
 
-        private TickTimer _runTimeout = null;
-
-        public sealed override IEnumerable<TickTimer> Run()
-        {
-            if (_runTimeout == null || _runTimeout.TimedOut)
-            {
-                _runTimeout = WaitSeconds(RunDelay);
-                foreach (TickTimer timeout in RunChannel())
-                    yield return timeout;
-            }
-
-            yield break;
-        }
+        // token instance that can be yielded by Run() to indicate the power manager should stop
+        // running a power implementation.
+        public static readonly TickTimer StopExecution = null;
     }
 }

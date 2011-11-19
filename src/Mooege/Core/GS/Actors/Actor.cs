@@ -406,12 +406,12 @@ namespace Mooege.Core.GS.Actors
             {
                 Id = 0x81,
                 Field0 = (int)World.NewActorID, // TODO: maybe not use actor ids?
-                Field1 = 1,
-                Field2 = effectGroupSNO,
-                Field3 = (int)this.DynamicID,
-                Field4 = (int)target.DynamicID,
-                Field5 = 0,
-                Field6 = 0
+                Field1 = 1,  // 0=efg, 1=efg, 2=rope
+                Field2 = effectGroupSNO, // efgSNO or ropeSNO
+                Field3 = (int)this.DynamicID, // source
+                Field4 = (int)target.DynamicID, // target
+                Field5 = 0, // 0=efg, 4=rope1, 3=rope2
+                Field6 = 0 // 0=efg, 1=rope1, 3=rope2
             }, target);
         }
         #endregion

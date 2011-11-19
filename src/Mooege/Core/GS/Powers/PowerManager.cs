@@ -34,13 +34,13 @@ namespace Mooege.Core.GS.Powers
         static readonly Logger Logger = LogManager.CreateLogger();
 
         // list of all actively channeled powers
-        private List<ChanneledPowerImplementation> _channeledPowers = new List<ChanneledPowerImplementation>();
+        private List<ChanneledPower> _channeledPowers = new List<ChanneledPower>();
 
         // list of all waiting to execute powers
         private class WaitingPower
         {
             public IEnumerator<TickTimer> PowerEnumerator;
-            public PowerImplementation Implementation;
+            public PowerScriptImplementation Implementation;
         }
         private List<WaitingPower> _waitingPowers = new List<WaitingPower>();
         
@@ -139,7 +139,7 @@ namespace Mooege.Core.GS.Powers
             if (implementation != null)
             {
                 // replace implementation with existing channel instance if one exists
-                if (implementation is ChanneledPowerImplementation)
+                if (implementation is ChanneledPower)
                 {
                     var chanpow = _FindChannelingPower(user, powerSNO);
                     if (chanpow != null)
@@ -147,17 +147,16 @@ namespace Mooege.Core.GS.Powers
                 }
 
                 // copy in context params
-                implementation.PowerManager = this;
                 implementation.PowerSNO = powerSNO;
                 implementation.User = user;
                 implementation.Target = target;
                 implementation.World = user.World;
                 implementation.TargetPosition = targetPosition;
                 implementation.TargetZ = targetZ;
-                implementation.Message = message;
+                implementation.TargetMessage = message;
 
                 // process channeled power events
-                var channeledPower = implementation as ChanneledPowerImplementation;
+                var channeledPower = implementation as ChanneledPower;
                 if (channeledPower != null)
                 {
                     if (channeledPower.ChannelOpen)
@@ -174,7 +173,7 @@ namespace Mooege.Core.GS.Powers
                 
                 var powerEnum = implementation.Run().GetEnumerator();
                 // actual power will first run here, if it yielded a timer process it in the waiting list
-                if (powerEnum.MoveNext() && powerEnum.Current != PowerImplementation.StopExecution)
+                if (powerEnum.MoveNext() && powerEnum.Current != PowerScriptImplementation.StopExecution)
                 {
                     _waitingPowers.Add(new WaitingPower
                     {
@@ -199,7 +198,7 @@ namespace Mooege.Core.GS.Powers
                 if (wait.PowerEnumerator.Current.TimedOut)
                 {
                     if (wait.PowerEnumerator.MoveNext())
-                        return wait.PowerEnumerator.Current == PowerImplementation.StopExecution;
+                        return wait.PowerEnumerator.Current == PowerScriptImplementation.StopExecution;
                     else
                         return true;
                 }
@@ -221,7 +220,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private ChanneledPowerImplementation _FindChannelingPower(Actor user, int powerSNOId)
+        private ChanneledPower _FindChannelingPower(Actor user, int powerSNOId)
         {
             return _channeledPowers.FirstOrDefault(impl => impl.User == user &&
                                                            impl.PowerSNO == powerSNOId &&

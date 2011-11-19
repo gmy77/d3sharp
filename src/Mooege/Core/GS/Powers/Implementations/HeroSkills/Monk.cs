@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +16,7 @@ using System.Linq;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
 using System.Text;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS.Message.Fields;
@@ -32,7 +30,7 @@ using Mooege.Core.GS.Ticker;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.DeadlyReach)]
-    public class MonkDeadlyReach : PowerImplementation
+    public class MonkDeadlyReach : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -40,7 +38,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             float reachLength;
             float reachThickness;
 
-            switch(Message.Field5)
+            switch(TargetMessage.Field5)
             {
                 case 0:
                     yield return WaitSeconds(0.1f);
@@ -70,7 +68,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.PlayEffectGroup(effectSNO);
 
             bool hitAnything = false;
-            foreach (Actor actor in GetTargetsInRange(User.Position, reachLength + 10f))
+            foreach (Actor actor in GetEnemiesInRange(User.Position, reachLength + 10f))
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, reachThickness))
                 {
@@ -87,11 +85,11 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.FistsOfThunder)]
-    public class MonkFistsOfThunder : PowerImplementation
+    public class MonkFistsOfThunder : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
-            switch (Message.Field5)
+            switch (TargetMessage.Field5)
             {
                 case 0:
                     yield return WaitSeconds(0.1f);
@@ -114,7 +112,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     User.PlayEffectGroup(96178); // ball of lightning
 
                     bool hitAnything = false;
-                    foreach (Actor actor in GetTargetsInRange(TargetPosition, 7f))
+                    foreach (Actor actor in GetEnemiesInRange(TargetPosition, 7f))
                     {
                         hitAnything = true;
                         Knockback(actor, 4f);
@@ -141,7 +139,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.SevenSidedStrike)]
-    public class MonkSevenSidedStrike : PowerImplementation
+    public class MonkSevenSidedStrike : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -156,7 +154,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             for (int n = 0; n < 7; ++n)
             {
-                IList<Actor> nearby = GetTargetsInRange(startpos, 20f, 1);
+                IList<Actor> nearby = GetEnemiesInRange(startpos, 20f, 1);
                 if (nearby.Count > 0)
                 {
                     SpawnEffect(99063, nearby[0].Position, -1);
@@ -172,12 +170,12 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.CripplingWave)]
-    public class MonkCripplingWave : PowerImplementation
+    public class MonkCripplingWave : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
             int effectSNO;
-            switch (Message.Field5)
+            switch (TargetMessage.Field5)
             {
                 case 0:
                     effectSNO = 18987;
@@ -195,7 +193,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.PlayEffectGroup(effectSNO);
 
             bool hitAnything = false;
-            if (Message.Field5 != 2)
+            if (TargetMessage.Field5 != 2)
             {
                 if (CanHitMeleeTarget(Target))
                 {
@@ -205,7 +203,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
             else
             {
-                IList<Actor> hits = GetTargetsInRange(User.Position, 10f);
+                IList<Actor> hits = GetEnemiesInRange(User.Position, 10f);
                 foreach (Actor hit in hits)
                 {
                     hitAnything = true;
@@ -221,12 +219,12 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.ExplodingPalm)]
-    public class MonkExplodingPalm : PowerImplementation
+    public class MonkExplodingPalm : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
             int effectSNO;
-            switch (Message.Field5)
+            switch (TargetMessage.Field5)
             {
                 case 0:
                     effectSNO = 142471;
@@ -254,12 +252,12 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.SweepingWind)]
-    public class MonkSweepingWind : PowerImplementation
+    public class MonkSweepingWind : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
             int effectSNO;
-            switch (Message.Field5)
+            switch (TargetMessage.Field5)
             {
                 case 0:
                     effectSNO = 196981;
@@ -287,7 +285,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.DashingStrike)]
-    public class MonkDashingStrike : PowerImplementation
+    public class MonkDashingStrike : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -296,7 +294,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             // dashing strike never specifies the target's id so we just search for the closest target
             // ultimately need to know the radius of each target and select the one most covered
             float min_distance = float.MaxValue;
-            foreach (Actor actor in GetTargetsInRange(TargetPosition, 8f))
+            foreach (Actor actor in GetEnemiesInRange(TargetPosition, 8f))
             {
                 float distance = PowerMath.Distance(actor.Position, TargetPosition);
                 if (distance < min_distance)

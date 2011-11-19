@@ -367,31 +367,11 @@ namespace Mooege.Core.GS.Powers
 
         private static ScriptFormula FindScriptFormula(int powerSNO, TagKeyScript scriptTag)
         {
-            Power power = (Power)MPQStorage.Data.Assets[SNOGroup.Power][powerSNO].Data;
-
-            // TODO: figure out which tagmaps to search and in what order
-            TagMap[] tagMaps = new TagMap[]
-            {
-                power.Powerdef.GeneralTagMap,
-                power.Powerdef.TagMap,
-                power.Powerdef.ContactTagMap0,
-                power.Powerdef.ContactTagMap1,
-                power.Powerdef.ContactTagMap2,
-                power.Powerdef.ContactTagMap3,
-                power.Powerdef.PVPGeneralTagMap,
-                power.Powerdef.PVPContactTagMap0,
-                power.Powerdef.PVPContactTagMap1,
-                power.Powerdef.PVPContactTagMap2,
-                power.Powerdef.PVPContactTagMap3,
-            };
-
-            foreach (TagMap tagmap in tagMaps)
-            {
-                if (tagmap.ContainsKey(scriptTag))
-                    return tagmap[scriptTag];
-            }
-
-            return null;
+            TagMap tagmap = PowerTag.FindTagMapWithKey(powerSNO, scriptTag);
+            if (tagmap != null)
+                return tagmap[scriptTag];
+            else
+                return null;
         }
 
         private static bool LookupBalanceTable(float tableId, float index, out float result)

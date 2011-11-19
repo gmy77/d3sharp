@@ -16,22 +16,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
-using Mooege.Common;
+using System.Linq;
+using System.Text;
+using Mooege.Core.GS.Skills;
 using Mooege.Core.GS.Ticker;
 
-namespace Mooege.Core.GS.Powers
+namespace Mooege.Core.GS.Powers.Implementations
 {
-    public abstract class PowerImplementation : PowerContext
+    [ImplementsPowerSNO(0x00007780)]  // Weapon_Melee_Instant.pow
+    public class WeaponMeleeInstant : PowerScriptImplementation
     {
-        public static readonly Logger Logger = LogManager.CreateLogger();
-
-        // Called to start executing a power
-        // Yields timers that signify when to continue execution.
-        public abstract IEnumerable<TickTimer> Run();
-
-        // token instance that can be yielded by Run() to indicate the power manager should stop
-        // running a power implementation.
-        public static readonly TickTimer StopExecution = null;
+        public override IEnumerable<TickTimer> Run()
+        {
+            if (CanHitMeleeTarget(Target))
+            {
+                WeaponDamage(Target, 1.00f, DamageType.Physical);
+            }
+            yield break;
+        }
     }
 }

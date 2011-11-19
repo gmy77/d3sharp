@@ -23,11 +23,13 @@ using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Ticker;
+using Mooege.Net.GS.Message;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.Bash)]
-    public class BarbarianBash : PowerImplementation
+    public class BarbarianBash : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -50,7 +52,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.LeapAttack)]
-    public class BarbarianLeap : PowerImplementation
+    public class BarbarianLeap : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -87,7 +89,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.PlayEffectGroup(18688);
 
             bool hitAnything = false;
-            foreach (Actor actor in GetTargetsInRange(TargetPosition, 8f))
+            foreach (Actor actor in GetEnemiesInRange(TargetPosition, 8f))
             {
                 hitAnything = true;
                 WeaponDamage(actor, 0.70f, DamageType.Physical);
@@ -101,25 +103,68 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FurySpenders.Whirlwind)]
-    public class BarbarianWhirlwind : PowerImplementation
+    public class BarbarianWhirlwind : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
-            //UsePrimaryResource(14f);
+            AddBuff(User, new WhirlwindEffect());
+            yield break;
+        }
 
-            //User.AddBuff(new WhirlWindEffectBuff(WaitSeconds(0.250f)));
+        [ImplementsBuffSlot(0)]
+        public class WhirlwindEffect : PowerBuff
+        {
+            private TickTimer _damageTimer;
+            private TickTimer _tornadoSpawnTimer;
 
-            foreach (Actor target in GetTargetsInRange(User.Position, 9f))
+            public override void Init()
             {
-                WeaponDamage(target, 0.44f, DamageType.Physical);
+                Timeout = WaitSeconds(0.20f);
             }
 
-            yield break;
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+
+                if (_damageTimer == null || _damageTimer.TimedOut)
+                {
+                    _damageTimer = WaitSeconds(ScriptFormula(0));
+                    //UsePrimaryResource(EvalTag(PowerKeys.ResourceCost));
+
+                    foreach (Actor target in GetEnemiesInRange(User.Position, ScriptFormula(2)))
+                    {
+                        WeaponDamage(target, ScriptFormula(1), Rune_A > 0 ? DamageType.Fire : DamageType.Physical);
+                    }
+                }
+
+                if (Rune_B > 0)
+                {
+                    if (_tornadoSpawnTimer == null)
+                        _tornadoSpawnTimer = WaitSeconds(ScriptFormula(5));
+
+                    if (_tornadoSpawnTimer.TimedOut)
+                    {
+                        _tornadoSpawnTimer = WaitSeconds(ScriptFormula(5));
+
+                        var tornado = new Projectile(this, 162386, User.Position);
+                        tornado.Timeout = WaitSeconds(3f);
+                        tornado.OnHit = (hit) =>
+                        {
+                            WeaponDamage(hit, ScriptFormula(6), DamageType.Physical);
+                        };
+                        tornado.Launch(new Vector3D(User.Position.X + Rand.Next(-5, 5), User.Position.Y + Rand.Next(-5, 5),
+                                                    User.Position.Z), 0.25f);
+                    }
+                }
+
+                return false;
+            }
         }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.AncientSpear)]
-    public class BarbarianAncientSpear : PowerImplementation
+    public class BarbarianAncientSpear : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {

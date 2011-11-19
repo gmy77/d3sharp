@@ -28,22 +28,26 @@ using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Ticker;
+using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Common.MPQ;
+using Mooege.Common;
 
 namespace Mooege.Core.GS.Powers
 {
     public class PowerContext
     {
+        public static readonly Logger Logger = LogManager.CreateLogger();
+
         private static ThreadLocal<Random> _threadRand = new ThreadLocal<Random>(() => new Random());
         public static Random Rand { get { return _threadRand.Value; } }
 
-        public PowerManager PowerManager;
         public int PowerSNO;
         public World World;
         public Actor User;
         public Actor Target;
         public Vector3D TargetPosition;
         public float TargetZ;
-        public TargetMessage Message;
+        public TargetMessage TargetMessage;
 
         // helper variables
         private TickTimer _defaultEffectTimeout;
@@ -182,7 +186,7 @@ namespace Mooege.Core.GS.Powers
             return SpawnEffect(187359, position, 0, timeout);
         }
 
-        public IList<Actor> GetTargetsInRange(Vector3D center, float range, int maxCount = -1)
+        public IList<Actor> GetEnemiesInRange(Vector3D center, float range, int maxCount = -1)
         {
             List<Actor> hits = new List<Actor>();
             foreach (Actor actor in World.QuadTree.Query<Actor>(new Circle(center.X, center.Y, range)))
@@ -240,13 +244,62 @@ namespace Mooege.Core.GS.Powers
             return result;
         }
 
+        public int EvalTag(TagKeyInt key)
+        {
+            TagMap tagmap = _FindTagMapWithKey(key);
+            if (tagmap != null)
+                return tagmap[key];
+            else
+                return 0;
+        }
+
+        public int EvalTag(TagKeySNO key)
+        {
+            TagMap tagmap = _FindTagMapWithKey(key);
+            if (tagmap != null)
+                return tagmap[key].Id;
+            else
+                return -1;
+        }
+
+        public float EvalTag(TagKeyFloat key)
+        {
+            TagMap tagmap = _FindTagMapWithKey(key);
+            if (tagmap != null)
+                return tagmap[key];
+            else
+                return 0;
+        }
+
+        public float EvalTag(TagKeyScript key)
+        {
+            float result;
+            if (!PowerFormulaScript.Evaluate(this.PowerSNO, key,
+                                             User.Attributes, Rand, out result))
+                return 0;
+
+            return result;
+        }
+
+        private TagMap _FindTagMapWithKey(TagKey key)
+        {
+            TagMap tagmap = PowerTag.FindTagMapWithKey(PowerSNO, key);
+            if (tagmap != null)
+                return tagmap;
+            else
+            {
+                Logger.Error("could not find tag key {0} in power {1}", key.ID, PowerSNO);
+                return null;
+            }
+        }
+
         public int Rune_A { get { return User.Attributes[GameAttribute.Rune_A, PowerSNO]; } }
         public int Rune_B { get { return User.Attributes[GameAttribute.Rune_B, PowerSNO]; } }
         public int Rune_C { get { return User.Attributes[GameAttribute.Rune_C, PowerSNO]; } }
         public int Rune_D { get { return User.Attributes[GameAttribute.Rune_D, PowerSNO]; } }
         public int Rune_E { get { return User.Attributes[GameAttribute.Rune_E, PowerSNO]; } }
 
-        public int RuneSelectsId(int none, int runeA, int runeB, int runeC, int runeD, int runeE)
+        public T RuneSelect<T>(T none, T runeA, T runeB, T runeC, T runeD, T runeE)
         {
             if (Rune_A > 0)
                 return runeA;
@@ -260,6 +313,17 @@ namespace Mooege.Core.GS.Powers
                 return runeE;
             else
                 return none;
+        }
+
+        public void BroadcastChangedAttributes(Actor actor)
+        {
+            foreach (var msg in actor.Attributes.GetChangedMessageList(actor.DynamicID))
+                actor.World.BroadcastIfRevealed(msg, actor);
+        }
+
+        public bool AddBuff(Actor target, Buff buff)
+        {
+            return target.World.BuffManager.AddBuff(User, target, buff);
         }
     }
 }

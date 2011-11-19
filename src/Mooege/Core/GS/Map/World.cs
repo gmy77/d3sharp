@@ -102,6 +102,7 @@ namespace Mooege.Core.GS.Map
         }
 
         public PowerManager PowerManager;
+        public BuffManager BuffManager;
 
         /// <summary>
         /// Creates a new world for the given game with given snoId.
@@ -121,6 +122,7 @@ namespace Mooege.Core.GS.Map
             this.Players = new ConcurrentDictionary<uint, Player>();
             this.QuadTree = new QuadTree(new Size(60, 60), 0);
             this.PowerManager = new PowerManager();
+            this.BuffManager = new BuffManager();
             this.Game.AddWorld(this);
         }
 
@@ -147,6 +149,7 @@ namespace Mooege.Core.GS.Map
             }
 
             this.PowerManager.Update();
+            this.BuffManager.Update();
         }
 
         #endregion

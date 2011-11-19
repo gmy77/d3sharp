@@ -30,7 +30,7 @@ using Mooege.Core.GS.Ticker;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.WitchDoctor.PhysicalRealm.PoisonDart)]
-    public class WitchDoctorPoisonDart : PowerImplementation
+    public class WitchDoctorPoisonDart : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -38,13 +38,13 @@ namespace Mooege.Core.GS.Powers.Implementations
             for (int n = 0; n < numProjectiles; ++n)
             {
                 var proj = new Projectile(this,
-                                          RuneSelectsId(107011, 107030, 107035, 107223, 107265, 107114),
+                                          RuneSelect(107011, 107030, 107035, 107223, 107265, 107114),
                                           User.Position);
                 proj.Position.Z += 3f;
                 proj.OnHit = (hit) =>
                 {
                     // TODO: fix positioning of hit actors. possibly increase model scale?
-                    SpawnEffect(RuneSelectsId(112327, 112338, 112327, 112345, 112347, 112311), proj.Position);
+                    SpawnEffect(RuneSelect(112327, 112338, 112327, 112345, 112347, 112311), proj.Position);
 
                     proj.Destroy();
 
@@ -61,7 +61,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.WitchDoctor.PhysicalRealm.ZombieCharger)]
-    public class WitchDoctorZombieCharger : PowerImplementation
+    public class WitchDoctorZombieCharger : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {
@@ -82,7 +82,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 yield return WaitSeconds(0.5f);
 
                 SpawnEffect(192210, TargetPosition);
-                WeaponDamage(GetTargetsInRange(TargetPosition, 12f), 1.00f, DamageType.Poison);
+                WeaponDamage(GetEnemiesInRange(TargetPosition, 12f), 1.00f, DamageType.Poison);
 
                 yield return WaitSeconds(0.4f);
             }
@@ -121,7 +121,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.WitchDoctor.PhysicalRealm.PlagueOfToads)]
-    public class WitchDoctorPlagueOfToads : PowerImplementation
+    public class WitchDoctorPlagueOfToads : PowerScriptImplementation
     {
         public override IEnumerable<TickTimer> Run()
         {

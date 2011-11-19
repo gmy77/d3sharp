@@ -99,21 +99,25 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\GS\Powers\Buff.cs" />
+    <Compile Include="Core\GS\Powers\BuffManager.cs" />
+    <Compile Include="Core\GS\Powers\ImplementsBuffSlot.cs" />
     <Compile Include="Core\GS\Powers\EffectActor.cs" />
-    <Compile Include="Core\GS\Powers\ChanneledPowerImplementation.cs" />
+    <Compile Include="Core\GS\Powers\ChanneledPower.cs" />
     <Compile Include="Core\GS\Powers\DamageType.cs" />
     <Compile Include="Core\GS\Powers\PowerFormulaScript.cs" />
-    <Compile Include="Core\GS\Powers\Implementations\Barbarian.cs" />
-    <Compile Include="Core\GS\Powers\Implementations\DemonHunter.cs" />
-    <Compile Include="Core\GS\Powers\Implementations\Melee.cs" />
-    <Compile Include="Core\GS\Powers\Implementations\Monk.cs" />
-    <Compile Include="Core\GS\Powers\Implementations\WitchDoctor.cs" />
-    <Compile Include="Core\GS\Powers\Implementations\Wizard.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Barbarian.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\DemonHunter.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\Melee.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Monk.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\WitchDoctor.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Wizard.cs" />
     <Compile Include="Core\GS\Powers\ImplementsPowerSNO.cs" />
     <Compile Include="Core\GS\Powers\PowerContext.cs" />
-    <Compile Include="Core\GS\Powers\PowerImplementation.cs" />
+    <Compile Include="Core\GS\Powers\PowerScriptImplementation.cs" />
     <Compile Include="Core\GS\Powers\PowerLoader.cs" />
     <Compile Include="Core\GS\Powers\PowerManager.cs" />
+    <Compile Include="Core\GS\Powers\PowerTag.cs" />
     <Compile Include="Core\GS\Powers\Projectile.cs" />
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
