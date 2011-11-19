@@ -21,6 +21,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.SNO;
 using System.Linq;
@@ -63,10 +64,11 @@ namespace Mooege.Common.MPQ
 
         private void LoadCatalog()
         {
-            var tocFile = this.FileSystem.FindFile("toc.dat");
+            var tocFile = this.FileSystem.FindFile(this.RequiredVersion >= 7841 ? "CoreTOC.dat" : "TOC.dat"); // as of patch beta patch 7841, blizz renamed TOC.dat as CoreTOC.dat
+
             if (tocFile == null)
             {
-                Logger.Error("Couldn't load CoreData catalog: toc.dat.");
+                Logger.Error("Couldn't load CoreData catalog.");
                 return;
             }
             
