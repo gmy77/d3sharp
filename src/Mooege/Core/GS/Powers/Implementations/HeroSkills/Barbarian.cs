@@ -140,6 +140,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                 if (Rune_B > 0)
                 {
+                    // spawn tornado projectiles in random directions every timed period
                     if (_tornadoSpawnTimer == null)
                         _tornadoSpawnTimer = WaitSeconds(ScriptFormula(5));
 
@@ -153,7 +154,8 @@ namespace Mooege.Core.GS.Powers.Implementations
                         {
                             WeaponDamage(hit, ScriptFormula(6), DamageType.Physical);
                         };
-                        tornado.Launch(new Vector3D(User.Position.X + Rand.Next(-5, 5), User.Position.Y + Rand.Next(-5, 5),
+                        tornado.Launch(new Vector3D(User.Position.X + (float)Rand.NextDouble() - 0.5f,
+                                                    User.Position.Y + (float)Rand.NextDouble() - 0.5f,
                                                     User.Position.Z), 0.25f);
                     }
                 }

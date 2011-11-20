@@ -52,58 +52,41 @@ namespace Mooege.Core.GS.Powers
                 return false;
             }
 
-            // load script from byte[] into int[]
-            int[] script = new int[scriptFormula.OpCodeArray.Length / 4];
-            for (int i = 0; i * 4 < scriptFormula.OpCodeArray.Length; ++i)
-                script[i] = BitConverter.ToInt32(scriptFormula.OpCodeArray, i * 4);
-
-            Stack<float> stack = new Stack<float>(64);
+            byte[] script = scriptFormula.OpCodeArray;
+            Stack<float> stack = new Stack<float>(5);  // analysis of all stack formulas found the biggest stack is currently 5
             int pos = 0;
             float numb1, numb2, numb3;
             float temp;
             while (pos < script.Length)
             {
-                switch ((byte)script[pos])
+                switch (script[pos])
                 {
-                    case 0:
-                        if (stack.Count < 1)
-                        {
-                            Logger.Error("Stack underflow");
+                    case 0: // return
+                        if (StackUnderflow(stack, 1))
                             return false;
-                        }
                         result = stack.Pop();
                         return true;
-                    case 1:
-                        ++pos;
-                        byte funcId = (byte)script[pos];
-                        switch (funcId)
+                    case 1: // function
+                        pos += 4;
+                        switch (script[pos])
                         {
                             case 0: // Min()
-                                if (stack.Count < 2)
-                                {
-                                    Logger.Error("Stack underflow");
+                                if (StackUnderflow(stack, 2))
                                     return false;
-                                }
                                 numb2 = stack.Pop();
                                 numb1 = stack.Pop();
                                 stack.Push(Math.Min(numb1, numb2));
                                 break;
                             case 1: // Max()
-                                if (stack.Count < 2)
-                                {
-                                    Logger.Error("Stack underflow");
+                                if (StackUnderflow(stack, 2))
                                     return false;
-                                }
                                 numb2 = stack.Pop();
                                 numb1 = stack.Pop();
                                 stack.Push(Math.Max(numb1, numb2));
                                 break;
                             case 2: // Pin()
-                                if (stack.Count < 3)
-                                {
-                                    Logger.Error("Stack underflow");
+                                if (StackUnderflow(stack, 3))
                                     return false;
-                                }
                                 numb3 = stack.Pop();
                                 numb2 = stack.Pop();
                                 numb1 = stack.Pop();
@@ -115,61 +98,43 @@ namespace Mooege.Core.GS.Powers
                                     stack.Push(numb1);
 
                                 break;
-                            case 3:
-                                if (stack.Count < 2)
-                                {
-                                    Logger.Error("Stack underflow");
+                            case 3: // RandomIntMinRange()
+                                if (StackUnderflow(stack, 2))
                                     return false;
-                                }
                                 numb2 = stack.Pop();
                                 numb1 = stack.Pop();
                                 stack.Push(numb1 + (float)rand.NextDouble() * numb2); // TODO: should these be int rounded?
                                 break;
-                            case 4:
-                                if (stack.Count < 2)
-                                {
-                                    Logger.Error("Stack underflow");
+                            case 4: // RandomIntMinMax()
+                                if (StackUnderflow(stack, 2))
                                     return false;
-                                }
                                 numb2 = stack.Pop();
                                 numb1 = stack.Pop();
                                 stack.Push(numb1 + (float)rand.NextDouble() * (numb2 - numb1));
                                 break;
                             case 5: // Floor()
-                                if (stack.Count < 1)
-                                {
-                                    Logger.Error("Stack underflow");
+                                if (StackUnderflow(stack, 1))
                                     return false;
-                                }
                                 numb1 = stack.Pop();
                                 stack.Push((float)Math.Floor(numb1));
                                 break;
                             case 9: // RandomFloatMinRange()
-                                if (stack.Count < 2)
-                                {
-                                    Logger.Error("Stack underflow");
+                                if (StackUnderflow(stack, 2))
                                     return false;
-                                }
                                 numb2 = stack.Pop();
                                 numb1 = stack.Pop();
                                 stack.Push(numb1 + (float)rand.NextDouble() * numb2);
                                 break;
                             case 10: // RandomFloatMinMax()
-                                if (stack.Count < 2)
-                                {
-                                    Logger.Error("Stack underflow");
+                                if (StackUnderflow(stack, 2))
                                     return false;
-                                }
                                 numb2 = stack.Pop();
                                 numb1 = stack.Pop();
                                 stack.Push(numb1 + (float)rand.NextDouble() * (numb2 - numb1));
                                 break;
                             case 11: // Table()
-                                if (stack.Count < 2)
-                                {
-                                    Logger.Error("Stack underflow");
+                                if (StackUnderflow(stack, 2))
                                     return false;
-                                }
                                 float index = stack.Pop();
                                 float tableID = stack.Pop();
                                 if (!LookupBalanceTable(tableID, index, out temp))
@@ -181,102 +146,94 @@ namespace Mooege.Core.GS.Powers
                                 return false;
                         }
                         break;
-                    case 5:
+                    case 5: // external identifier
                         if (!LoadIdentifier(powerSNO, scriptTag, attributes, rand,
-                                            script[pos + 1],
-                                            script[pos + 2],
-                                            script[pos + 3],
-                                            script[pos + 4],
+                                            BitConverter.ToInt32(script, pos + 4*1),
+                                            BitConverter.ToInt32(script, pos + 4*2),
+                                            BitConverter.ToInt32(script, pos + 4*3),
+                                            BitConverter.ToInt32(script, pos + 4*4),
                                             out temp))
                             return false;
 
                         stack.Push(temp);
-                        pos += 4;
+                        pos += 4*4;
                         break;
-                    case 6:
-                        ++pos;
-                        stack.Push(BinaryIntToFloat(script[pos]));
+                    case 6: // push float
+                        pos += 4;
+                        stack.Push(BitConverter.ToSingle(script, pos));
                         break;
                     case 8: // operator >
-                        if (stack.Count < 2)
-                        {
-                            Logger.Error("Stack underflow");
+                        if (StackUnderflow(stack, 2))
                             return false;
-                        }
                         numb2 = stack.Pop();
                         numb1 = stack.Pop();
                         stack.Push(numb1 > numb2 ? 1 : 0);
                         break;
-                    case 11:
-                        if (stack.Count < 2)
-                        {
-                            Logger.Error("Stack underflow");
+                    case 11: // operator +
+                        if (StackUnderflow(stack, 2))
                             return false;
-                        }
                         numb2 = stack.Pop();
                         numb1 = stack.Pop();
                         stack.Push(numb1 + numb2);
                         break;
-                    case 12:
-                        if (stack.Count < 2)
-                        {
-                            Logger.Error("Stack underflow");
+                    case 12: // operator -
+                        if (StackUnderflow(stack, 2))
                             return false;
-                        }
                         numb2 = stack.Pop();
                         numb1 = stack.Pop();
                         stack.Push(numb1 - numb2);
                         break;
-                    case 13:
-                        if (stack.Count < 2)
-                        {
-                            Logger.Error("Stack underflow");
+                    case 13: // operator *
+                        if (StackUnderflow(stack, 2))
                             return false;
-                        }
                         numb2 = stack.Pop();
                         numb1 = stack.Pop();
                         stack.Push(numb1 * numb2);
                         break;
-                    case 14:
-                        if (stack.Count < 2)
-                        {
-                            Logger.Error("Stack underflow");
+                    case 14: // operator /
+                        if (StackUnderflow(stack, 2))
                             return false;
-                        }
                         numb2 = stack.Pop();
                         numb1 = stack.Pop();
-                        if (numb1 == 0f)
+                        if (numb2 == 0f)
                         {
-                            Logger.Error("Division by zero");
-                            return false;
+                            Logger.Error("Division by zero, 0 pushed to stack instead of divide result");
+                            stack.Push(0f);
                         }
-                        stack.Push(numb1 / numb2);
+                        else
+                        {
+                            stack.Push(numb1 / numb2);
+                        }
                         break;
                     case 16: // operator -(unary)
-                        if (stack.Count < 1)
-                        {
-                            Logger.Error("Stack underflow");
+                        if (StackUnderflow(stack, 1))
                             return false;
-                        }
                         numb1 = stack.Pop();
                         stack.Push(-numb1);
                         break;
                     case 17: // operator ?:
-                        if (stack.Count < 3)
-                        {
-                            Logger.Error("Stack underflow");
+                        if (StackUnderflow(stack, 3))
                             return false;
-                        }
                         numb3 = stack.Pop();
                         numb2 = stack.Pop();
                         numb1 = stack.Pop();
                         stack.Push(numb1 != 0 ? numb2 : numb3);
                         break;
                     default:
-                        Logger.Error("Unimplemented OpCode({0})", (byte)script[pos]);
+                        Logger.Error("Unimplemented OpCode({0})", script[pos]);
                         return false;
                 }
-                ++pos;
+                pos += 4;
+            }
+            return false;
+        }
+
+        private static bool StackUnderflow(Stack<float> stack, int popcount)
+        {
+            if (stack.Count < popcount)
+            {
+                Logger.Error("Stack underflow");
+                return true;
             }
             return false;
         }
