@@ -322,7 +322,7 @@
     <Compile Include="Net\GS\Message\Definitions\Tutorial\TutorialShownMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Waypoint\OpenWaypointSelectionWindowMessage.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
-    <Compile Include="Net\GS\Message\GameAttributeMap.cs" />
+    <Compile Include="Core\GS\Objects\GameAttributeMap.cs" />
     <Compile Include="Net\MooNet\MooNetClient.cs" />
     <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />
