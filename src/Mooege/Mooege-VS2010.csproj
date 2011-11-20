@@ -102,6 +102,26 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\GS\Powers\Buff.cs" />
+    <Compile Include="Core\GS\Powers\BuffManager.cs" />
+    <Compile Include="Core\GS\Powers\ImplementsBuffSlot.cs" />
+    <Compile Include="Core\GS\Powers\EffectActor.cs" />
+    <Compile Include="Core\GS\Powers\ChanneledPower.cs" />
+    <Compile Include="Core\GS\Powers\DamageType.cs" />
+    <Compile Include="Core\GS\Powers\PowerFormulaScript.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Barbarian.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\DemonHunter.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\Melee.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Monk.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\WitchDoctor.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Wizard.cs" />
+    <Compile Include="Core\GS\Powers\ImplementsPowerSNO.cs" />
+    <Compile Include="Core\GS\Powers\PowerContext.cs" />
+    <Compile Include="Core\GS\Powers\PowerScript.cs" />
+    <Compile Include="Core\GS\Powers\PowerLoader.cs" />
+    <Compile Include="Core\GS\Powers\PowerManager.cs" />
+    <Compile Include="Core\GS\Powers\PowerTag.cs" />
+    <Compile Include="Core\GS\Powers\Projectile.cs" />
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Common\Extensions\ListExtensions.cs" />
@@ -220,6 +240,7 @@
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\GS\Markers\Marker.cs" />
+    <Compile Include="Core\GS\Powers\PowerMath.cs" />
     <Compile Include="Core\GS\Games\Quest.cs" />
     <Compile Include="Core\GS\Players\ConversationManager.cs" />
     <Compile Include="Core\GS\Common\InventoryGrid.cs" />
@@ -288,6 +309,7 @@
     <Compile Include="Core\MooNet\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\MooNet\Toons\ToonManager.cs" />
     <Compile Include="LogConfig.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Skill\CancelChanneledSkillMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />

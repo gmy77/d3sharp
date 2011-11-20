@@ -108,6 +108,7 @@ namespace Mooege.Core.GS.Actors
                     0x2cda,
                     0x2cd9
             };*/
+
             this.World.BroadcastIfRevealed(new PlayEffectMessage()
             {
                 ActorId = this.DynamicID,

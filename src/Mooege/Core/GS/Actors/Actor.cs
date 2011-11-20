@@ -36,6 +36,9 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Core.GS.Common.Types.TagMap;
+using System;
+using Mooege.Core.GS.Powers;
+using Mooege.Net.GS.Message.Definitions.Effect;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -298,6 +301,119 @@ namespace Mooege.Core.GS.Actors
             this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
         }
 
+        #endregion
+        
+        #region Movement/Translation
+
+        public void TranslateNormal(Vector3D destination, float speed = 1.0f, int? animationTag = null)
+        {
+            this.Position = destination;
+            float angle = (float)Math.Acos(this.FacingAngle) * 2f;
+            if (float.IsNaN(angle)) // just use RotationAmount if Quat is bad
+                angle = this.FacingAngle;
+
+            World.BroadcastIfRevealed(new NotifyActorMovementMessage
+            {
+                ActorId = (int)DynamicID,
+                Position = destination,
+                Angle = angle,
+                Field3 = false,
+                Speed = speed,
+                AnimationTag = animationTag,
+            }, this);
+        }
+
+        public void TranslateFacing(Vector3D target, bool immediately = false)
+        {
+            float radianAngle = PowerMath.AngleLookAt(this.Position, target);
+
+            // convert to quaternion and store in instance
+            this.FacingAngle = (float)Math.Cos(radianAngle / 2f);
+            this.RotationAxis = new Vector3D(0, 0, (float)Math.Sin(radianAngle / 2f));
+
+            World.BroadcastIfRevealed(new ACDTranslateFacingMessage
+            {
+                Id = 0x70,
+                ActorId = DynamicID,
+                Angle = radianAngle,
+                Immediately = immediately
+            }, this);
+        }
+
+        #endregion
+
+        #region Effects
+
+        public void PlayEffectGroup(int effectGroupSNO)
+        {
+            PlayEffect(Effect.PlayEffectGroup, effectGroupSNO);
+        }
+
+        public void PlayEffectGroup(int effectGroupSNO, Actor target)
+        {
+            if (target == null) return;
+
+            World.BroadcastIfRevealed(new EffectGroupACDToACDMessage
+            {
+                ActorID = this.DynamicID,
+                TargetID = target.DynamicID,
+                EffectSNOId = effectGroupSNO
+            }, this);
+        }
+
+        public void PlayHitEffect(int hitEffect, Actor hitDealer)
+        {
+            World.BroadcastIfRevealed(new PlayHitEffectMessage
+            {
+                ActorID = DynamicID,
+                HitDealer = hitDealer.DynamicID,
+                Field2 = hitEffect,
+                Field3 = false
+            }, this);
+        }
+
+        public void PlayEffect(Effect effect, int? param = null)
+        {
+            World.BroadcastIfRevealed(new PlayEffectMessage
+            {
+                ActorId = this.DynamicID,
+                Effect = effect,
+                OptionalParameter = param
+            }, this);
+        }
+
+        public void AddRopeEffect(int ropeSNO, Actor target)
+        {
+            if (target == null) return;
+
+            World.BroadcastIfRevealed(new RopeEffectMessageACDToACD
+            {
+                Id = 0xab,
+                Field0 = ropeSNO,
+                Field1 = (int)DynamicID,
+                Field2 = 4,
+                Field3 = (int)target.DynamicID,
+                Field4 = 1
+            }, this);
+        }
+
+        public void AddComplexEffect(int effectGroupSNO, Actor target)
+        {
+            if (target == null) return;
+
+            // TODO: Might need to track complex effects
+            World.BroadcastIfRevealed(new ComplexEffectAddMessage
+            {
+                Id = 0x81,
+                Field0 = (int)World.NewActorID, // TODO: maybe not use actor ids?
+                Field1 = 1,  // 0=efg, 1=efg, 2=rope
+                Field2 = effectGroupSNO, // efgSNO or ropeSNO
+                Field3 = (int)this.DynamicID, // source
+                Field4 = (int)target.DynamicID, // target
+                Field5 = 0, // 0=efg, 4=rope1, 3=rope2
+                Field6 = 0 // 0=efg, 1=rope1, 3=rope2
+            }, target);
+        }
         #endregion
 
         #region reveal & unreveal handling
