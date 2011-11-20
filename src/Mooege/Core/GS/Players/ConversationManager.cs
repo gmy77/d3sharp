@@ -226,7 +226,6 @@ namespace Mooege.Core.GS.Players
         {
             player.InGameClient.SendMessage(new EndConversationMessage()
             {
-                Field0 = currentUniqueLineID,
                 SNOConversation = asset.Header.SNOId,
                 ActorId = player.DynamicID
             });
