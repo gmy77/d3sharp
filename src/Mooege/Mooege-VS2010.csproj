@@ -140,6 +140,7 @@
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
     <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\NephalemAltar.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\ActorKeys.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\AnimationSetKeys.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\MarkerKeys.cs" />

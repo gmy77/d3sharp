@@ -128,7 +128,7 @@ namespace Mooege.Core.GS.Common.Types.SNO
             }
 
             if (_group.HasValue)
-                if (MPQStorage.Data.Assets.ContainsKey(_group.Value))
+                if (MPQStorage.Data != null && MPQStorage.Data.Assets.ContainsKey(_group.Value))
                     if (MPQStorage.Data.Assets[_group.Value].ContainsKey(Id))
                     {
                         _isValid = true;

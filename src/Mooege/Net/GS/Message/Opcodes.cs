@@ -174,7 +174,7 @@ namespace Mooege.Net.GS.Message
         PlayerIndexMessage3 = 153, // len: 	12
         PlayerLevel = 154, // len: 	16
         OpenSharedStashMessage = 155, // len: 	12, former ANNDataMessage19
-        ANNDataMessage19 = 156, //len:  12 added 7728
+        UseNephalemAltarMessage = 156, //len:  12 added 7728
         SimpleMessage9 = 157, // len: 8
         ACDPickupFailedMessage = 158, // len: 	16
         PetMessage = 159, // len: 	24
@@ -237,7 +237,7 @@ namespace Mooege.Net.GS.Message
         FloatingAmountMessage = 215, // len: 	40
         RemoveRagdollMessage = 216, // len: 	16
         SNONameDataMessage = 217, // len: 	16
-        PlayLoreImmediately = 218, // len: 	16
+        LoreMessage = 218, // len: 	16
         //SimpleMessage15 = 220, // len: 	8 //Removed 7841
         WorldDeletedMessage = 222, // len: 	12
         SimpleMessage16 = 223, // len: 	8
