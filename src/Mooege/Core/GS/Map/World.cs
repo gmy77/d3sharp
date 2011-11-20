@@ -136,7 +136,7 @@ namespace Mooege.Core.GS.Map
                     actorsToUpdate.Add(actor as IUpdateable);
                 }
             }
-            
+
             foreach(var actor in actorsToUpdate) // trigger the updates.
             {
                 actor.Update(tickCounter);
