@@ -161,8 +161,8 @@ namespace Mooege.Core.Cryptography
                 .Concat(K.ToArray())
                 .ToArray());
 
-            if (!M.CompareTo(M_client))
-                return false; // authentication failed because of invalid credentals.
+            // We can basically move m_server, secondproof and logonproof calculation behind the M.CompareTo(M_client) check, but as we have an option DisablePasswordChecks 
+            // which allows authentication without the correct password, they should be also calculated for wrong-passsword auths. /raist.
 
             // calculate server proof of session key
             var M_server = H.ComputeHash(new byte[0] // M_server = H(A, M_client, K)
@@ -180,7 +180,10 @@ namespace Mooege.Core.Cryptography
                 .Concat(secondProof.ToArray()) // second proof
                 .ToArray();
 
-            return true;
+            if (M.CompareTo(M_client)) // successful authentication session.
+                return true;
+            else // authentication failed because of invalid credentals.
+                return false;            
         }
 
         public static byte[] GetRandomBytes(int count)
