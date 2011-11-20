@@ -66,6 +66,7 @@ namespace Mooege.Core.GS.Powers
                             return false;
                         result = stack.Pop();
                         return true;
+
                     case 1: // function
                         pos += 4;
                         switch (script[pos])
@@ -77,6 +78,7 @@ namespace Mooege.Core.GS.Powers
                                 numb1 = stack.Pop();
                                 stack.Push(Math.Min(numb1, numb2));
                                 break;
+
                             case 1: // Max()
                                 if (StackUnderflow(stack, 2))
                                     return false;
@@ -84,6 +86,7 @@ namespace Mooege.Core.GS.Powers
                                 numb1 = stack.Pop();
                                 stack.Push(Math.Max(numb1, numb2));
                                 break;
+
                             case 2: // Pin()
                                 if (StackUnderflow(stack, 3))
                                     return false;
@@ -98,26 +101,30 @@ namespace Mooege.Core.GS.Powers
                                     stack.Push(numb1);
 
                                 break;
+
                             case 3: // RandomIntMinRange()
                                 if (StackUnderflow(stack, 2))
                                     return false;
                                 numb2 = stack.Pop();
                                 numb1 = stack.Pop();
-                                stack.Push(numb1 + (float)rand.NextDouble() * numb2); // TODO: should these be int rounded?
+                                stack.Push(rand.Next((int)numb1, (int)numb1 + (int)numb2));
                                 break;
+
                             case 4: // RandomIntMinMax()
                                 if (StackUnderflow(stack, 2))
                                     return false;
                                 numb2 = stack.Pop();
                                 numb1 = stack.Pop();
-                                stack.Push(numb1 + (float)rand.NextDouble() * (numb2 - numb1));
+                                stack.Push(rand.Next((int)numb1, (int)numb2));
                                 break;
+
                             case 5: // Floor()
                                 if (StackUnderflow(stack, 1))
                                     return false;
                                 numb1 = stack.Pop();
                                 stack.Push((float)Math.Floor(numb1));
                                 break;
+
                             case 9: // RandomFloatMinRange()
                                 if (StackUnderflow(stack, 2))
                                     return false;
@@ -125,6 +132,7 @@ namespace Mooege.Core.GS.Powers
                                 numb1 = stack.Pop();
                                 stack.Push(numb1 + (float)rand.NextDouble() * numb2);
                                 break;
+
                             case 10: // RandomFloatMinMax()
                                 if (StackUnderflow(stack, 2))
                                     return false;
@@ -132,6 +140,7 @@ namespace Mooege.Core.GS.Powers
                                 numb1 = stack.Pop();
                                 stack.Push(numb1 + (float)rand.NextDouble() * (numb2 - numb1));
                                 break;
+
                             case 11: // Table()
                                 if (StackUnderflow(stack, 2))
                                     return false;
@@ -141,6 +150,7 @@ namespace Mooege.Core.GS.Powers
                                     return false;
                                 stack.Push(temp);
                                 break;
+
                             default:
                                 Logger.Error("Unimplemented function");
                                 return false;
@@ -158,10 +168,12 @@ namespace Mooege.Core.GS.Powers
                         stack.Push(temp);
                         pos += 4*4;
                         break;
+
                     case 6: // push float
                         pos += 4;
                         stack.Push(BitConverter.ToSingle(script, pos));
                         break;
+
                     case 8: // operator >
                         if (StackUnderflow(stack, 2))
                             return false;
@@ -169,6 +181,7 @@ namespace Mooege.Core.GS.Powers
                         numb1 = stack.Pop();
                         stack.Push(numb1 > numb2 ? 1 : 0);
                         break;
+
                     case 11: // operator +
                         if (StackUnderflow(stack, 2))
                             return false;
@@ -176,6 +189,7 @@ namespace Mooege.Core.GS.Powers
                         numb1 = stack.Pop();
                         stack.Push(numb1 + numb2);
                         break;
+
                     case 12: // operator -
                         if (StackUnderflow(stack, 2))
                             return false;
@@ -183,6 +197,7 @@ namespace Mooege.Core.GS.Powers
                         numb1 = stack.Pop();
                         stack.Push(numb1 - numb2);
                         break;
+
                     case 13: // operator *
                         if (StackUnderflow(stack, 2))
                             return false;
@@ -190,6 +205,7 @@ namespace Mooege.Core.GS.Powers
                         numb1 = stack.Pop();
                         stack.Push(numb1 * numb2);
                         break;
+
                     case 14: // operator /
                         if (StackUnderflow(stack, 2))
                             return false;
@@ -205,12 +221,14 @@ namespace Mooege.Core.GS.Powers
                             stack.Push(numb1 / numb2);
                         }
                         break;
+
                     case 16: // operator -(unary)
                         if (StackUnderflow(stack, 1))
                             return false;
                         numb1 = stack.Pop();
                         stack.Push(-numb1);
                         break;
+
                     case 17: // operator ?:
                         if (StackUnderflow(stack, 3))
                             return false;
@@ -219,12 +237,14 @@ namespace Mooege.Core.GS.Powers
                         numb1 = stack.Pop();
                         stack.Push(numb1 != 0 ? numb2 : numb3);
                         break;
+
                     default:
                         Logger.Error("Unimplemented OpCode({0})", script[pos]);
                         return false;
                 }
                 pos += 4;
             }
+
             return false;
         }
 
@@ -252,11 +272,14 @@ namespace Mooege.Core.GS.Powers
             {
                 case 0:
                     return LoadAttribute(powerSNO, attributes, numb2, out result);
+
                 case 1: // slevel
                     result = attributes[GameAttribute.Skill, powerSNO];
                     return true;
+
                 case 22: // absolute power formula ref
                     return Evaluate(numb2, new TagKeyScript(numb3), attributes, rand, out result);
+
                 default:
                     if (numb1 >= 23 && numb1 <= 62) // SF_N, relative power formula ref
                     {
