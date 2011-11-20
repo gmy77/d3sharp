@@ -61,7 +61,7 @@ namespace D3TypeDump
         const int TypeDescriptorsAddress = 0x15C9008;
         const int TypeDescriptorsOffset = 40;
         const int AttributesAddress = 0x013AC420;
-        const int AttributeCount = 727;
+        const int AttributeCount = 728;
         const int Attribute_Int = 0x11D4C5C;
         const int Attribute_IntMinMax = 0x011D4C64;
         const int Attribute_FloatMinMax = 0x011D4C6C;
