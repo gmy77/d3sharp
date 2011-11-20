@@ -33,6 +33,7 @@ using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Definitions.Pet;
 using Mooege.Net.GS.Message.Definitions.Waypoint;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
@@ -315,10 +316,10 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Toon.Level];
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             this.Attributes[GameAttribute.Armor_Total] = 0;
-            this.Attributes[GameAttribute.Attack] = this.InitialAttack;
-            this.Attributes[GameAttribute.Precision] = this.InitialPrecision;
-            this.Attributes[GameAttribute.Defense] = this.InitialDefense;
-            this.Attributes[GameAttribute.Vitality] = this.InitialVitality;
+            this.Attributes[GameAttribute.Attack] = (int)this.InitialAttack;
+            this.Attributes[GameAttribute.Precision] = (int)this.InitialPrecision;
+            this.Attributes[GameAttribute.Defense] = (int)this.InitialDefense;
+            this.Attributes[GameAttribute.Vitality] = (int)this.InitialVitality;
 
             //Hitpoints have to be calculated after Vitality
             this.Attributes[GameAttribute.Hitpoints_Factor_Level] = 4f;
@@ -1383,10 +1384,10 @@ namespace Mooege.Core.GS.Players
                 else { this.Attributes[GameAttribute.Experience_Next] = 0; }
 
                 // 4 main attributes are incremented according to class
-                this.Attributes[GameAttribute.Attack] += this.AttackIncrement;
-                this.Attributes[GameAttribute.Precision] += this.PrecisionIncrement;
-                this.Attributes[GameAttribute.Vitality] += this.VitalityIncrement;
-                this.Attributes[GameAttribute.Defense] += this.DefenseIncrement;
+                this.Attributes[GameAttribute.Attack] += (int)this.AttackIncrement;
+                this.Attributes[GameAttribute.Precision] += (int)this.PrecisionIncrement;
+                this.Attributes[GameAttribute.Vitality] += (int)this.VitalityIncrement;
+                this.Attributes[GameAttribute.Defense] += (int)this.DefenseIncrement;
 
                 // Hitpoints from level may actually change. This needs to be verified by someone with the beta.
                 //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = this.Attributes[GameAttribute.Level] * this.Attributes[GameAttribute.Hitpoints_Factor_Level];

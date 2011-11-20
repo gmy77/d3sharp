@@ -36,20 +36,7 @@ namespace Mooege.Core.MooNet.Authentication
 
         public static void StartAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
-            if (Config.Instance.BypassAuthentication)
-                BypassAuthentication(client, request);
-            else
-                InitAuthentication(client, request);                                               
-        }
-
-        private static void BypassAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
-        {
-            client.Account = AccountManager.GetAccountByEmail(request.Email) ?? AccountManager.CreateAccount(request.Email, request.Email);
-            if (client.Account.LoggedInClient != null)
-                client.Account.LoggedInClient.Connection.Disconnect();
-            client.Account.LoggedInClient = client;
-
-            client.AuthenticationCompleteSignal.Set(); // signal about completion of authentication processes so we can return the response for AuthenticationService:LogonRequest.
+            InitAuthentication(client, request);
         }
 
         private static void InitAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)

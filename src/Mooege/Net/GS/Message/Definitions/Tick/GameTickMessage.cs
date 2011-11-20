@@ -46,10 +46,10 @@ namespace Mooege.Net.GS.Message.Definitions.Tick
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("DWordDataMessage:");
+            b.AppendLine("GameTickMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Tick.ToString("X8") + " (" + Tick + ")");
+            b.Append(' ', pad); b.AppendLine("Tick: 0x" + Tick.ToString("X8") + " (" + Tick + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

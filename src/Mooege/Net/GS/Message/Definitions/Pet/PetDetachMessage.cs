@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,53 +16,44 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Player
+namespace Mooege.Net.GS.Message.Definitions.Pet
 {
-    [Message(Opcodes.PetMessage)]
-    public class PetMessage : GameMessage
+    [Message(Opcodes.PetDetachMessage)]
+    public class PetDetachMessage : GameMessage
     {
         public int Field0;
-        public int Field1;
-        public uint PetId;
-        public int Field3;
+        public bool Field1;
 
-        public PetMessage()
-            : base(Opcodes.PetMessage)
+        public PetDetachMessage()
+            : base(Opcodes.PetDetachMessage)
         {
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(3);
-            Field1 = buffer.ReadInt(5);
-            PetId = buffer.ReadUInt(32);
-            Field3 = buffer.ReadInt(5) + (-1);
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(3, Field0);
-            buffer.WriteInt(5, Field1);
-            buffer.WriteUInt(32, PetId);
-            buffer.WriteInt(5, Field3 - (-1));
+            buffer.WriteInt(32, Field0);
+            buffer.WriteBool(Field1);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("PetMessage:");
-            b.Append(' ', pad++);
+            b.AppendLine("PetDetachMessage:");
+            b.Append(' ', pad++); 
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
-            b.Append(' ', pad); b.AppendLine("PetId: 0x" + PetId.ToString("X8") + " (" + PetId + ")");
-            b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
+            b.Append(' ', pad);b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1 " + (Field1 ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

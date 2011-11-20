@@ -5,5 +5,6 @@ message ContentHandle
     required fixed32 region = 1;
     required fixed32 usage = 2;
     required bytes hash = 3;
+    optional string proto_url = 4;
 }
 

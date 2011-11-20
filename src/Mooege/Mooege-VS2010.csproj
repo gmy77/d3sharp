@@ -140,6 +140,7 @@
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
     <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\NephalemAltar.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\ActorKeys.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\AnimationSetKeys.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\MarkerKeys.cs" />
@@ -233,7 +234,6 @@
     <Compile Include="Core\GS\Actors\Actor.cs" />
     <Compile Include="Core\Cryptography\ARC4.cs" />
     <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
-    <Compile Include="Core\MooNet\Authentication\Config.cs" />
     <Compile Include="Core\Cryptography\SRP6a.cs" />
     <Compile Include="Core\MooNet\Channels\Channel.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelManager.cs" />
@@ -262,6 +262,7 @@
     <Compile Include="Core\MooNet\Friends\FriendManager.cs" />
     <Compile Include="Core\MooNet\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\MooNet\Online\PlayerManager.cs" />
+    <Compile Include="Core\MooNet\Services\AchievementService.cs" />
     <Compile Include="Core\MooNet\Services\AuthenticationService.cs" />
     <Compile Include="Core\MooNet\Services\ConnectionService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelInvitationService.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\Message.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\VoteKickMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCSelectConversationMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Pet\PetDetachMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
@@ -470,7 +472,7 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\NetworkAddressMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\NewPlayerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCInteractOptionsMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Player\PetMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Pet\PetMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Animation\PlayAnimationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\PlayConvLineMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayCutsceneMessage.cs" />
@@ -588,7 +590,7 @@
     <None Include="..\..\dep\openssl\ssleay32.dll">
       <Link>ssleay32.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>    
+    </None>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -621,4 +623,5 @@
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
 </Project>

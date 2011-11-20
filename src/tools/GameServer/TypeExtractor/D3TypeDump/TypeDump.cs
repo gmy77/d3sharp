@@ -1,7 +1,24 @@
-﻿using System;
+﻿﻿/*
+ * Copyright (C) 2011 mooege project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using D3TypeDescriptor;
 using System.Diagnostics;
 using System.Xml.Linq;
@@ -10,22 +27,47 @@ namespace D3TypeDump
 {
     class TypeDump
     {
-
-        const int OpcodeSwitch_Address = 0x008C22F0;
-
-        const int TypeDescriptorsAddress = 0x157F5CC;
-        const int TypeDescriptorsOffset = 40;
-
-        const int AttributesAddress = 0x01372420;
-        const int AttributeCount = 717;
-        const int Attribute_Int = 0x011A55D4;
-        const int Attribute_IntMinMax = 0x011A55DC;
-        const int Attribute_FloatMinMax = 0x011A55E4;
-        const int Attribute_Float16 = 0x011A55EC;
-        const int Attribute_Float16Or32 = 0x011A55F4;
-
         const int HashAddress = 0x01318A30;
         const int HashOffset = 0x24;
+
+        #region build 7447 addresses
+        //const int OpcodeSwitch_Address = 0x008C22F0;
+        //const int TypeDescriptorsAddress = 0x157F5CC;
+        //const int TypeDescriptorsOffset = 40;
+        //const int AttributesAddress = 0x01372420;
+        //const int AttributeCount = 717;
+        //const int Attribute_Int = 0x011A55D4;
+        //const int Attribute_IntMinMax = 0x011A55DC;
+        //const int Attribute_FloatMinMax = 0x011A55E4;
+        //const int Attribute_Float16 = 0x011A55EC;
+        //const int Attribute_Float16Or32 = 0x011A55F4;
+        #endregion
+
+        #region build 7728 addresses
+        //const int OpcodeSwitch_Address = 0x008C22F0;
+        //const int TypeDescriptorsAddress = 0x157F5CC;
+        //const int TypeDescriptorsOffset = 40;
+        //const int AttributesAddress = 0x01372420;
+        //const int AttributeCount = 717;
+        //const int Attribute_Int = 0x011A55D4;
+        //const int Attribute_IntMinMax = 0x011A55DC;
+        //const int Attribute_FloatMinMax = 0x011A55E4;
+        //const int Attribute_Float16 = 0x011A55EC;
+        //const int Attribute_Float16Or32 = 0x011A55F4;
+        #endregion
+
+        #region build 7841 addresses
+        const int OpcodeSwitch_Address = 0x008C4260;
+        const int TypeDescriptorsAddress = 0x15C9008;
+        const int TypeDescriptorsOffset = 40;
+        const int AttributesAddress = 0x013AC420;
+        const int AttributeCount = 727;
+        const int Attribute_Int = 0x11D4C5C;
+        const int Attribute_IntMinMax = 0x011D4C64;
+        const int Attribute_FloatMinMax = 0x011D4C6C;
+        const int Attribute_Float16 = 0x011D4C74;
+        const int Attribute_Float16Or32 = 0x011D4C7C;
+        #endregion
 
         // TODO: Add patterns
 
@@ -35,8 +77,6 @@ namespace D3TypeDump
             public int Size;
             public List<int> Opcodes = new List<int>();
         }
-
-
 
         static Dictionary<int, GameMessageInfo> _gameMessageLookUp;
 
@@ -191,7 +231,6 @@ namespace D3TypeDump
             return result;
 
         }
-
 
         static void DumpAttributes(Mem32 mem)
         {

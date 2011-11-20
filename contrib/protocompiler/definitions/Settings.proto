@@ -12,3 +12,11 @@ message GameAccountSettings
     optional string rmt_last_used_currency = 3;
 }
 
+message Preferences
+{
+    optional int32 key_1 = 1;
+    optional int32 key_2 = 2;
+    optional int32 key_3 = 3;
+    optional int32 key_4 = 4;
+}
+

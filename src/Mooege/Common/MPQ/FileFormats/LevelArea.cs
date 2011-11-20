@@ -177,5 +177,6 @@ namespace Mooege.Common.MPQ.FileFormats
         Unique,
         Hireling,
         Clone,
+        Boss,
     }
 }

@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Text;
 using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
@@ -50,7 +50,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             Start.Parse(buffer);
             Velocity = new Vector3D();
             Velocity.Parse(buffer);
-            Field3 = buffer.ReadInt(24);
+            Field3 = buffer.ReadInt(25);
             FlyingAnimationTagID = buffer.ReadInt(21) + (-1);
             LandingAnimationTagID = buffer.ReadInt(21) + (-1);
             Field6 = buffer.ReadFloat32();
@@ -64,7 +64,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             buffer.WriteInt(32, ActorId);
             Start.Encode(buffer);
             Velocity.Encode(buffer);
-            buffer.WriteInt(24, Field3);
+            buffer.WriteInt(25, Field3);
             buffer.WriteInt(21, FlyingAnimationTagID - (-1));
             buffer.WriteInt(21, LandingAnimationTagID - (-1));
             buffer.WriteFloat32(Field6);
@@ -92,7 +92,5 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

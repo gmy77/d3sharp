@@ -16,14 +16,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Core.MooNet.Authentication
-{
-    public sealed class Config : Mooege.Common.Config.Config
-    {
-        public bool BypassAuthentication { get { return this.GetBoolean("BypassAuthentication", true); } set { this.Set("BypassAuthentication", value); } }
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Authentication") { }
+namespace GameMessageViewer
+{
+    static class Program
+    {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MessageViewer());
+        }
     }
 }

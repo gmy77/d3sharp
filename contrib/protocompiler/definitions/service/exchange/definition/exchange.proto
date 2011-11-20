@@ -166,7 +166,7 @@ message UnsubscribeOrderStatusChangeRequest
 message ClaimRequest
 {
     optional .bnet.protocol.exchange.PartitionId partition_id = 1;
-    optional uint32 order_id = 2;
+    optional uint64 order_id = 2;
     optional fixed32 program = 3;
     optional .bnet.protocol.EntityId bnet_account = 4;
 }
@@ -174,7 +174,7 @@ message ClaimRequest
 message CancelRequest
 {
     required .bnet.protocol.exchange.PartitionId partition_id = 1;
-    required uint32 order_id = 2;
+    required uint64 order_id = 2;
     optional uint32 reason = 3;
     optional .bnet.protocol.EntityId bnet_account = 4;
 }
@@ -251,6 +251,22 @@ message GetFeeDetailsResponse
 {
     repeated .bnet.protocol.exchange.FeeDetail fee_details_in = 1;
     repeated .bnet.protocol.exchange.FeeDetail fee_details_out = 2;
+}
+
+message GetOrderBookStatisticsRequest
+{
+    required .bnet.protocol.exchange.PartitionId partition_id = 1;
+    required uint32 order_type = 2;
+    required uint64 quantity = 3;
+    required uint32 last_trades = 4;
+    required uint32 last_days = 5;
+}
+
+message GetOrderBookStatisticsResponse
+{
+    repeated .bnet.protocol.exchange.PriceDetail price_details = 1;
+    required uint64 last_trades_average = 2;
+    required uint64 last_days_average = 3;
 }
 
 service ExchangeService
@@ -382,6 +398,10 @@ service ExchangeService
     rpc GetFeeDetails(.bnet.protocol.exchange.GetFeeDetailsRequest) returns(.bnet.protocol.exchange.GetFeeDetailsResponse)
     {
         option (method_id) = 34;
+    }
+    rpc GetOrderBookStatistics(.bnet.protocol.exchange.GetOrderBookStatisticsRequest) returns(.bnet.protocol.exchange.GetOrderBookStatisticsResponse)
+    {
+        option (method_id) = 35;
     }
 }
 

@@ -29,26 +29,32 @@ namespace Mooege.Common.MPQ.FileFormats
     public class Monster : FileFormat
     {
         public Header Header { get; private set; }
+        public int I0 { get; private set; }
         public int ActorSNO { get; private set; }
-
+        public int I1 { get; private set; }
         public MonsterRace Race { get; private set; }
         public MonsterSize Size { get; private set; }
         public MonsterType Type { get; private set; }
         public MonsterDef Monsterdef { get; private set; }
         public Resistance Resists { get; private set; }
-        public int I0 { get; private set; }
-        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
         public Levels Level = new Levels();
         public float[] Floats { get; private set; }
         public float F0 { get; private set; }
         public float F1 { get; private set; }
+        public float F2 { get; private set; }
+        public float F3 { get; private set; }
+        public float F4 { get; private set; }
+        public float F5 { get; private set; }
         public int SNOInventory { get; private set; }
         public int SNOSecondaryInventory { get; private set; }
         public int SNOLore { get; private set; }
-        public int I3 { get; private set; }
+        public int I4 { get; private set; }
         public HealthDropInfo HealthDropinfo0 { get; private set; }
         public HealthDropInfo HealthDropinfo1 { get; private set; }
         public HealthDropInfo HealthDropinfo2 { get; private set; }
+        public HealthDropInfo HealthDropinfo3 { get; private set; }
         public int SNOSkillKit { get; private set; }
         public MonsterPowerType PowerType { get; private set; }
         public SkillDeclaration[] SkillDeclarations { get; private set; }
@@ -58,56 +64,66 @@ namespace Mooege.Common.MPQ.FileFormats
         public int SNOTreasureClassRare { get; private set; }
         public int SNOTreasureClassChampion { get; private set; }
         public int SNOTreasureClassChampionLight { get; private set; }
-        public float F2 { get; private set; }
-        public float F3 { get; private set; }
-        public float F4 { get; private set; }
-        public float F5 { get; private set; }
         public float F6 { get; private set; }
-        public int I4 { get; private set; }
+        public float F7 { get; private set; }
+        public float F8 { get; private set; }
+        public float F9 { get; private set; }
+        public float F10 { get; private set; }
         public int I5 { get; private set; }
         public int I6 { get; private set; }
+        public int I7 { get; private set; }
         public int[] AIBehavior { get; private set; }
         public int[] GbidArray0 { get; private set; } // 8
         public int[] SNOSummonActor { get; private set; } //6
         public int[] GbidArray1 { get; private set; } // 4
         public int[] GbidArray2 { get; private set; } // 6
-        public int I7 { get; private set; }
         public int I8 { get; private set; }
         public int I9 { get; private set; }
+        public int I10 { get; private set; }
         public string Name { get; private set; } // 128
         public TagMap TagMap { get; private set; }
-        public int I10 { get; private set; }
+        public int I11 { get; private set; }
         public MonsterMinionSpawnGroup MonsterMinionSpawngroup { get; private set; }
 
         public Monster(MpqFile file)
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            stream.Position += (1 * 4);
+
+            this.I0 = stream.ReadValueS32();
             this.ActorSNO = stream.ReadValueS32();
-            stream.Position += 4;
+            this.I2 = stream.ReadValueS32();
             this.Type = (MonsterType)stream.ReadValueS32();
             this.Race = (MonsterRace)stream.ReadValueS32();
             this.Size = (MonsterSize)stream.ReadValueS32();
             this.Monsterdef = new MonsterDef(stream);
             this.Resists = (Resistance)stream.ReadValueS32();
-            this.I0 = stream.ReadValueS32();
-            this.I1 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
             this.Level.Normal = stream.ReadValueS32();
             this.Level.Nightmare = stream.ReadValueS32();
             this.Level.Hell = stream.ReadValueS32();
             this.Level.Inferno = stream.ReadValueS32();
-            Floats = new float[144];
-            for (int i = 0; i < 144; i++)
+            // 84 - last 6 of these floats are not in the array actually.
+            Floats = new float[138];
+            for (int i = 0; i < 138; i++)
             {
                 Floats[i] = stream.ReadValueF32();
             }
+            F0 = stream.ReadValueF32();
+            F1 = stream.ReadValueF32();
+            F2 = stream.ReadValueF32();
+            F3 = stream.ReadValueF32();
+            F4 = stream.ReadValueF32();
+            F5 = stream.ReadValueF32();
 
-
-            this.I3 = stream.ReadValueS32();
+            // 660
+            this.I4 = stream.ReadValueS32();
             this.HealthDropinfo0 = new HealthDropInfo(stream);
             this.HealthDropinfo1 = new HealthDropInfo(stream);
             this.HealthDropinfo2 = new HealthDropInfo(stream);
+            this.HealthDropinfo3 = new HealthDropInfo(stream);
+            // 712
             this.SNOSkillKit = stream.ReadValueS32();
             this.SkillDeclarations = new SkillDeclaration[8];
             for (int i = 0; i < 8; i++)
@@ -119,21 +135,22 @@ namespace Mooege.Common.MPQ.FileFormats
             {
                 this.MonsterSkillDeclarations[i] = new MonsterSkillDeclaration(stream);
             }
+            // 908
             this.SNOTreasureClassFirstKill = stream.ReadValueS32();
             this.SNOTreasureClass = stream.ReadValueS32();
             this.SNOTreasureClassRare = stream.ReadValueS32();
             this.SNOTreasureClassChampion = stream.ReadValueS32();
             this.SNOTreasureClassChampionLight = stream.ReadValueS32();
-            // at 916 here
-            this.F2 = stream.ReadValueF32();
-            this.F3 = stream.ReadValueF32();
-            this.F4 = stream.ReadValueF32();
-            this.F5 = stream.ReadValueF32();
-            I4 = stream.ReadValueS32();
-            F6 = stream.ReadValueF32();
+            // 928
+            this.F6 = stream.ReadValueF32();
+            this.F7 = stream.ReadValueF32();
+            this.F8 = stream.ReadValueF32();
+            this.F9 = stream.ReadValueF32();
             I5 = stream.ReadValueS32();
+            F10 = stream.ReadValueF32();
             I6 = stream.ReadValueS32();
-            //948
+            I7 = stream.ReadValueS32();
+            //960
             this.SNOInventory = stream.ReadValueS32();
             this.SNOSecondaryInventory = stream.ReadValueS32();
             this.SNOLore = stream.ReadValueS32();
@@ -162,18 +179,20 @@ namespace Mooege.Common.MPQ.FileFormats
             {
                 this.GbidArray2[i] = stream.ReadValueS32();
             }
-            this.I7 = stream.ReadValueS32();
+            // 1092
             this.I8 = stream.ReadValueS32();
             this.I9 = stream.ReadValueS32();
+            this.I10 = stream.ReadValueS32();
             this.PowerType = (MonsterPowerType)stream.ReadValueS32();
 
-            stream.Position += (6*4);
+            stream.Position += (7 * 4);
+            // 1136
             this.TagMap = stream.ReadSerializedItem<TagMap>();
             stream.Position += (2 * 4);
-            this.I10 = stream.ReadValueS32();
+            this.I11 = stream.ReadValueS32();
             stream.Position += (3 * 4);
             this.MonsterMinionSpawngroup = stream.ReadSerializedItem<MonsterMinionSpawnGroup>();
-            Name = stream.ReadString(128, true);         
+            this.Name = stream.ReadString(128, true);
             stream.Close();
         }
 

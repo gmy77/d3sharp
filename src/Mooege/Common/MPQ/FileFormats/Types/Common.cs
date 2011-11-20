@@ -45,7 +45,6 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         }
     }
 
-
     public class ScriptFormula
     {
         public int I0 { get; private set; }
@@ -236,6 +235,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public int I0 { get; private set; }
         public int[] GBIdAffixes = new int[3];
         public int I1 { get; private set; }
+        public int I2 { get; private set; }
 
         public ItemSpecifierData(MpqFileStream stream)
         {
@@ -246,6 +246,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
                 GBIdAffixes[i] = stream.ReadValueS32();
             }
             I1 = stream.ReadValueS32();
+            I2 = stream.ReadValueS32();
         }
     }
 

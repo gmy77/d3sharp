@@ -49,7 +49,7 @@ namespace D3.Items {
           "bmVTZXJ2aWNlLnByb3RvIp4BCgxSYXJlSXRlbU5hbWUSIgoTaXRlbV9uYW1l" + 
           "X2lzX3ByZWZpeBgBIAIoCDoFZmFsc2USIQoVc25vX2FmZml4X3N0cmluZ19s" + 
           "aXN0GAIgAigPOgItMRIjChdhZmZpeF9zdHJpbmdfbGlzdF9pbmRleBgDIAIo" + 
-          "EToCLTESIgoWaXRlbV9zdHJpbmdfbGlzdF9pbmRleBgEIAIoEToCLTEiqAMK" + 
+          "EToCLTESIgoWaXRlbV9zdHJpbmdfbGlzdF9pbmRleBgEIAIoEToCLTEiygMK" + 
           "CUdlbmVyYXRvchIPCgRzZWVkGAEgAigNOgEwEikKCWdiX2hhbmRsZRgCIAIo" + 
           "CzIWLkQzLkdhbWVCYWxhbmNlLkhhbmRsZRIUCgxiYXNlX2FmZml4ZXMYAyAD" + 
           "KA8SLgoOcmFyZV9pdGVtX25hbWUYBCACKAsyFi5EMy5JdGVtcy5SYXJlSXRl" + 
@@ -59,26 +59,27 @@ namespace D3.Items {
           "GgoSaXRlbV9xdWFsaXR5X2xldmVsGAsgAigREhoKEml0ZW1fYmluZGluZ19s" + 
           "ZXZlbBgMIAIoERIWCg5tYXhfZHVyYWJpbGl0eRgNIAIoDRItCghjb250ZW50" + 
           "cxgOIAMoCzIbLkQzLkl0ZW1zLkVtYmVkZGVkR2VuZXJhdG9yEhkKDWF0dHVu" + 
-          "ZWRfc2tpbGwYDyABKA86Ai0xImEKEUVtYmVkZGVkR2VuZXJhdG9yEiQKAmlk" + 
-          "GAEgAigLMhguRDMuT25saW5lU2VydmljZS5JdGVtSWQSJgoJZ2VuZXJhdG9y" + 
-          "GAIgAigLMhMuRDMuSXRlbXMuR2VuZXJhdG9yIpoCCglTYXZlZEl0ZW0SJAoC" + 
-          "aWQYASACKAsyGC5EMy5PbmxpbmVTZXJ2aWNlLkl0ZW1JZBIzCg9vd25lcl9l" + 
-          "bnRpdHlfaWQYAiABKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkEisK" + 
-          "CXNvY2tldF9pZBgDIAEoCzIYLkQzLk9ubGluZVNlcnZpY2UuSXRlbUlkEhYK" + 
-          "DmhpcmVsaW5nX2NsYXNzGAQgAigREhEKCWl0ZW1fc2xvdBgFIAIoERIUCgxz" + 
-          "cXVhcmVfaW5kZXgYBiACKBESHAoRdXNlZF9zb2NrZXRfY291bnQYByACKA06" + 
-          "ATASJgoJZ2VuZXJhdG9yGAggASgLMhMuRDMuSXRlbXMuR2VuZXJhdG9yInMK" + 
-          "EkF1Y3Rpb25BY2NvdW50SW5mbxIuCgphY2NvdW50X2lkGAEgAigLMhouRDMu" + 
-          "T25saW5lU2VydmljZS5FbnRpdHlJZBItCgllc2Nyb3dfaWQYAiACKAsyGi5E" + 
-          "My5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkIlsKC0F1Y3Rpb25JdGVtEiQKAmlk" + 
-          "GAEgAigLMhguRDMuT25saW5lU2VydmljZS5JdGVtSWQSJgoJZ2VuZXJhdG9y" + 
-          "GAIgAigLMhMuRDMuSXRlbXMuR2VuZXJhdG9yIlcKC0F1Y3Rpb25JbmZvEiQK" + 
-          "AmlkGAEgAigLMhguRDMuT25saW5lU2VydmljZS5JdGVtSWQSIgoFb3duZXIY" + 
-          "AiABKAsyEy5EMy5JdGVtcy5Pd25lcnNoaXAiLgoISXRlbUxpc3QSIgoFaXRl" + 
-          "bXMYASADKAsyEy5EMy5JdGVtcy5TYXZlZEl0ZW0ihAEKCU93bmVyc2hpcBIz" + 
-          "Cg9vd25lcl9lbnRpdHlfaWQYASACKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVu" + 
-          "dGl0eUlkEhMKC2RlbGV0ZV90aW1lGAIgASgSEi0KCWVzY3Jvd19pZBgDIAEo" + 
-          "CzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQ=");
+          "ZWRfc2tpbGwYDyABKA86Ai0xEiAKFWl0ZW1fdW5sb2NrX3RpbWVzdGFtcBgQ" + 
+          "IAEoBDoBMCJhChFFbWJlZGRlZEdlbmVyYXRvchIkCgJpZBgBIAIoCzIYLkQz" + 
+          "Lk9ubGluZVNlcnZpY2UuSXRlbUlkEiYKCWdlbmVyYXRvchgCIAIoCzITLkQz" + 
+          "Lkl0ZW1zLkdlbmVyYXRvciKaAgoJU2F2ZWRJdGVtEiQKAmlkGAEgAigLMhgu" + 
+          "RDMuT25saW5lU2VydmljZS5JdGVtSWQSMwoPb3duZXJfZW50aXR5X2lkGAIg" + 
+          "ASgLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIrCglzb2NrZXRfaWQY" + 
+          "AyABKAsyGC5EMy5PbmxpbmVTZXJ2aWNlLkl0ZW1JZBIWCg5oaXJlbGluZ19j" + 
+          "bGFzcxgEIAIoERIRCglpdGVtX3Nsb3QYBSACKBESFAoMc3F1YXJlX2luZGV4" + 
+          "GAYgAigREhwKEXVzZWRfc29ja2V0X2NvdW50GAcgAigNOgEwEiYKCWdlbmVy" + 
+          "YXRvchgIIAEoCzITLkQzLkl0ZW1zLkdlbmVyYXRvciJzChJBdWN0aW9uQWNj" + 
+          "b3VudEluZm8SLgoKYWNjb3VudF9pZBgBIAIoCzIaLkQzLk9ubGluZVNlcnZp" + 
+          "Y2UuRW50aXR5SWQSLQoJZXNjcm93X2lkGAIgAigLMhouRDMuT25saW5lU2Vy" + 
+          "dmljZS5FbnRpdHlJZCJbCgtBdWN0aW9uSXRlbRIkCgJpZBgBIAIoCzIYLkQz" + 
+          "Lk9ubGluZVNlcnZpY2UuSXRlbUlkEiYKCWdlbmVyYXRvchgCIAIoCzITLkQz" + 
+          "Lkl0ZW1zLkdlbmVyYXRvciJXCgtBdWN0aW9uSW5mbxIkCgJpZBgBIAIoCzIY" + 
+          "LkQzLk9ubGluZVNlcnZpY2UuSXRlbUlkEiIKBW93bmVyGAIgASgLMhMuRDMu" + 
+          "SXRlbXMuT3duZXJzaGlwIi4KCEl0ZW1MaXN0EiIKBWl0ZW1zGAEgAygLMhMu" + 
+          "RDMuSXRlbXMuU2F2ZWRJdGVtIoQBCglPd25lcnNoaXASMwoPb3duZXJfZW50" + 
+          "aXR5X2lkGAEgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBITCgtk" + 
+          "ZWxldGVfdGltZRgCIAEoEhItCgllc2Nyb3dfaWQYAyABKAsyGi5EMy5Pbmxp" + 
+          "bmVTZXJ2aWNlLkVudGl0eUlk");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Items_RareItemName__Descriptor = Descriptor.MessageTypes[0];
@@ -88,7 +89,7 @@ namespace D3.Items {
         internal__static_D3_Items_Generator__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_Items_Generator__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.Generator, global::D3.Items.Generator.Builder>(internal__static_D3_Items_Generator__Descriptor,
-                new string[] { "Seed", "GbHandle", "BaseAffixes", "RareItemName", "EnchantAffix", "SocketAffix", "Flags", "Durability", "StackSize", "DyeType", "ItemQualityLevel", "ItemBindingLevel", "MaxDurability", "Contents", "AttunedSkill", });
+                new string[] { "Seed", "GbHandle", "BaseAffixes", "RareItemName", "EnchantAffix", "SocketAffix", "Flags", "Durability", "StackSize", "DyeType", "ItemQualityLevel", "ItemBindingLevel", "MaxDurability", "Contents", "AttunedSkill", "ItemUnlockTimestamp", });
         internal__static_D3_Items_EmbeddedGenerator__Descriptor = Descriptor.MessageTypes[2];
         internal__static_D3_Items_EmbeddedGenerator__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.EmbeddedGenerator, global::D3.Items.EmbeddedGenerator.Builder>(internal__static_D3_Items_EmbeddedGenerator__Descriptor,
@@ -542,8 +543,8 @@ namespace D3.Items {
   public sealed partial class Generator : pb::GeneratedMessage<Generator, Generator.Builder> {
     private Generator() { }
     private static readonly Generator defaultInstance = new Generator().MakeReadOnly();
-    private static readonly string[] _generatorFieldNames = new string[] { "attuned_skill", "base_affixes", "contents", "durability", "dye_type", "enchant_affix", "flags", "gb_handle", "item_binding_level", "item_quality_level", "max_durability", "rare_item_name", "seed", "socket_affix", "stack_size" };
-    private static readonly uint[] _generatorFieldTags = new uint[] { 125, 29, 114, 64, 80, 45, 56, 18, 96, 88, 104, 34, 8, 53, 72 };
+    private static readonly string[] _generatorFieldNames = new string[] { "attuned_skill", "base_affixes", "contents", "durability", "dye_type", "enchant_affix", "flags", "gb_handle", "item_binding_level", "item_quality_level", "item_unlock_timestamp", "max_durability", "rare_item_name", "seed", "socket_affix", "stack_size" };
+    private static readonly uint[] _generatorFieldTags = new uint[] { 125, 29, 114, 64, 80, 45, 56, 18, 96, 88, 128, 104, 34, 8, 53, 72 };
     public static Generator DefaultInstance {
       get { return defaultInstance; }
     }
@@ -718,6 +719,16 @@ namespace D3.Items {
       get { return attunedSkill_; }
     }
     
+    public const int ItemUnlockTimestampFieldNumber = 16;
+    private bool hasItemUnlockTimestamp;
+    private ulong itemUnlockTimestamp_;
+    public bool HasItemUnlockTimestamp {
+      get { return hasItemUnlockTimestamp; }
+    }
+    public ulong ItemUnlockTimestamp {
+      get { return itemUnlockTimestamp_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasSeed) return false;
@@ -745,7 +756,7 @@ namespace D3.Items {
       int size = SerializedSize;
       string[] field_names = _generatorFieldNames;
       if (hasSeed) {
-        output.WriteUInt32(1, field_names[12], Seed);
+        output.WriteUInt32(1, field_names[13], Seed);
       }
       if (hasGbHandle) {
         output.WriteMessage(2, field_names[7], GbHandle);
@@ -754,13 +765,13 @@ namespace D3.Items {
         output.WriteSFixed32Array(3, field_names[1], baseAffixes_);
       }
       if (hasRareItemName) {
-        output.WriteMessage(4, field_names[11], RareItemName);
+        output.WriteMessage(4, field_names[12], RareItemName);
       }
       if (hasEnchantAffix) {
         output.WriteSFixed32(5, field_names[5], EnchantAffix);
       }
       if (hasSocketAffix) {
-        output.WriteSFixed32(6, field_names[13], SocketAffix);
+        output.WriteSFixed32(6, field_names[14], SocketAffix);
       }
       if (hasFlags) {
         output.WriteUInt32(7, field_names[6], Flags);
@@ -769,7 +780,7 @@ namespace D3.Items {
         output.WriteUInt32(8, field_names[3], Durability);
       }
       if (hasStackSize) {
-        output.WriteUInt64(9, field_names[14], StackSize);
+        output.WriteUInt64(9, field_names[15], StackSize);
       }
       if (hasDyeType) {
         output.WriteUInt32(10, field_names[4], DyeType);
@@ -781,13 +792,16 @@ namespace D3.Items {
         output.WriteSInt32(12, field_names[8], ItemBindingLevel);
       }
       if (hasMaxDurability) {
-        output.WriteUInt32(13, field_names[10], MaxDurability);
+        output.WriteUInt32(13, field_names[11], MaxDurability);
       }
       if (contents_.Count > 0) {
         output.WriteMessageArray(14, field_names[2], contents_);
       }
       if (hasAttunedSkill) {
         output.WriteSFixed32(15, field_names[0], AttunedSkill);
+      }
+      if (hasItemUnlockTimestamp) {
+        output.WriteUInt64(16, field_names[10], ItemUnlockTimestamp);
       }
       UnknownFields.WriteTo(output);
     }
@@ -846,6 +860,9 @@ namespace D3.Items {
         }
         if (hasAttunedSkill) {
           size += pb::CodedOutputStream.ComputeSFixed32Size(15, AttunedSkill);
+        }
+        if (hasItemUnlockTimestamp) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(16, ItemUnlockTimestamp);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1020,6 +1037,9 @@ namespace D3.Items {
         if (other.HasAttunedSkill) {
           AttunedSkill = other.AttunedSkill;
         }
+        if (other.HasItemUnlockTimestamp) {
+          ItemUnlockTimestamp = other.ItemUnlockTimestamp;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1132,6 +1152,10 @@ namespace D3.Items {
             }
             case 125: {
               result.hasAttunedSkill = input.ReadSFixed32(ref result.attunedSkill_);
+              break;
+            }
+            case 128: {
+              result.hasItemUnlockTimestamp = input.ReadUInt64(ref result.itemUnlockTimestamp_);
               break;
             }
           }
@@ -1515,6 +1539,26 @@ namespace D3.Items {
         PrepareBuilder();
         result.hasAttunedSkill = false;
         result.attunedSkill_ = -1;
+        return this;
+      }
+      
+      public bool HasItemUnlockTimestamp {
+        get { return result.hasItemUnlockTimestamp; }
+      }
+      public ulong ItemUnlockTimestamp {
+        get { return result.ItemUnlockTimestamp; }
+        set { SetItemUnlockTimestamp(value); }
+      }
+      public Builder SetItemUnlockTimestamp(ulong value) {
+        PrepareBuilder();
+        result.hasItemUnlockTimestamp = true;
+        result.itemUnlockTimestamp_ = value;
+        return this;
+      }
+      public Builder ClearItemUnlockTimestamp() {
+        PrepareBuilder();
+        result.hasItemUnlockTimestamp = false;
+        result.itemUnlockTimestamp_ = 0UL;
         return this;
       }
     }

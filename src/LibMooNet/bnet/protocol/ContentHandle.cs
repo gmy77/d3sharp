@@ -32,14 +32,14 @@ namespace bnet.protocol {
       static ContentHandle() {
         byte[] descriptorData = global::System.Convert.FromBase64String(
             "CiFsaWIvcHJvdG9jb2wvY29udGVudF9oYW5kbGUucHJvdG8SDWJuZXQucHJv" + 
-            "dG9jb2wiPAoNQ29udGVudEhhbmRsZRIOCgZyZWdpb24YASACKAcSDQoFdXNh" + 
-            "Z2UYAiACKAcSDAoEaGFzaBgDIAIoDA==");
+            "dG9jb2wiTwoNQ29udGVudEhhbmRsZRIOCgZyZWdpb24YASACKAcSDQoFdXNh" + 
+            "Z2UYAiACKAcSDAoEaGFzaBgDIAIoDBIRCglwcm90b191cmwYBCABKAk=");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_ContentHandle__Descriptor = Descriptor.MessageTypes[0];
           internal__static_bnet_protocol_ContentHandle__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.ContentHandle, global::bnet.protocol.ContentHandle.Builder>(internal__static_bnet_protocol_ContentHandle__Descriptor,
-                  new string[] { "Region", "Usage", "Hash", });
+                  new string[] { "Region", "Usage", "Hash", "ProtoUrl", });
           return null;
         };
         pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -57,8 +57,8 @@ namespace bnet.protocol {
   public sealed partial class ContentHandle : pb::GeneratedMessage<ContentHandle, ContentHandle.Builder> {
     private ContentHandle() { }
     private static readonly ContentHandle defaultInstance = new ContentHandle().MakeReadOnly();
-    private static readonly string[] _contentHandleFieldNames = new string[] { "hash", "region", "usage" };
-    private static readonly uint[] _contentHandleFieldTags = new uint[] { 26, 13, 21 };
+    private static readonly string[] _contentHandleFieldNames = new string[] { "hash", "proto_url", "region", "usage" };
+    private static readonly uint[] _contentHandleFieldTags = new uint[] { 26, 34, 13, 21 };
     public static ContentHandle DefaultInstance {
       get { return defaultInstance; }
     }
@@ -109,6 +109,16 @@ namespace bnet.protocol {
       get { return hash_; }
     }
     
+    public const int ProtoUrlFieldNumber = 4;
+    private bool hasProtoUrl;
+    private string protoUrl_ = "";
+    public bool HasProtoUrl {
+      get { return hasProtoUrl; }
+    }
+    public string ProtoUrl {
+      get { return protoUrl_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasRegion) return false;
@@ -122,13 +132,16 @@ namespace bnet.protocol {
       int size = SerializedSize;
       string[] field_names = _contentHandleFieldNames;
       if (hasRegion) {
-        output.WriteFixed32(1, field_names[1], Region);
+        output.WriteFixed32(1, field_names[2], Region);
       }
       if (hasUsage) {
-        output.WriteFixed32(2, field_names[2], Usage);
+        output.WriteFixed32(2, field_names[3], Usage);
       }
       if (hasHash) {
         output.WriteBytes(3, field_names[0], Hash);
+      }
+      if (hasProtoUrl) {
+        output.WriteString(4, field_names[1], ProtoUrl);
       }
       UnknownFields.WriteTo(output);
     }
@@ -148,6 +161,9 @@ namespace bnet.protocol {
         }
         if (hasHash) {
           size += pb::CodedOutputStream.ComputeBytesSize(3, Hash);
+        }
+        if (hasProtoUrl) {
+          size += pb::CodedOutputStream.ComputeStringSize(4, ProtoUrl);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -284,6 +300,9 @@ namespace bnet.protocol {
         if (other.HasHash) {
           Hash = other.Hash;
         }
+        if (other.HasProtoUrl) {
+          ProtoUrl = other.ProtoUrl;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -337,6 +356,10 @@ namespace bnet.protocol {
             }
             case 26: {
               result.hasHash = input.ReadBytes(ref result.hash_);
+              break;
+            }
+            case 34: {
+              result.hasProtoUrl = input.ReadString(ref result.protoUrl_);
               break;
             }
           }
@@ -407,6 +430,27 @@ namespace bnet.protocol {
         PrepareBuilder();
         result.hasHash = false;
         result.hash_ = pb::ByteString.Empty;
+        return this;
+      }
+      
+      public bool HasProtoUrl {
+        get { return result.hasProtoUrl; }
+      }
+      public string ProtoUrl {
+        get { return result.ProtoUrl; }
+        set { SetProtoUrl(value); }
+      }
+      public Builder SetProtoUrl(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasProtoUrl = true;
+        result.protoUrl_ = value;
+        return this;
+      }
+      public Builder ClearProtoUrl() {
+        PrepareBuilder();
+        result.hasProtoUrl = false;
+        result.protoUrl_ = "";
         return this;
       }
     }

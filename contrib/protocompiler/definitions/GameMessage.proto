@@ -88,3 +88,9 @@ message TutorialMessage
     optional string ui_anchor_name = 2;
 }
 
+message SetAchievementShowcase
+{
+    required uint64 achievement_id = 1;
+    required uint32 slot = 2;
+}
+
