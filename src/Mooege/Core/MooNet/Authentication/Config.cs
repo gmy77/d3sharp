@@ -16,29 +16,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Core.GS.Actors.Interactions;
-using Mooege.Core.GS.Common.Types.TagMap;
-using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Players;
-using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.Artisan;
-
-namespace Mooege.Core.GS.Actors.Implementations.Artisans
+namespace Mooege.Core.MooNet.Authentication
 {
-    public class Artisan : InteractiveNPC
+    public sealed class Config : Mooege.Common.Config.Config
     {
-        public Artisan(World world, int snoId, TagMap tags)
-            : base(world, snoId, tags)
-        {
-            this.Attributes[GameAttribute.MinimapActive] = true;
+        public bool DisablePasswordChecks { get { return this.GetBoolean("DisablePasswordChecks", true); } set { this.Set("DisablePasswordChecks", value); } }
 
-            Interactions.Add(new CraftInteraction());
-        }
-
-        public override void OnCraft(Player player)
-        {
-            player.InGameClient.SendMessage(new OpenArtisanWindowMessage() { ArtisanID = this.DynamicID });
-        }
-
+        private static readonly Config _instance = new Config();
+        public static Config Instance { get { return _instance; } }
+        private Config() : base("Authentication") { }
     }
 }

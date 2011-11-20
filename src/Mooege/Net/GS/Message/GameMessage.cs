@@ -26,10 +26,6 @@ namespace Mooege.Net.GS.Message
 {
     public abstract class GameMessage
     {
-        // public const int ImplementedProtocolHash = 0x21EEE08D; - 7447.
-        //public const int ImplementedProtocolHash = unchecked((int)0x9E121BBD); // 7728.
-        public const int ImplementedProtocolHash = unchecked((int)0x208CA037); // 7865.
-
         protected static readonly Logger Logger = LogManager.CreateLogger();
 
         private static readonly Dictionary<Opcodes, Type> MessageTypes = new Dictionary<Opcodes, Type>();

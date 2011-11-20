@@ -126,7 +126,7 @@ namespace Mooege.Net.GS.Message
         HirelingRequestLearnSkillMessage = 107, // len: 	20
         HotbarButtonData = 108, // len: 	12 former ANNDataMessage12
         PlayerChangeHotbarButtonMessage = 109, // len: 	20
-        PlayAnimationMessageSpec = 110, // len: 	12 former IntDataMessage2
+        IntDataMessage2 = 110, // len: 	12 dont know why someone renamed it PlayAnimationMessageSpec 
         PlayAnimationMessage = 111, // len: 	72
         ANNDataMessage13 = 112, // len: 	12
         NotifyActorMovementMessage = 113, // len: 	76 former ACDTranslateNormalMessage1
@@ -320,7 +320,7 @@ namespace Mooege.Net.GS.Message
         SimpleMessage42 = 299, // len: 	8
         NPCSelectConversationMessage = 300, // len: 	12 former SNODataMessage6
         HirelingDismissMessage = 301, // len: 	12 former ANNDataMessage33
-        SimpleMessage43 = 302, // len: 	8
+        CraftInteractionMessage = 302, // len: 	8 former SimpleMessage43
         HirelingHireMessage = 303, // len: 	8 former SimpleMessage44
         HirelingInventoryMessage = 304, // len: 	8 former SimpleMessage45
         SNODataMessage7 = 305, // len:  12

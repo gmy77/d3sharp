@@ -36,7 +36,12 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("LogonRequest(): Email={0}", request.Email);
 
-            // we should be also checking here version, program, locale and similar stuff /raist.
+            if (!VersionChecker.Check(request)) // if the client trying to connect doesn't match required version, disconnect him.
+            {
+                Logger.Error("Client [{0}] doesn't match required version {1}, disconnecting..", request.Email, VersionInfo.MooNet.RequiredClientVersion);
+                this.Client.Connection.Disconnect(); // TODO: We should be actually notifying the client with wrong version message. /raist.
+                return;
+            }
 
             AuthManager.StartAuthentication(this.Client, request);
 

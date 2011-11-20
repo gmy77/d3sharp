@@ -74,7 +74,7 @@ namespace Mooege.Core.GS.Actors
                     return CreateGizmo(world, snoId, tags);
 
                 case ActorType.ServerProp:
-                    return CreateGizmo(world, snoId, tags);
+                    return new ServerProp(world, snoId, tags);
 
             }
 
