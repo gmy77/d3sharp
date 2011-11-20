@@ -39,14 +39,15 @@ namespace Mooege.Core.GS.Items.Implementations
             player.Attributes[GameAttribute.Hitpoints_Cur] =
                 Math.Min(player.Attributes[GameAttribute.Hitpoints_Cur] + this.Attributes[GameAttribute.Hitpoints_Granted],
                 player.Attributes[GameAttribute.Hitpoints_Max]);
-            player.Attributes.SendChangedMessage(player.InGameClient, player.DynamicID); // TODO Send to all. /fasbat
+
+            player.Attributes.BroadcastChangedIfRevealed();
 
             if (this.Attributes[GameAttribute.ItemStackQuantityLo] <= 1)
                 player.Inventory.DestroyInventoryItem(this); // No more potions!
             else
             {
                 this.Attributes[GameAttribute.ItemStackQuantityLo]--; // Just remove one
-                this.Attributes.SendChangedMessage(player.InGameClient, this.DynamicID);
+                this.Attributes.SendChangedMessage(player.InGameClient);
             }
 
         }

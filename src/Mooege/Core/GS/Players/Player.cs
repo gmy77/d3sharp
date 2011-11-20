@@ -500,7 +500,7 @@ namespace Mooege.Core.GS.Players
             // switch on new skill in hotbar
             this.Attributes[GameAttribute.Skill, message.SNOSkill] = 1;
             this.Attributes[GameAttribute.Skill_Total, message.SNOSkill] = 1;
-            this.Attributes.SendChangedMessage(InGameClient, this.DynamicID);
+            this.Attributes.BroadcastChangedIfRevealed();
 
             foreach (HotbarButtonData button in this.SkillSet.HotBarSkills.Where(button => button.SNOSkill == oldSNOSkill)) // loop through hotbar and replace the old skill with new one
             {
@@ -525,7 +525,7 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Trait, message.SNOSkill] = 1;
             this.Attributes[GameAttribute.Skill, message.SNOSkill] = 1;
             this.Attributes[GameAttribute.Skill_Total, message.SNOSkill] = 1;
-            this.Attributes.SendChangedMessage(InGameClient, this.DynamicID);
+            this.Attributes.BroadcastChangedIfRevealed();
             this.SkillSet.PassiveSkills[message.SkillIndex] = message.SNOSkill;
             this.UpdateHeroState();
         }
@@ -600,7 +600,7 @@ namespace Mooege.Core.GS.Players
             {
                 this.Inventory.PickUp(oldRune); // pick removed rune
             }
-            this.Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
+            this.Attributes.BroadcastChangedIfRevealed();
             UpdateHeroState();
         }
 
@@ -1401,7 +1401,7 @@ namespace Mooege.Core.GS.Players
                 // On level up, health is set to max
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
 
-                this.Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
+                this.Attributes.BroadcastChangedIfRevealed();
 
                 this.InGameClient.SendMessage(new PlayerLevel()
                 {
@@ -1429,7 +1429,7 @@ namespace Mooege.Core.GS.Players
                 this.Attributes[GameAttribute.Experience_Next] = 0;
 
             }
-            this.Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
+            this.Attributes.BroadcastChangedIfRevealed();
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
         }
 
