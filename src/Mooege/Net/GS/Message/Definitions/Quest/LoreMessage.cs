@@ -20,8 +20,6 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Quest
 {
-/* TODO: FIXME
-    [Message(new[] {Opcodes.PlayLoreImmediately,Opcodes.PlayLoreWithButton})]
     [Message(Opcodes.LoreMessage)]
     public class LoreMessage : GameMessage
     {
@@ -48,5 +46,4 @@ namespace Mooege.Net.GS.Message.Definitions.Quest
             b.AppendLine("}");
         }
     }
-*/
 }
