@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
+using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
@@ -124,7 +126,7 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void Query(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.QueryRequest request, System.Action<bnet.protocol.presence.QueryResponse> done)
+        public override void Query(IRpcController controller, bnet.protocol.presence.QueryRequest request, Action<bnet.protocol.presence.QueryResponse> done)
         {            
             var builder = bnet.protocol.presence.QueryResponse.CreateBuilder();
 
@@ -153,6 +155,16 @@ namespace Mooege.Core.MooNet.Services
             }
 
             done(builder.Build());
-        }               
+        }
+
+        public override void Ownership(IRpcController controller, bnet.protocol.presence.OwnershipRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Heal(IRpcController controller, bnet.protocol.presence.UpdateRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

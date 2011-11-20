@@ -25,6 +25,7 @@ using Mooege.Common.Storage;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
+using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Toons
@@ -46,21 +47,76 @@ namespace Mooege.Core.MooNet.Toons
         /// </summary>
         public ToonHandleHelper ToonHandle { get; private set; }
 
+        /// <summary>
+        /// Toon's name.
+        /// </summary>
         public string Name { get; private set; }
+
+        /// <summary>
+        /// Toon's hash-code.
+        /// </summary>
         public int HashCode { get; set; }
-        public uint TimePlayed { get; set; }
-        public uint LoginTime { get; set; }
+
+        /// <summary>
+        /// Toon's hash-code as string.
+        /// </summary>
         public string HashCodeString { get; private set; }
+
+        /// <summary>
+        /// NameText as name#hashcode.
+        /// </summary>
+        public D3.Hero.NameText NameText { get; private set; }
+
+        /// <summary>
+        /// Toon's owner account.
+        /// </summary>
+        public Account Owner { get; set; }
+
+        /// <summary>
+        /// Toon's class.
+        /// </summary>
         public ToonClass Class { get; private set; }
+
+        /// <summary>
+        /// Toon's flags.
+        /// </summary>
         public ToonFlags Flags { get; private set; }
+
+        /// <summary>
+        /// Toon's level.
+        /// </summary>
         public byte Level { get; private set; }
+
+        /// <summary>
+        /// Total time played for toon.
+        /// </summary>
+        public uint TimePlayed { get; set; }
+
+        /// <summary>
+        /// Last login time for toon.
+        /// </summary>
+        public uint LoginTime { get; set; }
+        
+        /// <summary>
+        /// Away status for the toon? (shouldn't it be account stuff? /raist).
+        /// </summary>
+        public AwayStatus AwayStatus { get; private set; }
+
+        /// <summary>
+        /// The visual equipment for toon.
+        /// </summary>
+        public D3.Hero.VisualEquipment Equipment { get; protected set; }
+        
+        /// <summary>
+        /// Toon digest.
+        /// </summary>
         public D3.Hero.Digest Digest
         {
             get
             {
                 return D3.Hero.Digest.CreateBuilder().SetVersion(891)
                                 .SetHeroId(this.D3EntityID)
-                                .SetHeroName(this.Name)
+                                //.SetHeroName(this.Name) //no longer used in 7728, uses D3.Hero.NameText query -Egris
                                 .SetGbidClass((int)this.ClassID)
                                 .SetPlayerFlags((uint)this.Flags)
                                 .SetLevel(this.Level)
@@ -75,10 +131,6 @@ namespace Mooege.Core.MooNet.Toons
                                 .Build();
             }
         }
-        public D3.Hero.VisualEquipment Equipment { get; protected set; }
-        public AwayStatus AwayStatus { get; private set; }
-
-        public Account Owner { get; set; }
 
         public bool IsSelected
         {
@@ -165,6 +217,7 @@ namespace Mooege.Core.MooNet.Toons
             this.Name = name;
             this.HashCode = hashCode;
             this.HashCodeString = HashCode.ToString("D3");
+            this.NameText = D3.Hero.NameText.CreateBuilder().SetName(string.Format("{0}#{1}", this.Name, this.HashCodeString)).Build();
             this.Class = @class;
             this.Flags = flags;
             this.Level = level;
@@ -173,14 +226,14 @@ namespace Mooege.Core.MooNet.Toons
 
             var visualItems = new[]
             {                                
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Head
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Chest
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Feet
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Hands
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Weapon (1)
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Weapon (2)
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Shoulders
-                D3.Hero.VisualItem.CreateBuilder().SetGbid(0).SetDyeType(0).SetItemEffectType(0).SetEffectLevel(0).Build(), // Legs
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Head
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Chest
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Feet
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Hands
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Weapon (1)
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Weapon (2)
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Shoulders
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Legs
             };
 
             this.Equipment = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
@@ -237,7 +290,7 @@ namespace Mooege.Core.MooNet.Toons
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 4) // Hero's flags (gender and such)
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.Flags | ToonFlags.BothUnknowns)).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.Flags | ToonFlags.AllUnknowns)).Build());
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if the client is online
                     {
@@ -256,7 +309,7 @@ namespace Mooege.Core.MooNet.Toons
                 case FieldKeyHelper.Program.BNet:
                     if (queryKey.Group == 3 && queryKey.Field == 2) // Toon name
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name + "#" + this.HashCodeString).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 3) // Whether the toon is selected one for owner account.
                     {
@@ -299,11 +352,16 @@ namespace Mooege.Core.MooNet.Toons
             {
                 case FieldKeyHelper.Program.D3:
                     if (field.Key.Group == 4 && field.Key.Field == 1)
-                    {   
-                        //don't know what to do with this yet, so far I have observed that the update value is always equal to the toon owner's current channel /dustinconrad
-                        if (field.Value.HasMessageValue && !field.Value.MessageValue.Equals(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()))
+                    {
+                        if (field.Value.HasMessageValue) //7727 Sends empty SET instead of a CLEAR -Egris
                         {
-                            Logger.Warn("Toon owner's logged-in client channel is not equal to the channel specified in the update message");
+                            var entityId = D3.OnlineService.EntityId.ParseFrom(field.Value.MessageValue);
+                            var channel = ChannelManager.GetChannelByEntityId(entityId);
+                            this.Owner.LoggedInClient.CurrentChannel = channel;
+                        }
+                        else
+                        {
+                            Logger.Warn("Emtpy-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
                         }
                     }
                     else if (field.Key.Group == 4 && field.Key.Field == 2)
@@ -376,12 +434,12 @@ namespace Mooege.Core.MooNet.Toons
 
             // Flags
             var fieldKey5 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 4, 0);
-            var field5 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey5).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.Flags | ToonFlags.BothUnknowns)).Build()).Build();
+            var field5 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey5).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.Flags | ToonFlags.AllUnknowns)).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field5).Build());
 
             // Name
             var fieldKey6 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 2, 0);
-            var field6 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey6).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build()).Build();
+            var field6 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey6).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name + "#" + this.HashCodeString).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field6).Build());
 
             // Is it selected toon?
@@ -400,9 +458,14 @@ namespace Mooege.Core.MooNet.Toons
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field8).Build());
 
             // Unknown int - maybe highest completed act? /raist
-            var fieldKey9 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 9, 10);
+            var fieldKey9 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 10, 0);
             var field9 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey9).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field9).Build());
+
+            //Unknown string = always "NICKTEMPNAME" -Egris
+            var fieldKey11 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 3, 12, 0);
+            var field11 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey11).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("NICKTEMPNAME").Build()).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field11).Build());
 
             // Create a presence.ChannelState
             var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityID).AddRangeFieldOperation(operations).Build();
@@ -502,8 +565,10 @@ namespace Mooege.Core.MooNet.Toons
         Female = 0x02,
         // TODO: These two need to be figured out still.. /plash
         Unknown1 = 0x20,
-        Unknown2 = 0x2000000,
-        BothUnknowns = Unknown1 | Unknown2
+        Unknown2 = 0x40,
+        Unknown3 = 0x80000,
+        Unknown4 = 0x2000000,
+        AllUnknowns = Unknown1 | Unknown2 | Unknown3 | Unknown4
     }
 
     //TODO: figure out what 1 and 3 represent, or if it is a flag since all observed values are powers of 2 so far /dustinconrad

@@ -47,12 +47,14 @@ namespace Mooege.Common.MPQ.FileFormats
         public int SNOSpawn { get; private set; }
         public int Probability { get; private set; }
         public int I1 { get; private set; }
+        public int I2 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             this.SNOSpawn = stream.ReadValueS32();
             this.Probability = stream.ReadValueS32();
             this.I1 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(2) + (-1);
+            Field1 = buffer.ReadInt(3) + (-1);
             Field2 = buffer.ReadInt(32);
             Field3 = new WorldPlace();
             Field3.Parse(buffer);
@@ -41,7 +41,7 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, Field0);
-            buffer.WriteInt(2, Field1 - (-1));
+            buffer.WriteInt(3, Field1 - (-1));
             buffer.WriteInt(32, Field2);
             Field3.Encode(buffer);
         }
@@ -59,7 +59,5 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

@@ -60,6 +60,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public ItemSpecifierData ItemSpecifier { get; private set; }
         public int I5 { get; private set; }
         public int[] I4 { get; private set; }
+        public int I6 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -76,6 +77,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.I4 = new int[4];
             for (int i = 0; i < 4; i++)
                 this.I4[i] = stream.ReadValueS32();
+            this.I6 = stream.ReadValueS32();
         }
     }
 }

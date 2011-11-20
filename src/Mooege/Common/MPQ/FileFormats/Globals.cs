@@ -43,6 +43,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F5 { get; private set; }
         public float F6 { get; private set; }
         public float F7 { get; private set; }
+        public float F33 { get; private set; }
+        public float F34 { get; private set; }
         public RGBAColor[] Colors { get; private set; }
         public int I2 { get; private set; }
         public int I3 { get; private set; }
@@ -57,7 +59,6 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F13 { get; private set; }
         public float F14 { get; private set; }
         public float F15 { get; private set; }
-        public float F16 { get; private set; }
         public int I7 { get; private set; }
         public int I8 { get; private set; }
         public float F17 { get; private set; }
@@ -78,6 +79,12 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F24 { get; private set; }
         public float F25 { get; private set; }
         public float F26 { get; private set; }
+        public float F27 { get; private set; }
+        public float F28 { get; private set; }
+        public float F29 { get; private set; }
+        public float F30 { get; private set; }
+        public float F31 { get; private set; }
+        public float F32 { get; private set; }
 
         public Globals(MpqFile file)
         {
@@ -86,62 +93,69 @@ namespace Mooege.Common.MPQ.FileFormats
             this.TuningParams = new DifficultyTuningParams[4];
             for (int i = 0; i < 4; i++)
                 this.TuningParams[i] = new DifficultyTuningParams(stream);
-            this.F0 = stream.ReadValueF32(); //124
-            this.F1 = stream.ReadValueF32(); //128
-            this.F2 = stream.ReadValueF32(); //132
-            this.I0 = stream.ReadValueS32(); //136
+            this.F0 = stream.ReadValueF32(); //140
+            this.F1 = stream.ReadValueF32(); //144
+            this.F2 = stream.ReadValueF32(); //148
+            this.I0 = stream.ReadValueS32(); //152
             stream.Position += 12;
             this.ActorGroup = stream.ReadSerializedData<ActorGroup>(); //144
             stream.Position += 12;
-            this.I1 = stream.ReadValueS32(); //160
+            this.I1 = stream.ReadValueS32(); //176
             this.StartLocationNames = stream.ReadSerializedData<StartLocationName>(); //168
             stream.Position += 8;
             this.ScriptGlobalVars = stream.ReadSerializedData<GlobalScriptVariable>();  //184
-            this.F3 = stream.ReadValueF32(); //200
-            this.F4 = stream.ReadValueF32(); //204
-            this.F5 = stream.ReadValueF32(); //208
-            this.F6 = stream.ReadValueF32(); //212
-            this.F7 = stream.ReadValueF32(); //216
-            Colors = new RGBAColor[400]; //220
+            this.F3 = stream.ReadValueF32(); //216
+            this.F4 = stream.ReadValueF32(); //220
+            this.F5 = stream.ReadValueF32(); //224
+            this.F6 = stream.ReadValueF32(); //228
+            this.F7 = stream.ReadValueF32(); //232
+            this.F33 = stream.ReadValueF32(); //236
+            this.F34 = stream.ReadValueF32(); //240
+            Colors = new RGBAColor[400]; //244
             for (int i = 0; i < 400; i++)
                 Colors[i] = new RGBAColor(stream);
-            this.I2 = stream.ReadValueS32(); //1820
-            this.I3 = stream.ReadValueS32(); //1824
-            this.I4 = stream.ReadValueS32(); //1828
-            this.I5 = stream.ReadValueS32(); //1832
-            this.F8 = stream.ReadValueF32(); //1836
-            this.F9 = stream.ReadValueF32(); //1840
-            this.I6 = stream.ReadValueS32(); //1844
-            this.F10 = stream.ReadValueF32(); //1848
-            this.F11 = stream.ReadValueF32(); //1852
-            this.F12 = stream.ReadValueF32(); //1856
-            this.F13 = stream.ReadValueF32(); //1860
-            this.F14 = stream.ReadValueF32(); //1864
-            this.F15 = stream.ReadValueF32(); //1868
-            this.F16 = stream.ReadValueF32(); //1872
-            this.I7 = stream.ReadValueS32(); //1876
-            this.I8 = stream.ReadValueS32(); //1880
-            this.F17 = stream.ReadValueF32(); //1884
-            this.F18 = stream.ReadValueF32(); //1888
-            this.F19 = stream.ReadValueF32(); //1892
-            this.F20 = stream.ReadValueF32(); //1896
-            this.F21 = stream.ReadValueF32(); //1900
-            this.I9 = stream.ReadValueS32(); //1904
-            this.I10 = new int[4]; //1908
+            this.I2 = stream.ReadValueS32(); //1844
+            this.I3 = stream.ReadValueS32(); //1848
+            this.I4 = stream.ReadValueS32(); //1852
+            this.I5 = stream.ReadValueS32(); //1856
+            this.F8 = stream.ReadValueF32(); //1860
+            this.F9 = stream.ReadValueF32(); //1864
+            this.I6 = stream.ReadValueS32(); //1868
+            this.F10 = stream.ReadValueF32(); //1872
+            this.F11 = stream.ReadValueF32(); //1876
+            this.F12 = stream.ReadValueF32(); //1880
+            this.F13 = stream.ReadValueF32(); //1888
+            this.F14 = stream.ReadValueF32(); //1892
+            this.F15 = stream.ReadValueF32(); //1896
+            this.I7 = stream.ReadValueS32(); //1900
+            this.I8 = stream.ReadValueS32(); //1904
+            this.F17 = stream.ReadValueF32(); //1908
+            this.F18 = stream.ReadValueF32(); //1912
+            this.F19 = stream.ReadValueF32(); //1916
+            this.F20 = stream.ReadValueF32(); //1920
+            this.F21 = stream.ReadValueF32(); //1924
+            this.I9 = stream.ReadValueS32(); //1928
+            this.I10 = new int[4]; //1932
             for (int i = 0; i < 4; i++)
                 this.I10[i] = stream.ReadValueS32();
             stream.Position += 4;
-            this.BannerParams = new BannerParams(stream); //1928
-            this.I11 = stream.ReadValueS32(); //2120
-            this.I12 = stream.ReadValueS32(); //2124
-            this.I13 = stream.ReadValueS32(); //2128
-            this.I14 = stream.ReadValueS32(); //2132
-            this.I15 = stream.ReadValueS32(); //2136
-            this.F22 = stream.ReadValueF32(); //2140
-            this.F23 = stream.ReadValueF32(); //2144
-            this.F24 = stream.ReadValueF32(); //2148
-            this.F25 = stream.ReadValueF32(); //2152
-            this.F26 = stream.ReadValueF32(); //2156
+            this.BannerParams = new BannerParams(stream); //1952
+            this.I11 = stream.ReadValueS32(); //2184
+            this.I12 = stream.ReadValueS32(); //2188
+            this.I13 = stream.ReadValueS32(); //2192
+            this.I14 = stream.ReadValueS32(); //2196
+            this.I15 = stream.ReadValueS32(); //2200
+            this.F22 = stream.ReadValueF32(); //2204
+            this.F23 = stream.ReadValueF32(); //2208
+            this.F24 = stream.ReadValueF32(); //2212
+            this.F25 = stream.ReadValueF32(); //2216
+            this.F26 = stream.ReadValueF32(); //2220
+            this.F27 = stream.ReadValueF32(); //2224
+            this.F28 = stream.ReadValueF32(); //2228
+            this.F29 = stream.ReadValueF32(); //2232
+            this.F30 = stream.ReadValueF32(); //2236
+            this.F31 = stream.ReadValueF32(); //2240
+            this.F32 = stream.ReadValueF32(); //2244
             stream.Close();
         }
     }
@@ -155,6 +169,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F4 { get; private set; }
         public float F5 { get; private set; }
         public float F6 { get; private set; }
+        public float F7 { get; private set; }
 
         public DifficultyTuningParams(MpqFileStream stream)
         {
@@ -165,6 +180,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F4 = stream.ReadValueF32();
             this.F5 = stream.ReadValueF32();
             this.F6 = stream.ReadValueF32();
+            this.F7 = stream.ReadValueF32();
         }
     }
 
@@ -208,7 +224,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
     class BannerParams
     {
-        //Total Length: 192
+        //Total Length: 232
         public List<BannerTexturePair> TexBackgrounds { get; private set; }
         public int I0 { get; private set; }
         public List<BannerTexturePair> TexPatterns { get; private set; }
@@ -216,14 +232,16 @@ namespace Mooege.Common.MPQ.FileFormats
         public List<BannerTexturePair> TexVariantSigils { get; private set; }
         public List<BannerTexturePair> TexSigilAccents { get; private set; }
         public List<BannerColorSet> ColorSets { get; private set; }
+        public List<BannerSigilPlacement> SigilPlacements { get; private set; }
         public List<int> SNOActorBases { get; private set; }
         public List<int> SNOActorCaps { get; private set; }
         public List<int> SNOActorPoles { get; private set; }
         public List<int> SNOActorRibbons { get; private set; }
+        public List<EpicBannerDescription> EpicBannerDescriptions { get; private set; }
 
         public BannerParams(MpqFileStream stream)
         {
-            stream.Position += 8;
+            stream.Position += 12;
             this.TexBackgrounds = stream.ReadSerializedData<BannerTexturePair>();
             this.I0 = stream.ReadValueS32(); //16
             stream.Position += 12;
@@ -240,6 +258,8 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += 12;
             this.ColorSets = stream.ReadSerializedData<BannerColorSet>();
             stream.Position += 8;
+            this.SigilPlacements = stream.ReadSerializedData<BannerSigilPlacement>();
+            stream.Position += 8;
             this.SNOActorBases = stream.ReadSerializedInts();
             stream.Position += 8;
             this.SNOActorCaps = stream.ReadSerializedInts();
@@ -247,6 +267,9 @@ namespace Mooege.Common.MPQ.FileFormats
             this.SNOActorPoles = stream.ReadSerializedInts();
             stream.Position += 8;
             this.SNOActorRibbons = stream.ReadSerializedInts();
+            stream.Position += 8;
+            this.EpicBannerDescriptions = stream.ReadSerializedData<EpicBannerDescription>();
+            stream.Position += 8;
         }
     }
 
@@ -265,6 +288,7 @@ namespace Mooege.Common.MPQ.FileFormats
     class BannerColorSet : ISerializableData
     {
         public RGBAColor[] Color { get; private set; }
+        public string String1 { get; private set; }
         public int I0 { get; private set; }
         public string S0 { get; private set; }
 
@@ -273,8 +297,37 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Color = new RGBAColor[2];
             for (int i = 0; i < 2; i++)
                 this.Color[i] = new RGBAColor(stream);
+            this.String1 = stream.ReadString(64, true);
             this.I0 = stream.ReadValueS32();
-            this.S0 = stream.ReadString(64,true);
+            this.S0 = stream.ReadString(64, true);
+        }
+    }
+
+    class BannerSigilPlacement : ISerializableData
+    {
+        public string S0 { get; private set; }
+
+        public void Read(MpqFileStream stream)
+        {
+            this.S0 = stream.ReadString(64, true);
+        }
+    }
+
+    class EpicBannerDescription : ISerializableData
+    {
+        public int I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int I2 { get; private set; }
+        public int I3 { get; private set; }
+        public string S0 { get; private set; }
+
+        public void Read(MpqFileStream stream)
+        {
+            this.I0 = stream.ReadValueS32();
+            this.I1 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.I3 = stream.ReadValueS32();
+            this.S0 = stream.ReadString(128, true);
         }
     }
 }

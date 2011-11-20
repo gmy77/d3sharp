@@ -268,6 +268,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int I2 { get; private set; }
         public int I3 { get; private set; }
         public int I4 { get; private set; }
+        public int I5 { get; private set; }
         public List<QuestStepObjective> StepBonusObjectives { get; private set; }
 
         public void Read(MpqFileStream stream)
@@ -279,8 +280,9 @@ namespace Mooege.Common.MPQ.FileFormats
             I2 = stream.ReadValueS32();
             I3 = stream.ReadValueS32();
             I4 = stream.ReadValueS32();
+            I5 = stream.ReadValueS32();
 
-            stream.Position += 8;
+            stream.Position += 12;
             StepBonusObjectives = stream.ReadSerializedData<QuestStepObjective>();
         }
     }

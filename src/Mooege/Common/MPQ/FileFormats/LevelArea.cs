@@ -28,7 +28,7 @@ namespace Mooege.Common.MPQ.FileFormats
     public class LevelArea : FileFormat
     {
         public Header Header { get; private set; }
-        public int I0 { get; private set; }
+        public int[] I0 { get; private set; }
         public int I1 { get; private set; }
         public int SNOLevelAreaOverrideForGizmoLocs { get; private set; }
         public GizmoLocSet LocSet { get; private set; }
@@ -39,9 +39,12 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            this.I0 = stream.ReadValueS32();
+            this.I0 = new int[4];
+            for (int i = 0; i < 4; i++)
+                this.I0[i] = stream.ReadValueS32();
             this.I1 = stream.ReadValueS32();
             this.SNOLevelAreaOverrideForGizmoLocs = stream.ReadValueS32();
+            stream.Position += 4;
             this.LocSet = new GizmoLocSet(stream);
             this.I2 = stream.ReadValueS32();
             stream.Position += 12;
@@ -174,5 +177,6 @@ namespace Mooege.Common.MPQ.FileFormats
         Unique,
         Hireling,
         Clone,
+        Boss,
     }
 }

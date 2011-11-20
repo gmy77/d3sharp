@@ -191,9 +191,8 @@ namespace Mooege.Core.GS.Players
 
                     speaker1.FacingAngle = flatTranslation.Rotation();
 
-                    player.World.BroadcastIfRevealed(new ACDTranslateFacingMessage
+                    player.World.BroadcastIfRevealed(new ACDTranslateFacingMessage(Opcodes.ACDTranslateFacingMessage1)
                     {
-                        Id = (int)Opcodes.ACDTranslateFacingMessage1,
                         ActorId = speaker1.DynamicID,
                         Angle = speaker1.FacingAngle,
                         Immediately = false

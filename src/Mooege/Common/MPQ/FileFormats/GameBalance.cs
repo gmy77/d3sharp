@@ -242,7 +242,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class ItemTable : ISerializableData
     {
-        //Total Length: 1456
+        //Total Length: 1488
         public int Hash { get; private set; }
         public string Name { get; private set; }
         public int SNOActor { get; private set; }
@@ -272,6 +272,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public float ArmorValue { get; private set; }
         public float F3 { get; private set; }
         public float AttacksPerSecond { get; private set; }
+        public float F4 { get; private set; }
+        public float F5 { get; private set; }
         public int SNOSkill0 { get; private set; }
         public int I11 { get; private set; }
         public int SNOSkill1 { get; private set; }
@@ -287,6 +289,9 @@ namespace Mooege.Common.MPQ.FileFormats
         public int EnhancementToGrant { get; private set; }
         public int[] LegendaryAffixFamily { get; private set; }
         public int[] MaxAffixLevel { get; private set; }
+        public GemType Gem { get; private set; }
+        public int I16 { get; private set; }
+        public Alpha I17 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -326,7 +331,10 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F3 = stream.ReadValueF32(); //548
             stream.Position += 168;
             this.AttacksPerSecond = stream.ReadValueF32(); //720
-            stream.Position += 192;
+            stream.Position += 84;
+            this.F4 = stream.ReadValueF32(); //808
+            this.F5 = stream.ReadValueF32(); //812
+            stream.Position += 100;
             this.SNOSkill0 = stream.ReadValueS32(); //916
             this.I11 = stream.ReadValueS32(); //920
             this.SNOSkill1 = stream.ReadValueS32(); //924
@@ -340,16 +348,20 @@ namespace Mooege.Common.MPQ.FileFormats
             for (int i = 0; i < 16; i++)
                 this.Attribute[i] = new AttributeSpecifier(stream);
             this.Quality = (ItemQuality)stream.ReadValueS32(); //1376
-            this.RecipeToGrant = new int[6]; //1380
-            for (int i = 0; i < 6; i++)
+            this.RecipeToGrant = new int[10]; //1380
+            for (int i = 0; i < 10; i++)
                 this.RecipeToGrant[i] = stream.ReadValueS32();
-            this.EnhancementToGrant = stream.ReadValueS32(); //1404
+            this.EnhancementToGrant = stream.ReadValueS32(); //1420
             this.LegendaryAffixFamily = new int[6];
             for (int i = 0; i < 6; i++)
-                this.LegendaryAffixFamily[i] = stream.ReadValueS32(); //1408
+                this.LegendaryAffixFamily[i] = stream.ReadValueS32(); //1424
             this.MaxAffixLevel = new int[6];
             for (int i = 0; i < 6; i++)
-                this.MaxAffixLevel[i] = stream.ReadValueS32(); //1432
+                this.MaxAffixLevel[i] = stream.ReadValueS32(); //1446
+            this.Gem = (GemType)stream.ReadValueS32(); //1472
+            this.I16 = stream.ReadValueS32(); //1476
+            this.I17 = (Alpha)stream.ReadValueS32(); //1780
+            stream.Position += 4;
         }
 
         public enum ItemQuality
@@ -377,6 +389,22 @@ namespace Mooege.Common.MPQ.FileFormats
             A3 = 200,
             A4 = 300,
             Test = 1000,
+        }
+
+        public enum GemType : int
+        {
+            Amethyst = 1,
+            Emerald,
+            Ruby,
+            Topaz,
+        }
+
+        public enum Alpha : int
+        {
+            A = 1,
+            B,
+            C,
+            D,
         }
     }
 
@@ -434,6 +462,9 @@ namespace Mooege.Common.MPQ.FileFormats
         public int I45 { get; private set; }
         public int I46 { get; private set; }
         public int I47 { get; private set; }
+        public float F2 { get; private set; }
+        public float F3 { get; private set; }
+        public float F4 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -490,6 +521,10 @@ namespace Mooege.Common.MPQ.FileFormats
             this.I45 = stream.ReadValueS32();
             this.I46 = stream.ReadValueS32();
             this.I47 = stream.ReadValueS32();
+            stream.Position += 4;
+            this.F2 = stream.ReadValueF32();
+            this.F3 = stream.ReadValueF32();
+            this.F4 = stream.ReadValueF32();
         }
     }
 
@@ -887,6 +922,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int I3 { get; private set; }
         public int I4 { get; private set; }
         public int I5 { get; private set; }
+        public int I8 { get; private set; }
         public AffixType1 AffixType1 { get; private set; }
         public int I6 { get; private set; }
         public int SNORareNamePrefixStringList { get; private set; }
@@ -912,23 +948,23 @@ namespace Mooege.Common.MPQ.FileFormats
             this.I3 = stream.ReadValueS32(); //272
             this.I4 = stream.ReadValueS32(); //276
             this.I5 = stream.ReadValueS32(); //280
-            this.AffixType1 = (AffixType1)stream.ReadValueS32(); //284
-            this.I6 = stream.ReadValueS32(); //288
-            this.SNORareNamePrefixStringList = stream.ReadValueS32(); //292
-            this.SNORareNameSuffixStringList = stream.ReadValueS32(); //296
-            this.AffixFamily0 = stream.ReadValueS32(); //300
-            this.AffixFamily1 = stream.ReadValueS32(); //304
-            this.ExclusionCategory = stream.ReadValueS32(); //308
-            this.I7 = new int[6]; //312
+            this.I8 = stream.ReadValueS32(); //284
+            this.AffixType1 = (AffixType1)stream.ReadValueS32(); //288
+            this.I6 = stream.ReadValueS32(); //292
+            this.SNORareNamePrefixStringList = stream.ReadValueS32(); //296
+            this.SNORareNameSuffixStringList = stream.ReadValueS32(); //300
+            this.AffixFamily0 = stream.ReadValueS32(); //304
+            this.AffixFamily1 = stream.ReadValueS32(); //308
+            this.ExclusionCategory = stream.ReadValueS32(); //312
+            this.I7 = new int[6]; //316
             for (int i = 0; i < 6; i++)
                 this.I7[i] = stream.ReadValueS32();
-            this.ItemGroup = new int[6]; //336
+            this.ItemGroup = new int[6]; //340
             for (int i = 0; i < 6; i++)
                 this.ItemGroup[i] = stream.ReadValueS32();
-            this.QualityMask = (QualityMask)stream.ReadValueS32(); //360
-            this.AffixType2 = (AffixType2)stream.ReadValueS32(); //364
-            this.AssociatedAffix = stream.ReadValueS32(); //368
-            stream.Position += 4;
+            this.QualityMask = (QualityMask)stream.ReadValueS32(); //364
+            this.AffixType2 = (AffixType2)stream.ReadValueS32(); //368
+            this.AssociatedAffix = stream.ReadValueS32(); //372
             this.AttributeSpecifier = new AttributeSpecifier[4]; //376
             for (int i = 0; i < 4; i++)
                 this.AttributeSpecifier[i] = new AttributeSpecifier(stream);

@@ -29,12 +29,12 @@ namespace Mooege.Net.GS.Message.Definitions.Game
 
         public override void Parse(GameBitBuffer buffer)
         {
-            PlayerIndex = buffer.ReadInt(3);
+            PlayerIndex = buffer.ReadInt(4);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(3, PlayerIndex);
+            buffer.WriteInt(4, PlayerIndex);
         }
 
         public override void AsText(StringBuilder b, int pad)

@@ -43,35 +43,53 @@ namespace Mooege.Net.MooNet
         public static void Identify(IConnection connection, CodedInputStream stream)
         {
             var client = (MooNetClient) connection.Client;
-            var packet = new PacketIn(stream);
-                  
-            if(packet.ServiceId==ServiceReply)
+            var packet = new PacketIn(client, stream);
+
+            if (packet.Header.ServiceId == ServiceReply)
+                ProcessReply(client, packet);
+            else
+                ProcessMessage(client, stream, packet);           
+        }
+
+        private static void ProcessReply(MooNetClient client, PacketIn packet)
+        {
+            if (client.RPCCallbacks.ContainsKey(packet.Header.Token))
             {
-                var callback = client.RPCCallbacks.Dequeue();
-                
-                if (callback.RequestId == packet.RequestId) callback.Action(packet.ReadMessage(callback.Builder));
-                else Logger.Warn("RPC callback contains unexpected requestId: {0} where {1} was expected", callback.RequestId, packet.RequestId);
-                return;
+                var callback = client.RPCCallbacks[packet.Header.Token];
+                Logger.Trace("RPCReply => {0}", callback.Action.Target);
+
+                callback.Action(packet.ReadMessage(callback.Builder));
+                client.RPCCallbacks.Remove(packet.Header.Token);
             }
-            
-            var service = Service.GetByID(packet.ServiceId);
+            else
+            {
+                Logger.Warn("RPC callback contains unexpected token: {0}", packet.Header.Token);
+                client.Connection.Disconnect();
+            }
+        }
+
+        private static void ProcessMessage(MooNetClient client, CodedInputStream stream, PacketIn packet)
+        {
+            var service = Service.GetByID(packet.Header.ServiceId);
 
             if (service == null)
             {
-                Logger.Error("No service exists with id: 0x{0}", packet.ServiceId.ToString("X2"));
+                Logger.Error("No service exists with id: 0x{0}", packet.Header.ServiceId.ToString("X2"));
                 return;
             }
 
-            var method = service.DescriptorForType.Methods.Single(m => GetMethodId(m) == packet.MethodId);
+            var method = service.DescriptorForType.Methods.Single(m => GetMethodId(m) == packet.Header.MethodId);
             var proto = service.GetRequestPrototype(method);
-            var message = packet.ReadMessage(proto.WeakToBuilder());
+            var builder = proto.WeakCreateBuilderForType();
+            var message = builder.WeakMergeFrom(CodedInputStream.CreateInstance(packet.GetPayload(stream))).WeakBuild(); //var message = packet.ReadMessage(proto.WeakToBuilder()); // this method doesn't seem to work with 7728. /raist.
+            Logger.LogIncoming(message);
 
             try
             {
                 lock (service) // lock the service so that its in-context client does not get changed..
                 {
                     ((IServerService)service).Client = client;
-                    service.CallMethod(method, null, message, (msg => SendRPCResponse(connection, packet.RequestId, msg)));
+                    service.CallMethod(method, null, message, (msg => SendRPCResponse(client.Connection, packet.Header.Token, msg)));
                 }
             }
             catch (NotImplementedException)
@@ -93,9 +111,9 @@ namespace Mooege.Net.MooNet
             return (uint)method.Options[bnet.protocol.Rpc.MethodId.Descriptor];
         }
 
-        private static void SendRPCResponse(IConnection connection, int requestId, IMessage message)
+        private static void SendRPCResponse(IConnection connection, uint token, IMessage message)
         {
-            var packet = new PacketOut(ServiceReply, 0x0, requestId, message);
+            var packet = new PacketOut(ServiceReply, 0x0, token, message);
             connection.Send(packet);
         }
     }

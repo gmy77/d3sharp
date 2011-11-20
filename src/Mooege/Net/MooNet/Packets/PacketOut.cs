@@ -17,6 +17,7 @@
  */
 
 using System.IO;
+using Mooege.Common;
 using Mooege.Common.Extensions;
 using Google.ProtocolBuffers;
 
@@ -24,39 +25,43 @@ namespace Mooege.Net.MooNet.Packets
 {
     public class PacketOut
     {
-        public byte ServiceId { get; private set; }
-        public uint MethodId { get; private set; }
-        public int RequestId { get; private set; }
-        public ulong ObjectId { get; private set; }
-        public IMessage Message { get; private set; }
         public byte[] Data { get; private set; }
+        private static readonly Logger Logger = LogManager.CreateLogger();
 
-        public PacketOut(byte serviceId, uint methodId, int requestId, IMessage message)
-            : this(serviceId, methodId, requestId, 0x0, message)
+        public PacketOut(byte serviceId, uint methodId, uint token, IMessage message)
+            : this(serviceId, methodId, token, 0x0, message)
         {
         }
 
-        public PacketOut(byte serviceId, uint methodId, int requestId, ulong objectId, IMessage message)
+        public PacketOut(byte serviceId, uint methodId, uint token, ulong objectId, IMessage message)
         {
-            this.ServiceId = serviceId;
-            this.MethodId = methodId;
-            this.RequestId = requestId;
-            this.ObjectId = objectId;
+            var builder = bnet.protocol.Header.CreateBuilder()
+                .SetServiceId(serviceId)
+                .SetToken(token) // requestId.
+                .SetSize((uint)message.SerializedSize);
+
+            if (serviceId != MooNetRouter.ServiceReply)
+                builder.SetMethodId(methodId);
+
+            if (serviceId != MooNetRouter.ServiceReply && objectId != 0x0)
+                    builder.SetObjectId(objectId);
+
+            var header = builder.Build();
+            var headerSize = (short)(header.SerializedSize);
 
             using (var stream = new MemoryStream())
             {
                 var output = CodedOutputStream.CreateInstance(stream);
 
-                output.WriteRawByte(serviceId);
-                output.WriteInt32NoTag((int) methodId);
-                output.WriteInt16NoTag((short) requestId);
+                output.WriteRawByte((byte)(headerSize >> 8));
+                output.WriteRawByte((byte)((headerSize & 0xff)));
 
-                if (serviceId != 0xfe) output.WriteRawVarint64(this.ObjectId);
+                header.WriteTo(output);
+                message.WriteTo(output);
 
-                this.Message = message;
-                output.WriteMessageNoTag(message);
                 output.Flush();
                 this.Data = stream.ToArray();
+                Logger.LogOutgoing(message);
             }
         }
     }

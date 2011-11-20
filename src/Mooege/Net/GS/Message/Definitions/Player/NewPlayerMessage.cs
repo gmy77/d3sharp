@@ -25,7 +25,8 @@ namespace Mooege.Net.GS.Message.Definitions.Player
     public class NewPlayerMessage : GameMessage
     {
         public int PlayerIndex;
-        public string Field1;
+        public EntityId ToonId;
+        public EntityId GameAccountId;
         public string ToonName;
         public int Field3;
         public int Field4;
@@ -41,7 +42,10 @@ namespace Mooege.Net.GS.Message.Definitions.Player
         public override void Parse(GameBitBuffer buffer)
         {
             PlayerIndex = buffer.ReadInt(3);
-            Field1 = buffer.ReadCharArray(128);
+            ToonId = new EntityId();
+            ToonId.Parse(buffer);
+            GameAccountId = new EntityId();
+            GameAccountId.Parse(buffer);
             ToonName = buffer.ReadCharArray(101);
             Field3 = buffer.ReadInt(5) + (-1);
             Field4 = buffer.ReadInt(3) + (-1);
@@ -57,7 +61,8 @@ namespace Mooege.Net.GS.Message.Definitions.Player
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(3, PlayerIndex);
-            buffer.WriteCharArray(128, Field1);
+            ToonId.Encode(buffer);
+            GameAccountId.Encode(buffer);
             buffer.WriteCharArray(101, ToonName);
             buffer.WriteInt(5, Field3 - (-1));
             buffer.WriteInt(3, Field4 - (-1));
@@ -76,7 +81,8 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("PlayerIndex: 0x" + PlayerIndex.ToString("X8") + " (" + PlayerIndex + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: \"" + Field1 + "\"");
+            ToonId.AsText(b, pad);
+            GameAccountId.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("ToonName: \"" + ToonName + "\"");
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
             b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");

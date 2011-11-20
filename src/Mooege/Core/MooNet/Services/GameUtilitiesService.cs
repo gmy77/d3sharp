@@ -20,66 +20,78 @@ using System;
 using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Net.MooNet;
-using bnet.protocol;
-using bnet.protocol.game_utilities;
-using bnet.protocol.server_pool;
 
 namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x8, serviceName: "bnet.protocol.game_utilities.GameUtilities")]
-    public class GameUtilitiesService : GameUtilities,IServerService
+    public class GameUtilitiesService : bnet.protocol.game_utilities.GameUtilities,IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
 
-        public override void ProcessClientRequest(IRpcController controller, ClientRequest request, Action<ClientResponse> done)
+        public override void ProcessClientRequest(IRpcController controller, bnet.protocol.game_utilities.ClientRequest request, Action<bnet.protocol.game_utilities.ClientResponse> done)
         {
             Logger.Trace("ProcessClientRequest()");
 
             // TODO: handle the request. this is where banner changing happens (CustomMessageId 4)
             // CustomMessage for banner change is a D3.GameMessages.SaveBannerConfiguration
             //Logger.Debug("request:\n{0}", request.ToString());
-            
-            var builder = ClientResponse.CreateBuilder();
+
+            var builder = bnet.protocol.game_utilities.ClientResponse.CreateBuilder();
             done(builder.Build());
         }
 
-        public override void CreateToon(IRpcController controller, CreateToonRequest request, Action<CreateToonResponse> done)
+        public override void CreateToon(IRpcController controller, bnet.protocol.game_utilities.CreateToonRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void DeleteToon(IRpcController controller, DeleteToonRequest request, Action<NoData> done)
+        public override void DeleteToon(IRpcController controller, bnet.protocol.game_utilities.DeleteToonRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void TransferToon(IRpcController controller, TransferToonRequest request, Action<NoData> done)
+        public override void TransferToon(IRpcController controller, bnet.protocol.game_utilities.TransferToonRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void SelectToon(IRpcController controller, SelectToonRequest request, Action<NoData> done)
+        public override void SelectToon(IRpcController controller, bnet.protocol.game_utilities.SelectToonRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void PresenceChannelCreated(IRpcController controller, PresenceChannelCreatedRequest request, Action<NoData> done)
+        public override void PresenceChannelCreated(IRpcController controller, bnet.protocol.game_utilities.PresenceChannelCreatedRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void GetPlayerVariables(IRpcController controller, PlayerVariablesRequest request, Action<VariablesResponse> done)
+        public override void GetPlayerVariables(IRpcController controller, bnet.protocol.game_utilities.PlayerVariablesRequest request, Action<bnet.protocol.game_utilities.VariablesResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void GetGameVariables(IRpcController controller, GameVariablesRequest request, Action<VariablesResponse> done)
+        public override void GetGameVariables(IRpcController controller, bnet.protocol.game_utilities.GameVariablesRequest request, Action<bnet.protocol.game_utilities.VariablesResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void GetLoad(IRpcController controller, GetLoadRequest request, Action<ServerState> done)
+        public override void GetLoad(IRpcController controller, bnet.protocol.server_pool.GetLoadRequest request, Action<bnet.protocol.server_pool.ServerState> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void CreateToonEntity(IRpcController controller, bnet.protocol.toon.CreateToonEntityRequest request, Action<bnet.protocol.toon.CreateToonEntityResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void FinalizeToonCreation(IRpcController controller, bnet.protocol.toon.FinalizeToonCreationRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ProcessServerRequest(IRpcController controller, bnet.protocol.game_utilities.ServerRequest request, Action<bnet.protocol.game_utilities.ServerResponse> done)
         {
             throw new NotImplementedException();
         }

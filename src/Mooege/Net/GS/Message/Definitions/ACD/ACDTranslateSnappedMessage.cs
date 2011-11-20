@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Text;
 using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
@@ -38,7 +38,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             Field1.Parse(buffer);
             Field2 = buffer.ReadFloat32();
             Field3 = buffer.ReadBool();
-            Field4 = buffer.ReadInt(24);
+            Field4 = buffer.ReadInt(25);
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -47,7 +47,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             Field1.Encode(buffer);
             buffer.WriteFloat32(Field2);
             buffer.WriteBool(Field3);
-            buffer.WriteInt(24, Field4);
+            buffer.WriteInt(25, Field4);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -64,7 +64,5 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

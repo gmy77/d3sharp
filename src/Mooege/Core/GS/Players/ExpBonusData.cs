@@ -195,7 +195,6 @@ namespace Mooege.Core.GS.Players
             {
                 this._player.InGameClient.SendMessage(new KillCounterUpdateMessage()
                 {
-                    Id = 0xcd,
                     Field0 = bonusType,
                     Field1 = defeated,
                     Field2 = expBonus,

@@ -21,6 +21,7 @@ using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
+using bnet.protocol;
 using bnet.protocol.user_manager;
 
 namespace Mooege.Core.MooNet.Services
@@ -51,27 +52,42 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void ReportPlayer(IRpcController controller, ReportPlayerRequest request, Action<ReportPlayerResponse> done)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void BlockPlayer(IRpcController controller, BlockPlayerRequest request, Action<BlockPlayerResponse> done)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void RemovePlayerBlock(IRpcController controller, RemovePlayerBlockRequest request, Action<RemovePlayerBlockResponse> done)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void AddRecentPlayers(IRpcController controller, AddRecentPlayersRequest request, Action<AddRecentPlayersResponse> done)
         {
             throw new NotImplementedException();
         }
 
         public override void RemoveRecentPlayers(IRpcController controller, RemoveRecentPlayersRequest request, Action<RemoveRecentPlayersResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ReportToon(IRpcController controller, ReportToonRequest request, Action<ReportToonResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void BlockToon(IRpcController controller, BlockToonRequest request, Action<NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UnblockToons(IRpcController controller, UnblockToonsRequest request, Action<UnblockToonsResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ReportAccount(IRpcController controller, ReportAccountRequest request, Action<ReportAccountResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void IgnoreInviter(IRpcController controller, IgnoreInviterRequest request, Action<NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UnignoreInviters(IRpcController controller, UnignoreInvitersRequest request, Action<UnignoreInvitersResponse> done)
         {
             throw new NotImplementedException();
         }

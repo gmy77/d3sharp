@@ -73,7 +73,107 @@ namespace Mooege.Core.MooNet.Services
 
         public override void UpdateChannelState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateChannelStateRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("UpdateChannelState()");
+
+            // TODO: Should be actually applying changes on channel. /raist.
+
+            var channelState = bnet.protocol.channel.ChannelState.CreateBuilder();
+
+            foreach (bnet.protocol.attribute.Attribute attribute in request.StateChange.AttributeList)
+            {
+                if (attribute.Name == "D3.Party.GameCreateParams")
+                {
+                    if (attribute.HasValue && !attribute.Value.MessageValue.IsEmpty) //Sometimes not present -Egris
+                    {
+                        var gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
+
+                        var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                            .SetName("D3.Party.GameCreateParams")
+                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameCreateParams.ToByteString()).Build());
+                        channelState.AddAttribute(attr);
+                    }
+                }
+                else if (attribute.Name == "D3.Party.SearchForPublicGame.Params")
+                {
+                    //TODO: Find a game that fits the clients params and join
+                    var publicGameParams = D3.PartyMessage.SearchForPublicGameParams.ParseFrom(attribute.Value.MessageValue);
+                    Logger.Warn("SearchForPublicGameParams: {0}", publicGameParams.ToString());
+                }
+                else if (attribute.Name == "D3.Party.ScreenStatus")
+                {
+                    if (!attribute.HasValue || attribute.Value.MessageValue.IsEmpty) //Sometimes not present -Egris
+                    {
+                        var newScreen = this.Client.Account.ScreenStatus;
+
+                        var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                            .SetName("D3.Party.ScreenStatus")
+                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(newScreen.ToByteString()));
+                        channelState.AddAttribute(attr);
+                    }
+                    else
+                    {
+                        var oldScreen = D3.PartyMessage.ScreenStatus.ParseFrom(attribute.Value.MessageValue);
+                        this.Client.Account.ScreenStatus = oldScreen;
+                        //save screen status for use with friends -Egris
+                        var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                            .SetName("D3.Party.ScreenStatus")
+                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(oldScreen.ToByteString()));
+                        channelState.AddAttribute(attr);
+                        Logger.Debug("Client moving to Screen: {0}, with Status: {1}", oldScreen.Screen, oldScreen.Status);
+                    }
+                }
+                else if (attribute.Name == "D3.Party.JoinPermissionPreviousToLock")
+                {
+                    //0-CLOSED
+                    //1-ASK_TO_JOIN
+                    var joinPermission = attribute.Value;
+                    var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                        .SetName("D3.Party.JoinPermissionPreviousToLock")
+                        .SetValue(joinPermission);
+                    channelState.AddAttribute(attr);
+                }
+                else if (attribute.Name == "D3.Party.LockReasons")
+                {
+                    //0-CREATING_GAME
+                    //2-MATCHMAKER_SEARCHING
+                    var lockReason = attribute.Value;
+                    var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                        .SetName("D3.Party.LockReasons")
+                        .SetValue(lockReason);
+                    channelState.AddAttribute(attr);
+                }
+                else if (attribute.Name == "D3.Party.GameId")
+                {
+                    if (attribute.HasValue && !attribute.Value.MessageValue.IsEmpty) //Sometimes not present -Egris
+                    {
+                        var gameId = D3.OnlineService.GameId.ParseFrom(attribute.Value.MessageValue);
+                        var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                            .SetName("D3.Party.GameId")
+                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameId.ToByteString()).Build());
+                        channelState.AddAttribute(attr);
+                    }
+
+                }
+                else
+                {
+                    Logger.Warn("UpdateChannelState(): Unknown attribute: {0}", attribute.Name);
+                }
+            }
+
+            var builder = bnet.protocol.NoData.CreateBuilder();
+            done(builder.Build());
+
+            if (request.StateChange.HasPrivacyLevel)
+                channelState.PrivacyLevel = request.StateChange.PrivacyLevel;
+
+            var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
+                .SetAgentId(this.Client.CurrentToon.BnetEntityID)
+                .SetStateChange(channelState)
+                .Build();
+
+            // Send UpdateChannelStateNotification RPC
+            this.Client.MakeTargetedRPC(this.Client.CurrentChannel, () =>
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notification, callback => { }));
         }
 
         public override void UpdateMemberState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateMemberStateRequest request, System.Action<bnet.protocol.NoData> done)

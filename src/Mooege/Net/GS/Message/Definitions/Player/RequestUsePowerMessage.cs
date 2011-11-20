@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
+    /* TODO: Fixme
     [Message(Opcodes.RequestUsePowerMessage, Consumers.Player)]
     public class RequestUsePowerMessage : GameMessage
     {
@@ -30,6 +31,6 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
     }
+     */
 }

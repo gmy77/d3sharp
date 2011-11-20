@@ -20,8 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using Google.ProtocolBuffers;
-using Google.ProtocolBuffers.Descriptors;
 using Mooege.Common;
 using Mooege.Net.MooNet.Packets;
 
@@ -32,7 +30,7 @@ namespace Mooege.Net
         protected static readonly Logger Logger = LogManager.CreateLogger();
 
         private readonly Server _server;
-        private readonly Socket _socket;
+        public  Socket _Socket { get; private set; }
         private readonly byte[] _recvBuffer = new byte[BufferSize];
         public static readonly int BufferSize = 16 * 1024; // 16 KB       
 
@@ -44,24 +42,24 @@ namespace Mooege.Net
             if (socket == null) throw new ArgumentNullException("socket");
 
             this._server = server;
-            this._socket = socket;
+            this._Socket = socket;
         }       
 
         #region socket stuff
 
         public bool IsConnected
         {
-            get { return _socket.Connected; }
+            get { return _Socket.Connected; }
         }
 
         public IPEndPoint RemoteEndPoint
         {
-            get { return _socket.RemoteEndPoint as IPEndPoint; }
+            get { return _Socket.RemoteEndPoint as IPEndPoint; }
         }
 
         public IPEndPoint LocalEndPoint
         {
-            get { return _socket.LocalEndPoint as IPEndPoint; }
+            get { return _Socket.LocalEndPoint as IPEndPoint; }
         }
 
         public byte[] RecvBuffer
@@ -71,17 +69,17 @@ namespace Mooege.Net
 
         public Socket Socket
         {
-            get { return _socket; }
+            get { return _Socket; }
         }
 
         public IAsyncResult BeginReceive(AsyncCallback callback, object state)
         {
-            return _socket.BeginReceive(_recvBuffer, 0, BufferSize, SocketFlags.None, callback, state);
+            return _Socket.BeginReceive(_recvBuffer, 0, BufferSize, SocketFlags.None, callback, state);
         }
 
         public int EndReceive(IAsyncResult result)
         {
-            return _socket.EndReceive(result);
+            return _Socket.EndReceive(result);
         }
 
         public int Send(PacketOut packet)
@@ -134,8 +132,8 @@ namespace Mooege.Net
 
         public override string ToString()
         {
-            if (_socket.RemoteEndPoint != null)
-                return _socket.RemoteEndPoint.ToString();
+            if (_Socket.RemoteEndPoint != null)
+                return _Socket.RemoteEndPoint.ToString();
             else
                 return "Not Connected";
         }

@@ -263,8 +263,9 @@ namespace Mooege.Core.GS.Games
                                 Field3 = 0x0,
                                 Field4 = 0x0,
                                 Field5 = 0x0,
-                                Field6 = new[] {0x0, 0x0},
-                                Field7 = new[] {0x0, 0x0}
+                                Field6 = 0x0,
+                                Field7 = new[] {0x0, 0x0},
+                                Field8 = new[] {0x0, 0x0}
                             }
             });
 
@@ -299,7 +300,8 @@ namespace Mooege.Core.GS.Games
             target.InGameClient.SendMessage(new NewPlayerMessage
             {
                 PlayerIndex = joinedPlayer.PlayerIndex, // player index
-                Field1 = "", //Owner name?
+                ToonId = new EntityId() { High = (long)joinedPlayer.Toon.BnetEntityID.High, Low = (long)joinedPlayer.Toon.BnetEntityID.Low }, //Toon
+                GameAccountId = new EntityId() { High = (long)joinedPlayer.Toon.Owner.BnetGameAccountID.High, Low = (long)joinedPlayer.Toon.Owner.BnetGameAccountID.Low }, //GameAccount
                 ToonName = joinedPlayer.Toon.Name,
                 Field3 = 0x00000002, //party frame class
                 Field4 = target!=joinedPlayer? 0x2 : 0x4, //party frame level /boyc - may mean something different /raist.

@@ -21,8 +21,8 @@ using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Net.MooNet;
 using bnet.protocol;
-using bnet.protocol.exchange;
 using bnet.protocol.exchange_object_provider;
+using bnet.protocol.exchange_risk;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -32,132 +32,87 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
 
-        public override void GetConfiguration(IRpcController controller, GetConfigurationRequest request, Action<GetConfigurationResponse> done)
+        public override void GetConfiguration(IRpcController controller, bnet.protocol.exchange.GetConfigurationRequest request, Action<bnet.protocol.exchange.GetConfigurationResponse> done)
         {
             Logger.Trace("GetConfiguration()");
             //TODO: Figure out what the buyout rules/specialist values are, and if they are related /dustinconrad
-            var builder = GetConfigurationResponse.CreateBuilder()
-                .AddConfigs(SpecialistConfig.CreateBuilder()
+            var builder = bnet.protocol.exchange.GetConfigurationResponse.CreateBuilder()
+                .AddConfigs(bnet.protocol.exchange.SpecialistConfig.CreateBuilder()
                     .SetSpecialist(1)
                     .AddAuctionDurations(720)
                     .AddAuctionDurations(1440)
                     .AddAuctionDurations(2880)
                     .AddAuctionStartDelays(5)
                     .SetAntiSnipingExtensionDelay(1)
-                    .AddCurrencyConfig(CurrencyConfig.CreateBuilder()
+                    .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
                         .SetCurrency("D3_GOLD")
                         .SetTickSize(1)
-                        .SetFlatOutbidIncr(1)
-                        .SetScaleOutbidIncr(10)
-                        .SetMinStartingUnitPrice(5)
-                        .SetMaxStartingUnitPrice(4294967295)
+                        .SetMinUnitPrice(5)
                         .SetMaxUnitPrice(4294967295)
-                        .SetMaxTotalAmount(281474976710655)
-                        .SetBuyoutRule(1))
-                    .AddCurrencyConfig(CurrencyConfig.CreateBuilder()
-                        .SetCurrency("USD")
-                        .SetTickSize(2)
-                        .SetFlatOutbidIncr(2)
-                        .SetScaleOutbidIncr(10)
-                        .SetMinStartingUnitPrice(30)
-                        .SetMaxStartingUnitPrice(4294967295)
-                        .SetMaxUnitPrice(4294967295)
-                        .SetMaxTotalAmount(281474976710655)
-                        .SetBuyoutRule(1)))
-                .AddConfigs(SpecialistConfig.CreateBuilder()
-                    .SetSpecialist(2)
-                    .AddAuctionDurations(2880)
-                    .AddAuctionDurations(10080)
-                    .AddAuctionStartDelays(0)
-                    .SetAntiSnipingExtensionDelay(0)
-                    .AddCurrencyConfig(CurrencyConfig.CreateBuilder()
-                        .SetCurrency("D3_GOLD")
-                        .SetTickSize(1)
-                        .SetFlatOutbidIncr(1)
-                        .SetScaleOutbidIncr(10)
-                        .SetMinStartingUnitPrice(5)
-                        .SetMaxStartingUnitPrice(4294967295)
-                        .SetMaxUnitPrice(4294967295)
-                        .SetMaxTotalAmount(281474976710655)
-                        .SetBuyoutRule(2))
-                    .AddCurrencyConfig(CurrencyConfig.CreateBuilder()
-                        .SetCurrency("USD")
-                        .SetTickSize(2)
-                        .SetFlatOutbidIncr(2)
-                        .SetScaleOutbidIncr(10)
-                        .SetMinStartingUnitPrice(30)
-                        .SetMaxStartingUnitPrice(4294967295)
-                        .SetMaxUnitPrice(4294967295)
-                        .SetMaxTotalAmount(281474976710655)
-                        .SetBuyoutRule(2)));
+                        .SetMaxTotalPrice(4294967295)));
             done(builder.Build());
         }
 
-        public override void SubscribeOrderStatusChange(IRpcController controller, SubscribeOrderStatusChangeRequest request, Action<NoData> done)
+        public override void SubscribeOrderStatusChange(IRpcController controller, bnet.protocol.exchange.SubscribeOrderStatusChangeRequest request, Action<NoData> done)
         {
             Logger.Trace("SubscribeOrderStatusChange() Stub");
             var builder = NoData.CreateBuilder();
             done(builder.Build());
         }
 
-        public override void UnsubscribeOrderStatusChange(IRpcController controller, UnsubscribeOrderStatusChangeRequest request, Action<NoData> done)
+        public override void UnsubscribeOrderStatusChange(IRpcController controller, bnet.protocol.exchange.UnsubscribeOrderStatusChangeRequest request, Action<NoData> done)
         {
             Logger.Trace("UnsubscribeOrderStatusChange() Stub");
             var builder = NoData.CreateBuilder();
             done(builder.Build());
         }
 
-        public override void CreateOrderBook(IRpcController controller, CreateOrderBookRequest request, Action<CreateOrderBookResponse> done)
+        public override void CreateOrderBook(IRpcController controller, bnet.protocol.exchange.CreateOrderBookRequest request, Action<bnet.protocol.exchange.CreateOrderBookResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void PlaceOfferOnOrderBook(IRpcController controller, PlaceOfferOnOrderBookRequest request, Action<PlaceOfferOnOrderBookResponse> done)
+        public override void PlaceOfferOnOrderBook(IRpcController controller, bnet.protocol.exchange.PlaceOfferOnOrderBookRequest request, Action<bnet.protocol.exchange.PlaceOfferOnOrderBookResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void PlaceOfferCreateOrderBookIfNeeded(IRpcController controller, PlaceOfferCreateOrderBookIfNeededRequest request, Action<PlaceOfferCreateOrderBookIfNeededResponse> done)
+        public override void PlaceOfferCreateOrderBookIfNeeded(IRpcController controller, bnet.protocol.exchange.PlaceOfferCreateOrderBookIfNeededRequest request, Action<bnet.protocol.exchange.PlaceOfferCreateOrderBookIfNeededResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void PlaceBidOnOrderBook(IRpcController controller, PlaceBidOnOrderBookRequest request, Action<PlaceBidOnOrderBookResponse> done)
+        public override void PlaceBidOnOrderBook(IRpcController controller, bnet.protocol.exchange.PlaceBidOnOrderBookRequest request, Action<bnet.protocol.exchange.PlaceBidOnOrderBookResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void PlaceBidCreateOrderBookIfNeeded(IRpcController controller, PlaceBidCreateOrderBookIfNeededRequest request, Action<PlaceBidCreateOrderBookIfNeededResponse> done)
+        public override void PlaceBidCreateOrderBookIfNeeded(IRpcController controller, bnet.protocol.exchange.PlaceBidCreateOrderBookIfNeededRequest request, Action<bnet.protocol.exchange.PlaceBidCreateOrderBookIfNeededResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void QueryOffersByOrderBook(IRpcController controller, QueryOffersByOrderBookRequest request, Action<QueryOffersByOrderBookResponse> done)
+        public override void QueryOffersByOrderBook(IRpcController controller, bnet.protocol.exchange.QueryOffersByOrderBookRequest request, Action<bnet.protocol.exchange.QueryOffersByOrderBookResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void QueryBidsByOrderBook(IRpcController controller, QueryBidsByOrderBookRequest request, Action<QueryBidsByOrderBookResponse> done)
+        public override void QueryBidsByOrderBook(IRpcController controller, bnet.protocol.exchange.QueryBidsByOrderBookRequest request, Action<bnet.protocol.exchange.QueryBidsByOrderBookResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void QueryOffersByAccountForItem(IRpcController controller, QueryOffersByAccountForItemRequest request, Action<QueryOffersByAccountForItemResponse> done)
+        public override void QueryOffersByAccountForItem(IRpcController controller, bnet.protocol.exchange.QueryOffersByAccountForItemRequest request, Action<bnet.protocol.exchange.QueryOffersByAccountForItemResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void QueryBidsByAccountForItem(IRpcController controller, QueryBidsByAccountForItemRequest request, Action<QueryBidsByAccountForItemResponse> done)
+        public override void QueryBidsByAccountForItem(IRpcController controller, bnet.protocol.exchange.QueryBidsByAccountForItemRequest request, Action<bnet.protocol.exchange.QueryBidsByAccountForItemResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void QueryOrderBooksSummary(IRpcController controller, QueryOrderBooksSummaryRequest request, Action<QueryOrderBooksSummaryResponse> done)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void QuerySettlementsByOrderBook(IRpcController controller, QuerySettlementsByOrderBookRequest request, Action<QuerySettlementsByOrderBookResponse> done)
+        public override void QueryOrderBooksSummary(IRpcController controller, bnet.protocol.exchange.QueryOrderBooksSummaryRequest request, Action<bnet.protocol.exchange.QueryOrderBooksSummaryResponse> done)
         {
             throw new NotImplementedException();
         }
@@ -177,12 +132,12 @@ namespace Mooege.Core.MooNet.Services
             throw new NotImplementedException();
         }
 
-        public override void SubscribeOrderBookStatusChange(IRpcController controller, SubscribeOrderBookStatusChangeRequest request, Action<NoData> done)
+        public override void SubscribeOrderBookStatusChange(IRpcController controller, bnet.protocol.exchange.SubscribeOrderBookStatusChangeRequest request, Action<NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void UnsubscribeOrderBookStatusChange(IRpcController controller, UnsubscribeOrderBookStatusChangeRequest request, Action<NoData> done)
+        public override void UnsubscribeOrderBookStatusChange(IRpcController controller, bnet.protocol.exchange.UnsubscribeOrderBookStatusChangeRequest request, Action<NoData> done)
         {
             throw new NotImplementedException();
         }
@@ -192,42 +147,72 @@ namespace Mooege.Core.MooNet.Services
             throw new NotImplementedException();
         }
 
-        public override void ClaimBidItem(IRpcController controller, ClaimRequest request, Action<NoData> done)
+        public override void ClaimBidItem(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ClaimBidMoney(IRpcController controller, ClaimRequest request, Action<NoData> done)
+        public override void ClaimBidMoney(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ClaimOfferItem(IRpcController controller, ClaimRequest request, Action<NoData> done)
+        public override void ClaimOfferItem(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ClaimOfferMoney(IRpcController controller, ClaimRequest request, Action<NoData> done)
+        public override void ClaimOfferMoney(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void CancelBid(IRpcController controller, CancelRequest request, Action<NoData> done)
+        public override void CancelBid(IRpcController controller, bnet.protocol.exchange.CancelRequest request, Action<NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void CancelOffer(IRpcController controller, CancelRequest request, Action<NoData> done)
+        public override void CancelOffer(IRpcController controller, bnet.protocol.exchange.CancelRequest request, Action<NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void GetBidFeeEstimation(IRpcController controller, GetBidFeeEstimationRequest request, Action<GetFeeEstimationResponse> done)
+        public override void GetBidFeeEstimation(IRpcController controller, bnet.protocol.exchange.GetBidFeeEstimationRequest request, Action<bnet.protocol.exchange.GetFeeEstimationResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void GetOfferFeeEstimation(IRpcController controller, GetOfferFeeEstimationRequest request, Action<GetFeeEstimationResponse> done)
+        public override void GetOfferFeeEstimation(IRpcController controller, bnet.protocol.exchange.GetOfferFeeEstimationRequest request, Action<bnet.protocol.exchange.GetFeeEstimationResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void QueryOrdersByAccountForItem(IRpcController controller, bnet.protocol.exchange.QueryOrdersByAccountForItemRequest request, Action<bnet.protocol.exchange.QueryOrdersByAccountForItemResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ReportAuthorizeRiskVerdict(IRpcController controller, ReportAuthorizeRiskVerdictRequest request, Action<NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ReportSettleRiskVerdict(IRpcController controller, ReportSettleRiskVerdictRequest request, Action<NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DelaySettleRiskVerdict(IRpcController controller, DelaySettleRiskVerdictRequest request, Action<NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void GetFeeDetails(IRpcController controller, bnet.protocol.exchange.GetFeeDetailsRequest request, Action<bnet.protocol.exchange.GetFeeDetailsResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void GetOrderBookStatistics(IRpcController controller, bnet.protocol.exchange.GetOrderBookStatisticsRequest request, Action<bnet.protocol.exchange.GetOrderBookStatisticsResponse> done)
         {
             throw new NotImplementedException();
         }

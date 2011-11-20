@@ -34,7 +34,7 @@ namespace Mooege.Core.MooNet.Services
         
         public override void Logon(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.LogonRequest request, Action<bnet.protocol.authentication.LogonResponse> done)
         {
-            Logger.Trace("LogonRequest(); Email={0}", request.Email);
+            Logger.Trace("LogonRequest(): Email={0}", request.Email);
 
             // we should be also checking here version, program, locale and similar stuff /raist.
 
@@ -44,7 +44,7 @@ namespace Mooege.Core.MooNet.Services
             {
                 this.Client.AuthenticationCompleteSignal.WaitOne(); // wait the signal;
 
-                if(this.Client.AuthenticationErrorCode != MooNetClient.AuthenticationErrorCodes.None)
+                if(this.Client.AuthenticationErrorCode != AuthManager.AuthenticationErrorCodes.None)
                 {
                     Logger.Info("Authentication failed for {0} because of invalid credentals.", request.Email);
                     done(bnet.protocol.authentication.LogonResponse.DefaultInstance);
@@ -52,12 +52,14 @@ namespace Mooege.Core.MooNet.Services
                 }
 
                 Logger.Info("User {0} authenticated successfuly.", request.Email);
-                var builder = bnet.protocol.authentication.LogonResponse.
+                var logonResponseBuilder = bnet.protocol.authentication.LogonResponse.
                     CreateBuilder()
                     .SetAccount(Client.Account.BnetAccountID)
                     .SetGameAccount(Client.Account.BnetGameAccountID);
 
-                done(builder.Build());
+                done(logonResponseBuilder.Build());
+
+                this.Client.EnableEncryption();
 
                 PlayerManager.PlayerConnected(this.Client);
 
@@ -70,6 +72,8 @@ namespace Mooege.Core.MooNet.Services
         {
             var moduleMessage = request.Message.ToByteArray();
             var command = moduleMessage[0];
+
+            Logger.Trace("ModuleMessage(): command: {0}", command);
 
             done(bnet.protocol.NoData.CreateBuilder().Build());
 
