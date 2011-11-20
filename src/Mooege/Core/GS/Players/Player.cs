@@ -736,7 +736,7 @@ namespace Mooege.Core.GS.Players
 
                 if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player 
                     || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment 
-                    || actor.ActorType == ActorType.Critter || actor.ActorType == ActorType.Item)
+                    || actor.ActorType == ActorType.Critter || actor.ActorType == ActorType.Item || actor.ActorType == ActorType.ServerProp)
                     actor.Reveal(this);
             }
         }

@@ -16,29 +16,36 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Core.GS.Actors.Interactions;
-using Mooege.Core.GS.Common.Types.TagMap;
+using System.Collections.Generic;
 using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Players;
+using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Artisan;
+using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Actors.Implementations.Artisans
 {
-    public class Artisan : InteractiveNPC
+    [HandledSNO(0x0002FA63 /* PT_Blacksmith_ForgeWeaponShortcut.acr */,
+        0x0002FA64 /*PT_Blacksmith_ForgeArmorShortcut.acr */,
+        0x0002FA62 /*PT_Blacksmith_RepairShortcut.acr */, 
+        212519 /* Actor PT_Jeweler_AddSocketShortcut */,
+        212517 /* Actor PT_Jeweler_CombineShortcut */,
+        212521 /* Actor PT_Jeweler_RemoveGemShortcut */,
+        212511 /* Actor PT_Mystic_EnhanceShortcut */,
+        212510 /* Actor PT_Mystic_IdentifyShortcut */)]
+    public class ArtisanShortcut : InteractiveNPC
     {
-        public Artisan(World world, int snoId, TagMap tags)
+        public ArtisanShortcut(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Attributes[GameAttribute.MinimapActive] = true;
-
-            Interactions.Add(new CraftInteraction());
+            Attributes[GameAttribute.MinimapActive] = false;
+            Attributes[GameAttribute.Conversation_Icon, 0] = 0;
         }
 
-        public override void OnCraft(Player player)
+        public override void OnTargeted(Player player, TargetMessage message)
         {
             player.InGameClient.SendMessage(new OpenArtisanWindowMessage() { ArtisanID = this.DynamicID });
         }
-
     }
 }
