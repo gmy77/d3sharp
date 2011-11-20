@@ -85,8 +85,8 @@
     <Field Offset="28" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="13" Name="Quaternion">
-    <Field Type="DT_FLOAT#5" Offset="12" Flags="1" EncodedBits="32" />
     <Field Type="Vector3D#4" Offset="0" Flags="1" />
+    <Field Type="DT_FLOAT#5" Offset="12" Flags="1" EncodedBits="32" />
     <Field Offset="16" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="14" Name="Sphere">
@@ -259,8 +259,8 @@
   </StructureDescriptor>
   <StructureDescriptor Index="40" Name="AngularVelocityPath" UnkValue="1">
     <Field Type="InterpolationPathHeader#41" Offset="0" Flags="1" />
-    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="AngularVelocityNode#43" VariableOffset="4" />
+    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="41" Name="InterpolationPathHeader">
@@ -286,8 +286,8 @@
   <BasicDescriptor Index="44" Name="DT_ANGULARVELOCITY" />
   <StructureDescriptor Index="45" Name="AccelVectorPath" UnkValue="1">
     <Field Type="InterpolationPathHeader#41" Offset="0" Flags="1" />
-    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="AccelVectorNode#46" VariableOffset="4" />
+    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="46" Name="AccelVectorNode">
@@ -305,8 +305,8 @@
   <BasicDescriptor Index="48" Name="DT_ACCEL" />
   <StructureDescriptor Index="49" Name="VelocityVectorPath" UnkValue="1">
     <Field Type="InterpolationPathHeader#41" Offset="0" Flags="1" />
-    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="VelocityVectorNode#50" VariableOffset="4" />
+    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="50" Name="VelocityVectorNode">
@@ -324,8 +324,8 @@
   <BasicDescriptor Index="52" Name="DT_VELOCITY" />
   <StructureDescriptor Index="53" Name="AccelPath" UnkValue="1">
     <Field Type="InterpolationPathHeader#41" Offset="0" Flags="1" />
-    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="AccelNode#54" VariableOffset="4" />
+    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="54" Name="AccelNode">
@@ -336,8 +336,8 @@
   </StructureDescriptor>
   <StructureDescriptor Index="55" Name="VelocityPath" UnkValue="1">
     <Field Type="InterpolationPathHeader#41" Offset="0" Flags="1" />
-    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="VelocityNode#56" VariableOffset="4" />
+    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="56" Name="VelocityNode">
@@ -348,8 +348,8 @@
   </StructureDescriptor>
   <StructureDescriptor Index="57" Name="TimePath" UnkValue="1">
     <Field Type="InterpolationPathHeader#41" Offset="0" Flags="1" />
-    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="TimeNode#58" VariableOffset="4" />
+    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="58" Name="TimeNode">
@@ -361,8 +361,8 @@
   <BasicDescriptor Index="59" Name="DT_TIME" />
   <StructureDescriptor Index="60" Name="AnglePath" UnkValue="1">
     <Field Type="InterpolationPathHeader#41" Offset="0" Flags="1" />
-    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="AngleNode#61" VariableOffset="4" />
+    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="61" Name="AngleNode">
@@ -374,8 +374,8 @@
   <BasicDescriptor Index="62" Name="DT_ANGLE" />
   <StructureDescriptor Index="63" Name="ColorPath" UnkValue="1">
     <Field Type="InterpolationPathHeader#41" Offset="0" Flags="1" />
-    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="ColorNode#64" VariableOffset="4" />
+    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="64" Name="ColorNode">
@@ -386,8 +386,8 @@
   </StructureDescriptor>
   <StructureDescriptor Index="65" Name="VectorPath" UnkValue="1">
     <Field Type="InterpolationPathHeader#41" Offset="0" Flags="1" />
-    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="VectorNode#66" VariableOffset="4" />
+    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="66" Name="VectorNode">
@@ -398,8 +398,8 @@
   </StructureDescriptor>
   <StructureDescriptor Index="67" Name="IntPath" UnkValue="1">
     <Field Type="InterpolationPathHeader#41" Offset="0" Flags="1" />
-    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="IntNode#68" VariableOffset="4" />
+    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="68" Name="IntNode">
@@ -410,8 +410,8 @@
   </StructureDescriptor>
   <StructureDescriptor Index="69" Name="FloatPath" UnkValue="1">
     <Field Type="InterpolationPathHeader#41" Offset="0" Flags="1" />
-    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="FloatNode#70" VariableOffset="4" />
+    <Field Name="serNodes" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="70" Name="FloatNode">
@@ -421,20 +421,20 @@
     <Field Offset="12" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="71" Name="PolytopeData">
-    <Field Type="dmFloat3#72" Offset="32" Flags="1" />
-    <Field Name="serVertices" Type="SerializeData#2" Offset="64" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="0" Flags="1" SubType="dmFloat3#72" VariableOffset="64" />
-    <Field Name="serPlanes" Type="SerializeData#2" Offset="72" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="8" Flags="1" SubType="dmPlane#73" VariableOffset="64" />
-    <Field Name="serSubEdges" Type="SerializeData#2" Offset="80" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="16" Flags="1" SubType="dmSubEdge#74" VariableOffset="64" />
-    <Field Name="serFaceSubEdges" Type="SerializeData#2" Offset="88" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="24" Flags="1" SubType="DT_BYTE#38" VariableOffset="64" />
+    <Field Type="dmFloat3#72" Offset="32" Flags="1" />
     <Field Type="DT_INT#1" Offset="44" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="48" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="52" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="56" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="60" Flags="1" EncodedBits="32" />
+    <Field Name="serVertices" Type="SerializeData#2" Offset="64" Flags="0" />
+    <Field Name="serPlanes" Type="SerializeData#2" Offset="72" Flags="0" />
+    <Field Name="serSubEdges" Type="SerializeData#2" Offset="80" Flags="0" />
+    <Field Name="serFaceSubEdges" Type="SerializeData#2" Offset="88" Flags="0" />
     <Field Offset="96" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="72" Name="dmFloat3">
@@ -475,15 +475,15 @@
     <Field Type="Matrix4x4#25" Offset="4" Flags="1" />
     <Field Type="DT_FLOAT#5" Offset="68" Flags="1" EncodedBits="32" />
     <Field Type="DT_VELOCITY#52" Offset="72" Flags="1" EncodedBits="32" />
-    <Field Type="DT_VELOCITY#52" Offset="80" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="76" Flags="1" EncodedBits="32" />
+    <Field Type="DT_VELOCITY#52" Offset="80" Flags="1" EncodedBits="32" />
     <Field Type="DT_ANGLE#62" Offset="84" Flags="1" EncodedBits="32" />
     <Field Type="DT_ANGULARVELOCITY#44" Offset="88" Flags="1" EncodedBits="32" />
     <Field Type="DT_ANGLE#62" Offset="92" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="96" Flags="1" EncodedBits="32" />
     <Field Type="DT_VELOCITY#52" Offset="100" Flags="1" EncodedBits="32" />
-    <Field Type="DT_VELOCITY#52" Offset="108" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="104" Flags="1" EncodedBits="32" />
+    <Field Type="DT_VELOCITY#52" Offset="108" Flags="1" EncodedBits="32" />
     <Field Type="DT_ANGLE#62" Offset="112" Flags="1" EncodedBits="32" />
     <Field Type="DT_ANGULARVELOCITY#44" Offset="116" Flags="1" EncodedBits="32" />
     <Field Type="DT_ANGLE#62" Offset="120" Flags="1" EncodedBits="32" />
@@ -520,8 +520,8 @@
     <Field Offset="8" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="80" Name="UberMaterial">
-    <Field Type="Material#81" Offset="4" Flags="1" />
     <Field Name="snoShaderMap" Type="DT_SNO#82" Offset="0" Flags="1" EncodedBits="32" SnoType="36" />
+    <Field Type="Material#81" Offset="4" Flags="1" />
     <Field Name="serMatTexList" Type="SerializeData#2" Offset="76" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="88" Flags="33" SubType="MaterialTextureEntry#83" VariableOffset="-12" />
     <Field Offset="104" Flags="0" />
@@ -561,19 +561,13 @@
     <Field Name="dwWidth" Type="DT_INT#1" Offset="20" Flags="0" EncodedBits="32" />
     <Field Name="dwHeight" Type="DT_INT#1" Offset="24" Flags="0" EncodedBits="32" />
     <Field Name="dwFaceCount" Type="DT_INT#1" Offset="28" Flags="0" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="32" Flags="1" EncodedBits="32" />
     <Field Name="dwMipMapLevelMax" Type="DT_INT#1" Offset="36" Flags="0" EncodedBits="32" />
     <Field Type="DT_FIXEDARRAY#20" Offset="40" Flags="0" SubType="SerializeData#2" ArrayLength="60" />
     <Field Type="DT_INT#1" Offset="520" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="32" Flags="1" EncodedBits="32" />
-    <Field Type="DT_CHARARRAY#24" Offset="592" Flags="1" ArrayLength="256" EncodedBits="9" />
-    <Field Name="serImageFileIDs" Type="SerializeData#2" Offset="852" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="848" Flags="1" SubType="ImageFileID#88" VariableOffset="4" />
     <Field Name="serFrame" Type="SerializeData#2" Offset="524" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="532" Flags="1" SubType="TexFrame#78" VariableOffset="-8" />
     <Field Type="IVector2D#35" Offset="536" Flags="1" />
-    <Field Type="DT_INT#1" Offset="860" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="864" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="868" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="544" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="548" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="552" Flags="1" EncodedBits="32" />
@@ -582,6 +576,12 @@
     <Field Type="DT_BYTE#38" Offset="572" Flags="1" EncodedBits="8" />
     <Field Type="DT_BYTE#38" Offset="573" Flags="1" EncodedBits="8" />
     <Field Type="DT_BYTE#38" Offset="574" Flags="1" EncodedBits="8" />
+    <Field Type="DT_CHARARRAY#24" Offset="592" Flags="1" ArrayLength="256" EncodedBits="9" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="848" Flags="1" SubType="ImageFileID#88" VariableOffset="4" />
+    <Field Name="serImageFileIDs" Type="SerializeData#2" Offset="852" Flags="0" />
+    <Field Type="DT_INT#1" Offset="860" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="864" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="868" Flags="1" EncodedBits="32" />
     <Field Offset="872" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="88" Name="ImageFileID">
@@ -662,13 +662,13 @@
   </StructureDescriptor>
   <StructureDescriptor Index="98" Name="EffectGroup" UnkValue="1">
     <Field Type="DT_INT#1" Offset="12" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="40" Flags="1" EncodedBits="32" />
+    <Field Name="serEffects" Type="SerializeData#2" Offset="16" Flags="0" />
+    <Field Type="DT_INT#1" Offset="24" Flags="1" EncodedBits="32" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="EffectItem#99" VariableOffset="-12" />
     <Field Type="DT_INT#1" Offset="32" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="36" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="24" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="40" Flags="1" EncodedBits="32" />
     <Field Name="snoPower" Type="DT_SNO#82" Offset="44" Flags="1" EncodedBits="32" SnoType="29" />
-    <Field Name="serEffects" Type="SerializeData#2" Offset="16" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="28" Flags="1" SubType="EffectItem#99" VariableOffset="-12" />
     <Field Offset="304" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="99" Name="EffectItem">
@@ -689,6 +689,8 @@
     <Field Type="SNOName#104" Offset="44" Flags="1" />
     <Field Type="DT_INT#1" Offset="52" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="56" Flags="1" EncodedBits="32" />
+    <Field Name="eRuneType" Type="DT_INT#1" Offset="60" Flags="0" EncodedBits="32" />
+    <Field Name="bUseRuneType" Type="DT_INT#1" Offset="64" Flags="0" EncodedBits="32" />
     <Field Type="DT_FIXEDARRAY#20" Offset="68" Flags="1" SubType="HardpointLink#107" ArrayLength="2" />
     <Field Type="LookLink#108" Offset="204" Flags="1" />
     <Field Type="ConstraintLink#109" Offset="268" Flags="1" />
@@ -701,14 +703,12 @@
     <Field Type="DT_INT#1" Offset="356" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="360" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="364" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="384" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="368" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="372" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="376" Flags="1" EncodedBits="32" />
     <Field Type="DT_VELOCITY#52" Offset="380" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="384" Flags="1" EncodedBits="32" />
     <Field Type="DT_TIME#59" Offset="388" Flags="1" EncodedBits="32" />
-    <Field Name="eRuneType" Type="DT_INT#1" Offset="60" Flags="0" EncodedBits="32" />
-    <Field Name="bUseRuneType" Type="DT_INT#1" Offset="64" Flags="0" EncodedBits="32" />
     <Field Type="RGBAColor#37" Offset="392" Flags="1" />
     <Field Type="DT_TIME#59" Offset="396" Flags="1" EncodedBits="32" />
     <Field Type="RGBAColor#37" Offset="400" Flags="1" />
@@ -802,12 +802,15 @@
     <Field Type="FloatPath#69" Offset="124" Flags="1" />
     <Field Type="TimePath#57" Offset="164" Flags="1" />
     <Field Type="FloatPath#69" Offset="204" Flags="1" />
-    <Field Type="VelocityVectorPath#49" Offset="284" Flags="1" />
     <Field Type="AnglePath#60" Offset="244" Flags="1" />
+    <Field Type="VelocityVectorPath#49" Offset="284" Flags="1" />
     <Field Type="VelocityVectorPath#49" Offset="324" Flags="1" />
     <Field Type="VelocityPath#55" Offset="364" Flags="1" />
     <Field Type="VelocityPath#55" Offset="404" Flags="1" />
     <Field Type="VelocityPath#55" Offset="444" Flags="1" />
+    <Field Type="VectorPath#65" Offset="484" Flags="1" />
+    <Field Type="VelocityPath#55" Offset="524" Flags="1" />
+    <Field Type="DT_FLOAT#5" Offset="564" Flags="1" EncodedBits="32" />
     <Field Type="UberMaterial#80" Offset="568" Flags="1" />
     <Field Name="snoPhysics" Type="DT_SNO#82" Offset="672" Flags="1" EncodedBits="32" SnoType="28" />
     <Field Type="DT_MASS#114" Offset="676" Flags="1" EncodedBits="32" />
@@ -821,8 +824,8 @@
     <Field Type="DT_FLOAT#5" Offset="708" Flags="1" EncodedBits="32" />
     <Field Name="snoActor" Type="DT_SNO#82" Offset="712" Flags="1" EncodedBits="32" SnoType="1" />
     <Field Type="EmitterParams#115" Offset="716" Flags="1" />
-    <Field Type="FloatPath#69" Offset="1008" Flags="1" />
     <Field Type="ColorPath#63" Offset="968" Flags="1" />
+    <Field Type="FloatPath#69" Offset="1008" Flags="1" />
     <Field Type="FloatPath#69" Offset="1048" Flags="1" />
     <Field Type="FloatPath#69" Offset="1088" Flags="1" />
     <Field Type="AnglePath#60" Offset="1128" Flags="1" />
@@ -843,14 +846,11 @@
     <Field Type="AccelVectorPath#45" Offset="1728" Flags="1" />
     <Field Type="VelocityPath#55" Offset="1768" Flags="1" />
     <Field Type="FloatPath#69" Offset="1808" Flags="1" />
-    <Field Type="VectorPath#65" Offset="484" Flags="1" />
-    <Field Type="VelocityPath#55" Offset="524" Flags="1" />
-    <Field Type="DT_FLOAT#5" Offset="564" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="1848" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1852" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1856" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="1868" Flags="1" EncodedBits="32" />
     <Field Name="serMsgTriggeredEvents" Type="SerializeData#2" Offset="1860" Flags="0" />
+    <Field Type="DT_INT#1" Offset="1868" Flags="1" EncodedBits="32" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="1872" Flags="1" SubType="MsgTriggeredEvent#100" VariableOffset="-12" />
     <Field Offset="1880" Flags="0" />
   </StructureDescriptor>
@@ -1099,8 +1099,8 @@
     <Field Offset="520" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="139" Name="SoundBank" UnkValue="1">
-    <Field Type="DT_INT#1" Offset="20" Flags="1" EncodedBits="32" />
     <Field Name="serSoundSamples" Type="SerializeData#2" Offset="12" Flags="0" />
+    <Field Type="DT_INT#1" Offset="20" Flags="1" EncodedBits="32" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="24" Flags="1" SubType="SoundSample#140" VariableOffset="-12" />
     <Field Name="serSampleTimestamps" Type="SerializeData#2" Offset="28" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="36" Flags="1" SubType="DT_INT64#89" VariableOffset="-8" />
@@ -1109,6 +1109,7 @@
   </StructureDescriptor>
   <StructureDescriptor Index="140" Name="SoundSample" UnkValue="2">
     <Field Type="DT_CHARARRAY#24" Offset="0" Flags="1" ArrayLength="129" EncodedBits="8" />
+    <Field Type="DT_CHARARRAY#24" Offset="129" Flags="1" ArrayLength="256" EncodedBits="9" />
     <Field Type="DT_CHARARRAY#24" Offset="385" Flags="1" ArrayLength="256" EncodedBits="9" />
     <Field Type="DT_INT#1" Offset="644" Min="0" Max="1" Flags="17" EncodedBits="1" />
     <Field Type="DT_INT#1" Offset="648" Min="0" Max="1" Flags="17" EncodedBits="1" />
@@ -1117,7 +1118,6 @@
     <Field Type="DT_INT#1" Offset="660" Flags="1" EncodedBits="32" />
     <Field Name="eFormat" Type="DT_INT#1" Offset="664" Flags="0" EncodedBits="32" />
     <Field Name="serSamples" Type="SerializeData#2" Offset="668" Flags="0" />
-    <Field Type="DT_CHARARRAY#24" Offset="129" Flags="1" ArrayLength="256" EncodedBits="9" />
     <Field Offset="680" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="141" Name="Sound" UnkValue="7">
@@ -1134,14 +1134,14 @@
     <Field Type="DT_IMPULSE#96" Offset="52" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="56" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="60" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="72" Flags="1" EncodedBits="32" />
     <Field Name="serPermutations" Type="SerializeData#2" Offset="64" Flags="0" />
+    <Field Type="DT_INT#1" Offset="72" Flags="1" EncodedBits="32" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="76" Flags="1" SubType="SoundPermutation#142" VariableOffset="-12" />
     <Field Type="DT_INT#1" Offset="80" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="84" Flags="1" EncodedBits="32" />
-    <Field Type="DT_TIME#59" Offset="100" Flags="1" EncodedBits="32" />
-    <Field Name="serDspEffects" Type="SerializeData#2" Offset="92" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="88" Flags="1" SubType="DspEffect#143" VariableOffset="4" />
+    <Field Name="serDspEffects" Type="SerializeData#2" Offset="92" Flags="0" />
+    <Field Type="DT_TIME#59" Offset="100" Flags="1" EncodedBits="32" />
     <Field Offset="124" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="142" Name="SoundPermutation" UnkValue="1">
@@ -1172,41 +1172,41 @@
       </Enum>
     </Field>
     <Field Type="DspParam#144" Offset="8" Flags="1" DspIndex="0" />
-    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="0" />
-    <Field Type="DspParam#144" Offset="40" Flags="1" DspIndex="0" />
-    <Field Type="DspParam#144" Offset="56" Flags="1" DspIndex="0" />
-    <Field Type="DspParam#144" Offset="72" Flags="1" DspIndex="0" />
-    <Field Type="DspParam#144" Offset="88" Flags="1" DspIndex="0" />
-    <Field Type="DspParam#144" Offset="104" Flags="1" DspIndex="0" />
-    <Field Type="DspParam#144" Offset="120" Flags="1" DspIndex="0" />
     <Field Type="DspParam#144" Offset="8" Flags="1" DspIndex="1" />
-    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="1" />
-    <Field Type="DspParam#144" Offset="40" Flags="1" DspIndex="1" />
-    <Field Type="DspParam#144" Offset="56" Flags="1" DspIndex="1" />
     <Field Type="DspParam#144" Offset="8" Flags="1" DspIndex="2" />
     <Field Type="DspParam#144" Offset="8" Flags="1" DspIndex="3" />
-    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="3" />
-    <Field Type="DspParam#144" Offset="40" Flags="1" DspIndex="3" />
-    <Field Type="DspParam#144" Offset="56" Flags="1" DspIndex="3" />
-    <Field Type="DspParam#144" Offset="72" Flags="1" DspIndex="3" />
     <Field Type="DspParam#144" Offset="8" Flags="1" DspIndex="4" />
-    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="4" />
-    <Field Type="DspParam#144" Offset="40" Flags="1" DspIndex="4" />
-    <Field Type="DspParam#144" Offset="56" Flags="1" DspIndex="4" />
     <Field Type="DspParam#144" Offset="8" Flags="1" DspIndex="5" />
-    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="5" />
     <Field Type="DspParam#144" Offset="8" Flags="1" DspIndex="6" />
-    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="6" />
     <Field Type="DspParam#144" Offset="8" Flags="1" DspIndex="7" />
     <Field Type="DspParam#144" Offset="8" Flags="1" DspIndex="8" />
-    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="8" />
-    <Field Type="DspParam#144" Offset="40" Flags="1" DspIndex="8" />
     <Field Type="DspParam#144" Offset="8" Flags="1" DspIndex="9" />
+    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="0" />
+    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="1" />
+    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="3" />
+    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="4" />
+    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="5" />
+    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="6" />
+    <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="8" />
     <Field Type="DspParam#144" Offset="24" Flags="1" DspIndex="9" />
+    <Field Type="DspParam#144" Offset="40" Flags="1" DspIndex="0" />
+    <Field Type="DspParam#144" Offset="40" Flags="1" DspIndex="1" />
+    <Field Type="DspParam#144" Offset="40" Flags="1" DspIndex="3" />
+    <Field Type="DspParam#144" Offset="40" Flags="1" DspIndex="4" />
+    <Field Type="DspParam#144" Offset="40" Flags="1" DspIndex="8" />
     <Field Type="DspParam#144" Offset="40" Flags="1" DspIndex="9" />
+    <Field Type="DspParam#144" Offset="56" Flags="1" DspIndex="0" />
+    <Field Type="DspParam#144" Offset="56" Flags="1" DspIndex="1" />
+    <Field Type="DspParam#144" Offset="56" Flags="1" DspIndex="3" />
+    <Field Type="DspParam#144" Offset="56" Flags="1" DspIndex="4" />
     <Field Type="DspParam#144" Offset="56" Flags="1" DspIndex="9" />
+    <Field Type="DspParam#144" Offset="72" Flags="1" DspIndex="0" />
+    <Field Type="DspParam#144" Offset="72" Flags="1" DspIndex="3" />
     <Field Type="DspParam#144" Offset="72" Flags="1" DspIndex="9" />
+    <Field Type="DspParam#144" Offset="88" Flags="1" DspIndex="0" />
     <Field Type="DspParam#144" Offset="88" Flags="1" DspIndex="9" />
+    <Field Type="DspParam#144" Offset="104" Flags="1" DspIndex="0" />
+    <Field Type="DspParam#144" Offset="120" Flags="1" DspIndex="0" />
     <Field Offset="136" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="144" Name="DspParam">
@@ -1221,8 +1221,8 @@
     <Field Type="DT_FLOAT#5" Offset="16" Flags="1" EncodedBits="32" />
     <Field Type="DT_TIME#59" Offset="20" Flags="1" EncodedBits="32" />
     <Field Type="DT_TIME#59" Offset="24" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="36" Flags="1" EncodedBits="32" />
     <Field Name="serPlaylistEntries" Type="SerializeData#2" Offset="28" Flags="0" />
+    <Field Type="DT_INT#1" Offset="36" Flags="1" EncodedBits="32" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="40" Flags="1" SubType="PlaylistEntry#146" VariableOffset="-12" />
     <Field Type="DT_FIXEDARRAY#20" Offset="44" Flags="1" SubType="RandomMusicSoundParams#147" ArrayLength="2" />
     <Field Offset="76" Flags="0" />
@@ -1286,8 +1286,8 @@
     <Field Type="FloatPath#69" Offset="820" Flags="1" />
     <Field Type="FloatPath#69" Offset="860" Flags="1" />
     <Field Type="FloatPath#69" Offset="900" Flags="1" />
-    <Field Type="DT_INT#1" Offset="948" Flags="1" EncodedBits="32" />
     <Field Name="serMsgTriggeredEvents" Type="SerializeData#2" Offset="940" Flags="0" />
+    <Field Type="DT_INT#1" Offset="948" Flags="1" EncodedBits="32" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="952" Flags="1" SubType="MsgTriggeredEvent#100" VariableOffset="-12" />
     <Field Offset="960" Flags="0" />
   </StructureDescriptor>
@@ -1393,13 +1393,13 @@
     <Field Offset="88" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="156" Name="Appearance" UnkValue="6">
+    <Field Type="Structure#160" Offset="16" Flags="1" />
+    <Field Type="DT_INT#1" Offset="1456" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="1460" Flags="1" EncodedBits="32" />
     <Field Name="serAppearanceMaterials" Type="SerializeData#2" Offset="1464" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="1472" Flags="33" SubType="AppearanceMaterial#157" VariableOffset="-8" />
     <Field Name="serAppearanceLooks" Type="SerializeData#2" Offset="1480" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="1488" Flags="33" SubType="AppearanceLook#159" VariableOffset="-8" />
-    <Field Type="Structure#160" Offset="16" Flags="1" />
-    <Field Type="DT_INT#1" Offset="1456" Flags="1" EncodedBits="32" />
     <Field Name="nStaticLightCount" Type="DT_INT#1" Offset="1496" Flags="0" EncodedBits="32" />
     <Field Name="serStaticLights" Type="SerializeData#2" Offset="1500" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="1512" Flags="33" SubType="StaticLight#177" VariableOffset="-12" />
@@ -1443,8 +1443,8 @@
     <Field Type="DT_VARIABLEARRAY#3" Offset="16" Flags="32" SubType="BoneStructure#161" VariableOffset="-8" />
     <Field Type="LookAtData#163" Offset="24" Flags="1" />
     <Field Type="DT_INT#1" Offset="116" Flags="1" EncodedBits="32" />
-    <Field Name="serBonePulses" Type="SerializeData#2" Offset="128" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="120" Flags="33" SubType="BonePulseData#164" VariableOffset="8" />
+    <Field Name="serBonePulses" Type="SerializeData#2" Offset="128" Flags="0" />
     <Field Type="DT_FIXEDARRAY#20" Offset="136" Flags="1" SubType="GeoSet#165" ArrayLength="2" />
     <Field Type="Sphere#14" Offset="184" Flags="1" />
     <Field Name="nCollisionCapsuleCount" Type="DT_INT#1" Offset="200" Flags="0" EncodedBits="32" />
@@ -1456,6 +1456,10 @@
     <Field Type="Vector3D#4" Offset="248" Flags="1" />
     <Field Name="tOctreeVisualMesh" Type="Octree#17" Offset="264" Flags="0" />
     <Field Name="aabbBounds" Type="AABB#33" Offset="336" Flags="0" />
+    <Field Name="nLoopConstraintCount" Type="DT_INT#1" Offset="360" Flags="0" EncodedBits="32" />
+    <Field Name="serLoopConstraints" Type="SerializeData#2" Offset="364" Flags="0" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="376" Flags="32" SubType="ConstraintParameters#23" VariableOffset="-12" />
+    <Field Name="uRagdollDegrade" Type="DT_INT#1" Offset="384" Flags="0" EncodedBits="32" />
     <Field Type="DT_CHARARRAY#24" Offset="400" Flags="1" ArrayLength="256" EncodedBits="9" />
     <Field Type="DT_CHARARRAY#24" Offset="656" Flags="1" ArrayLength="256" EncodedBits="9" />
     <Field Type="DT_CHARARRAY#24" Offset="912" Flags="1" ArrayLength="256" EncodedBits="9" />
@@ -1463,10 +1467,6 @@
     <Field Type="DT_INT#1" Offset="1424" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1428" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="1432" Flags="1" EncodedBits="32" />
-    <Field Name="nLoopConstraintCount" Type="DT_INT#1" Offset="360" Flags="0" EncodedBits="32" />
-    <Field Name="serLoopConstraints" Type="SerializeData#2" Offset="364" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="376" Flags="32" SubType="ConstraintParameters#23" VariableOffset="-12" />
-    <Field Name="uRagdollDegrade" Type="DT_INT#1" Offset="384" Flags="0" EncodedBits="32" />
     <Field Offset="1440" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="161" Name="BoneStructure">
@@ -1833,9 +1833,9 @@
     <Field Type="DT_INT#1" Offset="20" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="24" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="28" Flags="1" EncodedBits="32" />
+    <Field Name="snoSpeakerActor" Type="DT_SNO#82" Offset="36" Flags="1" EncodedBits="32" SnoType="1" />
     <Field Type="DT_INT#1" Offset="40" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="44" Flags="1" EncodedBits="32" />
-    <Field Name="snoSpeakerActor" Type="DT_SNO#82" Offset="36" Flags="1" EncodedBits="32" SnoType="1" />
     <Field Type="DT_CHARARRAY#24" Offset="48" Flags="1" ArrayLength="49" EncodedBits="6" />
     <Field Type="DT_INT#1" Offset="100" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="104" Flags="1" EncodedBits="32" />
@@ -2000,32 +2000,32 @@
   </GameMessageDescriptor>
   <StructureDescriptor Index="221" Name="SceneClusterSet">
     <Field Type="DT_INT#1" Offset="0" Flags="1" EncodedBits="32" />
-    <Field Name="serClusters" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="8" Flags="33" SubType="SceneCluster#222" VariableOffset="8" />
+    <Field Name="serClusters" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Offset="24" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="222" Name="SceneCluster">
     <Field Type="DT_CHARARRAY#24" Offset="0" Flags="1" ArrayLength="128" EncodedBits="8" />
     <Field Type="DT_INT#1" Offset="128" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="132" Flags="1" EncodedBits="32" />
-    <Field Name="serSubSceneGroups" Type="SerializeData#2" Offset="144" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="136" Flags="33" SubType="SubSceneGroup#223" VariableOffset="8" />
+    <Field Name="serSubSceneGroups" Type="SerializeData#2" Offset="144" Flags="0" />
     <Field Type="SubSceneGroup#223" Offset="152" Flags="1" />
     <Field Offset="176" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="223" Name="SubSceneGroup">
     <Field Type="DT_INT#1" Offset="0" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="4" Flags="1" EncodedBits="32" />
-    <Field Name="serSubScenes" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="8" Flags="33" SubType="SubSceneEntry#224" VariableOffset="8" />
+    <Field Name="serSubScenes" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Offset="24" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="224" Name="SubSceneEntry">
     <Field Name="snoScene" Type="DT_SNO#82" Offset="0" Flags="1" EncodedBits="32" SnoType="33" />
     <Field Type="DT_INT#1" Offset="4" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="8" Flags="1" EncodedBits="32" />
-    <Field Name="serLabels" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="16" Flags="33" SubType="SubSceneLabel#225" VariableOffset="8" />
+    <Field Name="serLabels" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Offset="32" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="225" Name="SubSceneLabel">
@@ -2047,20 +2047,20 @@
     <Field Name="serPVPGlobalTagMap" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Name="hPVPGeneralTagMap" Type="DT_TAGMAP#91" Offset="40" Flags="33" VariableOffset="-8" TagMapRelated="1245184" />
     <Field Name="serContactTagMap[0]" Type="SerializeData#2" Offset="48" Flags="0" />
-    <Field Name="hContact0TagMap" Type="DT_TAGMAP#91" Offset="80" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
     <Field Name="serContactTagMap[1]" Type="SerializeData#2" Offset="56" Flags="0" />
-    <Field Name="hContact1TagMap" Type="DT_TAGMAP#91" Offset="88" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
     <Field Name="serContactTagMap[2]" Type="SerializeData#2" Offset="64" Flags="0" />
-    <Field Name="hContact2TagMap" Type="DT_TAGMAP#91" Offset="96" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
     <Field Name="serContactTagMap[3]" Type="SerializeData#2" Offset="72" Flags="0" />
+    <Field Name="hContact0TagMap" Type="DT_TAGMAP#91" Offset="80" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
+    <Field Name="hContact1TagMap" Type="DT_TAGMAP#91" Offset="88" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
+    <Field Name="hContact2TagMap" Type="DT_TAGMAP#91" Offset="96" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
     <Field Name="hContact3TagMap" Type="DT_TAGMAP#91" Offset="104" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
     <Field Name="serPVPContactTagMap[0]" Type="SerializeData#2" Offset="112" Flags="0" />
-    <Field Name="hPVPContact0TagMap" Type="DT_TAGMAP#91" Offset="144" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
     <Field Name="serPVPContactTagMap[1]" Type="SerializeData#2" Offset="120" Flags="0" />
-    <Field Name="hPVPContact1TagMap" Type="DT_TAGMAP#91" Offset="152" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
     <Field Name="serPVPContactTagMap[2]" Type="SerializeData#2" Offset="128" Flags="0" />
-    <Field Name="hPVPContact2TagMap" Type="DT_TAGMAP#91" Offset="160" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
     <Field Name="serPVPContactTagMap[3]" Type="SerializeData#2" Offset="136" Flags="0" />
+    <Field Name="hPVPContact0TagMap" Type="DT_TAGMAP#91" Offset="144" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
+    <Field Name="hPVPContact1TagMap" Type="DT_TAGMAP#91" Offset="152" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
+    <Field Name="hPVPContact2TagMap" Type="DT_TAGMAP#91" Offset="160" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
     <Field Name="hPVPContact3TagMap" Type="DT_TAGMAP#91" Offset="168" Flags="33" VariableOffset="-32" TagMapRelated="131072" />
     <Field Type="DT_INT#1" Offset="176" Flags="1" EncodedBits="32" />
     <Field Type="ActorCollisionFlags#228" Offset="180" Flags="1" />
@@ -2088,8 +2088,8 @@
     <Field Offset="9152" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="231" Name="GizmoLocSpawnType">
-    <Field Name="serEntry" Type="SerializeData#2" Offset="8" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="0" Flags="33" SubType="GizmoLocSpawnEntry#232" VariableOffset="8" />
+    <Field Name="serEntry" Type="SerializeData#2" Offset="8" Flags="0" />
     <Field Type="DT_CHARARRAY#24" Offset="16" Flags="1" ArrayLength="80" EncodedBits="7" />
     <Field Type="DT_CHARARRAY#24" Offset="96" Flags="1" ArrayLength="256" EncodedBits="9" />
     <Field Offset="352" Flags="0" />
@@ -2115,8 +2115,8 @@
   </StructureDescriptor>
   <StructureDescriptor Index="235" Name="LabelRuleSet">
     <Field Type="DT_INT#1" Offset="0" Flags="1" EncodedBits="32" />
-    <Field Name="serRules" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="8" Flags="33" SubType="LabelRule#236" VariableOffset="8" />
+    <Field Name="serRules" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Offset="24" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="236" Name="LabelRule">
@@ -2124,8 +2124,8 @@
     <Field Type="LabelCondition#237" Offset="128" Flags="1" />
     <Field Type="DT_INT#1" Offset="152" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="156" Flags="1" EncodedBits="32" />
-    <Field Name="serEntries" Type="SerializeData#2" Offset="168" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="160" Flags="33" SubType="LabelEntry#238" VariableOffset="8" />
+    <Field Name="serEntries" Type="SerializeData#2" Offset="168" Flags="0" />
     <Field Offset="176" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="237" Name="LabelCondition">
@@ -2351,15 +2351,15 @@
     <Field Type="DT_INT#1" Offset="8" Flags="1" EncodedBits="32" />
     <Field Type="WorldPlace#190" Offset="12" Flags="1" />
     <Field Type="DT_INT#1" Offset="28" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="32" Flags="1" EncodedBits="32" />
     <Field Name="m_snoStringList" Type="DT_SNO#82" Offset="36" Flags="1" EncodedBits="32" SnoType="42" />
     <Field Type="DT_INT#1" Offset="40" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="56" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="60" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="64" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="32" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="44" Min="0" Max="1" Flags="17" EncodedBits="1" />
     <Field Type="DT_INT#1" Offset="48" Min="0" Max="1" Flags="17" EncodedBits="1" />
     <Field Type="DT_INT#1" Offset="52" Min="0" Max="1" Flags="17" EncodedBits="1" />
+    <Field Type="DT_FLOAT#5" Offset="56" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="60" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="64" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="68" Flags="1" EncodedBits="32" />
     <Field Offset="72" Flags="0" />
   </GameMessageDescriptor>
@@ -2732,8 +2732,8 @@
   </GameMessageDescriptor>
   <GameMessageDescriptor Index="323" Name="TryConsoleCommand" Size="544" NetworkIds="1 2">
     <Field Type="RequiredMessageHeader#86" Offset="0" Flags="1" />
-    <Field Type="DT_CHARARRAY#24" Offset="12" Flags="1" ArrayLength="512" EncodedBits="10" />
     <Field Type="DT_INT#1" Offset="8" Min="-1" Max="7" Flags="17" EncodedBits="4" />
+    <Field Type="DT_CHARARRAY#24" Offset="12" Flags="1" ArrayLength="512" EncodedBits="10" />
     <Field Type="WorldPlace#190" Offset="524" Flags="1" />
     <Field Type="DT_INT#1" Offset="540" Flags="1" EncodedBits="32" />
     <Field Offset="544" Flags="0" />
@@ -2877,9 +2877,9 @@
     <Field Type="DT_INT#1" Offset="96" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="100" Min="-1" Max="10" Flags="17" EncodedBits="4" />
     <Field Type="DT_BYTE#38" Offset="104" Flags="1" EncodedBits="8" />
-    <Field Type="DT_OPTIONAL#197" Offset="121" Flags="1" SubType="DT_SNO#82" EncodedBits="32" />
     <Field Type="DT_OPTIONAL#197" Offset="105" Flags="1" SubType="DT_INT#1" EncodedBits="32" />
     <Field Type="DT_OPTIONAL#197" Offset="113" Flags="1" SubType="DT_INT#1" EncodedBits="32" />
+    <Field Type="DT_OPTIONAL#197" Offset="121" Flags="1" SubType="DT_SNO#82" EncodedBits="32" />
     <Field Offset="132" Flags="0" />
   </GameMessageDescriptor>
   <GameMessageDescriptor Index="344" Name="RevealWorldMessage" Size="16" NetworkIds="56">
@@ -3106,8 +3106,8 @@
     <Field Type="LearnedLore#384" Offset="416" Flags="1" />
     <Field Name="snoActiveSkills" Type="DT_FIXEDARRAY#20" Offset="2504" Flags="1" SubType="DT_SNO#82" ArrayLength="6" EncodedBits="32" SnoType="29" />
     <Field Name="snoTraits" Type="DT_FIXEDARRAY#20" Offset="2528" Flags="1" SubType="DT_SNO#82" ArrayLength="3" EncodedBits="32" SnoType="29" />
-    <Field Type="SavePointData#385" Offset="2796" Flags="1" />
     <Field Name="m_SeenTutorials" Type="DT_FIXEDARRAY#20" Offset="2540" Flags="1" SubType="DT_SNO#82" ArrayLength="64" EncodedBits="32" SnoType="63" />
+    <Field Type="SavePointData#385" Offset="2796" Flags="1" />
     <Field Offset="2812" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="381" Name="SkillKeyMapping">
@@ -3200,29 +3200,29 @@
     <Field Name="nCollisionMeshCount" Type="DT_INT#1" Offset="16" Flags="0" EncodedBits="32" />
     <Field Name="serCollisionMeshes" Type="SerializeData#2" Offset="20" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="32" Flags="32" SubType="CollisionMesh#392" VariableOffset="-12" />
+    <Field Type="DT_INT#1" Offset="40" Flags="1" EncodedBits="32" />
     <Field Type="DT_CHARARRAY#24" Offset="44" Flags="1" ArrayLength="256" EncodedBits="9" />
     <Field Type="DT_CHARARRAY#24" Offset="300" Flags="1" ArrayLength="256" EncodedBits="9" />
-    <Field Type="DT_INT#1" Offset="40" Flags="1" EncodedBits="32" />
     <Field Offset="560" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="392" Name="CollisionMesh">
     <Field Type="dmFloat3#72" Offset="0" Flags="1" />
     <Field Type="dmFloat3#72" Offset="12" Flags="1" />
     <Field Type="dmFloat3#72" Offset="24" Flags="1" />
-    <Field Type="DT_INT#1" Offset="76" Flags="1" EncodedBits="32" />
-    <Field Name="serDominoVertices" Type="SerializeData#2" Offset="96" Flags="0" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="40" Flags="33" SubType="dmMeshNode#395" VariableOffset="72" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="48" Flags="33" SubType="dmFloat3#72" VariableOffset="48" />
-    <Field Type="DT_INT#1" Offset="80" Flags="1" EncodedBits="32" />
-    <Field Name="serDominoTriangles" Type="SerializeData#2" Offset="104" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="56" Flags="33" SubType="dmMeshTriangle#393" VariableOffset="48" />
-    <Field Type="DT_INT#1" Offset="84" Flags="1" EncodedBits="32" />
-    <Field Name="serDominoEdges" Type="SerializeData#2" Offset="120" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="64" Flags="33" SubType="dmMeshEdge#394" VariableOffset="56" />
     <Field Type="DT_INT#1" Offset="72" Flags="1" EncodedBits="32" />
-    <Field Name="serDominoNodes" Type="SerializeData#2" Offset="112" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="40" Flags="33" SubType="dmMeshNode#395" VariableOffset="72" />
+    <Field Type="DT_INT#1" Offset="76" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="80" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="84" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="88" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="92" Flags="1" EncodedBits="32" />
+    <Field Name="serDominoVertices" Type="SerializeData#2" Offset="96" Flags="0" />
+    <Field Name="serDominoTriangles" Type="SerializeData#2" Offset="104" Flags="0" />
+    <Field Name="serDominoNodes" Type="SerializeData#2" Offset="112" Flags="0" />
+    <Field Name="serDominoEdges" Type="SerializeData#2" Offset="120" Flags="0" />
     <Field Type="DT_INT#1" Offset="128" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="132" Flags="1" EncodedBits="32" />
     <Field Offset="136" Flags="0" />
@@ -3258,14 +3258,22 @@
     <Field Type="DT_FLOAT#5" Offset="140" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="144" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="148" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="220" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="152" Flags="1" EncodedBits="32" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="160" Flags="33" SubType="ActorGroup#398" VariableOffset="8" />
+    <Field Name="serActorGroups" Type="SerializeData#2" Offset="168" Flags="0" />
+    <Field Type="DT_INT#1" Offset="176" Flags="1" EncodedBits="32" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="184" Flags="33" SubType="StartLocationName#399" VariableOffset="8" />
+    <Field Name="serStartLocationNames" Type="SerializeData#2" Offset="192" Flags="0" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="200" Flags="33" SubType="GlobalScriptVariable#400" VariableOffset="8" />
+    <Field Name="serScriptGlobalVars" Type="SerializeData#2" Offset="208" Flags="0" />
     <Field Type="DT_FLOAT#5" Offset="216" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="220" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="224" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="228" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="232" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="236" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="240" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="244" Flags="1" SubType="RGBAColor#37" ArrayLength="400" />
     <Field Type="DT_INT#1" Offset="1844" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="1848" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="1852" Flags="1" EncodedBits="32" />
@@ -3278,10 +3286,10 @@
     <Field Type="DT_FLOAT#5" Offset="1880" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1884" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1888" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="1900" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="1904" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1892" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1896" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="1900" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="1904" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1908" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1912" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1916" Flags="1" EncodedBits="32" />
@@ -3289,14 +3297,6 @@
     <Field Type="DT_FLOAT#5" Offset="1924" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="1928" Flags="1" EncodedBits="32" />
     <Field Type="DT_FIXEDARRAY#20" Offset="1932" Flags="1" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="244" Flags="1" SubType="RGBAColor#37" ArrayLength="400" />
-    <Field Name="serActorGroups" Type="SerializeData#2" Offset="168" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="160" Flags="33" SubType="ActorGroup#398" VariableOffset="8" />
-    <Field Type="DT_INT#1" Offset="176" Flags="1" EncodedBits="32" />
-    <Field Name="serStartLocationNames" Type="SerializeData#2" Offset="192" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="184" Flags="33" SubType="StartLocationName#399" VariableOffset="8" />
-    <Field Name="serScriptGlobalVars" Type="SerializeData#2" Offset="208" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="200" Flags="33" SubType="GlobalScriptVariable#400" VariableOffset="8" />
     <Field Type="BannerParams#401" Offset="1952" Flags="1" />
     <Field Type="DT_INT#1" Offset="2184" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="2188" Flags="1" EncodedBits="32" />
@@ -3344,34 +3344,34 @@
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="401" Name="BannerParams" UnkValue="9">
-    <Field Name="serTexBackgrounds" Type="SerializeData#2" Offset="8" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="0" Flags="33" SubType="BannerTexturePair#402" VariableOffset="8" />
+    <Field Name="serTexBackgrounds" Type="SerializeData#2" Offset="8" Flags="0" />
     <Field Type="DT_INT#1" Offset="16" Flags="1" EncodedBits="32" />
-    <Field Name="serTexPatterns" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="24" Flags="33" SubType="BannerTexturePair#402" VariableOffset="8" />
+    <Field Name="serTexPatterns" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_INT#1" Offset="40" Flags="1" EncodedBits="32" />
-    <Field Name="serTexMainSigils" Type="SerializeData#2" Offset="56" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="48" Flags="33" SubType="BannerTexturePair#402" VariableOffset="8" />
-    <Field Name="serTexVariantSigils" Type="SerializeData#2" Offset="72" Flags="0" />
+    <Field Name="serTexMainSigils" Type="SerializeData#2" Offset="56" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="64" Flags="33" SubType="BannerTexturePair#402" VariableOffset="8" />
+    <Field Name="serTexVariantSigils" Type="SerializeData#2" Offset="72" Flags="0" />
     <Field Type="DT_INT#1" Offset="80" Flags="1" EncodedBits="32" />
-    <Field Name="serTexSigilAccents" Type="SerializeData#2" Offset="96" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="88" Flags="33" SubType="BannerTexturePair#402" VariableOffset="8" />
+    <Field Name="serTexSigilAccents" Type="SerializeData#2" Offset="96" Flags="0" />
     <Field Type="DT_INT#1" Offset="104" Flags="1" EncodedBits="32" />
-    <Field Name="serColorSets" Type="SerializeData#2" Offset="120" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="112" Flags="33" SubType="BannerColorSet#403" VariableOffset="8" />
-    <Field Name="serSigilPlacements" Type="SerializeData#2" Offset="136" Flags="0" />
+    <Field Name="serColorSets" Type="SerializeData#2" Offset="120" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="128" Flags="33" SubType="BannerSigilPlacement#404" VariableOffset="8" />
-    <Field Name="serActorBases" Type="SerializeData#2" Offset="152" Flags="0" />
+    <Field Name="serSigilPlacements" Type="SerializeData#2" Offset="136" Flags="0" />
     <Field Name="arActorBases" Type="DT_VARIABLEARRAY#3" Offset="144" Flags="33" SubType="DT_SNO#82" VariableOffset="8" SnoType="1" />
-    <Field Name="serActorCaps" Type="SerializeData#2" Offset="168" Flags="0" />
+    <Field Name="serActorBases" Type="SerializeData#2" Offset="152" Flags="0" />
     <Field Name="arActorCaps" Type="DT_VARIABLEARRAY#3" Offset="160" Flags="33" SubType="DT_SNO#82" VariableOffset="8" SnoType="1" />
-    <Field Name="serActorPoles" Type="SerializeData#2" Offset="184" Flags="0" />
+    <Field Name="serActorCaps" Type="SerializeData#2" Offset="168" Flags="0" />
     <Field Name="arActorPoles" Type="DT_VARIABLEARRAY#3" Offset="176" Flags="33" SubType="DT_SNO#82" VariableOffset="8" SnoType="1" />
-    <Field Name="serActorRibbons" Type="SerializeData#2" Offset="200" Flags="0" />
+    <Field Name="serActorPoles" Type="SerializeData#2" Offset="184" Flags="0" />
     <Field Name="arActorRibbons" Type="DT_VARIABLEARRAY#3" Offset="192" Flags="33" SubType="DT_SNO#82" VariableOffset="8" SnoType="1" />
-    <Field Name="serEpicBannerDescriptions" Type="SerializeData#2" Offset="216" Flags="0" />
+    <Field Name="serActorRibbons" Type="SerializeData#2" Offset="200" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="208" Flags="33" SubType="EpicBannerDescription#405" VariableOffset="8" />
+    <Field Name="serEpicBannerDescriptions" Type="SerializeData#2" Offset="216" Flags="0" />
     <Field Offset="232" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="402" Name="BannerTexturePair">
@@ -3418,8 +3418,6 @@
   </StructureDescriptor>
   <StructureDescriptor Index="407" Name="Scene" UnkValue="9">
     <Field Type="DT_INT#1" Offset="12" Flags="1" EncodedBits="32" />
-    <Field Name="snoAppearance" Type="DT_SNO#82" Offset="776" Flags="257" EncodedBits="32" SnoType="9" />
-    <Field Name="snoPhysMesh" Type="DT_SNO#82" Offset="780" Flags="1" EncodedBits="32" SnoType="61" />
     <Field Name="aabbBounds" Type="AABB#33" Offset="16" Flags="0" />
     <Field Name="aabbMarkerSetBounds" Type="AABB#33" Offset="40" Flags="0" />
     <Field Type="NavMeshDef#408" Offset="64" Flags="1" />
@@ -3430,10 +3428,12 @@
     <Field Name="serMarkerSets" Type="SerializeData#2" Offset="488" Flags="0" />
     <Field Name="arMarkerSets" Type="DT_VARIABLEARRAY#3" Offset="496" Flags="291" SubType="DT_SNO#82" VariableOffset="-8" SnoType="24" />
     <Field Type="LookLink#108" Offset="552" Flags="1" />
-    <Field Type="DT_INT#1" Offset="624" Flags="1" EncodedBits="32" />
     <Field Name="serMsgTriggeredEvents" Type="SerializeData#2" Offset="616" Flags="0" />
+    <Field Type="DT_INT#1" Offset="624" Flags="1" EncodedBits="32" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="632" Flags="33" SubType="MsgTriggeredEvent#100" VariableOffset="-16" />
     <Field Name="tNavZoneDef" Type="NavZoneDefinition#409" Offset="640" Flags="0" />
+    <Field Name="snoAppearance" Type="DT_SNO#82" Offset="776" Flags="257" EncodedBits="32" SnoType="9" />
+    <Field Name="snoPhysMesh" Type="DT_SNO#82" Offset="780" Flags="1" EncodedBits="32" SnoType="61" />
     <Field Offset="784" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="408" Name="NavMeshDef">
@@ -3449,23 +3449,23 @@
   </StructureDescriptor>
   <StructureDescriptor Index="409" Name="NavZoneDefinition">
     <Field Type="DT_INT#1" Offset="0" Flags="1" EncodedBits="32" />
-    <Field Name="serNavCells" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="8" Flags="33" SubType="NavCell#410" VariableOffset="8" />
+    <Field Name="serNavCells" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Type="DT_INT#1" Offset="24" Flags="1" EncodedBits="32" />
-    <Field Name="serNavCellNeighbors" Type="SerializeData#2" Offset="40" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="32" Flags="33" SubType="NavCellLookup#411" VariableOffset="8" />
+    <Field Name="serNavCellNeighbors" Type="SerializeData#2" Offset="40" Flags="0" />
     <Field Type="DT_FLOAT#5" Offset="48" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="52" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="56" Flags="1" EncodedBits="32" />
     <Field Type="IVector2D#35" Offset="60" Flags="1" />
-    <Field Name="serGridSquares" Type="SerializeData#2" Offset="80" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="72" Flags="33" SubType="NavGridSquare#412" VariableOffset="8" />
+    <Field Name="serGridSquares" Type="SerializeData#2" Offset="80" Flags="0" />
     <Field Type="DT_INT#1" Offset="88" Flags="1" EncodedBits="32" />
-    <Field Name="serCellLookups" Type="SerializeData#2" Offset="104" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="96" Flags="33" SubType="NavCellLookup#411" VariableOffset="8" />
+    <Field Name="serCellLookups" Type="SerializeData#2" Offset="104" Flags="0" />
     <Field Type="DT_INT#1" Offset="112" Flags="1" EncodedBits="32" />
-    <Field Name="serBorderData" Type="SerializeData#2" Offset="128" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="120" Flags="33" SubType="NavCellBorderData#413" VariableOffset="8" />
+    <Field Name="serBorderData" Type="SerializeData#2" Offset="128" Flags="0" />
     <Field Offset="136" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="410" Name="NavCell">
@@ -3495,8 +3495,8 @@
   <GameMessageDescriptor Index="414" Name="SwapSceneMessage" Size="20" NetworkIds="55">
     <Field Type="RequiredMessageHeader#86" Offset="0" Flags="1" />
     <Field Type="DT_INT#1" Offset="8" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="16" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="12" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="16" Flags="1" EncodedBits="32" />
     <Field Offset="20" Flags="0" />
   </GameMessageDescriptor>
   <GameMessageDescriptor Index="415" Name="DestroySceneMessage" Size="16" NetworkIds="54">
@@ -3585,9 +3585,9 @@
   </StructureDescriptor>
   <StructureDescriptor Index="421" Name="TileInfo">
     <Field Type="DT_INT#1" Offset="0" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="12" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="4" Flags="1" EncodedBits="32" />
     <Field Name="snoScene" Type="DT_SNO#82" Offset="8" Flags="1" EncodedBits="32" SnoType="33" />
+    <Field Type="DT_INT#1" Offset="12" Flags="1" EncodedBits="32" />
     <Field Name="serTileTagMap" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Name="hTileTagMap" Type="DT_TAGMAP#91" Offset="24" Flags="33" VariableOffset="-8" TagMapRelated="983040" />
     <Field Type="CustomTileInfo#422" Offset="32" Flags="1" />
@@ -3620,8 +3620,8 @@
   </StructureDescriptor>
   <StructureDescriptor Index="425" Name="SceneParams">
     <Field Name="serSceneChunks" Type="SerializeData#2" Offset="0" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="16" Flags="33" SubType="SceneChunk#426" VariableOffset="-16" />
     <Field Type="DT_INT#1" Offset="8" Flags="1" EncodedBits="32" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="16" Flags="33" SubType="SceneChunk#426" VariableOffset="-16" />
     <Field Offset="24" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="426" Name="SceneChunk" UnkValue="2">
@@ -3677,8 +3677,8 @@
     <Field Name="hTagMap" Type="DT_TAGMAP#91" Offset="96" Flags="33" VariableOffset="-8" TagMapRelated="65536" />
     <Field Name="snoAnimSet" Type="DT_SNO#82" Offset="104" Flags="1" EncodedBits="32" SnoType="8" />
     <Field Name="snoMonster" Type="DT_SNO#82" Offset="108" Flags="1" EncodedBits="32" SnoType="25" />
-    <Field Type="DT_INT#1" Offset="120" Flags="1" EncodedBits="32" />
     <Field Name="serMsgTriggeredEvents" Type="SerializeData#2" Offset="112" Flags="0" />
+    <Field Type="DT_INT#1" Offset="120" Flags="1" EncodedBits="32" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="128" Flags="33" SubType="MsgTriggeredEvent#100" VariableOffset="-16" />
     <Field Type="Vector3D#4" Offset="136" Flags="1" />
     <Field Type="DT_FIXEDARRAY#20" Offset="148" Flags="1" SubType="WeightedLook#430" ArrayLength="8" />
@@ -3691,10 +3691,10 @@
     <Field Type="ActorCollisionData#431" Offset="716" Flags="1" />
     <Field Type="DT_FIXEDARRAY#20" Offset="784" Flags="1" SubType="InventoryImages#432" ArrayLength="5" />
     <Field Type="DT_INT#1" Offset="824" Flags="1" EncodedBits="32" />
-    <Field Name="serVOCastingNotes" Type="SerializeData#2" Offset="840" Flags="0" />
     <Field Type="DT_CSTRING#433" Offset="832" Flags="33" SubType="DT_BYTE#38" VariableOffset="8" />
-    <Field Name="serVORole" Type="SerializeData#2" Offset="856" Flags="0" />
+    <Field Name="serVOCastingNotes" Type="SerializeData#2" Offset="840" Flags="0" />
     <Field Type="DT_CSTRING#433" Offset="848" Flags="33" SubType="DT_BYTE#38" VariableOffset="8" />
+    <Field Name="serVORole" Type="SerializeData#2" Offset="856" Flags="0" />
     <Field Offset="864" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="430" Name="WeightedLook">
@@ -3732,8 +3732,8 @@
     <Field Type="DT_INT#1" Offset="12" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="16" Flags="1" EncodedBits="32" />
     <Field Name="snoAppearance" Type="DT_SNO#82" Offset="20" Flags="1" EncodedBits="32" SnoType="9" />
-    <Field Type="DT_INT#1" Offset="32" Flags="1" EncodedBits="32" />
     <Field Name="serPermutations" Type="SerializeData#2" Offset="24" Flags="0" />
+    <Field Type="DT_INT#1" Offset="32" Flags="1" EncodedBits="32" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="40" Flags="33" SubType="AnimPermutation#437" VariableOffset="-16" />
     <Field Type="DT_INT#1" Offset="48" Flags="1" EncodedBits="32" />
     <Field Offset="56" Flags="0" />
@@ -3748,11 +3748,11 @@
     <Field Type="DT_FLOAT#5" Offset="88" Flags="1" EncodedBits="32" />
     <Field Type="DT_TIME#59" Offset="92" Flags="1" EncodedBits="32" />
     <Field Type="DT_TIME#59" Offset="96" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="100" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="104" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="108" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="112" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="116" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="100" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="120" Flags="1" EncodedBits="32" />
     <Field Name="serBoneNames" Type="SerializeData#2" Offset="124" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="136" Flags="96" SubType="BoneName#438" VariableOffset="-12" />
@@ -3772,8 +3772,8 @@
     <Field Type="Vector3D#4" Offset="240" Flags="1" />
     <Field Type="Vector3D#4" Offset="252" Flags="1" />
     <Field Type="DT_FLOAT#5" Offset="264" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="276" Flags="1" EncodedBits="32" />
     <Field Name="serKeyedAttachments" Type="SerializeData#2" Offset="268" Flags="0" />
+    <Field Type="DT_INT#1" Offset="276" Flags="1" EncodedBits="32" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="280" Flags="97" SubType="KeyframedAttachment#445" VariableOffset="-12" />
     <Field Name="serKeyframePosList" Type="SerializeData#2" Offset="288" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="296" Flags="97" SubType="Vector3D#4" VariableOffset="-8" />
@@ -3828,19 +3828,19 @@
     <Field Offset="412" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="446" Name="StringList" UnkValue="3">
-    <Field Name="serStrings" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="16" Flags="33" SubType="StringTableEntry#447" VariableOffset="8" />
+    <Field Name="serStrings" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="447" Name="StringTableEntry">
-    <Field Name="serLabel" Type="SerializeData#2" Offset="8" Flags="0" />
     <Field Type="DT_CSTRING#433" Offset="0" Flags="33" SubType="DT_BYTE#38" VariableOffset="8" />
-    <Field Name="serText" Type="SerializeData#2" Offset="24" Flags="0" />
+    <Field Name="serLabel" Type="SerializeData#2" Offset="8" Flags="0" />
     <Field Type="DT_CSTRING#433" Offset="16" Flags="33" SubType="DT_BYTE#38" VariableOffset="8" />
-    <Field Name="serComment" Type="SerializeData#2" Offset="40" Flags="0" />
+    <Field Name="serText" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Type="DT_CSTRING#433" Offset="32" Flags="33" SubType="DT_BYTE#38" VariableOffset="8" />
-    <Field Name="serSpeaker" Type="SerializeData#2" Offset="56" Flags="0" />
+    <Field Name="serComment" Type="SerializeData#2" Offset="40" Flags="0" />
     <Field Type="DT_CSTRING#433" Offset="48" Flags="33" SubType="DT_BYTE#38" VariableOffset="8" />
+    <Field Name="serSpeaker" Type="SerializeData#2" Offset="56" Flags="0" />
     <Field Type="DT_INT#1" Offset="64" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="68" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="72" Flags="1" EncodedBits="32" />
@@ -3856,8 +3856,8 @@
     <Field Name="serScriptFormulaDetails" Type="SerializeData#2" Offset="692" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="704" Flags="97" SubType="ScriptFormulaDetails#449" VariableOffset="-12" />
     <Field Type="DT_INT#1" Offset="712" Flags="1" EncodedBits="32" />
-    <Field Name="serCompiledScript" Type="SerializeData#2" Offset="728" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="720" Flags="32" SubType="DT_BYTE#38" VariableOffset="8" />
+    <Field Name="serCompiledScript" Type="SerializeData#2" Offset="728" Flags="0" />
     <Field Name="snoQuestMetaData" Type="DT_SNO#82" Offset="736" Flags="1" EncodedBits="32" SnoType="31" />
     <Field Offset="744" Flags="0" />
   </StructureDescriptor>
@@ -3873,8 +3873,8 @@
     <Field Type="DT_VARIABLEARRAY#3" Offset="24" Flags="35" SubType="Marker#389" VariableOffset="-12" />
     <Field Name="serNoSpawns" Type="SerializeData#2" Offset="80" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="88" Flags="35" SubType="Circle#31" VariableOffset="-8" />
-    <Field Type="DT_INT#1" Offset="168" Flags="1" EncodedBits="32" />
     <Field Type="AABB#33" Offset="144" Flags="1" />
+    <Field Type="DT_INT#1" Offset="168" Flags="1" EncodedBits="32" />
     <Field Type="DT_CHARARRAY#24" Offset="172" Flags="1" ArrayLength="256" EncodedBits="9" />
     <Field Name="nLabel" Type="DT_GBID#181" Offset="428" Flags="1" EncodedBits="32" SnoType="11" />
     <Field Name="nSpecialIndexCount" Type="DT_INT#1" Offset="432" Flags="0" EncodedBits="32" />
@@ -3884,8 +3884,8 @@
   </StructureDescriptor>
   <StructureDescriptor Index="451" Name="Encounter" UnkValue="2">
     <Field Name="snoSymbol" Type="DT_SNO#82" Offset="12" Flags="1" EncodedBits="32" SnoType="1" />
-    <Field Name="serSpawnOptions" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="16" Flags="33" SubType="EncounterSpawnOption#452" VariableOffset="8" />
+    <Field Name="serSpawnOptions" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Offset="32" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="452" Name="EncounterSpawnOption" UnkValue="3">
@@ -3938,12 +3938,12 @@
     <Field Name="snoAltNpc3" Type="DT_SNO#82" Offset="188" Flags="1" EncodedBits="32" SnoType="1" />
     <Field Name="snoAltNpc4" Type="DT_SNO#82" Offset="192" Flags="1" EncodedBits="32" SnoType="1" />
     <Field Type="DT_INT#1" Offset="196" Flags="1" EncodedBits="32" />
-    <Field Name="serRootTreeNodes" Type="SerializeData#2" Offset="208" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="200" Flags="33" SubType="ConversationTreeNode#455" VariableOffset="8" />
+    <Field Name="serRootTreeNodes" Type="SerializeData#2" Offset="208" Flags="0" />
     <Field Type="DT_CHARARRAY#24" Offset="216" Flags="1" ArrayLength="256" EncodedBits="9" />
     <Field Type="DT_INT#1" Offset="472" Flags="1" EncodedBits="32" />
-    <Field Name="serCompiledScript" Type="SerializeData#2" Offset="488" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="480" Flags="32" SubType="DT_BYTE#38" VariableOffset="8" />
+    <Field Name="serCompiledScript" Type="SerializeData#2" Offset="488" Flags="0" />
     <Field Name="snoBossEncounter" Type="DT_SNO#82" Offset="536" Flags="1" EncodedBits="32" SnoType="64" />
     <Field Offset="544" Flags="0" />
   </StructureDescriptor>
@@ -3951,12 +3951,6 @@
     <Field Type="DT_INT#1" Offset="0" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="4" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="8" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="20" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="24" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="28" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="32" Flags="1" SubType="ConvLocaleDisplayTimes#456" ArrayLength="18" />
-    <Field Name="serComment" Type="SerializeData#2" Offset="760" Flags="0" />
-    <Field Type="DT_CSTRING#433" Offset="752" Flags="33" SubType="DT_BYTE#38" VariableOffset="8" />
     <Field Type="DT_ENUM#112" Offset="12" Min="-1" Max="8" Flags="17" EncodedBits="4">
       <Enum>
         <Entry Name="- None -" Value="-1" />
@@ -3985,13 +3979,19 @@
         <Entry Name="Enchantress Follower" Value="8" />
       </Enum>
     </Field>
+    <Field Type="DT_INT#1" Offset="20" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="24" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="28" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="32" Flags="1" SubType="ConvLocaleDisplayTimes#456" ArrayLength="18" />
+    <Field Type="DT_CSTRING#433" Offset="752" Flags="33" SubType="DT_BYTE#38" VariableOffset="8" />
+    <Field Name="serComment" Type="SerializeData#2" Offset="760" Flags="0" />
     <Field Type="DT_INT#1" Offset="768" Flags="1" EncodedBits="32" />
-    <Field Name="serTrueNodes" Type="SerializeData#2" Offset="784" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="776" Flags="33" SubType="ConversationTreeNode#455" VariableOffset="8" />
-    <Field Name="serFalseNodes" Type="SerializeData#2" Offset="800" Flags="0" />
+    <Field Name="serTrueNodes" Type="SerializeData#2" Offset="784" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="792" Flags="33" SubType="ConversationTreeNode#455" VariableOffset="8" />
-    <Field Name="serChildNodes" Type="SerializeData#2" Offset="816" Flags="0" />
+    <Field Name="serFalseNodes" Type="SerializeData#2" Offset="800" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="808" Flags="33" SubType="ConversationTreeNode#455" VariableOffset="8" />
+    <Field Name="serChildNodes" Type="SerializeData#2" Offset="816" Flags="0" />
     <Field Offset="824" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="456" Name="ConvLocaleDisplayTimes">
@@ -3999,8 +3999,8 @@
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="457" Name="ConversationList" UnkValue="3">
-    <Field Name="serConvList" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="16" Flags="33" SubType="ConversationListEntry#458" VariableOffset="8" />
+    <Field Name="serConvList" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Offset="32" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="458" Name="ConversationListEntry" UnkValue="1">
@@ -4021,8 +4021,8 @@
     <Field Offset="304" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="459" Name="FlagSet">
-    <Field Name="serFlagLookups" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="16" Flags="33" SubType="FlagLookup#460" VariableOffset="8" />
+    <Field Name="serFlagLookups" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Offset="32" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="460" Name="FlagLookup">
@@ -4050,8 +4050,8 @@
     <Field Name="snoLevelAreaOverrideForGizmoLocs" Type="DT_SNO#82" Offset="32" Flags="1" EncodedBits="32" SnoType="22" />
     <Field Type="GizmoLocSet#230" Offset="40" Flags="1" />
     <Field Type="DT_INT#1" Offset="9192" Flags="1" EncodedBits="32" />
-    <Field Name="serSpawnPopulations" Type="SerializeData#2" Offset="9208" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="9200" Flags="1057" SubType="LevelAreaSpawnPopulation#464" VariableOffset="8" />
+    <Field Name="serSpawnPopulations" Type="SerializeData#2" Offset="9208" Flags="0" />
     <Field Offset="9216" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="464" Name="LevelAreaSpawnPopulation" UnkValue="2">
@@ -4059,8 +4059,8 @@
     <Field Type="DT_INT#1" Offset="64" Flags="1" EncodedBits="32" />
     <Field Type="DT_FIXEDARRAY#20" Offset="68" Flags="1" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="84" Flags="1" EncodedBits="32" />
-    <Field Name="serSpawnGroups" Type="SerializeData#2" Offset="96" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="88" Flags="33" SubType="LevelAreaSpawnGroup#465" VariableOffset="8" />
+    <Field Name="serSpawnGroups" Type="SerializeData#2" Offset="96" Flags="0" />
     <Field Offset="104" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="465" Name="LevelAreaSpawnGroup" UnkValue="5">
@@ -4074,8 +4074,8 @@
     <Field Type="DT_FLOAT#5" Offset="8" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="12" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="16" Flags="1" EncodedBits="32" />
-    <Field Name="serSpawnItems" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="24" Flags="33" SubType="LevelAreaSpawnItem#466" VariableOffset="8" />
+    <Field Name="serSpawnItems" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_INT#1" Offset="40" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="44" Flags="1" EncodedBits="32" />
     <Field Offset="48" Flags="0" />
@@ -4110,14 +4110,14 @@
     <Field Type="DT_INT#1" Offset="16" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="20" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="24" Flags="1" EncodedBits="32" />
-    <Field Type="QuestUnassignedStep#468" Offset="40" Flags="1" />
-    <Field Name="serQuestSteps" Type="SerializeData#2" Offset="88" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="80" Flags="33" SubType="QuestStep#473" VariableOffset="8" />
-    <Field Name="serQuestCompletionSteps" Type="SerializeData#2" Offset="104" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="96" Flags="33" SubType="QuestCompletionStep#475" VariableOffset="8" />
     <Field Type="DT_INT#1" Offset="28" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="32" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="36" Flags="1" EncodedBits="32" />
+    <Field Type="QuestUnassignedStep#468" Offset="40" Flags="1" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="80" Flags="33" SubType="QuestStep#473" VariableOffset="8" />
+    <Field Name="serQuestSteps" Type="SerializeData#2" Offset="88" Flags="0" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="96" Flags="33" SubType="QuestCompletionStep#475" VariableOffset="8" />
+    <Field Name="serQuestCompletionSteps" Type="SerializeData#2" Offset="104" Flags="0" />
     <Field Type="QuestLevelRange#476" Offset="112" Flags="1" />
     <Field Type="QuestLevelRange#476" Offset="120" Flags="1" />
     <Field Type="QuestLevelRange#476" Offset="128" Flags="1" />
@@ -4126,16 +4126,16 @@
   </StructureDescriptor>
   <StructureDescriptor Index="468" Name="QuestUnassignedStep">
     <Field Type="DT_INT#1" Offset="0" Flags="1" EncodedBits="32" />
-    <Field Name="serStepObjectiveSets" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="8" Flags="33" SubType="QuestStepObjectiveSet#469" VariableOffset="8" />
-    <Field Name="serStepFailureConditionSets" Type="SerializeData#2" Offset="32" Flags="0" />
+    <Field Name="serStepObjectiveSets" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="24" Flags="33" SubType="QuestStepFailureConditionSet#471" VariableOffset="8" />
+    <Field Name="serStepFailureConditionSets" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="469" Name="QuestStepObjectiveSet">
     <Field Type="DT_INT#1" Offset="0" Flags="1" EncodedBits="32" />
-    <Field Name="serStepObjectives" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="8" Flags="33" SubType="QuestStepObjective#470" VariableOffset="8" />
+    <Field Name="serStepObjectives" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Offset="24" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="470" Name="QuestStepObjective" UnkValue="2">
@@ -4172,8 +4172,8 @@
     <Field Offset="564" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="471" Name="QuestStepFailureConditionSet">
-    <Field Name="serStepFailureConditions" Type="SerializeData#2" Offset="8" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="0" Flags="33" SubType="QuestStepFailureCondition#472" VariableOffset="8" />
+    <Field Name="serStepFailureConditions" Type="SerializeData#2" Offset="8" Flags="0" />
     <Field Offset="16" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="472" Name="QuestStepFailureCondition" UnkValue="1">
@@ -4202,6 +4202,8 @@
   <StructureDescriptor Index="473" Name="QuestStep" UnkValue="5">
     <Field Type="DT_CHARARRAY#24" Offset="0" Flags="1" ArrayLength="64" EncodedBits="7" />
     <Field Type="DT_INT#1" Offset="64" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="68" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="72" Flags="1" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
     <Field Type="DT_ENUM#112" Offset="88" Min="0" Max="3" Flags="17" EncodedBits="2">
       <Enum>
         <Entry Name="- No Item -" Value="0" />
@@ -4212,7 +4214,6 @@
     </Field>
     <Field Name="snoRewardRecipe" Type="DT_FIXEDARRAY#20" Offset="92" Flags="1" SubType="DT_SNO#82" ArrayLength="5" EncodedBits="32" SnoType="49" />
     <Field Name="snoRewardTreasureClass" Type="DT_SNO#82" Offset="112" Flags="1" EncodedBits="32" SnoType="52" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="72" Flags="1" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="116" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="120" Flags="1" EncodedBits="32" />
     <Field Type="DT_ENUM#112" Offset="124" Min="0" Max="3" Flags="17" EncodedBits="2">
@@ -4227,15 +4228,14 @@
     <Field Name="snoReplayRewardTreasureClass" Type="DT_SNO#82" Offset="148" Flags="1" EncodedBits="32" SnoType="52" />
     <Field Type="DT_INT#1" Offset="152" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="156" Flags="1" EncodedBits="32" />
-    <Field Name="serStepObjectiveSets" Type="SerializeData#2" Offset="184" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="176" Flags="33" SubType="QuestStepObjectiveSet#469" VariableOffset="8" />
-    <Field Name="serStepBonusObjectiveSets" Type="SerializeData#2" Offset="200" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="192" Flags="33" SubType="QuestStepBonusObjectiveSet#474" VariableOffset="8" />
-    <Field Name="serStepFailureConditionSets" Type="SerializeData#2" Offset="216" Flags="0" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="208" Flags="33" SubType="QuestStepFailureConditionSet#471" VariableOffset="8" />
-    <Field Type="DT_INT#1" Offset="68" Flags="1" EncodedBits="32" />
     <Field Name="snoPowerGranted" Type="DT_SNO#82" Offset="160" Flags="1" EncodedBits="32" SnoType="29" />
     <Field Name="snoWaypointLevelAreas" Type="DT_FIXEDARRAY#20" Offset="164" Flags="1" SubType="DT_SNO#82" ArrayLength="2" EncodedBits="32" SnoType="22" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="176" Flags="33" SubType="QuestStepObjectiveSet#469" VariableOffset="8" />
+    <Field Name="serStepObjectiveSets" Type="SerializeData#2" Offset="184" Flags="0" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="192" Flags="33" SubType="QuestStepBonusObjectiveSet#474" VariableOffset="8" />
+    <Field Name="serStepBonusObjectiveSets" Type="SerializeData#2" Offset="200" Flags="0" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="208" Flags="33" SubType="QuestStepFailureConditionSet#471" VariableOffset="8" />
+    <Field Name="serStepFailureConditionSets" Type="SerializeData#2" Offset="216" Flags="0" />
     <Field Offset="224" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="474" Name="QuestStepBonusObjectiveSet" UnkValue="1">
@@ -4245,8 +4245,8 @@
     <Field Type="DT_INT#1" Offset="24" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="28" Min="0" Max="1" Flags="17" EncodedBits="1" />
     <Field Type="DT_INT#1" Offset="32" Min="0" Max="1" Flags="17" EncodedBits="1" />
-    <Field Name="serStepBonusObjectives" Type="SerializeData#2" Offset="48" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="40" Flags="33" SubType="QuestStepObjective#470" VariableOffset="8" />
+    <Field Name="serStepBonusObjectives" Type="SerializeData#2" Offset="48" Flags="0" />
     <Field Offset="56" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="475" Name="QuestCompletionStep" UnkValue="1">
@@ -4271,10 +4271,10 @@
     <Field Offset="8" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="479" Name="SkillKit" UnkValue="1">
-    <Field Name="serTraitEntries" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="16" Flags="33" SubType="TraitEntry#480" VariableOffset="8" />
-    <Field Name="serActiveSkillEntries" Type="SerializeData#2" Offset="40" Flags="0" />
+    <Field Name="serTraitEntries" Type="SerializeData#2" Offset="24" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="32" Flags="33" SubType="ActiveSkillEntry#481" VariableOffset="8" />
+    <Field Name="serActiveSkillEntries" Type="SerializeData#2" Offset="40" Flags="0" />
     <Field Offset="48" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="480" Name="TraitEntry">
@@ -4332,6 +4332,7 @@
         <Entry Name="Boss" Value="7" />
       </Enum>
     </Field>
+    <Field Type="Monster#486" Offset="36" Flags="1" />
     <Field Type="DT_ENUM#112" Offset="56" Min="0" Max="6" Flags="17" EncodedBits="3">
       <Enum>
         <Entry Name="Physical" Value="0" />
@@ -4346,20 +4347,45 @@
     <Field Type="DT_INT#1" Offset="60" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="64" Flags="1" EncodedBits="32" />
     <Field Type="DT_FIXEDARRAY#20" Offset="68" Flags="1" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="84" Flags="1" SubType="DT_FLOAT#5" ArrayLength="138" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="636" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="640" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="644" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="648" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="652" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="656" Flags="1" EncodedBits="32" />
-    <Field Name="snoInventory" Type="DT_SNO#82" Offset="960" Flags="1" EncodedBits="32" SnoType="52" />
-    <Field Name="snoSecondaryInventory" Type="DT_SNO#82" Offset="964" Flags="1" EncodedBits="32" SnoType="52" />
-    <Field Name="snoLore" Type="DT_SNO#82" Offset="968" Flags="1" EncodedBits="32" SnoType="59" />
+    <Field Type="DT_INT#1" Offset="660" Flags="1" EncodedBits="32" />
     <Field Type="HealthDropInfo#483" Offset="664" Flags="1" />
     <Field Type="HealthDropInfo#483" Offset="676" Flags="1" />
     <Field Type="HealthDropInfo#483" Offset="688" Flags="1" />
     <Field Type="HealthDropInfo#483" Offset="700" Flags="1" />
-    <Field Type="DT_INT#1" Offset="660" Flags="1" EncodedBits="32" />
+    <Field Name="snoSkillKit" Type="DT_SNO#82" Offset="712" Flags="1" EncodedBits="32" SnoType="39" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="716" Flags="1" SubType="SkillDeclaration#484" ArrayLength="8" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="780" Flags="1" SubType="MonsterSkillDeclaration#485" ArrayLength="8" />
+    <Field Name="snoTreasureClassFirstKill" Type="DT_SNO#82" Offset="908" Flags="1" EncodedBits="32" SnoType="52" />
+    <Field Name="snoTreasureClass" Type="DT_SNO#82" Offset="912" Flags="1" EncodedBits="32" SnoType="52" />
+    <Field Name="snoTreasureClassRare" Type="DT_SNO#82" Offset="916" Flags="1" EncodedBits="32" SnoType="52" />
+    <Field Name="snoTreasureClassChampion" Type="DT_SNO#82" Offset="920" Flags="1" EncodedBits="32" SnoType="52" />
+    <Field Name="snoTreasureClassChampionLight" Type="DT_SNO#82" Offset="924" Flags="1" EncodedBits="32" SnoType="52" />
+    <Field Type="DT_FLOAT#5" Offset="928" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="932" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="936" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="940" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="944" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="948" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="952" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="956" Flags="1" EncodedBits="32" />
+    <Field Name="snoInventory" Type="DT_SNO#82" Offset="960" Flags="1" EncodedBits="32" SnoType="52" />
+    <Field Name="snoSecondaryInventory" Type="DT_SNO#82" Offset="964" Flags="1" EncodedBits="32" SnoType="52" />
+    <Field Name="snoLore" Type="DT_SNO#82" Offset="968" Flags="1" EncodedBits="32" SnoType="59" />
+    <Field Name="arAIBehaviors" Type="DT_FIXEDARRAY#20" Offset="972" Flags="1" SubType="DT_SNO#82" ArrayLength="6" EncodedBits="32" SnoType="3" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="996" Flags="1" SubType="DT_GBID#181" ArrayLength="8" EncodedBits="32" />
+    <Field Name="snoSummonActor" Type="DT_FIXEDARRAY#20" Offset="1028" Flags="1" SubType="DT_SNO#82" ArrayLength="6" EncodedBits="32" SnoType="1" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="1052" Flags="1" SubType="DT_GBID#181" ArrayLength="4" EncodedBits="32" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="1068" Flags="1" SubType="DT_GBID#181" ArrayLength="6" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="1092" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="1096" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="1100" Flags="1" EncodedBits="32" />
     <Field Type="DT_ENUM#112" Offset="1104" Min="0" Max="6" Flags="17" EncodedBits="3">
       <Enum>
         <Entry Name="Mana" Value="0" />
@@ -4371,38 +4397,12 @@
         <Entry Name="Discipline" Value="6" />
       </Enum>
     </Field>
-    <Field Type="DT_FIXEDARRAY#20" Offset="84" Flags="1" SubType="DT_FLOAT#5" ArrayLength="138" EncodedBits="32" />
-    <Field Name="snoSkillKit" Type="DT_SNO#82" Offset="712" Flags="1" EncodedBits="32" SnoType="39" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="716" Flags="1" SubType="SkillDeclaration#484" ArrayLength="8" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="780" Flags="1" SubType="MonsterSkillDeclaration#485" ArrayLength="8" />
-    <Field Name="snoTreasureClassFirstKill" Type="DT_SNO#82" Offset="908" Flags="1" EncodedBits="32" SnoType="52" />
-    <Field Name="snoTreasureClass" Type="DT_SNO#82" Offset="912" Flags="1" EncodedBits="32" SnoType="52" />
-    <Field Name="snoTreasureClassRare" Type="DT_SNO#82" Offset="916" Flags="1" EncodedBits="32" SnoType="52" />
-    <Field Name="snoTreasureClassChampion" Type="DT_SNO#82" Offset="920" Flags="1" EncodedBits="32" SnoType="52" />
-    <Field Name="snoTreasureClassChampionLight" Type="DT_SNO#82" Offset="924" Flags="1" EncodedBits="32" SnoType="52" />
-    <Field Type="Monster#486" Offset="36" Flags="1" />
-    <Field Type="DT_FLOAT#5" Offset="928" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="932" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="936" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="940" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="944" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="948" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="952" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="956" Flags="1" EncodedBits="32" />
-    <Field Name="arAIBehaviors" Type="DT_FIXEDARRAY#20" Offset="972" Flags="1" SubType="DT_SNO#82" ArrayLength="6" EncodedBits="32" SnoType="3" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="996" Flags="1" SubType="DT_GBID#181" ArrayLength="8" EncodedBits="32" />
-    <Field Name="snoSummonActor" Type="DT_FIXEDARRAY#20" Offset="1028" Flags="1" SubType="DT_SNO#82" ArrayLength="6" EncodedBits="32" SnoType="1" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="1052" Flags="1" SubType="DT_GBID#181" ArrayLength="4" EncodedBits="32" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="1068" Flags="1" SubType="DT_GBID#181" ArrayLength="6" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="1092" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="1096" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="1100" Flags="1" EncodedBits="32" />
-    <Field Type="DT_CHARARRAY#24" Offset="1176" Flags="1" ArrayLength="128" EncodedBits="8" />
     <Field Name="serTagMap" Type="SerializeData#2" Offset="1136" Flags="0" />
     <Field Name="hTagMap" Type="DT_TAGMAP#91" Offset="1144" Flags="33" VariableOffset="-8" TagMapRelated="1179648" />
     <Field Type="DT_INT#1" Offset="1152" Flags="1" EncodedBits="32" />
-    <Field Name="serSpawnGroups" Type="SerializeData#2" Offset="1168" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="1160" Flags="33" SubType="MonsterMinionSpawnGroup#487" VariableOffset="8" />
+    <Field Name="serSpawnGroups" Type="SerializeData#2" Offset="1168" Flags="0" />
+    <Field Type="DT_CHARARRAY#24" Offset="1176" Flags="1" ArrayLength="128" EncodedBits="8" />
     <Field Offset="1304" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="483" Name="HealthDropInfo">
@@ -4434,8 +4434,8 @@
   <StructureDescriptor Index="487" Name="MonsterMinionSpawnGroup">
     <Field Type="DT_FLOAT#5" Offset="0" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="4" Flags="1" EncodedBits="32" />
-    <Field Name="serSpawnItems" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="8" Flags="33" SubType="MonsterMinionSpawnItem#488" VariableOffset="8" />
+    <Field Name="serSpawnItems" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Offset="24" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="488" Name="MonsterMinionSpawnItem">
@@ -4583,23 +4583,23 @@
     <Field Type="DT_HIGHPRECISIONPERCENT#508" Offset="12" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="16" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="20" Flags="1" EncodedBits="32" />
-    <Field Name="serModifierList" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="24" Flags="33" SubType="LootDropModifier#509" VariableOffset="8" />
+    <Field Name="serModifierList" Type="SerializeData#2" Offset="32" Flags="0" />
     <Field Offset="40" Flags="0" />
   </StructureDescriptor>
   <BasicDescriptor Index="508" Name="DT_HIGHPRECISIONPERCENT" />
   <StructureDescriptor Index="509" Name="LootDropModifier" UnkValue="1">
     <Field Type="DT_INT#1" Offset="0" Flags="1" EncodedBits="32" />
     <Field Name="snoSubTreasureClass" Type="DT_SNO#82" Offset="4" Flags="1" EncodedBits="32" SnoType="52" />
-    <Field Type="ItemSpecifierData#490" Offset="32" Flags="1" />
-    <Field Name="gbidQualityClass" Type="DT_GBID#181" Offset="16" Flags="1" EncodedBits="32" SnoType="27" />
     <Field Type="DT_HIGHPRECISIONPERCENT#508" Offset="8" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="12" Flags="1" EncodedBits="32" />
-    <Field Name="snoCondition" Type="DT_SNO#82" Offset="28" Flags="1" EncodedBits="32" SnoType="51" />
+    <Field Name="gbidQualityClass" Type="DT_GBID#181" Offset="16" Flags="1" EncodedBits="32" SnoType="27" />
     <Field Type="DT_INT#1" Offset="20" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="24" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="64" Flags="0" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
+    <Field Name="snoCondition" Type="DT_SNO#82" Offset="28" Flags="1" EncodedBits="32" SnoType="51" />
+    <Field Type="ItemSpecifierData#490" Offset="32" Flags="1" />
     <Field Type="DT_INT#1" Offset="60" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="64" Flags="0" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="80" Flags="1" EncodedBits="32" />
     <Field Offset="84" Flags="0" />
   </StructureDescriptor>
@@ -4612,8 +4612,8 @@
     <Field Type="DT_INT#1" Offset="32" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="36" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="40" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="48" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="44" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="48" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="52" Flags="1" EncodedBits="32" />
     <Field Name="snoQuestRange" Type="DT_SNO#82" Offset="56" Flags="1" EncodedBits="32" SnoType="58" />
     <Field Name="arrWorlds" Type="DT_FIXEDARRAY#20" Offset="60" Flags="1" SubType="DT_SNO#82" ArrayLength="4" EncodedBits="32" SnoType="48" />
@@ -4658,9 +4658,6 @@
   </StructureDescriptor>
   <StructureDescriptor Index="516" Name="PlayerSavedQuest">
     <Field Name="snoQuest" Type="DT_SNO#82" Offset="0" Flags="1" EncodedBits="32" SnoType="31" />
-    <Field Type="DT_INT#1" Offset="8" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="12" Flags="1" SubType="DT_INT#1" ArrayLength="20" EncodedBits="32" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="92" Flags="1" SubType="DT_INT#1" ArrayLength="20" EncodedBits="32" />
     <Field Type="DT_ENUM#112" Offset="4" Min="0" Max="3" Flags="17" EncodedBits="2">
       <Enum>
         <Entry Name="Normal" Value="0" />
@@ -4669,6 +4666,9 @@
         <Entry Name="Inferno" Value="3" />
       </Enum>
     </Field>
+    <Field Type="DT_INT#1" Offset="8" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="12" Flags="1" SubType="DT_INT#1" ArrayLength="20" EncodedBits="32" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="92" Flags="1" SubType="DT_INT#1" ArrayLength="20" EncodedBits="32" />
     <Field Offset="172" Flags="0" />
   </StructureDescriptor>
   <GameMessageDescriptor Index="517" Name="QuestCounterMessage" Size="32" NetworkIds="151">
@@ -4693,8 +4693,8 @@
     <Field Name="snoQuest" Type="DT_SNO#82" Offset="8" Flags="1" EncodedBits="32" SnoType="31" />
     <Field Name="snoLevelArea" Type="DT_SNO#82" Offset="12" Flags="1" EncodedBits="32" SnoType="22" />
     <Field Type="DT_INT#1" Offset="16" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="24" Min="0" Max="1" Flags="17" EncodedBits="1" />
     <Field Type="DT_INT#1" Offset="20" Min="0" Max="1" Flags="17" EncodedBits="1" />
+    <Field Type="DT_INT#1" Offset="24" Min="0" Max="1" Flags="17" EncodedBits="1" />
     <Field Offset="28" Flags="0" />
   </GameMessageDescriptor>
   <StructureDescriptor Index="520" Name="GameBalance" UnkValue="3">
@@ -4708,10 +4708,10 @@
     <Field Name="tExperienceTable" Type="ExperienceTable#529" Offset="568" Flags="0" />
     <Field Name="tHelpCodesTable" Type="HelpCodes#531" Offset="584" Flags="0" />
     <Field Name="tMonsterLevelTable" Type="MonsterLevelTable#533" Offset="600" Flags="0" />
+    <Field Name="tAffixTable" Type="AffixTable#541" Offset="616" Flags="0" />
     <Field Name="tHeroTable" Type="Heros#535" Offset="632" Flags="0" />
     <Field Name="tMovementStyleTable" Type="MovementStyles#537" Offset="648" Flags="0" />
     <Field Name="tLabelGBIDTable" Type="Labels#539" Offset="664" Flags="0" />
-    <Field Name="tAffixTable" Type="AffixTable#541" Offset="616" Flags="0" />
     <Field Name="tLootDistTable" Type="LootDistributionTable#544" Offset="680" Flags="0" />
     <Field Name="tRareItemNamesTable" Type="RareItemNamesTable#546" Offset="696" Flags="0" />
     <Field Name="tMonsterAffixesTable" Type="MonsterAffixesTable#548" Offset="712" Flags="0" />
@@ -4739,6 +4739,20 @@
     <Field Name="Name" Type="DT_CHARARRAY#24" Offset="4" Flags="5" ArrayLength="256" EncodedBits="9" />
     <Field Name="ParentType" Type="DT_GBID#181" Offset="260" Flags="1" EncodedBits="32" SnoType="1" />
     <Field Type="DT_INT#1" Offset="264" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="12" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="1" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="3" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="6" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="7" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="8" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="9" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="10" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="13" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="11" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="14" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="15" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="16" />
     <Field Type="DT_ENUM#112" Offset="272" Min="0" Max="28" Flags="17" EncodedBits="5">
       <Enum>
         <Entry Name="Player:Backpack" Value="0" />
@@ -4843,20 +4857,6 @@
         <Entry Name="Pet:Neck" Value="26" />
       </Enum>
     </Field>
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="12" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="1" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="3" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="6" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="7" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="8" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="9" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="10" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="13" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="11" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="14" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="15" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="16" />
     <Field Name="InherentAffix1" Type="DT_GBID#181" Offset="288" Flags="1" EncodedBits="32" SnoType="8" />
     <Field Name="InherentAffix2" Type="DT_GBID#181" Offset="292" Flags="1" EncodedBits="32" SnoType="8" />
     <Field Name="InherentAffix3" Type="DT_GBID#181" Offset="296" Flags="1" EncodedBits="32" SnoType="8" />
@@ -4874,6 +4874,15 @@
     <Field Name="Name" Type="DT_CHARARRAY#24" Offset="4" Flags="5" ArrayLength="256" EncodedBits="9" />
     <Field Name="Actor" Type="DT_SNO#82" Offset="260" Flags="1" EncodedBits="32" SnoType="1" />
     <Field Name="ItemType1" Type="DT_GBID#181" Offset="264" Flags="1" EncodedBits="32" SnoType="1" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="1" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="2" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="3" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="4" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="5" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="7" />
+    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="6" />
+    <Field Type="DT_INT#1" Offset="272" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="276" Flags="1" EncodedBits="32" />
     <Field Type="DT_ENUM#112" Offset="280" Min="-1" Max="1000" Flags="17" EncodedBits="10">
       <Enum>
@@ -4890,10 +4899,10 @@
     <Field Type="DT_INT#1" Offset="292" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="296" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="300" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="312" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="316" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="304" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="308" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="312" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="316" Flags="1" EncodedBits="32" />
     <Field Name="BaseItem" Type="DT_GBID#181" Offset="320" Flags="1" EncodedBits="32" SnoType="2" />
     <Field Name="Set" Type="DT_GBID#181" Offset="324" Flags="1" EncodedBits="32" SnoType="33" />
     <Field Name="ComponentTreasureClass" Type="DT_SNO#82" Offset="328" Flags="1" EncodedBits="32" SnoType="52" />
@@ -4901,22 +4910,14 @@
     <Field Name="ComponentTreasureClassRare" Type="DT_SNO#82" Offset="336" Flags="1" EncodedBits="32" SnoType="52" />
     <Field Name="RareNamePrefixStringList" Type="DT_SNO#82" Offset="340" Flags="1" EncodedBits="32" SnoType="42" />
     <Field Name="RareNameSuffixStringList" Type="DT_SNO#82" Offset="344" Flags="1" EncodedBits="32" SnoType="42" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="1" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="2" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="3" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="4" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="5" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="7" />
-    <Field Type="DT_FLAG#523" Offset="268" Flags="1" EncodedBits="1" FlagIndex="6" />
-    <Field Type="DT_INT#1" Offset="272" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="348" Flags="1" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="452" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="456" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="808" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="812" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="720" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="544" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="548" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="720" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="808" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="812" Flags="1" EncodedBits="32" />
     <Field Name="Skill0" Type="DT_SNO#82" Offset="916" Flags="1" EncodedBits="32" SnoType="29" />
     <Field Type="DT_INT#1" Offset="920" Flags="1" EncodedBits="32" />
     <Field Name="Skill1" Type="DT_SNO#82" Offset="924" Flags="1" EncodedBits="32" SnoType="29" />
@@ -4925,71 +4926,70 @@
     <Field Type="DT_INT#1" Offset="936" Flags="1" EncodedBits="32" />
     <Field Name="Skill3" Type="DT_SNO#82" Offset="940" Flags="1" EncodedBits="32" SnoType="29" />
     <Field Type="DT_INT#1" Offset="944" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="348" Flags="1" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="992" Flags="1" />
     <Field Name="AttributeParam1" Type="DT_ATTRIBUTEPARAM#527" Offset="996" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[0].serAttributeFormula" Type="SerializeData#2" Offset="1008" Flags="0" />
     <Field Name="AttributeFormula1" Type="DT_FORMULA#528" Offset="1000" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[0].serAttributeFormula" Type="SerializeData#2" Offset="1008" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1016" Flags="1" />
     <Field Name="AttributeParam2" Type="DT_ATTRIBUTEPARAM#527" Offset="1020" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[1].serAttributeFormula" Type="SerializeData#2" Offset="1032" Flags="0" />
     <Field Name="AttributeFormula2" Type="DT_FORMULA#528" Offset="1024" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[1].serAttributeFormula" Type="SerializeData#2" Offset="1032" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1040" Flags="1" />
     <Field Name="AttributeParam3" Type="DT_ATTRIBUTEPARAM#527" Offset="1044" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[2].serAttributeFormula" Type="SerializeData#2" Offset="1056" Flags="0" />
     <Field Name="AttributeFormula3" Type="DT_FORMULA#528" Offset="1048" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[2].serAttributeFormula" Type="SerializeData#2" Offset="1056" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1064" Flags="1" />
     <Field Name="AttributeParam4" Type="DT_ATTRIBUTEPARAM#527" Offset="1068" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[3].serAttributeFormula" Type="SerializeData#2" Offset="1080" Flags="0" />
     <Field Name="AttributeFormula4" Type="DT_FORMULA#528" Offset="1072" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[3].serAttributeFormula" Type="SerializeData#2" Offset="1080" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1088" Flags="1" />
     <Field Name="AttributeParam5" Type="DT_ATTRIBUTEPARAM#527" Offset="1092" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[4].serAttributeFormula" Type="SerializeData#2" Offset="1104" Flags="0" />
     <Field Name="AttributeFormula5" Type="DT_FORMULA#528" Offset="1096" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[4].serAttributeFormula" Type="SerializeData#2" Offset="1104" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1112" Flags="1" />
     <Field Name="AttributeParam6" Type="DT_ATTRIBUTEPARAM#527" Offset="1116" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[5].serAttributeFormula" Type="SerializeData#2" Offset="1128" Flags="0" />
     <Field Name="AttributeFormula6" Type="DT_FORMULA#528" Offset="1120" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[5].serAttributeFormula" Type="SerializeData#2" Offset="1128" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1136" Flags="1" />
     <Field Name="AttributeParam7" Type="DT_ATTRIBUTEPARAM#527" Offset="1140" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[6].serAttributeFormula" Type="SerializeData#2" Offset="1152" Flags="0" />
     <Field Name="AttributeFormula7" Type="DT_FORMULA#528" Offset="1144" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[6].serAttributeFormula" Type="SerializeData#2" Offset="1152" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1160" Flags="1" />
     <Field Name="AttributeParam8" Type="DT_ATTRIBUTEPARAM#527" Offset="1164" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[7].serAttributeFormula" Type="SerializeData#2" Offset="1176" Flags="0" />
     <Field Name="AttributeFormula8" Type="DT_FORMULA#528" Offset="1168" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[7].serAttributeFormula" Type="SerializeData#2" Offset="1176" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1184" Flags="1" />
     <Field Name="AttributeParam9" Type="DT_ATTRIBUTEPARAM#527" Offset="1188" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[8].serAttributeFormula" Type="SerializeData#2" Offset="1200" Flags="0" />
     <Field Name="AttributeFormula9" Type="DT_FORMULA#528" Offset="1192" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[8].serAttributeFormula" Type="SerializeData#2" Offset="1200" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1208" Flags="1" />
     <Field Name="AttributeParam10" Type="DT_ATTRIBUTEPARAM#527" Offset="1212" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[9].serAttributeFormula" Type="SerializeData#2" Offset="1224" Flags="0" />
     <Field Name="AttributeFormula10" Type="DT_FORMULA#528" Offset="1216" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[9].serAttributeFormula" Type="SerializeData#2" Offset="1224" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1232" Flags="1" />
     <Field Name="AttributeParam11" Type="DT_ATTRIBUTEPARAM#527" Offset="1236" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[10].serAttributeFormula" Type="SerializeData#2" Offset="1248" Flags="0" />
     <Field Name="AttributeFormula11" Type="DT_FORMULA#528" Offset="1240" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[10].serAttributeFormula" Type="SerializeData#2" Offset="1248" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1256" Flags="1" />
     <Field Name="AttributeParam12" Type="DT_ATTRIBUTEPARAM#527" Offset="1260" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[11].serAttributeFormula" Type="SerializeData#2" Offset="1272" Flags="0" />
     <Field Name="AttributeFormula12" Type="DT_FORMULA#528" Offset="1264" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[11].serAttributeFormula" Type="SerializeData#2" Offset="1272" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1280" Flags="1" />
     <Field Name="AttributeParam13" Type="DT_ATTRIBUTEPARAM#527" Offset="1284" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[12].serAttributeFormula" Type="SerializeData#2" Offset="1296" Flags="0" />
     <Field Name="AttributeFormula13" Type="DT_FORMULA#528" Offset="1288" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[12].serAttributeFormula" Type="SerializeData#2" Offset="1296" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1304" Flags="1" />
     <Field Name="AttributeParam14" Type="DT_ATTRIBUTEPARAM#527" Offset="1308" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[13].serAttributeFormula" Type="SerializeData#2" Offset="1320" Flags="0" />
     <Field Name="AttributeFormula14" Type="DT_FORMULA#528" Offset="1312" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[13].serAttributeFormula" Type="SerializeData#2" Offset="1320" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1328" Flags="1" />
     <Field Name="AttributeParam15" Type="DT_ATTRIBUTEPARAM#527" Offset="1332" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[14].serAttributeFormula" Type="SerializeData#2" Offset="1344" Flags="0" />
     <Field Name="AttributeFormula15" Type="DT_FORMULA#528" Offset="1336" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[14].serAttributeFormula" Type="SerializeData#2" Offset="1344" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="1352" Flags="1" />
     <Field Name="AttributeParam16" Type="DT_ATTRIBUTEPARAM#527" Offset="1356" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[15].serAttributeFormula" Type="SerializeData#2" Offset="1368" Flags="0" />
     <Field Name="AttributeFormula16" Type="DT_FORMULA#528" Offset="1360" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[15].serAttributeFormula" Type="SerializeData#2" Offset="1368" Flags="0" />
     <Field Type="DT_ENUM#112" Offset="1376" Min="-1" Max="10" Flags="17" EncodedBits="4">
       <Enum>
         <Entry Name="Invalid" Value="-1" />
@@ -5092,16 +5092,16 @@
     <Field Type="DT_INT#1" Offset="180" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="184" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="188" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="228" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="192" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="196" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="200" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="204" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="232" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="208" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="212" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="216" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="220" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="228" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="232" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="236" Flags="1" EncodedBits="32" />
     <Field Offset="240" Flags="0" />
   </StructureDescriptor>
@@ -5123,16 +5123,11 @@
   </StructureDescriptor>
   <StructureDescriptor Index="534" Name="MonsterLevelDefinition">
     <Field Type="DT_INT#1" Offset="0" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="484" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="488" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="496" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="492" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="20" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="32" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="36" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="40" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="48" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="184" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="92" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="96" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="100" Flags="1" EncodedBits="32" />
@@ -5145,25 +5140,17 @@
     <Field Type="DT_FLOAT#5" Offset="128" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="132" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="136" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="440" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="444" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="140" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="144" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="460" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="464" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="468" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="472" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="476" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="504" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="148" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="152" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="156" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="160" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="176" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="180" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="184" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="220" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="224" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="176" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="520" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="180" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="232" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="236" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="268" Flags="1" EncodedBits="32" />
@@ -5175,6 +5162,19 @@
     <Field Type="DT_FLOAT#5" Offset="292" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="296" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="300" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="440" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="444" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="460" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="464" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="468" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="472" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="476" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="484" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="488" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="492" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="496" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="504" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="520" Flags="1" EncodedBits="32" />
     <Field Offset="556" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="535" Name="Heros">
@@ -5194,15 +5194,6 @@
     <Field Name="SkillKit1" Type="DT_SNO#82" Offset="288" Flags="1" EncodedBits="32" SnoType="39" />
     <Field Name="SkillKit2" Type="DT_SNO#82" Offset="292" Flags="1" EncodedBits="32" SnoType="39" />
     <Field Name="SkillKit3" Type="DT_SNO#82" Offset="296" Flags="1" EncodedBits="32" SnoType="39" />
-    <Field Type="DT_FLOAT#5" Offset="308" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="312" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="796" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="800" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="808" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="804" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="332" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="336" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="348" Flags="1" EncodedBits="32" />
     <Field Type="DT_ENUM#112" Offset="300" Min="0" Max="6" Flags="17" EncodedBits="3">
       <Enum>
         <Entry Name="Mana" Value="0" />
@@ -5225,25 +5216,25 @@
         <Entry Name="Discipline" Value="6" />
       </Enum>
     </Field>
+    <Field Type="DT_FLOAT#5" Offset="308" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="312" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="332" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="336" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="348" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="352" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="356" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="360" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="368" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="372" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="376" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="496" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="404" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="532" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="536" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="488" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="544" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="480" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="484" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="768" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="852" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="856" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="860" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="864" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="488" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="496" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="532" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="536" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="544" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="580" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="584" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="588" Flags="1" EncodedBits="32" />
@@ -5260,6 +5251,15 @@
     <Field Type="DT_FLOAT#5" Offset="716" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="720" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="724" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="768" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="796" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="800" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="804" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="808" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="852" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="856" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="860" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="864" Flags="1" EncodedBits="32" />
     <Field Offset="868" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="537" Name="MovementStyles">
@@ -5297,8 +5297,8 @@
     <Field Type="DT_FLOAT#5" Offset="360" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="364" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="368" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="376" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="372" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="376" Flags="1" EncodedBits="32" />
     <Field Name="snoPowerToBreakObjects" Type="DT_SNO#82" Offset="380" Flags="1" EncodedBits="32" SnoType="29" />
     <Field Offset="384" Flags="0" />
   </StructureDescriptor>
@@ -5350,6 +5350,9 @@
     <Field Name="RareNameSuffixStringList" Type="DT_SNO#82" Offset="300" Flags="1" EncodedBits="32" SnoType="42" />
     <Field Name="AffixFamily0" Type="DT_GBID#181" Offset="304" Flags="1" EncodedBits="32" SnoType="8" />
     <Field Name="AffixFamily1" Type="DT_GBID#181" Offset="308" Flags="1" EncodedBits="32" SnoType="8" />
+    <Field Name="ExclusionCategory" Type="DT_GBID#181" Offset="312" Flags="1" EncodedBits="32" SnoType="8" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="316" Flags="1" SubType="DT_INT#1" ArrayLength="6" EncodedBits="32" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="340" Flags="1" SubType="DT_INT#1" ArrayLength="6" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="364" Flags="1" EncodedBits="32" />
     <Field Type="DT_ENUM#112" Offset="368" Min="0" Max="11" Flags="17" EncodedBits="4">
       <Enum>
@@ -5364,18 +5367,15 @@
         <Entry Name="Socket Enhancement" Value="11" />
       </Enum>
     </Field>
-    <Field Type="DT_FIXEDARRAY#20" Offset="340" Flags="1" SubType="DT_INT#1" ArrayLength="6" EncodedBits="32" />
     <Field Name="AssociatedAffix" Type="DT_GBID#181" Offset="372" Flags="1" EncodedBits="32" SnoType="8" />
-    <Field Name="ExclusionCategory" Type="DT_GBID#181" Offset="312" Flags="1" EncodedBits="32" SnoType="8" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="316" Flags="1" SubType="DT_INT#1" ArrayLength="6" EncodedBits="32" />
     <Field Type="DT_FIXEDARRAY#20" Offset="376" Flags="1" SubType="AttributeSpecifier#543" ArrayLength="4" />
     <Field Offset="544" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="543" Name="AttributeSpecifier">
     <Field Type="DT_TRANSLATEABLE#526" Offset="0" Flags="1" />
     <Field Name="SNOParam" Type="DT_SNO#82" Offset="4" Flags="1" EncodedBits="32" />
-    <Field Name="serAttributeFormula" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Name="Formula" Type="DT_FORMULA#528" Offset="8" Flags="0" VariableOffset="8" />
+    <Field Name="serAttributeFormula" Type="SerializeData#2" Offset="16" Flags="0" />
     <Field Offset="24" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="544" Name="LootDistributionTable">
@@ -5416,7 +5416,6 @@
   </StructureDescriptor>
   <StructureDescriptor Index="547" Name="RareItemNamesEntry">
     <Field Name="Name" Type="DT_CHARARRAY#24" Offset="4" Flags="5" ArrayLength="256" EncodedBits="9" />
-    <Field Name="RelatedAffixOrItemType" Type="DT_GBID#181" Offset="264" Flags="1" EncodedBits="32" />
     <Field Type="DT_ENUM#112" Offset="260" Min="1" Max="37" Flags="17" EncodedBits="6">
       <Enum>
         <Entry Name="Item Types" Value="1" />
@@ -5447,6 +5446,7 @@
         <Entry Name="Scripted Achievement Events" Value="37" />
       </Enum>
     </Field>
+    <Field Name="RelatedAffixOrItemType" Type="DT_GBID#181" Offset="264" Flags="1" EncodedBits="32" />
     <Field Type="DT_ENUM#112" Offset="268" Min="0" Max="11" Flags="17" EncodedBits="4">
       <Enum>
         <Entry Name="Prefix" Value="0" />
@@ -5472,19 +5472,6 @@
     <Field Type="DT_INT#1" Offset="260" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="264" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="268" Flags="1" EncodedBits="32" />
-    <Field Type="DT_ENUM#112" Offset="280" Min="0" Max="11" Flags="17" EncodedBits="4">
-      <Enum>
-        <Entry Name="Prefix" Value="0" />
-        <Entry Name="Suffix" Value="1" />
-        <Entry Name="Inherent" Value="2" />
-        <Entry Name="Title" Value="5" />
-        <Entry Name="Quality" Value="6" />
-        <Entry Name="Immunity" Value="7" />
-        <Entry Name="Random" Value="9" />
-        <Entry Name="Enhancement" Value="10" />
-        <Entry Name="Socket Enhancement" Value="11" />
-      </Enum>
-    </Field>
     <Field Type="DT_ENUM#112" Offset="272" Min="0" Max="3" Flags="17" EncodedBits="2">
       <Enum>
         <Entry Name="All" Value="0" />
@@ -5504,92 +5491,105 @@
         <Entry Name="Holy" Value="6" />
       </Enum>
     </Field>
+    <Field Type="DT_ENUM#112" Offset="280" Min="0" Max="11" Flags="17" EncodedBits="4">
+      <Enum>
+        <Entry Name="Prefix" Value="0" />
+        <Entry Name="Suffix" Value="1" />
+        <Entry Name="Inherent" Value="2" />
+        <Entry Name="Title" Value="5" />
+        <Entry Name="Quality" Value="6" />
+        <Entry Name="Immunity" Value="7" />
+        <Entry Name="Random" Value="9" />
+        <Entry Name="Enhancement" Value="10" />
+        <Entry Name="Socket Enhancement" Value="11" />
+      </Enum>
+    </Field>
     <Field Type="DT_INT#1" Offset="284" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="288" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="292" Flags="1" EncodedBits="32" />
-    <Field Name="On_Spawn_Power_Minion" Type="DT_SNO#82" Offset="780" Flags="1" EncodedBits="32" SnoType="29" />
-    <Field Name="On_Spawn_Power_Rare" Type="DT_SNO#82" Offset="788" Flags="1" EncodedBits="32" SnoType="29" />
-    <Field Name="On_Spawn_Power_Champion" Type="DT_SNO#82" Offset="784" Flags="1" EncodedBits="32" SnoType="29" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="296" Flags="1" />
     <Field Name="Param0" Type="DT_ATTRIBUTEPARAM#527" Offset="300" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[0].serAttributeFormula" Type="SerializeData#2" Offset="312" Flags="0" />
     <Field Name="Value0" Type="DT_FORMULA#528" Offset="304" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[0].serAttributeFormula" Type="SerializeData#2" Offset="312" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="320" Flags="1" />
     <Field Name="Param1" Type="DT_ATTRIBUTEPARAM#527" Offset="324" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[1].serAttributeFormula" Type="SerializeData#2" Offset="336" Flags="0" />
     <Field Name="Value1" Type="DT_FORMULA#528" Offset="328" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[1].serAttributeFormula" Type="SerializeData#2" Offset="336" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="344" Flags="1" />
     <Field Name="Param2" Type="DT_ATTRIBUTEPARAM#527" Offset="348" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[2].serAttributeFormula" Type="SerializeData#2" Offset="360" Flags="0" />
     <Field Name="Value2" Type="DT_FORMULA#528" Offset="352" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[2].serAttributeFormula" Type="SerializeData#2" Offset="360" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="368" Flags="1" />
     <Field Name="Param3" Type="DT_ATTRIBUTEPARAM#527" Offset="372" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[3].serAttributeFormula" Type="SerializeData#2" Offset="384" Flags="0" />
     <Field Name="Value3" Type="DT_FORMULA#528" Offset="376" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[3].serAttributeFormula" Type="SerializeData#2" Offset="384" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="392" Flags="1" />
     <Field Name="Param4" Type="DT_ATTRIBUTEPARAM#527" Offset="396" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[4].serAttributeFormula" Type="SerializeData#2" Offset="408" Flags="0" />
     <Field Name="Value4" Type="DT_FORMULA#528" Offset="400" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[4].serAttributeFormula" Type="SerializeData#2" Offset="408" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="416" Flags="1" />
     <Field Name="Param5" Type="DT_ATTRIBUTEPARAM#527" Offset="420" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[5].serAttributeFormula" Type="SerializeData#2" Offset="432" Flags="0" />
     <Field Name="Value5" Type="DT_FORMULA#528" Offset="424" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[5].serAttributeFormula" Type="SerializeData#2" Offset="432" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="440" Flags="1" />
     <Field Name="Param6" Type="DT_ATTRIBUTEPARAM#527" Offset="444" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[6].serAttributeFormula" Type="SerializeData#2" Offset="456" Flags="0" />
     <Field Name="Value6" Type="DT_FORMULA#528" Offset="448" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[6].serAttributeFormula" Type="SerializeData#2" Offset="456" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="464" Flags="1" />
     <Field Name="Param7" Type="DT_ATTRIBUTEPARAM#527" Offset="468" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[7].serAttributeFormula" Type="SerializeData#2" Offset="480" Flags="0" />
     <Field Name="Value7" Type="DT_FORMULA#528" Offset="472" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[7].serAttributeFormula" Type="SerializeData#2" Offset="480" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="488" Flags="1" />
     <Field Name="Param8" Type="DT_ATTRIBUTEPARAM#527" Offset="492" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[8].serAttributeFormula" Type="SerializeData#2" Offset="504" Flags="0" />
     <Field Name="Value8" Type="DT_FORMULA#528" Offset="496" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[8].serAttributeFormula" Type="SerializeData#2" Offset="504" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="512" Flags="1" />
     <Field Name="Param9" Type="DT_ATTRIBUTEPARAM#527" Offset="516" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[9].serAttributeFormula" Type="SerializeData#2" Offset="528" Flags="0" />
     <Field Name="Value9" Type="DT_FORMULA#528" Offset="520" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[9].serAttributeFormula" Type="SerializeData#2" Offset="528" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="536" Flags="1" />
     <Field Name="MinionParam0" Type="DT_ATTRIBUTEPARAM#527" Offset="540" Flags="1" EncodedBits="32" />
-    <Field Name="ptMinionAttributes[0].serAttributeFormula" Type="SerializeData#2" Offset="552" Flags="0" />
     <Field Name="MinionValue0" Type="DT_FORMULA#528" Offset="544" Flags="0" VariableOffset="8" />
+    <Field Name="ptMinionAttributes[0].serAttributeFormula" Type="SerializeData#2" Offset="552" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="560" Flags="1" />
     <Field Name="MinionParam1" Type="DT_ATTRIBUTEPARAM#527" Offset="564" Flags="1" EncodedBits="32" />
-    <Field Name="ptMinionAttributes[1].serAttributeFormula" Type="SerializeData#2" Offset="576" Flags="0" />
     <Field Name="MinionValue1" Type="DT_FORMULA#528" Offset="568" Flags="0" VariableOffset="8" />
+    <Field Name="ptMinionAttributes[1].serAttributeFormula" Type="SerializeData#2" Offset="576" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="584" Flags="1" />
     <Field Name="MinionParam2" Type="DT_ATTRIBUTEPARAM#527" Offset="588" Flags="1" EncodedBits="32" />
-    <Field Name="ptMinionAttributes[2].serAttributeFormula" Type="SerializeData#2" Offset="600" Flags="0" />
     <Field Name="MinionValue2" Type="DT_FORMULA#528" Offset="592" Flags="0" VariableOffset="8" />
+    <Field Name="ptMinionAttributes[2].serAttributeFormula" Type="SerializeData#2" Offset="600" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="608" Flags="1" />
     <Field Name="MinionParam3" Type="DT_ATTRIBUTEPARAM#527" Offset="612" Flags="1" EncodedBits="32" />
-    <Field Name="ptMinionAttributes[3].serAttributeFormula" Type="SerializeData#2" Offset="624" Flags="0" />
     <Field Name="MinionValue3" Type="DT_FORMULA#528" Offset="616" Flags="0" VariableOffset="8" />
+    <Field Name="ptMinionAttributes[3].serAttributeFormula" Type="SerializeData#2" Offset="624" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="632" Flags="1" />
     <Field Name="MinionParam4" Type="DT_ATTRIBUTEPARAM#527" Offset="636" Flags="1" EncodedBits="32" />
-    <Field Name="ptMinionAttributes[4].serAttributeFormula" Type="SerializeData#2" Offset="648" Flags="0" />
     <Field Name="MinionValue4" Type="DT_FORMULA#528" Offset="640" Flags="0" VariableOffset="8" />
+    <Field Name="ptMinionAttributes[4].serAttributeFormula" Type="SerializeData#2" Offset="648" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="656" Flags="1" />
     <Field Name="MinionParam5" Type="DT_ATTRIBUTEPARAM#527" Offset="660" Flags="1" EncodedBits="32" />
-    <Field Name="ptMinionAttributes[5].serAttributeFormula" Type="SerializeData#2" Offset="672" Flags="0" />
     <Field Name="MinionValue5" Type="DT_FORMULA#528" Offset="664" Flags="0" VariableOffset="8" />
+    <Field Name="ptMinionAttributes[5].serAttributeFormula" Type="SerializeData#2" Offset="672" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="680" Flags="1" />
     <Field Name="MinionParam6" Type="DT_ATTRIBUTEPARAM#527" Offset="684" Flags="1" EncodedBits="32" />
-    <Field Name="ptMinionAttributes[6].serAttributeFormula" Type="SerializeData#2" Offset="696" Flags="0" />
     <Field Name="MinionValue6" Type="DT_FORMULA#528" Offset="688" Flags="0" VariableOffset="8" />
+    <Field Name="ptMinionAttributes[6].serAttributeFormula" Type="SerializeData#2" Offset="696" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="704" Flags="1" />
     <Field Name="MinionParam7" Type="DT_ATTRIBUTEPARAM#527" Offset="708" Flags="1" EncodedBits="32" />
-    <Field Name="ptMinionAttributes[7].serAttributeFormula" Type="SerializeData#2" Offset="720" Flags="0" />
     <Field Name="MinionValue7" Type="DT_FORMULA#528" Offset="712" Flags="0" VariableOffset="8" />
+    <Field Name="ptMinionAttributes[7].serAttributeFormula" Type="SerializeData#2" Offset="720" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="728" Flags="1" />
     <Field Name="MinionParam8" Type="DT_ATTRIBUTEPARAM#527" Offset="732" Flags="1" EncodedBits="32" />
-    <Field Name="ptMinionAttributes[8].serAttributeFormula" Type="SerializeData#2" Offset="744" Flags="0" />
     <Field Name="MinionValue8" Type="DT_FORMULA#528" Offset="736" Flags="0" VariableOffset="8" />
+    <Field Name="ptMinionAttributes[8].serAttributeFormula" Type="SerializeData#2" Offset="744" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="752" Flags="1" />
     <Field Name="MinionParam9" Type="DT_ATTRIBUTEPARAM#527" Offset="756" Flags="1" EncodedBits="32" />
-    <Field Name="ptMinionAttributes[9].serAttributeFormula" Type="SerializeData#2" Offset="768" Flags="0" />
     <Field Name="MinionValue9" Type="DT_FORMULA#528" Offset="760" Flags="0" VariableOffset="8" />
+    <Field Name="ptMinionAttributes[9].serAttributeFormula" Type="SerializeData#2" Offset="768" Flags="0" />
+    <Field Name="On_Spawn_Power_Minion" Type="DT_SNO#82" Offset="780" Flags="1" EncodedBits="32" SnoType="29" />
+    <Field Name="On_Spawn_Power_Champion" Type="DT_SNO#82" Offset="784" Flags="1" EncodedBits="32" SnoType="29" />
+    <Field Name="On_Spawn_Power_Rare" Type="DT_SNO#82" Offset="788" Flags="1" EncodedBits="32" SnoType="29" />
     <Field Offset="792" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="550" Name="RareMonsterNamesTable">
@@ -5626,24 +5626,24 @@
     <Field Name="ItemType" Type="DT_GBID#181" Offset="264" Flags="1" EncodedBits="32" SnoType="1" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="272" Flags="1" />
     <Field Name="AttributeParam1" Type="DT_ATTRIBUTEPARAM#527" Offset="276" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[0].serAttributeFormula" Type="SerializeData#2" Offset="288" Flags="0" />
     <Field Name="AttributeFormula1" Type="DT_FORMULA#528" Offset="280" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[0].serAttributeFormula" Type="SerializeData#2" Offset="288" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="296" Flags="1" />
     <Field Name="AttributeParam2" Type="DT_ATTRIBUTEPARAM#527" Offset="300" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[1].serAttributeFormula" Type="SerializeData#2" Offset="312" Flags="0" />
     <Field Name="AttributeFormula2" Type="DT_FORMULA#528" Offset="304" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[1].serAttributeFormula" Type="SerializeData#2" Offset="312" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="320" Flags="1" />
     <Field Name="AttributeParam3" Type="DT_ATTRIBUTEPARAM#527" Offset="324" Flags="1" EncodedBits="32" />
-    <Field Name="ptAttributes[2].serAttributeFormula" Type="SerializeData#2" Offset="336" Flags="0" />
     <Field Name="AttributeFormula3" Type="DT_FORMULA#528" Offset="328" Flags="0" VariableOffset="8" />
+    <Field Name="ptAttributes[2].serAttributeFormula" Type="SerializeData#2" Offset="336" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="344" Flags="1" />
     <Field Name="ReqAttribParam1" Type="DT_ATTRIBUTEPARAM#527" Offset="348" Flags="1" EncodedBits="32" />
-    <Field Name="ptRequirements[0].serAttributeFormula" Type="SerializeData#2" Offset="360" Flags="0" />
     <Field Name="ReqAttribFormula1" Type="DT_FORMULA#528" Offset="352" Flags="0" VariableOffset="8" />
+    <Field Name="ptRequirements[0].serAttributeFormula" Type="SerializeData#2" Offset="360" Flags="0" />
     <Field Type="DT_TRANSLATEABLE#526" Offset="368" Flags="1" />
     <Field Name="ReqAttribParam2" Type="DT_ATTRIBUTEPARAM#527" Offset="372" Flags="1" EncodedBits="32" />
-    <Field Name="ptRequirements[1].serAttributeFormula" Type="SerializeData#2" Offset="384" Flags="0" />
     <Field Name="ReqAttribFormula2" Type="DT_FORMULA#528" Offset="376" Flags="0" VariableOffset="8" />
+    <Field Name="ptRequirements[1].serAttributeFormula" Type="SerializeData#2" Offset="384" Flags="0" />
     <Field Type="DT_CHARARRAY#24" Offset="392" Flags="1" ArrayLength="1024" EncodedBits="11" />
     <Field Offset="1416" Flags="0" />
   </StructureDescriptor>
@@ -5968,13 +5968,13 @@
     <Field Name="Actor" Type="DT_SNO#82" Offset="260" Flags="1" EncodedBits="32" SnoType="1" />
     <Field Name="Proxy" Type="DT_SNO#82" Offset="264" Flags="1" EncodedBits="32" SnoType="1" />
     <Field Name="Inventory" Type="DT_SNO#82" Offset="268" Flags="1" EncodedBits="32" SnoType="52" />
-    <Field Type="DT_FLOAT#5" Offset="752" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="756" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="764" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="760" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="436" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="440" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="724" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="752" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="756" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="760" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="764" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="776" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="780" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="784" Flags="1" EncodedBits="32" />
@@ -5987,8 +5987,8 @@
   </StructureDescriptor>
   <StructureDescriptor Index="566" Name="SetItemBonusTableEntry">
     <Field Name="Name" Type="DT_CHARARRAY#24" Offset="4" Flags="5" ArrayLength="256" EncodedBits="9" />
-    <Field Type="DT_INT#1" Offset="264" Flags="1" EncodedBits="32" />
     <Field Name="Set" Type="DT_GBID#181" Offset="260" Flags="1" EncodedBits="32" SnoType="33" />
+    <Field Type="DT_INT#1" Offset="264" Flags="1" EncodedBits="32" />
     <Field Type="DT_FIXEDARRAY#20" Offset="272" Flags="1" SubType="AttributeSpecifier#543" ArrayLength="8" />
     <Field Offset="464" Flags="0" />
   </StructureDescriptor>
@@ -6188,10 +6188,10 @@
   <StructureDescriptor Index="585" Name="GameSyncedData">
     <Field Type="DT_INT#1" Offset="0" Min="0" Max="1" Flags="17" EncodedBits="1" />
     <Field Type="DT_INT#1" Offset="4" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="48" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="52" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="56" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="60" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="48" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="64" Flags="1" EncodedBits="32" />
     <Field Type="DT_FIXEDARRAY#20" Offset="76" Flags="1" SubType="DT_INT#1" ArrayLength="2" EncodedBits="32" />
     <Field Type="DT_FIXEDARRAY#20" Offset="84" Flags="1" SubType="DT_INT#1" ArrayLength="2" EncodedBits="32" />

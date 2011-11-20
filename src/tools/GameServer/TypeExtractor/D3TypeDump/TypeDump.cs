@@ -51,8 +51,6 @@ namespace D3TypeDump
             public List<int> Opcodes = new List<int>();
         }
 
-
-
         static Dictionary<int, GameMessageInfo> _gameMessageLookUp;
 
         static void GetMessageOpcodes(Mem32 m)

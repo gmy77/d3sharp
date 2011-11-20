@@ -26,12 +26,16 @@ namespace D3TypeDescriptor
 
         public override System.Xml.Linq.XElement ToXml()
         {
-            XElement e = base.ToXml();
-            e.Name = "StructureDescriptor";
-            if (Fields != null)
-                foreach (var f in Fields)
-                    e.Add(f.ToXml());
-            return e;
+            XElement element = base.ToXml();
+            element.Name = "StructureDescriptor";
+
+            if (this.Fields == null)
+                return element;
+
+            foreach (var field in this.Fields.OrderBy(x => x.Offset)) // order fields by offset.
+                element.Add(field.ToXml());
+
+            return element;
         }
 
 

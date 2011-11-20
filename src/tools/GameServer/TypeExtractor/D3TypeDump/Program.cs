@@ -20,8 +20,4 @@ namespace D3TypeDump
             Console.ReadLine();
         }
     }
-
-
-
-
 }
