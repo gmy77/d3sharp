@@ -32,6 +32,7 @@ using Mooege.Net.GS;
 using Mooege.Net.GS.Message.Definitions.Hireling;
 using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Net.GS.Message.Definitions.Artisan;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -93,9 +94,7 @@ namespace Mooege.Core.GS.Actors
 
                 // show the exclamation mark if actor has an unread quest conversation
                 Attributes[GameAttribute.Conversation_Icon, 0] = questConversation ? 1 : 0;
-                foreach (var message in Attributes.GetChangedMessageList(this.DynamicID))
-                    World.BroadcastIfRevealed(message, this);
-                Attributes.ClearChanged();
+                Attributes.BroadcastChangedIfRevealed();
             }
         }
 
@@ -153,7 +152,13 @@ namespace Mooege.Core.GS.Actors
             if (message is NPCSelectConversationMessage) OnSelectConversation(client.Player, message as NPCSelectConversationMessage);
             if (message is HirelingHireMessage) OnHire(client.Player);
             if (message is HirelingInventoryMessage) OnInventory(client.Player);
+            if (message is CraftInteractionMessage) OnCraft(client.Player);
             else return;
+        }
+
+        public virtual void OnCraft(Player player)
+        {
+            throw new NotImplementedException();
         }
 
         public virtual void OnInventory(Player player)

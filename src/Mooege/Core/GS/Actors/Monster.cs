@@ -164,13 +164,12 @@ namespace Mooege.Core.GS.Actors
                 ActorID = this.DynamicID,
             }, this);
 
-            GameAttributeMap attribs = new GameAttributeMap();
+            GameAttributeMap attribs = this.Attributes; //TODO change it /fasbat
             attribs[GameAttribute.Hitpoints_Cur] = 0f;
             attribs[GameAttribute.Could_Have_Ragdolled] = true;
             attribs[GameAttribute.Deleted_On_Server] = true;
 
-            foreach (var msg in attribs.GetMessageList(this.DynamicID))
-                this.World.BroadcastIfRevealed(msg, this);
+            attribs.BroadcastChangedIfRevealed();
 
             // Spawn Random item and give exp for each player in range
             List<Player> players = this.GetPlayersInRange(26f);

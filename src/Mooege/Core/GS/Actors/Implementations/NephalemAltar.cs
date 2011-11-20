@@ -43,9 +43,9 @@ namespace Mooege.Core.GS.Actors.Implementations
             });
 
             player.Attributes[GameAttribute.Last_Altar_ANN] = (int)this.DynamicID;
-            player.Attributes.SendChangedMessage(player.InGameClient, player.DynamicID);
+            player.Attributes.BroadcastChangedIfRevealed();
             Attributes[GameAttribute.Gizmo_Has_Been_Operated] = true;
-            Attributes.SendChangedMessage(player.InGameClient, this.DynamicID);
+            Attributes.BroadcastChangedIfRevealed();
         }
     }
 }
