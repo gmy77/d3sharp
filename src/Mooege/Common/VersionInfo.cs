@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mooege.Common.Extensions;
 
 namespace Mooege.Common
 {
@@ -45,7 +46,21 @@ namespace Mooege.Common
         /// </summary>
         public static class MooNet
         {
+            /// <summary>
+            /// Required client version.
+            /// </summary>
             public const int RequiredClientVersion = 7841;
+
+            public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
+            {
+                {"Aurora 0ee3b2e0e2_public/251 (Nov 16 2011 20:44:30)", 7841},
+                {"Aurora b4367eba86_public/234 (Oct 28 2011 14:20:53)", 7728}
+            };
+
+            /// <summary>
+            /// Auth module's (RequestPassword) hash.
+            /// </summary>
+            public static byte[] AuthModuleHash = "8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray();
         }
 
         /// <summary>

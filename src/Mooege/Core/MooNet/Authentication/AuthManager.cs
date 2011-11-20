@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Google.ProtocolBuffers;
 using Mooege.Common;
-using Mooege.Common.Extensions;
 using Mooege.Core.Cryptography;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Net.MooNet;
@@ -32,7 +31,6 @@ namespace Mooege.Core.MooNet.Authentication
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         private static readonly Dictionary<MooNetClient, SRP6a> OngoingAuthentications = new Dictionary<MooNetClient, SRP6a>();
-        private static readonly byte[] ModuleHash = "8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray(); // "RequestPassword" module
 
         public static void StartAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
@@ -58,7 +56,7 @@ namespace Mooege.Core.MooNet.Authentication
                 .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
                     .SetRegion(0x00005553) // us
                     .SetUsage(0x61757468) // auth - password.dll
-                    .SetHash(ByteString.CopyFrom(ModuleHash)))
+                    .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AuthModuleHash)))
                 .SetMessage(ByteString.CopyFrom(srp6a.LogonChallenge))
                 .Build();
 
