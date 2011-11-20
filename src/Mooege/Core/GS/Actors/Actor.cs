@@ -333,7 +333,7 @@ namespace Mooege.Core.GS.Actors
 
             World.BroadcastIfRevealed(new ACDTranslateFacingMessage
             {
-                Id = 0x70,
+                Id = 115,
                 ActorId = DynamicID,
                 Angle = radianAngle,
                 Immediately = immediately
@@ -388,7 +388,7 @@ namespace Mooege.Core.GS.Actors
 
             World.BroadcastIfRevealed(new RopeEffectMessageACDToACD
             {
-                Id = 0xab,
+                Id = 175,
                 Field0 = ropeSNO,
                 Field1 = (int)DynamicID,
                 Field2 = 4,
@@ -404,7 +404,7 @@ namespace Mooege.Core.GS.Actors
             // TODO: Might need to track complex effects
             World.BroadcastIfRevealed(new ComplexEffectAddMessage
             {
-                Id = 0x81,
+                Id = 132,
                 Field0 = (int)World.NewActorID, // TODO: maybe not use actor ids?
                 Field1 = 1,  // 0=efg, 1=efg, 2=rope
                 Field2 = effectGroupSNO, // efgSNO or ropeSNO

@@ -416,7 +416,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             
             World.BroadcastIfRevealed(new ACDTranslateDetPathMessage
             {
-                Id = 0x73,
+                Id = 118,
                 Field0 = (int)eff.DynamicID,
                 Field1 = 1, // 0 - crashes client
                             // 1 - random scuttle (charged bolt effect)
