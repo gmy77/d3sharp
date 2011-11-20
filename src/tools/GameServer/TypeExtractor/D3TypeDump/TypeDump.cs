@@ -44,7 +44,6 @@ namespace D3TypeDump
         #endregion
 
         #region build 7728 addresses
-        //Build 7728 Addresses
         //const int OpcodeSwitch_Address = 0x008C22F0;
         //const int TypeDescriptorsAddress = 0x157F5CC;
         //const int TypeDescriptorsOffset = 40;
