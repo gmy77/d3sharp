@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Hireling
 {
-    [Message(Opcodes.HirelingSwapMessage)]
+    [Message (new[] {Opcodes.HirelingSwapMessage1, Opcodes.HirelingSwapMessage2})]
     public class HirelingSwapMessage : GameMessage
     {
         public int HirelingId;

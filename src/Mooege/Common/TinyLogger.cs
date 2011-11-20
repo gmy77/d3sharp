@@ -118,8 +118,8 @@ namespace Mooege.Common
         public void Fatal(string message, params object[] args) { Log(Level.Fatal, message, args); }
 
         // moonet packet loggers
-        public void LogIncoming(Google.ProtocolBuffers.IMessage msg) { Log(Level.Dump, msg.AsText(), null); }
-        public void LogOutgoing(Google.ProtocolBuffers.IMessage msg) { Log(Level.Dump, msg.AsText(), null); }
+        public void LogIncoming(Google.ProtocolBuffers.IMessage msg) { Log(Level.Dump, "[I] " + msg.AsText(), null); }
+        public void LogOutgoing(Google.ProtocolBuffers.IMessage msg) { Log(Level.Dump, "[O] " + msg.AsText(), null); }
 
         // ingame packet loggers
         public void LogIncoming(GameMessage msg) { Log(Level.Dump, "[I] " + msg.AsText(), null); }

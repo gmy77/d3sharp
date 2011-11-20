@@ -33,7 +33,6 @@ namespace Mooege.Net.GS.Message.Definitions.Connection
             {
                 client.SendMessage(new LogoutTickTimeMessage()
                 {
-                    Id = 0x0027,
                     Field0 = false, // true - logout with party?
                     Ticks = 0, // delay 1, make this equal to 0 for instant logout
                     Field2 = 0, // delay 2

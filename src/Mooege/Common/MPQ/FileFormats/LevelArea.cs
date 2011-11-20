@@ -28,7 +28,7 @@ namespace Mooege.Common.MPQ.FileFormats
     public class LevelArea : FileFormat
     {
         public Header Header { get; private set; }
-        public int I0 { get; private set; }
+        public int[] I0 { get; private set; }
         public int I1 { get; private set; }
         public int SNOLevelAreaOverrideForGizmoLocs { get; private set; }
         public GizmoLocSet LocSet { get; private set; }
@@ -39,9 +39,12 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            this.I0 = stream.ReadValueS32();
+            this.I0 = new int[4];
+            for (int i = 0; i < 4; i++)
+                this.I0[i] = stream.ReadValueS32();
             this.I1 = stream.ReadValueS32();
             this.SNOLevelAreaOverrideForGizmoLocs = stream.ReadValueS32();
+            stream.Position += 4;
             this.LocSet = new GizmoLocSet(stream);
             this.I2 = stream.ReadValueS32();
             stream.Position += 12;
@@ -65,29 +68,29 @@ namespace Mooege.Common.MPQ.FileFormats
     public class GizmoLocSpawnType
     {
         public List<GizmoLocSpawnEntry> SpawnEntry { get; private set; }
-        public string S0 { get; private set; }
-        public string S1 { get; private set; }
+        public string Description { get; private set; }
+        public string Comment { get; private set; }
 
         public GizmoLocSpawnType(MpqFileStream stream)
         {
             stream.Position += 8;
             this.SpawnEntry = stream.ReadSerializedData<GizmoLocSpawnEntry>();
-            this.S0 = stream.ReadString(80, true);
-            this.S1 = stream.ReadString(256, true);
+            this.Description = stream.ReadString(80, true);
+            this.Comment = stream.ReadString(256, true);
         }
     }
 
     public class GizmoLocSpawnEntry : ISerializableData
     {
-        public int I0 { get; private set; }
-        public int I1 { get; private set; }
+        public int Min { get; private set; }
+        public int Max { get; private set; }
         public SNOHandle SNOHandle { get; private set; }
         public int I2 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
-            this.I0 = stream.ReadValueS32();
-            this.I1 = stream.ReadValueS32();
+            this.Min = stream.ReadValueS32();
+            this.Max = stream.ReadValueS32();
             this.SNOHandle = new SNOHandle(stream);
             this.I2 = stream.ReadValueS32();
         }
@@ -174,5 +177,6 @@ namespace Mooege.Common.MPQ.FileFormats
         Unique,
         Hireling,
         Clone,
+        Boss,
     }
 }

@@ -41,6 +41,7 @@ namespace Mooege.Net.GS.Message.Fields
         public int SNOConversation;
         public int Field1;          // have not seen != 0
         public bool Field2;         // have not seen true
+        public bool Field3;
         public int LineID;          // the ID of the line within the conversation
                                     // Participant to speak out? must mach what the lineID is expecting... eg. LineID == 6 expects 2 while LineID == 5 expects 1 (in a specific dialogue)
                                     // Set to 0 for a conversation line said by the player - farmy
@@ -62,6 +63,7 @@ namespace Mooege.Net.GS.Message.Fields
             SNOConversation = buffer.ReadInt(32);
             Field1 = buffer.ReadInt(32);
             Field2 = buffer.ReadBool();
+            Field3 = buffer.ReadBool();
             LineID = buffer.ReadInt(32);
             Speaker = buffer.ReadInt(32);
             Field5 = buffer.ReadInt(32);
@@ -82,6 +84,7 @@ namespace Mooege.Net.GS.Message.Fields
             buffer.WriteInt(32, SNOConversation);
             buffer.WriteInt(32, Field1);
             buffer.WriteBool(Field2);
+            buffer.WriteBool(Field3);
             buffer.WriteInt(32, LineID);
             buffer.WriteInt(32, Speaker);
             buffer.WriteInt(32, Field5);
@@ -109,6 +112,8 @@ namespace Mooege.Net.GS.Message.Fields
             b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', pad);
             b.AppendLine("Field2: " + (Field2 ? "true" : "false"));
+            b.Append(' ', pad);
+            b.AppendLine("Field3: " + (Field3 ? "true" : "false"));
             b.Append(' ', pad);
             b.AppendLine("LineID: 0x" + LineID.ToString("X8") + " (" + LineID + ")");
             b.Append(' ', pad);

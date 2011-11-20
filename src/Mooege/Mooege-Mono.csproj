@@ -64,6 +64,9 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\dep\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="ManagedOpenSsl">
+      <HintPath>..\..\dep\openssl\ManagedOpenSsl.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp">
     </Reference>
     <Reference Include="System">
@@ -137,7 +140,12 @@
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
     <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
-    <Compile Include="Common\MPQ\FileFormats\Types\TagMap.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\NephalemAltar.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\ActorKeys.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\AnimationSetKeys.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\MarkerKeys.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\PowerKeys.cs" />
+    <Compile Include="Core\GS\Common\Types\TagMap\TagMap.cs" />
     <Compile Include="Common\MPQ\SerializableData.cs" />
     <Compile Include="Common\MPQ\FileFormats\World.cs" />
     <Compile Include="Common\MPQ\FileFormats\Types\Common.cs" />
@@ -166,6 +174,7 @@
     <Compile Include="Common\MPQ\MPQStorage.cs" />
     <Compile Include="Core\GS\Items\ItemGroup.cs" />
     <Compile Include="Core\GS\Items\FormulaScript.cs" />
+    <Compile Include="Core\Cryptography\SSL\CertificateHelper.cs" />
     <Compile Include="Core\GS\Actors\ActorFactory.cs" />
     <Compile Include="Core\GS\Actors\Gizmo.cs" />
     <Compile Include="Core\GS\Actors\Environment.cs" />
@@ -223,9 +232,9 @@
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
+    <Compile Include="Core\Cryptography\ARC4.cs" />
     <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
-    <Compile Include="Core\MooNet\Authentication\Config.cs" />
-    <Compile Include="Core\MooNet\Authentication\SRP6a.cs" />
+    <Compile Include="Core\Cryptography\SRP6a.cs" />
     <Compile Include="Core\MooNet\Channels\Channel.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelManager.cs" />
     <Compile Include="Core\MooNet\Channels\Member.cs" />
@@ -238,8 +247,8 @@
     <Compile Include="Core\MooNet\Commands\CommandManager.cs" />
     <Compile Include="Core\MooNet\Commands\CommandAttribute.cs" />
     <Compile Include="Core\MooNet\Commands\ServerCommands.cs" />
-    <Compile Include="Core\MooNet\Games\GameCreator.cs" />
-    <Compile Include="Core\MooNet\Games\GameCreatorManager.cs" />
+    <Compile Include="Core\MooNet\Games\GameFactory.cs" />
+    <Compile Include="Core\MooNet\Games\GameFactoryManager.cs" />
     <Compile Include="Core\MooNet\Helpers\EntityIdHelper.cs" />
     <Compile Include="Core\MooNet\Helpers\FieldKeyHelper.cs" />
     <Compile Include="Core\MooNet\Helpers\NotificationTypeHelper.cs" />
@@ -253,12 +262,12 @@
     <Compile Include="Core\MooNet\Friends\FriendManager.cs" />
     <Compile Include="Core\MooNet\Objects\PersistentRPCObject.cs" />
     <Compile Include="Core\MooNet\Online\PlayerManager.cs" />
+    <Compile Include="Core\MooNet\Services\AchievementService.cs" />
     <Compile Include="Core\MooNet\Services\AuthenticationService.cs" />
-    <Compile Include="Core\MooNet\Services\BaseService.cs" />
+    <Compile Include="Core\MooNet\Services\ConnectionService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelInvitationService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelOwnerService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelService.cs" />
-    <Compile Include="Core\MooNet\Services\ChatService.cs" />
     <Compile Include="Core\MooNet\Services\ExchangeService.cs" />
     <Compile Include="Core\MooNet\Services\FollowersService.cs" />
     <Compile Include="Core\MooNet\Services\FriendsService.cs" />
@@ -266,7 +275,6 @@
     <Compile Include="Core\MooNet\Services\GameUtilitiesService.cs" />
     <Compile Include="Core\MooNet\Services\IServerService.cs" />
     <Compile Include="Core\MooNet\Services\NotificationService.cs" />
-    <Compile Include="Core\MooNet\Services\PartyService.cs" />
     <Compile Include="Core\MooNet\Services\PresenceService.cs" />
     <Compile Include="Core\MooNet\Services\SearchService.cs" />
     <Compile Include="Core\MooNet\Services\Service.cs" />
@@ -283,14 +291,21 @@
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Animation\LoopingAnimationPowerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\OpenArtisanWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\RequestAddSocketMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Conversation\AdvanceConvMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Conversation\UpdateConvAutoAdvanceMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingDismissMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingHireMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingInventoryMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropStackPortionMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\Message.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\VoteKickMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCSelectConversationMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Pet\PetDetachMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseCauldronOfJordanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
@@ -447,7 +462,6 @@
     <Compile Include="Net\GS\Message\Definitions\Game\JoinLANGameMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Combat\KillCounterUpdateMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Combat\KillCountMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Skill\LearnedSkillMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Connection\LogoutContextMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Connection\LogoutTickTimeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Quest\LoreMessage.cs" />
@@ -458,7 +472,7 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\NetworkAddressMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\NewPlayerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCInteractOptionsMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Player\PetMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Pet\PetMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Animation\PlayAnimationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\PlayConvLineMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayCutsceneMessage.cs" />
@@ -468,7 +482,6 @@
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerDeSyncSnapMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerEnterKnownMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerIndexMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Player\PlayerInteractMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerLevel.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerQuestMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Audio\PlayErrorSoundMessage.cs" />
@@ -566,6 +579,18 @@
       <Link>Assets\MPQ\IMPORTANT</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\dep\openssl\ManagedOpenSsl.dll.config">
+      <Link>ManagedOpenSsl.dll.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\dep\openssl\libeay32.dll">
+      <Link>libeay32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\dep\openssl\ssleay32.dll">
+      <Link>ssleay32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -598,4 +623,5 @@
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
 </Project>

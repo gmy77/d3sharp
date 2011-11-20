@@ -19,6 +19,7 @@
 using System.IO;
 using System.Collections.Generic;
 using Gibbed.IO;
+using Google.ProtocolBuffers;
 using Mooege.Common;
 using Mooege.Net.MooNet;
 
@@ -71,38 +72,49 @@ namespace Mooege.Core.MooNet.Services
             done(response);
         }
 
+        private static readonly ByteString HeroDigestColumn = ByteString.CopyFrom(new byte[] { 0xA1, 0x81, 0xA8, 0x35, 0x68, 0x24, 0x41, 0x60, 0x09, 0x7C, 0x05, 0x1B, 0x11, 0xA8, 0x7F, 0x04 });
+        private static readonly ByteString HeroNameColumn = ByteString.CopyFrom(new byte[] { 0xE6, 0x7A, 0xC5, 0x2B, 0x8F, 0x5F, 0x83, 0x87, 0xA6, 0x68, 0xD7, 0x2C, 0x46, 0x74, 0xEC, 0xD3 });
+
         private bnet.protocol.storage.ExecuteResponse GetHeroDigest(MooNetClient client, bnet.protocol.storage.ExecuteRequest request)
         {
             var results = new List<bnet.protocol.storage.OperationResult>();
 
             foreach(var operation in request.OperationsList)
             {
+                ByteString data = null;
+
                 // find the requested toons entity-id.
                 var stream = new MemoryStream(operation.RowId.Hash.ToByteArray());
-                
+
                 // contains ToonHandle in field form with one unknown field (which is not in message definition):
                 // int16 unknown; uint8 realm; uint8 region; uint32 program; uint64 id;
                 stream.ReadValueU16(); // unknown
                 stream.ReadValueU8(); // realm
                 stream.ReadValueU8(); // region 
                 stream.ReadValueU32(false); // program
-                    
-                var toonId=stream.ReadValueU64(false);
 
-                if(!client.Account.Toons.ContainsKey(toonId))
+                var toonId = stream.ReadValueU64(false);
+
+                if (!client.Account.Toons.ContainsKey(toonId))
                 {
                     Logger.Error("Can't find the requested toon: {0}", toonId);
                     continue;
                 }
 
-                var toon = client.Account.Toons[toonId];                    
+                var toon = client.Account.Toons[toonId];
+
+                if (operation.ColumnId.Hash.Equals(HeroDigestColumn))
+                    data = toon.Digest.ToByteString();
+                else if (operation.ColumnId.Hash.Equals(HeroNameColumn))
+                    data = toon.NameText.ToByteString();
+                                 
                 var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
                 operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
                         .SetColumnId(request.OperationsList[0].ColumnId)
                         .SetRowId(request.OperationsList[0].RowId)
                         .SetVersion(1)
-                        .SetData(toon.Digest.ToByteString())
+                        .SetData(data)
                         .Build()
                     );
                 results.Add(operationResult.Build());
@@ -123,6 +135,7 @@ namespace Mooege.Core.MooNet.Services
             foreach (var operation in request.OperationsList)
             {
                 var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
+                operationResult.SetErrorCode(4); //this query returns error 4 in 7728 -Egris
                 operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
                         .SetColumnId(request.OperationsList[0].ColumnId)
@@ -173,6 +186,7 @@ namespace Mooege.Core.MooNet.Services
             foreach (var operation in request.OperationsList)
             {
                 var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
+                operationResult.SetErrorCode(4); //this query returns error 4 in 7728 -Egris
                 operationResult.AddData(
                     bnet.protocol.storage.Cell.CreateBuilder()
                         .SetColumnId(request.OperationsList[0].ColumnId)

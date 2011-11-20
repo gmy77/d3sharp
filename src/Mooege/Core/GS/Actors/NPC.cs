@@ -17,9 +17,9 @@
  */
 
 using System.Collections.Generic;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -32,7 +32,6 @@ namespace Mooege.Core.GS.Actors
         {
             this.Field2 = 0x9;
             this.Field7 = 2;
-            this.Attributes[GameAttribute.TeamID] = 1;
             this.Attributes[GameAttribute.Is_NPC] = true;
         }
     }

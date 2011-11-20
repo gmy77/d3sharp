@@ -31,7 +31,9 @@ using Mooege.Core.MooNet.Toons;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Actor;
+using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Net.GS.Message.Definitions.Misc;
+using Mooege.Net.GS.Message.Definitions.Pet;
 using Mooege.Net.GS.Message.Definitions.Waypoint;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
@@ -314,10 +316,10 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Toon.Level];
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             this.Attributes[GameAttribute.Armor_Total] = 0;
-            this.Attributes[GameAttribute.Attack] = this.InitialAttack;
-            this.Attributes[GameAttribute.Precision] = this.InitialPrecision;
-            this.Attributes[GameAttribute.Defense] = this.InitialDefense;
-            this.Attributes[GameAttribute.Vitality] = this.InitialVitality;
+            this.Attributes[GameAttribute.Attack] = (int)this.InitialAttack;
+            this.Attributes[GameAttribute.Precision] = (int)this.InitialPrecision;
+            this.Attributes[GameAttribute.Defense] = (int)this.InitialDefense;
+            this.Attributes[GameAttribute.Vitality] = (int)this.InitialVitality;
 
             //Hitpoints have to be calculated after Vitality
             this.Attributes[GameAttribute.Hitpoints_Factor_Level] = 4f;
@@ -421,6 +423,26 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Shared_Stash_Slots] = 14;
             this.Attributes[GameAttribute.Backpack_Slots] = 60;
             this.Attributes[GameAttribute.General_Cooldown] = 0;
+
+
+            // TODO: Fix this shit! Should be actually done so after loading is complete /raist.
+            this.Attributes[GameAttribute.Banter_Cooldown, 0xFFFFF] = 0x000007C9;
+            this.Attributes[GameAttribute.Buff_Active, 0x20CBE] = true;
+            this.Attributes[GameAttribute.Buff_Active, 0x33C40] = false;
+            this.Attributes[GameAttribute.Immobolize] = false;
+            this.Attributes[GameAttribute.Untargetable] = false;
+            this.Attributes[GameAttribute.CantStartDisplayedPowers] = false;
+            this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x20CBE] = 0xC1;
+            this.Attributes[GameAttribute.Disabled] = false;
+            this.Attributes[GameAttribute.Hidden] = false;
+            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x33C40] = 0;
+            this.Attributes[GameAttribute.Buff_Icon_End_Tick0, 0x20CBE] = 0x7C9;
+            this.Attributes[GameAttribute.Loading] = false;
+            this.Attributes[GameAttribute.Buff_Icon_End_Tick0, 0x33C40] = 0;
+            this.Attributes[GameAttribute.Invulnerable] = false;
+            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x20CBE] = 1;
+            this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x33C40] = 0;
+
             #endregion // Attributes
 
             // unlocking assigned skills
@@ -734,7 +756,9 @@ namespace Mooege.Core.GS.Players
         }
 
         public override void OnLeave(World world)
-        { }
+        {
+            this.Conversations.StopAll();
+        }
 
         public override bool Reveal(Player player)
         {
@@ -1130,7 +1154,7 @@ namespace Mooege.Core.GS.Players
                 .SetLevel(45)
                 .SetCooldownEnd(0)
                 .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage8) { Data = blacksmith.ToByteArray() };
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage9) { Data = blacksmith.ToByteArray() };
         }
 
         public GenericBlobMessage GetJewelerData()
@@ -1139,7 +1163,7 @@ namespace Mooege.Core.GS.Players
                 .SetLevel(9)
                 .SetCooldownEnd(0)
                 .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage9) { Data = jeweler.ToByteArray() };
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage10) { Data = jeweler.ToByteArray() };
         }
 
         public GenericBlobMessage GetMysticData()
@@ -1148,7 +1172,7 @@ namespace Mooege.Core.GS.Players
                 .SetLevel(45)
                 .SetCooldownEnd(0)
                 .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage10) { Data = mystic.ToByteArray() };
+            return new GenericBlobMessage(Opcodes.GenericBlobMessage11) { Data = mystic.ToByteArray() };
         }
 
         #endregion
@@ -1360,10 +1384,10 @@ namespace Mooege.Core.GS.Players
                 else { this.Attributes[GameAttribute.Experience_Next] = 0; }
 
                 // 4 main attributes are incremented according to class
-                this.Attributes[GameAttribute.Attack] += this.AttackIncrement;
-                this.Attributes[GameAttribute.Precision] += this.PrecisionIncrement;
-                this.Attributes[GameAttribute.Vitality] += this.VitalityIncrement;
-                this.Attributes[GameAttribute.Defense] += this.DefenseIncrement;
+                this.Attributes[GameAttribute.Attack] += (int)this.AttackIncrement;
+                this.Attributes[GameAttribute.Precision] += (int)this.PrecisionIncrement;
+                this.Attributes[GameAttribute.Vitality] += (int)this.VitalityIncrement;
+                this.Attributes[GameAttribute.Defense] += (int)this.DefenseIncrement;
 
                 // Hitpoints from level may actually change. This needs to be verified by someone with the beta.
                 //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = this.Attributes[GameAttribute.Level] * this.Attributes[GameAttribute.Hitpoints_Factor_Level];
@@ -1381,7 +1405,6 @@ namespace Mooege.Core.GS.Players
 
                 this.InGameClient.SendMessage(new PlayerLevel()
                 {
-                    Id = 0x98,
                     Field0 = 0x00000000,
                     Field1 = this.Attributes[GameAttribute.Level],
                 });
@@ -1408,6 +1431,77 @@ namespace Mooege.Core.GS.Players
             }
             this.Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
+        }
+
+        public void PlayHeroConversation(int snoConversation, int lineID)
+        {
+            // TODO: Fixme
+            //this.InGameClient.SendMessage(new PlayConvLineMessage()
+            //{
+            //    ActorID = this.DynamicID,
+            //    Field1 = new uint[9]
+            //        {
+            //            this.DynamicID, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
+            //        },
+
+            //    Params = new PlayLineParams()
+            //    {
+            //        SNOConversation = snoConversation,
+            //        Field1 = 0x00000001,
+            //        Field2 = false,
+            //        LineID = lineID,
+            //        Field4 = 0x00000000,
+            //        Field5 = -1,
+            //        TextClass = (Class)this.Properties.VoiceClassID,
+            //        Gender = (this.Properties.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
+            //        AudioClass = (Class)this.Properties.VoiceClassID,
+            //        SNOSpeakerActor = this.SNOId,
+            //        Name = this.Properties.Name,
+            //        Field11 = 0x00000002,
+            //        Field12 = -1,
+            //        Field13 = 0x00000069,
+            //        Field14 = 0x0000006E,
+            //        Field15 = 0x00000032
+            //    },
+            //    Field3 = 0x00000069,
+            //});
+
+            //this.OpenConversations.Add(new OpenConversation(
+            //    new EndConversationMessage()
+            //    {
+            //        ActorId = this.DynamicID,
+            //        Field0 = 0x0000006E,
+            //        SNOConversation = snoConversation
+            //    },
+            //    this.InGameClient.Game.TickCounter + 200
+            //));
+        }
+
+        public void CheckOpenConversations()
+        {
+            // TODO: Fixme
+            //if (this.OpenConversations.Count > 0)
+            //{
+            //    foreach (OpenConversation openConversation in this.OpenConversations)
+            //    {
+            //        if (openConversation.endTick <= this.InGameClient.Game.TickCounter)
+            //        {
+            //            this.InGameClient.SendMessage(openConversation.endConversationMessage);
+            //        }
+            //    }
+            //}
+        }
+
+        public struct OpenConversation
+        {
+            public EndConversationMessage endConversationMessage;
+            public int endTick;
+
+            public OpenConversation(EndConversationMessage endConversationMessage, int endTick)
+            {
+                this.endConversationMessage = endConversationMessage;
+                this.endTick = endTick;
+            }
         }
 
         #endregion
@@ -1516,16 +1610,17 @@ namespace Mooege.Core.GS.Players
         /// <param name="immediately">if false, lore will have new lore button</param>
         public void PlayLore(int loreSNOId, bool immediately)
         {
+            // TODO: Fixme
             // play lore to player
-            InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Quest.LoreMessage
-            {
-                Id = (int)(immediately ? Opcodes.PlayLoreImmediately : Opcodes.PlayLoreWithButton),
-                LoreSNOId = loreSNOId
-            });
-            if (!HasLore(loreSNOId))
-            {
-                AddLore(loreSNOId);
-            }
+            //InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Quest.LoreMessage
+            //{
+            //    Id = (int)(immediately ? Opcodes.PlayLoreImmediately : Opcodes.PlayLoreWithButton),
+            //    LoreSNOId = loreSNOId
+            //});
+            //if (!HasLore(loreSNOId))
+            //{
+            //    AddLore(loreSNOId);
+            //}
         }
 
         /// <summary>

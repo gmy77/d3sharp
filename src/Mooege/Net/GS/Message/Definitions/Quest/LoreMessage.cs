@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Quest
 {
-    [Message(new[] {Opcodes.PlayLoreImmediately,Opcodes.PlayLoreWithButton})]
+    [Message(Opcodes.LoreMessage)]
     public class LoreMessage : GameMessage
     {
         public int LoreSNOId;
@@ -45,7 +45,5 @@ namespace Mooege.Net.GS.Message.Definitions.Quest
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }

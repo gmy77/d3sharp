@@ -57,25 +57,25 @@ namespace Mooege.Tools.HeaderViewer
         private void ParseHeader(byte[] array)
         {
             CodedInputStream stream = CodedInputStream.CreateInstance(array);
-            var serviceId = stream.ReadRawByte();
-            var methodId = stream.ReadRawVarint32();
-            var requestId = stream.ReadRawByte() | (stream.ReadRawByte() << 8);
-            bool hasObjectId = false;
-            ulong objectId = 0;
-            if (serviceId != 0xfe)
-            {
-                hasObjectId = true;
-                objectId = stream.ReadRawVarint64();
-            }
-            var payloadLength = stream.ReadRawVarint32();
+            var size = (stream.ReadRawByte() << 8) | stream.ReadRawByte(); // header size.
+            var headerData = stream.ReadRawBytes(size); // header data.
+            var Header = bnet.protocol.Header.ParseFrom(headerData);  // parse header.
             outputBox.ResetText();
-            outputBox.Text = String.Format(
+            outputBox.Text = string.Format(
                 "ServiceID = {0}\r\n"
               + "MethodID  = {1}\r\n"
-              + "RequestID = {2}\r\n"
+              + "Token = {2}\r\n"
               + "ObjectID  = {3}\r\n"
-              + "PayloadLength  = {4}\r\n"
-              , serviceId, methodId, requestId, (hasObjectId) ? objectId.ToString() : "none", payloadLength);
+              + "Size  = {4}\r\n"
+              + "Status = {5}\r\n"
+              + "Errors = {6}\r\n",
+              Header.ServiceId,
+              Header.HasMethodId ? Header.MethodId.ToString() : "None",
+              Header.HasToken ? Header.Token.ToString() : "None",
+              Header.HasObjectId ? Header.ObjectId.ToString() : "None",
+              Header.HasSize ? Header.Size.ToString() : "None",
+              Header.HasStatus ? Header.Status.ToString() : "None",
+              Header.ErrorCount);
         }
     }
 }

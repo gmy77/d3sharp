@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mooege.Core.GS.Map;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Markers;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
@@ -22,8 +22,8 @@ namespace Mooege.Core.GS.Actors.Implementations
         // TODO If the client lacks all information, we need a system to combine mpq data with custom data
         protected override void ReadTags()
         {
-            if (!Tags.ContainsKey(TagKeys.ConversationList))
-                Tags.Add(TagKeys.ConversationList, new TagMapEntry(TagKeys.ConversationList.ID, 108832, 2));
+            if (!Tags.ContainsKey(MarkerKeys.ConversationList))
+                Tags.Add(MarkerKeys.ConversationList, new TagMapEntry(MarkerKeys.ConversationList.ID, 108832, 2));
 
             base.ReadTags();
         }

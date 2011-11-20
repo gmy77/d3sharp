@@ -18,10 +18,12 @@
 
 using System;
 using System.Linq;
+using Mooege.Common.Helpers.Hash;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Core.MooNet.Services;
 using Mooege.Net.MooNet;
+using Mooege.Common.Helpers;
 
 namespace Mooege.Core.MooNet.Commands
 {
@@ -64,7 +66,29 @@ namespace Mooege.Core.MooNet.Commands
         }
     }
 
-    [CommandGroup("rpcobject", "Lists rpc-objects.", Account.UserLevels.Owner)]
+    [CommandGroup("hash", "Create hashes.", Account.UserLevels.Owner)]
+    public class HashDebugCommands : CommandGroup
+    {
+        [Command("hashitem", "Hash case insensitive (item names)")]
+        public string HashItem(string[] @params, MooNetClient invokerClient)
+        {
+            if (@params.Count() < 1)
+                return "Invalid arguments. Type 'help hash show' to get help.";
+
+            return StringHashHelper.HashItemName(@params[0]).ToString();
+        }
+
+        [Command("hash", "Hash case Sensitive")]
+        public string HashNormal(string[] @params, MooNetClient invokerClient)
+        {
+            if (@params.Count() < 1)
+                return "Invalid arguments. Type 'help hash show' to get help.";
+
+            return StringHashHelper.HashNormal(@params[0]).ToString();
+        }
+    }
+
+    [CommandGroup("rpcobject", "Lists rpc-objects.", Account.UserLevels.Admin)]
     public class RPCObjectDebugCommands : CommandGroup
     {
         [Command("list", "Shows lists of RPCObjects")]

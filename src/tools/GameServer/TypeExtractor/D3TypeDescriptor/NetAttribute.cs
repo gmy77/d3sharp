@@ -1,6 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿﻿/*
+ * Copyright (C) 2011 mooege project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+using System;
 using System.Text;
 using System.Xml.Linq;
 
@@ -104,9 +120,9 @@ namespace D3TypeDescriptor
                 NetAttribute a = new NetAttribute();
                 a.Id = int.Parse(e.Attribute("Id").Value);
                 a.U2 = int.Parse(e.Attribute("U2").Value);
-                a.U2 = int.Parse(e.Attribute("U3").Value);
-                a.U2 = int.Parse(e.Attribute("U4").Value);
-                a.U2 = int.Parse(e.Attribute("U5").Value);
+                a.U3 = int.Parse(e.Attribute("U3").Value);
+                a.U4 = int.Parse(e.Attribute("U4").Value);
+                a.U5 = int.Parse(e.Attribute("U5").Value);
 
                 a.ScriptA = e.Attribute("ScriptA").Value;
                 a.ScriptB = e.Attribute("ScriptB").Value;
@@ -121,6 +137,53 @@ namespace D3TypeDescriptor
 
                 Attributes[a.Id] = a;
             }
+        }
+
+        public static void GenerateClass(StringBuilder b)
+        {
+            b.Append("public partial class GameAttribute\n{\n\n");
+
+            foreach (var attr in Attributes)
+            {
+                string newName = attr.Name.Replace(' ', '_');
+
+                b.Append("public static readonly GameAttribute");
+                if (attr.BitCount == 1)
+                    b.Append("B");
+                else if (attr.IsInteger)
+                    b.Append("I");
+                else
+                    b.Append("F");
+
+                b.Append(" ");
+                b.Append(newName);
+                b.Append(" = new GameAttribute");
+
+                if (attr.BitCount == 1)
+                    b.Append("B");
+                else if (attr.IsInteger)
+                    b.Append("I");
+                else
+                    b.Append("F");
+
+                b.Append("(");
+                b.Append(attr.Id); b.Append(", ");
+                b.Append(attr.U2); b.Append(", ");
+                b.Append(attr.U3); b.Append(", ");
+                b.Append(attr.U4); b.Append(", ");
+                b.Append(attr.U5); b.Append(", ");
+                b.Append("\""); b.Append(attr.ScriptA); b.Append("\""); b.Append(", ");
+                b.Append("\""); b.Append(attr.ScriptB); b.Append("\""); b.Append(", ");
+                b.Append("\""); b.Append(attr.Name); b.Append("\""); b.Append(", ");
+                b.Append("GameAttributeEncoding."); b.Append(attr.EncodingType); b.Append(", ");
+                b.Append(attr.U10); b.Append(", ");
+                b.Append(attr.Min); b.Append(", ");
+                b.Append(attr.Max); b.Append(", ");
+                b.Append(attr.BitCount);
+                b.Append(");\n");
+            }
+
+            b.Append("}");
         }
     }
 }

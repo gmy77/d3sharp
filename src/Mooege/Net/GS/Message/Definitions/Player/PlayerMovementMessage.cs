@@ -59,7 +59,7 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             }
             if (buffer.ReadBool())
             {
-                Field5 = buffer.ReadInt(24);
+                Field5 = buffer.ReadInt(25);
             }
             if (buffer.ReadBool())
             {
@@ -97,7 +97,7 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             buffer.WriteBool(Field5.HasValue);
             if (Field5.HasValue)
             {
-                buffer.WriteInt(24, Field5.Value);
+                buffer.WriteInt(25, Field5.Value);
             }
             buffer.WriteBool(AnimationTag.HasValue);
             if (AnimationTag.HasValue)
