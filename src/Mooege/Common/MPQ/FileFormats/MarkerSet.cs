@@ -78,7 +78,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public TagMap TagMap { get; private set; }
         public int IntTagMap { get; private set; }
         public int Int1 { get; private set; }
-        public int Int2 { get; private set; }
+        public List<MarkerLink> MarkerLinks = new List<MarkerLink>();
 
         public void Read(MpqFileStream stream)
         {
@@ -93,13 +93,23 @@ namespace Mooege.Common.MPQ.FileFormats
             // IntTagMap && Int2 are always 0 for beta. leave it here only because xml does not match either -farmy
             this.IntTagMap = stream.ReadValueS32();
             Int1 = stream.ReadValueS32();
-            Int2 = stream.ReadValueS32();
-
-            var pointerMarkerLinks = stream.GetSerializedDataPointer();
+            var int2 = stream.ReadValueS32();
+            this.MarkerLinks = stream.ReadSerializedData<MarkerLink>();
             stream.Position += (3 * 4);
         }
     }
 
+    public class MarkerLink : ISerializableData
+    {
+        public string String1 { get; private set; }
+        public string String2 { get; private set; }
+
+        public void Read(MpqFileStream stream)
+        {
+            this.String1 = stream.ReadString(128, true);
+            this.String2 = stream.ReadString(128, true);
+        }
+    }
 
     public enum MarkerType
     {
