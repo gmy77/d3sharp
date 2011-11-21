@@ -388,10 +388,11 @@ namespace GameMessageViewer
                 // find toon name for client hash
                 foreach(BufferNode bn in allNodes)
                     if(bn.clientHash.Equals(m.Tag.ToString()))
-                        foreach(MessageNode mn in bn.Nodes)
-                            if(mn.gameMessage is NewPlayerMessage)
+                        foreach(TreeNode mn in bn.Nodes)
+                            if(mn is MessageNode)
+                            if((mn as MessageNode).gameMessage is NewPlayerMessage)
                             {
-                                m.Text = (mn.gameMessage as NewPlayerMessage).ToonName;
+                                m.Text = ((mn as MessageNode).gameMessage as NewPlayerMessage).ToonName;
                                 goto hell;
                             }
 
