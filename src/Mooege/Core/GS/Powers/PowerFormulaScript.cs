@@ -28,6 +28,7 @@ using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Net.GS.Message;
+using Mooege.Core.GS.Objects;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -245,6 +246,14 @@ namespace Mooege.Core.GS.Powers
                 pos += 4;
             }
 
+            // HACK: ignore bad formula
+            if (powerSNO == Skills.Skills.Barbarian.FurySpenders.Whirlwind &&
+                scriptTag.ID == 266560) // ScriptFormula(4)
+            {
+                return true;
+            }
+
+            Logger.Error("script finished without return opcode");
             return false;
         }
 
@@ -287,7 +296,7 @@ namespace Mooege.Core.GS.Powers
                         TagKeyScript relativeTag = GenerateTagForScriptFormula(SF_N);
                         return Evaluate(powerSNO, relativeTag, attributes, rand, out result);
                     }
-                    else if (numb1 >= 63 && numb1 <= 71) // known gamebalance power table id range
+                    else if (numb1 >= 63 && numb1 <= 72) // known gamebalance power table id range
                     {
                         result = BinaryIntToFloat(numb1); // simply store id, used later by Table()
                         return true;
@@ -308,7 +317,15 @@ namespace Mooege.Core.GS.Powers
             GameAttribute.Rune_B.Id,
             GameAttribute.Rune_C.Id,
             GameAttribute.Rune_D.Id,
-            GameAttribute.Rune_E.Id
+            GameAttribute.Rune_E.Id,
+            GameAttribute.Buff_Icon_Count0.Id,
+            GameAttribute.Buff_Icon_Count1.Id,
+            GameAttribute.Buff_Icon_Count2.Id,
+            GameAttribute.Buff_Icon_Count3.Id,
+            GameAttribute.Buff_Icon_Count4.Id,
+            GameAttribute.Buff_Icon_Count5.Id,
+            GameAttribute.Buff_Icon_Count6.Id,
+            GameAttribute.Buff_Icon_Count7.Id,
         };
 
         private static bool LoadAttribute(int powerSNO, GameAttributeMap attributes, int attributeId, out float result)
@@ -403,6 +420,8 @@ namespace Mooege.Core.GS.Powers
                     return "Healing";
                 case 71:
                     return "WDCost";
+                case 72:
+                    return "RuneDamageBonus";
                 default:
                     Logger.Error("Unknown table id {0}", tableId);
                     return null;

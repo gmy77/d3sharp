@@ -189,8 +189,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         private void _SetHiddenAttribute(Actor actor, bool active)
         {
             actor.Attributes[GameAttribute.Hidden] = active;
-            foreach (var msg in actor.Attributes.GetChangedMessageList(actor.DynamicID))
-                World.BroadcastIfRevealed(msg, actor);
+            actor.Attributes.BroadcastChangedIfRevealed();
         }
 
         // hackish animation player until a centralized one can be made

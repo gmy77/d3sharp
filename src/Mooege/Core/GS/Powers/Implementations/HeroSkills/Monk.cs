@@ -348,13 +348,10 @@ namespace Mooege.Core.GS.Powers.Implementations
         private void _SetupAttributes(bool active)
         {
             int intval = active ? 1 : 0;
-            GameAttributeMap map = User.Attributes;
-            map[GameAttribute.Buff_Icon_Count0, PowerSNO] = intval;
-            map[GameAttribute.Power_Buff_0_Visual_Effect_None, PowerSNO] = active; // switch on effect
-            map[GameAttribute.Hidden] = active;
-
-            foreach (var msg in map.GetChangedMessageList(User.DynamicID))
-                User.World.BroadcastIfRevealed(msg, User);
+            User.Attributes[GameAttribute.Buff_Icon_Count0, PowerSNO] = intval;
+            User.Attributes[GameAttribute.Power_Buff_0_Visual_Effect_None, PowerSNO] = active; // switch on effect
+            User.Attributes[GameAttribute.Hidden] = active;
+            User.Attributes.BroadcastChangedIfRevealed();
         }
     }
 }

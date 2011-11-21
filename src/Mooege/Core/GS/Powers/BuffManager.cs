@@ -90,21 +90,20 @@ namespace Mooege.Core.GS.Powers
                 Buff existingBuff = _buffs[buff.Target].FirstOrDefault((b) => b.GetType() == buffType);
                 if (existingBuff != null)
                 {
-                    existingBuff.Stack(buff);
+                    if (existingBuff.Stack(buff))
+                        return true;
+                    // buff is non-stacking, just add normally
+                }
+
+                _buffs[buff.Target].Add(buff);
+                if (buff.Apply())
+                {
                     return true;
                 }
                 else
                 {
-                    _buffs[buff.Target].Add(buff);
-                    if (buff.Apply())
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        _buffs[buff.Target].Remove(buff);
-                        return false;
-                    }
+                    _buffs[buff.Target].Remove(buff);
+                    return false;
                 }
             }
             else

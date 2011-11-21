@@ -100,7 +100,9 @@ namespace Mooege.Core.GS.Powers
 
             return true;
         }
-                            
+        
+        // HACK: used for item spawn helper in UsePower()
+        private bool _spawnedHelperItems = false;
 
         public bool UsePower(Actor user, int powerSNO, uint targetId = uint.MaxValue, Vector3D targetPosition = null,
                              TargetMessage targetMessage = null)
@@ -120,7 +122,7 @@ namespace Mooege.Core.GS.Powers
                 targetPosition = target.Position;
             }
                         
-            #region Monster spawn HACK
+            #region Items and Monster spawn HACK
             // HACK: intercept hotbar skill 1 to always spawn test mobs.
             if (user is Player && powerSNO == (user as Player).SkillSet.HotBarSkills[4].SNOSkill)
             {
@@ -130,7 +132,7 @@ namespace Mooege.Core.GS.Powers
                 // list of actorSNO values to pick from when spawning
                 int[] actorSNO_values = { 4282, 3893, 6652, 5428, 5346, 6024, 5393, 5467 };
                 int actorSNO = actorSNO_values[RandomHelper.Next(actorSNO_values.Length - 1)];
-                Logger.Debug("PowerManager spawning sno {0}", actorSNO);
+                Logger.Debug("10 monsters spawning with actor sno {0}", actorSNO);
 
                 for (int n = 0; n < spawn_count; ++n)
                 {
@@ -168,6 +170,16 @@ namespace Mooege.Core.GS.Powers
                     user.World.Enter(mon);
                 }
 
+                // spawn some useful items for testing at the ground of the player
+                if (!_spawnedHelperItems)
+                {
+                    _spawnedHelperItems = true;
+                    Items.ItemGenerator.Cook((Players.Player)user, "Sword_2H_205").EnterWorld(user.Position);
+                    Items.ItemGenerator.Cook((Players.Player)user, "Crossbow_102").EnterWorld(user.Position);
+                    for (int n = 0; n < 30; ++n)
+                        Items.ItemGenerator.Cook((Players.Player)user, "Runestone_Unattuned_07").EnterWorld(user.Position);
+                }
+                
                 return true;
             }
             #endregion

@@ -1642,10 +1642,7 @@ namespace Mooege.Core.GS.Players
                     0f);
             }
 
-            // FIXME: better way to update attribute changes?
-            GameAttributeMap map = new GameAttributeMap();
-            map[GameAttribute.Resource_Cur, resourceID] = this.Attributes[GameAttribute.Resource_Cur, resourceID];
-            map.SendMessage(this.InGameClient, this.DynamicID);
+            this.Attributes.BroadcastChangedIfRevealed();
         }
 
         private void _UpdateResources()
@@ -1654,7 +1651,7 @@ namespace Mooege.Core.GS.Players
             if (!InGameClient.TickingEnabled) return;
 
             // update resources once every update for now.
-            if (this.InGameClient.Game.TickCounter - _lastResourceUpdateTick < 6) // assume tick rate is 6
+            if (this.InGameClient.Game.TickCounter - _lastResourceUpdateTick < this.InGameClient.Game.TickRate)
                 return;
 
             _lastResourceUpdateTick = this.InGameClient.Game.TickCounter;
@@ -1663,7 +1660,7 @@ namespace Mooege.Core.GS.Players
             switch (this.Toon.Class)
             {
                 case ToonClass.Barbarian:
-                    UsePrimaryResource(0.2f);
+                    UsePrimaryResource(0.1f);
                     break;
                 case ToonClass.DemonHunter:
                     GeneratePrimaryResource(3f);

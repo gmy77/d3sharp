@@ -76,7 +76,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Field3 = 303110, // used for male barb leap
                 FlyingAnimationTagID = 69792, // used for male barb leap
                 LandingAnimationTagID = -1,
-                Field6 = -1.0f, // gravity
+                Field6 = -0.1f, // gravity
                 Field7 = Skills.Skills.Barbarian.FuryGenerators.LeapAttack,
                 Field8 = 0
             }, User);

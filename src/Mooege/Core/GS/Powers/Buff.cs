@@ -32,7 +32,7 @@ namespace Mooege.Core.GS.Powers
             if (PowerSNO != 0)
             {
                 User.Attributes[GameAttribute.Buff_Active, PowerSNO] = true;
-                BroadcastChangedAttributes(User);
+                User.Attributes.BroadcastChangedIfRevealed();
             }
             return true;
         }
@@ -42,13 +42,13 @@ namespace Mooege.Core.GS.Powers
             if (PowerSNO != 0)
             {
                 User.Attributes[GameAttribute.Buff_Active, PowerSNO] = false;
-                BroadcastChangedAttributes(User);
+                User.Attributes.BroadcastChangedIfRevealed();
             }
         }
 
         public virtual void Init() { }
         public virtual bool Update() { return false; }
-        public virtual void Stack(Buff buff) { }
+        public virtual bool Stack(Buff buff) { return false; }
         // OnPayload
         // OnFinished
     }
@@ -62,12 +62,14 @@ namespace Mooege.Core.GS.Powers
             return this.Timeout != null && this.Timeout.TimedOut;
         }
 
-        public override void Stack(Buff buff)
+        public override bool Stack(Buff buff)
         {
             TimedBuff newbuff = (TimedBuff)buff;
             // update buff if new timeout is longer than current one, or if new buff has no timeout
             if (newbuff.Timeout == null || this.Timeout != null && newbuff.Timeout.TimeoutTick > this.Timeout.TimeoutTick)
                 this.Timeout = newbuff.Timeout;
+
+            return true;
         }
     }
 
@@ -95,7 +97,7 @@ namespace Mooege.Core.GS.Powers
                 User.Attributes[_Buff_Icon_End_TickN, PowerSNO] = this.Timeout.TimeoutTick;
                 User.Attributes[_Buff_Icon_CountN, PowerSNO] = 1;
                 User.Attributes[_Power_Buff_N_VisualEffect_R, PowerSNO] = true;
-                BroadcastChangedAttributes(User);
+                User.Attributes.BroadcastChangedIfRevealed();
             }
             return true;
         }
@@ -108,11 +110,11 @@ namespace Mooege.Core.GS.Powers
             {
                 User.Attributes[_Power_Buff_N_VisualEffect_R, PowerSNO] = false;
                 User.Attributes[_Buff_Icon_CountN, PowerSNO] = 0;
-                BroadcastChangedAttributes(User);
+                User.Attributes.BroadcastChangedIfRevealed();
             }
         }
 
-        public override void Stack(Buff buff)
+        public override bool Stack(Buff buff)
         {
             base.Stack(buff);
 
@@ -121,8 +123,9 @@ namespace Mooege.Core.GS.Powers
             {
                 User.Attributes[_Buff_Icon_Start_TickN, PowerSNO] = this.Timeout.TimeoutTick;
                 User.Attributes[_Buff_Icon_End_TickN, PowerSNO] = this.Timeout.TimeoutTick;
-                BroadcastChangedAttributes(User);
+                User.Attributes.BroadcastChangedIfRevealed();
             }
+            return true;
         }
 
         private GameAttributeB _Power_Buff_N_VisualEffect_R
