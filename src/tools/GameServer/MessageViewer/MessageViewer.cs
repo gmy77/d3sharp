@@ -33,8 +33,6 @@ using PacketDotNet;
 
 namespace GameMessageViewer
 {
-
-
     public interface HighlightingNode
     {
         void Highlight(RichTextBox input);
@@ -53,11 +51,6 @@ namespace GameMessageViewer
         {
             InitializeComponent();
         }
-
-
-
-
-
 
 
         private void tree_AfterSelect(object sender, TreeViewEventArgs e)
@@ -141,7 +134,7 @@ namespace GameMessageViewer
                 bn.Collapse();
 
                 foreach (MessageNode mn in bn.Nodes)
-                    if (mn.gameMessage.ToString().Contains(find))
+                    if (mn.gameMessage.GetType().Name.Contains(find))
                     {
                         bn.BackColor = Color.Yellow;
                         mn.BackColor = Color.Yellow;
@@ -261,10 +254,13 @@ namespace GameMessageViewer
                                 {
                                     usedKeys.Add(id.ToString());
                                     string alias = "";
-
-                                    if (SNOAliases.AnimationGroups.TryGetValue(id.ToString(), out alias))
+                                    
+                                    var aliases = Mooege.Core.GS.Common.Types.TagMap.TagMap.GetKeys(id);
+                                    if(aliases.Count > 0)
                                     {
-                                        output.Rtf = output.Rtf.Replace(word, word + ":" + alias);
+                                        alias = String.Join(" or ", aliases.Select(x => x.Name));
+
+                                        output.Rtf = output.Rtf.Replace(word, word + ": TagKey." + alias);
 
                                         int pos = -1;
                                         while ((pos = output.Text.IndexOf(alias, pos + 1)) > 0)
@@ -276,8 +272,8 @@ namespace GameMessageViewer
                                         }
                                     }
 
-
-                                    if (SNOAliases.Aliases.TryGetValue(id.ToString(), out alias))
+                                    alias = SNOAliases.GetAlias(id);
+                                    if (alias != "")
                                     {
                                         output.Rtf = output.Rtf.Replace(word, word + ":" + alias);
 

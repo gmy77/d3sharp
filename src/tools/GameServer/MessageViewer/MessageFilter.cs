@@ -31,6 +31,14 @@ namespace GameMessageViewer
 {
     public partial class MessageFilter : Form
     {
+        private class Preset
+        {
+            public string Name;
+            public Dictionary<string, bool> Filter;
+            public override string ToString() { return Name; }
+        }
+
+
         public Dictionary<string, bool> Filter = new Dictionary<string, bool>();
 
 
@@ -53,36 +61,27 @@ namespace GameMessageViewer
 
             boxes.Sort((a, b) => a.Text.CompareTo(b.Text));
 
-            int itemsPerRow = 6;
-
+            int itemsPerRow = 30;
             int count = 0;
             foreach (CheckBox c in boxes)
             {
-                bool selected;
-                if (Filter.TryGetValue(c.Text, out selected))
-                    c.Checked = selected;
-                else
-                    c.Checked = true;
-
-                c.Left = 20 + 220 * (count % itemsPerRow);
-                c.Top = 20 + 20 * (count++ / itemsPerRow);
+                c.Left = 20 + 220 * (count / itemsPerRow);
+                c.Top = 20 + 18 * (count++ % itemsPerRow);
                 Controls.Add(c);
             }
 
-            int Width = 40 + itemsPerRow * 220;
-            int Height = 60 + cmdOk.Height + (count - 1) / itemsPerRow * 20;
+            int Width = 40 + count / itemsPerRow * 220;
+            int Height = 100 + itemsPerRow * 18;
             this.ClientSize = new System.Drawing.Size(Width, Height);
-
-
-            cmdAll.Top = this.ClientSize.Height - cmdAll.Height - 20;
-            cmdNone.Top = this.ClientSize.Height - cmdNone.Height - 20;
-
+            Presets.Top = this.ClientSize.Height - Presets.Height - 20;
+            Presets.Left = 20;
             cmdOk.Left = this.ClientSize.Width - cmdOk.Width - 20;
             cmdOk.Top = this.ClientSize.Height - cmdOk.Height - 20;
 
-            foreach (Control c in this.Controls)
-                if (c is CheckBox)
-                    Filter[c.Text] = true;
+            foreach (Preset p in CreatePresets())
+                Presets.Items.Add(p);
+
+            Presets.SelectedIndex = 0;
 
         }
 
@@ -113,6 +112,80 @@ namespace GameMessageViewer
             foreach (Control c in this.Controls)
                 if (c is CheckBox)
                     (c as CheckBox).Checked = false;
+        }
+
+        /// <summary>
+        /// Create some preset filters
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<Preset> CreatePresets()
+        {
+            Dictionary<string, bool> All = new Dictionary<string, bool>();
+            foreach (Control c in this.Controls)
+                if (c is CheckBox)
+                    All[c.Text] = true;
+            yield return new Preset() { Name = "All", Filter = All };
+
+            Dictionary<string, bool> None = new Dictionary<string, bool>();
+            foreach (Control c in this.Controls)
+                if (c is CheckBox)
+                    None[c.Text] = false;
+            yield return new Preset() { Name = "None", Filter = None };
+
+            Dictionary<string, bool> LessVerbose = All.Clone();
+            LessVerbose["GameTickMessage"] = false;
+            LessVerbose["TrickleMessage"] = false;
+            LessVerbose["ACDTranslateFacingMessage"] = false;
+            yield return new Preset() { Name = "Less verbose", Filter = LessVerbose };
+
+            Dictionary<string, bool> Questing = None.Clone();
+            Questing["QuestCounterMessage"] = true;
+            Questing["QuestMeterMessage"] = true;
+            Questing["QuestUpdateMessage"] = true;
+            Questing["WorldTargetMessage"] = true;
+            yield return new Preset() { Name = "Questing", Filter = Questing };
+
+            Dictionary<string, bool> Conversation = None.Clone();
+            Conversation["PlayConvLineMessage"] = true;
+            Conversation["FinishConversationMessage"] = true;
+            Conversation["EndConversationMessage"] = true;
+            Conversation["RequestCloseConversationWindowMessage"] = true;
+            Conversation["StopConvLineMessage"] = true;
+            Conversation["WorldTargetMessage"] = true;
+
+            yield return new Preset() { Name = "Conversation", Filter = Conversation };
+ 
+        }
+
+        private void Presets_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadPreset(((ComboBox)sender).SelectedItem as Preset);
+        }
+
+        /// <summary>
+        /// Loads a preset and sets it as selected filter
+        /// </summary>
+        /// <param name="p"></param>
+        private void LoadPreset(Preset p)
+        {
+            foreach (Control c in this.Controls)
+                if (c is CheckBox)
+                    (c as CheckBox).Checked = p.Filter[(c as CheckBox).Text];
+            this.Filter = p.Filter;
+        }
+    }
+
+    /// <summary>
+    /// Extension method to clone dictionaries
+    /// </summary>
+    public static class DictionaryClone
+    {
+        public static Dictionary<string, bool> Clone(this Dictionary<string, bool> original)
+        {
+            Dictionary<string, bool> clone = new Dictionary<string, bool>();
+            foreach (string key in original.Keys)
+                clone.Add(key, original[key]);
+            return clone;
         }
     }
 }

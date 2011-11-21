@@ -29,8 +29,7 @@
         private void InitializeComponent()
         {
             this.cmdOk = new System.Windows.Forms.Button();
-            this.cmdAll = new System.Windows.Forms.Button();
-            this.cmdNone = new System.Windows.Forms.Button();
+            this.Presets = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // cmdOk
@@ -43,25 +42,16 @@
             this.cmdOk.UseVisualStyleBackColor = true;
             this.cmdOk.Click += new System.EventHandler(this.cmdOk_Click);
             // 
-            // cmdAll
+            // Presets
             // 
-            this.cmdAll.Location = new System.Drawing.Point(12, 343);
-            this.cmdAll.Name = "cmdAll";
-            this.cmdAll.Size = new System.Drawing.Size(54, 34);
-            this.cmdAll.TabIndex = 1;
-            this.cmdAll.Text = "All";
-            this.cmdAll.UseVisualStyleBackColor = true;
-            this.cmdAll.Click += new System.EventHandler(this.cmdAll_Click);
-            // 
-            // cmdNone
-            // 
-            this.cmdNone.Location = new System.Drawing.Point(72, 343);
-            this.cmdNone.Name = "cmdNone";
-            this.cmdNone.Size = new System.Drawing.Size(54, 34);
-            this.cmdNone.TabIndex = 2;
-            this.cmdNone.Text = "None";
-            this.cmdNone.UseVisualStyleBackColor = true;
-            this.cmdNone.Click += new System.EventHandler(this.cmdNone_Click);
+            this.Presets.BackColor = System.Drawing.SystemColors.Window;
+            this.Presets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Presets.FormattingEnabled = true;
+            this.Presets.Location = new System.Drawing.Point(12, 351);
+            this.Presets.Name = "Presets";
+            this.Presets.Size = new System.Drawing.Size(162, 21);
+            this.Presets.TabIndex = 3;
+            this.Presets.SelectedIndexChanged += new System.EventHandler(this.Presets_SelectedIndexChanged);
             // 
             // MessageFilter
             // 
@@ -69,8 +59,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1019, 389);
             this.ControlBox = false;
-            this.Controls.Add(this.cmdNone);
-            this.Controls.Add(this.cmdAll);
+            this.Controls.Add(this.Presets);
             this.Controls.Add(this.cmdOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -84,7 +73,6 @@
         #endregion
 
         private System.Windows.Forms.Button cmdOk;
-        private System.Windows.Forms.Button cmdAll;
-        private System.Windows.Forms.Button cmdNone;
+        private System.Windows.Forms.ComboBox Presets;
     }
 }

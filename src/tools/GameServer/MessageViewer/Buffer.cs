@@ -35,11 +35,10 @@ namespace GameMessageViewer
     /// </summary>
     class GameMessageProxy
     {
-        //static Dictionary<string, Type> MessageTypes = new Dictionary<string,Type>();
         private static readonly Dictionary<Opcodes, Type> MessageTypes = new Dictionary<Opcodes, Type>();
 
-
-        // Load all types in the AppDomain that inherit from GameMessage
+        // Create a dictionary of all GameMessages and what opcodes they handle
+        // for all Subclasses of GameMessage defined anywhere in the AppDomain
         static GameMessageProxy()
         {
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -49,16 +48,12 @@ namespace GameMessageViewer
                         var attributes = (MessageAttribute[])type.GetCustomAttributes(typeof(MessageAttribute), true);
                         if (attributes.Length == 0) continue;
                         foreach (MessageAttribute attribute in attributes)
-                        {
                             foreach (var opcode in attribute.Opcodes)
-                            {
                                 MessageTypes.Add(opcode, type);
-                            }
-                        }
-
                     }
         }
 
+        // Create and parse the GameMessage that handles the next opcode
         public static GameMessage ParseMessage(GameBitBuffer buffer)
         {
             GameMessage msg = null;
@@ -67,7 +62,7 @@ namespace GameMessageViewer
             if (MessageTypes.ContainsKey(opcode))
             {
                 msg = (GameMessage)FormatterServices.GetUninitializedObject(MessageTypes[opcode]);
-                msg.Id = (int)opcode;
+                typeof(GameMessage).GetProperty("Id").SetValue(msg, (int)opcode, null);
                 msg.Parse(buffer);
             }
 

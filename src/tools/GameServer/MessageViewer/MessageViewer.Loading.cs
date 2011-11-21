@@ -31,13 +31,11 @@ namespace GameMessageViewer
 {
     public partial class MessageViewer
     {
+
         private byte[] String_To_Bytes(string strInput)
         {
-            // i variable used to hold position in string  
             int i = 0;
-            // x variable used to hold byte array element position  
             int x = 0;
-            // allocate byte array based on half of string length  
             byte[] bytes = new byte[(strInput.Length) / 2];
             // loop through the string - 2 bytes at a time converting  
             //  it to decimal equivalent and store in byte array  
@@ -48,9 +46,17 @@ namespace GameMessageViewer
                 i = i + 2;
                 ++x;
             }
-            // return the finished byte array of decimal values  
             return bytes;
         }
+
+
+                        //        string b = Encoding.UTF8.GetString(buffer.Data, 0, buffer.Length / 8);
+                        //if (b.Contains("0.3.1.7779") ||
+                        //    b.Contains("0.3.0.7484") ||
+                        //    b.Contains("0.3.0.7333"))
+                        //{
+                        //    MessageBox.Show("The dump version ({0}) is incompatible to the currently used mooege version ({1})\n Loading continues but it may take significantly longer and many messages will not be parsed correctly");
+                        //}
 
 
         private void LoadWiresharkHex(string text)
@@ -66,6 +72,7 @@ namespace GameMessageViewer
                     if (i > 0 && (rows[i].StartsWith(" ") ^ rows[i - 1].StartsWith(" ")))
                     {
                         Buffer buffer = new Buffer(String_To_Bytes(currentBuffer));
+
                         BufferNode newNode = new BufferNode(buffer, actors, questTree, "1");
                         newNode.Start = text.Length;
                         newNode.BackColor = rows[i].StartsWith(" ") ? newNode.BackColor = Color.LightCoral : Color.LightBlue;
