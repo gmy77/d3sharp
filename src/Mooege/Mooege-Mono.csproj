@@ -140,7 +140,7 @@
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
     <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
-    <Compile Include="Common\VersionInfo.cs" />
+    <Compile Include="Common\Versions\VersionInfo.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\ArtisanShortcut.cs" />
     <Compile Include="Core\GS\Actors\Implementations\NephalemAltar.cs" />
     <Compile Include="Core\GS\Actors\ServerProp.cs" />
@@ -292,7 +292,7 @@
     <Compile Include="Core\MooNet\Toons\Toon.cs" />
     <Compile Include="Core\MooNet\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\MooNet\Toons\ToonManager.cs" />
-    <Compile Include="LogConfig.cs" />
+    <Compile Include="Common\Logging\LogConfig.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
@@ -558,7 +558,7 @@
     <Compile Include="Net\MooNet\MooNetRouter.cs" />
     <Compile Include="Common\Helpers\Hash\StringHashHelper.cs" />
     <Compile Include="Common\Extensions\IMessageExtensions.cs" />
-    <Compile Include="Common\TinyLogger.cs" />
+    <Compile Include="Common\Logging\TinyLogger.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObjectManager.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObject.cs" />
     <Compile Include="Common\Storage\Config.cs" />
