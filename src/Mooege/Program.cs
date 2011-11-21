@@ -20,7 +20,7 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Items;
 using Mooege.Core.MooNet.Commands;

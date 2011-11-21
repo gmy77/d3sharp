@@ -19,8 +19,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Mooege.Common.Helpers;
 using Mooege.Common.Helpers.IO;
+using Mooege.Common.Logging;
 
 namespace Mooege.Common.MPQ
 {

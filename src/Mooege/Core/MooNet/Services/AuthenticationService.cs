@@ -19,7 +19,8 @@
 using System;
 using System.Globalization;
 using System.Threading;
-using Mooege.Common;
+using Mooege.Common.Logging;
+using Mooege.Common.Versions;
 using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;

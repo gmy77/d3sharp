@@ -16,19 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-using Mooege.Common;
 using Mooege.Common.Helpers.Hash;
-using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Map;
-using Mooege.Common.Helpers;
 using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors

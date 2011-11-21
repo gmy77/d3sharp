@@ -18,7 +18,7 @@
 
 using System;
 using Google.ProtocolBuffers;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Toons;

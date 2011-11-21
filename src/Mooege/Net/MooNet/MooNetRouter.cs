@@ -20,7 +20,7 @@ using System;
 using System.Linq;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Services;
 using Mooege.Net.MooNet.Packets;
 

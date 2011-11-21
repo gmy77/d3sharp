@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using CrystalMpq;
 using Gibbed.IO;
+using Mooege.Common.Versions;
 using Mooege.Core.GS.Common.Types.SNO;
 using System.Linq;
 

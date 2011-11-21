@@ -17,9 +17,8 @@
  */
 
 using System.IO;
-using Mooege.Common;
-using Mooege.Common.Extensions;
 using Google.ProtocolBuffers;
+using Mooege.Common.Logging;
 
 namespace Mooege.Net.MooNet.Packets
 {

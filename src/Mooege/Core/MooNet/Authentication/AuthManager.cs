@@ -19,7 +19,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Google.ProtocolBuffers;
-using Mooege.Common;
+using Mooege.Common.Logging;
+using Mooege.Common.Versions;
 using Mooege.Core.Cryptography;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Net.MooNet;

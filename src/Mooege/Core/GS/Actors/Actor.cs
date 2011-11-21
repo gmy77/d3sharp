@@ -19,8 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using Mooege.Common;
-using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.Misc;

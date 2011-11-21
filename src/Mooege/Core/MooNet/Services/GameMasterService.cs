@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Google.ProtocolBuffers;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Games;
 using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;

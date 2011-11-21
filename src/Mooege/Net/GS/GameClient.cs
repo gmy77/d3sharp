@@ -18,15 +18,13 @@
 
 using System;
 using System.Linq;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Tick;
 using Mooege.Net.MooNet;
 
-// TODO: Client should probably just flush on every message, or use a queue with a very small quota..
-// consider: The client seems to not interpret received messages until a tick message which makes flushing earlier less useful
 namespace Mooege.Net.GS
 {
     public sealed class GameClient : IClient

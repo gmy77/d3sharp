@@ -18,7 +18,7 @@
 
 using System;
 using Google.ProtocolBuffers;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
 using bnet.protocol;

@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Net.MooNet.Packets;
 
 namespace Mooege.Net

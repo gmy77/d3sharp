@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Net.MooNet;
 
