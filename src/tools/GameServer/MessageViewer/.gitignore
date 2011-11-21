@@ -4,3 +4,4 @@
 *.exe
 *.dll
 bin/Debug/
+/obj/
