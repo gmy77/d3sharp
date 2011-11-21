@@ -18,7 +18,6 @@
 
 using System;
 using Google.ProtocolBuffers;
-using Mooege.Common;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
 
@@ -29,6 +28,7 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
+        public bnet.protocol.Header LastCallHeader { get; set; }
 
         public override void PostUpdate(IRpcController controller, bnet.protocol.achievements.PostUpdateRequest request, Action<bnet.protocol.achievements.PostUpdateResponse> done)
         {

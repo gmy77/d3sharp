@@ -8,7 +8,7 @@ Currently supported:
 * Mono Runtime: 2.10.5
 * Game Version: Patch6 (7841)
 
-Requires:
+Requirements:
 
 * OpenSSL-1.0.0.e
 * SQLite

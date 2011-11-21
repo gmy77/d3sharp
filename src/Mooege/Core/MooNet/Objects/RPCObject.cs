@@ -85,7 +85,7 @@ namespace Mooege.Core.MooNet.Objects
                 return;
             }
             // Unmap the object from the client
-            client.UnmapLocalObjectID(this.DynamicId);
+            client.UnmapLocalObjectId(this.DynamicId);
             this.Subscribers.Remove(client);
             // We don't need to do a notify nor respond to the client with anything since the client will ultimately act
             // like the object never existed in the first place

@@ -119,7 +119,7 @@ namespace Mooege.Core.MooNet.Commands
             output += "[Subscribers]\n";
             foreach(var client in rpcObject.Subscribers)
             {
-                var remoteId = client.GetRemoteObjectID(rpcObject.DynamicId);
+                var remoteId = client.GetRemoteObjectId(rpcObject.DynamicId);
                 output += string.Format("RemoteId: 0x{0} - {1}\n", remoteId.ToString("X8"), client.Account.Email);
             }
 
