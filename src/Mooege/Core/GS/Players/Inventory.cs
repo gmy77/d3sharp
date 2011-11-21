@@ -17,6 +17,7 @@
  */
 
 using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Items;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;

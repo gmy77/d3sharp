@@ -17,7 +17,7 @@
  */
 
 using System.Text;
-using Mooege.Common;
+using Mooege.Common.Versions;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {

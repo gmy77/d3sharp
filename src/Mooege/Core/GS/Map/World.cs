@@ -24,6 +24,7 @@ using System.Windows;
 using Mooege.Common;
 using Mooege.Common.Helpers;
 using Mooege.Common.Helpers.Math;
+using Mooege.Common.Logging;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;

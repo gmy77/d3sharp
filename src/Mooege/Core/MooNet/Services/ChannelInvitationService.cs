@@ -17,8 +17,8 @@
  */
 
 using System;
-using Mooege.Common;
 using Mooege.Common.Extensions;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
@@ -30,6 +30,8 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
+        public bnet.protocol.Header LastCallHeader { get; set; }
+
         private readonly ChannelInvitationManager _invitationManager = new ChannelInvitationManager();
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.SubscribeRequest request, Action<bnet.protocol.channel_invitation.SubscribeResponse> done)
@@ -45,10 +47,10 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("{0} accepted invitation.", this.Client.CurrentToon);
 
-            var response = bnet.protocol.channel_invitation.AcceptInvitationResponse.CreateBuilder().SetObjectId(this._invitationManager.DynamicId).Build();
-            done(response);
+            var channel = this._invitationManager.HandleAccept(this.Client, request);
 
-            this._invitationManager.HandleAccept(this.Client, request);
+            var response = bnet.protocol.channel_invitation.AcceptInvitationResponse.CreateBuilder().SetObjectId(channel.DynamicId).Build();
+            done(response);
         }
 
         public override void DeclineInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)

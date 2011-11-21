@@ -17,7 +17,8 @@
  */
 
 using System;
-using Mooege.Common;
+using System.Linq;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
@@ -29,6 +30,7 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
+        public bnet.protocol.Header LastCallHeader { get; set; }
 
         public override void AddMember(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.AddMemberRequest request, System.Action<bnet.protocol.NoData> done)
         {
@@ -57,13 +59,17 @@ namespace Mooege.Core.MooNet.Services
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
 
-            if (!request.HasMessage) return; // only continue if the request actually contains a message.
+            if (!request.HasMessage) 
+                return; // only continue if the request actually contains a message.
+            
+            if (request.Message.AttributeCount == 0 || !request.Message.AttributeList.First().HasValue)
+                return; // check if it has attributes.
 
-            if (!(request.Message.AttributeCount > 0 && request.Message.AttributeList[0].HasValue &&
-                CommandManager.TryParse(request.Message.AttributeList[0].Value.StringValue, this.Client, CommandManager.RespondOver.Channel))) // try parsing the message as a command   
-            {
-                this.Client.CurrentChannel.SendMessage(this.Client, request.Message); // if it's not - let channel itself to broadcast message to it's members.  
-            }
+            var channel = ChannelManager.GetChannelByDynamicId(this.LastCallHeader.ObjectId);
+            var parsedAsCommand = CommandManager.TryParse(request.Message.AttributeList[0].Value.StringValue, this.Client); // try parsing the message as a command
+
+            if(!parsedAsCommand)
+                channel.SendMessage(this.Client, request.Message); // if it's not parsed as an command - let channel itself to broadcast message to it's members.              
         }
 
         public override void SetRoles(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SetRolesRequest request, System.Action<bnet.protocol.NoData> done)
@@ -76,7 +82,6 @@ namespace Mooege.Core.MooNet.Services
             Logger.Trace("UpdateChannelState()");
 
             // TODO: Should be actually applying changes on channel. /raist.
-
             var channelState = bnet.protocol.channel.ChannelState.CreateBuilder();
 
             foreach (bnet.protocol.attribute.Attribute attribute in request.StateChange.AttributeList)
@@ -95,12 +100,15 @@ namespace Mooege.Core.MooNet.Services
                 }
                 else if (attribute.Name == "D3.Party.SearchForPublicGame.Params")
                 {
-                    //TODO: Find a game that fits the clients params and join
+                    // TODO: Find a game that fits the clients params and join /raist.
                     var publicGameParams = D3.PartyMessage.SearchForPublicGameParams.ParseFrom(attribute.Value.MessageValue);
                     Logger.Warn("SearchForPublicGameParams: {0}", publicGameParams.ToString());
                 }
                 else if (attribute.Name == "D3.Party.ScreenStatus")
                 {
+                    if (!this.Client.MOTDSent)
+                        this.Client.SendMOTD(); // send the MOTD to client if we haven't yet so.
+
                     if (!attribute.HasValue || attribute.Value.MessageValue.IsEmpty) //Sometimes not present -Egris
                     {
                         var newScreen = this.Client.Account.ScreenStatus;
@@ -114,7 +122,8 @@ namespace Mooege.Core.MooNet.Services
                     {
                         var oldScreen = D3.PartyMessage.ScreenStatus.ParseFrom(attribute.Value.MessageValue);
                         this.Client.Account.ScreenStatus = oldScreen;
-                        //save screen status for use with friends -Egris
+
+                        // TODO: save screen status for use with friends -Egris
                         var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                             .SetName("D3.Party.ScreenStatus")
                             .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(oldScreen.ToByteString()));
@@ -124,8 +133,9 @@ namespace Mooege.Core.MooNet.Services
                 }
                 else if (attribute.Name == "D3.Party.JoinPermissionPreviousToLock")
                 {
-                    //0-CLOSED
-                    //1-ASK_TO_JOIN
+                    // 0 - CLOSED
+                    // 1 - ASK_TO_JOIN
+
                     var joinPermission = attribute.Value;
                     var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                         .SetName("D3.Party.JoinPermissionPreviousToLock")
@@ -134,8 +144,9 @@ namespace Mooege.Core.MooNet.Services
                 }
                 else if (attribute.Name == "D3.Party.LockReasons")
                 {
-                    //0-CREATING_GAME
-                    //2-MATCHMAKER_SEARCHING
+                    // 0 - CREATING_GAME
+                    // 2 - MATCHMAKER_SEARCHING
+
                     var lockReason = attribute.Value;
                     var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                         .SetName("D3.Party.LockReasons")
@@ -171,7 +182,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetStateChange(channelState)
                 .Build();
 
-            // Send UpdateChannelStateNotification RPC
+            // Send UpdateChannelStateNotification RPC call.
             this.Client.MakeTargetedRPC(this.Client.CurrentChannel, () =>
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notification, callback => { }));
         }

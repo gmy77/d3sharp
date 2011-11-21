@@ -17,16 +17,13 @@
  */
 
 using System;
-using System.Linq;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Objects;
-using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Core.GS.Ticker;
-using Mooege.Common;
+using Mooege.Common.Logging;
 
 namespace Mooege.Core.GS.Powers
 {

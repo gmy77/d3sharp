@@ -25,7 +25,7 @@ using System.Linq;
 using Mooege.Common.Extensions;
 using Mooege.Net.GS.Message;
 
-namespace Mooege.Common
+namespace Mooege.Common.Logging
 {
     public static class LogManager
     {

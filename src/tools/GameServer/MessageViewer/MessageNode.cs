@@ -26,7 +26,7 @@ using System.Drawing;
 
 namespace GameMessageViewer
 {
-    public class MessageNode : TreeNode, HighlightingNode
+    public class MessageNode : TreeNode, ITextNode
     {
         public GameMessage gameMessage;
         public int mStart;
@@ -45,23 +45,10 @@ namespace GameMessageViewer
             return new MessageNode(gameMessage, mStart, mEnd);
         }
 
-        public void Highlight(RichTextBox r)
-        {
-            this.BackColor = Color.Yellow;
-            Highlight(r, Color.Green);
-        }
 
-        public void Unhighlight(RichTextBox r)
+        public string AsText()
         {
-            this.BackColor = Color.White;
-            (Parent as HighlightingNode).Highlight(r);
-        }
-
-        public void Highlight(RichTextBox input, Color color)
-        {
-            input.SelectionStart = mStart >> 2;
-            input.SelectionLength = ((mEnd - mStart) % 4) == 0 ? (mEnd - mStart) >> 2 : ((mEnd - mStart) >> 2) + 1;
-            input.SelectionBackColor = color;
+            return gameMessage.AsText();
         }
     }
 }

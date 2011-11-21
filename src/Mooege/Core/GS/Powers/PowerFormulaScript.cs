@@ -20,8 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Mooege.Common;
-using Mooege.Common.Helpers;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.MPQ.FileFormats.Types;
@@ -29,6 +27,7 @@ using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Objects;
+using Mooege.Common.Logging;
 
 namespace Mooege.Core.GS.Powers
 {

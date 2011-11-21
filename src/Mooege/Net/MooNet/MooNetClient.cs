@@ -22,13 +22,12 @@ using System.Net.Sockets;
 using System.Threading;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
-using Mooege.Common;
 using Mooege.Common.Helpers.Hash;
+using Mooege.Common.Logging;
 using Mooege.Core.Cryptography.SSL;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Channels;
-using Mooege.Core.MooNet.Commands;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Core.MooNet.Toons;
@@ -102,6 +101,8 @@ namespace Mooege.Net.MooNet
         /// Token counter for RPCs.
         /// </summary>
         private uint _tokenCounter = 0;
+
+        public bool MOTDSent { get; private set; }
         
         /// <summary>
         /// Listener Id for upcoming rpc.
@@ -110,6 +111,8 @@ namespace Mooege.Net.MooNet
         
         public MooNetClient(IConnection connection)
         {
+            this.MOTDSent = false;
+
             this.Connection = connection;
             if (this.Connection != null)
                 this.NetworkStream = new NetworkStream(this.Connection._Socket, true);
@@ -138,7 +141,7 @@ namespace Mooege.Net.MooNet
         /// <param name="rpc">The rpc action.</param>
         public void MakeTargetedRPC(RPCObject targetObject, Action rpc)
         {
-            this._listenerId = this.GetRemoteObjectID(targetObject.DynamicId);
+            this._listenerId = this.GetRemoteObjectId(targetObject.DynamicId);
             Logger.Trace("[RPC: {0}] Method: {1} Target: {2} [localId: {3}, remoteId: {4}].", this, rpc.Method,
                          targetObject.ToString(), targetObject.DynamicId, this._listenerId);
 
@@ -222,7 +225,7 @@ namespace Mooege.Net.MooNet
         /// Unmaps an existing local objectId.
         /// </summary>
         /// <param name="localObjectId"></param>
-        public void UnmapLocalObjectID(ulong localObjectId)
+        public void UnmapLocalObjectId(ulong localObjectId)
         {
             try
             {
@@ -239,7 +242,7 @@ namespace Mooege.Net.MooNet
         /// </summary>
         /// <param name="localObjectId">The local objectId</param>
         /// <returns>The remoteobjectId</returns>
-        public ulong GetRemoteObjectID(ulong localObjectId)
+        public ulong GetRemoteObjectId(ulong localObjectId)
         {
             return localObjectId != 0 ? this.MappedObjects[localObjectId] : 0;
         }
@@ -314,26 +317,9 @@ namespace Mooege.Net.MooNet
         #region text-messaging functionality from server to client
 
         /// <summary>
-        /// Sends a message to given client. Can be used for sending command replies.
+        /// Sends a whisper from toon itself to toon.
         /// </summary>
-        /// <param name="text">Message to send</param>
-        public void SendServerMessage(string text)
-        {
-            if (text.Trim() == string.Empty) return;
-
-            var message = bnet.protocol.channel.Message.CreateBuilder()
-                .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("message_text")
-                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(text).Build()).Build()).Build();
-
-            var notification = bnet.protocol.channel.SendMessageNotification.CreateBuilder().SetAgentId(this.CurrentToon.BnetEntityID)
-                .SetMessage(message).SetRequiredPrivileges(0).
-                Build();
-
-            this.MakeTargetedRPC(this.CurrentChannel, () =>
-                bnet.protocol.channel.ChannelSubscriber.CreateStub(this).NotifySendMessage(null, notification, callback => { }));
-        }
-
-        // used by server-toon
+        /// <param name="text"></param>
         public void SendServerWhisper(string text)
         {
             if (text.Trim() == string.Empty) return;
@@ -341,7 +327,7 @@ namespace Mooege.Net.MooNet
             var notification = bnet.protocol.notification.Notification.CreateBuilder()
                 .SetTargetId(this.CurrentToon.BnetEntityID)
                 .SetType("WHISPER")
-                .SetSenderId(CommandHandlerAccount.Instance.LoggedInClient.CurrentToon.BnetEntityID)
+                .SetSenderId(this.CurrentToon.BnetEntityID)
                 .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("whisper")
                 .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(text).Build()).Build()).Build();
 
@@ -351,7 +337,7 @@ namespace Mooege.Net.MooNet
 
         #endregion
 
-        #region current channel hack - fixme
+        #region current channel 
 
         private Channel _currentChannel;
         public Channel CurrentChannel
@@ -374,8 +360,6 @@ namespace Mooege.Net.MooNet
                 var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.CurrentToon.BnetEntityID).AddFieldOperation(operation).Build();
 
                 this.SendStateChangeNotification(this.CurrentToon, state);
-
-                // TODO: notify friends too. /raist.
             }
         }
       
@@ -390,6 +374,24 @@ namespace Mooege.Net.MooNet
 
             this.MakeTargetedRPC(target, () => 
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(this).NotifyUpdateChannelState(null, notification, callback => { }));
+        }
+
+        #endregion
+
+        #region MOTD handling
+
+        /// <summary>
+        /// Sends server message of the day text.
+        /// </summary>
+        public void SendMOTD()
+        {
+            if (this.MOTDSent)
+                return;
+
+            var motd = Config.Instance.MOTD.Trim() != string.Empty ? Config.Instance.MOTD : "Missing MOTD text!";
+
+            this.SendServerWhisper(motd);
+            this.MOTDSent = true;
         }
 
         #endregion

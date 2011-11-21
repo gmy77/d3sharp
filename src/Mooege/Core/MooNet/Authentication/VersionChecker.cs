@@ -16,12 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Common;
-using Mooege.Net.MooNet;
+using Mooege.Common.Logging;
+using Mooege.Common.Versions;
 
 namespace Mooege.Core.MooNet.Authentication
 {

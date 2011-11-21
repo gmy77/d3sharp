@@ -18,18 +18,21 @@
 
 using System;
 using System.IO;
-using Mooege.Common;
+using Mooege.Common.Logging;
 
-namespace GSPacketDumper {
-    class Program {
+namespace GSPacketDumper
+{
+    internal class Program
+    {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        static void Main(string[] args) 
+        private static void Main(string[] args)
         {
             PrintLicense();
 
             // Check command line
-            if (args.Length != 1) {
+            if (args.Length != 1)
+            {
                 Console.WriteLine("usage: " + Environment.GetCommandLineArgs()[0] + " <filename>");
                 return;
             }
@@ -42,14 +45,14 @@ namespace GSPacketDumper {
             }
 
             var outputFile = Path.GetFileName(args[0]) + ".txt";
-            if(File.Exists(outputFile)) File.Delete(outputFile);
+            if (File.Exists(outputFile)) File.Delete(outputFile);
 
             LogManager.Enabled = true;
             LogManager.AttachLogTarget(new FileTarget(outputFile, Logger.Level.Dump, Logger.Level.Dump, true, true));
 
             Console.WriteLine("Demystifying packets:");
             PacketReader.Read(args[0]);
-            Console.WriteLine("\n\n[done]");            
+            Console.WriteLine("\n\n[done]");
         }
 
         private static void PrintLicense()

@@ -17,7 +17,7 @@
  */
 
 using System;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
 
@@ -28,6 +28,7 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
+        public bnet.protocol.Header LastCallHeader { get; set; }
 
         public override void CreateChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.CreateChannelRequest request, System.Action<bnet.protocol.channel.CreateChannelResponse> done)
         {
@@ -37,13 +38,9 @@ namespace Mooege.Core.MooNet.Services
                 .SetChannelId(channel.BnetEntityId);
 
             done(builder.Build());
-            channel.SetOwner(Client); // Set the client that requested the creation of channel as the owner
+            channel.SetOwner(Client); // Set the client that requested the creation of channel as the owner           
 
             Logger.Trace("CreateChannel() {0} for {1}", channel, Client.CurrentToon);
-
-            // send our MOTD - though this is actually not the right place for it /raist.
-            //if (Config.Instance.MOTD.Trim() != string.Empty)
-            //    this.Client.SendServerWhisper(Config.Instance.MOTD);
         }
 
         public override void FindChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.FindChannelRequest request, System.Action<bnet.protocol.channel.FindChannelResponse> done)
@@ -75,7 +72,7 @@ namespace Mooege.Core.MooNet.Services
             Logger.Warn("ChannelOwnerService:JoinChannel()");
 
             var channel = ChannelManager.GetChannelByEntityId(request.ChannelId);
-            channel.AddMember(this.Client);
+            channel.Join(this.Client, request.ObjectId);
             var builder = bnet.protocol.channel.JoinChannelResponse.CreateBuilder().SetObjectId(channel.DynamicId);
             done(builder.Build());
         }

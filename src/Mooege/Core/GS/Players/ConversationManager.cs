@@ -19,15 +19,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Mooege.Common.Helpers.Math;
+using Mooege.Common.Logging;
 using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS;
 using Mooege.Common.MPQ.FileFormats;
-using Mooege.Common;
-using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Games;
@@ -226,7 +224,6 @@ namespace Mooege.Core.GS.Players
         {
             player.InGameClient.SendMessage(new EndConversationMessage()
             {
-                Field0 = currentUniqueLineID,
                 SNOConversation = asset.Header.SNOId,
                 ActorId = player.DynamicID
             });

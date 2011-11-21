@@ -18,11 +18,8 @@
 
 using System;
 using Google.ProtocolBuffers;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
-using bnet.protocol;
-using bnet.protocol.exchange_object_provider;
-using bnet.protocol.exchange_risk;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -31,6 +28,7 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
+        public bnet.protocol.Header LastCallHeader { get; set; }
 
         public override void GetConfiguration(IRpcController controller, bnet.protocol.exchange.GetConfigurationRequest request, Action<bnet.protocol.exchange.GetConfigurationResponse> done)
         {
@@ -53,17 +51,17 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void SubscribeOrderStatusChange(IRpcController controller, bnet.protocol.exchange.SubscribeOrderStatusChangeRequest request, Action<NoData> done)
+        public override void SubscribeOrderStatusChange(IRpcController controller, bnet.protocol.exchange.SubscribeOrderStatusChangeRequest request, Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("SubscribeOrderStatusChange() Stub");
-            var builder = NoData.CreateBuilder();
+            var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
 
-        public override void UnsubscribeOrderStatusChange(IRpcController controller, bnet.protocol.exchange.UnsubscribeOrderStatusChangeRequest request, Action<NoData> done)
+        public override void UnsubscribeOrderStatusChange(IRpcController controller, bnet.protocol.exchange.UnsubscribeOrderStatusChangeRequest request, Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("UnsubscribeOrderStatusChange() Stub");
-            var builder = NoData.CreateBuilder();
+            var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
 
@@ -117,62 +115,62 @@ namespace Mooege.Core.MooNet.Services
             throw new NotImplementedException();
         }
 
-        public override void ReportAuthorize(IRpcController controller, ReportAuthorizeRequest request, Action<NoData> done)
+        public override void ReportAuthorize(IRpcController controller, bnet.protocol.exchange_object_provider.ReportAuthorizeRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ReportSettle(IRpcController controller, ReportSettleRequest request, Action<NoData> done)
+        public override void ReportSettle(IRpcController controller, bnet.protocol.exchange_object_provider.ReportSettleRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ReportCancel(IRpcController controller, ReportCancelRequest request, Action<NoData> done)
+        public override void ReportCancel(IRpcController controller, bnet.protocol.exchange_object_provider.ReportCancelRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void SubscribeOrderBookStatusChange(IRpcController controller, bnet.protocol.exchange.SubscribeOrderBookStatusChangeRequest request, Action<NoData> done)
+        public override void SubscribeOrderBookStatusChange(IRpcController controller, bnet.protocol.exchange.SubscribeOrderBookStatusChangeRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void UnsubscribeOrderBookStatusChange(IRpcController controller, bnet.protocol.exchange.UnsubscribeOrderBookStatusChangeRequest request, Action<NoData> done)
+        public override void UnsubscribeOrderBookStatusChange(IRpcController controller, bnet.protocol.exchange.UnsubscribeOrderBookStatusChangeRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void GetPaymentMethods(IRpcController controller, GetPaymentMethodsRequest request, Action<GetPaymentMethodsResponse> done)
+        public override void GetPaymentMethods(IRpcController controller, bnet.protocol.exchange_object_provider.GetPaymentMethodsRequest request, Action<bnet.protocol.exchange_object_provider.GetPaymentMethodsResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ClaimBidItem(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<NoData> done)
+        public override void ClaimBidItem(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ClaimBidMoney(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<NoData> done)
+        public override void ClaimBidMoney(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ClaimOfferItem(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<NoData> done)
+        public override void ClaimOfferItem(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ClaimOfferMoney(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<NoData> done)
+        public override void ClaimOfferMoney(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void CancelBid(IRpcController controller, bnet.protocol.exchange.CancelRequest request, Action<NoData> done)
+        public override void CancelBid(IRpcController controller, bnet.protocol.exchange.CancelRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void CancelOffer(IRpcController controller, bnet.protocol.exchange.CancelRequest request, Action<NoData> done)
+        public override void CancelOffer(IRpcController controller, bnet.protocol.exchange.CancelRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
@@ -192,17 +190,17 @@ namespace Mooege.Core.MooNet.Services
             throw new NotImplementedException();
         }
 
-        public override void ReportAuthorizeRiskVerdict(IRpcController controller, ReportAuthorizeRiskVerdictRequest request, Action<NoData> done)
+        public override void ReportAuthorizeRiskVerdict(IRpcController controller, bnet.protocol.exchange_risk.ReportAuthorizeRiskVerdictRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ReportSettleRiskVerdict(IRpcController controller, ReportSettleRiskVerdictRequest request, Action<NoData> done)
+        public override void ReportSettleRiskVerdict(IRpcController controller, bnet.protocol.exchange_risk.ReportSettleRiskVerdictRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void DelaySettleRiskVerdict(IRpcController controller, DelaySettleRiskVerdictRequest request, Action<NoData> done)
+        public override void DelaySettleRiskVerdict(IRpcController controller, bnet.protocol.exchange_risk.DelaySettleRiskVerdictRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }

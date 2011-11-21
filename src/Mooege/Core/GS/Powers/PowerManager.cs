@@ -17,7 +17,6 @@
  */
 
 using System.Collections.Generic;
-using Mooege.Common;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
@@ -26,6 +25,7 @@ using Mooege.Net.GS.Message.Definitions.World;
 using System.Linq;
 using Mooege.Core.GS.Ticker;
 using Mooege.Common.Helpers.Math;
+using Mooege.Common.Logging;
 
 namespace Mooege.Core.GS.Powers
 {

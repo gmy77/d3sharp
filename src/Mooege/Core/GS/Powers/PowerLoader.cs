@@ -18,10 +18,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Common;
 using System.Reflection;
+using Mooege.Common.Logging;
 
 namespace Mooege.Core.GS.Powers
 {

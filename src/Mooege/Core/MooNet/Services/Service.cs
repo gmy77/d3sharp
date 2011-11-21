@@ -52,7 +52,7 @@ namespace Mooege.Core.MooNet.Services
        
         static Service()
         {
-            foreach (var type in Assembly.GetEntryAssembly().GetTypes().Where(type => type.GetInterface("IServerService") != null))
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(type => type.GetInterface("IServerService") != null))
             {
                 object[] attributes = type.GetCustomAttributes(typeof(ServiceAttribute), true); // get the attributes of the packet.
                 if (attributes.Length == 0) return;
