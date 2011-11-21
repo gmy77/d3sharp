@@ -53,8 +53,9 @@ namespace Mooege.Common
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
-                {"Aurora 0ee3b2e0e2_public/251 (Nov 16 2011 20:44:30)", 7841},
-                {"Aurora b4367eba86_public/234 (Oct 28 2011 14:20:53)", 7728}
+                {"Aurora 0ee3b2e0e2_public/251 (Nov 16 2011 20:44:30)", 7841}, // win32
+                {"Aurora 0ee3b2e0e2_public/250 (Nov 16 2011 19:22:36)", 7841}, // macos
+                {"Aurora b4367eba86_public/234 (Oct 28 2011 14:20:53)", 7728}  // win32
             };
 
             /// <summary>
