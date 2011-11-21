@@ -37,14 +37,14 @@ using Mooege.Core.GS.Common.Types.SNO;
 
 namespace GameMessageViewer
 {
-    class BufferNode : TreeNode, HighlightingNode
+    class BufferNode : TreeNode
     {
         public Buffer Buffer;
         public int Start;
         private bool expanded = false;
         private TreeView actors; // i know...bad design
         private TreeView quests; // i know...bad design
-        public List<MessageNode> allNodes = new List<MessageNode>();
+        public List<TreeNode> allNodes = new List<TreeNode>();
         private static Dictionary<uint, TreeNode> actorMap = new Dictionary<uint, TreeNode>();
         public readonly string clientHash;
 
@@ -57,9 +57,15 @@ namespace GameMessageViewer
         {
             Nodes.Clear();
 
-            foreach(MessageNode node in allNodes)
-                if (filter[node.gameMessage.GetType().Name])
+            foreach (TreeNode node in allNodes)
+                if (node is MessageNode)
+                {
+                    if (filter[(node as MessageNode).gameMessage.GetType().Name])
+                        Nodes.Add(node);
+                }
+                else
                     Nodes.Add(node);
+
         }
 
         public BufferNode(Buffer buffer, TreeView actors, TreeView quests, string clientHash)
@@ -72,11 +78,10 @@ namespace GameMessageViewer
             Parse();
 
             if (allNodes.Count > 0)
-                Text = allNodes.First().gameMessage.GetType().Name;
+                Text = allNodes.First().Text;
             else
             {
-                allNodes.Add(new MessageNode(new ParsedMessage(BitConverter.ToString(Buffer.Data, 0)), 0, 1));
-                allNodes[0].Text = "Contents of buffer";
+                allNodes.Add(new ErrorNode("Contents of buffer", BitConverter.ToString(Buffer.Data, 0)));
                 Text = "No messages in this buffer";
             }
         }
@@ -266,8 +271,7 @@ namespace GameMessageViewer
                         {
                             int pos = Buffer.Position;
                             Buffer.Position = start;
-                            MessageNode errorNode = new MessageNode(new ParsedMessage(String.Format("No message handler found for message id {0}", (Opcodes)Buffer.ReadInt(9))), 0, 0);
-                            errorNode.Text = String.Format(errorNode.gameMessage.ToString());
+                            ErrorNode errorNode = new ErrorNode(String.Format("No message handler found for message id {0}", (Opcodes)Buffer.ReadInt(9)), "");
                             errorNode.BackColor = Color.Pink;
                             allNodes.Add(errorNode);
                             Buffer.Position = pos;
@@ -278,8 +282,7 @@ namespace GameMessageViewer
                     {
                         int pos = Buffer.Position;
                         Buffer.Position = start;
-                        MessageNode errorNode = new MessageNode(new ParsedMessage(String.Format("Error parsing messsage {0}: {1}", (Opcodes)Buffer.ReadInt(9), e.Message)), 0, 0);
-                        errorNode.Text = String.Format(errorNode.gameMessage.ToString());
+                        ErrorNode errorNode = new ErrorNode(String.Format("Error parsing messsage {0}", (Opcodes)Buffer.ReadInt(9)), e.Message);
                         errorNode.BackColor = Color.Pink;
                         allNodes.Add(errorNode);
                         Buffer.Position = pos;
@@ -288,30 +291,6 @@ namespace GameMessageViewer
 
                 Buffer.Position = end;
             }
-        }
-
-
-        public void Highlight(RichTextBox input)
-        {
-            input.SelectionStart = Start;
-            input.SelectionLength = Buffer.Length % 4 == 0 ? Buffer.Length >> 2 : (Buffer.Length >> 2) + 1;
-            input.SelectionBackColor = this.BackColor;
-            
-            foreach (HighlightingNode node in Nodes)
-                node.Highlight(input, Color.LightGreen);
-
-        }
-
-        public void Unhighlight(RichTextBox input)
-        {
-            input.SelectionStart = Start;
-            input.SelectionLength = Buffer.Length % 4 == 0 ? Buffer.Length >> 2 : (Buffer.Length >> 2) + 1;
-            input.SelectionBackColor = Color.White;
-        }
-
-        public void Highlight(RichTextBox input, Color color)
-        {
-            throw new NotImplementedException();
         }
     }
 }

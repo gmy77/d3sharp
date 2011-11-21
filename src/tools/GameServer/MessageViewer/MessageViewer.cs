@@ -33,13 +33,6 @@ using PacketDotNet;
 
 namespace GameMessageViewer
 {
-    public interface HighlightingNode
-    {
-        void Highlight(RichTextBox input);
-        void Unhighlight(RichTextBox input);
-        void Highlight(RichTextBox input, Color color);
-    }
-
     public partial class MessageViewer : Form
     {
         MessageFilter filterWindow = new MessageFilter();
@@ -55,8 +48,8 @@ namespace GameMessageViewer
 
         private void tree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (tree.SelectedNode is MessageNode)
-                DisplayMessage((tree.SelectedNode as MessageNode).gameMessage.AsText());
+            if ((sender as TreeView).SelectedNode is ITextNode)
+                DisplayMessage(((sender as TreeView).SelectedNode as ITextNode).AsText());
         }
 
         private void ApplyFilter()
@@ -76,27 +69,11 @@ namespace GameMessageViewer
             tree.EndUpdate();
         }
 
-        private void tree_BeforeSelect(object sender, TreeViewCancelEventArgs e)
-        {
-            if(tree.SelectedNode != null)
-                if(tree.SelectedNode.IsExpanded == false)
-                    (tree.SelectedNode as HighlightingNode).Unhighlight(input);
-        }
 
         private void tree_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
             if (e.Node is BufferNode)
                 (e.Node as BufferNode).Parse();
-        }
-
-        private void tree_AfterCollapse(object sender, TreeViewEventArgs e)
-        {
-            (e.Node as HighlightingNode).Unhighlight(input);
-        }
-
-        private void tree_AfterExpand(object sender, TreeViewEventArgs e)
-        {
-            (e.Node as HighlightingNode).Highlight(input);
         }
 
         private void groupedNode_AfterSelect(object sender, TreeViewEventArgs e)

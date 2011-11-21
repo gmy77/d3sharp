@@ -132,6 +132,7 @@ namespace GameMessageViewer
             foreach (TcpRecon tr in sharpPcapDict.Values)
             {
                 retVal.Add(tr.data_out_file.BaseStream as MemoryStream);
+
                 tr.Close();
             }
             sharpPcapDict.Clear();
