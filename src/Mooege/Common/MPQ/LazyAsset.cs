@@ -28,12 +28,7 @@ namespace Mooege.Common.MPQ
     {
         public override FileFormat Data
         {
-            get
-            {
-                if (_data == null)
-                    _data = (FileFormat)Activator.CreateInstance(_parser, new object[] { _file });
-                return _data;
-            }
+            get { return _data ?? (_data = (FileFormat) Activator.CreateInstance(_parser, new object[] {_file})); } // if we haven't parsed the data yet, do it so.
         }
 
         private FileFormat _data;

@@ -89,6 +89,7 @@ namespace Mooege.Net.MooNet
                 lock (service) // lock the service so that its in-context client does not get changed..
                 {
                     ((IServerService)service).Client = client;
+                    ((IServerService)service).LastCallHeader = packet.Header;
                     service.CallMethod(method, null, message, (msg => SendRPCResponse(client.Connection, packet.Header.Token, msg)));
                 }
             }
