@@ -17,6 +17,7 @@
  */
 
 using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Items;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
@@ -335,11 +336,11 @@ namespace Mooege.Core.GS.Players
 
             // TODO: This needs to change the attribute on the item itself. /komiga
             // Update source
-            itemFrom.Attributes.SendChangedMessage(_owner.InGameClient, itemFrom.DynamicID);
+            itemFrom.Attributes.SendChangedMessage(_owner.InGameClient);
 
             // TODO: This needs to change the attribute on the item itself. /komiga
             // Update target
-            itemTo.Attributes.SendChangedMessage(_owner.InGameClient, itemTo.DynamicID);
+            itemTo.Attributes.SendChangedMessage(_owner.InGameClient);
         }
 
         private void OnInventoryDropItemMessage(InventoryDropItemMessage msg)
@@ -382,7 +383,7 @@ namespace Mooege.Core.GS.Players
         {
             // TODO: Take that money away ;)
             _owner.Attributes[GameAttribute.Shared_Stash_Slots] += 14;
-            _owner.Attributes.SendChangedMessage(_owner.InGameClient, _owner.DynamicID);
+            _owner.Attributes.BroadcastChangedIfRevealed();
             _stashGrid.ResizeGrid(_owner.Attributes[GameAttribute.Shared_Stash_Slots] / 7, 7);
         }
 

@@ -16,14 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Linq;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Players;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message.Definitions.World;
-using Mooege.Core.GS.Common.Types.SNO;
-using Mooege.Core.GS.Markers;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Items.Implementations

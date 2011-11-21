@@ -16,11 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Common;
-
-namespace Mooege
+namespace Mooege.Common.Logging
 {
-    public sealed class LogConfig : Common.Config.Config
+    public sealed class LogConfig : Config.Config
     {
         public string LoggingRoot { get { return this.GetString("Root", @"logs"); } set { this.Set("Root", value); } }
 
@@ -31,7 +29,7 @@ namespace Mooege
         private LogConfig() : base("Logging") { }
     }
 
-    public class LogTargetConfig : Common.Config.Config
+    public class LogTargetConfig : Config.Config
     {
         public bool Enabled { get { return this.GetBoolean("Enabled", true); } set { this.Set("Enabled", value); } }
         public string Target { get { return this.GetString("Target", "Console"); } set { this.GetString("Target", value); } }

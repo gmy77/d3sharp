@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using CrystalMpq;
 using Gibbed.IO;
+using Mooege.Common.Versions;
 using Mooege.Core.GS.Common.Types.SNO;
 using System.Linq;
 
@@ -36,7 +37,7 @@ namespace Mooege.Common.MPQ
         private static readonly SNOGroup[] PatchExceptions = new[] { SNOGroup.TreasureClass, SNOGroup.TimedEvent, SNOGroup.ConversationList };
 
         public Data()
-            : base(7841, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
+            : base(VersionInfo.MPQ.RequiredPatchVersion, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
         { }
 
         public void Init()

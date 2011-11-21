@@ -18,8 +18,8 @@
 
 using System;
 using Google.ProtocolBuffers;
-using Mooege.Common;
 using Mooege.Common.Extensions;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Friends;
 using Mooege.Net.MooNet;

@@ -49,7 +49,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Google.ProtocolBuffers">
-      <HintPath>..\..\..\..\dep\Google.ProtocolBuffers.dll</HintPath>
+      <HintPath>..\..\..\..\dep\protobuf-csharp\Google.ProtocolBuffers.dll</HintPath>
     </Reference>
     <Reference Include="System">
     </Reference>

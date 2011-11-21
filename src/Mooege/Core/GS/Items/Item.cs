@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Common;
 using Mooege.Common.Helpers.Math;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
@@ -27,7 +27,6 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message;
 using Mooege.Common.MPQ.FileFormats;
-using Mooege.Common.Helpers;
 using Actor = Mooege.Core.GS.Actors.Actor;
 using World = Mooege.Core.GS.Map.World;
 

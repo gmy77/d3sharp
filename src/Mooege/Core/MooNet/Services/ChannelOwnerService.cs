@@ -17,7 +17,7 @@
  */
 
 using System;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
 

@@ -62,7 +62,7 @@
       <HintPath>..\..\dep\crystalmpq\CrystalMpq.Utility.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\dep\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\..\dep\sharpziplib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="ManagedOpenSsl">
       <HintPath>..\..\dep\openssl\ManagedOpenSsl.dll</HintPath>
@@ -78,22 +78,22 @@
     </Reference>
     <Reference Include="Gibbed.IO, Version=1.0.4289.8017, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dep\Gibbed.IO.dll</HintPath>
+      <HintPath>..\..\dep\gibbed.io\Gibbed.IO.dll</HintPath>
     </Reference>
     <Reference Include="Google.ProtocolBuffers, Version=2.3.0.277, Culture=neutral, PublicKeyToken=17b3b1f090c3ea48">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dep\Google.ProtocolBuffers.dll</HintPath>
+      <HintPath>..\..\dep\protobuf-csharp\Google.ProtocolBuffers.dll</HintPath>
     </Reference>
     <Reference Include="Nini, Version=1.1.0.0, Culture=neutral, PublicKeyToken=691faec150a7fa7b">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dep\Nini.dll</HintPath>
+      <HintPath>..\..\dep\nini\Nini.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.SQLite, Version=1.0.74.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dep\sqlite\sqlite-managed\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\dep\PowerCollections.dll</HintPath>
+      <HintPath>..\..\dep\powercollections\PowerCollections.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
@@ -140,7 +140,10 @@
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
     <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
+    <Compile Include="Common\Versions\VersionInfo.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Artisans\ArtisanShortcut.cs" />
     <Compile Include="Core\GS\Actors\Implementations\NephalemAltar.cs" />
+    <Compile Include="Core\GS\Actors\ServerProp.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\ActorKeys.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\AnimationSetKeys.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\MarkerKeys.cs" />
@@ -235,6 +238,8 @@
     <Compile Include="Core\Cryptography\ARC4.cs" />
     <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
     <Compile Include="Core\Cryptography\SRP6a.cs" />
+    <Compile Include="Core\MooNet\Authentication\Config.cs" />
+    <Compile Include="Core\MooNet\Authentication\VersionChecker.cs" />
     <Compile Include="Core\MooNet\Channels\Channel.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelManager.cs" />
     <Compile Include="Core\MooNet\Channels\Member.cs" />
@@ -287,11 +292,12 @@
     <Compile Include="Core\MooNet\Toons\Toon.cs" />
     <Compile Include="Core\MooNet\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\MooNet\Toons\ToonManager.cs" />
-    <Compile Include="LogConfig.cs" />
+    <Compile Include="Common\Logging\LogConfig.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Animation\LoopingAnimationPowerMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\CraftInteractionMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\OpenArtisanWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\RequestAddSocketMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\AdvanceConvMessage.cs" />
@@ -322,7 +328,7 @@
     <Compile Include="Net\GS\Message\Definitions\Tutorial\TutorialShownMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Waypoint\OpenWaypointSelectionWindowMessage.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
-    <Compile Include="Net\GS\Message\GameAttributeMap.cs" />
+    <Compile Include="Core\GS\Objects\GameAttributeMap.cs" />
     <Compile Include="Net\MooNet\MooNetClient.cs" />
     <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />
@@ -552,7 +558,7 @@
     <Compile Include="Net\MooNet\MooNetRouter.cs" />
     <Compile Include="Common\Helpers\Hash\StringHashHelper.cs" />
     <Compile Include="Common\Extensions\IMessageExtensions.cs" />
-    <Compile Include="Common\TinyLogger.cs" />
+    <Compile Include="Common\Logging\TinyLogger.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObjectManager.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObject.cs" />
     <Compile Include="Common\Storage\Config.cs" />

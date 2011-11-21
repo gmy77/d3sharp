@@ -63,7 +63,7 @@ namespace Mooege.Core.GS.Players
                 Items.Add(item.DynamicID, item);
             item.Owner = _owner;
             item.Attributes[GameAttribute.Item_Equipped] = true; // Probaly should be handled by Equipable class /fasbat
-            item.Attributes.SendChangedMessage(_owner.InGameClient, item.DynamicID);
+            item.Attributes.SendChangedMessage(_owner.InGameClient);
             item.SetInventoryLocation(slot, 0, 0);            
         }
 
@@ -87,7 +87,7 @@ namespace Mooege.Core.GS.Players
             {
                 _equipment[slot] = 0;
                 item.Attributes[GameAttribute.Item_Equipped] = false; // Probaly should be handled by Equipable class /fasbat
-                item.Attributes.SendChangedMessage(_owner.InGameClient, item.DynamicID);
+                item.Attributes.SendChangedMessage(_owner.InGameClient);
                 return slot;
             }
 
@@ -142,7 +142,7 @@ namespace Mooege.Core.GS.Players
         public Item AddGoldItem(Item collectedItem)
         {
             _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += collectedItem.Attributes[GameAttribute.Gold];
-            _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient, _inventoryGold.DynamicID);
+            _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient);
             return _inventoryGold;
         }
 

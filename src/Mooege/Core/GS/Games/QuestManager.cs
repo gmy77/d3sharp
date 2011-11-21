@@ -18,9 +18,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Common.MPQ;
 
 namespace Mooege.Core.GS.Games

@@ -22,7 +22,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Generators;
 using Mooege.Core.GS.Map;

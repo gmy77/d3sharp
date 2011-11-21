@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
 
 // FIXME: An RPCObject will never get released at runtime because we don't remove it from

@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Common.Storage;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Commands;
