@@ -71,6 +71,7 @@
       <DependentUpon>CustomLinqQuery.cs</DependentUpon>
     </Compile>
     <Compile Include="Dynamic.cs" />
+    <Compile Include="ErrorNode.cs" />
     <Compile Include="Find.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,7 +96,6 @@
     <Compile Include="MessageNode.cs" />
     <Compile Include="Buffer.cs" />
     <Compile Include="MooNetCallNode.cs" />
-    <Compile Include="ParsedMessage.cs" />
     <Compile Include="pCapReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
