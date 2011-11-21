@@ -57,7 +57,7 @@ namespace Mooege.Core.MooNet.Authentication
                 .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
                     .SetRegion(0x00005553) // us
                     .SetUsage(0x61757468) // auth - password.dll
-                    .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AuthModuleHash)))
+                    .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AuthModuleHashMap[client.Platform])))
                 .SetMessage(ByteString.CopyFrom(srp6a.LogonChallenge))
                 .Build();
 

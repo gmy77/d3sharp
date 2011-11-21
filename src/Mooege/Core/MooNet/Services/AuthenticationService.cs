@@ -38,7 +38,7 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("LogonRequest(): Email={0}", request.Email);
 
-            if (!VersionChecker.Check(request)) // if the client trying to connect doesn't match required version, disconnect him.
+            if (!VersionChecker.Check(this.Client, request)) // if the client trying to connect doesn't match required version, disconnect him.
             {
                 Logger.Error("Client [{0}] doesn't match required version {1}, disconnecting..", request.Email, VersionInfo.MooNet.RequiredClientVersion);
                 this.Client.Connection.Disconnect(); // TODO: We should be actually notifying the client with wrong version message. /raist.

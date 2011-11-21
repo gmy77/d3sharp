@@ -78,6 +78,16 @@ namespace Mooege.Net.MooNet
         public Dictionary<uint, uint> Services { get; private set; }
 
         /// <summary>
+        /// Platform of the client.
+        /// </summary>
+        public ClientPlatform Platform { get; set; }
+
+        /// <summary>
+        /// Locale of the client.
+        /// </summary>
+        public ClientLocale Locale { get; set; }
+
+        /// <summary>
         /// Allows AuthenticationService.LogonResponse to be post-poned until authentication process is done.
         /// </summary>
         public readonly AutoResetEvent AuthenticationCompleteSignal = new AutoResetEvent(false);
@@ -111,6 +121,8 @@ namespace Mooege.Net.MooNet
         
         public MooNetClient(IConnection connection)
         {
+            this.Platform = ClientPlatform.Unknown;
+            this.Locale = ClientLocale.Unknown;
             this.MOTDSent = false;
 
             this.Connection = connection;
@@ -399,6 +411,27 @@ namespace Mooege.Net.MooNet
         public override string ToString()
         {
             return String.Format("{{ Client: {0} }}", this.Account==null ? "??" : this.Account.Email);
+        }
+
+        /// <summary>
+        /// Platform enum for clients.
+        /// </summary>
+        public enum ClientPlatform
+        {
+            Unknown,
+            Invalid,
+            Win,
+            Mac
+        }
+
+        /// <summary>
+        /// Locale enum for clients.
+        /// </summary>
+        public enum ClientLocale
+        {            
+            Unknown,
+            Invalid,
+            enUS
         }
     }
 }
