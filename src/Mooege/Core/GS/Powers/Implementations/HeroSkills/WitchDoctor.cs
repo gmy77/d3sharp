@@ -34,7 +34,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            int numProjectiles = (int)ScriptFormula(4);
+            int numProjectiles = Rune_B > 0 ? (int)ScriptFormula(4) : 1;
             for (int n = 0; n < numProjectiles; ++n)
             {
                 var proj = new Projectile(this,
@@ -51,11 +51,15 @@ namespace Mooege.Core.GS.Powers.Implementations
                     if (Rune_E > 0 && Rand.NextDouble() < ScriptFormula(11))
                         hit.PlayEffectGroup(107163);
 
-                    WeaponDamage(hit, (ScriptFormula(13) + 0.16f * Rune_A), (Rune_A > 0 ? DamageType.Fire : DamageType.Poison));
+                    if (Rune_A > 0)
+                        WeaponDamage(hit, ScriptFormula(2), DamageType.Fire);
+                    else
+                        WeaponDamage(hit, ScriptFormula(0), DamageType.Poison);
                 };
                 proj.Launch(TargetPosition, 1f);
 
-                yield return WaitSeconds(ScriptFormula(17));
+                if (Rune_B > 0)
+                    yield return WaitSeconds(ScriptFormula(17));
             }
         }
     }

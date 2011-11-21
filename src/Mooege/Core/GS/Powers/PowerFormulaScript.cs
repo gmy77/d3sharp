@@ -54,7 +54,7 @@ namespace Mooege.Core.GS.Powers
             }
 
             byte[] script = scriptFormula.OpCodeArray;
-            Stack<float> stack = new Stack<float>(5);  // analysis of all stack formulas found the biggest stack is currently 5
+            Stack<float> stack = new Stack<float>(4);  // analysis of all stack formulas found the biggest stack is currently 11
             int pos = 0;
             float numb1, numb2, numb3;
             float temp;
