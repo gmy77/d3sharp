@@ -30,7 +30,8 @@ namespace Mooege.Common.MPQ
         {
             get
             {
-                if (_data == null)
+                if (_data == null && _parser != null && _file != null)
+
                     _data = (FileFormat)Activator.CreateInstance(_parser, new object[] { _file });
                 return _data;
             }
@@ -49,6 +50,10 @@ namespace Mooege.Common.MPQ
         {
             _parser = parser;
             _file = file;
+
+            if (_parser == null || _file == null)
+                System.Diagnostics.Debugger.Break();
+
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture so that we don't hit pitfalls in non en/US systems with different number formats.
         }
     }
