@@ -27,11 +27,19 @@ namespace Mooege.Core.MooNet.Authentication
 
         public static bool Check(bnet.protocol.authentication.LogonRequest request)
         {
-            var foundVersionMatch = VersionInfo.MooNet.ClientVersionMaps.ContainsKey(request.Version) ? true: false;
-            var versionMatch = foundVersionMatch ? VersionInfo.MooNet.ClientVersionMaps[request.Version] : -1;
+            int versionMatch = -1;
+            string clientVersionSignature = request.HasVersion ? request.Version.Substring(0, 24) : string.Empty; // get client's version string signature - the very first 24 chars like; "Aurora b4367eba86_public".
 
-            Logger.Trace(
-                "Client Info: user: {0} program: {1}  platform: {2} locale: {3} version: {4} [{5}]  app_version: {6}.",
+            foreach(var pair in VersionInfo.MooNet.ClientVersionMaps) // see if client's version signature matches anyone in our client versions map.
+            {
+                if (pair.Key != clientVersionSignature)
+                    continue;
+
+                versionMatch = pair.Value;
+                break;
+            }
+
+            Logger.Trace("Client Info: user: {0} program: {1}  platform: {2} locale: {3} version: {4} [{5}]  app_version: {6}.",
                 request.Email, request.Program, request.Platform, request.Locale, versionMatch != -1 ? versionMatch.ToString() : "Unknown", request.Version,
                 request.ApplicationVersion);
 

@@ -110,12 +110,15 @@ namespace GameMessageViewer
             {
                 bn.Collapse();
 
-                foreach (MessageNode mn in bn.Nodes)
-                    if (mn.gameMessage.GetType().Name.Contains(find))
+                foreach (TreeNode mn in bn.Nodes)
+                    if (mn is MessageNode)
                     {
-                        bn.BackColor = Color.Yellow;
-                        mn.BackColor = Color.Yellow;
-                        bn.Expand();
+                        if ((mn as MessageNode).gameMessage.GetType().Name.Contains(find))
+                        {
+                            bn.BackColor = Color.Yellow;
+                            mn.BackColor = Color.Yellow;
+                            bn.Expand();
+                        }
                     }
             }
             tree.EndUpdate();
