@@ -35,8 +35,6 @@
             this.actors = new System.Windows.Forms.TreeView();
             this.tabQuests = new System.Windows.Forms.TabPage();
             this.questTree = new System.Windows.Forms.TreeView();
-            this.tabRawData = new System.Windows.Forms.TabPage();
-            this.input = new System.Windows.Forms.RichTextBox();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.panel_mdump = new System.Windows.Forms.Panel();
             this.panel_mdump_content_ = new System.Windows.Forms.Panel();
@@ -67,11 +65,12 @@
             this.trySNOAliasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.MooNet = new System.Windows.Forms.TabPage();
+            this.MooNetTree = new System.Windows.Forms.TreeView();
             this.panel_mainframe.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabActors.SuspendLayout();
             this.tabQuests.SuspendLayout();
-            this.tabRawData.SuspendLayout();
             this.panel_mdump.SuspendLayout();
             this.panel_mdump_content_.SuspendLayout();
             this.panel_mdump_subcontent.SuspendLayout();
@@ -82,6 +81,7 @@
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.MooNet.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_mainframe
@@ -103,7 +103,6 @@
             // 
             this.tabControl1.Controls.Add(this.tabActors);
             this.tabControl1.Controls.Add(this.tabQuests);
-            this.tabControl1.Controls.Add(this.tabRawData);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(536, 10);
             this.tabControl1.Name = "tabControl1";
@@ -152,29 +151,6 @@
             this.questTree.Size = new System.Drawing.Size(350, 366);
             this.questTree.TabIndex = 2;
             this.questTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.groupedNode_AfterSelect);
-            // 
-            // tabRawData
-            // 
-            this.tabRawData.Controls.Add(this.input);
-            this.tabRawData.Location = new System.Drawing.Point(4, 22);
-            this.tabRawData.Name = "tabRawData";
-            this.tabRawData.Padding = new System.Windows.Forms.Padding(3);
-            this.tabRawData.Size = new System.Drawing.Size(356, 372);
-            this.tabRawData.TabIndex = 1;
-            this.tabRawData.Text = "Raw data view";
-            this.tabRawData.UseVisualStyleBackColor = true;
-            // 
-            // input
-            // 
-            this.input.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.input.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.input.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.input.Location = new System.Drawing.Point(3, 3);
-            this.input.Name = "input";
-            this.input.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.input.Size = new System.Drawing.Size(350, 366);
-            this.input.TabIndex = 3;
-            this.input.Text = "";
             // 
             // splitter2
             // 
@@ -282,6 +258,7 @@
             // tabControl2
             // 
             this.tabControl2.Controls.Add(this.tabPage1);
+            this.tabControl2.Controls.Add(this.MooNet);
             this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
             this.tabControl2.Name = "tabControl2";
@@ -451,6 +428,25 @@
             this.aboutToolStripMenuItem1.Text = "About...";
             this.aboutToolStripMenuItem1.Click += new System.EventHandler(this.aboutToolStripMenuItem1_Click);
             // 
+            // MooNet
+            // 
+            this.MooNet.Controls.Add(this.MooNetTree);
+            this.MooNet.Location = new System.Drawing.Point(4, 22);
+            this.MooNet.Name = "MooNet";
+            this.MooNet.Size = new System.Drawing.Size(249, 372);
+            this.MooNet.TabIndex = 1;
+            this.MooNet.Text = "MooNet";
+            this.MooNet.UseVisualStyleBackColor = true;
+            // 
+            // MooNetTree
+            // 
+            this.MooNetTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MooNetTree.Location = new System.Drawing.Point(0, 0);
+            this.MooNetTree.Name = "MooNetTree";
+            this.MooNetTree.Size = new System.Drawing.Size(249, 372);
+            this.MooNetTree.TabIndex = 0;
+            this.MooNetTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tree_AfterSelect);
+            // 
             // MessageViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -467,7 +463,6 @@
             this.tabControl1.ResumeLayout(false);
             this.tabActors.ResumeLayout(false);
             this.tabQuests.ResumeLayout(false);
-            this.tabRawData.ResumeLayout(false);
             this.panel_mdump.ResumeLayout(false);
             this.panel_mdump.PerformLayout();
             this.panel_mdump_content_.ResumeLayout(false);
@@ -482,6 +477,7 @@
             this.panel1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.MooNet.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -494,8 +490,6 @@
         private System.Windows.Forms.TabPage tabActors;
         private System.Windows.Forms.TreeView actors;
         private System.Windows.Forms.TabPage tabQuests;
-        private System.Windows.Forms.TabPage tabRawData;
-        private System.Windows.Forms.RichTextBox input;
         private System.Windows.Forms.Splitter splitter2;
         private System.Windows.Forms.Panel panel_mdump;
         private System.Windows.Forms.Panel panel_mdump_content_;
@@ -527,6 +521,8 @@
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TreeView tree;
+        private System.Windows.Forms.TabPage MooNet;
+        private System.Windows.Forms.TreeView MooNetTree;
 
 
     }

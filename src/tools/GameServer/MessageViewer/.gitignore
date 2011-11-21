@@ -1,2 +1,6 @@
-/bin/
-/obj/
+
+*.manifest
+*.pdb
+*.exe
+*.dll
+bin/Debug/

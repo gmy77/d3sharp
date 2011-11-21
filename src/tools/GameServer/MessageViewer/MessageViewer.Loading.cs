@@ -26,18 +26,21 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 using Mooege.Net.GS.Message.Definitions.Player;
+using Google.ProtocolBuffers;
+using Mooege.Net.MooNet.Packets;
+using Mooege.Core.MooNet.Services;
+using Mooege.Net.MooNet;
+using Mooege.Net.MooNet.RPC;
 
 namespace GameMessageViewer
 {
     public partial class MessageViewer
     {
+
         private byte[] String_To_Bytes(string strInput)
         {
-            // i variable used to hold position in string  
             int i = 0;
-            // x variable used to hold byte array element position  
             int x = 0;
-            // allocate byte array based on half of string length  
             byte[] bytes = new byte[(strInput.Length) / 2];
             // loop through the string - 2 bytes at a time converting  
             //  it to decimal equivalent and store in byte array  
@@ -48,9 +51,17 @@ namespace GameMessageViewer
                 i = i + 2;
                 ++x;
             }
-            // return the finished byte array of decimal values  
             return bytes;
         }
+
+
+                        //        string b = Encoding.UTF8.GetString(buffer.Data, 0, buffer.Length / 8);
+                        //if (b.Contains("0.3.1.7779") ||
+                        //    b.Contains("0.3.0.7484") ||
+                        //    b.Contains("0.3.0.7333"))
+                        //{
+                        //    MessageBox.Show("The dump version ({0}) is incompatible to the currently used mooege version ({1})\n Loading continues but it may take significantly longer and many messages will not be parsed correctly");
+                        //}
 
 
         private void LoadWiresharkHex(string text)
@@ -66,6 +77,7 @@ namespace GameMessageViewer
                     if (i > 0 && (rows[i].StartsWith(" ") ^ rows[i - 1].StartsWith(" ")))
                     {
                         Buffer buffer = new Buffer(String_To_Bytes(currentBuffer));
+
                         BufferNode newNode = new BufferNode(buffer, actors, questTree, "1");
                         newNode.Start = text.Length;
                         newNode.BackColor = rows[i].StartsWith(" ") ? newNode.BackColor = Color.LightCoral : Color.LightBlue;
@@ -86,10 +98,20 @@ namespace GameMessageViewer
                 tree.Nodes.Add(newNode);
             }
 
-            input.Text = text;
-
             ApplyFilter();
         }
+
+
+        public bool IsMooNetStream(string stream)
+        {
+            return stream.Contains(BitConverter.ToString(System.Text.Encoding.UTF8.GetBytes("Aurora")).Replace("-", ""));
+        }
+
+        public bool IsAchievmentStream(string stream)
+        {
+            return stream.Contains(BitConverter.ToString(System.Text.Encoding.UTF8.GetBytes("Achievements_Beta:RetrieveNameFromStringlist")).Replace("-", ""));
+        }
+
 
 
         /// <summary>
@@ -104,12 +126,28 @@ namespace GameMessageViewer
                 // This ugly thing returns a list of MemoryStreams. One for each session in the cap
                 var streams = pCapReader.ReconSingleFileSharpPcap(path);
 
-                // Take the largest session (yeah if its no working for you, this may cause it)
-                var ordered = streams.OrderBy(stream => stream.Length);
-                ordered.Last().Seek(0, SeekOrigin.Begin);
-                LoadDump(new StreamReader(ordered.Last()).ReadToEnd());
+                foreach (var stream in streams)
+                {
+                    stream.Seek(0, SeekOrigin.Begin);
+                    string text = new StreamReader(stream).ReadToEnd();
+
+                    if (IsMooNetStream(text))
+                    {
+                        LoadMooNetDump(text);
+                        continue;
+                    }
+                    if (IsAchievmentStream(text))
+                    {
+                        System.Console.WriteLine("Achievementstream not parsed");
+                        continue;
+                    }
+
+                    LoadDump(text);
+                }
+
             }
-            catch (SharpPcap.PcapException) {
+            catch (SharpPcap.PcapException)
+            {
                 MessageBox.Show("The file could not be read. Only lipcap cap files can be loaded. If you want to load a NetMon cap the README tells you how to", "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -134,6 +172,119 @@ namespace GameMessageViewer
 
             }
 
+        }
+
+
+        private static readonly Dictionary<uint, MooNetCallNode> RPCCallbacksIn = new Dictionary<uint, MooNetCallNode>();
+        private static readonly Dictionary<uint, MooNetCallNode> RPCCallbacksOut = new Dictionary<uint, MooNetCallNode>();
+        
+
+        private void BNetBufferAssembledCallback(byte[] buffer, Direction direction, string clientHash)
+        {
+            Dictionary<string, Color[]> colors = new Dictionary<string, Color[]>();
+
+
+            Color[][] trafficColors = new Color[][]
+            { new Color[] { Color.LightCoral , Color.LightBlue },
+              new Color[] { Color.Tomato, Color.Blue },
+              new Color[] { Color.Red, Color.BlueViolet },
+              new Color[] { Color.PaleVioletRed, Color.CadetBlue } 
+            };
+
+
+            var stream = CodedInputStream.CreateInstance(buffer);
+            while (!stream.IsAtEnd)
+            {
+                try
+                {
+                    var packet = new PacketIn(null, stream);
+
+                    if (packet.Header.ServiceId == 0xFE /*ServiceReply*/)
+                    {
+                        //ProcessReply(client, packet);
+                        var callNode = RPCCallbacksIn[packet.Header.Token];
+                        RPCCallbacksIn.Remove(packet.Header.Token);
+                        callNode.ReceiveReply(packet, true);
+                    }
+                    else
+                    {
+                        var service = Service.GetByID(packet.Header.ServiceId);
+
+                        if (service == null)
+                        {
+                            MooNetTree.Nodes.Add(String.Format("Service not found: {0}", service));
+                            return;
+                        }
+
+                        var newNode = new MooNetCallNode(packet, stream);
+                        MooNetTree.Nodes.Add(newNode);
+                        RPCCallbacksIn.Add(packet.Header.Token, newNode);
+                    }
+                }
+                catch (Exception e)
+                {
+                    var newNode = new TreeNode(String.Format("Error parsing {0}", e.Message));
+                    MooNetTree.Nodes.Add(newNode);
+                
+                }
+            }
+        }
+
+        private void LoadMooNetDump(string text)
+        {
+            AssembleBuffer(text, BNetBufferAssembledCallback);
+        }
+
+
+        private enum Direction
+        {
+            Incoming,
+            Outgoing
+        }
+
+        private void AssembleBuffer(string text, Action<byte[], Direction, string> bufferAssembledCallback)
+        {
+            String[] rows = text.Split('\n');
+            string currentDirection = "";
+            String currentBuffer = "";
+            List<string> clients = new List<string>();
+            string clientHash = "";
+
+            // to read mooege dumps, some leading info must be removed
+            // the amount of chars is fixed so its calculated once
+            int removeChars = rows[0].IndexOf("Inc:");
+            if (removeChars < 0)
+                removeChars = rows[0].IndexOf("Out:");
+
+            for (int i = 0; i < rows.Length; i++)
+            {
+
+                // Skip anything til the Inc/Out part (for mooege dumps), note client hash
+                rows[i] = rows[i].Substring(removeChars);
+                if (rows[i].Length < 8) continue;           // no content after incoming/outgoing
+
+                clientHash = rows[i].Substring(4, 8);
+                if (clients.Contains(clientHash) == false)
+                {
+                    clients.Add(clientHash);
+                }
+
+                if (rows[i].Length > 3)
+                {
+                    // Everytime the direction of data changes, the buffer is parsed and emptied
+                    // this is for pcap dumps where the data stream is sent in smaller packets
+                    // in mooege, data is dumped in whole
+                    if (i > 0 && rows[i].Substring(0, 1) != currentDirection)
+                    {
+                        bufferAssembledCallback(String_To_Bytes(currentBuffer), currentDirection == "I" ? Direction.Incoming : Direction.Outgoing, clientHash);
+                        
+                        currentBuffer = "";
+                        currentDirection = rows[i].Substring(0, 1);
+                    }
+                    if (currentDirection == "") currentDirection = rows[i].Substring(0, 1);
+                    currentBuffer += (rows[i].Substring(13)).Replace("\r", "");
+                }
+            }
         }
 
 
@@ -250,7 +401,6 @@ namespace GameMessageViewer
 
 
             tree.Nodes.AddRange(allNodes.ToArray());
-            input.Text = text;
             progressBar.Visible = false;
         }
 
