@@ -96,28 +96,33 @@ namespace Mooege.Common.MPQ.FileFormats
                 this.NavMeshSquareCount = stream.ReadValueS32();
                 this.Float0 = stream.ReadValueF32();
                 this.Squares = stream.ReadSerializedData<NavMeshSquare>(this.NavMeshSquareCount);
-                // Could do away with keeping Squares as Squares = 
+               
                 if (SquaresCountX < 64 && SquaresCountY < 64)
                 {
                     WalkGrid = new byte[64, 64];
                 }
-                else
+                else if (SquaresCountX < 128 && SquaresCountY < 128)
                 {
                     WalkGrid = new byte[128, 128]; //96*96
                 }
-                if (SquaresCountX > 127 || SquaresCountY > 127) { WalkGrid = new byte[256, 256]; }
-                int xx, yy;
+                else if (SquaresCountX > 128 || SquaresCountY > 128)
+                {
+                    WalkGrid = new byte[256, 256];
+                }
+
+                int X, Y;
+                // Loop thru each NavmeshSquare in the array, and fills a grid.
                 for (int i = 0; i < NavMeshSquareCount; i++)
                 {
-                    int cnt = i;
-                    xx = 0; yy = 0;
-                    while (cnt > SquaresCountY - 1)
+                    int countNavSquare = i;
+                    X = 0; Y = 0;
+                    while (countNavSquare > SquaresCountY - 1)
                     {
-                        yy++;
-                        cnt -= SquaresCountY;
+                        Y++;
+                        countNavSquare -= SquaresCountY;
                     }
-                    xx = cnt;
-                    WalkGrid[xx, yy] = (byte)(Squares[i].Flags & Scene.NavCellFlags.AllowWalk); // Set the grid to 0x1 if its walkable, left as 0 if not. - DarkLotus
+                    X = countNavSquare;
+                    WalkGrid[X, Y] = (byte)(Squares[i].Flags & Scene.NavCellFlags.AllowWalk); // Set the grid to 0x1 if its walkable, left as 0 if not. - DarkLotus
                 }
 
                 stream.Position += (3 * 4);

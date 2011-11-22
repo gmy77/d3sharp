@@ -28,21 +28,18 @@ using System.Threading.Tasks;
 
 namespace Mooege.Core.GS.Actors.Movement
 {
-    public class MoveToPointWithPathfind : ActorAction
+    public class MoveToPointWithPathfindAction : ActorAction
     {
         public Vector3D Heading { get; private set; }
 
         public SteppedRelativeTickTimer Timer;
-        private List<Vector3D> Path = new List<Vector3D>();
-        //private Task<List<Vector3D>> task;
+        private List<Vector3D> _path = new List<Vector3D>();
 
-        public MoveToPointWithPathfind(Actor owner, Vector3D heading)
+        public MoveToPointWithPathfindAction(Actor owner, Vector3D heading)
             : base(owner)
         {
-                  //task = Task.Factory.StartNew(() => pather.FindPath(ref Path,owner,owner.Position,heading));
-                  //task = Task<List<Vector3D>>.Factory.StartNew(() => pather.FindPath(owner, owner.Position, heading));
             // Sending a request for a Path to the Pathing thread.
-            owner.World.Game.Pathfinder.GetPath(owner, owner.Position, heading, ref Path);
+            owner.World.Game.Pathfinder.GetPath(owner, owner.Position, heading, ref _path);
             this.Heading = heading;
 
         }
@@ -50,11 +47,11 @@ namespace Mooege.Core.GS.Actors.Movement
         public override void Start(int tickCounter)
         {
             // Just wait, path request hasnt been processed yet, idealy this would be null or something instead - Darklotus
-            if (Path.Count == 0)
+            if (_path.Count == 0)
                 return;
 
             // if path count is 1 its our fake 0,0,0 vector, which means no path was found. - DarkLotus
-            if (Path.Count < 2)
+            if (_path.Count < 2)
             {
                 this.Started = true;
                 this.Done = true;
@@ -64,15 +61,15 @@ namespace Mooege.Core.GS.Actors.Movement
             // mobs sometimes skip a bit, pretty sure this is because timing isnt correct.  :( - DarkLotus
                       
 
-            this.Timer = new SteppedRelativeTickTimer(this.Owner.World.Game, 18, (int)(Path.Count *2 / this.Owner.WalkSpeed),
+            this.Timer = new SteppedRelativeTickTimer(this.Owner.World.Game, 18, (int)(_path.Count *2 / this.Owner.WalkSpeed),
             (tick) =>
             {
                 //this.Owner.Position = MovementHelpers.GetMovementPosition(this.Owner.Position, this.Owner.WalkSpeed, facingAngle, 6);
-                if (Path.Count >= 1)
+                if (_path.Count >= 1)
                 {
-                    this.Owner.Move(this.Path.First(), MovementHelpers.GetFacingAngle(this.Owner, this.Path.First()));
-                    this.Owner.Position = Path.First();
-                    Path.RemoveAt(0);
+                    this.Owner.Move(this._path.First(), MovementHelpers.GetFacingAngle(this.Owner, this._path.First()));
+                    this.Owner.Position = _path.First();
+                    _path.RemoveAt(0);
                     //Logger.Trace("Step left in Queue: " + Path.Count);
                 }
                 else
