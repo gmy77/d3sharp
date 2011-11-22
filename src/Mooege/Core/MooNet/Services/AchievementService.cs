@@ -18,8 +18,11 @@
 
 using System;
 using Google.ProtocolBuffers;
+using Mooege.Common.Versions;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
+using Mooege.Core.MooNet.Achievement;
+using Mooege.Common.Extensions;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -37,12 +40,28 @@ namespace Mooege.Core.MooNet.Services
 
         public override void RegisterWithService(IRpcController controller, bnet.protocol.achievements.RegisterWithServiceRequest request, Action<bnet.protocol.achievements.RegisterWithServiceResponse> done)
         {
-            throw new NotImplementedException();
+            // This should register client with achievement notifier service. -Egris
+            var response = bnet.protocol.achievements.RegisterWithServiceResponse.CreateBuilder()
+                .SetMaxRecordsPerUpdate(1)
+                .SetMaxCriteriaPerRecord(2)
+                .SetMaxAchievementsPerRecord(1)
+                .SetMaxRegistrations(16)
+                .SetFlushFrequency(180);
+            done(response.Build());
         }
 
         public override void RequestSnapshot(IRpcController controller, bnet.protocol.achievements.RequestSnapshotRequest request, Action<bnet.protocol.achievements.RequestSnapshotResponse> done)
         {
-            throw new NotImplementedException();
+            var snapshot = bnet.protocol.achievements.Snapshot.CreateBuilder();
+
+            foreach (var achievement in this.Client.Account.Achievements)
+                snapshot.AddAchievementSnapshot(achievement);
+
+            foreach (var criteria in this.Client.Account.AchievementCriteria)
+                snapshot.AddCriteriaSnapshot(criteria);
+
+            var response = bnet.protocol.achievements.RequestSnapshotResponse.CreateBuilder().SetSnapshot(snapshot);
+            done(response.Build());
         }
 
         public override void UnregisterFromService(IRpcController controller, bnet.protocol.achievements.UnregisterFromServiceRequest request, Action<bnet.protocol.NoData> done)
@@ -52,7 +71,14 @@ namespace Mooege.Core.MooNet.Services
 
         public override void Initialize(IRpcController controller, bnet.protocol.achievements.InitializeRequest request, Action<bnet.protocol.achievements.InitializeResponse> done)
         {
-            throw new NotImplementedException();
+            var contentHandle = bnet.protocol.ContentHandle.CreateBuilder()
+                .SetRegion(0x00005553)
+                .SetUsage(0x61636876)
+                .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AchievementFileHash.ToByteArray()));
+            var reponse = bnet.protocol.achievements.InitializeResponse.CreateBuilder().SetContentHandle(contentHandle);
+
+            done(reponse.Build());
         }
+
     }
 }
