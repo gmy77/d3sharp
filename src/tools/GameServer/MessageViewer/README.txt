@@ -1,5 +1,6 @@
 ﻿1. Add latest mooege.exe to dependencies
-2. Run and Load file
+2. Set output path to mooege output path (or it wont find sno aliases)
+3. Run and Load file
 
 If you cannot open a file it is probably because it is a netmon dump. Only libpcap/wireshark can be read.
 To browse a netmon dump anyways you have to do the following:.

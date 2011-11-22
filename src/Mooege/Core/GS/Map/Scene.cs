@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Collision;

@@ -17,7 +17,7 @@
  */
 
 using System;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
 
@@ -28,6 +28,7 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
+        public bnet.protocol.Header LastCallHeader { get; set; }
 
         public override void ToonList(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.toon.external.ToonListRequest request, Action<bnet.protocol.toon.external.ToonListResponse> done)
         {

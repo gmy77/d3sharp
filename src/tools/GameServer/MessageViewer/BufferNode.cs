@@ -31,17 +31,20 @@ using Mooege.Net.GS.Message.Definitions.Tick;
 using Mooege.Net.GS.Message.Definitions.Attribute;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Definitions.Player;
+using Mooege.Net.GS.Message.Definitions.Game;
+using Mooege.Common.MPQ;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace GameMessageViewer
 {
-    class BufferNode : TreeNode, HighlightingNode
+    class BufferNode : TreeNode
     {
         public Buffer Buffer;
         public int Start;
         private bool expanded = false;
         private TreeView actors; // i know...bad design
         private TreeView quests; // i know...bad design
-        public List<MessageNode> allNodes = new List<MessageNode>();
+        public List<TreeNode> allNodes = new List<TreeNode>();
         private static Dictionary<uint, TreeNode> actorMap = new Dictionary<uint, TreeNode>();
         public readonly string clientHash;
 
@@ -54,9 +57,15 @@ namespace GameMessageViewer
         {
             Nodes.Clear();
 
-            foreach(MessageNode node in allNodes)
-                if(filter[node.gameMessage.ToString().Split('.').Last()])
+            foreach (TreeNode node in allNodes)
+                if (node is MessageNode)
+                {
+                    if (filter[(node as MessageNode).gameMessage.GetType().Name])
+                        Nodes.Add(node);
+                }
+                else
                     Nodes.Add(node);
+
         }
 
         public BufferNode(Buffer buffer, TreeView actors, TreeView quests, string clientHash)
@@ -66,34 +75,15 @@ namespace GameMessageViewer
             this.quests = quests;
             this.clientHash = clientHash;
 
-            if (Buffer.IsPacketAvailable())
-            {
-                Buffer.ReadInt(32);
-
-                try
-                {
-                    GameMessage message = Buffer.ParseMessage();
-                    if (message != null)
-                    {
-                        Text = String.Join(".", (message.GetType().ToString().Split('.').Skip(5))) + ":" + buffer.Length;
-                    }
-                    else
-                    {
-                        buffer.Position = 32;
-                        Text = "Message not implemented: " + Buffer.ReadInt(9);
-                    }
-
-                }
-                catch (Exception)
-                {
-                    Text = "Error parsing node";
-                }
-            }
-            else
-                Text = "No Packet available";
-
-            buffer.Position = 0;
             Parse();
+
+            if (allNodes.Count > 0)
+                Text = allNodes.First().Text;
+            else
+            {
+                allNodes.Add(new ErrorNode("Contents of buffer", BitConverter.ToString(Buffer.Data, 0)));
+                Text = "No messages in this buffer";
+            }
         }
 
         public void Parse()
@@ -112,18 +102,20 @@ namespace GameMessageViewer
 
                 while ((end - Buffer.Position) >= 9)
                 {
+                    int start = Buffer.Position;
+
                     try
                     {
-                        int start = Buffer.Position;
                         GameMessage message = Buffer.ParseMessage();
                         if (message != null)
                         {
+            
                             if (message is ACDEnterKnownMessage)
                             {
                                 String hex = (message as ACDEnterKnownMessage).ActorID.ToString("X8");
-                                string name;
-                                SNOAliases.Aliases.TryGetValue((message as ACDEnterKnownMessage).ActorSNOId.ToString(), out name);
-
+                                //string name;
+                                //SNOAliases.Aliases.TryGetValue((message as ACDEnterKnownMessage).ActorSNOId.ToString(), out name);
+                                string name = SNOAliases.GetAlias((message as ACDEnterKnownMessage).ActorSNOId);
                                 if (!actors.Nodes.ContainsKey(hex))
                                 {
                                     TreeNode actorNode = actors.Nodes.Add(hex, hex + "  " + name);
@@ -134,9 +126,8 @@ namespace GameMessageViewer
 
                             if (message is QuestUpdateMessage)
                             {
-                                string name;
-                                SNOAliases.Aliases.TryGetValue((message as QuestUpdateMessage).snoQuest.ToString(), out name);
-
+                                string name = SNOAliases.GetAlias((message as QuestUpdateMessage).snoQuest);
+                                //SNOAliases.Aliases.TryGetValue(.ToString(), out name);
                                 if (!quests.Nodes.ContainsKey(name))
                                 {
                                     TreeNode questNode = quests.Nodes.Add(name, name);
@@ -162,6 +153,20 @@ namespace GameMessageViewer
                                 }
                                 if (message is PlayerMovementMessage)
                                 {
+                                    // If the client sends a PlayerMoveMessage, but the actor is not yet in the
+                                    // actor list, its due to a broken cap that starts too late...add the node for speed (and grouping)
+                                    if (!actorMap.ContainsKey((uint)(message as PlayerMovementMessage).ActorId))
+                                    {
+                                        String hex = (message as PlayerMovementMessage).ActorId.ToString("X8");
+
+                                        if (!actors.Nodes.ContainsKey(hex))
+                                        {
+                                            TreeNode actorNode = actors.Nodes.Add(hex + " Capper");
+                                            actorMap.Add((uint)(message as PlayerMovementMessage).ActorId, actorNode);
+                                            actorNode.Tag = hex;
+                                        }
+                                    }
+
                                     actorMap[(uint)(message as PlayerMovementMessage).ActorId].Nodes.Add(node.Clone());
                                     continue;
                                 }
@@ -183,7 +188,7 @@ namespace GameMessageViewer
                                 }
                                 if (message is TrickleMessage)
                                 {
-                                    if(actorMap.ContainsKey((uint)(message as TrickleMessage).ActorId))
+                                    if (actorMap.ContainsKey((uint)(message as TrickleMessage).ActorId))
                                         actorMap[(uint)(message as TrickleMessage).ActorId].Nodes.Add(node.Clone());
                                     continue;
                                 }
@@ -196,6 +201,16 @@ namespace GameMessageViewer
                                 if (message is ACDTranslateFacingMessage)
                                 {
                                     actorMap[(uint)(message as ACDTranslateFacingMessage).ActorId].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is ACDEnterKnownMessage)
+                                {
+                                    actorMap[(uint)(message as ACDEnterKnownMessage).ActorID].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is ACDCreateActorMessage)
+                                {
+                                    actorMap[(uint)(message as ACDCreateActorMessage).ActorId].Nodes.Add(node.Clone());
                                     continue;
                                 }
                                 if (message is AttributeSetValueMessage)
@@ -254,41 +269,28 @@ namespace GameMessageViewer
                         }
                         else
                         {
-                            System.Console.Write("No message found");
+                            int pos = Buffer.Position;
+                            Buffer.Position = start;
+                            ErrorNode errorNode = new ErrorNode(String.Format("No message handler found for message id {0}", (Opcodes)Buffer.ReadInt(9)), "");
+                            errorNode.BackColor = Color.Pink;
+                            allNodes.Add(errorNode);
+                            Buffer.Position = pos;
                         }
                     }
+
                     catch (Exception e)
                     {
-                        System.Console.Write("Error while parsing messages");
+                        int pos = Buffer.Position;
+                        Buffer.Position = start;
+                        ErrorNode errorNode = new ErrorNode(String.Format("Error parsing messsage {0}", (Opcodes)Buffer.ReadInt(9)), e.Message);
+                        errorNode.BackColor = Color.Pink;
+                        allNodes.Add(errorNode);
+                        Buffer.Position = pos;
                     }
                 }
 
                 Buffer.Position = end;
             }
-        }
-
-
-        public void Highlight(RichTextBox input)
-        {
-            input.SelectionStart = Start;
-            input.SelectionLength = Buffer.Length % 4 == 0 ? Buffer.Length >> 2 : (Buffer.Length >> 2) + 1;
-            input.SelectionBackColor = this.BackColor;
-            
-            foreach (HighlightingNode node in Nodes)
-                node.Highlight(input, Color.LightGreen);
-
-        }
-
-        public void Unhighlight(RichTextBox input)
-        {
-            input.SelectionStart = Start;
-            input.SelectionLength = Buffer.Length % 4 == 0 ? Buffer.Length >> 2 : (Buffer.Length >> 2) + 1;
-            input.SelectionBackColor = Color.White;
-        }
-
-        public void Highlight(RichTextBox input, Color color)
-        {
-            throw new NotImplementedException();
         }
     }
 }

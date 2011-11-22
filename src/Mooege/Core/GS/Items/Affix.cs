@@ -17,7 +17,7 @@
  */
 
 using System;
-using Mooege.Common;
+using Mooege.Common.Logging;
 
 namespace Mooege.Core.GS.Items
 {

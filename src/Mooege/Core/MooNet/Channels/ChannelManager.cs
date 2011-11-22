@@ -16,8 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Net.MooNet;
 
@@ -76,6 +77,14 @@ namespace Mooege.Core.MooNet.Channels
             else
                 Logger.Warn("Given entity ID doesn't look like a channel ID!");
             return null;
+        }
+
+        public static Channel GetChannelByDynamicId(ulong dynamicId)
+        {
+            if (!Channels.ContainsKey(dynamicId))
+                throw new Exception(string.Format("No channel exists with given dynamic id: {0}", dynamicId));
+            else
+                return Channels[dynamicId];
         }
     }
 }

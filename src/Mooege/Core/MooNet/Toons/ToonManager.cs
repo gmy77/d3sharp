@@ -20,10 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Common.Storage;
 using Mooege.Core.MooNet.Accounts;
-using Mooege.Core.MooNet.Commands;
 
 namespace Mooege.Core.MooNet.Toons
 {
@@ -37,8 +36,6 @@ namespace Mooege.Core.MooNet.Toons
 
         static ToonManager()
         {
-            Toons.Add(CommandHandlerToon.Instance.PersistentID, CommandHandlerToon.Instance); // Hackish command handler toon that we can send server commands. /raist.
-
             LoadToons();
         }
 

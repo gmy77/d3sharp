@@ -17,8 +17,8 @@
  */
 
 using System;
-using Mooege.Common.Helpers;
 using Mooege.Common.Helpers.IO;
+using Mooege.Common.Logging;
 using Nini.Config;
 
 namespace Mooege.Common.Config

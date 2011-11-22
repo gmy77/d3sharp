@@ -752,5 +752,6 @@ namespace Mooege.Net.GS.Message
         public static readonly GameAttributeF Damage_Percent_Reduction_Turns_Into_Heal = new GameAttributeF(724, 0, -1, 7, 0, "", "", "Damage_Percent_Reduction_Turns_Into_Heal", GameAttributeEncoding.Float16, 9, 0, 0, 16);
         public static readonly GameAttributeF Damage_Percent_Percent_Bonus_Vs_Monster_Type = new GameAttributeF(725, 0, 18, 7, 0, "", "", "Damage_Percent_Percent_Bonus_Vs_Monster_Type", GameAttributeEncoding.Float16, 9, 0, 0, 16);
         public static readonly GameAttributeI Item_Manipulation_Timeout = new GameAttributeI(726, 0, -1, 4, 1, "", "", "Item_Manipulation_Timeout", GameAttributeEncoding.Int, 0, 0, 0, 32);
+        public static readonly GameAttributeI Picked_Up_Time = new GameAttributeI(727, 0, -1, 4, 1, "", "", "Picked_Up_Time", GameAttributeEncoding.Int, 9, 0, 0, 32);
     }
 }

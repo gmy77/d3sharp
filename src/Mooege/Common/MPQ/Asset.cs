@@ -30,7 +30,7 @@ namespace Mooege.Common.MPQ
         public Int32 SNOId {get; private set;}
         public string Name {get; private set;}
         public string FileName {get; private set;}
-        public FileFormat Data {get; private set;}
+        public virtual FileFormat Data {get; private set;}
 
         public Asset(SNOGroup group, Int32 snoId, string name)
         {
@@ -41,7 +41,7 @@ namespace Mooege.Common.MPQ
             this.FileName = group + "\\" + this.Name + FileExtensions.Extensions[(int)group];
         }
 
-        public void RunParser(Type parser, MpqFile file)
+        public virtual void RunParser(Type parser, MpqFile file)
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture so that we don't hit pitfalls in non en/US systems with different number formats.
             this.Data = (FileFormat) Activator.CreateInstance(parser, new object[] {file});

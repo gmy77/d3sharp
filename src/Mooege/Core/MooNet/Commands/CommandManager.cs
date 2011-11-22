@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Mooege.Common;
+using Mooege.Common.Logging;
+using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Commands
@@ -96,14 +98,16 @@ namespace Mooege.Core.MooNet.Commands
         /// </summary>
         /// <param name="line">The line to be parsed.</param>
         /// <param name="invokerClient">The invoker client if any.</param>
-        /// <param name="respondOver">The response medium to command</param>
         /// <returns><see cref="bool"/></returns>
-        public static bool TryParse(string line, MooNetClient invokerClient, RespondOver respondOver)
+        public static bool TryParse(string line, MooNetClient invokerClient)
         {
             string output = string.Empty;
             string command;
             string parameters;
             var found = false;
+
+            if (invokerClient == null)
+                throw new ArgumentException("invokerClient");
 
             if (!ExtractCommandAndParameters(line, out command, out parameters))
                 return false;
@@ -119,17 +123,12 @@ namespace Mooege.Core.MooNet.Commands
             if (found == false)
                 output = string.Format("Unknown command: {0} {1}", command, parameters);
 
-            if (output == string.Empty) return true;
+            if (output == string.Empty) 
+                return true;
 
-            switch (respondOver)
-            {
-                case RespondOver.Channel: // if invoked from client within a channel
-                    if (invokerClient != null) invokerClient.SendServerMessage(output);
-                    break;
-                case RespondOver.Whisper: // if invoked from client with a whisper
-                    if (invokerClient != null) invokerClient.SendServerWhisper(output);
-                    break;
-            }
+            output = "[mooege] " + output;
+
+            invokerClient.SendServerWhisper(output);
             
             return true;
         }
@@ -207,15 +206,6 @@ namespace Mooege.Core.MooNet.Commands
 
                 return output;
             }
-        }
-
-        /// <summary>
-        /// Response mediums.
-        /// </summary>
-        public enum RespondOver
-        {
-            Channel,
-            Whisper
         }
     }
 }

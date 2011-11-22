@@ -16,13 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
+using Mooege.Core.GS.Actors.Interactions;
+using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Artisan;
-using Mooege.Net.GS.Message.Definitions.World;
-using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations.Artisans
 {
@@ -32,11 +31,14 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
             : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
+
+            Interactions.Add(new CraftInteraction());
         }
 
-        public override void OnTargeted(Player player, TargetMessage message)
+        public override void OnCraft(Player player)
         {
             player.InGameClient.SendMessage(new OpenArtisanWindowMessage() { ArtisanID = this.DynamicID });
         }
+
     }
 }

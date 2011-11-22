@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using CrystalMpq;
 using CrystalMpq.Utility;
+using Mooege.Common.Logging;
 using Wintellect.PowerCollections;
 
 namespace Mooege.Common.MPQ
