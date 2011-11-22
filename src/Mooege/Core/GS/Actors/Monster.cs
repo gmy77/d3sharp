@@ -70,7 +70,7 @@ namespace Mooege.Core.GS.Actors
             this.Field2 = 0x8;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
             this.Attributes[GameAttribute.Experience_Granted] = 125;
-            //this.Brain = new Mooege.Core.GS.AI.Brains.MonsterBrain(this);
+
         }
 
         public override void OnTargeted(Player player, TargetMessage message)

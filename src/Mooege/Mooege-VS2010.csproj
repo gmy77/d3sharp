@@ -147,7 +147,7 @@
     <Compile Include="Common\Versions\VersionInfo.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\ArtisanShortcut.cs" />
     <Compile Include="Core\GS\Actors\Implementations\NephalemAltar.cs" />
-    <Compile Include="Core\GS\Actors\Movement\MoveToPointWithPathfind.cs" />
+    <Compile Include="Core\GS\Actors\Movement\MoveToPointWithPathfindAction.cs" />
     <Compile Include="Core\GS\Actors\ServerProp.cs" />
     <Compile Include="Core\GS\AI\Pathfinder.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\ActorKeys.cs" />

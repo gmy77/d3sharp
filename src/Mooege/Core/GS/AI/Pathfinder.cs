@@ -49,7 +49,7 @@ namespace Mooege.Core.GS.AI
                 if (!_queuedPathTasks.IsEmpty)
                 {
                     workPathTask = _queuedPathTasks.First();
-                    workPathTask.Value.getit();
+                    workPathTask.Value.GetPath();
                     _queuedPathTasks.TryRemove(workPathTask.Key, out temporaryPathTask);
                 }
                 else { System.Threading.Thread.Sleep(50); }
@@ -245,7 +245,7 @@ namespace Mooege.Core.GS.AI
                 this.Path = Path;
 
             }
-            public List<Vector3D> getit()
+            public List<Vector3D> GetPath()
             {
                 Path.AddRange(pathing.FindPath(Actor, start, destination));
 
