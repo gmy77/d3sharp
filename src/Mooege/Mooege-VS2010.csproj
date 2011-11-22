@@ -55,8 +55,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="astar2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\dep\astar\astar2.dll</HintPath>
+    <Reference Include="AStar">
+      <HintPath>..\..\dep\astar\AStar.dll</HintPath>
     </Reference>
     <Reference Include="CrystalMpq">
       <HintPath>..\..\dep\crystalmpq\CrystalMpq.dll</HintPath>

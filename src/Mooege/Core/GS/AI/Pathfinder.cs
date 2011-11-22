@@ -17,7 +17,7 @@ namespace Mooege.Core.GS.AI
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         private System.Collections.Concurrent.ConcurrentDictionary<uint, List<Vector3D>> _completedPathTasks = new System.Collections.Concurrent.ConcurrentDictionary<uint, List<Vector3D>>();
-        private System.Collections.Concurrent.ConcurrentDictionary<uint, PathingTask> _queuedPathTasks = new System.Collections.Concurrent.ConcurrentDictionary<uint, PathingTask>();
+        private System.Collections.Concurrent.ConcurrentDictionary<uint, PathRequestTask> _queuedPathTasks = new System.Collections.Concurrent.ConcurrentDictionary<uint, PathRequestTask>();
 
         private Pathfinder aipather;
         private Games.Game game;
@@ -29,21 +29,21 @@ namespace Mooege.Core.GS.AI
         }
 
         //This submits a request for a path to the pathfinder thread. This is the main point of entry for usage. - DarkLotus
-        public void GetPath(Actor owner, Vector3D vector3D, Vector3D heading, ref List<Vector3D> Path)
+        public PathRequestTask GetPath(Actor owner, Vector3D vector3D, Vector3D heading)
         {
             if (aipather == null)
                 aipather = new Pathfinder();
-
-            _queuedPathTasks.TryAdd(owner.DynamicID, new PathingTask(aipather, owner, owner.Position, heading, ref Path));
-            return;
+            var pathRequestTask = new PathRequestTask(aipather, owner, owner.Position, heading);
+            _queuedPathTasks.TryAdd(owner.DynamicID, pathRequestTask);
+            return pathRequestTask;
         }
 
 
         //Runs a copy for each game currently running- Processes all pathrequests queued.
         public void UpdateLoop()
         {
-            PathingTask temporaryPathTask;
-            KeyValuePair<uint, PathingTask> workPathTask;
+            PathRequestTask temporaryPathTask;
+            KeyValuePair<uint, PathRequestTask> workPathTask;
             while (true)
             {
                 if (!_queuedPathTasks.IsEmpty)
@@ -56,7 +56,7 @@ namespace Mooege.Core.GS.AI
             }
 
         }
-    private class Pathfinder
+    public class Pathfinder
     {
         //TODO Grab Z axis for each move from scene grid, if Z is desired. Walking works fine sending 0 Z axis.
         //Shortcomings; Grids are built off Walkable, no accounting for flying,Ghost allowed movements etc With current method this would require duplicating WalkGrid for each scene with FlyGrid and GhostGrid
@@ -140,6 +140,7 @@ namespace Mooege.Core.GS.AI
             for (int i = 0; i < nodePathList.Count; i++)
             {
                 // Convert the path into world coordinates for use in Movement.
+                // TODO Objectpool maybe?
                 vectorPathList.Insert(0, new Vector3D(nodePathList[i].X * 2.5f + _baseX, nodePathList[i].Y * 2.5f + _baseY, 0));
             }
             return vectorPathList;
@@ -229,32 +230,28 @@ namespace Mooege.Core.GS.AI
     
 
     
-        public class PathingTask
+        public class PathRequestTask
         {
-            private Pathfinder pathing;
-            public Actor Actor;
-            private Vector3D start;
-            private Vector3D destination;
-            List<Vector3D> Path;
-            public PathingTask(Pathfinder pathing, Actor actor, Vector3D Start, Vector3D Destination, ref List<Vector3D> Path)
-            {
-                this.pathing = pathing;
-                this.Actor = actor;
-                this.start = Start;
-                this.destination = Destination;
-                this.Path = Path;
+            private Pathfinder _pathfinder;
+            public Actor _actor;
+            private Vector3D _start;
+            private Vector3D _destination;
+            public List<Vector3D> Path;
+            public Boolean PathFound = false;
 
+            public PathRequestTask(Pathfinder pathing, Actor actor, Vector3D Start, Vector3D Destination)
+            {
+                this._pathfinder = pathing;
+                this._actor = actor;
+                this._start = Start;
+                this._destination = Destination;
+                this.Path = new List<Vector3D>();
             }
             public List<Vector3D> GetPath()
             {
-                Path.AddRange(pathing.FindPath(Actor, start, destination));
-
-                if (Path.Count == 0)
-                {
-                    //Path = null; 
-                    Path.Add(new Vector3D(0,0,0));
-                    // This is a horrible hack because Path = null doesnt seem to propergate back to PathfindToPoint.cs - Darklotus
-                }
+                Path.AddRange(_pathfinder.FindPath(_actor, _start, _destination));
+                PathFound = true;
+               
                 return Path;
             }
         }

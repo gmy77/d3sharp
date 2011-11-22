@@ -34,12 +34,12 @@ namespace Mooege.Core.GS.Actors.Movement
 
         public SteppedRelativeTickTimer Timer;
         private List<Vector3D> _path = new List<Vector3D>();
-
+        private AI.Pather.PathRequestTask _pathRequestTask;
         public MoveToPointWithPathfindAction(Actor owner, Vector3D heading)
             : base(owner)
         {
             // Sending a request for a Path to the Pathing thread.
-            owner.World.Game.Pathfinder.GetPath(owner, owner.Position, heading, ref _path);
+            _pathRequestTask = owner.World.Game.Pathfinder.GetPath(owner, owner.Position, heading);
             this.Heading = heading;
 
         }
@@ -47,16 +47,17 @@ namespace Mooege.Core.GS.Actors.Movement
         public override void Start(int tickCounter)
         {
             // Just wait, path request hasnt been processed yet, idealy this would be null or something instead - Darklotus
-            if (_path.Count == 0)
+            if (!_pathRequestTask.PathFound)
                 return;
 
-            // if path count is 1 its our fake 0,0,0 vector, which means no path was found. - DarkLotus
-            if (_path.Count < 2)
+            // No path found, so end Action.
+            if (_pathRequestTask.Path.Count < 1)
             {
                 this.Started = true;
                 this.Done = true;
                 return;
             }
+            _path = _pathRequestTask.Path;
             // Each path step will be 2.5f apart roughly, not sure on the math to get correct walk speed for the timer.
             // mobs sometimes skip a bit, pretty sure this is because timing isnt correct.  :( - DarkLotus
                       
