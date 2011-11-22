@@ -96,7 +96,7 @@ namespace Mooege.Common.MPQ.FileFormats
                 this.NavMeshSquareCount = stream.ReadValueS32();
                 this.Float0 = stream.ReadValueF32();
                 this.Squares = stream.ReadSerializedData<NavMeshSquare>(this.NavMeshSquareCount);
-                // Could do away with keeping Squares
+                // Could do away with keeping Squares as Squares = 
                 if (SquaresCountX < 64 && SquaresCountY < 64)
                 {
                     WalkGrid = new byte[64, 64];
@@ -117,7 +117,7 @@ namespace Mooege.Common.MPQ.FileFormats
                         cnt -= SquaresCountY;
                     }
                     xx = cnt;
-                    WalkGrid[xx, yy] = (byte)(Squares[i].Flags & 0x1); // Set the grid to 0x1 if its walkable, left as 0 if not. - DarkLotus
+                    WalkGrid[xx, yy] = (byte)(Squares[i].Flags & Scene.NavCellFlags.AllowWalk); // Set the grid to 0x1 if its walkable, left as 0 if not. - DarkLotus
                 }
 
                 stream.Position += (3 * 4);
@@ -176,12 +176,12 @@ namespace Mooege.Common.MPQ.FileFormats
         public class NavMeshSquare : ISerializableData
         {
             public float Float0 { get; private set; }
-            public int Flags { get; private set; }
+            public NavCellFlags Flags { get; private set; }
 
             public void Read(MpqFileStream stream)
             {
                 this.Float0 = stream.ReadValueF32();
-                this.Flags = stream.ReadValueS32();
+                this.Flags = (NavCellFlags)stream.ReadValueS32();
             }
         }
 
