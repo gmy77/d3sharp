@@ -153,8 +153,8 @@ namespace Mooege.Core.GS.Games
             var loopThread = new Thread(Update) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture }; ; // create the game update thread.
             loopThread.Start();
             Pathfinder = new Mooege.Core.GS.AI.Pather(this); //Creates the "Game"s single Pathfinder thread, Probably could be pushed further up and have a single thread handling all path req's for all running games. - DarkLotus
-            var aiThread = new Thread(Pathfinder.UpdateLoop) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture };
-            aiThread.Start();
+            var patherThread = new Thread(Pathfinder.UpdateLoop) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture };
+            patherThread.Start();
         }
 
         #region update & tick managment

@@ -9,6 +9,7 @@ using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Common.Types.Misc;
 using Algorithms;
 using Mooege.Core.GS.Actors;
+using Mooege.Common.Logging;
 
 namespace Mooege.Core.GS.AI
 {
@@ -71,7 +72,6 @@ namespace Mooege.Core.GS.AI
                 initPathFinder();
             }
                         
-            //nodePathList = new List<PathFinderNode>();
             start.X = (int)((Start.X - basex) / 2.5f);
             start.Y = (int)((Start.Y - basey) / 2.5f);
             dest.X = (int)((Destination.X - basex) / 2.5f);
@@ -91,7 +91,6 @@ namespace Mooege.Core.GS.AI
             for (int i = 0; i < nodePathList.Count; i++)
             {
                 vectorPathList.Insert(0, new Vector3D(nodePathList[i].X * 2.5f + basex, nodePathList[i].Y * 2.5f + basey, 0));
-                //vectorPathList.Add(new Vector3D(nodePathList[i].X * 2.5f + basex, nodePathList[i].Y * 2.5f + basey, 0));
             }
             return vectorPathList;
         }
