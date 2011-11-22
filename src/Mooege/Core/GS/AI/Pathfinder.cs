@@ -71,13 +71,11 @@ namespace Mooege.Core.GS.AI
                 mPathFinder = new PathFinderFast(buildOutOfSceneGrid(curScene, destScene, ref basex, ref basey));
                 initPathFinder();
             }
-                        
+            //2.5f is because Scene navmesh's are based on 96x96 for a 240x240 scene - Darklotus
             start.X = (int)((Start.X - basex) / 2.5f);
             start.Y = (int)((Start.Y - basey) / 2.5f);
             dest.X = (int)((Destination.X - basex) / 2.5f);
             dest.Y = (int)((Destination.Y - basey) / 2.5f);
-            //start = new Point((int)((Start.X - basex) / 2.5f), (int)((Start.Y - basey) / 2.5f));
-            //dest = new Point((int)((Destination.X - basex) / 2.5f), (int)((Destination.Y - basey) / 2.5f));
 
             nodePathList = mPathFinder.FindPath(start, dest);
             if (vectorPathList == null)
@@ -185,20 +183,18 @@ namespace Mooege.Core.GS.AI
             this.game = game;
         }
 
+        //This submits a request for a path to the pathfinder thread. - DarkLotus
         internal void GetPath(Actor owner, Vector3D vector3D, Vector3D heading, ref List<Vector3D> Path)
         {
             if (aipather == null)
-                aipather = new Pathfinder(); 
+                aipather = new Pathfinder();
 
-                AddRequest(aipather, owner, vector3D, heading,ref Path);
-                return;
+            queuedtasks.TryAdd(owner.DynamicID, new PathingTask(aipather, owner, owner.Position, heading, ref Path));
+            return;
         }
 
-        private void AddRequest(AI.Pathfinder pathing, Actor actor, Vector3D Start, Vector3D Destination, ref List<Vector3D> Path)
-        {
-            queuedtasks.TryAdd(actor.DynamicID, new PathingTask(pathing, actor, Start, Destination,ref Path));
-        }
-
+        
+        //Runs a copy for each game currently running- Processes all pathrequests queued.
         public void UpdateLoop()
         {
             PathingTask temporaryPathTask;
@@ -239,6 +235,7 @@ namespace Mooege.Core.GS.AI
                 {
                     //Path = null; 
                     Path.Add(new Vector3D(0,0,0));
+                    // This is a horrible hack because Path = null doesnt seem to propergate back to PathfindToPoint.cs - Darklotus
                 }
                 return Path;
             }

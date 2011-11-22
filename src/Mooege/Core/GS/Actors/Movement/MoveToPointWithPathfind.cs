@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 
 namespace Mooege.Core.GS.Actors.Movement
 {
-    public class PathfindToPoint : ActorAction
+    public class MoveToPointWithPathfind : ActorAction
     {
         public Vector3D Heading { get; private set; }
 
@@ -36,11 +36,12 @@ namespace Mooege.Core.GS.Actors.Movement
         private List<Vector3D> Path = new List<Vector3D>();
         //private Task<List<Vector3D>> task;
 
-        public PathfindToPoint(Actor owner, Vector3D heading)
+        public MoveToPointWithPathfind(Actor owner, Vector3D heading)
             : base(owner)
         {
                   //task = Task.Factory.StartNew(() => pather.FindPath(ref Path,owner,owner.Position,heading));
-                  //task = Task<List<Vector3D>>.Factory.StartNew(() => pather.FindPath(owner, owner.Position, heading)); 
+                  //task = Task<List<Vector3D>>.Factory.StartNew(() => pather.FindPath(owner, owner.Position, heading));
+            // Sending a request for a Path to the Pathing thread.
             owner.World.Game.Pathfinder.GetPath(owner, owner.Position, heading, ref Path);
             this.Heading = heading;
 
@@ -48,8 +49,11 @@ namespace Mooege.Core.GS.Actors.Movement
 
         public override void Start(int tickCounter)
         {
+            // Just wait, path request hasnt been processed yet, idealy this would be null or something instead - Darklotus
             if (Path.Count == 0)
                 return;
+
+            // if path count is 1 its our fake 0,0,0 vector, which means no path was found. - DarkLotus
             if (Path.Count < 2)
             {
                 this.Started = true;
@@ -58,9 +62,7 @@ namespace Mooege.Core.GS.Actors.Movement
             }
             // Each path step will be 2.5f apart roughly, not sure on the math to get correct walk speed for the timer.
             // mobs sometimes skip a bit, pretty sure this is because timing isnt correct.  :( - DarkLotus
-            
-            //var facingAngle = MovementHelpers.GetFacingAngle(this.Owner, this.Heading);
-            
+                      
 
             this.Timer = new SteppedRelativeTickTimer(this.Owner.World.Game, 18, (int)(Path.Count *2 / this.Owner.WalkSpeed),
             (tick) =>
