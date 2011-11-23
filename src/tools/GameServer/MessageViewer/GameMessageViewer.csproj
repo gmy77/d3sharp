@@ -150,6 +150,10 @@
       <Project>{4CC19847-6F24-4453-9E31-126F94308AB9}</Project>
       <Name>LibMooNet</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Mooege\Mooege-VS2010.csproj">
+      <Project>{41BB6B2D-BD3F-42B6-860C-D21DC74B33CD}</Project>
+      <Name>Mooege-VS2010</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
