@@ -24,13 +24,9 @@ using System.Text;
 
 namespace Mooege.Net.WebServices
 {
-    [ServiceContract]
-    public class OnlineService
-    {
-        [OperationContract]
-        string Hello()
-        {
-            return "Hello mooege!";
-        }
-    }
+    /// <summary>
+    /// Interface for web-services.
+    /// </summary>
+    public interface IWebService
+    { }
 }

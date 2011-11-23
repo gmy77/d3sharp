@@ -552,7 +552,8 @@
     <Compile Include="Net\MooNet\RPC\RPCCallback.cs" />
     <Compile Include="Net\NATConfig.cs" />
     <Compile Include="Net\Utils.cs" />
-    <Compile Include="Net\WebServices\OnlineService.cs" />
+    <Compile Include="Net\WebServices\IWebService.cs" />
+    <Compile Include="Core\MooNet\Online\OnlineWebService.cs" />
     <Compile Include="Net\WebServices\ServiceManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Net\Connection.cs" />

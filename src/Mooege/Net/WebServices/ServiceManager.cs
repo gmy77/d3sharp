@@ -17,6 +17,9 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using Mooege.Common.Logging;
@@ -26,26 +29,43 @@ namespace Mooege.Net.WebServices
     public class ServiceManager
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-        private ServiceHost _onlineServiceHost;
+
+        private readonly static Uri ServiceUri = new Uri("http://localhost:9000/");
+        private readonly List<ServiceHost> _serviceHosts = new List<ServiceHost>();
+        private readonly Dictionary<Type, ServiceContractAttribute> _webServices = new Dictionary<Type, ServiceContractAttribute>();        
 
         public ServiceManager()
-        { }
+        {
+            this.LoadServices();
+        }
+
+        private void LoadServices()
+        {
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(type => type.GetInterface("IWebService") != null))
+            {
+                object[] attributes = type.GetCustomAttributes(typeof(ServiceContractAttribute), true); // get the attributes of the packet.
+                if (attributes.Length == 0) return;
+
+                _webServices.Add(type, (ServiceContractAttribute)attributes[0]);
+            }
+        }
 
         public void Run()
         {
-            var serviceUri = new Uri("http://localhost:9000/");
-            this._onlineServiceHost = new ServiceHost(typeof(OnlineService), serviceUri);
+            foreach(var pair in this._webServices)
+            {
+                var serviceHost = new ServiceHost(pair.Key, ServiceUri);
+                var behavior = new ServiceMetadataBehavior { HttpGetEnabled = true };
+                serviceHost.Description.Behaviors.Add(behavior);
 
-            var behavior = new ServiceMetadataBehavior();
-            behavior.HttpGetEnabled = true;
-            this._onlineServiceHost.Description.Behaviors.Add(behavior);
+                serviceHost.AddServiceEndpoint(typeof (IMetadataExchange), new BasicHttpBinding(), "MEX");
+                serviceHost.AddServiceEndpoint(pair.Key, new BasicHttpBinding(), pair.Value.Name);
 
-            this._onlineServiceHost.AddServiceEndpoint(typeof(OnlineService), new BasicHttpBinding(), "OnlineService");
-            this._onlineServiceHost.AddServiceEndpoint(typeof(IMetadataExchange), new BasicHttpBinding(), "MEX");
+                serviceHost.Open();
+                this._serviceHosts.Add(serviceHost);
+            }
 
-            _onlineServiceHost.Open();
-
-            Logger.Info("Webservices server started...");
+            Logger.Info("Loaded web-services manager with {0} services..", this._webServices.Count);
         }
     }
 }
