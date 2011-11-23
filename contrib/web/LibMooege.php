@@ -26,15 +26,23 @@ print_r($count);
 $players=$mooege->OnlinePlayersList();
 print_r($players);
 
+/**
+ * LibMooege class that connect Mooege's web-services and communicate with them.
+ */
 class LibMooege
 {
     var $connected=false;
     var $servicesAddress; // web-services address..
     
-    var $moonetSOAPClient; // SOAP client for MooNet service.
-    var $gsSOAPClient; // SOAP client for GS service.
-    var $accountsSOAPClient; // SOAP client for accounts service.    
+    var $moonet; // SOAP client for MooNet service.
+    var $gs; // SOAP client for GS service.
+    var $accounts; // SOAP client for accounts service.    
     
+    /**
+     * Creates a new instance of the LibMooege class.
+     * @param type $address Base 
+     * @param type $port 
+     */
     public function __construct($address = "http://localhost", $port = 9000)
     {                
         $this->serviceAddress="$address:$port";
@@ -44,26 +52,31 @@ class LibMooege
     private function CreateSOAPClients()
     {
         try {
-            $this->moonetSOAPClient = new SoapClient($this->serviceAddress.'/MooNet?wsdl');
-            $this->gsSOAPClient = new SoapClient($this->serviceAddress.'/GS?wsdl');
-            $this->accountsSOAPClient = new SoapClient($this->serviceAddress.'/Accounts?wsdl');
+            $this->moonet = new SoapClient($this->serviceAddress.'/MooNet?wsdl');
+            $this->gs = new SoapClient($this->serviceAddress.'/GS?wsdl');
+            $this->accounts = new SoapClient($this->serviceAddress.'/Accounts?wsdl');
             $this->connected=true;
         }
         catch(Exception $e)
         {
-            echo $e;
             $this->connected=false;
         }
     }
     
     public function OnlinePlayerCount()
     {
-        return $this->moonetSOAPClient->OnlinePlayerCount();
+        if($this->connected)
+            return $this->moonet->OnlinePlayerCount();
+        else
+            throw new Exception("Can not connect mooege services!");
     }
     
     public function OnlinePlayersList()
     {
-        return $this->moonetSOAPClient->OnlinePlayersList();
+        if($this->connected)               
+            return $this->moonet->OnlinePlayersList();
+        else
+            throw new Exception("Can not connect mooege services!");
     }
 }
 ?> 
