@@ -27,6 +27,10 @@ using System.IO;
 
 namespace GameMessageViewer
 {
+
+    /// <summary>
+    /// Class that identifies a connection within a pcap dump
+    /// </summary>
     class Connection
     {
         private string m_srcIp;
@@ -129,6 +133,7 @@ namespace GameMessageViewer
             {
                 retVal.Add(tr.data_out_file.BaseStream as MemoryStream);
                 tr.Close();
+                tr.data_out_file.BaseStream.Seek(0, SeekOrigin.Begin);
             }
             sharpPcapDict.Clear();
             return retVal;
@@ -143,10 +148,9 @@ namespace GameMessageViewer
         // The callback function for the SharpPcap library
         private static void device_PcapOnPacketArrival(object sender, CaptureEventArgs e)
         {
-            var packet = Packet.ParsePacket(LinkLayers.Ethernet, e.Packet.Data);
-            if (packet.PayloadPacket == null || packet.PayloadPacket.PayloadPacket == null) return;
+            if (Packet.ParsePacket(LinkLayers.Ethernet, e.Packet.Data).PayloadPacket == null) return;
 
-            var tcpPacket = packet.PayloadPacket.PayloadPacket as TcpPacket;
+            TcpPacket tcpPacket = Packet.ParsePacket(LinkLayers.Ethernet, e.Packet.Data).PayloadPacket.PayloadPacket as TcpPacket;
 
             // THIS FILTERS D3 TRAFFIC, GS AS WELL AS MOONET
             if (tcpPacket != null && (tcpPacket.SourcePort == 1119 || tcpPacket.DestinationPort == 1119))

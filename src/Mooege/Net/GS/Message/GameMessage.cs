@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using Mooege.Common;
+using Mooege.Common.Logging;
 
 namespace Mooege.Net.GS.Message
 {

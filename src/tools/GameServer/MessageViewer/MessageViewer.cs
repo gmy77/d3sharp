@@ -30,18 +30,11 @@ using System.IO;
 using SharpPcap.LibPcap;
 using SharpPcap;
 using PacketDotNet;
+using Mooege.Common.MPQ;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace GameMessageViewer
 {
-
-
-    public interface HighlightingNode
-    {
-        void Highlight(RichTextBox input);
-        void Unhighlight(RichTextBox input);
-        void Highlight(RichTextBox input, Color color);
-    }
-
     public partial class MessageViewer : Form
     {
         MessageFilter filterWindow = new MessageFilter();
@@ -55,15 +48,10 @@ namespace GameMessageViewer
         }
 
 
-
-
-
-
-
         private void tree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (tree.SelectedNode is MessageNode)
-                DisplayMessage((tree.SelectedNode as MessageNode).gameMessage.AsText());
+            if ((sender as TreeView).SelectedNode is ITextNode)
+                DisplayMessage(((sender as TreeView).SelectedNode as ITextNode).AsText());
         }
 
         private void ApplyFilter()
@@ -83,27 +71,11 @@ namespace GameMessageViewer
             tree.EndUpdate();
         }
 
-        private void tree_BeforeSelect(object sender, TreeViewCancelEventArgs e)
-        {
-            if(tree.SelectedNode != null)
-                if(tree.SelectedNode.IsExpanded == false)
-                    (tree.SelectedNode as HighlightingNode).Unhighlight(input);
-        }
 
         private void tree_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
             if (e.Node is BufferNode)
                 (e.Node as BufferNode).Parse();
-        }
-
-        private void tree_AfterCollapse(object sender, TreeViewEventArgs e)
-        {
-            (e.Node as HighlightingNode).Unhighlight(input);
-        }
-
-        private void tree_AfterExpand(object sender, TreeViewEventArgs e)
-        {
-            (e.Node as HighlightingNode).Highlight(input);
         }
 
         private void groupedNode_AfterSelect(object sender, TreeViewEventArgs e)
@@ -121,7 +93,7 @@ namespace GameMessageViewer
 
         private void messageFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            filterWindow.Show();
+            filterWindow.ShowDialog();
             ApplyFilter();
         }
 
@@ -140,12 +112,15 @@ namespace GameMessageViewer
             {
                 bn.Collapse();
 
-                foreach (MessageNode mn in bn.Nodes)
-                    if (mn.gameMessage.ToString().Contains(find))
+                foreach (TreeNode mn in bn.Nodes)
+                    if (mn is MessageNode)
                     {
-                        bn.BackColor = Color.Yellow;
-                        mn.BackColor = Color.Yellow;
-                        bn.Expand();
+                        if ((mn as MessageNode).gameMessage.GetType().Name.Contains(find))
+                        {
+                            bn.BackColor = Color.Yellow;
+                            mn.BackColor = Color.Yellow;
+                            bn.Expand();
+                        }
                     }
             }
             tree.EndUpdate();
@@ -261,10 +236,13 @@ namespace GameMessageViewer
                                 {
                                     usedKeys.Add(id.ToString());
                                     string alias = "";
-
-                                    if (SNOAliases.AnimationGroups.TryGetValue(id.ToString(), out alias))
+                                    
+                                    var aliases = Mooege.Core.GS.Common.Types.TagMap.TagMap.GetKeys(id);
+                                    if(aliases.Count > 0)
                                     {
-                                        output.Rtf = output.Rtf.Replace(word, word + ":" + alias);
+                                        alias = String.Join(" or ", aliases.Select(x => x.Name));
+
+                                        output.Rtf = output.Rtf.Replace(word, word + ": TagKey." + alias);
 
                                         int pos = -1;
                                         while ((pos = output.Text.IndexOf(alias, pos + 1)) > 0)
@@ -276,8 +254,8 @@ namespace GameMessageViewer
                                         }
                                     }
 
-
-                                    if (SNOAliases.Aliases.TryGetValue(id.ToString(), out alias))
+                                    alias = SNOAliases.GetAlias(id);
+                                    if (alias != "")
                                     {
                                         output.Rtf = output.Rtf.Replace(word, word + ":" + alias);
 
@@ -291,6 +269,24 @@ namespace GameMessageViewer
                                         }
 
                                     }
+
+                                    alias = SNOAliases.GetGroup(id);
+                                    if (alias != "")
+                                    {
+                                        output.Rtf = output.Rtf.Replace(word, word + ":" + alias);
+
+                                        int pos = -1;
+                                        while ((pos = output.Text.IndexOf(alias, pos + 1)) > 0)
+                                        {
+                                            output.SelectionStart = pos;
+                                            output.SelectionLength = alias.Length;
+                                            output.SelectionColor = Color.OrangeRed;
+                                            output.SelectionLength = 0;
+                                        }
+
+                                    }
+                                    
+
 
                                 }
                             }
@@ -320,8 +316,8 @@ namespace GameMessageViewer
                     LoadDump(File.ReadAllText(ofd.FileName));
                 if (Path.GetExtension(ofd.FileName).ToLower().Contains("cap"))
                     LoadPcap(ofd.FileName);
-                if (Path.GetExtension(ofd.FileName).ToLower().Contains("hex"))
-                    LoadWiresharkHex(File.ReadAllText(ofd.FileName));
+                //if (Path.GetExtension(ofd.FileName).ToLower().Contains("hex"))
+                //    LoadWiresharkHex(File.ReadAllText(ofd.FileName));
             }
         }
 

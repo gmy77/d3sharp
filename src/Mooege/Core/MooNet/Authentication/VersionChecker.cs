@@ -16,11 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Common;
+using Mooege.Common.Logging;
+using Mooege.Common.Versions;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Authentication
@@ -29,15 +26,47 @@ namespace Mooege.Core.MooNet.Authentication
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        public static bool Check(bnet.protocol.authentication.LogonRequest request)
+        public static bool Check(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
-            var foundVersionMatch = VersionInfo.MooNet.ClientVersionMaps.ContainsKey(request.Version) ? true: false;
-            var versionMatch = foundVersionMatch ? VersionInfo.MooNet.ClientVersionMaps[request.Version] : -1;
+            int versionMatch = -1;
+            string clientVersionSignature = request.HasVersion ? request.Version.Substring(0, 24) : string.Empty; // get client's version string signature - the very first 24 chars like; "Aurora b4367eba86_public".
 
-            Logger.Trace(
-                "Client Info: user: {0} program: {1}  platform: {2} locale: {3} version: {4} [{5}]  app_version: {6}.",
-                request.Email, request.Program, request.Platform, request.Locale, versionMatch != -1 ? versionMatch.ToString() : "Unknown", request.Version,
-                request.ApplicationVersion);
+            foreach(var pair in VersionInfo.MooNet.ClientVersionMaps) // see if client's version signature matches anyone in our client versions map.
+            {
+                if (pair.Key != clientVersionSignature)
+                    continue;
+
+                versionMatch = pair.Value;
+                break;
+            }
+
+            // set client platform.
+            switch (request.Platform.ToLower())
+            {
+                case "win":
+                    client.Platform = MooNetClient.ClientPlatform.Win;
+                    break;
+                case "mac":
+                    client.Platform = MooNetClient.ClientPlatform.Mac;
+                    break;
+                default:
+                    client.Platform = MooNetClient.ClientPlatform.Invalid;
+                    break;
+            }
+
+            // set client locale
+            switch(request.Locale)
+            {
+                case "enUS":
+                    client.Locale = MooNetClient.ClientLocale.enUS;
+                    break;
+                default:
+                    client.Locale = MooNetClient.ClientLocale.Invalid;
+                    break;
+            }
+
+            Logger.Trace("Client Info: user: {0} program: {1}  platform: {2} locale: {3} version: {4} [{5}]  app_version: {6}.",
+                request.Email, request.Program, request.Platform, request.Locale, versionMatch != -1 ? versionMatch.ToString() : "Unknown", request.Version,request.ApplicationVersion);
 
             return versionMatch == VersionInfo.MooNet.RequiredClientVersion; // see if the client fits our required version.
         }

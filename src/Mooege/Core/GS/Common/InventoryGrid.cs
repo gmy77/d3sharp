@@ -18,7 +18,7 @@
 
 using System;
 using System.Collections.Generic;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Objects;

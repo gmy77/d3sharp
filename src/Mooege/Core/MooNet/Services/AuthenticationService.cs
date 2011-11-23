@@ -19,7 +19,8 @@
 using System;
 using System.Globalization;
 using System.Threading;
-using Mooege.Common;
+using Mooege.Common.Logging;
+using Mooege.Common.Versions;
 using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
@@ -31,12 +32,13 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
+        public bnet.protocol.Header LastCallHeader { get; set; }
         
         public override void Logon(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.LogonRequest request, Action<bnet.protocol.authentication.LogonResponse> done)
         {
             Logger.Trace("LogonRequest(): Email={0}", request.Email);
 
-            if (!VersionChecker.Check(request)) // if the client trying to connect doesn't match required version, disconnect him.
+            if (!VersionChecker.Check(this.Client, request)) // if the client trying to connect doesn't match required version, disconnect him.
             {
                 Logger.Error("Client [{0}] doesn't match required version {1}, disconnecting..", request.Email, VersionInfo.MooNet.RequiredClientVersion);
                 this.Client.Connection.Disconnect(); // TODO: We should be actually notifying the client with wrong version message. /raist.

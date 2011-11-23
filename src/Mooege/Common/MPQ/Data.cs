@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using CrystalMpq;
 using Gibbed.IO;
+using Mooege.Common.Versions;
 using Mooege.Core.GS.Common.Types.SNO;
 using System.Linq;
 
@@ -117,12 +118,15 @@ namespace Mooege.Common.MPQ
 
             var elapsedTime = DateTime.Now - timerStart;
 
-            Logger.Info("Found a total of {0} assets from {1} catalog and parsed {2} of them in {3:c}.", assetsCount, fileName, this._tasks.Count, elapsedTime);
+            if(Storage.Config.Instance.LazyLoading)
+                Logger.Info("Found a total of {0} assets from {1} catalog and postponed loading because lazy loading is activated.", assetsCount, fileName);
+            else
+                Logger.Info("Found a total of {0} assets from {1} catalog and parsed {2} of them in {3:c}.", assetsCount, fileName, this._tasks.Count, elapsedTime);
         }
 
         private Asset ProcessAsset(SNOGroup group, Int32 snoId, string name)
         {
-            var asset = new Asset(group, snoId, name); // create the asset.
+            var asset = Storage.Config.Instance.LazyLoading ? new LazyAsset(group, snoId, name) : new Asset(group, snoId, name); // create the asset.
             if (!this.Parsers.ContainsKey(asset.Group)) return asset; // if we don't have a proper parser for asset, just give up.
 
             var parser = this.Parsers[asset.Group]; // get the type the asset's parser.

@@ -19,8 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using Mooege.Common;
-using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.Misc;
@@ -146,7 +145,7 @@ namespace Mooege.Core.GS.Actors
         public Mooege.Common.MPQ.FileFormats.AnimSet AnimationSet { get; private set; }
 
         // TODO: read them from MPQ data's instead /raist.
-        public float WalkSpeed = 0.2797852f;
+        public float WalkSpeed = 0.108f;//0.2797852f;
         public float RunSpeed = 0.3598633f;
 
         // Some ACD uncertainties /komiga.

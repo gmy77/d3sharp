@@ -18,7 +18,7 @@
 
 using System;
 using System.Linq;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Net.GS.Message;
 using PcapDotNet.Core;
 using PcapDotNet.Packets;

@@ -18,8 +18,8 @@
 
 using System;
 using System.Data.SQLite;
-using Mooege.Common.Helpers;
 using Mooege.Common.Helpers.IO;
+using Mooege.Common.Logging;
 
 namespace Mooege.Common.Storage
 {

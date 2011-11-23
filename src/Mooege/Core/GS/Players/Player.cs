@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Mooege.Common;
 using Mooege.Common.Helpers.Math;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Objects;
@@ -1644,19 +1645,19 @@ namespace Mooege.Core.GS.Players
         {
             Attributes[GameAttribute.Skill, 0x0002EC66] = 1;
             Attributes[GameAttribute.Skill_Total, 0x0002EC66] = 1;
-            Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
+            Attributes.SendChangedMessage(this.InGameClient);
         }
 
         internal void EnableCauldronOfJordan()
         {         
             Attributes[GameAttribute.ItemMeltUnlocked] = true;
-            Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
+            Attributes.SendChangedMessage(this.InGameClient);
         }
 
         internal void EnableCubeOfNephalem()
         {
             Attributes[GameAttribute.SalvageUnlocked] = true;
-            Attributes.SendChangedMessage(this.InGameClient, this.DynamicID);
+            Attributes.SendChangedMessage(this.InGameClient);
         }
 
         #endregion

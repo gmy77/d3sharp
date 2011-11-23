@@ -16,13 +16,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Mooege.Common.Extensions;
+using Mooege.Net.MooNet;
 
-namespace Mooege.Common
+namespace Mooege.Common.Versions
 {
     /// <summary>
     /// Supported Versions Info.
@@ -53,14 +51,37 @@ namespace Mooege.Common
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
-                {"Aurora 0ee3b2e0e2_public/251 (Nov 16 2011 20:44:30)", 7841},
-                {"Aurora b4367eba86_public/234 (Oct 28 2011 14:20:53)", 7728}
+                {"Aurora 0ee3b2e0e2_public", 7841}, 
+                {"Aurora b4367eba86_public", 7728}
             };
 
             /// <summary>
-            /// Auth module's (RequestPassword) hash.
+            /// Auth module's hash map for client platforms.
             /// </summary>
-            public static byte[] AuthModuleHash = "8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray();
+            public static Dictionary<MooNetClient.ClientPlatform, byte[]> AuthModuleHashMap = new Dictionary<MooNetClient.ClientPlatform, byte[]>()
+            {
+                { MooNetClient.ClientPlatform.Win,"8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray() },
+                { MooNetClient.ClientPlatform.Mac,"63BC118937E6EA2FAA7B7192676DAEB1B7CA87A9C24ED9F5ACD60E630B4DD7A4".ToByteArray() }
+            };
+
+            public static class Achievements
+            {
+                /// <summary>
+                /// AchievementFile hash.
+                /// </summary>
+                public static string AchievementFileHash = "ef29e59b9394e7c6f694afbb92b70a74c4fd4c96961a8ec490e770371b72e6ab";
+
+                /// <summary>
+                /// AchievementFile filename.
+                /// </summary>
+                public static string AchievementFilename = AchievementFileHash + ".achv";
+
+                /// <summary>
+                /// AchievementFile download URL.
+                /// </summary>
+                public static string AchievementURL = "http://us.depot.battle.net:1119/" + AchievementFilename;
+
+            }
         }
 
         /// <summary>

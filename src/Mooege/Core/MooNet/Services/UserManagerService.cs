@@ -18,11 +18,9 @@
 
 using System;
 using Google.ProtocolBuffers;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
-using bnet.protocol;
-using bnet.protocol.user_manager;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -31,6 +29,7 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
+        public bnet.protocol.Header LastCallHeader { get; set; }
 
         public override void SubscribeToUserManager(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.user_manager.SubscribeToUserManagerRequest request, System.Action<bnet.protocol.user_manager.SubscribeToUserManagerResponse> done)
         {
@@ -38,56 +37,56 @@ namespace Mooege.Core.MooNet.Services
 
             // temp hack: send him all online players on server where he should be normally get list of player he met in his last few games /raist.
 
-            var builder = SubscribeToUserManagerResponse.CreateBuilder();
+            var builder = bnet.protocol.user_manager.SubscribeToUserManagerResponse.CreateBuilder();
             foreach (var client in PlayerManager.OnlinePlayers)
             {
                 if (client == this.Client) continue; // Don't add the requester to the list                
                 if (client.CurrentToon == null) continue;
 
                 Logger.Debug("RecentPlayer => " + client.CurrentToon);
-                var recentPlayer = RecentPlayer.CreateBuilder().SetPlayer(client.CurrentToon.BnetEntityID);
+                var recentPlayer = bnet.protocol.user_manager.RecentPlayer.CreateBuilder().SetPlayer(client.CurrentToon.BnetEntityID);
                 builder.AddRecentPlayers(recentPlayer);
             }
 
             done(builder.Build());
         }
 
-        public override void AddRecentPlayers(IRpcController controller, AddRecentPlayersRequest request, Action<AddRecentPlayersResponse> done)
+        public override void AddRecentPlayers(IRpcController controller, bnet.protocol.user_manager.AddRecentPlayersRequest request, Action<bnet.protocol.user_manager.AddRecentPlayersResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void RemoveRecentPlayers(IRpcController controller, RemoveRecentPlayersRequest request, Action<RemoveRecentPlayersResponse> done)
+        public override void RemoveRecentPlayers(IRpcController controller, bnet.protocol.user_manager.RemoveRecentPlayersRequest request, Action<bnet.protocol.user_manager.RemoveRecentPlayersResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ReportToon(IRpcController controller, ReportToonRequest request, Action<ReportToonResponse> done)
+        public override void ReportToon(IRpcController controller, bnet.protocol.user_manager.ReportToonRequest request, Action<bnet.protocol.user_manager.ReportToonResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void BlockToon(IRpcController controller, BlockToonRequest request, Action<NoData> done)
+        public override void BlockToon(IRpcController controller, bnet.protocol.user_manager.BlockToonRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void UnblockToons(IRpcController controller, UnblockToonsRequest request, Action<UnblockToonsResponse> done)
+        public override void UnblockToons(IRpcController controller, bnet.protocol.user_manager.UnblockToonsRequest request, Action<bnet.protocol.user_manager.UnblockToonsResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ReportAccount(IRpcController controller, ReportAccountRequest request, Action<ReportAccountResponse> done)
+        public override void ReportAccount(IRpcController controller, bnet.protocol.user_manager.ReportAccountRequest request, Action<bnet.protocol.user_manager.ReportAccountResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void IgnoreInviter(IRpcController controller, IgnoreInviterRequest request, Action<NoData> done)
+        public override void IgnoreInviter(IRpcController controller, bnet.protocol.user_manager.IgnoreInviterRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void UnignoreInviters(IRpcController controller, UnignoreInvitersRequest request, Action<UnignoreInvitersResponse> done)
+        public override void UnignoreInviters(IRpcController controller, bnet.protocol.user_manager.UnignoreInvitersRequest request, Action<bnet.protocol.user_manager.UnignoreInvitersResponse> done)
         {
             throw new NotImplementedException();
         }

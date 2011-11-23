@@ -17,8 +17,7 @@
  */
 
 using System;
-using Google.ProtocolBuffers;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Toons;
@@ -34,6 +33,7 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
+        public bnet.protocol.Header LastCallHeader { get; set; }
 
         public override void Subscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.SubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
@@ -126,7 +126,7 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void Query(IRpcController controller, bnet.protocol.presence.QueryRequest request, Action<bnet.protocol.presence.QueryResponse> done)
+        public override void Query(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.QueryRequest request, Action<bnet.protocol.presence.QueryResponse> done)
         {            
             var builder = bnet.protocol.presence.QueryResponse.CreateBuilder();
 
@@ -157,12 +157,12 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void Ownership(IRpcController controller, bnet.protocol.presence.OwnershipRequest request, Action<bnet.protocol.NoData> done)
+        public override void Ownership(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.OwnershipRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void Heal(IRpcController controller, bnet.protocol.presence.UpdateRequest request, Action<bnet.protocol.NoData> done)
+        public override void Heal(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UpdateRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }

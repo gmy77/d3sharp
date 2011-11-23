@@ -7,3 +7,8 @@ Currently supported:
 * Microsoft Runtime: .NET 4.0
 * Mono Runtime: 2.10.5
 * Game Version: Patch6 (7841)
+
+Requirements:
+
+* OpenSSL-1.0.0.e
+* SQLite 

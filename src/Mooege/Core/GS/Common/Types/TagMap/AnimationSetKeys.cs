@@ -47,6 +47,8 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public static TagKeyInt GenericCast = new TagKeyInt(262144);
         public static TagKeyInt IdleDefault = new TagKeyInt(69632);
         public static TagKeyInt Idle = new TagKeyInt(69968);
+
+        public static TagKeyInt Flee = new TagKeyInt(70768);
         public static TagKeyInt Spawn = new TagKeyInt(70097);
         public static TagKeyInt KnockBackLand = new TagKeyInt(71176);
         public static TagKeyInt KnockBackMegaOuttro = new TagKeyInt(71218);
@@ -66,6 +68,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public static TagKeyInt Dead8 = new TagKeyInt(77840);
         public static TagKeyInt SpecialDead = new TagKeyInt(71440);
         public static TagKeyInt Run = new TagKeyInt(69728);
+        public static TagKeyInt TownRun = new TagKeyInt(69736);
         public static TagKeyInt Walk = new TagKeyInt(69744);
         public static TagKeyInt Attack = new TagKeyInt(69776);
         public static TagKeyInt Attack2 = new TagKeyInt(69792);
@@ -116,7 +119,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
 
         public static TagKeyInt Opening = new TagKeyInt(70416);
         public static TagKeyInt Open = new TagKeyInt(70432);
-        public static TagKeyInt Closing = new TagKeyInt(70438);
+        public static TagKeyInt Closing = new TagKeyInt(70448);
 
         public static TagKeyInt RootBreak = new TagKeyInt(196608);
 

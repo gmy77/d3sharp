@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Commands

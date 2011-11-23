@@ -18,16 +18,14 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Mooege.Common;
 using Mooege.Common.Helpers.Math;
+using Mooege.Common.Logging;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Map;
-using Mooege.Common.Helpers;
 using Mooege.Core.GS.Common.Types.TagMap;
-using System;
 using Mooege.Common.MPQ.FileFormats;
 using World = Mooege.Core.GS.Map.World;
 using Scene = Mooege.Core.GS.Map.Scene;

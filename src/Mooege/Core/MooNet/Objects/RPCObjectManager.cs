@@ -18,7 +18,7 @@
 
 using System;
 using System.Collections.Generic;
-using Mooege.Common;
+using Mooege.Common.Logging;
 
 namespace Mooege.Core.MooNet.Objects
 {

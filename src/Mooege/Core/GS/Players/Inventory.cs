@@ -17,6 +17,7 @@
  */
 
 using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Items;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
@@ -116,7 +117,7 @@ namespace Mooege.Core.GS.Players
                     if (baseItem.Attributes[GameAttribute.ItemStackQuantityLo] + item.Attributes[GameAttribute.ItemStackQuantityLo] < baseItem.ItemDefinition.MaxStackAmount)
                     {
                         baseItem.Attributes[GameAttribute.ItemStackQuantityLo] += item.Attributes[GameAttribute.ItemStackQuantityLo];
-                        baseItem.Attributes.SendChangedMessage(_owner.InGameClient, baseItem.DynamicID);
+                        baseItem.Attributes.SendChangedMessage(_owner.InGameClient);
 
                         // Item amount successful added. Don't place item in inventory instead destroy it.
                         item.Destroy();
@@ -351,7 +352,7 @@ namespace Mooege.Core.GS.Players
         {
             Item itemFrom = GetItem((uint)msg.FromID);
             itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
-            itemFrom.Attributes.SendChangedMessage(_owner.InGameClient, itemFrom.DynamicID);
+            itemFrom.Attributes.SendChangedMessage(_owner.InGameClient);
 
             Item item = ItemGenerator.CreateItem(_owner, itemFrom.ItemDefinition);
             item.Attributes[GameAttribute.ItemStackQuantityLo] = (int)msg.Amount;
@@ -372,19 +373,8 @@ namespace Mooege.Core.GS.Players
             itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
             itemTo.Attributes[GameAttribute.ItemStackQuantityLo] += (int)msg.Amount;
 
-<<<<<<< HEAD
-            itemFrom.Attributes.SendChangedMessage(_owner.InGameClient, itemFrom.DynamicID);
-            itemTo.Attributes.SendChangedMessage(_owner.InGameClient, itemTo.DynamicID);
-=======
-
-            // TODO: This needs to change the attribute on the item itself. /komiga
-            // Update source
             itemFrom.Attributes.SendChangedMessage(_owner.InGameClient);
-
-            // TODO: This needs to change the attribute on the item itself. /komiga
-            // Update target
             itemTo.Attributes.SendChangedMessage(_owner.InGameClient);
->>>>>>> 37798121696d22c72d2c166e19641cc5e45593be
         }
 
         private void OnInventoryDropItemMessage(InventoryDropItemMessage msg)

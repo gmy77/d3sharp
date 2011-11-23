@@ -19,15 +19,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Mooege.Common.Helpers.Math;
+using Mooege.Common.Logging;
 using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS;
 using Mooege.Common.MPQ.FileFormats;
-using Mooege.Common;
-using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Games;
@@ -226,7 +224,6 @@ namespace Mooege.Core.GS.Players
         {
             player.InGameClient.SendMessage(new EndConversationMessage()
             {
-                Field0 = currentUniqueLineID,
                 SNOConversation = asset.Header.SNOId,
                 ActorId = player.DynamicID
             });
@@ -277,7 +274,7 @@ namespace Mooege.Core.GS.Players
             // TODO Actor id should be CurrentSpeaker.DynamicID not PrimaryNPC.ActorID. This is a workaround because no audio for the player is playing otherwise
             player.InGameClient.SendMessage(new PlayConvLineMessage()
             {
-                ActorID = GetActorBySNO(asset.SNOPrimaryNpc).DynamicID, //CurrentSpeaker.DynamicID
+                ActorID = GetSpeaker(currentLineNode.Speaker1).DynamicID, // GetActorBySNO(asset.SNOPrimaryNpc).DynamicID,
                 Field1 = new uint[9]
                         {
                             player.DynamicID, asset.SNOPrimaryNpc != -1 ? GetActorBySNO(asset.SNOPrimaryNpc).DynamicID : 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
@@ -288,6 +285,7 @@ namespace Mooege.Core.GS.Players
                     SNOConversation = asset.Header.SNOId,
                     Field1 = 0x00000000,
                     Field2 = false,
+                    Field3 = true,
                     LineID = currentLineNode.LineID,
                     Speaker = (int)currentLineNode.Speaker1,
                     Field5 = -1,

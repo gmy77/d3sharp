@@ -21,8 +21,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using Mooege.Common;
 using Mooege.Common.Extensions;
+using Mooege.Common.Logging;
 
 namespace Mooege.Net
 {

@@ -18,8 +18,8 @@
 
 using System;
 using Google.ProtocolBuffers;
-using Mooege.Common;
 using Mooege.Common.Extensions;
+using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Friends;
 using Mooege.Net.MooNet;
@@ -31,6 +31,7 @@ namespace Mooege.Core.MooNet.Services
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
+        public bnet.protocol.Header LastCallHeader { get; set; }
 
         public override void SubscribeToFriends(IRpcController controller, bnet.protocol.friends.SubscribeToFriendsRequest request, Action<bnet.protocol.friends.SubscribeToFriendsResponse> done)
         {

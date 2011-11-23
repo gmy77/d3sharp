@@ -66,8 +66,9 @@ namespace GameMessageViewer
 
             // Create a List of only MessageNodes
             foreach (BufferNode bn in nodes)
-                foreach (MessageNode mn in bn.allNodes)
-                    mNodes.Add(mn);
+                foreach (TreeNode mn in bn.allNodes)
+                    if(mn is MessageNode)
+                        mNodes.Add(mn as MessageNode);
 
             comboBox1.SelectedIndex = 0;
             this.ShowDialog();

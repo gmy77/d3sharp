@@ -159,8 +159,8 @@ namespace Mooege.Core.GS.Skills
 
             public class FurySpenders
             {
-                public const int HammerOfTheAncients = 0x000134E5;
-                public const int ThreateningShout = 0x0001389C;
+                public const int HammerOfTheAncients = 0x0001389C;
+                public const int ThreateningShout = 0x000134E5;
                 public const int BattleRage = 0x000134E4;
                 public const int WeaponThrow = 0x00016EBD;
                 public const int Rend = 0x00011348;

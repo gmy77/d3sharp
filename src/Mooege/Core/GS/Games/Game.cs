@@ -22,7 +22,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Generators;
 using Mooege.Core.GS.Map;
@@ -136,6 +136,7 @@ namespace Mooege.Core.GS.Games
         public uint NewWorldID { get { return _lastWorldID++; } }
 
         public QuestManager Quests { get; private set; }
+        public AI.Pather Pathfinder { get; private set; }
 
         /// <summary>
         /// Creates a new game with given gameId.
@@ -153,6 +154,9 @@ namespace Mooege.Core.GS.Games
             this._tickWatch = new Stopwatch();
             var loopThread = new Thread(Update) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture }; ; // create the game update thread.
             loopThread.Start();
+            Pathfinder = new Mooege.Core.GS.AI.Pather(this); //Creates the "Game"s single Pathfinder thread, Probably could be pushed further up and have a single thread handling all path req's for all running games. - DarkLotus
+            var patherThread = new Thread(Pathfinder.UpdateLoop) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture };
+            patherThread.Start();
         }
 
         #region update & tick managment
@@ -395,5 +399,6 @@ namespace Mooege.Core.GS.Games
         }
 
         #endregion
+
     }
 }

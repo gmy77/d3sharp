@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mooege.Common;
+using Mooege.Common.Logging;
 using Mooege.Net.GS.Message.Definitions.Combat;
 using Mooege.Common.Helpers;
 
