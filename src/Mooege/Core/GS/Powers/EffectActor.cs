@@ -22,6 +22,7 @@ using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Ticker;
+using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -31,20 +32,30 @@ namespace Mooege.Core.GS.Powers
 
         public override ActorType ActorType { get { return Actors.ActorType.ClientEffect; } }
 
-        public EffectActor(World world, int actorSNO, Vector3D position, float angle, TickTimer timeout = null)
-            : base(world, actorSNO)
+        public EffectActor(PowerContext context, int actorSNO, Vector3D position)
+            : base(context.World, actorSNO)
         {
-            FacingAngle = (float)Math.Cos(angle / 2f);
-            RotationAxis = new Vector3D(0, 0, (float)Math.Sin(angle / 2f));
-
             this.Field2 = 0x8;
             if (this.Scale == 0f)
                 this.Scale = 1f;
             this.Position = position;
-            
-            this.Timeout = timeout;
-            
-            world.Enter(this);
+
+            this.Timeout = null;
+
+            // copy in important effect params from user
+            this.Attributes[GameAttribute.Rune_A, context.PowerSNO] = context.User.Attributes[GameAttribute.Rune_A, context.PowerSNO];
+            this.Attributes[GameAttribute.Rune_B, context.PowerSNO] = context.User.Attributes[GameAttribute.Rune_B, context.PowerSNO];
+            this.Attributes[GameAttribute.Rune_C, context.PowerSNO] = context.User.Attributes[GameAttribute.Rune_C, context.PowerSNO];
+            this.Attributes[GameAttribute.Rune_D, context.PowerSNO] = context.User.Attributes[GameAttribute.Rune_D, context.PowerSNO];
+            this.Attributes[GameAttribute.Rune_E, context.PowerSNO] = context.User.Attributes[GameAttribute.Rune_E, context.PowerSNO];
+        }
+
+        public void Spawn(float facingAngle = 0)
+        {
+            FacingAngle = (float)Math.Cos(facingAngle / 2f);
+            RotationAxis = new Vector3D(0, 0, (float)Math.Sin(facingAngle / 2f));
+
+            this.World.Enter(this);
         }
 
         public void Update(int tickCounter)

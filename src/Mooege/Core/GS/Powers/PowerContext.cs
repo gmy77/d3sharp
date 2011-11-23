@@ -149,7 +149,7 @@ namespace Mooege.Core.GS.Powers
 
         public EffectActor SpawnEffect(int actorSNO, Vector3D position, float angle = 0, TickTimer timeout = null)
         {
-            if (angle == -1f)
+            if (angle == -1)
                 angle = (float)(Rand.NextDouble() * (Math.PI * 2));
             if (timeout == null)
             {
@@ -159,7 +159,10 @@ namespace Mooege.Core.GS.Powers
                 timeout = _defaultEffectTimeout;
             }
 
-            return new EffectActor(World, actorSNO, position, angle, timeout);
+            var actor = new EffectActor(this, actorSNO, position);
+            actor.Timeout = timeout;
+            actor.Spawn(angle);
+            return actor;
         }
 
         public EffectActor SpawnEffect(int actorSNO, Vector3D position, Actor facingTarget, TickTimer timeout = null)

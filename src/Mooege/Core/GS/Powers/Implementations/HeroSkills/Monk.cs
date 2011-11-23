@@ -163,29 +163,39 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            UsePrimaryResource(90f);
-            StartCooldown(WaitSeconds(30f));
-
-            Vector3D startpos;
-            if (Target == null)
-                startpos = User.Position;
-            else
-                startpos = TargetPosition;
+            //UsePrimaryResource(50f);
+            //StartCooldown(WaitSeconds(30f));
+            
+            var groundEffect = SpawnProxy(TargetPosition, WaitInfinite());
+            groundEffect.PlayEffectGroup(145041);
 
             for (int n = 0; n < 7; ++n)
             {
-                IList<Actor> nearby = GetEnemiesInRange(startpos, 20f, 1);
+                IList<Actor> nearby = GetEnemiesInRange(TargetPosition, 25f);
                 if (nearby.Count > 0)
                 {
-                    SpawnEffect(99063, nearby[0].Position, -1);
-                    WeaponDamage(nearby[0], 2.15f, DamageType.Physical);
-                    yield return WaitSeconds(0.1f);
+                    var target = nearby[Rand.Next(0, nearby.Count)];
+
+                    SpawnEffect(99063, target.Position, -1);                    
+                    yield return WaitSeconds(0.2f);
+
+                    if (Rune_E > 0)
+                    {
+                        target.PlayEffectGroup(99098);
+                        var splashTargets = GetEnemiesInRange(target.Position, 5f);
+                        splashTargets.Remove(target); // don't hit target with splash
+                        WeaponDamage(splashTargets, 0.31f, DamageType.Holy);
+                    }
+
+                    WeaponDamage(target, 1.15f, DamageType.Physical);
                 }
                 else
                 {
                     break;
                 }
             }
+
+            groundEffect.Destroy();
         }
     }
 
@@ -309,7 +319,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            UsePrimaryResource(15f);
+            //UsePrimaryResource(15f);
 
             // dashing strike never specifies the target's id so we just search for the closest target
             // ultimately need to know the radius of each target and select the one most covered
@@ -334,11 +344,17 @@ namespace Mooege.Core.GS.Powers.Implementations
                 // if no target, always dash fixed amount
                 TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, User.Position, 13f);
             }
-
-            _SetupAttributes(true);
-
-            var dashTimout = WaitSeconds(0.15f);
-            int dashTicks = dashTimout.TimeoutTick - User.World.Game.TickCounter;
+            
+            // dash speed seems to always be actor speed * 10
+            float speed = User.Attributes[GameAttribute.Running_Rate_Total] * 10f;
+            TickTimer minDashWait = WaitSeconds(0.15f);
+            TickTimer waitDashEnd = new RelativeTickTimer(World.Game, (int)(PowerMath.Distance2D(User.Position, TargetPosition) / speed));
+            
+            // if dash ticks is too small the effect won't show at all, so always make it at least minDashWait
+            waitDashEnd = minDashWait.TimeoutTick > waitDashEnd.TimeoutTick ? minDashWait : waitDashEnd;
+            
+            // dashing effect buff
+            AddBuff(User, new DashingBuff0(waitDashEnd));
             
             // TODO: Generalize this and put it in Actor
             User.World.BroadcastInclusive(new NotifyActorMovementMessage
@@ -347,31 +363,48 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Position = TargetPosition,
                 Angle = PowerMath.AngleLookAt(User.Position, TargetPosition),
                 Field3 = true, // turn instantly toward target
-                Speed = PowerMath.Distance(User.Position, TargetPosition) / dashTicks, // speed, distance per tick
+                Speed = speed,
                 Field5 = 0x9206, // alt: 0x920e, not sure what this param is for.
                 AnimationTag = 69808, // dashing strike attack animation
                 Field7 = 6, // ticks to wait before playing animation
             }, User);
             User.Position = TargetPosition;
 
-            yield return dashTimout;
-
-            _SetupAttributes(false);
+            yield return waitDashEnd;
 
             if (Target != null && Target.World != null) // target could've died or left world
             {
                 User.TranslateFacing(Target.Position, true);
-                WeaponDamage(Target, 0.65f, DamageType.Physical);
+                yield return WaitSeconds(0.1f);
+                User.PlayEffectGroup(113720);
+                WeaponDamage(Target, 1.60f, DamageType.Physical);
             }
         }
-        
-        private void _SetupAttributes(bool active)
+
+        [ImplementsBuffSlot(0)]
+        class DashingBuff0 : PowerBuff
         {
-            int intval = active ? 1 : 0;
-            User.Attributes[GameAttribute.Buff_Icon_Count0, PowerSNO] = intval;
-            User.Attributes[GameAttribute.Power_Buff_0_Visual_Effect_None, PowerSNO] = active; // switch on effect
-            User.Attributes[GameAttribute.Hidden] = active;
-            User.Attributes.BroadcastChangedIfRevealed();
+            public DashingBuff0(TickTimer timeout)
+            {
+                Timeout = timeout;
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+
+                User.Attributes[GameAttribute.Hidden] = true;
+                User.Attributes.BroadcastChangedIfRevealed();
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+                User.Attributes[GameAttribute.Hidden] = false;
+                User.Attributes.BroadcastChangedIfRevealed();
+            }
         }
     }
 }

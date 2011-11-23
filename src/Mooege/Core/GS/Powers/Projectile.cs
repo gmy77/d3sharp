@@ -24,6 +24,7 @@ using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Ticker;
 using Mooege.Common.Logging;
+using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -66,6 +67,13 @@ namespace Mooege.Core.GS.Powers
             this.Context = context;
             this.Position = new Vector3D(position);
             this.Timeout = new SecondsTickTimer(context.World.Game, 2f);  // 2 second default timeout for projectiles
+
+            // copy in important effect params from user
+            this.Attributes[GameAttribute.Rune_A, context.PowerSNO] = context.User.Attributes[GameAttribute.Rune_A, context.PowerSNO];
+            this.Attributes[GameAttribute.Rune_B, context.PowerSNO] = context.User.Attributes[GameAttribute.Rune_B, context.PowerSNO];
+            this.Attributes[GameAttribute.Rune_C, context.PowerSNO] = context.User.Attributes[GameAttribute.Rune_C, context.PowerSNO];
+            this.Attributes[GameAttribute.Rune_D, context.PowerSNO] = context.User.Attributes[GameAttribute.Rune_D, context.PowerSNO];
+            this.Attributes[GameAttribute.Rune_E, context.PowerSNO] = context.User.Attributes[GameAttribute.Rune_E, context.PowerSNO];
 
             _arrivalTime = null;
             _lastUpdateTick = 0;
