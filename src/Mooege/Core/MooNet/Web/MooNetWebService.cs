@@ -19,16 +19,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using Mooege.Core.MooNet.Online;
 using Mooege.Net.WebServices;
 
-namespace Mooege.Core.MooNet.Online
+namespace Mooege.Core.MooNet.Web
 {
     /// <summary>
     /// Web service that can return statistics on online players and so.
     /// </summary>
-    [ServiceContract(Name="Online")]
-    public class OnlineWebService : IWebService
+    [ServiceContract(Name="MooNet")]
+    public class MooNetWebService : IWebService
     {
+        /// <summary>
+        /// Always returns true, so that clients can see if the moonet-server is online.
+        /// </summary>
+        /// <returns>true</returns>
+        [OperationContract]
+        public bool Ping()
+        {
+            return true;
+        }
+
         /// <summary>
         /// Returns the online players count.
         /// </summary>
@@ -47,6 +58,6 @@ namespace Mooege.Core.MooNet.Online
         public List<string> PlayersList()
         {
             return (from client in PlayerManager.OnlinePlayers where client.CurrentToon != null select client.CurrentToon.Name).ToList();
-        }
+        }        
     }
 }

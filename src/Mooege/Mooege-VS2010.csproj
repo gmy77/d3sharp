@@ -100,6 +100,7 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -238,6 +239,7 @@
     <Compile Include="Core\GS\Players\Equipment.cs" />
     <Compile Include="Core\GS\Ticker\SteppedTickTimer.cs" />
     <Compile Include="Core\GS\Ticker\TickTimer.cs" />
+    <Compile Include="Core\GS\Web\GSWebService.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
@@ -300,6 +302,7 @@
     <Compile Include="Core\MooNet\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\MooNet\Toons\ToonManager.cs" />
     <Compile Include="Common\Logging\LogConfig.cs" />
+    <Compile Include="Core\MooNet\Web\AccountWebService.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
@@ -553,7 +556,7 @@
     <Compile Include="Net\NATConfig.cs" />
     <Compile Include="Net\Utils.cs" />
     <Compile Include="Net\WebServices\IWebService.cs" />
-    <Compile Include="Core\MooNet\Online\OnlineWebService.cs" />
+    <Compile Include="Core\MooNet\Web\MooNetWebService.cs" />
     <Compile Include="Net\WebServices\ServiceManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Net\Connection.cs" />

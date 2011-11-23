@@ -30,7 +30,6 @@ namespace Mooege.Net.WebServices
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        private readonly static Uri ServiceUri = new Uri("http://localhost:9000/");
         private readonly List<ServiceHost> _serviceHosts = new List<ServiceHost>();
         private readonly Dictionary<Type, ServiceContractAttribute> _webServices = new Dictionary<Type, ServiceContractAttribute>();        
 
@@ -52,14 +51,19 @@ namespace Mooege.Net.WebServices
 
         public void Run()
         {
-            foreach(var pair in this._webServices)
-            {
-                var serviceHost = new ServiceHost(pair.Key, ServiceUri);
-                var behavior = new ServiceMetadataBehavior { HttpGetEnabled = true };
-                serviceHost.Description.Behaviors.Add(behavior);
+            var httpGetBehavior = new ServiceMetadataBehavior { HttpGetEnabled = true };                        
 
-                serviceHost.AddServiceEndpoint(typeof (IMetadataExchange), new BasicHttpBinding(), "MEX");
-                serviceHost.AddServiceEndpoint(pair.Key, new BasicHttpBinding(), pair.Value.Name);
+            foreach (var pair in this._webServices)
+            {
+                var uri = new Uri("http://localhost:9000/" + pair.Value.Name);
+                var serviceHost = new ServiceHost(pair.Key, uri);
+            
+                serviceHost.Description.Behaviors.Add(httpGetBehavior);
+                var debugBehavior = (ServiceDebugBehavior) serviceHost.Description.Behaviors[typeof (ServiceDebugBehavior)];
+                debugBehavior.IncludeExceptionDetailInFaults = true;
+
+                serviceHost.AddServiceEndpoint(typeof(IMetadataExchange), new BasicHttpBinding(), "Mex");
+                serviceHost.AddServiceEndpoint(pair.Key, new BasicHttpBinding(), "");
 
                 serviceHost.Open();
                 this._serviceHosts.Add(serviceHost);
