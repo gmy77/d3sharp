@@ -17,7 +17,7 @@
  */
 
 using System.IO;
-using Mooege.Common.Versions;
+using Version = Mooege.Common.Versions.VersionInfo.MooNet.Achievements;
 using Mooege.Common.Logging;
 
 namespace Mooege.Core.MooNet.Achievement
@@ -30,21 +30,54 @@ namespace Mooege.Core.MooNet.Achievement
 
         static AchievementManager()
         {
-            if (File.Exists(VersionInfo.MooNet.AchievementFileHash + ".achv"))
+            if (File.Exists(Version.AchievementFilename))
             {
-                var br = new BinaryReader(File.Open(VersionInfo.MooNet.AchievementFileHash + ".achv", FileMode.Open));
+                var br = new BinaryReader(File.Open(Version.AchievementFilename, FileMode.Open));
                 Achievements = bnet.protocol.achievements.AchievementFile.ParseFrom(br.ReadBytes((int)br.BaseStream.Length));
                 br.Close();
                 Logger.Info("Achievement file loaded from disk.");
             }
             else
             {
-                Logger.Info("Achievement file not found. Downloading...");
-                byte[] data = new System.Net.WebClient().DownloadData("http://us.depot.battle.net:1119/" + VersionInfo.MooNet.AchievementFileHash + ".achv");
-                var br = new BinaryWriter(File.Open(VersionInfo.MooNet.AchievementFileHash + ".achv", FileMode.CreateNew));
-                br.Write(data);
-                br.Close();
-                Achievements = bnet.protocol.achievements.AchievementFile.ParseFrom(data);
+                Logger.Info("Achievement file not found. Attempting to download...");
+                var attempts = 0;
+                byte[] data = new byte[] { };
+                while (attempts < 5)
+                {
+                    try
+                    {
+                        data = new System.Net.WebClient().DownloadData(Version.AchievementURL);
+                        break;
+                    }
+                    catch (System.Net.WebException)
+                    {
+                        attempts++;
+                    }
+                }
+                try
+                {
+                    Achievements = bnet.protocol.achievements.AchievementFile.ParseFrom(data);
+                    if (attempts < 5)
+                    {
+                        var br = new BinaryWriter(File.Open(Version.AchievementFilename, FileMode.CreateNew));
+                        br.Write(data);
+                        br.Close();
+                    }
+                    else
+                    {
+                        Logger.Error("AchievementFile could not be downloaded. Aborted after 5 tries.");
+                    }
+                }
+                catch (Google.ProtocolBuffers.InvalidProtocolBufferException)
+                {
+                    Achievements = bnet.protocol.achievements.AchievementFile.CreateBuilder().Build();
+                    Logger.Error("AchievementFile could not be downloaded and parsed correctly.");
+                }
+                catch (IOException)
+                {
+                    Logger.Error("{0} could not be written to.", Version.AchievementFilename);
+                }
+
             }
         }
 

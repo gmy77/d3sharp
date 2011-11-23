@@ -85,6 +85,7 @@ namespace Mooege.Common.MPQ.FileFormats
             public int NavMeshSquareCount { get; private set; }
             public float Float0 { get; private set; }
             public List<NavMeshSquare> Squares = new List<NavMeshSquare>();
+            public byte[,] WalkGrid;
             public string Filename { get; private set; }
 
             public NavMeshDef(MpqFileStream stream)
@@ -95,6 +96,34 @@ namespace Mooege.Common.MPQ.FileFormats
                 this.NavMeshSquareCount = stream.ReadValueS32();
                 this.Float0 = stream.ReadValueF32();
                 this.Squares = stream.ReadSerializedData<NavMeshSquare>(this.NavMeshSquareCount);
+               
+                if (SquaresCountX < 64 && SquaresCountY < 64)
+                {
+                    WalkGrid = new byte[64, 64];
+                }
+                else if (SquaresCountX < 128 && SquaresCountY < 128)
+                {
+                    WalkGrid = new byte[128, 128]; //96*96
+                }
+                else if (SquaresCountX > 128 || SquaresCountY > 128)
+                {
+                    WalkGrid = new byte[256, 256];
+                }
+
+                int X, Y;
+                // Loop thru each NavmeshSquare in the array, and fills a grid.
+                for (int i = 0; i < NavMeshSquareCount; i++)
+                {
+                    int countNavSquare = i;
+                    X = 0; Y = 0;
+                    while (countNavSquare > SquaresCountY - 1)
+                    {
+                        Y++;
+                        countNavSquare -= SquaresCountY;
+                    }
+                    X = countNavSquare;
+                    WalkGrid[X, Y] = (byte)(Squares[i].Flags & Scene.NavCellFlags.AllowWalk); // Set the grid to 0x1 if its walkable, left as 0 if not. - DarkLotus
+                }
 
                 stream.Position += (3 * 4);
                 this.Filename = stream.ReadString(256, true);
@@ -152,12 +181,12 @@ namespace Mooege.Common.MPQ.FileFormats
         public class NavMeshSquare : ISerializableData
         {
             public float Float0 { get; private set; }
-            public int Flags { get; private set; }
+            public NavCellFlags Flags { get; private set; }
 
             public void Read(MpqFileStream stream)
             {
                 this.Float0 = stream.ReadValueF32();
-                this.Flags = stream.ReadValueS32();
+                this.Flags = (NavCellFlags)stream.ReadValueS32();
             }
         }
 
