@@ -36,6 +36,8 @@ namespace Mooege.Core.MooNet.Accounts
         public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
         public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
         public D3.PartyMessage.ScreenStatus ScreenStatus { get; set; }
+        public List<bnet.protocol.achievements.AchievementUpdateRecord> Achievements { get; set; }
+        public List<bnet.protocol.achievements.CriteriaUpdateRecord> AchievementCriteria { get; set; }
 
         public string Email { get; private set; } // I - Username
         public byte[] Salt { get; private set; }  // s- User's salt.
@@ -158,6 +160,9 @@ namespace Mooege.Core.MooNet.Accounts
                 .SetUseSigilVariant(true)
                 .SetEpicBanner(0)
                 .Build();
+
+            this.Achievements = new List<bnet.protocol.achievements.AchievementUpdateRecord>();
+            this.AchievementCriteria = new List<bnet.protocol.achievements.CriteriaUpdateRecord>();
         }
 
         public bnet.protocol.presence.Field QueryField(bnet.protocol.presence.FieldKey queryKey)

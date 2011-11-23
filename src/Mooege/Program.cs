@@ -26,6 +26,7 @@ using Mooege.Core.GS.Items;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet;
+using Mooege.Core.MooNet.Achievement;
 using Environment = System.Environment;
 
 namespace Mooege
@@ -65,6 +66,9 @@ namespace Mooege
             }
 
             Logger.Info("Item database loaded with a total of {0} item definitions.", ItemGenerator.TotalItems);
+
+            Logger.Info("Achievement file parsed with a total of {0} achievements and {1} criteria in {2} categories.",
+                AchievementManager.TotalAchievements, AchievementManager.TotalCriteria, AchievementManager.TotalCategories);
 
             StartupServers();
         }

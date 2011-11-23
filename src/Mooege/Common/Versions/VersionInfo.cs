@@ -63,6 +63,25 @@ namespace Mooege.Common.Versions
                 { MooNetClient.ClientPlatform.Win,"8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray() },
                 { MooNetClient.ClientPlatform.Mac,"63BC118937E6EA2FAA7B7192676DAEB1B7CA87A9C24ED9F5ACD60E630B4DD7A4".ToByteArray() }
             };
+
+            public static class Achievements
+            {
+                /// <summary>
+                /// AchievementFile hash.
+                /// </summary>
+                public static string AchievementFileHash = "ef29e59b9394e7c6f694afbb92b70a74c4fd4c96961a8ec490e770371b72e6ab";
+
+                /// <summary>
+                /// AchievementFile filename.
+                /// </summary>
+                public static string AchievementFilename = AchievementFileHash + ".achv";
+
+                /// <summary>
+                /// AchievementFile download URL.
+                /// </summary>
+                public static string AchievementURL = "http://us.depot.battle.net:1119/" + AchievementFilename;
+
+            }
         }
 
         /// <summary>

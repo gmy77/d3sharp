@@ -242,6 +242,7 @@
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
     <Compile Include="Core\Cryptography\ARC4.cs" />
+    <Compile Include="Core\MooNet\Achievement\AchievementManager.cs" />
     <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
     <Compile Include="Core\Cryptography\SRP6a.cs" />
     <Compile Include="Core\MooNet\Authentication\Config.cs" />
