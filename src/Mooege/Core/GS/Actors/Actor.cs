@@ -148,7 +148,7 @@ namespace Mooege.Core.GS.Actors
         public Mooege.Common.MPQ.FileFormats.AnimSet AnimationSet { get; private set; }
 
         // TODO: read them from MPQ data's instead /raist.
-        public float WalkSpeed = 0.2797852f;
+        public float WalkSpeed = 0.108f;//0.2797852f;
         public float RunSpeed = 0.3598633f;
 
         // Some ACD uncertainties /komiga.

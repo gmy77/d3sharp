@@ -1,3 +1,7 @@
+@CHOICE /C:YN /M:"Have you made sure field 'item' in QuestProto.QuestReward has been renamed to 'item_granted'"
+@IF ERRORLEVEL 2 goto :end
+
+
 CD definitions
 
 "../compilers/protogen_csharp.exe" --proto_path=./ --include_imports -expand_namespace_directories=true -cls_compliance=false -ignore_google_protobuf=true -service_generator_type=GENERIC -output_directory=../bin/csharp/ lib\config\process_config.proto 
@@ -59,3 +63,5 @@ CD definitions
 "../compilers/protogen_csharp.exe" --proto_path=./ --include_imports -expand_namespace_directories=true -cls_compliance=false -ignore_google_protobuf=true -service_generator_type=GENERIC -output_directory=../bin/csharp/ service\exchange\definition\exchange.proto 
 
 pause
+
+:end
