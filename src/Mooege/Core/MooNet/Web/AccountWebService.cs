@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Linq;
 using System.ServiceModel;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Net.WebServices;
@@ -26,7 +27,7 @@ namespace Mooege.Core.MooNet.Web
     public class AccountWebService : IWebService
     {        
         [OperationContract]
-        public bool Create(string email, string password)
+        public bool CreateAccount(string email, string password)
         {
             if (string.IsNullOrEmpty(email))
                 throw new FaultException(new FaultReason("Email parameter can not be null or empty."));
@@ -37,7 +38,7 @@ namespace Mooege.Core.MooNet.Web
             if (password.Length < 8 || password.Length > 16)
                 throw new FaultException(new FaultReason("Password should be a minimum of 8 and a maximum of 16 characters."));
 
-            if (AccountManager.GetAccountByEmail(email) != null)
+            if (AccountManager.GetAccountByEmail(email.ToLower()) != null)
                 throw new FaultException(new FaultReason(string.Format("An account already exists for email address {0}.", email)));
 
             var account = AccountManager.CreateAccount(email, password);
@@ -45,15 +46,44 @@ namespace Mooege.Core.MooNet.Web
         }
 
         [OperationContract]
-        public bool Exists(string email)
+        public bool AccountExists(string email)
         {
             if (string.IsNullOrEmpty(email))
                 throw new FaultException(new FaultReason("Email parameter can not be null or empty."));
 
-            if (AccountManager.GetAccountByEmail(email) != null)
-                return true;
-            else
-                return false;
+            return AccountManager.GetAccountByEmail(email.ToLower()) != null;
+        }
+
+        [OperationContract]
+        public bool VerifyPassword(string email, string password)
+        {
+            if (string.IsNullOrEmpty(email))
+                throw new FaultException(new FaultReason("Email parameter can not be null or empty."));
+
+            if (string.IsNullOrEmpty(password))
+                throw new FaultException(new FaultReason("Password parameter can not be null or empty."));
+
+            if (password.Length < 8 || password.Length > 16)
+                throw new FaultException(new FaultReason("Password should be a minimum of 8 and a maximum of 16 characters."));
+
+            var account = AccountManager.GetAccountByEmail(email.ToLower());
+
+            if (account == null)
+                throw new FaultException(new FaultReason(string.Format("Accout does not exist for email address {0}.", email)));
+
+            return account.VerifyPassword(password);
+        }
+
+        [OperationContract]
+        public int TotalAccounts()
+        {
+            return AccountManager.TotalAccounts;
+        }
+
+        [OperationContract]
+        public int TotalToons()
+        {
+            return AccountManager.AccountsList.Sum(account => account.Toons.Count);
         }
     }
 }

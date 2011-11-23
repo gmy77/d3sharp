@@ -133,7 +133,9 @@ namespace Mooege
         {
             StartMooNet();
             StartGS();
-            StartWebServices();
+
+            if(Net.WebServices.Config.Instance.Enabled)
+                StartWebServices();
 
             while (true)
             {

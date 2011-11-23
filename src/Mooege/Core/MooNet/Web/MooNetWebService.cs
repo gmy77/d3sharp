@@ -37,7 +37,7 @@ namespace Mooege.Core.MooNet.Web
         [OperationContract]
         public bool Ping()
         {
-            return true;
+            return true; // TODO: actually fix it so that it's aware of services being stopped /raist.
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Mooege.Core.MooNet.Web
         /// </summary>
         /// <returns>Online player count.</returns>
         [OperationContract]
-        public int OnlinePlayerCount()
+        public int OnlinePlayersCount()
         {
             return PlayerManager.OnlinePlayers.Count;
         }
@@ -57,7 +57,7 @@ namespace Mooege.Core.MooNet.Web
         [OperationContract]
         public List<string> OnlinePlayersList()
         {
-            return (from client in PlayerManager.OnlinePlayers where client.CurrentToon != null select client.CurrentToon.Name).ToList();
-        }        
+            return (from client in PlayerManager.OnlinePlayers where client.CurrentToon != null select string.Format("{0}#{1}", client.CurrentToon.Name, client.CurrentToon.HashCode)).ToList();
+        }
     }
 }

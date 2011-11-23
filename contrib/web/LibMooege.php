@@ -18,43 +18,81 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-$mooege = new LibMooege();
-
-$count=$mooege->OnlinePlayerCount();
-print_r($count);
-
-$players=$mooege->OnlinePlayersList();
-print_r($players);
+//ServicesInfo(); // Only comment-out this line when you want to debug.
 
 /**
  * LibMooege class that connect Mooege's web-services and communicate with them.
+ * Requires php_soap extension to be activated.
  */
 class LibMooege
 {
+    /** 
+     * Is connected to mooege web-services?
+     * @var type $connected
+     */
     var $connected=false;
-    var $servicesAddress; // web-services address..
+        
+    /** 
+     * Mooege web-services address
+     * @var type $servicesAddress
+     */
+    var $servicesAddress;
+
+    /** 
+     * SOAP client for Core service.
+     * @var type SOAPClient
+     */
+    var $core; 
     
-    var $moonet; // SOAP client for MooNet service.
-    var $gs; // SOAP client for GS service.
-    var $accounts; // SOAP client for accounts service.    
+    /** 
+     * SOAP client for MooNet service.
+     * @var type SOAPClient
+     */
+    var $moonet; 
+    
+    /**
+     * SOAP client for GS service.
+     * @var type $gs
+     */
+    var $gameserver;
+    
+    /**
+     * SOAP client for accounts service
+     * @var type $accounts.
+     */
+    var $accounts;
     
     /**
      * Creates a new instance of the LibMooege class.
-     * @param type $address Base 
-     * @param type $port 
+     * @param type $address - Base address for mooege web-services.
+     * @param type $port - Port for mooege web-services.
+     * @param type $default_timeout - Default timeout value for connecting soap services.
      */
-    public function __construct($address = "http://localhost", $port = 9000)
+    public function __construct($address = "http://localhost", $port = 9000, $default_timeout = 15)
     {                
-        $this->serviceAddress="$address:$port";
-        $this->CreateSOAPClients();
+        $this->servicesAddress="$address:$port";
+        $this->CreateSOAPClients($default_timeout);
     }
     
-    private function CreateSOAPClients()
+    /**
+     * Creates soap-clients used for communicating mooege web-services.
+     */
+    private function CreateSOAPClients($timeout)
     {
-        try {
-            $this->moonet = new SoapClient($this->serviceAddress.'/MooNet?wsdl');
-            $this->gs = new SoapClient($this->serviceAddress.'/GS?wsdl');
-            $this->accounts = new SoapClient($this->serviceAddress.'/Accounts?wsdl');
+        try 
+        {          
+            $this->core = new SoapClient($this->servicesAddress.'/Core?wsdl', array(
+                'connection_timeout' => $timeout));
+            
+            $this->moonet = new SoapClient($this->servicesAddress.'/MooNet?wsdl', array(
+                'connection_timeout' => $timeout));
+            
+            $this->gameserver = new SoapClient($this->servicesAddress.'/GS?wsdl', array(
+                'connection_timeout' => $timeout));
+            
+            $this->accounts = new SoapClient($this->servicesAddress.'/Accounts?wsdl', array(
+                'connection_timeout' => $timeout));
+            
             $this->connected=true;
         }
         catch(Exception $e)
@@ -63,20 +101,257 @@ class LibMooege
         }
     }
     
-    public function OnlinePlayerCount()
+    /**
+     * Returns mooege version.
+     * @return type string
+     */
+    public function Version()
     {
-        if($this->connected)
-            return $this->moonet->OnlinePlayerCount();
-        else
-            throw new Exception("Can not connect mooege services!");
+        if(!$this->connected)
+            return "N/A";
+        
+        try {
+            $response=$this->core->Version();
+        }
+        catch(Exception $e) {
+            return "N/A";
+        }
+        
+        return $response->VersionResult;     
+    }
+    /**
+     * Returns uptime statistics for mooege.
+     * @return type string
+     */
+    public function Uptime()
+    {
+        if(!$this->connected)
+            return "N/A";
+        
+        try {
+            $response=$this->core->Uptime();
+        }
+        catch(Exception $e) {
+            return "N/A";
+        }
+        
+        return $response->UptimeResult;     
     }
     
+    /**
+     * Returns true if MooNet is online.
+     * @return type bool
+     */
+    public function IsMooNetServerOnline()
+    {
+        if(!$this->connected)
+            return false;
+        
+        try {
+            $response=$this->moonet->Ping();
+        }
+        catch(Exception $e) {
+            return false;
+        }
+        
+        return $response->PingResult;     
+    }
+    
+    /**
+     * Returns count of online players.
+     * @return type int
+     */
+    public function OnlinePlayerCount()
+    {
+        if(!$this->connected)
+            return -1;
+        
+        try {
+            $response = $this->moonet->OnlinePlayersCount();
+        }
+        catch(Exception $e) {
+            return -1;
+        }
+        
+        return $response->OnlinePlayersCountResult;        
+    }
+    
+    /**
+     * Returns list of online players.
+     * @return type array.
+     */
     public function OnlinePlayersList()
     {
-        if($this->connected)               
-            return $this->moonet->OnlinePlayersList();
+        if(!$this->connected)
+            return array();
+        
+        try {
+            $response = $this->moonet->OnlinePlayersList();
+        }
+        catch(Exception $e) {
+            return array();
+        }
+                        
+        if(property_exists($response->OnlinePlayersListResult, "string"))
+            return $response->OnlinePlayersListResult->string;
         else
-            throw new Exception("Can not connect mooege services!");
+            return $response->OnlinePlayersListResult;
     }
+    
+    /**
+    * Returns true if game-server is online.
+    * @return type bool
+    */
+    public function IsGameServerOnline()
+    {
+        if(!$this->connected)
+            return false;
+        
+        try {
+            $response=$this->gameserver->Ping();        
+        }
+        catch(Exception $e) {
+            return false;
+        }
+                
+        return $response->PingResult;
+    }
+    
+    /**
+     * Creates a new account over mooege database.
+     * Returns true if the call was successful, false otherwhise.
+     * @param type $email
+     * @param type $password
+     * @return type bool
+     */
+    public function CreateAccount($email, $password)
+    {
+        if(!$this->connected)
+            return false;
+        
+        try {
+            $response=$this->accounts->CreateAccount(array('email' => $email, 'password' => $password));
+        }
+        catch(Exception $e) {
+            return false;
+        }
+        
+        return $response->CreateAccountResult;
+    }
+    
+    /**
+     * Returns true if an account exists for given email address, false otherwise.
+     * @param type $email
+     * @return type bool
+     */
+    public function AccountExists($email)
+    {
+        if(!$this->connected)
+            return false;
+        
+        try {
+            $response=$this->accounts->AccountExists(array('email' => $email));
+        }
+        catch(Exception $e) {
+            return false;
+        }
+        
+        return $response->AccountExistsResult;
+    }
+    
+    /**
+     * Returns true if password is correct, false otherwise.
+     * @param type $email
+     * @param type $password
+     * @return type bool
+     */
+    public function VerifyPassword($email, $password)
+    {
+        if(!$this->connected)
+            return false;
+        
+        try {
+            $response=$this->accounts->VerifyPassword(array('email' => $email, 'password' => $password));
+        }
+        catch(Exception $e) {
+            return false;
+        }
+        
+        return $response->VerifyPasswordResult;
+    }
+    
+    /**
+     * Returns count of total accounts.
+     * @return type int
+     */
+    public function TotalAccounts()
+    {
+        if(!$this->connected)
+            return -1;
+        
+        try {
+            $response = $this->accounts->TotalAccounts();
+        }
+        catch(Exception $e) {
+            return -1;
+        }
+        
+        return $response->TotalAccountsResult;        
+    }
+    
+    /**
+     * Returns count of total toons.
+     * @return type int
+     */
+    public function TotalToons()
+    {
+        if(!$this->connected)
+            return -1;
+        
+        try {
+            $response = $this->accounts->TotalToons();
+        }
+        catch(Exception $e) {
+            return -1;
+        }
+        
+        return $response->TotalToonsResult;        
+    }
+}
+?>
+
+<?php
+/**
+ * Prints services-info.
+ */
+function ServicesInfo()
+{
+    $mooege = new LibMooege();
+    $created=$mooege->CreateAccount("debug@","12345678");
+    $exists=$mooege->AccountExists("debug@");
+    $verified=$mooege->VerifyPassword("debug@","12345678");
+?>
+    <?if ($mooege->connected):?>
+        Connected to <?=$mooege->servicesAddress?>.
+        <ul>
+            <li>Create account: debug@:12345678 [<?if($created):?>True<?else:?>False<?endif?>]</li>   
+            <li>Account Exists: debug@ [<?if($exists):?>True<?else:?>False<?endif?>]</li>
+            <li>Verify Password: 12345678 [<?if($verified):?>True<?else:?>False<?endif?>]</li>
+        </ul>
+    <?else:?>
+        Not connected to mooege web-services!
+    <?endif?>  
+        
+    <table border='1'><tr><th>Service</th><th>Query</th><th>Result</th></tr>        
+        <tr><td>Core</td><td>Version</td><td><?=$mooege->Version()?></td></tr>
+        <tr><td>Core</td><td>Uptime</td><td><?=$mooege->Uptime()?></td></tr>
+        <tr><td>MooNet</td><td>IsMooNetServerOnline</td><td><?=$mooege->IsMooNetServerOnline()?></td></tr>
+        <tr><td>MooNet</td><td>TotalAccounts</td><td><?=$mooege->TotalAccounts()?></td></tr>
+        <tr><td>MooNet</td><td>TotalToons</td><td><?=$mooege->TotalToons()?></td></tr>
+        <tr><td>MooNet</td><td>OnlinePlayerCount</td><td><?=$mooege->OnlinePlayerCount()?></td></tr>
+        <tr><td>MooNet</td><td>OnlinePlayersList</td><td><?=print_r($mooege->OnlinePlayersList())?></td></tr>
+        <tr><td>GameServer</td><td>IsGameServerOnline</td><td><?=$mooege->IsGameServerOnline()?></td></tr>
+    </table>        
+<?
 }
 ?> 

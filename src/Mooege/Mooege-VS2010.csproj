@@ -303,6 +303,7 @@
     <Compile Include="Core\MooNet\Toons\ToonManager.cs" />
     <Compile Include="Common\Logging\LogConfig.cs" />
     <Compile Include="Core\MooNet\Web\AccountWebService.cs" />
+    <Compile Include="Core\Web\CoreWebService.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
@@ -555,6 +556,7 @@
     <Compile Include="Net\MooNet\RPC\RPCCallback.cs" />
     <Compile Include="Net\NATConfig.cs" />
     <Compile Include="Net\Utils.cs" />
+    <Compile Include="Net\WebServices\Config.cs" />
     <Compile Include="Net\WebServices\IWebService.cs" />
     <Compile Include="Core\MooNet\Web\MooNetWebService.cs" />
     <Compile Include="Net\WebServices\ServiceManager.cs" />

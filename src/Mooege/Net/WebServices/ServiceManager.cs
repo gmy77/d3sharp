@@ -53,7 +53,7 @@ namespace Mooege.Net.WebServices
         {            
             foreach (var pair in this._webServices)
             {
-                var uri = new Uri("http://localhost:9000/" + pair.Value.Name);
+                var uri = new Uri(string.Format("{0}/{1}", Config.Instance.Address, pair.Value.Name));
                 var serviceHost = new ServiceHost(pair.Key, uri);
 
                 serviceHost.Description.Behaviors.Add(new ServiceMetadataBehavior { HttpGetEnabled = true });
