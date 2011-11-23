@@ -209,6 +209,8 @@ namespace Mooege
 
         public static bool StartWebServices()
         {
+			System.Environment.SetEnvironmentVariable("MONO_STRICT_MS_COMPLIANT", "yes"); // required for making web-services working under mono too. /raist
+			
             var webservices = new ServiceManager();
             webservices.Run();
 
