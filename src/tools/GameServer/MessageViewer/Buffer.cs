@@ -51,6 +51,16 @@ namespace GameMessageViewer
                             foreach (var opcode in attribute.Opcodes)
                                 MessageTypes.Add(opcode, type);
                     }
+
+            foreach(Opcodes opcode in Enum.GetValues(typeof(Opcodes)))
+                if(!MessageTypes.ContainsKey(opcode))
+                    foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                        foreach (Type type in assembly.GetTypes())
+                            if (type.IsSubclassOf(typeof(GameMessage)))
+                                if(opcode.ToString().StartsWith(type.Name))
+                                    MessageTypes.Add(opcode, type);
+
+
         }
 
         // Create and parse the GameMessage that handles the next opcode
