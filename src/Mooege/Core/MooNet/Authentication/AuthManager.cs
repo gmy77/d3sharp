@@ -40,7 +40,7 @@ namespace Mooege.Core.MooNet.Authentication
 
         private static void InitAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
-            var account = AccountManager.GetAccountByEmail(request.Email); // check if account exists.
+            var account = AccountManager.GetAccountByEmail(request.Email.ToLower()); // check if account exists.
             
             if (account == null) // we should be returning an error to client /raist.
             {
@@ -57,7 +57,7 @@ namespace Mooege.Core.MooNet.Authentication
                 .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
                     .SetRegion(0x00005553) // us
                     .SetUsage(0x61757468) // auth - password.dll
-                    .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AuthModuleHash)))
+                    .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AuthModuleHashMap[client.Platform])))
                 .SetMessage(ByteString.CopyFrom(srp6a.LogonChallenge))
                 .Build();
 
