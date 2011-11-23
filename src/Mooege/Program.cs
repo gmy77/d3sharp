@@ -27,6 +27,7 @@ using Mooege.Core.MooNet.Commands;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet;
 using Mooege.Core.MooNet.Achievement;
+using Mooege.Net.WebServices;
 using Environment = System.Environment;
 
 namespace Mooege
@@ -132,6 +133,7 @@ namespace Mooege
         {
             StartMooNet();
             StartGS();
+            StartWebServices();
 
             while (true)
             {
@@ -153,6 +155,8 @@ namespace Mooege
                 Logger.Warn("Shutting down Game-Server..");
                 GameServer.Shutdown();
             }
+
+            // todo: stop webservices.
 
             Environment.Exit(0);
         }
@@ -185,6 +189,7 @@ namespace Mooege
             GameServer = new GameServer();
             GameServerThread = new Thread(GameServer.Run) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture };
             GameServerThread.Start();
+
             return true;
         }
 
@@ -196,6 +201,15 @@ namespace Mooege
             GameServer.Shutdown();
             GameServerThread.Abort();
             GameServer = null;
+
+            return true;
+        }
+
+        public static bool StartWebServices()
+        {
+            var webservices = new ServiceManager();
+            webservices.Run();
+
             return true;
         }
 
