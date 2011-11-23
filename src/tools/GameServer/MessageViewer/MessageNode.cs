@@ -29,20 +29,16 @@ namespace GameMessageViewer
     public class MessageNode : TreeNode, ITextNode
     {
         public GameMessage gameMessage;
-        public int mStart;
-        public int mEnd;
 
-        public MessageNode(GameMessage message, int start, int end)
+        public MessageNode(GameMessage message)
         {
             this.gameMessage = message;
-            this.mStart = start;
-            this.mEnd = end;
             Text = String.Join(".", (message.GetType().ToString().Split('.').Skip(5)));
         }
 
         public new MessageNode Clone()
         {
-            return new MessageNode(gameMessage, mStart, mEnd);
+            return new MessageNode(gameMessage);
         }
 
 

@@ -37,13 +37,15 @@ namespace GameMessageViewer
     public partial class MessageViewer
     {
 
+        /// <summary>
+        /// Hex string to byte array
+        /// </summary>
         private byte[] String_To_Bytes(string strInput)
         {
             int i = 0;
             int x = 0;
             byte[] bytes = new byte[(strInput.Length) / 2];
-            // loop through the string - 2 bytes at a time converting  
-            //  it to decimal equivalent and store in byte array  
+
             while (strInput.Length > i + 1)
             {
                 long lngDecimal = Convert.ToInt32(strInput.Substring(i, 2), 16);
@@ -54,64 +56,84 @@ namespace GameMessageViewer
             return bytes;
         }
 
-
-                        //        string b = Encoding.UTF8.GetString(buffer.Data, 0, buffer.Length / 8);
-                        //if (b.Contains("0.3.1.7779") ||
-                        //    b.Contains("0.3.0.7484") ||
-                        //    b.Contains("0.3.0.7333"))
-                        //{
-                        //    MessageBox.Show("The dump version ({0}) is incompatible to the currently used mooege version ({1})\n Loading continues but it may take significantly longer and many messages will not be parsed correctly");
-                        //}
-
-
-        private void LoadWiresharkHex(string text)
+        /// <summary>
+        /// string (char array) to hex string
+        /// </summary>
+        private string Encode(string text)
         {
-            if (text.Contains(" "))
-            {
-                String[] rows = text.Split('\n');
-                String currentBuffer = "";
-                text = "";
-
-                for (int i = 0; i < rows.Length; i++)
-                {
-                    if (i > 0 && (rows[i].StartsWith(" ") ^ rows[i - 1].StartsWith(" ")))
-                    {
-                        Buffer buffer = new Buffer(String_To_Bytes(currentBuffer));
-
-                        BufferNode newNode = new BufferNode(buffer, actors, questTree, "1");
-                        newNode.Start = text.Length;
-                        newNode.BackColor = rows[i].StartsWith(" ") ? newNode.BackColor = Color.LightCoral : Color.LightBlue;
-                        tree.Nodes.Add(newNode);
-                        text += currentBuffer;
-                        currentBuffer = "";
-                    }
-
-                    currentBuffer += (rows[i].StartsWith(" ") ? rows[i].Substring(14, 3 * 16) : rows[i].Substring(10, 3 * 16)).Trim().Replace(" ", "");
-                }
-            }
-
-            else
-            {
-                Buffer buffer = new Buffer(String_To_Bytes(text));
-                BufferNode newNode = new BufferNode(buffer, actors, questTree, "1");
-                newNode.Parse();
-                tree.Nodes.Add(newNode);
-            }
-
-            ApplyFilter();
+            return BitConverter.ToString(System.Text.Encoding.UTF8.GetBytes(text)).Replace("-", "");
         }
 
-
+        /// <summary>
+        /// Returns whether a given hex stream is a moonet stream
+        /// </summary>
         public bool IsMooNetStream(string stream)
         {
-            return stream.Contains(BitConverter.ToString(System.Text.Encoding.UTF8.GetBytes("Aurora")).Replace("-", ""));
+            return stream.Contains(Encode("Aurora"));
         }
 
+        /// <summary>
+        /// Returns whether a given hex stream is an achievment stream
+        /// </summary>
         public bool IsAchievmentStream(string stream)
         {
-            return stream.Contains(BitConverter.ToString(System.Text.Encoding.UTF8.GetBytes("Achievements_Beta:RetrieveNameFromStringlist")).Replace("-", ""));
+            return stream.Contains(Encode("Achievements_Beta:RetrieveNameFromStringlist"));
         }
 
+        /// <summary>
+        /// Returns the protocol version for a given stream if the information is available
+        /// Only GS streams have that version set (i guess/hope)
+        /// </summary>
+        public string GetVersion(string stream)
+        {
+            string[] versions = new string[] { "0.4.0.7865", "0.3.1.7779", "0.3.0.7484", "0.3.0.7333" };
+
+
+            foreach (string version in versions)
+                if(stream.Contains(Encode(version)))
+                    return version;
+
+            return "unknown";
+        }
+
+
+
+        //private void LoadWiresharkHex(string text)
+        //{
+        //    if (text.Contains(" "))
+        //    {
+        //        String[] rows = text.Split('\n');
+        //        String currentBuffer = "";
+        //        text = "";
+
+        //        for (int i = 0; i < rows.Length; i++)
+        //        {
+        //            if (i > 0 && (rows[i].StartsWith(" ") ^ rows[i - 1].StartsWith(" ")))
+        //            {
+        //                Buffer buffer = new Buffer(String_To_Bytes(currentBuffer));
+
+        //                BufferNode newNode = new BufferNode(buffer, actors, questTree, "1");
+        //                newNode.Start = text.Length;
+        //                newNode.BackColor = rows[i].StartsWith(" ") ? newNode.BackColor = Color.LightCoral : Color.LightBlue;
+        //                tree.Nodes.Add(newNode);
+        //                text += currentBuffer;
+        //                currentBuffer = "";
+        //            }
+
+        //            currentBuffer += (rows[i].StartsWith(" ") ? rows[i].Substring(14, 3 * 16) : rows[i].Substring(10, 3 * 16)).Trim().Replace(" ", "");
+        //        }
+        //    }
+
+        //    else
+        //    {
+        //        Buffer buffer = new Buffer(String_To_Bytes(text));
+        //        BufferNode newNode = new BufferNode(buffer, actors, questTree, "1");
+        //        newNode.Parse();
+        //        tree.Nodes.Add(newNode);
+        //    }
+
+        //    ApplyFilter();
+        //}
 
 
         /// <summary>
@@ -125,26 +147,44 @@ namespace GameMessageViewer
             {
                 // This ugly thing returns a list of MemoryStreams. One for each session in the cap
                 var streams = pCapReader.ReconSingleFileSharpPcap(path);
+                List<string> gsStreams = new List<string>();
 
+                // sort the streams
                 foreach (var stream in streams)
                 {
-                    stream.Seek(0, SeekOrigin.Begin);
                     string text = new StreamReader(stream).ReadToEnd();
 
-                    if (IsMooNetStream(text))
-                    {
-                        LoadMooNetDump(text);
-                        continue;
-                    }
-                    if (IsAchievmentStream(text))
-                    {
-                        System.Console.WriteLine("Achievementstream not parsed");
-                        continue;
-                    }
+                    // TODO Implement MooNet Parsing
+                    // if (IsMooNetStream(text)) LoadMooNetDump(text);
+                    if (IsAchievmentStream(text)) System.Console.WriteLine("Achievementstream not parsed");
 
-                    LoadDump(text);
+                    if (!IsMooNetStream(text) && !IsAchievmentStream(text))
+                        gsStreams.Add(text);
                 }
 
+                // sometimes there are other streams in the dump...
+                // if only one stream is found, or more are found but only one is tagged with mooege protocol version load that one
+                if (gsStreams.Count > 0)
+                {
+                    var correct = gsStreams.Where(x => GetVersion(x).Equals(Mooege.Common.Versions.VersionInfo.Ingame.VersionString));
+
+                    if (correct.Count() == 1)
+                        LoadDump(correct.First());
+                    else
+                    {
+                        if (gsStreams.Count() == 1)
+                            LoadDump(gsStreams.First());
+                        else
+                        {
+                            if (DialogResult.Yes == MessageBox.Show("The dump contains more than one unidentified stream, but in none of them mooege version {0} was found. The dump is either broken or of a version Mooege does not support. Continue loading all streams? (This may take longer and messages may appear broken)", "Multiple streams found", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                                foreach (var stream in gsStreams)
+                                    LoadDump(stream);
+                        }
+                    }
+                }
+
+                if(streams.Count == 0)
+                    MessageBox.Show("No streams found. Is this really a GS / MooNet Dump?", "FatFingerFileMisclick", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (SharpPcap.PcapException)
             {
@@ -291,13 +331,16 @@ namespace GameMessageViewer
         private void LoadDump(string text)
         {
             String[] rows = text.Split('\n');
-            String currentBuffer = "";
-            text = "";
             string currentDirection = "";
             progressBar.Maximum = rows.Length;
             progressBar.Value = 0;
             progressBar.Visible = true;
             allNodes = new List<BufferNode>();
+
+            Dictionary<string, TreeNode> actors = new Dictionary<string, TreeNode>();
+            Dictionary<string, TreeNode> quests = new Dictionary<string, TreeNode>();
+
+
 
             Color[][] trafficColors = new Color[][]
             { new Color[] { Color.LightCoral , Color.LightBlue },
@@ -316,6 +359,9 @@ namespace GameMessageViewer
             if(removeChars < 0)
                 removeChars = rows[0].IndexOf("Out:");
             string clientHash = "";
+            int counter = 0;
+            int size = 0;
+            Dictionary<string, BufferNode> lastNodesMissingData = new Dictionary<string, BufferNode>();
             for (int i = 0; i < rows.Length; i++)
             {
                 if (rows[i].Length > removeChars)
@@ -326,15 +372,12 @@ namespace GameMessageViewer
                     if (clients.Contains(clientHash) == false)
                     {
                         clients.Add(clientHash);
+                        lastNodesMissingData.Add(clientHash + "I", null);
+                        lastNodesMissingData.Add(clientHash + "O", null);
                         colors[clientHash] = trafficColors[clients.Count - 1];
                     }
 
                     progressBar.Value = i;
-
-                    //causes bugs
-                    //Application.DoEvents();
-                    //if (this.Visible == false)
-                    //    break;
 
                     if (rows[i].Length > 3)
                     {
@@ -343,37 +386,65 @@ namespace GameMessageViewer
                         // in mooege, data is dumped in whole
                         if (i > 0 && rows[i].Substring(0, 1) != currentDirection)
                         {
-                            Buffer buffer = new Buffer(String_To_Bytes(currentBuffer));
-                            BufferNode newNode = new BufferNode(buffer, actors, questTree, clientHash);
-                            newNode.Start = text.Length;
-                            newNode.BackColor = currentDirection == "I" ? colors[clientHash][0] : colors[clientHash][1];
-                            allNodes.Add(newNode);
-                            //tree.Nodes.Add(newNode);
-                            newNode.ApplyFilter(filterWindow.Filter);
-                            text += currentBuffer;
-                            currentBuffer = "";
+                            byte[] buf = new byte[size / 2];
+                            size = 0;
+                            for(int k = i - counter; k < i; k++)
+                            {
+                                Array.Copy(String_To_Bytes(rows[k]), 0, buf, size / 2, rows[k].Length / 2); 
+                                size += rows[k].Length;
+                            }
+
+                            if (lastNodesMissingData[clientHash + currentDirection] == null)
+                            {
+                                BufferNode newNode = new BufferNode(actors, quests, clientHash);
+
+                                if (newNode.Append(buf))
+                                    lastNodesMissingData[clientHash + currentDirection] = newNode;
+                                else
+                                    lastNodesMissingData[clientHash + currentDirection] = null;
+
+                                newNode.BackColor = currentDirection == "I" ? colors[clientHash][0] : colors[clientHash][1];
+                                allNodes.Add(newNode);
+                            }
+                            else
+                            {
+                                if (false == lastNodesMissingData[clientHash + currentDirection].Append(buf))
+                                    lastNodesMissingData[clientHash + currentDirection] = null;
+                            }
+
+
+                            counter = 0;
+                            size = 0;
                             currentDirection = rows[i].Substring(0, 1);
                         }
 
                         if (currentDirection == "") currentDirection = rows[i].Substring(0, 1);
-                        currentBuffer += (rows[i].Substring(13)).Replace("\r", "");
+                        rows[i] = rows[i].Substring(13).Replace("\r", "");
+                        counter++;
+                        size += rows[i].Length;
                     }
                 }
             }
 
 
-            if (currentBuffer.Length > 10)
+            if (counter > 0)
             {
-                Buffer buffer = new Buffer(String_To_Bytes(currentBuffer));
-                BufferNode newNode = new BufferNode(buffer, actors, questTree, clientHash);
-                newNode.Start = text.Length;
+                byte[] buf = new byte[size / 2];
+                size = 0;
+                for (int k = rows.Length - counter; k < rows.Length; k++)
+                {
+                    Array.Copy(String_To_Bytes(rows[k]), 0, buf, size / 2, rows[k].Length / 2);
+                    size += rows[k].Length;
+                }
+
+                BufferNode newNode = new BufferNode(actors, quests, clientHash);
+                newNode.Append(buf);
                 newNode.BackColor = currentDirection == "I" ? colors[clientHash][0] : colors[clientHash][1];
                 allNodes.Add(newNode);
-                newNode.ApplyFilter(filterWindow.Filter);
-                text += currentBuffer;
             }
 
-
+            foreach(BufferNode bn in allNodes)
+                bn.ApplyFilter(filterWindow.Filter);
 
 
             // Create a filter menu entry for every client in the stream.
@@ -399,6 +470,10 @@ namespace GameMessageViewer
             hell:
                 filterPlayersToolStripMenuItem.DropDownItems.Add(m);
             }
+
+
+            questTree.Nodes.AddRange(quests.Values.ToArray());
+            this.actors.Nodes.AddRange(actors.Values.ToArray());
 
 
             tree.Nodes.AddRange(allNodes.ToArray());

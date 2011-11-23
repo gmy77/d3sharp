@@ -30,6 +30,8 @@ using System.IO;
 using SharpPcap.LibPcap;
 using SharpPcap;
 using PacketDotNet;
+using Mooege.Common.MPQ;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace GameMessageViewer
 {
@@ -91,7 +93,7 @@ namespace GameMessageViewer
 
         private void messageFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            filterWindow.Show();
+            filterWindow.ShowDialog();
             ApplyFilter();
         }
 
@@ -268,6 +270,24 @@ namespace GameMessageViewer
 
                                     }
 
+                                    alias = SNOAliases.GetGroup(id);
+                                    if (alias != "")
+                                    {
+                                        output.Rtf = output.Rtf.Replace(word, word + ":" + alias);
+
+                                        int pos = -1;
+                                        while ((pos = output.Text.IndexOf(alias, pos + 1)) > 0)
+                                        {
+                                            output.SelectionStart = pos;
+                                            output.SelectionLength = alias.Length;
+                                            output.SelectionColor = Color.OrangeRed;
+                                            output.SelectionLength = 0;
+                                        }
+
+                                    }
+                                    
+
+
                                 }
                             }
                         }
@@ -296,8 +316,8 @@ namespace GameMessageViewer
                     LoadDump(File.ReadAllText(ofd.FileName));
                 if (Path.GetExtension(ofd.FileName).ToLower().Contains("cap"))
                     LoadPcap(ofd.FileName);
-                if (Path.GetExtension(ofd.FileName).ToLower().Contains("hex"))
-                    LoadWiresharkHex(File.ReadAllText(ofd.FileName));
+                //if (Path.GetExtension(ofd.FileName).ToLower().Contains("hex"))
+                //    LoadWiresharkHex(File.ReadAllText(ofd.FileName));
             }
         }
 
