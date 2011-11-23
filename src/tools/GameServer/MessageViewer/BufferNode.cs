@@ -34,16 +34,22 @@ using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Definitions.Game;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Net.GS.Message.Definitions.Animation;
+using Mooege.Net.GS.Message.Definitions.Effect;
+using Mooege.Net.GS.Message.Definitions.Scene;
+using Mooege.Net.GS.Message.Definitions.Map;
+using Mooege.Net.GS.Message.Definitions.Combat;
+using Mooege.Net.GS.Message.Definitions.World;
 
 namespace GameMessageViewer
 {
     class BufferNode : TreeNode
     {
         public Buffer Buffer;
-        public int Start;
-        private bool expanded = false;
-        private TreeView actors; // i know...bad design
-        private TreeView quests; // i know...bad design
+
+        private Dictionary<string, TreeNode> actors;
+        private Dictionary<string, TreeNode> quests;
+
         public List<TreeNode> allNodes = new List<TreeNode>();
         private static Dictionary<uint, TreeNode> actorMap = new Dictionary<uint, TreeNode>();
         public readonly string clientHash;
@@ -68,31 +74,40 @@ namespace GameMessageViewer
 
         }
 
-        public BufferNode(Buffer buffer, TreeView actors, TreeView quests, string clientHash)
+        public BufferNode(Dictionary<string, TreeNode> actors, Dictionary<string, TreeNode> quests, string clientHash)
         {
-            this.Buffer = buffer;
+            this.Buffer = new Buffer(new byte[0]);
             this.actors = actors;
             this.quests = quests;
             this.clientHash = clientHash;
+        }
 
-            Parse();
+
+
+        public bool Append(byte[] data)
+        {
+            Buffer.AppendData(data);
+            if (allNodes.Count == 1 && allNodes[0].GetType() == typeof(ErrorNode))
+                allNodes.Clear();
+
+            bool missing = Parse();
+
 
             if (allNodes.Count > 0)
                 Text = allNodes.First().Text;
             else
             {
                 allNodes.Add(new ErrorNode("Contents of buffer", BitConverter.ToString(Buffer.Data, 0)));
-                Text = "No messages in this buffer";
+                Text = "Packet missing data";
             }
+            return missing;
         }
 
-        public void Parse()
+        static Dictionary<Type, int> gg = new Dictionary<Type, int>();
+
+        public bool Parse()
         {
-            if (expanded)
-                return;
-            else
-                expanded = true;
-            allNodes.Clear();
+            //allNodes.Clear();
 
             while (Buffer.IsPacketAvailable())
             {
@@ -104,6 +119,7 @@ namespace GameMessageViewer
                 {
                     int start = Buffer.Position;
 
+                    #region Try parsing a message
                     try
                     {
                         GameMessage message = Buffer.ParseMessage();
@@ -116,9 +132,10 @@ namespace GameMessageViewer
                                 //string name;
                                 //SNOAliases.Aliases.TryGetValue((message as ACDEnterKnownMessage).ActorSNOId.ToString(), out name);
                                 string name = SNOAliases.GetAlias((message as ACDEnterKnownMessage).ActorSNOId);
-                                if (!actors.Nodes.ContainsKey(hex))
+                                if (!actors.ContainsKey(hex))
                                 {
-                                    TreeNode actorNode = actors.Nodes.Add(hex, hex + "  " + name);
+                                    TreeNode actorNode = new TreeNode(hex + "  " + name);
+                                    actors.Add(hex, actorNode);
                                     actorMap.Add((message as ACDEnterKnownMessage).ActorID, actorNode);
                                     actorNode.Tag = hex;
                                 }
@@ -128,24 +145,79 @@ namespace GameMessageViewer
                             {
                                 string name = SNOAliases.GetAlias((message as QuestUpdateMessage).snoQuest);
                                 //SNOAliases.Aliases.TryGetValue(.ToString(), out name);
-                                if (!quests.Nodes.ContainsKey(name))
+                                if (!quests.ContainsKey((message as QuestUpdateMessage).snoQuest.ToString("X8")))
                                 {
-                                    TreeNode questNode = quests.Nodes.Add(name, name);
+                                    TreeNode questNode = new TreeNode(name);
                                     questNode.Tag = (message as QuestUpdateMessage).snoQuest.ToString("X8");
+                                    quests.Add(questNode.Tag.ToString(), questNode);
                                 }
                             }
 
-                            MessageNode node = new MessageNode(message, Start * 4 + start, Start * 4 + Buffer.Position);
-                            node.BackColor = this.BackColor;
+                            MessageNode node = new MessageNode(message);
                             allNodes.Add(node);
 
                             /// THIS IS FOR QUICKER PARSING BUT IM TOO LAZY TO DO THAT FOR ALL MESSAGES
                             #region quickparse
-                            if (message is GameTickMessage || message is SNODataMessage || message is SNONameDataMessage)
+
+                            // skip messages without actor or quest id
+                            if (message is GameTickMessage ||
+                                message is SNODataMessage || 
+                                message is SNONameDataMessage || 
+                                message is SimpleMessage ||
+                                message is RevealSceneMessage ||
+                                message is DestroySceneMessage ||
+                                message is MapRevealSceneMessage 
+                                )
                                 continue;
 
                             try
                             {
+                                if (gg.ContainsKey(message.GetType()))
+                                    gg[message.GetType()]++;
+                                else
+                                    gg.Add(message.GetType(), 1);
+
+                                if (message is ANNDataMessage)
+                                {
+                                    if (actorMap.ContainsKey((uint)(message as ANNDataMessage).ActorID))
+                                        actorMap[(uint)(message as ANNDataMessage).ActorID].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is ACDTranslateFacingMessage)
+                                {
+                                    actorMap[(uint)(message as ACDTranslateFacingMessage).ActorId].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+
+                                if (message is AttributeSetValueMessage)
+                                {
+                                    var msg = message as AttributeSetValueMessage;
+                                    actorMap[(uint)(message as AttributeSetValueMessage).ActorID].Nodes.Add(node.Clone());
+
+                                    if (msg.Field1.Attribute != GameAttribute.Attached_To_ACD &&
+                                        msg.Field1.Attribute != GameAttribute.Attachment_ACD &&
+                                        msg.Field1.Attribute != GameAttribute.Banner_ACDID &&
+                                        msg.Field1.Attribute != GameAttribute.Follow_Target_ACDID &&
+                                        msg.Field1.Attribute != GameAttribute.Forced_Enemy_ACDID &&
+                                        msg.Field1.Attribute != GameAttribute.Gizmo_Operator_ACDID &&
+                                        msg.Field1.Attribute != GameAttribute.Guard_Object_ACDID &&
+                                        msg.Field1.Attribute != GameAttribute.Item_Bound_To_ACD &&
+                                        msg.Field1.Attribute != GameAttribute.Last_Damage_ACD &&
+                                        msg.Field1.Attribute != GameAttribute.Last_ACD_Attacked &&
+                                        msg.Field1.Attribute != GameAttribute.Last_ACD_Attacked_By &&
+                                        msg.Field1.Attribute != GameAttribute.Attached_To_ACD &&
+                                        msg.Field1.Attribute != GameAttribute.Last_Blocked_ACD &&
+                                        msg.Field1.Attribute != GameAttribute.Loading_Player_ACD &&
+                                        msg.Field1.Attribute != GameAttribute.RootTargetACD &&
+                                        msg.Field1.Attribute != GameAttribute.Script_Target_ACDID &&
+                                        msg.Field1.Attribute != GameAttribute.Spawned_by_ACDID &&
+                                        msg.Field1.Attribute != GameAttribute.Summoned_By_ACDID &&
+                                        msg.Field1.Attribute != GameAttribute.Taunt_Target_ACD &&
+                                        msg.Field1.Attribute != GameAttribute.Wizard_Slowtime_Proxy_ACD)
+                                        //actorMap[(uint)(message as AttributeSetValueMessage).Field1.Int].Nodes.Add(node.Clone());
+                                        continue;
+                                }
+
                                 if (message is NotifyActorMovementMessage)
                                 {
                                     actorMap[(uint)(message as NotifyActorMovementMessage).ActorId].Nodes.Add(node.Clone());
@@ -159,11 +231,12 @@ namespace GameMessageViewer
                                     {
                                         String hex = (message as PlayerMovementMessage).ActorId.ToString("X8");
 
-                                        if (!actors.Nodes.ContainsKey(hex))
+                                        if (!actors.ContainsKey(hex))
                                         {
-                                            TreeNode actorNode = actors.Nodes.Add(hex + " Capper");
+                                            TreeNode actorNode = new TreeNode(hex + " Capper");
                                             actorMap.Add((uint)(message as PlayerMovementMessage).ActorId, actorNode);
                                             actorNode.Tag = hex;
+                                            actors.Add(hex, actorNode);
                                         }
                                     }
 
@@ -192,17 +265,6 @@ namespace GameMessageViewer
                                         actorMap[(uint)(message as TrickleMessage).ActorId].Nodes.Add(node.Clone());
                                     continue;
                                 }
-                                if (message is ANNDataMessage)
-                                {
-                                    if (actorMap.ContainsKey((uint)(message as ANNDataMessage).ActorID))
-                                        actorMap[(uint)(message as ANNDataMessage).ActorID].Nodes.Add(node.Clone());
-                                    continue;
-                                }
-                                if (message is ACDTranslateFacingMessage)
-                                {
-                                    actorMap[(uint)(message as ACDTranslateFacingMessage).ActorId].Nodes.Add(node.Clone());
-                                    continue;
-                                }
                                 if (message is ACDEnterKnownMessage)
                                 {
                                     actorMap[(uint)(message as ACDEnterKnownMessage).ActorID].Nodes.Add(node.Clone());
@@ -213,44 +275,83 @@ namespace GameMessageViewer
                                     actorMap[(uint)(message as ACDCreateActorMessage).ActorId].Nodes.Add(node.Clone());
                                     continue;
                                 }
-                                if (message is AttributeSetValueMessage)
+                                if (message is ACDDestroyActorMessage)
                                 {
-                                    var msg = message as AttributeSetValueMessage;
-                                    if (msg.Field1.Attribute != GameAttribute.Attached_To_ACD &&
-                                        msg.Field1.Attribute != GameAttribute.Attachment_ACD &&
-                                        msg.Field1.Attribute != GameAttribute.Banner_ACDID &&
-                                        msg.Field1.Attribute != GameAttribute.Follow_Target_ACDID &&
-                                        msg.Field1.Attribute != GameAttribute.Forced_Enemy_ACDID &&
-                                        msg.Field1.Attribute != GameAttribute.Gizmo_Operator_ACDID &&
-                                        msg.Field1.Attribute != GameAttribute.Guard_Object_ACDID &&
-                                        msg.Field1.Attribute != GameAttribute.Item_Bound_To_ACD &&
-                                        msg.Field1.Attribute != GameAttribute.Last_Damage_ACD &&
-                                        msg.Field1.Attribute != GameAttribute.Last_ACD_Attacked &&
-                                        msg.Field1.Attribute != GameAttribute.Last_ACD_Attacked_By &&
-                                        msg.Field1.Attribute != GameAttribute.Attached_To_ACD &&
-                                        msg.Field1.Attribute != GameAttribute.Last_Blocked_ACD &&
-                                        msg.Field1.Attribute != GameAttribute.Loading_Player_ACD &&
-                                        msg.Field1.Attribute != GameAttribute.RootTargetACD &&
-                                        msg.Field1.Attribute != GameAttribute.Script_Target_ACDID &&
-                                        msg.Field1.Attribute != GameAttribute.Spawned_by_ACDID &&
-                                        msg.Field1.Attribute != GameAttribute.Summoned_By_ACDID &&
-                                        msg.Field1.Attribute != GameAttribute.Taunt_Target_ACD &&
-                                        msg.Field1.Attribute != GameAttribute.Wizard_Slowtime_Proxy_ACD)
-                                        actorMap[(uint)(message as AttributeSetValueMessage).ActorID].Nodes.Add(node.Clone());
+                                    actorMap[(uint)(message as ACDDestroyActorMessage).ActorId].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is ACDTranslateFixedMessage)
+                                {
+                                    actorMap[(uint)(message as ACDTranslateFixedMessage).ActorId].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is AttributesSetValuesMessage)
+                                {
+                                    actorMap[(uint)(message as AttributesSetValuesMessage).ActorID].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is SetIdleAnimationMessage)
+                                {
+                                    actorMap[(uint)(message as SetIdleAnimationMessage).ActorID].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is ACDWorldPositionMessage)
+                                {
+                                    actorMap[(uint)(message as ACDWorldPositionMessage).ActorID].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is PlayEffectMessage)
+                                {
+                                    actorMap[(uint)(message as PlayEffectMessage).ActorId].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is PlayAnimationMessage)
+                                {
+                                    actorMap[(uint)(message as PlayAnimationMessage).ActorID].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is FloatingNumberMessage)
+                                {
+                                    actorMap[(uint)(message as FloatingNumberMessage).ActorID].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is ACDTranslateSyncMessage)
+                                {
+                                    actorMap[(uint)(message as ACDTranslateSyncMessage).Field0].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is ACDTranslateDetPathMessage)
+                                {
+                                    actorMap[(uint)(message as ACDTranslateDetPathMessage).Field0].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is PlayHitEffectMessage)
+                                {
+                                    actorMap[(uint)(message as PlayHitEffectMessage).ActorID].Nodes.Add(node.Clone());
+                                    continue;
+                                }
+                                if (message is AimTargetMessage)
+                                {
+                                    actorMap[(uint)(message as AimTargetMessage).Field0].Nodes.Add(node.Clone());
+                                    if((message as AimTargetMessage).Field2 != -1)
+                                        actorMap[(uint)(message as AimTargetMessage).Field2].Nodes.Add(node.Clone()); 
+                                    continue;
+                                }
+                                if (message is TargetMessage)
+                                {
+                                    if((message as TargetMessage).TargetID != 0xFFFFFFFF)
+                                        actorMap[(uint)(message as TargetMessage).TargetID].Nodes.Add(node.Clone());
                                     continue;
                                 }
 
-
-
                             }
-                            catch (Exception) { }
+                            catch (Exception) {}
 
                             #endregion
 
-                            //System.Console.WriteLine(message.GetType());
                             // Bruteforce find actor ID and add to actor tree
                             string text = message.AsText();
-                            foreach (TreeNode an in actors.Nodes)
+                            foreach (TreeNode an in actors.Values)
                                 if (text.Contains((string)an.Tag))
                                 {
                                     MessageNode nodeb = node.Clone();
@@ -259,7 +360,7 @@ namespace GameMessageViewer
                                 }
 
                             // Bruteforce find quest SNO and add to quest tree
-                            foreach (TreeNode qn in quests.Nodes)
+                            foreach (TreeNode qn in quests.Values)
                                 if (text.Contains(qn.Tag.ToString()))
                                 {
                                     MessageNode nodeb = node.Clone();
@@ -287,10 +388,13 @@ namespace GameMessageViewer
                         allNodes.Add(errorNode);
                         Buffer.Position = pos;
                     }
+                    #endregion
                 }
 
                 Buffer.Position = end;
             }
+
+            return Buffer.Position != Buffer.Length;
         }
     }
 }

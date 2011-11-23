@@ -6,7 +6,7 @@ message QuestReward
 {
     optional int32 xp_granted = 1 [default = 0];
     optional int32 gold_granted = 2 [default = 0];
-    optional .D3.Items.Generator item = 3;
+    optional .D3.Items.Generator item_granted = 3;
 }
 
 message QuestStepComplete
