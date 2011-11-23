@@ -152,7 +152,7 @@ namespace Mooege.Core.GS.Powers
             float radius = this.ActorData.Cylinder.Ax2;
             Circle startCircle = new Circle(_prevUpdatePosition.X, _prevUpdatePosition.Y, radius);
             // make a velocity representing the change to the current position
-            PowerMath.Vec2D velocity = PowerMath.Vec2D.WithoutZ(this.Position - _prevUpdatePosition);
+            Vector2F velocity = PowerMath.VectorWithoutZ(this.Position - _prevUpdatePosition);
             
             Actor hit = null;
             foreach (Actor target in this.GetMonstersInRange(radius + 25f))
