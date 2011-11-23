@@ -274,7 +274,7 @@ namespace Mooege.Core.GS.Players
             // TODO Actor id should be CurrentSpeaker.DynamicID not PrimaryNPC.ActorID. This is a workaround because no audio for the player is playing otherwise
             player.InGameClient.SendMessage(new PlayConvLineMessage()
             {
-                ActorID = GetActorBySNO(asset.SNOPrimaryNpc).DynamicID, //CurrentSpeaker.DynamicID
+                ActorID = GetSpeaker(currentLineNode.Speaker1).DynamicID, // GetActorBySNO(asset.SNOPrimaryNpc).DynamicID,
                 Field1 = new uint[9]
                         {
                             player.DynamicID, asset.SNOPrimaryNpc != -1 ? GetActorBySNO(asset.SNOPrimaryNpc).DynamicID : 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
@@ -285,6 +285,7 @@ namespace Mooege.Core.GS.Players
                     SNOConversation = asset.Header.SNOId,
                     Field1 = 0x00000000,
                     Field2 = false,
+                    Field3 = true,
                     LineID = currentLineNode.LineID,
                     Speaker = (int)currentLineNode.Speaker1,
                     Field5 = -1,
