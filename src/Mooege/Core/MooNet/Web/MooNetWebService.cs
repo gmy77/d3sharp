@@ -45,7 +45,7 @@ namespace Mooege.Core.MooNet.Web
         /// </summary>
         /// <returns>Online player count.</returns>
         [OperationContract]
-        public int PlayerCount()
+        public int OnlinePlayerCount()
         {
             return PlayerManager.OnlinePlayers.Count;
         }
@@ -55,7 +55,7 @@ namespace Mooege.Core.MooNet.Web
         /// </summary>
         /// <returns>Online players list.</returns>
         [OperationContract]
-        public List<string> PlayersList()
+        public List<string> OnlinePlayersList()
         {
             return (from client in PlayerManager.OnlinePlayers where client.CurrentToon != null select client.CurrentToon.Name).ToList();
         }        

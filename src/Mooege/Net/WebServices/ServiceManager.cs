@@ -50,15 +50,13 @@ namespace Mooege.Net.WebServices
         }
 
         public void Run()
-        {
-            var httpGetBehavior = new ServiceMetadataBehavior { HttpGetEnabled = true };                        
-
+        {            
             foreach (var pair in this._webServices)
             {
                 var uri = new Uri("http://localhost:9000/" + pair.Value.Name);
                 var serviceHost = new ServiceHost(pair.Key, uri);
-            
-                serviceHost.Description.Behaviors.Add(httpGetBehavior);
+
+                serviceHost.Description.Behaviors.Add(new ServiceMetadataBehavior { HttpGetEnabled = true });
                 var debugBehavior = (ServiceDebugBehavior) serviceHost.Description.Behaviors[typeof (ServiceDebugBehavior)];
                 debugBehavior.IncludeExceptionDetailInFaults = true;
 
