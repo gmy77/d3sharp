@@ -109,18 +109,18 @@ namespace Mooege.Core.GS.Powers.Implementations
                     MeleeStageHit();
                     break;
                 case 1:
-                    if (waitCombo(1) > 0)
-                        yield return WaitSeconds(waitCombo(1));
+                    yield return WaitSeconds(waitCombo(1));
                     User.PlayEffectGroup(143516);
                     MeleeStageHit();
                     break;
                 case 2:
+                    AddBuff(User, new ComboStage3Buff());
                     yield return WaitSeconds(waitCombo(2));
+                    User.PlayEffectGroup(143518);
+
                     // put target position a little bit in front of the monk. represents the lightning ball
                     TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
                                         User.Position, 8f);
-
-                    User.PlayEffectGroup(143518);
 
                     bool hitAnything = false;
                     foreach (Actor actor in GetEnemiesInRange(TargetPosition, 7f))
@@ -145,6 +145,15 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 GeneratePrimaryResource(6f);
                 WeaponDamage(Target, 1.20f, DamageType.Lightning);
+            }
+        }
+
+        [ImplementsBuffSlot(7)]
+        class ComboStage3Buff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(0.5f / EvalTag(PowerKeys.ComboAttackSpeed3));
             }
         }
     }

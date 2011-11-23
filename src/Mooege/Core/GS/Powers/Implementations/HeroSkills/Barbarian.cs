@@ -58,14 +58,13 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             //StartCooldown(WaitSeconds(10f));
 
-            Vector3D delta = new Vector3D(TargetPosition.X - User.Position.X, TargetPosition.Y - User.Position.Y,
-                                          TargetPosition.Z - User.Position.Z);
+            Vector3D delta = new Vector3D(TargetPosition - User.Position);
             float delta_length = (float)Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y);
             Vector3D delta_normal = new Vector3D(delta.X / delta_length, delta.Y / delta_length, delta.Z / delta_length);
             float unitsMovedPerTick = 30f;
             Vector3D ramp = new Vector3D(delta_normal.X * (delta_length / unitsMovedPerTick),
                                          delta_normal.Y * (delta_length / unitsMovedPerTick),
-                                         1.48324f); // usual leap height, possibly different when jumping up/down?
+                                         1.483239f); // usual leap height, possibly different when jumping up/down?
 
             // TODO: Generalize this and put it in Actor
             User.World.BroadcastIfRevealed(new ACDTranslateArcMessage()
@@ -73,17 +72,18 @@ namespace Mooege.Core.GS.Powers.Implementations
                 ActorId = (int)User.DynamicID,
                 Start = User.Position,
                 Velocity = ramp,
-                Field3 = 303110, // used for male barb leap
+                //Field3 = 303110, // used for male barb leap
                 FlyingAnimationTagID = 69792, // used for male barb leap
                 LandingAnimationTagID = -1,
                 Field6 = -0.1f, // gravity
                 Field7 = Skills.Skills.Barbarian.FuryGenerators.LeapAttack,
-                Field8 = 0
+                Field8 = 0,
+                Field9 = TargetPosition.Z,
             }, User);
             User.Position = TargetPosition;
 
             // wait for leap to hit
-            yield return WaitSeconds(0.65f);
+            yield return WaitSeconds(0.6f);
 
             // ground smash effect
             User.PlayEffectGroup(18688);

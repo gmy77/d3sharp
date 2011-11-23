@@ -131,6 +131,9 @@ namespace Mooege.Core.GS.Map
 
         public void Update(int tickCounter)
         {
+            this.PowerManager.Update();
+            this.BuffManager.Update();
+
             var actorsToUpdate = new List<IUpdateable>(); // list of actor to update.
 
             foreach(var player in this.Players.Values) // get players in the world.
@@ -148,9 +151,6 @@ namespace Mooege.Core.GS.Map
             {
                 actor.Update(tickCounter);
             }
-
-            this.PowerManager.Update();
-            this.BuffManager.Update();
         }
 
         #endregion

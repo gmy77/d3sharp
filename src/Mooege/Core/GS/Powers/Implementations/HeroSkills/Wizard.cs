@@ -31,16 +31,57 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
-            UsePrimaryResource(60f);
-            SpawnEffect(86790, TargetPosition);
-            yield return WaitSeconds(2f); // wait for meteor to hit
-            SpawnEffect(86769, TargetPosition);
-            SpawnEffect(90364, TargetPosition, 0, WaitSeconds(4f));
+            UsePrimaryResource(ScriptFormula(8));
 
-            IList<Actor> hits = GetEnemiesInRange(TargetPosition, 13f);
-            WeaponDamage(hits, 3.05f, DamageType.Fire);
+            // cast effect
+            User.PlayEffectGroup(RuneSelect(71141, 71141, 71141, 92222, 217377, 217461));
 
-            // TODO: ground fire damage?
+            TickTimer waitForImpact = WaitSeconds(ScriptFormula(4));
+
+            List<Vector3D> impactPositions = new List<Vector3D>();
+            int meteorCount = Rune_B > 0 ? (int)ScriptFormula(9) : 1;
+
+            // pending effect + meteor
+            for (int n = 0; n < meteorCount; ++n)
+            {
+                Vector3D impactPos;
+                if (meteorCount > 1)
+                    impactPos = new Vector3D(TargetPosition.X + ((float)Rand.NextDouble() - 0.5f) * 25,
+                                             TargetPosition.Y + ((float)Rand.NextDouble() - 0.5f) * 25,
+                                             TargetPosition.Z);
+                else
+                    impactPos = TargetPosition;
+
+                SpawnEffect(RuneSelect(86790, 215853, 91440, 92030, 217142, 217457), impactPos, 0, WaitSeconds(5f));
+                impactPositions.Add(impactPos);
+
+                if (meteorCount > 1)
+                    yield return WaitSeconds(0.1f);
+            }
+
+            // wait for meteor impact(s)
+            yield return waitForImpact;
+
+            // impact effects
+            foreach (var impactPos in impactPositions)
+            {
+                // impact
+                SpawnEffect(RuneSelect(86769, 215809, 91441, 92031, 217139, 217458), impactPos);
+
+                IList<Actor> hits = GetEnemiesInRange(impactPos, ScriptFormula(3));
+                WeaponDamage(hits, ScriptFormula(0),
+                    RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Fire, DamageType.Cold, DamageType.Arcane, DamageType.Fire));
+
+                // pool effect
+                if (Rune_B == 0)
+                {
+                    SpawnEffect(RuneSelect(90364, 90364, -1, 92032, 217307, 217459), impactPos, 0,
+                        WaitSeconds(ScriptFormula(5)));
+                }
+
+                if (meteorCount > 1)
+                    yield return WaitSeconds(0.1f);
+            }
         }
     }
 
