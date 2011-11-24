@@ -109,6 +109,7 @@ namespace Mooege.Tools.StringViewer
 
         private void DetectProto()
         {
+            cmdDetect.Enabled = false;
             cboProtos.Items.Clear();
             Application.UseWaitCursor = true;
             foreach (var proto in protoTypes)
@@ -125,7 +126,8 @@ namespace Mooege.Tools.StringViewer
                 }
                 catch (Exception e)
                 {
-                    if (!e.Message.Contains("missing") && !e.Message.Contains("the middle"))
+                    if (!e.Message.Contains("missing") && !e.Message.Contains("the middle")
+                        && !e.Message.Contains("invalid wire") && !e.Message.Contains("invalid tag"))
                     {
                         MessageBox.Show("Detected possible problem:\n" + e.Message);
                     }
@@ -139,6 +141,7 @@ namespace Mooege.Tools.StringViewer
                 MessageBox.Show("String does not completely build into any valid prototype.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
             Application.UseWaitCursor = false;
+            cmdDetect.Enabled = true;
         }
 
         private void cboProtos_SelectedIndexChanged(object sender, EventArgs e)
