@@ -40,6 +40,7 @@ namespace Mooege.Tools.StringViewer
             var ProtoList = from types in Assembly.Load("LibMooNet").GetTypes()
                             where types.IsClass && types.Name != "Builder"
                             && types.Name != "Types" && types.Name != "Stub"
+                            && types.IsAbstract == false && !types.Name.Contains("PrivateImplementation")
                             select types;
             protoTypes = ProtoList.ToArray();
         }
@@ -122,8 +123,12 @@ namespace Mooege.Tools.StringViewer
                     if (builder.UnknownFields.SerializedSize == 0)
                         cboProtos.Items.Add(proto.FullName);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    if (!e.Message.Contains("missing") && !e.Message.Contains("the middle"))
+                    {
+                        MessageBox.Show("Detected possible problem:\n" + e.Message);
+                    }
                 }
             }
             if (cboProtos.Items.Count > 0)
