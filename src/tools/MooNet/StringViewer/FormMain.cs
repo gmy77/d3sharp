@@ -18,9 +18,11 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using Google.ProtocolBuffers;
 using Mooege.Tools.Helpers;
+using System.Linq;
 
 namespace Mooege.Tools.StringViewer
 {
@@ -28,11 +30,18 @@ namespace Mooege.Tools.StringViewer
     {
         private byte[] _byteData;
         private bool _arrayize=false;
+        private System.Type[] protoTypes;
 
         public FormMain()
         {
             InitializeComponent();
             this.comboBoxOutputType.SelectedIndex = 0;
+
+            var ProtoList = from types in Assembly.Load("LibMooNet").GetTypes()
+                            where types.IsClass && types.Name != "Builder"
+                            && types.Name != "Types" && types.Name != "Stub"
+                            select types;
+            protoTypes = ProtoList.ToArray();
         }
 
         private void UpdateProtoOutput()
@@ -95,6 +104,46 @@ namespace Mooege.Tools.StringViewer
 
             _arrayize = !_arrayize;
             UpdateHexOutput();
+        }
+
+        private void DetectProto()
+        {
+            cboProtos.Items.Clear();
+            Application.UseWaitCursor = true;
+            foreach (var proto in protoTypes)
+            {
+                Application.DoEvents();
+                try
+                {
+                    var defaultMessage = MessageUtil.GetDefaultMessage(proto);
+                    IBuilder builder = defaultMessage.WeakCreateBuilderForType();
+                    builder.WeakMergeFrom(ByteString.CopyFrom(_byteData));
+                    builder.WeakBuild();
+                    if (builder.UnknownFields.SerializedSize == 0)
+                        cboProtos.Items.Add(proto.FullName);
+                }
+                catch (Exception)
+                {
+                }
+            }
+            if (cboProtos.Items.Count > 0)
+            {
+                cboProtos.SelectedIndex = 0;
+            }
+            else
+                MessageBox.Show("String does not completely build into any valid prototype.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+            Application.UseWaitCursor = false;
+        }
+
+        private void cboProtos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBoxProtoType.Text = cboProtos.SelectedItem.ToString();
+        }
+
+        private void cmdDetect_Click(object sender, EventArgs e)
+        {
+            DetectProto();
         }
     }
 
