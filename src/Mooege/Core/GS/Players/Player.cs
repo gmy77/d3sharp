@@ -1139,41 +1139,41 @@ namespace Mooege.Core.GS.Players
 
         #region cooked messages
 
-        public GenericBlobMessage GetPlayerBanner()
+        public PlayerBannerMessage GetPlayerBanner()
         {
             var playerBanner = D3.GameMessage.PlayerBanner.CreateBuilder()
-                .SetPlayerIndex((uint) this.PlayerIndex)
+                .SetPlayerIndex((uint)this.PlayerIndex)
                 .SetBanner(this.Toon.Owner.BannerConfiguration)
                 .Build();
 
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage6) {Data = playerBanner.ToByteArray()};
+            return new PlayerBannerMessage() { PlayerBanner = playerBanner };
         }
 
-        public GenericBlobMessage GetBlacksmithData()
+        public BlacksmithDataInitialMessage GetBlacksmithData()
         {
             var blacksmith = D3.ItemCrafting.CrafterData.CreateBuilder()
                 .SetLevel(45)
                 .SetCooldownEnd(0)
                 .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage9) { Data = blacksmith.ToByteArray() };
+            return new BlacksmithDataInitialMessage() { CrafterData = blacksmith };
         }
 
-        public GenericBlobMessage GetJewelerData()
+        public JewelerDataInitialMessage GetJewelerData()
         {
             var jeweler = D3.ItemCrafting.CrafterData.CreateBuilder()
                 .SetLevel(9)
                 .SetCooldownEnd(0)
                 .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage10) { Data = jeweler.ToByteArray() };
+            return new JewelerDataInitialMessage() { CrafterData = jeweler };
         }
 
-        public GenericBlobMessage GetMysticData()
+        public MysticDataInitialMessage GetMysticData()
         {
             var mystic = D3.ItemCrafting.CrafterData.CreateBuilder()
                 .SetLevel(45)
                 .SetCooldownEnd(0)
                 .Build();
-            return new GenericBlobMessage(Opcodes.GenericBlobMessage11) { Data = mystic.ToByteArray() };
+            return new MysticDataInitialMessage() { CrafterData = mystic };
         }
 
         #endregion
