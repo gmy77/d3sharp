@@ -55,6 +55,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AStar">
+      <HintPath>..\..\dep\astar\AStar.dll</HintPath>
+    </Reference>
     <Reference Include="CrystalMpq">
       <HintPath>..\..\dep\crystalmpq\CrystalMpq.dll</HintPath>
     </Reference>
@@ -97,6 +100,8 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -140,10 +145,13 @@
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
     <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
+    <Compile Include="Common\MPQ\LazyAsset.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\ArtisanShortcut.cs" />
     <Compile Include="Core\GS\Actors\Implementations\NephalemAltar.cs" />
+    <Compile Include="Core\GS\Actors\Movement\MoveToPointWithPathfindAction.cs" />
     <Compile Include="Core\GS\Actors\ServerProp.cs" />
+    <Compile Include="Core\GS\AI\Pathfinder.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\ActorKeys.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\AnimationSetKeys.cs" />
     <Compile Include="Core\GS\Common\Types\TagMap\MarkerKeys.cs" />
@@ -231,11 +239,13 @@
     <Compile Include="Core\GS\Players\Equipment.cs" />
     <Compile Include="Core\GS\Ticker\SteppedTickTimer.cs" />
     <Compile Include="Core\GS\Ticker\TickTimer.cs" />
+    <Compile Include="Core\GS\Web\GSWebService.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
     <Compile Include="Core\Cryptography\ARC4.cs" />
+    <Compile Include="Core\MooNet\Achievement\AchievementManager.cs" />
     <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
     <Compile Include="Core\Cryptography\SRP6a.cs" />
     <Compile Include="Core\MooNet\Authentication\Config.cs" />
@@ -248,7 +258,6 @@
     <Compile Include="Core\MooNet\Commands\CommandGroup.cs" />
     <Compile Include="Core\MooNet\Commands\Config.cs" />
     <Compile Include="Core\MooNet\Commands\DebugCommands.cs" />
-    <Compile Include="Core\MooNet\Commands\ServerCommandHandler.cs" />
     <Compile Include="Core\MooNet\Commands\CommandManager.cs" />
     <Compile Include="Core\MooNet\Commands\CommandAttribute.cs" />
     <Compile Include="Core\MooNet\Commands\ServerCommands.cs" />
@@ -293,6 +302,8 @@
     <Compile Include="Core\MooNet\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\MooNet\Toons\ToonManager.cs" />
     <Compile Include="Common\Logging\LogConfig.cs" />
+    <Compile Include="Core\MooNet\Web\AccountWebService.cs" />
+    <Compile Include="Core\Web\CoreWebService.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
@@ -545,6 +556,10 @@
     <Compile Include="Net\MooNet\RPC\RPCCallback.cs" />
     <Compile Include="Net\NATConfig.cs" />
     <Compile Include="Net\Utils.cs" />
+    <Compile Include="Net\WebServices\Config.cs" />
+    <Compile Include="Net\WebServices\IWebService.cs" />
+    <Compile Include="Core\MooNet\Web\MooNetWebService.cs" />
+    <Compile Include="Net\WebServices\ServiceManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Net\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -629,5 +644,4 @@
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
 </Project>

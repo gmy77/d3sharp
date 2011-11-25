@@ -30,10 +30,10 @@ using Mooege.Common.Versions;
 #else
 [assembly: AssemblyConfiguration("Release")]
 #endif
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("2011")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany("mooege.org")]
+[assembly: AssemblyProduct("mooege")]
+[assembly: AssemblyCopyright("Copyright ©  2011, mooege")]
+[assembly: AssemblyTrademark("mooege")]
 [assembly: AssemblyCulture("")]
 
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".

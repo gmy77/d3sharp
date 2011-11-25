@@ -40,7 +40,7 @@ namespace Mooege.Core.MooNet.Authentication
 
         private static void InitAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
-            var account = AccountManager.GetAccountByEmail(request.Email); // check if account exists.
+            var account = AccountManager.GetAccountByEmail(request.Email.ToLower()); // check if account exists.
             
             if (account == null) // we should be returning an error to client /raist.
             {

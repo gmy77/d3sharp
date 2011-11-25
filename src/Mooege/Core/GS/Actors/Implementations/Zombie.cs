@@ -30,7 +30,7 @@ namespace Mooege.Core.GS.Actors.Implementations
         public Zombie(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            // this.Brain = new MonsterBrain(this);
+            //this.Brain = new MonsterBrain(this);
         }
     }
 }

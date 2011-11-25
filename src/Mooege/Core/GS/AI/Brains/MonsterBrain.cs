@@ -69,7 +69,7 @@ namespace Mooege.Core.GS.AI.Brains
                 var heading = new Vector3D(this.Body.Position.X + FastRandom.Instance.Next(-40, 40), this.Body.Position.Y + FastRandom.Instance.Next(-40, 40), this.Body.Position.Z);
 
                 if (this.Body.Position.DistanceSquared(ref heading) > this.Body.WalkSpeed * this.Body.World.Game.TickRate) // just skip the movements that can be accomplished in a single game.update(). /raist.
-                    this.CurrentAction = new PathfindToPoint(this.Body, heading);
+                    this.CurrentAction = new MoveToPointWithPathfindAction(this.Body, heading);
             }
         }
     }

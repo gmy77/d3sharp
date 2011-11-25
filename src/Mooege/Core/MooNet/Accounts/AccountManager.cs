@@ -28,7 +28,9 @@ namespace Mooege.Core.MooNet.Accounts
     public static class AccountManager
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
+
         private static readonly Dictionary<string, Account> Accounts = new Dictionary<string, Account>();
+        public static List<Account> AccountsList { get { return Accounts.Values.ToList(); } }
 
         public static int TotalAccounts
         {

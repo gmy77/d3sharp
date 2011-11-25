@@ -35,6 +35,6 @@ public class QueryTemplate<T> where T : GameMessage
         IEnumerable<T> result = messages.AsQueryable<T>().Where(whereClause);
 
         foreach (T message in result)
-            yield return new MessageNode(message, 0, 0);
+            yield return new MessageNode(message);
     }
 }

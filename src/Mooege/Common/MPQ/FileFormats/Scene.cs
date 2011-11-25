@@ -75,51 +75,8 @@ namespace Mooege.Common.MPQ.FileFormats
             this.NavZone = new NavZoneDef(stream);
 
             stream.Close();
-            
-            /*List<System.Windows.Point> Vertices = new List<System.Windows.Point>();
-            List<face3> faces = new List<face3>();
-            if (file.Name.Contains("Tristram_E10_S15"))
-            {
-                System.IO.StreamWriter fs = new System.IO.StreamWriter("output.obj");
-                foreach (var cell in this.NavZone.NavCells)
-                {
-                    if ((cell.Flags & NavCellFlags.AllowWalk) == NavCellFlags.AllowWalk)
-                    {
-                        float x = 0 + cell.Min.X;
-                        float y = 0 + cell.Min.Y;
-
-                        float sizex = cell.Max.X - cell.Min.X;
-                        float sizey = cell.Max.Y - cell.Min.Y;
-                        var rect = new System.Windows.Rect(x, y, sizex, sizey);
-                        Vertices.Add(rect.BottomRight);
-                        Vertices.Add(rect.BottomLeft);
-                        Vertices.Add(rect.TopLeft);
-                        Vertices.Add(rect.TopRight);
-                        faces.Add(new face3(Vertices.Count - 3, Vertices.Count - 2, Vertices.Count - 1, Vertices.Count - 0));
-                    }
-                }
-                foreach (var x in Vertices)
-                {
-                    fs.WriteLine("v " + x.X + " " + 0  + " " + x.Y);
-                }
-                foreach (var x in faces)
-                {
-                    fs.WriteLine("f " + (x.i0) + " " + (x.i3) + " " + (x.i2) + " " + (x.i1));
-                }
-                fs.Close();
-            }*/
         }
-        public class face3
-        {
-            public int i0, i1, i2,i3;
-            public face3(int i1,int i2,int i3,int i4)
-        {
-            this.i0 = i1;
-            this.i1 = i2;
-            this.i2 = i3;
-            this.i3 = i4;
-        }
-        }
+        
         public class NavMeshDef
         {
             public int SquaresCountX { get; private set; }
@@ -139,29 +96,33 @@ namespace Mooege.Common.MPQ.FileFormats
                 this.NavMeshSquareCount = stream.ReadValueS32();
                 this.Float0 = stream.ReadValueF32();
                 this.Squares = stream.ReadSerializedData<NavMeshSquare>(this.NavMeshSquareCount);
-                // Could do away with keeping Squares
+               
                 if (SquaresCountX < 64 && SquaresCountY < 64)
                 {
                     WalkGrid = new byte[64, 64];
                 }
-                else
+                else if (SquaresCountX < 128 && SquaresCountY < 128)
                 {
                     WalkGrid = new byte[128, 128]; //96*96
                 }
-                if (SquaresCountX > 127 || SquaresCountY > 127) { WalkGrid = new byte[256, 256]; }             
-                int xx, yy;
+                else if (SquaresCountX > 128 || SquaresCountY > 128)
+                {
+                    WalkGrid = new byte[256, 256];
+                }
+
+                int X, Y;
+                // Loop thru each NavmeshSquare in the array, and fills a grid.
                 for (int i = 0; i < NavMeshSquareCount; i++)
                 {
-                    //WalkGrid[i % SquaresCountY, i / SquaresCountY] = (byte)(Squares[i].Flags & 0x1);
-                    int cnt = i;
-                    xx = 0; yy = 0;
-                    while (cnt > SquaresCountY - 1)
+                    int countNavSquare = i;
+                    X = 0; Y = 0;
+                    while (countNavSquare > SquaresCountY - 1)
                     {
-                        yy++;
-                        cnt -= SquaresCountY;
+                        Y++;
+                        countNavSquare -= SquaresCountY;
                     }
-                    xx = cnt;
-                    WalkGrid[xx, yy] = (byte)(Squares[i].Flags & 0x1); // Set the grid to 0x1 if its walkable, left as 0 if not. - DarkLotus
+                    X = countNavSquare;
+                    WalkGrid[X, Y] = (byte)(Squares[i].Flags & Scene.NavCellFlags.AllowWalk); // Set the grid to 0x1 if its walkable, left as 0 if not. - DarkLotus
                 }
 
                 stream.Position += (3 * 4);
@@ -220,12 +181,12 @@ namespace Mooege.Common.MPQ.FileFormats
         public class NavMeshSquare : ISerializableData
         {
             public float Float0 { get; private set; }
-            public int Flags { get; private set; }
+            public NavCellFlags Flags { get; private set; }
 
             public void Read(MpqFileStream stream)
             {
                 this.Float0 = stream.ReadValueF32();
-                this.Flags = stream.ReadValueS32();
+                this.Flags = (NavCellFlags)stream.ReadValueS32();
             }
         }
 
