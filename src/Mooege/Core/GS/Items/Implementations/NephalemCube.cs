@@ -18,6 +18,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mooege.Net.GS.Message;
+using Mooege.Common.MPQ.FileFormats;
+using Mooege.Net.GS.Message.Definitions.Misc;
 
 namespace Mooege.Core.GS.Items.Implementations
 {
@@ -34,5 +37,38 @@ namespace Mooege.Core.GS.Items.Implementations
             player.EnableCubeOfNephalem();
             this.Destroy();
         }
+
+        public static void OnUse(GS.Players.Player player, Item salvageItem)
+        {           
+            if (salvageItem == null) return;
+            player.Inventory.DestroyInventoryItem(salvageItem);
+
+            List<Item> craftingMaterials = TreasureClassManager.CreateLoot(player, salvageItem.ItemDefinition.SNOComponentTreasureClass);
+            if (salvageItem.Attributes[GameAttribute.Item_Quality_Level] >= (int)ItemTable.ItemQuality.Magic1)
+                craftingMaterials.AddRange(TreasureClassManager.CreateLoot(player, salvageItem.ItemDefinition.SNOComponentTreasureClassMagic));
+            if (salvageItem.Attributes[GameAttribute.Item_Quality_Level] >= (int)ItemTable.ItemQuality.Rare4)
+                craftingMaterials.AddRange(TreasureClassManager.CreateLoot(player, salvageItem.ItemDefinition.SNOComponentTreasureClassRare));
+
+            List<int> craftigItemsGbids = new List<int>();
+            foreach (Item crafingItem in craftingMaterials)
+            {
+                craftigItemsGbids.Add(crafingItem.GBHandle.GBID);
+                // reveal new item to player                  
+                player.Inventory.PickUp(crafingItem);
+                player.Inventory.RevealInventoryItem(crafingItem);
+            }
+
+            // TODO: This Message doesn't work. I think i should produce an entry in the chat window like "Salvaging Gloves gave you Common scrap!" - angerwin
+            SalvageResultsMessage message = new SalvageResultsMessage
+            {
+                gbidNewItems = craftigItemsGbids.ToArray(),
+                gbidOriginalItem = salvageItem.GBHandle.GBID,
+                Field1 = 0, // Unkown
+                Field2 = 0, // Unkown 
+
+            };
+            //_owner.InGameClient.SendMessage(message);
+        }
+        
     }
 }

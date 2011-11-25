@@ -32,6 +32,7 @@ using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using System.Collections.Generic;
 using System.Linq;
+using Mooege.Core.GS.Items.Implementations;
 
 namespace Mooege.Core.GS.Players
 {
@@ -576,50 +577,25 @@ namespace Mooege.Core.GS.Players
         }
 
 
-        private void OnUseNephalmCubeMessage(RequestUseNephalemCubeMessage requestUseNephalemCubeMessage)
+		private void OnUseNephalmCubeMessage(RequestUseNephalemCubeMessage requestUseNephalemCubeMessage)
         {
             Item salvageItem = GetItem(requestUseNephalemCubeMessage.ActorID);
-            if (salvageItem == null) return;
-            DestroyInventoryItem(salvageItem);
-
-            List<Item> craftingMaterials = TreasureClassManager.CreateLoot(_owner, salvageItem.ItemDefinition.SNOComponentTreasureClass);
-            if (salvageItem.Attributes[GameAttribute.Item_Quality_Level] >= (int)ItemTable.ItemQuality.Magic1)
-                craftingMaterials.AddRange(TreasureClassManager.CreateLoot(_owner, salvageItem.ItemDefinition.SNOComponentTreasureClassMagic));
-            if (salvageItem.Attributes[GameAttribute.Item_Quality_Level] >= (int)ItemTable.ItemQuality.Rare4)
-                craftingMaterials.AddRange(TreasureClassManager.CreateLoot(_owner, salvageItem.ItemDefinition.SNOComponentTreasureClassRare));
-
-            List<int> craftigItemsGbids = new List<int>();
-            foreach (Item crafingItem in craftingMaterials)
-            {
-                craftigItemsGbids.Add(crafingItem.GBHandle.GBID);
-                // reveal new item to player  
-                RevealInventoryItem(crafingItem);
-                PickUp(crafingItem);
-            }
-
-            // TODO: This Message doesn't work. I think i should produce an entry in the chat window like "Salvaging Gloves gave you Common scrap!" - angerwin
-            SalvageResultsMessage message = new SalvageResultsMessage
-            {
-                gbidNewItems = craftigItemsGbids.ToArray(),
-                gbidOriginalItem = salvageItem.GBHandle.GBID,
-                Field1 = 0, // Unkown
-                Field2 = 0, // Unkown 
-
-            };
-            //_owner.InGameClient.SendMessage(message);
+            NephalemCube.OnUse(_owner, salvageItem);
         }
 
         private void OnUseCauldronOfJordanMessage(RequestUseCauldronOfJordanMessage requestUseCauldronOfJordanMessage)
         {
-            Item selledItem = GetItem(requestUseCauldronOfJordanMessage.ActorID);
-            int sellValue = selledItem.ItemDefinition.BaseGoldValue; // TODO: calculate correct sell value for magic items
-            Item sumGoldItem = _equipment.AddGoldAmount(sellValue);
-
-            // TODO: instead of destroying item, it should be moved to merchants inventory for rebuy. 
-            DestroyInventoryItem(selledItem);
+            Item sellItem = GetItem(requestUseCauldronOfJordanMessage.ActorID);
+            CauldronOfJordan.OnUse(_owner, sellItem);
         }
 
-        private Item RevealInventoryItem(Item item)
+
+        public void AddGoldAmount(int amount)
+        {
+            _equipment.AddGoldAmount(amount);
+        }
+
+        public Item RevealInventoryItem(Item item)
         {
             item.Owner = _owner;
             _owner.World.Enter(item); // this does not reveal an Item to the Player because item has no Worldposition                        

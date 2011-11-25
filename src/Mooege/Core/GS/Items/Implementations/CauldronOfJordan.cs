@@ -34,5 +34,14 @@ namespace Mooege.Core.GS.Items.Implementations
             player.EnableCauldronOfJordan();
             this.Destroy();
         }
+
+        public static void OnUse(GS.Players.Player player, Item sellItem)
+        {
+            int sellValue = sellItem.ItemDefinition.BaseGoldValue; // TODO: calculate correct sell value for magic items
+            player.Inventory.AddGoldAmount(sellValue);
+
+            // TODO: instead of destroying item, it should be moved to merchants inventory for rebuy. 
+            player.Inventory.DestroyInventoryItem(sellItem);
+        }
     }
 }

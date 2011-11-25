@@ -1641,20 +1641,20 @@ namespace Mooege.Core.GS.Players
 
         #region StoneOfRecall, CubeOfNephalem, CauldonOfJourdan
 
-        internal void EnableStoneOfRecall()
+        public void EnableStoneOfRecall()
         {
             Attributes[GameAttribute.Skill, 0x0002EC66] = 1;
             Attributes[GameAttribute.Skill_Total, 0x0002EC66] = 1;
             Attributes.SendChangedMessage(this.InGameClient);
         }
 
-        internal void EnableCauldronOfJordan()
+        public void EnableCauldronOfJordan()
         {         
             Attributes[GameAttribute.ItemMeltUnlocked] = true;
             Attributes.SendChangedMessage(this.InGameClient);
         }
 
-        internal void EnableCubeOfNephalem()
+        public void EnableCubeOfNephalem()
         {
             Attributes[GameAttribute.SalvageUnlocked] = true;
             Attributes.SendChangedMessage(this.InGameClient);
