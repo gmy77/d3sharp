@@ -38,7 +38,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\dep\protobuf-csharp\Google.ProtocolBuffers.dll</HintPath>
     </Reference>
-    <Reference Include="Mooege, Version=0.7841.4345.3407, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="Mooege, Version=0.7841.4345.12586, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <ExecutableExtension>.exe</ExecutableExtension>
       <HintPath>..\..\..\Mooege\bin\Debug\Mooege.exe</HintPath>

@@ -21,12 +21,34 @@ using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Common.Logging;
+using Mooege.Core.GS.Items;
+using Mooege.Common.Helpers.Math;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.TreasureClass)]
     public class TreasureClass : FileFormat
     {
+        Logger Logger = new Logger("TreasureClass");
+
+        public static TreasureClass GenericTreasure 
+        {
+            get
+            {
+                return new StandardTreasureClass();
+            }
+        }
+
+        public class StandardTreasureClass : TreasureClass
+        {
+            public override Item CreateDrop(Player player)
+            {
+                return ItemGenerator.CreateGold(player, RandomHelper.Next(1000, 3000));
+            }
+        }
+
         public Header Header { get; private set; }
         public float Percentage { get; private set; }
         public int I0 { get; private set; }
@@ -45,6 +67,13 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Close();
         }
 
+        public TreasureClass() { }
+
+        public virtual Item CreateDrop(Player player)
+        {
+            Logger.Warn("Treasure classes not implemented, using generic treasure class");
+            return TreasureClass.GenericTreasure.CreateDrop(player);
+        }
     }
 
     public class LootDropModifier : ISerializableData
@@ -57,7 +86,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int I2 { get; private set; }
         public int I3 { get; private set; }
         public int SNOCondition { get; private set; }
-        public ItemSpecifierData ItemSpecifier { get; private set; }
+        public ItemSpecifierData2 ItemSpecifier { get; private set; }
         public int I5 { get; private set; }
         public int[] I4 { get; private set; }
         public int I6 { get; private set; }
@@ -72,12 +101,35 @@ namespace Mooege.Common.MPQ.FileFormats
             this.I2 = stream.ReadValueS32();
             this.I3 = stream.ReadValueS32();
             this.SNOCondition = stream.ReadValueS32();
-            this.ItemSpecifier = new ItemSpecifierData(stream);
+            this.ItemSpecifier = new ItemSpecifierData2(stream);
             this.I5 = stream.ReadValueS32();
             this.I4 = new int[4];
             for (int i = 0; i < 4; i++)
                 this.I4[i] = stream.ReadValueS32();
-            this.I6 = stream.ReadValueS32();
+            //this.I6 = stream.ReadValueS32();
         }
+
+
+        public class ItemSpecifierData2
+        {
+            public int ItemGBId { get; private set; }
+            public int I0 { get; private set; }
+            public int[] GBIdAffixes = new int[3];
+            public int I1 { get; private set; }
+            public int I2 { get; private set; }
+
+            public ItemSpecifierData2(MpqFileStream stream)
+            {
+                ItemGBId = stream.ReadValueS32();
+                I0 = stream.ReadValueS32();
+                for (int i = 0; i < GBIdAffixes.Length; i++)
+                {
+                    GBIdAffixes[i] = stream.ReadValueS32();
+                }
+                I1 = stream.ReadValueS32();
+                //I2 = stream.ReadValueS32();
+            }
+        }
+
     }
 }

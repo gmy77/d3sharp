@@ -103,7 +103,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         {
             get
             {
-                return _tagMapEntries[key.ID].Int;
+                return key.GetValue(_tagMapEntries[key.ID]);
             }
         }
 
@@ -111,7 +111,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         {
             get
             {
-                return _tagMapEntries[key.ID].Float;
+                return key.GetValue(_tagMapEntries[key.ID]);
             }
         }
 
@@ -119,7 +119,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         {
             get
             {
-                return _tagMapEntries[key.ID].ScriptFormula;
+                return key.GetValue(_tagMapEntries[key.ID]);
             }
         }
 
@@ -127,9 +127,18 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         {
             get
             {
-                return new SNOHandle(_tagMapEntries[key.ID].Int);
+                return key.GetValue(_tagMapEntries[key.ID]);
             }
         }
+
+        public GizmoGroup this[TagKeyGizmoGroup key]
+        {
+            get
+            {
+                return key.GetValue(_tagMapEntries[key.ID]);
+            }
+        }
+
 
         [Obsolete("Use TagKeys instead. If it is missing create it")]
         public TagMapEntry this[int key]
@@ -158,7 +167,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
     }
 
 
-    public class TagKey
+    public abstract class TagKey
     {
         public int ID { get; private set; }
         public string Name { get; set; }
@@ -166,10 +175,10 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public TagKey(int id) { ID = id; }
     }
 
-    public class TagKeyInt : TagKey { public TagKeyInt(int id) : base(id) { } }
-    public class TagKeyFloat : TagKey { public TagKeyFloat(int id) : base(id) { } }
-    public class TagKeyScript : TagKey { public TagKeyScript(int id) : base(id) { } }
-    public class TagKeySNO : TagKey { public TagKeySNO(int id) : base(id) { } }
+    public class TagKeyInt : TagKey { public TagKeyInt(int id) : base(id) { } public int GetValue(TagMapEntry entry) { return entry.Int; }  }
+    public class TagKeyFloat : TagKey { public TagKeyFloat(int id) : base(id) { } public float GetValue(TagMapEntry entry) { return entry.Float; } }
+    public class TagKeyScript : TagKey { public TagKeyScript(int id) : base(id) { } public ScriptFormula GetValue(TagMapEntry entry) { return entry.ScriptFormula; } }
+    public class TagKeySNO : TagKey { public TagKeySNO(int id) : base(id) { } public SNOHandle GetValue(TagMapEntry entry) { return new SNOHandle(entry.Int); } }
 
 
     public class TagMapEntry
@@ -190,22 +199,20 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public override string ToString()
         {
             List<TagKey> keys = TagMap.GetKeys(TagID);
-            TagKey key = null;
+ 
+            if(keys.Count == 0)
+                switch (Type)
+                {
+                    case 1: return String.Format("{0} = {1}", TagID.ToString(), Float);
+                    case 4: return String.Format("{0} = {1}", TagID.ToString(), ScriptFormula);
+                    default: return String.Format("{0} = {1}", TagID.ToString(), Int);
+                }
 
             if (keys.Count == 1)
-                key = keys.First();
-            else if(keys.Count > 0)
-            {
-                key = new TagKey(TagID);
-                key.Name = String.Format("Ambigious key: Depending of the context it one of {0}", String.Join(",", keys.Select(x => x.Name).ToArray()));
-            }
+                return String.Format("{0} = {1}", keys.First().Name, keys.First().GetType().GetMethod("GetValue").Invoke(keys.First(), new object[] { this }).ToString());
+ 
+            return String.Format("Ambigious key: Depending of the context it one of {0}", String.Join(",", keys.Select(x => x.Name).ToArray()));
 
-            switch (Type)
-            {
-                case 1: return String.Format("{0} = {1}", key != null ? key.Name : TagID.ToString(), Float);
-                case 4: return String.Format("{0} = {1}", key != null ? key.Name : TagID.ToString(), ScriptFormula);
-                default: return String.Format("{0} = {1}", key != null ? key.Name : TagID.ToString(), Int);
-            }
         }
 
         public TagMapEntry(MpqFileStream stream)

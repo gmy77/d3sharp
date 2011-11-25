@@ -32,7 +32,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int I1 { get; private set; }
         public int SNOLevelAreaOverrideForGizmoLocs { get; private set; }
         public GizmoLocSet LocSet { get; private set; }
-        public int I2 { get; private set; }
+        public int SpawnPopulationEntries { get; private set; }
         public List<LevelAreaSpawnPopulation> SpawnPopulation { get; private set; }
 
         public LevelArea(MpqFile file)
@@ -46,7 +46,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.SNOLevelAreaOverrideForGizmoLocs = stream.ReadValueS32();
             stream.Position += 4;
             this.LocSet = new GizmoLocSet(stream);
-            this.I2 = stream.ReadValueS32();
+            this.SpawnPopulationEntries = stream.ReadValueS32();
             stream.Position += 12;
             this.SpawnPopulation = stream.ReadSerializedData<LevelAreaSpawnPopulation>();
             stream.Close();

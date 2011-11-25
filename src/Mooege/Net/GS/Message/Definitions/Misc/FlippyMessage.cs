@@ -23,34 +23,33 @@ using Mooege.Net.GS.Message.Fields;
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     /// <summary>
-    /// Sent to the client to create a world animation. Like in gold flipping before gold dropping or
-    /// highlighting the area around around important items.
+    /// Sent to the client to play an item drop animation
     /// </summary>
     [Message(Opcodes.FlippyMessage)]
     public class FlippyMessage : GameMessage
     {
-        // TODO Verify SNOs, there are to few samples to be sure - farmy
         public int ActorID;             // Effect is created at the actors location
         public int SNOParticleEffect;   // SNO for a particle effect or 0x6d82 (default_flippy) for an appearance effect
-        public int SNOAppearance;       // -1 for a particle effect or SNO of the animation effect. eg Axe_flippy etc
-        public Vector3D Field3;         // no idea ... my tests always take the actor position - farmy
+        public int SNOFlippyActor;      // -1 for a particle effect or ActorSNO for the actor to use during flipping
+        public Vector3D Destination;
+
         public FlippyMessage() : base(Opcodes.FlippyMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
             ActorID = buffer.ReadInt(32);
             SNOParticleEffect = buffer.ReadInt(32);
-            SNOAppearance = buffer.ReadInt(32);
-            Field3 = new Vector3D();
-            Field3.Parse(buffer);
+            SNOFlippyActor = buffer.ReadInt(32);
+            Destination = new Vector3D();
+            Destination.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, ActorID);
             buffer.WriteInt(32, SNOParticleEffect);
-            buffer.WriteInt(32, SNOAppearance);
-            Field3.Encode(buffer);
+            buffer.WriteInt(32, SNOFlippyActor);
+            Destination.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -61,8 +60,8 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', pad); b.AppendLine("SNOParticleEffect: 0x" + SNOParticleEffect.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("SNOAppearance: 0x" + SNOAppearance.ToString("X8"));
-            Field3.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("SNOFlippyActor: 0x" + SNOFlippyActor.ToString("X8"));
+            Destination.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

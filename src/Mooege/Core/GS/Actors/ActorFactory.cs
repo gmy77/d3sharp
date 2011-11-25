@@ -26,12 +26,15 @@ using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Core.GS.Actors.Implementations;
+using Mooege.Common.Logging;
 
 namespace Mooege.Core.GS.Actors
 {
     public static class ActorFactory
     {
         private static readonly Dictionary<int, Type> SNOHandlers = new Dictionary<int, Type>();
+        private static Logger Logger = new Logger("ActorFactory");
 
         static ActorFactory()
         {
@@ -71,7 +74,23 @@ namespace Mooege.Core.GS.Actors
                         else
                             return new Monster(world, snoId, tags);
                 case ActorType.Gizmo:
-                    return CreateGizmo(world, snoId, tags);
+
+                        switch (actorData.TagMap[ActorKeys.GizmoGroup])
+                        {
+                            case GizmoGroup.ClickableLoot:
+                                return new ClickableLoot(world, snoId, tags);
+                            case GizmoGroup.KillableLoot:
+                                return new KillableLoot(world, snoId, tags);
+                            case GizmoGroup.Portal:
+                                return new Portal(world, snoId, tags);
+                            case GizmoGroup.BossPortal:
+                                Logger.Warn("Skipping loading of boss portals");
+                                return null;
+
+                            default:
+                                return CreateGizmo(world, snoId, tags);
+                        }
+
 
                 case ActorType.ServerProp:
                     return new ServerProp(world, snoId, tags);
