@@ -46,6 +46,20 @@ namespace Mooege.Common.MPQ.FileFormats
             this.S0 = stream.ReadString(256);
             this.S1 = stream.ReadString(256);
             this.I1 = stream.ReadValueS32();
+
+            if (file.Name.Contains("Tristram_E10_S15"))
+            {
+                System.IO.StreamWriter fs = new System.IO.StreamWriter("physmeshout.obj");
+                foreach (var x in CollisionMeshes[0].DominoVertices)
+                {
+                    fs.WriteLine("v " + x.X + " " + x.Z + " " + x.Y);
+                }
+                foreach (var x in CollisionMeshes[0].DominoTriangles)
+                {
+                    fs.WriteLine("f " + (x.I0 + 1) + " " + (x.I1 + 1) + " " + (x.I2 + 1));
+                }
+                fs.Close();
+            }
             stream.Close();
         }
     }
@@ -56,12 +70,12 @@ namespace Mooege.Common.MPQ.FileFormats
         public Float3 F1 { get; private set; }
         public Float3 F2 { get; private set; }
         public int I0 { get; private set; }
-        public int I1 { get; private set; }
-        public int I2 { get; private set; }
-        public int I3 { get; private set; }
+        public int NumberOfVerts { get; private set; }
+        public int NumberOfFaces { get; private set; }
+        public int NumberOfEdges { get; private set; }
         public int I4 { get; private set; }
         public int I5 { get; private set; }
-        public List<Float3> F3 { get; private set; }
+        public List<Float3> DominoVertices { get; private set; }
         public List<MeshTriangle> DominoTriangles { get; private set; }
         public List<MeshNode> DominoNodes { get; private set; }
         public List<MeshEdge> DominoEdges { get; private set; }
@@ -75,12 +89,13 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F2 = new Float3(stream);
             stream.Position += 36;
             this.I0 = stream.ReadValueS32();
-            this.I1 = stream.ReadValueS32();
-            this.I2 = stream.ReadValueS32();
-            this.I3 = stream.ReadValueS32();
+            this.NumberOfVerts = stream.ReadValueS32();
+            this.NumberOfFaces = stream.ReadValueS32();
+            this.NumberOfEdges = stream.ReadValueS32();
             this.I4 = stream.ReadValueS32();
             this.I5 = stream.ReadValueS32();
-            this.F3 = stream.ReadSerializedData<Float3>();
+
+            this.DominoVertices = stream.ReadSerializedData<Float3>();
             this.DominoTriangles = stream.ReadSerializedData<MeshTriangle>();
             this.DominoNodes = stream.ReadSerializedData<MeshNode>();
             this.DominoEdges = stream.ReadSerializedData<MeshEdge>();
@@ -91,24 +106,24 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class Float3 : ISerializableData
     {
-        public float F0 { get; private set; }
-        public float F1 { get; private set; }
-        public float F2 { get; private set; }
+        public float X { get; private set; }
+        public float Y { get; private set; }
+        public float Z { get; private set; }
 
         public Float3() { }
 
         public Float3(MpqFileStream stream)
         {
-            F0 = stream.ReadValueF32();
-            F1 = stream.ReadValueF32();
-            F2 = stream.ReadValueF32();
+            X = stream.ReadValueF32();
+            Y = stream.ReadValueF32();
+            Z = stream.ReadValueF32();
         }
 
         public void Read(MpqFileStream stream)
         {
-            F0 = stream.ReadValueF32();
-            F1 = stream.ReadValueF32();
-            F2 = stream.ReadValueF32();
+            X = stream.ReadValueF32();
+            Y = stream.ReadValueF32();
+            Z = stream.ReadValueF32();
         }
     }
 
@@ -130,7 +145,7 @@ namespace Mooege.Common.MPQ.FileFormats
             I3 = stream.ReadValueS32();
             I4 = stream.ReadValueS32();
             I5 = stream.ReadValueS32();
-            I6 = stream.ReadValueS16();
+            I6 = (short)stream.ReadValueS32();
         }
     }
 

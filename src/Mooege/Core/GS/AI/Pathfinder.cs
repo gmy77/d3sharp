@@ -9,6 +9,7 @@ using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Common.Types.Misc;
 using Algorithms;
 using Mooege.Core.GS.Actors;
+using Mooege.Common.Logging;
 
 namespace Mooege.Core.GS.AI
 {

@@ -44,6 +44,9 @@
             this.checkBoxMasterScenes = new System.Windows.Forms.CheckBox();
             this.groupSettings = new System.Windows.Forms.GroupBox();
             this.groupOptions = new System.Windows.Forms.GroupBox();
+            this.btnRenderToObj = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.trackBarUpdateFrequency = new System.Windows.Forms.TrackBar();
             this.groupBoxRenderMode = new System.Windows.Forms.GroupBox();
             this.checkBoxDrawPlayerProximityRect = new System.Windows.Forms.CheckBox();
             this.checkBoxDrawPlayerProximityCircle = new System.Windows.Forms.CheckBox();
@@ -52,19 +55,18 @@
             this.groupPreview = new System.Windows.Forms.GroupBox();
             this.pictureBoxPreview = new System.Windows.Forms.PictureBox();
             this.panelStage = new System.Windows.Forms.Panel();
-            this.trackBarUpdateFrequency = new System.Windows.Forms.TrackBar();
-            this.label1 = new System.Windows.Forms.Label();
             this.timerUpdate = new System.Windows.Forms.Timer(this.components);
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStage)).BeginInit();
             this.groupActorVisibility.SuspendLayout();
             this.groupMapVisibility.SuspendLayout();
             this.groupSettings.SuspendLayout();
             this.groupOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarUpdateFrequency)).BeginInit();
             this.groupBoxRenderMode.SuspendLayout();
             this.groupPreview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).BeginInit();
             this.panelStage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarUpdateFrequency)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBoxStage
@@ -102,8 +104,8 @@
             // 
             // groupActorVisibility
             // 
-            this.groupActorVisibility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupActorVisibility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.groupActorVisibility.Controls.Add(this.checkBoxMonsters);
             this.groupActorVisibility.Controls.Add(this.checkBoxPlayers);
             this.groupActorVisibility.Controls.Add(this.checkBoxNPCs);
@@ -158,8 +160,8 @@
             // 
             // groupMapVisibility
             // 
-            this.groupMapVisibility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupMapVisibility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.groupMapVisibility.Controls.Add(this.checkBoxUnwalkableCells);
             this.groupMapVisibility.Controls.Add(this.checkBoxWalkableCells);
             this.groupMapVisibility.Controls.Add(this.checkBoxSubScenes);
@@ -240,6 +242,7 @@
             // 
             // groupOptions
             // 
+            this.groupOptions.Controls.Add(this.btnRenderToObj);
             this.groupOptions.Controls.Add(this.label1);
             this.groupOptions.Controls.Add(this.trackBarUpdateFrequency);
             this.groupOptions.Controls.Add(this.checkBoxFillCells);
@@ -251,10 +254,39 @@
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
             // 
+            // btnRenderToObj
+            // 
+            this.btnRenderToObj.Location = new System.Drawing.Point(9, 162);
+            this.btnRenderToObj.Name = "btnRenderToObj";
+            this.btnRenderToObj.Size = new System.Drawing.Size(84, 23);
+            this.btnRenderToObj.TabIndex = 4;
+            this.btnRenderToObj.Text = "RenderToObj";
+            this.toolTip1.SetToolTip(this.btnRenderToObj, "Saves the Worlds Walkable Tiles into a Wavefront .obj.");
+            this.btnRenderToObj.UseVisualStyleBackColor = true;
+            this.btnRenderToObj.Click += new System.EventHandler(this.btnRenderToObj_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 69);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(98, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Update Frequency:";
+            // 
+            // trackBarUpdateFrequency
+            // 
+            this.trackBarUpdateFrequency.Location = new System.Drawing.Point(6, 87);
+            this.trackBarUpdateFrequency.Name = "trackBarUpdateFrequency";
+            this.trackBarUpdateFrequency.Size = new System.Drawing.Size(185, 45);
+            this.trackBarUpdateFrequency.TabIndex = 2;
+            this.trackBarUpdateFrequency.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBarUpdateFrequency.ValueChanged += new System.EventHandler(this.trackBarUpdateFrequency_ValueChanged);
+            // 
             // groupBoxRenderMode
             // 
-            this.groupBoxRenderMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBoxRenderMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBoxRenderMode.Controls.Add(this.checkBoxDrawPlayerProximityRect);
             this.groupBoxRenderMode.Controls.Add(this.checkBoxDrawPlayerProximityCircle);
             this.groupBoxRenderMode.Controls.Add(this.radioButtonPlayerProximity);
@@ -316,8 +348,8 @@
             // 
             // groupPreview
             // 
-            this.groupPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.groupPreview.Controls.Add(this.pictureBoxPreview);
             this.groupPreview.Location = new System.Drawing.Point(6, 10);
             this.groupPreview.Name = "groupPreview";
@@ -348,24 +380,6 @@
             this.panelStage.TabIndex = 0;
             this.panelStage.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelStage_Scroll);
             // 
-            // trackBarUpdateFrequency
-            // 
-            this.trackBarUpdateFrequency.Location = new System.Drawing.Point(6, 87);
-            this.trackBarUpdateFrequency.Name = "trackBarUpdateFrequency";
-            this.trackBarUpdateFrequency.Size = new System.Drawing.Size(185, 45);
-            this.trackBarUpdateFrequency.TabIndex = 2;
-            this.trackBarUpdateFrequency.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBarUpdateFrequency.ValueChanged += new System.EventHandler(this.trackBarUpdateFrequency_ValueChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 69);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(98, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Update Frequency:";
-            // 
             // timerUpdate
             // 
             this.timerUpdate.Tick += new System.EventHandler(this.timerUpdate_Tick);
@@ -392,13 +406,13 @@
             this.groupSettings.ResumeLayout(false);
             this.groupOptions.ResumeLayout(false);
             this.groupOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarUpdateFrequency)).EndInit();
             this.groupBoxRenderMode.ResumeLayout(false);
             this.groupBoxRenderMode.PerformLayout();
             this.groupPreview.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).EndInit();
             this.panelStage.ResumeLayout(false);
             this.panelStage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarUpdateFrequency)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -430,6 +444,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TrackBar trackBarUpdateFrequency;
         private System.Windows.Forms.Timer timerUpdate;
+        private System.Windows.Forms.Button btnRenderToObj;
+        private System.Windows.Forms.ToolTip toolTip1;
 
     }
 }
