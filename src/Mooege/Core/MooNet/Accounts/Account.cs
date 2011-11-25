@@ -239,6 +239,18 @@ namespace Mooege.Core.MooNet.Accounts
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, notification.Build(), callback => { }));
         }
 
+        public bool VerifyPassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+                return false;
+
+            if (password.Length < 8 || password.Length > 16)
+                return false;
+
+            var calculatedVerifier = SRP6a.CalculatePasswordVerifierForAccount(this.Email, password, this.Salt);
+            return calculatedVerifier.SequenceEqual(this.PasswordVerifier);
+        }
+
         public void SaveToDB()
         {
             try

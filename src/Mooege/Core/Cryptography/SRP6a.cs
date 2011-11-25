@@ -140,6 +140,13 @@ namespace Mooege.Core.Cryptography
             return BigInteger.ModPow(g, x, N).ToArray();
         }
 
+        /// <summary>
+        /// Verifies the account using srp6a session provided values by client.
+        /// </summary>
+        /// <param name="ABytes">Client's public ephemeral</param>
+        /// <param name="M_client">Client M.</param>
+        /// <param name="seed">Session seed.</param>
+        /// <returns></returns>
         public bool Verify(byte[] ABytes, byte[] M_client, byte[] seed)
         {
             var A = ABytes.ToBigInteger(); // client's public ephemeral
