@@ -50,7 +50,7 @@ namespace Mooege.Core.MooNet.Accounts
 
             var email = @params[0];
             var password = @params[1];
-            Account.UserLevels userLevel = Account.UserLevels.User;
+            var userLevel = Account.UserLevels.User;
 
             if (@params.Count() == 3)
             {

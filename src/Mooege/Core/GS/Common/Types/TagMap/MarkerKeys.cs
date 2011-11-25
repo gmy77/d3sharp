@@ -58,6 +58,6 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public static TagKeySNO DestinationLevelArea = new TagKeySNO(526853);
 
         public static TagKeySNO TriggeredConversation = new TagKeySNO(528128);
-
+        public static TagKeyInt TriggerDistance = new TagKeyInt(528384); // raven_pecking
     }
 }

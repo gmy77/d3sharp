@@ -53,6 +53,7 @@ namespace GameMessageViewer
                     if (type.BaseType == typeof(GameMessage))
                     {
                         CheckBox chk = new CheckBox();
+                        chk.Font = new Font(chk.Font.FontFamily, 7);
                         chk.Tag = type.Name;
                         chk.Text = type.Name;
                         chk.AutoSize = true;
@@ -61,7 +62,7 @@ namespace GameMessageViewer
 
             boxes.Sort((a, b) => a.Text.CompareTo(b.Text));
 
-            int itemsPerRow = 30;
+            int itemsPerRow = 35;
             int count = 0;
             foreach (CheckBox c in boxes)
             {
@@ -70,7 +71,7 @@ namespace GameMessageViewer
                 Controls.Add(c);
             }
 
-            int Width = 40 + count / itemsPerRow * 220;
+            int Width = 40 + (count / itemsPerRow + 1) * 220;
             int Height = 100 + itemsPerRow * 18;
             this.ClientSize = new System.Drawing.Size(Width, Height);
             Presets.Top = this.ClientSize.Height - Presets.Height - 20;
@@ -85,11 +86,13 @@ namespace GameMessageViewer
 
         }
 
-        new public void Show()
+        new public void Show(List<TreeNode> nodes)
         {
-
             this.ShowDialog();
         }
+
+
+
 
         private void cmdOk_Click(object sender, EventArgs e)
         {

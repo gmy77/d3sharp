@@ -100,6 +100,8 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -237,6 +239,7 @@
     <Compile Include="Core\GS\Players\Equipment.cs" />
     <Compile Include="Core\GS\Ticker\SteppedTickTimer.cs" />
     <Compile Include="Core\GS\Ticker\TickTimer.cs" />
+    <Compile Include="Core\GS\Web\GSWebService.cs" />
     <Compile Include="Core\MooNet\Accounts\Account.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountCommands.cs" />
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
@@ -299,17 +302,30 @@
     <Compile Include="Core\MooNet\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\MooNet\Toons\ToonManager.cs" />
     <Compile Include="Common\Logging\LogConfig.cs" />
+    <Compile Include="Core\MooNet\Web\AccountWebService.cs" />
+    <Compile Include="Core\Web\CoreWebService.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Animation\LoopingAnimationPowerMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\ArtisanWindowClosedMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\MysticDataInitialMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\BlacksmithDataInitialMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\BlacksmithDataProgressMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\CraftInteractionMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\JewelerDataInitialMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\JewelerDataProgressMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\MysticDataProgressMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\OpenArtisanWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\RequestAddSocketMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Artisan\TrainArtisanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\AdvanceConvMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\UpdateConvAutoAdvanceMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\NephalemAltarWindowClosedMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBannerMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Tutorial\TutorialMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingDismissMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingHireMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingInventoryMessage.cs" />
@@ -323,6 +339,7 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\RequestUseNephalemCubeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\RequestUsePowerMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Quest\QuestStepCompleteMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignSkillMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Stash\OpenSharedStashMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBusyMessage.cs" />
@@ -551,6 +568,10 @@
     <Compile Include="Net\MooNet\RPC\RPCCallback.cs" />
     <Compile Include="Net\NATConfig.cs" />
     <Compile Include="Net\Utils.cs" />
+    <Compile Include="Net\WebServices\Config.cs" />
+    <Compile Include="Net\WebServices\IWebService.cs" />
+    <Compile Include="Core\MooNet\Web\MooNetWebService.cs" />
+    <Compile Include="Net\WebServices\ServiceManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Net\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -635,5 +656,4 @@
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
 </Project>

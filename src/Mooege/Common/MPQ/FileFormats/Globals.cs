@@ -22,11 +22,12 @@ using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Common.Types.SNO;
+using System.Linq;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.Globals)]
-    class Globals : FileFormat
+    public class Globals : FileFormat
     {
         public Header Header { get; private set; }
         public DifficultyTuningParams[] TuningParams { get; private set; } //len 4
@@ -34,9 +35,9 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F1 { get; private set; }
         public float F2 { get; private set; }
         public int I0 { get; private set; }
-        public List<ActorGroup> ActorGroup { get; private set; }
+        public Dictionary<int, ActorGroup> ActorGroup { get; private set; }
         public int I1 { get; private set; }
-        public List<StartLocationName> StartLocationNames { get; private set; }
+        public Dictionary<int, StartLocationName> StartLocationNames { get; private set; }
         public List<GlobalScriptVariable> ScriptGlobalVars { get; private set; }
         public float F3 { get; private set; }
         public float F4 { get; private set; }
@@ -98,10 +99,18 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F2 = stream.ReadValueF32(); //148
             this.I0 = stream.ReadValueS32(); //152
             stream.Position += 12;
-            this.ActorGroup = stream.ReadSerializedData<ActorGroup>(); //144
+
+            this.ActorGroup = new Dictionary<int, FileFormats.ActorGroup>();
+            foreach(var group in stream.ReadSerializedData<ActorGroup>()) //144
+                this.ActorGroup.Add(group.UHash, group);
+           
             stream.Position += 12;
             this.I1 = stream.ReadValueS32(); //176
-            this.StartLocationNames = stream.ReadSerializedData<StartLocationName>(); //168
+
+            this.StartLocationNames = new Dictionary<int, FileFormats.StartLocationName>();
+            foreach (var startLocation in stream.ReadSerializedData<StartLocationName>())  //168
+                StartLocationNames.Add(startLocation.I0, startLocation);
+
             stream.Position += 8;
             this.ScriptGlobalVars = stream.ReadSerializedData<GlobalScriptVariable>();  //184
             this.F3 = stream.ReadValueF32(); //216
@@ -160,7 +169,7 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    class DifficultyTuningParams
+    public class DifficultyTuningParams
     {
         public float F0 { get; private set; }
         public float F1 { get; private set; }
@@ -184,7 +193,7 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    class ActorGroup : ISerializableData
+    public class ActorGroup : ISerializableData
     {
         public int UHash { get; private set; }
         public string S0 { get; private set; }
@@ -196,7 +205,7 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    class StartLocationName : ISerializableData
+    public class StartLocationName : ISerializableData
     {
         public int I0 { get; private set; }
         public string S0 { get; private set; }
@@ -208,7 +217,7 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    class GlobalScriptVariable : ISerializableData
+    public class GlobalScriptVariable : ISerializableData
     {
         public int UHash { get; private set; }
         public string S0 { get; private set; }
@@ -222,7 +231,7 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    class BannerParams
+    public class BannerParams
     {
         //Total Length: 232
         public List<BannerTexturePair> TexBackgrounds { get; private set; }
@@ -273,7 +282,7 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    class BannerTexturePair : ISerializableData
+    public class BannerTexturePair : ISerializableData
     {
         public int SNOTexture { get; private set; }
         public int I0 { get; private set; }
@@ -285,7 +294,7 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    class BannerColorSet : ISerializableData
+    public class BannerColorSet : ISerializableData
     {
         public RGBAColor[] Color { get; private set; }
         public string String1 { get; private set; }
@@ -303,7 +312,7 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    class BannerSigilPlacement : ISerializableData
+    public class BannerSigilPlacement : ISerializableData
     {
         public string S0 { get; private set; }
 
@@ -313,7 +322,7 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    class EpicBannerDescription : ISerializableData
+    public class EpicBannerDescription : ISerializableData
     {
         public int I0 { get; private set; }
         public int I1 { get; private set; }

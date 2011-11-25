@@ -25,7 +25,6 @@ namespace Mooege.Common.Storage
         public bool EnableTasks { get { return this.GetBoolean("EnableTasks", true); } set { this.Set("EnableTasks", value); } }
         public bool LazyLoading { get { return this.GetBoolean("LazyLoading", false); } set { this.Set("LazyLoading", value); } }
         
-
         private static readonly Config _instance = new Config();
         public static Config Instance { get { return _instance; } }
         private Config() : base("Storage") { }
