@@ -293,5 +293,10 @@ namespace Mooege.Core.GS.Map.Debug
 
         #endregion            
 
+        private void btnDumpMeshToObj_Click(object sender, EventArgs e)
+        {
+            this.Mesh.DumpNavMeshToObj();
+        }
+
     }    
 }
