@@ -112,7 +112,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         Passive = -1,
         Door = 0,
         ClickableLoot = 1,
-        Portal = 2,     // whichdoctor_fetisharmy also has this set despite beeing a clienteffect
+        Portal = 2,     // whichdoctor_fetisharmy also has this set despite beeing client effects
         Waypoint = 4,
         CheckPoint = 7,
         Sign = 8,
@@ -131,7 +131,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         Destructible = 48,
         Barricade = 56,
         WeirdGroup57 = 57,  // Actor\TEMP_SkeletonPortal_Center.acr, Gizmo Actor\SkeletonKingGizmo.acr, Gizmo, Actor\TEMP_GoatPortal_Center.acr, Gizmo, Actor\Temp_Story_Trigger_Enabled.acr, Gizmo, Actor\trOut_fields_Cart_Fixable.acr, Gizmo, Actor\Temp_FesteringWoodsAmbush_Switch.acr, Gizmo, Actor\trOut_Wilderness_Skeleton_Chair_Switch.acr, 
-        Triggered = 60,  // raven pecking, wall collapse... triggered when player approaches
+        ProximityTriggered = 60,  // raven pecking, wall collapse... triggered when player approaches
         ActChangeTempObject = 62, // only one actor with that name
         Banner = 64,
         Readable = 65,

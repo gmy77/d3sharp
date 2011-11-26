@@ -35,7 +35,7 @@ namespace Mooege.Core.GS.Objects
         /// </summary>
         public World World { get; protected set; }
 
-        private Vector3D _position;
+        protected Vector3D _position;
 
         /// <summary>
         /// The position of the object.

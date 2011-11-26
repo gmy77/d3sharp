@@ -527,6 +527,13 @@ namespace Mooege.Core.GS.Actors
             
         }
 
+        /// <summary>
+        /// Called when a player moves close to the actor
+        /// </summary>
+        public virtual void OnPlayerApproaching(Player player)
+        {
+        }
+
         #endregion
 
         #region cooked messages

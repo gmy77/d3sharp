@@ -32,7 +32,7 @@ using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
-    [HandledSNO(6442 /* Waypoint.acr */, 192164 /* Waypoint_OldTristram.acr */)]
+    //[HandledSNO(6442 /* Waypoint.acr */, 192164 /* Waypoint_OldTristram.acr */)]
     public sealed class Waypoint : Gizmo
     {
         public int WaypointId { get; private set; }

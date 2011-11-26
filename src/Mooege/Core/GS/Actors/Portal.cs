@@ -79,7 +79,7 @@ namespace Mooege.Core.GS.Actors
 
         public override bool Reveal(Player player)
         {
-            if (!base.Reveal(player))
+            if (!base.Reveal(player) || Destination == null)
                 return false;
 
             player.InGameClient.SendMessage(new PortalSpecifierMessage()

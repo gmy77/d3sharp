@@ -86,6 +86,18 @@ namespace Mooege.Core.GS.Actors
                             case GizmoGroup.BossPortal:
                                 Logger.Warn("Skipping loading of boss portals");
                                 return null;
+                            case GizmoGroup.CheckPoint:
+                                return new Checkpoint(world, snoId, tags);
+                            case GizmoGroup.Waypoint:
+                                return new Waypoint(world, snoId, tags);
+                            case GizmoGroup.Savepoint:
+                                return new Savepoint(world, snoId, tags);
+                            case GizmoGroup.ProximityTriggered:
+                                return new ProximityTriggeredGizmo(world, snoId, tags);
+                            case GizmoGroup.Shrine:
+                                return new Shrine(world, snoId, tags);
+                            case GizmoGroup.Healthwell:
+                                return new Healthwell(world, snoId, tags);
 
                             default:
                                 return CreateGizmo(world, snoId, tags);

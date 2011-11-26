@@ -25,20 +25,39 @@ using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Net.GS.Message;
+using TreasureClass = Mooege.Common.MPQ.FileFormats.TreasureClass;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
+    /// <summary>
+    /// Class that implements behaviour for clickable loot types.
+    /// Play open animation on click, then set idle animation and drop loot
+    /// </summary>
     class ClickableLoot : Gizmo
     {
+        private TreasureClass _treasureClass;
+
         public ClickableLoot(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-
+            try
+            {
+                _treasureClass = (TreasureClass)ActorData.TagMap[ActorKeys.LootTreasureClass].Target;
+            }
+            catch (Exception)
+            {
+                Logger.Warn("Could not load treasure class for loot actor because it is either not tagged or the treasure class is not available. Using standard treasure class instead");
+                _treasureClass = TreasureClass.GenericTreasure;
+            }
         }
 
 
         public override void OnTargeted(Players.Player player, Net.GS.Message.Definitions.World.TargetMessage message)
         {
+            // TODO Are chests dropping loot for everyone or only for the one opening it
+            foreach (var p in this.GetPlayersInRange(30))
+                World.DropItem(this, null, _treasureClass.CreateDrop(player));
+
             World.BroadcastIfRevealed(new PlayAnimationMessage
             {
                 ActorID = this.DynamicID,
@@ -69,8 +88,6 @@ namespace Mooege.Core.GS.Actors.Implementations
             Attributes.BroadcastChangedIfRevealed();
 
             base.OnTargeted(player, message);
-
         }
-
     }
 }

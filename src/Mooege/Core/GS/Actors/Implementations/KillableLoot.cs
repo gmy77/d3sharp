@@ -32,6 +32,10 @@ using Mooege.Core.GS.Items;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
+    /// <summary>
+    /// Class that implements behaviour for killable gizmos.
+    /// Play die animation on click, then set idle animation, drop loot and remove from server
+    /// </summary>
     class KillableLoot : Gizmo
     {
         private TreasureClass TreasureClass;
@@ -39,15 +43,8 @@ namespace Mooege.Core.GS.Actors.Implementations
         public KillableLoot(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            try
-            {
+            if(ActorData.TagMap.ContainsKey(ActorKeys.LootTreasureClass))
                 TreasureClass = (TreasureClass)ActorData.TagMap[ActorKeys.LootTreasureClass].Target;
-            }
-            catch (Exception)
-            {
-                Logger.Warn("Could not load treasure class for loot actor because it is either not tagged or the treasure class is not available. Using standard treasure class instead");
-                TreasureClass = TreasureClass.GenericTreasure;
-            }
         }
 
 
@@ -74,8 +71,9 @@ namespace Mooege.Core.GS.Actors.Implementations
 
         public void Die()
         {
-            foreach(var player in this.GetPlayersInRange(30))
-                World.DropItem(this, null, this.TreasureClass.CreateDrop(player));
+            if(this.TreasureClass != null)
+                foreach(var player in this.GetPlayersInRange(30))
+                    World.DropItem(this, null, this.TreasureClass.CreateDrop(player));
 
             World.BroadcastIfRevealed(new PlayAnimationMessage
             {
@@ -98,6 +96,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             this.Attributes[GameAttribute.Deleted_On_Server] = true;
             this.Attributes[GameAttribute.Could_Have_Ragdolled] = true;
             Attributes.BroadcastChangedIfRevealed();
+            this.Destroy();
         }
 
 
