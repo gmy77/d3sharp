@@ -23,18 +23,18 @@ namespace Mooege.Net.GS.Message.Fields
     public class SavePointData
     {
         public int /* sno */ snoWorld;
-        public int Field1;
+        public int SavepointId;
 
         public void Parse(GameBitBuffer buffer)
         {
             snoWorld = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            SavepointId = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, snoWorld);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, SavepointId);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -46,7 +46,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("snoWorld: 0x" + snoWorld.ToString("X8"));
             b.Append(' ', pad);
-            b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.AppendLine("SavepointId: 0x" + SavepointId.ToString("X8") + " (" + SavepointId + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
