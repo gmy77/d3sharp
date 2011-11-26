@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,17 +20,12 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    [Message(new[] {
-        Opcodes.ANNDataMessage8, Opcodes.ANNDataMessage10, Opcodes.ANNDataMessage11, Opcodes.ANNDataMessage13, Opcodes.ANNDataMessage15, 
-        Opcodes.ANNDataMessage16, Opcodes.ANNDataMessage17, Opcodes.ANNDataMessage18, Opcodes.UseNephalemAltarMessage, Opcodes.ANNDataMessage21, Opcodes.ANNDataMessage23, 
-        Opcodes.ANNDataMessage24, Opcodes.ANNDataMessage25, Opcodes.ANNDataMessage26, Opcodes.ANNDataMessage28, Opcodes.ANNDataMessage29, Opcodes.ANNDataMessage31, 
-        Opcodes.ANNDataMessage32, 
-    })]
-    public class ANNDataMessage : GameMessage
+    [Message(Opcodes.ShrineActivatedMessage)]
+    public class ShrineActivatedMessage : GameMessage
     {
         public uint ActorID; // Actor's DynamicID
 
-        public ANNDataMessage(Opcodes id) : base(id) {}
+        public ShrineActivatedMessage() : base(Opcodes.ShrineActivatedMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
@@ -45,14 +40,13 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("ANNDataMessage:");
+            b.AppendLine("ActivateShrineMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
 
     }
 }
