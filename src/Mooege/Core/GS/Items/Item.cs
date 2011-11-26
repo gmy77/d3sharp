@@ -402,13 +402,6 @@ namespace Mooege.Core.GS.Items
             if (!base.Reveal(player))
                 return false;
 
-            // Drop effect/sound? TODO find out
-            player.InGameClient.SendMessage(new PlayEffectMessage()
-            {
-                ActorId = this.DynamicID,
-                Effect = Effect.SecondaryRessourceEffect
-            });
-
             var affixGbis = new int[AffixList.Count];
             for (int i = 0; i < AffixList.Count; i++)
             {
