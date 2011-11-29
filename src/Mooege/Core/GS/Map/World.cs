@@ -318,9 +318,9 @@ namespace Mooege.Core.GS.Map
             monster.EnterWorld(position);
         }
 
-        private List<TickTimer<Item>> _flippyTimers = new List<TickTimer<Item>>();
-        private const int FlippyDurationInTicks = 20;
-        private const int FlippyMaxDistanceManhattan = 10;
+        private List<TickTimer> _flippyTimers = new List<TickTimer>();
+        private const int FlippyDurationInTicks = 30;
+        private const int FlippyMaxDistanceManhattan = 10;  // length of one side of the square around the player where the item will appear
         private const int FlippyDefaultFlippy = 0x6d82;     // g_flippy.prt
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace Mooege.Core.GS.Map
         /// <param name="tickCounter"></param>
         private void UpdateFlippy(int tickCounter)
         {
-            List<TickTimer<Item>> finished = new List<TickTimer<Item>>();
+            List<TickTimer> finished = new List<TickTimer>();
             foreach (var flippy in _flippyTimers)
             {
                 flippy.Update(tickCounter);
@@ -414,11 +414,11 @@ namespace Mooege.Core.GS.Map
         {
             lock (_flippyTimers)
             {
-                _flippyTimers.Add(new TickTimer<Item>(
+                _flippyTimers.Add(new RelativeTickTimer(
                     Game, 
-                    Game.TickCounter + FlippyDurationInTicks,
-                    (_item) => _item.Drop(null, _item.Position)             // drop the item after FlippyDuration ticks
-                    , item));
+                    FlippyDurationInTicks,
+                    (p) => item.Drop(null, item.Position)             // drop the item after FlippyDuration ticks
+                    ));
             }
 
             // Get a random location close to the source

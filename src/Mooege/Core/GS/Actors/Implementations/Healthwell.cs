@@ -23,7 +23,7 @@ using Mooege.Net.GS.Message;
 namespace Mooege.Core.GS.Actors.Implementations
 {
     /// <summary>
-    /// Class that implements shrines, run power on click and send activation message
+    /// Class that implements healthwell, run power on click and change gizmo state
     /// </summary>
     class Healthwell : Gizmo
     {

@@ -22,6 +22,7 @@ using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message;
+using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
@@ -40,7 +41,8 @@ namespace Mooege.Core.GS.Actors.Implementations
             {
                 _collapsed = true;
 
-                // TODO make a key once you are sure about that tagid
+                // TODO most of the fields here are unknown, find out about animation playing duration
+                int duration = 500; // ticks
                 World.BroadcastIfRevealed(new PlayAnimationMessage
                 {
                     ActorID = this.DynamicID,
@@ -50,8 +52,8 @@ namespace Mooege.Core.GS.Actors.Implementations
                     {
                         new Net.GS.Message.Fields.PlayAnimationMessageSpec()
                         {
-                            Field0 = 500,
-                            Field1 = ActorData.TagMap.ContainsKey(66308) ? ActorData.TagMap[66308].Int : AnimationSet.TagMapAnimDefault[AnimationSetKeys.DeathDefault] ,
+                            Field0 = duration,
+                            Field1 = ActorData.TagMap.ContainsKey(ActorKeys.DeathAnimationTag) ? AnimationSet.TagMapAnimDefault[ActorData.TagMap[ActorKeys.DeathAnimationTag]].Int : AnimationSet.TagMapAnimDefault[AnimationSetKeys.DeathDefault] ,
                             Field2 = 0,
                             Field3 = 1
                         }
@@ -67,7 +69,8 @@ namespace Mooege.Core.GS.Actors.Implementations
 
                 this.Attributes[GameAttribute.Deleted_On_Server] = true;
                 Attributes.BroadcastChangedIfRevealed();
-                this.Destroy();
+
+                RelativeTickTimer destroy = new RelativeTickTimer(World.Game, duration, x => this.Destroy());
             }
         }
 
