@@ -44,10 +44,12 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         #endregion
 
 
-        public static TagKeyInt TeamID = new TagKeyInt(65556);
+        public static TagKeyFloat Scale = new TagKeyFloat(65543);
+        public static TagKeyInt TeamID = new TagKeyInt(65556);  // TODO this is not team id
         public static TagKeySNO FlippyParticle = new TagKeySNO(65655);
         public static TagKeySNO Flippy = new TagKeySNO(65688);
 
+        public static TagKeySNO Script = new TagKeySNO(65907);
 
         public static TagKeySNO SoundFootstepGrass = new TagKeySNO(66048);
         public static TagKeySNO SoundFootstepDirt1 = new TagKeySNO(66049);
@@ -74,7 +76,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public static TagKeyGizmoGroup GizmoGroup = new TagKeyGizmoGroup(66305);
         public static TagKeySNO LootTreasureClass = new TagKeySNO(66384);
         public static TagKeySNO ActivationPower = new TagKeySNO(66400);
-
+        public static TagKeySNO WarpProxy = new TagKeySNO(66472);
 
 
         public static TagKeySNO Lore = new TagKeySNO(67331);
