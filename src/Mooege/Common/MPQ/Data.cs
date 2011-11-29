@@ -56,7 +56,7 @@ namespace Mooege.Common.MPQ
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
                 if (!type.IsSubclassOf(typeof(FileFormat))) continue;
-                var attributes = (FileFormatAttribute[])type.GetCustomAttributes(typeof(FileFormatAttribute), true);
+                var attributes = (FileFormatAttribute[])type.GetCustomAttributes(typeof(FileFormatAttribute), false);
                 if (attributes.Length == 0) continue;
 
                 Parsers.Add(attributes[0].Group, type);
@@ -98,6 +98,20 @@ namespace Mooege.Common.MPQ
                 var asset = this.ProcessAsset(group, snoId, name); // process the asset.
                 this.Assets[group].TryAdd(snoId, asset); // add it to our assets dictionary.
             }
+
+            //System.IO.StreamWriter f = new System.IO.StreamWriter(System.IO.File.OpenWrite("F:\\dfsdfsdf.txt"));
+            //foreach (var key in Mooege.Common.MPQ.FileFormats.Actor.groups.Keys)
+            //{
+            //    f.WriteLine("Group: " + (Mooege.Core.GS.Common.Types.TagMap.GizmoGroup) key);
+            //    foreach (var value in Mooege.Common.MPQ.FileFormats.Actor.groups[key])
+            //    {
+            //        f.WriteLine(this.Assets[SNOGroup.Actor][value.Header.SNOId].FileName + "(" + value.Header.SNOId + "), " + value.Type);
+
+            //        foreach (var tag in ((Mooege.Common.MPQ.FileFormats.Actor)this.Assets[SNOGroup.Actor][value.Header.SNOId].Data).TagMap)
+            //            f.WriteLine(tag.ToString());
+            //    }
+            //}
+            //f.Close();
 
             stream.Close();
 
