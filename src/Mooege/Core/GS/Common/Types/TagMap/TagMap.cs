@@ -209,7 +209,10 @@ namespace Mooege.Core.GS.Common.Types.TagMap
                 }
 
             if (keys.Count == 1)
-                return String.Format("{0} = {1}", keys.First().Name, keys.First().GetType().GetMethod("GetValue").Invoke(keys.First(), new object[] { this }).ToString());
+            {
+                var value = keys.First().GetType().GetMethod("GetValue").Invoke(keys.First(), new object[] { this });
+                return String.Format("{0} = {1}", keys.First().Name, value == null ? "null" : value.ToString());
+            }
  
             return String.Format("Ambigious key: Depending of the context it one of {0}", String.Join(",", keys.Select(x => x.Name).ToArray()));
 
@@ -231,10 +234,34 @@ namespace Mooege.Core.GS.Common.Types.TagMap
                 case 2: // SNO
                     this.Int = stream.ReadValueS32();
                     break;
+
+                // TODO: Create strong type for gbid (at least i think they are)
+                case 3:
+                    this.Int = stream.ReadValueS32();
+                    break;
+
                 case 4:
                     this.ScriptFormula = new ScriptFormula(stream);
                     break;
+
+                // TODO: Strong type for group hashes
+                case 5:
+                    this.Int = stream.ReadValueS32();
+                    break;
+
+                // Todo: Strong type for ... hmmm.. is that a gameattributeindex?
+                case 6:
+                    this.Int = stream.ReadValueS32();
+                    break;
+
+                // Todo: Strong type fo StartingLocationID
+                case 7:
+                    this.Int = stream.ReadValueS32();
+                    break;
+
                 default:
+                    // if this break hits, blizz introduced a new key type and most likey we should have to react to it
+                    System.Diagnostics.Debugger.Break();
                     this.Int = stream.ReadValueS32();
                     break;
             }
