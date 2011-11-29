@@ -149,10 +149,10 @@
     <Compile Include="Common\Versions\VersionInfo.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\ArtisanShortcut.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Checkpoint.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\ClickableLoot.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\LootContainer.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Healthwell.cs" />
     <Compile Include="Core\GS\Actors\Implementations\ProximityTriggeredGizmo.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\KillableLoot.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\DesctructibleLootContainer.cs" />
     <Compile Include="Core\GS\Actors\Implementations\NephalemAltar.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Savepoint.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Shrine.cs" />

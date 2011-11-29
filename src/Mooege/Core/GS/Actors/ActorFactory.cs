@@ -77,10 +77,10 @@ namespace Mooege.Core.GS.Actors
 
                         switch (actorData.TagMap[ActorKeys.GizmoGroup])
                         {
-                            case GizmoGroup.ClickableLoot:
-                                return new ClickableLoot(world, snoId, tags);
-                            case GizmoGroup.KillableLoot:
-                                return new KillableLoot(world, snoId, tags);
+                            case GizmoGroup.LootContainer:
+                                return new LootContainer(world, snoId, tags);
+                            case GizmoGroup.DestructibleLootContainer:
+                                return new DesctructibleLootContainer(world, snoId, tags);
                             case GizmoGroup.Portal:
                                 return new Portal(world, snoId, tags);
                             case GizmoGroup.BossPortal:

@@ -36,11 +36,11 @@ namespace Mooege.Core.GS.Actors.Implementations
     /// Class that implements behaviour for killable gizmos.
     /// Play die animation on click, then set idle animation, drop loot and remove from server
     /// </summary>
-    class KillableLoot : Gizmo
+    class DesctructibleLootContainer : Gizmo
     {
         private TreasureClass TreasureClass;
 
-        public KillableLoot(World world, int snoId, TagMap tags)
+        public DesctructibleLootContainer(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             if(ActorData.TagMap.ContainsKey(ActorKeys.LootTreasureClass))

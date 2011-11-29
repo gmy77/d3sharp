@@ -74,6 +74,8 @@ namespace Mooege.Core.GS.Common.Types.TagMap
 
 
         public static TagKeyGizmoGroup GizmoGroup = new TagKeyGizmoGroup(66305);
+        public static TagKeyInt DeathAnimationTag = new TagKeyInt(66308); // this is probably not the correct name since it is used only on ravens, that have a 'monster' attached to it. it may be something more general
+
         public static TagKeySNO LootTreasureClass = new TagKeySNO(66384);
         public static TagKeySNO ActivationPower = new TagKeySNO(66400);
         public static TagKeySNO WarpProxy = new TagKeySNO(66472);
@@ -113,7 +115,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
     {
         Passive = -1,
         Door = 0,
-        ClickableLoot = 1,
+        LootContainer = 1,
         Portal = 2,     // whichdoctor_fetisharmy also has this set despite beeing client effects
         Waypoint = 4,
         CheckPoint = 7,
@@ -126,7 +128,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         ServerProp = 19,    // mostly set for server props and for actors that have a controling function (conductorproxymaster, markerlocation, nospawn20feet, etc)
         StartLocations = 20, // and exit locations
         CathedralIdol = 22, // only one actor with that name
-        KillableLoot = 23,
+        DestructibleLootContainer = 23,
         PlayerSharedStash = 25,
         Spawner = 28,
         Trigger = 44,

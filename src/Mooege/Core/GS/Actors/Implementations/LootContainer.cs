@@ -33,11 +33,11 @@ namespace Mooege.Core.GS.Actors.Implementations
     /// Class that implements behaviour for clickable loot types.
     /// Play open animation on click, then set idle animation and drop loot
     /// </summary>
-    class ClickableLoot : Gizmo
+    class LootContainer : Gizmo
     {
         private TreasureClass _treasureClass;
 
-        public ClickableLoot(World world, int snoId, TagMap tags)
+        public LootContainer(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             try
