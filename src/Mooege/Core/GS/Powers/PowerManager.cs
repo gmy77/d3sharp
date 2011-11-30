@@ -163,10 +163,10 @@ namespace Mooege.Core.GS.Powers
                     Monster mon = new Monster(user.World, actorSNO, null);
                     mon.Position = position;
                     mon.Scale = 1.35f;
-                    mon.Attributes[GameAttribute.Hitpoints_Max_Total] = 50f;
-                    mon.Attributes[GameAttribute.Hitpoints_Max] = 50f;
+                    mon.Attributes[GameAttribute.Hitpoints_Max_Total] = 5f;
+                    mon.Attributes[GameAttribute.Hitpoints_Max] = 5f;
                     mon.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 0f;
-                    mon.Attributes[GameAttribute.Hitpoints_Cur] = 50f;
+                    mon.Attributes[GameAttribute.Hitpoints_Cur] = 5f;
                     user.World.Enter(mon);
                 }
 

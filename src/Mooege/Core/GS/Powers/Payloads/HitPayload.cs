@@ -61,7 +61,8 @@ namespace Mooege.Core.GS.Powers.Payloads
                     this.ElementDamages[entry.DamageType] = 0f;
 
                 if (entry.IsWeaponBasedDamage)
-                    this.ElementDamages[entry.DamageType] += weaponMinDamage + (float)PowerContext.Rand.NextDouble() * weaponDamageDelta;
+                    this.ElementDamages[entry.DamageType] += entry.WeaponDamageMultiplier *
+                        (weaponMinDamage + (float)PowerContext.Rand.NextDouble() * weaponDamageDelta);
                 else
                     this.ElementDamages[entry.DamageType] += entry.MinDamage + (float)PowerContext.Rand.NextDouble() * entry.DamageDelta;
             }
