@@ -16,17 +16,32 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Common.Storage
+using System;
+using System.Text;
+
+namespace Mooege.Net.GS.Message.Definitions.Artisan
 {
-    public sealed class Config : Common.Config.Config
+    [Message(Opcodes.ArtisanWindowClosedMessage)]
+    public class ArtisanWindowClosedMessage : GameMessage
     {
-        public string Root { get { return this.GetString("Root", "Assets"); } set { this.Set("Root", value); } }
-        public string MPQRoot { get { return this.GetString("MPQRoot", "Assets/MPQ"); } set { this.Set("MPQRoot", value); } }
-        public bool EnableTasks { get { return this.GetBoolean("EnableTasks", true); } set { this.Set("EnableTasks", value); } }
-        public bool LazyLoading { get { return this.GetBoolean("LazyLoading", false); } set { this.Set("LazyLoading", value); } }
-        
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Storage") { }
+
+        public override void Parse(GameBitBuffer buffer)
+        {
+        }
+
+        public override void Encode(GameBitBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AsText(StringBuilder b, int pad)
+        {
+            b.Append(' ', pad);
+            b.AppendLine("ArtisanWindowClosedMessage:");
+            b.Append(' ', pad++);
+            b.AppendLine("{");
+            b.Append(' ', --pad);
+            b.AppendLine("}");
+        }
     }
 }

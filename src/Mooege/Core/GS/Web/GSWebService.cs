@@ -16,17 +16,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Common.Storage
+using System.ServiceModel;
+using Mooege.Net.WebServices;
+
+namespace Mooege.Core.GS.Web
 {
-    public sealed class Config : Common.Config.Config
+    /// <summary>
+    /// Web service that can return statistics on online players and so.
+    /// </summary>
+    [ServiceContract(Name="GS")]
+    public class GSWebService : IWebService
     {
-        public string Root { get { return this.GetString("Root", "Assets"); } set { this.Set("Root", value); } }
-        public string MPQRoot { get { return this.GetString("MPQRoot", "Assets/MPQ"); } set { this.Set("MPQRoot", value); } }
-        public bool EnableTasks { get { return this.GetBoolean("EnableTasks", true); } set { this.Set("EnableTasks", value); } }
-        public bool LazyLoading { get { return this.GetBoolean("LazyLoading", false); } set { this.Set("LazyLoading", value); } }
-        
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Storage") { }
+        /// <summary>
+        /// Always returns true, so that clients can see if the gs-server is online.
+        /// </summary>
+        /// <returns>true</returns>
+        [OperationContract]
+        public bool Ping()
+        {
+            return true;
+        }
     }
 }
