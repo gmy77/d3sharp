@@ -29,6 +29,9 @@ using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Ticker;
 using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Common.Logging;
+using Mooege.Net.GS.Message.Definitions.Animation;
+using Mooege.Net.GS.Message.Fields;
+using Mooege.Core.GS.Powers.Payloads;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -109,42 +112,18 @@ namespace Mooege.Core.GS.Powers
             }
         }
         
-        public void WeaponDamage(Actor target, float percentage, DamageType damageType, bool hitEffectOverridden = false)
+        public void WeaponDamage(Actor target, float damageMultiplier, DamageType damageType)
         {
             if (target == null || target.World == null) return;
-
-            // TODO: this all needs to really be forwarded to a real combat system
-            // just use hardcoded weapon damage range for now
-            float damageAmount = Rand.Next(20, 35) * percentage;
-
-            if (User is Player)
-            {
-                (User as Player).InGameClient.SendMessage(new FloatingNumberMessage
-                {
-                    ActorID = target.DynamicID,
-                    Number = damageAmount,
-                    Type = FloatingNumberMessage.FloatType.White
-                });
-            }
-
-            if (!hitEffectOverridden)
-                target.PlayHitEffect((int)damageType.HitEffect, User);
-
-            // Update hp, kill if Monster and 0hp
-            float new_hp = Math.Max(target.Attributes[GameAttribute.Hitpoints_Cur] - damageAmount, 0f);
-            target.Attributes[GameAttribute.Hitpoints_Cur] = new_hp;
-            target.Attributes.BroadcastChangedIfRevealed();
-
-            if (new_hp == 0f && target is Monster && User is Player)
-                (target as Monster).Die(User as Player);
+            WeaponDamage(new List<Actor> { target }, damageMultiplier, damageType);
         }
 
-        public void WeaponDamage(IList<Actor> target_list, float percentage, DamageType damageType, bool hitEffectOverridden = false)
+        public void WeaponDamage(IList<Actor> targets, float damageMultiplier, DamageType damageType)
         {
-            foreach (Actor target in target_list)
-            {
-                WeaponDamage(target, percentage, damageType);
-            }
+            AttackPayload payload = new AttackPayload(this);
+            payload.AddTargets(targets);
+            payload.AddWeaponDamage(damageMultiplier, damageType);
+            payload.Apply();
         }
 
         public EffectActor SpawnEffect(int actorSNO, Vector3D position, float angle = 0, TickTimer timeout = null)
@@ -182,15 +161,15 @@ namespace Mooege.Core.GS.Powers
             return SpawnEffect(187359, position, 0, timeout);
         }
 
-        public IList<Actor> GetEnemiesInRange(Vector3D center, float range, int maxCount = -1)
+        public IList<Actor> GetEnemiesInRadius(Vector3D center, float radius, int maxCount = -1)
         {
             List<Actor> hits = new List<Actor>();
-            foreach (Actor actor in World.QuadTree.Query<Actor>(new Circle(center.X, center.Y, range)))
+            foreach (Actor actor in World.QuadTree.Query<Actor>(new Circle(center.X, center.Y, radius)))
             {
                 if (hits.Count == maxCount)
                     break;
 
-                if (actor is Monster)
+                if (!actor.Attributes[GameAttribute.Untargetable] && actor is Monster)
                     hits.Add(actor);
             }
 
@@ -210,9 +189,9 @@ namespace Mooege.Core.GS.Powers
         public void Knockback(Actor target, Vector3D from, float amount)
         {
             if (target == null) return;
-
-            var move = PowerMath.ProjectAndTranslate2D(from, target.Position, target.Position, amount);
-            target.TranslateNormal(move, 1f);
+            // KNOCKBACK DISABLED for now
+            //var move = PowerMath.ProjectAndTranslate2D(from, target.Position, target.Position, amount);
+            //target.TranslateNormal(move, 1f);
         }
 
         public void Knockback(Actor target, float amount)
@@ -246,7 +225,7 @@ namespace Mooege.Core.GS.Powers
             if (tagmap != null)
                 return tagmap[key];
             else
-                return 0;
+                return -1;
         }
 
         public int EvalTag(TagKeySNO key)
@@ -284,7 +263,7 @@ namespace Mooege.Core.GS.Powers
                 return tagmap;
             else
             {
-                Logger.Error("could not find tag key {0} in power {1}", key.ID, PowerSNO);
+                //Logger.Error("could not find tag key {0} in power {1}", key.ID, PowerSNO);
                 return null;
             }
         }
@@ -314,6 +293,26 @@ namespace Mooege.Core.GS.Powers
         public bool AddBuff(Actor target, Buff buff)
         {
             return target.World.BuffManager.AddBuff(User, target, buff);
+        }
+
+        public void PlayAnimationGeneric(Actor actor, int animationSNO, float speed = 1.0f)
+        {
+            actor.World.BroadcastIfRevealed(new PlayAnimationMessage()
+            {
+                ActorID = actor.DynamicID,
+                Field1 = 0x3,
+                Field2 = 0,
+                tAnim = new PlayAnimationMessageSpec[1]
+                {
+                    new PlayAnimationMessageSpec()
+                    {
+                        Field0 = -2,  // play animation once through
+                        Field1 = animationSNO,
+                        Field2 = 0x0,
+                        Field3 = speed,
+                    }
+                }
+            }, actor);
         }
     }
 }

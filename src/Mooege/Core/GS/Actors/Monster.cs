@@ -190,7 +190,7 @@ namespace Mooege.Core.GS.Actors
         /// <summary>
         /// Plays lore for first death of this monster's death.
         /// </summary>
-        private void PlayLore()
+        public void PlayLore()
         {
             if (LoreSNOId != -1)
             {

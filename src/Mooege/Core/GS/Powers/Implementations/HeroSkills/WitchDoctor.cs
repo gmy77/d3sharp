@@ -16,12 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mooege.Net.GS.Message.Definitions.Animation;
-using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message;
@@ -75,52 +70,31 @@ namespace Mooege.Core.GS.Powers.Implementations
             inFrontOfTarget.Z = User.Position.Z;
             var garggy = SpawnEffect(122305, inFrontOfTarget, TargetPosition, WaitInfinite());
 
-            _PlayAni(garggy, 155988);
+            PlayAnimationGeneric(garggy, 155988);
 
             yield return WaitSeconds(2f);
 
             for (int n = 0; n < 3; ++n)
             {
-                _PlayAni(garggy, 211382);
+                PlayAnimationGeneric(garggy, 211382);
 
                 yield return WaitSeconds(0.5f);
 
                 SpawnEffect(192210, TargetPosition);
-                WeaponDamage(GetEnemiesInRange(TargetPosition, 12f), 1.00f, DamageType.Poison);
+                WeaponDamage(GetEnemiesInRadius(TargetPosition, 12f), 1.00f, DamageType.Poison);
 
                 yield return WaitSeconds(0.4f);
             }
 
-            _PlayAni(garggy, 155536); //mwhaha
+            PlayAnimationGeneric(garggy, 155536); //mwhaha
             yield return WaitSeconds(1.5f);
 
-            _PlayAni(garggy, 171024);
+            PlayAnimationGeneric(garggy, 171024);
             yield return WaitSeconds(2f);
 
             garggy.Destroy();
 
             yield break;       
-        }
-
-        // hackish animation player until a centralized one can be made
-        private void _PlayAni(Actor actor, int aniSNO)
-        {
-            World.BroadcastIfRevealed(new PlayAnimationMessage()
-            {
-                ActorID = actor.DynamicID,
-                Field1 = 0x3,
-                Field2 = 0,
-                tAnim = new PlayAnimationMessageSpec[1]
-                {
-                    new PlayAnimationMessageSpec()
-                    {
-                        Field0 = -2,
-                        Field1 = aniSNO,
-                        Field2 = 0x0,
-                        Field3 = 1f
-                    }
-                }
-            }, actor);
         }
     }
 
@@ -137,10 +111,10 @@ namespace Mooege.Core.GS.Powers.Implementations
             
             // HACK: holy hell there is alot of hardcoded animation timings here
             
-            _PlayAni(bigtoad, 110766); // spawn ani
+            PlayAnimationGeneric(bigtoad, 110766); // spawn ani
             yield return WaitSeconds(1f);
 
-            _PlayAni(bigtoad, 110520); // attack ani
+            PlayAnimationGeneric(bigtoad, 110520); // attack ani
             TickTimer waitAttackEnd = WaitSeconds(1.5f);
             yield return WaitSeconds(0.3f); // wait for attack ani to play a bit
 
@@ -167,10 +141,10 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (!waitAttackEnd.TimedOut)
                     yield return waitAttackEnd;
 
-                _PlayAni(bigtoad, 110636); // disgest ani, 5 seconds
+                PlayAnimationGeneric(bigtoad, 110636); // disgest ani, 5 seconds
                 for (int n = 0; n < 5 && ValidTarget(); ++n)
                 {
-                    WeaponDamage(Target, 0.39f, DamageType.Poison, true);
+                    WeaponDamage(Target, 0.39f, DamageType.Poison);
                     yield return WaitSeconds(1f);
                 }
 
@@ -178,14 +152,14 @@ namespace Mooege.Core.GS.Powers.Implementations
                 {
                     _SetHiddenAttribute(Target, false);
 
-                    _PlayAni(bigtoad, 110637); // regurgitate ani
+                    PlayAnimationGeneric(bigtoad, 110637); // regurgitate ani
                     Knockback(Target, userCastPosition, 6f);
                     Target.PlayEffectGroup(18281); // actual regurgitate efg isn't working so use generic acid effect
                     yield return WaitSeconds(0.9f);
                 }
             }
 
-            _PlayAni(bigtoad, 110764); // despawn ani
+            PlayAnimationGeneric(bigtoad, 110764); // despawn ani
             yield return WaitSeconds(0.7f);
             bigtoad.Destroy();
         }
@@ -194,27 +168,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             actor.Attributes[GameAttribute.Hidden] = active;
             actor.Attributes.BroadcastChangedIfRevealed();
-        }
-
-        // hackish animation player until a centralized one can be made
-        private void _PlayAni(Actor actor, int aniSNO)
-        {
-            World.BroadcastIfRevealed(new PlayAnimationMessage()
-            {
-                ActorID = actor.DynamicID,
-                Field1 = 0x3,
-                Field2 = 0,
-                tAnim = new PlayAnimationMessageSpec[1]
-                {
-                    new PlayAnimationMessageSpec()
-                    {
-                        Field0 = -2,
-                        Field1 = aniSNO,
-                        Field2 = 0x0,
-                        Field3 = 1f
-                    }
-                }
-            }, actor);
         }
     }
 }

@@ -68,7 +68,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 // impact
                 SpawnEffect(RuneSelect(86769, 215809, 91441, 92031, 217139, 217458), impactPos);
 
-                IList<Actor> hits = GetEnemiesInRange(impactPos, ScriptFormula(3));
+                IList<Actor> hits = GetEnemiesInRadius(impactPos, ScriptFormula(3));
                 WeaponDamage(hits, ScriptFormula(0),
                     RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Fire, DamageType.Cold, DamageType.Arcane, DamageType.Fire));
 
@@ -130,7 +130,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                         break;
                     }
 
-                    curTarget = GetEnemiesInRange(curTarget.Position, 15f, 3).FirstOrDefault(t => !targets.Contains(t));
+                    curTarget = GetEnemiesInRadius(curTarget.Position, 15f, 3).FirstOrDefault(t => !targets.Contains(t));
                     if (curTarget != null)
                     {
                         targets.Add(curTarget);
@@ -178,7 +178,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             SpawnEffect(185366, TargetPosition);
             yield return WaitSeconds(0.4f);
 
-            IList<Actor> hits = GetEnemiesInRange(TargetPosition, 10f);
+            IList<Actor> hits = GetEnemiesInRadius(TargetPosition, 10f);
             WeaponDamage(hits, 10f, DamageType.Fire);
         }
     }
@@ -202,7 +202,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             RunDelay = 0.1f;
 
-            // spawn target effect a little bit above the ground target
             _calcTargetPosition();
             _target = SpawnEffect(52687, TargetPosition, 0, WaitInfinite());
             User.AddComplexEffect(18792, _target);
@@ -225,12 +224,12 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             UsePrimaryResource(23f * RunDelay);
 
-            foreach (Actor actor in GetEnemiesInRange(User.Position, BeamLength + 10f))
+            foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f))
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
                 {  
-                    actor.PlayEffectGroup(18793);
-                    WeaponDamage(actor, 1.35f * RunDelay, DamageType.Arcane, true);
+                    //actor.PlayEffectGroup(18793);
+                    WeaponDamage(actor, 1.35f * RunDelay, DamageType.Arcane);
                 }
             }
 
@@ -249,7 +248,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield return WaitSeconds(0.350f); // wait for wizard to land
             User.PlayEffectGroup(19356);
 
-            IList<Actor> hits = GetEnemiesInRange(User.Position, 20);
+            IList<Actor> hits = GetEnemiesInRadius(User.Position, 20);
             foreach (Actor actor in hits)
             {
                 Knockback(actor, 5f);
@@ -295,7 +294,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 _targetProxy.TranslateNormal(laggyPosition, 8f);
 
             SpawnEffect(97821, laggyPosition);
-            WeaponDamage(GetEnemiesInRange(laggyPosition, 6f), 2.00f * RunDelay, DamageType.Arcane);
+            WeaponDamage(GetEnemiesInRadius(laggyPosition, 6f), 2.00f * RunDelay, DamageType.Arcane);
         }
     }
 
@@ -311,7 +310,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             SpawnEffect(FrostNova_Emitter, User.Position);
 
-            IList<Actor> hits = GetEnemiesInRange(User.Position, 18);
+            IList<Actor> hits = GetEnemiesInRadius(User.Position, 18);
             foreach (Actor actor in hits)
             {
                 WeaponDamage(actor, 0.65f, DamageType.Cold);
@@ -336,7 +335,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             for(int i = 0; i < blizzard_duration; ++i)
             {
-                IList<Actor> hits = GetEnemiesInRange(TargetPosition, 18);
+                IList<Actor> hits = GetEnemiesInRadius(TargetPosition, 18);
                 foreach (Actor actor in hits)
                 {
                     WeaponDamage(actor, 0.65f, DamageType.Cold);
@@ -366,7 +365,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             RunDelay = 0.1f;
 
-            // spawn target effect a little bit above the ground target
             _calcTargetPosition();
             _target = SpawnEffect(6535, TargetPosition, 0, WaitInfinite());
             User.AddComplexEffect(19327, _target);
@@ -389,7 +387,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             UsePrimaryResource(29f * RunDelay);
 
-            foreach (Actor actor in GetEnemiesInRange(User.Position, BeamLength + 10f))
+            foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f))
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
                 {
@@ -429,7 +427,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             for (int n = 0; n < 3; ++n)
             {
-                foreach (var target in GetEnemiesInRange(TargetPosition, 9f))
+                foreach (var target in GetEnemiesInRadius(TargetPosition, 9f))
                 {
                     WeaponDamage(target, 0.30f, DamageType.Physical);
                 }

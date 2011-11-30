@@ -105,12 +105,15 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\GS\Powers\Buff.cs" />
+    <Compile Include="Core\GS\Powers\Payloads\AttackPayload.cs" />
+    <Compile Include="Core\GS\Powers\BaseBuffs.cs" />
     <Compile Include="Core\GS\Powers\BuffManager.cs" />
     <Compile Include="Core\GS\Powers\ImplementsBuffSlot.cs" />
     <Compile Include="Core\GS\Powers\EffectActor.cs" />
     <Compile Include="Core\GS\Powers\ChanneledPower.cs" />
     <Compile Include="Core\GS\Powers\DamageType.cs" />
+    <Compile Include="Core\GS\Powers\Payloads\DeathPayload.cs" />
+    <Compile Include="Core\GS\Powers\Payloads\HitPayload.cs" />
     <Compile Include="Core\GS\Powers\PowerFormulaScript.cs" />
     <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Barbarian.cs" />
     <Compile Include="Core\GS\Powers\Implementations\HeroSkills\DemonHunter.cs" />

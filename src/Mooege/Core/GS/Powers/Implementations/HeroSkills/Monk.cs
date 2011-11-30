@@ -69,7 +69,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.PlayEffectGroup(effectSNO);
 
             bool hitAnything = false;
-            foreach (Actor actor in GetEnemiesInRange(User.Position, reachLength + 10f))
+            foreach (Actor actor in GetEnemiesInRadius(User.Position, reachLength + 10f))
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, reachThickness))
                 {
@@ -123,7 +123,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                                         User.Position, 8f);
 
                     bool hitAnything = false;
-                    foreach (Actor actor in GetEnemiesInRange(TargetPosition, 7f))
+                    foreach (Actor actor in GetEnemiesInRadius(TargetPosition, 7f))
                     {
                         hitAnything = true;
                         Knockback(actor, 4f);
@@ -171,7 +171,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             for (int n = 0; n < 7; ++n)
             {
-                IList<Actor> nearby = GetEnemiesInRange(TargetPosition, 25f);
+                IList<Actor> nearby = GetEnemiesInRadius(TargetPosition, 25f);
                 if (nearby.Count > 0)
                 {
                     var target = nearby[Rand.Next(0, nearby.Count)];
@@ -182,7 +182,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     if (Rune_E > 0)
                     {
                         target.PlayEffectGroup(99098);
-                        var splashTargets = GetEnemiesInRange(target.Position, 5f);
+                        var splashTargets = GetEnemiesInRadius(target.Position, 5f);
                         splashTargets.Remove(target); // don't hit target with splash
                         WeaponDamage(splashTargets, 0.31f, DamageType.Holy);
                     }
@@ -233,7 +233,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
             else
             {
-                IList<Actor> hits = GetEnemiesInRange(User.Position, 10f);
+                IList<Actor> hits = GetEnemiesInRadius(User.Position, 10f);
                 foreach (Actor hit in hits)
                 {
                     hitAnything = true;
@@ -324,7 +324,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             // dashing strike never specifies the target's id so we just search for the closest target
             // ultimately need to know the radius of each target and select the one most covered
             float min_distance = float.MaxValue;
-            foreach (Actor actor in GetEnemiesInRange(TargetPosition, 8f))
+            foreach (Actor actor in GetEnemiesInRadius(TargetPosition, 8f))
             {
                 float distance = PowerMath.Distance(actor.Position, TargetPosition);
                 if (distance < min_distance)

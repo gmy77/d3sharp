@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
@@ -25,6 +26,7 @@ using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Ticker;
 using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Core.GS.Powers.Payloads;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -39,12 +41,18 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (CanHitMeleeTarget(Target))
             {
-                GeneratePrimaryResource(6f);
-                
-                if (Rand.NextDouble() < 0.20)
-                    Knockback(Target, 4f);
+                var payload = new AttackPayload(this);
+                payload.AddTarget(Target);
+                payload.AddWeaponDamage(1.45f, DamageType.Physical);
+                payload.OnHit = (hit) =>
+                {
+                    GeneratePrimaryResource(6f);
 
-                WeaponDamage(Target, 1.45f, DamageType.Physical);
+                    if (Rand.NextDouble() < 0.20)
+                        Knockback(Target, 4f);
+                };
+
+                payload.Apply();
             }
 
             yield break;
@@ -89,7 +97,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.PlayEffectGroup(18688);
 
             bool hitAnything = false;
-            foreach (Actor actor in GetEnemiesInRange(TargetPosition, 8f))
+            foreach (Actor actor in GetEnemiesInRadius(TargetPosition, 8f))
             {
                 hitAnything = true;
                 WeaponDamage(actor, 0.70f, DamageType.Physical);
@@ -132,7 +140,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     _damageTimer = WaitSeconds(ScriptFormula(0));
                     //UsePrimaryResource(EvalTag(PowerKeys.ResourceCost));
 
-                    foreach (Actor target in GetEnemiesInRange(User.Position, ScriptFormula(2)))
+                    foreach (Actor target in GetEnemiesInRadius(User.Position, ScriptFormula(2)))
                     {
                         WeaponDamage(target, ScriptFormula(1), Rune_A > 0 ? DamageType.Fire : DamageType.Physical);
                     }

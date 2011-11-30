@@ -612,18 +612,21 @@ namespace Mooege.Core.GS.Players
 
         private void OnObjectTargeted(GameClient client, TargetMessage message)
         {
-            if (this.World.PowerManager.UsePower(this, message.PowerSNO, message.TargetID, message.Field2.Position, message))
-                return;
+            bool powerHandled = this.World.PowerManager.UsePower(this, message.PowerSNO, message.TargetID, message.Field2.Position, message);
 
-            Actor actor = this.World.GetActorByDynamicId(message.TargetID);
-            if (actor == null) return;
-
-            if ((actor.GBHandle.Type == 1) && (actor.Attributes[GameAttribute.TeamID] == 10))
+            if (!powerHandled)
             {
-                this.ExpBonusData.MonsterAttacked(this.InGameClient.Game.TickCounter);
+                Actor actor = this.World.GetActorByDynamicId(message.TargetID);
+                if (actor == null) return;
+
+                if ((actor.GBHandle.Type == 1) && (actor.Attributes[GameAttribute.TeamID] == 10))
+                {
+                    this.ExpBonusData.MonsterAttacked(this.InGameClient.Game.TickCounter);
+                }
+
+                actor.OnTargeted(this, message);
             }
 
-            actor.OnTargeted(this, message);
             this.ExpBonusData.Check(2);
         }
 

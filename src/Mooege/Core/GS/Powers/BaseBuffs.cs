@@ -31,8 +31,8 @@ namespace Mooege.Core.GS.Powers
         {
             if (PowerSNO != 0)
             {
-                User.Attributes[GameAttribute.Buff_Active, PowerSNO] = true;
-                User.Attributes.BroadcastChangedIfRevealed();
+                Target.Attributes[GameAttribute.Buff_Active, PowerSNO] = true;
+                Target.Attributes.BroadcastChangedIfRevealed();
             }
             return true;
         }
@@ -41,8 +41,8 @@ namespace Mooege.Core.GS.Powers
         {
             if (PowerSNO != 0)
             {
-                User.Attributes[GameAttribute.Buff_Active, PowerSNO] = false;
-                User.Attributes.BroadcastChangedIfRevealed();
+                Target.Attributes[GameAttribute.Buff_Active, PowerSNO] = false;
+                Target.Attributes.BroadcastChangedIfRevealed();
             }
         }
 
@@ -91,14 +91,15 @@ namespace Mooege.Core.GS.Powers
         {
             base.Apply();
 
+            Target.Attributes[_Power_Buff_N_VisualEffect_R, PowerSNO] = true;
             if (this.Timeout != null)
             {
-                User.Attributes[_Buff_Icon_Start_TickN, PowerSNO] = this.Timeout.TimeoutTick;
-                User.Attributes[_Buff_Icon_End_TickN, PowerSNO] = this.Timeout.TimeoutTick;
-                User.Attributes[_Buff_Icon_CountN, PowerSNO] = 1;
-                User.Attributes[_Power_Buff_N_VisualEffect_R, PowerSNO] = true;
-                User.Attributes.BroadcastChangedIfRevealed();
+                Target.Attributes[_Buff_Icon_Start_TickN, PowerSNO] = this.Timeout.TimeoutTick;
+                Target.Attributes[_Buff_Icon_End_TickN, PowerSNO] = this.Timeout.TimeoutTick;
+                Target.Attributes[_Buff_Icon_CountN, PowerSNO] = 1;
             }
+            Target.Attributes.BroadcastChangedIfRevealed();
+
             return true;
         }
 
@@ -106,25 +107,26 @@ namespace Mooege.Core.GS.Powers
         {
             base.Remove();
 
+            Target.Attributes[_Power_Buff_N_VisualEffect_R, PowerSNO] = false;
             if (this.Timeout != null)
             {
-                User.Attributes[_Power_Buff_N_VisualEffect_R, PowerSNO] = false;
-                User.Attributes[_Buff_Icon_CountN, PowerSNO] = 0;
-                User.Attributes.BroadcastChangedIfRevealed();
+                Target.Attributes[_Buff_Icon_CountN, PowerSNO] = 0;
             }
+            Target.Attributes.BroadcastChangedIfRevealed();
         }
 
         public override bool Stack(Buff buff)
         {
             base.Stack(buff);
 
-            //User.Attributes[GameAttribute.Buff_Icon_Count0, PowerSNO] += 1;
+            Target.Attributes[_Buff_Icon_CountN, PowerSNO] += 1;
             if (this.Timeout != null)
             {
-                User.Attributes[_Buff_Icon_Start_TickN, PowerSNO] = this.Timeout.TimeoutTick;
-                User.Attributes[_Buff_Icon_End_TickN, PowerSNO] = this.Timeout.TimeoutTick;
-                User.Attributes.BroadcastChangedIfRevealed();
+                Target.Attributes[_Buff_Icon_Start_TickN, PowerSNO] = this.Timeout.TimeoutTick;
+                Target.Attributes[_Buff_Icon_End_TickN, PowerSNO] = this.Timeout.TimeoutTick;
             }
+            Target.Attributes.BroadcastChangedIfRevealed();
+
             return true;
         }
 

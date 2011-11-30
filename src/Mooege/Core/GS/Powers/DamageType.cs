@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mooege.Common.MPQ.FileFormats;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -27,7 +28,7 @@ namespace Mooege.Core.GS.Powers
     {
         public enum HitEffectType : int
         {
-            Blood = 0,
+            Physical = 0,
             Fire = 1,
             Lightning = 2,
             Cold = 3,
@@ -38,13 +39,61 @@ namespace Mooege.Core.GS.Powers
         }
 
         public HitEffectType HitEffect;
+        public int AttributeKey;  // GameAttributeMap key for a given damage type
+        public AnimationTags DeathAnimationTag;
 
-        public static readonly DamageType Physical = new DamageType { HitEffect = HitEffectType.Blood };
-        public static readonly DamageType Arcane = new DamageType { HitEffect = HitEffectType.Arcane };
-        public static readonly DamageType Cold = new DamageType { HitEffect = HitEffectType.Cold };
-        public static readonly DamageType Fire = new DamageType { HitEffect = HitEffectType.Fire };
-        public static readonly DamageType Lightning = new DamageType { HitEffect = HitEffectType.Lightning };
-        public static readonly DamageType Poison = new DamageType { HitEffect = HitEffectType.Poison };
-        public static readonly DamageType Holy = new DamageType { HitEffect = HitEffectType.Holy };
+        public static readonly DamageType Physical = new DamageType
+        { 
+            HitEffect = HitEffectType.Physical, 
+            AttributeKey = 0,
+            DeathAnimationTag = AnimationTags.DeathFlyingOrDefault,
+        };
+        public static readonly DamageType Arcane = new DamageType
+        {
+            HitEffect = HitEffectType.Arcane,
+            AttributeKey = 5,
+            DeathAnimationTag = AnimationTags.DeathArcane,
+        };
+        public static readonly DamageType Cold = new DamageType
+        {
+            HitEffect = HitEffectType.Cold,
+            AttributeKey = 3,
+            DeathAnimationTag = AnimationTags.DeathCold,
+        };
+        public static readonly DamageType Fire = new DamageType 
+        {
+            HitEffect = HitEffectType.Fire,
+            AttributeKey = 1,
+            DeathAnimationTag = AnimationTags.DeathFire,
+        };
+        public static readonly DamageType Lightning = new DamageType
+        {
+            HitEffect = HitEffectType.Lightning,
+            AttributeKey = 2,
+            DeathAnimationTag = AnimationTags.DeathLightning,
+        };
+        public static readonly DamageType Poison = new DamageType
+        {
+            HitEffect = HitEffectType.Poison,
+            AttributeKey = 4,
+            DeathAnimationTag = AnimationTags.DeathPoison,
+        };
+        public static readonly DamageType Holy = new DamageType
+        {
+            HitEffect = HitEffectType.Holy,
+            AttributeKey = 6,
+            DeathAnimationTag = AnimationTags.DeathHoly,
+        };
+
+        public static readonly DamageType[] AllTypes = new DamageType[]
+        {
+            Physical,
+            Arcane,
+            Cold,
+            Fire,
+            Lightning,
+            Poison,
+            Holy
+        };
     }
 }
