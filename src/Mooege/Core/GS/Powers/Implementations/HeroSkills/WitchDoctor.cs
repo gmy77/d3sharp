@@ -36,7 +36,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                                           RuneSelect(107011, 107030, 107035, 107223, 107265, 107114),
                                           User.Position);
                 proj.Position.Z += 3f;
-                proj.OnHit = (hit) =>
+                proj.OnCollision = (hit) =>
                 {
                     // TODO: fix positioning of hit actors. possibly increase model scale?
                     SpawnEffect(RuneSelect(112327, 112338, 112327, 112345, 112347, 112311), proj.Position);

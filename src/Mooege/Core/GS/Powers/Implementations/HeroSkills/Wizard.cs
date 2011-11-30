@@ -155,9 +155,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.PlayEffectGroup(19305); // cast effect
             
             var projectile = new Projectile(this, 99567, User.Position);
-            projectile.OnHit = (hit) =>
+            projectile.OnCollision = (hit) =>
             {
-                SpawnEffect(99572, hit.Position); // impact effect
+                SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
                 projectile.Destroy();
                 WeaponDamage(hit, 1.10f, DamageType.Arcane);
             };

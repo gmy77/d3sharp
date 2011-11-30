@@ -158,7 +158,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                         var tornado = new Projectile(this, 162386, User.Position);
                         tornado.Timeout = WaitSeconds(3f);
-                        tornado.OnHit = (hit) =>
+                        tornado.OnCollision = (hit) =>
                         {
                             WeaponDamage(hit, ScriptFormula(6), DamageType.Physical);
                         };
@@ -182,7 +182,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             var projectile = new Projectile(this, 74636, User.Position);
             projectile.Timeout = WaitSeconds(0.5f);
-            projectile.OnHit = (hit) =>
+            projectile.OnCollision = (hit) =>
             {
                 GeneratePrimaryResource(15f);
 

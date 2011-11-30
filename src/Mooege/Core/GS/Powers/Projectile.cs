@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Linq;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message.Definitions.ACD;
@@ -37,7 +38,7 @@ namespace Mooege.Core.GS.Powers
         public PowerContext Context;
         public Vector3D Velocity { get; private set; }
 
-        public Action<Actor> OnHit;
+        public Action<Actor> OnCollision;
         public Action OnUpdate;
         public Action OnArrival;
         public Action OnTimeout;
@@ -145,7 +146,7 @@ namespace Mooege.Core.GS.Powers
 
         private void _CheckCollisions()
         {
-            if (OnHit == null) return;
+            if (OnCollision == null) return;
 
             // check if we collided with anything since last update
 
@@ -155,7 +156,8 @@ namespace Mooege.Core.GS.Powers
             Vector2F velocity = PowerMath.VectorWithoutZ(this.Position - _prevUpdatePosition);
             
             Actor hit = null;
-            foreach (Actor target in this.Context.GetEnemiesInRadius(this.Position, radius + 25f))
+            foreach (Actor target in this.Context.GetEnemiesInRadius(this.Position, radius + 25f)
+                                                 .OrderBy(t => PowerMath.Distance2D(_prevUpdatePosition, t.Position)))
             {
                 float targetRadius = 1.5f; // target.ActorData.Cylinder.Ax2;
                 if (PowerMath.MovingCircleCollides(startCircle, velocity, new Circle(target.Position.X, target.Position.Y, targetRadius)))
@@ -166,7 +168,7 @@ namespace Mooege.Core.GS.Powers
             }
 
             if (hit != null)
-                OnHit(hit);
+                OnCollision(hit);
         }
 
         private bool _ReckonArrivalTimedOut()
