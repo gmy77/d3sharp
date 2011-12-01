@@ -55,7 +55,6 @@ namespace Mooege.Core.GS.Items.Implementations
                 craftigItemsGbids.Add(crafingItem.GBHandle.GBID);
                 // reveal new item to player                  
                 player.Inventory.PickUp(crafingItem);
-                player.Inventory.RevealInventoryItem(crafingItem);
             }
 
             // TODO: This Message doesn't work. I think i should produce an entry in the chat window like "Salvaging Gloves gave you Common scrap!" - angerwin

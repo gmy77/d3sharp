@@ -372,7 +372,7 @@ namespace Mooege.Core.GS.Items
 
         public override bool Reveal(Player player)
         {
-            if (this.CurrentState == ItemState.PickingUp)
+            if (this.CurrentState == ItemState.PickingUp && HasWorldLocation)
                 return false;
 
             if (!base.Reveal(player))

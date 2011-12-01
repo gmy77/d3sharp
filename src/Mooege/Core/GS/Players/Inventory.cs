@@ -357,7 +357,6 @@ namespace Mooege.Core.GS.Players
 
             Item item = ItemGenerator.CreateItem(_owner, itemFrom.ItemDefinition);
             item.Attributes[GameAttribute.ItemStackQuantityLo] = (int)msg.Amount;
-            RevealInventoryItem(item);
 
             InventoryGrid targetGrid = (msg.InvLoc.EquipmentSlot == (int)EquipmentSlotId.Stash) ? _stashGrid : _inventoryGrid;
             targetGrid.AddItem(item, msg.InvLoc.Row, msg.InvLoc.Column);
@@ -593,14 +592,6 @@ namespace Mooege.Core.GS.Players
         public void AddGoldAmount(int amount)
         {
             _equipment.AddGoldAmount(amount);
-        }
-
-        public Item RevealInventoryItem(Item item)
-        {
-            item.Owner = _owner;
-            _owner.World.Enter(item); // this does not reveal an Item to the Player because item has no Worldposition                        
-            item.Reveal(_owner);
-            return item;
         }
     }
 }
