@@ -18,7 +18,7 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Skill
 {
     [Message(Opcodes.DWordDataMessage3)]
     public class CancelChanneledSkillMessage : GameMessage, ISelfHandler

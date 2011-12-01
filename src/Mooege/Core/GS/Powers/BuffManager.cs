@@ -30,26 +30,10 @@ namespace Mooege.Core.GS.Powers
 
         public void Update()
         {
-            List<Actor> emptyKeys = new List<Actor>();
-
-            foreach (var buffKV in _buffs)
-            {
-                buffKV.Value.RemoveAll((buff) =>
-                {
-                    bool removing = buff.Update();
-                    if (removing)
-                        buff.Remove();
-
-                    return removing;
-                });
-
-                if (buffKV.Value.Count == 0)
-                    emptyKeys.Add(buffKV.Key);
-            }
-
-            // clean up empty buff lists
-            foreach (var key in emptyKeys)
-                _buffs.Remove(key);
+            // update and remove finished buffs, got to make a copy of dictionary keys because _RemoveBuffsIf
+            // will modify _buffs
+            foreach (Actor target in _buffs.Keys.ToArray())
+                _RemoveBuffsIf(target, (buff) => buff.Update());
         }
 
         public bool AddBuff(Actor user, Actor target, Buff buff)
@@ -75,6 +59,30 @@ namespace Mooege.Core.GS.Powers
             buff.Init();
 
             return _AddBuff(buff);
+        }
+
+        public void RemoveBuffs(Actor target, Type buffClass)
+        {
+            if (!_buffs.ContainsKey(target)) return;
+
+            _RemoveBuffsIf(target, (buff) => buff.GetType() == buffClass);
+        }
+
+        public void RemoveBuffs(Actor target, int powerSNO)
+        {
+            if (!_buffs.ContainsKey(target)) return;
+
+            _RemoveBuffsIf(target, (buff) => buff.PowerSNO == powerSNO);
+        }
+
+        public void RemoveAllBuffs(Actor target)
+        {
+            if (!_buffs.ContainsKey(target)) return;
+
+            foreach (Buff buff in _buffs[target])
+                buff.Remove();
+
+            _buffs.Remove(target);
         }
 
         private bool _AddBuff(Buff buff)
@@ -121,6 +129,21 @@ namespace Mooege.Core.GS.Powers
                     return false;
                 }
             }
+        }
+
+        private void _RemoveBuffsIf(Actor target, Func<Buff, bool> pred)
+        {
+            _buffs[target].RemoveAll((buff) =>
+            {
+                bool removing = pred(buff);
+                if (removing)
+                    buff.Remove();
+
+                return removing;
+            });
+
+            if (_buffs[target].Count == 0)
+                _buffs.Remove(target);
         }
     }
 }

@@ -148,7 +148,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
 
-        [ImplementsBuffSlot(7)]
+        [ImplementsPowerBuff(7, false)]
         class ComboStage3Buff : PowerBuff
         {
             public override void Init()
@@ -381,7 +381,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
 
-        [ImplementsBuffSlot(0)]
+        [ImplementsPowerBuff(0, false)]
         class DashingBuff0 : PowerBuff
         {
             public DashingBuff0(TickTimer timeout)
@@ -405,6 +405,100 @@ namespace Mooege.Core.GS.Powers.Implementations
                 User.Attributes[GameAttribute.Hidden] = false;
                 User.Attributes.BroadcastChangedIfRevealed();
             }
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Monk.Mantras.MantraOfEvasion)]
+    public class MonkMantraOfEvasion : PowerScript
+    {
+        public override IEnumerable<TickTimer> Run()
+        {
+            // cast effect
+            User.PlayEffectGroup(143964);
+
+            AddBuff(User, new CasterBuff());
+            foreach (Actor ally in GetAlliesInRadius(User.Position, ScriptFormula(0)))
+                AddBuff(User, new CastBonusBuff());
+
+            yield break;
+        }
+
+        class BaseDodgeBuff : PowerBuff
+        {
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+
+                Target.Attributes[GameAttribute.Dodge_Chance_Bonus] += ScriptFormula(2);
+                Target.Attributes.BroadcastChangedIfRevealed();
+
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+
+                Target.Attributes[GameAttribute.Dodge_Chance_Bonus] -= ScriptFormula(2);
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
+        }
+
+        class BaseFullEffectsBuff : BaseDodgeBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(1));
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+
+                // aura fade effect
+                Target.PlayEffectGroup(199677);
+            }
+        }
+
+        [ImplementsPowerBuff(0, false)]
+        class CasterBuff : BaseFullEffectsBuff
+        {
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+
+                foreach (Actor ally in GetAlliesInRadius(Target.Position, ScriptFormula(0)))
+                {
+                    if (ally != Target)
+                        AddBuff(ally, new AllyBuff());
+                }
+
+                return false;
+            }
+        }
+
+        [ImplementsPowerBuff(7, false)]
+        class CastBonusBuff : BaseDodgeBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(13));
+            }
+        }
+
+        [ImplementsPowerBuff(1, false)]
+        class AllyBuff : BaseFullEffectsBuff
+        {
         }
     }
 }

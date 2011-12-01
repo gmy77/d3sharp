@@ -24,13 +24,15 @@ using System.Text;
 namespace Mooege.Core.GS.Powers
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class ImplementsBuffSlot : Attribute
+    public class ImplementsPowerBuff : Attribute
     {
-        public int Slot;
+        public int BuffSlot;
+        public bool CountStacks;
 
-        public ImplementsBuffSlot(int slot)
+        public ImplementsPowerBuff(int buffSlot, bool countStacks)
         {
-            Slot = slot;
+            BuffSlot = buffSlot;
+            CountStacks = countStacks;
         }
     }
 }

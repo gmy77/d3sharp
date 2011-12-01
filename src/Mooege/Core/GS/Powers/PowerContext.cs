@@ -163,13 +163,31 @@ namespace Mooege.Core.GS.Powers
 
         public IList<Actor> GetEnemiesInRadius(Vector3D center, float radius, int maxCount = -1)
         {
+            // for now simple switch from enemy/ally using class types Player/Monster
+            if (User is Player)
+                return _GetActorsOfTypeInRadius<Monster>(center, radius, maxCount);
+            else
+                return _GetActorsOfTypeInRadius<Player>(center, radius, maxCount);
+        }
+
+        public IList<Actor> GetAlliesInRadius(Vector3D center, float radius, int maxCount = -1)
+        {
+            // for now simple switch from enemy/ally using class types Player/Monster
+            if (User is Player)
+                return _GetActorsOfTypeInRadius<Player>(center, radius, maxCount);
+            else
+                return _GetActorsOfTypeInRadius<Monster>(center, radius, maxCount);
+        }
+
+        private IList<Actor> _GetActorsOfTypeInRadius<T>(Vector3D center, float radius, int maxCount) where T : Actor
+        {
             List<Actor> hits = new List<Actor>();
-            foreach (Actor actor in World.QuadTree.Query<Actor>(new Circle(center.X, center.Y, radius)))
+            foreach (Actor actor in World.QuadTree.Query<T>(new Circle(center.X, center.Y, radius)))
             {
                 if (hits.Count == maxCount)
                     break;
 
-                if (!actor.Attributes[GameAttribute.Untargetable] && actor is Monster)
+                if (!actor.Attributes[GameAttribute.Untargetable])
                     hits.Add(actor);
             }
 

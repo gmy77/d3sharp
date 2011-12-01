@@ -76,14 +76,17 @@ namespace Mooege.Core.GS.Powers
     public abstract class PowerBuff : TimedBuff
     {
         public int BuffSlot = 0;
+        public bool IsCountingStacks = false;
+        public int StackCount = 0;
 
         public PowerBuff()
         {
-            // try to load BuffSlot from attribute
-            var attributes = (ImplementsBuffSlot[])this.GetType().GetCustomAttributes(typeof(ImplementsBuffSlot), true);
-            foreach (var slotAttribute in attributes)
+            // try to load buff options from attribute
+            var attributes = (ImplementsPowerBuff[])this.GetType().GetCustomAttributes(typeof(ImplementsPowerBuff), true);
+            foreach (var attr in attributes)
             {
-                BuffSlot = slotAttribute.Slot;
+                BuffSlot = attr.BuffSlot;
+                IsCountingStacks = attr.CountStacks;
             }
         }
 
@@ -97,6 +100,7 @@ namespace Mooege.Core.GS.Powers
                 Target.Attributes[_Buff_Icon_Start_TickN, PowerSNO] = this.Timeout.TimeoutTick;
                 Target.Attributes[_Buff_Icon_End_TickN, PowerSNO] = this.Timeout.TimeoutTick;
                 Target.Attributes[_Buff_Icon_CountN, PowerSNO] = 1;
+                this.StackCount = 1;
             }
             Target.Attributes.BroadcastChangedIfRevealed();
 
@@ -110,7 +114,10 @@ namespace Mooege.Core.GS.Powers
             Target.Attributes[_Power_Buff_N_VisualEffect_R, PowerSNO] = false;
             if (this.Timeout != null)
             {
+                Target.Attributes[_Buff_Icon_Start_TickN, PowerSNO] = 0;
+                Target.Attributes[_Buff_Icon_End_TickN, PowerSNO] = 0;
                 Target.Attributes[_Buff_Icon_CountN, PowerSNO] = 0;
+                this.StackCount = 0;
             }
             Target.Attributes.BroadcastChangedIfRevealed();
         }
@@ -118,12 +125,16 @@ namespace Mooege.Core.GS.Powers
         public override bool Stack(Buff buff)
         {
             base.Stack(buff);
-
-            Target.Attributes[_Buff_Icon_CountN, PowerSNO] += 1;
+            
             if (this.Timeout != null)
             {
                 Target.Attributes[_Buff_Icon_Start_TickN, PowerSNO] = this.Timeout.TimeoutTick;
                 Target.Attributes[_Buff_Icon_End_TickN, PowerSNO] = this.Timeout.TimeoutTick;
+                if (this.IsCountingStacks)
+                {
+                    Target.Attributes[_Buff_Icon_CountN, PowerSNO] += 1;
+                    this.StackCount += 1;
+                }
             }
             Target.Attributes.BroadcastChangedIfRevealed();
 

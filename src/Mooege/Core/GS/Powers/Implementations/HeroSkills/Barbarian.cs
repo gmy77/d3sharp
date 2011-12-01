@@ -119,7 +119,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield break;
         }
 
-        [ImplementsBuffSlot(0)]
+        [ImplementsPowerBuff(0, false)]
         public class WhirlwindEffect : PowerBuff
         {
             private TickTimer _damageTimer;
