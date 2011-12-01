@@ -275,23 +275,6 @@ namespace Mooege.Core.GS.Games
 
             joinedPlayer.EnterWorld(this.StartingWorld.StartingPoints.First().Position);
             joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
-
-            // TODO: These items do not droped randomly. They should be created during MainQuest
-            #region Hacky Main-Quest-Items       
-            var cauldornOfJordan = ItemGenerator.Cook(joinedPlayer, "StoneOfWealth");
-            cauldornOfJordan.Drop(null, joinedPlayer.Position);
-            joinedPlayer.GroundItems[cauldornOfJordan.DynamicID] = cauldornOfJordan;
-
-            var cubeOfNephalm = ItemGenerator.Cook(joinedPlayer, "NephalemCube");
-            cubeOfNephalm.Drop(null, joinedPlayer.Position);
-            joinedPlayer.GroundItems[cubeOfNephalm.DynamicID] = cubeOfNephalm;
-
-            var stoneOfRecall =  ItemGenerator.Cook(joinedPlayer, "StoneOfRecall");
-            stoneOfRecall.Drop(null, joinedPlayer.Position);
-            joinedPlayer.GroundItems[stoneOfRecall.DynamicID] = stoneOfRecall;
-            #endregion
-
-
         }
 
         /// <summary>
