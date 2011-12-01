@@ -21,6 +21,7 @@ using System.Globalization;
 using System.Threading;
 using CrystalMpq;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Common.Storage;
 
 namespace Mooege.Common.MPQ
 {
@@ -45,6 +46,7 @@ namespace Mooege.Common.MPQ
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture so that we don't hit pitfalls in non en/US systems with different number formats.
             this.Data = (FileFormat) Activator.CreateInstance(parser, new object[] {file});
+            PersistenceManager.LoadPartial(this.Data, SNOId.ToString());
         }
     }
 }

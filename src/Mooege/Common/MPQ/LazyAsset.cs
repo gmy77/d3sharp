@@ -21,6 +21,7 @@ using System.Globalization;
 using System.Threading;
 using CrystalMpq;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Common.Storage;
 
 namespace Mooege.Common.MPQ
 {
@@ -31,7 +32,10 @@ namespace Mooege.Common.MPQ
             get
             {
                 if (_data == null && _parser != null && _file != null)
+                {
                     _data = (FileFormat)Activator.CreateInstance(_parser, new object[] { _file });
+                    PersistenceManager.LoadPartial(_data, SNOId.ToString());
+                }
                 return _data;
             }
         }

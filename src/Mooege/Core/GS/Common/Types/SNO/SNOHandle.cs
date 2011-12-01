@@ -22,6 +22,7 @@ using Gibbed.IO;
 using Mooege.Common.MPQ;
 using Mooege.Net.GS.Message;
 using System;
+using Mooege.Common.Storage;
 
 namespace Mooege.Core.GS.Common.Types.SNO
 {
@@ -47,7 +48,7 @@ namespace Mooege.Core.GS.Common.Types.SNO
         /// <summary>
         /// The id of the referenced object
         /// </summary>
-        public int Id { get; private set; }
+        [PersistentProperty] public int Id { get; private set; }
 
         /// <summary>
         /// The target object this handle refers to.

@@ -146,6 +146,7 @@
     <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
     <Compile Include="Common\MPQ\LazyAsset.cs" />
+    <Compile Include="Common\Storage\PersistenceManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\ArtisanShortcut.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Checkpoint.cs" />
@@ -614,6 +615,10 @@
     </None>
     <None Include="..\..\assets\config.ini">
       <Link>config.ini</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\mpqdata.db">
+      <Link>Assets\mpqdata.db</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\MPQ\IMPORTANT">
