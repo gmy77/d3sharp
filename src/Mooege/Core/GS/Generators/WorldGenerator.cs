@@ -328,6 +328,7 @@ namespace Mooege.Core.GS.Generators
                     {
                         if (RandomHelper.NextDouble() > 0.8)
                         {
+                            // TODO Load correct spawn population
                              // 2.5 is units per square, TODO: Find out how to calculate units per square. Is it F1 * V0.I1 / SquareCount?
                             int x = RandomHelper.Next(scene.NavMesh.SquaresCountX);
                             int y = RandomHelper.Next(scene.NavMesh.SquaresCountY);
@@ -342,7 +343,7 @@ namespace Mooege.Core.GS.Generators
                                         {
                                             X = (float)(x * 2.5 + scene.Position.X),
                                             Y = (float)(y * 2.5 + scene.Position.Y),
-                                            Z = scene.Position.Z
+                                            Z = scene.NavMesh.Squares[y * scene.NavMesh.SquaresCountX + x].Height     //scene.Position.Z
                                         },
                                         Quaternion = new Quaternion
                                         {

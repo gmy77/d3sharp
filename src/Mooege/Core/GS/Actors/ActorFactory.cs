@@ -99,7 +99,32 @@ namespace Mooege.Core.GS.Actors
                             case GizmoGroup.Healthwell:
                                 return new Healthwell(world, snoId, tags);
 
+                            case GizmoGroup.ActChangeTempObject:
+                            case GizmoGroup.Banner:
+                            case GizmoGroup.Barricade:
+                            case GizmoGroup.CathedralIdol:
+                            case GizmoGroup.Destructible:
+                            case GizmoGroup.Door:
+                            case GizmoGroup.DungeonStonePortal:
+                            case GizmoGroup.Headstone:
+                            case GizmoGroup.HearthPortal:
+                            case GizmoGroup.NephalemAltar:
+                            case GizmoGroup.Passive:
+                            case GizmoGroup.PlayerSharedStash:
+                            case GizmoGroup.QuestLoot:
+                            case GizmoGroup.Readable:
+                            case GizmoGroup.ServerProp:
+                            case GizmoGroup.Sign:
+                            case GizmoGroup.Spawner:
+                            case GizmoGroup.StartLocations:
+                            case GizmoGroup.TownPortal:
+                            case GizmoGroup.Trigger:
+                            case GizmoGroup.WeirdGroup57:
+                                Logger.Info("GizmoGroup {0} has no proper implementation, using default gizmo instead", actorData.TagMap[ActorKeys.GizmoGroup]);
+                                return CreateGizmo(world, snoId, tags);
+
                             default:
+                                Logger.Warn("Unknown gizmo group {0}", actorData.TagMap[ActorKeys.GizmoGroup]);
                                 return CreateGizmo(world, snoId, tags);
                         }
 

@@ -23,6 +23,9 @@ using Mooege.Core.GS.Common.Types.Math;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
+    /// <summary>
+    /// Implementation of checkpoints. Do they have any other purpose than sending the checkpoint visual?
+    /// </summary>
     class Checkpoint : Gizmo
     {
         private bool _checkpointReached = false;

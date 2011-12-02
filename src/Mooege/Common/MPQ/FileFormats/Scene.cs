@@ -180,12 +180,12 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public class NavMeshSquare : ISerializableData
         {
-            public float Float0 { get; private set; }
+            public float Height { get; private set; }
             public NavCellFlags Flags { get; private set; }
 
             public void Read(MpqFileStream stream)
             {
-                this.Float0 = stream.ReadValueF32();
+                this.Height = stream.ReadValueF32();
                 this.Flags = (NavCellFlags)stream.ReadValueS32();
             }
         }

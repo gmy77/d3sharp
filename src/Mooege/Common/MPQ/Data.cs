@@ -129,7 +129,9 @@ namespace Mooege.Common.MPQ
         }
 
         /// <summary>
-        /// Load the toc from the database that contains all former mpq assets that are know stored in the db
+        /// Load the table of contents from the database. the database toc contains the sno ids of all objects
+        /// that should / can no longer be loaded from mpq because it is zeroed out or because we need to edit
+        /// some of the fields
         /// </summary>
         private void LoadDBCatalog()
         {
@@ -147,24 +149,28 @@ namespace Mooege.Common.MPQ
                             itemReader["Name"].ToString()));
                     }
                 }
-
             }
         }
 
-
+        /// <summary>
+        /// Adds the asset to the dictionary and tries to parse it if a parser
+        /// is found and lazy loading is deactivated
+        /// </summary>
+        /// <param name="asset">New asset to be processed</param>
         private void ProcessAsset(Asset asset)
         {
-            this.Assets[asset.Group].TryAdd(asset.SNOId, asset); // add it to our assets dictionary.
-            if (!this.Parsers.ContainsKey(asset.Group)) return; // if we don't have a proper parser for asset, just give up.
+            this.Assets[asset.Group].TryAdd(asset.SNOId, asset);
+            if (!this.Parsers.ContainsKey(asset.Group)) return;
 
-            asset.Parser = this.Parsers[asset.Group]; // get the type the asset's parser.
+            asset.Parser = this.Parsers[asset.Group];
 
+            // If lazy loading is deactivated, immediatly run parsers sequentially or threaded
             if (Storage.Config.Instance.LazyLoading == false)
             {
                 if (Storage.Config.Instance.EnableTasks)
-                    this._tasks.Add(new Task(() => asset.RunParser())); // add it to our task list, so we can parse them concurrently.        
+                    this._tasks.Add(new Task(() => asset.RunParser()));
                 else
-                    asset.RunParser(); // run the parsers sequentally.   
+                    asset.RunParser();
             }
         }
 

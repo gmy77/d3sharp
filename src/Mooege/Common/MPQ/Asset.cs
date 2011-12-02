@@ -17,11 +17,7 @@
  */
 
 using System;
-using System.Globalization;
-using System.Threading;
-using CrystalMpq;
 using Mooege.Core.GS.Common.Types.SNO;
-using Mooege.Common.Storage;
 
 namespace Mooege.Common.MPQ
 {
@@ -33,7 +29,7 @@ namespace Mooege.Common.MPQ
         public string FileName { get; protected set; }
         public Type Parser { get; set; }
 
-
+        protected FileFormat _data = null;
 
         public FileFormat Data
         {
@@ -50,9 +46,6 @@ namespace Mooege.Common.MPQ
 
         protected abstract bool SourceAvailable { get; }
 
-
-        protected FileFormat _data = null;
-         
 
         public Asset(SNOGroup group, Int32 snoId, string name)
         {
