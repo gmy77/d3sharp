@@ -25,6 +25,7 @@ using Mooege.Common.Logging;
 using Mooege.Core.GS.Items;
 using Mooege.Common.Helpers.Math;
 using Mooege.Core.GS.Players;
+using Mooege.Common.Storage;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -33,7 +34,7 @@ namespace Mooege.Common.MPQ.FileFormats
     {
         Logger Logger = new Logger("TreasureClass");
 
-        public static TreasureClass GenericTreasure 
+        public static TreasureClass GenericTreasure
         {
             get
             {
@@ -49,23 +50,17 @@ namespace Mooege.Common.MPQ.FileFormats
             }
         }
 
-        public Header Header { get; private set; }
+        [PersistentProperty("Percentage")]
         public float Percentage { get; private set; }
-        public int I0 { get; private set; }
-        public int I1 { get; private set; }
-        public List<LootDropModifier> ModifierList { get; private set; }
 
-        public TreasureClass(MpqFile file)
-        {
-            var stream = file.Open();
-            this.Header = new Header(stream);
-            this.Percentage = stream.ReadValueF32();
-            this.I0 = stream.ReadValueS32();
-            this.I1 = stream.ReadValueS32();
-            stream.Position += 8;
-            this.ModifierList = stream.ReadSerializedData<LootDropModifier>();
-            stream.Close();
-        }
+        [PersistentProperty("I0")]
+        public int I0 { get; private set; }
+
+        [PersistentProperty("LootDropModifiersCount")]
+        public int LootDropModifiersCount { get; private set; }
+
+        [PersistentProperty("LootDropModifiers")]
+        public List<LootDropModifier> LootDropModifiers { get; private set; }
 
         public TreasureClass() { }
 
@@ -76,60 +71,44 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    public class LootDropModifier : ISerializableData
+    public class LootDropModifier
     {
+        [PersistentProperty("I0")]
         public int I0 { get; private set; }
+
+        [PersistentProperty("SNOSubTreasureClass")]
         public int SNOSubTreasureClass { get; private set; }
+
+        [PersistentProperty("Percentage")]
         public float Percentage { get; private set; }
+
+        [PersistentProperty("I1")]
         public int I1 { get; private set; }
+
+        [PersistentProperty("GBIdQualityClass")]
         public int GBIdQualityClass { get; private set; }
+
+        [PersistentProperty("I2")]
         public int I2 { get; private set; }
+
+        [PersistentProperty("I3")]
         public int I3 { get; private set; }
+
+        [PersistentProperty("SNOCondition")]
         public int SNOCondition { get; private set; }
-        public ItemSpecifierData2 ItemSpecifier { get; private set; }
+
+        [PersistentProperty("ItemSpecifier")]
+        public ItemSpecifierData ItemSpecifier { get; private set; }
+
+        [PersistentProperty("I5")]
         public int I5 { get; private set; }
+
+        [PersistentProperty("I4", 4)]
         public int[] I4 { get; private set; }
+
+        [PersistentProperty("I6")]
         public int I6 { get; private set; }
 
-        public void Read(MpqFileStream stream)
-        {
-            this.I0 = stream.ReadValueS32();
-            this.SNOSubTreasureClass = stream.ReadValueS32();
-            this.Percentage = stream.ReadValueF32();
-            this.I1 = stream.ReadValueS32();
-            this.GBIdQualityClass = stream.ReadValueS32();
-            this.I2 = stream.ReadValueS32();
-            this.I3 = stream.ReadValueS32();
-            this.SNOCondition = stream.ReadValueS32();
-            this.ItemSpecifier = new ItemSpecifierData2(stream);
-            this.I5 = stream.ReadValueS32();
-            this.I4 = new int[4];
-            for (int i = 0; i < 4; i++)
-                this.I4[i] = stream.ReadValueS32();
-            //this.I6 = stream.ReadValueS32();
-        }
-
-
-        public class ItemSpecifierData2
-        {
-            public int ItemGBId { get; private set; }
-            public int I0 { get; private set; }
-            public int[] GBIdAffixes = new int[3];
-            public int I1 { get; private set; }
-            public int I2 { get; private set; }
-
-            public ItemSpecifierData2(MpqFileStream stream)
-            {
-                ItemGBId = stream.ReadValueS32();
-                I0 = stream.ReadValueS32();
-                for (int i = 0; i < GBIdAffixes.Length; i++)
-                {
-                    GBIdAffixes[i] = stream.ReadValueS32();
-                }
-                I1 = stream.ReadValueS32();
-                //I2 = stream.ReadValueS32();
-            }
-        }
-
+        public LootDropModifier() { }
     }
 }

@@ -60,6 +60,14 @@ namespace Mooege.Common.Storage
         }
 
 
+        public static object Load(Type type, string id)
+        {
+            var instance = Activator.CreateInstance(type);
+            LoadPartial(instance, id);
+            return instance;
+        }
+
+
         /// <summary>
         /// Loads data from the mpqmirror into an already existing object
         /// </summary>
@@ -81,7 +89,7 @@ namespace Mooege.Common.Storage
         }
 
         // TODO first projection, then join... not the other way around
-        private static string genericListsql = "SELECT {1}.* FROM {0}_{1} JOIN {1} ON {0}_{1}.{1}Id = {1}.Id WHERE {0}Id = {2}";
+        private static string genericListsql = "SELECT {1}.* FROM {0}_{1}_{3} JOIN {1} ON {0}_{1}_{3}.{1}Id = {1}.Id WHERE {0}Id = {2}";
 
         /// <summary>
         /// Loads properties of an object from the passes reader
@@ -101,7 +109,7 @@ namespace Mooege.Common.Storage
                     // Load generic lists by finding the mn-mapping table and loading every entry recursivly
                     if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(List<>))
                     {
-                        using (var cmd = new SQLiteCommand(String.Format(genericListsql, o.GetType().Name, property.PropertyType.GetGenericArguments()[0].Name, entryId), DBManager.MPQMirror))
+                        using (var cmd = new SQLiteCommand(String.Format(genericListsql, o.GetType().Name, property.PropertyType.GetGenericArguments()[0].Name, entryId, columnName), DBManager.MPQMirror))
                         {
                             var itemReader = cmd.ExecuteReader();
                             var list = Activator.CreateInstance(property.PropertyType);
@@ -228,6 +236,8 @@ namespace Mooege.Common.Storage
             {
                 if (GetPersistentAttribute(property) != null)
                 {
+                    string columnName = String.Format("{0}{1}", embeddedPrefix, GetPersistentAttribute(property).Name == null ? property.Name : GetPersistentAttribute(property).Name);
+
                     if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(List<>))
                     {
                         IList list = (IList)property.GetValue(o, null);
@@ -237,11 +247,12 @@ namespace Mooege.Common.Storage
                             string newId = Save(item, null, null, "");
 
                             using (var cmd = new SQLiteCommand(String.Format(
-                                "INSERT INTO {0}_{1} ({0}Id, {1}Id) VALUES ({2}, {3})",
+                                "INSERT INTO {0}_{1}_{4} ({0}Id, {1}Id) VALUES ({2}, {3})",
                                 o.GetType().Name,
                                 property.PropertyType.GetGenericArguments()[0].Name,
                                 id,
-                                newId
+                                newId,
+                                columnName
                                 ), DBManager.MPQMirror))
                             {
                                 cmd.ExecuteNonQuery();

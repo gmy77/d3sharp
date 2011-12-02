@@ -25,43 +25,27 @@ using Mooege.Common.Storage;
 
 namespace Mooege.Common.MPQ
 {
-    public abstract class Asset
+    public class MPQAsset : Asset
     {
-        public SNOGroup Group { get; private set; }
-        public Int32 SNOId { get; private set; }
-        public string Name { get; private set; }
-        public string FileName { get; protected set; }
-        public Type Parser { get; set; }
+        public MpqFile MpqFile { get; set; }
 
-
-
-        public FileFormat Data
+        protected override bool SourceAvailable
         {
-            get
-            {
-                if (_data == null && SourceAvailable)
-                {
-                    RunParser();
-                }
-
-                return _data;
-            }
+            get { return MpqFile != null && MpqFile.Size != 0; }
         }
 
-        protected abstract bool SourceAvailable { get; }
-
-
-        protected FileFormat _data = null;
-         
-
-        public Asset(SNOGroup group, Int32 snoId, string name)
+        public MPQAsset(SNOGroup group, Int32 snoId, string name)
+            : base(group, snoId, name)
         {
-            this.FileName = group + "\\" + name + FileExtensions.Extensions[(int)group];
-            this.Group = group;
-            this.SNOId = snoId;
-            this.Name = name;
         }
 
-        public abstract void RunParser();
+        public override void RunParser()
+        {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture so that we don't hit pitfalls in non en/US systems with different number formats.
+            _data = (FileFormat)Activator.CreateInstance(Parser, new object[] { MpqFile });
+            PersistenceManager.LoadPartial(_data, SNOId.ToString());
+
+            //PersistenceManager.Save(this.Data, SNOId.ToString());
+        }
     }
 }

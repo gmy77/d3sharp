@@ -26,6 +26,8 @@ using Gibbed.IO;
 using Mooege.Common.Versions;
 using Mooege.Core.GS.Common.Types.SNO;
 using System.Linq;
+using System.Data.SQLite;
+using Mooege.Common.Storage;
 
 namespace Mooege.Common.MPQ
 {
@@ -34,7 +36,7 @@ namespace Mooege.Common.MPQ
         public Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>> Assets = new Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>>();
         public readonly Dictionary<SNOGroup, Type> Parsers = new Dictionary<SNOGroup, Type>();
         private readonly List<Task> _tasks = new List<Task>();
-        private static readonly SNOGroup[] PatchExceptions = new[] { SNOGroup.TreasureClass, SNOGroup.TimedEvent, SNOGroup.ConversationList, SNOGroup.Script, SNOGroup.AiBehavior, SNOGroup.AiState, SNOGroup.Conductor, SNOGroup.FlagSet, SNOGroup.Code };
+        private static readonly SNOGroup[] PatchExceptions = new[] { SNOGroup.TimedEvent, SNOGroup.ConversationList, SNOGroup.Script, SNOGroup.AiBehavior, SNOGroup.AiState, SNOGroup.Conductor, SNOGroup.FlagSet, SNOGroup.Code };
 
         public Data()
             : base(VersionInfo.MPQ.RequiredPatchVersion, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
@@ -66,7 +68,8 @@ namespace Mooege.Common.MPQ
         private void LoadCatalogs()
         {
             this.LoadCatalog("CoreTOC.dat"); // as of patch beta patch 7841, blizz renamed TOC.dat as CoreTOC.dat
-            this.LoadCatalog("TOC.dat", true, PatchExceptions.ToList()); // used for reading assets patched to zero bytes and removed from mainCatalog file.          
+            this.LoadCatalog("TOC.dat", true, PatchExceptions.ToList()); // used for reading assets patched to zero bytes and removed from mainCatalog file.  
+            this.LoadDBCatalog();
         }
 
         private void LoadCatalog(string fileName, bool useBaseMPQ = false, List<SNOGroup> groupsToLoad = null)
@@ -95,23 +98,10 @@ namespace Mooege.Common.MPQ
                 if (groupsToLoad != null && !groupsToLoad.Contains(group)) // if we're handled groups to load, just ignore the ones not in the list.
                     continue;
 
-                var asset = this.ProcessAsset(group, snoId, name); // process the asset.
-                this.Assets[group].TryAdd(snoId, asset); // add it to our assets dictionary.
+                var asset = new MPQAsset(group, snoId, name);
+                asset.MpqFile = this.GetFile(asset.FileName, PatchExceptions.Contains(asset.Group)); // get the file. note: if file is in any of the groups in PatchExceptions it'll from load the original version - the reason is that assets in those groups got patched to 0 bytes. /raist.
+                this.ProcessAsset(asset); // process the asset.
             }
-
-            //System.IO.StreamWriter f = new System.IO.StreamWriter(System.IO.File.OpenWrite("F:\\dfsdfsdf.txt"));
-            //foreach (var key in Mooege.Common.MPQ.FileFormats.Actor.groups.Keys)
-            //{
-            //    f.WriteLine("Group: " + (Mooege.Core.GS.Common.Types.TagMap.GizmoGroup) key);
-            //    foreach (var value in Mooege.Common.MPQ.FileFormats.Actor.groups[key])
-            //    {
-            //        f.WriteLine(this.Assets[SNOGroup.Actor][value.Header.SNOId].FileName + "(" + value.Header.SNOId + "), " + value.Type);
-
-            //        foreach (var tag in ((Mooege.Common.MPQ.FileFormats.Actor)this.Assets[SNOGroup.Actor][value.Header.SNOId].Data).TagMap)
-            //            f.WriteLine(tag.ToString());
-            //    }
-            //}
-            //f.Close();
 
             stream.Close();
 
@@ -138,22 +128,44 @@ namespace Mooege.Common.MPQ
                 Logger.Info("Found a total of {0} assets from {1} catalog and parsed {2} of them in {3:c}.", assetsCount, fileName, this._tasks.Count, elapsedTime);
         }
 
-        private Asset ProcessAsset(SNOGroup group, Int32 snoId, string name)
+        /// <summary>
+        /// Load the toc from the database that contains all former mpq assets that are know stored in the db
+        /// </summary>
+        private void LoadDBCatalog()
         {
-            var asset = Storage.Config.Instance.LazyLoading ? new LazyAsset(group, snoId, name) : new Asset(group, snoId, name); // create the asset.
-            if (!this.Parsers.ContainsKey(asset.Group)) return asset; // if we don't have a proper parser for asset, just give up.
+            using (var cmd = new SQLiteCommand("SELECT * FROM TOC", DBManager.MPQMirror))
+            {
+                var itemReader = cmd.ExecuteReader();
 
-            var parser = this.Parsers[asset.Group]; // get the type the asset's parser.
-            var file = this.GetFile(asset.FileName, PatchExceptions.Contains(asset.Group)); // get the file. note: if file is in any of the groups in PatchExceptions it'll from load the original version - the reason is that assets in those groups got patched to 0 bytes. /raist.
+                if (itemReader.HasRows)
+                {
+                    while (itemReader.Read())
+                    {
+                        ProcessAsset(new DBAsset(
+                            (SNOGroup)Enum.Parse(typeof(SNOGroup), itemReader["SNOGroup"].ToString()),
+                            Convert.ToInt32(itemReader["SNOId"]),
+                            itemReader["Name"].ToString()));
+                    }
+                }
 
-            if (file == null || file.Size < 10) return asset; // if it's empty, give up again.
+            }
+        }
 
-            if (Storage.Config.Instance.EnableTasks)
-                this._tasks.Add(new Task(() => asset.RunParser(parser, file))); // add it to our task list, so we can parse them concurrently.        
-            else
-                asset.RunParser(parser, file); // run the parsers sequentally.
 
-            return asset;
+        private void ProcessAsset(Asset asset)
+        {
+            this.Assets[asset.Group].TryAdd(asset.SNOId, asset); // add it to our assets dictionary.
+            if (!this.Parsers.ContainsKey(asset.Group)) return; // if we don't have a proper parser for asset, just give up.
+
+            asset.Parser = this.Parsers[asset.Group]; // get the type the asset's parser.
+
+            if (Storage.Config.Instance.LazyLoading == false)
+            {
+                if (Storage.Config.Instance.EnableTasks)
+                    this._tasks.Add(new Task(() => asset.RunParser())); // add it to our task list, so we can parse them concurrently.        
+                else
+                    asset.RunParser(); // run the parsers sequentally.   
+            }
         }
 
         /// <summary>

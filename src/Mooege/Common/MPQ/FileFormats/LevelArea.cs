@@ -35,8 +35,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public GizmoLocSet LocSet { get; private set; }
         public int SpawnPopulationEntries { get; private set; }
 
-        [PersistentProperty()]
-        public List<LevelAreaSpawnPopulation> SpawnPopulation { get; private set; }
+        [PersistentProperty("SpawnPopulation")] public List<LevelAreaSpawnPopulation> SpawnPopulation { get; private set; }
 
         public LevelArea(MpqFile file)
         {
@@ -108,7 +107,7 @@ namespace Mooege.Common.MPQ.FileFormats
         [PersistentProperty("I1", 4)] public int[] I1 { get; private set; }
 
         [PersistentProperty("SpawnGroupsCount")] public int SpawnGroupsCount { get; private set; }
-        [PersistentProperty()] public List<LevelAreaSpawnGroup> SpawnGroup { get; private set; }
+        [PersistentProperty("SpawnGroup")] public List<LevelAreaSpawnGroup> SpawnGroup { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -130,7 +129,7 @@ namespace Mooege.Common.MPQ.FileFormats
         [PersistentProperty("F1")] public float F1 { get; private set; }
         [PersistentProperty("I0")] public int I0 { get; private set; }
         [PersistentProperty("I1")] public int SpawnItemsCount { get; private set; }
-        [PersistentProperty()] public List<LevelAreaSpawnItem> SpawnItems { get; private set; }
+        [PersistentProperty("SpawnItems")] public List<LevelAreaSpawnItem> SpawnItems { get; private set; }
         [PersistentProperty("I2")] public int I2 { get; private set; }
         [PersistentProperty("I3")] public int I3 { get; private set; }
 

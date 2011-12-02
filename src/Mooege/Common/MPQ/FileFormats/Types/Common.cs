@@ -243,6 +243,8 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public int I1 { get; private set; }
         public int I2 { get; private set; }
 
+        public ItemSpecifierData() { }
+
         public ItemSpecifierData(MpqFileStream stream)
         {
             ItemGBId = stream.ReadValueS32();
