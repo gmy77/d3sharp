@@ -27,6 +27,8 @@ namespace Mooege.Net.GS.Message.Definitions.Connection
         public int Ticks;
         public int Field2;
 
+        public LogoutTickTimeMessage() : base(Opcodes.LogoutTickTimeMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadBool();
