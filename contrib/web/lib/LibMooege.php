@@ -18,8 +18,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-//ServicesInfo(); // Only comment-out this line when you want to debug.
-
 /**
  * LibMooege class that connect Mooege's web-services and communicate with them.
  * Requires php_soap extension to be activated.
@@ -68,7 +66,7 @@ class LibMooege
      * @param type $port - Port for mooege web-services.
      * @param type $default_timeout - Default timeout value for connecting soap services.
      */
-    public function __construct($address = "http://localhost", $port = 9000, $default_timeout = 15)
+    public function __construct($address = "http://localhost", $port = 9000, $default_timeout = 5)
     {                
         $this->servicesAddress="$address:$port";
         $this->CreateSOAPClients($default_timeout);
@@ -319,39 +317,3 @@ class LibMooege
     }
 }
 ?>
-
-<?php
-/**
- * Prints services-info.
- */
-function ServicesInfo()
-{
-    $mooege = new LibMooege();
-    $created=$mooege->CreateAccount("debug@","12345678");
-    $exists=$mooege->AccountExists("debug@");
-    $verified=$mooege->VerifyPassword("debug@","12345678");
-?>
-    <?if ($mooege->connected):?>
-        Connected to <?=$mooege->servicesAddress?>.
-        <ul>
-            <li>Create account: debug@:12345678 [<?if($created):?>True<?else:?>False<?endif?>]</li>   
-            <li>Account Exists: debug@ [<?if($exists):?>True<?else:?>False<?endif?>]</li>
-            <li>Verify Password: 12345678 [<?if($verified):?>True<?else:?>False<?endif?>]</li>
-        </ul>
-    <?else:?>
-        Not connected to mooege web-services!
-    <?endif?>  
-        
-    <table border='1'><tr><th>Service</th><th>Query</th><th>Result</th></tr>        
-        <tr><td>Core</td><td>Version</td><td><?=$mooege->Version()?></td></tr>
-        <tr><td>Core</td><td>Uptime</td><td><?=$mooege->Uptime()?></td></tr>
-        <tr><td>MooNet</td><td>IsMooNetServerOnline</td><td><?=$mooege->IsMooNetServerOnline()?></td></tr>
-        <tr><td>MooNet</td><td>TotalAccounts</td><td><?=$mooege->TotalAccounts()?></td></tr>
-        <tr><td>MooNet</td><td>TotalToons</td><td><?=$mooege->TotalToons()?></td></tr>
-        <tr><td>MooNet</td><td>OnlinePlayerCount</td><td><?=$mooege->OnlinePlayerCount()?></td></tr>
-        <tr><td>MooNet</td><td>OnlinePlayersList</td><td><?=print_r($mooege->OnlinePlayersList())?></td></tr>
-        <tr><td>GameServer</td><td>IsGameServerOnline</td><td><?=$mooege->IsGameServerOnline()?></td></tr>
-    </table>        
-<?
-}
-?> 

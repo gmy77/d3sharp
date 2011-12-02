@@ -23,6 +23,7 @@ using System.Windows;
 using Mooege.Common.Helpers.Concurrency;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Players;
+using System.Collections.Generic;
 
 namespace Mooege.Core.GS.Map.Debug
 {
@@ -342,6 +343,45 @@ namespace Mooege.Core.GS.Map.Debug
                 graphics.DrawString(scene.SceneSNO.Name, _sceneFont, scene.Parent == null ? Brushes.Black : Brushes.Gray, stringRectangle, drawFormat);
         }
 
+        #endregion
+
+        #region DumpMeshtoObj
+        public void DumpNavMeshToObj()
+        {
+            //Renders all the walkable cells into a 2d model. Output in http://en.wikipedia.org/wiki/Wavefront_.obj_file
+            List<System.Windows.Point> Vertices = new List<System.Windows.Point>();
+            List<face3> faces = new List<face3>();
+            System.IO.StreamWriter fs = new System.IO.StreamWriter("world.obj");
+            foreach (var rect in this.WalkableCells)
+            {
+
+                Vertices.Add(rect.BottomRight);
+                Vertices.Add(rect.BottomLeft);
+                Vertices.Add(rect.TopLeft);
+                Vertices.Add(rect.TopRight);
+                faces.Add(new face3(Vertices.Count - 3, Vertices.Count - 2, Vertices.Count - 1, Vertices.Count - 0));
+            }
+            foreach (var x in Vertices)
+            {
+                fs.WriteLine("v " + x.X + " " + 0 + " " + x.Y);
+            }
+            foreach (var x in faces)
+            {
+                fs.WriteLine("f " + (x.i0) + " " + (x.i3) + " " + (x.i2) + " " + (x.i1));
+            }
+            fs.Close();
+        }
+        public class face3
+        {
+            public int i0, i1, i2, i3;
+            public face3(int i1, int i2, int i3, int i4)
+            {
+                this.i0 = i1;
+                this.i1 = i2;
+                this.i2 = i3;
+                this.i3 = i4;
+            }
+        }
         #endregion
     }
 }
