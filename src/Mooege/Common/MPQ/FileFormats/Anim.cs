@@ -47,8 +47,6 @@ namespace Mooege.Common.MPQ.FileFormats
             this.I2 = stream.ReadValueS32();
             stream.Position += 12;
             this.I3 = stream.ReadValueS32();
-            if (this.Header.SNOId == 0x00001DE8 || this.Header.SNOId == 0x000024DB)
-                stream.Position += 0;
             stream.Close();
         }
     }
