@@ -81,8 +81,8 @@ namespace Mooege.Core.GS.Powers.Payloads
             // remove all buffs before deleting actor
             this.Target.World.BuffManager.RemoveAllBuffs(this.Target);
 
-            this.Target.Attributes[GameAttribute.Could_Have_Ragdolled] = true;
             this.Target.Attributes[GameAttribute.Deleted_On_Server] = true;
+            this.Target.Attributes[GameAttribute.Could_Have_Ragdolled] = true;
             this.Target.Attributes.BroadcastChangedIfRevealed();
 
             // Spawn Random item and give exp for each player in range

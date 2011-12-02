@@ -258,13 +258,13 @@ namespace Mooege.Core.GS.Powers.Implementations
             switch (TargetMessage.Field5)
             {
                 case 0:
-                    effectSNO = 142471;
+                    effectSNO = 143841;
                     break;
                 case 1:
-                    effectSNO = 142471;
+                    effectSNO = 143841;
                     break;
                 case 2:
-                    effectSNO = 142473;
+                    effectSNO = 143473;
                     break;
                 default:
                     yield break;
