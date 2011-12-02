@@ -345,7 +345,8 @@ namespace Mooege.Core.GS.Map.Debug
 
         #endregion
 
-        public void RenderToObj()
+        #region DumpMeshtoObj
+        public void DumpNavMeshToObj()
         {
             //Renders all the walkable cells into a 2d model. Output in http://en.wikipedia.org/wiki/Wavefront_.obj_file
             List<System.Windows.Point> Vertices = new List<System.Windows.Point>();
@@ -354,11 +355,11 @@ namespace Mooege.Core.GS.Map.Debug
             foreach (var rect in this.WalkableCells)
             {
 
-                    Vertices.Add(rect.BottomRight);
-                    Vertices.Add(rect.BottomLeft);
-                    Vertices.Add(rect.TopLeft);
-                    Vertices.Add(rect.TopRight);
-                    faces.Add(new face3(Vertices.Count - 3, Vertices.Count - 2, Vertices.Count - 1, Vertices.Count - 0));
+                Vertices.Add(rect.BottomRight);
+                Vertices.Add(rect.BottomLeft);
+                Vertices.Add(rect.TopLeft);
+                Vertices.Add(rect.TopRight);
+                faces.Add(new face3(Vertices.Count - 3, Vertices.Count - 2, Vertices.Count - 1, Vertices.Count - 0));
             }
             foreach (var x in Vertices)
             {
@@ -381,5 +382,6 @@ namespace Mooege.Core.GS.Map.Debug
                 this.i3 = i4;
             }
         }
+        #endregion
     }
 }

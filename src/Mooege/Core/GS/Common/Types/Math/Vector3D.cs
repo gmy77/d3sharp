@@ -19,11 +19,12 @@
 using System.Text;
 using CrystalMpq;
 using Gibbed.IO;
+using Mooege.Common.MPQ;
 using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Common.Types.Math
 {
-    public class Vector3D
+    public class Vector3D : ISerializableData
     {
         public float X;
         public float Y;
@@ -57,6 +58,13 @@ namespace Mooege.Core.GS.Common.Types.Math
         {
         }
 
+        public void Read(MpqFileStream stream)
+        {
+            X = stream.ReadValueF32();
+            Y = stream.ReadValueF32();
+            Z = stream.ReadValueF32();
+        }
+        
         /// <summary>
         /// Parses Vector3D from given GameBitBuffer.
         /// </summary>

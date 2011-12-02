@@ -22,6 +22,7 @@ using Gibbed.IO;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
 
+
 namespace Mooege.Common.MPQ.FileFormats
 {
     [FileFormat(SNOGroup.PhysMesh)]
@@ -46,20 +47,6 @@ namespace Mooege.Common.MPQ.FileFormats
             this.S0 = stream.ReadString(256);
             this.S1 = stream.ReadString(256);
             this.I1 = stream.ReadValueS32();
-
-            if (file.Name.Contains("Tristram_E10_S15"))
-            {
-                System.IO.StreamWriter fs = new System.IO.StreamWriter("physmeshout.obj");
-                foreach (var x in CollisionMeshes[0].DominoVertices)
-                {
-                    fs.WriteLine("v " + x.X + " " + x.Z + " " + x.Y);
-                }
-                foreach (var x in CollisionMeshes[0].DominoTriangles)
-                {
-                    fs.WriteLine("f " + (x.I0 + 1) + " " + (x.I1 + 1) + " " + (x.I2 + 1));
-                }
-                fs.Close();
-            }
             stream.Close();
         }
     }
@@ -69,13 +56,13 @@ namespace Mooege.Common.MPQ.FileFormats
         public Float3 F0 { get; private set; }
         public Float3 F1 { get; private set; }
         public Float3 F2 { get; private set; }
-        public int I0 { get; private set; }
-        public int NumberOfVerts { get; private set; }
-        public int NumberOfFaces { get; private set; }
-        public int NumberOfEdges { get; private set; }
+        public int DominoNodeCount { get; private set; }
+        public int VerticeCount { get; private set; }
+        public int DominoTriangleCount { get; private set; }
+        public int DominoEdgeCount { get; private set; }
         public int I4 { get; private set; }
         public int I5 { get; private set; }
-        public List<Float3> DominoVertices { get; private set; }
+        public List<Float3> Vertices { get; private set; }
         public List<MeshTriangle> DominoTriangles { get; private set; }
         public List<MeshNode> DominoNodes { get; private set; }
         public List<MeshEdge> DominoEdges { get; private set; }
@@ -88,14 +75,13 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F1 = new Float3(stream);
             this.F2 = new Float3(stream);
             stream.Position += 36;
-            this.I0 = stream.ReadValueS32();
-            this.NumberOfVerts = stream.ReadValueS32();
-            this.NumberOfFaces = stream.ReadValueS32();
-            this.NumberOfEdges = stream.ReadValueS32();
+            this.DominoNodeCount = stream.ReadValueS32();
+            this.VerticeCount = stream.ReadValueS32();
+            this.DominoTriangleCount = stream.ReadValueS32();
+            this.DominoEdgeCount = stream.ReadValueS32();
             this.I4 = stream.ReadValueS32();
             this.I5 = stream.ReadValueS32();
-
-            this.DominoVertices = stream.ReadSerializedData<Float3>();
+            this.Vertices = stream.ReadSerializedData<Float3>();
             this.DominoTriangles = stream.ReadSerializedData<MeshTriangle>();
             this.DominoNodes = stream.ReadSerializedData<MeshNode>();
             this.DominoEdges = stream.ReadSerializedData<MeshEdge>();
@@ -129,9 +115,9 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class MeshTriangle : ISerializableData
     {
-        public int I0 { get; private set; }
-        public int I1 { get; private set; }
-        public int I2 { get; private set; }
+        public int VerticeOneIndex { get; private set; }
+        public int VerticeTwoIndex { get; private set; }
+        public int VerticeThreeIndex { get; private set; }
         public int I3 { get; private set; }
         public int I4 { get; private set; }
         public int I5 { get; private set; }
@@ -139,13 +125,16 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void Read(MpqFileStream stream)
         {
-            I0 = stream.ReadValueS32();
-            I1 = stream.ReadValueS32();
-            I2 = stream.ReadValueS32();
+            VerticeOneIndex = stream.ReadValueS32();
+            VerticeTwoIndex = stream.ReadValueS32();
+            VerticeThreeIndex = stream.ReadValueS32();
             I3 = stream.ReadValueS32();
             I4 = stream.ReadValueS32();
             I5 = stream.ReadValueS32();
-            I6 = (short)stream.ReadValueS32();
+            I6 = (short)stream.ReadValueS32(); // i6 is a word, but struct is 28 bytes - DarkLotus
+            //<Field Type="DT_WORD#30" Offset="24" Flags="1" EncodedBits="16" />
+            //<Field Offset="28" Flags="0" />
+            
         }
     }
 
@@ -182,6 +171,7 @@ namespace Mooege.Common.MPQ.FileFormats
             I2 = stream.ReadValueS16();
             B1 = stream.ReadValueS8();
             B2 = stream.ReadValueS8();
+            stream.Position += 2;
         }
     }
 }

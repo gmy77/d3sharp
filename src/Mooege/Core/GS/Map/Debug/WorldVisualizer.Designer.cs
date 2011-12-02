@@ -44,7 +44,6 @@
             this.checkBoxMasterScenes = new System.Windows.Forms.CheckBox();
             this.groupSettings = new System.Windows.Forms.GroupBox();
             this.groupOptions = new System.Windows.Forms.GroupBox();
-            this.btnRenderToObj = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.trackBarUpdateFrequency = new System.Windows.Forms.TrackBar();
             this.groupBoxRenderMode = new System.Windows.Forms.GroupBox();
@@ -56,7 +55,8 @@
             this.pictureBoxPreview = new System.Windows.Forms.PictureBox();
             this.panelStage = new System.Windows.Forms.Panel();
             this.timerUpdate = new System.Windows.Forms.Timer(this.components);
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnDumpMeshToObj = new System.Windows.Forms.Button();
+            this.btnNavToToolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStage)).BeginInit();
             this.groupActorVisibility.SuspendLayout();
             this.groupMapVisibility.SuspendLayout();
@@ -242,7 +242,7 @@
             // 
             // groupOptions
             // 
-            this.groupOptions.Controls.Add(this.btnRenderToObj);
+            this.groupOptions.Controls.Add(this.btnDumpMeshToObj);
             this.groupOptions.Controls.Add(this.label1);
             this.groupOptions.Controls.Add(this.trackBarUpdateFrequency);
             this.groupOptions.Controls.Add(this.checkBoxFillCells);
@@ -253,17 +253,6 @@
             this.groupOptions.TabIndex = 7;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
-            // 
-            // btnRenderToObj
-            // 
-            this.btnRenderToObj.Location = new System.Drawing.Point(9, 162);
-            this.btnRenderToObj.Name = "btnRenderToObj";
-            this.btnRenderToObj.Size = new System.Drawing.Size(84, 23);
-            this.btnRenderToObj.TabIndex = 4;
-            this.btnRenderToObj.Text = "RenderToObj";
-            this.toolTip1.SetToolTip(this.btnRenderToObj, "Saves the Worlds Walkable Tiles into a Wavefront .obj.");
-            this.btnRenderToObj.UseVisualStyleBackColor = true;
-            this.btnRenderToObj.Click += new System.EventHandler(this.btnRenderToObj_Click);
             // 
             // label1
             // 
@@ -384,6 +373,18 @@
             // 
             this.timerUpdate.Tick += new System.EventHandler(this.timerUpdate_Tick);
             // 
+            // btnDumpMeshToObj
+            // 
+            this.btnDumpMeshToObj.Location = new System.Drawing.Point(6, 162);
+            this.btnDumpMeshToObj.Name = "btnDumpMeshToObj";
+            this.btnDumpMeshToObj.Size = new System.Drawing.Size(75, 23);
+            this.btnDumpMeshToObj.TabIndex = 4;
+            this.btnDumpMeshToObj.Text = "NavTo .Obj";
+            this.btnNavToToolTip.SetToolTip(this.btnDumpMeshToObj, "Dumps all walkable cells into a 2d WaveFront model, placed in your Mooege root fo" +
+                    "lder");
+            this.btnDumpMeshToObj.UseVisualStyleBackColor = true;
+            this.btnDumpMeshToObj.Click += new System.EventHandler(this.btnDumpMeshToObj_Click);
+            // 
             // WorldVisualizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -444,8 +445,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TrackBar trackBarUpdateFrequency;
         private System.Windows.Forms.Timer timerUpdate;
-        private System.Windows.Forms.Button btnRenderToObj;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Button btnDumpMeshToObj;
+        private System.Windows.Forms.ToolTip btnNavToToolTip;
 
     }
 }
