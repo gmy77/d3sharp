@@ -343,7 +343,7 @@ namespace Mooege.Core.GS.Generators
                                         {
                                             X = (float)(x * 2.5 + scene.Position.X),
                                             Y = (float)(y * 2.5 + scene.Position.Y),
-                                            Z = scene.NavMesh.Squares[y * scene.NavMesh.SquaresCountX + x].Z     //scene.Position.Z
+                                            Z = scene.NavMesh.Squares[y * scene.NavMesh.SquaresCountX + x].Z + scene.Position.Z
                                         },
                                         Quaternion = new Quaternion
                                         {
