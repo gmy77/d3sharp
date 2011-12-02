@@ -118,6 +118,7 @@
     <Compile Include="Common\MPQ\FileFormats\Act.cs" />
     <Compile Include="Common\MPQ\FileFormats\Actor.cs" />
     <Compile Include="Common\MPQ\FileFormats\Adventure.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Anim.cs" />
     <Compile Include="Common\MPQ\FileFormats\AnimSet.cs" />
     <Compile Include="Common\MPQ\FileExtensions.cs" />
     <Compile Include="Common\MPQ\FileFormat.cs" />
