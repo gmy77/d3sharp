@@ -19,12 +19,14 @@
 using System.Collections.Generic;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Common.Logging;
 
 namespace Mooege.Core.GS.Actors
 {
     public class Gizmo : Actor
     {
         public override ActorType ActorType { get { return ActorType.Gizmo; } }
+        protected Logger Logger = new Logger("Gizmo");
 
         public Gizmo(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)

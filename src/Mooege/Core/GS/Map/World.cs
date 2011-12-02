@@ -39,6 +39,8 @@ using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Core.GS.Ticker;
+using Mooege.Net.GS.Message.Definitions.Misc;
 
 namespace Mooege.Core.GS.Map
 {
@@ -92,7 +94,6 @@ namespace Mooege.Core.GS.Map
         // Environment
         public Mooege.Common.MPQ.FileFormats.Environment Environment { get; private set; }
 
-
         /// <summary>
         /// Returns list of available starting points.
         /// </summary>
@@ -127,9 +128,9 @@ namespace Mooege.Core.GS.Map
         {
             var actorsToUpdate = new List<IUpdateable>(); // list of actor to update.
 
-            foreach(var player in this.Players.Values) // get players in the world.
+            foreach (var player in this.Players.Values) // get players in the world.
             {
-                foreach(var actor in player.GetActorsInRange().OfType<IUpdateable>()) // get IUpdateable actors in range.
+                foreach (var actor in player.GetActorsInRange().OfType<IUpdateable>()) // get IUpdateable actors in range.
                 {
                     if (actorsToUpdate.Contains(actor as IUpdateable)) // don't let a single actor in range of more than players to get updated more thance per tick /raist.
                         continue;
@@ -138,10 +139,12 @@ namespace Mooege.Core.GS.Map
                 }
             }
 
-            foreach(var actor in actorsToUpdate) // trigger the updates.
+            foreach (var actor in actorsToUpdate) // trigger the updates.
             {
                 actor.Update(tickCounter);
             }
+
+            UpdateFlippy(tickCounter);
         }
 
         #endregion
@@ -315,12 +318,17 @@ namespace Mooege.Core.GS.Map
             monster.EnterWorld(position);
         }
 
+        private List<TickTimer> _flippyTimers = new List<TickTimer>();
+        private const int FlippyDurationInTicks = 30;
+        private const int FlippyMaxDistanceManhattan = 10;  // length of one side of the square around the player where the item will appear
+        private const int FlippyDefaultFlippy = 0x6d82;     // g_flippy.prt
+
         /// <summary>
         /// Spawns a random item drop for given player.
         /// </summary>
         /// <param name="player">The player.</param>
         /// <param name="position">The position for drop.</param>
-        public void SpawnRandomItemDrop(Player player, Vector3D position)
+        public void SpawnRandomItemDrop(Actor source, Player player)
         {
             var item = ItemGenerator.GenerateRandom(player);
             if ((item is SpellRune) && (item.Attributes[GameAttribute.Rune_Rank] == 0)) {
@@ -330,8 +338,9 @@ namespace Mooege.Core.GS.Map
                     (item as SpellRune).ReAttuneToClass(player.Toon.Class);
                 }
             }
-            item.Drop(null, position); // NOTE: The owner field for an item is only set when it is in the owner's inventory. /komiga
+            // NOTE: The owner field for an item is only set when it is in the owner's inventory. /komiga
             player.GroundItems[item.DynamicID] = item; // FIXME: Hacky. /komiga
+            DropItem(source, null, item);
         }
 
         /// <summary>
@@ -339,11 +348,11 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         /// <param name="player">The player.</param>
         /// <param name="position">The position for drop.</param>
-        public void SpawnGold(Player player, Vector3D position)
+        public void SpawnGold(Actor source, Player player)
         {
-            var item = ItemGenerator.CreateGold(player, RandomHelper.Next(1000, 3000)); // somehow the actual ammount is not shown on ground /raist.
             // TODO: Gold should be spawned for all players in range. /raist.
-            item.Drop(null, position);
+            var item = ItemGenerator.CreateGold(player, RandomHelper.Next(1000, 3000)); // somehow the actual ammount is not shown on ground /raist.
+            DropItem(source, player, item);
         }
 
         /// <summary>
@@ -351,11 +360,95 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         /// <param name="player">The player.</param>
         /// <param name="position">The position for drop.</param>
-        public void SpawnHealthGlobe(Player player, Vector3D position)
+        public void SpawnHealthGlobe(Actor source, Player player, Vector3D position)
         {
             // TODO: Health-globe should be spawned for all players in range. /raist.
             var item = ItemGenerator.CreateGlobe(player, RandomHelper.Next(1, 28)); // somehow the actual ammount is not shown on ground /raist.
-            item.Drop(null, position);
+            DropItem(source, player, item);
+        }
+
+        /// <summary>
+        /// Update the flippy animations and remove them once they have timed out
+        /// </summary>
+        /// <param name="tickCounter"></param>
+        private void UpdateFlippy(int tickCounter)
+        {
+            List<TickTimer> finished = new List<TickTimer>();
+            foreach (var flippy in _flippyTimers)
+            {
+                flippy.Update(tickCounter);
+
+                if (!flippy.Running)
+                {
+                    finished.Add(flippy);
+                }
+            }
+
+            lock (_flippyTimers)
+            {
+                foreach (var finishedFlippy in finished)
+                {
+                    _flippyTimers.Remove(finishedFlippy);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Drops a given item to a random position close to the player
+        /// </summary>
+        /// <param name="player">Player to which to reveal the item</param>
+        /// <param name="item">Item to reveal</param>
+        public void DropItem(Player player, Item item)
+        {
+            DropItem(player, player, item);
+        }
+
+        /// <summary>
+        /// Drops a given item to a random position close to a source actor
+        /// </summary>
+        /// <param name="source">Source actor of the flippy animation</param>
+        /// <param name="player">Player to which to reveal the item</param>
+        /// <param name="item">Item to reveal</param>
+        public void DropItem(Actor source, Player player, Item item)
+        {
+            lock (_flippyTimers)
+            {
+                _flippyTimers.Add(new RelativeTickTimer(
+                    Game, 
+                    FlippyDurationInTicks,
+                    (p) => item.Drop(null, item.Position)             // drop the item after FlippyDuration ticks
+                    ));
+            }
+
+            // Get a random location close to the source
+            // TODO Make sure the location actually allows items (not occupied by something)
+            float x = (float)(RandomHelper.NextDouble() - 0.5) * FlippyMaxDistanceManhattan;
+            float y = (float)(RandomHelper.NextDouble() - 0.5) * FlippyMaxDistanceManhattan;
+            item.Position = source.Position + new Vector3D(x, y, 0);
+
+            // Items send either only a particle effect or default particle and either FlippyTag.Actor or their own actorsno
+            int particleSNO = -1;
+            int actorSNO = -1;
+
+            if(item.SnoFlippyParticle != null)
+            {
+                particleSNO = item.SnoFlippyParticle.Id;
+            }
+            else
+            {
+                actorSNO = item.SnoFlippyActory == null ? -1 : item.SnoFlippyActory.Id;
+                particleSNO = FlippyDefaultFlippy;
+            }
+
+            BroadcastIfRevealed(new FlippyMessage
+            {
+                ActorID = (int)source.DynamicID,
+                Destination = item.Position,
+                SNOFlippyActor = actorSNO,
+                SNOParticleEffect = particleSNO
+            }, source);
+
         }
 
         #endregion

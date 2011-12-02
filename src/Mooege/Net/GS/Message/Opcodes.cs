@@ -197,7 +197,7 @@ namespace Mooege.Net.GS.Message
         RopeEffectMessageACDToACD = 175, // len: 	28
         RopeEffectMessageACDToPlace = 176, // len: 	36
         ANNDataMessage21 = 177, // len: 	12
-        ANNDataMessage22 = 178, // len: 	12
+        ShrineActivatedMessage = 178, // len: 	12   former ANNDataMessage22
         GameSyncedDataMessage = 179, // len: 	96
         ACDChangeActorMessage = 180, // len: 	16
         PlayerWarpedMessage = 181, // len: 	16

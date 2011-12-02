@@ -175,13 +175,13 @@ namespace Mooege.Core.GS.Actors
             foreach (Player plr in players)
             {
                 plr.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
-                this.World.SpawnRandomItemDrop(plr, this.Position);
+                this.World.SpawnRandomItemDrop(this, plr);
             }
 
             player.ExpBonusData.Update(player.GBHandle.Type, this.GBHandle.Type);
-            this.World.SpawnGold(player, this.Position);
+            this.World.SpawnGold(this, player);
             if (RandomHelper.Next(1, 100) < 20)
-                this.World.SpawnHealthGlobe(player, this.Position);
+                this.World.SpawnHealthGlobe(this, player, this.Position);
             this.PlayLore();
             this.Destroy();
         }
