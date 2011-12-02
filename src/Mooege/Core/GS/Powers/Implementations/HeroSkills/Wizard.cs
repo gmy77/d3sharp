@@ -23,6 +23,7 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Ticker;
+using Mooege.Core.GS.Powers.Payloads;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -335,11 +336,14 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             for(int i = 0; i < blizzard_duration; ++i)
             {
-                IList<Actor> hits = GetEnemiesInRadius(TargetPosition, 18);
-                foreach (Actor actor in hits)
+                AttackPayload attack = new AttackPayload(this);
+                attack.AddTargets(GetEnemiesInRadius(TargetPosition, 18));
+                attack.AddWeaponDamage(0.65f, DamageType.Cold);
+                attack.OnHit = (hit) =>
                 {
-                    WeaponDamage(actor, 0.65f, DamageType.Cold);
-                }
+                    AddBuff(hit.Target, new DebuffChilled(WaitSeconds(3f)));
+                };
+                attack.Apply();
 
                 yield return WaitSeconds(1f);
             }

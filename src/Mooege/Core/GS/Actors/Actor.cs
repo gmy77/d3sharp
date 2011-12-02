@@ -350,7 +350,7 @@ namespace Mooege.Core.GS.Actors
 
         public void PlayEffectGroup(int effectGroupSNO, Actor target)
         {
-            if (target == null) return;
+            if (target == null || this.World == null) return;
 
             World.BroadcastIfRevealed(new EffectGroupACDToACDMessage
             {
@@ -362,6 +362,8 @@ namespace Mooege.Core.GS.Actors
 
         public void PlayHitEffect(int hitEffect, Actor hitDealer)
         {
+            if (hitDealer.World == null || this.World == null) return;
+
             World.BroadcastIfRevealed(new PlayHitEffectMessage
             {
                 ActorID = DynamicID,
@@ -373,6 +375,8 @@ namespace Mooege.Core.GS.Actors
 
         public void PlayEffect(Effect effect, int? param = null)
         {
+            if (this.World == null) return;
+
             World.BroadcastIfRevealed(new PlayEffectMessage
             {
                 ActorId = this.DynamicID,
@@ -383,7 +387,7 @@ namespace Mooege.Core.GS.Actors
 
         public void AddRopeEffect(int ropeSNO, Actor target)
         {
-            if (target == null) return;
+            if (target == null || target.World == null || this.World == null) return;
 
             World.BroadcastIfRevealed(new RopeEffectMessageACDToACD
             {
@@ -398,7 +402,7 @@ namespace Mooege.Core.GS.Actors
 
         public void AddComplexEffect(int effectGroupSNO, Actor target)
         {
-            if (target == null) return;
+            if (target == null || target.World == null || this.World == null) return;
 
             // TODO: Might need to track complex effects
             World.BroadcastIfRevealed(new ComplexEffectAddMessage

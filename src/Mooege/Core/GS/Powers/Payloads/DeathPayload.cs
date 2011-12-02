@@ -50,7 +50,7 @@ namespace Mooege.Core.GS.Powers.Payloads
                 ActorId = this.Target.DynamicID,
                 Effect = Mooege.Net.GS.Message.Definitions.Effect.Effect.Unknown12,
             }, this.Target);
-                        
+
             this.Target.World.BroadcastIfRevealed(new ANNDataMessage(Opcodes.ANNDataMessage13)
             {
                 ActorID = this.Target.DynamicID
@@ -77,6 +77,9 @@ namespace Mooege.Core.GS.Powers.Payloads
             {
                 ActorID = this.Target.DynamicID,
             }, this.Target);
+
+            // remove all buffs before deleting actor
+            this.Target.World.BuffManager.RemoveAllBuffs(this.Target);
 
             this.Target.Attributes[GameAttribute.Could_Have_Ragdolled] = true;
             this.Target.Attributes[GameAttribute.Deleted_On_Server] = true;

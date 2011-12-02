@@ -29,7 +29,7 @@ namespace Mooege.Core.GS.Powers
         public int BuffSlot;
         public bool CountStacks;
 
-        public ImplementsPowerBuff(int buffSlot, bool countStacks)
+        public ImplementsPowerBuff(int buffSlot, bool countStacks = false)
         {
             BuffSlot = buffSlot;
             CountStacks = countStacks;

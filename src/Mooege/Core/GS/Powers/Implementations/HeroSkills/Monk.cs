@@ -27,6 +27,7 @@ using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
 using Mooege.Core.GS.Ticker;
 using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Core.GS.Powers.Payloads;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -381,7 +382,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
 
-        [ImplementsPowerBuff(0, false)]
+        [ImplementsPowerBuff(0)]
         class DashingBuff0 : PowerBuff
         {
             public DashingBuff0(TickTimer timeout)
@@ -447,10 +448,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         class BaseFullEffectsBuff : BaseDodgeBuff
         {
-            public override void Init()
-            {
-                Timeout = WaitSeconds(ScriptFormula(1));
-            }
+            // TODO: rune buff effects and such will go here
 
             public override bool Apply()
             {
@@ -463,15 +461,25 @@ namespace Mooege.Core.GS.Powers.Implementations
             public override void Remove()
             {
                 base.Remove();
+            }
+        }
+
+        [ImplementsPowerBuff(0)]
+        class CasterBuff : BaseFullEffectsBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(1));
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
 
                 // aura fade effect
                 Target.PlayEffectGroup(199677);
             }
-        }
 
-        [ImplementsPowerBuff(0, false)]
-        class CasterBuff : BaseFullEffectsBuff
-        {
             public override bool Update()
             {
                 if (base.Update())
@@ -487,7 +495,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
 
-        [ImplementsPowerBuff(7, false)]
+        [ImplementsPowerBuff(7)]
         class CastBonusBuff : BaseDodgeBuff
         {
             public override void Init()
@@ -496,9 +504,63 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
 
-        [ImplementsPowerBuff(1, false)]
+        [ImplementsPowerBuff(1)]
         class AllyBuff : BaseFullEffectsBuff
         {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(11));
+            }
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.BlindingFlash)]
+    public class MonkBlindingFlash : PowerScript
+    {
+        public override IEnumerable<TickTimer> Run()
+        {
+            User.PlayEffectGroup(137644);
+
+            AttackPayload attack = new AttackPayload(this);
+            attack.AddTargets(GetEnemiesInRadius(User.Position, ScriptFormula(1)));
+            attack.OnHit = (hit) =>
+            {
+                TickTimer waitBuffEnd = WaitSeconds(ScriptFormula(0));
+
+                // add main effect buff only if blind debuff took effect
+                if (AddBuff(hit.Target, new DebuffBlind(waitBuffEnd)))
+                    AddBuff(hit.Target, new MainEffectBuff(waitBuffEnd));
+            };
+
+            attack.Apply();
+
+            yield break;
+        }
+
+        [ImplementsPowerBuff(5)]
+        class MainEffectBuff : PowerBuff
+        {
+            public MainEffectBuff(TickTimer timeout)
+            {
+                Timeout = timeout;
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+
+                Target.Attributes[GameAttribute.Hit_Chance] -= ScriptFormula(8);
+                Target.Attributes.BroadcastChangedIfRevealed();
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+                Target.Attributes[GameAttribute.Hit_Chance] += ScriptFormula(8);
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
         }
     }
 }

@@ -80,6 +80,13 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
+        public void StartDefaultCooldown()
+        {
+            float sec = EvalTag(PowerKeys.CooldownTime);
+            if (sec > 0f)
+                StartCooldown(WaitSeconds(sec));
+        }
+
         public void GeneratePrimaryResource(float amount)
         {
             if (User is Player)
