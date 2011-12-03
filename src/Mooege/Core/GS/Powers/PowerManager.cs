@@ -43,6 +43,11 @@ namespace Mooege.Core.GS.Powers
             public PowerScript Implementation;
         }
         private List<WaitingPower> _waitingPowers = new List<WaitingPower>();
+
+        // list of actors that were killed and are waiting to be deleted
+        // rather ugly hack needed because deleting actors immediatly when they have visual buff effects
+        // applied causes the effects to stay around forever.
+        private Dictionary<Actor, TickTimer> _deletingActors = new Dictionary<Actor, TickTimer>();
         
         public PowerManager()
         {
@@ -50,7 +55,8 @@ namespace Mooege.Core.GS.Powers
 
         public void Update()
         {
-            UpdateWaitingPowers();
+            _UpdateDeletingActors();
+            _UpdateWaitingPowers();
         }
 
         public bool UsePower(Actor user, PowerScript power, Actor target = null,
@@ -197,7 +203,7 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        public void UpdateWaitingPowers()
+        private void _UpdateWaitingPowers()
         {
             // process all powers, removing from the list the ones that expire
             _waitingPowers.RemoveAll((wait) =>
@@ -236,6 +242,28 @@ namespace Mooege.Core.GS.Powers
             return _channeledPowers.FirstOrDefault(impl => impl.User == user &&
                                                            impl.PowerSNO == powerSNO &&
                                                            impl.ChannelOpen);
+        }
+
+        private void _UpdateDeletingActors()
+        {
+            foreach (var key in _deletingActors.Keys.ToArray())
+            {
+                if (_deletingActors[key].TimedOut)
+                {
+                    key.Destroy();
+                    _deletingActors.Remove(key);
+                }
+            }
+        }
+
+        public void AddDeletingActor(Actor actor)
+        {
+            _deletingActors.Add(actor, new SecondsTickTimer(actor.World.Game, 0.2f));
+        }
+
+        public bool IsDeletingActor(Actor actor)
+        {
+            return _deletingActors.ContainsKey(actor);
         }
     }
 }

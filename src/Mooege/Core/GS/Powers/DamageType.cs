@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Mooege.Common.MPQ.FileFormats;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -40,49 +40,49 @@ namespace Mooege.Core.GS.Powers
 
         public HitEffectType HitEffect;
         public int AttributeKey;  // GameAttributeMap key for a given damage type
-        public AnimationTags DeathAnimationTag;
+        public TagKeyInt DeathAnimationTag;
 
         public static readonly DamageType Physical = new DamageType
         { 
             HitEffect = HitEffectType.Physical, 
             AttributeKey = 0,
-            DeathAnimationTag = AnimationTags.DeathFlyingOrDefault,
+            DeathAnimationTag = AnimationSetKeys.DeathDefault,
         };
         public static readonly DamageType Arcane = new DamageType
         {
             HitEffect = HitEffectType.Arcane,
             AttributeKey = 5,
-            DeathAnimationTag = AnimationTags.DeathArcane,
+            DeathAnimationTag = AnimationSetKeys.DeathArcane,
         };
         public static readonly DamageType Cold = new DamageType
         {
             HitEffect = HitEffectType.Cold,
             AttributeKey = 3,
-            DeathAnimationTag = AnimationTags.DeathCold,
+            DeathAnimationTag = AnimationSetKeys.DeathCold,
         };
         public static readonly DamageType Fire = new DamageType 
         {
             HitEffect = HitEffectType.Fire,
             AttributeKey = 1,
-            DeathAnimationTag = AnimationTags.DeathFire,
+            DeathAnimationTag = AnimationSetKeys.DeathFire,
         };
         public static readonly DamageType Lightning = new DamageType
         {
             HitEffect = HitEffectType.Lightning,
             AttributeKey = 2,
-            DeathAnimationTag = AnimationTags.DeathLightning,
+            DeathAnimationTag = AnimationSetKeys.DeathLightning,
         };
         public static readonly DamageType Poison = new DamageType
         {
             HitEffect = HitEffectType.Poison,
             AttributeKey = 4,
-            DeathAnimationTag = AnimationTags.DeathPoison,
+            DeathAnimationTag = AnimationSetKeys.DeathPoison,
         };
         public static readonly DamageType Holy = new DamageType
         {
             HitEffect = HitEffectType.Holy,
             AttributeKey = 6,
-            DeathAnimationTag = AnimationTags.DeathHoly,
+            DeathAnimationTag = AnimationSetKeys.DeathHoly,
         };
 
         public static readonly DamageType[] AllTypes = new DamageType[]

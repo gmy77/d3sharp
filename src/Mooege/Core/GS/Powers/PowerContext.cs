@@ -194,7 +194,7 @@ namespace Mooege.Core.GS.Powers
                 if (hits.Count == maxCount)
                     break;
 
-                if (!actor.Attributes[GameAttribute.Untargetable])
+                if (!actor.Attributes[GameAttribute.Untargetable] && !World.PowerManager.IsDeletingActor(actor))
                     hits.Add(actor);
             }
 

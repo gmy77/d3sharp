@@ -26,6 +26,7 @@ using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Players;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Powers.Payloads
 {
@@ -106,22 +107,27 @@ namespace Mooege.Core.GS.Powers.Payloads
             if (this.Target is Monster)
                 (this.Target as Monster).PlayLore();
 
-            this.Target.Destroy();
+            // HACK: have to add actors to deleting list right now to fix visual buff effects not disappearing
+            //this.Target.Destroy();
+            this.Target.World.PowerManager.AddDeletingActor(this.Target);
         }
 
         private int _FindBestDeathAnimation()
         {
-            int sno = this.Target.AnimationSet.GetAniSNO(this.DeathDamageType.DeathAnimationTag);
+            int sno = _GetSNOFromTag(this.DeathDamageType.DeathAnimationTag);
             if (sno != -1)
                 return sno;
 
-            // try to fallback using pulverize first because the "DeathDefault" looks terrible.
-            sno = this.Target.AnimationSet.GetAniSNO(Mooege.Common.MPQ.FileFormats.AnimationTags.DeathPulverise);
-            if (sno != -1)
-                return sno;
+            // load default ani if damage type death doesn't exist
+            return _GetSNOFromTag(AnimationSetKeys.DeathDefault);
+        }
 
-            sno = this.Target.AnimationSet.GetAniSNO(Mooege.Common.MPQ.FileFormats.AnimationTags.DeathDefault);
-            return sno;
+        private int _GetSNOFromTag(TagKeyInt tag)
+        {
+            if (this.Target.AnimationSet.Animations.ContainsKey(tag.ID))
+                return this.Target.AnimationSet.Animations[tag.ID];
+            else
+                return -1;
         }
     }
 }
