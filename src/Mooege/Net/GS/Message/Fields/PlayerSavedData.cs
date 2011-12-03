@@ -26,8 +26,8 @@ namespace Mooege.Net.GS.Message.Fields
         public HotbarButtonData[] HotBarButtons;
         // MaxLength = 15
         public SkillKeyMapping[] SkilKeyMappings;
-        public int /* time */ Field2;
-        public int Field3;
+        public int PlaytimeTotal;
+        public int WaypointFlags;
         public HirelingSavedData Field4;
         public int Field5;
         public LearnedLore LearnedLore;
@@ -35,7 +35,7 @@ namespace Mooege.Net.GS.Message.Fields
         public int /* sno */[] snoActiveSkills;
         // MaxLength = 3
         public int /* sno */[] snoTraits;
-        public SavePointData Field9;
+        public SavePointData SavePointData;
         // MaxLength = 64
         public int /* sno */[] m_SeenTutorials;
 
@@ -53,8 +53,8 @@ namespace Mooege.Net.GS.Message.Fields
                 SkilKeyMappings[i] = new SkillKeyMapping();
                 SkilKeyMappings[i].Parse(buffer);
             }
-            Field2 = buffer.ReadInt(32);
-            Field3 = buffer.ReadInt(32);
+            PlaytimeTotal = buffer.ReadInt(32);
+            WaypointFlags = buffer.ReadInt(32);
             Field4 = new HirelingSavedData();
             Field4.Parse(buffer);
             Field5 = buffer.ReadInt(32);
@@ -64,8 +64,8 @@ namespace Mooege.Net.GS.Message.Fields
             for (int i = 0; i < snoActiveSkills.Length; i++) snoActiveSkills[i] = buffer.ReadInt(32);
             snoTraits = new int /* sno */[3];
             for (int i = 0; i < snoTraits.Length; i++) snoTraits[i] = buffer.ReadInt(32);
-            Field9 = new SavePointData();
-            Field9.Parse(buffer);
+            SavePointData = new SavePointData();
+            SavePointData.Parse(buffer);
             m_SeenTutorials = new int /* sno */[64];
             for (int i = 0; i < m_SeenTutorials.Length; i++) m_SeenTutorials[i] = buffer.ReadInt(32);
         }
@@ -80,14 +80,14 @@ namespace Mooege.Net.GS.Message.Fields
             {
                 SkilKeyMappings[i].Encode(buffer);
             }
-            buffer.WriteInt(32, Field2);
-            buffer.WriteInt(32, Field3);
+            buffer.WriteInt(32, PlaytimeTotal);
+            buffer.WriteInt(32, WaypointFlags);
             Field4.Encode(buffer);
             buffer.WriteInt(32, Field5);
             LearnedLore.Encode(buffer);
             for (int i = 0; i < snoActiveSkills.Length; i++) buffer.WriteInt(32, snoActiveSkills[i]);
             for (int i = 0; i < snoTraits.Length; i++) buffer.WriteInt(32, snoTraits[i]);
-            Field9.Encode(buffer);
+            SavePointData.Encode(buffer);
             for (int i = 0; i < m_SeenTutorials.Length; i++) buffer.WriteInt(32, m_SeenTutorials[i]);
         }
 
@@ -122,9 +122,9 @@ namespace Mooege.Net.GS.Message.Fields
             b.AppendLine("}");
             b.AppendLine();
             b.Append(' ', pad);
-            b.AppendLine("Field2: 0x" + Field2.ToString("X8"));
+            b.AppendLine("PlaytimeTotal: 0x" + PlaytimeTotal.ToString("X8"));
             b.Append(' ', pad);
-            b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
+            b.AppendLine("WaypointFlags: 0x" + WaypointFlags.ToString("X8") + " (" + WaypointFlags + ")");
             Field4.AsText(b, pad);
             b.Append(' ', pad);
             b.AppendLine("Field5: 0x" + Field5.ToString("X8") + " (" + Field5 + ")");
@@ -161,7 +161,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("}");
             b.AppendLine();
-            Field9.AsText(b, pad);
+            SavePointData.AsText(b, pad);
             b.Append(' ', pad);
             b.AppendLine("m_SeenTutorials:");
             b.Append(' ', pad);

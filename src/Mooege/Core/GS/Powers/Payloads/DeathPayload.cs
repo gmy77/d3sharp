@@ -91,7 +91,7 @@ namespace Mooege.Core.GS.Powers.Payloads
             foreach (Player plr in players)
             {
                 plr.UpdateExp(this.Target.Attributes[GameAttribute.Experience_Granted]);
-                this.Target.World.SpawnRandomItemDrop(plr, this.Target.Position);
+                this.Target.World.SpawnRandomItemDrop(this.Target, plr);
             }
 
             if (this.Context.User is Player)
@@ -99,9 +99,9 @@ namespace Mooege.Core.GS.Powers.Payloads
                 Player player = (Player)this.Context.User;
 
                 player.ExpBonusData.Update(player.GBHandle.Type, this.Target.GBHandle.Type);
-                this.Target.World.SpawnGold(player, this.Target.Position);
+                this.Target.World.SpawnGold(this.Target, player);
                 if (Mooege.Common.Helpers.Math.RandomHelper.Next(1, 100) < 20)
-                    this.Target.World.SpawnHealthGlobe(player, this.Target.Position);
+                    this.Target.World.SpawnHealthGlobe(this.Target, player, this.Target.Position);
             }
 
             if (this.Target is Monster)

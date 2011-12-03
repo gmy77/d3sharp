@@ -26,12 +26,15 @@ using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Core.GS.Actors.Implementations;
+using Mooege.Common.Logging;
 
 namespace Mooege.Core.GS.Actors
 {
     public static class ActorFactory
     {
         private static readonly Dictionary<int, Type> SNOHandlers = new Dictionary<int, Type>();
+        private static Logger Logger = new Logger("ActorFactory");
 
         static ActorFactory()
         {
@@ -71,7 +74,60 @@ namespace Mooege.Core.GS.Actors
                         else
                             return new Monster(world, snoId, tags);
                 case ActorType.Gizmo:
-                    return CreateGizmo(world, snoId, tags);
+
+                        switch (actorData.TagMap[ActorKeys.GizmoGroup])
+                        {
+                            case GizmoGroup.LootContainer:
+                                return new LootContainer(world, snoId, tags);
+                            case GizmoGroup.DestructibleLootContainer:
+                                return new DesctructibleLootContainer(world, snoId, tags);
+                            case GizmoGroup.Portal:
+                                return new Portal(world, snoId, tags);
+                            case GizmoGroup.BossPortal:
+                                Logger.Warn("Skipping loading of boss portals");
+                                return null;
+                            case GizmoGroup.CheckPoint:
+                                return new Checkpoint(world, snoId, tags);
+                            case GizmoGroup.Waypoint:
+                                return new Waypoint(world, snoId, tags);
+                            case GizmoGroup.Savepoint:
+                                return new Savepoint(world, snoId, tags);
+                            case GizmoGroup.ProximityTriggered:
+                                return new ProximityTriggeredGizmo(world, snoId, tags);
+                            case GizmoGroup.Shrine:
+                                return new Shrine(world, snoId, tags);
+                            case GizmoGroup.Healthwell:
+                                return new Healthwell(world, snoId, tags);
+
+                            case GizmoGroup.ActChangeTempObject:
+                            case GizmoGroup.Banner:
+                            case GizmoGroup.Barricade:
+                            case GizmoGroup.CathedralIdol:
+                            case GizmoGroup.Destructible:
+                            case GizmoGroup.Door:
+                            case GizmoGroup.DungeonStonePortal:
+                            case GizmoGroup.Headstone:
+                            case GizmoGroup.HearthPortal:
+                            case GizmoGroup.NephalemAltar:
+                            case GizmoGroup.Passive:
+                            case GizmoGroup.PlayerSharedStash:
+                            case GizmoGroup.QuestLoot:
+                            case GizmoGroup.Readable:
+                            case GizmoGroup.ServerProp:
+                            case GizmoGroup.Sign:
+                            case GizmoGroup.Spawner:
+                            case GizmoGroup.StartLocations:
+                            case GizmoGroup.TownPortal:
+                            case GizmoGroup.Trigger:
+                            case GizmoGroup.WeirdGroup57:
+                                Logger.Info("GizmoGroup {0} has no proper implementation, using default gizmo instead", actorData.TagMap[ActorKeys.GizmoGroup]);
+                                return CreateGizmo(world, snoId, tags);
+
+                            default:
+                                Logger.Warn("Unknown gizmo group {0}", actorData.TagMap[ActorKeys.GizmoGroup]);
+                                return CreateGizmo(world, snoId, tags);
+                        }
+
 
                 case ActorType.ServerProp:
                     return new ServerProp(world, snoId, tags);

@@ -97,6 +97,11 @@ namespace Mooege.Common.MPQ.FileFormats
             this.MarkerLinks = stream.ReadSerializedData<MarkerLink>();
             stream.Position += (3 * 4);
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}, {1}", Name, SNOHandle.Name);
+        }
     }
 
     public class MarkerLink : ISerializableData

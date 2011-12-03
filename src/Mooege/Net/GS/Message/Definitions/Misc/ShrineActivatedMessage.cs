@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,39 +18,35 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Fields
+namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    public class SavePointData
+    [Message(Opcodes.ShrineActivatedMessage)]
+    public class ShrineActivatedMessage : GameMessage
     {
-        public int /* sno */ snoWorld;
-        public int SavepointId;
+        public uint ActorID; // Actor's DynamicID
 
-        public void Parse(GameBitBuffer buffer)
+        public ShrineActivatedMessage() : base(Opcodes.ShrineActivatedMessage) { }
+
+        public override void Parse(GameBitBuffer buffer)
         {
-            snoWorld = buffer.ReadInt(32);
-            SavepointId = buffer.ReadInt(32);
+            ActorID = buffer.ReadUInt(32);
         }
 
-        public void Encode(GameBitBuffer buffer)
+        public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, snoWorld);
-            buffer.WriteInt(32, SavepointId);
+            buffer.WriteUInt(32, ActorID);
         }
 
-        public void AsText(StringBuilder b, int pad)
+        public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("SavePointData:");
+            b.AppendLine("ActivateShrineMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad);
-            b.AppendLine("snoWorld: 0x" + snoWorld.ToString("X8"));
-            b.Append(' ', pad);
-            b.AppendLine("SavepointId: 0x" + SavepointId.ToString("X8") + " (" + SavepointId + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
 
     }
 }

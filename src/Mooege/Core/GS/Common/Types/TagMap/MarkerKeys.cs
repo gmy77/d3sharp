@@ -57,7 +57,11 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public static TagKeyInt ActorTag = new TagKeyInt(526852);
         public static TagKeySNO DestinationLevelArea = new TagKeySNO(526853);
 
+        public static TagKeyInt SavepointId = new TagKeyInt(526976);
+
         public static TagKeySNO TriggeredConversation = new TagKeySNO(528128);
         public static TagKeyInt TriggerDistance = new TagKeyInt(528384); // raven_pecking
+
+        public static TagKeySNO MinimapTexture = new TagKeySNO(548864);
     }
 }

@@ -647,6 +647,13 @@ namespace Mooege.Core.GS.Actors
             
         }
 
+        /// <summary>
+        /// Called when a player moves close to the actor
+        /// </summary>
+        public virtual void OnPlayerApproaching(Player player)
+        {
+        }
+
         #endregion
 
         #region cooked messages
@@ -694,7 +701,9 @@ namespace Mooege.Core.GS.Actors
         {
             if (this.Tags == null) return;
 
-            this.Scale = Tags.ContainsKey(MarkerKeys.Scale) ? Tags[MarkerKeys.Scale] : 1;
+            // load scale from actor data and override it with marker tags if one is set
+            this.Scale = ActorData.TagMap.ContainsKey(ActorKeys.Scale) ? ActorData.TagMap[ActorKeys.Scale] : 1;
+            this.Scale = Tags.ContainsKey(MarkerKeys.Scale) ? Tags[MarkerKeys.Scale] : this.Scale ;
 
 
             if (Tags.ContainsKey(MarkerKeys.QuestRange))

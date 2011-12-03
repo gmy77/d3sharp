@@ -20,6 +20,7 @@ using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Common.Types.SNO;
+using System.Text;
 
 namespace Mooege.Common.MPQ.FileFormats.Types
 {
@@ -55,7 +56,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public int NameSize { get; private set; }
         public int I5 { get; private set; }
         public int OpcodeSize { get; private set; }
-        public byte[] OpCodeName { get; private set; }
+        public string OpCodeName { get; private set; }
         public byte[] OpCodeArray { get; private set; }
 
         public ScriptFormula(MpqFileStream stream)
@@ -68,8 +69,8 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             this.NameSize = stream.ReadValueS32();
             this.I5 = stream.ReadValueS32();
             this.OpcodeSize = stream.ReadValueS32();
-            this.OpCodeName = new byte[NameSize];
-            stream.Read(OpCodeName, 0, NameSize);
+            this.OpCodeName = stream.ReadStringZ(Encoding.ASCII);
+ 
             switch(NameSize % 4)
             {
                 case 0:
@@ -87,6 +88,11 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             }
             this.OpCodeArray = new byte[OpcodeSize];
             stream.Read(OpCodeArray, 0, OpcodeSize);
+        }
+
+        public override string ToString()
+        {
+            return OpCodeName;
         }
     }
 
@@ -236,6 +242,8 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         public int[] GBIdAffixes = new int[3];
         public int I1 { get; private set; }
         public int I2 { get; private set; }
+
+        public ItemSpecifierData() { }
 
         public ItemSpecifierData(MpqFileStream stream)
         {

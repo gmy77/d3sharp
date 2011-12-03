@@ -191,8 +191,9 @@ namespace Mooege.Core.GS.Generators
         /// <param name="world">The world to which to add loaded actors</param>
         private static void loadLevelAreas(Dictionary<int, List<Scene>> levelAreas, World world)
         {
-            /// Each Scene has one to four level areas assigned to it, so each level area consists of at
-            /// least one scene. Scenes marker tags have generic GizmoLocationA to Z that are used 
+            /// Each Scene has one to four level areas assigned to it. I dont know if that means
+            /// the scene belongs to both level areas or if the scene is split
+            /// Scenes marker tags have generic GizmoLocationA to Z that are used 
             /// to provide random spawning possibilities.
             /// For each of these 26 LocationGroups, the LevelArea has a entry in its SpawnType array that defines
             /// what type of actor/encounter/adventure could spawn there
@@ -317,6 +318,49 @@ namespace Mooege.Core.GS.Generators
                         }
                     }
                 }
+
+
+
+                // Load monsters for level area
+                foreach (var scene in levelAreas[la])
+                {
+                    for (int i = 0; i < 100; i++)
+                    {
+                        if (RandomHelper.NextDouble() > 0.8)
+                        {
+                            // TODO Load correct spawn population
+                             // 2.5 is units per square, TODO: Find out how to calculate units per square. Is it F1 * V0.I1 / SquareCount?
+                            int x = RandomHelper.Next(scene.NavMesh.SquaresCountX);
+                            int y = RandomHelper.Next(scene.NavMesh.SquaresCountY);
+
+                            if ((scene.NavMesh.Squares[y * scene.NavMesh.SquaresCountX + x].Flags & Mooege.Common.MPQ.FileFormats.Scene.NavCellFlags.NoSpawn) == 0)
+                            {
+                                loadActor(
+                                    new SNOHandle(6652), 
+                                    new PRTransform
+                                    {
+                                        Vector3D = new Vector3D
+                                        {
+                                            X = (float)(x * 2.5 + scene.Position.X),
+                                            Y = (float)(y * 2.5 + scene.Position.Y),
+                                            Z = scene.NavMesh.Squares[y * scene.NavMesh.SquaresCountX + x].Z + scene.Position.Z
+                                        },
+                                        Quaternion = new Quaternion
+                                        {
+                                            W = (float)(RandomHelper.NextDouble() * System.Math.PI * 2),
+                                            Vector3D = new Vector3D(0, 0, 1)
+                                        }
+                                    },
+                                    world,
+                                    new TagMap()
+                                    );
+                            }
+                        }
+                    }
+                }
+
+
+
             }
         }
 
