@@ -67,7 +67,7 @@ namespace Mooege.Core.GS.Powers.Payloads
                     new PlayAnimationMessageSpec()
                     {
                         Field0 = 0x2,
-                        Field1 = _FindBestDeathAnimation(),
+                        Field1 = _FindBestDeathAnimationSNO(),
                         Field2 = 0x0,
                         Field3 = 1f
                     }
@@ -112,13 +112,27 @@ namespace Mooege.Core.GS.Powers.Payloads
             this.Target.World.PowerManager.AddDeletingActor(this.Target);
         }
 
-        private int _FindBestDeathAnimation()
+        private int _FindBestDeathAnimationSNO()
         {
+            // check if power has special death animation, and roll chance to use it
+            TagKeyInt specialDeathTag = _GetTagForSpecialDeath(this.Context.EvalTag(PowerKeys.SpecialDeathType));
+            if (specialDeathTag != null)
+            {
+                float specialDeathChance = this.Context.EvalTag(PowerKeys.SpecialDeathChance);
+                if (PowerContext.Rand.NextDouble() < specialDeathChance)
+                {
+                    int specialSNO = _GetSNOFromTag(specialDeathTag);
+                    if (specialSNO != -1)
+                        return specialSNO;
+                }
+                // decided not to use special death or actor doesn't have it, just fall back to normal death anis
+            }
+
             int sno = _GetSNOFromTag(this.DeathDamageType.DeathAnimationTag);
             if (sno != -1)
                 return sno;
 
-            // load default ani if damage type death doesn't exist
+            // load default ani if all else fails
             return _GetSNOFromTag(AnimationSetKeys.DeathDefault);
         }
 
@@ -128,6 +142,22 @@ namespace Mooege.Core.GS.Powers.Payloads
                 return this.Target.AnimationSet.Animations[tag.ID];
             else
                 return -1;
+        }
+
+        private static TagKeyInt _GetTagForSpecialDeath(int specialDeathType)
+        {
+            switch (specialDeathType)
+            {
+                default: return null;
+                case 1: return AnimationSetKeys.DeathDisintegration;
+                case 2: return AnimationSetKeys.DeathPulverise;
+                case 3: return AnimationSetKeys.DeathPlague;
+                case 4: return AnimationSetKeys.DeathDismember;
+                case 5: return AnimationSetKeys.DeathDecap;
+                case 6: return AnimationSetKeys.DeathAcid;
+                case 7: return AnimationSetKeys.DeathLava;  // haven't seen lava used, but there's no other place for it
+                case 8: return AnimationSetKeys.DeathSpirit;
+            }
         }
     }
 }
