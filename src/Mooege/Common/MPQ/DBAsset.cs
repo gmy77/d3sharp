@@ -19,37 +19,28 @@
 using System;
 using System.Globalization;
 using System.Threading;
-using CrystalMpq;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Common.Storage;
 
 namespace Mooege.Common.MPQ
 {
-    public class LazyAsset : Asset
+    public class DBAsset : Asset
     {
-        public override FileFormat Data
+
+        protected override bool SourceAvailable
         {
-            get
-            {
-                if (_data == null && _parser != null && _file != null)
-                    _data = (FileFormat)Activator.CreateInstance(_parser, new object[] { _file });
-                return _data;
-            }
+            get { return true; }
         }
 
-        private FileFormat _data;
-        private Type _parser;
-        private MpqFile _file;
-
-        public LazyAsset(SNOGroup group, Int32 snoId, string name)
+        public DBAsset(SNOGroup group, Int32 snoId, string name)
             : base(group, snoId, name)
         {
         }
 
-        public override void RunParser(Type parser, MpqFile file)
+        public override void RunParser()
         {
-            _parser = parser;
-            _file = file;
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture so that we don't hit pitfalls in non en/US systems with different number formats.
+            _data = (FileFormat)PersistenceManager.Load(Parser, SNOId.ToString());
         }
     }
 }

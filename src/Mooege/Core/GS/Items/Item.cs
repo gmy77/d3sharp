@@ -29,6 +29,8 @@ using Mooege.Net.GS.Message;
 using Mooege.Common.MPQ.FileFormats;
 using Actor = Mooege.Core.GS.Actors.Actor;
 using World = Mooege.Core.GS.Map.World;
+using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Core.GS.Common.Types.SNO;
 
 // TODO: This entire namespace belongs in GS. Bnet only needs a certain representation of items whereas nearly everything here is GS-specific
 
@@ -78,6 +80,26 @@ namespace Mooege.Core.GS.Items
                 Attributes[GameAttribute.Item_Quality_Level] = value;
             }
         }
+
+        public SNOHandle SnoFlippyActory
+        {
+            get
+            {
+                return ActorData.TagMap.ContainsKey(ActorKeys.Flippy) ? ActorData.TagMap[ActorKeys.Flippy] : null;
+            }
+        }
+
+        public SNOHandle SnoFlippyParticle
+        {
+            get
+            {
+                return ActorData.TagMap.ContainsKey(ActorKeys.FlippyParticle) ? ActorData.TagMap[ActorKeys.FlippyParticle] : null;
+            }
+        }
+
+
+            
+
 
         public override bool HasWorldLocation
         {
@@ -379,13 +401,6 @@ namespace Mooege.Core.GS.Items
 
             if (!base.Reveal(player))
                 return false;
-
-            // Drop effect/sound? TODO find out
-            player.InGameClient.SendMessage(new PlayEffectMessage()
-            {
-                ActorId = this.DynamicID,
-                Effect = Effect.SecondaryRessourceEffect
-            });
 
             var affixGbis = new int[AffixList.Count];
             for (int i = 0; i < AffixList.Count; i++)
