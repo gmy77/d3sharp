@@ -224,11 +224,21 @@ namespace Mooege.Core.GS.Map
                         case Mooege.Common.MPQ.FileFormats.MarkerType.Light:
                         case Mooege.Common.MPQ.FileFormats.MarkerType.Particle:
                         case Mooege.Common.MPQ.FileFormats.MarkerType.SubScenePosition:
-                            // nothing to do for these here
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.AudioVolume:
+                            // nothing to do for these here, client load them on its own
+                            break;
+
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.Script:
+                            Logger.Warn("Ignoring marker {0} in {1} ({2}) because scripts are not handled yet", marker.Name, markerSetData.FileName, markerSetData.Header.SNOId);
+                            break;
+
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.Event:
+                            Logger.Warn("Ignoring marker {0} in {1} ({2}) because events are not handled yet", marker.Name, markerSetData.FileName, markerSetData.Header.SNOId);
                             break;
 
                         case Mooege.Common.MPQ.FileFormats.MarkerType.MinimapMarker:
-                            // TODO Load minimap markers here
+                            Logger.Warn("Ignoring marker {0} in {1} ({2}) because minimap marker are not handled yet", marker.Name, markerSetData.FileName, markerSetData.Header.SNOId);
+
                             break;
 
                         case Mooege.Common.MPQ.FileFormats.MarkerType.Actor:

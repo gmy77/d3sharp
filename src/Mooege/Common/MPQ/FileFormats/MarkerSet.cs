@@ -121,14 +121,18 @@ namespace Mooege.Common.MPQ.FileFormats
         Actor = 0,
         Light,
 
+        AudioVolume = 4,
         AmbientSound = 6,
         Particle = 7,
 
         Encounter = 10,
 
+        Script = 13,
+
         SubScenePosition = 16,
 
         MinimapMarker = 28,
+        Event = 29,
 
         // don't blame me - farmy :-)
         GizmoLocationA = 50,
