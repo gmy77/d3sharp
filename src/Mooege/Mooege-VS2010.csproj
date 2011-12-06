@@ -240,7 +240,6 @@
     <Compile Include="Core\GS\Map\Debug\WorldVisualizer.Designer.cs">
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GS\Markers\Marker.cs" />
     <Compile Include="Core\GS\Games\Quest.cs" />
     <Compile Include="Core\GS\Players\ConversationManager.cs" />
     <Compile Include="Core\GS\Common\InventoryGrid.cs" />

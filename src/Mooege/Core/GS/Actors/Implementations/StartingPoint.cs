@@ -18,12 +18,10 @@
 
 using System.Collections.Generic;
 using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
-    [HandledSNO((int)MarkerTypes.Start_Location_0, (int)MarkerTypes.Start_Location_Team_0)]
     public class StartingPoint : Gizmo
     {
         public int TargetId { get; private set; }
