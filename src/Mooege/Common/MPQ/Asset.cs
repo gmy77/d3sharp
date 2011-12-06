@@ -35,7 +35,7 @@ namespace Mooege.Common.MPQ
         {
             get
             {
-                if (_data == null && SourceAvailable)
+                if (_data == null && SourceAvailable && Parser != null)
                 {
                     RunParser();
                 }
