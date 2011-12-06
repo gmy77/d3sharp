@@ -30,21 +30,26 @@ using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Powers.Payloads
 {
-    public class DeathPayload
+    public class DeathPayload : Payload
     {
-        public PowerContext Context;
-        public Actor Target;
         public DamageType DeathDamageType;
 
         public DeathPayload(PowerContext context, DamageType deathDamageType, Actor target)
+            : base(context, target)
         {
-            this.Context = context;
             this.DeathDamageType = deathDamageType;
-            this.Target = target;
         }
 
         public void Apply()
         {
+            if (this.Target.World == null) return;
+
+            // HACK: add to hackish list thats used to defer deleting actor and filter it from powers targetting
+            this.Target.World.PowerManager.AddDeletingActor(this.Target);
+
+            // send this death payload to buffs
+            this.Target.World.BuffManager.SendTargetPayload(this.Target, this);
+            
             // wtf is this?
             this.Target.World.BroadcastIfRevealed(new Mooege.Net.GS.Message.Definitions.Effect.PlayEffectMessage()
             {
@@ -107,9 +112,8 @@ namespace Mooege.Core.GS.Powers.Payloads
             if (this.Target is Monster)
                 (this.Target as Monster).PlayLore();
 
-            // HACK: have to add actors to deleting list right now to fix visual buff effects not disappearing
+            // HACK: instead of deleting actor right here, its added to a list (near the top of this function)
             //this.Target.Destroy();
-            this.Target.World.PowerManager.AddDeletingActor(this.Target);
         }
 
         private int _FindBestDeathAnimationSNO()

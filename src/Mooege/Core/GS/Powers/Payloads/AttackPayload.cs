@@ -25,10 +25,8 @@ using Mooege.Core.GS.Actors;
 
 namespace Mooege.Core.GS.Powers.Payloads
 {
-    public class AttackPayload
+    public class AttackPayload : Payload
     {
-        public PowerContext Context;
-        
         // list of each amount and type of damage the attack will contain
         public class DamageEntry
         {
@@ -52,8 +50,8 @@ namespace Mooege.Core.GS.Powers.Payloads
         private List<Actor> _targets = new List<Actor>();
         
         public AttackPayload(PowerContext context)
+            : base(context, context.User)
         {
-            Context = context;
         }
 
         public void AddDamage(float minDamage, float damageDelta, DamageType damageType)
@@ -79,8 +77,6 @@ namespace Mooege.Core.GS.Powers.Payloads
 
         public void AddTarget(Actor target)
         {
-            if (target == null || target.World == null) return;
-
             _targets.Add(target);
         }
 
@@ -96,8 +92,14 @@ namespace Mooege.Core.GS.Powers.Payloads
 
         public void Apply()
         {
+            this.Target.World.BuffManager.SendTargetPayload(this.Target, this);
+
             foreach (Actor target in _targets)
             {
+                // filter null and killed targets
+                if (target == null || target.World != null && target.World.PowerManager.IsDeletingActor(target))
+                    continue;
+
                 // TODO: calculate hit chance for monsters instead of always hitting
 
                 var payload = new HitPayload(this, _DoCriticalHit(this.Context.User, target), target);
@@ -107,9 +109,7 @@ namespace Mooege.Core.GS.Powers.Payloads
                 if (OnHit != null)
                     OnHit(payload);
 
-                // make sure target hasn't died from OnHit() stuff before applying payload
-                if (target.World != null)
-                    payload.Apply();
+                payload.Apply();
             }
         }
 

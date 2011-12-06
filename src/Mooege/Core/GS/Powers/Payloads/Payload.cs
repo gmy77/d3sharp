@@ -20,23 +20,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Mooege.Core.GS.Skills;
-using Mooege.Core.GS.Ticker;
 using Mooege.Core.GS.Actors;
 
-namespace Mooege.Core.GS.Powers.Implementations
+namespace Mooege.Core.GS.Powers.Payloads
 {
-    [ImplementsPowerSNO(0x00007780)]  // Weapon_Melee_Instant.pow
-    public class WeaponMeleeInstant : PowerScript
+    public abstract class Payload
     {
-        public override IEnumerable<TickTimer> Run()
+        public PowerContext Context;
+        public Actor Target;
+
+        public Payload(PowerContext context, Actor target)
         {
-            Actor hit = GetBestMeleeEnemy();
-            if (hit != null)
-            {
-                WeaponDamage(hit, 1.00f, DamageType.Physical);
-            }
-            yield break;
+            this.Context = context;
+            this.Target = target;
         }
     }
 }

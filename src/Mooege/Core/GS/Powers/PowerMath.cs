@@ -106,6 +106,11 @@ namespace Mooege.Core.GS.Powers
 
         public static bool PointInBeam(Vector3D point, Vector3D beamStart, Vector3D beamEnd, float beamThickness)
         {
+            return CircleInBeam(new Circle(point.X, point.Y, 0), beamStart, beamEnd, beamThickness);
+        }
+
+        public static bool CircleInBeam(Circle circle, Vector3D beamStart, Vector3D beamEnd, float beamThickness)
+        {
             // NOTE: right now this does everything in 2d, ignoring Z
 
             // offset start beam position by beam thickness
@@ -113,7 +118,7 @@ namespace Mooege.Core.GS.Powers
 
             return MovingCircleCollides(new Circle(beamStart.X, beamStart.Y, beamThickness),
                                         VectorWithoutZ(beamEnd - beamStart),
-                                        new Circle(point.X, point.Y, 0));
+                                        circle);
         }
 
         public static bool PointInRectangle(Vector2F point, float r1x, float r1y,

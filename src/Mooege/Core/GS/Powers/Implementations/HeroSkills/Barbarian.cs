@@ -39,17 +39,18 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             User.PlayEffectGroup(18662);
 
-            if (CanHitMeleeTarget(Target))
+            Actor hit = GetBestMeleeEnemy();
+            if (hit != null)
             {
                 var payload = new AttackPayload(this);
                 payload.AddTarget(Target);
                 payload.AddWeaponDamage(1.45f, DamageType.Physical);
-                payload.OnHit = (hit) =>
+                payload.OnHit = (hitPayload) =>
                 {
                     GeneratePrimaryResource(6f);
 
                     if (Rand.NextDouble() < 0.20)
-                        Knockback(Target, 4f);
+                        Knockback(hitPayload.Target, 4f);
                 };
 
                 payload.Apply();

@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Actors;
@@ -142,14 +143,15 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         private void MeleeStageHit()
         {
-            if (CanHitMeleeTarget(Target))
+            Actor hit = GetBestMeleeEnemy();
+            if (hit != null)
             {
                 GeneratePrimaryResource(6f);
-                WeaponDamage(Target, 1.20f, DamageType.Lightning);
+                WeaponDamage(hit, 1.20f, DamageType.Lightning);
             }
         }
 
-        [ImplementsPowerBuff(7, false)]
+        [ImplementsPowerBuff(7)]
         class ComboStage3Buff : PowerBuff
         {
             public override void Init()
@@ -226,10 +228,11 @@ namespace Mooege.Core.GS.Powers.Implementations
             bool hitAnything = false;
             if (TargetMessage.Field5 != 2)
             {
-                if (CanHitMeleeTarget(Target))
+                Actor hit = GetBestMeleeEnemy();
+                if (hit != null)
                 {
                     hitAnything = true;
-                    WeaponDamage(Target, 1.35f, DamageType.Physical);
+                    WeaponDamage(hit, 1.35f, DamageType.Physical);
                 }
             }
             else
@@ -254,31 +257,175 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
+            yield return WaitSeconds(waitCombo(TargetMessage.Field5));
+
+            AttackPayload attack = new AttackPayload(this);
             int effectSNO;
             switch (TargetMessage.Field5)
             {
                 case 0:
-                    effectSNO = 143841;
-                    break;
                 case 1:
                     effectSNO = 143841;
+
+                    attack.AddTarget(GetBestMeleeEnemy());
+                    attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
+                    if (Rune_C > 0)
+                    {
+                        attack.OnHit = (hitPayload) =>
+                        {
+                            AddBuff(hitPayload.Target, new RuneCDebuff());
+                        };
+                    }
                     break;
+
                 case 2:
                     effectSNO = 143473;
+
+                    if (Rune_B > 0) // TODO: make this use arc, not beam
+                        attack.AddTargets(GetEnemiesInBeamDirection(User.Position, TargetPosition, 0.1f, ScriptFormula(19) / 2f)
+                                                                   .Take((int)ScriptFormula(18)).ToList());
+                    else
+                        attack.AddTarget(GetBestMeleeEnemy());
+
+                    attack.AutomaticHitEffects = false;
+                    attack.OnHit = (hitPayload) =>
+                    {
+                        AddBuff(hitPayload.Target, new MainDebuff());
+                    };
                     break;
+
                 default:
                     yield break;
             }
 
             User.PlayEffectGroup(effectSNO);
+            attack.Apply();
+            yield break;
+        }
 
-            if (CanHitMeleeTarget(Target))
+        float waitCombo(int combo)
+        {
+            switch (combo)
             {
-                GeneratePrimaryResource(6f);
-                WeaponDamage(Target, 1.00f, DamageType.Physical);
+                case 0: return 0.5f / EvalTag(PowerKeys.ComboAttackSpeed1);
+                case 1: return 0.5f / EvalTag(PowerKeys.ComboAttackSpeed2);
+                case 2: return 0.5f / EvalTag(PowerKeys.ComboAttackSpeed3);
+                default: return 5.0f;
+            }
+        }
+
+        [ImplementsPowerBuff(0)]
+        class MainDebuff : PowerBuff
+        {
+            const float _damageRate = 1.0f;
+            TickTimer _damageTimer = null;
+
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(3));
             }
 
-            yield break;
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+
+                Target.Attributes[GameAttribute.Bleeding] = true;
+                Target.Attributes.BroadcastChangedIfRevealed();
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+
+                Target.Attributes[GameAttribute.Bleeding] = false;
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
+
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+
+                if (_damageTimer == null || _damageTimer.TimedOut)
+                {
+                    _damageTimer = WaitSeconds(_damageRate);
+
+                    AttackPayload attack = new AttackPayload(this);
+                    attack.AddTarget(Target);
+                    attack.AddWeaponDamage(ScriptFormula(6) * _damageRate, DamageType.Physical);
+                    attack.AutomaticHitEffects = false;
+                    attack.Apply();
+                }
+                return false;
+            }
+
+            public override void OnPayload(Payload payload)
+            {
+                if (payload.Target == Target && payload is DeathPayload)
+                {
+                    AttackPayload attack = new AttackPayload(this);
+                    attack.AddTargets(GetEnemiesInRadius(Target.Position, ScriptFormula(11)));
+                    attack.AddDamage(ScriptFormula(9) * Target.Attributes[GameAttribute.Hitpoints_Max_Total],
+                                     ScriptFormula(10), DamageType.Physical);
+                    if (Rune_D > 0)
+                    {
+                        attack.OnHit = (hitPayload) =>
+                        {
+                            GeneratePrimaryResource(ScriptFormula(14));
+                        };
+                    }
+                    attack.Apply();
+
+                    SpawnProxy(Target.Position).PlayEffectGroup(18991);
+                }
+            }
+        }
+
+        [ImplementsPowerBuff(1, true)]
+        class RuneCDebuff : PowerBuff
+        {
+            public override void Init()
+            {
+                base.Init();
+                Timeout = WaitSeconds(ScriptFormula(25));
+                MaxStackCount = (int)ScriptFormula(17);
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+
+                _AddAmp();
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+                Target.Attributes[GameAttribute.Amplify_Damage_Percent] -= StackCount * ScriptFormula(15);
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
+
+            public override bool Stack(Buff buff)
+            {
+                bool stacked = StackCount < MaxStackCount;
+
+                base.Stack(buff);
+
+                if (stacked)
+                    _AddAmp();
+
+                return true;
+            }
+
+            private void _AddAmp()
+            {
+                Target.Attributes[GameAttribute.Amplify_Damage_Percent] += ScriptFormula(15);
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
         }
     }
 
@@ -305,10 +452,11 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             User.PlayEffectGroup(effectSNO);
 
-            if (CanHitMeleeTarget(Target))
+            Actor hit = GetBestMeleeEnemy();
+            if (hit != null)
             {
                 GeneratePrimaryResource(6f);
-                WeaponDamage(Target, 1.00f, DamageType.Physical);
+                WeaponDamage(hit, 1.00f, DamageType.Physical);
             }
 
             yield break;

@@ -117,6 +117,7 @@
     <Compile Include="Core\GS\Powers\DamageType.cs" />
     <Compile Include="Core\GS\Powers\Payloads\DeathPayload.cs" />
     <Compile Include="Core\GS\Powers\Payloads\HitPayload.cs" />
+    <Compile Include="Core\GS\Powers\Payloads\Payload.cs" />
     <Compile Include="Core\GS\Powers\PowerFormulaScript.cs" />
     <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Barbarian.cs" />
     <Compile Include="Core\GS\Powers\Implementations\HeroSkills\DemonHunter.cs" />

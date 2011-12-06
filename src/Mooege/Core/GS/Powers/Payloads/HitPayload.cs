@@ -30,10 +30,8 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Core.GS.Powers.Payloads
 {
-    public class HitPayload
+    public class HitPayload : Payload
     {
-        public PowerContext Context;
-        public Actor Target;
         public float TotalDamage;
         public DamageType DominantDamageType;
         public Dictionary<DamageType, float> ElementDamages;
@@ -43,9 +41,8 @@ namespace Mooege.Core.GS.Powers.Payloads
         public Action<DeathPayload> OnDeath = null;
 
         public HitPayload(AttackPayload attackPayload, bool criticalHit, Actor target)
+            : base(attackPayload.Context, target)
         {
-            this.Context = attackPayload.Context;
-            this.Target = target;
             this.IsCriticalHit = criticalHit;
             
             // TODO: select these values based on element type?
@@ -82,20 +79,28 @@ namespace Mooege.Core.GS.Powers.Payloads
 
             this.TotalDamage = this.ElementDamages.Sum(kv => kv.Value);
             this.DominantDamageType = this.ElementDamages.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
+            if (this.DominantDamageType == null)
+                this.DominantDamageType = DamageType.Physical; // default to physical if no other damage type calced
         }
 
         public void Apply()
         {
-            // play damage number message
-            if (this.Context.User is Player)
+            if (this.Target.World != null)
+                this.Target.World.BuffManager.SendTargetPayload(this.Target, this);
+
+            // floating damage number
+            if (this.Target.World != null)
             {
-                // TODO: handle player getting hit? maybe broadcast red message
-                (this.Context.User as Player).InGameClient.SendMessage(new FloatingNumberMessage
+                this.Target.World.BroadcastIfRevealed(new FloatingNumberMessage
                 {
                     ActorID = this.Target.DynamicID,
                     Number = this.TotalDamage,
-                    Type = this.IsCriticalHit ? FloatingNumberMessage.FloatType.WhiteCritical : FloatingNumberMessage.FloatType.White
-                });
+                    // make player damage red, all other damage white
+                    Type = this.IsCriticalHit ? 
+                        (this.Target is Player) ? FloatingNumberMessage.FloatType.RedCritical : FloatingNumberMessage.FloatType.WhiteCritical
+                                              :
+                        (this.Target is Player) ? FloatingNumberMessage.FloatType.Red : FloatingNumberMessage.FloatType.White
+                }, this.Target);
             }
 
             if (this.AutomaticHitEffects)
@@ -112,29 +117,10 @@ namespace Mooege.Core.GS.Powers.Payloads
                     this.Target.PlayHitEffect((int)this.DominantDamageType.HitEffect, this.Context.User);
                 }
 
-                // TODO: sound effects
-                
-                // play hit animation if the actor has one
-                int hitAni = this.Target.AnimationSet.GetAniSNO(Mooege.Common.MPQ.FileFormats.AnimationTags.GetHit);
-                if (hitAni != -1)
-                {
-                    this.Target.World.BroadcastIfRevealed(new PlayAnimationMessage()
-                    {
-                        ActorID = this.Target.DynamicID,
-                        Field1 = 0x6,
-                        Field2 = 0,
-                        tAnim = new PlayAnimationMessageSpec[1]
-                        {
-                            new PlayAnimationMessageSpec()
-                            {
-                                Field0 = 40,  // HACK: harded animation length, we need to read these from .ani
-                                Field1 = hitAni,
-                                Field2 = 0x0,
-                                Field3 = 1f  // TODO: vary this based on hit recovery
-                            }
-                        }
-                    }, this.Target);
-                }
+                // play override hitsound if any, otherwise just default to playing metal weapon hit for now
+                int overridenSound = this.Context.EvalTag(PowerKeys.HitsoundOverride);
+                int hitsound = overridenSound > 0 ? overridenSound : 1;
+                this.Target.PlayEffect(Net.GS.Message.Definitions.Effect.Effect.Hit, hitsound);
             }
 
             // TODO: critical hit special element buff/effects
@@ -152,6 +138,30 @@ namespace Mooege.Core.GS.Powers.Payloads
                     OnDeath(deathload);
 
                 deathload.Apply();
+            }
+            else if (this.AutomaticHitEffects && this.Target.World != null)
+            {
+                // target didn't die, so play hit animation if the actor has one
+                int hitAni = this.Target.AnimationSet.GetAniSNO(Mooege.Common.MPQ.FileFormats.AnimationTags.GetHit);
+                if (hitAni != -1)
+                {
+                    this.Target.World.BroadcastIfRevealed(new PlayAnimationMessage
+                    {
+                        ActorID = this.Target.DynamicID,
+                        Field1 = 0x6,
+                        Field2 = 0,
+                        tAnim = new PlayAnimationMessageSpec[]
+                        {
+                            new PlayAnimationMessageSpec
+                            {
+                                Field0 = 40,  // HACK: harded animation length, we need to read these from .ani
+                                Field1 = hitAni,
+                                Field2 = 0x0,
+                                Field3 = 1f  // TODO: vary this based on hit recovery
+                            }
+                        }
+                    }, this.Target);
+                }
             }
 
             // TODO: if target survives and it's a AI monster, give it aggro

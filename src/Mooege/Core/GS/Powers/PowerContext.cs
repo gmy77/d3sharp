@@ -201,14 +201,20 @@ namespace Mooege.Core.GS.Powers
             return hits;
         }
 
-        public bool CanHitMeleeTarget(Actor target, float range = 13f)
+        public IList<Actor> GetEnemiesInBeamDirection(Vector3D startPoint, Vector3D direction,
+                                                      float length, float thickness = 0f)
         {
-            if (target == null) return false;
+            Vector3D beamEnd = PowerMath.ProjectAndTranslate2D(startPoint, direction, startPoint, length);
 
-            return (Math.Sqrt(
-                        Math.Pow(User.Position.X - target.Position.X, 2) +
-                        Math.Pow(User.Position.Y - target.Position.Y, 2) +
-                        Math.Pow(User.Position.Z - target.Position.Z, 2)) <= range);
+            List<Actor> hits = new List<Actor>();
+            foreach (Actor actor in GetEnemiesInRadius(startPoint, length + Math.Max(thickness * 2, 10f)))
+            {
+                float actorRadius = 1.5f; // TODO: actor.ActorData.Cylinder.Ax2;
+                if (PowerMath.CircleInBeam(new Circle(actor.Position.X, actor.Position.Y, actorRadius), startPoint, beamEnd, thickness))
+                    hits.Add(actor);
+            }
+
+            return hits;
         }
 
         public void Knockback(Actor target, Vector3D from, float amount)
@@ -224,9 +230,9 @@ namespace Mooege.Core.GS.Powers
             Knockback(target, User.Position, amount);
         }
 
-        public bool ValidTarget(Actor target)
+        public static bool ValidTarget(Actor target)
         {
-            return Target != null && Target.World != null; // TODO: check if world is same as powers?
+            return target != null && target.World != null; // TODO: check if world is same as powers?
         }
 
         public bool ValidTarget()

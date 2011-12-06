@@ -30,10 +30,20 @@ namespace Mooege.Core.GS.Powers
 
         public void Update()
         {
-            // update and remove finished buffs, got to make a copy of dictionary keys because _RemoveBuffsIf
-            // will modify _buffs
-            foreach (Actor target in _buffs.Keys.ToArray())
-                _RemoveBuffsIf(target, (buff) => buff.Update());
+            // make copy of keys as the dictionary will be modified during update/cleaning
+            Actor[] keys = _buffs.Keys.ToArray();
+
+            // update buffs and mark finished ones as removed
+            foreach (Actor target in keys)
+                _RemoveBuffsIf(target, buff => buff.Update());
+
+            // clean up removed buffs
+            foreach (Actor target in keys)
+            {
+                _buffs[target].RemoveAll(buff => buff == null);
+                if (_buffs[target].Count == 0)
+                    _buffs.Remove(target);
+            }
         }
 
         public bool AddBuff(Actor user, Actor target, Buff buff)
@@ -65,24 +75,35 @@ namespace Mooege.Core.GS.Powers
         {
             if (!_buffs.ContainsKey(target)) return;
 
-            _RemoveBuffsIf(target, (buff) => buff.GetType() == buffClass);
+            _RemoveBuffsIf(target, buff => buff.GetType() == buffClass);
         }
 
         public void RemoveBuffs(Actor target, int powerSNO)
         {
             if (!_buffs.ContainsKey(target)) return;
 
-            _RemoveBuffsIf(target, (buff) => buff.PowerSNO == powerSNO);
+            _RemoveBuffsIf(target, buff => buff.PowerSNO == powerSNO);
         }
 
         public void RemoveAllBuffs(Actor target)
         {
             if (!_buffs.ContainsKey(target)) return;
 
-            foreach (Buff buff in _buffs[target])
-                buff.Remove();
+            _RemoveBuffsIf(target, buff => true);
+        }
 
-            _buffs.Remove(target);
+        public void SendTargetPayload(Actor target, Payloads.Payload payload)
+        {
+            if (_buffs.ContainsKey(target))
+            {
+                List<Buff> buffs = _buffs[target];
+                int buffCount = buffs.Count;
+                for (int i = 0; i < buffCount; ++i)
+                {
+                    if (buffs[i] != null)
+                        buffs[i].OnPayload(payload);
+                }
+            }
         }
 
         private bool _AddBuff(Buff buff)
@@ -95,7 +116,7 @@ namespace Mooege.Core.GS.Powers
             if (_buffs.ContainsKey(buff.Target))
             {
                 Type buffType = buff.GetType();
-                Buff existingBuff = _buffs[buff.Target].FirstOrDefault((b) => b.GetType() == buffType);
+                Buff existingBuff = _buffs[buff.Target].FirstOrDefault(b => b != null && b.GetType() == buffType);
                 if (existingBuff != null)
                 {
                     if (existingBuff.Stack(buff))
@@ -133,17 +154,19 @@ namespace Mooege.Core.GS.Powers
 
         private void _RemoveBuffsIf(Actor target, Func<Buff, bool> pred)
         {
-            _buffs[target].RemoveAll((buff) =>
+            List<Buff> buffs = _buffs[target];
+            int buffCount = buffs.Count;
+            for (int i = 0; i < buffCount; ++i)
             {
-                bool removing = pred(buff);
-                if (removing)
-                    buff.Remove();
-
-                return removing;
-            });
-
-            if (_buffs[target].Count == 0)
-                _buffs.Remove(target);
+                if (buffs[i] != null)
+                {
+                    if (pred(buffs[i]))
+                    {
+                        buffs[i].Remove();
+                        buffs[i] = null;
+                    }
+                }
+            }
         }
     }
 }
