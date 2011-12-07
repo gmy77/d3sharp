@@ -27,7 +27,7 @@ using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Core.GS.Powers
 {
-    public class PowerTag
+    public class PowerTagHelper
     {
         public static TagMap FindTagMapWithKey(int powerSNO, TagKey key)
         {

@@ -363,7 +363,7 @@ namespace Mooege.Core.GS.Powers
 
         private static ScriptFormula FindScriptFormula(int powerSNO, TagKeyScript scriptTag)
         {
-            TagMap tagmap = PowerTag.FindTagMapWithKey(powerSNO, scriptTag);
+            TagMap tagmap = PowerTagHelper.FindTagMapWithKey(powerSNO, scriptTag);
             if (tagmap != null)
                 return tagmap[scriptTag];
             else

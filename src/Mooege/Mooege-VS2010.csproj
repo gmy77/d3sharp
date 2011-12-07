@@ -130,7 +130,7 @@
     <Compile Include="Core\GS\Powers\PowerScript.cs" />
     <Compile Include="Core\GS\Powers\PowerLoader.cs" />
     <Compile Include="Core\GS\Powers\PowerManager.cs" />
-    <Compile Include="Core\GS\Powers\PowerTag.cs" />
+    <Compile Include="Core\GS\Powers\PowerTagHelper.cs" />
     <Compile Include="Core\GS\Powers\Projectile.cs" />
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />

@@ -289,7 +289,7 @@ namespace Mooege.Core.GS.Powers
 
         private TagMap _FindTagMapWithKey(TagKey key)
         {
-            TagMap tagmap = PowerTag.FindTagMapWithKey(PowerSNO, key);
+            TagMap tagmap = PowerTagHelper.FindTagMapWithKey(PowerSNO, key);
             if (tagmap != null)
                 return tagmap;
             else
