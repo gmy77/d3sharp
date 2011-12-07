@@ -330,9 +330,8 @@ namespace Mooege.Core.GS.Actors
             this.FacingAngle = (float)Math.Cos(radianAngle / 2f);
             this.RotationAxis = new Vector3D(0, 0, (float)Math.Sin(radianAngle / 2f));
 
-            World.BroadcastIfRevealed(new ACDTranslateFacingMessage
+            World.BroadcastIfRevealed(new ACDTranslateFacingMessage(Opcodes.ACDTranslateFacingMessage1)
             {
-                Id = 115,
                 ActorId = DynamicID,
                 Angle = radianAngle,
                 Immediately = immediately
@@ -391,7 +390,7 @@ namespace Mooege.Core.GS.Actors
 
             World.BroadcastIfRevealed(new RopeEffectMessageACDToACD
             {
-                Id = 175,
+                Id = (int)Opcodes.RopeEffectMessageACDToACD,
                 Field0 = ropeSNO,
                 Field1 = (int)DynamicID,
                 Field2 = 4,
@@ -407,7 +406,7 @@ namespace Mooege.Core.GS.Actors
             // TODO: Might need to track complex effects
             World.BroadcastIfRevealed(new ComplexEffectAddMessage
             {
-                Id = 132,
+                Id = (int)Opcodes.ComplexEffectAddMessage,
                 Field0 = (int)World.NewActorID, // TODO: maybe not use actor ids?
                 Field1 = 1,  // 0=efg, 1=efg, 2=rope
                 Field2 = effectGroupSNO, // efgSNO or ropeSNO

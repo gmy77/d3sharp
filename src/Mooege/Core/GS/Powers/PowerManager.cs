@@ -36,13 +36,13 @@ namespace Mooege.Core.GS.Powers
         // list of all actively channeled powers
         private List<ChanneledPower> _channeledPowers = new List<ChanneledPower>();
 
-        // list of all waiting to execute powers
-        private class WaitingPower
+        // list of all executing power scripts
+        private class ExecutingScript
         {
             public IEnumerator<TickTimer> PowerEnumerator;
             public PowerScript Implementation;
         }
-        private List<WaitingPower> _waitingPowers = new List<WaitingPower>();
+        private List<ExecutingScript> _executingScripts = new List<ExecutingScript>();
 
         // list of actors that were killed and are waiting to be deleted
         // rather ugly hack needed because deleting actors immediatly when they have visual buff effects
@@ -56,7 +56,7 @@ namespace Mooege.Core.GS.Powers
         public void Update()
         {
             _UpdateDeletingActors();
-            _UpdateWaitingPowers();
+            _UpdateExecutingScripts();
         }
 
         public bool UsePower(Actor user, PowerScript power, Actor target = null,
@@ -94,10 +94,10 @@ namespace Mooege.Core.GS.Powers
             }
 
             var powerEnum = power.Run().GetEnumerator();
-            // actual power will first run here, if it yielded a timer process it in the waiting list
+            // actual power will first run here, if it yielded a timer process it in the executing list
             if (powerEnum.MoveNext() && powerEnum.Current != PowerScript.StopExecution)
             {
-                _waitingPowers.Add(new WaitingPower
+                _executingScripts.Add(new ExecutingScript
                 {
                     PowerEnumerator = powerEnum,
                     Implementation = power
@@ -203,15 +203,15 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private void _UpdateWaitingPowers()
+        private void _UpdateExecutingScripts()
         {
             // process all powers, removing from the list the ones that expire
-            _waitingPowers.RemoveAll((wait) =>
+            _executingScripts.RemoveAll(script =>
             {
-                if (wait.PowerEnumerator.Current.TimedOut)
+                if (script.PowerEnumerator.Current.TimedOut)
                 {
-                    if (wait.PowerEnumerator.MoveNext())
-                        return wait.PowerEnumerator.Current == PowerScript.StopExecution;
+                    if (script.PowerEnumerator.MoveNext())
+                        return script.PowerEnumerator.Current == PowerScript.StopExecution;
                     else
                         return true;
                 }

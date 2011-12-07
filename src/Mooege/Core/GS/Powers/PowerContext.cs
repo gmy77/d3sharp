@@ -328,14 +328,14 @@ namespace Mooege.Core.GS.Powers
 
         public void PlayAnimationGeneric(Actor actor, int animationSNO, float speed = 1.0f)
         {
-            actor.World.BroadcastIfRevealed(new PlayAnimationMessage()
+            actor.World.BroadcastIfRevealed(new PlayAnimationMessage
             {
                 ActorID = actor.DynamicID,
                 Field1 = 0x3,
                 Field2 = 0,
-                tAnim = new PlayAnimationMessageSpec[1]
+                tAnim = new PlayAnimationMessageSpec[]
                 {
-                    new PlayAnimationMessageSpec()
+                    new PlayAnimationMessageSpec
                     {
                         Field0 = -2,  // play animation once through
                         Field1 = animationSNO,

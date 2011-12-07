@@ -94,7 +94,7 @@ namespace Mooege.Core.GS.Powers
 
             this.World.BroadcastIfRevealed(new ACDTranslateFixedMessage
             {
-                Id = 116,
+                Id = (int)Opcodes.ACDTranslateFixedMessage,
                 ActorId = (int)this.DynamicID,
                 Velocity = this.Velocity,
                 Field2 = 0x00800000,
