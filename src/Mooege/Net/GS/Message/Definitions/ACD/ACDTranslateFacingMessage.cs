@@ -43,8 +43,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         /// </summary>
         public bool TurnImmediately;
 
-        public ACDTranslateFacingMessage() { }
-        public ACDTranslateFacingMessage(Opcodes id) : base(id) { }
+        public ACDTranslateFacingMessage() : base(Opcodes.ACDTranslateFacingMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

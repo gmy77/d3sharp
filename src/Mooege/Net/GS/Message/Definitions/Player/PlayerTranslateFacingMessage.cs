@@ -43,7 +43,6 @@ namespace Mooege.Net.GS.Message.Definitions.Player
         /// </summary>
         public bool TurnImmediately;
 
-        public PlayerTranslateFacingMessage() { }
         public PlayerTranslateFacingMessage() : base(Opcodes.PlayerTranslateFacingMessage) { }
 
         public override void Parse(GameBitBuffer buffer)

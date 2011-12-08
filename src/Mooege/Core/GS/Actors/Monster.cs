@@ -150,7 +150,7 @@ namespace Mooege.Core.GS.Actors
                 {
                     new PlayAnimationMessageSpec()
                     {
-                        Duration = 0x20,
+                        Duration = 0x2,
                         AnimationSNO = AnimationSet.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
                         PermutationIndex = 0x0,
                         Speed = 0.1f
