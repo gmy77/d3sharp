@@ -84,12 +84,7 @@ namespace Mooege.Core.GS.Powers
 
         public virtual float GetContactDelay()
         {
-            // only have a contact delay if the action speed is >0 and there is a contact effect specified
-            float actionSpeed = GetActionSpeed();
-            if (actionSpeed > 0f && GetContactEffectSNO() != -1)
-                return 0.5f / actionSpeed;
-            else
-                return 0f;
+            return 0f;
         }
 
         private void _PlayActionAnimation()

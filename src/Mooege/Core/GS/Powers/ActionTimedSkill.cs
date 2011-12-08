@@ -20,23 +20,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Mooege.Core.GS.Skills;
-using Mooege.Core.GS.Ticker;
-using Mooege.Core.GS.Actors;
 
-namespace Mooege.Core.GS.Powers.Implementations
+namespace Mooege.Core.GS.Powers
 {
-    [ImplementsPowerSNO(0x00007780)]  // Weapon_Melee_Instant.pow
-    public class WeaponMeleeInstant : ActionTimedSkill
+    public abstract class ActionTimedSkill : Skill
     {
-        public override IEnumerable<TickTimer> Main()
+        public override float GetContactDelay()
         {
-            Actor hit = GetBestMeleeEnemy();
-            if (hit != null)
-            {
-                WeaponDamage(hit, 1.00f, DamageType.Physical);
-            }
-            yield break;
+            float actionSpeed = GetActionSpeed();
+            if (actionSpeed > 0f)
+                return 0.5f / actionSpeed;
+            else
+                return 0f;
         }
     }
 }
