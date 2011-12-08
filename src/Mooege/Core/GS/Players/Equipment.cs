@@ -141,7 +141,13 @@ namespace Mooege.Core.GS.Players
 
         public Item AddGoldItem(Item collectedItem)
         {
-            _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += collectedItem.Attributes[GameAttribute.Gold];
+
+            return AddGoldAmount(collectedItem.Attributes[GameAttribute.Gold]);
+        }
+
+        internal Item AddGoldAmount(int amount)
+        {
+            _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += amount;
             _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient);
             return _inventoryGold;
         }

@@ -272,7 +272,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int I2 { get; private set; }
         public int RandomPropertiesCount { get; private set; }
         public int MaxSockets { get; private set; }
-        public int I5 { get; private set; }
+        public int MaxStackAmount { get; private set; }
         public int BaseGoldValue { get; private set; }
         public int I7 { get; private set; }
         public int RequiredLevel { get; private set; }
@@ -326,7 +326,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.I2 = stream.ReadValueS32(); //284
             this.RandomPropertiesCount = stream.ReadValueS32(); //288
             this.MaxSockets = stream.ReadValueS32(); //292
-            this.I5 = stream.ReadValueS32(); //296
+            this.MaxStackAmount = stream.ReadValueS32(); //296
             this.BaseGoldValue = stream.ReadValueS32(); //300
             this.I7 = stream.ReadValueS32(); //304
             this.RequiredLevel = stream.ReadValueS32(); //308

@@ -24,23 +24,23 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
     [Message(Opcodes.InventorySplitStackMessage, Consumers.Inventory)]
     public class InventorySplitStackMessage : GameMessage
     {
-        public int Field0;
-        public long Field1;
-        public InvLoc Field2;
+        public int FromID;
+        public long Amount;
+        public InvLoc InvLoc;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt64(64);
-            Field2 = new InvLoc();
-            Field2.Parse(buffer);
+            FromID = buffer.ReadInt(32);
+            Amount = buffer.ReadInt64(64);
+            InvLoc = new InvLoc();
+            InvLoc.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt64(64, Field1);
-            Field2.Encode(buffer);
+            buffer.WriteInt(32, FromID);
+            buffer.WriteInt64(64, Amount);
+            InvLoc.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -49,13 +49,11 @@ namespace Mooege.Net.GS.Message.Definitions.Inventory
             b.AppendLine("InventorySplitStackMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X16"));
-            Field2.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("FromID: 0x" + FromID.ToString("X8") + " (" + FromID + ")");
+            b.Append(' ', pad); b.AppendLine("Amount: 0x" + Amount.ToString("X16"));
+            InvLoc.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
-
     }
 }
