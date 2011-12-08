@@ -292,8 +292,9 @@ namespace Mooege.Core.GS.Map
                     actor.Unreveal(player);
                 }
             }
-            
-            this.RemoveActor(actor);
+
+            if (this.HasActor(actor.DynamicID))
+                this.RemoveActor(actor);
 
             if (!(actor is Player)) return; // if the leaving actors is a player, unreveal the actors revealed to him contained in the world.
             var revealedObjects = (actor as Player).RevealedObjects.Values.ToList(); // list of revealed actors.

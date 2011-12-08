@@ -119,6 +119,11 @@ namespace Mooege.Core.GS.Items
             }
         }
 
+        public bool IsStackable()
+        {
+            return ItemDefinition.MaxStackAmount > 1;
+        }
+
         public InvLoc InvLoc
         {
             get
@@ -163,15 +168,8 @@ namespace Mooege.Core.GS.Items
             if(this.ItemType.Flags.HasFlag(ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
                 Attributes[GameAttribute.Item_Quality_Level] = 3;
 
+            Attributes[GameAttribute.ItemStackQuantityLo] = 1;
             Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
-
-            /*
-            List<IItemAttributeCreator> attributeCreators = new AttributeCreatorFactory().Create(this.ItemType);
-            foreach (IItemAttributeCreator creator in attributeCreators)
-            {
-                creator.CreateAttributes(this);
-            }
-            */
 
             RandomGenerator = new ItemRandomHelper(Attributes[GameAttribute.Seed]);
             RandomGenerator.Next();
@@ -396,7 +394,7 @@ namespace Mooege.Core.GS.Items
 
         public override bool Reveal(Player player)
         {
-            if (this.CurrentState == ItemState.PickingUp)
+            if (this.CurrentState == ItemState.PickingUp && HasWorldLocation)
                 return false;
 
             if (!base.Reveal(player))

@@ -28,6 +28,11 @@ using Mooege.Core.GS.Common;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Net.GS.Message.Definitions.Stash;
 using Mooege.Core.GS.Objects;
+using Mooege.Common.Helpers;
+using Mooege.Net.GS.Message.Definitions.Misc;
+using System.Collections.Generic;
+using System.Linq;
+using Mooege.Core.GS.Items.Implementations;
 
 namespace Mooege.Core.GS.Players
 {
@@ -65,7 +70,7 @@ namespace Mooege.Core.GS.Players
         }
 
 
-         /// <summary>
+        /// <summary>
         /// Refreshes the visual appearance of the hero
         /// </summary>
         public void SendVisualInventory(Player player)
@@ -103,6 +108,25 @@ namespace Mooege.Core.GS.Players
             System.Diagnostics.Debug.Assert(!_inventoryGrid.Contains(item) && !_equipment.IsItemEquipped(item), "Item already in inventory");
             // TODO: Autoequip when equipment slot is empty
 
+            // If Item is Stackable try to add the amount
+            if (item.IsStackable())
+            {
+                // Find items of same type (GBID) and try to add it to one of them
+                List<Item> baseItems = FindSameItems(item.GBHandle.GBID);
+                foreach (Item baseItem in baseItems)
+                {
+                    if (baseItem.Attributes[GameAttribute.ItemStackQuantityLo] + item.Attributes[GameAttribute.ItemStackQuantityLo] < baseItem.ItemDefinition.MaxStackAmount)
+                    {
+                        baseItem.Attributes[GameAttribute.ItemStackQuantityLo] += item.Attributes[GameAttribute.ItemStackQuantityLo];
+                        baseItem.Attributes.SendChangedMessage(_owner.InGameClient);
+
+                        // Item amount successful added. Don't place item in inventory instead destroy it.
+                        item.Destroy();
+                        return true;
+                    }
+                }
+            }
+
             bool success = false;
             if (!_inventoryGrid.HasFreeSpace(item))
             {
@@ -135,6 +159,11 @@ namespace Mooege.Core.GS.Players
             return success;
         }
 
+        private List<Item> FindSameItems(int gbid)
+        {
+            return _inventoryGrid.Items.Values.Where(i => i.GBHandle.GBID == gbid).ToList();
+        }
+       
         public void BuyItem(Item originalItem)
         {
             // TODO: Create a copy instead of random.
@@ -317,9 +346,20 @@ namespace Mooege.Core.GS.Players
             return true;
         }
 
+        /// <summary>
+        /// Transfers an amount from one stack to a free space
+        /// </summary>
         public void OnInventorySplitStackMessage(InventorySplitStackMessage msg)
         {
-            // TODO need to create and introduce a new item that is of the same type as the source
+            Item itemFrom = GetItem((uint)msg.FromID);
+            itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
+            itemFrom.Attributes.SendChangedMessage(_owner.InGameClient);
+
+            Item item = ItemGenerator.CreateItem(_owner, itemFrom.ItemDefinition);
+            item.Attributes[GameAttribute.ItemStackQuantityLo] = (int)msg.Amount;
+
+            InventoryGrid targetGrid = (msg.InvLoc.EquipmentSlot == (int)EquipmentSlotId.Stash) ? _stashGrid : _inventoryGrid;
+            targetGrid.AddItem(item, msg.InvLoc.Row, msg.InvLoc.Column);
         }
 
         /// <summary>
@@ -327,19 +367,13 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void OnInventoryStackTransferMessage(InventoryStackTransferMessage msg)
         {
-            Item itemFrom = _owner.World.GetItem(msg.FromID);
-            Item itemTo = _owner.World.GetItem(msg.ToID);
+            Item itemFrom = GetItem(msg.FromID);
+            Item itemTo = GetItem(msg.ToID);
 
             itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
-            itemTo.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
+            itemTo.Attributes[GameAttribute.ItemStackQuantityLo] += (int)msg.Amount;
 
-
-            // TODO: This needs to change the attribute on the item itself. /komiga
-            // Update source
             itemFrom.Attributes.SendChangedMessage(_owner.InGameClient);
-
-            // TODO: This needs to change the attribute on the item itself. /komiga
-            // Update target
             itemTo.Attributes.SendChangedMessage(_owner.InGameClient);
         }
 
@@ -376,6 +410,9 @@ namespace Mooege.Core.GS.Players
             else if (message is InventoryDropItemMessage) OnInventoryDropItemMessage(message as InventoryDropItemMessage);
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
             else if (message is RequestBuySharedStashSlotsMessage) OnBuySharedStashSlots(message as RequestBuySharedStashSlotsMessage);
+            else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
+            else if (message is RequestUseCauldronOfJordanMessage) OnUseCauldronOfJordanMessage(message as RequestUseCauldronOfJordanMessage);
+            else if (message is RequestUseNephalemCubeMessage) OnUseNephalmCubeMessage(message as RequestUseNephalemCubeMessage);
             else return;
         }
 
@@ -398,20 +435,26 @@ namespace Mooege.Core.GS.Players
         {
             uint targetItemId = inventoryRequestUseMessage.UsedOnItem;
             uint usedItemId = inventoryRequestUseMessage.UsedItem;
-            int actionId = inventoryRequestUseMessage.Field1; // guess 1 means dyeing. Probably other value for using identify scroll , selling , .... - angerwin
-            Item usedItem = _owner.World.GetItem(usedItemId);
-            Item targetItem = _owner.World.GetItem(targetItemId);
+            int actionId = inventoryRequestUseMessage.Field1;
+            Item usedItem = GetItem(usedItemId);
+            Item targetItem = GetItem(targetItemId);
 
             usedItem.OnRequestUse(_owner, targetItem, actionId, inventoryRequestUseMessage.Location);
         }
 
         public void DestroyInventoryItem(Item item)
         {
-            _inventoryGrid.RemoveItem(item);
-            _equipment.UnequipItem(item);
-//            item.Destroy();
-            item.Unreveal(_owner);
-            _owner.World.Game.EndTracking(item);
+            if (_equipment.IsItemEquipped(item))
+            {
+                _equipment.UnequipItem(item);
+                SendVisualInventory(_owner);
+            }
+            else
+            {
+                _inventoryGrid.RemoveItem(item);
+            }
+
+            item.Destroy();
         }
 
         public bool Reveal(Player player)
@@ -532,5 +575,23 @@ namespace Mooege.Core.GS.Players
             return rune;
         }
 
+
+		private void OnUseNephalmCubeMessage(RequestUseNephalemCubeMessage requestUseNephalemCubeMessage)
+        {
+            Item salvageItem = GetItem(requestUseNephalemCubeMessage.ActorID);
+            NephalemCube.OnUse(_owner, salvageItem);
+        }
+
+        private void OnUseCauldronOfJordanMessage(RequestUseCauldronOfJordanMessage requestUseCauldronOfJordanMessage)
+        {
+            Item sellItem = GetItem(requestUseCauldronOfJordanMessage.ActorID);
+            CauldronOfJordan.OnUse(_owner, sellItem);
+        }
+
+
+        public void AddGoldAmount(int amount)
+        {
+            _equipment.AddGoldAmount(amount);
+        }
     }
 }

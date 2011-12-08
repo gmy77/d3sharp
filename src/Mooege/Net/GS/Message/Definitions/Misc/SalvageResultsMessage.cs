@@ -29,6 +29,8 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         // MaxLength = 10
         public int /* gbid */[] gbidNewItems;
 
+        public SalvageResultsMessage() : base(Opcodes.SalvageResultsMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             gbidOriginalItem = buffer.ReadInt(32);

@@ -225,6 +225,11 @@ namespace Mooege.Core.GS.Items
             return item;
         }
 
+        public static ItemTable GetItemDefinition(int gbid)
+        {
+            return (Items.ContainsKey(gbid)) ? Items[gbid] : null;
+        }
+
         public static Item CreateGold(Player player, int amount)
         {
             var item = Cook(player, "Gold1");
