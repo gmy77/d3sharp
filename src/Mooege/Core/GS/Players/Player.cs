@@ -187,7 +187,7 @@ namespace Mooege.Core.GS.Players
 
             this.Field2 = 0x00000009;
             this.Scale = this.ModelScale;
-            this.FacingAngle = 0.05940768f;
+            this.RotationW = 0.05940768f;
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.Field7 = -1;
             this.NameSNOId = -1;
@@ -637,7 +637,7 @@ namespace Mooege.Core.GS.Players
                 this.Position = message.Position;
 
             if (message.Angle != null)
-                this.FacingAngle = message.Angle.Value;
+                this.SetFacingRotation(message.Angle.Value);
 
 
             var msg = new NotifyActorMovementMessage
