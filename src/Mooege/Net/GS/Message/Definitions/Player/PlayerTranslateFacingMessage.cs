@@ -18,15 +18,15 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.ACD
+namespace Mooege.Net.GS.Message.Definitions.Player
 {
     /// <summary>
-    /// Server -> Client
+    /// Client -> Server
     /// 
-    /// Sent to rotate an actor (most likely around the world z axis, not the actor rotation axis?)
+    /// Sent when the player turns eg. while using a power
     /// </summary>
-    [Message(Opcodes.ACDTranslateFacingMessage)]
-    public class ACDTranslateFacingMessage : GameMessage
+    [Message(Opcodes.PlayerTranslateFacingMessage, Consumers.Player)]
+    public class PlayerTranslateFacingMessage : GameMessage
     {
         /// <summary>
         /// Id of the player actor
@@ -43,8 +43,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         /// </summary>
         public bool TurnImmediately;
 
-        public ACDTranslateFacingMessage() { }
-        public ACDTranslateFacingMessage(Opcodes id) : base(id) { }
+        public PlayerTranslateFacingMessage() { }
+        public PlayerTranslateFacingMessage() : base(Opcodes.PlayerTranslateFacingMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
@@ -63,12 +63,12 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("ACDTranslateFacingMessage:");
+            b.AppendLine("PlayerTranslateFacingMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorId.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Angle: " + Angle.ToString("G"));
-            b.Append(' ', pad); b.AppendLine("Immediately: " + (TurnImmediately ? "true" : "false"));
+            b.Append(' ', pad); b.AppendLine("TurnImmediately: " + (TurnImmediately ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

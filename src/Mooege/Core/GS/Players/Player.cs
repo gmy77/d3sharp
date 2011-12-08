@@ -478,7 +478,13 @@ namespace Mooege.Core.GS.Players
             else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
             else if (message is HirelingDismissMessage) OnHirelingDismiss();
             else if (message is SocketSpellMessage) OnSocketSpell(client, (SocketSpellMessage)message);
+            else if (message is PlayerTranslateFacingMessage) OnTranslateFacing(client, (PlayerTranslateFacingMessage)message);
             else return;
+        }
+
+        private void OnTranslateFacing(GameClient client, PlayerTranslateFacingMessage message)
+        {
+            this.
         }
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)

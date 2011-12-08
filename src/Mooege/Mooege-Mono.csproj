@@ -339,6 +339,7 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\ShrineActivatedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\NephalemAltarWindowClosedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBannerMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Player\PlayerTranslateFacingMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Tutorial\TutorialMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingDismissMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingHireMessage.cs" />
