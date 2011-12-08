@@ -187,12 +187,13 @@ namespace Mooege.Core.GS.Players
                     Vector3D translation = speaker2.Position - speaker1.Position;
                     Vector2F flatTranslation = new Vector2F(translation.X, translation.Y);
 
-                    speaker1.FacingAngle = flatTranslation.Rotation();
+                    float facingAngle = flatTranslation.Rotation();
+                    speaker1.SetFacingRotation(facingAngle);
 
                     player.World.BroadcastIfRevealed(new ACDTranslateFacingMessage(Opcodes.ACDTranslateFacingMessage1)
                     {
                         ActorId = speaker1.DynamicID,
-                        Angle = speaker1.FacingAngle,
+                        Angle = facingAngle,
                         Immediately = false
                     }, speaker1);
                 }

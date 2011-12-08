@@ -47,8 +47,7 @@ namespace Mooege.Core.GS.Actors
             this.Monster = new SNOHandle(SNOGroup.Monster, (ActorData.MonsterSNO));
 
             // FIXME: This is hardcoded crap
-            this.FacingAngle = (float)(RandomHelper.NextDouble() * 2.0f * Math.PI);
-            this.RotationAxis.X = 0f; this.RotationAxis.Y = 0f; this.RotationAxis.Z = 1f;
+            this.SetFacingRotation((float)(RandomHelper.NextDouble() * 2.0f * Math.PI));
             this.GBHandle.Type = -1; this.GBHandle.GBID = -1;
             this.Field7 = 0x00000001;
             this.Field10 = 0x0;
