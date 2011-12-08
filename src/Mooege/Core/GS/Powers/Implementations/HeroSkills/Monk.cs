@@ -461,7 +461,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 ActorId = (int)User.DynamicID,
                 Position = TargetPosition,
                 Angle = PowerMath.AngleLookAt(User.Position, TargetPosition),
-                Field3 = true, // turn instantly toward target
+                TurnImmediately = true,
                 Speed = speed,
                 Field5 = 0x9206, // alt: 0x920e, not sure what this param is for.
                 AnimationTag = 69808, // dashing strike attack animation

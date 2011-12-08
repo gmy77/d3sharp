@@ -102,10 +102,10 @@ namespace Mooege.Core.GS.Powers
                     {
                         new PlayAnimationMessageSpec
                         {
-                            Field0 = (int)(60f / speed),  // ticks
-                            Field1 = animationSNO,
-                            Field2 = 0x0,
-                            Field3 = speed,
+                            Duration = (int)(60f / speed),  // ticks
+                            AnimationSNO = animationSNO,
+                            PermutationIndex = 0x0,
+                            Speed = speed,
                         }
                     }
                 };

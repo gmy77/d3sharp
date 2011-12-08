@@ -38,6 +38,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public string FileName { get; private set; }
         public int NLabel { get; private set; }
         public int SpecialIndexCount { get; private set; }
+        public List<short> SpecialIndexList { get; private set; }
+        public List<Circle> NoSpawns { get; private set; }
 
         public MarkerSet(MpqFile file)
         {
@@ -47,9 +49,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Markers = stream.ReadSerializedData<Marker>();
 
             stream.Position += (15 * 4);
-            var pointerSpawns = stream.GetSerializedDataPointer();
-            //TODO Load spawn locations
-
+            NoSpawns = stream.ReadSerializedData<Circle>();
             stream.Position += (14 * 4);
             this.AABB = new AABB(stream);
             int i0 = stream.ReadValueS32();
@@ -58,13 +58,9 @@ namespace Mooege.Common.MPQ.FileFormats
             this.ContainsActorLocations = i0 == 1;
 
             this.FileName = stream.ReadString(256, true);
-
             this.NLabel = stream.ReadValueS32();
-            SpecialIndexCount = stream.ReadValueS32();
-
-            var pointerSpecialIndexList = stream.GetSerializedDataPointer();
-            // TODO Load PointerSpecialIndexList
-
+            this.SpecialIndexCount = stream.ReadValueS32();
+            this.SpecialIndexList = stream.ReadSerializedShorts();
             stream.Close();
         }
     }
@@ -76,8 +72,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public PRTransform PRTransform { get; private set; }
         public SNOHandle SNOHandle { get; private set; }
         public TagMap TagMap { get; private set; }
-        public int IntTagMap { get; private set; }
-        public int Int1 { get; private set; }
+        public int MarkerLinksCount { get; private set; }
         public List<MarkerLink> MarkerLinks = new List<MarkerLink>();
 
         public void Read(MpqFileStream stream)
@@ -86,14 +81,9 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Type = (MarkerType)stream.ReadValueS32();
             this.PRTransform = new PRTransform(stream);
             this.SNOHandle = new SNOHandle(stream);
-
             this.TagMap = stream.ReadSerializedItem<TagMap>();
-
-            // Un sure about these 3 ints, 010template isnt the same as snodata.xml - DarkLotus
-            // IntTagMap && Int2 are always 0 for beta. leave it here only because xml does not match either -farmy
-            this.IntTagMap = stream.ReadValueS32();
-            Int1 = stream.ReadValueS32();
-            var int2 = stream.ReadValueS32();
+            stream.Position += 8;
+            this.MarkerLinksCount = stream.ReadValueS32();
             this.MarkerLinks = stream.ReadSerializedData<MarkerLink>();
             stream.Position += (3 * 4);
         }
@@ -101,6 +91,18 @@ namespace Mooege.Common.MPQ.FileFormats
         public override string ToString()
         {
             return string.Format("{0}, {1}", Name, SNOHandle.Name);
+        }
+    }
+
+    public class Circle : ISerializableData
+    {
+        public Vector2F Center { get; private set; }
+        public float Radius { get; private set; }
+
+        public void Read(MpqFileStream stream)
+        {
+            Center = new Vector2F(stream.ReadValueF32(), stream.ReadValueF32());
+            Radius = stream.ReadValueF32();
         }
     }
 
@@ -121,14 +123,18 @@ namespace Mooege.Common.MPQ.FileFormats
         Actor = 0,
         Light,
 
+        AudioVolume = 4,
         AmbientSound = 6,
         Particle = 7,
 
         Encounter = 10,
 
+        Script = 13,
+
         SubScenePosition = 16,
 
         MinimapMarker = 28,
+        Event = 29,
 
         // don't blame me - farmy :-)
         GizmoLocationA = 50,

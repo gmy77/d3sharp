@@ -317,7 +317,7 @@ namespace Mooege.Core.GS.Actors
                 ActorId = (int)DynamicID,
                 Position = destination,
                 Angle = angle,
-                Field3 = false,
+                TurnImmediately = false,
                 Speed = speed,
                 AnimationTag = animationTag,
             }, this);
@@ -431,10 +431,10 @@ namespace Mooege.Core.GS.Actors
                 {
                     new PlayAnimationMessageSpec
                     {
-                        Field0 = ticksToPlay.HasValue ? ticksToPlay.Value : -2,  // -2 = play animation once through
-                        Field1 = animationSNO,
-                        Field2 = 0x0,  // TODO: implement variations?
-                        Field3 = speed,
+                        Duration = ticksToPlay.HasValue ? ticksToPlay.Value : -2,  // -2 = play animation once through
+                        AnimationSNO = animationSNO,
+                        PermutationIndex = 0x0,  // TODO: implement variations?
+                        Speed = speed,
                     }
                 }
             }, this);
@@ -769,7 +769,7 @@ namespace Mooege.Core.GS.Actors
                 ActorId = (int)this.DynamicID,
                 Position = point,
                 Angle = facingAngle,
-                Field3 = false,
+                TurnImmediately = false,
                 Speed = this.WalkSpeed,
                 Field5 = 0,
                 AnimationTag = this.AnimationSet == null ? 0 : this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk)

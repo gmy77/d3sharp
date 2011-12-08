@@ -44,8 +44,6 @@ namespace Mooege.Common.MPQ
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture so that we don't hit pitfalls in non en/US systems with different number formats.
             _data = (FileFormat)Activator.CreateInstance(Parser, new object[] { MpqFile });
             PersistenceManager.LoadPartial(_data, SNOId.ToString());
-
-            //PersistenceManager.Save(this.Data, SNOId.ToString());
         }
     }
 }

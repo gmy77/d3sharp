@@ -37,7 +37,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int ScriptFormulaCount { get; private set; }
         public List<ScriptFormulaDetails> ScriptFormulaDetails = new List<ScriptFormulaDetails>();
         public int i3 { get; private set; }
-        public List<byte> CompliedScript = new List<byte>();
+        public string CompiledScript { get; private set; }
         public int SNOQuestMetaData { get; private set; }
 
         public Power(MpqFile file)
@@ -57,19 +57,7 @@ namespace Mooege.Common.MPQ.FileFormats
             i3 = stream.ReadValueS32();
             stream.Position += (3 * 4);
 
-            // TODO: please fix this - use our serializable-data readers instead! /raist
-            // TODO add a class for complied script so it can be deserialized properly. - DarkLotus
-            // none of the .pow appear to have any data here, and stream position appears to be correct, unsure - DarkLotus
-            var serCompliedScript = stream.GetSerializedDataPointer();
-            if (serCompliedScript.Size > 0)
-            {
-                long x = stream.Position;
-                stream.Position = serCompliedScript.Offset + 16;
-                var buf = new byte[serCompliedScript.Size];
-                stream.Read(buf, 0, serCompliedScript.Size);
-                stream.Position = x;
-                CompliedScript.AddRange(buf);
-            }
+            CompiledScript = System.Text.Encoding.ASCII.GetString(stream.ReadSerializedByteArray());
             SNOQuestMetaData = stream.ReadValueS32();
             stream.Close();
         }

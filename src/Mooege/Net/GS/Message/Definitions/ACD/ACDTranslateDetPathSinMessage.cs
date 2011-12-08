@@ -41,6 +41,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public float Field13;
         public DPathSinData Field14;
 
+        public ACDTranslateDetPathSinMessage() : base(Opcodes.ACDTranslateDetPathSinMessage) { }
 
 
 

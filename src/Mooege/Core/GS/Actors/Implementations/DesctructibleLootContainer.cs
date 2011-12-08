@@ -84,10 +84,10 @@ namespace Mooege.Core.GS.Actors.Implementations
                 {
                     new Net.GS.Message.Fields.PlayAnimationMessageSpec()
                     {
-                        Field0 = 10,
-                        Field1 = AnimationSet.TagMapAnimDefault[AnimationSetKeys.DeathDefault],
-                        Field2 = 0,
-                        Field3 = 1
+                        Duration = 10,
+                        AnimationSNO = AnimationSet.TagMapAnimDefault[AnimationSetKeys.DeathDefault],
+                        PermutationIndex = 0,
+                        Speed = 1
                     }
                 }
 

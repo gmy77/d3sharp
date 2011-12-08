@@ -42,7 +42,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public float Field14;
         public float Field15;
 
-
+        public ACDTranslateDetPathMessage() : base(Opcodes.ACDTranslateDetPathMessage) { }
 
 
         public override void Parse(GameBitBuffer buffer)

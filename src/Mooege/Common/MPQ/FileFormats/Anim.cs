@@ -203,12 +203,12 @@ namespace Mooege.Common.MPQ.FileFormats
     public class RotationKey : ISerializableData
     {
         public int I0 { get; private set; }
-        public Quaternion Q0 { get; private set; }
+        public Quaternion16 Q0 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             this.I0 = stream.ReadValueS32();
-            this.Q0 = new Quaternion(stream);
+            this.Q0 = new Quaternion16(stream);
         }
     }
 
@@ -250,4 +250,25 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
+    public class Quaternion16
+    {
+        public short Short0;
+        public short Short1;
+        public short Short2;
+        public short Short3;
+
+        public Quaternion16() { }
+
+        /// <summary>
+        /// Reads Quaternion16 from given MPQFileStream.
+        /// </summary>
+        /// <param name="stream">The MPQFileStream to read from.</param>
+        public Quaternion16(MpqFileStream stream)
+        {
+            this.Short0 = stream.ReadValueS16();
+            this.Short1 = stream.ReadValueS16();
+            this.Short2 = stream.ReadValueS16();
+            this.Short3 = stream.ReadValueS16();
+        }
+    }
 }

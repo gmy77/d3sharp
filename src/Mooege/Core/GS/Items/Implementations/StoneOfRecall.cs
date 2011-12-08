@@ -1,4 +1,4 @@
-﻿﻿/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,27 +16,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
-using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Common.Types.TagMap;
+using System.Text;
 
-namespace Mooege.Core.GS.Actors.Implementations
+namespace Mooege.Core.GS.Items.Implementations
 {
-    public class StartingPoint : Gizmo
+    [HandledItem("StoneOfRecall")]
+    class StoneOfRecall : Item
     {
-        public int TargetId { get; private set; }
-
-        public StartingPoint(World world, int snoId, TagMap tags)
-            : base(world, snoId, tags)
+        public StoneOfRecall(GS.Map.World world, Mooege.Common.MPQ.FileFormats.ItemTable definition)
+            : base(world, definition)
         {
         }
 
-        protected override void ReadTags()
+        public override void OnTargeted(Players.Player player, Net.GS.Message.Definitions.World.TargetMessage message)
         {
-            if (this.Tags == null) return;
-
-            if (this.Tags.ContainsKey(MarkerKeys.ActorTag))
-                this.TargetId = this.Tags[MarkerKeys.ActorTag];
+            player.EnableStoneOfRecall();
+            this.Destroy();
         }
     }
 }
