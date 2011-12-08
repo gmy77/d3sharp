@@ -93,10 +93,10 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override void OnChannelOpen()
         {
-            RunDelay = 0.5f;
+            EffectsPerSecond = 0.5f;
         }
 
-        public override IEnumerable<TickTimer> RunChannel()
+        public override IEnumerable<TickTimer> Main()
         {
             User.TranslateFacing(TargetPosition);
 
@@ -203,7 +203,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override void OnChannelOpen()
         {
-            RunDelay = 0.1f;
+            EffectsPerSecond = 0.1f;
 
             _calcTargetPosition();
             _target = SpawnEffect(52687, TargetPosition, 0, WaitInfinite());
@@ -223,16 +223,16 @@ namespace Mooege.Core.GS.Powers.Implementations
             // client updates target actor position
         }
 
-        public override IEnumerable<TickTimer> RunChannel()
+        public override IEnumerable<TickTimer> Main()
         {
-            UsePrimaryResource(23f * RunDelay);
+            UsePrimaryResource(23f * EffectsPerSecond);
 
             foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f))
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
                 {  
                     //actor.PlayEffectGroup(18793);
-                    WeaponDamage(actor, 1.35f * RunDelay, DamageType.Arcane);
+                    WeaponDamage(actor, 1.35f * EffectsPerSecond, DamageType.Arcane);
                 }
             }
 
@@ -269,7 +269,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override void OnChannelOpen()
         {
-            RunDelay = 0.2f;
+            EffectsPerSecond = 0.2f;
 
             _targetProxy = SpawnProxy(TargetPosition, WaitInfinite());
             _userProxy = SpawnProxy(User.Position, WaitInfinite());
@@ -284,20 +284,20 @@ namespace Mooege.Core.GS.Powers.Implementations
             _userProxy.Destroy();
         }
 
-        public override IEnumerable<TickTimer> RunChannel()
+        public override IEnumerable<TickTimer> Main()
         {
-            UsePrimaryResource(20f * RunDelay);
+            UsePrimaryResource(20f * EffectsPerSecond);
 
             Vector3D laggyPosition = new Vector3D(TargetPosition);
 
             yield return WaitSeconds(0.9f);
 
             // update proxy target delayed so animation lines up with explosions a bit better
-            if (ChannelOpen)
+            if (IsChannelOpen)
                 _targetProxy.TranslateNormal(laggyPosition, 8f);
 
             SpawnEffect(97821, laggyPosition);
-            WeaponDamage(GetEnemiesInRadius(laggyPosition, 6f), 2.00f * RunDelay, DamageType.Arcane);
+            WeaponDamage(GetEnemiesInRadius(laggyPosition, 6f), 2.00f * EffectsPerSecond, DamageType.Arcane);
         }
     }
 
@@ -369,7 +369,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override void OnChannelOpen()
         {
-            RunDelay = 0.1f;
+            EffectsPerSecond = 0.1f;
 
             _calcTargetPosition();
             _target = SpawnEffect(6535, TargetPosition, 0, WaitInfinite());
@@ -389,15 +389,15 @@ namespace Mooege.Core.GS.Powers.Implementations
             // client updates target actor position
         }
         
-        public override IEnumerable<TickTimer> RunChannel()
+        public override IEnumerable<TickTimer> Main()
         {
-            UsePrimaryResource(29f * RunDelay);
+            UsePrimaryResource(29f * EffectsPerSecond);
 
             foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f))
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
                 {
-                    WeaponDamage(actor, 2.70f * RunDelay, DamageType.Cold);
+                    WeaponDamage(actor, 2.70f * EffectsPerSecond, DamageType.Cold);
                 }
             }
 

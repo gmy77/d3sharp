@@ -33,7 +33,7 @@ namespace Mooege.Core.GS.Powers
         // main handler called to generate effects for skill
         public abstract IEnumerable<TickTimer> Main();
                 
-        public override IEnumerable<TickTimer> Run()
+        public sealed override IEnumerable<TickTimer> Run()
         {
             // play starting animation and effects
             _PlayActionAnimation();

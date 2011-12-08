@@ -26,26 +26,42 @@ namespace Mooege.Core.GS.Powers
 {
     public abstract class ChanneledSkill : PowerScript
     {
-        public bool ChannelOpen = false;
-        public float RunDelay = 1.0f;
+        public bool IsChannelOpen = false;
+        public float EffectsPerSecond = 1.0f;
 
         public virtual void OnChannelOpen() { }
         public virtual void OnChannelClose() { }
         public virtual void OnChannelUpdated() { }
-        public abstract IEnumerable<TickTimer> RunChannel();
+        public abstract IEnumerable<TickTimer> Main();
 
-        private TickTimer _runTimeout = null;
+        private TickTimer _effectTimeout = null;
 
         public sealed override IEnumerable<TickTimer> Run()
         {
-            if (_runTimeout == null || _runTimeout.TimedOut)
+            // process channeled skill events
+            if (IsChannelOpen)
             {
-                _runTimeout = WaitSeconds(RunDelay);
-                foreach (TickTimer timeout in RunChannel())
-                    yield return timeout;
+                OnChannelUpdated();
+            }
+            else  // first call to this skill's Run(), set channel as open
+            {
+                OnChannelOpen();
+                IsChannelOpen = true;
             }
 
-            yield break;
+            // run main script if ready
+            if (_effectTimeout == null || _effectTimeout.TimedOut)
+            {
+                _effectTimeout = WaitSeconds(EffectsPerSecond);
+                foreach (TickTimer timeout in Main())
+                    yield return timeout;
+            }
+        }
+
+        public void CloseChannel()
+        {
+            OnChannelClose();
+            IsChannelOpen = false;
         }
     }
 }

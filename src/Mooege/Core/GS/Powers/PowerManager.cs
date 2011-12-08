@@ -65,9 +65,15 @@ namespace Mooege.Core.GS.Powers
             // replace power with existing channel instance if one exists
             if (power is ChanneledSkill)
             {
-                var chanpow = _FindChannelingSkill(user, power.PowerSNO);
-                if (chanpow != null)
-                    power = chanpow;
+                var existingChannel = _FindChannelingSkill(user, power.PowerSNO);
+                if (existingChannel != null)
+                {
+                    power = existingChannel;
+                }
+                else  // new channeled skill, add it to the list
+                {
+                    _channeledSkills.Add((ChanneledSkill)power);
+                }
             }
 
             // copy in context params
@@ -76,22 +82,6 @@ namespace Mooege.Core.GS.Powers
             power.World = user.World;
             power.TargetPosition = targetPosition;
             power.TargetMessage = targetMessage;
-
-            // process channeled skill events
-            var channeledSkill = power as ChanneledSkill;
-            if (channeledSkill != null)
-            {
-                if (channeledSkill.ChannelOpen)
-                {
-                    channeledSkill.OnChannelUpdated();
-                }
-                else
-                {
-                    channeledSkill.OnChannelOpen();
-                    channeledSkill.ChannelOpen = true;
-                    _channeledSkills.Add(channeledSkill);
-                }
-            }
 
             _StartScript(power);
             return true;
@@ -217,8 +207,7 @@ namespace Mooege.Core.GS.Powers
             var channeledSkill = _FindChannelingSkill(user, powerSNO);
             if (channeledSkill != null)
             {
-                channeledSkill.OnChannelClose();
-                channeledSkill.ChannelOpen = false;
+                channeledSkill.CloseChannel();
                 _channeledSkills.Remove(channeledSkill);
             }
             else
@@ -231,7 +220,7 @@ namespace Mooege.Core.GS.Powers
         {
             return _channeledSkills.FirstOrDefault(impl => impl.User == user &&
                                                            impl.PowerSNO == powerSNO &&
-                                                           impl.ChannelOpen);
+                                                           impl.IsChannelOpen);
         }
 
         private void _StartScript(PowerScript script)

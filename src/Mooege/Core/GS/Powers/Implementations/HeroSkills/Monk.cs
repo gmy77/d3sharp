@@ -40,7 +40,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             float reachLength;
             float reachThickness;
 
-            switch(TargetMessage.Field5)
+            switch(ComboIndex)
             {
                 case 0:
                     reachLength = 13;
