@@ -27,6 +27,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int Field0;
         public GBHandle Field1;
 
+        public ACDChangeGBHandleMessage() : base(Opcodes.ACDChangeGBHandleMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);

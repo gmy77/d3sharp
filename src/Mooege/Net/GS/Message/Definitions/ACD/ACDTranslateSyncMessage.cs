@@ -29,6 +29,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public Vector3D Field1;
         public bool? Field2;
 
+        public ACDTranslateSyncMessage() : base(Opcodes.ACDTranslateSyncMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);

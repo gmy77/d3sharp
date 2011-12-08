@@ -113,11 +113,12 @@
     <Compile Include="Common\Helpers\Concurrency\ConcurrentList.cs" />
     <Compile Include="Common\Helpers\Math\FastRandom.cs" />
     <Compile Include="Common\Helpers\IO\FileHelpers.cs" />
-    <Compile Include="Common\MPQ\Asset.cs" />
+    <Compile Include="Common\MPQ\MPQAsset.cs" />
     <Compile Include="Common\MPQ\Data.cs" />
     <Compile Include="Common\MPQ\FileFormats\Act.cs" />
     <Compile Include="Common\MPQ\FileFormats\Actor.cs" />
     <Compile Include="Common\MPQ\FileFormats\Adventure.cs" />
+    <Compile Include="Common\MPQ\FileFormats\Anim.cs" />
     <Compile Include="Common\MPQ\FileFormats\AnimSet.cs" />
     <Compile Include="Common\MPQ\FileExtensions.cs" />
     <Compile Include="Common\MPQ\FileFormat.cs" />
@@ -145,10 +146,19 @@
     <Compile Include="Common\MPQ\FileFormats\SkillKit.cs" />
     <Compile Include="Common\MPQ\FileFormats\TreasureClass.cs" />
     <Compile Include="Common\MPQ\FileFormats\Tutorial.cs" />
-    <Compile Include="Common\MPQ\LazyAsset.cs" />
+    <Compile Include="Common\MPQ\Asset.cs" />
+    <Compile Include="Common\MPQ\DBAsset.cs" />
+    <Compile Include="Common\Storage\PersistenceManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Artisans\ArtisanShortcut.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Checkpoint.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\LootContainer.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Healthwell.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\ProximityTriggeredGizmo.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\DesctructibleLootContainer.cs" />
     <Compile Include="Core\GS\Actors\Implementations\NephalemAltar.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Savepoint.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Shrine.cs" />
     <Compile Include="Core\GS\Actors\Movement\MoveToPointWithPathfindAction.cs" />
     <Compile Include="Core\GS\Actors\ServerProp.cs" />
     <Compile Include="Core\GS\AI\Pathfinder.cs" />
@@ -230,7 +240,6 @@
     <Compile Include="Core\GS\Map\Debug\WorldVisualizer.Designer.cs">
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\GS\Markers\Marker.cs" />
     <Compile Include="Core\GS\Games\Quest.cs" />
     <Compile Include="Core\GS\Players\ConversationManager.cs" />
     <Compile Include="Core\GS\Common\InventoryGrid.cs" />
@@ -323,6 +332,7 @@
     <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\UpdateConvAutoAdvanceMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Misc\ShrineActivatedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\NephalemAltarWindowClosedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBannerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Tutorial\TutorialMessage.cs" />
@@ -607,6 +617,10 @@
     <None Include="..\..\assets\config.ini">
       <Link>config.ini</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\mpqdata.db">
+      <Link>Assets\mpqdata.db</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\MPQ\IMPORTANT">
       <Link>Assets\MPQ\IMPORTANT</Link>

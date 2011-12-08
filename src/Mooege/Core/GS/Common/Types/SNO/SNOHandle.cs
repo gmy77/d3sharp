@@ -48,7 +48,7 @@ namespace Mooege.Core.GS.Common.Types.SNO
         /// <summary>
         /// The id of the referenced object
         /// </summary>
-        [PersistentProperty] public int Id { get; private set; }
+        [PersistentProperty("Id")] public int Id { get; private set; }
 
         /// <summary>
         /// The target object this handle refers to.

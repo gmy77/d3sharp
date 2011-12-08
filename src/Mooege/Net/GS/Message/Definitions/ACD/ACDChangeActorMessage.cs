@@ -26,6 +26,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int Field0;
         public int /* sno */ Field1;
 
+        public ACDChangeActorMessage() : base(Opcodes.ACDChangeActorMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);

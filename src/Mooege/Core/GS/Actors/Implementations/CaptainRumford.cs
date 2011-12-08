@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations

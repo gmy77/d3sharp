@@ -25,6 +25,7 @@ using System.Reflection;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats.Types;
+using Mooege.Common.Storage;
 
 namespace Mooege.Core.GS.Common.Types.TagMap
 {
@@ -37,7 +38,9 @@ namespace Mooege.Core.GS.Common.Types.TagMap
     {
 
         public int TagMapSize { get; private set; }
-        private Dictionary<int, TagMapEntry> _tagMapEntries;
+
+        [PersistentProperty("TagMapEntries")]
+        private Dictionary<int, TagMapEntry> _tagMapEntries { get; set; }
 
         [Obsolete("Use TagKeys instead. If it is missing create it.")]
         public List<TagMapEntry> TagMapEntries
@@ -183,11 +186,22 @@ namespace Mooege.Core.GS.Common.Types.TagMap
 
     public class TagMapEntry
     {
+        [PersistentProperty("Type")]
         public int Type { get; private set; }
+
+        [PersistentProperty("TagID")]
         public int TagID { get; private set; }
+
+        [PersistentProperty("ScriptFormula")]
         public ScriptFormula ScriptFormula { get; private set; }
+
+        [PersistentProperty("Int")]
         public int Int { get; private set; }
+
+        [PersistentProperty("Float")]
         public float Float { get; private set; }
+
+        public TagMapEntry() { }
 
         public TagMapEntry(int tag, int value, int type)
         {

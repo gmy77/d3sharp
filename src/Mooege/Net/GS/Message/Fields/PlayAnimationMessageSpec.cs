@@ -20,27 +20,43 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Fields
 {
+
     public class PlayAnimationMessageSpec
     {
-        public int Field0;
-        public int /* sno */ Field1;
-        public int Field2;
-        public float Field3;
+        /// <summary>
+        /// Duration in ticks the animation plays. If set too short, animation just stop
+        /// </summary>
+        public int Duration;
+
+        /// <summary>
+        /// SNOId of the animation to play
+        /// </summary>
+        public int AnimationSNO;
+
+        /// <summary>
+        /// Inded of the permutation within the animation object
+        /// </summary>
+        public int PermutationIndex;
+
+        /// <summary>
+        /// Speed in which to play the animation
+        /// </summary>
+        public float Speed;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
-            Field2 = buffer.ReadInt(32);
-            Field3 = buffer.ReadFloat32();
+            Duration = buffer.ReadInt(32);
+            AnimationSNO = buffer.ReadInt(32);
+            PermutationIndex = buffer.ReadInt(32);
+            Speed = buffer.ReadFloat32();
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
-            buffer.WriteInt(32, Field2);
-            buffer.WriteFloat32(Field3);
+            buffer.WriteInt(32, Duration);
+            buffer.WriteInt(32, AnimationSNO);
+            buffer.WriteInt(32, PermutationIndex);
+            buffer.WriteFloat32(Speed);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -50,13 +66,13 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.AppendLine("Duration: 0x" + Duration.ToString("X8") + " (" + Duration + " ticks)");
             b.Append(' ', pad);
-            b.AppendLine("Field1: 0x" + Field1.ToString("X8"));
+            b.AppendLine("AnimationSNO: 0x" + AnimationSNO.ToString("X8"));
             b.Append(' ', pad);
-            b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.AppendLine("PermutationIndex: 0x" + PermutationIndex.ToString("X8") + " (" + PermutationIndex + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field3: " + Field3.ToString("G"));
+            b.AppendLine("Speed: " + Speed.ToString("G"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

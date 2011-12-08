@@ -36,7 +36,7 @@ namespace Mooege.Common.MPQ
         public Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>> Assets = new Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>>();
         public readonly Dictionary<SNOGroup, Type> Parsers = new Dictionary<SNOGroup, Type>();
         private readonly List<Task> _tasks = new List<Task>();
-        private static readonly SNOGroup[] PatchExceptions = new[] { SNOGroup.TimedEvent, SNOGroup.ConversationList, SNOGroup.Script, SNOGroup.AiBehavior, SNOGroup.AiState, SNOGroup.Conductor, SNOGroup.FlagSet, SNOGroup.Code };
+        private static readonly SNOGroup[] PatchExceptions = new[] { SNOGroup.TimedEvent, SNOGroup.Script, SNOGroup.AiBehavior, SNOGroup.AiState, SNOGroup.Conductor, SNOGroup.FlagSet, SNOGroup.Code };
 
         public Data()
             : base(VersionInfo.MPQ.RequiredPatchVersion, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
@@ -135,6 +135,9 @@ namespace Mooege.Common.MPQ
         /// </summary>
         private void LoadDBCatalog()
         {
+            int assetCount = 0;
+            var timerStart = DateTime.Now;
+
             using (var cmd = new SQLiteCommand("SELECT * FROM TOC", DBManager.MPQMirror))
             {
                 var itemReader = cmd.ExecuteReader();
@@ -147,9 +150,16 @@ namespace Mooege.Common.MPQ
                             (SNOGroup)Enum.Parse(typeof(SNOGroup), itemReader["SNOGroup"].ToString()),
                             Convert.ToInt32(itemReader["SNOId"]),
                             itemReader["Name"].ToString()));
+                        assetCount++;
                     }
                 }
             }
+
+            if (Storage.Config.Instance.LazyLoading)
+                Logger.Info("Found a total of {0} assets from DB catalog and postponed loading because lazy loading is activated.", assetCount);
+            else
+                Logger.Info("Found a total of {0} assets from DB catalog and parsed {1} of them in {2:c}.", assetCount, this._tasks.Count, DateTime.Now - timerStart);
+
         }
 
         /// <summary>

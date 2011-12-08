@@ -68,7 +68,9 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public static TagKeySNO SoundFootstepSnow = new TagKeySNO(66062);
         public static TagKeySNO SoundFootstepWater4 = new TagKeySNO(66063);
 
-        
+        public static TagKeySNO SoundFootstepCarpet = new TagKeySNO(69644);
+
+
         public static TagKeySNO Projectile = new TagKeySNO(66138);
 
 

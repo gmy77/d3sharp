@@ -52,10 +52,10 @@ namespace Mooege.Core.GS.Actors.Implementations
                     {
                         new Net.GS.Message.Fields.PlayAnimationMessageSpec()
                         {
-                            Field0 = duration,
-                            Field1 = ActorData.TagMap.ContainsKey(ActorKeys.DeathAnimationTag) ? AnimationSet.TagMapAnimDefault[ActorData.TagMap[ActorKeys.DeathAnimationTag]].Int : AnimationSet.TagMapAnimDefault[AnimationSetKeys.DeathDefault] ,
-                            Field2 = 0,
-                            Field3 = 1
+                            Duration = duration,
+                            AnimationSNO = ActorData.TagMap.ContainsKey(ActorKeys.DeathAnimationTag) ? AnimationSet.TagMapAnimDefault[ActorData.TagMap[ActorKeys.DeathAnimationTag]].Int : AnimationSet.TagMapAnimDefault[AnimationSetKeys.DeathDefault] ,
+                            PermutationIndex = 0,
+                            Speed = 1
                         }
                     }
 
