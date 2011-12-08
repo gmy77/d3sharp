@@ -49,7 +49,7 @@ namespace Mooege.Core.GS.Generators
             var worldData = (Mooege.Common.MPQ.FileFormats.World)worldAsset.Data;
 
 
-            if (worldData.SceneParams.SceneChunks.Count == 0)
+            if (worldData.IsGenerated)
             {
                 Logger.Error("World {0} [{1}] is a dynamic world! Can't generate dynamic worlds yet!", worldAsset.Name, worldAsset.SNOId);
                 return null;
@@ -394,7 +394,7 @@ namespace Mooege.Core.GS.Generators
             {
                 var mpqMarkerSet = MPQStorage.Data.Assets[SNOGroup.MarkerSet][markerSet].Data as Mooege.Common.MPQ.FileFormats.MarkerSet;
                 foreach (var marker in mpqMarkerSet.Markers)
-                    if (marker.Type == Mooege.Common.MPQ.FileFormats.MarkerType.SubScenePosition)      // TODO Make this an enum value /farmy
+                    if (marker.Type == Mooege.Common.MPQ.FileFormats.MarkerType.SubScenePosition)
                         return marker.PRTransform.Vector3D;
             }
 

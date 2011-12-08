@@ -20,12 +20,16 @@ using System.Text;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Net.GS.Message;
+using Mooege.Common.Storage;
 
 namespace Mooege.Core.GS.Common.Types.Math
 {
     public class Vector2D
     {
+        [PersistentProperty("X")]
         public int X;
+
+        [PersistentProperty("Y")]
         public int Y;
 
         public Vector2D() { }
