@@ -31,14 +31,10 @@ using Mooege.Core.GS.Powers.Payloads;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.Bash)]
-    public class BarbarianBash : PowerScript
+    public class BarbarianBash : Skill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
-            yield return WaitSeconds(0.25f); // wait for swing animation
-
-            User.PlayEffectGroup(18662);
-
             Actor hit = GetBestMeleeEnemy();
             if (hit != null)
             {
@@ -58,12 +54,18 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             yield break;
         }
+
+        public override float GetContactDelay()
+        {
+            // seems to need this custom speed for all attacks
+            return ScriptFormula(13);
+        }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.LeapAttack)]
-    public class BarbarianLeap : PowerScript
+    public class BarbarianLeap : Skill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
             //StartCooldown(WaitSeconds(10f));
 
@@ -112,9 +114,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FurySpenders.Whirlwind)]
-    public class BarbarianWhirlwind : PowerScript
+    public class BarbarianWhirlwind : Skill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
             AddBuff(User, new WhirlwindEffect());
             yield break;
@@ -175,9 +177,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.AncientSpear)]
-    public class BarbarianAncientSpear : PowerScript
+    public class BarbarianAncientSpear : Skill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
             //StartCooldown(WaitSeconds(10f));
 
@@ -192,9 +194,16 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                 _setupReturnProjectile(hit.Position);
 
-                // GET OVER HERE
-                hit.TranslateNormal(inFrontOfUser, 2f);
-                WeaponDamage(hit, 1.00f, DamageType.Physical);
+                AttackPayload attack = new AttackPayload(this);
+                attack.AddTarget(hit);
+                attack.AddWeaponDamage(1.00f, DamageType.Physical);
+                attack.AutomaticHitEffects = false;
+                attack.OnHit = (hitPayload) =>
+                {
+                    // GET OVER HERE
+                    hit.TranslateNormal(inFrontOfUser, 2f);
+                };
+                attack.Apply();
 
                 projectile.Destroy();
             };
