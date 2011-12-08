@@ -62,22 +62,7 @@ namespace Mooege.Core.GS.Powers.Payloads
                 ActorID = this.Target.DynamicID
             }, this.Target);
 
-            this.Target.World.BroadcastIfRevealed(new PlayAnimationMessage
-            {
-                ActorID = this.Target.DynamicID,
-                Field1 = 0xb,
-                Field2 = 0,
-                tAnim = new PlayAnimationMessageSpec[]
-                {
-                    new PlayAnimationMessageSpec
-                    {
-                        Field0 = 0x2,
-                        Field1 = _FindBestDeathAnimationSNO(),
-                        Field2 = 0x0,
-                        Field3 = 1f
-                    }
-                }
-            }, this.Target);
+            this.Target.PlayAnimation(11, _FindBestDeathAnimationSNO(), 1f, 2);
 
             this.Target.World.BroadcastIfRevealed(new ANNDataMessage(Opcodes.ANNDataMessage24)
             {

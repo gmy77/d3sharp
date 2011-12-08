@@ -615,7 +615,7 @@ namespace Mooege.Core.GS.Players
 
         private void OnObjectTargeted(GameClient client, TargetMessage message)
         {
-            bool powerHandled = this.World.PowerManager.UsePower(this, message.PowerSNO, message.TargetID, message.Field2.Position, message);
+            bool powerHandled = this.World.PowerManager.RunPower(this, message.PowerSNO, message.TargetID, message.Field2.Position, message);
 
             if (!powerHandled)
             {

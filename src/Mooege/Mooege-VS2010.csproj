@@ -107,13 +107,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\GS\Powers\ComboSkill.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\StatusDebuffs.cs" />
     <Compile Include="Core\GS\Powers\Payloads\AttackPayload.cs" />
     <Compile Include="Core\GS\Powers\BaseBuffs.cs" />
     <Compile Include="Core\GS\Powers\BuffManager.cs" />
     <Compile Include="Core\GS\Powers\ImplementsPowerBuff.cs" />
     <Compile Include="Core\GS\Powers\EffectActor.cs" />
-    <Compile Include="Core\GS\Powers\ChanneledPower.cs" />
+    <Compile Include="Core\GS\Powers\ChanneledSkill.cs" />
     <Compile Include="Core\GS\Powers\DamageType.cs" />
     <Compile Include="Core\GS\Powers\Payloads\DeathPayload.cs" />
     <Compile Include="Core\GS\Powers\Payloads\HitPayload.cs" />
@@ -273,6 +274,7 @@
     <Compile Include="Core\GS\Objects\IUpdateable.cs" />
     <Compile Include="Core\GS\Players\ExpBonusData.cs" />
     <Compile Include="Core\GS\Players\Equipment.cs" />
+    <Compile Include="Core\GS\Powers\Skill.cs" />
     <Compile Include="Core\GS\Ticker\SteppedTickTimer.cs" />
     <Compile Include="Core\GS\Ticker\TickTimer.cs" />
     <Compile Include="Core\GS\Web\GSWebService.cs" />

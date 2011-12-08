@@ -70,13 +70,13 @@ namespace Mooege.Core.GS.Powers.Implementations
             inFrontOfTarget.Z = User.Position.Z;
             var garggy = SpawnEffect(122305, inFrontOfTarget, TargetPosition, WaitInfinite());
 
-            PlayAnimationGeneric(garggy, 155988);
+            garggy.PlayActionAnimation(155988);
 
             yield return WaitSeconds(2f);
 
             for (int n = 0; n < 3; ++n)
             {
-                PlayAnimationGeneric(garggy, 211382);
+                garggy.PlayActionAnimation(211382);
 
                 yield return WaitSeconds(0.5f);
 
@@ -86,10 +86,10 @@ namespace Mooege.Core.GS.Powers.Implementations
                 yield return WaitSeconds(0.4f);
             }
 
-            PlayAnimationGeneric(garggy, 155536); //mwhaha
+            garggy.PlayActionAnimation(155536); //mwhaha
             yield return WaitSeconds(1.5f);
 
-            PlayAnimationGeneric(garggy, 171024);
+            garggy.PlayActionAnimation(171024);
             yield return WaitSeconds(2f);
 
             garggy.Destroy();
@@ -111,10 +111,10 @@ namespace Mooege.Core.GS.Powers.Implementations
             
             // HACK: holy hell there is alot of hardcoded animation timings here
             
-            PlayAnimationGeneric(bigtoad, 110766); // spawn ani
+            bigtoad.PlayActionAnimation(110766); // spawn ani
             yield return WaitSeconds(1f);
 
-            PlayAnimationGeneric(bigtoad, 110520); // attack ani
+            bigtoad.PlayActionAnimation(110520); // attack ani
             TickTimer waitAttackEnd = WaitSeconds(1.5f);
             yield return WaitSeconds(0.3f); // wait for attack ani to play a bit
 
@@ -141,7 +141,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (!waitAttackEnd.TimedOut)
                     yield return waitAttackEnd;
 
-                PlayAnimationGeneric(bigtoad, 110636); // disgest ani, 5 seconds
+                bigtoad.PlayActionAnimation(110636); // disgest ani, 5 seconds
                 for (int n = 0; n < 5 && ValidTarget(); ++n)
                 {
                     WeaponDamage(Target, 0.39f, DamageType.Poison);
@@ -152,14 +152,14 @@ namespace Mooege.Core.GS.Powers.Implementations
                 {
                     _SetHiddenAttribute(Target, false);
 
-                    PlayAnimationGeneric(bigtoad, 110637); // regurgitate ani
+                    bigtoad.PlayActionAnimation(110637); // regurgitate ani
                     Knockback(Target, userCastPosition, 6f);
                     Target.PlayEffectGroup(18281); // actual regurgitate efg isn't working so use generic acid effect
                     yield return WaitSeconds(0.9f);
                 }
             }
 
-            PlayAnimationGeneric(bigtoad, 110764); // despawn ani
+            bigtoad.PlayActionAnimation(110764); // despawn ani
             yield return WaitSeconds(0.7f);
             bigtoad.Destroy();
         }

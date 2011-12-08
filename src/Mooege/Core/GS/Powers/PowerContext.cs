@@ -325,25 +325,5 @@ namespace Mooege.Core.GS.Powers
         {
             return target.World.BuffManager.AddBuff(User, target, buff);
         }
-
-        public void PlayAnimationGeneric(Actor actor, int animationSNO, float speed = 1.0f)
-        {
-            actor.World.BroadcastIfRevealed(new PlayAnimationMessage
-            {
-                ActorID = actor.DynamicID,
-                Field1 = 0x3,
-                Field2 = 0,
-                tAnim = new PlayAnimationMessageSpec[]
-                {
-                    new PlayAnimationMessageSpec
-                    {
-                        Field0 = -2,  // play animation once through
-                        Field1 = animationSNO,
-                        Field2 = 0x0,
-                        Field3 = speed,
-                    }
-                }
-            }, actor);
-        }
     }
 }

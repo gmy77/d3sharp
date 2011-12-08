@@ -33,17 +33,17 @@ namespace Mooege.Core.GS.Powers
     {
         static readonly Logger Logger = LogManager.CreateLogger();
 
-        // list of all actively channeled powers
-        private List<ChanneledPower> _channeledPowers = new List<ChanneledPower>();
+        // list of all actively channeled skills
+        private List<ChanneledSkill> _channeledSkills = new List<ChanneledSkill>();
 
         // list of all executing power scripts
         private class ExecutingScript
         {
             public IEnumerator<TickTimer> PowerEnumerator;
-            public PowerScript Implementation;
+            public PowerScript Script;
         }
         private List<ExecutingScript> _executingScripts = new List<ExecutingScript>();
-
+        
         // list of actors that were killed and are waiting to be deleted
         // rather ugly hack needed because deleting actors immediatly when they have visual buff effects
         // applied causes the effects to stay around forever.
@@ -59,13 +59,13 @@ namespace Mooege.Core.GS.Powers
             _UpdateExecutingScripts();
         }
 
-        public bool UsePower(Actor user, PowerScript power, Actor target = null,
+        public bool RunPower(Actor user, PowerScript power, Actor target = null,
                              Vector3D targetPosition = null, TargetMessage targetMessage = null)
         {
             // replace power with existing channel instance if one exists
-            if (power is ChanneledPower)
+            if (power is ChanneledSkill)
             {
-                var chanpow = _FindChannelingPower(user, power.PowerSNO);
+                var chanpow = _FindChannelingSkill(user, power.PowerSNO);
                 if (chanpow != null)
                     power = chanpow;
             }
@@ -77,41 +77,31 @@ namespace Mooege.Core.GS.Powers
             power.TargetPosition = targetPosition;
             power.TargetMessage = targetMessage;
 
-            // process channeled power events
-            var channeledPower = power as ChanneledPower;
-            if (channeledPower != null)
+            // process channeled skill events
+            var channeledSkill = power as ChanneledSkill;
+            if (channeledSkill != null)
             {
-                if (channeledPower.ChannelOpen)
+                if (channeledSkill.ChannelOpen)
                 {
-                    channeledPower.OnChannelUpdated();
+                    channeledSkill.OnChannelUpdated();
                 }
                 else
                 {
-                    channeledPower.OnChannelOpen();
-                    channeledPower.ChannelOpen = true;
-                    _channeledPowers.Add(channeledPower);
+                    channeledSkill.OnChannelOpen();
+                    channeledSkill.ChannelOpen = true;
+                    _channeledSkills.Add(channeledSkill);
                 }
             }
 
-            var powerEnum = power.Run().GetEnumerator();
-            // actual power will first run here, if it yielded a timer process it in the executing list
-            if (powerEnum.MoveNext() && powerEnum.Current != PowerScript.StopExecution)
-            {
-                _executingScripts.Add(new ExecutingScript
-                {
-                    PowerEnumerator = powerEnum,
-                    Implementation = power
-                });
-            }
-
+            _StartScript(power);
             return true;
         }
         
-        // HACK: used for item spawn helper in UsePower()
+        // HACK: used for item spawn helper in StartPower()
         private bool _spawnedHelperItems = false;
 
-        public bool UsePower(Actor user, int powerSNO, uint targetId = uint.MaxValue, Vector3D targetPosition = null,
-                             TargetMessage targetMessage = null)
+        public bool RunPower(Actor user, int powerSNO, uint targetId = uint.MaxValue, Vector3D targetPosition = null,
+                               TargetMessage targetMessage = null)
         {
             Actor target;
 
@@ -195,7 +185,7 @@ namespace Mooege.Core.GS.Powers
             if (implementation != null)
             {
                 implementation.PowerSNO = powerSNO;
-                return UsePower(user, implementation, target, targetPosition, targetMessage);
+                return RunPower(user, implementation, target, targetPosition, targetMessage);
             }
             else
             {
@@ -222,14 +212,14 @@ namespace Mooege.Core.GS.Powers
             });
         }
 
-        public void CancelChanneledPower(Actor user, int powerSNO)
+        public void CancelChanneledSkill(Actor user, int powerSNO)
         {
-            var channeledPower = _FindChannelingPower(user, powerSNO);
-            if (channeledPower != null)
+            var channeledSkill = _FindChannelingSkill(user, powerSNO);
+            if (channeledSkill != null)
             {
-                channeledPower.OnChannelClose();
-                channeledPower.ChannelOpen = false;
-                _channeledPowers.Remove(channeledPower);
+                channeledSkill.OnChannelClose();
+                channeledSkill.ChannelOpen = false;
+                _channeledSkills.Remove(channeledSkill);
             }
             else
             {
@@ -237,11 +227,24 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
-        private ChanneledPower _FindChannelingPower(Actor user, int powerSNO)
+        private ChanneledSkill _FindChannelingSkill(Actor user, int powerSNO)
         {
-            return _channeledPowers.FirstOrDefault(impl => impl.User == user &&
+            return _channeledSkills.FirstOrDefault(impl => impl.User == user &&
                                                            impl.PowerSNO == powerSNO &&
                                                            impl.ChannelOpen);
+        }
+
+        private void _StartScript(PowerScript script)
+        {
+            var powerEnum = script.Run().GetEnumerator();
+            if (powerEnum.MoveNext() && powerEnum.Current != PowerScript.StopExecution)
+            {
+                _executingScripts.Add(new ExecutingScript
+                {
+                    PowerEnumerator = powerEnum,
+                    Script = script
+                });
+            }
         }
 
         private void _UpdateDeletingActors()

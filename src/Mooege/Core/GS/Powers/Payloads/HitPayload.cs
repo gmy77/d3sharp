@@ -97,7 +97,7 @@ namespace Mooege.Core.GS.Powers.Payloads
                     Number = this.TotalDamage,
                     // make player damage red, all other damage white
                     Type = this.IsCriticalHit ? 
-                        (this.Target is Player) ? FloatingNumberMessage.FloatType.RedCritical : FloatingNumberMessage.FloatType.WhiteCritical
+                        (this.Target is Player) ? FloatingNumberMessage.FloatType.RedCritical : FloatingNumberMessage.FloatType.Golden
                                               :
                         (this.Target is Player) ? FloatingNumberMessage.FloatType.Red : FloatingNumberMessage.FloatType.White
                 }, this.Target);
@@ -117,10 +117,14 @@ namespace Mooege.Core.GS.Powers.Payloads
                     this.Target.PlayHitEffect((int)this.DominantDamageType.HitEffect, this.Context.User);
                 }
 
-                // play override hitsound if any, otherwise just default to playing metal weapon hit for now
-                int overridenSound = this.Context.EvalTag(PowerKeys.HitsoundOverride);
-                int hitsound = overridenSound > 0 ? overridenSound : 1;
-                this.Target.PlayEffect(Net.GS.Message.Definitions.Effect.Effect.Hit, hitsound);
+                if (this.TotalDamage > 0f)
+                {
+                    // play override hitsound if any, otherwise just default to playing metal weapon hit for now
+                    int overridenSound = this.Context.EvalTag(PowerKeys.HitsoundOverride);
+                    int hitsound = overridenSound != -1 ? overridenSound : 1;
+                    if (hitsound > 0)
+                        this.Target.PlayEffect(Net.GS.Message.Definitions.Effect.Effect.Hit, hitsound);
+                }
             }
 
             // TODO: critical hit special element buff/effects
@@ -145,22 +149,8 @@ namespace Mooege.Core.GS.Powers.Payloads
                 int hitAni = this.Target.AnimationSet.GetAniSNO(Mooege.Common.MPQ.FileFormats.AnimationTags.GetHit);
                 if (hitAni != -1)
                 {
-                    this.Target.World.BroadcastIfRevealed(new PlayAnimationMessage
-                    {
-                        ActorID = this.Target.DynamicID,
-                        Field1 = 0x6,
-                        Field2 = 0,
-                        tAnim = new PlayAnimationMessageSpec[]
-                        {
-                            new PlayAnimationMessageSpec
-                            {
-                                Field0 = 40,  // HACK: harded animation length, we need to read these from .ani
-                                Field1 = hitAni,
-                                Field2 = 0x0,
-                                Field3 = 1f  // TODO: vary this based on hit recovery
-                            }
-                        }
-                    }, this.Target);
+                    // HACK: hardcoded animation speed/ticks, need to base those off hit recovery speed
+                    this.Target.PlayAnimation(6, hitAni, 1.0f, 40);
                 }
             }
 

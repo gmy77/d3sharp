@@ -33,30 +33,24 @@ using Mooege.Core.GS.Powers.Payloads;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.DeadlyReach)]
-    public class MonkDeadlyReach : PowerScript
+    public class MonkDeadlyReach : ComboSkill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
-            int effectSNO;
             float reachLength;
             float reachThickness;
 
             switch(TargetMessage.Field5)
             {
                 case 0:
-                    yield return WaitSeconds(0.1f);
-                    effectSNO = 140870;
                     reachLength = 13;
                     reachThickness = 3f;
                     break;
                 case 1:
-                    effectSNO = 140871;
                     reachLength = 14;
                     reachThickness = 4.5f;
                     break;
                 case 2:
-                    yield return WaitSeconds(0.3f);
-                    effectSNO = 140872;
                     reachLength = 18;
                     reachThickness = 4.5f;
                     break;
@@ -67,8 +61,6 @@ namespace Mooege.Core.GS.Powers.Implementations
             // calculate end of attack reach
             TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
                                                    User.Position, reachLength);
-
-            User.PlayEffectGroup(effectSNO);
 
             bool hitAnything = false;
             foreach (Actor actor in GetEnemiesInRadius(User.Position, reachLength + 10f))
@@ -88,37 +80,18 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.FistsOfThunder)]
-    public class MonkFistsOfThunder : PowerScript
+    public class MonkFistsOfThunder : ComboSkill
     {
-        float waitCombo(int combo)
-        {
-            switch (combo)
-            {
-                case 0: return 0.5f / EvalTag(PowerKeys.ComboAttackSpeed1);
-                case 1: return 0.5f / EvalTag(PowerKeys.ComboAttackSpeed2);
-                case 2: return 0.5f / EvalTag(PowerKeys.ComboAttackSpeed3);
-                default: return 5.0f;
-            }
-        }
-
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
             switch (TargetMessage.Field5)
             {
                 case 0:
-                    yield return WaitSeconds(waitCombo(0));
-                    User.PlayEffectGroup(143516);
-                    MeleeStageHit();
-                    break;
                 case 1:
-                    yield return WaitSeconds(waitCombo(1));
-                    User.PlayEffectGroup(143516);
                     MeleeStageHit();
                     break;
                 case 2:
-                    AddBuff(User, new ComboStage3Buff());
-                    yield return WaitSeconds(waitCombo(2));
-                    User.PlayEffectGroup(143518);
+                    //AddBuff(User, new ComboStage3Buff());
 
                     // put target position a little bit in front of the monk. represents the lightning ball
                     TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
@@ -162,9 +135,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.SevenSidedStrike)]
-    public class MonkSevenSidedStrike : PowerScript
+    public class MonkSevenSidedStrike : Skill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
             //UsePrimaryResource(50f);
             //StartCooldown(WaitSeconds(30f));
@@ -203,9 +176,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.CripplingWave)]
-    public class MonkCripplingWave : PowerScript
+    public class MonkCripplingWave : ComboSkill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
             int effectSNO;
             switch (TargetMessage.Field5)
@@ -253,20 +226,15 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.ExplodingPalm)]
-    public class MonkExplodingPalm : PowerScript
+    public class MonkExplodingPalm : ComboSkill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
-            yield return WaitSeconds(waitCombo(TargetMessage.Field5));
-
             AttackPayload attack = new AttackPayload(this);
-            int effectSNO;
             switch (TargetMessage.Field5)
             {
                 case 0:
                 case 1:
-                    effectSNO = 143841;
-
                     attack.AddTarget(GetBestMeleeEnemy());
                     attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
                     if (Rune_C > 0)
@@ -279,8 +247,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                     break;
 
                 case 2:
-                    effectSNO = 143473;
-
                     if (Rune_B > 0) // TODO: make this use arc, not beam
                         attack.AddTargets(GetEnemiesInBeamDirection(User.Position, TargetPosition, 0.1f, ScriptFormula(19) / 2f)
                                                                    .Take((int)ScriptFormula(18)).ToList());
@@ -297,21 +263,8 @@ namespace Mooege.Core.GS.Powers.Implementations
                 default:
                     yield break;
             }
-
-            User.PlayEffectGroup(effectSNO);
             attack.Apply();
             yield break;
-        }
-
-        float waitCombo(int combo)
-        {
-            switch (combo)
-            {
-                case 0: return 0.5f / EvalTag(PowerKeys.ComboAttackSpeed1);
-                case 1: return 0.5f / EvalTag(PowerKeys.ComboAttackSpeed2);
-                case 2: return 0.5f / EvalTag(PowerKeys.ComboAttackSpeed3);
-                default: return 5.0f;
-            }
         }
 
         [ImplementsPowerBuff(0)]
@@ -430,28 +383,10 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.SweepingWind)]
-    public class MonkSweepingWind : PowerScript
+    public class MonkSweepingWind : ComboSkill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
-            int effectSNO;
-            switch (TargetMessage.Field5)
-            {
-                case 0:
-                    effectSNO = 196981;
-                    break;
-                case 1:
-                    effectSNO = 196983;
-                    break;
-                case 2:
-                    effectSNO = 196984;
-                    break;
-                default:
-                    yield break;
-            }
-
-            User.PlayEffectGroup(effectSNO);
-
             Actor hit = GetBestMeleeEnemy();
             if (hit != null)
             {
@@ -463,10 +398,25 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-    [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.DashingStrike)]
-    public class MonkDashingStrike : PowerScript
+    [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.WayOfTheHundredFists)]
+    public class MonkWayOfTheHundredFists : ComboSkill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
+        {
+            yield break;
+        }
+
+        public override float GetContactDelay()
+        {
+            // no contact delay for hundred fists
+            return 0f;
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.DashingStrike)]
+    public class MonkDashingStrike : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
         {
             //UsePrimaryResource(15f);
 
@@ -558,13 +508,10 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.Mantras.MantraOfEvasion)]
-    public class MonkMantraOfEvasion : PowerScript
+    public class MonkMantraOfEvasion : Skill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
-            // cast effect
-            User.PlayEffectGroup(143964);
-
             AddBuff(User, new CasterBuff());
             foreach (Actor ally in GetAlliesInRadius(User.Position, ScriptFormula(0)))
                 AddBuff(User, new CastBonusBuff());
@@ -663,12 +610,10 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritSpenders.BlindingFlash)]
-    public class MonkBlindingFlash : PowerScript
+    public class MonkBlindingFlash : Skill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
-            User.PlayEffectGroup(137644);
-
             AttackPayload attack = new AttackPayload(this);
             attack.AddTargets(GetEnemiesInRadius(User.Position, ScriptFormula(1)));
             attack.OnHit = (hit) =>

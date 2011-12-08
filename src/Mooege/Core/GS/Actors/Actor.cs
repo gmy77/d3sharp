@@ -38,6 +38,7 @@ using Mooege.Core.GS.Common.Types.TagMap;
 using System;
 using Mooege.Core.GS.Powers;
 using Mooege.Net.GS.Message.Definitions.Effect;
+using Mooege.Net.GS.Message.Definitions.Animation;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -415,6 +416,33 @@ namespace Mooege.Core.GS.Actors
                 Field5 = 0, // 0=efg, 4=rope1, 3=rope2
                 Field6 = 0 // 0=efg, 1=rope1, 3=rope2
             }, target);
+        }
+
+        public void PlayAnimation(int animationType, int animationSNO, float speed = 1.0f, int? ticksToPlay = null)
+        {
+            if (this.World == null) return;
+
+            this.World.BroadcastIfRevealed(new PlayAnimationMessage
+            {
+                ActorID = this.DynamicID,
+                Field1 = animationType,
+                Field2 = 0,
+                tAnim = new PlayAnimationMessageSpec[]
+                {
+                    new PlayAnimationMessageSpec
+                    {
+                        Field0 = ticksToPlay.HasValue ? ticksToPlay.Value : -2,  // -2 = play animation once through
+                        Field1 = animationSNO,
+                        Field2 = 0x0,  // TODO: implement variations?
+                        Field3 = speed,
+                    }
+                }
+            }, this);
+        }
+
+        public void PlayActionAnimation(int animationSNO, float speed = 1.0f, int? ticksToPlay = null)
+        {
+            PlayAnimation(3, animationSNO, speed, ticksToPlay);
         }
         #endregion
 

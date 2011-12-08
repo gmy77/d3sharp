@@ -37,7 +37,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             // cast effect
             User.PlayEffectGroup(RuneSelect(71141, 71141, 71141, 92222, 217377, 217461));
 
-            TickTimer waitForImpact = WaitSeconds(ScriptFormula(4));
+            // HACK: mooege's 100ms update rate is a little to slow for the impact to appear right on time so
+            // an 100ms is shaved off the wait time
+            TickTimer waitForImpact = WaitSeconds(ScriptFormula(4) - 0.1f);  
 
             List<Vector3D> impactPositions = new List<Vector3D>();
             int meteorCount = Rune_B > 0 ? (int)ScriptFormula(9) : 1;
@@ -87,7 +89,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.Electrocute)]
-    public class WizardElectrocute : ChanneledPower
+    public class WizardElectrocute : ChanneledSkill
     {
         public override void OnChannelOpen()
         {
@@ -185,7 +187,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Disintegrate)]
-    public class WizardDisintegrate : ChanneledPower
+    public class WizardDisintegrate : ChanneledSkill
     {
         const float BeamLength = 40f;
 
@@ -260,7 +262,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneTorrent)]
-    public class WizardArcaneTorrent : ChanneledPower
+    public class WizardArcaneTorrent : ChanneledSkill
     {
         private Actor _targetProxy = null;
         private Actor _userProxy = null;
@@ -351,7 +353,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.RayOfFrost)]
-    public class WizardRayOfFrost : ChanneledPower
+    public class WizardRayOfFrost : ChanneledSkill
     {
         const float BeamLength = 40f;
 
