@@ -29,7 +29,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public Vector3D Field1;
         public Vector3D Field2;
 
-        public ACDTranslateFixedUpdateMessage() : base(Opcodes.ACDTranslateFixedMessage) { }
+        public ACDTranslateFixedUpdateMessage() : base(Opcodes.ACDTranslateFixedUpdateMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

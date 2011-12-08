@@ -22,6 +22,8 @@ using Mooege.Net.GS.Message.Fields;
 namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
     /// <summary>
+    /// Server -> Client
+    /// 
     /// Plays a single line from a conversation.
     /// </summary>
     [Message(Opcodes.PlayConvLineMessage)]
@@ -30,7 +32,7 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
         public uint ActorID;             // The SNO of this actor is used, to get a localized "Name" of the conversation participant for chat ouput
         // MaxLength = 9
         public uint[] Field1;            // looks like a list of conversation participants - farmy
-        public PlayLineParams Params;
+        public PlayLineParams PlayLineParams;
         public int Duration;             // playback duration in ms
 
         public PlayConvLineMessage() : base(Opcodes.PlayConvLineMessage) {}
@@ -40,8 +42,8 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
             ActorID = buffer.ReadUInt(32);
             Field1 = new uint[9];
             for (int i = 0; i < Field1.Length; i++) Field1[i] = buffer.ReadUInt(32);
-            Params = new PlayLineParams();
-            Params.Parse(buffer);
+            PlayLineParams = new PlayLineParams();
+            PlayLineParams.Parse(buffer);
             Duration = buffer.ReadInt(32);
         }
 
@@ -49,7 +51,7 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
         {
             buffer.WriteUInt(32, ActorID);
             for (int i = 0; i < Field1.Length; i++) buffer.WriteUInt(32, Field1[i]);
-            Params.Encode(buffer);
+            PlayLineParams.Encode(buffer);
             buffer.WriteInt(32, Duration);
         }
 
@@ -64,7 +66,7 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
             b.Append(' ', pad); b.AppendLine("{");
             for (int i = 0; i < Field1.Length; ) { b.Append(' ', pad + 1); for (int j = 0; j < 8 && i < Field1.Length; j++, i++) { b.Append("0x" + Field1[i].ToString("X8") + ", "); } b.AppendLine(); }
             b.Append(' ', pad); b.AppendLine("}"); b.AppendLine();
-            Params.AsText(b, pad);
+            PlayLineParams.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("Duration: 0x" + Duration.ToString("X8") + " (" + Duration + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");

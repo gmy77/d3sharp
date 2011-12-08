@@ -18,52 +18,59 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Conversation
+namespace Mooege.Net.GS.Message.Definitions.Player
 {
     /// <summary>
-    /// Server -> Client
+    /// Client -> Server
     /// 
-    /// TODO What does this message actually do? sending it not changes nothing. - farmy
+    /// Sent when the player turns eg. while using a power
     /// </summary>
-    [Message(Opcodes.EndConversationMessage)]
-    public class EndConversationMessage : GameMessage
+    [Message(Opcodes.PlayerTranslateFacingMessage, Consumers.Player)]
+    public class PlayerTranslateFacingMessage : GameMessage
     {
         /// <summary>
-        /// SNO of the conversation
-        /// </summary>
-        public int SNOConversation;
-
-        /// <summary>
-        /// Id of the actor that started the conversation
+        /// Id of the player actor
         /// </summary>
         public uint ActorId;
 
-        public EndConversationMessage() : base(Opcodes.EndConversationMessage) { }
+        /// <summary>
+        /// Angle between actor X axis and world X axis in radians
+        /// </summary>
+        public float Angle;
+
+        /// <summary>
+        /// Sets whether the player turned immediatly or smoothly
+        /// </summary>
+        public bool TurnImmediately;
+
+        public PlayerTranslateFacingMessage() : base(Opcodes.PlayerTranslateFacingMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            SNOConversation = buffer.ReadInt(32);
             ActorId = buffer.ReadUInt(32);
+            Angle = buffer.ReadFloat32();
+            TurnImmediately = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, SNOConversation);
             buffer.WriteUInt(32, ActorId);
+            buffer.WriteFloat32(Angle);
+            buffer.WriteBool(TurnImmediately);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("EndConversationMessage:");
+            b.AppendLine("PlayerTranslateFacingMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("SNOConversation: 0x" + SNOConversation.ToString("X8") + " (" + SNOConversation + ")");
-            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorId.ToString("X8") + " (" + ActorId + ")");
+            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorId.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Angle: " + Angle.ToString("G"));
+            b.Append(' ', pad); b.AppendLine("TurnImmediately: " + (TurnImmediately ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
 
     }
 }

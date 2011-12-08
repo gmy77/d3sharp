@@ -155,7 +155,7 @@ namespace Mooege.Common.MPQ
         /// </summary>
         /// <param name="stream">The MPQFileStream to read from.</param>
         /// <returns>The serialized byte array</returns>
-        public static unsafe byte[] ReadSerializedByteArray(this MpqFileStream stream)
+        public static byte[] ReadSerializedByteArray(this MpqFileStream stream)
         {
             int offset = stream.ReadValueS32(); // ofset for serialized data.
             int size = stream.ReadValueS32(); // size of serialized data.

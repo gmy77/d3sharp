@@ -50,6 +50,7 @@ using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
 using System;
 using Mooege.Common.Helpers;
+using Mooege.Net.GS.Message.Definitions.ACD;
 
 namespace Mooege.Core.GS.Players
 {
@@ -478,7 +479,20 @@ namespace Mooege.Core.GS.Players
             else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
             else if (message is HirelingDismissMessage) OnHirelingDismiss();
             else if (message is SocketSpellMessage) OnSocketSpell(client, (SocketSpellMessage)message);
+            else if (message is PlayerTranslateFacingMessage) OnTranslateFacing(client, (PlayerTranslateFacingMessage)message);
             else return;
+        }
+
+        private void OnTranslateFacing(GameClient client, PlayerTranslateFacingMessage message)
+        {
+            this.SetFacingRotation(message.Angle);
+
+            World.BroadcastExclusive(new ACDTranslateFacingMessage
+            {
+                ActorId = this.DynamicID,
+                Angle = message.Angle,
+                TurnImmediately = message.TurnImmediately
+            }, this);
         }
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)

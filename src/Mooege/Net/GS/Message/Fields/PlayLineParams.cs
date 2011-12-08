@@ -17,6 +17,7 @@
  */
 
 using System.Text;
+using Mooege.Common.MPQ.FileFormats;
 
 namespace Mooege.Net.GS.Message.Fields
 {
@@ -38,24 +39,67 @@ namespace Mooege.Net.GS.Message.Fields
 
     public class PlayLineParams
     {
+        /// <summary>
+        /// Sno of the conversation ressource
+        /// </summary>
         public int SNOConversation;
         public int Field1;          // have not seen != 0
         public bool Field2;         // have not seen true
         public bool Field3;
-        public int LineID;          // the ID of the line within the conversation
-                                    // Participant to speak out? must mach what the lineID is expecting... eg. LineID == 6 expects 2 while LineID == 5 expects 1 (in a specific dialogue)
-                                    // Set to 0 for a conversation line said by the player - farmy
-        public int Speaker;         // this could be the same as in Conversation-mpq filetype
+
+        /// <summary>
+        /// Identifier of the line (within the conversation) to play
+        /// </summary>
+        public int LineID;
+
+        /// <summary>
+        /// Speaker if the current line (dont know why this is sent along and not taken from ressource by client, 
+        /// maybe there are some lines with more than one speaker but i have not seen that yet - farmy)
+        /// </summary>
+        public Speaker Speaker;
         public int Field5;          // have not seen != -1
-        public Class TextClass;     // Class enum used to pick a class specific text. Or -1 for npc text
-        public VoiceGender Gender;  // Used if Field4 set to 0, (Use hero's gender) audio
-        public Class AudioClass;    // Used if Field4 set to 0, (Use hero's class) audio
-        public int SNOSpeakerActor; // Picture of this actor is used on the text (if any)
-        public string Name;         // Name of the actor if Field4 is set to 0 ("Hero speaking")
+
+        /// <summary>
+        /// Class to identify which text to show when Speaker == Speaker.Player or -1 if an npc is talking
+        /// </summary>
+        public Class TextClass;
+
+        /// <summary>
+        /// Gender of the voice to play if Speaker == Speaker.Player
+        /// </summary>
+        public VoiceGender Gender;
+
+        /// <summary>
+        /// Class to identify which audio to play when Speaker == Speaker.Player
+        /// </summary>
+        public Class AudioClass;
+
+        /// <summary>
+        /// SNO of an Actor for the profile picture when the conversation has text
+        /// </summary>
+        public int SNOSpeakerActor;
+
+        /// <summary>
+        /// Name of the actor if it is a player char (Speaker == Speaker.Player)
+        /// </summary>
+        public string Name;
+
         public int Field11;
+
+        /// <summary>
+        /// Animation of the Speaker
+        /// </summary>
         public int AnimationTag;
+
+        /// <summary>
+        /// Duration of the played conversation line in gameticks
+        /// </summary>
         public int Duration;
-        public int Field14;         // seems to be a running number across conversationlines. StopConvLine.Field0 == EndConvLine.Field0 == PlayConvLine.PlayLineParams.Field14 for a conversation
+
+        /// <summary>
+        /// Identifier of this PlayLine. Used to reference this line in later messages like AutoAdvance and StopConvLine
+        /// </summary>
+        public int Id;
         public int Field15;
 
         public void Parse(GameBitBuffer buffer)
@@ -65,7 +109,7 @@ namespace Mooege.Net.GS.Message.Fields
             Field2 = buffer.ReadBool();
             Field3 = buffer.ReadBool();
             LineID = buffer.ReadInt(32);
-            Speaker = buffer.ReadInt(32);
+            Speaker = (Speaker)buffer.ReadInt(32);
             Field5 = buffer.ReadInt(32);
             TextClass = (Class)buffer.ReadInt(32);
             Gender = (VoiceGender)buffer.ReadInt(32);
@@ -75,7 +119,7 @@ namespace Mooege.Net.GS.Message.Fields
             Field11 = buffer.ReadInt(32);
             AnimationTag = buffer.ReadInt(32);
             Duration = buffer.ReadInt(32);
-            Field14 = buffer.ReadInt(32);
+            Id = buffer.ReadInt(32);
             Field15 = buffer.ReadInt(32);
         }
 
@@ -86,7 +130,7 @@ namespace Mooege.Net.GS.Message.Fields
             buffer.WriteBool(Field2);
             buffer.WriteBool(Field3);
             buffer.WriteInt(32, LineID);
-            buffer.WriteInt(32, Speaker);
+            buffer.WriteInt(32, (int)Speaker);
             buffer.WriteInt(32, Field5);
             buffer.WriteInt(32, (int)TextClass);
             buffer.WriteInt(32, (int)Gender);
@@ -96,7 +140,7 @@ namespace Mooege.Net.GS.Message.Fields
             buffer.WriteInt(32, Field11);
             buffer.WriteInt(32, AnimationTag);
             buffer.WriteInt(32, Duration);
-            buffer.WriteInt(32, Field14);
+            buffer.WriteInt(32, Id);
             buffer.WriteInt(32, Field15);
         }
 
@@ -117,7 +161,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("LineID: 0x" + LineID.ToString("X8") + " (" + LineID + ")");
             b.Append(' ', pad);
-            b.AppendLine("Speaker: 0x" + Speaker.ToString("X8") + " (" + Speaker + ")");
+            b.AppendLine("Speaker: 0x" + ((int)Speaker).ToString("X8") + " (" + Speaker + ")");
             b.Append(' ', pad);
             b.AppendLine("Field5: 0x" + Field5.ToString("X8") + " (" + Field5 + ")");
             b.Append(' ', pad);
@@ -137,7 +181,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("Duration: 0x" + Duration.ToString("X8") + " (" + Duration + ")");
             b.Append(' ', pad);
-            b.AppendLine("Field14: 0x" + Field14.ToString("X8") + " (" + Field14 + ")");
+            b.AppendLine("Id: 0x" + Id.ToString("X8") + " (" + Id + ")");
             b.Append(' ', pad);
             b.AppendLine("Field15: 0x" + Field15.ToString("X8") + " (" + Field15 + ")");
             b.Append(' ', --pad);
