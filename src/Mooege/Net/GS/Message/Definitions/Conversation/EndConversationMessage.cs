@@ -21,14 +21,22 @@ using System.Text;
 namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
     /// <summary>
-    /// Sent to the client
+    /// Server -> Client
+    /// 
     /// TODO What does this message actually do? sending it not changes nothing. - farmy
     /// </summary>
     [Message(Opcodes.EndConversationMessage)]
     public class EndConversationMessage : GameMessage
     {
+        /// <summary>
+        /// SNO of the conversation
+        /// </summary>
         public int SNOConversation;
-        public uint ActorId;         // Actor that begun conversation in PlayConvLine
+
+        /// <summary>
+        /// Id of the actor that started the conversation
+        /// </summary>
+        public uint ActorId;
 
         public EndConversationMessage() : base(Opcodes.EndConversationMessage) { }
 
