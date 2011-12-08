@@ -80,6 +80,7 @@ namespace Mooege.Core.GS.Players
         private int currentUniqueLineID;        // id used to identify the current line clientside
         private int startTick = 0;              // start tick of the current line. used to determine, when to start the next line
         private ConversationTreeNode currentLineNode = null;
+        private int endTick = 0;
 
         // Find a childnode with a matching class id, that one holds information about how long the speaker talks
         // If there is no matching childnode, there must be one with -1 which only combines all class specific into one
@@ -161,6 +162,15 @@ namespace Mooege.Core.GS.Players
         }
 
         /// <summary>
+        /// Sets a new end tick for line playback
+        /// </summary>
+        /// <param name="endTick"></param>
+        public void UpdateAdvance(int endTick)
+        {
+            this.endTick = endTick;
+        }
+
+        /// <summary>
         /// Skips to the next line of the conversation
         /// </summary>
         public void Interrupt()
@@ -173,7 +183,7 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void Update(int tickCounter)
         {
-            if (startTick > 0 && currentLineNode == null)
+            if (endTick > 0 && currentLineNode == null)
                 PlayNextLine(false);
             else
             {
@@ -187,18 +197,19 @@ namespace Mooege.Core.GS.Players
                     Vector3D translation = speaker2.Position - speaker1.Position;
                     Vector2F flatTranslation = new Vector2F(translation.X, translation.Y);
 
-                    speaker1.FacingAngle = flatTranslation.Rotation();
+                    float facingAngle = flatTranslation.Rotation();
+                    speaker1.SetFacingRotation(facingAngle);
 
-                    player.World.BroadcastIfRevealed(new ACDTranslateFacingMessage(Opcodes.ACDTranslateFacingMessage1)
+                    player.World.BroadcastIfRevealed(new ACDTranslateFacingMessage
                     {
                         ActorId = speaker1.DynamicID,
-                        Angle = speaker1.FacingAngle,
-                        Immediately = false
+                        Angle = facingAngle,
+                        TurnImmediately = false
                     }, speaker1);
                 }
 
                 // start the next line if the playback has finished
-                if (startTick + duration < tickCounter)
+                if (tickCounter > endTick)
                     PlayNextLine(false);
             }
         }
@@ -207,7 +218,7 @@ namespace Mooege.Core.GS.Players
         /// Stops current line and starts the next if there is one, or ends the conversation
         /// </summary>
         /// <param name="interrupt">sets, whether the speaker is interrupted</param>
-        private void PlayNextLine(bool interrupt)
+        public void PlayNextLine(bool interrupt)
         {
             StopLine(interrupt);
 
@@ -245,7 +256,7 @@ namespace Mooege.Core.GS.Players
         {
             player.InGameClient.SendMessage(new StopConvLineMessage()
             {
-                Field0 = currentUniqueLineID,
+                PlayLineParamsId = currentUniqueLineID,
                 Interrupt = interrupted,
             });
         }
@@ -258,7 +269,7 @@ namespace Mooege.Core.GS.Players
         {
             if (asset.RootTreeNodes[LineIndex].I0 == 6)
             {
-                // dont know what to do with them yet, this just ignores them -farmy
+                // TODO dont know what to do with them yet, this just ignores them -farmy
                 currentLineNode = null;
                 return;
             }
@@ -270,6 +281,7 @@ namespace Mooege.Core.GS.Players
 
             currentUniqueLineID = manager.GetNextUniqueLineID();
             startTick = player.World.Game.TickCounter;
+            endTick = startTick + duration;
 
             // TODO Actor id should be CurrentSpeaker.DynamicID not PrimaryNPC.ActorID. This is a workaround because no audio for the player is playing otherwise
             player.InGameClient.SendMessage(new PlayConvLineMessage()
@@ -280,14 +292,14 @@ namespace Mooege.Core.GS.Players
                             player.DynamicID, asset.SNOPrimaryNpc != -1 ? GetActorBySNO(asset.SNOPrimaryNpc).DynamicID : 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
                         },
 
-                Params = new PlayLineParams()
+                PlayLineParams = new PlayLineParams()
                 {
                     SNOConversation = asset.Header.SNOId,
                     Field1 = 0x00000000,
                     Field2 = false,
                     Field3 = true,
                     LineID = currentLineNode.LineID,
-                    Speaker = (int)currentLineNode.Speaker1,
+                    Speaker = currentLineNode.Speaker1,
                     Field5 = -1,
                     TextClass = currentLineNode.Speaker1 == Speaker.Player ? (Class)player.Toon.VoiceClassID : Class.None,
                     Gender = (player.Toon.Gender == 0) ? VoiceGender.Male : VoiceGender.Female,
@@ -297,7 +309,7 @@ namespace Mooege.Core.GS.Players
                     Field11 = 0x00000000,  // is this field I1? and if...what does it do?? 2 for level up -farmy
                     AnimationTag = currentLineNode.AnimationTag,
                     Duration = duration,
-                    Field14 = currentUniqueLineID,
+                    Id = currentUniqueLineID,
                     Field15 = 0x00000000        // dont know, 0x32 for level up
                 },
                 Duration = duration,
@@ -422,15 +434,22 @@ namespace Mooege.Core.GS.Players
             {
                 if (message is RequestCloseConversationWindowMessage)
                 {
-                    List<Conversation> clonedList;
-
-                    lock (openConversations)
-                    {
-                        clonedList = (from c in openConversations select c.Value).ToList();
-                    }
+                    List<Conversation> clonedList = (from c in openConversations select c.Value).ToList();
 
                     foreach (var conversation in clonedList)
                         conversation.Interrupt();
+                }
+
+                if (message is UpdateConvAutoAdvanceMessage)
+                {
+                    UpdateConvAutoAdvanceMessage tmpMessage = (UpdateConvAutoAdvanceMessage)message;
+                    openConversations[tmpMessage.SNOConversation].UpdateAdvance(tmpMessage.EndTick);
+                }
+
+                if (message is AdvanceConvMessage)
+                {
+                    Conversation conv = openConversations[((AdvanceConvMessage)message).SNOConversation];
+                    conv.PlayNextLine(true);
                 }
             }
         }

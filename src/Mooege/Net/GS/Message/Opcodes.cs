@@ -131,7 +131,7 @@ namespace Mooege.Net.GS.Message
         ANNDataMessage13 = 112, // len: 	12
         NotifyActorMovementMessage = 113, // len: 	76 former ACDTranslateNormalMessage1
         ACDTranslateSnappedMessage = 114, // len: 	36
-        ACDTranslateFacingMessage1 = 115, // len: 	20
+        ACDTranslateFacingMessage = 115, // len: 	20
         ACDTranslateFixedMessage = 116, // len: 	36
         ACDTranslateArcMessage = 117, // len: 	60
         ACDTranslateDetPathMessage = 118, // len: 	88
@@ -140,7 +140,7 @@ namespace Mooege.Net.GS.Message
         ACDTranslateSyncMessage = 121, // len: 	32
         ACDTranslateFixedUpdateMessage = 122, // len: 	36
         PlayerMovementMessage = 123, //len:    75 former ACDTranslateNormalMessage2
-        ACDTranslateFacingMessage2 = 124, // len: 	20
+        PlayerTranslateFacingMessage = 124, // len: 	20
         PlayEffectMessage = 125, // len: 	24
         PlayHitEffectMessage = 126, // len: 	24
         PlayHitEffectOverrideMessage = 127, // len: 	20

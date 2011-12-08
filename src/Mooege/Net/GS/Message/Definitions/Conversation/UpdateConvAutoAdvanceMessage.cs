@@ -20,25 +20,42 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
-    [Message(Opcodes.UpdateConvAutoAdvanceMessage)]
+    /// <summary>
+    /// Client -> Server
+    /// 
+    /// Sent by the client to update expected end of a conversation.
+    /// Maybe due to lag or the player alt+tabbing out of the game
+    /// </summary>
+    [Message(Opcodes.UpdateConvAutoAdvanceMessage, Consumers.Conversations)]
     class UpdateConvAutoAdvanceMessage : GameMessage
     {
-        public int Field0;
-        public int Field1;
-        public int Field2;
+        /// <summary>
+        /// SNO of the conversation ressource
+        /// </summary>
+        public int SNOConversation;
+
+        /// <summary>
+        /// Identifier of the PlayLineParams as used in PlayConvLineMessage to start the conversation
+        /// </summary>
+        public int PlayLineParamsId;
+
+        /// <summary>
+        /// New end of the conversation
+        /// </summar
+        public int EndTick;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
-            Field2 = buffer.ReadInt(32);
+            SNOConversation = buffer.ReadInt(32);
+            PlayLineParamsId = buffer.ReadInt(32);
+            EndTick = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
-            buffer.WriteInt(32, Field2);
+            buffer.WriteInt(32, SNOConversation);
+            buffer.WriteInt(32, PlayLineParamsId);
+            buffer.WriteInt(32, EndTick);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -47,9 +64,9 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
             b.AppendLine("UpdateConvAutoAdvanceMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
-            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.Append(' ', pad); b.AppendLine("SNOConversation: 0x" + SNOConversation.ToString("X8") + " (" + SNOConversation + ")");
+            b.Append(' ', pad); b.AppendLine("PlayLineParamsId: 0x" + PlayLineParamsId.ToString("X8") + " (" + PlayLineParamsId + ")");
+            b.Append(' ', pad); b.AppendLine("EndTick: 0x" + EndTick.ToString("X8") + " (" + EndTick + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

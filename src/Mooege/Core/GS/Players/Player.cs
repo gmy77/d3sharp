@@ -50,6 +50,7 @@ using Mooege.Core.GS.Actors.Implementations.Artisans;
 using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
 using Mooege.Common.Helpers;
+using Mooege.Net.GS.Message.Definitions.ACD;
 
 namespace Mooege.Core.GS.Players
 {
@@ -190,7 +191,7 @@ namespace Mooege.Core.GS.Players
 
             this.Field2 = 0x00000009;
             this.Scale = this.ModelScale;
-            this.FacingAngle = 0.05940768f;
+            this.RotationW = 0.05940768f;
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.Field7 = -1;
             this.NameSNOId = -1;
@@ -483,7 +484,20 @@ namespace Mooege.Core.GS.Players
             else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
             else if (message is HirelingDismissMessage) OnHirelingDismiss();
             else if (message is SocketSpellMessage) OnSocketSpell(client, (SocketSpellMessage)message);
+            else if (message is PlayerTranslateFacingMessage) OnTranslateFacing(client, (PlayerTranslateFacingMessage)message);
             else return;
+        }
+
+        private void OnTranslateFacing(GameClient client, PlayerTranslateFacingMessage message)
+        {
+            this.SetFacingRotation(message.Angle);
+
+            World.BroadcastExclusive(new ACDTranslateFacingMessage
+            {
+                ActorId = this.DynamicID,
+                Angle = message.Angle,
+                TurnImmediately = message.TurnImmediately
+            }, this);
         }
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
@@ -642,7 +656,7 @@ namespace Mooege.Core.GS.Players
                 this.Position = message.Position;
 
             if (message.Angle != null)
-                this.FacingAngle = message.Angle.Value;
+                this.SetFacingRotation(message.Angle.Value);
 
 
             var msg = new NotifyActorMovementMessage
