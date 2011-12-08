@@ -26,7 +26,7 @@ using Mooege.Common.Storage;
 namespace Mooege.Common.MPQ.FileFormats
 {
     /// <summary>
-    ///  There are no conversationLists in the CoreData with size > 0, so this is not used (yet)
+    /// List of all possible conversations for an actor and when they are available
     /// </summary>
     [FileFormat(SNOGroup.ConversationList)]
     public class ConversationList : FileFormat
