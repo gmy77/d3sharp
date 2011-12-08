@@ -639,7 +639,7 @@ namespace Mooege.Core.GS.Players
                 ActorId = message.ActorId,
                 Position = this.Position,
                 Angle = message.Angle,
-                Field3 = false,
+                TurnImmediately = false,
                 Speed = message.Speed,
                 Field5 = message.Field5,
                 AnimationTag = message.AnimationTag

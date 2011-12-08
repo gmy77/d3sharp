@@ -35,6 +35,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int AnimationTag;        // Animation used during movement
         public int /* sno */ Field4;
 
+        public ACDTranslateFixedMessage() : base(Opcodes.ACDTranslateFixedMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             ActorId = buffer.ReadInt(32);

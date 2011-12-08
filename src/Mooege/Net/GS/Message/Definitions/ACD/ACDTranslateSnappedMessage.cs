@@ -31,6 +31,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public bool Field3;
         public int Field4;
 
+        public ACDTranslateSnappedMessage() : base(Opcodes.ACDTranslateSnappedMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
