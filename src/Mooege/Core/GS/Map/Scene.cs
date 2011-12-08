@@ -91,7 +91,7 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         public PRTransform Transform
         {
-            get { return new PRTransform { Quaternion = new Quaternion { W = this.FacingAngle, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationW, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace Mooege.Core.GS.Map
                             if (actor == null) continue;
 
                             var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
-                            actor.FacingAngle = marker.PRTransform.Quaternion.W;
+                            actor.RotationW = marker.PRTransform.Quaternion.W;
                             actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
                             actor.EnterWorld(position);
@@ -261,7 +261,7 @@ namespace Mooege.Core.GS.Map
                             if (actor2 == null) continue;
 
                             var position2 = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
-                            actor2.FacingAngle = marker.PRTransform.Quaternion.W;
+                            actor2.RotationW = marker.PRTransform.Quaternion.W;
                             actor2.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
                             actor2.EnterWorld(position2);
