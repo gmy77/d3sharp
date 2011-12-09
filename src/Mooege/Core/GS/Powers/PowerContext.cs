@@ -72,12 +72,12 @@ namespace Mooege.Core.GS.Powers
 
         public void StartCooldown(TickTimer timeout)
         {
-            if (User is Player)
-            {
-                User.Attributes[GameAttribute.Power_Cooldown_Start, PowerSNO] = World.Game.TickCounter;
-                User.Attributes[GameAttribute.Power_Cooldown, PowerSNO] = timeout.TimeoutTick;
-                User.Attributes.BroadcastChangedIfRevealed();
-            }
+            AddBuff(User, new CooldownBuff(PowerSNO, timeout));
+        }
+
+        public void StartCooldown(float seconds)
+        {
+            StartCooldown(WaitSeconds(seconds));
         }
 
         public void StartDefaultCooldown()

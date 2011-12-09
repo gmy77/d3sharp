@@ -512,6 +512,8 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
+            StartDefaultCooldown();
+
             AddBuff(User, new CasterBuff());
             foreach (Actor ally in GetAlliesInRadius(User.Position, ScriptFormula(0)))
                 AddBuff(User, new CastBonusBuff());
@@ -614,6 +616,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
+            StartDefaultCooldown();
+            UsePrimaryResource(EvalTag(PowerKeys.ResourceCost));
+
             AttackPayload attack = new AttackPayload(this);
             attack.AddTargets(GetEnemiesInRadius(User.Position, ScriptFormula(1)));
             attack.OnHit = (hit) =>
