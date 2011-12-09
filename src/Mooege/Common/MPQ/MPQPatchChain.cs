@@ -95,7 +95,7 @@ namespace Mooege.Common.MPQ
                 }
 
                 MPQFileList.Add(patchVersion, file);
-                Logger.Trace("Applied patch file: {0}.", patchName);
+                Logger.Trace("Added patch file: {0}.", patchName);
             }
 
             /* add mpq's to mpq-file system in reverse-order (highest version first) */
@@ -103,9 +103,11 @@ namespace Mooege.Common.MPQ
             {
                 foreach(var mpq in pair.Value)
                 {
-                    this.FileSystem.Archives.Add(new MpqArchive(mpq, false));
+                    Logger.Trace("Applying file: {0}.", System.IO.Path.GetFileName(mpq));
+                    this.FileSystem.Archives.Add(new MpqArchive(mpq, true));
                 }
             }
+            Logger.Trace("All files successfully applied.");
         }
     }
 }
