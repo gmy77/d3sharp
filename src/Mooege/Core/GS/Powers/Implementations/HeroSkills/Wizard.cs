@@ -105,7 +105,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             if (Target == null)
             {
                 // no target, just zap the air with miss effect rope
-                User.AddRopeEffect(30913, SpawnProxy(TargetPosition));
+                User.AddRopeEffect(30913, TargetPosition);
             }
             else
             {

@@ -109,9 +109,7 @@ namespace Mooege.Core.GS.Powers
         
         private void _SetupLaunch(Vector3D target, float speed)
         {
-            float facing = PowerMath.AngleLookAt(this.Position, target);
-            this.FacingAngle = (float)Math.Cos(facing / 2f);
-            this.RotationAxis = new Vector3D(0, 0, (float)Math.Sin(facing / 2f));
+            this.TranslateFacing(target, true);
             
             Vector3D dir_normal = PowerMath.Normalize(new Vector3D(target.X - this.Position.X,
                                                                    target.Y - this.Position.Y,

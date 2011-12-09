@@ -52,9 +52,7 @@ namespace Mooege.Core.GS.Powers
 
         public void Spawn(float facingAngle = 0)
         {
-            FacingAngle = (float)Math.Cos(facingAngle / 2f);
-            RotationAxis = new Vector3D(0, 0, (float)Math.Sin(facingAngle / 2f));
-
+            this.SetFacingRotation(facingAngle);
             this.World.Enter(this);
         }
 

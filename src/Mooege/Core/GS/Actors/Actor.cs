@@ -308,15 +308,14 @@ namespace Mooege.Core.GS.Actors
         public void TranslateNormal(Vector3D destination, float speed = 1.0f, int? animationTag = null)
         {
             this.Position = destination;
-            float angle = (float)Math.Acos(this.FacingAngle) * 2f;
-            if (float.IsNaN(angle)) // just use RotationAmount if Quat is bad
-                angle = this.FacingAngle;
 
-            World.BroadcastIfRevealed(new NotifyActorMovementMessage
+            if (this.World == null) return;
+
+            this.World.BroadcastIfRevealed(new NotifyActorMovementMessage
             {
                 ActorId = (int)DynamicID,
                 Position = destination,
-                Angle = angle,
+                Angle = (float)Math.Acos(this.RotationW) * 2f,  // convert z-axis quat to radians
                 TurnImmediately = false,
                 Speed = speed,
                 AnimationTag = animationTag,
@@ -325,17 +324,16 @@ namespace Mooege.Core.GS.Actors
 
         public void TranslateFacing(Vector3D target, bool immediately = false)
         {
-            float radianAngle = PowerMath.AngleLookAt(this.Position, target);
+            float facingAngle = Movement.MovementHelpers.GetFacingAngle(this, target);
+            this.SetFacingRotation(facingAngle);
 
-            // convert to quaternion and store in instance
-            this.FacingAngle = (float)Math.Cos(radianAngle / 2f);
-            this.RotationAxis = new Vector3D(0, 0, (float)Math.Sin(radianAngle / 2f));
+            if (this.World == null) return;
 
-            World.BroadcastIfRevealed(new ACDTranslateFacingMessage(Opcodes.ACDTranslateFacingMessage1)
+            this.World.BroadcastIfRevealed(new ACDTranslateFacingMessage
             {
                 ActorId = DynamicID,
-                Angle = radianAngle,
-                Immediately = immediately
+                Angle = facingAngle,
+                TurnImmediately = immediately
             }, this);
         }
 
@@ -397,6 +395,20 @@ namespace Mooege.Core.GS.Actors
                 Field2 = 4,
                 Field3 = (int)target.DynamicID,
                 Field4 = 1
+            }, this);
+        }
+
+        public void AddRopeEffect(int ropeSNO, Vector3D target)
+        {
+            if (this.World == null) return;
+
+            this.World.BroadcastIfRevealed(new RopeEffectMessageACDToPlace
+            {
+                Id = (int)Opcodes.RopeEffectMessageACDToPlace,
+                Field0 = ropeSNO,
+                Field1 = (int)this.DynamicID,
+                Field2 = 4,
+                Field3 = new WorldPlace { Position = target, WorldID = this.World.DynamicID }
             }, this);
         }
 
