@@ -32,6 +32,7 @@ using Mooege.Common.Logging;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Powers.Payloads;
+using Mooege.Net.GS.Message.Definitions.Actor;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -72,7 +73,7 @@ namespace Mooege.Core.GS.Powers
 
         public void StartCooldown(TickTimer timeout)
         {
-            AddBuff(User, new CooldownBuff(PowerSNO, timeout));
+            AddBuff(User, new Implementations.CooldownBuff(PowerSNO, timeout));
         }
 
         public void StartCooldown(float seconds)
@@ -215,6 +216,22 @@ namespace Mooege.Core.GS.Powers
             }
 
             return hits;
+        }
+
+        public void TranslateEffect(Actor actor, Vector3D destination, float speed)
+        {
+            actor.Position = destination;
+
+            if (actor.World == null) return;
+
+            actor.World.BroadcastIfRevealed(new NotifyActorMovementMessage
+            {
+                ActorId = (int)actor.DynamicID,
+                Position = destination,
+                Angle = (float)Math.Acos(actor.RotationW) * 2f,  // convert z-axis quat to radians
+                TurnImmediately = true,
+                Speed = speed,
+            }, actor);
         }
 
         public void Knockback(Actor target, Vector3D from, float amount)

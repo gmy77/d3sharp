@@ -271,11 +271,9 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             EffectsPerSecond = 0.2f;
 
-            _targetProxy = SpawnProxy(TargetPosition, WaitInfinite());
+            _targetProxy = SpawnEffect(RuneSelect(134595, 170443, 170285, 170830, 170590, 134595), TargetPosition, 0, WaitInfinite());
             _userProxy = SpawnProxy(User.Position, WaitInfinite());
-            // TODO: fixed casting effect so it rotates along with actor
-            _userProxy.PlayEffectGroup(97385);
-            _userProxy.PlayEffectGroup(134442, _targetProxy);
+            _userProxy.PlayEffectGroup(RuneSelect(134442, 170263, 170264, 170569, 170572, 164077), _targetProxy);
         }
 
         public override void OnChannelClose()
@@ -288,16 +286,26 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             UsePrimaryResource(20f * EffectsPerSecond);
 
+            AddBuff(User, new CastEffect());
+
             Vector3D laggyPosition = new Vector3D(TargetPosition);
 
             yield return WaitSeconds(0.9f);
 
             // update proxy target delayed so animation lines up with explosions a bit better
             if (IsChannelOpen)
-                _targetProxy.TranslateNormal(laggyPosition, 8f);
+                TranslateEffect(_targetProxy, laggyPosition, 8f);
 
-            SpawnEffect(97821, laggyPosition);
             WeaponDamage(GetEnemiesInRadius(laggyPosition, 6f), 2.00f * EffectsPerSecond, DamageType.Arcane);
+        }
+
+        [ImplementsPowerBuff(0)]
+        class CastEffect : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(0.3f);
+            }
         }
     }
 

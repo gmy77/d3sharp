@@ -23,11 +23,11 @@ using System.Text;
 using Mooege.Core.GS.Ticker;
 using Mooege.Net.GS.Message;
 
-namespace Mooege.Core.GS.Powers
+namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(30176)]  // Cooldown.pow
     [ImplementsPowerBuff(0)]
-    public class CooldownBuff : TimedBuff
+    public class CooldownBuff : PowerBuff
     {
         public int TargetPowerSNO;
 
