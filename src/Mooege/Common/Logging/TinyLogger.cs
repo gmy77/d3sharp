@@ -184,7 +184,7 @@ namespace Mooege.Common.Logging
             if (!Directory.Exists(LogConfig.Instance.LoggingRoot)) // create logging directory if it does not exist.
                 Directory.CreateDirectory(LogConfig.Instance.LoggingRoot);
 
-            this._fileStream = new FileStream(_filePath, reset ? FileMode.Create : FileMode.Append, FileAccess.Write);
+            this._fileStream = new FileStream(_filePath, reset ? FileMode.Create : FileMode.Append, FileAccess.Write, FileShare.Read);
             this._logStream = new StreamWriter(this._fileStream) {AutoFlush = true};
         }
 
