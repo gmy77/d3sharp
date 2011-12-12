@@ -383,12 +383,15 @@ namespace Mooege.Core.GS.Powers
                                                                                           .Select(a => a.Data)
                                                                                           .Cast<GameBalance>())
             {
-                foreach (var powerEntry in gb.PowerFormula)
+                if (gb.PowerFormula != null)
                 {
-                    if (powerEntry.S0 == tableName)
+                    foreach (var powerEntry in gb.PowerFormula)
                     {
-                        result = powerEntry.F0[(int)index];
-                        return true;
+                        if (powerEntry.S0 == tableName)
+                        {
+                            result = powerEntry.F0[(int)index];
+                            return true;
+                        }
                     }
                 }
             }

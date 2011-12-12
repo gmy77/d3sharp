@@ -58,19 +58,12 @@ namespace Mooege.Core.GS.Powers.Implementations
                     yield break;
             }
 
-            // calculate end of attack reach
-            TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
-                                                   User.Position, reachLength);
-
             bool hitAnything = false;
-            foreach (Actor actor in GetEnemiesInRadius(User.Position, reachLength + 10f))
-            {
-                if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, reachThickness))
-                {
-                    hitAnything = true;
-                    WeaponDamage(actor, 1.20f, DamageType.Physical);
-                }
-            }
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetEnemiesInBeamDirection(User.Position, TargetPosition, reachLength, reachThickness);
+            attack.AddWeaponDamage(1.20f, DamageType.Physical);
+            attack.OnHit = hitPayload => { hitAnything = true; };
+            attack.Apply();
 
             if (hitAnything)
                 GeneratePrimaryResource(6f);
@@ -98,12 +91,14 @@ namespace Mooege.Core.GS.Powers.Implementations
                                         User.Position, 8f);
 
                     bool hitAnything = false;
-                    foreach (Actor actor in GetEnemiesInRadius(TargetPosition, 7f))
-                    {
+                    AttackPayload attack = new AttackPayload(this);
+                    attack.Targets = GetEnemiesInRadius(TargetPosition, 7f);
+                    attack.AddWeaponDamage(1.20f, DamageType.Lightning);
+                    attack.OnHit = hitPayload => {
                         hitAnything = true;
-                        Knockback(actor, 4f);
-                        WeaponDamage(actor, 1.20f, DamageType.Lightning);
-                    }
+                        Knockback(hitPayload.Target, 4f);
+                    };
+                    attack.Apply();
 
                     if (hitAnything)
                         GeneratePrimaryResource(6f);
@@ -116,12 +111,14 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         private void MeleeStageHit()
         {
-            Actor hit = GetBestMeleeEnemy();
-            if (hit != null)
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetBestMeleeEnemy();
+            attack.AddWeaponDamage(1.20f, DamageType.Lightning);
+            attack.OnHit = hitPayload =>
             {
                 GeneratePrimaryResource(6f);
-                WeaponDamage(hit, 1.20f, DamageType.Lightning);
-            }
+            };
+            attack.Apply();
         }
 
         [ImplementsPowerBuff(7)]
@@ -147,7 +144,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             for (int n = 0; n < 7; ++n)
             {
-                IList<Actor> nearby = GetEnemiesInRadius(TargetPosition, 25f);
+                IList<Actor> nearby = GetEnemiesInRadius(TargetPosition, 25f).Actors;
                 if (nearby.Count > 0)
                 {
                     var target = nearby[Rand.Next(0, nearby.Count)];
@@ -159,7 +156,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     {
                         target.PlayEffectGroup(99098);
                         var splashTargets = GetEnemiesInRadius(target.Position, 5f);
-                        splashTargets.Remove(target); // don't hit target with splash
+                        splashTargets.Actors.Remove(target); // don't hit target with splash
                         WeaponDamage(splashTargets, 0.31f, DamageType.Holy);
                     }
 
@@ -181,7 +178,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Main()
         {
             int effectSNO;
-            switch (TargetMessage.Field5)
+            switch (ComboIndex)
             {
                 case 0:
                     effectSNO = 18987;
@@ -199,24 +196,15 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.PlayEffectGroup(effectSNO);
 
             bool hitAnything = false;
-            if (TargetMessage.Field5 != 2)
-            {
-                Actor hit = GetBestMeleeEnemy();
-                if (hit != null)
-                {
-                    hitAnything = true;
-                    WeaponDamage(hit, 1.35f, DamageType.Physical);
-                }
-            }
+            AttackPayload attack = new AttackPayload(this);
+            if (ComboIndex != 2)
+                attack.Targets = GetBestMeleeEnemy();
             else
-            {
-                IList<Actor> hits = GetEnemiesInRadius(User.Position, 10f);
-                foreach (Actor hit in hits)
-                {
-                    hitAnything = true;
-                    WeaponDamage(hit, 1.35f, DamageType.Physical);
-                }
-            }
+                attack.Targets = GetEnemiesInRadius(User.Position, 10f);
+
+            attack.AddWeaponDamage(1.35f, DamageType.Physical);
+            attack.OnHit = hitPayload => { hitAnything = true; };
+            attack.Apply();
 
             if (hitAnything)
                 GeneratePrimaryResource(6f);
@@ -235,7 +223,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 case 0:
                 case 1:
-                    attack.AddTarget(GetBestMeleeEnemy());
+                    attack.Targets = GetBestMeleeEnemy();
                     attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
                     if (Rune_C > 0)
                     {
@@ -247,11 +235,18 @@ namespace Mooege.Core.GS.Powers.Implementations
                     break;
 
                 case 2:
-                    if (Rune_B > 0) // TODO: make this use arc, not beam
-                        attack.AddTargets(GetEnemiesInBeamDirection(User.Position, TargetPosition, 0.1f, ScriptFormula(19) / 2f)
-                                                                   .Take((int)ScriptFormula(18)).ToList());
+                    if (Rune_B > 0)
+                    {
+                        // TODO: make this use arc, not beam
+                        attack.Targets = GetEnemiesInBeamDirection(User.Position, TargetPosition, 0.1f, ScriptFormula(19) / 2f);
+                        int maxTargets = (int)ScriptFormula(18);
+                        if (maxTargets < attack.Targets.Actors.Count)
+                            attack.Targets.Actors.RemoveRange(maxTargets, attack.Targets.Actors.Count - maxTargets);
+                    }
                     else
-                        attack.AddTarget(GetBestMeleeEnemy());
+                    {
+                        attack.Targets = GetBestMeleeEnemy();
+                    }
 
                     attack.AutomaticHitEffects = false;
                     attack.OnHit = (hitPayload) =>
@@ -306,7 +301,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     _damageTimer = WaitSeconds(_damageRate);
 
                     AttackPayload attack = new AttackPayload(this);
-                    attack.AddTarget(Target);
+                    attack.SetSingleTarget(Target);
                     attack.AddWeaponDamage(ScriptFormula(6) * _damageRate, DamageType.Physical);
                     attack.AutomaticHitEffects = false;
                     attack.Apply();
@@ -319,7 +314,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (payload.Target == Target && payload is DeathPayload)
                 {
                     AttackPayload attack = new AttackPayload(this);
-                    attack.AddTargets(GetEnemiesInRadius(Target.Position, ScriptFormula(11)));
+                    attack.Targets = GetEnemiesInRadius(Target.Position, ScriptFormula(11));
                     attack.AddDamage(ScriptFormula(9) * Target.Attributes[GameAttribute.Hitpoints_Max_Total],
                                      ScriptFormula(10), DamageType.Physical);
                     if (Rune_D > 0)
@@ -387,12 +382,10 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            Actor hit = GetBestMeleeEnemy();
-            if (hit != null)
-            {
-                GeneratePrimaryResource(6f);
-                WeaponDamage(hit, 1.00f, DamageType.Physical);
-            }
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetBestMeleeEnemy();
+            attack.AddWeaponDamage(1.00f, DamageType.Physical);
+            attack.Apply();
 
             yield break;
         }
@@ -423,7 +416,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             // dashing strike never specifies the target's id so we just search for the closest target
             // ultimately need to know the radius of each target and select the one most covered
             float min_distance = float.MaxValue;
-            foreach (Actor actor in GetEnemiesInRadius(TargetPosition, 8f))
+            foreach (Actor actor in GetEnemiesInRadius(TargetPosition, 8f).Actors)
             {
                 float distance = PowerMath.Distance(actor.Position, TargetPosition);
                 if (distance < min_distance)
@@ -515,7 +508,8 @@ namespace Mooege.Core.GS.Powers.Implementations
             StartDefaultCooldown();
 
             AddBuff(User, new CasterBuff());
-            foreach (Actor ally in GetAlliesInRadius(User.Position, ScriptFormula(0)))
+            AddBuff(User, new CastBonusBuff());
+            foreach (Actor ally in GetAlliesInRadius(User.Position, ScriptFormula(0)).Actors)
                 AddBuff(User, new CastBonusBuff());
 
             yield break;
@@ -582,11 +576,8 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (base.Update())
                     return true;
 
-                foreach (Actor ally in GetAlliesInRadius(Target.Position, ScriptFormula(0)))
-                {
-                    if (ally != Target)
-                        AddBuff(ally, new AllyBuff());
-                }
+                foreach (Actor ally in GetAlliesInRadius(Target.Position, ScriptFormula(0)).Actors)
+                    AddBuff(ally, new AllyBuff());
 
                 return false;
             }
@@ -620,7 +611,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             UsePrimaryResource(EvalTag(PowerKeys.ResourceCost));
 
             AttackPayload attack = new AttackPayload(this);
-            attack.AddTargets(GetEnemiesInRadius(User.Position, ScriptFormula(1)));
+            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(1));
             attack.OnHit = (hit) =>
             {
                 TickTimer waitBuffEnd = WaitSeconds(ScriptFormula(0));

@@ -35,22 +35,18 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            Actor hit = GetBestMeleeEnemy();
-            if (hit != null)
+            var payload = new AttackPayload(this);
+            payload.Targets = GetBestMeleeEnemy();
+            payload.AddWeaponDamage(1.45f, DamageType.Physical);
+            payload.OnHit = hitPayload =>
             {
-                var payload = new AttackPayload(this);
-                payload.AddTarget(Target);
-                payload.AddWeaponDamage(1.45f, DamageType.Physical);
-                payload.OnHit = (hitPayload) =>
-                {
-                    GeneratePrimaryResource(6f);
+                GeneratePrimaryResource(6f);
 
-                    if (Rand.NextDouble() < 0.20)
-                        Knockback(hitPayload.Target, 4f);
-                };
+                if (Rand.NextDouble() < 0.20)
+                    Knockback(hitPayload.Target, 4f);
+            };
 
-                payload.Apply();
-            }
+            payload.Apply();
 
             yield break;
         }
@@ -100,11 +96,11 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.PlayEffectGroup(18688);
 
             bool hitAnything = false;
-            foreach (Actor actor in GetEnemiesInRadius(TargetPosition, 8f))
-            {
-                hitAnything = true;
-                WeaponDamage(actor, 0.70f, DamageType.Physical);
-            }
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetEnemiesInRadius(TargetPosition, 8f);
+            attack.AddWeaponDamage(0.70f, DamageType.Physical);
+            attack.OnHit = hitPayload => { hitAnything = true; };
+            attack.Apply();
 
             if (hitAnything)
                 GeneratePrimaryResource(15f);
@@ -143,10 +139,8 @@ namespace Mooege.Core.GS.Powers.Implementations
                     _damageTimer = WaitSeconds(ScriptFormula(0));
                     //UsePrimaryResource(EvalTag(PowerKeys.ResourceCost));
 
-                    foreach (Actor target in GetEnemiesInRadius(User.Position, ScriptFormula(2)))
-                    {
-                        WeaponDamage(target, ScriptFormula(1), Rune_A > 0 ? DamageType.Fire : DamageType.Physical);
-                    }
+                    WeaponDamage(GetEnemiesInRadius(User.Position, ScriptFormula(2)),
+                                 ScriptFormula(1), Rune_A > 0 ? DamageType.Fire : DamageType.Physical);
                 }
 
                 if (Rune_B > 0)
@@ -195,7 +189,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 _setupReturnProjectile(hit.Position);
 
                 AttackPayload attack = new AttackPayload(this);
-                attack.AddTarget(hit);
+                attack.SetSingleTarget(hit);
                 attack.AddWeaponDamage(1.00f, DamageType.Physical);
                 attack.AutomaticHitEffects = false;
                 attack.OnHit = (hitPayload) =>

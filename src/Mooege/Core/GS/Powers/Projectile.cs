@@ -153,8 +153,10 @@ namespace Mooege.Core.GS.Powers
             Vector2F velocity = PowerMath.VectorWithoutZ(this.Position - _prevUpdatePosition);
             
             Actor hit = null;
-            foreach (Actor target in this.Context.GetEnemiesInRadius(this.Position, radius + 25f)
-                                                 .OrderBy(t => PowerMath.Distance2D(_prevUpdatePosition, t.Position)))
+            TargetList targets = this.Context.GetEnemiesInRadius(this.Position, radius + 25f);
+            targets.SortByDistanceFrom(_prevUpdatePosition);
+
+            foreach (Actor target in targets.Actors)
             {
                 float targetRadius = 1.5f; // target.ActorData.Cylinder.Ax2;
                 if (PowerMath.MovingCircleCollides(startCircle, velocity, new Circle(target.Position.X, target.Position.Y, targetRadius)))

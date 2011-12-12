@@ -71,8 +71,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 // impact
                 SpawnEffect(RuneSelect(86769, 215809, 91441, 92031, 217139, 217458), impactPos);
 
-                IList<Actor> hits = GetEnemiesInRadius(impactPos, ScriptFormula(3));
-                WeaponDamage(hits, ScriptFormula(0),
+                WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(0),
                     RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Fire, DamageType.Cold, DamageType.Arcane, DamageType.Fire));
 
                 // pool effect
@@ -133,7 +132,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                         break;
                     }
 
-                    curTarget = GetEnemiesInRadius(curTarget.Position, 15f, 3).FirstOrDefault(t => !targets.Contains(t));
+                    curTarget = GetEnemiesInRadius(curTarget.Position, 15f, 3).Actors.FirstOrDefault(t => !targets.Contains(t));
                     if (curTarget != null)
                     {
                         targets.Add(curTarget);
@@ -181,8 +180,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             SpawnEffect(185366, TargetPosition);
             yield return WaitSeconds(0.4f);
 
-            IList<Actor> hits = GetEnemiesInRadius(TargetPosition, 10f);
-            WeaponDamage(hits, 10f, DamageType.Fire);
+            WeaponDamage(GetEnemiesInRadius(TargetPosition, 10f), 10f, DamageType.Fire);
         }
     }
 
@@ -227,11 +225,10 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             UsePrimaryResource(23f * EffectsPerSecond);
 
-            foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f))
+            foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f).Actors)
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
-                {  
-                    //actor.PlayEffectGroup(18793);
+                {
                     WeaponDamage(actor, 1.35f * EffectsPerSecond, DamageType.Arcane);
                 }
             }
@@ -251,12 +248,11 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield return WaitSeconds(0.350f); // wait for wizard to land
             User.PlayEffectGroup(19356);
 
-            IList<Actor> hits = GetEnemiesInRadius(User.Position, 20);
-            foreach (Actor actor in hits)
-            {
-                Knockback(actor, 5f);
-                WeaponDamage(actor, 2.05f, DamageType.Physical);
-            }
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetEnemiesInRadius(User.Position, 20f);
+            attack.AddWeaponDamage(2.05f, DamageType.Physical);
+            attack.OnHit = hitPayload => { Knockback(hitPayload.Target, 5f); };
+            attack.Apply();
             yield break;
         }
     }
@@ -321,11 +317,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             SpawnEffect(FrostNova_Emitter, User.Position);
 
-            IList<Actor> hits = GetEnemiesInRadius(User.Position, 18);
-            foreach (Actor actor in hits)
-            {
-                WeaponDamage(actor, 0.65f, DamageType.Cold);
-            }
+            WeaponDamage(GetEnemiesInRadius(User.Position, 18f), 0.65f, DamageType.Cold);
 
             yield break;
         }
@@ -347,7 +339,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             for(int i = 0; i < blizzard_duration; ++i)
             {
                 AttackPayload attack = new AttackPayload(this);
-                attack.AddTargets(GetEnemiesInRadius(TargetPosition, 18));
+                attack.Targets = GetEnemiesInRadius(TargetPosition, 18f);
                 attack.AddWeaponDamage(0.65f, DamageType.Cold);
                 attack.OnHit = (hit) =>
                 {
@@ -401,7 +393,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             UsePrimaryResource(29f * EffectsPerSecond);
 
-            foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f))
+            foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f).Actors)
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
                 {
@@ -441,10 +433,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             for (int n = 0; n < 3; ++n)
             {
-                foreach (var target in GetEnemiesInRadius(TargetPosition, 9f))
-                {
-                    WeaponDamage(target, 0.30f, DamageType.Physical);
-                }
+                WeaponDamage(GetEnemiesInRadius(TargetPosition, 9f), 0.30f, DamageType.Physical);
                 yield return WaitSeconds(0.2f);
             }
         }

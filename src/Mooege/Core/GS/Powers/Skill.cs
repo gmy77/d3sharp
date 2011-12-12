@@ -61,7 +61,7 @@ namespace Mooege.Core.GS.Powers
         public virtual int GetActionAnimationSNO()
         {
             int tag = EvalTag(PowerKeys.AnimationTag);
-            if (User.AnimationSet.Animations.ContainsKey(tag))
+            if (User.AnimationSet != null && User.AnimationSet.Animations.ContainsKey(tag))
                 return User.AnimationSet.Animations[tag];
             else
                 return -1;

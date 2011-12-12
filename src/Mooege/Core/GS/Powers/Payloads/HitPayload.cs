@@ -70,7 +70,7 @@ namespace Mooege.Core.GS.Powers.Payloads
                 // TODO: probably will calculate this off of GameAttribute.Crit_Damage_Percent, but right now that attribute is never set
                 var damTypes = this.ElementDamages.Keys.ToArray();
                 foreach (var type in damTypes)
-                    this.ElementDamages[type] *= 1.0f + 0.25f;
+                    this.ElementDamages[type] *= 1.0f + 0.50f;
             }
 
             // TODO: reduce element damage amounts according to target's resistances
@@ -146,11 +146,14 @@ namespace Mooege.Core.GS.Powers.Payloads
             else if (this.AutomaticHitEffects && this.Target.World != null)
             {
                 // target didn't die, so play hit animation if the actor has one
-                int hitAni = this.Target.AnimationSet.GetAniSNO(Mooege.Common.MPQ.FileFormats.AnimationTags.GetHit);
-                if (hitAni != -1)
+                if (this.Target.AnimationSet != null)
                 {
-                    // HACK: hardcoded animation speed/ticks, need to base those off hit recovery speed
-                    this.Target.PlayAnimation(6, hitAni, 1.0f, 40);
+                    int hitAni = this.Target.AnimationSet.TagMapAnimDefault[AnimationSetKeys.GetHit];
+                    if (hitAni != -1)
+                    {
+                        // HACK: hardcoded animation speed/ticks, need to base those off hit recovery speed
+                        this.Target.PlayAnimation(6, hitAni, 1.0f, 40);
+                    }
                 }
             }
 

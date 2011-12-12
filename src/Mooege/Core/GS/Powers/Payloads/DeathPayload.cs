@@ -127,8 +127,8 @@ namespace Mooege.Core.GS.Powers.Payloads
 
         private int _GetSNOFromTag(TagKeyInt tag)
         {
-            if (this.Target.AnimationSet.Animations.ContainsKey(tag.ID))
-                return this.Target.AnimationSet.Animations[tag.ID];
+            if (this.Target.AnimationSet != null && this.Target.AnimationSet.TagMapAnimDefault.ContainsKey(tag))
+                return this.Target.AnimationSet.TagMapAnimDefault[tag];
             else
                 return -1;
         }

@@ -31,11 +31,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            Actor hit = GetBestMeleeEnemy();
-            if (hit != null)
-            {
-                WeaponDamage(hit, 1.00f, DamageType.Physical);
-            }
+            WeaponDamage(GetBestMeleeEnemy(), 1.00f, DamageType.Physical);
             yield break;
         }
     }

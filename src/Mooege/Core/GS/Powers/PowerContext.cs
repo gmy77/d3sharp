@@ -122,14 +122,16 @@ namespace Mooege.Core.GS.Powers
         
         public void WeaponDamage(Actor target, float damageMultiplier, DamageType damageType)
         {
-            if (target == null || target.World == null) return;
-            WeaponDamage(new List<Actor> { target }, damageMultiplier, damageType);
+            AttackPayload payload = new AttackPayload(this);
+            payload.SetSingleTarget(target);
+            payload.AddWeaponDamage(damageMultiplier, damageType);
+            payload.Apply();
         }
 
-        public void WeaponDamage(IList<Actor> targets, float damageMultiplier, DamageType damageType)
+        public void WeaponDamage(TargetList targets, float damageMultiplier, DamageType damageType)
         {
             AttackPayload payload = new AttackPayload(this);
-            payload.AddTargets(targets);
+            payload.Targets = targets;
             payload.AddWeaponDamage(damageMultiplier, damageType);
             payload.Apply();
         }
@@ -169,53 +171,66 @@ namespace Mooege.Core.GS.Powers
             return SpawnEffect(187359, position, 0, timeout);
         }
 
-        public IList<Actor> GetEnemiesInRadius(Vector3D center, float radius, int maxCount = -1)
+        public TargetList GetEnemiesInRadius(Vector3D center, float radius, int maxCount = -1)
+        {            
+            // for now simple switch from enemy/ally using class types Player/Monster
+            if (User is Player)
+                return _GetTargetsInRadiusHelper(center, radius, maxCount,
+                    actor => true, actor => actor is Monster);
+            else
+                return _GetTargetsInRadiusHelper(center, radius, maxCount,
+                    actor => true, actor => actor is Player);
+        }
+
+        public TargetList GetAlliesInRadius(Vector3D center, float radius, int maxCount = -1)
         {
             // for now simple switch from enemy/ally using class types Player/Monster
             if (User is Player)
-                return _GetActorsOfTypeInRadius<Monster>(center, radius, maxCount);
+                return _GetTargetsInRadiusHelper(center, radius, maxCount,
+                    actor => true, actor => actor is Player);
             else
-                return _GetActorsOfTypeInRadius<Player>(center, radius, maxCount);
+                return _GetTargetsInRadiusHelper(center, radius, maxCount,
+                    actor => true, actor => actor is Monster);
         }
 
-        public IList<Actor> GetAlliesInRadius(Vector3D center, float radius, int maxCount = -1)
+        private TargetList _GetTargetsInRadiusHelper(Vector3D center, float radius, int maxCount,
+            Func<Actor, bool> filter, Func<Actor, bool> targetFilter)
         {
-            // for now simple switch from enemy/ally using class types Player/Monster
-            if (User is Player)
-                return _GetActorsOfTypeInRadius<Player>(center, radius, maxCount);
-            else
-                return _GetActorsOfTypeInRadius<Monster>(center, radius, maxCount);
-        }
-
-        private IList<Actor> _GetActorsOfTypeInRadius<T>(Vector3D center, float radius, int maxCount) where T : Actor
-        {
-            List<Actor> hits = new List<Actor>();
-            foreach (Actor actor in World.QuadTree.Query<T>(new Circle(center.X, center.Y, radius)))
+            TargetList targets = new TargetList();
+            int count = 0;
+            foreach (Actor actor in World.QuadTree.Query<Actor>(new Circle(center.X, center.Y, radius)))
             {
-                if (hits.Count == maxCount)
-                    break;
-
-                if (!actor.Attributes[GameAttribute.Untargetable] && !World.PowerManager.IsDeletingActor(actor))
-                    hits.Add(actor);
+                if (filter(actor) && !actor.Attributes[GameAttribute.Untargetable] && !World.PowerManager.IsDeletingActor(actor) &&
+                    actor != User)
+                {
+                    if (targetFilter(actor))
+                    {
+                        if (count != maxCount)
+                        {
+                            targets.Actors.Add(actor);
+                            count += 1;
+                        }
+                    }
+                    else
+                    {
+                        targets.ExtraActors.Add(actor);
+                    }
+                }
             }
 
-            return hits;
+            return targets;
         }
 
-        public IList<Actor> GetEnemiesInBeamDirection(Vector3D startPoint, Vector3D direction,
-                                                      float length, float thickness = 0f)
+        public TargetList GetEnemiesInBeamDirection(Vector3D startPoint, Vector3D direction,
+                                                    float length, float thickness = 0f)
         {
             Vector3D beamEnd = PowerMath.ProjectAndTranslate2D(startPoint, direction, startPoint, length);
 
-            List<Actor> hits = new List<Actor>();
-            foreach (Actor actor in GetEnemiesInRadius(startPoint, length + Math.Max(thickness * 2, 10f)))
-            {
-                float actorRadius = 1.5f; // TODO: actor.ActorData.Cylinder.Ax2;
-                if (PowerMath.CircleInBeam(new Circle(actor.Position.X, actor.Position.Y, actorRadius), startPoint, beamEnd, thickness))
-                    hits.Add(actor);
-            }
-
-            return hits;
+            float fixedActorRadius = 1.5f;  // TODO: calculate based on actor.ActorData.Cylinder.Ax2 ?
+            return _GetTargetsInRadiusHelper(startPoint, length + Math.Max(thickness * 2, 10f), -1,
+                actor => PowerMath.CircleInBeam(new Circle(actor.Position.X, actor.Position.Y, fixedActorRadius),
+                                                startPoint, beamEnd, thickness),
+                actor => actor is Monster);
         }
 
         public void TranslateEffect(Actor actor, Vector3D destination, float speed)
@@ -249,7 +264,7 @@ namespace Mooege.Core.GS.Powers
 
         public static bool ValidTarget(Actor target)
         {
-            return target != null && target.World != null; // TODO: check if world is same as powers?
+            return target != null && target.World != null;
         }
 
         public bool ValidTarget()

@@ -40,17 +40,22 @@ namespace Mooege.Core.GS.Powers
         public static readonly TickTimer StopExecution = null;
 
 
-        public Actor GetBestMeleeEnemy()
+        public TargetList GetBestMeleeEnemy()
         {
             float meleeRange = 10f;  // TODO: possibly use equipped weapon range for this?
 
-            // get all targets that could be hit by melee attack, return the script Target if its one of them
-            // otherwise return nearest target
-            IList<Actor> targets = GetEnemiesInBeamDirection(User.Position, TargetPosition, meleeRange);
-            if (targets.Contains(Target))
-                return Target;
+            // get all targets that could be hit by melee attack, then select the script's target if
+            // it has one, otherwise use the closest target in range.
+            TargetList targets = GetEnemiesInBeamDirection(User.Position, TargetPosition, meleeRange);
 
-            return targets.OrderBy(t => PowerMath.Distance2D(User.Position, t.Position)).FirstOrDefault();
+            Actor bestEnemy;
+            if (targets.Actors.Contains(Target))
+                bestEnemy = Target;
+            else
+                bestEnemy = targets.GetClosestTo(User.Position);
+
+            targets.Actors.RemoveAll(actor => actor != bestEnemy);
+            return targets;
         }
     }
 }

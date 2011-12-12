@@ -22,11 +22,15 @@ using System.Linq;
 using System.Text;
 using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Powers.Payloads
 {
     public class AttackPayload : Payload
     {
+        // list of targets to try and hit with this payload, must be set before calling Apply()
+        public TargetList Targets;
+
         // list of each amount and type of damage the attack will contain
         public class DamageEntry
         {
@@ -47,7 +51,7 @@ namespace Mooege.Core.GS.Powers.Payloads
         // so this can be set to false to force off all hit effect generation from the payload
         public bool AutomaticHitEffects = true;
 
-        private List<Actor> _targets = new List<Actor>();
+        private List<Func<Buff>> _hitBuffs = new List<Func<Buff>>();
         
         public AttackPayload(PowerContext context)
             : base(context, context.User)
@@ -75,26 +79,34 @@ namespace Mooege.Core.GS.Powers.Payloads
             });
         }
 
-        public void AddTarget(Actor target)
+        public void SetSingleTarget(Actor target)
         {
-            _targets.Add(target);
+            this.Targets = new TargetList();
+            this.Targets.Actors.Add(target);
         }
 
-        public void AddTargets(IList<Actor> targets)
+        public void AddBuffOnHit<T>() where T : Buff, new()
         {
-            _targets.AddRange(targets);
-        }
-
-        public void ClearTargets()
-        {
-            _targets.Clear();
+            _hitBuffs.Add(() => new T());
         }
 
         public void Apply()
         {
             this.Target.World.BuffManager.SendTargetPayload(this.Target, this);
 
-            foreach (Actor target in _targets)
+            // if attack does damage and payload target is a player, run through and activate all the desctructibles
+            if (this.Target is Player && this.DamageEntries.Count > 0)
+            {
+                Player player = (Player)this.Target;
+                foreach (Actor extra in this.Targets.ExtraActors)
+                {
+                    if (extra is Mooege.Core.GS.Actors.Implementations.DesctructibleLootContainer)
+                        extra.OnTargeted(player, null);
+                }
+            }
+            
+            // main targets
+            foreach (Actor target in this.Targets.Actors)
             {
                 // filter null and killed targets
                 if (target == null || target.World != null && target.World.PowerManager.IsDeletingActor(target))
@@ -105,6 +117,9 @@ namespace Mooege.Core.GS.Powers.Payloads
                 var payload = new HitPayload(this, _DoCriticalHit(this.Context.User, target), target);
                 payload.AutomaticHitEffects = this.AutomaticHitEffects;
                 payload.OnDeath = OnDeath;
+
+                foreach (Func<Buff> buffFactory in _hitBuffs)
+                    this.Context.AddBuff(target, buffFactory());
 
                 if (OnHit != null)
                     OnHit(payload);
