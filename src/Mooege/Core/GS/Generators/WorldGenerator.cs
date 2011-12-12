@@ -345,11 +345,7 @@ namespace Mooege.Core.GS.Generators
                                             Y = (float)(y * 2.5 + scene.Position.Y),
                                             Z = scene.NavMesh.Squares[y * scene.NavMesh.SquaresCountX + x].Z + scene.Position.Z
                                         },
-                                        Quaternion = new Quaternion
-                                        {
-                                            W = (float)(RandomHelper.NextDouble() * System.Math.PI * 2),
-                                            Vector3D = new Vector3D(0, 0, 1)
-                                        }
+                                        Quaternion = Quaternion.FacingRotation((float)(RandomHelper.NextDouble() * System.Math.PI * 2))
                                     },
                                     world,
                                     new TagMap()

@@ -92,6 +92,17 @@ namespace Mooege.Core.GS.Actors
         }
 
         /// <summary>
+        /// Replaces the actor's rotation with one that rotates along the Z-axis by the specified "facing" angle. 
+        /// </summary>
+        /// <param name="facingAngle">The angle in radians.</param>
+        public void SetFacingRotation(float facingAngle)
+        {
+            Quaternion q = Quaternion.FacingRotation(facingAngle);
+            this.RotationW = q.W;
+            this.RotationAxis = q.Vector3D;
+        }
+
+        /// <summary>
         /// Tags read from MPQ's for the actor.
         /// </summary>
         public TagMap Tags { get; private set; }
