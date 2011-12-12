@@ -19,27 +19,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Mooege.Common.Logging;
 using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Common.Types.TagMap;
-using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Objects;
-using Mooege.Common.Logging;
+using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Powers
 {
     // Based off Items.FormulaScript class, modified to read game attributes and fully execute power script formulas.
-    static class PowerFormulaScript
+    public static class ScriptFormulaEvaluator
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
-
-        public static TagKeyScript GenerateTagForScriptFormula(int SF_N)
-        {
-            return new TagKeyScript(266496 + 256 * (SF_N / 10) + 16 * (SF_N % 10));
-        }
 
         public static bool Evaluate(int powerSNO, TagKeyScript scriptTag, GameAttributeMap attributes, Random rand, out float result)
         {
@@ -292,7 +286,7 @@ namespace Mooege.Core.GS.Powers
                     if (numb1 >= 23 && numb1 <= 62) // SF_N, relative power formula ref
                     {
                         int SF_N = numb1 - 23;
-                        TagKeyScript relativeTag = GenerateTagForScriptFormula(SF_N);
+                        TagKeyScript relativeTag = PowerTagHelper.GenerateTagForScriptFormula(SF_N);
                         return Evaluate(powerSNO, relativeTag, attributes, rand, out result);
                     }
                     else if (numb1 >= 63 && numb1 <= 72) // known gamebalance power table id range
@@ -429,127 +423,5 @@ namespace Mooege.Core.GS.Powers
                     return null;
             }
         }
-
-        // TODO: disassembler is completely out of date
-
-        public static string ToString(int[] script)
-        {
-            StringBuilder b = new StringBuilder();
-            int pos = 0;
-            while (pos < script.Length)
-            {
-                switch ((byte)script[pos])
-                {
-                    case 0:
-                        b.Append("return; ");
-                        break;
-                    case 1:
-                        ++pos;
-                        ToStringFunc(b, (byte)script[pos]);
-                        break;
-                    case 5:
-                        ToStringIdentifierEval(
-                            b,
-                            script[pos + 1],
-                            script[pos + 2],
-                            script[pos + 3],
-                            script[pos + 4]);
-                        ++pos;
-                        break;
-                    case 6:
-                        b.Append("push ");
-                        ++pos;
-                        b.Append(BinaryIntToFloat(script[pos]));
-                        b.Append("; ");
-                        break;
-                    case 11:
-                        b.Append("add; ");
-                        break;
-                    case 12:
-                        b.Append("sub; ");
-                        break;
-                    case 13:
-                        b.Append("mul; ");
-                        break;
-                    case 14:
-                        b.Append("div; ");
-                        break;
-                    default:
-                        b.Append("unknownOp (");
-                        b.Append(script[pos]);
-                        b.Append("); ");
-                        break;
-                }
-                ++pos;
-            }
-            return b.ToString();
-        }
-
-        static void ToStringFunc(StringBuilder b, byte funcId)
-        {
-            switch (funcId)
-            {
-                case 0:
-                    b.Append("func Min(stack1, stack0); ");
-                    break;
-                case 1:
-                    b.Append("func Max(stack1, stack0); ");
-                    break;
-                case 2:
-                    b.Append("func Pin(stack2, stack1, stack0); ");
-                    break;
-                case 3:
-                    b.Append("func RandomIntMinRange(stack1, stack0); ");
-                    break;
-                case 4:
-                    b.Append("func RandomIntMinMax(stack1, stack0); ");
-                    break;
-                case 5:
-                    b.Append("func Floor(stack0); ");
-                    break;
-                case 6:
-                    b.Append("func Dim(stack2, stack1, stack0); ");
-                    break;
-                case 7:
-                    b.Append("func Pow(stack1, stack0); ");
-                    break;
-                case 8:
-                    b.Append("func Log(stack0); ");
-                    break;
-                case 9:
-                    b.Append("func RandomFloatMinRange(stack1, stack0); ");
-                    break;
-                case 10:
-                    b.Append("func RandomFloatMinMax(stack1, stack0); ");
-                    break;
-                case 11:
-                    b.Append("func TableLookup(stack1, stack0); ");
-                    break;
-                default:
-                    b.Append("unknownFunc(");
-                    b.Append(funcId);
-                    b.Append("); ");
-                    break;
-            }
-        }
-
-        static void ToStringIdentifierEval(StringBuilder b, int numb1, int numb2, int numb3, int numb4)
-        {
-            switch (numb1)
-            {
-                case 0:
-                    b.Append("GetAttribute ");
-                    b.Append(GameAttribute.Attributes[numb2].Name);
-                    b.Append(" ("); b.Append(numb2); b.Append("); ");
-                    break;
-                case 22:
-                    b.Append("RunScript ... ; ");
-                    break;
-                default:
-                    b.Append("unknown source on identifier function ; ");
-                    break;
-            }
-        }
     }
-
 }

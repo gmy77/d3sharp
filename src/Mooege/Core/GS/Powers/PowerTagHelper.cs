@@ -29,6 +29,11 @@ namespace Mooege.Core.GS.Powers
 {
     public class PowerTagHelper
     {
+        public static TagKeyScript GenerateTagForScriptFormula(int SF_N)
+        {
+            return new TagKeyScript(266496 + 256 * (SF_N / 10) + 16 * (SF_N % 10));
+        }
+
         public static TagMap FindTagMapWithKey(int powerSNO, TagKey key)
         {
             Power power = (Power)MPQStorage.Data.Assets[SNOGroup.Power][powerSNO].Data;

@@ -275,7 +275,7 @@ namespace Mooege.Core.GS.Powers
         public float ScriptFormula(int index)
         {
             float result;
-            if (!PowerFormulaScript.Evaluate(this.PowerSNO, PowerFormulaScript.GenerateTagForScriptFormula(index),
+            if (!ScriptFormulaEvaluator.Evaluate(this.PowerSNO, PowerTagHelper.GenerateTagForScriptFormula(index),
                                              User.Attributes, Rand, out result))
                 return 0;
 
@@ -312,7 +312,7 @@ namespace Mooege.Core.GS.Powers
         public float EvalTag(TagKeyScript key)
         {
             float result;
-            if (!PowerFormulaScript.Evaluate(this.PowerSNO, key,
+            if (!ScriptFormulaEvaluator.Evaluate(this.PowerSNO, key,
                                              User.Attributes, Rand, out result))
                 return 0;
 
