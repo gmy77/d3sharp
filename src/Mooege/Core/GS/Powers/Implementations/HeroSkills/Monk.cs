@@ -219,19 +219,14 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Main()
         {
             AttackPayload attack = new AttackPayload(this);
-            switch (TargetMessage.Field5)
+            switch (ComboIndex)
             {
                 case 0:
                 case 1:
                     attack.Targets = GetBestMeleeEnemy();
                     attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
                     if (Rune_C > 0)
-                    {
-                        attack.OnHit = (hitPayload) =>
-                        {
-                            AddBuff(hitPayload.Target, new RuneCDebuff());
-                        };
-                    }
+                        attack.AddBuffOnHit<RuneCDebuff>();
                     break;
 
                 case 2:
@@ -249,16 +244,18 @@ namespace Mooege.Core.GS.Powers.Implementations
                     }
 
                     attack.AutomaticHitEffects = false;
-                    attack.OnHit = (hitPayload) =>
-                    {
-                        AddBuff(hitPayload.Target, new MainDebuff());
-                    };
+                    attack.AddBuffOnHit<MainDebuff>();
                     break;
 
                 default:
                     yield break;
             }
+            bool hitAnything = false;
+            attack.OnHit = hitPayload => { hitAnything = true; };
             attack.Apply();
+
+            if (hitAnything)
+                GeneratePrimaryResource(6f);
             yield break;
         }
 

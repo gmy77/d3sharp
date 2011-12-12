@@ -62,6 +62,8 @@ namespace Mooege.Core.GS.Powers.Payloads
                         (weaponMinDamage + (float)PowerContext.Rand.NextDouble() * weaponDamageDelta);
                 else
                     this.ElementDamages[entry.DamageType] += entry.MinDamage + (float)PowerContext.Rand.NextDouble() * entry.DamageDelta;
+
+                this.ElementDamages[entry.DamageType] *= 1.0f + this.Target.Attributes[GameAttribute.Amplify_Damage_Percent];
             }
 
             // apply critical damage boost
@@ -70,7 +72,7 @@ namespace Mooege.Core.GS.Powers.Payloads
                 // TODO: probably will calculate this off of GameAttribute.Crit_Damage_Percent, but right now that attribute is never set
                 var damTypes = this.ElementDamages.Keys.ToArray();
                 foreach (var type in damTypes)
-                    this.ElementDamages[type] *= 1.0f + 0.50f;
+                    this.ElementDamages[type] *= 1.5f + this.Target.Attributes[GameAttribute.Crit_Percent_Bonus_Capped];
             }
 
             // TODO: reduce element damage amounts according to target's resistances
