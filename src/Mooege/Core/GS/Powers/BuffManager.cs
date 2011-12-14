@@ -92,6 +92,23 @@ namespace Mooege.Core.GS.Powers
             _RemoveBuffsIf(target, buff => true);
         }
 
+        public T GetFirstBuff<T>(Actor target) where T : Buff
+        {
+            if (!_buffs.ContainsKey(target)) return null;
+
+            Buff buff = _buffs[target].FirstOrDefault(b => b != null && b.GetType() == typeof(T));
+            if (buff != null)
+                return (T)buff;
+            else
+                return null;
+        }
+
+        public Buff[] GetAllBuffs(Actor target)
+        {
+            if (!_buffs.ContainsKey(target)) return null;
+            return _buffs[target].Where(b => b != null).ToArray();
+        }
+
         public void SendTargetPayload(Actor target, Payloads.Payload payload)
         {
             if (_buffs.ContainsKey(target))

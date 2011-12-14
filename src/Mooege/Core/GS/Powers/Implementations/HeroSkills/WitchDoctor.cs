@@ -121,17 +121,14 @@ namespace Mooege.Core.GS.Powers.Implementations
             var tongueEnd = SpawnProxy(TargetPosition, WaitInfinite());
             bigtoad.AddRopeEffect(107892, tongueEnd);
 
-            // calculate time it will take for actors to reach toad
-            const float tongueSpeed = 4f;
-            int waitMoveTicks = (int)(PowerMath.Distance(bigtoad.Position, TargetPosition) / tongueSpeed);
-            
             yield return WaitSeconds(0.3f); // have tongue hang there for a bit
             
-            tongueEnd.TranslateNormal(bigtoad.Position, tongueSpeed);
+            var tongueMover = new Implementations.KnockbackBuff(-0.01f, 3f, -0.1f);
+            this.World.BuffManager.AddBuff(bigtoad, tongueEnd, tongueMover);
             if (ValidTarget())
-                Target.TranslateNormal(bigtoad.Position, tongueSpeed);
+                this.World.BuffManager.AddBuff(bigtoad, Target, new Implementations.KnockbackBuff(-0.01f, 3f, -0.1f));
 
-            yield return WaitTicks(waitMoveTicks);
+            yield return tongueMover.ArrivalTime;
             tongueEnd.Destroy();
 
             if (ValidTarget())
@@ -144,7 +141,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 bigtoad.PlayActionAnimation(110636); // disgest ani, 5 seconds
                 for (int n = 0; n < 5 && ValidTarget(); ++n)
                 {
-                    WeaponDamage(Target, 0.39f, DamageType.Poison);
+                    WeaponDamage(Target, 0.039f, DamageType.Poison);
                     yield return WaitSeconds(1f);
                 }
 
@@ -153,7 +150,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     _SetHiddenAttribute(Target, false);
 
                     bigtoad.PlayActionAnimation(110637); // regurgitate ani
-                    Knockback(Target, userCastPosition, 6f);
+                    this.World.BuffManager.AddBuff(bigtoad, Target, new Implementations.KnockbackBuff(36f));
                     Target.PlayEffectGroup(18281); // actual regurgitate efg isn't working so use generic acid effect
                     yield return WaitSeconds(0.9f);
                 }

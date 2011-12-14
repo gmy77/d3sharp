@@ -24,6 +24,7 @@ using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Ticker;
 using Mooege.Core.GS.Powers.Payloads;
+using Mooege.Core.GS.Actors.Movement;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -251,7 +252,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, 20f);
             attack.AddWeaponDamage(2.05f, DamageType.Physical);
-            attack.OnHit = hitPayload => { Knockback(hitPayload.Target, 5f); };
+            attack.OnHit = hitPayload => { Knockback(hitPayload.Target, ScriptFormula(0), ScriptFormula(4), ScriptFormula(5)); };
             attack.Apply();
             yield break;
         }
@@ -469,7 +470,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Field2 = Rand.Next(), // RNG seed for style 1 and 2
                 Field3 = Rand.Next(), // RNG seed for style 1 and 2
                 Field4 = new Vector3D(0.0f, 0.3f, 0),  // length of this vector is amount moved for style 1 and 2, 
-                Field5 = PowerMath.AngleLookAt(User.Position, TargetPosition), // facing angle
+                Field5 = MovementHelpers.GetFacingAngle(User.Position, TargetPosition), // facing angle
                 Field6 = User.Position,
                 Field7 = 1,
                 Field8 = 0,

@@ -141,7 +141,7 @@ namespace Mooege.Core.GS.Actors
             get { return true; }
         }
 
-        protected Mooege.Common.MPQ.FileFormats.Actor ActorData { get; private set; }
+        public Mooege.Common.MPQ.FileFormats.Actor ActorData { get; private set; }
 
         /// <summary>
         /// The animation set for actor.
@@ -304,23 +304,6 @@ namespace Mooege.Core.GS.Actors
         #endregion
         
         #region Movement/Translation
-
-        public void TranslateNormal(Vector3D destination, float speed = 1.0f, int? animationTag = null)
-        {
-            this.Position = destination;
-
-            if (this.World == null) return;
-
-            this.World.BroadcastIfRevealed(new NotifyActorMovementMessage
-            {
-                ActorId = (int)DynamicID,
-                Position = destination,
-                Angle = (float)Math.Acos(this.RotationW) * 2f,  // convert z-axis quat to radians
-                TurnImmediately = false,
-                Speed = speed,
-                AnimationTag = animationTag,
-            }, this);
-        }
 
         public void TranslateFacing(Vector3D target, bool immediately = false)
         {

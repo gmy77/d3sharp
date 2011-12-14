@@ -33,6 +33,7 @@ using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Powers.Payloads;
 using Mooege.Net.GS.Message.Definitions.Actor;
+using Mooege.Core.GS.Actors.Movement;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -156,13 +157,13 @@ namespace Mooege.Core.GS.Powers
 
         public EffectActor SpawnEffect(int actorSNO, Vector3D position, Actor facingTarget, TickTimer timeout = null)
         {
-            float angle = (facingTarget != null) ? PowerMath.AngleLookAt(User.Position, facingTarget.Position) : -1f;
+            float angle = (facingTarget != null) ? MovementHelpers.GetFacingAngle(User.Position, facingTarget.Position) : -1f;
             return SpawnEffect(actorSNO, position, angle, timeout);
         }
 
         public EffectActor SpawnEffect(int actorSNO, Vector3D position, Vector3D facingTarget, TickTimer timeout = null)
         {
-            float angle = PowerMath.AngleLookAt(User.Position, facingTarget);
+            float angle = MovementHelpers.GetFacingAngle(User.Position, facingTarget);
             return SpawnEffect(actorSNO, position, angle, timeout);
         }
 
@@ -248,18 +249,12 @@ namespace Mooege.Core.GS.Powers
                 Speed = speed,
             }, actor);
         }
-
-        public void Knockback(Actor target, Vector3D from, float amount)
+        
+        public TickTimer Knockback(Actor target, float magnitude, float arcHeight = 3.0f, float arcGravity = -0.03f)
         {
-            if (target == null) return;
-            // KNOCKBACK DISABLED for now
-            //var move = PowerMath.ProjectAndTranslate2D(from, target.Position, target.Position, amount);
-            //target.TranslateNormal(move, 1f);
-        }
-
-        public void Knockback(Actor target, float amount)
-        {
-            Knockback(target, User.Position, amount);
+            var buff = new Implementations.KnockbackBuff(magnitude, arcHeight, arcGravity);
+            AddBuff(target, buff);
+            return buff.ArrivalTime;
         }
 
         public static bool ValidTarget(Actor target)
@@ -339,18 +334,12 @@ namespace Mooege.Core.GS.Powers
 
         public T RuneSelect<T>(T none, T runeA, T runeB, T runeC, T runeD, T runeE)
         {
-            if (Rune_A > 0)
-                return runeA;
-            else if (Rune_B > 0)
-                return runeB;
-            else if (Rune_C > 0)
-                return runeC;
-            else if (Rune_D > 0)
-                return runeD;
-            else if (Rune_E > 0)
-                return runeE;
-            else
-                return none;
+            if (Rune_A > 0) return runeA;
+            else if (Rune_B > 0) return runeB;
+            else if (Rune_C > 0) return runeC;
+            else if (Rune_D > 0) return runeD;
+            else if (Rune_E > 0) return runeE;
+            else return none;
         }
 
         public bool AddBuff(Actor target, Buff buff)

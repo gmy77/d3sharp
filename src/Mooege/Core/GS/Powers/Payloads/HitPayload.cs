@@ -148,7 +148,8 @@ namespace Mooege.Core.GS.Powers.Payloads
             else if (this.AutomaticHitEffects && this.Target.World != null)
             {
                 // target didn't die, so play hit animation if the actor has one
-                if (this.Target.AnimationSet != null)
+                if (this.Target.World.BuffManager.GetFirstBuff<Implementations.KnockbackBuff>(this.Target) == null &&
+                    this.Target.AnimationSet != null)
                 {
                     int hitAni = this.Target.AnimationSet.TagMapAnimDefault[AnimationSetKeys.GetHit];
                     if (hitAni != -1)

@@ -108,8 +108,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\GS\Powers\ActionTimedSkill.cs" />
+    <Compile Include="Core\GS\Powers\ActorMover.cs" />
     <Compile Include="Core\GS\Powers\ComboSkill.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\CooldownBuff.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\KnockbackBuff.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\StatusDebuffs.cs" />
     <Compile Include="Core\GS\Powers\Payloads\AttackPayload.cs" />
     <Compile Include="Core\GS\Powers\BaseBuffs.cs" />

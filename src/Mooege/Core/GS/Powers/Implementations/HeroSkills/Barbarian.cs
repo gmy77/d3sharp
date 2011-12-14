@@ -35,18 +35,18 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            var payload = new AttackPayload(this);
-            payload.Targets = GetBestMeleeEnemy();
-            payload.AddWeaponDamage(1.45f, DamageType.Physical);
-            payload.OnHit = hitPayload =>
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetBestMeleeEnemy();
+            attack.AddWeaponDamage(1.45f, DamageType.Physical);
+            attack.OnHit = hitPayload =>
             {
                 GeneratePrimaryResource(6f);
 
                 if (Rand.NextDouble() < 0.20)
-                    Knockback(hitPayload.Target, 4f);
+                    Knockback(hitPayload.Target, ScriptFormula(5), ScriptFormula(6), ScriptFormula(7));
             };
 
-            payload.Apply();
+            attack.Apply();
 
             yield break;
         }
@@ -65,35 +65,21 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             //StartCooldown(WaitSeconds(10f));
 
-            Vector3D delta = new Vector3D(TargetPosition - User.Position);
-            float delta_length = (float)Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y);
-            Vector3D delta_normal = new Vector3D(delta.X / delta_length, delta.Y / delta_length, delta.Z / delta_length);
-            float unitsMovedPerTick = 30f;
-            Vector3D ramp = new Vector3D(delta_normal.X * (delta_length / unitsMovedPerTick),
-                                         delta_normal.Y * (delta_length / unitsMovedPerTick),
-                                         1.483239f); // usual leap height, possibly different when jumping up/down?
-
-            // TODO: Generalize this and put it in Actor
-            User.World.BroadcastIfRevealed(new ACDTranslateArcMessage()
+            ActorMover mover = new ActorMover(User);
+            mover.MoveArc(TargetPosition, 10, -0.1f, new ACDTranslateArcMessage
             {
-                ActorId = (int)User.DynamicID,
-                Start = User.Position,
-                Velocity = ramp,
-                //Field3 = 303110, // used for male barb leap
-                FlyingAnimationTagID = 69792, // used for male barb leap
+                //Field3 = 303110, // used for male barb leap, not needed?
+                FlyingAnimationTagID = 69792,
                 LandingAnimationTagID = -1,
-                Field6 = -0.1f, // gravity
-                Field7 = Skills.Skills.Barbarian.FuryGenerators.LeapAttack,
-                Field8 = 0,
-                Field9 = TargetPosition.Z,
-            }, User);
-            User.Position = TargetPosition;
+                Field7 = PowerSNO
+            });
 
-            // wait for leap to hit
-            yield return WaitSeconds(0.6f);
+            // wait for landing
+            while (!mover.Update())
+                yield return WaitTicks(1);
 
             // ground smash effect
-            User.PlayEffectGroup(18688);
+            User.PlayEffectGroup(162811);
 
             bool hitAnything = false;
             AttackPayload attack = new AttackPayload(this);
@@ -182,10 +168,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             projectile.OnCollision = (hit) =>
             {
                 GeneratePrimaryResource(15f);
-
-                var inFrontOfUser = PowerMath.ProjectAndTranslate2D(User.Position, hit.Position,
-                    User.Position, 5f);
-
+                
                 _setupReturnProjectile(hit.Position);
 
                 AttackPayload attack = new AttackPayload(this);
@@ -195,7 +178,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 attack.OnHit = (hitPayload) =>
                 {
                     // GET OVER HERE
-                    hit.TranslateNormal(inFrontOfUser, 2f);
+                    Knockback(hitPayload.Target, -25f, 1f, -0.03f);
                 };
                 attack.Apply();
 
@@ -206,7 +189,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 _setupReturnProjectile(projectile.Position);
             };
 
-            projectile.Launch(TargetPosition, 2f);
+            projectile.Launch(TargetPosition, 1.9f);
             User.AddRopeEffect(79402, projectile);
 
             yield break;
@@ -215,14 +198,17 @@ namespace Mooege.Core.GS.Powers.Implementations
         private void _setupReturnProjectile(Vector3D spawnPosition)
         {
             var return_proj = new Projectile(this, 79400, new Vector3D(spawnPosition.X, spawnPosition.Y, User.Position.Z));
-            Vector3D prevPosition = return_proj.Position;
+            return_proj.DestroyOnArrival = true;
             return_proj.OnUpdate = () =>
             {
                 if (PowerMath.Distance2D(return_proj.Position, User.Position) < 15f)
                     return_proj.Destroy();
             };
 
-            return_proj.Launch(User.Position, 2f);
+            Vector3D inFrontOfUser = PowerMath.ProjectAndTranslate2D(User.Position, spawnPosition,
+                new Vector3D(User.Position.X, User.Position.Y, return_proj.Position.Z), 5f);
+
+            return_proj.LaunchArc(inFrontOfUser, 1f, -0.03f);
             User.AddRopeEffect(79402, return_proj);
         }
     }

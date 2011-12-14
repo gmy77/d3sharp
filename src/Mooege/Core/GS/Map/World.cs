@@ -132,8 +132,8 @@ namespace Mooege.Core.GS.Map
 
         public void Update(int tickCounter)
         {
-            this.PowerManager.Update();
             this.BuffManager.Update();
+            this.PowerManager.Update();
 
             var actorsToUpdate = new List<IUpdateable>(); // list of actor to update.
 

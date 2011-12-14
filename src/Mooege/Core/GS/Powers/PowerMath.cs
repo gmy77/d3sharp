@@ -65,11 +65,6 @@ namespace Mooege.Core.GS.Powers
                                     Math.Pow(a.Y - b.Y, 2));
         }
 
-        public static float AngleLookAt(Vector3D source, Vector3D target)
-        {
-            return (float)Math.Atan2(target.Y - source.Y, target.X - source.X);
-        }
-
         public static Vector3D ProjectAndTranslate2D(Vector3D a, Vector3D b, Vector3D position, float amount)
         {
             Vector3D r = new Vector3D(position);

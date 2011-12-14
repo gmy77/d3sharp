@@ -47,21 +47,14 @@ namespace Mooege.Core.GS.Powers
         public Actor GetClosestTo(Vector3D position)
         {
             Actor closest = null;
-            float closestDistance = 0f;
+            float closestDistance = float.MaxValue;
             foreach (Actor actor in this.Actors)
             {
-                if (closest == null)
+                float distance = PowerMath.Distance2D(actor.Position, position);
+                if (distance < closestDistance)
                 {
                     closest = actor;
-                }
-                else
-                {
-                    float distance = PowerMath.Distance2D(actor.Position, position);
-                    if (distance < closestDistance)
-                    {
-                        closest = actor;
-                        closestDistance = distance;
-                    }
+                    closestDistance = distance;
                 }
             }
 

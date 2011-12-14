@@ -96,7 +96,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     attack.AddWeaponDamage(1.20f, DamageType.Lightning);
                     attack.OnHit = hitPayload => {
                         hitAnything = true;
-                        Knockback(hitPayload.Target, 4f);
+                        Knockback(hitPayload.Target, 12f);
                     };
                     attack.Apply();
 
@@ -411,17 +411,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             //UsePrimaryResource(15f);
 
             // dashing strike never specifies the target's id so we just search for the closest target
-            // ultimately need to know the radius of each target and select the one most covered
-            float min_distance = float.MaxValue;
-            foreach (Actor actor in GetEnemiesInRadius(TargetPosition, 8f).Actors)
-            {
-                float distance = PowerMath.Distance(actor.Position, TargetPosition);
-                if (distance < min_distance)
-                {
-                    min_distance = distance;
-                    Target = actor;
-                }
-            }
+            Target = GetEnemiesInRadius(TargetPosition, 8f).GetClosestTo(TargetPosition);
 
             if (Target != null)
             {
@@ -433,33 +423,10 @@ namespace Mooege.Core.GS.Powers.Implementations
                 // if no target, always dash fixed amount
                 TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, User.Position, 13f);
             }
-            
-            // dash speed seems to always be actor speed * 10
-            float speed = User.Attributes[GameAttribute.Running_Rate_Total] * 10f;
-            TickTimer minDashWait = WaitSeconds(0.15f);
-            TickTimer waitDashEnd = new RelativeTickTimer(World.Game, (int)(PowerMath.Distance2D(User.Position, TargetPosition) / speed));
-            
-            // if dash ticks is too small the effect won't show at all, so always make it at least minDashWait
-            waitDashEnd = minDashWait.TimeoutTick > waitDashEnd.TimeoutTick ? minDashWait : waitDashEnd;
-            
-            // dashing effect buff
-            AddBuff(User, new DashingBuff0(waitDashEnd));
-            
-            // TODO: Generalize this and put it in Actor
-            User.World.BroadcastInclusive(new NotifyActorMovementMessage
-            {
-                ActorId = (int)User.DynamicID,
-                Position = TargetPosition,
-                Angle = PowerMath.AngleLookAt(User.Position, TargetPosition),
-                TurnImmediately = true,
-                Speed = speed,
-                Field5 = 0x9206, // alt: 0x920e, not sure what this param is for.
-                AnimationTag = 69808, // dashing strike attack animation
-                Field7 = 6, // ticks to wait before playing animation
-            }, User);
-            User.Position = TargetPosition;
 
-            yield return waitDashEnd;
+            var dashBuff = new DashMoverBuff(TargetPosition);
+            AddBuff(User, dashBuff);
+            yield return dashBuff.Timeout;
 
             if (Target != null && Target.World != null) // target could've died or left world
             {
@@ -471,11 +438,14 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
 
         [ImplementsPowerBuff(0)]
-        class DashingBuff0 : PowerBuff
+        class DashMoverBuff : PowerBuff
         {
-            public DashingBuff0(TickTimer timeout)
+            private Vector3D _destination;
+            private ActorMover _mover;
+
+            public DashMoverBuff(Vector3D destination)
             {
-                Timeout = timeout;
+                _destination = destination;
             }
 
             public override bool Apply()
@@ -483,16 +453,38 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (!base.Apply())
                     return false;
 
-                User.Attributes[GameAttribute.Hidden] = true;
-                User.Attributes.BroadcastChangedIfRevealed();
+                // dash speed seems to always be actor speed * 10
+                float speed = Target.Attributes[GameAttribute.Running_Rate_Total] * 10f;
+
+                _mover = new ActorMover(Target);
+                _mover.Move(_destination, speed, new NotifyActorMovementMessage
+                {
+                    TurnImmediately = true,
+                    Field5 = 0x9206, // alt: 0x920e, not sure what this param is for.
+                    AnimationTag = 69808, // dashing strike attack animation
+                    Field7 = 6, // ticks to wait before playing attack animation
+                });
+
+                // make sure buff timeout is big enough otherwise the client will sometimes ignore the visual effects.
+                TickTimer minDashWait = WaitSeconds(0.15f);
+                Timeout = minDashWait.TimeoutTick > _mover.ArrivalTime.TimeoutTick ? minDashWait : _mover.ArrivalTime;
+
+                Target.Attributes[GameAttribute.Hidden] = true;
+                Target.Attributes.BroadcastChangedIfRevealed();
                 return true;
             }
 
             public override void Remove()
             {
                 base.Remove();
-                User.Attributes[GameAttribute.Hidden] = false;
-                User.Attributes.BroadcastChangedIfRevealed();
+                Target.Attributes[GameAttribute.Hidden] = false;
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
+
+            public override bool Update()
+            {
+                _mover.Update();
+                return base.Update();
             }
         }
     }
