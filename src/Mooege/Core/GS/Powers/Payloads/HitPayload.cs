@@ -151,11 +151,14 @@ namespace Mooege.Core.GS.Powers.Payloads
                 if (this.Target.World.BuffManager.GetFirstBuff<Implementations.KnockbackBuff>(this.Target) == null &&
                     this.Target.AnimationSet != null)
                 {
-                    int hitAni = this.Target.AnimationSet.TagMapAnimDefault[AnimationSetKeys.GetHit];
-                    if (hitAni != -1)
+                    if (this.Target.AnimationSet.TagMapAnimDefault.ContainsKey(AnimationSetKeys.GetHit))
                     {
-                        // HACK: hardcoded animation speed/ticks, need to base those off hit recovery speed
-                        this.Target.PlayAnimation(6, hitAni, 1.0f, 40);
+                        int hitAni = this.Target.AnimationSet.TagMapAnimDefault[AnimationSetKeys.GetHit];
+                        if (hitAni != -1)
+                        {
+                            // HACK: hardcoded animation speed/ticks, need to base those off hit recovery speed
+                            this.Target.PlayAnimation(6, hitAni, 1.0f, 40);
+                        }
                     }
                 }
             }

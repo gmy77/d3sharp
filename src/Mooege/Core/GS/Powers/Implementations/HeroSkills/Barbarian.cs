@@ -69,7 +69,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             mover.MoveArc(TargetPosition, 10, -0.1f, new ACDTranslateArcMessage
             {
                 //Field3 = 303110, // used for male barb leap, not needed?
-                FlyingAnimationTagID = 69792,
+                FlyingAnimationTagID = AnimationSetKeys.Attack2.ID,
                 LandingAnimationTagID = -1,
                 Field7 = PowerSNO
             });
@@ -77,6 +77,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             // wait for landing
             while (!mover.Update())
                 yield return WaitTicks(1);
+
+            // extra wait for leap to finish
+            yield return WaitTicks(1);
 
             // ground smash effect
             User.PlayEffectGroup(162811);
@@ -197,17 +200,10 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         private void _setupReturnProjectile(Vector3D spawnPosition)
         {
+            Vector3D inFrontOfUser = PowerMath.ProjectAndTranslate2D(User.Position, spawnPosition, User.Position, 5f);
+
             var return_proj = new Projectile(this, 79400, new Vector3D(spawnPosition.X, spawnPosition.Y, User.Position.Z));
             return_proj.DestroyOnArrival = true;
-            return_proj.OnUpdate = () =>
-            {
-                if (PowerMath.Distance2D(return_proj.Position, User.Position) < 15f)
-                    return_proj.Destroy();
-            };
-
-            Vector3D inFrontOfUser = PowerMath.ProjectAndTranslate2D(User.Position, spawnPosition,
-                new Vector3D(User.Position.X, User.Position.Y, return_proj.Position.Z), 5f);
-
             return_proj.LaunchArc(inFrontOfUser, 1f, -0.03f);
             User.AddRopeEffect(79402, return_proj);
         }

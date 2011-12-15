@@ -132,9 +132,6 @@ namespace Mooege.Core.GS.Map
 
         public void Update(int tickCounter)
         {
-            this.BuffManager.Update();
-            this.PowerManager.Update();
-
             var actorsToUpdate = new List<IUpdateable>(); // list of actor to update.
 
             foreach (var player in this.Players.Values) // get players in the world.
@@ -153,7 +150,15 @@ namespace Mooege.Core.GS.Map
                 actor.Update(tickCounter);
             }
 
+            this.BuffManager.Update();
+            this.PowerManager.Update();
+
             UpdateFlippy(tickCounter);
+
+            foreach (var player in this.Players.Values)
+            {
+                player.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
+            }
         }
 
         #endregion

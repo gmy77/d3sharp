@@ -257,6 +257,13 @@ namespace Mooege.Core.GS.Powers
             return buff.ArrivalTime;
         }
 
+        public TickTimer Knockback(Vector3D from, Actor target, float magnitude, float arcHeight = 3.0f, float arcGravity = -0.03f)
+        {
+            var buff = new Implementations.KnockbackBuff(magnitude, arcHeight, arcGravity);
+            AddBuff(SpawnProxy(from), target, buff);
+            return buff.ArrivalTime;
+        }
+
         public static bool ValidTarget(Actor target)
         {
             return target != null && target.World != null;
@@ -344,7 +351,12 @@ namespace Mooege.Core.GS.Powers
 
         public bool AddBuff(Actor target, Buff buff)
         {
-            return target.World.BuffManager.AddBuff(User, target, buff);
+            return AddBuff(User, target, buff);
+        }
+
+        public bool AddBuff(Actor user, Actor target, Buff buff)
+        {
+            return target.World.BuffManager.AddBuff(user, target, buff);
         }
     }
 }

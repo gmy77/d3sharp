@@ -85,10 +85,9 @@ namespace Mooege.Core.GS.Powers
             this.Target.World.BroadcastIfRevealed(baseMessage, this.Target);
         }
 
-        public void MoveArc(Vector3D destination, float crestHeight, float gravity,
-                            ACDTranslateArcMessage baseMessage = null)
+        public void MoveArc(Vector3D destination, float height, float gravity, ACDTranslateArcMessage baseMessage = null)
         {
-            _SetupArcMove(destination, crestHeight, gravity);
+            _SetupArcMove(destination, height, gravity);
             _moveCommand = MoveCommandType.Arc;
 
             if (baseMessage == null)
@@ -146,7 +145,7 @@ namespace Mooege.Core.GS.Powers
                                          normal.Y * (distance / arrivalTicks),
                                          absGravity * arcLength);
 
-            this.ArrivalTime = new RelativeTickTimer(this.Target.World.Game, arrivalTicks + 6);  // HACK: +6 to fix timings
+            this.ArrivalTime = new RelativeTickTimer(this.Target.World.Game, arrivalTicks);
             _startPosition = this.Target.Position;
             _endPosition = destination;
             _startTick = this.Target.World.Game.TickCounter;

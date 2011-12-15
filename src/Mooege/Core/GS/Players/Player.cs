@@ -729,8 +729,6 @@ namespace Mooege.Core.GS.Players
             Conversations.Update(this.World.Game.TickCounter);
 
             _UpdateResources();
-
-            this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
         }
 
         #endregion

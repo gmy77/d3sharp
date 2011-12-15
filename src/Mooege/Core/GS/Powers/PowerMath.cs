@@ -26,7 +26,7 @@ using Mooege.Core.GS.Common.Types.Misc;
 namespace Mooege.Core.GS.Powers
 {
     // Collection of useful functions that operate on things Powers work with.
-    public class PowerMath
+    public static class PowerMath
     {
         public static Vector2F VectorWithoutZ(Vector3D v)
         {
@@ -73,6 +73,35 @@ namespace Mooege.Core.GS.Powers
             r.Y += ab_norm.Y * amount;
             //r.Z += ab_norm.Z * amount;
             return r;
+        }
+
+        public static Vector3D VectorRotateZ(Vector3D v, float radians)
+        {
+            float cosRad = (float)Math.Cos(radians);
+            float sinRad = (float)Math.Sin(radians);
+
+            return new Vector3D(v.X * cosRad - v.Y * sinRad,
+                                v.X * sinRad + v.Y * cosRad,
+                                v.Z);
+        }
+
+        public const float DegreesToRadians = (float)(Math.PI / 180.0);
+
+        public static Vector3D[] GenerateSpreadPositions(Vector3D center, Vector3D targetPosition, float spacingDegrees, int count)
+        {
+            Vector3D baseRotation = targetPosition - center;
+            float spacing = spacingDegrees * DegreesToRadians;
+            float median = count % 2 == 0 ? spacing * (count+1) / 2.0f : spacing * (float)Math.Ceiling(count / 2.0f);
+            Vector3D[] output = new Vector3D[count];
+
+            float offset = 1f;
+            for (int i = 0; i < count; ++i)
+            {
+                output[i] = center + VectorRotateZ(baseRotation, offset * spacing - median);
+                offset += 1f;
+            }
+
+            return output;
         }
 
         public static bool PointInRotatedRect(Vector2F point, Vector2F rectMidpointStart, Vector2F rectMidpointEnd, float rectHeight)

@@ -26,6 +26,7 @@ using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Ticker;
 using Mooege.Common.Logging;
 using Mooege.Net.GS.Message;
+using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -50,6 +51,7 @@ namespace Mooege.Core.GS.Powers
         private ActorMover _mover;
         private Vector3D _prevUpdatePosition;
         private bool _onArrivalCalled;
+        private bool _spawned;  // using my own spawn flag cause Actor.Spawned isn't being used right now
 
         public Projectile(PowerContext context, int actorSNO, Vector3D position)
             : base(context.World, actorSNO)
@@ -60,6 +62,7 @@ namespace Mooege.Core.GS.Powers
 
             this.Context = context;
             this.Position = new Vector3D(position);
+            this.SetFacingRotation(0);
             this.Timeout = new SecondsTickTimer(context.World.Game, 2f);  // 2 second default timeout for projectiles
 
             // copy in important effect params from user
@@ -71,6 +74,7 @@ namespace Mooege.Core.GS.Powers
 
             _prevUpdatePosition = null;
             _mover = new ActorMover(this);
+            _spawned = false;
 
             // offset position by mpq collision data
             this.Position.Z += this.ActorData.Cylinder.Ax1 - this.ActorData.Cylinder.Position.Z;
@@ -78,25 +82,38 @@ namespace Mooege.Core.GS.Powers
 
         public void Launch(Vector3D targetPosition, float speed)
         {
-            if (!this.Spawned)
+            if (!_spawned)
+            {
                 this.EnterWorld(this.Position);
+                _spawned = true;
+            }
 
             _mover.MoveFixed(targetPosition, speed, new ACDTranslateFixedMessage
             {
                 Field2 = 0x00800000,
-                AnimationTag = 0x00011000,  // seems all projectiles use walk ani
-                Field4 = unchecked((int)0xFFFFFFFF)
+                AnimationTag = AnimationSetKeys.IdleDefault.ID,
+                Field4 = -1
             });
 
             _onArrivalCalled = false;
         }
 
-        public void LaunchArc(Vector3D destination, float arcHeight, float arcGravity)
+        public void LaunchArc(Vector3D destination, float arcHeight, float arcGravity, float visualBounce = 0f)
         {
-            if (!this.Spawned)
+            if (!_spawned)
+            {
                 this.EnterWorld(this.Position);
+                _spawned = true;
+            }
 
-            _mover.MoveArc(destination, arcHeight, arcGravity);
+            _mover.MoveArc(destination, arcHeight, arcGravity, new ACDTranslateArcMessage
+            {
+                Field3 = 0x00800000,
+                FlyingAnimationTagID = AnimationSetKeys.IdleDefault.ID,
+                LandingAnimationTagID = -1,
+                Field7 = this.Context.PowerSNO,
+                Field8 = visualBounce
+            });
             _onArrivalCalled = false;
         }
 

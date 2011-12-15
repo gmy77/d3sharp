@@ -112,4 +112,15 @@ namespace Mooege.Core.GS.Powers.Implementations
             Timeout = timeout;
         }
     }
+
+    [ImplementsPowerSNO(101000)] // DebuffStunned.pow
+    [ImplementsPowerBuff(0)]
+    public class DebuffStunned : SimpleBooleanStatusDebuff
+    {
+        public DebuffStunned(TickTimer timeout)
+            : base(GameAttribute.Stunned, GameAttribute.Stun_Immune, FloatingNumberMessage.FloatType.Stunned)
+        {
+            Timeout = timeout;
+        }
+    }
 }
