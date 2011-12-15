@@ -110,8 +110,6 @@ namespace Mooege.Core.GS.Powers
         
         private void _SetupMove(Vector3D destination, float speed)
         {
-            this.Target.TranslateFacing(destination, true);
-
             Vector3D dir_normal = PowerMath.Normalize(new Vector3D(destination.X - this.Target.Position.X,
                                                                    destination.Y - this.Target.Position.Y,
                                                                    0f));  // were not moving in 3d for now
@@ -129,8 +127,6 @@ namespace Mooege.Core.GS.Powers
 
         private void _SetupArcMove(Vector3D destination, float crestHeight, float gravity)
         {
-            this.Target.TranslateFacing(destination, true);
-
             // TODO: handle when target and destination heights differ
             float absGravity = Math.Abs(gravity);
             float arcLength = (float)Math.Sqrt(2f * crestHeight / absGravity);

@@ -62,7 +62,6 @@ namespace Mooege.Core.GS.Powers
 
             this.Context = context;
             this.Position = new Vector3D(position);
-            this.SetFacingRotation(0);
             this.Timeout = new SecondsTickTimer(context.World.Game, 2f);  // 2 second default timeout for projectiles
 
             // copy in important effect params from user
@@ -82,6 +81,7 @@ namespace Mooege.Core.GS.Powers
 
         public void Launch(Vector3D targetPosition, float speed)
         {
+            this.TranslateFacing(targetPosition, true);
             if (!_spawned)
             {
                 this.EnterWorld(this.Position);
@@ -100,6 +100,7 @@ namespace Mooege.Core.GS.Powers
 
         public void LaunchArc(Vector3D destination, float arcHeight, float arcGravity, float visualBounce = 0f)
         {
+            this.TranslateFacing(destination, true);
             if (!_spawned)
             {
                 this.EnterWorld(this.Position);

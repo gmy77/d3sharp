@@ -182,6 +182,12 @@ namespace Mooege.Core.GS.Powers
             }
             else
             {
+                // no power script is available, but try to play the cast effects
+                var efgTag = Mooege.Core.GS.Common.Types.TagMap.PowerKeys.CastingEffectGroup_Male;
+                var tagmap = PowerTagHelper.FindTagMapWithKey(powerSNO, efgTag);
+                if (tagmap != null)
+                    user.PlayEffectGroup(tagmap[efgTag].Id);
+
                 return false;
             }
         }

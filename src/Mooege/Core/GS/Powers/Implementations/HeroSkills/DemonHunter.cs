@@ -71,6 +71,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 bounceOffset *= 0.3f;
 
                 yield return grenades[0].ArrivalTime;
+                // play "dink dink" grenade bounce sound
                 grenades[0].PlayEffect(Effect.Unknown69);
             }
 
@@ -118,7 +119,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 int damagePulses = (int)ScriptFormula(28);
                 for (int pulse = 0; pulse < damagePulses; ++pulse)
                 {
-                    yield return WaitSeconds(ScriptFormula(12));
+                    yield return WaitSeconds(ScriptFormula(12) / damagePulses);
 
                     for (int i = 0; i < grenades.Length; ++i)
                     {
@@ -126,6 +127,21 @@ namespace Mooege.Core.GS.Powers.Implementations
                     }
                 }
             }
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.DemonHunter.HatredSpenders.RainOfVengeance)]
+    public class DemonHunterRainOfVengeance : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            gok();
+            yield break;
+        }
+
+        private void gok()
+        {
+            SpawnEffect(149949, TargetPosition, -1);
         }
     }
 }
