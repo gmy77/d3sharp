@@ -180,7 +180,16 @@ namespace Mooege.Common.MPQ
                 if (Storage.Config.Instance.EnableTasks)
                     this._tasks.Add(new Task(() => asset.RunParser()));
                 else
-                    asset.RunParser();
+                {
+                    try
+                    {
+                        asset.RunParser();
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error("Error parsing {0}.\n{1}", asset.FileName, e.Message);
+                    }
+                }
             }
         }
 
