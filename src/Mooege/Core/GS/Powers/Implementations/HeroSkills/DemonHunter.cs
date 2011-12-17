@@ -62,7 +62,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 for (int i = 0; i < grenades.Length; ++i)
                 {
-                    grenades[i].LaunchArc(PowerMath.ProjectAndTranslate2D(projDestinations[i], User.Position, projDestinations[i],
+                    grenades[i].LaunchArc(PowerMath.TranslateDirection2D(projDestinations[i], User.Position, projDestinations[i],
                                                                           targetDistance * 0.3f * bounceOffset),
                                           height, ScriptFormula(20));
                 }

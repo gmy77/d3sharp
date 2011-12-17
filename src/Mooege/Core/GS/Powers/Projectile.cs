@@ -57,12 +57,17 @@ namespace Mooege.Core.GS.Powers
             : base(context.World, actorSNO)
         {
             this.Field2 = 0x8;
-            this.Scale = 1.35f;
             this.Field7 = 0x00000001;  // TODO: test if this is necessary
+
+            if (this.Scale == 0f)
+                this.Scale = 1.00f;
 
             this.Context = context;
             this.Position = new Vector3D(position);
-            this.Timeout = new SecondsTickTimer(context.World.Game, 2f);  // 2 second default timeout for projectiles
+            // offset position by mpq collision data
+            this.Position.Z += this.ActorData.Cylinder.Ax1 - this.ActorData.Cylinder.Position.Z;
+            // 2 second default timeout for projectiles
+            this.Timeout = new SecondsTickTimer(context.World.Game, 2f);
 
             // copy in important effect params from user
             this.Attributes[GameAttribute.Rune_A, context.PowerSNO] = context.User.Attributes[GameAttribute.Rune_A, context.PowerSNO];
@@ -74,9 +79,6 @@ namespace Mooege.Core.GS.Powers
             _prevUpdatePosition = null;
             _mover = new ActorMover(this);
             _spawned = false;
-
-            // offset position by mpq collision data
-            this.Position.Z += this.ActorData.Cylinder.Ax1 - this.ActorData.Cylinder.Position.Z;
         }
 
         public void Launch(Vector3D targetPosition, float speed)

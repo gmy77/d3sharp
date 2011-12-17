@@ -66,7 +66,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             // HACK: made up garggy spell :)
 
-            Vector3D inFrontOfTarget = PowerMath.ProjectAndTranslate2D(TargetPosition, User.Position, TargetPosition, 11f);
+            Vector3D inFrontOfTarget = PowerMath.TranslateDirection2D(TargetPosition, User.Position, TargetPosition, 11f);
             inFrontOfTarget.Z = User.Position.Z;
             var garggy = SpawnEffect(122305, inFrontOfTarget, TargetPosition, WaitInfinite());
 
@@ -106,7 +106,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             // NOTE: not normal plague of toads right now but Obsidian runed "Toad of Hugeness"
 
             Vector3D userCastPosition = new Vector3D(User.Position);
-            Vector3D inFrontOfUser = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, User.Position, 7f);
+            Vector3D inFrontOfUser = PowerMath.TranslateDirection2D(User.Position, TargetPosition, User.Position, 7f);
             var bigtoad = SpawnEffect(109906, inFrontOfUser, TargetPosition, WaitInfinite());
             
             // HACK: holy hell there is alot of hardcoded animation timings here

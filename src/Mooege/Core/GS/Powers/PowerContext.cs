@@ -173,33 +173,50 @@ namespace Mooege.Core.GS.Powers
         }
 
         public TargetList GetEnemiesInRadius(Vector3D center, float radius, int maxCount = -1)
-        {            
-            // for now simple switch from enemy/ally using class types Player/Monster
-            if (User is Player)
-                return _GetTargetsInRadiusHelper(center, radius, maxCount,
-                    actor => true, actor => actor is Monster);
-            else
-                return _GetTargetsInRadiusHelper(center, radius, maxCount,
-                    actor => true, actor => actor is Player);
+        {
+            return _GetTargetsInRadiusHelper(center, radius, maxCount, (actor) => true, _EnemyTargetFilter);
         }
 
         public TargetList GetAlliesInRadius(Vector3D center, float radius, int maxCount = -1)
         {
-            // for now simple switch from enemy/ally using class types Player/Monster
-            if (User is Player)
-                return _GetTargetsInRadiusHelper(center, radius, maxCount,
-                    actor => true, actor => actor is Player);
-            else
-                return _GetTargetsInRadiusHelper(center, radius, maxCount,
-                    actor => true, actor => actor is Monster);
+            return _GetTargetsInRadiusHelper(center, radius, maxCount, (actor) => true, _AllyTargetFilter);
+        }
+
+        public TargetList GetEnemiesInBeamDirection(Vector3D startPoint, Vector3D direction,
+                                                    float length, float thickness = 0f)
+        {
+            Vector3D beamEnd = PowerMath.TranslateDirection2D(startPoint, direction, startPoint, length);
+
+            float fixedActorRadius = 1.5f;  // TODO: calculate based on actor.ActorData.Cylinder.Ax2 ?
+            return _GetTargetsInRadiusHelper(startPoint, length + thickness, -1,
+                actor => PowerMath.CircleInBeam(new Circle(actor.Position.X, actor.Position.Y, fixedActorRadius),
+                                                startPoint, beamEnd, thickness),
+                _EnemyTargetFilter);
+        }
+
+        public TargetList GetEnemiesInArcDirection(Vector3D center, Vector3D direction, float radius, float lengthDegrees)
+        {
+            Vector2F arcCenter2D = PowerMath.VectorWithoutZ(center);
+            Vector2F arcDirection2D = PowerMath.VectorWithoutZ(direction);
+            float arcLength = lengthDegrees * PowerMath.DegreesToRadians;
+
+            float fixedActorRadius = 1.5f;  // TODO: calculate based on actor.ActorData.Cylinder.Ax2 ?
+            return _GetTargetsInRadiusHelper(center, radius, -1,
+                actor => PowerMath.ArcCircleCollides(arcCenter2D, arcDirection2D, radius, arcLength,
+                                                     new Circle(actor.Position.X, actor.Position.Y, fixedActorRadius)),
+                _EnemyTargetFilter);
         }
 
         private TargetList _GetTargetsInRadiusHelper(Vector3D center, float radius, int maxCount,
             Func<Actor, bool> filter, Func<Actor, bool> targetFilter)
         {
+            // Query() needs to gather using circle-circle collision, until then just extend the search radius by the default
+            // actor radius currently used.
+            float actorRadiusCompensation = 1.5f;
+
             TargetList targets = new TargetList();
             int count = 0;
-            foreach (Actor actor in World.QuadTree.Query<Actor>(new Circle(center.X, center.Y, radius)))
+            foreach (Actor actor in World.QuadTree.Query<Actor>(new Circle(center.X, center.Y, radius + actorRadiusCompensation)))
             {
                 if (filter(actor) && !actor.Attributes[GameAttribute.Untargetable] && !World.PowerManager.IsDeletingActor(actor) &&
                     actor != User)
@@ -222,16 +239,20 @@ namespace Mooege.Core.GS.Powers
             return targets;
         }
 
-        public TargetList GetEnemiesInBeamDirection(Vector3D startPoint, Vector3D direction,
-                                                    float length, float thickness = 0f)
+        private bool _EnemyTargetFilter(Actor actor)
         {
-            Vector3D beamEnd = PowerMath.ProjectAndTranslate2D(startPoint, direction, startPoint, length);
+            if (User is Player)
+                return actor is Monster;
+            else
+                return actor is Player;
+        }
 
-            float fixedActorRadius = 1.5f;  // TODO: calculate based on actor.ActorData.Cylinder.Ax2 ?
-            return _GetTargetsInRadiusHelper(startPoint, length + Math.Max(thickness * 2, 10f), -1,
-                actor => PowerMath.CircleInBeam(new Circle(actor.Position.X, actor.Position.Y, fixedActorRadius),
-                                                startPoint, beamEnd, thickness),
-                actor => actor is Monster);
+        private bool _AllyTargetFilter(Actor actor)
+        {
+            if (User is Player)
+                return actor is Player;
+            else
+                return actor is Monster;
         }
 
         public void TranslateEffect(Actor actor, Vector3D destination, float speed)

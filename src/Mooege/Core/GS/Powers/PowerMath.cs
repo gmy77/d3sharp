@@ -28,6 +28,8 @@ namespace Mooege.Core.GS.Powers
     // Collection of useful functions that operate on things Powers work with.
     public static class PowerMath
     {
+        #region Vector operations
+
         public static Vector2F VectorWithoutZ(Vector3D v)
         {
             return new Vector2F(v.X, v.Y);
@@ -65,14 +67,12 @@ namespace Mooege.Core.GS.Powers
                                     Math.Pow(a.Y - b.Y, 2));
         }
 
-        public static Vector3D ProjectAndTranslate2D(Vector3D a, Vector3D b, Vector3D position, float amount)
+        public static Vector3D TranslateDirection2D(Vector3D source, Vector3D destination, Vector3D point, float amount)
         {
-            Vector3D r = new Vector3D(position);
-            Vector3D ab_norm = Normalize(new Vector3D(b.X - a.X, b.Y - a.Y, 0/*b.Z - a.Z*/)); // 2D
-            r.X += ab_norm.X * amount;
-            r.Y += ab_norm.Y * amount;
-            //r.Z += ab_norm.Z * amount;
-            return r;
+            Vector3D norm = Normalize(new Vector3D(destination.X - source.X, destination.Y - source.Y, 0f));
+            return new Vector3D(point.X + norm.X * amount,
+                                point.Y + norm.Y * amount,
+                                point.Z);
         }
 
         public static Vector3D VectorRotateZ(Vector3D v, float radians)
@@ -103,6 +103,10 @@ namespace Mooege.Core.GS.Powers
 
             return output;
         }
+
+        #endregion
+
+        #region Geometry intersection/collision tests
 
         public static bool PointInRotatedRect(Vector2F point, Vector2F rectMidpointStart, Vector2F rectMidpointEnd, float rectHeight)
         {
@@ -138,7 +142,7 @@ namespace Mooege.Core.GS.Powers
             // NOTE: right now this does everything in 2d, ignoring Z
 
             // offset start beam position by beam thickness
-            beamStart = ProjectAndTranslate2D(beamStart, beamEnd, beamStart, beamThickness);
+            beamStart = TranslateDirection2D(beamStart, beamEnd, beamStart, beamThickness);
 
             return MovingCircleCollides(new Circle(beamStart.X, beamStart.Y, beamThickness),
                                         VectorWithoutZ(beamEnd - beamStart),
@@ -180,5 +184,20 @@ namespace Mooege.Core.GS.Powers
             float distanceSq = (float)(Math.Pow(closest.X - target.Center.X, 2) + Math.Pow(closest.Y - target.Center.Y, 2));
             return distanceSq <= (float)Math.Pow(mover.Radius + target.Radius, 2);
         }
+
+        public static bool ArcCircleCollides(Vector2F arcCenter, Vector2F arcDirection, float arcRadius, float arcLength, Circle circle)
+        {
+            Vector2F arcDelta = arcDirection - arcCenter;
+            Vector2F circleDelta = circle.Center - arcCenter;
+            if (arcDelta == circleDelta)
+                return true;
+
+            if (arcDelta.Angle(circleDelta) < arcLength / 2f)
+                return Vector2F.Distance(arcCenter, circle.Center) <= arcRadius + circle.Radius;
+            else
+                return false;
+        }
+
+        #endregion
     }
 }

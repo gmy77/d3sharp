@@ -195,7 +195,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         private void _calcTargetPosition()
         {
             // project beam end to always be a certain length
-            TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
+            TargetPosition = PowerMath.TranslateDirection2D(User.Position, TargetPosition,
                                                              new Vector3D(User.Position.X, User.Position.Y, TargetPosition.Z),
                                                              BeamLength);
         }
@@ -363,7 +363,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         private void _calcTargetPosition()
         {
             // project beam end to always be a certain length
-            TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
+            TargetPosition = PowerMath.TranslateDirection2D(User.Position, TargetPosition,
                                                              new Vector3D(User.Position.X, User.Position.Y, TargetPosition.Z),
                                                              BeamLength);
         }
@@ -430,7 +430,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.PlayEffectGroup(188941);
 
             // calculate hit area of effect, just in front of the user
-            TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, User.Position, 9f);
+            TargetPosition = PowerMath.TranslateDirection2D(User.Position, TargetPosition, User.Position, 9f);
 
             for (int n = 0; n < 3; ++n)
             {

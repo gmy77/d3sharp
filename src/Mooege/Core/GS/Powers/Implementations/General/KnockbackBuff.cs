@@ -49,7 +49,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             if (!base.Apply())
                 return false;
 
-            Vector3D destination = PowerMath.ProjectAndTranslate2D(User.Position, Target.Position,
+            Vector3D destination = PowerMath.TranslateDirection2D(User.Position, Target.Position,
                                                                    _magnitude < 0f ? User.Position : Target.Position, 
                                                                    (float)Math.Sqrt(Math.Abs(_magnitude)));
 

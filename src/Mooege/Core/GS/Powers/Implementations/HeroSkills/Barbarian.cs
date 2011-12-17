@@ -177,7 +177,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                 AttackPayload attack = new AttackPayload(this);
                 attack.SetSingleTarget(hit);
                 attack.AddWeaponDamage(1.00f, DamageType.Physical);
-                attack.AutomaticHitEffects = false;
                 attack.OnHit = (hitPayload) =>
                 {
                     // GET OVER HERE
@@ -200,7 +199,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         private void _setupReturnProjectile(Vector3D spawnPosition)
         {
-            Vector3D inFrontOfUser = PowerMath.ProjectAndTranslate2D(User.Position, spawnPosition, User.Position, 5f);
+            Vector3D inFrontOfUser = PowerMath.TranslateDirection2D(User.Position, spawnPosition, User.Position, 5f);
 
             var return_proj = new Projectile(this, 79400, new Vector3D(spawnPosition.X, spawnPosition.Y, User.Position.Z));
             return_proj.DestroyOnArrival = true;

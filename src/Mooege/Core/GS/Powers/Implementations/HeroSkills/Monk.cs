@@ -87,7 +87,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     //AddBuff(User, new ComboStage3Buff());
 
                     // put target position a little bit in front of the monk. represents the lightning ball
-                    TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition,
+                    TargetPosition = PowerMath.TranslateDirection2D(User.Position, TargetPosition,
                                         User.Position, 8f);
 
                     bool hitAnything = false;
@@ -198,11 +198,11 @@ namespace Mooege.Core.GS.Powers.Implementations
             bool hitAnything = false;
             AttackPayload attack = new AttackPayload(this);
             if (ComboIndex != 2)
-                attack.Targets = GetBestMeleeEnemy();
+                attack.Targets = GetEnemiesInArcDirection(User.Position, TargetPosition, ScriptFormula(5), ScriptFormula(6));
             else
-                attack.Targets = GetEnemiesInRadius(User.Position, 10f);
+                attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(8));
 
-            attack.AddWeaponDamage(1.35f, DamageType.Physical);
+            attack.AddWeaponDamage(1.10f, DamageType.Physical);
             attack.OnHit = hitPayload => { hitAnything = true; };
             attack.Apply();
 
@@ -233,7 +233,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     if (Rune_B > 0)
                     {
                         // TODO: make this use arc, not beam
-                        attack.Targets = GetEnemiesInBeamDirection(User.Position, TargetPosition, 0.1f, ScriptFormula(19) / 2f);
+                        attack.Targets = GetEnemiesInArcDirection(User.Position, TargetPosition, ScriptFormula(19), ScriptFormula(20));
                         int maxTargets = (int)ScriptFormula(18);
                         if (maxTargets < attack.Targets.Actors.Count)
                             attack.Targets.Actors.RemoveRange(maxTargets, attack.Targets.Actors.Count - maxTargets);
@@ -416,12 +416,12 @@ namespace Mooege.Core.GS.Powers.Implementations
             if (Target != null)
             {
                 // put dash destination just beyond target
-                TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, Target.Position, Target.Position, 7f);
+                TargetPosition = PowerMath.TranslateDirection2D(User.Position, Target.Position, Target.Position, 7f);
             }
             else
             {
                 // if no target, always dash fixed amount
-                TargetPosition = PowerMath.ProjectAndTranslate2D(User.Position, TargetPosition, User.Position, 13f);
+                TargetPosition = PowerMath.TranslateDirection2D(User.Position, TargetPosition, User.Position, 13f);
             }
 
             var dashBuff = new DashMoverBuff(TargetPosition);
@@ -456,6 +456,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 // dash speed seems to always be actor speed * 10
                 float speed = Target.Attributes[GameAttribute.Running_Rate_Total] * 10f;
 
+                Target.TranslateFacing(_destination, true);
                 _mover = new ActorMover(Target);
                 _mover.Move(_destination, speed, new NotifyActorMovementMessage
                 {
