@@ -266,5 +266,20 @@ namespace Mooege.Core.GS.Powers
         {
             return _deletingActors.ContainsKey(actor);
         }
+
+        public void CancelAllPowers(Actor user)
+        {
+            _channeledSkills.RemoveAll(impl =>
+            {
+                if (impl.User == user && impl.IsChannelOpen)
+                {
+                    impl.CloseChannel();
+                    return true;
+                }
+                return false;
+            });
+
+            _executingScripts.RemoveAll((script) => script.Script.User == user);
+        }
     }
 }

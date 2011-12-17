@@ -46,7 +46,7 @@ namespace Mooege.Core.GS.Powers.Payloads
 
             // HACK: add to hackish list thats used to defer deleting actor and filter it from powers targetting
             this.Target.World.PowerManager.AddDeletingActor(this.Target);
-
+            
             // send this death payload to buffs
             this.Target.World.BuffManager.SendTargetPayload(this.Target, this);
             
@@ -62,6 +62,7 @@ namespace Mooege.Core.GS.Powers.Payloads
                 ActorID = this.Target.DynamicID
             }, this.Target);
 
+            // play main death animation
             this.Target.PlayAnimation(11, _FindBestDeathAnimationSNO(), 1f, 2);
 
             this.Target.World.BroadcastIfRevealed(new ANNDataMessage(Opcodes.ANNDataMessage24)
@@ -69,8 +70,9 @@ namespace Mooege.Core.GS.Powers.Payloads
                 ActorID = this.Target.DynamicID,
             }, this.Target);
 
-            // remove all buffs before deleting actor
+            // remove all buffs and running powers before deleting actor
             this.Target.World.BuffManager.RemoveAllBuffs(this.Target);
+            this.Target.World.PowerManager.CancelAllPowers(this.Target);
 
             this.Target.Attributes[GameAttribute.Deleted_On_Server] = true;
             this.Target.Attributes[GameAttribute.Could_Have_Ragdolled] = true;

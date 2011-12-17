@@ -147,6 +147,10 @@ namespace Mooege.Core.GS.Powers.Payloads
             }
             else if (this.AutomaticHitEffects && this.Target.World != null)
             {
+                // HACK: reduce hit effect rate for Player to 10% so they don't get perma hit-sun locked.
+                if (this.Target is Player && PowerContext.Rand.NextDouble() < 0.9)
+                    return;
+
                 // target didn't die, so play hit animation if the actor has one
                 if (this.Target.World.BuffManager.GetFirstBuff<Implementations.KnockbackBuff>(this.Target) == null &&
                     this.Target.AnimationSet != null)
