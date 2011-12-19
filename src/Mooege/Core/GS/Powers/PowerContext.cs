@@ -174,12 +174,12 @@ namespace Mooege.Core.GS.Powers
 
         public TargetList GetEnemiesInRadius(Vector3D center, float radius, int maxCount = -1)
         {
-            return _GetTargetsInRadiusHelper(center, radius, maxCount, (actor) => true, _EnemyTargetFilter);
+            return _GetTargetsInRadiusHelper(center, radius, maxCount, (actor) => true, _EnemyActorFilter);
         }
 
         public TargetList GetAlliesInRadius(Vector3D center, float radius, int maxCount = -1)
         {
-            return _GetTargetsInRadiusHelper(center, radius, maxCount, (actor) => true, _AllyTargetFilter);
+            return _GetTargetsInRadiusHelper(center, radius, maxCount, (actor) => true, _AllyActorFilter);
         }
 
         public TargetList GetEnemiesInBeamDirection(Vector3D startPoint, Vector3D direction,
@@ -191,7 +191,7 @@ namespace Mooege.Core.GS.Powers
             return _GetTargetsInRadiusHelper(startPoint, length + thickness, -1,
                 actor => PowerMath.CircleInBeam(new Circle(actor.Position.X, actor.Position.Y, fixedActorRadius),
                                                 startPoint, beamEnd, thickness),
-                _EnemyTargetFilter);
+                _EnemyActorFilter);
         }
 
         public TargetList GetEnemiesInArcDirection(Vector3D center, Vector3D direction, float radius, float lengthDegrees)
@@ -204,7 +204,7 @@ namespace Mooege.Core.GS.Powers
             return _GetTargetsInRadiusHelper(center, radius, -1,
                 actor => PowerMath.ArcCircleCollides(arcCenter2D, arcDirection2D, radius, arcLength,
                                                      new Circle(actor.Position.X, actor.Position.Y, fixedActorRadius)),
-                _EnemyTargetFilter);
+                _EnemyActorFilter);
         }
 
         private TargetList _GetTargetsInRadiusHelper(Vector3D center, float radius, int maxCount,
@@ -239,20 +239,26 @@ namespace Mooege.Core.GS.Powers
             return targets;
         }
 
-        private bool _EnemyTargetFilter(Actor actor)
+        private Func<Actor, bool> _EnemyActorFilter
         {
-            if (User is Player)
-                return actor is Monster;
-            else
-                return actor is Player;
+            get
+            {
+                if (User is Player)
+                    return (actor) => actor is Monster;
+                else
+                    return (actor) => actor is Player;
+            }
         }
 
-        private bool _AllyTargetFilter(Actor actor)
+        private Func<Actor, bool> _AllyActorFilter
         {
-            if (User is Player)
-                return actor is Player;
-            else
-                return actor is Monster;
+            get
+            {
+                if (User is Player)
+                    return (actor) => actor is Player;
+                else
+                    return (actor) => actor is Monster;
+            }
         }
 
         public void TranslateEffect(Actor actor, Vector3D destination, float speed)
@@ -378,6 +384,20 @@ namespace Mooege.Core.GS.Powers
         public bool AddBuff(Actor user, Actor target, Buff buff)
         {
             return target.World.BuffManager.AddBuff(user, target, buff);
+        }
+
+        public Vector3D RandomDirection(Vector3D position, float radius)
+        {
+            return RandomDirection(position, radius, radius);
+        }
+
+        public Vector3D RandomDirection(Vector3D position, float minRadius, float maxRadius)
+        {
+            float angle = (float)(Rand.NextDouble() * Math.PI * 2);
+            float radius = minRadius + (float)Rand.NextDouble() * (maxRadius - minRadius);
+            return new Vector3D(position.X + (float)Math.Cos(angle) * radius,
+                                position.Y + (float)Math.Sin(angle) * radius,
+                                position.Z);
         }
     }
 }

@@ -177,7 +177,6 @@ namespace Mooege.Core.GS.Powers
             var implementation = PowerLoader.CreateImplementationForPowerSNO(powerSNO);
             if (implementation != null)
             {
-                implementation.PowerSNO = powerSNO;
                 return RunPower(user, implementation, target, targetPosition, targetMessage);
             }
             else

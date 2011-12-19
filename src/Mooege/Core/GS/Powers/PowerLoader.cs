@@ -33,7 +33,9 @@ namespace Mooege.Core.GS.Powers
         {
             if (_implementations.ContainsKey(powerSNO))
             {
-                return (PowerScript)Activator.CreateInstance(_implementations[powerSNO]);
+                PowerScript script = (PowerScript)Activator.CreateInstance(_implementations[powerSNO]);
+                script.PowerSNO = powerSNO;
+                return script;
             }
             else
             {

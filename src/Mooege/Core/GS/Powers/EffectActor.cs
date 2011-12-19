@@ -28,19 +28,26 @@ namespace Mooege.Core.GS.Powers
 {
     public class EffectActor : Actor, IUpdateable
     {
-        public TickTimer Timeout;
+        public PowerContext Context;
+
+        public TickTimer Timeout = null;
+        public float UpdateDelay = 0f;
+        public Action OnUpdate = null;
+        public Action OnTimeout = null;
 
         public override ActorType ActorType { get { return Actors.ActorType.ClientEffect; } }
+
+        private TickTimer _updateTimer;
 
         public EffectActor(PowerContext context, int actorSNO, Vector3D position)
             : base(context.World, actorSNO)
         {
+            this.Context = context;
+
             this.Field2 = 0x8;
             if (this.Scale == 0f)
                 this.Scale = 1f;
             this.Position = position;
-
-            this.Timeout = null;
 
             // copy in important effect params from user
             this.Attributes[GameAttribute.Rune_A, context.PowerSNO] = context.User.Attributes[GameAttribute.Rune_A, context.PowerSNO];
@@ -56,10 +63,26 @@ namespace Mooege.Core.GS.Powers
             this.World.Enter(this);
         }
 
-        public void Update(int tickCounter)
+        public virtual void Update(int tickCounter)
         {
             if (Timeout != null && Timeout.TimedOut)
+            {
+                if (OnTimeout != null)
+                    OnTimeout();
+
                 this.Destroy();
+            }
+            else if (OnUpdate != null)
+            {
+                if (_updateTimer == null || _updateTimer.TimedOut)
+                {
+                    OnUpdate();
+                    if (this.UpdateDelay > 0f)
+                        _updateTimer = new SecondsTickTimer(this.Context.World.Game, this.UpdateDelay);
+                    else
+                        _updateTimer = null;
+                }
+            }
         }
     }
 }

@@ -73,6 +73,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override bool Stack(Buff buff)
         {
             // not sure how knockbacks would be combined, so just swallow all knockback stacks for now
+            // updated stacked buff with mover so arrival time can be read for would-be-stacked buff.
+            ((KnockbackBuff)buff)._mover = _mover;
             return true;
         }
     }

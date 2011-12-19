@@ -24,6 +24,9 @@ using Mooege.Core.GS.Ticker;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Powers.Payloads;
+using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Actors.Movement;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -135,13 +138,185 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            gok();
+            //StartDefaultCooldown();
+            UsePrimaryResource(EvalTag(PowerKeys.ResourceCost));
+
+            // ground summon effect for rune c
+            if (Rune_C > 0)
+                SpawnProxy(TargetPosition).PlayEffectGroup(152294);
+
+            // startup delay all version of skill have
+            yield return WaitSeconds(ScriptFormula(3));
+
+            IEnumerable<TickTimer> subScript;
+            if (Rune_A > 0)
+                subScript = _RuneA();
+            else if (Rune_B > 0)
+                subScript = _RuneB();
+            else if (Rune_C > 0)
+                subScript = _RuneC();
+            else if (Rune_D > 0)
+                subScript = _RuneD();
+            else if (Rune_E > 0)
+                subScript = _RuneE();
+            else
+                subScript = _NoRune();
+
+            foreach (var timeout in subScript)
+                yield return timeout;
+        }
+
+        IEnumerable<TickTimer> _RuneA()
+        {
+            Vector3D castedPosition = new Vector3D(User.Position);
+
+            int demonCount = (int)ScriptFormula(23);
+            for (int n = 0; n < demonCount; ++n)
+            {
+                var attackDelay = WaitSeconds(ScriptFormula(20));
+                var demonPosition = RandomDirection(castedPosition, ScriptFormula(24), ScriptFormula(25));
+
+                var demon = SpawnEffect(149949, demonPosition, ScriptFormula(22), WaitSeconds(5.0f));                    
+                demon.OnUpdate = () =>
+                {
+                    if (attackDelay.TimedOut)
+                    {
+                        demon.PlayEffectGroup(152590);
+                        WeaponDamage(GetEnemiesInRadius(demonPosition, ScriptFormula(27)), ScriptFormula(26), DamageType.Fire);
+
+                        demon.OnUpdate = null;
+                    }
+                };
+
+                yield return WaitSeconds(ScriptFormula(4));
+            }
+        }
+
+        IEnumerable<TickTimer> _NoRune()
+        {
+            _CreateArrowPool(131701, new Vector3D(User.Position), ScriptFormula(6), ScriptFormula(7));
             yield break;
         }
 
-        private void gok()
+        IEnumerable<TickTimer> _RuneB()
         {
-            SpawnEffect(149949, TargetPosition, -1);
+            Vector3D castedPosition = new Vector3D(User.Position);
+
+            TickTimer timeout = WaitSeconds(ScriptFormula(16));
+            while (!timeout.TimedOut)
+            {
+                TargetList targets = GetEnemiesInRadius(castedPosition, ScriptFormula(18));
+                if (targets.Actors.Count > 0)
+                    _CreateArrowPool(153029, targets.Actors[Rand.Next(targets.Actors.Count)].Position, ScriptFormula(28), ScriptFormula(34));
+
+                yield return WaitSeconds(ScriptFormula(38));
+            }
+        }
+
+        void _CreateArrowPool(int actorSNO, Vector3D position, float duration, float radius)
+        {
+            var pool = SpawnEffect(actorSNO, position, 0, WaitSeconds(duration));
+            pool.OnUpdate = () =>
+            {
+                TargetList targets = GetEnemiesInRadius(position, radius);
+                targets.Actors.RemoveAll((actor) => Rand.NextDouble() > ScriptFormula(10));
+                targets.ExtraActors.RemoveAll((actor) => Rand.NextDouble() > ScriptFormula(10));
+
+                WeaponDamage(targets, ScriptFormula(0), DamageType.Physical);
+
+                // rewrite delay every time for variation: base wait time * variation * user attack speed
+                pool.UpdateDelay = (ScriptFormula(5) + (float)Rand.NextDouble() * ScriptFormula(2)) * (1.0f / ScriptFormula(9));
+            };
+        }
+
+        IEnumerable<TickTimer> _RuneC()
+        {
+            var demon = new Projectile(this, 155276, TargetPosition);
+            demon.Timeout = WaitSeconds(ScriptFormula(30));
+
+            TickTimer grenadeTimer = null;
+            demon.OnUpdate = () =>
+            {
+                if (grenadeTimer == null || grenadeTimer.TimedOut)
+                {
+                    grenadeTimer = WaitSeconds(ScriptFormula(31));
+
+                    demon.PlayEffect(Effect.Sound, 215621);
+
+                    var grenade = new Projectile(this, 152589, new Vector3D(demon.Position.X, demon.Position.Y, demon.Position.Z + 18f));
+                    grenade.Timeout = WaitSeconds(ScriptFormula(33));
+                    grenade.OnTimeout = () =>
+                    {
+                        grenade.PlayEffectGroup(154020);
+                        WeaponDamage(GetEnemiesInRadius(grenade.Position, ScriptFormula(32)), ScriptFormula(0), DamageType.Fire);
+                    };
+                    grenade.LaunchArc(demon.Position, 0.1f, -0.1f, 0.6f);  // parameters not based on anything, just picked to look good
+                }
+            };
+
+            bool firstLaunch = true;
+            while (!demon.Timeout.TimedOut)
+            {
+                demon.Launch(RandomDirection(TargetPosition, 0f, ScriptFormula(7)), 0.2f);
+                if (firstLaunch)
+                {
+                    demon.PlayEffectGroup(165237);
+                    firstLaunch = false;
+                }
+                yield return demon.ArrivalTime;
+            }
+        }
+
+        IEnumerable<TickTimer> _RuneD()
+        {
+            int flyerCount = (int)ScriptFormula(14);
+            for (int n = 0; n < flyerCount; ++n)
+            {
+                var flyerPosition = RandomDirection(TargetPosition, 0f, ScriptFormula(7));
+                var flyer = SpawnEffect(200808, flyerPosition, 0f, WaitSeconds(ScriptFormula(5)));
+                flyer.OnTimeout = () =>
+                {
+                    flyer.PlayEffectGroup(200516);
+                    AttackPayload attack = new AttackPayload(this);
+                    attack.Targets = GetEnemiesInRadius(flyerPosition, ScriptFormula(13));
+                    attack.AddWeaponDamage(ScriptFormula(12), DamageType.Fire);
+                    attack.OnHit = (hitPayload) =>
+                    {
+                        AddBuff(hitPayload.Target, new DebuffStunned(WaitSeconds(ScriptFormula(37))));
+                    };
+                    attack.Apply();
+                };
+
+                yield return WaitSeconds(ScriptFormula(4));
+            }
+        }
+
+        IEnumerable<TickTimer> _RuneE()
+        {
+            float attackRadius = 8f;  // value is not in formulas, just a guess
+            Vector3D castedPosition = new Vector3D(User.Position);
+            float castAngle = MovementHelpers.GetFacingAngle(castedPosition, TargetPosition);
+            float waveOffset = 0f;
+
+            int flyerCount = (int)ScriptFormula(15);
+            for (int n = 0; n < flyerCount; ++n)
+            {
+                waveOffset += 3.0f;
+                var wavePosition = PowerMath.TranslateDirection2D(castedPosition, TargetPosition, castedPosition, waveOffset);
+                var flyerPosition = RandomDirection(wavePosition, 0f, attackRadius);
+                var flyer = SpawnEffect(200561, flyerPosition, castAngle, WaitSeconds(ScriptFormula(20)));
+                flyer.OnTimeout = () =>
+                {
+                    flyer.PlayEffectGroup(200819);
+                    AttackPayload attack = new AttackPayload(this);
+                    attack.Targets = GetEnemiesInRadius(flyerPosition, attackRadius);
+                    attack.AddWeaponDamage(ScriptFormula(11), DamageType.Physical);
+                    attack.OnHit = (hitPayload) => { Knockback(hitPayload.Target, 90f); };
+                    attack.Apply();
+                };
+
+                yield return WaitSeconds(ScriptFormula(4));
+            }
         }
     }
 }

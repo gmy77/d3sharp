@@ -25,13 +25,16 @@ using Mooege.Core.GS.Ticker;
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.WitchDoctor.PhysicalRealm.PoisonDart)]
-    public class WitchDoctorPoisonDart : PowerScript
+    public class WitchDoctorPoisonDart : Skill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
             int numProjectiles = Rune_B > 0 ? (int)ScriptFormula(4) : 1;
             for (int n = 0; n < numProjectiles; ++n)
             {
+                if (Rune_B > 0)
+                    yield return WaitSeconds(ScriptFormula(17));
+
                 var proj = new Projectile(this,
                                           RuneSelect(107011, 107030, 107035, 107223, 107265, 107114),
                                           User.Position);
@@ -45,16 +48,13 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                     if (Rune_E > 0 && Rand.NextDouble() < ScriptFormula(11))
                         hit.PlayEffectGroup(107163);
-
+                    
                     if (Rune_A > 0)
                         WeaponDamage(hit, ScriptFormula(2), DamageType.Fire);
                     else
                         WeaponDamage(hit, ScriptFormula(0), DamageType.Poison);
                 };
                 proj.Launch(TargetPosition, 1f);
-
-                if (Rune_B > 0)
-                    yield return WaitSeconds(ScriptFormula(17));
             }
         }
     }
