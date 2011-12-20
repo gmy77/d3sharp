@@ -34,5 +34,12 @@ namespace Mooege.Core.GS.Powers.Implementations
             WeaponDamage(GetBestMeleeEnemy(), 1.00f, DamageType.Physical);
             yield break;
         }
+
+        public override float GetActionSpeed()
+        {
+            // for some reason the formula for _Instant.pow does not multiply by 1.1 even though it should
+            // manually scale melee speed
+            return base.GetActionSpeed() * 1.1f;
+        }
     }
 }

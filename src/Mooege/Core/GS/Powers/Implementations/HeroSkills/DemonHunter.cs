@@ -44,7 +44,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 targetDirs = new Vector3D[(int)ScriptFormula(24)];
 
                 int takenPos = 0;
-                foreach (Actor actor in GetEnemiesInArcDirection(User.Position, TargetPosition, 50f, ScriptFormula(12)).Actors)
+                foreach (Actor actor in GetEnemiesInArcDirection(User.Position, TargetPosition, 75f, ScriptFormula(12)).Actors)
                 {
                     targetDirs[takenPos] = actor.Position;
                     ++takenPos;
@@ -183,14 +183,25 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
 
             // damage effects
-            for (int i = 0; i < grenades.Length; ++i)
+            foreach (var grenade in grenades)
             {
-                SpawnEffect(RuneSelect(154027, 154045, 154028, 154044, 154046, 154043), grenades[i].Position);
+                var grenadeN = grenade;
+
+                SpawnEffect(RuneSelect(154027, 154045, 154028, 154044, 154046, 154043), grenade.Position);
+
+                // poison pool effect
                 if (Rune_A > 0)
-                    SpawnEffect(154076, grenades[i].Position, 0, WaitSeconds(ScriptFormula(7)));
+                {
+                    var pool = SpawnEffect(154076, grenade.Position, 0, WaitSeconds(ScriptFormula(7)));
+                    pool.UpdateDelay = 1f;
+                    pool.OnUpdate = () =>
+                    {
+                        WeaponDamage(GetEnemiesInRadius(grenadeN.Position, ScriptFormula(5)), ScriptFormula(6), DamageType.Poison);
+                    };
+                }
 
                 AttackPayload attack = new AttackPayload(this);
-                attack.Targets = GetEnemiesInRadius(grenades[i].Position, ScriptFormula(4));
+                attack.Targets = GetEnemiesInRadius(grenade.Position, ScriptFormula(4));
                 attack.AddWeaponDamage(ScriptFormula(0), Rune_A > 0 ? DamageType.Poison : DamageType.Fire);
                 attack.OnHit = (hitPayload) =>
                 {
@@ -200,24 +211,9 @@ namespace Mooege.Core.GS.Powers.Implementations
                             AddBuff(hitPayload.Target, new DebuffStunned(WaitSeconds(ScriptFormula(10))));
                     }
                     if (Rune_C > 0)
-                        Knockback(grenades[i].Position, hitPayload.Target, ScriptFormula(8));
+                        Knockback(grenadeN.Position, hitPayload.Target, ScriptFormula(8));
                 };
                 attack.Apply();
-            }
-
-            // TODO replace with better pool effect system
-            // poison pool effect
-            if (Rune_A > 0)
-            {
-                TickTimer cloudTimeout = WaitSeconds(ScriptFormula(7));
-                while (!cloudTimeout.TimedOut)
-                {
-                    for (int i = 0; i < grenades.Length; ++i)
-                    {
-                        WeaponDamage(GetEnemiesInRadius(grenades[i].Position, ScriptFormula(5)), ScriptFormula(6), DamageType.Poison);
-                    }
-                    yield return WaitSeconds(1f);
-                }
             }
 
             // clusterbomb hits
@@ -228,9 +224,9 @@ namespace Mooege.Core.GS.Powers.Implementations
                 {
                     yield return WaitSeconds(ScriptFormula(12) / damagePulses);
 
-                    for (int i = 0; i < grenades.Length; ++i)
+                    foreach (var grenade in grenades)
                     {
-                        WeaponDamage(GetEnemiesInRadius(grenades[i].Position, ScriptFormula(4)), ScriptFormula(0), DamageType.Fire);
+                        WeaponDamage(GetEnemiesInRadius(grenade.Position, ScriptFormula(4)), ScriptFormula(0), DamageType.Fire);
                     }
                 }
             }
