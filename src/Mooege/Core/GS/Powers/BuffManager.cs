@@ -179,8 +179,11 @@ namespace Mooege.Core.GS.Powers
                 {
                     if (pred(buffs[i]))
                     {
-                        buffs[i].Remove();
-                        buffs[i] = null;
+                        if (buffs[i] != null)
+                        {
+                            buffs[i].Remove();
+                            buffs[i] = null;
+                        }
                     }
                 }
             }

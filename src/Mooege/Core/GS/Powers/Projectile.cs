@@ -98,6 +98,7 @@ namespace Mooege.Core.GS.Powers
             });
 
             _onArrivalCalled = false;
+            _prevUpdatePosition = this.Position;
         }
 
         public void LaunchArc(Vector3D destination, float arcHeight, float arcGravity, float visualBounce = 0f)
@@ -117,7 +118,9 @@ namespace Mooege.Core.GS.Powers
                 Field7 = this.Context.PowerSNO,
                 Field8 = visualBounce
             });
+
             _onArrivalCalled = false;
+            _prevUpdatePosition = this.Position;
         }
 
         private void _CheckCollisions()
@@ -153,10 +156,17 @@ namespace Mooege.Core.GS.Powers
         
         public void Update(int tickCounter)
         {
-            _prevUpdatePosition = this.Position;
-            _mover.Update();
-
             // gotta make sure the actor hasn't been deleted after processing each handler
+
+            if (this.World != null)
+                _CheckCollisions();
+
+            // doing updates after collision tests
+            if (this.World != null)
+            {
+                _prevUpdatePosition = this.Position;
+                _mover.Update();
+            }
 
             if (OnUpdate != null)
                 OnUpdate();
@@ -172,9 +182,6 @@ namespace Mooege.Core.GS.Powers
                     this.Arrived) // double check arrival in case OnArrival() re-launched
                     Destroy();
             }
-
-            if (this.World != null)
-                _CheckCollisions();
 
             if (this.World != null)
             {

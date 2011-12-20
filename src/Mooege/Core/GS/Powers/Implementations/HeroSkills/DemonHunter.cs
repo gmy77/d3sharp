@@ -30,6 +30,110 @@ using Mooege.Core.GS.Actors.Movement;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
+    [ImplementsPowerSNO(Skills.Skills.DemonHunter.HatredGenerators.BolaShot)]
+    public class DemonHunterBolaShot : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            GeneratePrimaryResource(ScriptFormula(17));
+
+            // fire projectile normally, or find targets in arc if RuneB
+            Vector3D[] targetDirs;
+            if (Rune_B > 0)
+            {
+                targetDirs = new Vector3D[(int)ScriptFormula(24)];
+
+                int takenPos = 0;
+                foreach (Actor actor in GetEnemiesInArcDirection(User.Position, TargetPosition, 50f, ScriptFormula(12)).Actors)
+                {
+                    targetDirs[takenPos] = actor.Position;
+                    ++takenPos;
+                    if (takenPos >= targetDirs.Length)
+                        break;
+                }
+
+                // generate any extra positions using generic spread
+                if (takenPos < targetDirs.Length)
+                {
+                    PowerMath.GenerateSpreadPositions(User.Position, TargetPosition, 10f, targetDirs.Length - takenPos)
+                             .CopyTo(targetDirs, takenPos);
+                }
+            }
+            else
+            {
+                targetDirs = new Vector3D[] { TargetPosition };
+            }
+
+            foreach (Vector3D position in targetDirs)
+            {
+                var proj = new Projectile(this, RuneSelect(77569, 153864, 153865, 153866, 153867, 153868), User.Position);
+                proj.Position.Z += 5f;  // fix height
+                proj.OnCollision = (hit) =>
+                {
+                    // hit effect
+                    hit.PlayEffectGroup(RuneSelect(77577, 153870, 153872, 153873, 153871, 153869));
+
+                    if (Rune_B > 0)
+                        WeaponDamage(hit, ScriptFormula(9), DamageType.Poison);
+                    else
+                        AddBuff(hit, new ExplosionBuff());
+
+                    proj.Destroy();
+                };
+                proj.Launch(position, ScriptFormula(2));
+
+                if (Rune_B > 0)
+                    yield return WaitSeconds(ScriptFormula(13));
+            }
+        }
+        
+        [ImplementsPowerBuff(0)]
+        class ExplosionBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                base.Init();
+                Timeout = WaitSeconds(ScriptFormula(4));
+            }
+
+            public override bool Update()
+            {
+                if (Timeout.TimedOut)
+                {
+                    Target.PlayEffectGroup(RuneSelect(77573, 153727, 154073, 154074, 154072, 154070));
+
+                    if (Rune_D > 0)
+                    {
+                        if (Rand.NextDouble() < ScriptFormula(31))
+                            GenerateSecondaryResource(ScriptFormula(32));
+                    }
+
+                    AttackPayload attack = new AttackPayload(this);
+                    attack.Targets = GetEnemiesInRadius(Target.Position, ScriptFormula(20));
+                    attack.AddWeaponDamage(ScriptFormula(6),
+                        RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Poison,
+                                   DamageType.Lightning, DamageType.Fire, DamageType.Arcane));
+                    if (Rune_C > 0)
+                    {
+                        attack.OnHit = (hitPayload) =>
+                        {
+                            if (Rand.NextDouble() < ScriptFormula(28))
+                                AddBuff(hitPayload.Target, new DebuffStunned(WaitSeconds(ScriptFormula(29))));
+                        };
+                    }
+                    attack.Apply();
+                }
+
+                return base.Update();
+            }
+
+            public override bool Stack(Buff buff)
+            {
+                return false;
+            }
+        }
+    }
+
     [ImplementsPowerSNO(Skills.Skills.DemonHunter.HatredGenerators.Grenades)]
     public class DemonHunterGrenades : Skill
     {
@@ -243,7 +347,8 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                     demon.PlayEffect(Effect.Sound, 215621);
 
-                    var grenade = new Projectile(this, 152589, new Vector3D(demon.Position.X, demon.Position.Y, demon.Position.Z + 18f));
+                    var grenade = new Projectile(this, 152589, demon.Position);
+                    grenade.Position.Z += 18f;  // make it spawn near demon's cannon
                     grenade.Timeout = WaitSeconds(ScriptFormula(33));
                     grenade.OnTimeout = () =>
                     {
@@ -284,7 +389,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     {
                         AddBuff(hitPayload.Target, new DebuffStunned(WaitSeconds(ScriptFormula(37))));
                     };
-                    attack.Apply();
+                    attack.Apply();                    
                 };
 
                 yield return WaitSeconds(ScriptFormula(4));
