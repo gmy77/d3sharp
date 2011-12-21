@@ -34,7 +34,11 @@ namespace Mooege.Core.GS.Actors.Movement
             if ((lookerPosition == null) || (targetPosition == null))
                 return 0f;
 
-            return (float) Math.Atan2((targetPosition.Y - lookerPosition.Y), (targetPosition.X - lookerPosition.X));
+            float a = (float)Math.Atan2((targetPosition.Y - lookerPosition.Y), (targetPosition.X - lookerPosition.X));
+            if (a < 0f)
+                a += (float)Math.PI * 2f;
+
+            return a;
         }
 
         public static float GetFacingAngle(Actor looker, Actor target)

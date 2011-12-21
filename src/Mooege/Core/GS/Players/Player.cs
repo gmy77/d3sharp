@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
@@ -48,7 +49,6 @@ using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Core.GS.Actors.Implementations.Artisans;
 using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
-using System;
 using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.ACD;
 
@@ -171,6 +171,9 @@ namespace Mooege.Core.GS.Players
             }
         }
 
+        // Resource generation timing /mdz
+        private int _lastResourceUpdateTick;
+
         /// <summary>
         /// Creates a new player.
         /// </summary>
@@ -199,6 +202,8 @@ namespace Mooege.Core.GS.Players
             this.Conversations = new ConversationManager(this, this.World.Game.Quests);
             this.ExpBonusData = new ExpBonusData(this);
             this.SelectedNPC = null;
+
+            this._lastResourceUpdateTick = 0;
 
             // TODO SavePoint from DB
             this.SavePointData = new SavePointData() { snoWorld = -1, SavepointId = -1 };
@@ -624,15 +629,21 @@ namespace Mooege.Core.GS.Players
 
         private void OnObjectTargeted(GameClient client, TargetMessage message)
         {
-            Actor actor = this.World.GetActorByDynamicId(message.TargetID);
-            if (actor == null) return;
+            bool powerHandled = this.World.PowerManager.RunPower(this, message.PowerSNO, message.TargetID, message.Field2.Position, message);
 
-            if ((actor.GBHandle.Type == 1) && (actor.Attributes[GameAttribute.TeamID] == 10))
+            if (!powerHandled)
             {
-                this.ExpBonusData.MonsterAttacked(this.InGameClient.Game.TickCounter);
+                Actor actor = this.World.GetActorByDynamicId(message.TargetID);
+                if (actor == null) return;
+
+                if ((actor.GBHandle.Type == 1) && (actor.Attributes[GameAttribute.TeamID] == 10))
+                {
+                    this.ExpBonusData.MonsterAttacked(this.InGameClient.Game.TickCounter);
+                }
+
+                actor.OnTargeted(this, message);
             }
 
-            actor.OnTargeted(this, message);
             this.ExpBonusData.Check(2);
         }
 
@@ -717,7 +728,7 @@ namespace Mooege.Core.GS.Players
             // Check if there is an conversation to close in this tick
             Conversations.Update(this.World.Game.TickCounter);
 
-            this.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
+            _UpdateResources();
         }
 
         #endregion
@@ -1539,6 +1550,84 @@ namespace Mooege.Core.GS.Players
                 Type = FloatingNumberMessage.FloatType.Green
             });
 
+        }
+
+        #endregion
+
+        #region Resource Generate/Use
+
+        public void GeneratePrimaryResource(float amount)
+        {
+            _ModifyResourceAttribute(this.ResourceID, amount);
+        }
+
+        public void UsePrimaryResource(float amount)
+        {
+            _ModifyResourceAttribute(this.ResourceID, -amount);
+        }
+
+        public void GenerateSecondaryResource(float amount)
+        {
+            // always assume dh discipline
+            int disciplineID = this.ResourceID + 1; //0x00000006
+            _ModifyResourceAttribute(disciplineID, amount);
+        }
+
+        public void UseSecondaryResource(float amount)
+        {
+            // always assume dh discipline
+            int disciplineID = this.ResourceID + 1; //0x00000006
+            _ModifyResourceAttribute(disciplineID, -amount);
+        }
+
+        private void _ModifyResourceAttribute(int resourceID, float amount)
+        {
+            if (amount > 0f)
+            {
+                this.Attributes[GameAttribute.Resource_Cur, resourceID] = Math.Min(
+                    this.Attributes[GameAttribute.Resource_Cur, resourceID] + amount,
+                    this.Attributes[GameAttribute.Resource_Max, resourceID]);
+            }
+            else
+            {
+                this.Attributes[GameAttribute.Resource_Cur, resourceID] = Math.Max(
+                    this.Attributes[GameAttribute.Resource_Cur, resourceID] + amount,
+                    0f);
+            }
+
+            this.Attributes.BroadcastChangedIfRevealed();
+        }
+
+        private void _UpdateResources()
+        {
+            // will crash client when loading if you try to update resources too early
+            if (!InGameClient.TickingEnabled) return;
+
+            // update resources once every update for now.
+            if (this.InGameClient.Game.TickCounter - _lastResourceUpdateTick < this.InGameClient.Game.TickRate)
+                return;
+
+            _lastResourceUpdateTick = this.InGameClient.Game.TickCounter;
+
+            // TODO: setup and use attributes Resource_Regen_Per_Second or Resource_Regen_Percent_Per_Second
+            switch (this.Toon.Class)
+            {
+                case ToonClass.Barbarian:
+                    UsePrimaryResource(0.1f);
+                    break;
+                case ToonClass.DemonHunter:
+                    GeneratePrimaryResource(3f);
+                    GenerateSecondaryResource(0.3f);
+                    break;
+                case ToonClass.Monk:
+                    break;
+                case ToonClass.WitchDoctor:
+                    GeneratePrimaryResource(1f);
+                    break;
+                case ToonClass.Wizard:
+                    GeneratePrimaryResource(2f);
+                    break;
+            }
         }
 
         #endregion

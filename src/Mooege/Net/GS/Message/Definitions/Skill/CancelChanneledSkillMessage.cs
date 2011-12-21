@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,42 +18,35 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Player
+namespace Mooege.Net.GS.Message.Definitions.Skill
 {
-	/// <summary>
-    /// Sent from the client when a buff is right clicked to be cancelled
-    /// </summary>
-    [Message(Opcodes.RequestBuffCancelMessage)]
-    public class RequestBuffCancelMessage : GameMessage, ISelfHandler
+    [Message(Opcodes.DWordDataMessage3)]
+    public class CancelChanneledSkillMessage : GameMessage, ISelfHandler
     {
-        public int /* sno */ PowerSNOId; // SNO of the power that activated the buff to be canceled
-        public int Field1; // Might be ActorID, might be number of stacks to clear off?
+        public int Field0;
 
         public void Handle(GameClient client)
         {
-            client.Player.World.BuffManager.RemoveBuffs(client.Player, PowerSNOId);
+            client.Player.World.PowerManager.CancelChanneledSkill(client.Player, Field0);
         }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            PowerSNOId = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            Field0 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, PowerSNOId);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, Field0);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("RequestBuffCancelMessage:");
+            b.AppendLine("CancelChanneledSkillMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("PowerSNOId: 0x" + PowerSNOId.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

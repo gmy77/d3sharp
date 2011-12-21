@@ -62,7 +62,7 @@ namespace Mooege.Core.MooNet.Services
             var builder = bnet.protocol.toon.external.CreateToonResponse.CreateBuilder();
 
             int hashCode = ToonManager.GetUnusedHashCodeForToonName(request.Name);
-            var toon = new Toon(request.Name, hashCode, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account);
+            var toon = new Toon(request.Name, hashCode, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 30, Client.Account);
             if (ToonManager.SaveToon(toon))
                 builder.SetToken((uint)toon.BnetEntityID.Low);
             done(builder.Build());
