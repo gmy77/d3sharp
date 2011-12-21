@@ -25,6 +25,8 @@ using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Ticker;
 using Mooege.Core.GS.Powers.Payloads;
 using Mooege.Core.GS.Actors.Movement;
+using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -171,17 +173,140 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Hydra)]
-    public class WizardHydra : PowerScript
+        //No Rune = Default
+        //Rune_A = Hydra_Frost
+        //Rune_B = Hydra_Lightning
+        //Rune_C = Hydra_Acid
+        //Rune_D = Hydra_Big
+        //Rune_E = Hydra_Arcane
+
+    public class WizardHydra : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            UsePrimaryResource(60f);
+            //Spawn Pool[Maybe a bigger pool?], Spawn Hyrdas, 
+            //Hydras face targets in radius[TODO], projectile[TODO], despawn after 9 seconds[TODO]
+            //TODO: [Hard MODE!] - Rune Effects..
+
+            Vector3D userCastPosition = new Vector3D(User.Position);
+            Vector3D inFrontOfUser = PowerMath.TranslateDirection2D(User.Position, TargetPosition, User.Position, 7f);
+            Vector3D[] spawnPoints = PowerMath.GenerateSpreadPositions(inFrontOfUser, RandomDirection(inFrontOfUser, 5f), 120, 3);
+
+            var timeout = WaitSeconds(ScriptFormula(0));
+
+            SpawnEffect(RuneSelect(81103, 83028, 81238, 77112, 83964, 81239), inFrontOfUser, 0, timeout); //Lava Pool Spawn
+
+            int[] actorSNOs = new int[] {   RuneSelect(80745, 82972, 82109, 82111, 83959, 81515), 
+                                            RuneSelect(80757, 83024, 81229, 81226, -1, 81231), 
+                                            RuneSelect(80758, 83025, 81230, 81227, -1, 81232) };
+
+            List<Actor> hydras = new List<Actor>();
+
+            for (int i = 0; i < 3; ++i)
+            {
+                var hydra = SpawnEffect(actorSNOs[i], spawnPoints[i], 0, timeout);
+                hydra.UpdateDelay = 0.5f; // attack every half-second
+                hydra.OnUpdate = () =>
+                {
+                    var targets = GetEnemiesInRadius(hydra.Position, 10f);
+                    if (targets.Actors.Count > 0)
+                    {
+                        targets.SortByDistanceFrom(hydra.Position);
+                        //hydra.TranslateFacing(targets.Actors);
+
+                        hydra.PlayActionAnimation(hydra.AnimationSet.TagMapAnimDefault[AnimationSetKeys.Attack]);
+                        //TickTimer waitAttackEnd = WaitSeconds(1.5f);
+                        //yield return WaitSeconds(2f);
+                        
+
+                        WeaponDamage(GetEnemiesInRadius(TargetPosition, 10f), 10f, DamageType.Fire);
+                    }
+                    hydra.PlayActionAnimation(hydra.AnimationSet.TagMapAnimDefault[AnimationSetKeys.Idle]);
+                    
+                };
+
+                hydra.PlayActionAnimation(hydra.AnimationSet.TagMapAnimDefault[AnimationSetKeys.Spawn]);
+                hydras.Add(hydra);
+            }
+
+            //yield return WaitSeconds(2f);
+
+            // wait for duration of skill
+            yield return timeout;
+
+            // hydra skill shutdown
+
+            foreach (var hyd in hydras)
+            {
+                hyd.PlayActionAnimation(hyd.AnimationSet.TagMapAnimDefault[AnimationSetKeys.Despawn]); // despawn ani
+            }
+
+            yield return WaitSeconds(2f);
+
+            foreach (var hyd in hydras)
+            {
+                hyd.Destroy();
+            }
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneOrb)]
+    public class ArcaneOrb : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
-            UsePrimaryResource(60f);
+            UsePrimaryResource(ScriptFormula(0));
 
-            // HACK: made up demonic meteor spell, not real hydra
-            SpawnEffect(185366, TargetPosition);
-            yield return WaitSeconds(0.4f);
+            // cast effect - taken from DemonHuner Bola Shot
+            Vector3D[] targetDirs;
+            {
+                targetDirs = new Vector3D[] { TargetPosition };
+            }
 
-            WeaponDamage(GetEnemiesInRadius(TargetPosition, 10f), 10f, DamageType.Fire);
+            foreach (Vector3D position in targetDirs)
+            {
+                var proj = new Projectile(this, RuneSelect(6515, 130073, 215555, 75726, 216040, 75650), User.Position);
+                proj.Position.Z += 5f;  // fix height
+                proj.OnCollision = (hit) =>
+                {
+                    // hit effect
+                    // Rune_C = 4 Orbs floating around User
+                    // Rune_E = Ignores collision with mobs and just hits and continues.
+                    hit.PlayEffectGroup(RuneSelect(19308, 130020, 215580, -1, 216056, -1));
+
+                    WeaponDamage(hit, ScriptFormula(1), DamageType.Arcane);
+
+                    proj.Destroy();
+                };
+                proj.Launch(position, ScriptFormula(2));
+
+                yield return WaitSeconds(2f);
+            }
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.EnergyTwister)]
+    public class EnergyTwister : PowerScript
+    {
+        public override IEnumerable<TickTimer> Run()
+        {
+            UsePrimaryResource(ScriptFormula(0));
+
+            // cast effect
+            SpawnEffect(RuneSelect(6560, 215311, 6560, 6560, 215324, 210804), TargetPosition);
+                //Tornados need to move randomdirections
+                //and leave trail behind them (79940)
+
+                    // NoRune = Unleash a twister, deals 60% weapon damage per second Arcane to everything caught within it. 
+                    // Rune_E = Stationary = deals damage but does not move
+                    // Rune_A = Increase Damage
+                    // Rune_C = 5 regular twisters to charge up, 
+                    //          then User needs to cast signature spell, then One Big Tornado
+                    // Rune_B = Normal Twisters, if two touch, they merge with increased AoE
+                    // Rune_D = Reduced cost of casting resource
+
+                yield return WaitSeconds(2f);
         }
     }
 
@@ -436,6 +561,59 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 WeaponDamage(GetEnemiesInRadius(TargetPosition, 9f), 0.30f, DamageType.Physical);
                 yield return WaitSeconds(0.2f);
+            }
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.IceArmor)]
+    public class IceArmor : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            StartDefaultCooldown();
+            UsePrimaryResource(25f);
+            AddBuff(User, new IceArmorBuff());
+            yield break;
+        }
+
+        [ImplementsPowerBuff(1)]
+        class IceArmorBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(120f);
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+
+                //TODO:Increase Armor by 50%
+                //User.Attributes[GameAttribute.Armor_Item_Percent, 0.5];
+
+                //TODO: Rune Stats
+                //Rune_C = IceArmorRune_IceBlade.acr/.efg
+
+                return true;
+            }
+
+            public override void OnPayload(Payload payload)
+            {
+                if (payload.Target == Target && payload is HitPayload)
+                {
+                    //Affect monsters in radius
+                    //GetEnemiesInRadius(User.Position, ScriptFormula(7));
+                    //TODO:Chill for 2 Seconds?
+                    WeaponDamage(payload.Context.User,0.12f, DamageType.Cold);
+                }
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+                User.PlayEffectGroup(19326);
+                
             }
         }
     }
