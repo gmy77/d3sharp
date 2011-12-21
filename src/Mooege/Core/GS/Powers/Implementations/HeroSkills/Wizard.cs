@@ -276,6 +276,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (Rune_C > 0)
             {
+                //Somehow set a max to only have 4 orbs at a time.
                 AddBuff(User, new Orbit1());
                 AddBuff(User, new Orbit2());
                 AddBuff(User, new Orbit3());
@@ -355,7 +356,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 return false;
             }
         }
-        [ImplementsPowerBuff(3)]
+        [ImplementsPowerBuff(2)]
         class Orbit3 : PowerBuff
         {
             public override bool Update()
@@ -374,7 +375,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
 
-        [ImplementsPowerBuff(4)]
+        [ImplementsPowerBuff(3)]
         class Orbit4 : PowerBuff
         {
             public override bool Update()
