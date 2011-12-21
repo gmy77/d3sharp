@@ -192,11 +192,13 @@ namespace Mooege.Core.GS.Powers.Implementations
             Vector3D userCastPosition = new Vector3D(User.Position);
             Vector3D inFrontOfUser = PowerMath.TranslateDirection2D(User.Position, TargetPosition, User.Position, 7f);
             Vector3D[] spawnPoints = PowerMath.GenerateSpreadPositions(inFrontOfUser, RandomDirection(inFrontOfUser, 5f), 120, 3);
+            //Hydra1 = angle 0, Hydra2 = angle 120, Hydra3 = angle 240. this isnt a spread but the angle of animation?VectorRotateZ?
+            // it may even just be spreading out the heads by mere inches(?) 
 
             var timeout = WaitSeconds(ScriptFormula(0));
-
+            
             SpawnEffect(RuneSelect(81103, 83028, 81238, 77112, 83964, 81239), inFrontOfUser, 0, timeout); //Lava Pool Spawn
-
+            
             int[] actorSNOs = new int[] {   RuneSelect(80745, 82972, 82109, 82111, 83959, 81515), 
                                             RuneSelect(80757, 83024, 81229, 81226, -1, 81231), 
                                             RuneSelect(80758, 83025, 81230, 81227, -1, 81232) };
@@ -209,7 +211,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 hydra.UpdateDelay = 0.5f; // attack every half-second
                 hydra.OnUpdate = () =>
                 {
-                    var targets = GetEnemiesInRadius(hydra.Position, 10f);
+                    var targets = GetEnemiesInRadius(hydra.Position, 60f);
                     if (targets.Actors.Count > 0)
                     {
                         targets.SortByDistanceFrom(hydra.Position);
@@ -219,6 +221,8 @@ namespace Mooege.Core.GS.Powers.Implementations
                         //TickTimer waitAttackEnd = WaitSeconds(1.5f);
                         //yield return WaitSeconds(2f);
                         
+                        // the -1 below is RUneLightning, it has a rope effect. 
+                        hydra.PlayEffectGroup(RuneSelect(77116, 83043, -1, 77109, 86082, 77097));
 
                         WeaponDamage(GetEnemiesInRadius(TargetPosition, 10f), 10f, DamageType.Fire);
                     }
@@ -252,10 +256,16 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneOrb)]
-    public class ArcaneOrb : PowerScript
+    public class ArcaneOrb : Skill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
+            if (Rune_D > 0)
+            {
+                UsePrimaryResource(ScriptFormula(0) - ScriptFormula(13));
+            }
+            else
+
             UsePrimaryResource(ScriptFormula(0));
 
             // cast effect - taken from DemonHuner Bola Shot
@@ -264,24 +274,122 @@ namespace Mooege.Core.GS.Powers.Implementations
                 targetDirs = new Vector3D[] { TargetPosition };
             }
 
+            if (Rune_C > 0)
+            {
+                AddBuff(User, new Orbit1());
+                AddBuff(User, new Orbit2());
+                AddBuff(User, new Orbit3());
+                AddBuff(User, new Orbit4());
+                yield break;
+            }
+            else
             foreach (Vector3D position in targetDirs)
             {
-                var proj = new Projectile(this, RuneSelect(6515, 130073, 215555, 75726, 216040, 75650), User.Position);
+                var proj = new Projectile(this, RuneSelect(6515, 130073, 215555, -1, 216040, 75650), User.Position);
                 proj.Position.Z += 5f;  // fix height
                 proj.OnCollision = (hit) =>
                 {
-                    // hit effect
-                    // Rune_C = 4 Orbs floating around User
-                    // Rune_E = Ignores collision with mobs and just hits and continues.
                     hit.PlayEffectGroup(RuneSelect(19308, 130020, 215580, -1, 216056, -1));
 
-                    WeaponDamage(hit, ScriptFormula(1), DamageType.Arcane);
+                    if (Rune_A > 0)
+                    {
+                        WeaponDamage(GetEnemiesInRadius(proj.Position, 10f), ScriptFormula(6), DamageType.Arcane);
+                    }
+                    else if (Rune_B > 0)
+                    {
+                        WeaponDamage(GetEnemiesInRadius(proj.Position, 16f), ScriptFormula(1), DamageType.Arcane);
+                    }
+                    else
+                    WeaponDamage(GetEnemiesInRadius(proj.Position, 10f), ScriptFormula(7), DamageType.Arcane);
 
-                    proj.Destroy();
+                    if (Rune_E > 0)
+                    {
+                        //ignore destruction.
+                    }
+                    else
+                    {
+                        proj.Destroy();
+                    }
                 };
                 proj.Launch(position, ScriptFormula(2));
 
                 yield return WaitSeconds(2f);
+            }
+
+            
+        }
+        [ImplementsPowerBuff(0)]
+        class Orbit1 : PowerBuff
+        {
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+
+                var targets = GetEnemiesInRadius(Target.Position, 10f);
+                if (targets.Actors.Count > 0)
+                {
+                    WeaponDamage(targets, 1.00f, DamageType.Arcane);
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        [ImplementsPowerBuff(1)]
+        class Orbit2 : PowerBuff
+        {
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+
+                var targets = GetEnemiesInRadius(Target.Position, 10f);
+                if (targets.Actors.Count > 0)
+                {
+                    WeaponDamage(targets, 1.00f, DamageType.Arcane);
+                    return true;
+                }
+
+                return false;
+            }
+        }
+        [ImplementsPowerBuff(3)]
+        class Orbit3 : PowerBuff
+        {
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+
+                var targets = GetEnemiesInRadius(Target.Position, 10f);
+                if (targets.Actors.Count > 0)
+                {
+                    WeaponDamage(targets, 1.00f, DamageType.Arcane);
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        [ImplementsPowerBuff(4)]
+        class Orbit4 : PowerBuff
+        {
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+
+                var targets = GetEnemiesInRadius(Target.Position, 10f);
+                if (targets.Actors.Count > 0)
+                {
+                    WeaponDamage(targets, 1.00f, DamageType.Arcane);
+                    return true;
+                }
+
+                return false;
             }
         }
     }
@@ -296,7 +404,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             // cast effect
             SpawnEffect(RuneSelect(6560, 215311, 6560, 6560, 215324, 210804), TargetPosition);
                 //Tornados need to move randomdirections
-                //and leave trail behind them (79940)
+                //and leave trail behind them (79940), think actor already does this.
 
                     // NoRune = Unleash a twister, deals 60% weapon damage per second Arcane to everything caught within it. 
                     // Rune_E = Stationary = deals damage but does not move
