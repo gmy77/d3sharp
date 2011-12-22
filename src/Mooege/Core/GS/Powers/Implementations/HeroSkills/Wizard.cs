@@ -876,4 +876,220 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         }
     }
+
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.StormArmor)]
+    public class StormArmor : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            StartDefaultCooldown();
+            UsePrimaryResource(25f);
+            AddBuff(User, new StormArmorBuff());
+            yield break;
+        }
+
+        [ImplementsPowerBuff(0)]
+        class StormArmorBuff : PowerBuff
+        {
+            //Unknown how Rune_E works, if attack crits -> you shock nearby enemies.
+            public override void Init()
+            {
+                Timeout = WaitSeconds(120f);
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+
+                if (Rune_D > 0)
+                {
+                    //reduce all arcane costs by 7 while storm armor is active
+                }
+
+                return true;
+            }
+
+            public override void OnPayload(Payload payload)
+            {
+                if (Rune_B > 0)
+                {
+                    if (payload.Target == Target && payload is HitPayload)
+                    {
+                        //increase movement speed 20% for 5 seconds
+                    }
+                }
+                if (Rune_C > 0)
+                {
+                    if (payload.Target == Target && payload is HitPayload)
+                    {
+                        //you have a chance to be enveloped with a lightning shield for 8 seconds 
+                        //that shocks nearby enemies for 120% weapon damage as Lightning.
+                    }
+                }
+
+            }
+
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+                //add cooldown delay
+                var targets = GetEnemiesInRadius(Target.Position, ScriptFormula(19));
+                if (targets.Actors.Count > 0)
+                {
+                    if (Rune_A > 0)
+                    {
+                        WeaponDamage(targets, 2.20f, DamageType.Lightning);
+                    }
+                    else
+                        WeaponDamage(targets, 1.00f, DamageType.Lightning);
+                }
+                return false;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+
+            }
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.DiamondSkin)]
+    public class DiamondSkin : Skill
+    {
+        //todo: where are the diamondskin effects?!
+        public override IEnumerable<TickTimer> Main()
+        {
+            StartDefaultCooldown();
+            UsePrimaryResource(25f);
+            AddBuff(User, new DiamondSkinBuff());
+            yield break;
+        }
+
+        [ImplementsPowerBuff(0)] //TODO: check this theres 3 groups..
+        class DiamondSkinBuff : PowerBuff
+        {
+            //Unknown how Rune_E works, if attack crits -> you shock nearby enemies.
+            public override void Init()
+            {
+                Timeout = WaitSeconds(5f);
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+
+
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+
+            }
+        }
+    }
+
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.SlowTime)]
+    public class SlowTime : Skill
+    {
+        //todo: where are the diamondskin effects?!
+        public override IEnumerable<TickTimer> Main()
+        {
+            if (Rune_D > 0)
+            {
+                StartCooldown(ScriptFormula(14));
+                //UsePrimaryResource(25f);
+                AddBuff(User, new SlowTimeBuff());
+                yield break;
+            }
+            else
+            StartDefaultCooldown();
+            //UsePrimaryResource(25f);
+            AddBuff(User, new SlowTimeBuff());
+            yield break;
+        }
+
+        [ImplementsPowerBuff(0)] //TODO: check this
+        class SlowTimeBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(0));
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+
+                SpawnEffect(RuneSelect(6553, 112585, 112808, 112560, 112572, 112697), User.Position);
+                return true;
+            }
+
+            public override bool Update()
+            {
+                if (Rune_C > 0)
+                {
+                    if (base.Update())
+                        return true;
+                    var Rune_Ctargets = GetEnemiesInRadius(User.Position, 10f);
+                    if (Rune_Ctargets.Actors.Count > 0)
+                    {
+                        //Slowed Enemies, their Attack speed and Projectile Speeds are decreased.
+                    }
+                    return false;
+                }
+                else if (Rune_E > 0)
+                {
+                    if (base.Update())
+                        return true;
+                    var enemytargets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
+                    if (enemytargets.Actors.Count > 0)
+                    {
+                        //Slowed Enemies, their Attack speed and Projectile Speeds are decreased.
+                    }
+                    var friendlytargets = GetAlliesInRadius(User.Position, ScriptFormula(2));
+                    if (friendlytargets.Actors.Count > 0)
+                    {
+                        //speed up time for friendlies by increasing attack speed by 140%
+                    }
+                    return false;
+                }
+                else
+
+                if (base.Update())
+                    return true;
+
+                var targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
+                if (targets.Actors.Count > 0)
+                {
+                    if (Rune_A > 0)
+                    {
+                        //Slowed Enemies, their Attack speed and Projectile Speeds are decreased.
+                        //Take 140% more damage.
+                    }
+                    if (Rune_B > 0)
+                    {
+                        //Slowed Enemies, their Attack speed and Projectile Speeds are decreased.
+                        //Once Enemies out of range of bubble or bubble ended, 14 more seconds on slow time effect.
+                        //maybe add this to remove()?
+                    }
+
+                        //Slowed Enemies, their Attack speed and Projectile Speeds are decreased.
+                }
+                return false;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+
+            }
+        }
+    }
 }
