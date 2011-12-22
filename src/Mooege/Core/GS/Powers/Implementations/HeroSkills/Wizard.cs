@@ -492,6 +492,110 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ExplosiveBlast)]
+    public class ExplosiveBlast : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            //All of these need charge up effect (Intro.efg or TEMP_proxy.acr)
+            if (Rune_D > 0)
+            {
+                UsePrimaryResource(45f - ScriptFormula(17));
+                StartCooldown(WaitSeconds(1f));
+            }
+            else
+            UsePrimaryResource(45f);
+            StartCooldown(WaitSeconds(1f));
+
+            IEnumerable<TickTimer> subScript;
+            if (Rune_A > 0)
+                subScript = _RuneA();
+            else if (Rune_B > 0)
+                subScript = _RuneB();
+            else if (Rune_C > 0)
+                subScript = _RuneC();
+            else if (Rune_D > 0)
+                subScript = _RuneD();
+            else if (Rune_E > 0)
+                subScript = _RuneE();
+            else
+                subScript = _NoRune();
+
+            foreach (var timeout in subScript)
+                yield return timeout;
+        }
+        IEnumerable<TickTimer> _RuneA()
+        {
+            SpawnEffect(61419, User.Position);
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetEnemiesInRadius(User.Position, 36f);
+            //add correct damage
+            attack.AddWeaponDamage(1f, DamageType.Physical);
+            attack.Apply();
+            yield break;
+        }
+        IEnumerable<TickTimer> _RuneB()
+        {
+            yield return WaitSeconds(2f);
+            SpawnEffect(192210, User.Position);
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetEnemiesInRadius(User.Position, 54f);
+            //add correct dmg
+            attack.AddWeaponDamage(1f, DamageType.Physical);
+            attack.Apply();
+            yield break;
+        }
+        IEnumerable<TickTimer> _RuneC()
+        {
+            //place spawneffect at feet - does not follow with you
+            yield return WaitSeconds(2f);
+            SpawnEffect(61419, User.Position);
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetEnemiesInRadius(User.Position, 36f);
+            //Add correct dmg
+            attack.AddWeaponDamage(1f, DamageType.Physical);
+            attack.Apply();
+            yield break;
+        }
+        IEnumerable<TickTimer> _RuneD()
+        {
+            yield return WaitSeconds(2f);
+            SpawnEffect(192211, User.Position);
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetEnemiesInRadius(User.Position, 36f);
+            //add correct dmg
+            attack.AddWeaponDamage(1f, DamageType.Physical);
+            attack.Apply();
+            yield break;
+        }
+        IEnumerable<TickTimer> _RuneE()
+        {
+            yield return WaitSeconds(2f);
+            for (int i = 0; i < 8; ++i)
+            {
+                SpawnEffect(61419, User.Position);
+                AttackPayload attack = new AttackPayload(this);
+                attack.Targets = GetEnemiesInRadius(User.Position, 36f);
+                //add correct dmg
+                attack.AddWeaponDamage(1f, DamageType.Physical);
+                attack.Apply();
+                yield return WaitSeconds(0.3f);
+            }
+            yield break;
+        }
+        IEnumerable<TickTimer> _NoRune()
+        {
+            yield return WaitSeconds(2f);
+            SpawnEffect(61419, User.Position);
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetEnemiesInRadius(User.Position, 36f);
+            //add correct dmg
+            attack.AddWeaponDamage(1f, DamageType.Physical);
+            attack.Apply();
+            yield break;
+        }
+    }
+
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneTorrent)]
     public class WizardArcaneTorrent : ChanneledSkill
     {
