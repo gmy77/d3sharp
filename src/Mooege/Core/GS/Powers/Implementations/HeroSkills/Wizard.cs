@@ -27,6 +27,7 @@ using Mooege.Core.GS.Powers.Payloads;
 using Mooege.Core.GS.Actors.Movement;
 using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Net.GS.Message;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -188,11 +189,12 @@ namespace Mooege.Core.GS.Powers.Implementations
             //Spawn Pool[Maybe a bigger pool?], Spawn Hyrdas, 
             //Hydras face targets in radius[TODO], projectile[TODO], despawn after 9 seconds[TODO]
             //TODO: [Hard MODE!] - Rune Effects..
+            // http://www.youtube.com/watch?v=twVSLGkoQqk
 
             Vector3D userCastPosition = new Vector3D(User.Position);
             Vector3D inFrontOfUser = PowerMath.TranslateDirection2D(User.Position, TargetPosition, User.Position, 7f);
-            Vector3D[] spawnPoints = PowerMath.GenerateSpreadPositions(inFrontOfUser, RandomDirection(inFrontOfUser, 5f), 120, 3);
-            //Hydra1 = angle 0, Hydra2 = angle 120, Hydra3 = angle 240. this isnt a spread but the angle of animation?VectorRotateZ?
+            Vector3D[] spawnPoints = PowerMath.GenerateSpreadPositions(inFrontOfUser, RandomDirection(inFrontOfUser, 0f), 180, 3);
+            //Hydra1 = angle 0, Hydra2 = angle 120, Hydra3 = angle 240. this isnt a spread but the angle of animation? think its the Y axis?
             // it may even just be spreading out the heads by mere inches(?) 
 
             var timeout = WaitSeconds(ScriptFormula(0));
@@ -208,50 +210,36 @@ namespace Mooege.Core.GS.Powers.Implementations
             for (int i = 0; i < 3; ++i)
             {
                 var hydra = SpawnEffect(actorSNOs[i], spawnPoints[i], 0, timeout);
-                hydra.UpdateDelay = 0.5f; // attack every half-second
+                hydra.UpdateDelay = 1f; // attack every half-second
                 hydra.OnUpdate = () =>
                 {
+                    /* 
+                     * Hydras all face the same direction,
+                     * attacking in the area in front of them, 
+                     * not the whole 180 degrees that they are facing
+                     */
                     var targets = GetEnemiesInRadius(hydra.Position, 60f);
                     if (targets.Actors.Count > 0)
                     {
                         targets.SortByDistanceFrom(hydra.Position);
-                        //hydra.TranslateFacing(targets.Actors);
-
-                        hydra.PlayActionAnimation(hydra.AnimationSet.TagMapAnimDefault[AnimationSetKeys.Attack]);
-                        //TickTimer waitAttackEnd = WaitSeconds(1.5f);
-                        //yield return WaitSeconds(2f);
-                        
-                        // the -1 below is RUneLightning, it has a rope effect. 
-                        hydra.PlayEffectGroup(RuneSelect(77116, 83043, -1, 77109, 86082, 77097));
-
-                        WeaponDamage(GetEnemiesInRadius(TargetPosition, 10f), 10f, DamageType.Fire);
+                        var proj = new Projectile(this, RuneSelect(77116, 83043, -1, 77109, 86082, 77097), hydra.Position);
+                        proj.Position.Z += 5f;  // fix height
+                        proj.OnCollision = (hit) =>
+                        {
+                            // hit effect?
+                                WeaponDamage(hit, 1.00f, DamageType.Fire);
+         
+                            proj.Destroy();
+                        };
+                        proj.Launch(TargetPosition, ScriptFormula(2));
                     }
-                    hydra.PlayActionAnimation(hydra.AnimationSet.TagMapAnimDefault[AnimationSetKeys.Idle]);
                     
                 };
 
-                hydra.PlayActionAnimation(hydra.AnimationSet.TagMapAnimDefault[AnimationSetKeys.Spawn]);
                 hydras.Add(hydra);
             }
-
-            //yield return WaitSeconds(2f);
-
             // wait for duration of skill
             yield return timeout;
-
-            // hydra skill shutdown
-
-            foreach (var hyd in hydras)
-            {
-                hyd.PlayActionAnimation(hyd.AnimationSet.TagMapAnimDefault[AnimationSetKeys.Despawn]); // despawn ani
-            }
-
-            yield return WaitSeconds(2f);
-
-            foreach (var hyd in hydras)
-            {
-                hyd.Destroy();
-            }
         }
     }
 
@@ -265,7 +253,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                 UsePrimaryResource(ScriptFormula(0) - ScriptFormula(13));
             }
             else
-
             UsePrimaryResource(ScriptFormula(0));
 
             // cast effect - taken from DemonHuner Bola Shot
@@ -305,7 +292,6 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                     if (Rune_E > 0)
                     {
-                        //ignore destruction.
                     }
                     else
                     {
@@ -497,6 +483,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
+            //For Damage Multipler -> I use damage modifier script formula, is that correct?
             //All of these need charge up effect (Intro.efg or TEMP_proxy.acr)
             if (Rune_D > 0)
             {
@@ -529,8 +516,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             SpawnEffect(61419, User.Position);
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, 36f);
-            //add correct damage
-            attack.AddWeaponDamage(1f, DamageType.Physical);
+            attack.AddWeaponDamage(ScriptFormula(9), DamageType.Physical);
             attack.Apply();
             yield break;
         }
@@ -541,7 +527,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, 54f);
             //add correct dmg
-            attack.AddWeaponDamage(1f, DamageType.Physical);
+            attack.AddWeaponDamage(ScriptFormula(18), DamageType.Physical);
             attack.Apply();
             yield break;
         }
@@ -552,8 +538,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             SpawnEffect(61419, User.Position);
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, 36f);
-            //Add correct dmg
-            attack.AddWeaponDamage(1f, DamageType.Physical);
+            attack.AddWeaponDamage(ScriptFormula(11), DamageType.Physical);
             attack.Apply();
             yield break;
         }
@@ -563,8 +548,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             SpawnEffect(192211, User.Position);
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, 36f);
-            //add correct dmg
-            attack.AddWeaponDamage(1f, DamageType.Physical);
+            attack.AddWeaponDamage(ScriptFormula(3), DamageType.Physical);
             attack.Apply();
             yield break;
         }
@@ -576,10 +560,9 @@ namespace Mooege.Core.GS.Powers.Implementations
                 SpawnEffect(61419, User.Position);
                 AttackPayload attack = new AttackPayload(this);
                 attack.Targets = GetEnemiesInRadius(User.Position, 36f);
-                //add correct dmg
-                attack.AddWeaponDamage(1f, DamageType.Physical);
+                attack.AddWeaponDamage(ScriptFormula(13), DamageType.Physical);
                 attack.Apply();
-                yield return WaitSeconds(0.3f);
+                yield return WaitSeconds(0.5f);
             }
             yield break;
         }
@@ -589,8 +572,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             SpawnEffect(61419, User.Position);
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, 36f);
-            //add correct dmg
-            attack.AddWeaponDamage(1f, DamageType.Physical);
+            attack.AddWeaponDamage(ScriptFormula(3), DamageType.Physical);
             attack.Apply();
             yield break;
         }
@@ -802,8 +784,9 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (!base.Apply())
                     return false;
 
-                //TODO:Increase Armor by 50%
-                //User.Attributes[GameAttribute.Armor_Item_Percent, 0.5];
+                //TODO:Increase Armor by 50% -> Correct?
+                User.Attributes[GameAttribute.Armor_Item_Percent] += ScriptFormula(2);
+                User.Attributes.BroadcastChangedIfRevealed();
 
                 //TODO: Rune Stats
                 //Rune_C = IceArmorRune_IceBlade.acr/.efg
@@ -817,8 +800,11 @@ namespace Mooege.Core.GS.Powers.Implementations
                 {
                     //Affect monsters in radius
                     //GetEnemiesInRadius(User.Position, ScriptFormula(7));
-                    //TODO:Chill for 2 Seconds?
+                    //TODO:Chill for 2 Seconds? Attempted..
                     WeaponDamage(payload.Context.User,0.12f, DamageType.Cold);
+                    Target.Attributes[GameAttribute.Chilled] = true;
+                    WaitSeconds(2f);
+                    Target.Attributes[GameAttribute.Chilled] = false;
                 }
             }
 
@@ -891,7 +877,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         [ImplementsPowerBuff(0)]
         class StormArmorBuff : PowerBuff
         {
-            //Unknown how Rune_E works, if attack crits -> you shock nearby enemies.
+            //TODO; Unknown how Rune_E works, if attack crits -> you shock nearby enemies.
             public override void Init()
             {
                 Timeout = WaitSeconds(120f);
@@ -905,6 +891,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (Rune_D > 0)
                 {
                     //reduce all arcane costs by 7 while storm armor is active
+                    User.Attributes[GameAttribute.Resource_Cost_Reduction_Amount] += 7;
                 }
 
                 return true;
@@ -917,6 +904,9 @@ namespace Mooege.Core.GS.Powers.Implementations
                     if (payload.Target == Target && payload is HitPayload)
                     {
                         //increase movement speed 20% for 5 seconds
+                        User.Attributes[GameAttribute.Movement_Bonus_Run_Speed] += ScriptFormula(14);
+                        WaitSeconds(5f);
+                        User.Attributes[GameAttribute.Movement_Bonus_Run_Speed] -= ScriptFormula(14);
                     }
                 }
                 if (Rune_C > 0)
@@ -950,6 +940,10 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             public override void Remove()
             {
+                if (Rune_D > 0)
+                {
+                    User.Attributes[GameAttribute.Resource_Cost_Reduction_Amount] -= 7;
+                }
                 base.Remove();
 
             }
@@ -960,6 +954,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     public class DiamondSkin : Skill
     {
         //todo: where are the diamondskin effects?!
+        //gameattribute[Breakable Shield HP] + Invulnerable or No Damage?
         public override IEnumerable<TickTimer> Main()
         {
             StartDefaultCooldown();
@@ -968,10 +963,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield break;
         }
 
-        [ImplementsPowerBuff(0)] //TODO: check this theres 3 groups..
+        [ImplementsPowerBuff(0)] //TODO: check this, theres 3 groups..
         class DiamondSkinBuff : PowerBuff
         {
-            //Unknown how Rune_E works, if attack crits -> you shock nearby enemies.
             public override void Init()
             {
                 Timeout = WaitSeconds(5f);
@@ -997,7 +991,6 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.SlowTime)]
     public class SlowTime : Skill
     {
-        //todo: where are the diamondskin effects?!
         public override IEnumerable<TickTimer> Main()
         {
             if (Rune_D > 0)
@@ -1036,22 +1029,31 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (Rune_C > 0)
                 {
                     if (base.Update())
+                    {
+                        Target.Attributes[GameAttribute.Slow] = false;
                         return true;
+                    }
                     var Rune_Ctargets = GetEnemiesInRadius(User.Position, 10f);
                     if (Rune_Ctargets.Actors.Count > 0)
                     {
                         //Slowed Enemies, their Attack speed and Projectile Speeds are decreased.
+                        Target.Attributes[GameAttribute.Slow] = true;
+
                     }
                     return false;
                 }
                 else if (Rune_E > 0)
                 {
                     if (base.Update())
+                    {
+                        Target.Attributes[GameAttribute.Slow] = false;
                         return true;
+                    }
                     var enemytargets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
                     if (enemytargets.Actors.Count > 0)
                     {
                         //Slowed Enemies, their Attack speed and Projectile Speeds are decreased.
+                        Target.Attributes[GameAttribute.Slow] = true;
                     }
                     var friendlytargets = GetAlliesInRadius(User.Position, ScriptFormula(2));
                     if (friendlytargets.Actors.Count > 0)
@@ -1062,25 +1064,30 @@ namespace Mooege.Core.GS.Powers.Implementations
                 }
                 else
 
-                if (base.Update())
-                    return true;
-
+                    if (base.Update())
+                    {
+                        Target.Attributes[GameAttribute.Slow] = false;
+                        return true;
+                    }
                 var targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
                 if (targets.Actors.Count > 0)
                 {
                     if (Rune_A > 0)
                     {
                         //Slowed Enemies, their Attack speed and Projectile Speeds are decreased.
+                        Target.Attributes[GameAttribute.Slow] = true;
                         //Take 140% more damage.
                     }
                     if (Rune_B > 0)
                     {
                         //Slowed Enemies, their Attack speed and Projectile Speeds are decreased.
+                        Target.Attributes[GameAttribute.Slow] = true;
                         //Once Enemies out of range of bubble or bubble ended, 14 more seconds on slow time effect.
                         //maybe add this to remove()?
                     }
 
                         //Slowed Enemies, their Attack speed and Projectile Speeds are decreased.
+                        Target.Attributes[GameAttribute.Slow] = true;
                 }
                 return false;
             }
@@ -1091,5 +1098,6 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             }
         }
+        //Mirror Image, Energy Armor, Familiar, Archon, Magic Weapon, 
     }
 }
