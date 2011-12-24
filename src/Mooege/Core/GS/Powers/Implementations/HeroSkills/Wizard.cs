@@ -484,15 +484,38 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Main()
         {
             //For Damage Multipler -> I use damage modifier script formula, is that correct?
-            //All of these need charge up effect (Intro.efg or TEMP_proxy.acr)
             if (Rune_D > 0)
             {
                 UsePrimaryResource(45f - ScriptFormula(17));
                 StartCooldown(WaitSeconds(1f));
+                User.PlayEffectGroup(89449);
+            }
+            else if (Rune_A > 0)
+            {
+                //there is no charge up effect since its instant
+                UsePrimaryResource(45f);
+                StartCooldown(WaitSeconds(1f));
+            }
+            else if (Rune_C > 0)
+            {
+                UsePrimaryResource(45f);
+                StartCooldown(WaitSeconds(1f));
+                SpawnProxy(User.Position).PlayEffectGroup(89449);
             }
             else
-            UsePrimaryResource(45f);
-            StartCooldown(WaitSeconds(1f));
+            {
+                UsePrimaryResource(45f);
+                StartCooldown(WaitSeconds(1f));
+                User.PlayEffectGroup(89449);
+            }
+
+
+            if (Rune_A > 0)
+            {
+                //Dont wait.
+            }
+            else
+                yield return WaitSeconds(ScriptFormula(5));
 
             IEnumerable<TickTimer> subScript;
             if (Rune_A > 0)
@@ -522,19 +545,16 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
         IEnumerable<TickTimer> _RuneB()
         {
-            yield return WaitSeconds(2f);
             SpawnEffect(192210, User.Position);
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, 54f);
-            //add correct dmg
             attack.AddWeaponDamage(ScriptFormula(18), DamageType.Physical);
             attack.Apply();
             yield break;
         }
         IEnumerable<TickTimer> _RuneC()
         {
-            //place spawneffect at feet - does not follow with you
-            yield return WaitSeconds(2f);
+            //TODO: place spawneffect at feet - does not follow with you
             SpawnEffect(61419, User.Position);
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, 36f);
@@ -544,7 +564,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
         IEnumerable<TickTimer> _RuneD()
         {
-            yield return WaitSeconds(2f);
             SpawnEffect(192211, User.Position);
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, 36f);
@@ -554,7 +573,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
         IEnumerable<TickTimer> _RuneE()
         {
-            yield return WaitSeconds(2f);
             for (int i = 0; i < 8; ++i)
             {
                 SpawnEffect(61419, User.Position);
@@ -568,7 +586,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
         IEnumerable<TickTimer> _NoRune()
         {
-            yield return WaitSeconds(2f);
             SpawnEffect(61419, User.Position);
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, 36f);
@@ -953,7 +970,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.DiamondSkin)]
     public class DiamondSkin : Skill
     {
-        //todo: where are the diamondskin effects?!
+        //Wizard_StoneSkin.efg/stonearmor/diamondskin is also diamondskin..
         //gameattribute[Breakable Shield HP] + Invulnerable or No Damage?
         public override IEnumerable<TickTimer> Main()
         {
@@ -963,7 +980,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield break;
         }
 
-        [ImplementsPowerBuff(0)] //TODO: check this, theres 3 groups..
+        [ImplementsPowerBuff(2)] //TODO: check this, theres 3 groups..
         class DiamondSkinBuff : PowerBuff
         {
             public override void Init()
@@ -975,15 +992,13 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 if (!base.Apply())
                     return false;
-
-
                 return true;
             }
 
             public override void Remove()
             {
                 base.Remove();
-
+                User.PlayEffectGroup(RuneSelect(93077, 187716, 187805, 187822, 187831, 187851));
             }
         }
     }
@@ -991,6 +1006,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.SlowTime)]
     public class SlowTime : Skill
     {
+        //TODO: make sure that when AI works, that the SlowTime Bubble is the only area that gets the effects and not from the user's position.
         public override IEnumerable<TickTimer> Main()
         {
             if (Rune_D > 0)
@@ -1098,6 +1114,171 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             }
         }
-        //Mirror Image, Energy Armor, Familiar, Archon, Magic Weapon, 
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.EnergyArmor)]
+     public class EnergyArmor : Skill
+        {
+            public override IEnumerable<TickTimer> Main()
+            {
+                StartDefaultCooldown();
+                UsePrimaryResource(25f);
+                AddBuff(User, new EnergyArmorBuff());
+                yield break;
+            }
+
+            [ImplementsPowerBuff(0)]
+            class EnergyArmorBuff : PowerBuff
+            {
+                public override void Init()
+                {
+                    Timeout = WaitSeconds(120f);
+                }
+
+                public override bool Apply()
+                {
+                    if (!base.Apply())
+                        return false;
+                    if (Rune_A > 0)
+                    {
+                        //increase resistance
+                    }
+                    if (Rune_B > 0)
+                    {
+                        //increase max resource by 40
+                    }
+                    if (Rune_E > 0)
+                    {
+                        //increase percision by 40$
+                    }
+                    //increasing your Defense by 20% but lowers your maximum Arcane Power by 20.
+                    //--> drains __ primary resource for every 1% of your maximum Life absorbed.
+                    return true;
+                }
+
+                public override void OnPayload(Payload payload)
+                {
+                    if (Rune_C > 0)
+                    {
+                        //incoming attacks that would deal more than 26% of your maximum Life 
+                        //are reduced to deal 26% of your maximum Life instead.
+                        //TODO: take the two numbers, and find which is the minimum.
+                    }
+                    if (Rune_D > 0)
+                    {
+                    //You have a chance to gain 7 Arcane Power whenever you are hit by a ranged or melee attack.
+                    }
+                }
+
+                public override bool Update()
+                {
+                    if (base.Update())
+                        return true;
+                    return false;
+                }
+
+                public override void Remove()
+                {
+                    base.Remove();
+                }
+            }
+        }
+   [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.MagicWeapon)]
+    public class MagicWeapon : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            StartDefaultCooldown();
+            UsePrimaryResource(25f);
+            AddBuff(User, new MagicWeaponBuff());
+            yield break;
+        }
+
+        [ImplementsPowerBuff(0)]
+        class MagicWeaponBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(60f);
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                return true;
+            }
+            public override bool Update()
+            {
+                if(base.Update())
+                    return true;
+
+                AttackPayload attack = new AttackPayload(this);
+                if (Rune_A > 0)
+                {
+                    attack.OnHit = (hitPayload) =>
+                    {
+                        //ScriptFormula(3 & 4 & 5)
+                        //poison enemies for 3 seconds, dealing 70% of weapon damage
+                    };
+                }
+                if (Rune_B > 0)
+                {
+                    attack.OnHit = (hitPayload) =>
+                    {
+                        //formulas didn't say the chance.
+                        if (Rand.NextDouble() < .10)
+                        {
+                            //lightning arcs
+                            //ScriptFormula(6 & 7)
+                        }
+                    };
+                }
+                if (Rune_C > 0)
+                {
+                    attack.OnHit = (hitPayload) =>
+                    {
+                        //damage increase bonus percent - ScriptFormula(8)
+                        if (Rand.NextDouble() < ScriptFormula(9))
+                        {
+                            AddBuff(hitPayload.Target, new KnockbackBuff(ScriptFormula(10)));
+                        }
+                    };
+                }
+                if (Rune_D > 0)
+                {
+                    attack.OnHit = (hitPayload) =>
+                    {
+                        //formulas didn't say the chance.
+                        if (Rand.NextDouble() < .10)
+                        {
+                            //restore arcane power ScriptFormula(11)
+                        }
+                    };
+                }
+                if (Rune_E > 0)
+                {
+                    attack.OnHit = (hitPayload) =>
+                    {
+                        //formulas didn't say the chance.
+                        if (Rand.NextDouble() < .10)
+                        {
+                            //RuneE Leech Perc ofDamage Done - ScriptFormula(12)
+                        }
+                    };
+                }
+                //increase physical damage by 20% - ScriptFormula(0)
+                attack.Apply();
+
+                return false;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+            }
+        }
+    }
+
+        //[Hard Skills TODO] Mirror Image, Familiar, Archon
+        //10 passive skills
     }
 }
